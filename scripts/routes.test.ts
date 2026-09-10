@@ -149,3 +149,22 @@ void test('a reserved page carries no logic — no script of its own (D14.7)', (
     assert.equal(executable.length, 0, `${page} ships executable script`);
   }
 });
+
+void test('no page links a reader to a source URL known to be dead (D14.14)', () => {
+  if (!built) return;
+  // Observed and archived 10/9/2026: every sub-page of the book answers 404, including the URLs
+  // the landing page publishes itself. Until that changes, nothing we ship may point there —
+  // "va vérifier, c'est écrit là" is the promise, and a 404 is the one answer that breaks it.
+  const deadShapes =
+    /melenchon2027\.fr\/programme2025\/livre\/(?:introduction|chapitre\d|partie\d|[a-z-]{6,})/;
+  const offenders: string[] = [];
+  for (const page of ['dist/s/c1-s02/index.html', 'dist/s/c7-s08/index.html', 'dist/index.html']) {
+    if (!existsSync(page)) continue;
+    const html = readFileSync(page, 'utf8');
+    for (const m of html.matchAll(/(?:href|"(?:isBasedOn|citation)")\s*[:=]\s*"([^"]+)"/g)) {
+      const url = m[1] ?? '';
+      if (deadShapes.test(url)) offenders.push(`${page}: ${url}`);
+    }
+  }
+  assert.deepEqual(offenders, [], `links to a dead source URL:\n${offenders.join('\n')}`);
+});
