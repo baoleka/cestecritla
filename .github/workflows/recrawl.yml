@@ -32,9 +32,6 @@ concurrency:
   group: recrawl
   cancel-in-progress: false
 
-env:
-  RECRAWL_DIR: ${{ runner.temp }}/recrawl
-
 jobs:
   recrawl:
     name: Ingestion, diff et pull request
@@ -43,6 +40,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      # RECRAWL_DIR used to be a workflow-level `env:` reading `${{ runner.temp }}`, and the
+      # `runner` context is not available there — nor in a job-level `env:`, only inside a step.
+      # That is a PARSE error, so the workflow could never run at all: not on schedule, not on
+      # dispatch. It went unnoticed because it had never been executed on GitHub (H-COR-2), and
+      # the weekly re-crawl is what keeps the corpus honest for the whole campaign.
+      # RUNNER_TEMP is a genuine environment variable on the runner; exporting it through
+      # $GITHUB_ENV makes it available both as $RECRAWL_DIR in `run:` and as
+      # ${{ env.RECRAWL_DIR }} in a `with:`.
+      - name: Répertoire de travail hors de l'arbre git
+        run: echo "RECRAWL_DIR=$RUNNER_TEMP/recrawl" >> "$GITHUB_ENV"
 
       - name: Node 24
         uses: actions/setup-node@v4
