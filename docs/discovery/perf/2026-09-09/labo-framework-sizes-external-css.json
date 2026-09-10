@@ -1,0 +1,211 @@
+{
+  "measuredAt": "2026-09-09T13:01:25.505Z",
+  "variants": [
+    {
+      "name": "react",
+      "label": "React 19 + Vite 6 + Tailwind v4",
+      "files": [
+        {
+          "path": "/assets/index-Dv1bC0oP.js",
+          "raw": 204521,
+          "gzip": 64682,
+          "role": "js-initial",
+          "wire": 65201,
+          "encoding": "br"
+        },
+        {
+          "path": "/assets/index-OH5C0G9Z.css",
+          "raw": 13845,
+          "gzip": 3773,
+          "role": "css",
+          "wire": 3819,
+          "encoding": "br"
+        },
+        {
+          "path": "/assets/search-core-CUPmbxsA.js",
+          "raw": 21028,
+          "gzip": 7245,
+          "role": "js-lazy",
+          "wire": 7549,
+          "encoding": "br"
+        },
+        {
+          "path": "/data/slim.json",
+          "raw": 249153,
+          "gzip": 69166,
+          "role": "data",
+          "wire": 68646,
+          "encoding": "br"
+        },
+        {
+          "path": "/fonts/GowunBatang-Bold-latin.woff2",
+          "raw": 19796,
+          "gzip": 19824,
+          "role": "font",
+          "wire": 19796,
+          "encoding": "identity"
+        },
+        {
+          "path": "/fonts/GowunBatang-Regular-latin.woff2",
+          "raw": 19652,
+          "gzip": 19680,
+          "role": "font-preloaded",
+          "wire": 19652,
+          "encoding": "identity"
+        },
+        {
+          "path": "/fonts/OFL-GowunBatang.txt",
+          "raw": 4397,
+          "gzip": 1981,
+          "role": "other"
+        },
+        {
+          "path": "/fonts/OFL-PublicSans.txt",
+          "raw": 4390,
+          "gzip": 1974,
+          "role": "other"
+        },
+        {
+          "path": "/fonts/PublicSans-Italic-Variable-latin.woff2",
+          "raw": 31116,
+          "gzip": 31144,
+          "role": "font",
+          "wire": 31116,
+          "encoding": "identity"
+        },
+        {
+          "path": "/fonts/PublicSans-Variable-latin.woff2",
+          "raw": 29180,
+          "gzip": 29208,
+          "role": "font-preloaded",
+          "wire": 29180,
+          "encoding": "identity"
+        },
+        {
+          "path": "/index.html",
+          "raw": 934,
+          "gzip": 525,
+          "role": "html",
+          "wire": 471,
+          "encoding": "br"
+        }
+      ],
+      "totals": {
+        "htmlRaw": 934,
+        "htmlGzip": 525,
+        "htmlWire": 471,
+        "jsInitialGzip": 64682,
+        "jsInitialWire": 65201,
+        "jsLazyGzip": 7245,
+        "cssGzip": 3773,
+        "cssWire": 3819,
+        "fontsPreloaded": 48832,
+        "criticalPathWire": 118323,
+        "initialLoadWire": 118323
+      }
+    },
+    {
+      "name": "astro",
+      "label": "Astro 5 (static + vanilla script)",
+      "files": [
+        {
+          "path": "/_astro/index.DPgV6q0t.css",
+          "raw": 7117,
+          "gzip": 1903,
+          "role": "css",
+          "wire": 1925,
+          "encoding": "br"
+        },
+        {
+          "path": "/_astro/search-core.CUPmbxsA.js",
+          "raw": 21028,
+          "gzip": 7245,
+          "role": "js-lazy",
+          "wire": 7549,
+          "encoding": "br"
+        },
+        {
+          "path": "/_astro/SearchBox.astro_astro_type_script_index_0_lang.DzuQZjhz.js",
+          "raw": 3133,
+          "gzip": 1517,
+          "role": "js-initial",
+          "wire": 1498,
+          "encoding": "br"
+        },
+        {
+          "path": "/data/slim.json",
+          "raw": 249153,
+          "gzip": 69166,
+          "role": "data",
+          "wire": 68700,
+          "encoding": "br"
+        },
+        {
+          "path": "/fonts/GowunBatang-Bold-latin.woff2",
+          "raw": 19796,
+          "gzip": 19824,
+          "role": "font",
+          "wire": 19796,
+          "encoding": "identity"
+        },
+        {
+          "path": "/fonts/GowunBatang-Regular-latin.woff2",
+          "raw": 19652,
+          "gzip": 19680,
+          "role": "font-preloaded",
+          "wire": 19652,
+          "encoding": "identity"
+        },
+        {
+          "path": "/fonts/OFL-GowunBatang.txt",
+          "raw": 4397,
+          "gzip": 1981,
+          "role": "other"
+        },
+        {
+          "path": "/fonts/OFL-PublicSans.txt",
+          "raw": 4390,
+          "gzip": 1974,
+          "role": "other"
+        },
+        {
+          "path": "/fonts/PublicSans-Italic-Variable-latin.woff2",
+          "raw": 31116,
+          "gzip": 31144,
+          "role": "font",
+          "wire": 31116,
+          "encoding": "identity"
+        },
+        {
+          "path": "/fonts/PublicSans-Variable-latin.woff2",
+          "raw": 29180,
+          "gzip": 29208,
+          "role": "font-preloaded",
+          "wire": 29180,
+          "encoding": "identity"
+        },
+        {
+          "path": "/index.html",
+          "raw": 6138,
+          "gzip": 2645,
+          "role": "html",
+          "wire": 2624,
+          "encoding": "br"
+        }
+      ],
+      "totals": {
+        "htmlRaw": 6138,
+        "htmlGzip": 2645,
+        "htmlWire": 2624,
+        "jsInitialGzip": 1517,
+        "jsInitialWire": 1498,
+        "jsLazyGzip": 7245,
+        "cssGzip": 1903,
+        "cssWire": 1925,
+        "fontsPreloaded": 48832,
+        "criticalPathWire": 54879,
+        "initialLoadWire": 54879
+      }
+    }
+  ]
+}

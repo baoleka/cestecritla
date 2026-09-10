@@ -1,0 +1,16 @@
+{
+  "uuid": "c33d31bf-f390-42e7-96be-98377e7f9d89",
+  "name": "aec-lab-fts",
+  "created_at": "2026-09-09T12:52:43.937Z",
+  "num_tables": 11,
+  "running_in_region": "WEUR",
+  "read_replication": {
+    "mode": "disabled"
+  },
+  "jurisdiction": null,
+  "database_size": 1150976,
+  "read_queries_24h": 949,
+  "write_queries_24h": 8,
+  "rows_read_24h": 121085,
+  "rows_written_24h": 2850
+}

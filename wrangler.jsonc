@@ -1,0 +1,50 @@
+{
+  // "C'est écrit là" — production Worker (Free plan, no payment method: D0.2, D0.31).
+  // One Worker: Static Assets serve everything; the script only sees /api/*.
+  //
+  // v1/v2 scope (D6.10 + D13.1): NO `ai`, NO `d1_databases`/`migrations_dir`, NO
+  // `durable_objects`/`migrations`, NO `ratelimits`, NO `kv_namespaces`, NO `triggers.crons`,
+  // NO AI_*/TURNSTILE_*/BUDGET_*/Q_CACHE_TTL_DAYS vars. They return only with the v3
+  // "ids only" contract; prototypes/labo-plateforme/d1-fts5 is kept as their proof.
+  // Do NOT copy the binding list from decisions.md D7.1: it predates D13.1 and is not struck out.
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "cestecritla",
+  "main": "src/worker/index.ts",
+  "compatibility_date": "2026-09-09",
+
+  // Custom domains on the Free zone (D10.2). workers.dev stays off so the only public
+  // origin is the .fr (CSP, OG URLs, LCEN).
+  "routes": [
+    { "pattern": "cestecritla.fr", "custom_domain": true },
+    { "pattern": "www.cestecritla.fr", "custom_domain": true },
+  ],
+  "workers_dev": false,
+  "preview_urls": false,
+
+  // Astro static output. Everything under ./dist is served by Static Assets: free, unlimited,
+  // outside the invocation counter. Only /api/* reaches the script; over the daily request
+  // limit /api/* answers 429 while the static site keeps working.
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"],
+  },
+
+  // Aggregated events, no identifier (D0.22, D5.1): one beacon per session, sampled client-side.
+  "analytics_engine_datasets": [{ "binding": "ANALYTICS", "dataset": "cel_events" }],
+
+  // The build's corpus version. The beacon is rejected if it does not match (D7.11).
+  "vars": {
+    "CORPUS_VERSION": "d29c7422004ab27c",
+  },
+
+  // No logs at all in production (D0.22, ADR-10): no invocation logs, no traces.
+  // CPU and error rates are read from GraphQL workersInvocationsAdaptive, which needs no logs.
+  "observability": { "enabled": false },
+
+  "minify": true,
+  "upload_source_maps": false,
+  "keep_vars": false,
+}

@@ -1,0 +1,7 @@
+start 2026-09-09T12:58:21Z
+codes: {200: 265, 503: 15} elapsed_s: 12.6
+first_503_at: 266 body: {"allowed": false, "used": 8480, "day": "2026-09-09", "remaining": 20, "budget": 10000, "hardStop": 8500, "resetAt": "2026-09-10T00:00:00.000Z"}
+wall_ms p50=44 p95=55 min=29 max=120
+do_rpc_ms(server-timing) p50=18 p95=22 min=5 max=91 n=280
+end 2026-09-09T12:58:33Z
+{"allowed":false,"used":8480,"day":"2026-09-09","remaining":20,"budget":10000,"hardStop":8500,"resetAt":"2026-09-10T00:00:00.000Z"}

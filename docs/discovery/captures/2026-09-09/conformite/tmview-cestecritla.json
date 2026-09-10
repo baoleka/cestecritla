@@ -1,0 +1,9 @@
+{
+ "tradeMarks": [],
+ "page": 1,
+ "totalPages": 0,
+ "totalResults": 0,
+ "_query": "cestecritla",
+ "_fetched_at": "2026-09-09T18:52Z",
+ "_source": "https://www.tmdn.org/tmview/ (EUIPN TMview, API search/results, offices FR + EM + WO ; data.inpi.fr renvoyait HTTP 403 le 9/9/2026)"
+}

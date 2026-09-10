@@ -1,0 +1,2636 @@
+{
+  "meta": {
+    "corpus_version": "d29c7422004ab27c",
+    "source_crawled_at": "2026-09-07T16:30:57.692Z",
+    "license_fr": "Textes extraits mot pour mot de « L'Avenir en commun, édition 2025 » (https://melenchon2027.fr/programme2025/livre/), CC BY-NC-SA 4.0, attribution « La France insoumise – L'Avenir en commun ». Fichier dérivé diffusé sous la même licence.",
+    "generator": "scripts/derive.ts",
+    "method_fr": "Étiquetage déterministe par règles (aucune IA) : pour chaque section, le titre, les paragraphes, les mesures clés, les mesures et les sous-mesures sont comparés à des listes de mots-clés par étiquette (scripts/tag-rules.ts). Chaque occurrence compte 1 point, une occurrence dans le titre compte 3 points ; une étiquette est attribuée à partir de 2 points (seuil relevé à 3 pour les mots-clés ambigus) et d'au moins 25 % du score de la meilleure étiquette du même vocabulaire dans la section (au plus 6 étiquettes par vocabulaire). Deux vocabulaires fermés : situations de vie (qui est concerné) et thèmes (de quoi parle la section). Chaque section reçoit au moins un thème : à défaut de seuil atteint, le thème le plus cité, sinon le thème par défaut du chapitre. Les textes ne sont ni modifiés ni résumés.",
+    "rules_file": "scripts/tag-rules.ts",
+    "title_weight": 3,
+    "sections": 89,
+    "sections_with_theme_fallback": [],
+    "sections_without_life_situation": [
+      "c1-s01",
+      "c1-s02",
+      "c1-s04",
+      "c1-s06",
+      "c2-s01",
+      "c2-s02",
+      "c3-s02",
+      "c4-s02",
+      "c6-s01",
+      "c6-s03",
+      "c6-s04",
+      "c7-s06",
+      "c7-s07",
+      "c9-s02",
+      "c9-s03",
+      "c12-s01",
+      "c12-s02",
+      "c14-s04",
+      "c14-s06",
+      "c15-s04",
+      "c16-s01",
+      "c16-s03",
+      "c16-s04",
+      "c16-s05",
+      "c16-s06",
+      "c16-s09",
+      "c16-s10",
+      "c16-s11",
+      "c17-s01",
+      "c17-s02",
+      "c18-s02",
+      "c18-s03",
+      "c18-s04",
+      "c18-s05"
+    ],
+    "review_sample": [
+      "c1-s01 — Réunir une Assemblée constituante pour passer à la 6e République — situations : (aucune) | thèmes : démocratie / institutions",
+      "c4-s01 — Une nouvelle étape des libertés et de l’émancipation individuelle — situations : femme, personne LGBTQIA+ | thèmes : démocratie / institutions, égalité femmes-hommes, LGBTQIA+, famille / parentalité, libertés / droits fondamentaux",
+      "c6-s01 — Mettre au pas la finance — situations : (aucune) | thèmes : impôts / fiscalité, finance / banques / dette",
+      "c7-s06 — La justice au nom du peuple — situations : (aucune) | thèmes : justice",
+      "c8-s07 — En finir avec la souffrance au travail — situations : salarié·e, malade / patient·e | thèmes : travail",
+      "c11-s01 — La bifurcation dans les arts et la culture : pour un service public du progrès humain — situations : salarié·e, artiste / auteur·rice | thèmes : culture",
+      "c14-s01 — Pollutions : désempoisonner le monde — situations : habitant·e des Outre-mer, victime / justiciable | thèmes : écologie / climat, entreprise / industrie",
+      "c16-s01 — Assumer l’indépendance de la France dans le monde — situations : (aucune) | thèmes : Europe, international / paix, défense / armée",
+      "c16-s11 — Construire une relation avec l’Afrique basée sur la souveraineté des peuples — situations : (aucune) | thèmes : international / paix"
+    ]
+  },
+  "vocab": {
+    "life_situations": [
+      "élève / lycéen·ne",
+      "étudiant·e",
+      "jeune (18-30 ans)",
+      "enfant / adolescent·e",
+      "parent",
+      "salarié·e",
+      "indépendant·e / artisan·e / commerçant·e",
+      "fonctionnaire / agent·e public·que",
+      "chômeur·se / demandeur·se d'emploi",
+      "retraité·e",
+      "personne en perte d'autonomie / aidant·e",
+      "personne en situation de handicap",
+      "malade / patient·e",
+      "femme",
+      "personne LGBTQIA+",
+      "locataire / mal-logé·e",
+      "propriétaire",
+      "agriculteur·rice / pêcheur·se",
+      "habitant·e des Outre-mer",
+      "habitant·e des zones rurales",
+      "habitant·e des villes / quartiers populaires",
+      "personne étrangère / immigrée",
+      "personne victime de racisme / discriminations",
+      "personne en situation de pauvreté / précarité",
+      "artiste / auteur·rice",
+      "sportif·ve",
+      "chercheur·se / enseignant·e",
+      "soignant·e / personnel de santé",
+      "policier·ère / gendarme",
+      "militaire / ancien·ne combattant·e",
+      "consommateur·rice / usager·ère",
+      "victime / justiciable"
+    ],
+    "themes": [
+      "pouvoir d'achat",
+      "salaires",
+      "retraites",
+      "logement",
+      "santé",
+      "école / éducation",
+      "recherche / sciences",
+      "espace / spatial",
+      "écologie / climat",
+      "énergie",
+      "transports",
+      "sécurité / police",
+      "justice",
+      "immigration / asile",
+      "Europe",
+      "international / paix",
+      "défense / armée",
+      "démocratie / institutions",
+      "territoires / collectivités locales",
+      "impôts / fiscalité",
+      "travail",
+      "entreprise / industrie",
+      "finance / banques / dette",
+      "services publics",
+      "culture",
+      "sport",
+      "numérique",
+      "alimentation / agriculture",
+      "eau",
+      "mer / océans",
+      "animaux",
+      "laïcité",
+      "égalité femmes-hommes",
+      "LGBTQIA+",
+      "handicap",
+      "jeunesse / enfance",
+      "famille / parentalité",
+      "grand âge / autonomie",
+      "solidarité / protection sociale",
+      "égalité / lutte contre les discriminations",
+      "libertés / droits fondamentaux",
+      "médias",
+      "consommation / déchets",
+      "Outre-mer"
+    ]
+  },
+  "sections": [
+    {
+      "id": "c1-s01",
+      "title": "Réunir une Assemblée constituante pour passer à la 6e République",
+      "life_situations": [],
+      "themes": [
+        "démocratie / institutions"
+      ],
+      "hits": {
+        "femme": 1,
+        "démocratie / institutions": 43,
+        "territoires / collectivités locales": 1,
+        "services publics": 1,
+        "égalité femmes-hommes": 1
+      }
+    },
+    {
+      "id": "c1-s02",
+      "title": "Abolir la monarchie présidentielle",
+      "life_situations": [],
+      "themes": [
+        "démocratie / institutions"
+      ],
+      "hits": {
+        "démocratie / institutions": 30,
+        "libertés / droits fondamentaux": 1
+      }
+    },
+    {
+      "id": "c1-s03",
+      "title": "Balayer l’oligarchie, abolir les privilèges de la caste",
+      "life_situations": [
+        "salarié·e",
+        "fonctionnaire / agent·e public·que"
+      ],
+      "themes": [
+        "démocratie / institutions",
+        "entreprise / industrie"
+      ],
+      "hits": {
+        "salarié·e": 2,
+        "fonctionnaire / agent·e public·que": 4,
+        "victime / justiciable": 1,
+        "pouvoir d'achat": 1,
+        "santé": 1,
+        "justice": 4,
+        "international / paix": 1,
+        "démocratie / institutions": 20,
+        "impôts / fiscalité": 2,
+        "travail": 2,
+        "entreprise / industrie": 6,
+        "finance / banques / dette": 1,
+        "services publics": 4,
+        "solidarité / protection sociale": 1
+      }
+    },
+    {
+      "id": "c1-s04",
+      "title": "Une République permettant l’intervention populaire",
+      "life_situations": [],
+      "themes": [
+        "démocratie / institutions"
+      ],
+      "hits": {
+        "parent": 2,
+        "salarié·e": 1,
+        "habitant·e des Outre-mer": 1,
+        "habitant·e des villes / quartiers populaires": 1,
+        "victime / justiciable": 1,
+        "écologie / climat": 1,
+        "justice": 1,
+        "Europe": 2,
+        "international / paix": 3,
+        "démocratie / institutions": 39,
+        "territoires / collectivités locales": 7,
+        "travail": 3,
+        "entreprise / industrie": 2,
+        "égalité femmes-hommes": 1,
+        "famille / parentalité": 3,
+        "libertés / droits fondamentaux": 1,
+        "Outre-mer": 1
+      }
+    },
+    {
+      "id": "c1-s05",
+      "title": "Une République laïque",
+      "life_situations": [
+        "habitant·e des Outre-mer"
+      ],
+      "themes": [
+        "démocratie / institutions",
+        "laïcité"
+      ],
+      "hits": {
+        "élève / lycéen·ne": 1,
+        "habitant·e des Outre-mer": 2,
+        "école / éducation": 1,
+        "international / paix": 1,
+        "démocratie / institutions": 9,
+        "territoires / collectivités locales": 2,
+        "services publics": 1,
+        "laïcité": 31,
+        "libertés / droits fondamentaux": 2,
+        "Outre-mer": 2
+      }
+    },
+    {
+      "id": "c1-s06",
+      "title": "La Révolution citoyenne dans les médias",
+      "life_situations": [],
+      "themes": [
+        "entreprise / industrie",
+        "médias"
+      ],
+      "hits": {
+        "salarié·e": 1,
+        "personne étrangère / immigrée": 1,
+        "sportif·ve": 1,
+        "consommateur·rice / usager·ère": 2,
+        "justice": 1,
+        "immigration / asile": 1,
+        "démocratie / institutions": 6,
+        "impôts / fiscalité": 1,
+        "travail": 1,
+        "entreprise / industrie": 8,
+        "finance / banques / dette": 2,
+        "culture": 2,
+        "sport": 1,
+        "numérique": 3,
+        "solidarité / protection sociale": 2,
+        "libertés / droits fondamentaux": 5,
+        "médias": 31
+      }
+    },
+    {
+      "id": "c2-s01",
+      "title": "Collectiviser les biens communs fondamentaux",
+      "life_situations": [],
+      "themes": [
+        "services publics"
+      ],
+      "hits": {
+        "santé": 1,
+        "écologie / climat": 2,
+        "énergie": 1,
+        "démocratie / institutions": 2,
+        "services publics": 11,
+        "alimentation / agriculture": 1,
+        "eau": 2
+      }
+    },
+    {
+      "id": "c2-s02",
+      "title": "Mettre fin au pillage économique de la Nation",
+      "life_situations": [],
+      "themes": [
+        "transports",
+        "justice",
+        "entreprise / industrie",
+        "services publics"
+      ],
+      "hits": {
+        "malade / patient·e": 1,
+        "personne en situation de pauvreté / précarité": 1,
+        "pouvoir d'achat": 1,
+        "santé": 1,
+        "énergie": 1,
+        "transports": 4,
+        "justice": 2,
+        "défense / armée": 1,
+        "travail": 1,
+        "entreprise / industrie": 7,
+        "finance / banques / dette": 1,
+        "services publics": 3,
+        "culture": 1,
+        "solidarité / protection sociale": 1
+      }
+    },
+    {
+      "id": "c3-s01",
+      "title": "Reconnaître la citoyenneté dans l’entreprise et des droits nouveaux aux salariés",
+      "life_situations": [
+        "salarié·e"
+      ],
+      "themes": [
+        "démocratie / institutions",
+        "travail",
+        "entreprise / industrie"
+      ],
+      "hits": {
+        "salarié·e": 9,
+        "consommateur·rice / usager·ère": 1,
+        "écologie / climat": 1,
+        "démocratie / institutions": 4,
+        "travail": 10,
+        "entreprise / industrie": 13,
+        "consommation / déchets": 1
+      }
+    },
+    {
+      "id": "c3-s02",
+      "title": "Une République affirmant le rôle central des communes",
+      "life_situations": [],
+      "themes": [
+        "démocratie / institutions",
+        "territoires / collectivités locales"
+      ],
+      "hits": {
+        "salarié·e": 1,
+        "femme": 2,
+        "habitant·e des zones rurales": 1,
+        "habitant·e des villes / quartiers populaires": 1,
+        "pouvoir d'achat": 1,
+        "démocratie / institutions": 9,
+        "territoires / collectivités locales": 21,
+        "travail": 3,
+        "finance / banques / dette": 1,
+        "égalité femmes-hommes": 2,
+        "solidarité / protection sociale": 1
+      }
+    },
+    {
+      "id": "c4-s01",
+      "title": "Une nouvelle étape des libertés et de l’émancipation individuelle",
+      "life_situations": [
+        "femme",
+        "personne LGBTQIA+"
+      ],
+      "themes": [
+        "démocratie / institutions",
+        "égalité femmes-hommes",
+        "LGBTQIA+",
+        "famille / parentalité",
+        "libertés / droits fondamentaux"
+      ],
+      "hits": {
+        "enfant / adolescent·e": 2,
+        "parent": 1,
+        "malade / patient·e": 2,
+        "femme": 3,
+        "personne LGBTQIA+": 4,
+        "pouvoir d'achat": 2,
+        "santé": 1,
+        "Europe": 2,
+        "démocratie / institutions": 4,
+        "égalité femmes-hommes": 3,
+        "LGBTQIA+": 5,
+        "jeunesse / enfance": 2,
+        "famille / parentalité": 3,
+        "grand âge / autonomie": 2,
+        "solidarité / protection sociale": 2,
+        "libertés / droits fondamentaux": 9
+      }
+    },
+    {
+      "id": "c4-s02",
+      "title": "Sortir de l’état d’urgence permanent",
+      "life_situations": [],
+      "themes": [
+        "sécurité / police",
+        "justice",
+        "libertés / droits fondamentaux"
+      ],
+      "hits": {
+        "sécurité / police": 5,
+        "justice": 3,
+        "impôts / fiscalité": 2,
+        "entreprise / industrie": 2,
+        "numérique": 2,
+        "libertés / droits fondamentaux": 12
+      }
+    },
+    {
+      "id": "c4-s03",
+      "title": "Refonder une police républicaine",
+      "life_situations": [
+        "policier·ère / gendarme"
+      ],
+      "themes": [
+        "sécurité / police"
+      ],
+      "hits": {
+        "élève / lycéen·ne": 2,
+        "étudiant·e": 1,
+        "indépendant·e / artisan·e / commerçant·e": 1,
+        "chercheur·se / enseignant·e": 1,
+        "policier·ère / gendarme": 4,
+        "école / éducation": 3,
+        "espace / spatial": 1,
+        "sécurité / police": 17,
+        "justice": 3,
+        "international / paix": 1,
+        "démocratie / institutions": 1,
+        "territoires / collectivités locales": 1,
+        "services publics": 2,
+        "libertés / droits fondamentaux": 3
+      }
+    },
+    {
+      "id": "c5-s01",
+      "title": "Éradiquer l’illettrisme et développer l’alphabétisation",
+      "life_situations": [
+        "habitant·e des Outre-mer"
+      ],
+      "themes": [
+        "école / éducation",
+        "Outre-mer"
+      ],
+      "hits": {
+        "élève / lycéen·ne": 1,
+        "jeune (18-30 ans)": 1,
+        "habitant·e des Outre-mer": 4,
+        "consommateur·rice / usager·ère": 1,
+        "pouvoir d'achat": 2,
+        "école / éducation": 11,
+        "international / paix": 1,
+        "culture": 1,
+        "jeunesse / enfance": 1,
+        "solidarité / protection sociale": 1,
+        "Outre-mer": 4
+      }
+    },
+    {
+      "id": "c5-s02",
+      "title": "Faire le service public de la petite enfance",
+      "life_situations": [
+        "enfant / adolescent·e",
+        "parent"
+      ],
+      "themes": [
+        "école / éducation",
+        "travail",
+        "services publics",
+        "jeunesse / enfance",
+        "famille / parentalité"
+      ],
+      "hits": {
+        "jeune (18-30 ans)": 1,
+        "enfant / adolescent·e": 14,
+        "parent": 12,
+        "femme": 2,
+        "pouvoir d'achat": 2,
+        "école / éducation": 8,
+        "travail": 6,
+        "entreprise / industrie": 1,
+        "services publics": 5,
+        "égalité femmes-hommes": 2,
+        "jeunesse / enfance": 19,
+        "famille / parentalité": 12,
+        "solidarité / protection sociale": 2,
+        "libertés / droits fondamentaux": 2
+      }
+    },
+    {
+      "id": "c5-s03",
+      "title": "Reconstruire une école globale pour l’égalité et l’émancipation",
+      "life_situations": [
+        "élève / lycéen·ne"
+      ],
+      "themes": [
+        "école / éducation"
+      ],
+      "hits": {
+        "élève / lycéen·ne": 51,
+        "jeune (18-30 ans)": 4,
+        "enfant / adolescent·e": 3,
+        "parent": 1,
+        "salarié·e": 1,
+        "fonctionnaire / agent·e public·que": 1,
+        "personne en situation de handicap": 2,
+        "femme": 1,
+        "personne LGBTQIA+": 3,
+        "personne victime de racisme / discriminations": 2,
+        "personne en situation de pauvreté / précarité": 1,
+        "chercheur·se / enseignant·e": 2,
+        "soignant·e / personnel de santé": 1,
+        "pouvoir d'achat": 4,
+        "salaires": 3,
+        "santé": 2,
+        "école / éducation": 85,
+        "recherche / sciences": 2,
+        "écologie / climat": 6,
+        "transports": 1,
+        "justice": 1,
+        "Europe": 1,
+        "démocratie / institutions": 2,
+        "territoires / collectivités locales": 3,
+        "travail": 3,
+        "entreprise / industrie": 3,
+        "finance / banques / dette": 1,
+        "services publics": 7,
+        "alimentation / agriculture": 5,
+        "laïcité": 1,
+        "égalité femmes-hommes": 6,
+        "LGBTQIA+": 3,
+        "handicap": 2,
+        "jeunesse / enfance": 9,
+        "famille / parentalité": 1,
+        "solidarité / protection sociale": 6,
+        "égalité / lutte contre les discriminations": 5,
+        "libertés / droits fondamentaux": 6,
+        "consommation / déchets": 1
+      }
+    },
+    {
+      "id": "c5-s04",
+      "title": "Qualifier tout le monde",
+      "life_situations": [
+        "élève / lycéen·ne",
+        "étudiant·e",
+        "jeune (18-30 ans)"
+      ],
+      "themes": [
+        "école / éducation",
+        "écologie / climat",
+        "jeunesse / enfance"
+      ],
+      "hits": {
+        "élève / lycéen·ne": 4,
+        "étudiant·e": 2,
+        "jeune (18-30 ans)": 6,
+        "enfant / adolescent·e": 1,
+        "salarié·e": 1,
+        "agriculteur·rice / pêcheur·se": 2,
+        "pouvoir d'achat": 2,
+        "école / éducation": 13,
+        "écologie / climat": 6,
+        "sécurité / police": 1,
+        "territoires / collectivités locales": 1,
+        "impôts / fiscalité": 1,
+        "travail": 2,
+        "entreprise / industrie": 2,
+        "finance / banques / dette": 1,
+        "services publics": 2,
+        "alimentation / agriculture": 2,
+        "jeunesse / enfance": 8,
+        "solidarité / protection sociale": 2
+      }
+    },
+    {
+      "id": "c5-s05",
+      "title": "Être une grande nation scientifique",
+      "life_situations": [
+        "étudiant·e",
+        "chercheur·se / enseignant·e"
+      ],
+      "themes": [
+        "école / éducation",
+        "recherche / sciences"
+      ],
+      "hits": {
+        "étudiant·e": 6,
+        "jeune (18-30 ans)": 1,
+        "personne étrangère / immigrée": 2,
+        "chercheur·se / enseignant·e": 5,
+        "pouvoir d'achat": 1,
+        "école / éducation": 6,
+        "recherche / sciences": 23,
+        "écologie / climat": 3,
+        "immigration / asile": 2,
+        "international / paix": 4,
+        "démocratie / institutions": 4,
+        "impôts / fiscalité": 1,
+        "finance / banques / dette": 1,
+        "services publics": 1,
+        "numérique": 1,
+        "jeunesse / enfance": 2,
+        "solidarité / protection sociale": 1
+      }
+    },
+    {
+      "id": "c5-s06",
+      "title": "Refonder l’enseignement supérieur",
+      "life_situations": [
+        "étudiant·e"
+      ],
+      "themes": [
+        "école / éducation",
+        "recherche / sciences",
+        "jeunesse / enfance"
+      ],
+      "hits": {
+        "élève / lycéen·ne": 1,
+        "étudiant·e": 24,
+        "jeune (18-30 ans)": 2,
+        "fonctionnaire / agent·e public·que": 2,
+        "malade / patient·e": 1,
+        "personne en situation de pauvreté / précarité": 2,
+        "chercheur·se / enseignant·e": 5,
+        "pouvoir d'achat": 3,
+        "logement": 4,
+        "santé": 2,
+        "école / éducation": 22,
+        "recherche / sciences": 9,
+        "écologie / climat": 1,
+        "international / paix": 1,
+        "travail": 3,
+        "entreprise / industrie": 1,
+        "finance / banques / dette": 2,
+        "services publics": 2,
+        "jeunesse / enfance": 7,
+        "solidarité / protection sociale": 5,
+        "libertés / droits fondamentaux": 1
+      }
+    },
+    {
+      "id": "c5-s07",
+      "title": "Créer une conscription pour le secours collectif",
+      "life_situations": [
+        "jeune (18-30 ans)"
+      ],
+      "themes": [
+        "salaires",
+        "santé",
+        "défense / armée",
+        "égalité femmes-hommes",
+        "jeunesse / enfance"
+      ],
+      "hits": {
+        "jeune (18-30 ans)": 12,
+        "salarié·e": 2,
+        "femme": 2,
+        "personne victime de racisme / discriminations": 2,
+        "militaire / ancien·ne combattant·e": 1,
+        "pouvoir d'achat": 1,
+        "salaires": 2,
+        "santé": 3,
+        "écologie / climat": 1,
+        "transports": 2,
+        "défense / armée": 7,
+        "culture": 1,
+        "alimentation / agriculture": 1,
+        "égalité femmes-hommes": 4,
+        "jeunesse / enfance": 4,
+        "solidarité / protection sociale": 1,
+        "égalité / lutte contre les discriminations": 2
+      }
+    },
+    {
+      "id": "c6-s01",
+      "title": "Mettre au pas la finance",
+      "life_situations": [],
+      "themes": [
+        "impôts / fiscalité",
+        "finance / banques / dette"
+      ],
+      "hits": {
+        "salarié·e": 1,
+        "Europe": 2,
+        "impôts / fiscalité": 4,
+        "travail": 1,
+        "entreprise / industrie": 2,
+        "finance / banques / dette": 10
+      }
+    },
+    {
+      "id": "c6-s02",
+      "title": "Pour des banques au service de l’intérêt général",
+      "life_situations": [
+        "indépendant·e / artisan·e / commerçant·e"
+      ],
+      "themes": [
+        "écologie / climat",
+        "entreprise / industrie",
+        "finance / banques / dette"
+      ],
+      "hits": {
+        "indépendant·e / artisan·e / commerçant·e": 3,
+        "écologie / climat": 9,
+        "justice": 2,
+        "démocratie / institutions": 1,
+        "impôts / fiscalité": 1,
+        "entreprise / industrie": 7,
+        "finance / banques / dette": 19,
+        "services publics": 3,
+        "solidarité / protection sociale": 1
+      }
+    },
+    {
+      "id": "c6-s03",
+      "title": "Définanciariser l’économie réelle",
+      "life_situations": [],
+      "themes": [
+        "entreprise / industrie",
+        "finance / banques / dette"
+      ],
+      "hits": {
+        "salarié·e": 1,
+        "santé": 1,
+        "école / éducation": 1,
+        "écologie / climat": 2,
+        "justice": 1,
+        "démocratie / institutions": 1,
+        "impôts / fiscalité": 1,
+        "travail": 1,
+        "entreprise / industrie": 7,
+        "finance / banques / dette": 11,
+        "solidarité / protection sociale": 1
+      }
+    },
+    {
+      "id": "c6-s04",
+      "title": "Refuser le chantage : annuler la dette publique",
+      "life_situations": [],
+      "themes": [
+        "Europe",
+        "finance / banques / dette"
+      ],
+      "hits": {
+        "enfant / adolescent·e": 1,
+        "indépendant·e / artisan·e / commerçant·e": 1,
+        "agriculteur·rice / pêcheur·se": 1,
+        "pouvoir d'achat": 1,
+        "santé": 3,
+        "écologie / climat": 1,
+        "justice": 1,
+        "Europe": 13,
+        "entreprise / industrie": 2,
+        "finance / banques / dette": 28,
+        "services publics": 1,
+        "culture": 1,
+        "alimentation / agriculture": 2,
+        "jeunesse / enfance": 1,
+        "solidarité / protection sociale": 2
+      }
+    },
+    {
+      "id": "c6-s05",
+      "title": "Faire la révolution fiscale",
+      "life_situations": [
+        "parent"
+      ],
+      "themes": [
+        "impôts / fiscalité"
+      ],
+      "hits": {
+        "enfant / adolescent·e": 1,
+        "parent": 3,
+        "femme": 2,
+        "propriétaire": 1,
+        "personne étrangère / immigrée": 1,
+        "pouvoir d'achat": 2,
+        "salaires": 1,
+        "logement": 1,
+        "écologie / climat": 3,
+        "énergie": 1,
+        "sécurité / police": 1,
+        "justice": 3,
+        "immigration / asile": 1,
+        "Europe": 3,
+        "international / paix": 1,
+        "démocratie / institutions": 1,
+        "impôts / fiscalité": 49,
+        "travail": 1,
+        "entreprise / industrie": 5,
+        "finance / banques / dette": 8,
+        "services publics": 1,
+        "culture": 3,
+        "égalité femmes-hommes": 2,
+        "jeunesse / enfance": 1,
+        "famille / parentalité": 3,
+        "solidarité / protection sociale": 2,
+        "médias": 1
+      }
+    },
+    {
+      "id": "c7-s01",
+      "title": "L’égalité des populations par la démocratie et les services publics",
+      "life_situations": [
+        "indépendant·e / artisan·e / commerçant·e",
+        "habitant·e des villes / quartiers populaires"
+      ],
+      "themes": [
+        "transports",
+        "démocratie / institutions",
+        "territoires / collectivités locales",
+        "services publics"
+      ],
+      "hits": {
+        "élève / lycéen·ne": 1,
+        "indépendant·e / artisan·e / commerçant·e": 2,
+        "malade / patient·e": 1,
+        "habitant·e des Outre-mer": 1,
+        "habitant·e des zones rurales": 2,
+        "habitant·e des villes / quartiers populaires": 7,
+        "personne en situation de pauvreté / précarité": 1,
+        "logement": 2,
+        "santé": 1,
+        "école / éducation": 1,
+        "transports": 4,
+        "justice": 1,
+        "démocratie / institutions": 3,
+        "territoires / collectivités locales": 9,
+        "impôts / fiscalité": 1,
+        "entreprise / industrie": 1,
+        "services publics": 9,
+        "solidarité / protection sociale": 1,
+        "Outre-mer": 1
+      }
+    },
+    {
+      "id": "c7-s02",
+      "title": "En finir avec l’abandon des Outre-mer",
+      "life_situations": [
+        "habitant·e des Outre-mer"
+      ],
+      "themes": [
+        "pouvoir d'achat",
+        "école / éducation",
+        "services publics",
+        "solidarité / protection sociale",
+        "Outre-mer"
+      ],
+      "hits": {
+        "élève / lycéen·ne": 2,
+        "fonctionnaire / agent·e public·que": 1,
+        "personne en perte d'autonomie / aidant·e": 1,
+        "habitant·e des Outre-mer": 12,
+        "personne en situation de pauvreté / précarité": 2,
+        "consommateur·rice / usager·ère": 1,
+        "pouvoir d'achat": 5,
+        "logement": 1,
+        "santé": 2,
+        "école / éducation": 6,
+        "écologie / climat": 2,
+        "énergie": 1,
+        "transports": 3,
+        "démocratie / institutions": 2,
+        "territoires / collectivités locales": 1,
+        "entreprise / industrie": 3,
+        "services publics": 4,
+        "culture": 1,
+        "grand âge / autonomie": 1,
+        "solidarité / protection sociale": 4,
+        "Outre-mer": 13
+      }
+    },
+    {
+      "id": "c7-s03",
+      "title": "Faire la société de l’entraide : généraliser l’économie sociale, solidaire et coopérative",
+      "life_situations": [
+        "salarié·e"
+      ],
+      "themes": [
+        "travail",
+        "entreprise / industrie",
+        "solidarité / protection sociale"
+      ],
+      "hits": {
+        "salarié·e": 2,
+        "indépendant·e / artisan·e / commerçant·e": 1,
+        "personne en situation de handicap": 1,
+        "consommateur·rice / usager·ère": 1,
+        "pouvoir d'achat": 1,
+        "école / éducation": 1,
+        "démocratie / institutions": 1,
+        "territoires / collectivités locales": 1,
+        "travail": 7,
+        "entreprise / industrie": 22,
+        "finance / banques / dette": 3,
+        "handicap": 1,
+        "solidarité / protection sociale": 18
+      }
+    },
+    {
+      "id": "c7-s04",
+      "title": "Éradiquer la pauvreté",
+      "life_situations": [
+        "personne en situation de pauvreté / précarité"
+      ],
+      "themes": [
+        "pouvoir d'achat",
+        "solidarité / protection sociale"
+      ],
+      "hits": {
+        "jeune (18-30 ans)": 1,
+        "salarié·e": 1,
+        "locataire / mal-logé·e": 2,
+        "personne en situation de pauvreté / précarité": 24,
+        "pouvoir d'achat": 8,
+        "salaires": 1,
+        "logement": 1,
+        "énergie": 1,
+        "impôts / fiscalité": 1,
+        "travail": 2,
+        "finance / banques / dette": 2,
+        "services publics": 1,
+        "alimentation / agriculture": 2,
+        "eau": 1,
+        "jeunesse / enfance": 1,
+        "solidarité / protection sociale": 28,
+        "consommation / déchets": 1
+      }
+    },
+    {
+      "id": "c7-s05",
+      "title": "Garantir le droit au logement",
+      "life_situations": [
+        "locataire / mal-logé·e"
+      ],
+      "themes": [
+        "logement"
+      ],
+      "hits": {
+        "étudiant·e": 1,
+        "jeune (18-30 ans)": 1,
+        "salarié·e": 1,
+        "locataire / mal-logé·e": 14,
+        "propriétaire": 1,
+        "habitant·e des villes / quartiers populaires": 2,
+        "chercheur·se / enseignant·e": 1,
+        "logement": 35,
+        "santé": 1,
+        "école / éducation": 1,
+        "écologie / climat": 1,
+        "énergie": 1,
+        "immigration / asile": 1,
+        "territoires / collectivités locales": 1,
+        "impôts / fiscalité": 5,
+        "travail": 1,
+        "entreprise / industrie": 1,
+        "finance / banques / dette": 1,
+        "services publics": 1,
+        "eau": 2,
+        "mer / océans": 1,
+        "jeunesse / enfance": 1,
+        "solidarité / protection sociale": 1
+      }
+    },
+    {
+      "id": "c7-s06",
+      "title": "La justice au nom du peuple",
+      "life_situations": [],
+      "themes": [
+        "justice"
+      ],
+      "hits": {
+        "jeune (18-30 ans)": 2,
+        "fonctionnaire / agent·e public·que": 1,
+        "habitant·e des Outre-mer": 1,
+        "victime / justiciable": 1,
+        "pouvoir d'achat": 2,
+        "sécurité / police": 1,
+        "justice": 20,
+        "démocratie / institutions": 2,
+        "finance / banques / dette": 1,
+        "services publics": 1,
+        "jeunesse / enfance": 2,
+        "famille / parentalité": 1,
+        "solidarité / protection sociale": 2,
+        "Outre-mer": 1
+      }
+    },
+    {
+      "id": "c7-s07",
+      "title": "Une politique de justice efficace",
+      "life_situations": [],
+      "themes": [
+        "sécurité / police",
+        "justice",
+        "démocratie / institutions"
+      ],
+      "hits": {
+        "policier·ère / gendarme": 1,
+        "victime / justiciable": 2,
+        "école / éducation": 2,
+        "écologie / climat": 4,
+        "sécurité / police": 5,
+        "justice": 19,
+        "démocratie / institutions": 5,
+        "entreprise / industrie": 3,
+        "finance / banques / dette": 3,
+        "égalité femmes-hommes": 3,
+        "libertés / droits fondamentaux": 1
+      }
+    },
+    {
+      "id": "c7-s08",
+      "title": "Une police de proximité au service de la sûreté des citoyens",
+      "life_situations": [
+        "policier·ère / gendarme"
+      ],
+      "themes": [
+        "sécurité / police"
+      ],
+      "hits": {
+        "fonctionnaire / agent·e public·que": 1,
+        "policier·ère / gendarme": 10,
+        "victime / justiciable": 1,
+        "salaires": 1,
+        "recherche / sciences": 1,
+        "sécurité / police": 27,
+        "territoires / collectivités locales": 1,
+        "finance / banques / dette": 1,
+        "services publics": 1,
+        "numérique": 1,
+        "libertés / droits fondamentaux": 3
+      }
+    },
+    {
+      "id": "c7-s09",
+      "title": "Protéger les enfants",
+      "life_situations": [
+        "enfant / adolescent·e"
+      ],
+      "themes": [
+        "jeunesse / enfance"
+      ],
+      "hits": {
+        "jeune (18-30 ans)": 3,
+        "enfant / adolescent·e": 27,
+        "parent": 1,
+        "malade / patient·e": 5,
+        "femme": 1,
+        "habitant·e des Outre-mer": 1,
+        "personne étrangère / immigrée": 2,
+        "victime / justiciable": 1,
+        "santé": 6,
+        "école / éducation": 4,
+        "sécurité / police": 1,
+        "justice": 6,
+        "immigration / asile": 4,
+        "international / paix": 1,
+        "démocratie / institutions": 1,
+        "impôts / fiscalité": 1,
+        "finance / banques / dette": 1,
+        "numérique": 2,
+        "égalité femmes-hommes": 5,
+        "jeunesse / enfance": 33,
+        "famille / parentalité": 2,
+        "solidarité / protection sociale": 1,
+        "libertés / droits fondamentaux": 2,
+        "Outre-mer": 1
+      }
+    },
+    {
+      "id": "c8-s01",
+      "title": "Établir la garantie d’emploi",
+      "life_situations": [
+        "chômeur·se / demandeur·se d'emploi"
+      ],
+      "themes": [
+        "travail"
+      ],
+      "hits": {
+        "parent": 1,
+        "salarié·e": 1,
+        "chômeur·se / demandeur·se d'emploi": 7,
+        "salaires": 1,
+        "école / éducation": 1,
+        "écologie / climat": 1,
+        "travail": 13,
+        "famille / parentalité": 1
+      }
+    },
+    {
+      "id": "c8-s02",
+      "title": "Réduire le temps de travail et faire naître une société du temps choisi",
+      "life_situations": [
+        "salarié·e"
+      ],
+      "themes": [
+        "travail"
+      ],
+      "hits": {
+        "salarié·e": 11,
+        "chômeur·se / demandeur·se d'emploi": 1,
+        "retraité·e": 1,
+        "retraites": 2,
+        "écologie / climat": 2,
+        "transports": 1,
+        "impôts / fiscalité": 2,
+        "travail": 28
+      }
+    },
+    {
+      "id": "c8-s03",
+      "title": "Un emploi stable pour chacun",
+      "life_situations": [
+        "salarié·e",
+        "indépendant·e / artisan·e / commerçant·e",
+        "personne en situation de pauvreté / précarité"
+      ],
+      "themes": [
+        "Europe",
+        "travail",
+        "entreprise / industrie",
+        "solidarité / protection sociale"
+      ],
+      "hits": {
+        "salarié·e": 3,
+        "indépendant·e / artisan·e / commerçant·e": 2,
+        "fonctionnaire / agent·e public·que": 1,
+        "malade / patient·e": 1,
+        "femme": 1,
+        "personne en situation de pauvreté / précarité": 5,
+        "consommateur·rice / usager·ère": 2,
+        "immigration / asile": 1,
+        "Europe": 3,
+        "travail": 11,
+        "entreprise / industrie": 7,
+        "numérique": 2,
+        "égalité femmes-hommes": 1,
+        "solidarité / protection sociale": 5,
+        "consommation / déchets": 1
+      }
+    },
+    {
+      "id": "c8-s04",
+      "title": "Augmenter les salaires et réduire les inégalités salariales dans l’entreprise",
+      "life_situations": [
+        "salarié·e",
+        "femme"
+      ],
+      "themes": [
+        "salaires",
+        "travail",
+        "entreprise / industrie",
+        "égalité femmes-hommes",
+        "solidarité / protection sociale"
+      ],
+      "hits": {
+        "jeune (18-30 ans)": 1,
+        "salarié·e": 17,
+        "fonctionnaire / agent·e public·que": 2,
+        "retraité·e": 1,
+        "malade / patient·e": 1,
+        "femme": 7,
+        "personne en situation de pauvreté / précarité": 3,
+        "pouvoir d'achat": 2,
+        "salaires": 16,
+        "retraites": 1,
+        "santé": 1,
+        "école / éducation": 1,
+        "justice": 2,
+        "travail": 9,
+        "entreprise / industrie": 7,
+        "finance / banques / dette": 3,
+        "services publics": 2,
+        "égalité femmes-hommes": 8,
+        "jeunesse / enfance": 1,
+        "famille / parentalité": 1,
+        "solidarité / protection sociale": 6
+      }
+    },
+    {
+      "id": "c8-s05",
+      "title": "Rétablir une assurance-chômage protectrice",
+      "life_situations": [
+        "salarié·e",
+        "chômeur·se / demandeur·se d'emploi"
+      ],
+      "themes": [
+        "travail"
+      ],
+      "hits": {
+        "salarié·e": 5,
+        "chômeur·se / demandeur·se d'emploi": 17,
+        "personne en situation de pauvreté / précarité": 2,
+        "artiste / auteur·rice": 1,
+        "soignant·e / personnel de santé": 1,
+        "salaires": 1,
+        "santé": 1,
+        "impôts / fiscalité": 1,
+        "travail": 26,
+        "culture": 1,
+        "solidarité / protection sociale": 5
+      }
+    },
+    {
+      "id": "c8-s06",
+      "title": "Une sécurité sociale professionnelle",
+      "life_situations": [
+        "salarié·e"
+      ],
+      "themes": [
+        "santé",
+        "travail",
+        "solidarité / protection sociale"
+      ],
+      "hits": {
+        "jeune (18-30 ans)": 1,
+        "salarié·e": 5,
+        "indépendant·e / artisan·e / commerçant·e": 1,
+        "chômeur·se / demandeur·se d'emploi": 1,
+        "malade / patient·e": 1,
+        "personne en situation de pauvreté / précarité": 1,
+        "santé": 9,
+        "école / éducation": 2,
+        "travail": 22,
+        "entreprise / industrie": 1,
+        "finance / banques / dette": 1,
+        "jeunesse / enfance": 1,
+        "solidarité / protection sociale": 8
+      }
+    },
+    {
+      "id": "c8-s07",
+      "title": "En finir avec la souffrance au travail",
+      "life_situations": [
+        "salarié·e",
+        "malade / patient·e"
+      ],
+      "themes": [
+        "travail"
+      ],
+      "hits": {
+        "salarié·e": 3,
+        "indépendant·e / artisan·e / commerçant·e": 1,
+        "fonctionnaire / agent·e public·que": 2,
+        "chômeur·se / demandeur·se d'emploi": 1,
+        "malade / patient·e": 5,
+        "soignant·e / personnel de santé": 1,
+        "santé": 7,
+        "recherche / sciences": 1,
+        "écologie / climat": 3,
+        "justice": 2,
+        "international / paix": 1,
+        "travail": 35,
+        "entreprise / industrie": 1,
+        "finance / banques / dette": 1,
+        "services publics": 2,
+        "alimentation / agriculture": 1
+      }
+    },
+    {
+      "id": "c8-s08",
+      "title": "Garantir une retraite digne",
+      "life_situations": [
+        "retraité·e",
+        "personne en situation de pauvreté / précarité"
+      ],
+      "themes": [
+        "retraites",
+        "solidarité / protection sociale"
+      ],
+      "hits": {
+        "salarié·e": 3,
+        "indépendant·e / artisan·e / commerçant·e": 1,
+        "retraité·e": 15,
+        "femme": 1,
+        "agriculteur·rice / pêcheur·se": 1,
+        "personne en situation de pauvreté / précarité": 5,
+        "salaires": 3,
+        "retraites": 17,
+        "santé": 1,
+        "écologie / climat": 2,
+        "justice": 1,
+        "démocratie / institutions": 3,
+        "impôts / fiscalité": 3,
+        "travail": 2,
+        "entreprise / industrie": 1,
+        "finance / banques / dette": 3,
+        "alimentation / agriculture": 1,
+        "égalité femmes-hommes": 1,
+        "grand âge / autonomie": 3,
+        "solidarité / protection sociale": 5
+      }
+    },
+    {
+      "id": "c9-s01",
+      "title": "Créer un état d’urgence sociale",
+      "life_situations": [
+        "habitant·e des Outre-mer"
+      ],
+      "themes": [
+        "pouvoir d'achat",
+        "salaires",
+        "énergie",
+        "territoires / collectivités locales",
+        "entreprise / industrie",
+        "services publics"
+      ],
+      "hits": {
+        "salarié·e": 1,
+        "fonctionnaire / agent·e public·que": 1,
+        "habitant·e des Outre-mer": 2,
+        "personne en situation de pauvreté / précarité": 1,
+        "pouvoir d'achat": 5,
+        "salaires": 2,
+        "santé": 1,
+        "énergie": 2,
+        "territoires / collectivités locales": 4,
+        "entreprise / industrie": 3,
+        "finance / banques / dette": 2,
+        "services publics": 3,
+        "alimentation / agriculture": 1,
+        "solidarité / protection sociale": 2,
+        "libertés / droits fondamentaux": 1,
+        "Outre-mer": 2
+      }
+    },
+    {
+      "id": "c9-s02",
+      "title": "Réindustrialiser et relocaliser pour assurer notre indépendance",
+      "life_situations": [],
+      "themes": [
+        "écologie / climat",
+        "entreprise / industrie"
+      ],
+      "hits": {
+        "parent": 1,
+        "personne en perte d'autonomie / aidant·e": 1,
+        "malade / patient·e": 1,
+        "agriculteur·rice / pêcheur·se": 1,
+        "personne étrangère / immigrée": 1,
+        "santé": 3,
+        "écologie / climat": 14,
+        "énergie": 2,
+        "transports": 2,
+        "justice": 1,
+        "immigration / asile": 2,
+        "international / paix": 2,
+        "impôts / fiscalité": 3,
+        "travail": 1,
+        "entreprise / industrie": 25,
+        "finance / banques / dette": 4,
+        "alimentation / agriculture": 3,
+        "eau": 1,
+        "famille / parentalité": 1,
+        "grand âge / autonomie": 1,
+        "solidarité / protection sociale": 1,
+        "consommation / déchets": 4
+      }
+    },
+    {
+      "id": "c9-s03",
+      "title": "Lancer des grands chantiers écologiques, créateurs d’emplois",
+      "life_situations": [],
+      "themes": [
+        "écologie / climat",
+        "énergie",
+        "travail",
+        "entreprise / industrie",
+        "eau",
+        "mer / océans"
+      ],
+      "hits": {
+        "chômeur·se / demandeur·se d'emploi": 1,
+        "habitant·e des Outre-mer": 1,
+        "logement": 2,
+        "écologie / climat": 9,
+        "énergie": 6,
+        "transports": 1,
+        "international / paix": 1,
+        "travail": 5,
+        "entreprise / industrie": 3,
+        "culture": 1,
+        "eau": 3,
+        "mer / océans": 8,
+        "consommation / déchets": 1,
+        "Outre-mer": 2
+      }
+    },
+    {
+      "id": "c10-s01",
+      "title": "Réaliser l’égalité entre les femmes et les hommes",
+      "life_situations": [
+        "femme"
+      ],
+      "themes": [
+        "égalité femmes-hommes"
+      ],
+      "hits": {
+        "enfant / adolescent·e": 1,
+        "parent": 5,
+        "salarié·e": 2,
+        "retraité·e": 1,
+        "femme": 23,
+        "personne LGBTQIA+": 1,
+        "locataire / mal-logé·e": 1,
+        "personne en situation de pauvreté / précarité": 1,
+        "soignant·e / personnel de santé": 1,
+        "salaires": 3,
+        "retraites": 2,
+        "logement": 1,
+        "santé": 3,
+        "transports": 1,
+        "justice": 2,
+        "démocratie / institutions": 1,
+        "travail": 5,
+        "entreprise / industrie": 2,
+        "finance / banques / dette": 2,
+        "alimentation / agriculture": 1,
+        "égalité femmes-hommes": 37,
+        "LGBTQIA+": 1,
+        "jeunesse / enfance": 1,
+        "famille / parentalité": 7,
+        "solidarité / protection sociale": 2
+      }
+    },
+    {
+      "id": "c10-s02",
+      "title": "Une République universaliste contre le racisme et les discriminations",
+      "life_situations": [
+        "personne victime de racisme / discriminations"
+      ],
+      "themes": [
+        "démocratie / institutions",
+        "égalité / lutte contre les discriminations"
+      ],
+      "hits": {
+        "enfant / adolescent·e": 1,
+        "habitant·e des Outre-mer": 1,
+        "personne étrangère / immigrée": 2,
+        "personne victime de racisme / discriminations": 15,
+        "policier·ère / gendarme": 3,
+        "victime / justiciable": 1,
+        "logement": 2,
+        "santé": 1,
+        "école / éducation": 1,
+        "sécurité / police": 4,
+        "immigration / asile": 2,
+        "international / paix": 3,
+        "démocratie / institutions": 6,
+        "travail": 2,
+        "services publics": 1,
+        "culture": 3,
+        "numérique": 1,
+        "laïcité": 1,
+        "jeunesse / enfance": 1,
+        "égalité / lutte contre les discriminations": 19,
+        "libertés / droits fondamentaux": 1,
+        "Outre-mer": 1
+      }
+    },
+    {
+      "id": "c10-s03",
+      "title": "Construire l’autonomie des jeunes",
+      "life_situations": [
+        "étudiant·e",
+        "jeune (18-30 ans)",
+        "personne en situation de pauvreté / précarité"
+      ],
+      "themes": [
+        "travail",
+        "jeunesse / enfance",
+        "solidarité / protection sociale"
+      ],
+      "hits": {
+        "étudiant·e": 3,
+        "jeune (18-30 ans)": 11,
+        "parent": 2,
+        "salarié·e": 1,
+        "chômeur·se / demandeur·se d'emploi": 1,
+        "personne en situation de pauvreté / précarité": 8,
+        "chercheur·se / enseignant·e": 1,
+        "pouvoir d'achat": 1,
+        "santé": 1,
+        "école / éducation": 3,
+        "transports": 1,
+        "Europe": 1,
+        "territoires / collectivités locales": 1,
+        "impôts / fiscalité": 1,
+        "travail": 6,
+        "entreprise / industrie": 1,
+        "alimentation / agriculture": 3,
+        "jeunesse / enfance": 16,
+        "famille / parentalité": 3,
+        "solidarité / protection sociale": 11
+      }
+    },
+    {
+      "id": "c10-s04",
+      "title": "Faire face collectivement à la perte d’autonomie individuelle",
+      "life_situations": [
+        "salarié·e",
+        "retraité·e",
+        "personne en perte d'autonomie / aidant·e"
+      ],
+      "themes": [
+        "démocratie / institutions",
+        "travail",
+        "grand âge / autonomie"
+      ],
+      "hits": {
+        "salarié·e": 2,
+        "retraité·e": 7,
+        "personne en perte d'autonomie / aidant·e": 8,
+        "malade / patient·e": 1,
+        "femme": 1,
+        "salaires": 2,
+        "retraites": 1,
+        "santé": 2,
+        "école / éducation": 1,
+        "international / paix": 1,
+        "démocratie / institutions": 3,
+        "travail": 7,
+        "entreprise / industrie": 1,
+        "services publics": 2,
+        "égalité femmes-hommes": 1,
+        "grand âge / autonomie": 10,
+        "solidarité / protection sociale": 1
+      }
+    },
+    {
+      "id": "c10-s05",
+      "title": "Lever les obstacles à l’autonomie des personnes en situation de handicap",
+      "life_situations": [
+        "élève / lycéen·ne",
+        "salarié·e",
+        "personne en situation de handicap"
+      ],
+      "themes": [
+        "école / éducation",
+        "travail",
+        "handicap"
+      ],
+      "hits": {
+        "élève / lycéen·ne": 4,
+        "étudiant·e": 1,
+        "jeune (18-30 ans)": 1,
+        "enfant / adolescent·e": 1,
+        "salarié·e": 4,
+        "fonctionnaire / agent·e public·que": 1,
+        "personne en situation de handicap": 14,
+        "personne victime de racisme / discriminations": 1,
+        "victime / justiciable": 1,
+        "salaires": 1,
+        "logement": 3,
+        "santé": 1,
+        "école / éducation": 11,
+        "transports": 1,
+        "justice": 1,
+        "Europe": 2,
+        "territoires / collectivités locales": 1,
+        "travail": 5,
+        "finance / banques / dette": 1,
+        "services publics": 2,
+        "alimentation / agriculture": 1,
+        "handicap": 16,
+        "jeunesse / enfance": 2,
+        "solidarité / protection sociale": 2,
+        "égalité / lutte contre les discriminations": 2
+      }
+    },
+    {
+      "id": "c11-s01",
+      "title": "La bifurcation dans les arts et la culture : pour un service public du progrès humain",
+      "life_situations": [
+        "salarié·e",
+        "artiste / auteur·rice"
+      ],
+      "themes": [
+        "culture"
+      ],
+      "hits": {
+        "étudiant·e": 1,
+        "jeune (18-30 ans)": 1,
+        "salarié·e": 3,
+        "chômeur·se / demandeur·se d'emploi": 1,
+        "femme": 1,
+        "personne victime de racisme / discriminations": 2,
+        "artiste / auteur·rice": 11,
+        "chercheur·se / enseignant·e": 1,
+        "pouvoir d'achat": 3,
+        "santé": 1,
+        "école / éducation": 7,
+        "recherche / sciences": 1,
+        "démocratie / institutions": 2,
+        "territoires / collectivités locales": 6,
+        "impôts / fiscalité": 1,
+        "travail": 5,
+        "entreprise / industrie": 1,
+        "finance / banques / dette": 1,
+        "services publics": 3,
+        "culture": 52,
+        "numérique": 1,
+        "égalité femmes-hommes": 4,
+        "jeunesse / enfance": 1,
+        "solidarité / protection sociale": 4,
+        "égalité / lutte contre les discriminations": 3,
+        "libertés / droits fondamentaux": 1,
+        "médias": 4
+      }
+    },
+    {
+      "id": "c11-s02",
+      "title": "Le sport et les corps libérés de l’argent",
+      "life_situations": [
+        "sportif·ve"
+      ],
+      "themes": [
+        "sport"
+      ],
+      "hits": {
+        "élève / lycéen·ne": 2,
+        "jeune (18-30 ans)": 1,
+        "personne en situation de handicap": 3,
+        "malade / patient·e": 1,
+        "femme": 3,
+        "personne LGBTQIA+": 2,
+        "personne victime de racisme / discriminations": 1,
+        "personne en situation de pauvreté / précarité": 1,
+        "sportif·ve": 34,
+        "pouvoir d'achat": 3,
+        "logement": 1,
+        "santé": 3,
+        "école / éducation": 5,
+        "recherche / sciences": 1,
+        "justice": 1,
+        "démocratie / institutions": 1,
+        "impôts / fiscalité": 3,
+        "services publics": 1,
+        "sport": 40,
+        "égalité femmes-hommes": 5,
+        "LGBTQIA+": 2,
+        "handicap": 4,
+        "jeunesse / enfance": 1,
+        "solidarité / protection sociale": 5,
+        "égalité / lutte contre les discriminations": 1,
+        "libertés / droits fondamentaux": 2,
+        "médias": 3,
+        "consommation / déchets": 1
+      }
+    },
+    {
+      "id": "c12-s01",
+      "title": "La bifurcation écologique pour une société de l’harmonie",
+      "life_situations": [],
+      "themes": [
+        "écologie / climat",
+        "entreprise / industrie"
+      ],
+      "hits": {
+        "logement": 1,
+        "espace / spatial": 1,
+        "écologie / climat": 37,
+        "énergie": 2,
+        "transports": 4,
+        "démocratie / institutions": 2,
+        "territoires / collectivités locales": 1,
+        "entreprise / industrie": 12,
+        "finance / banques / dette": 1,
+        "numérique": 1,
+        "mer / océans": 1,
+        "solidarité / protection sociale": 1
+      }
+    },
+    {
+      "id": "c12-s02",
+      "title": "L’organisation de l’État au service de la planification écologique",
+      "life_situations": [],
+      "themes": [
+        "écologie / climat",
+        "démocratie / institutions",
+        "territoires / collectivités locales",
+        "eau"
+      ],
+      "hits": {
+        "habitant·e des Outre-mer": 1,
+        "habitant·e des villes / quartiers populaires": 1,
+        "écologie / climat": 20,
+        "énergie": 2,
+        "démocratie / institutions": 5,
+        "territoires / collectivités locales": 12,
+        "travail": 1,
+        "finance / banques / dette": 1,
+        "eau": 10,
+        "Outre-mer": 1
+      }
+    },
+    {
+      "id": "c12-s03",
+      "title": "Les Outre-mer, avant-postes de la planification écologique",
+      "life_situations": [
+        "agriculteur·rice / pêcheur·se",
+        "habitant·e des Outre-mer"
+      ],
+      "themes": [
+        "écologie / climat",
+        "énergie",
+        "alimentation / agriculture",
+        "Outre-mer"
+      ],
+      "hits": {
+        "agriculteur·rice / pêcheur·se": 4,
+        "habitant·e des Outre-mer": 9,
+        "écologie / climat": 17,
+        "énergie": 7,
+        "Europe": 1,
+        "territoires / collectivités locales": 3,
+        "impôts / fiscalité": 1,
+        "travail": 1,
+        "entreprise / industrie": 3,
+        "alimentation / agriculture": 8,
+        "mer / océans": 3,
+        "Outre-mer": 9
+      }
+    },
+    {
+      "id": "c13-s01",
+      "title": "Investir pour lancer la bifurcation de notre économie",
+      "life_situations": [
+        "salarié·e"
+      ],
+      "themes": [
+        "écologie / climat",
+        "travail",
+        "entreprise / industrie"
+      ],
+      "hits": {
+        "salarié·e": 2,
+        "salaires": 1,
+        "santé": 1,
+        "écologie / climat": 10,
+        "énergie": 1,
+        "transports": 1,
+        "territoires / collectivités locales": 1,
+        "travail": 4,
+        "entreprise / industrie": 7,
+        "alimentation / agriculture": 1,
+        "solidarité / protection sociale": 1,
+        "consommation / déchets": 1
+      }
+    },
+    {
+      "id": "c13-s02",
+      "title": "Développer les transports publics écologiques, repenser la mobilité individuelle",
+      "life_situations": [
+        "habitant·e des Outre-mer"
+      ],
+      "themes": [
+        "transports"
+      ],
+      "hits": {
+        "habitant·e des Outre-mer": 2,
+        "pouvoir d'achat": 1,
+        "écologie / climat": 6,
+        "énergie": 1,
+        "transports": 40,
+        "Europe": 3,
+        "territoires / collectivités locales": 1,
+        "travail": 1,
+        "entreprise / industrie": 4,
+        "services publics": 5,
+        "numérique": 1,
+        "mer / océans": 1,
+        "solidarité / protection sociale": 2,
+        "Outre-mer": 2
+      }
+    },
+    {
+      "id": "c13-s03",
+      "title": "Organiser le 100 % d’énergies renouvelables en 2050 et la rénovation énergétique",
+      "life_situations": [
+        "locataire / mal-logé·e",
+        "propriétaire"
+      ],
+      "themes": [
+        "logement",
+        "énergie"
+      ],
+      "hits": {
+        "salarié·e": 1,
+        "locataire / mal-logé·e": 3,
+        "propriétaire": 5,
+        "personne en situation de pauvreté / précarité": 1,
+        "consommateur·rice / usager·ère": 1,
+        "pouvoir d'achat": 3,
+        "logement": 16,
+        "écologie / climat": 10,
+        "énergie": 55,
+        "transports": 3,
+        "sécurité / police": 2,
+        "Europe": 1,
+        "territoires / collectivités locales": 2,
+        "travail": 4,
+        "entreprise / industrie": 6,
+        "services publics": 5,
+        "numérique": 1,
+        "alimentation / agriculture": 2,
+        "solidarité / protection sociale": 4,
+        "consommation / déchets": 1
+      }
+    },
+    {
+      "id": "c13-s04",
+      "title": "Consommer autrement, une France « zéro déchet »",
+      "life_situations": [
+        "consommateur·rice / usager·ère"
+      ],
+      "themes": [
+        "écologie / climat",
+        "médias",
+        "consommation / déchets"
+      ],
+      "hits": {
+        "élève / lycéen·ne": 1,
+        "consommateur·rice / usager·ère": 5,
+        "pouvoir d'achat": 1,
+        "logement": 1,
+        "école / éducation": 1,
+        "écologie / climat": 12,
+        "énergie": 3,
+        "justice": 1,
+        "travail": 1,
+        "entreprise / industrie": 1,
+        "services publics": 1,
+        "numérique": 2,
+        "médias": 9,
+        "consommation / déchets": 33
+      }
+    },
+    {
+      "id": "c13-s05",
+      "title": "Souveraineté alimentaire et révolution agricole : pour une agriculture écologique et paysanne",
+      "life_situations": [
+        "agriculteur·rice / pêcheur·se"
+      ],
+      "themes": [
+        "écologie / climat",
+        "alimentation / agriculture"
+      ],
+      "hits": {
+        "retraité·e": 2,
+        "agriculteur·rice / pêcheur·se": 30,
+        "pouvoir d'achat": 4,
+        "salaires": 1,
+        "retraites": 2,
+        "logement": 1,
+        "santé": 2,
+        "écologie / climat": 14,
+        "Europe": 1,
+        "international / paix": 2,
+        "territoires / collectivités locales": 1,
+        "impôts / fiscalité": 1,
+        "travail": 2,
+        "entreprise / industrie": 8,
+        "finance / banques / dette": 2,
+        "alimentation / agriculture": 49,
+        "consommation / déchets": 1
+      }
+    },
+    {
+      "id": "c14-s01",
+      "title": "Pollutions : désempoisonner le monde",
+      "life_situations": [
+        "habitant·e des Outre-mer",
+        "victime / justiciable"
+      ],
+      "themes": [
+        "écologie / climat",
+        "entreprise / industrie"
+      ],
+      "hits": {
+        "salarié·e": 1,
+        "indépendant·e / artisan·e / commerçant·e": 1,
+        "malade / patient·e": 1,
+        "habitant·e des Outre-mer": 5,
+        "personne en situation de pauvreté / précarité": 1,
+        "victime / justiciable": 5,
+        "santé": 2,
+        "espace / spatial": 1,
+        "écologie / climat": 25,
+        "énergie": 2,
+        "sécurité / police": 1,
+        "international / paix": 1,
+        "territoires / collectivités locales": 3,
+        "travail": 2,
+        "entreprise / industrie": 7,
+        "finance / banques / dette": 1,
+        "alimentation / agriculture": 1,
+        "eau": 2,
+        "solidarité / protection sociale": 1,
+        "libertés / droits fondamentaux": 1,
+        "consommation / déchets": 2,
+        "Outre-mer": 5
+      }
+    },
+    {
+      "id": "c14-s02",
+      "title": "L’eau, enjeu central pour l’Humanité",
+      "life_situations": [
+        "agriculteur·rice / pêcheur·se",
+        "habitant·e des Outre-mer"
+      ],
+      "themes": [
+        "écologie / climat",
+        "eau"
+      ],
+      "hits": {
+        "salarié·e": 1,
+        "agriculteur·rice / pêcheur·se": 3,
+        "habitant·e des Outre-mer": 2,
+        "pouvoir d'achat": 3,
+        "santé": 1,
+        "écologie / climat": 13,
+        "énergie": 1,
+        "transports": 3,
+        "sécurité / police": 1,
+        "démocratie / institutions": 2,
+        "territoires / collectivités locales": 1,
+        "impôts / fiscalité": 1,
+        "travail": 1,
+        "entreprise / industrie": 6,
+        "finance / banques / dette": 1,
+        "services publics": 4,
+        "alimentation / agriculture": 5,
+        "eau": 46,
+        "solidarité / protection sociale": 3,
+        "Outre-mer": 2
+      }
+    },
+    {
+      "id": "c14-s03",
+      "title": "Le droit à l’eau dans les Outre-mer",
+      "life_situations": [
+        "habitant·e des Outre-mer"
+      ],
+      "themes": [
+        "eau",
+        "Outre-mer"
+      ],
+      "hits": {
+        "fonctionnaire / agent·e public·que": 1,
+        "habitant·e des Outre-mer": 11,
+        "personne étrangère / immigrée": 1,
+        "consommateur·rice / usager·ère": 2,
+        "pouvoir d'achat": 2,
+        "santé": 1,
+        "écologie / climat": 1,
+        "immigration / asile": 1,
+        "territoires / collectivités locales": 1,
+        "finance / banques / dette": 2,
+        "services publics": 2,
+        "eau": 28,
+        "Outre-mer": 11
+      }
+    },
+    {
+      "id": "c14-s04",
+      "title": "Défendre la forêt, poumon de la planète",
+      "life_situations": [],
+      "themes": [
+        "écologie / climat"
+      ],
+      "hits": {
+        "salarié·e": 1,
+        "retraité·e": 1,
+        "salaires": 1,
+        "retraites": 1,
+        "santé": 1,
+        "écologie / climat": 28,
+        "énergie": 1,
+        "Europe": 1,
+        "international / paix": 2,
+        "travail": 5,
+        "entreprise / industrie": 6,
+        "finance / banques / dette": 2,
+        "services publics": 1,
+        "alimentation / agriculture": 1,
+        "solidarité / protection sociale": 1
+      }
+    },
+    {
+      "id": "c14-s05",
+      "title": "Rompre avec la maltraitance animale",
+      "life_situations": [
+        "agriculteur·rice / pêcheur·se"
+      ],
+      "themes": [
+        "alimentation / agriculture",
+        "animaux"
+      ],
+      "hits": {
+        "agriculteur·rice / pêcheur·se": 6,
+        "santé": 1,
+        "recherche / sciences": 1,
+        "écologie / climat": 1,
+        "transports": 1,
+        "entreprise / industrie": 1,
+        "alimentation / agriculture": 7,
+        "animaux": 21
+      }
+    },
+    {
+      "id": "c14-s06",
+      "title": "Sauver l’écosystème et la biodiversité",
+      "life_situations": [],
+      "themes": [
+        "écologie / climat"
+      ],
+      "hits": {
+        "logement": 1,
+        "recherche / sciences": 1,
+        "écologie / climat": 18,
+        "international / paix": 3,
+        "territoires / collectivités locales": 1,
+        "entreprise / industrie": 2,
+        "services publics": 2,
+        "alimentation / agriculture": 2,
+        "eau": 1,
+        "mer / océans": 3,
+        "animaux": 3,
+        "consommation / déchets": 1
+      }
+    },
+    {
+      "id": "c15-s01",
+      "title": "S’organiser pour faire face aux pandémies",
+      "life_situations": [
+        "malade / patient·e"
+      ],
+      "themes": [
+        "santé",
+        "entreprise / industrie"
+      ],
+      "hits": {
+        "étudiant·e": 1,
+        "malade / patient·e": 4,
+        "pouvoir d'achat": 2,
+        "santé": 20,
+        "recherche / sciences": 3,
+        "écologie / climat": 2,
+        "entreprise / industrie": 9,
+        "finance / banques / dette": 1,
+        "services publics": 1,
+        "libertés / droits fondamentaux": 3
+      }
+    },
+    {
+      "id": "c15-s02",
+      "title": "Faire passer la santé d’abord et reconstruire les établissements de santé publics, notamment les hôpitaux",
+      "life_situations": [
+        "malade / patient·e",
+        "soignant·e / personnel de santé"
+      ],
+      "themes": [
+        "santé"
+      ],
+      "hits": {
+        "élève / lycéen·ne": 2,
+        "étudiant·e": 1,
+        "parent": 1,
+        "salarié·e": 1,
+        "retraité·e": 1,
+        "personne en perte d'autonomie / aidant·e": 1,
+        "malade / patient·e": 13,
+        "habitant·e des zones rurales": 1,
+        "personne en situation de pauvreté / précarité": 1,
+        "chercheur·se / enseignant·e": 1,
+        "soignant·e / personnel de santé": 13,
+        "pouvoir d'achat": 1,
+        "salaires": 1,
+        "santé": 49,
+        "école / éducation": 3,
+        "recherche / sciences": 1,
+        "écologie / climat": 4,
+        "Europe": 3,
+        "territoires / collectivités locales": 3,
+        "travail": 4,
+        "entreprise / industrie": 3,
+        "finance / banques / dette": 1,
+        "services publics": 2,
+        "alimentation / agriculture": 3,
+        "famille / parentalité": 1,
+        "grand âge / autonomie": 1,
+        "solidarité / protection sociale": 4
+      }
+    },
+    {
+      "id": "c15-s03",
+      "title": "Addictions et drogues : il faut changer de stratégie",
+      "life_situations": [
+        "malade / patient·e"
+      ],
+      "themes": [
+        "santé",
+        "libertés / droits fondamentaux"
+      ],
+      "hits": {
+        "élève / lycéen·ne": 1,
+        "jeune (18-30 ans)": 2,
+        "enfant / adolescent·e": 1,
+        "personne en perte d'autonomie / aidant·e": 1,
+        "malade / patient·e": 14,
+        "consommateur·rice / usager·ère": 1,
+        "santé": 27,
+        "école / éducation": 1,
+        "sécurité / police": 1,
+        "justice": 2,
+        "international / paix": 1,
+        "impôts / fiscalité": 1,
+        "entreprise / industrie": 4,
+        "jeunesse / enfance": 3,
+        "grand âge / autonomie": 1,
+        "libertés / droits fondamentaux": 11,
+        "consommation / déchets": 2
+      }
+    },
+    {
+      "id": "c15-s04",
+      "title": "En finir avec la malbouffe",
+      "life_situations": [],
+      "themes": [
+        "santé",
+        "alimentation / agriculture"
+      ],
+      "hits": {
+        "élève / lycéen·ne": 1,
+        "enfant / adolescent·e": 2,
+        "malade / patient·e": 2,
+        "agriculteur·rice / pêcheur·se": 1,
+        "habitant·e des Outre-mer": 1,
+        "personne en situation de pauvreté / précarité": 1,
+        "victime / justiciable": 1,
+        "pouvoir d'achat": 1,
+        "santé": 12,
+        "école / éducation": 2,
+        "territoires / collectivités locales": 1,
+        "entreprise / industrie": 1,
+        "numérique": 1,
+        "alimentation / agriculture": 19,
+        "jeunesse / enfance": 2,
+        "solidarité / protection sociale": 3,
+        "médias": 4,
+        "consommation / déchets": 2,
+        "Outre-mer": 1
+      }
+    },
+    {
+      "id": "c16-s01",
+      "title": "Assumer l’indépendance de la France dans le monde",
+      "life_situations": [],
+      "themes": [
+        "Europe",
+        "international / paix",
+        "défense / armée"
+      ],
+      "hits": {
+        "indépendant·e / artisan·e / commerçant·e": 1,
+        "militaire / ancien·ne combattant·e": 1,
+        "Europe": 3,
+        "international / paix": 12,
+        "défense / armée": 3,
+        "territoires / collectivités locales": 2,
+        "sport": 1,
+        "libertés / droits fondamentaux": 1
+      }
+    },
+    {
+      "id": "c16-s02",
+      "title": "Construire une défense souveraine au service de la paix",
+      "life_situations": [
+        "militaire / ancien·ne combattant·e"
+      ],
+      "themes": [
+        "énergie",
+        "international / paix",
+        "défense / armée",
+        "entreprise / industrie"
+      ],
+      "hits": {
+        "jeune (18-30 ans)": 1,
+        "personne étrangère / immigrée": 1,
+        "chercheur·se / enseignant·e": 1,
+        "policier·ère / gendarme": 1,
+        "militaire / ancien·ne combattant·e": 10,
+        "santé": 2,
+        "recherche / sciences": 1,
+        "espace / spatial": 1,
+        "écologie / climat": 5,
+        "énergie": 6,
+        "sécurité / police": 3,
+        "immigration / asile": 1,
+        "international / paix": 17,
+        "défense / armée": 23,
+        "entreprise / industrie": 6,
+        "services publics": 2,
+        "culture": 1,
+        "numérique": 2,
+        "jeunesse / enfance": 1
+      }
+    },
+    {
+      "id": "c16-s03",
+      "title": "Renforcer l’ONU pour faire vivre un monde ordonné",
+      "life_situations": [],
+      "themes": [
+        "international / paix"
+      ],
+      "hits": {
+        "agriculteur·rice / pêcheur·se": 2,
+        "militaire / ancien·ne combattant·e": 1,
+        "santé": 1,
+        "école / éducation": 1,
+        "recherche / sciences": 1,
+        "écologie / climat": 3,
+        "énergie": 1,
+        "international / paix": 25,
+        "défense / armée": 1,
+        "démocratie / institutions": 2,
+        "entreprise / industrie": 1,
+        "finance / banques / dette": 1,
+        "culture": 1,
+        "alimentation / agriculture": 5
+      }
+    },
+    {
+      "id": "c16-s04",
+      "title": "Agir pour le respect du droit international contre les guerres",
+      "life_situations": [],
+      "themes": [
+        "international / paix"
+      ],
+      "hits": {
+        "militaire / ancien·ne combattant·e": 1,
+        "sécurité / police": 2,
+        "justice": 3,
+        "Europe": 1,
+        "international / paix": 27,
+        "défense / armée": 1,
+        "territoires / collectivités locales": 1,
+        "culture": 1
+      }
+    },
+    {
+      "id": "c16-s05",
+      "title": "Refuser le libre-échange, instaurer un protectionnisme écologique et la coopération économique",
+      "life_situations": [],
+      "themes": [
+        "écologie / climat",
+        "international / paix",
+        "entreprise / industrie"
+      ],
+      "hits": {
+        "chômeur·se / demandeur·se d'emploi": 1,
+        "santé": 1,
+        "écologie / climat": 9,
+        "international / paix": 24,
+        "démocratie / institutions": 1,
+        "travail": 2,
+        "entreprise / industrie": 8,
+        "finance / banques / dette": 3,
+        "sport": 1,
+        "famille / parentalité": 1
+      }
+    },
+    {
+      "id": "c16-s06",
+      "title": "Étendre les protections du droit international aux biens communs planétaires",
+      "life_situations": [],
+      "themes": [
+        "écologie / climat",
+        "justice",
+        "international / paix",
+        "mer / océans"
+      ],
+      "hits": {
+        "étudiant·e": 1,
+        "militaire / ancien·ne combattant·e": 1,
+        "santé": 2,
+        "recherche / sciences": 1,
+        "écologie / climat": 11,
+        "sécurité / police": 1,
+        "justice": 5,
+        "immigration / asile": 1,
+        "international / paix": 19,
+        "défense / armée": 1,
+        "entreprise / industrie": 3,
+        "finance / banques / dette": 1,
+        "services publics": 4,
+        "eau": 2,
+        "mer / océans": 5,
+        "libertés / droits fondamentaux": 1,
+        "consommation / déchets": 1
+      }
+    },
+    {
+      "id": "c16-s07",
+      "title": "Pour une politique migratoire humaniste et réaliste",
+      "life_situations": [
+        "personne étrangère / immigrée"
+      ],
+      "themes": [
+        "immigration / asile"
+      ],
+      "hits": {
+        "étudiant·e": 1,
+        "enfant / adolescent·e": 1,
+        "parent": 1,
+        "salarié·e": 1,
+        "locataire / mal-logé·e": 1,
+        "personne étrangère / immigrée": 18,
+        "policier·ère / gendarme": 1,
+        "logement": 1,
+        "école / éducation": 1,
+        "écologie / climat": 3,
+        "sécurité / police": 1,
+        "justice": 1,
+        "immigration / asile": 20,
+        "Europe": 2,
+        "international / paix": 3,
+        "travail": 1,
+        "finance / banques / dette": 1,
+        "services publics": 1,
+        "égalité femmes-hommes": 3,
+        "jeunesse / enfance": 2,
+        "famille / parentalité": 1,
+        "solidarité / protection sociale": 1
+      }
+    },
+    {
+      "id": "c16-s08",
+      "title": "Les Outre-mer, fer de lance d’une diplomatie écologique altermondialiste",
+      "life_situations": [
+        "habitant·e des Outre-mer"
+      ],
+      "themes": [
+        "écologie / climat",
+        "international / paix",
+        "Outre-mer"
+      ],
+      "hits": {
+        "étudiant·e": 1,
+        "habitant·e des Outre-mer": 16,
+        "personne victime de racisme / discriminations": 1,
+        "militaire / ancien·ne combattant·e": 1,
+        "école / éducation": 1,
+        "recherche / sciences": 1,
+        "écologie / climat": 5,
+        "immigration / asile": 1,
+        "international / paix": 14,
+        "défense / armée": 1,
+        "démocratie / institutions": 1,
+        "territoires / collectivités locales": 3,
+        "eau": 2,
+        "mer / océans": 2,
+        "jeunesse / enfance": 1,
+        "égalité / lutte contre les discriminations": 1,
+        "Outre-mer": 16
+      }
+    },
+    {
+      "id": "c16-s09",
+      "title": "Construire des coopérations altermondialistes et internationalistes",
+      "life_situations": [],
+      "themes": [
+        "international / paix"
+      ],
+      "hits": {
+        "personne en perte d'autonomie / aidant·e": 1,
+        "écologie / climat": 3,
+        "international / paix": 17,
+        "territoires / collectivités locales": 1,
+        "entreprise / industrie": 1,
+        "finance / banques / dette": 1,
+        "grand âge / autonomie": 1,
+        "solidarité / protection sociale": 2,
+        "libertés / droits fondamentaux": 1
+      }
+    },
+    {
+      "id": "c16-s10",
+      "title": "Unir le petit bassin méditerranéen autour d’objectifs communs de progrès",
+      "life_situations": [],
+      "themes": [
+        "écologie / climat",
+        "international / paix",
+        "mer / océans"
+      ],
+      "hits": {
+        "étudiant·e": 1,
+        "personne étrangère / immigrée": 1,
+        "école / éducation": 2,
+        "écologie / climat": 6,
+        "immigration / asile": 1,
+        "international / paix": 12,
+        "territoires / collectivités locales": 1,
+        "numérique": 1,
+        "mer / océans": 6,
+        "libertés / droits fondamentaux": 1,
+        "médias": 2
+      }
+    },
+    {
+      "id": "c16-s11",
+      "title": "Construire une relation avec l’Afrique basée sur la souveraineté des peuples",
+      "life_situations": [],
+      "themes": [
+        "international / paix"
+      ],
+      "hits": {
+        "indépendant·e / artisan·e / commerçant·e": 1,
+        "personne en situation de handicap": 1,
+        "militaire / ancien·ne combattant·e": 1,
+        "écologie / climat": 1,
+        "international / paix": 26,
+        "défense / armée": 1,
+        "démocratie / institutions": 1,
+        "finance / banques / dette": 1,
+        "handicap": 1,
+        "libertés / droits fondamentaux": 1
+      }
+    },
+    {
+      "id": "c16-s12",
+      "title": "Passer à la francophonie des peuples",
+      "life_situations": [
+        "étudiant·e"
+      ],
+      "themes": [
+        "international / paix"
+      ],
+      "hits": {
+        "étudiant·e": 2,
+        "chercheur·se / enseignant·e": 1,
+        "école / éducation": 4,
+        "recherche / sciences": 1,
+        "international / paix": 25,
+        "démocratie / institutions": 4,
+        "travail": 1,
+        "culture": 3,
+        "médias": 2
+      }
+    },
+    {
+      "id": "c17-s01",
+      "title": "Utiliser tous les leviers d’action face aux institutions européennes",
+      "life_situations": [],
+      "themes": [
+        "Europe",
+        "international / paix",
+        "démocratie / institutions"
+      ],
+      "hits": {
+        "école / éducation": 1,
+        "recherche / sciences": 1,
+        "écologie / climat": 2,
+        "Europe": 10,
+        "international / paix": 4,
+        "démocratie / institutions": 3,
+        "impôts / fiscalité": 1,
+        "finance / banques / dette": 1,
+        "culture": 2
+      }
+    },
+    {
+      "id": "c17-s02",
+      "title": "Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme",
+      "life_situations": [],
+      "themes": [
+        "Europe",
+        "international / paix"
+      ],
+      "hits": {
+        "salarié·e": 1,
+        "salaires": 1,
+        "écologie / climat": 4,
+        "Europe": 20,
+        "international / paix": 5,
+        "démocratie / institutions": 3,
+        "travail": 2,
+        "entreprise / industrie": 1,
+        "finance / banques / dette": 2
+      }
+    },
+    {
+      "id": "c18-s01",
+      "title": "Protéger les mers et océans",
+      "life_situations": [
+        "agriculteur·rice / pêcheur·se"
+      ],
+      "themes": [
+        "écologie / climat",
+        "international / paix",
+        "mer / océans"
+      ],
+      "hits": {
+        "élève / lycéen·ne": 1,
+        "indépendant·e / artisan·e / commerçant·e": 1,
+        "agriculteur·rice / pêcheur·se": 6,
+        "habitant·e des Outre-mer": 1,
+        "militaire / ancien·ne combattant·e": 1,
+        "école / éducation": 2,
+        "recherche / sciences": 1,
+        "espace / spatial": 2,
+        "écologie / climat": 9,
+        "énergie": 1,
+        "transports": 1,
+        "Europe": 1,
+        "international / paix": 8,
+        "défense / armée": 1,
+        "territoires / collectivités locales": 2,
+        "impôts / fiscalité": 1,
+        "travail": 1,
+        "alimentation / agriculture": 6,
+        "eau": 1,
+        "mer / océans": 28,
+        "libertés / droits fondamentaux": 1,
+        "consommation / déchets": 1,
+        "Outre-mer": 1
+      }
+    },
+    {
+      "id": "c18-s02",
+      "title": "Être à la hauteur de la responsabilité maritime française",
+      "life_situations": [],
+      "themes": [
+        "énergie",
+        "entreprise / industrie",
+        "mer / océans"
+      ],
+      "hits": {
+        "militaire / ancien·ne combattant·e": 1,
+        "recherche / sciences": 3,
+        "écologie / climat": 4,
+        "énergie": 8,
+        "transports": 1,
+        "défense / armée": 1,
+        "travail": 2,
+        "entreprise / industrie": 7,
+        "services publics": 1,
+        "mer / océans": 18
+      }
+    },
+    {
+      "id": "c18-s03",
+      "title": "Relancer la découverte de l’espace",
+      "life_situations": [],
+      "themes": [
+        "recherche / sciences",
+        "espace / spatial",
+        "écologie / climat",
+        "international / paix"
+      ],
+      "hits": {
+        "recherche / sciences": 3,
+        "espace / spatial": 7,
+        "écologie / climat": 2,
+        "international / paix": 6,
+        "défense / armée": 1,
+        "entreprise / industrie": 1,
+        "services publics": 1
+      }
+    },
+    {
+      "id": "c18-s04",
+      "title": "Affirmer le caractère d’intérêt général de la révolution numérique",
+      "life_situations": [],
+      "themes": [
+        "numérique"
+      ],
+      "hits": {
+        "personne victime de racisme / discriminations": 1,
+        "victime / justiciable": 1,
+        "pouvoir d'achat": 1,
+        "recherche / sciences": 1,
+        "justice": 1,
+        "Europe": 2,
+        "international / paix": 1,
+        "démocratie / institutions": 3,
+        "territoires / collectivités locales": 1,
+        "entreprise / industrie": 1,
+        "services publics": 3,
+        "numérique": 20,
+        "solidarité / protection sociale": 2,
+        "égalité / lutte contre les discriminations": 1,
+        "libertés / droits fondamentaux": 3
+      }
+    },
+    {
+      "id": "c18-s05",
+      "title": "Garantir la souveraineté numérique de la France",
+      "life_situations": [],
+      "themes": [
+        "numérique"
+      ],
+      "hits": {
+        "locataire / mal-logé·e": 1,
+        "personne étrangère / immigrée": 1,
+        "chercheur·se / enseignant·e": 1,
+        "logement": 1,
+        "école / éducation": 1,
+        "recherche / sciences": 3,
+        "écologie / climat": 3,
+        "énergie": 1,
+        "transports": 1,
+        "immigration / asile": 1,
+        "international / paix": 6,
+        "démocratie / institutions": 3,
+        "entreprise / industrie": 6,
+        "finance / banques / dette": 1,
+        "services publics": 1,
+        "culture": 1,
+        "numérique": 35,
+        "solidarité / protection sociale": 2,
+        "libertés / droits fondamentaux": 2,
+        "médias": 1,
+        "consommation / déchets": 3
+      }
+    }
+  ]
+}

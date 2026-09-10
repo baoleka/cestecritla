@@ -1,0 +1,232 @@
+[
+  {
+    "results": [],
+    "success": true,
+    "meta": {
+      "served_by": "v3-prod",
+      "served_by_region": "WEUR",
+      "served_by_colo": "CDG",
+      "served_by_primary": true,
+      "timings": {
+        "sql_duration_ms": 0.2033
+      },
+      "duration": 0.2033,
+      "changes": 0,
+      "last_row_id": 0,
+      "changed_db": false,
+      "size_after": 1150976,
+      "rows_read": 1,
+      "rows_written": 2,
+      "total_attempts": 1
+    }
+  },
+  {
+    "results": [
+      {
+        "id": "c14-s02-k01",
+        "rank": -8.851,
+        "t": "Consacrer une « règle bleue » qui applique le principe de la"
+      },
+      {
+        "id": "c12-s01-m11",
+        "rank": -8.429,
+        "t": "Instaurer un moratoire sur les grands projets inutiles et éc"
+      },
+      {
+        "id": "c12-s01-k01",
+        "rank": -8.189,
+        "t": "Inscrire dans la Constitution le principe de la « règle vert"
+      },
+      {
+        "id": "intro-p22",
+        "rank": -4.084,
+        "t": "Nous devons tous surmonter la crise écologique. Il y a un se"
+      }
+    ],
+    "success": true,
+    "meta": {
+      "served_by": "v3-prod",
+      "served_by_region": "WEUR",
+      "served_by_colo": "CDG",
+      "served_by_primary": true,
+      "timings": {
+        "sql_duration_ms": 1.1123
+      },
+      "duration": 1.1123,
+      "changes": 0,
+      "last_row_id": 0,
+      "changed_db": false,
+      "size_after": 1150976,
+      "rows_read": 8,
+      "rows_written": 0,
+      "total_attempts": 1
+    }
+  },
+  {
+    "results": [
+      {
+        "id": "c10-s04-m05",
+        "rank": -6.058
+      },
+      {
+        "id": "c10-s04-m02",
+        "rank": -5.71
+      },
+      {
+        "id": "c15-s02-m01",
+        "rank": -5.474
+      },
+      {
+        "id": "c7-s04-m09",
+        "rank": -5.44
+      },
+      {
+        "id": "c7-s06-m01",
+        "rank": -4.166
+      },
+      {
+        "id": "c18-s05-m08",
+        "rank": -4.039
+      },
+      {
+        "id": "c14-s04-m08",
+        "rank": -3.949
+      },
+      {
+        "id": "intro-p15",
+        "rank": -3.92
+      },
+      {
+        "id": "c8-s07-m08",
+        "rank": -3.863
+      },
+      {
+        "id": "c5-s05-m06",
+        "rank": -3.727
+      }
+    ],
+    "success": true,
+    "meta": {
+      "served_by": "v3-prod",
+      "served_by_region": "WEUR",
+      "served_by_colo": "CDG",
+      "served_by_primary": true,
+      "timings": {
+        "sql_duration_ms": 1.0953
+      },
+      "duration": 1.0953,
+      "changes": 0,
+      "last_row_id": 0,
+      "changed_db": false,
+      "size_after": 1150976,
+      "rows_read": 210,
+      "rows_written": 0,
+      "total_attempts": 1
+    }
+  },
+  {
+    "results": [
+      {
+        "n": 105
+      }
+    ],
+    "success": true,
+    "meta": {
+      "served_by": "v3-prod",
+      "served_by_region": "WEUR",
+      "served_by_colo": "CDG",
+      "served_by_primary": true,
+      "timings": {
+        "sql_duration_ms": 0.1956
+      },
+      "duration": 0.1956,
+      "changes": 0,
+      "last_row_id": 0,
+      "changed_db": false,
+      "size_after": 1150976,
+      "rows_read": 105,
+      "rows_written": 0,
+      "total_attempts": 1
+    }
+  },
+  {
+    "results": [
+      {
+        "distinct_terms": 4710,
+        "total_term_occurrences": 51246
+      }
+    ],
+    "success": true,
+    "meta": {
+      "served_by": "v3-prod",
+      "served_by_region": "WEUR",
+      "served_by_colo": "CDG",
+      "served_by_primary": true,
+      "timings": {
+        "sql_duration_ms": 5.5596
+      },
+      "duration": 5.5596,
+      "changes": 0,
+      "last_row_id": 0,
+      "changed_db": false,
+      "size_after": 1150976,
+      "rows_read": 4710,
+      "rows_written": 0,
+      "total_attempts": 1
+    }
+  },
+  {
+    "results": [
+      {
+        "term": "de",
+        "doc": 825
+      },
+      {
+        "term": "la",
+        "doc": 776
+      },
+      {
+        "term": "et",
+        "doc": 760
+      },
+      {
+        "term": "l",
+        "doc": 718
+      },
+      {
+        "term": "les",
+        "doc": 714
+      },
+      {
+        "term": "des",
+        "doc": 665
+      },
+      {
+        "term": "le",
+        "doc": 638
+      },
+      {
+        "term": "a",
+        "doc": 578
+      }
+    ],
+    "success": true,
+    "meta": {
+      "served_by": "v3-prod",
+      "served_by_region": "WEUR",
+      "served_by_colo": "CDG",
+      "served_by_primary": true,
+      "timings": {
+        "sql_duration_ms": 2.2564
+      },
+      "duration": 2.2564,
+      "changes": 0,
+      "last_row_id": 0,
+      "changed_db": false,
+      "size_after": 1150976,
+      "rows_read": 9420,
+      "rows_written": 0,
+      "total_attempts": 1
+    }
+  }
+]

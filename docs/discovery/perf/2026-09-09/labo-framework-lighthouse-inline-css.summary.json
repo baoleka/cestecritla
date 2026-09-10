@@ -1,0 +1,321 @@
+{
+  "measuredAt": "2026-09-09T13:24:32.845Z",
+  "pass": "inline-css",
+  "runsPerVariant": 3,
+  "lighthouseVersion": "13.4.1",
+  "hostUserAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+  "networkUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Mobile Safari/537.36",
+  "throttlingMethod": "devtools",
+  "throttling": {
+    "rttMs": 150,
+    "throughputKbps": 1638.4,
+    "requestLatencyMs": 562.5,
+    "downloadThroughputKbps": 1474.56,
+    "uploadThroughputKbps": 675,
+    "cpuSlowdownMultiplier": 4
+  },
+  "formFactor": "mobile",
+  "chromePath": "<home>/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome",
+  "variants": {
+    "react": {
+      "label": "React 19 + Vite 6 + Tailwind v4",
+      "url": "https://aec-lab-fw-react.baoleka.workers.dev/",
+      "runs": [
+        {
+          "run": 1,
+          "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/react-inline-css.1.json",
+          "fetchTime": "2026-09-09T13:21:31.472Z",
+          "score": 0.98,
+          "fcp": 2030.811,
+          "lcp": 2030.811,
+          "tbt": 0,
+          "cls": 0,
+          "speedIndex": 1714,
+          "ttfb": 48,
+          "lcpElement": "div#root > main.mx-auto > article.mt-8 > p.mt-4",
+          "lcpBreakdown": {
+            "timeToFirstByte": 86.74800012207031,
+            "elementRenderDelay": 1944.0629998779298
+          },
+          "mainThreadMs": 297.58899999999977,
+          "bootupMs": 91.28599999999994,
+          "requests": 4,
+          "transferTotal": 123172,
+          "transferByType": {
+            "Document": 5183,
+            "Font": 50252,
+            "Script": 67737
+          },
+          "benchmarkIndex": 1035
+        },
+        {
+          "run": 2,
+          "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/react-inline-css.2.json",
+          "fetchTime": "2026-09-09T13:21:54.690Z",
+          "score": 0.97,
+          "fcp": 2059.255,
+          "lcp": 2059.255,
+          "tbt": 0,
+          "cls": 0,
+          "speedIndex": 1743,
+          "ttfb": 45,
+          "lcpElement": "div#root > main.mx-auto > article.mt-8 > p.mt-4",
+          "lcpBreakdown": {
+            "timeToFirstByte": 106.34799987792968,
+            "elementRenderDelay": 1952.9070001220703
+          },
+          "mainThreadMs": 307.2229999999997,
+          "bootupMs": 91.56499999999994,
+          "requests": 4,
+          "transferTotal": 123156,
+          "transferByType": {
+            "Document": 5182,
+            "Font": 50252,
+            "Script": 67722
+          },
+          "benchmarkIndex": 1017.5
+        },
+        {
+          "run": 3,
+          "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/react-inline-css.3.json",
+          "fetchTime": "2026-09-09T13:22:17.905Z",
+          "score": 0.97,
+          "fcp": 2058.878,
+          "lcp": 2058.878,
+          "tbt": 0,
+          "cls": 0,
+          "speedIndex": 1742,
+          "ttfb": 49,
+          "lcpElement": "div#root > main.mx-auto > article.mt-8 > p.mt-4",
+          "lcpBreakdown": {
+            "timeToFirstByte": 108.636,
+            "elementRenderDelay": 1950.242
+          },
+          "mainThreadMs": 300.8249999999999,
+          "bootupMs": 94.84099999999998,
+          "requests": 4,
+          "transferTotal": 123217,
+          "transferByType": {
+            "Document": 5236,
+            "Font": 50245,
+            "Script": 67736
+          },
+          "benchmarkIndex": 1017
+        }
+      ],
+      "median": {
+        "score": 0.97,
+        "fcp": 2058.878,
+        "lcp": 2058.878,
+        "tbt": 0,
+        "cls": 0,
+        "speedIndex": 1742,
+        "ttfb": 48,
+        "mainThreadMs": 300.8249999999999,
+        "bootupMs": 91.56499999999994,
+        "transferTotal": 123172,
+        "requests": 4
+      }
+    },
+    "astro": {
+      "label": "Astro 5 (static + vanilla script)",
+      "url": "https://aec-lab-fw-astro.baoleka.workers.dev/",
+      "runs": [
+        {
+          "run": 1,
+          "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/astro-inline-css.1.json",
+          "fetchTime": "2026-09-09T13:18:13.204Z",
+          "score": 1,
+          "fcp": 965.46,
+          "lcp": 965.46,
+          "tbt": 0,
+          "cls": 0.0019673959516339507,
+          "speedIndex": 1016,
+          "ttfb": 46,
+          "lcpElement": "body > main > article > p.verbatim",
+          "lcpBreakdown": {
+            "timeToFirstByte": 135.30200012207033,
+            "elementRenderDelay": 830.1579998779297
+          },
+          "mainThreadMs": 321.9680000000001,
+          "bootupMs": 21.463,
+          "requests": 4,
+          "transferTotal": 58064,
+          "transferByType": {
+            "Document": 5520,
+            "Font": 50253,
+            "Script": 2291
+          },
+          "benchmarkIndex": 1021.5
+        },
+        {
+          "run": 2,
+          "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/astro-inline-css.2.json",
+          "fetchTime": "2026-09-09T13:18:35.855Z",
+          "score": 1,
+          "fcp": 920.826,
+          "lcp": 920.826,
+          "tbt": 0,
+          "cls": 0.0019673959516339507,
+          "speedIndex": 971,
+          "ttfb": 57,
+          "lcpElement": "body > main > article > p.verbatim",
+          "lcpBreakdown": {
+            "timeToFirstByte": 89.89199987792969,
+            "elementRenderDelay": 830.9340001220703
+          },
+          "mainThreadMs": 331.8740000000002,
+          "bootupMs": 23.688999999999993,
+          "requests": 4,
+          "transferTotal": 58056,
+          "transferByType": {
+            "Document": 5516,
+            "Font": 50250,
+            "Script": 2290
+          },
+          "benchmarkIndex": 1009
+        },
+        {
+          "run": 3,
+          "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/astro-inline-css.3.json",
+          "fetchTime": "2026-09-09T13:18:58.735Z",
+          "score": 1,
+          "fcp": 934.596,
+          "lcp": 934.596,
+          "tbt": 0,
+          "cls": 0.0019673959516339507,
+          "speedIndex": 986,
+          "ttfb": 80,
+          "lcpElement": "body > main > article > p.verbatim",
+          "lcpBreakdown": {
+            "timeToFirstByte": 149.292,
+            "elementRenderDelay": 785.304
+          },
+          "mainThreadMs": 319.76500000000016,
+          "bootupMs": 21.246000000000002,
+          "requests": 4,
+          "transferTotal": 58060,
+          "transferByType": {
+            "Document": 5525,
+            "Font": 50243,
+            "Script": 2292
+          },
+          "benchmarkIndex": 1009
+        }
+      ],
+      "median": {
+        "score": 1,
+        "fcp": 934.596,
+        "lcp": 934.596,
+        "tbt": 0,
+        "cls": 0.0019673959516339507,
+        "speedIndex": 986,
+        "ttfb": 57,
+        "mainThreadMs": 321.9680000000001,
+        "bootupMs": 21.463,
+        "transferTotal": 58060,
+        "requests": 4
+      }
+    },
+    "react-ssg": {
+      "label": "React 19 + Vite 6 + Tailwind v4, prerendered + hydration",
+      "url": "https://aec-lab-fw-react-ssg.baoleka.workers.dev/",
+      "runs": [
+        {
+          "run": 1,
+          "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/react-ssg-inline-css.1.json",
+          "fetchTime": "2026-09-09T13:22:41.258Z",
+          "score": 1,
+          "fcp": 967.62,
+          "lcp": 967.62,
+          "tbt": 0,
+          "cls": 0.0019673959516339507,
+          "speedIndex": 1027,
+          "ttfb": 50,
+          "lcpElement": "div#root > main.mx-auto > article.mt-8 > p.mt-4",
+          "lcpBreakdown": {
+            "timeToFirstByte": 128.739,
+            "elementRenderDelay": 838.881
+          },
+          "mainThreadMs": 431.3959999999999,
+          "bootupMs": 89.08299999999991,
+          "requests": 4,
+          "transferTotal": 125688,
+          "transferByType": {
+            "Document": 7705,
+            "Font": 50249,
+            "Script": 67734
+          },
+          "benchmarkIndex": 1009.5
+        },
+        {
+          "run": 2,
+          "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/react-ssg-inline-css.2.json",
+          "fetchTime": "2026-09-09T13:23:04.582Z",
+          "score": 1,
+          "fcp": 891.702,
+          "lcp": 891.702,
+          "tbt": 0,
+          "cls": 0.0019673959516339507,
+          "speedIndex": 953,
+          "ttfb": 52,
+          "lcpElement": "div#root > main.mx-auto > article.mt-8 > p.mt-4",
+          "lcpBreakdown": {
+            "timeToFirstByte": 79.915,
+            "elementRenderDelay": 811.787
+          },
+          "mainThreadMs": 406.0809999999997,
+          "bootupMs": 90.24399999999997,
+          "requests": 4,
+          "transferTotal": 125826,
+          "transferByType": {
+            "Document": 7786,
+            "Font": 50255,
+            "Script": 67785
+          },
+          "benchmarkIndex": 999.5
+        },
+        {
+          "run": 3,
+          "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/react-ssg-inline-css.3.json",
+          "fetchTime": "2026-09-09T13:23:27.600Z",
+          "score": 1,
+          "fcp": 929.247,
+          "lcp": 929.247,
+          "tbt": 0,
+          "cls": 0.0019673959516339507,
+          "speedIndex": 989,
+          "ttfb": 57,
+          "lcpElement": "div#root > main.mx-auto > article.mt-8 > p.mt-4",
+          "lcpBreakdown": {
+            "timeToFirstByte": 92.572,
+            "elementRenderDelay": 836.675
+          },
+          "mainThreadMs": 436.586,
+          "bootupMs": 91.22499999999992,
+          "requests": 4,
+          "transferTotal": 125725,
+          "transferByType": {
+            "Document": 7708,
+            "Font": 50255,
+            "Script": 67762
+          },
+          "benchmarkIndex": 1021
+        }
+      ],
+      "median": {
+        "score": 1,
+        "fcp": 929.247,
+        "lcp": 929.247,
+        "tbt": 0,
+        "cls": 0.0019673959516339507,
+        "speedIndex": 989,
+        "ttfb": 52,
+        "mainThreadMs": 431.3959999999999,
+        "bootupMs": 90.24399999999997,
+        "transferTotal": 125725,
+        "requests": 4
+      }
+    }
+  }
+}

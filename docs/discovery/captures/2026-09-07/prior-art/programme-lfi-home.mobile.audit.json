@@ -1,0 +1,253 @@
+{
+  "title": "La France Insoumise - L'avenir en commun - Mélenchon 2027 : Soutenez ma candidature à l’élection présidentielle",
+  "themeColor": null,
+  "bodyBg": "#FFFCF4",
+  "htmlBg": "transparent",
+  "fontsLoaded": [
+    "Union gothic normal normal",
+    "Stack Sans 300 normal",
+    "Stack Sans 400 normal",
+    "Stack Sans 700 normal",
+    "Font Awesome 7 Slab 400 normal"
+  ],
+  "fontFaceSrc": [
+    "\"Union gothic\" <- \"https://melenchon2027.fr/wp-content/uploads/2026/04/union_gothic-variable.ttf\"",
+    "\"Stack Sans\" <- \"https://melenchon2027.fr/wp-content/uploads/2026/04/StackSansText-Light.ttf\"",
+    "\"Stack Sans\" <- \"https://melenchon2027.fr/wp-content/uploads/2026/04/StackSansText-Regular.ttf\"",
+    "\"Stack Sans\" <- \"https://melenchon2027.fr/wp-content/uploads/2026/04/StackSansText-Bold.ttf\"",
+    "swiper-icons <- \"data:application/font-woff;charset=utf-8;base64, d09GRgABAAAAAAZgABAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABGRlRNAAAGRAAAABoAAAAci6qHkUdERUYAAAWgAAAAIwAAACQAYABXR1BPUwAABhQAAAAuAAAANuAY7+xHU1VCAAAFxAAAAFAAAABm2fPczU9TLzIAAAHcAAAASgAAAGBP9V5RY21hcAAAAkQAAACIAAABYt6F0cBjdnQgAAACzAAAAAQAAAAEABEBRGdhc3AAAAWYAAAACAAAAAj//wADZ2x5ZgAAAywAAADMAAAD2MHtryVoZWFkAAABbAAAADAAAAA2E2+eoWhoZWEAAAGcAAAAHwAAACQC9gDzaG10eAAAAigAAAAZAAAArgJkABFsb2NhAAAC0AAAAFoAAABaFQAUGG1heHAAAAG8AAAAHwAAACAAcABAbmFtZQAAA/gAAAE5AAACXvFdBwlwb3N0AAAFNAAAAGIAAACE5s74hXjaY2BkYGAAYpf5Hu/j+W2+MnAzMYDAzaX6QjD6/4//Bxj5GA8AuRwMYGkAPywL13jaY2BkYGA88P8Agx4j+/8fQDYfA1AEBWgDAIB2BOoAeNpjYGRgYNBh4GdgYgABEMnIABJzYNADCQAACWgAsQB42mNgYfzCOIGBlYGB0YcxjYGBwR1Kf2WQZGhhYGBiYGVmgAFGBiQQkOaawtDAoMBQxXjg/wEGPcYDDA4wNUA2CCgwsAAAO4EL6gAAeNpj2M0gyAACqxgGNWBkZ2D4/wMA+xkDdgAAAHjaY2BgYGaAYBkGRgYQiAHyGMF8FgYHIM3DwMHABGQrMOgyWDLEM1T9/w8UBfEMgLzE////P/5//f/V/xv+r4eaAAeMbAxwIUYmIMHEgKYAYjUcsDAwsLKxc3BycfPw8jEQA/gZBASFhEVExcQlJKWkZWTl5BUUlZRVVNXUNTQZBgMAAMR+E+gAEQFEAAAAKgAqACoANAA+AEgAUgBcAGYAcAB6AIQAjgCYAKIArAC2AMAAygDUAN4A6ADyAPwBBgEQARoBJAEuATgBQgFMAVYBYAFqAXQBfgGIAZIBnAGmAbIBzgHsAAB42u2NMQ6CUAyGW568x9AneYYgm4MJbhKFaExIOAVX8ApewSt4Bic4AfeAid3VOBixDxfPYEza5O+Xfi04YADggiUIULCuEJK8VhO4bSvpdnktHI5QCYtdi2sl8ZnXaHlqUrNKzdKcT8cjlq+rwZSvIVczNiezsfnP/uznmfPFBNODM2K7MTQ45YEAZqGP81AmGGcF3iPqOop0r1SPTaTbVkfUe4HXj97wYE+yNwWYxwWu4v1ugWHgo3S1XdZEVqWM7ET0cfnLGxWfkgR42o2PvWrDMBSFj/IHLaF0zKjRgdiVMwScNRAoWUoH78Y2icB/yIY09An6AH2Bdu/UB+yxopYshQiEvnvu0dURgDt8QeC8PDw7Fpji3fEA4z/PEJ6YOB5hKh4dj3EvXhxPqH/SKUY3rJ7srZ4FZnh1PMAtPhwP6fl2PMJMPDgeQ4rY8YT6Gzao0eAEA409DuggmTnFnOcSCiEiLMgxCiTI6Cq5DZUd3Qmp10vO0LaLTd2cjN4fOumlc7lUYbSQcZFkutRG7g6JKZKy0RmdLY680CDnEJ+UMkpFFe1RN7nxdVpXrC4aTtnaurOnYercZg2YVmLN/d/gczfEimrE/fs/bOuq29Zmn8tloORaXgZgGa78yO9/cnXm2BpaGvq25Dv9S4E9+5SIc9PqupJKhYFSSl47+Qcr1mYNAAAAeNptw0cKwkAAAMDZJA8Q7OUJvkLsPfZ6zFVERPy8qHh2YER+3i/BP83vIBLLySsoKimrqKqpa2hp6+jq6RsYGhmbmJqZSy0sraxtbO3sHRydnEMU4uR6yx7JJXveP7WrDycAAAAAAAH//wACeNpjYGRgYOABYhkgZgJCZgZNBkYGLQZtIJsFLMYAAAw3ALgAeNolizEKgDAQBCchRbC2sFER0YD6qVQiBCv/H9ezGI6Z5XBAw8CBK/m5iQQVauVbXLnOrMZv2oLdKFa8Pjuru2hJzGabmOSLzNMzvutpB3N42mNgZGBg4GKQYzBhYMxJLMlj4GBgAYow/P/PAJJhLM6sSoWKfWCAAwDAjgbRAAB42mNgYGBkAIIbCZo5IPrmUn0hGA0AO8EFTQAA\"",
+    "\"Union gothic\" <- \"https://melenchon2027.fr/wp-content/uploads/2026/04/union_gothic-variable.ttf\"",
+    "\"Stack Sans\" <- \"https://melenchon2027.fr/wp-content/uploads/2026/04/StackSansText-Light.ttf\"",
+    "\"Stack Sans\" <- \"https://melenchon2027.fr/wp-content/uploads/2026/04/StackSansText-Regular.ttf\"",
+    "\"Stack Sans\" <- \"https://melenchon2027.fr/wp-content/uploads/2026/04/StackSansText-Bold.ttf\"",
+    "Roboto <- \"https://melenchon2027.fr/wp-content/uploads/elementor/google-fonts/fonts/roboto-59bd2d54.woff2\"",
+    "Roboto <- \"https://melenchon2027.fr/wp-content/uploads/elementor/google-fonts/fonts/roboto-09f504e0.woff2\"",
+    "Roboto <- \"https://melenchon2027.fr/wp-content/uploads/elementor/google-fonts/fonts/roboto-ec145187.woff2\"",
+    "Roboto <- \"https://melenchon2027.fr/wp-content/uploads/elementor/google-fonts/fonts/roboto-6b29be68.woff2\"",
+    "Roboto <- \"https://melenchon2027.fr/wp-content/uploads/elementor/google-fonts/fonts/roboto-48514a2c.woff2\"",
+    "Roboto <- \"https://melenchon2027.fr/wp-content/uploads/elementor/google-fonts/fonts/roboto-a81d578b.woff2\"",
+    "Roboto <- \"https://melenchon2027.fr/wp-content/uploads/elementor/google-fonts/fonts/roboto-894b2e7f.woff2\"",
+    "Roboto <- \"https://melenchon2027.fr/wp-content/uploads/elementor/google-fonts/fonts/roboto-e2103707.woff2\"",
+    "Roboto <- \"https://melenchon2027.fr/wp-content/uploads/elementor/google-fonts/fonts/roboto-8ed4bb54.woff2\"",
+    "Roboto <- \"https://melenchon2027.fr/wp-content/uploads/elementor/google-fonts/fonts/roboto-59bd2d54.woff2\"",
+    "Roboto <- \"https://melenchon2027.fr/wp-content/uploads/elementor/google-fonts/fonts/roboto-09f504e0.woff2\""
+  ],
+  "cssVars": {
+    "--wp-block-synced-color": "#7a00df",
+    "--wp-block-synced-color--rgb": "122,0,223",
+    "--wp-bound-block-color": "var(--wp-block-synced-color)",
+    "--wp-editor-canvas-background": "#ddd",
+    "--wp-admin-theme-color": "#007cba",
+    "--wp-admin-theme-color--rgb": "0,124,186",
+    "--wp-admin-theme-color-darker-10": "#006ba1",
+    "--wp-admin-theme-color-darker-10--rgb": "0,107,160.5",
+    "--wp-admin-theme-color-darker-20": "#005a87",
+    "--wp-admin-theme-color-darker-20--rgb": "0,90,135",
+    "--wp--preset--font-size--normal": "16px",
+    "--wp--preset--font-size--huge": "42px",
+    "--e-global-color-64fc235": "#FFFCF4",
+    "--border-color": "var( --e-global-color-1fa0d3b )",
+    "--e-global-color-primary": "#4C0297",
+    "--e-global-color-accent": "#D1271C",
+    "--e-global-color-secondary": "#212320",
+    "--e-global-color-text": "#707070",
+    "--e-global-color-1fa0d3b": "#212320",
+    "--e-global-color-a3804fd": "#4C0297",
+    "--e-global-color-d2cc0e6": "#D1271C",
+    "--e-global-color-e52a784": "#FFD2CF",
+    "--e-global-color-c3c9cc8": "#E5CBFF",
+    "--e-global-color-f3f168f": "#FFD400",
+    "--e-global-color-86c7abd": "#F2F5F6",
+    "--e-global-color-b2b6634": "#EAEAEA",
+    "--e-global-color-2cdba5d": "#A8A8A8",
+    "--e-global-color-eaebc1f": "#2E9959",
+    "--e-global-color-65fd49bd": "#ED5FB1",
+    "--e-global-color-1cd0d92": "#3885F4",
+    "--e-global-color-1023826": "#074290",
+    "--e-global-color-ff50cc4": "#EA610B",
+    "--e-global-color-4979426": "#00842E",
+    "--e-global-color-c24255c": "#E30D13",
+    "--e-global-color-d2daac5": "#16ADDB",
+    "--e-global-color-0d93600": "#328355",
+    "--e-global-color-ea3e6ba": "#7F13B2",
+    "--e-global-color-047f455": "#76781E",
+    "--e-global-color-57041ad": "#408D8C",
+    "--e-global-color-ae5c5d1": "#EDFBF3",
+    "--e-global-color-c17a020": "#186842",
+    "--e-global-color-7e71c75": "#1D3E9E",
+    "--e-global-color-baa76f5": "#E8F6FF",
+    "--e-global-typography-primary-font-family": "\"Union gothic\"",
+    "--e-global-typography-primary-font-size": "52px",
+    "--e-global-typography-primary-font-style": "normal",
+    "--e-global-typography-secondary-font-family": "\"Stack Sans\"",
+    "--e-global-typography-secondary-font-size": "24px",
+    "--e-global-typography-secondary-font-weight": "500",
+    "--e-global-typography-text-font-family": "\"Stack Sans\"",
+    "--e-global-typography-text-font-size": "16px",
+    "--e-global-typography-text-font-weight": "400",
+    "--e-global-typography-accent-font-family": "\"Stack Sans\"",
+    "--e-global-typography-accent-font-size": "16px",
+    "--e-global-typography-accent-font-weight": "700",
+    "--e-global-typography-63d28ab-font-family": "\"Union gothic\"",
+    "--e-global-typography-63d28ab-font-size": "40px",
+    "--e-global-typography-63d28ab-font-style": "normal",
+    "--e-global-typography-a138182-font-family": "\"Union gothic\"",
+    "--e-global-typography-a138182-font-size": "32px",
+    "--e-global-typography-a138182-font-style": "normal",
+    "--e-global-typography-a8c7b6b-font-family": "\"Stack Sans\"",
+    "--e-global-typography-a8c7b6b-font-size": "18px",
+    "--e-global-typography-a8c7b6b-font-weight": "700",
+    "--e-global-typography-5cc819e-font-family": "\"Stack Sans\"",
+    "--e-global-typography-5cc819e-font-size": "16px",
+    "--e-global-typography-5cc819e-font-weight": "300",
+    "--e-global-typography-8a5e662-font-family": "\"Stack Sans\"",
+    "--e-global-typography-8a5e662-font-size": "16px",
+    "--e-global-typography-8a5e662-font-weight": "400",
+    "--e-global-typography-8a5e662-font-style": "normal",
+    "--e-global-typography-c65db77-font-family": "\"Stack Sans\"",
+    "--e-global-typography-c65db77-font-size": "24px",
+    "--e-global-typography-c65db77-font-weight": "700",
+    "--e-global-typography-c65db77-font-style": "normal",
+    "--e-global-typography-235e786-font-family": "\"Stack Sans\"",
+    "--e-global-typography-235e786-font-size": "18px",
+    "--e-global-typography-235e786-font-weight": "700",
+    "--e-global-typography-235e786-font-style": "normal",
+    "--e-global-typography-40937e9-font-family": "\"Stack Sans\""
+  },
+  "topColors": [
+    [
+      "#212320",
+      216
+    ],
+    [
+      "#FFFCF4",
+      76
+    ],
+    [
+      "#4C0297",
+      20
+    ],
+    [
+      "#EDE5FF",
+      2
+    ],
+    [
+      "#8F120A",
+      1
+    ],
+    [
+      "#FDECEA",
+      1
+    ],
+    [
+      "#004880",
+      1
+    ],
+    [
+      "#E8F6FF",
+      1
+    ],
+    [
+      "#186842",
+      1
+    ],
+    [
+      "#EDFBF3",
+      1
+    ],
+    [
+      "#F06B00",
+      1
+    ],
+    [
+      "#FFF1E6",
+      1
+    ],
+    [
+      "#222222",
+      1
+    ],
+    [
+      "#F2F2F2",
+      1
+    ]
+  ],
+  "topFonts": [
+    [
+      "Stack Sans",
+      110
+    ],
+    [
+      "Union gothic",
+      11
+    ]
+  ],
+  "samples": {
+    "h1": {
+      "font": "Stack Sans",
+      "weight": "900",
+      "size": "40px",
+      "lineHeight": "40px",
+      "color": "#4C0297",
+      "bg": "transparent",
+      "transform": "uppercase",
+      "style": "normal",
+      "letterSpacing": "-2%"
+    },
+    "h2": {
+      "font": "Stack Sans",
+      "weight": "700",
+      "size": "14px",
+      "lineHeight": "18px",
+      "color": "#4C0297",
+      "bg": "transparent",
+      "transform": "none",
+      "style": "normal",
+      "letterSpacing": "normal"
+    },
+    "h3": null,
+    "p": {
+      "font": "Stack Sans",
+      "weight": "700",
+      "size": "16px",
+      "lineHeight": "24px",
+      "color": "#212320",
+      "bg": "transparent",
+      "transform": "none",
+      "style": "normal",
+      "letterSpacing": "normal"
+    },
+    "a": {
+      "font": "Stack Sans",
+      "weight": "700",
+      "size": "12px",
+      "lineHeight": "18px",
+      "color": "#4C0297",
+      "bg": "transparent",
+      "transform": "none",
+      "style": "normal",
+      "letterSpacing": "normal"
+    },
+    "button": {
+      "font": "Stack Sans",
+      "weight": "400",
+      "size": "20px",
+      "lineHeight": "20px",
+      "color": "#222222",
+      "bg": "transparent",
+      "transform": "none",
+      "style": "normal",
+      "letterSpacing": "normal"
+    }
+  },
+  "links": [
+    "https://ng.melenchon2027.fr/wp-content/uploads/2026/04/PROGRAMME-FRONT-POPULAIRE.pdf",
+    "https://melenchon2027.fr/wp-content/uploads/2026/04/PROGRAMME-FRONT-POPULAIRE.pdf"
+  ],
+  "hexInText": [],
+  "imgs": [
+    "https://melenchon2027.fr/wp-content/uploads/2024/01/LOGO-M27.svg",
+    "https://melenchon2027.fr/wp-content/uploads/2026/04/LogoTortue.svg",
+    "https://melenchon2027.fr/wp-content/uploads/2026/05/LOGO-LFI-BLANC-RVB.png"
+  ]
+}

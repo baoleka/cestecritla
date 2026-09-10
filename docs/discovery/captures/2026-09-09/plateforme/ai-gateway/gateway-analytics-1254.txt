@@ -1,0 +1,7 @@
+2026-09-09T12:54:00Z  gw=aec  workers-ai/@cf/mistralai/mistral-small-3.1-24b-instruct  cached=0  n=1  cachedRequests=0  in=21  out=37  err=0  p50=1346ms
+2026-09-09T12:54:00Z  gw=aec  workers-ai/@cf/mistralai/mistral-small-3.1-24b-instruct  cached=1  n=9  cachedRequests=9  in=0  out=0  err=0  p50=11ms
+2026-09-09T12:59:00Z  gw=aec  workers-ai/@cf/mistralai/mistral-small-3.1-24b-instruct  cached=1  n=1  cachedRequests=1  in=0  out=0  err=0  p50=45ms
+2026-09-09T12:59:00Z  gw=aec  workers-ai/@cf/mistralai/mistral-small-3.1-24b-instruct  cached=0  n=2  cachedRequests=0  in=43  out=74  err=0  p50=917ms
+2026-09-09T13:02:00Z  gw=aec  workers-ai/@cf/mistralai/mistral-small-3.1-24b-instruct  cached=1  n=1  cachedRequests=1  in=0  out=0  err=0  p50=41ms
+2026-09-09T13:02:00Z  gw=aec  workers-ai/@cf/mistralai/mistral-small-3.1-24b-instruct  cached=0  n=1  cachedRequests=0  in=21  out=37  err=0  p50=1006ms
+TOTAL 2026-09-09T12:50:00Z -> 2026-09-09T13:04:20.287Z: requests=15 cachedRequests=11

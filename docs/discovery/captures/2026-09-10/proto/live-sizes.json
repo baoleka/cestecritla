@@ -1,0 +1,347 @@
+{
+ "assets": {
+  "/": {
+   "wire": 2379,
+   "enc": "br",
+   "raw": 5902,
+   "type": "text/html"
+  },
+  "/concept/": {
+   "wire": 769,
+   "enc": "br",
+   "raw": 1723,
+   "type": "text/html"
+  },
+  "/concept/concept.js": {
+   "wire": 4144,
+   "enc": "br",
+   "raw": 12064,
+   "type": "text/javascript"
+  },
+  "/defi/?n=1": {
+   "wire": 854,
+   "enc": "br",
+   "raw": 1974,
+   "type": "text/html"
+  },
+  "/defi/?n=254": {
+   "wire": 854,
+   "enc": "br",
+   "raw": 1974,
+   "type": "text/html"
+  },
+  "/defi/card.js": {
+   "wire": 3846,
+   "enc": "br",
+   "raw": 10297,
+   "type": "text/javascript"
+  },
+  "/defi/defi.css": {
+   "wire": 1565,
+   "enc": "br",
+   "raw": 4454,
+   "type": "text/css"
+  },
+  "/defi/defi.js": {
+   "wire": 7198,
+   "enc": "br",
+   "raw": 22494,
+   "type": "text/javascript"
+  },
+  "/defi/defis.json": {
+   "wire": 685,
+   "enc": "br",
+   "raw": 1260,
+   "type": "application/json"
+  },
+  "/home/": {
+   "wire": 1252,
+   "enc": "br",
+   "raw": 3084,
+   "type": "text/html"
+  },
+  "/home/home.js": {
+   "wire": 2866,
+   "enc": "br",
+   "raw": 8822,
+   "type": "text/javascript"
+  },
+  "/link/?id=c12-s01-k01": {
+   "wire": 837,
+   "enc": "br",
+   "raw": 1855,
+   "type": "text/html"
+  },
+  "/link/link.js": {
+   "wire": 1055,
+   "enc": "br",
+   "raw": 2818,
+   "type": "text/javascript"
+  },
+  "/nope": {
+   "wire": 568,
+   "enc": "br",
+   "raw": 1153,
+   "type": "text/html"
+  },
+  "/q/?s=c12-s01": {
+   "wire": 876,
+   "enc": "br",
+   "raw": 2014,
+   "type": "text/html"
+  },
+  "/q/card.css": {
+   "wire": 1227,
+   "enc": "br",
+   "raw": 3400,
+   "type": "text/css"
+  },
+  "/q/card.js": {
+   "wire": 1890,
+   "enc": "br",
+   "raw": 4777,
+   "type": "text/javascript"
+  },
+  "/q/card?s=c12-s01": {
+   "wire": 343,
+   "enc": "br",
+   "raw": 767,
+   "type": "text/html"
+  },
+  "/q/q.css": {
+   "wire": 1437,
+   "enc": "br",
+   "raw": 3527,
+   "type": "text/css"
+  },
+  "/q/q.js": {
+   "wire": 4616,
+   "enc": "br",
+   "raw": 12293,
+   "type": "text/javascript"
+  },
+  "/riposte/": {
+   "wire": 787,
+   "enc": "br",
+   "raw": 1910,
+   "type": "text/html"
+  },
+  "/riposte/?flash=1": {
+   "wire": 787,
+   "enc": "br",
+   "raw": 1910,
+   "type": "text/html"
+  },
+  "/riposte/?id=rip-01": {
+   "wire": 787,
+   "enc": "br",
+   "raw": 1910,
+   "type": "text/html"
+  },
+  "/riposte/riposte.css": {
+   "wire": 1523,
+   "enc": "br",
+   "raw": 4108,
+   "type": "text/css"
+  },
+  "/riposte/riposte.js": {
+   "wire": 6890,
+   "enc": "br",
+   "raw": 19395,
+   "type": "text/javascript"
+  },
+  "/root.js": {
+   "wire": 195,
+   "enc": "br",
+   "raw": 307,
+   "type": "text/javascript"
+  },
+  "/section/?id=c12-s01": {
+   "wire": 732,
+   "enc": "br",
+   "raw": 1653,
+   "type": "text/html"
+  },
+  "/section/section.js": {
+   "wire": 3513,
+   "enc": "br",
+   "raw": 9428,
+   "type": "text/javascript"
+  },
+  "/shared/base.css": {
+   "wire": 5401,
+   "enc": "br",
+   "raw": 23108,
+   "type": "text/css"
+  },
+  "/shared/data/concept-index.json": {
+   "wire": 897,
+   "enc": "br",
+   "raw": 3492,
+   "type": "application/json"
+  },
+  "/shared/data/extras.json": {
+   "wire": 9617,
+   "enc": "br",
+   "raw": 24825,
+   "type": "application/json"
+  },
+  "/shared/data/glossary.json": {
+   "wire": 37015,
+   "enc": "br",
+   "raw": 154528,
+   "type": "application/json"
+  },
+  "/shared/data/quiz-triplets.json": {
+   "wire": 2493,
+   "enc": "br",
+   "raw": 11002,
+   "type": "application/json"
+  },
+  "/shared/data/riposte.json": {
+   "wire": 6584,
+   "enc": "br",
+   "raw": 22180,
+   "type": "application/json"
+  },
+  "/shared/data/slim.json": {
+   "wire": 68708,
+   "enc": "br",
+   "raw": 249153,
+   "type": "application/json"
+  },
+  "/shared/data/stat-cards-legal.json": {
+   "wire": 508,
+   "enc": "br",
+   "raw": 1052,
+   "type": "application/json"
+  },
+  "/shared/data/stat-cards.json": {
+   "wire": 7001,
+   "enc": "br",
+   "raw": 58402,
+   "type": "application/json"
+  },
+  "/shared/data/strings.json": {
+   "wire": 4227,
+   "enc": "br",
+   "raw": 11272,
+   "type": "application/json"
+  },
+  "/shared/fonts/GowunBatang-Bold-latin.woff2": {
+   "wire": 19796,
+   "enc": "identity",
+   "raw": 19796,
+   "type": "font/woff2"
+  },
+  "/shared/fonts/GowunBatang-Regular-latin.woff2": {
+   "wire": 19652,
+   "enc": "identity",
+   "raw": 19652,
+   "type": "font/woff2"
+  },
+  "/shared/fonts/PublicSans-Italic-Variable-latin.woff2": {
+   "wire": 31116,
+   "enc": "identity",
+   "raw": 31116,
+   "type": "font/woff2"
+  },
+  "/shared/fonts/PublicSans-Variable-latin.woff2": {
+   "wire": 29180,
+   "enc": "identity",
+   "raw": 29180,
+   "type": "font/woff2"
+  },
+  "/shared/motion.css": {
+   "wire": 1537,
+   "enc": "br",
+   "raw": 3818,
+   "type": "text/css"
+  },
+  "/shared/motion.js": {
+   "wire": 3633,
+   "enc": "br",
+   "raw": 10024,
+   "type": "text/javascript"
+  },
+  "/shared/tokens.css": {
+   "wire": 1943,
+   "enc": "br",
+   "raw": 5140,
+   "type": "text/css"
+  },
+  "/shared/ui.js": {
+   "wire": 11360,
+   "enc": "br",
+   "raw": 32534,
+   "type": "text/javascript"
+  }
+ },
+ "pages": {
+  "/": {
+   "requests": 8,
+   "wire_bytes": 85801,
+   "raw_bytes": 138559
+  },
+  "/home/": {
+   "requests": 13,
+   "wire_bytes": 192803,
+   "raw_bytes": 463558
+  },
+  "/link/?id=c12-s01-k01": {
+   "requests": 12,
+   "wire_bytes": 183993,
+   "raw_bytes": 434145
+  },
+  "/section/?id=c12-s01": {
+   "requests": 17,
+   "wire_bytes": 218821,
+   "raw_bytes": 533645
+  },
+  "/concept/": {
+   "requests": 17,
+   "wire_bytes": 236708,
+   "raw_bytes": 671083
+  },
+  "/defi/?n=254": {
+   "requests": 17,
+   "wire_bytes": 201419,
+   "raw_bytes": 483793
+  },
+  "/defi/?n=1": {
+   "requests": 17,
+   "wire_bytes": 201419,
+   "raw_bytes": 483793
+  },
+  "/q/?s=c12-s01": {
+   "requests": 16,
+   "wire_bytes": 196693,
+   "raw_bytes": 472150
+  },
+  "/q/card?s=c12-s01": {
+   "requests": 14,
+   "wire_bytes": 188054,
+   "raw_bytes": 449418
+  },
+  "/riposte/": {
+   "requests": 18,
+   "wire_bytes": 210564,
+   "raw_bytes": 550361
+  },
+  "/riposte/?id=rip-01": {
+   "requests": 18,
+   "wire_bytes": 210564,
+   "raw_bytes": 550361
+  },
+  "/riposte/?flash=1": {
+   "requests": 18,
+   "wire_bytes": 210564,
+   "raw_bytes": 550361
+  },
+  "/nope": {
+   "requests": 5,
+   "wire_bytes": 68208,
+   "raw_bytes": 89697
+  }
+ }
+}

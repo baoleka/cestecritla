@@ -1,0 +1,249 @@
+/* AEC Discover — direction A « éditorial-typographique »
+   Static mockup stylesheet. Tokens: design/tokens.json (v0). Contrast: design/contrast-matrix.md.
+   Self-hosted subset fonts (D3.6), no external request, no framework. */
+
+@font-face {
+  font-family: "Public Sans";
+  src: url("fonts/PublicSans-Variable-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Public Sans";
+  src: url("fonts/PublicSans-Italic-Variable-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Gowun Batang";
+  src: url("fonts/GowunBatang-Regular-latin.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Gowun Batang";
+  src: url("fonts/GowunBatang-Bold-latin.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- Colour roles (tokens.json color-role.light) ---------- */
+:root {
+  color-scheme: light dark;
+  --bg: #fffcf4;            /* Crème */
+  --bg-elevated: #fdedff;   /* Violet 100 */
+  --text: #212320;          /* Charbon */
+  --brand: #4c0297;         /* Violet */
+  --brand-on: #fffcf4;
+  --action: #d1271c;        /* Rouge */
+  --action-on: #fffcf4;
+  --verbatim-bg: #fdedff;
+  --verbatim-rule: #4c0297;
+  --shadow-3d: #e5cbff;     /* Violet 200 */
+  --warn-bg: #ffd2cf;       /* Corail 200 */
+  --warn-text: #212320;
+  --focus: #4c0297;
+  --rule: #e5cbff;          /* thin decorative rule (Violet 200) */
+  --rule-strong: #4c0297;   /* thin structural rule (Violet) */
+  --part-accent: #2e9959;   /* Vif vert, part 3 — aplat only, never text */
+  --ui: "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --verbatim: "Gowun Batang", "Iowan Old Style", Georgia, serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #212320;
+    --bg-elevated: #2c2e2b;
+    --text: #fffcf4;
+    --brand: #e5cbff;       /* Violet 200 (Violet on Charbon = 1,33 forbidden) */
+    --brand-on: #212320;
+    --action: #f9c900;      /* Vif jaune */
+    --action-on: #212320;
+    --verbatim-bg: #2c2e2b;
+    --verbatim-rule: #e5cbff;
+    --shadow-3d: #4c0297;
+    --warn-bg: #3a2a28;
+    --warn-text: #fffcf4;
+    --focus: #f9c900;
+    --rule: color-mix(in srgb, #e5cbff 40%, #212320); /* decorative only */
+    --rule-strong: #e5cbff;
+  }
+}
+
+/* ---------- Base ---------- */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--ui);
+  font-size: 16px;
+  line-height: 1.55;
+  font-weight: 400;
+  /* Subsets are unhinted (design/fonts/README.md §4): without this, Chromium/FreeType rounds the advance of « f » at 14 px (« of ficiel »). */
+  text-rendering: geometricPrecision;
+}
+.page { max-width: 480px; margin: 0 auto; padding: 16px 20px 40px; }
+a { color: var(--brand); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+p { margin: 0 0 12px; }
+em { font-style: italic; }
+.book { font-style: italic; }
+hr { border: 0; border-top: 1px solid var(--rule-strong); margin: 24px 0; }
+hr.soft { border-top-color: var(--rule); }
+
+/* ---------- Header: the only chrome ---------- */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; margin-bottom: 28px; }
+.wordmark {
+  display: inline-block;
+  white-space: nowrap;
+  font: 900 13px/1 var(--ui);
+  font-style: italic;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--brand);
+  background: var(--bg);
+  border: 1.5px solid var(--brand);
+  padding: 6px 9px 5px;
+  text-decoration: none;
+  box-shadow: 6px 6px 0 var(--shadow-3d); /* the single 3D block of every screen (rule 4) */
+}
+.nav { display: flex; gap: 18px; }
+.nav a { font: 700 11px/1 var(--ui); letter-spacing: .1em; text-transform: uppercase; color: var(--brand); text-decoration: none; padding: 8px 0; min-height: 24px; }
+.nav a:hover { text-decoration: underline; }
+
+/* ---------- Labels ---------- */
+.label { display: block; font: 700 11px/1.3 var(--ui); letter-spacing: .1em; text-transform: uppercase; color: var(--brand); margin: 0 0 10px; }
+.label.plain { color: var(--text); }
+.part { display: flex; align-items: flex-start; gap: 8px; font: 700 11px/1.35 var(--ui); letter-spacing: .1em; text-transform: uppercase; color: var(--text); margin: 0 0 12px; }
+.part::before { content: ""; flex: 0 0 auto; width: 10px; height: 10px; margin-top: 2px; background: var(--part-accent); }
+.kicker { font: 700 11px/1.35 var(--ui); letter-spacing: .1em; text-transform: uppercase; color: var(--brand); margin: 0 0 18px; }
+
+/* ---------- Display titles: Public Sans 900, capitals, true italic, staggered lines ---------- */
+.display {
+  font-family: var(--ui);
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  font-size: 34px;
+  line-height: .95;
+  letter-spacing: -.02em;
+  color: var(--brand);
+  margin: 0 0 20px;
+}
+.display .l { display: block; }
+.display .l:nth-child(2) { margin-left: 6px; }
+.display .l:nth-child(3) { margin-left: 12px; }
+.display .l:nth-child(4) { margin-left: 18px; }
+.display .l:nth-child(5) { margin-left: 24px; }
+.display.xl { font-size: 40px; }
+.display.on-brand { color: var(--brand-on); }
+h2.h { font: 900 22px/1.1 var(--ui); text-transform: uppercase; letter-spacing: -.01em; color: var(--brand); margin: 32px 0 12px; }
+h3.h { font: 700 18px/1.25 var(--ui); color: var(--text); margin: 24px 0 8px; }
+.lead { font-size: 18px; line-height: 1.45; margin: 0 0 16px; }
+.small { font-size: 14px; line-height: 1.45; }
+.muted { color: var(--text); }
+
+/* ---------- Verbatim: the hero object (D3.2) ---------- */
+.verbatim {
+  font-family: var(--verbatim);
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.55;
+  background: var(--verbatim-bg);
+  border-left: 4px solid var(--verbatim-rule);
+  padding: 14px 16px 16px 18px;
+  margin: 0 0 12px;
+  color: var(--text);
+}
+.verbatim .label { margin-bottom: 8px; }
+.verbatim p { margin: 0; }
+.verbatim p + p { margin-top: 10px; }
+.verbatim.hero { font-size: 22px; line-height: 1.4; padding: 18px 18px 22px 20px; }
+.verbatim.key { font-weight: 700; font-size: 19px; line-height: 1.45; }
+.verbatim.bare { background: transparent; border-left: 0; padding: 0; }
+.verbatim .loc { display: block; font: 400 13px/1.4 var(--ui); color: var(--brand); margin-top: 12px; }
+.chapeau { font-family: var(--verbatim); font-size: 18px; line-height: 1.6; margin: 0 0 8px; }
+
+/* ---------- Measures list ---------- */
+.measures { list-style: none; margin: 0; padding: 0; counter-reset: m; }
+.measures li { display: grid; grid-template-columns: 34px 1fr; gap: 10px; padding: 14px 0; border-top: 1px solid var(--rule); }
+.measures li:last-child { border-bottom: 1px solid var(--rule); }
+.measures li::before { counter-increment: m; content: counter(m, decimal-leading-zero); font: 900 18px/1.3 var(--ui); font-style: italic; color: var(--brand); }
+.measures li p { font-family: var(--verbatim); font-size: 17px; line-height: 1.5; margin: 0; }
+
+/* ---------- Cards, badges ---------- */
+.card { border: 1px solid var(--brand); border-radius: 8px; padding: 16px; background: var(--bg); margin: 0 0 16px; }
+.card.elevated { background: var(--bg-elevated); border-color: var(--bg-elevated); }
+.badge { display: inline-block; font: 700 12px/1.2 var(--ui); color: var(--brand); border: 1px solid var(--brand); border-radius: 999px; padding: 6px 10px; margin: 0 6px 8px 0; }
+.badge.fill { background: var(--brand); color: var(--brand-on); border-color: var(--brand); }
+.badge.ctx { font-size: 10px; letter-spacing: .06em; text-transform: uppercase; padding: 3px 7px; vertical-align: 2px; margin: 0 0 0 4px; }
+.ref { font: 700 10px/1 var(--ui); color: var(--brand); text-decoration: none; vertical-align: super; margin: 0 1px 0 2px; letter-spacing: .02em; }
+.ref:hover { text-decoration: underline; }
+.nowrap { white-space: nowrap; }
+sup { font-size: .7em; line-height: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; }
+.chips a { font: 700 13px/1 var(--ui); color: var(--brand); border: 1px solid var(--brand); border-radius: 999px; padding: 9px 12px; text-decoration: none; }
+
+/* ---------- Buttons (rule 8) ---------- */
+.btn {
+  display: flex; align-items: stretch; justify-content: space-between;
+  width: 100%; min-height: 52px; margin: 0 0 12px;
+  background: var(--action); color: var(--action-on);
+  font: 700 14px/1.2 var(--ui); letter-spacing: .06em; text-transform: uppercase;
+  border: 0; border-radius: 8px; text-decoration: none; cursor: pointer;
+}
+.btn .t { display: flex; align-items: center; padding: 14px 18px; flex: 1 1 auto; }
+.btn .arrow { display: flex; align-items: center; justify-content: center; width: 52px; border-left: 1px solid var(--action-on); }
+.btn .arrow svg { width: 20px; height: 20px; }
+.btn.secondary { background: transparent; color: var(--brand); border: 1.5px solid var(--brand); }
+.btn.secondary .arrow { border-left-color: var(--brand); }
+.btn.center .t { justify-content: center; }
+.textlink { display: inline-block; font: 700 14px/1.3 var(--ui); color: var(--brand); padding: 8px 0; }
+
+/* ---------- Search / chat input ---------- */
+.field { display: block; width: 100%; font: 400 16px/1.4 var(--ui); color: var(--text); background: var(--bg); border: 1.5px solid var(--brand); border-radius: 8px; padding: 14px 16px; margin: 0 0 8px; }
+.field::placeholder { color: var(--brand); opacity: 1; }
+.hint { font-size: 14px; line-height: 1.45; color: var(--text); margin: 0 0 20px; }
+
+/* ---------- Stat card, loi 77-808 (D5.5) ---------- */
+.stat { border: 1px solid var(--brand); border-radius: 8px; padding: 16px 16px 14px; margin: 24px 0; }
+.stat .big { font: 900 48px/1 var(--ui); font-style: italic; letter-spacing: -.03em; color: var(--brand); margin: 4px 0 8px; }
+.stat .claim { font-family: var(--verbatim); font-size: 17px; line-height: 1.5; margin: 0 0 12px; }
+.stat .legal { font-size: 14px; line-height: 1.45; margin: 0 0 4px; border-top: 1px solid var(--rule); padding-top: 10px; }
+
+/* ---------- Progress (flat, straight) ---------- */
+.progress { margin: 28px 0 8px; }
+.progress .bar { height: 6px; background: var(--shadow-3d); margin: 8px 0 10px; }
+.progress .bar i { display: block; height: 100%; width: 33.3%; background: var(--brand); }
+.progress .count { font: 900 16px/1.2 var(--ui); color: var(--brand); text-transform: uppercase; letter-spacing: .02em; }
+
+/* ---------- Chat ---------- */
+.notice { font-size: 14px; line-height: 1.45; border-top: 1px solid var(--rule-strong); border-bottom: 1px solid var(--rule-strong); padding: 10px 0; margin: 0 0 24px; }
+.msg-user { font: 700 17px/1.4 var(--ui); margin: 28px 0 14px; padding-left: 14px; border-left: 4px solid var(--brand); }
+.msg-user .label { margin-bottom: 4px; }
+.liant { margin: 0 0 12px; }
+.aihead { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; }
+.degraded { background: var(--warn-bg); color: var(--warn-text); padding: 12px 14px; border-radius: 8px; margin: 0 0 12px; }
+.degraded .label { color: var(--warn-text); margin-bottom: 4px; }
+.degraded p { margin: 0; font-size: 14px; }
+.composer { background: var(--bg); padding: 16px 0 0; border-top: 1px solid var(--rule-strong); margin-top: 32px; }
+.composer .row { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
+.composer .field { margin: 0; }
+.composer .send { flex: 0 0 auto; width: auto; min-height: 48px; margin: 0; }
+.composer .send .t { padding: 12px 22px; }
+
+/* ---------- Footer ---------- */
+.footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--rule-strong); font-size: 14px; line-height: 1.5; }
+.footer p { margin: 0 0 6px; }
+.footer .legal { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 10px; }
+.footer .legal a { font: 700 11px/1.6 var(--ui); letter-spacing: .1em; text-transform: uppercase; text-decoration: none; }
+
+/* ---------- Motion (P7): only opacity, ≤ 120 ms, nothing under reduced-motion ---------- */
+.btn, .nav a, .chips a { transition: opacity 120ms cubic-bezier(.2, 0, 0, 1); }
+.btn:hover { opacity: .92; }
+@media (prefers-reduced-motion: reduce) { .btn, .nav a, .chips a { transition: none; } }

@@ -1,0 +1,542 @@
+{
+  "meta": {
+    "title_fr": "Réponses aux objections — 15 objections de terrain, réponse verbatim d'abord",
+    "version": "0.3.0",
+    "corpus_version": "d29c7422004ab27c",
+    "source_crawled_at": "2026-09-07T16:30:57.692Z",
+    "generated_at": "2026-09-07T17:16:10.131Z",
+    "revised_at": "2026-09-10",
+    "generator": "T8 (docs/discovery/10-riposte.md) — sélection manuelle, identifiants vérifiés par scripts/riposte.test.ts ; corrections D5.11 (docs/discovery/07-mecaniques.md §7.4) appliquées le 9/9/2026",
+    "changelog_fr": [
+      "0.3.0 (10/9/2026, panel rouge T12, docs/discovery/13-tests-humains.md §T12) : rip-04 — la carte de partage imprimait « Le SMIC monte, les PME sont épaulées » au-dessus de c6-s02-m05 (caisse de péréquation), qui ne dit rien du SMIC : verbatim_id passé à c8-s04-k01 et liant réécrit. rip-10 et rip-12 — les deux liants portaient une négation universelle sur les 837 propositions (« aucune mesure n'interdit l'avion », « ne contient ni sortie de l'Union ni sortie de l'euro »), exactement ce que D6.4 interdit au chat : réécrits en positif, notes de retournement complétées. rip-01 — deuxième phrase réattribuée (« Il baisse la TVA… »). rip-08 — liant réattribué (« Le programme confie… » au lieu de « La Constitution est écrite… »), règle 7 du guide de glossaire étendue à ce fichier (D2.2). share_card_fr.title_kind (claim | topic) sur les 15 entrées : un titre qui affirme doit partager un mot plein avec le verbatim imprimé ; un titre qui nomme un sujet le déclare et porte sa raison. Testé par scripts/riposte.test.ts.",
+      "0.2.0 (9/9/2026, D5.11 confirmée 9/9 avec D5.x) : rip-11 reformulée en objection de terrain sur la laïcité, sans le mot de l'accusation (relecture D0.27 en attente, voir revision_note_fr) ; champ slug par entrée, depuis la liste fermée meta.theme_slugs (route /r/<slug>, D5.10), jamais le mot d'une accusation ; champ button_label_fr (mot de sujet du bouton de la grille, §7.4) ; étiquette de l'objection « Ce qu'on entend souvent » (meta.objection_label_key, plus jamais « idée reçue ») ; rip-08 et rip-12 sans carte statistique (hors sujet) ; ordre des identifiants de rip-06, rip-10 et rip-13 : la première mesure répond à l'objection, celle qui confirme la prémisse reste présente et vient en dernier ; les liants de rip-06, rip-10 et rip-13 suivent le nouvel ordre (la phrase qui confirme la prémisse vient en second, jamais cachée) ; aucune carte statistique sur /m/<id> ; chrono seulement derrière « S'entraîner ». Les entrées et le vocabulaire des thèmes restent ceux de la v0.1.",
+      "0.1.0 (7/9/2026) : sélection T8."
+    ],
+    "license_fr": "Les mesures et les cartes statistiques citées par identifiant sont extraites mot pour mot de « L'Avenir en commun, édition 2025 » (https://melenchon2027.fr/programme2025/livre/), CC BY-NC-SA 4.0, attribution « La France insoumise – L'Avenir en commun ». Les objections, liants et notes de ce fichier sont des textes du projet, diffusés sous la même licence. Les réponses Désintox ne sont jamais reproduites : seul le lien est affiché (D1.5, licence à vérifier).",
+    "method_fr": "Quinze objections entendues sur le terrain en 2026, dont onze reprennent une objection traitée par desintox.lafranceinsoumise.fr (26 posts relevés le 7/9/2026) et quatre viennent du terrain seul. Pour chacune : deux à quatre identifiants de mesures réelles qui répondent (trouvés par recherche de mots-clés dans data/aec-2025.json, jamais rédigés), une carte « À savoir » de la même section si elle répond à l'objection (sinon null), le lien Désintox si l'objection y est traitée, un liant de deux phrases au plus étiqueté « reformulé » et sans chiffre qui ne figure pas dans un passage cité, un titre de carte de partage de huit mots au plus avec l'identifiant du verbatim à imprimer, et une note « ce qu'il ne faut pas dire ».",
+    "answer_kind_fr": {
+      "verbatim-first": "L'écran de réponse affiche d'abord le texte exact des mesures (zone « Texte du programme », Gowun Batang, D3.2), puis la carte statistique repliée (« Voir le chiffre »), avec ses mentions loi 77-808, puis le liant sous l'étiquette « En clair (reformulé) », puis le lien Désintox précédé de « La France insoumise y répond en détail sur desintox.lafranceinsoumise.fr ». Un seul tap mène au verbatim de la section."
+    },
+    "objection_label_key": "riposte.heard_label",
+    "objection_label_fr": "Ce qu'on entend souvent",
+    "objection_label_note_fr": "L'app n'émet aucun verdict sur l'objection : ni « idée reçue », ni « faux ». L'étiquette dit seulement que la phrase s'entend ; dans le mode d'entraînement (militant, derrière « S'entraîner »), l'étiquette « On te dit : » est admise (05-direction-artistique.md §9 correction 10).",
+    "slug_rule_fr": "Le slug est un thème neutre pris dans la liste fermée meta.theme_slugs (route /r/<slug>, D5.10) : jamais le mot d'une accusation, jamais un identifiant libre. Le slug et le mot de bouton (button_label_fr) sont ce qui voyage dans une URL, un QR ou une bulle WhatsApp ; l'objection complète n'apparaît qu'à l'intérieur de la fiche, entre guillemets, en petit corps.",
+    "theme_slugs": {
+      "impots": {
+        "theme": "impôts / fiscalité",
+        "label_fr": "Impôts"
+      },
+      "retraites": {
+        "theme": "retraites",
+        "label_fr": "Retraites"
+      },
+      "dette": {
+        "theme": "finance / banques / dette",
+        "label_fr": "Dette"
+      },
+      "salaires": {
+        "theme": "salaires",
+        "label_fr": "Salaires"
+      },
+      "immigration": {
+        "theme": "immigration / asile",
+        "label_fr": "Immigration"
+      },
+      "police": {
+        "theme": "sécurité / police",
+        "label_fr": "Police"
+      },
+      "campagnes": {
+        "theme": "territoires / collectivités locales",
+        "label_fr": "Campagnes"
+      },
+      "institutions": {
+        "theme": "démocratie / institutions",
+        "label_fr": "Institutions"
+      },
+      "agriculture": {
+        "theme": "alimentation / agriculture",
+        "label_fr": "Agriculture"
+      },
+      "transports": {
+        "theme": "transports",
+        "label_fr": "Transports"
+      },
+      "laicite": {
+        "theme": "laïcité",
+        "label_fr": "Laïcité"
+      },
+      "europe": {
+        "theme": "Europe",
+        "label_fr": "Europe"
+      },
+      "energie": {
+        "theme": "énergie",
+        "label_fr": "Énergie"
+      },
+      "logement": {
+        "theme": "logement",
+        "label_fr": "Logement"
+      },
+      "industrie": {
+        "theme": "entreprise / industrie",
+        "label_fr": "Industrie"
+      }
+    },
+    "liant_rule_fr": "Deux phrases au plus, étiquetées « reformulé », sans aucun nombre en chiffres qui ne soit pas présent dans une mesure ou une carte statistique citée par l’entrée (vérifié par scripts/riposte.test.ts).",
+    "objection_rule_fr": "Quinze mots au plus, telle qu’on l’entend, entre guillemets. Jamais le nom d'une religion, d'une origine ni d'un groupe de personnes (D5.11).",
+    "share_card_rule_fr": "Titre de huit mots au plus ; le corps de la carte est le verbatim de la mesure `verbatim_id`, jamais le liant ; bande d'attribution CC BY-NC-SA (D3.3, D3.8) ; aucun score, aucun classement, aucun emoji (D0.32). Aucune carte statistique sur aucune image de partage ni sur /m/<id> : la page /m/<id> = verbatim + chapitre + section + attribution (D5.4, D5.11).",
+    "stat_card_rule_fr": "Une carte « À savoir » n'est affichée dans une réponse que si le sidecar stat-cards-legal.json donne institut, commanditaire, dates de terrain et échantillon (loi 77-808 art. 2) ; l'année est dans le même corps que le pourcentage ; repliée par défaut derrière « Voir le chiffre » quand la vague est antérieure à 2024 (session 2 : 3 militants sur 4). Sans sidecar, la carte reste dans le verbatim de section avec la mention « Mentions légales incomplètes dans la source ».",
+    "flashcard_rule_fr": "Le compte à rebours de dix secondes n'existe que derrière « S'entraîner », jamais sur l'écran 0 ni sur une page atteinte par un lien (D5.11 : chrono hors écran 0). Recto : objection seule. Verso : verbatim, chiffre replié, liant, lien. Aucun score, aucun streak, aucun état serveur : la dernière objection vue est écrite en localStorage seulement après un geste, et la clé est listée sur /confidentialite.",
+    "excluded_stat_card_ids": [
+      "c13-s03-a02"
+    ],
+    "excluded_stat_card_note_fr": "c13-s03-a02 (votation militante sur le nucléaire) n’est pas un sondage : jamais affichée comme chiffre de riposte (D1.9).",
+    "counts": {
+      "entries": 15,
+      "grounded_in_desintox": 11,
+      "field_only": 4,
+      "with_stat_card": 11,
+      "distinct_themes": 15,
+      "distinct_sections": 23,
+      "distinct_slugs": 15
+    },
+    "desintox_source": "https://desintox.lafranceinsoumise.fr/",
+    "desintox_display_rule_fr": "Le lien Désintox s'affiche sous le libellé neutre riposte.desintox_link (« Lire sur Désintox »), précédé de riposte.desintox_lead ; desintox_title sert au test de cohérence avec data/desintox.json et n'est jamais rendu à l'écran (D5.11 : le titre d'un billet peut reprendre le mot d'une accusation, comme pour rip-11).",
+    "desintox_license_note": "Contenu issu de desintox.lafranceinsoumise.fr (droits La France insoumise). À utiliser comme source citée, avec lien vers l’article d’origine. Pas de reproduction intégrale dans l’app sans vérification préalable de la licence."
+  },
+  "entries": [
+    {
+      "id": "rip-01",
+      "objection_fr": "« Avec vous, les impôts vont exploser »",
+      "theme": "impôts / fiscalité",
+      "slug": "impots",
+      "button_label_fr": "Impôts",
+      "source": "desintox",
+      "answer_kind": "verbatim-first",
+      "measure_ids": [
+        "c6-s05-k01",
+        "c6-s05-m05",
+        "c6-s05-m07",
+        "c6-s05-m02"
+      ],
+      "stat_card_id": "c6-s05-a01",
+      "desintox_url": "https://desintox.lafranceinsoumise.fr/vous-voulez-augmenter-les-impots/",
+      "desintox_title": "« Vous voulez augmenter les impôts »",
+      "desintox_post_id": 779,
+      "liant_fr": "Le programme rend l'impôt sur le revenu et la CSG progressifs : plus on gagne, plus on contribue. Il baisse la TVA sur les produits de première nécessité.",
+      "liant_kind": "reformulé",
+      "share_card_fr": {
+        "title_fr": "Qui paiera plus, qui paiera moins",
+        "title_kind": "topic",
+        "title_note_fr": "Question posée au lecteur, aucune affirmation sur le texte.",
+        "verbatim_id": "c6-s05-k01"
+      },
+      "flashcard_seconds": 10,
+      "reversal_note_fr": "Ne pas dire « personne ne paiera plus » ni avancer un seuil en euros de tête : le seuil est dans la réponse Désintox, pas dans le texte du programme. Ne pas promettre de baisse chiffrée."
+    },
+    {
+      "id": "rip-02",
+      "objection_fr": "« La retraite à 60 ans, c'est infinançable »",
+      "theme": "retraites",
+      "slug": "retraites",
+      "button_label_fr": "Retraites",
+      "source": "desintox",
+      "answer_kind": "verbatim-first",
+      "measure_ids": [
+        "c8-s08-k01",
+        "c8-s08-m03",
+        "c8-s04-k01",
+        "c8-s08-m01"
+      ],
+      "stat_card_id": "c8-s08-a02",
+      "desintox_url": "https://desintox.lafranceinsoumise.fr/ok-mais-ca-reste-infinancable/",
+      "desintox_title": "« La retraite à 60 ans reste infinançable »",
+      "desintox_post_id": 851,
+      "liant_fr": "Le texte prévoit le retour à 60 ans pour quarante annuités et nomme ses recettes : cotisation vieillesse relevée chaque année, dividendes et revenus financiers soumis à cotisation. La réponse Désintox détaille le financement par les salaires.",
+      "liant_kind": "reformulé",
+      "share_card_fr": {
+        "title_fr": "Soixante ans, quarante annuités, financé",
+        "title_kind": "claim",
+        "verbatim_id": "c8-s08-k01"
+      },
+      "flashcard_seconds": 10,
+      "reversal_note_fr": "Ne pas avancer un coût en milliards de tête : les chiffres cités par les adversaires et leurs contre-chiffres sont dans les deux réponses Désintox, pas dans le programme. Ne pas dire « ça ne coûte rien »."
+    },
+    {
+      "id": "rip-03",
+      "objection_fr": "« Ils vont ruiner le pays, c'est infinançable »",
+      "theme": "finance / banques / dette",
+      "slug": "dette",
+      "button_label_fr": "Dette",
+      "source": "desintox",
+      "answer_kind": "verbatim-first",
+      "measure_ids": [
+        "c6-s05-m08",
+        "c6-s05-m11",
+        "c6-s05-m14",
+        "c6-s04-m03"
+      ],
+      "stat_card_id": "c6-s05-a03",
+      "desintox_url": "https://desintox.lafranceinsoumise.fr/vous-y-connaissez-rien-en-economie-avec-vous-cest-la-catastrophe-assuree/",
+      "desintox_title": "« Vous y connaissez rien en économie, avec vous c’est la catastrophe assurée »",
+      "desintox_post_id": 781,
+      "liant_fr": "Le programme dit où il prend l'argent : niches fiscales passées au crible, taxe permanente sur les superprofits, fraude et évasion fiscales traitées en priorité. Il traite la dette publique par un audit citoyen et un réaménagement négocié.",
+      "liant_kind": "reformulé",
+      "share_card_fr": {
+        "title_fr": "D'où vient l'argent : le texte",
+        "title_kind": "topic",
+        "title_note_fr": "Intitulé de sujet (« d'où vient l'argent »), aucune affirmation sur le texte.",
+        "verbatim_id": "c6-s05-m11"
+      },
+      "flashcard_seconds": 10,
+      "reversal_note_fr": "Ne pas improviser un chiffrage global : ce corpus ne contient pas de tableau de financement, seulement des montants isolés. Ne pas dire « la dette n'existe pas » : le texte parle d'audit et de réaménagement négocié."
+    },
+    {
+      "id": "rip-04",
+      "objection_fr": "« Augmenter le SMIC, ça tue les petites entreprises »",
+      "theme": "salaires",
+      "slug": "salaires",
+      "button_label_fr": "Salaires",
+      "source": "desintox",
+      "answer_kind": "verbatim-first",
+      "measure_ids": [
+        "c8-s04-k01",
+        "c6-s02-m05",
+        "c6-s05-m01",
+        "c6-s04-m06"
+      ],
+      "stat_card_id": null,
+      "desintox_url": "https://desintox.lafranceinsoumise.fr/vous-allez-tuer-les-petites-entreprises-en-augmentant-le-smic/",
+      "desintox_title": "« Vous allez tuer les petites entreprises en augmentant le SMIC »",
+      "desintox_post_id": 784,
+      "liant_fr": "Le programme porte le SMIC mensuel à un montant écrit dans le texte et indexe les salaires sur l'inflation. Il organise aussi la solidarité entre entreprises : caisse de péréquation interentreprises, impôt sur les sociétés égal entre PME et grands groupes.",
+      "liant_kind": "reformulé",
+      "share_card_fr": {
+        "title_fr": "Le SMIC monte, les PME sont épaulées",
+        "title_kind": "claim",
+        "verbatim_id": "c8-s04-k01"
+      },
+      "flashcard_seconds": 10,
+      "reversal_note_fr": "Ne pas mettre en avant le sondage de la section (c8-s04-a01) : il porte sur un montant de SMIC antérieur à celui du texte, capture hostile garantie. Ne pas nier que le coût du travail augmente : montrer la caisse de péréquation."
+    },
+    {
+      "id": "rip-05",
+      "objection_fr": "« Avec eux, c'est l'immigration sans limite »",
+      "theme": "immigration / asile",
+      "slug": "immigration",
+      "button_label_fr": "Immigration",
+      "source": "desintox",
+      "answer_kind": "verbatim-first",
+      "measure_ids": [
+        "c16-s07-m05",
+        "c16-s07-m08",
+        "c16-s07-m01",
+        "c16-s07-k01"
+      ],
+      "stat_card_id": "c16-s07-a01",
+      "desintox_url": "https://desintox.lafranceinsoumise.fr/vous-etes-immigrationnistes/",
+      "desintox_title": "« Vous êtes immigrationnistes »",
+      "desintox_post_id": 857,
+      "liant_fr": "Le programme organise des voies légales et un accueil digne, et agit sur les causes des départs : accords commerciaux inégaux, dérèglement climatique, coopération internationale. Il fait de la carte de dix ans le titre de séjour de référence.",
+      "liant_kind": "reformulé",
+      "share_card_fr": {
+        "title_fr": "Ce que dit le texte sur l'immigration",
+        "title_kind": "topic",
+        "title_note_fr": "Intitulé de sujet, aucune affirmation sur le texte.",
+        "verbatim_id": "c16-s07-m05"
+      },
+      "flashcard_seconds": 10,
+      "reversal_note_fr": "Ne pas répondre par un chiffre de flux ou de coût de tête : les chiffres OCDE et Eurostat sont dans les réponses Désintox, pas dans le programme. Ne pas dire « frontières ouvertes » ni « fermées » : le texte parle de voies légales et de régularisation."
+    },
+    {
+      "id": "rip-06",
+      "objection_fr": "« Vous êtes anti-flics, laxistes sur la sécurité »",
+      "theme": "sécurité / police",
+      "slug": "police",
+      "button_label_fr": "Police",
+      "source": "desintox",
+      "answer_kind": "verbatim-first",
+      "measure_ids": [
+        "c7-s08-m06",
+        "c4-s03-m02",
+        "c7-s08-m07",
+        "c7-s08-k01"
+      ],
+      "stat_card_id": "c7-s08-a01",
+      "desintox_url": "https://desintox.lafranceinsoumise.fr/vous-etes-anti-flics/",
+      "desintox_title": "« Vous êtes anti-flics »",
+      "desintox_post_id": 771,
+      "liant_fr": "Le programme renforce les effectifs contre les trafics et la délinquance financière, double la police technique et scientifique et porte la formation des gardiens de la paix à deux ans. Il rétablit la police de proximité.",
+      "liant_kind": "reformulé",
+      "share_card_fr": {
+        "title_fr": "Police : effectifs, formation, proximité",
+        "title_kind": "claim",
+        "verbatim_id": "c7-s08-m06"
+      },
+      "flashcard_seconds": 10,
+      "reversal_note_fr": "Ne pas ouvrir sur le démantèlement des BAC ni sur les violences policières quand la question est « laxisme » : commencer par les effectifs et la formation ; la mesure clé, qui contient le démantèlement, vient ensuite et ne se cache pas. Ne pas dire « la police est le problème »."
+    },
+    {
+      "id": "rip-07",
+      "objection_fr": "« Vous n'avez rien pour les campagnes »",
+      "theme": "territoires / collectivités locales",
+      "slug": "campagnes",
+      "button_label_fr": "Campagnes",
+      "source": "desintox",
+      "answer_kind": "verbatim-first",
+      "measure_ids": [
+        "c7-s01-k01",
+        "c3-s02-m04",
+        "c13-s02-m02",
+        "c15-s02-m01"
+      ],
+      "stat_card_id": "c7-s01-a01",
+      "desintox_url": "https://desintox.lafranceinsoumise.fr/la-france-insoumise-nen-a-rien-a-faire-de-la-ruralite/",
+      "desintox_title": "« La France insoumise n’en a rien à faire de la ruralité »",
+      "desintox_post_id": 757,
+      "liant_fr": "Le programme fixe une distance maximale entre tout lieu d’habitation et les services publics essentiels, départements ruraux nommés explicitement. Il rouvre des lignes du quotidien et des gares, finance les communes rurales et rapproche urgences et maternités.",
+      "liant_kind": "reformulé",
+      "share_card_fr": {
+        "title_fr": "Campagnes : la distance maximale aux services",
+        "title_kind": "claim",
+        "verbatim_id": "c7-s01-k01"
+      },
+      "flashcard_seconds": 10,
+      "reversal_note_fr": "Ne pas opposer villes et campagnes : la réponse Désintox refuse ce clivage. Ne pas promettre une gare ou une maternité précise : citer la règle de distance du texte."
+    },
+    {
+      "id": "rip-08",
+      "objection_fr": "« La 6e République, c'est Mélenchon président à vie »",
+      "theme": "démocratie / institutions",
+      "slug": "institutions",
+      "button_label_fr": "Institutions",
+      "source": "desintox",
+      "answer_kind": "verbatim-first",
+      "measure_ids": [
+        "c1-s01-m01",
+        "c1-s01-m02",
+        "c1-s01-m03",
+        "c1-s04-k01"
+      ],
+      "stat_card_id": null,
+      "desintox_url": "https://desintox.lafranceinsoumise.fr/la-france-insoumise-nest-pas-democratique/",
+      "desintox_title": "« La France insoumise n’est pas démocratique »",
+      "desintox_post_id": 672,
+      "desintox_fit": "partial",
+      "desintox_note_fr": "La réponse Désintox porte sur le fonctionnement interne du mouvement, pas sur les institutions : elle sert de contexte, la riposte repose sur le texte du programme seul.",
+      "liant_fr": "Le programme confie l'écriture de la Constitution à une Assemblée constituante élue pour cela, dont les membres ne peuvent pas être candidats ensuite, puis soumise à référendum. Il ajoute le référendum révocatoire : les citoyens peuvent démettre un élu.",
+      "liant_kind": "reformulé",
+      "share_card_fr": {
+        "title_fr": "Qui écrit la Constitution, et qui vote",
+        "title_kind": "claim",
+        "verbatim_id": "c1-s01-m02"
+      },
+      "flashcard_seconds": 10,
+      "reversal_note_fr": "Ne pas personnaliser (« il ne sera pas… ») : répondre par la procédure. Ne pas dire « régime présidentiel renforcé » : la mesure clé de la section suivante parle de régime parlementaire.",
+      "stat_card_note_fr": "c1-s02-a01 (proportionnelle) ne répond pas à l'objection sur la 6e République : retirée (D5.11)."
+    },
+    {
+      "id": "rip-09",
+      "objection_fr": "« Vous êtes contre les agriculteurs »",
+      "theme": "alimentation / agriculture",
+      "slug": "agriculture",
+      "button_label_fr": "Agriculture",
+      "source": "desintox",
+      "answer_kind": "verbatim-first",
+      "measure_ids": [
+        "c13-s05-m01",
+        "c13-s05-m08",
+        "c13-s05-m02",
+        "c13-s05-k01"
+      ],
+      "stat_card_id": "c13-s05-a01",
+      "desintox_url": "https://desintox.lafranceinsoumise.fr/vous-etes-contre-les-agriculteurs/",
+      "desintox_title": "« Vous êtes contre les agriculteurs »",
+      "desintox_post_id": 2110,
+      "liant_fr": "Le programme garantit des prix planchers, interdit les ventes à perte, encadre les marges de la grande distribution et reprend les dettes des convertis au bio. Il engage une réforme des retraites agricoles.",
+      "liant_kind": "reformulé",
+      "share_card_fr": {
+        "title_fr": "Prix planchers, marges encadrées, retraites agricoles",
+        "title_kind": "claim",
+        "verbatim_id": "c13-s05-m01"
+      },
+      "flashcard_seconds": 10,
+      "reversal_note_fr": "Ne pas commencer par les pesticides face à un agriculteur : commencer par le revenu (prix planchers, ventes à perte). Ne pas citer la loi Duplomb sans la réponse Désintox sous les yeux."
+    },
+    {
+      "id": "rip-10",
+      "objection_fr": "« Avec vous, on ne pourra plus prendre l'avion »",
+      "theme": "transports",
+      "slug": "transports",
+      "button_label_fr": "Transports",
+      "source": "desintox",
+      "answer_kind": "verbatim-first",
+      "measure_ids": [
+        "c13-s02-m02",
+        "c13-s02-m06",
+        "c13-s02-m05",
+        "c13-s02-m10"
+      ],
+      "stat_card_id": "c13-s02-a01",
+      "desintox_url": "https://desintox.lafranceinsoumise.fr/avec-vous-on-ne-pourra-plus-prendre-lavion/",
+      "desintox_title": "« Avec vous on ne pourra plus prendre l’avion »",
+      "desintox_post_id": 2114,
+      "liant_fr": "Le texte rouvre des lignes de train du quotidien, développe les transports à la demande hors des villes et l'aide à la réparation des voitures. Il supprime les lignes aériennes quand le train fait le trajet en moins de quatre heures.",
+      "liant_kind": "reformulé",
+      "share_card_fr": {
+        "title_fr": "Avion : ce que le texte supprime vraiment",
+        "title_kind": "claim",
+        "verbatim_id": "c13-s02-m06"
+      },
+      "flashcard_seconds": 10,
+      "reversal_note_fr": "Ne pas dire « on ne touche pas à l'avion » : la suppression des lignes courtes est écrite. Ne pas dire non plus « aucune mesure n'interdit l'avion » : c'est une affirmation sur les 837 propositions, qu'aucun identifiant ne soutient (panel rouge T12). Ne pas citer l'interdiction des jets privés comme mesure : elle est dans la réponse Désintox, pas dans le texte de l'édition 2025 — c'est le lien Désintox qui la porte."
+    },
+    {
+      "id": "rip-11",
+      "objection_fr": "« Vous avez abandonné la laïcité »",
+      "theme": "laïcité",
+      "slug": "laicite",
+      "button_label_fr": "Laïcité",
+      "source": "desintox",
+      "answer_kind": "verbatim-first",
+      "measure_ids": [
+        "c1-s05-k01",
+        "c1-s05-m03",
+        "c1-s05-m04",
+        "c1-s05-m01"
+      ],
+      "stat_card_id": null,
+      "desintox_url": "https://desintox.lafranceinsoumise.fr/vous-etes-la-france-islamiste/",
+      "desintox_title": "« Vous êtes la France islamiste »",
+      "desintox_post_id": 1050,
+      "desintox_fit": "partial",
+      "desintox_note_fr": "Le billet Désintox répond à une accusation plus violente, dont le titre n'est jamais affiché dans l'app : seul le lien apparaît, sous le libellé neutre « Lire sur Désintox ». La réponse repose sur les quatre mesures de la section laïcité.",
+      "liant_fr": "Le programme garantit la liberté de conscience et l'application stricte de la laïcité : aucun financement public des édifices et activités cultuels, combat de tous les communautarismes et de l'usage politique des religions, abrogation du concordat.",
+      "liant_kind": "reformulé",
+      "share_card_fr": {
+        "title_fr": "Laïcité : quatre mesures, mot pour mot",
+        "title_kind": "claim",
+        "verbatim_id": "c1-s05-k01"
+      },
+      "flashcard_seconds": 10,
+      "reversal_note_fr": "Ne pas reprendre le mot de l'accusation ni débattre d'une religion : lire la mesure clé. Ne pas dire « la laïcité interdit » : la réponse Désintox rappelle que la loi de séparation protège, elle n'interdit pas.",
+      "review_status": "pending-review",
+      "revision_note_fr": "Reformulée le 9/9/2026 (D5.11, red team 07-mecaniques.md §7.4) : l'objection v0.1 reprenait le mot de l'accusation, qui aurait voyagé dans les bulles WhatsApp. Objection de terrain non inflammable, sans religion ni groupe nommé ; slug « laicite ». Relecture D0.27 (militant + non politisé) encore due : jusque-là, l'entrée reste hors de la grille par défaut (review_status)."
+    },
+    {
+      "id": "rip-12",
+      "objection_fr": "« Ils veulent sortir de l'UE et de l'euro »",
+      "theme": "Europe",
+      "slug": "europe",
+      "button_label_fr": "Europe",
+      "source": "terrain",
+      "answer_kind": "verbatim-first",
+      "measure_ids": [
+        "c17-s02-m02",
+        "c17-s02-m05",
+        "c17-s01-m03",
+        "c17-s01-m01"
+      ],
+      "stat_card_id": null,
+      "desintox_url": null,
+      "desintox_title": null,
+      "desintox_post_id": null,
+      "liant_fr": "Le programme parle de désobéir aux règles européennes incompatibles avec ses engagements sociaux et écologiques. Il fait primer la Constitution sur le droit européen et construit des coopérations avec les États volontaires.",
+      "liant_kind": "reformulé",
+      "share_card_fr": {
+        "title_fr": "Europe : désobéir, pas sortir",
+        "title_kind": "topic",
+        "title_note_fr": "Intitulé de sujet en deux mots, aucune affirmation sur le texte.",
+        "verbatim_id": "c17-s02-m02"
+      },
+      "flashcard_seconds": 10,
+      "reversal_note_fr": "Ne pas dire « on restera quoi qu'il arrive » ni « on sortira » : le texte parle de désobéissance et de référendum sur tout nouveau traité. Ne pas dire « le programme ne contient ni sortie de l'Union ni sortie de l'euro » : c'est une négation sur le programme entier, qu'aucun identifiant ne soutient (panel rouge T12). Renvoyer à la FAQ « Est-ce qu'on sort de l'euro ? », qui montre ce que le chapitre dit.",
+      "stat_card_note_fr": "c17-s02-a01 (travail détaché) ne répond pas à l'objection sur la sortie de l'UE : retirée (D5.11)."
+    },
+    {
+      "id": "rip-13",
+      "objection_fr": "« Sans nucléaire, on aura des coupures de courant »",
+      "theme": "énergie",
+      "slug": "energie",
+      "button_label_fr": "Énergie",
+      "source": "terrain",
+      "answer_kind": "verbatim-first",
+      "measure_ids": [
+        "c13-s03-m02",
+        "c13-s03-k01",
+        "c13-s03-m03",
+        "c13-s03-m04"
+      ],
+      "stat_card_id": "c13-s03-a01",
+      "desintox_url": null,
+      "desintox_title": null,
+      "desintox_post_id": null,
+      "liant_fr": "Le texte prévoit d'abord les technologies qui gèrent les pics et les creux, sur le double mot d'ordre de sobriété et d'efficacité, avec un objectif de 100 % d'énergies renouvelables. Il écrit et planifie la sortie du nucléaire, avec démantèlement, reconversion des sites et convention collective unique pour les salariés.",
+      "liant_kind": "reformulé",
+      "share_card_fr": {
+        "title_fr": "Sortie du nucléaire : le plan du texte",
+        "title_kind": "claim",
+        "verbatim_id": "c13-s03-m03"
+      },
+      "flashcard_seconds": 10,
+      "reversal_note_fr": "Ne pas cacher ni relativiser la sortie du nucléaire : elle est écrite. Ne pas présenter la votation militante de la section comme un sondage : ce n'en est pas un (D1.9). Ne pas promettre une date de fermeture qui n'est pas dans le texte."
+    },
+    {
+      "id": "rip-14",
+      "objection_fr": "« Encadrer les loyers, plus personne ne louera »",
+      "theme": "logement",
+      "slug": "logement",
+      "button_label_fr": "Logement",
+      "source": "terrain",
+      "answer_kind": "verbatim-first",
+      "measure_ids": [
+        "c7-s05-m04",
+        "c7-s05-m02",
+        "c7-s05-m03",
+        "c7-s05-m09"
+      ],
+      "stat_card_id": "c7-s05-a01",
+      "desintox_url": null,
+      "desintox_title": null,
+      "desintox_post_id": null,
+      "liant_fr": "Le programme encadre les loyers partout et les baisse dans les grandes villes, mais il protège aussi le bailleur : une garantie universelle couvre les impayés, pour le locataire comme pour le propriétaire. Il construit des logements publics chaque année pendant cinq ans.",
+      "liant_kind": "reformulé",
+      "share_card_fr": {
+        "title_fr": "Loyers encadrés, propriétaires garantis",
+        "title_kind": "claim",
+        "verbatim_id": "c7-s05-m02"
+      },
+      "flashcard_seconds": 10,
+      "reversal_note_fr": "Ne pas dire « les propriétaires paieront » : la garantie des loyers les protège aussi. Ne pas parler de réquisition en premier : la mesure existe (logements vides), elle vient après l'encadrement et la garantie."
+    },
+    {
+      "id": "rip-15",
+      "objection_fr": "« Ils veulent tout nationaliser, c'est le communisme »",
+      "theme": "entreprise / industrie",
+      "slug": "industrie",
+      "button_label_fr": "Industrie",
+      "source": "terrain",
+      "answer_kind": "verbatim-first",
+      "measure_ids": [
+        "c2-s02-k01",
+        "c2-s02-m04",
+        "c2-s01-k01",
+        "c9-s02-m12"
+      ],
+      "stat_card_id": "c9-s02-a01",
+      "desintox_url": null,
+      "desintox_title": null,
+      "desintox_post_id": null,
+      "liant_fr": "Le programme revient sur des privatisations nommées (aéroports, autoroutes, Française des Jeux) et crée des pôles publics dans des secteurs listés : médicaments, transports, banque, énergie, armement. Il fait fixer par référendum la liste des biens communs à collectiviser.",
+      "liant_kind": "reformulé",
+      "share_card_fr": {
+        "title_fr": "Ce qui redevient public, liste exacte",
+        "title_kind": "claim",
+        "verbatim_id": "c2-s02-m04"
+      },
+      "flashcard_seconds": 10,
+      "reversal_note_fr": "Ne pas dire « rien ne sera nationalisé » ni « tout » : citer la liste. Ne pas employer « collectiviser » sans la mesure clé sous les yeux : le mot est dans le texte, avec le référendum qui fixe la liste."
+    }
+  ]
+}

@@ -1,0 +1,227 @@
+{
+  "measuredAt": "2026-09-09T13:24:32.613Z",
+  "pass": "",
+  "runsPerVariant": 3,
+  "lighthouseVersion": "13.4.1",
+  "hostUserAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+  "networkUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Mobile Safari/537.36",
+  "throttlingMethod": "devtools",
+  "throttling": {
+    "rttMs": 150,
+    "throughputKbps": 1638.4,
+    "requestLatencyMs": 562.5,
+    "downloadThroughputKbps": 1474.56,
+    "uploadThroughputKbps": 675,
+    "cpuSlowdownMultiplier": 4
+  },
+  "formFactor": "mobile",
+  "chromePath": "<home>/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome",
+  "variants": {
+    "react": {
+      "label": "React 19 + Vite 6 + Tailwind v4",
+      "url": "https://aec-lab-fw-react.baoleka.workers.dev/",
+      "runs": [
+        {
+          "run": 1,
+          "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/react.1.json",
+          "fetchTime": "2026-09-09T13:07:18.714Z",
+          "score": 0.97,
+          "fcp": 2090.595,
+          "lcp": 2090.595,
+          "tbt": 0,
+          "cls": 0,
+          "speedIndex": 1933,
+          "ttfb": 41,
+          "lcpElement": "div#root > main.mx-auto > article.mt-8 > p.mt-4",
+          "lcpBreakdown": {
+            "timeToFirstByte": 75.278,
+            "elementRenderDelay": 2015.317
+          },
+          "mainThreadMs": 331.49499999999966,
+          "bootupMs": 102.66599999999991,
+          "requests": 5,
+          "transferTotal": 124007,
+          "transferByType": {
+            "Document": 1282,
+            "Font": 50249,
+            "Script": 67753,
+            "Stylesheet": 4723
+          },
+          "benchmarkIndex": 997
+        },
+        {
+          "run": 2,
+          "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/react.2.json",
+          "fetchTime": "2026-09-09T13:07:42.175Z",
+          "score": 0.97,
+          "fcp": 2077.782,
+          "lcp": 2077.782,
+          "tbt": 0,
+          "cls": 0,
+          "speedIndex": 1921,
+          "ttfb": 51,
+          "lcpElement": "div#root > main.mx-auto > article.mt-8 > p.mt-4",
+          "lcpBreakdown": {
+            "timeToFirstByte": 84.937,
+            "elementRenderDelay": 1992.845
+          },
+          "mainThreadMs": 325.5679999999998,
+          "bootupMs": 93.69299999999993,
+          "requests": 5,
+          "transferTotal": 123904,
+          "transferByType": {
+            "Document": 1285,
+            "Font": 50249,
+            "Script": 67707,
+            "Stylesheet": 4663
+          },
+          "benchmarkIndex": 1016
+        },
+        {
+          "run": 3,
+          "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/react.3.json",
+          "fetchTime": "2026-09-09T13:08:05.606Z",
+          "score": 0.97,
+          "fcp": 2077.855,
+          "lcp": 2077.855,
+          "tbt": 0,
+          "cls": 0,
+          "speedIndex": 1921,
+          "ttfb": 42,
+          "lcpElement": "div#root > main.mx-auto > article.mt-8 > p.mt-4",
+          "lcpBreakdown": {
+            "timeToFirstByte": 71.37900012207031,
+            "elementRenderDelay": 2006.4759998779298
+          },
+          "mainThreadMs": 332.14999999999964,
+          "bootupMs": 102.31799999999994,
+          "requests": 5,
+          "transferTotal": 123942,
+          "transferByType": {
+            "Document": 1290,
+            "Font": 50247,
+            "Script": 67752,
+            "Stylesheet": 4653
+          },
+          "benchmarkIndex": 1014.5
+        }
+      ],
+      "median": {
+        "score": 0.97,
+        "fcp": 2077.855,
+        "lcp": 2077.855,
+        "tbt": 0,
+        "cls": 0,
+        "speedIndex": 1921,
+        "ttfb": 42,
+        "mainThreadMs": 331.49499999999966,
+        "bootupMs": 102.31799999999994,
+        "transferTotal": 123942,
+        "requests": 5
+      }
+    },
+    "astro": {
+      "label": "Astro 5 (static + vanilla script)",
+      "url": "https://aec-lab-fw-astro.baoleka.workers.dev/",
+      "runs": [
+        {
+          "run": 1,
+          "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/astro.1.json",
+          "fetchTime": "2026-09-09T13:13:49.028Z",
+          "score": 1,
+          "fcp": 1473.408,
+          "lcp": 1473.408,
+          "tbt": 0,
+          "cls": 0.0019673959516339507,
+          "speedIndex": 1486,
+          "ttfb": 48,
+          "lcpElement": "body > main > article > p.verbatim",
+          "lcpBreakdown": {
+            "timeToFirstByte": 133.525,
+            "elementRenderDelay": 1339.883
+          },
+          "mainThreadMs": 301.75199999999995,
+          "bootupMs": 20.451999999999998,
+          "requests": 5,
+          "transferTotal": 58791,
+          "transferByType": {
+            "Document": 3475,
+            "Font": 50249,
+            "Stylesheet": 2775,
+            "Script": 2292
+          },
+          "benchmarkIndex": 1009
+        },
+        {
+          "run": 2,
+          "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/astro.2.json",
+          "fetchTime": "2026-09-09T13:14:11.668Z",
+          "score": 1,
+          "fcp": 1450.211,
+          "lcp": 1450.211,
+          "tbt": 0,
+          "cls": 0.0019673959516339507,
+          "speedIndex": 1462,
+          "ttfb": 49,
+          "lcpElement": "body > main > article > p.verbatim",
+          "lcpBreakdown": {
+            "timeToFirstByte": 83.111,
+            "elementRenderDelay": 1367.1
+          },
+          "mainThreadMs": 311.0090000000002,
+          "bootupMs": 20.794,
+          "requests": 5,
+          "transferTotal": 58767,
+          "transferByType": {
+            "Document": 3473,
+            "Font": 50237,
+            "Stylesheet": 2765,
+            "Script": 2292
+          },
+          "benchmarkIndex": 1008.5
+        },
+        {
+          "run": 3,
+          "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/astro.3.json",
+          "fetchTime": "2026-09-09T13:14:34.340Z",
+          "score": 1,
+          "fcp": 1459.366,
+          "lcp": 1459.366,
+          "tbt": 0,
+          "cls": 0.0019673959516339507,
+          "speedIndex": 1470,
+          "ttfb": 63,
+          "lcpElement": "body > main > article > p.verbatim",
+          "lcpBreakdown": {
+            "timeToFirstByte": 95.173,
+            "elementRenderDelay": 1364.193
+          },
+          "mainThreadMs": 329.35800000000006,
+          "bootupMs": 20.421,
+          "requests": 5,
+          "transferTotal": 58785,
+          "transferByType": {
+            "Document": 3471,
+            "Font": 50251,
+            "Stylesheet": 2770,
+            "Script": 2293
+          },
+          "benchmarkIndex": 989.5
+        }
+      ],
+      "median": {
+        "score": 1,
+        "fcp": 1459.366,
+        "lcp": 1459.366,
+        "tbt": 0,
+        "cls": 0.0019673959516339507,
+        "speedIndex": 1470,
+        "ttfb": 49,
+        "mainThreadMs": 311.0090000000002,
+        "bootupMs": 20.451999999999998,
+        "transferTotal": 58785,
+        "requests": 5
+      }
+    }
+  }
+}

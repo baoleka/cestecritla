@@ -1,0 +1,45 @@
+{
+  "name": "cestecritla",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Discovery dossier and tooling for « C'est écrit là » (cestecritla.fr)",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "tsx scripts/build.ts",
+    "build:fast": "tsx scripts/build.ts --fast",
+    "preview": "astro preview",
+    "deploy": "wrangler deploy",
+    "ingest": "tsx scripts/ingest.ts",
+    "typecheck": "wrangler types >/dev/null && tsc --noEmit && tsc -p src/worker/tsconfig.json --noEmit && astro check --tsconfig tsconfig.app.json",
+    "test": "tsx --test scripts/*.test.ts",
+    "contrast": "tsx scripts/contrast.ts",
+    "lint": "eslint scripts eval",
+    "format": "prettier --write \"**/*.{ts,json,md}\"",
+    "a11y": "tsx scripts/a11y.ts",
+    "build:neutral": "tsx scripts/build.ts --neutral"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@cloudflare/workers-types": "^5.20260910.1",
+    "@eslint/js": "^9.39.5",
+    "@types/node": "^24.13.4",
+    "axe-core": "4.11.0",
+    "eslint": "^9.39.5",
+    "node-html-parser": "^7.1.0",
+    "playwright": "1.63.0",
+    "prettier": "^3.9.6",
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.69.0",
+    "wrangler": "4.130.0"
+  },
+  "dependencies": {
+    "astro": "5.18.2",
+    "minisearch": "7.2.0"
+  }
+}

@@ -1,0 +1,15 @@
+node_modules/
+.wrangler/
+.dev.vars
+*.log
+.DS_Store
+scratch/
+# candidate corpora produced by `ingest.ts --out data/aec-2025.next.json` (see scripts/README.md)
+data/aec-2025.next*.json
+build/
+dist/
+.astro/
+public/fonts/
+worker-configuration.d.ts
+.gate-forbidden
+docs/discovery/captures/assets-tiers/

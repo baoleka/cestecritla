@@ -1,0 +1,1236 @@
+[
+  {
+    "shot": "ecran0",
+    "scheme": "light",
+    "path": "/defi/?n=254",
+    "note": "Écran 0 par lien (ligne de contexte impersonnelle), carte 1/5",
+    "file": "defi/ecran0.png",
+    "fileFull": "defi/ecran0.full.png",
+    "extras": [],
+    "external": [],
+    "errors": [],
+    "url": "http://127.0.0.1:8767/defi/?n=254",
+    "scrollWidth": 390,
+    "height": 845,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        3
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        8
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        8
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        3
+      ],
+      [
+        "#212320 on #FDEDFF",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 8,
+    "blocks3d": 1,
+    "ctaBottom": 488,
+    "independenceBottom": 673,
+    "hasDenominator": false,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "text": "Quelqu’un partage 5 mesures de L’Avenir en commun 2025, le programme.\n\nTIRAGE DU 11 SEPTEMBRE\n\nTU SAVAIS QUE\nC’ÉTAIT DEDANS ?\n\n1 / 5\n\nTEXTE DU PROGRAMME\n\nRevaloriser les APL de 10 %\n\nChapitre 9 › Créer un état d’urgence sociale\nLire la section\nJE SAVAIS\nJE DÉCOUVRE\nPasser\n\n5 mesures · 1 min · rien à saisir"
+  },
+  {
+    "shot": "ecran0",
+    "scheme": "dark",
+    "path": "/defi/?n=254",
+    "note": "Écran 0 par lien (ligne de contexte impersonnelle), carte 1/5",
+    "file": "defi/ecran0.dark.png",
+    "fileFull": "defi/ecran0.dark.full.png",
+    "extras": [],
+    "external": [],
+    "errors": [],
+    "url": "http://127.0.0.1:8767/defi/?n=254",
+    "scrollWidth": 390,
+    "height": 845,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        3
+      ],
+      [
+        "#E5CBFF on #212320",
+        8
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        8
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        3
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 8,
+    "blocks3d": 1,
+    "ctaBottom": 488,
+    "independenceBottom": 673,
+    "hasDenominator": false,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "text": "Quelqu’un partage 5 mesures de L’Avenir en commun 2025, le programme.\n\nTIRAGE DU 11 SEPTEMBRE\n\nTU SAVAIS QUE\nC’ÉTAIT DEDANS ?\n\n1 / 5\n\nTEXTE DU PROGRAMME\n\nRevaloriser les APL de 10 %\n\nChapitre 9 › Créer un état d’urgence sociale\nLire la section\nJE SAVAIS\nJE DÉCOUVRE\nPasser\n\n5 mesures · 1 min · rien à saisir"
+  },
+  {
+    "shot": "ecran0-direct",
+    "scheme": "light",
+    "path": "/defi/?date=2026-09-11",
+    "note": "Écran 0 direct (tirage du jour, sans ligne de contexte)",
+    "file": "defi/ecran0-direct.png",
+    "fileFull": "defi/ecran0-direct.full.png",
+    "extras": [],
+    "external": [],
+    "errors": [],
+    "url": "http://127.0.0.1:8767/defi/?date=2026-09-11",
+    "scrollWidth": 390,
+    "height": 844,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        3
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        8
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        3
+      ],
+      [
+        "#212320 on #FDEDFF",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        7
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 8,
+    "blocks3d": 1,
+    "ctaBottom": 435,
+    "independenceBottom": 620,
+    "hasDenominator": false,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "text": "TIRAGE DU 11 SEPTEMBRE\n\nTU SAVAIS QUE\nC’ÉTAIT DEDANS ?\n\n1 / 5\n\nTEXTE DU PROGRAMME\n\nRevaloriser les APL de 10 %\n\nChapitre 9 › Créer un état d’urgence sociale\nLire la section\nJE SAVAIS\nJE DÉCOUVRE\nPasser\n\n5 mesures · 1 min · rien à saisir"
+  },
+  {
+    "shot": "ecran0-direct",
+    "scheme": "dark",
+    "path": "/defi/?date=2026-09-11",
+    "note": "Écran 0 direct (tirage du jour, sans ligne de contexte)",
+    "file": "defi/ecran0-direct.dark.png",
+    "fileFull": "defi/ecran0-direct.dark.full.png",
+    "extras": [],
+    "external": [],
+    "errors": [],
+    "url": "http://127.0.0.1:8767/defi/?date=2026-09-11",
+    "scrollWidth": 390,
+    "height": 844,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        3
+      ],
+      [
+        "#E5CBFF on #212320",
+        8
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        3
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        7
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 8,
+    "blocks3d": 1,
+    "ctaBottom": 435,
+    "independenceBottom": 620,
+    "hasDenominator": false,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "text": "TIRAGE DU 11 SEPTEMBRE\n\nTU SAVAIS QUE\nC’ÉTAIT DEDANS ?\n\n1 / 5\n\nTEXTE DU PROGRAMME\n\nRevaloriser les APL de 10 %\n\nChapitre 9 › Créer un état d’urgence sociale\nLire la section\nJE SAVAIS\nJE DÉCOUVRE\nPasser\n\n5 mesures · 1 min · rien à saisir"
+  },
+  {
+    "shot": "10s",
+    "scheme": "light",
+    "path": "/defi/?n=254",
+    "note": "Carte 2/5 après un premier tap, « 2 / 5 »",
+    "file": "defi/10s.png",
+    "fileFull": "defi/10s.full.png",
+    "extras": [],
+    "external": [],
+    "errors": [],
+    "url": "http://127.0.0.1:8767/defi/?n=254#p=s",
+    "scrollWidth": 390,
+    "height": 845,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        3
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        8
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        8
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        3
+      ],
+      [
+        "#212320 on #FDEDFF",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 8,
+    "blocks3d": 1,
+    "ctaBottom": 488,
+    "independenceBottom": 673,
+    "hasDenominator": false,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "text": "Quelqu’un partage 5 mesures de L’Avenir en commun 2025, le programme.\n\nTIRAGE DU 11 SEPTEMBRE\n\nTU SAVAIS QUE\nC’ÉTAIT DEDANS ?\n\n2 / 5\n\nTEXTE DU PROGRAMME\n\nPlafonner les frais bancaires\n\nChapitre 7 › Éradiquer la pauvreté\nLire la section\nJE SAVAIS\nJE DÉCOUVRE\nPasser\n\n5 mesures · 1 min · rien à saisir"
+  },
+  {
+    "shot": "10s",
+    "scheme": "dark",
+    "path": "/defi/?n=254",
+    "note": "Carte 2/5 après un premier tap, « 2 / 5 »",
+    "file": "defi/10s.dark.png",
+    "fileFull": "defi/10s.dark.full.png",
+    "extras": [],
+    "external": [],
+    "errors": [],
+    "url": "http://127.0.0.1:8767/defi/?n=254#p=s",
+    "scrollWidth": 390,
+    "height": 845,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        3
+      ],
+      [
+        "#E5CBFF on #212320",
+        8
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        8
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        3
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 8,
+    "blocks3d": 1,
+    "ctaBottom": 488,
+    "independenceBottom": 673,
+    "hasDenominator": false,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "text": "Quelqu’un partage 5 mesures de L’Avenir en commun 2025, le programme.\n\nTIRAGE DU 11 SEPTEMBRE\n\nTU SAVAIS QUE\nC’ÉTAIT DEDANS ?\n\n2 / 5\n\nTEXTE DU PROGRAMME\n\nPlafonner les frais bancaires\n\nChapitre 7 › Éradiquer la pauvreté\nLire la section\nJE SAVAIS\nJE DÉCOUVRE\nPasser\n\n5 mesures · 1 min · rien à saisir"
+  },
+  {
+    "shot": "aha",
+    "scheme": "light",
+    "path": "/defi/?n=254",
+    "note": "SectionVerbatim c14-s02 depuis la carte 3, mesure ciblée, « Reprendre le tirage (3/5) », À savoir 77-808 avec sidecar",
+    "file": "defi/aha.png",
+    "fileFull": "defi/aha.full.png",
+    "extras": [
+      "defi/aha-savoir.png",
+      "defi/aha-haut.png"
+    ],
+    "external": [],
+    "errors": [],
+    "url": "http://127.0.0.1:8767/section/?id=c14-s02&back=%2Fdefi%2F%3Fn%3D254%23p%3Dsd&backLabel=Reprendre%20le%20tirage%20(3%2F5)#c14-s02-m09",
+    "scrollWidth": 390,
+    "height": 5461,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        40
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        30
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        2
+      ],
+      [
+        "#212320 on #FDEDFF",
+        1
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "Voir sur melenchon2027.fr",
+        "w": 171,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "Voir l’encadré dans le program",
+        "w": 216,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "Voir sur melenchon2027.fr",
+        "w": 177,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 32,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": null,
+    "hasDenominator": false,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal",
+      "Gowun Batang 700 normal"
+    ],
+    "text": "Aller au contenu\nC’EST ÉCRIT LÀ\nACCUEIL\nCHERCHER\n\nReprendre le tirage (3/5)\n\nPARTIE 3 · L’HARMONIE DES ÊTRES HUMAINS AVEC LA NATURE\n\nCHAPITRE 14 · PROTECTION DES BIENS COMMUNS ET DES DROITS DE L’ESPÈCE\nL’EAU, ENJEU\nCENTRAL POUR\nL’HUMANITÉ\n\nVoir sur melenchon2027.fr\n\nTEXTE DU PROGRAMME\n\nL’eau est le grand défi commun de l’humanité. C’est une urgence écologique et un cercle vicieux : le cycle de l’eau est perturbé par le réchauffement climatique, et cette perturbation aggrave en retour le dérèglement climatique. L’eau douce disponible devient de plus en plus rare. C’est aussi une urgence sociale"
+  },
+  {
+    "shot": "aha",
+    "scheme": "dark",
+    "path": "/defi/?n=254",
+    "note": "SectionVerbatim c14-s02 depuis la carte 3, mesure ciblée, « Reprendre le tirage (3/5) », À savoir 77-808 avec sidecar",
+    "file": "defi/aha.dark.png",
+    "fileFull": "defi/aha.dark.full.png",
+    "extras": [
+      "defi/aha-savoir.dark.png",
+      "defi/aha-haut.dark.png"
+    ],
+    "external": [],
+    "errors": [],
+    "url": "http://127.0.0.1:8767/section/?id=c14-s02&back=%2Fdefi%2F%3Fn%3D254%23p%3Dsd&backLabel=Reprendre%20le%20tirage%20(3%2F5)#c14-s02-m09",
+    "scrollWidth": 390,
+    "height": 5461,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        40
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        30
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        2
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        1
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "Voir sur melenchon2027.fr",
+        "w": 171,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "Voir l’encadré dans le program",
+        "w": 216,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "Voir sur melenchon2027.fr",
+        "w": 177,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 32,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": null,
+    "hasDenominator": false,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal",
+      "Gowun Batang 700 normal"
+    ],
+    "text": "Aller au contenu\nC’EST ÉCRIT LÀ\nACCUEIL\nCHERCHER\n\nReprendre le tirage (3/5)\n\nPARTIE 3 · L’HARMONIE DES ÊTRES HUMAINS AVEC LA NATURE\n\nCHAPITRE 14 · PROTECTION DES BIENS COMMUNS ET DES DROITS DE L’ESPÈCE\nL’EAU, ENJEU\nCENTRAL POUR\nL’HUMANITÉ\n\nVoir sur melenchon2027.fr\n\nTEXTE DU PROGRAMME\n\nL’eau est le grand défi commun de l’humanité. C’est une urgence écologique et un cercle vicieux : le cycle de l’eau est perturbé par le réchauffement climatique, et cette perturbation aggrave en retour le dérèglement climatique. L’eau douce disponible devient de plus en plus rare. C’est aussi une urgence sociale"
+  },
+  {
+    "shot": "resultat",
+    "scheme": "light",
+    "path": "/defi/?n=254",
+    "note": "Résultat : 3 mesures qui m’ont surpris·e, mosaïque, Et toi ?, Comparer, Encore ?",
+    "file": "defi/resultat.png",
+    "fileFull": "defi/resultat.full.png",
+    "extras": [],
+    "external": [],
+    "errors": [],
+    "url": "http://127.0.0.1:8767/defi/?n=254#p=sddpd",
+    "scrollWidth": 390,
+    "height": 2621,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        4
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        42
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        9
+      ],
+      [
+        "#212320 on #FDEDFF",
+        3
+      ],
+      [
+        "#212320 on #FFFCF4",
+        13
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 19,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": 2449,
+    "hasDenominator": false,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "text": "TIRAGE DU 11 SEPTEMBRE\n\n3 MESURES\nQUI M’ONT\nSURPRIS·E\nTEXTE DU PROGRAMME\n\nPlafonner les frais bancaires\n\nChapitre 7 › Éradiquer la pauvreté\nLire la section\nTEXTE DU PROGRAMME\n\nMailler le territoire de fontaines à eau, de douches et de sanitaires publics et gratuits\n\nChapitre 14 › L’eau, enjeu central pour l’Humanité\nLire la section\nTEXTE DU PROGRAMME\n\nRefuser les fusions forcées de communes\n\nChapitre 3 › Une République affirmant le rôle central des communes\nLire la section\nLES CHAPITRES DE TES DÉCOUVERTES\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\nET TOI ?\n\nCe lien envoie le tirage du 11 sep"
+  },
+  {
+    "shot": "resultat",
+    "scheme": "dark",
+    "path": "/defi/?n=254",
+    "note": "Résultat : 3 mesures qui m’ont surpris·e, mosaïque, Et toi ?, Comparer, Encore ?",
+    "file": "defi/resultat.dark.png",
+    "fileFull": "defi/resultat.dark.full.png",
+    "extras": [],
+    "external": [],
+    "errors": [],
+    "url": "http://127.0.0.1:8767/defi/?n=254#p=sddpd",
+    "scrollWidth": 390,
+    "height": 2621,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        4
+      ],
+      [
+        "#E5CBFF on #212320",
+        42
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        9
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        3
+      ],
+      [
+        "#FFFCF4 on #212320",
+        13
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 19,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": 2449,
+    "hasDenominator": false,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "text": "TIRAGE DU 11 SEPTEMBRE\n\n3 MESURES\nQUI M’ONT\nSURPRIS·E\nTEXTE DU PROGRAMME\n\nPlafonner les frais bancaires\n\nChapitre 7 › Éradiquer la pauvreté\nLire la section\nTEXTE DU PROGRAMME\n\nMailler le territoire de fontaines à eau, de douches et de sanitaires publics et gratuits\n\nChapitre 14 › L’eau, enjeu central pour l’Humanité\nLire la section\nTEXTE DU PROGRAMME\n\nRefuser les fusions forcées de communes\n\nChapitre 3 › Une République affirmant le rôle central des communes\nLire la section\nLES CHAPITRES DE TES DÉCOUVERTES\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\nET TOI ?\n\nCe lien envoie le tirage du 11 sep"
+  },
+  {
+    "shot": "carte",
+    "scheme": "light",
+    "path": "/defi/?n=254",
+    "note": "Carte 1080 × 1920 dessinée dans un canvas client, texte de repli, enregistrer / envoyer",
+    "file": "defi/carte.png",
+    "fileFull": "defi/carte.full.png",
+    "extras": [
+      "defi/carte-1080x1920.png"
+    ],
+    "external": [],
+    "errors": [],
+    "url": "http://127.0.0.1:8767/defi/?n=254#p=sddpd",
+    "scrollWidth": 390,
+    "height": 1383,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        9
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        8
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 8,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": 1211,
+    "hasDenominator": false,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "text": "Retour au résultat\n\nCARTE DU TIRAGE DU 11 SEPTEMBRE\n\nENVOYER\nLA CARTE\n\nMessage : Tirage du 11 septembre : 3 mesures du programme qui m’ont surpris·e. À toi : http://127.0.0.1:8767/defi/?n=254\n\nENREGISTRER L’IMAGE\nENVOYER SUR WHATSAPP\nCopier le lien"
+  },
+  {
+    "shot": "carte",
+    "scheme": "dark",
+    "path": "/defi/?n=254",
+    "note": "Carte 1080 × 1920 dessinée dans un canvas client, texte de repli, enregistrer / envoyer",
+    "file": "defi/carte.dark.png",
+    "fileFull": "defi/carte.dark.full.png",
+    "extras": [],
+    "external": [],
+    "errors": [],
+    "url": "http://127.0.0.1:8767/defi/?n=254#p=sddpd",
+    "scrollWidth": 390,
+    "height": 1383,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        9
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        8
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 8,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": 1211,
+    "hasDenominator": false,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "text": "Retour au résultat\n\nCARTE DU TIRAGE DU 11 SEPTEMBRE\n\nENVOYER\nLA CARTE\n\nMessage : Tirage du 11 septembre : 3 mesures du programme qui m’ont surpris·e. À toi : http://127.0.0.1:8767/defi/?n=254\n\nENREGISTRER L’IMAGE\nENVOYER SUR WHATSAPP\nCopier le lien"
+  },
+  {
+    "shot": "lien",
+    "scheme": "light",
+    "path": "/defi/?n=254#r=ddsdp",
+    "note": "Arrivée par lien avec #r= : « Quelqu’un a joué ce défi », les réponses reçues restent masquées",
+    "file": "defi/lien.png",
+    "fileFull": "defi/lien.full.png",
+    "extras": [],
+    "external": [],
+    "errors": [],
+    "url": "http://127.0.0.1:8767/defi/?n=254#r=ddsdp",
+    "scrollWidth": 390,
+    "height": 863,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        3
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        8
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        8
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        3
+      ],
+      [
+        "#212320 on #FDEDFF",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 8,
+    "blocks3d": 1,
+    "ctaBottom": 506,
+    "independenceBottom": 691,
+    "hasDenominator": false,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "text": "Quelqu’un a joué ce défi. Ses découvertes s’affichent après les 5 réponses, jamais avant.\n\nTIRAGE DU 11 SEPTEMBRE\n\nTU SAVAIS QUE\nC’ÉTAIT DEDANS ?\n\n1 / 5\n\nTEXTE DU PROGRAMME\n\nRevaloriser les APL de 10 %\n\nChapitre 9 › Créer un état d’urgence sociale\nLire la section\nJE SAVAIS\nJE DÉCOUVRE\nPasser\n\n5 mesures · 1 min · rien à saisir"
+  },
+  {
+    "shot": "lien",
+    "scheme": "dark",
+    "path": "/defi/?n=254#r=ddsdp",
+    "note": "Arrivée par lien avec #r= : « Quelqu’un a joué ce défi », les réponses reçues restent masquées",
+    "file": "defi/lien.dark.png",
+    "fileFull": "defi/lien.dark.full.png",
+    "extras": [],
+    "external": [],
+    "errors": [],
+    "url": "http://127.0.0.1:8767/defi/?n=254#r=ddsdp",
+    "scrollWidth": 390,
+    "height": 863,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        3
+      ],
+      [
+        "#E5CBFF on #212320",
+        8
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        8
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        3
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 8,
+    "blocks3d": 1,
+    "ctaBottom": 506,
+    "independenceBottom": 691,
+    "hasDenominator": false,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "text": "Quelqu’un a joué ce défi. Ses découvertes s’affichent après les 5 réponses, jamais avant.\n\nTIRAGE DU 11 SEPTEMBRE\n\nTU SAVAIS QUE\nC’ÉTAIT DEDANS ?\n\n1 / 5\n\nTEXTE DU PROGRAMME\n\nRevaloriser les APL de 10 %\n\nChapitre 9 › Créer un état d’urgence sociale\nLire la section\nJE SAVAIS\nJE DÉCOUVRE\nPasser\n\n5 mesures · 1 min · rien à saisir"
+  },
+  {
+    "shot": "lien-resultat",
+    "scheme": "light",
+    "path": "/defi/?n=254#r=ddsdp",
+    "note": "Résultat après un lien #r= : bloc « Vous avez découvert 2 mesures en commun », Et toi ? sans #r=",
+    "file": "defi/lien-resultat.png",
+    "fileFull": "defi/lien-resultat.full.png",
+    "extras": [],
+    "external": [],
+    "errors": [],
+    "url": "http://127.0.0.1:8767/defi/?n=254#r=ddsdp&p=ddssp",
+    "scrollWidth": 390,
+    "height": 2830,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        3
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        44
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        10
+      ],
+      [
+        "#212320 on #FDEDFF",
+        4
+      ],
+      [
+        "#212320 on #FFFCF4",
+        14
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 20,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": 2658,
+    "hasDenominator": false,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "text": "TIRAGE DU 11 SEPTEMBRE\n\n2 MESURES\nQUI M’ONT\nSURPRIS·E\nTEXTE DU PROGRAMME\n\nRevaloriser les APL de 10 %\n\nChapitre 9 › Créer un état d’urgence sociale\nLire la section\nTEXTE DU PROGRAMME\n\nPlafonner les frais bancaires\n\nChapitre 7 › Éradiquer la pauvreté\nLire la section\nLES CHAPITRES DE TES DÉCOUVERTES\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\nVOUS AVEZ DÉCOUVERT 2 MESURES EN COMMUN\n\nRevaloriser les APL de 10 %\n\nChapitre 9 › Créer un état d’urgence sociale\nLire la section\n\nPlafonner les frais bancaires\n\nChapitre 7 › Éradiquer la pauvreté\nLire la section\n\nLes réponses de l’autre personne étaient "
+  },
+  {
+    "shot": "lien-resultat",
+    "scheme": "dark",
+    "path": "/defi/?n=254#r=ddsdp",
+    "note": "Résultat après un lien #r= : bloc « Vous avez découvert 2 mesures en commun », Et toi ? sans #r=",
+    "file": "defi/lien-resultat.dark.png",
+    "fileFull": "defi/lien-resultat.dark.full.png",
+    "extras": [],
+    "external": [],
+    "errors": [],
+    "url": "http://127.0.0.1:8767/defi/?n=254#r=ddsdp&p=ddssp",
+    "scrollWidth": 390,
+    "height": 2830,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        3
+      ],
+      [
+        "#E5CBFF on #212320",
+        44
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        10
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        4
+      ],
+      [
+        "#FFFCF4 on #212320",
+        14
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 20,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": 2658,
+    "hasDenominator": false,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "text": "TIRAGE DU 11 SEPTEMBRE\n\n2 MESURES\nQUI M’ONT\nSURPRIS·E\nTEXTE DU PROGRAMME\n\nRevaloriser les APL de 10 %\n\nChapitre 9 › Créer un état d’urgence sociale\nLire la section\nTEXTE DU PROGRAMME\n\nPlafonner les frais bancaires\n\nChapitre 7 › Éradiquer la pauvreté\nLire la section\nLES CHAPITRES DE TES DÉCOUVERTES\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\nVOUS AVEZ DÉCOUVERT 2 MESURES EN COMMUN\n\nRevaloriser les APL de 10 %\n\nChapitre 9 › Créer un état d’urgence sociale\nLire la section\n\nPlafonner les frais bancaires\n\nChapitre 7 › Éradiquer la pauvreté\nLire la section\n\nLes réponses de l’autre personne étaient "
+  },
+  {
+    "shot": "resultat-zero",
+    "scheme": "light",
+    "path": "/defi/?n=254",
+    "note": "Résultat sans découverte : « Tu connaissais les 5. En voici 5 autres ? »",
+    "file": "defi/resultat-zero.png",
+    "fileFull": "defi/resultat-zero.full.png",
+    "extras": [],
+    "external": [],
+    "errors": [],
+    "url": "http://127.0.0.1:8767/defi/?n=254#p=sssps",
+    "scrollWidth": 390,
+    "height": 2096,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        43
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        14
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 16,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": 1924,
+    "hasDenominator": false,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "text": "TIRAGE DU 11 SEPTEMBRE\n\nTu connaissais les 5.\n\nEn voici 5 autres ?\n\nLES CHAPITRES DU TIRAGE\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\nET TOI ?\n\nCe lien envoie le tirage du 11 septembre, sans tes réponses.\n\nENVOYER SUR WHATSAPP\nCopier le lien\nVOIR LA CARTE\nCOMPARER NOS DÉCOUVERTES\n\nCe lien contient tes 5 réponses.\n\nENVOYER AVEC MES RÉPONSES\nCopier le lien\nENCORE ?\nLIRE LE PROGRAMME\nLE TIRAGE DU 11 SEPTEMBRE\n\nRevaloriser les APL de 10 %\n\nChapitre 9 › Créer un état d’urgence sociale\nLire la section\n\nPlafonner les frais bancaires\n\nChapitre 7 › Éradiquer la pauvreté\nLire la section\n\nMailler le t"
+  },
+  {
+    "shot": "resultat-zero",
+    "scheme": "dark",
+    "path": "/defi/?n=254",
+    "note": "Résultat sans découverte : « Tu connaissais les 5. En voici 5 autres ? »",
+    "file": "defi/resultat-zero.dark.png",
+    "fileFull": "defi/resultat-zero.dark.full.png",
+    "extras": [],
+    "external": [],
+    "errors": [],
+    "url": "http://127.0.0.1:8767/defi/?n=254#p=sssps",
+    "scrollWidth": 390,
+    "height": 2096,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        43
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        14
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 16,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": 1924,
+    "hasDenominator": false,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "text": "TIRAGE DU 11 SEPTEMBRE\n\nTu connaissais les 5.\n\nEn voici 5 autres ?\n\nLES CHAPITRES DU TIRAGE\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\nET TOI ?\n\nCe lien envoie le tirage du 11 septembre, sans tes réponses.\n\nENVOYER SUR WHATSAPP\nCopier le lien\nVOIR LA CARTE\nCOMPARER NOS DÉCOUVERTES\n\nCe lien contient tes 5 réponses.\n\nENVOYER AVEC MES RÉPONSES\nCopier le lien\nENCORE ?\nLIRE LE PROGRAMME\nLE TIRAGE DU 11 SEPTEMBRE\n\nRevaloriser les APL de 10 %\n\nChapitre 9 › Créer un état d’urgence sociale\nLire la section\n\nPlafonner les frais bancaires\n\nChapitre 7 › Éradiquer la pauvreté\nLire la section\n\nMailler le t"
+  },
+  {
+    "shot": "silence",
+    "scheme": "light",
+    "path": "/defi/?n=254&silence=1",
+    "note": "Silence électoral : partage gelé, lecture maintenue",
+    "file": "defi/silence.png",
+    "fileFull": "defi/silence.full.png",
+    "extras": [],
+    "external": [],
+    "errors": [],
+    "url": "http://127.0.0.1:8767/defi/?n=254&silence=1#p=sddpd",
+    "scrollWidth": 390,
+    "height": 2461,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        4
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        38
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        9
+      ],
+      [
+        "#212320 on #FDEDFF",
+        3
+      ],
+      [
+        "#212320 on #FFFCF4",
+        15
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 14,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": 2289,
+    "hasDenominator": false,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "text": "TIRAGE DU 11 SEPTEMBRE\n\n3 MESURES\nQUI M’ONT\nSURPRIS·E\nTEXTE DU PROGRAMME\n\nPlafonner les frais bancaires\n\nChapitre 7 › Éradiquer la pauvreté\nLire la section\nTEXTE DU PROGRAMME\n\nMailler le territoire de fontaines à eau, de douches et de sanitaires publics et gratuits\n\nChapitre 14 › L’eau, enjeu central pour l’Humanité\nLire la section\nTEXTE DU PROGRAMME\n\nRefuser les fusions forcées de communes\n\nChapitre 3 › Une République affirmant le rôle central des communes\nLire la section\nLES CHAPITRES DE TES DÉCOUVERTES\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\nET TOI ?\n\nCe lien envoie le tirage du 11 sep"
+  },
+  {
+    "shot": "silence",
+    "scheme": "dark",
+    "path": "/defi/?n=254&silence=1",
+    "note": "Silence électoral : partage gelé, lecture maintenue",
+    "file": "defi/silence.dark.png",
+    "fileFull": "defi/silence.dark.full.png",
+    "extras": [],
+    "external": [],
+    "errors": [],
+    "url": "http://127.0.0.1:8767/defi/?n=254&silence=1#p=sddpd",
+    "scrollWidth": 390,
+    "height": 2461,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        4
+      ],
+      [
+        "#E5CBFF on #212320",
+        38
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        9
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        3
+      ],
+      [
+        "#FFFCF4 on #212320",
+        15
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 14,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": 2289,
+    "hasDenominator": false,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "text": "TIRAGE DU 11 SEPTEMBRE\n\n3 MESURES\nQUI M’ONT\nSURPRIS·E\nTEXTE DU PROGRAMME\n\nPlafonner les frais bancaires\n\nChapitre 7 › Éradiquer la pauvreté\nLire la section\nTEXTE DU PROGRAMME\n\nMailler le territoire de fontaines à eau, de douches et de sanitaires publics et gratuits\n\nChapitre 14 › L’eau, enjeu central pour l’Humanité\nLire la section\nTEXTE DU PROGRAMME\n\nRefuser les fusions forcées de communes\n\nChapitre 3 › Une République affirmant le rôle central des communes\nLire la section\nLES CHAPITRES DE TES DÉCOUVERTES\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\nET TOI ?\n\nCe lien envoie le tirage du 11 sep"
+  }
+]

@@ -1,0 +1,264 @@
+{
+  "url": "https://laec.fr/s35m286/",
+  "finalUrl": "https://laec.fr/section/35/etablir-la-garantie-demploi#mesure-286",
+  "status": 200,
+  "loadMs": 1378,
+  "responseHeaders": {
+    "content-encoding": "gzip",
+    "content-type": "text/html; charset=utf-8",
+    "date": "Mon, 07 Sep 2026 16:02:30 GMT",
+    "referrer-policy": "same-origin",
+    "server": "nginx/1.14.2",
+    "strict-transport-security": "max-age=15552000; includeSubDomains",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY"
+  },
+  "hosts": {
+    "laec.fr": 16,
+    "kit.fontawesome.com": 2
+  },
+  "requestsCount": 18,
+  "responses": [
+    {
+      "url": "https://kit.fontawesome.com/5fa0e3eada.js",
+      "status": 403,
+      "ct": "",
+      "server": "cloudflare",
+      "cache": "BYPASS"
+    },
+    {
+      "url": "https://kit.fontawesome.com/5fa0e3eada.js",
+      "status": 403,
+      "ct": "",
+      "server": "cloudflare",
+      "cache": "BYPASS"
+    }
+  ],
+  "cookies": [],
+  "title": "Établir la garantie d'emploi",
+  "lang": "fr",
+  "meta": {
+    "viewport": "width=device-width, initial-scale=1, shrink-to-fit=no",
+    "description": "LAEC.fr (abréviation de « L'Avenir En Commun »), c'est le programme en ligne de Jean-Luc Mélenchon et de l'Union Populaire pour l'élection présidentielle de 2022.",
+    "msapplication-TileColor": "#FFFFFF",
+    "msapplication-TileImage": "/static/img/favicon-144.png",
+    "msapplication-tooltip": "L'Avenir En Commun, le programme de Jean-Luc Mélenchon pour l'union populaire 2022 en version intégrale",
+    "application-name": "LAEC.fr",
+    "og:site_name": "LAEC.fr",
+    "og:locale": "fr_FR",
+    "og:type": "",
+    "og:title": " Établir la garantie d'emploi ",
+    "og:description": " Le chômage est un fléau pour les individus, pour les familles et pour la société tout entière. La collectivité doit inter... ",
+    "og:image": "https://laec.fr/static/visuels/s35.png",
+    "og:image:width": "1200",
+    "og:image:height": "628",
+    "og:url": " ",
+    "fb:app_id": "secret",
+    "twitter:card": "summary_large_image",
+    "twitter:site": "@yourtwitterid"
+  },
+  "links": {
+    "apple-touch-icon-precomposed": [
+      "https://laec.fr/static/img/favicon-152.png"
+    ],
+    "preload stylesheet": [
+      "/static/app.css",
+      "/static/assets/style/laec-v2.css"
+    ],
+    "preload": [
+      "/static/assets/fonts/ApotekComp-Light.woff2",
+      "/static/assets/fonts/ApotekComp-Medium.woff2",
+      "/static/assets/fonts/ApotekComp-Regular.woff2"
+    ],
+    "icon": [
+      "data:image/png;base64,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"
+    ]
+  },
+  "scripts": [
+    "https://laec.fr/static/app.js",
+    "https://kit.fontawesome.com/5fa0e3eada.js"
+  ],
+  "anchorsCount": 28,
+  "anchors": [
+    {
+      "href": "https://laec.fr/section/35/etablir-la-garantie-demploi#main",
+      "text": "Aller au contenu principal"
+    },
+    {
+      "href": "https://laec.fr/",
+      "text": "L'avenir en commun"
+    },
+    {
+      "href": "https://laec.fr/sommaire",
+      "text": "Table\n                         des matières Sommaire"
+    },
+    {
+      "href": "https://laec.fr/livrets-et-plans",
+      "text": "Livrets et plans Livrets et plans"
+    },
+    {
+      "href": "https://laec.fr/visuels",
+      "text": "Visuels Visuels"
+    },
+    {
+      "href": "https://laec.fr/chapitre/7/plein-emploi",
+      "text": ""
+    },
+    {
+      "href": "https://laec.fr/section/35/etablir-la-garantie-demploi#contenu",
+      "text": "ALLER AU TEXTE"
+    },
+    {
+      "href": "https://laec.fr/hasard",
+      "text": "Au hasard !"
+    },
+    {
+      "href": "https://laec.fr/section/36/reduire-le-temps-de-travail-et-faire-naitre-une-societe-du-temps-choisi",
+      "text": "36 . Réduire le temps de travail et faire naître une société du temps choisi"
+    },
+    {
+      "href": "https://laec.fr/section/34/instaurer-un-protectionnisme-ecologique-et-solidaire-pour-produire-en-france-et-assurer-notre-independance",
+      "text": "34 . Instaurer un protectionnisme écologique et solidaire pour produire en Franc"
+    },
+    {
+      "href": "https://laec.fr/partie/3/unir-pour-bien-vivre",
+      "text": "PLEIN EMPLOI Unir pour bien vivre"
+    },
+    {
+      "href": "https://www.facebook.com/sharer/sharer.php?u=https://laec.fr/s35",
+      "text": "Facebook"
+    },
+    {
+      "href": "https://twitter.com/intent/tweet?text=Voici%20une%20des%20sections%20de%20l%27%23AvenirEnCommun%20pour%20laquelle%20je%20vais%20voter%20%23Melenchon2022%20%F0%9F%97%B3%EF%B8%8F%20https://laec.fr/s35%20https://laec.fr/s35",
+      "text": "Twitter"
+    },
+    {
+      "href": "https://www.seuil.com/ouvrage/l-avenir-en-commun-jean-luc-melenchon/9782021482461",
+      "text": "éditions du\n                                    Seuil"
+    },
+    {
+      "href": "https://www.leslibraires.fr/le_reseau/",
+      "text": "librairies"
+    },
+    {
+      "href": "https://livre.fnac.com/a16111725/Jean-Luc-Melenchon-L-Avenir-en-commun-Le-programme-pour-l-Union-populaire-presente-par-Jean-Luc-Melenchon",
+      "text": "Fnac"
+    },
+    {
+      "href": "https://www.leslibraires.fr/livre/19846280-l-avenir-en-commun-jean-luc-melenchon-seuil",
+      "text": "libraire\n                                    indépendant"
+    },
+    {
+      "href": "https://www.facebook.com/sharer/sharer.php?u=https://laec.fr/s35m286",
+      "text": "Facebook"
+    },
+    {
+      "href": "https://twitter.com/intent/tweet?text=Voici%20une%20des%20sections%20de%20l%27%23AvenirEnCommun%20pour%20laquelle%20je%20vais%20voter%20%23Melenchon2022%20%F0%9F%97%B3%EF%B8%8F%20https://laec.fr/s35m286/%20https://laec.fr/s35m286/",
+      "text": "Twitter"
+    },
+    {
+      "href": "https://www.seuil.com/ouvrage/l-avenir-en-commun-jean-luc-melenchon/9782021482461",
+      "text": "éditions du Seuil"
+    },
+    {
+      "href": "https://www.leslibraires.fr/le_reseau/",
+      "text": "librairies"
+    },
+    {
+      "href": "https://livre.fnac.com/a16111725/Jean-Luc-Melenchon-L-Avenir-en-commun-Le-programme-pour-l-Union-populaire-presente-par-Jean-Luc-Melenchon",
+      "text": "Fnac"
+    },
+    {
+      "href": "https://www.leslibraires.fr/livre/9275770-l-avenir-en-commun-le-programme-de-la-france-i--jean-luc-melenchon-le-seuil",
+      "text": "libraire indépendant"
+    },
+    {
+      "href": "https://laec.fr/section/35/etablir-la-garantie-demploi#body",
+      "text": "RETOUR EN HAUT DE PAGE"
+    },
+    {
+      "href": "https://laec.fr/recherche",
+      "text": "Rechercher dans L'Avenir En Commun"
+    },
+    {
+      "href": "https://discord-insoumis.fr/",
+      "text": "Contact"
+    },
+    {
+      "href": "https://laec.fr/page/mentions-legales",
+      "text": "Mentions"
+    },
+    {
+      "href": "http://discord-insoumis.fr/",
+      "text": "Discord Insoumis"
+    }
+  ],
+  "share": [
+    {
+      "href": "https://www.facebook.com/sharer/sharer.php?u=https://laec.fr/s35",
+      "text": "Facebook"
+    },
+    {
+      "href": "https://twitter.com/intent/tweet?text=Voici%20une%20des%20sections%20de%20l%27%23AvenirEnCommun%20pour%20laquelle%20je%20vais%20voter%20%23Melenchon2022%20%F0%9F%97%B3%EF%B8%8F%20https://laec.fr/s35%20https://laec.fr/s35",
+      "text": "Twitter"
+    },
+    {
+      "href": "https://www.facebook.com/sharer/sharer.php?u=https://laec.fr/s35m286",
+      "text": "Facebook"
+    },
+    {
+      "href": "https://twitter.com/intent/tweet?text=Voici%20une%20des%20sections%20de%20l%27%23AvenirEnCommun%20pour%20laquelle%20je%20vais%20voter%20%23Melenchon2022%20%F0%9F%97%B3%EF%B8%8F%20https://laec.fr/s35m286/%20https://laec.fr/s35m286/",
+      "text": "Twitter"
+    }
+  ],
+  "forms": [
+    {
+      "action": "https://laec.fr/recherche",
+      "method": "get",
+      "inputs": [
+        {
+          "type": "text",
+          "name": "q",
+          "placeholder": "Ex: Partage, écologie…",
+          "required": false
+        }
+      ]
+    }
+  ],
+  "headings": [
+    {
+      "tag": "H1",
+      "text": "35\nPLEIN EMPLOI\nÉtablir la\ngarantie d'emploi"
+    },
+    {
+      "tag": "H2",
+      "text": "MESURE CLÉ :"
+    },
+    {
+      "tag": "H2",
+      "text": "A SAVOIR"
+    }
+  ],
+  "jsonld": [],
+  "textLen": 1449,
+  "wordsFirst": "Aller au contenu principal Afficher la navigation L'avenir en commun 35 PLEIN EMPLOI Établir la garantie d'emploi ALLER AU TEXTE Au hasard ! PLAN DU LIVRE SECTION SUIVANTE 36 . Réduire le temps de travail et faire naître une société du temps choisi SECTION PRÉCÉDENTE 34 . Instaurer un protectionnisme écologique et solidaire pour produire en France et assurer notre indépendance PRÉFACE DE LA PARTIE PLEIN EMPLOI Unir pour bien vivre Le chômage est un fléau pour les individus, pour les familles et pour la société tout entière. La collectivité doit intervenir et proposer à tous de prendre la part du travail qui est nécessaire. Pour cela, tout chômeur de longue durée se verra proposer un emploi utile à la transition écologique ou à l’action sociale (les secteurs d’urgence), en lien avec ses qualifications et sur la base du volontariat. MESURE CLÉ : CRÉER UNE GARANTIE D’EMPLOI : TOUT CHÔMEUR DE LONGUE DURÉE POURRA SE VOIR PROPOSER D’ÊTRE EMBAUCHÉ AU MOINS AU SMIC REVALORISÉ DANS UN SECTEUR D’URGENCE PLEIN EMPLOI ÉTABLIR LA GARANTIE D'EMPLOI Créer une garantie d’emploi : tout chômeur de longue durée pourra se voir proposer d’être embauché au moins au SMIC revalorisé dans un secteur d’urgence Fermer A SAVOIR 87% des Français se déclarent favorables à ce que l’État garantisse un emploi à tout chômeur de longue durée qui souhaite travailler (Harris Interactive, mai 2021) RETOUR EN HAUT DE PAGE Contact Mentions",
+  "localStorage": {},
+  "buttons": [
+    "Afficher la navigation",
+    "Rechercher",
+    "Fermer",
+    "Fermer"
+  ],
+  "ids": [
+    "mesure-286",
+    "modal-measure-286",
+    "modal-measure-label-286"
+  ],
+  "hints": {
+    "navigatorShare": false,
+    "serviceWorker": false,
+    "fetchUrls": [],
+    "apiWords": []
+  },
+  "swRegistered": []
+}

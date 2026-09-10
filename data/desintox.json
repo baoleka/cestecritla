@@ -1,0 +1,529 @@
+{
+  "meta": {
+    "source": "https://desintox.lafranceinsoumise.fr/",
+    "api": "https://desintox.lafranceinsoumise.fr/wp-json/wp/v2/",
+    "fetched_at": "2026-09-07T15:53:14.393Z",
+    "user_agent": "cestecritla/0.1 (+https://github.com/baoleka/cestecritla)",
+    "category": {
+      "id": 19,
+      "name": "Idées reçues"
+    },
+    "posts_total_site": 43,
+    "license_note": "Contenu issu de desintox.lafranceinsoumise.fr (droits La France insoumise). À utiliser comme source citée, avec lien vers l’article d’origine. Pas de reproduction intégrale dans l’app sans vérification préalable de la licence.",
+    "content_policy_fr": "Seules les métadonnées et le titre des articles Désintox sont conservés (D9.10, revue juriste hostile B2) : le texte intégral n'est ni redistribué ni versionné, sa licence n'étant pas précisée sur desintox.lafranceinsoumise.fr (D1.5). L'app affiche le titre et le lien, jamais une phrase. Pour ré-obtenir le texte complet en local (non versionné) : npx tsx scripts/fetch-desintox.ts --full --out data/desintox.full.json Les rares phrases effectivement citées par une carte ou une riposte sont conservées dans `cited_snippets` (citation courte attribuée, avec lien), pour que la porte de CI puisse vérifier chaque chiffre."
+  },
+  "categories": [
+    {
+      "id": 1,
+      "name": "Non classé",
+      "slug": "non-classe",
+      "count": 0,
+      "parent": 0
+    },
+    {
+      "id": 19,
+      "name": "Idées reçues",
+      "slug": "idees-recues",
+      "count": 26,
+      "parent": 0
+    },
+    {
+      "id": 20,
+      "name": "Le mouvement",
+      "slug": "mouvement",
+      "count": 3,
+      "parent": 19
+    },
+    {
+      "id": 21,
+      "name": "Économie",
+      "slug": "economie",
+      "count": 7,
+      "parent": 19
+    },
+    {
+      "id": 23,
+      "name": "Immigration",
+      "slug": "immigration",
+      "count": 5,
+      "parent": 19
+    },
+    {
+      "id": 24,
+      "name": "Antiracisme",
+      "slug": "antiracisme",
+      "count": 3,
+      "parent": 19
+    },
+    {
+      "id": 25,
+      "name": "Sécurité",
+      "slug": "securite",
+      "count": 3,
+      "parent": 19
+    },
+    {
+      "id": 32,
+      "name": "International",
+      "slug": "international",
+      "count": 3,
+      "parent": 19
+    },
+    {
+      "id": 34,
+      "name": "Actualité",
+      "slug": "actualite",
+      "count": 17,
+      "parent": 0
+    },
+    {
+      "id": 35,
+      "name": "Espace Juridique",
+      "slug": "espace-juridique",
+      "count": 0,
+      "parent": 0
+    },
+    {
+      "id": 37,
+      "name": "Signaler-Arcom",
+      "slug": "signaler-arcom",
+      "count": 0,
+      "parent": 0
+    },
+    {
+      "id": 40,
+      "name": "Écologie",
+      "slug": "ecologie",
+      "count": 2,
+      "parent": 19
+    },
+    {
+      "id": 42,
+      "name": "À LA UNE",
+      "slug": "a-la-une",
+      "count": 1,
+      "parent": 34
+    }
+  ],
+  "posts": [
+    {
+      "id": 672,
+      "slug": "la-france-insoumise-nest-pas-democratique",
+      "url": "https://desintox.lafranceinsoumise.fr/la-france-insoumise-nest-pas-democratique/",
+      "title": "« La France insoumise n’est pas démocratique »",
+      "date": "2025-05-23T18:09:33",
+      "modified": "2026-03-12T11:22:10",
+      "word_count": 400,
+      "categories": [
+        "Idées reçues",
+        "Le mouvement"
+      ],
+      "tag_ids": [
+        27
+      ]
+    },
+    {
+      "id": 2360,
+      "slug": "ca-nexiste-pas-les-violences-policieres-2",
+      "url": "https://desintox.lafranceinsoumise.fr/ca-nexiste-pas-les-violences-policieres-2/",
+      "title": "« Ça n’existe pas les violences policières »",
+      "date": "2025-05-27T11:24:00",
+      "modified": "2026-03-12T11:26:49",
+      "word_count": 267,
+      "categories": [
+        "Idées reçues",
+        "Sécurité"
+      ],
+      "tag_ids": [
+        30
+      ]
+    },
+    {
+      "id": 757,
+      "slug": "la-france-insoumise-nen-a-rien-a-faire-de-la-ruralite",
+      "url": "https://desintox.lafranceinsoumise.fr/la-france-insoumise-nen-a-rien-a-faire-de-la-ruralite/",
+      "title": "« La France insoumise n’en a rien à faire de la ruralité »",
+      "date": "2025-05-27T12:19:22",
+      "modified": "2026-03-12T11:40:20",
+      "word_count": 342,
+      "categories": [
+        "Idées reçues",
+        "Le mouvement"
+      ],
+      "tag_ids": [
+        27
+      ]
+    },
+    {
+      "id": 760,
+      "slug": "vous-ne-faites-rien-a-part-bordeliser",
+      "url": "https://desintox.lafranceinsoumise.fr/vous-ne-faites-rien-a-part-bordeliser/",
+      "title": "« Vous ne faites rien à part bordéliser »",
+      "date": "2025-05-27T12:34:54",
+      "modified": "2026-03-12T11:40:25",
+      "word_count": 444,
+      "categories": [
+        "Idées reçues",
+        "Le mouvement"
+      ],
+      "tag_ids": [
+        27
+      ]
+    },
+    {
+      "id": 771,
+      "slug": "vous-etes-anti-flics",
+      "url": "https://desintox.lafranceinsoumise.fr/vous-etes-anti-flics/",
+      "title": "« Vous êtes anti-flics »",
+      "date": "2025-05-27T14:06:15",
+      "modified": "2026-03-12T11:40:32",
+      "word_count": 127,
+      "categories": [
+        "Idées reçues",
+        "Sécurité"
+      ],
+      "tag_ids": [
+        30
+      ]
+    },
+    {
+      "id": 779,
+      "slug": "vous-voulez-augmenter-les-impots",
+      "url": "https://desintox.lafranceinsoumise.fr/vous-voulez-augmenter-les-impots/",
+      "title": "« Vous voulez augmenter les impôts »",
+      "date": "2025-05-27T14:13:08",
+      "modified": "2026-03-12T11:40:38",
+      "word_count": 257,
+      "categories": [
+        "Idées reçues",
+        "Économie"
+      ],
+      "tag_ids": [
+        26
+      ]
+    },
+    {
+      "id": 781,
+      "slug": "vous-y-connaissez-rien-en-economie-avec-vous-cest-la-catastrophe-assuree",
+      "url": "https://desintox.lafranceinsoumise.fr/vous-y-connaissez-rien-en-economie-avec-vous-cest-la-catastrophe-assuree/",
+      "title": "« Vous y connaissez rien en économie, avec vous c’est la catastrophe assurée »",
+      "date": "2025-05-27T14:13:49",
+      "modified": "2026-03-12T11:42:16",
+      "word_count": 277,
+      "categories": [
+        "Idées reçues",
+        "Économie"
+      ],
+      "tag_ids": [
+        26
+      ]
+    },
+    {
+      "id": 784,
+      "slug": "vous-allez-tuer-les-petites-entreprises-en-augmentant-le-smic",
+      "url": "https://desintox.lafranceinsoumise.fr/vous-allez-tuer-les-petites-entreprises-en-augmentant-le-smic/",
+      "title": "« Vous allez tuer les petites entreprises en augmentant le SMIC »",
+      "date": "2025-05-27T14:14:21",
+      "modified": "2026-03-12T11:40:43",
+      "word_count": 229,
+      "categories": [
+        "Idées reçues",
+        "Économie"
+      ],
+      "tag_ids": [
+        26
+      ]
+    },
+    {
+      "id": 787,
+      "slug": "augmenter-les-salaires-ca-detruit-leconomie",
+      "url": "https://desintox.lafranceinsoumise.fr/augmenter-les-salaires-ca-detruit-leconomie/",
+      "title": "« Augmenter les salaires, ça détruit l’économie »",
+      "date": "2025-05-27T14:15:33",
+      "modified": "2026-03-12T11:40:50",
+      "word_count": 154,
+      "categories": [
+        "Idées reçues",
+        "Économie"
+      ],
+      "tag_ids": [
+        26
+      ]
+    },
+    {
+      "id": 790,
+      "slug": "vous-proposez-la-societe-du-chomage-de-masse",
+      "url": "https://desintox.lafranceinsoumise.fr/vous-proposez-la-societe-du-chomage-de-masse/",
+      "title": "« Vous proposez la société du chômage de masse »",
+      "date": "2025-05-27T14:16:52",
+      "modified": "2026-03-12T11:41:00",
+      "word_count": 285,
+      "categories": [
+        "Idées reçues",
+        "Économie"
+      ],
+      "tag_ids": [
+        26
+      ]
+    },
+    {
+      "id": 848,
+      "slug": "la-retraite-a-60-ans-ca-coute-cher",
+      "url": "https://desintox.lafranceinsoumise.fr/la-retraite-a-60-ans-ca-coute-cher/",
+      "title": "« La retraite à 60 ans, ça coûte cher »",
+      "date": "2025-05-27T15:07:21",
+      "modified": "2026-03-12T11:40:55",
+      "word_count": 200,
+      "categories": [
+        "Idées reçues",
+        "Économie"
+      ],
+      "tag_ids": [
+        26
+      ]
+    },
+    {
+      "id": 851,
+      "slug": "ok-mais-ca-reste-infinancable",
+      "url": "https://desintox.lafranceinsoumise.fr/ok-mais-ca-reste-infinancable/",
+      "title": "« La retraite à 60 ans reste infinançable »",
+      "date": "2025-05-27T15:08:13",
+      "modified": "2026-03-12T11:41:05",
+      "word_count": 139,
+      "categories": [
+        "Idées reçues",
+        "Économie"
+      ],
+      "tag_ids": [
+        26
+      ]
+    },
+    {
+      "id": 857,
+      "slug": "vous-etes-immigrationnistes",
+      "url": "https://desintox.lafranceinsoumise.fr/vous-etes-immigrationnistes/",
+      "title": "« Vous êtes immigrationnistes »",
+      "date": "2025-05-27T15:09:57",
+      "modified": "2026-03-12T11:17:39",
+      "word_count": 423,
+      "categories": [
+        "Idées reçues",
+        "Immigration"
+      ],
+      "tag_ids": [
+        28
+      ]
+    },
+    {
+      "id": 860,
+      "slug": "limmigration-ca-coute-cher-a-la-societe",
+      "url": "https://desintox.lafranceinsoumise.fr/limmigration-ca-coute-cher-a-la-societe/",
+      "title": "« L’immigration ça coûte cher à la société »",
+      "date": "2025-05-27T15:11:22",
+      "modified": "2026-03-12T11:41:14",
+      "word_count": 381,
+      "categories": [
+        "Idées reçues",
+        "Immigration"
+      ],
+      "tag_ids": [
+        28
+      ]
+    },
+    {
+      "id": 863,
+      "slug": "on-donne-tout-aux-immigres-ils-peuvent-mieux-se-soigner-que-les-francais",
+      "url": "https://desintox.lafranceinsoumise.fr/on-donne-tout-aux-immigres-ils-peuvent-mieux-se-soigner-que-les-francais/",
+      "title": "« On donne tout aux immigrés, ils peuvent mieux se soigner que les Français »",
+      "date": "2025-05-27T15:12:02",
+      "modified": "2026-03-12T11:40:10",
+      "word_count": 154,
+      "categories": [
+        "Idées reçues",
+        "Immigration"
+      ],
+      "tag_ids": [
+        28
+      ]
+    },
+    {
+      "id": 866,
+      "slug": "le-statut-de-deplace-climatique-va-entrainer-une-vague-migratoire",
+      "url": "https://desintox.lafranceinsoumise.fr/le-statut-de-deplace-climatique-va-entrainer-une-vague-migratoire/",
+      "title": "« Le statut de “déplacé climatique” va entraîner une vague migratoire »",
+      "date": "2025-05-27T15:12:47",
+      "modified": "2026-03-12T11:40:02",
+      "word_count": 189,
+      "categories": [
+        "Idées reçues",
+        "Immigration"
+      ],
+      "tag_ids": [
+        28
+      ]
+    },
+    {
+      "id": 869,
+      "slug": "vous-vous-dites-feministes-mais-ce-sont-les-etrangers-qui-agressent-majoritairement-les-femmes",
+      "url": "https://desintox.lafranceinsoumise.fr/vous-vous-dites-feministes-mais-ce-sont-les-etrangers-qui-agressent-majoritairement-les-femmes/",
+      "title": "« Vous vous dites féministes, mais ce sont les étrangers qui agressent majoritairement les femmes »",
+      "date": "2025-05-27T15:13:34",
+      "modified": "2026-03-12T11:39:54",
+      "word_count": 123,
+      "categories": [
+        "Idées reçues",
+        "Immigration"
+      ],
+      "tag_ids": [
+        28
+      ]
+    },
+    {
+      "id": 1050,
+      "slug": "vous-etes-la-france-islamiste",
+      "url": "https://desintox.lafranceinsoumise.fr/vous-etes-la-france-islamiste/",
+      "title": "« Vous êtes la France islamiste »",
+      "date": "2025-05-28T14:25:57",
+      "modified": "2026-04-23T12:23:45",
+      "word_count": 199,
+      "categories": [
+        "Idées reçues",
+        "Antiracisme"
+      ],
+      "tag_ids": [
+        31
+      ]
+    },
+    {
+      "id": 1093,
+      "slug": "vous-soutenez-des-dictateurs",
+      "url": "https://desintox.lafranceinsoumise.fr/vous-soutenez-des-dictateurs/",
+      "title": "« Vous soutenez des dictateurs ! »",
+      "date": "2025-05-30T16:18:02",
+      "modified": "2026-04-23T11:40:43",
+      "word_count": 126,
+      "categories": [
+        "Idées reçues",
+        "International"
+      ],
+      "tag_ids": [
+        33
+      ]
+    },
+    {
+      "id": 1101,
+      "slug": "vous-etes-ambigus-sur-lantisemitisme",
+      "url": "https://desintox.lafranceinsoumise.fr/vous-etes-ambigus-sur-lantisemitisme/",
+      "title": "« Vous êtes ambigus sur l’antisémitisme »",
+      "date": "2025-05-30T16:21:32",
+      "modified": "2026-04-23T12:08:25",
+      "word_count": 168,
+      "categories": [
+        "Idées reçues",
+        "Antiracisme"
+      ],
+      "tag_ids": [
+        31
+      ]
+    },
+    {
+      "id": 1105,
+      "slug": "vous-etes-les-amis-du-hamas",
+      "url": "https://desintox.lafranceinsoumise.fr/vous-etes-les-amis-du-hamas/",
+      "title": "« Vous êtes les amis du Hamas »",
+      "date": "2025-05-30T16:25:37",
+      "modified": "2026-04-23T15:50:13",
+      "word_count": 205,
+      "categories": [
+        "Idées reçues",
+        "International"
+      ],
+      "tag_ids": [
+        31
+      ]
+    },
+    {
+      "id": 1108,
+      "slug": "vous-voulez-remettre-en-place-le-delit-de-blaspheme",
+      "url": "https://desintox.lafranceinsoumise.fr/vous-voulez-remettre-en-place-le-delit-de-blaspheme/",
+      "title": "« Vous voulez remettre en place le délit de blasphème ! »",
+      "date": "2025-05-30T16:28:17",
+      "modified": "2026-04-23T12:12:45",
+      "word_count": 113,
+      "categories": [
+        "Idées reçues",
+        "Antiracisme"
+      ],
+      "tag_ids": [
+        31
+      ]
+    },
+    {
+      "id": 2104,
+      "slug": "vous-etes-des-amis-de-poutine",
+      "url": "https://desintox.lafranceinsoumise.fr/vous-etes-des-amis-de-poutine/",
+      "title": "« Vous êtes des amis de Poutine »",
+      "date": "2025-08-15T15:23:11",
+      "modified": "2026-04-23T11:38:03",
+      "word_count": 422,
+      "categories": [
+        "International",
+        "Idées reçues"
+      ],
+      "tag_ids": [
+        33
+      ]
+    },
+    {
+      "id": 2108,
+      "slug": "vous-soutenez-les-violences-lors-des-manifestations-et-des-rassemblements",
+      "url": "https://desintox.lafranceinsoumise.fr/vous-soutenez-les-violences-lors-des-manifestations-et-des-rassemblements/",
+      "title": "« Vous soutenez les violences lors des manifestations et des rassemblements »",
+      "date": "2025-08-15T15:25:43",
+      "modified": "2026-03-12T11:37:38",
+      "word_count": 356,
+      "categories": [
+        "Idées reçues",
+        "Sécurité"
+      ],
+      "tag_ids": [
+        30
+      ]
+    },
+    {
+      "id": 2110,
+      "slug": "vous-etes-contre-les-agriculteurs",
+      "url": "https://desintox.lafranceinsoumise.fr/vous-etes-contre-les-agriculteurs/",
+      "title": "« Vous êtes contre les agriculteurs »",
+      "date": "2025-08-15T15:27:50",
+      "modified": "2026-03-12T11:37:31",
+      "word_count": 452,
+      "categories": [
+        "Idées reçues",
+        "Écologie"
+      ],
+      "tag_ids": [
+        41
+      ],
+      "cited_snippets": [
+        "L’objectif est notamment de permettre la création de 300 000 nouveaux emplois dans des projets d’agriculture vivrière écologique pour relancer un monde paysan."
+      ]
+    },
+    {
+      "id": 2114,
+      "slug": "avec-vous-on-ne-pourra-plus-prendre-lavion",
+      "url": "https://desintox.lafranceinsoumise.fr/avec-vous-on-ne-pourra-plus-prendre-lavion/",
+      "title": "« Avec vous on ne pourra plus prendre l’avion »",
+      "date": "2025-08-15T15:31:23",
+      "modified": "2026-03-12T11:38:29",
+      "word_count": 389,
+      "categories": [
+        "Idées reçues",
+        "Écologie"
+      ],
+      "tag_ids": [
+        41
+      ]
+    }
+  ]
+}

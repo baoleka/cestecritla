@@ -1,0 +1,29 @@
+{
+  "name": "aec-lab-fts",
+  "version": "0.0.1",
+  "private": true,
+  "description": "T7 lab: D1 + FTS5 (unicode61 remove_diacritics 2) lexical retrieval over L'Avenir en commun 2025, plus the hashed Q/R cache table (D0.22)",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build-sql": "cd ../../.. && npx tsx prototypes/labo-plateforme/d1-fts5/scripts/build-sql.ts",
+    "db:schema": "wrangler d1 execute aec-lab-fts --remote --yes --json --file sql/schema.sql",
+    "db:load": "wrangler d1 execute aec-lab-fts --remote --yes --json --file sql/load-propositions.sql",
+    "db:load-fts": "wrangler d1 execute aec-lab-fts --remote --yes --json --file sql/load-fts.sql",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit && cd ../../.. && npx tsc -p prototypes/labo-plateforme/d1-fts5/tsconfig.scripts.json",
+    "types": "wrangler types",
+    "bench": "cd ../../.. && npx tsx prototypes/labo-plateforme/d1-fts5/scripts/bench.ts",
+    "cpu": "cd ../../.. && npx tsx prototypes/labo-plateforme/d1-fts5/scripts/cpu-graphql.ts",
+    "delete": "wrangler delete && wrangler d1 delete aec-lab-fts"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260907.1",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.129.1"
+  }
+}

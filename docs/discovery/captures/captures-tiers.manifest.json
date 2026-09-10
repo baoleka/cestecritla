@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "generated_at": "2026-09-10",
+    "decision": "H-LAN-14 (priorité 1), D14.9",
+    "purpose_fr": "Empreintes des pièces tierces sorties du dépôt public. Elles restent vérifiables sans être redistribuées : le dépôt ne republie ni le logo LFI, ni le wordmark M27, ni la tortue officielle, ni une photographie de personnes identifiables, ni l'adresse personnelle d'un tiers, ni le texte du programme sous une licence que le LICENSE racine ne couvre pas. Les fichiers eux-mêmes vivent hors du dépôt, dans docs/discovery/captures/assets-tiers/, non versionné.",
+    "verify_fr": "sha256sum <fichier> et comparer à l'empreinte ci-dessous",
+    "count": 10,
+    "total_bytes": 3745918
+  },
+  "captures": [
+    {
+      "path": "docs/discovery/captures/2026-09-07/identite/charte-lfi.desktop.png",
+      "kind": "identity-capture",
+      "bytes": 935861,
+      "sha256": "15aa6d7028d2bab452a0a264693b9f5bc671df0d08fa115557958e7e93dc66c0",
+      "captured_at": "2026-09-07",
+      "why_removed_fr": "Charte graphique LFI, page entière — contient le logo LFI complet (Φ + « LA FRANCE INSOUMISE »)"
+    },
+    {
+      "path": "docs/discovery/captures/2026-09-07/identite/charte-lfi.desktop.part0.png",
+      "kind": "identity-capture",
+      "bytes": 395051,
+      "sha256": "0ead4875bf51ac45bd5f3cd9e85d16752edc7a9464c685e9f88edbb7a5e65264",
+      "captured_at": "2026-09-07",
+      "why_removed_fr": "Charte graphique LFI, haut de page — logo LFI complet et photo de tract tenu en main"
+    },
+    {
+      "path": "docs/discovery/captures/2026-09-07/identite/charte-lfi.desktop.part1.png",
+      "kind": "identity-capture",
+      "bytes": 96119,
+      "sha256": "2af37865892dd82205a01c9afd79d7af789579e5bcb9bc87063ab4bd04e35b9f",
+      "captured_at": "2026-09-07",
+      "why_removed_fr": "Charte graphique LFI, bas de page"
+    },
+    {
+      "path": "docs/discovery/captures/2026-09-07/identite/charte-lfi.palettes.png",
+      "kind": "identity-capture",
+      "bytes": 163536,
+      "sha256": "47df8f5abe3c94555dc4d9df8edfe7dce460ee9b92fb98ba17eb31edfb5575d8",
+      "captured_at": "2026-09-07",
+      "why_removed_fr": "Palettes de la charte graphique LFI"
+    },
+    {
+      "path": "docs/discovery/captures/2026-09-07/identite/melenchon2027-home.desktop.png",
+      "kind": "identity-capture",
+      "bytes": 525696,
+      "sha256": "ed8e66e1ee8e1130b31810ee03e43e5738e8838d371f02925e6c159f36a34eab",
+      "captured_at": "2026-09-07",
+      "why_removed_fr": "melenchon2027.fr, accueil desktop — wordmark M27"
+    },
+    {
+      "path": "docs/discovery/captures/2026-09-07/identite/melenchon2027-home.mobile.png",
+      "kind": "identity-capture",
+      "bytes": 911656,
+      "sha256": "399e78a748e81a79f1b6d695b0011cc5ed5796c7ad2335efa7a4730c8ece411c",
+      "captured_at": "2026-09-07",
+      "why_removed_fr": "melenchon2027.fr, accueil mobile — wordmark M27, tortue officielle, photographie de foule avec personnes identifiables"
+    },
+    {
+      "path": "docs/discovery/captures/2026-09-07/identite/melenchon2027-home.mobile.top.png",
+      "kind": "identity-capture",
+      "bytes": 332718,
+      "sha256": "e627611e6b19b87ce0f6b73c1b6b292481df99d15858c3f8d8a833e793e54796",
+      "captured_at": "2026-09-07",
+      "why_removed_fr": "melenchon2027.fr, haut de page mobile — wordmark M27, tortue officielle sur la jauge de soutiens"
+    },
+    {
+      "path": "docs/discovery/captures/2026-09-07/melenchon2027.fr_mentions-legales.html",
+      "kind": "third-party-page",
+      "bytes": 132374,
+      "sha256": "cc2da66ecaed9df5015df63cac06e055c0e44a14a286af10ad51fc75c716b834",
+      "captured_at": "2026-09-07",
+      "why_removed_fr": "Mentions légales de melenchon2027.fr — porte l’adresse personnelle d’un tiers"
+    },
+    {
+      "path": "docs/discovery/captures/2026-09-07/melenchon2027.fr_programme2025_livre.html",
+      "kind": "third-party-page",
+      "bytes": 122334,
+      "sha256": "c05fc312d6447b5ec74ad78a86da9ae108309931449251d85ec017371680e5f6",
+      "captured_at": "2026-09-07",
+      "why_removed_fr": "Page « livre » de melenchon2027.fr — reproduit le texte du programme (CC BY-NC-SA) et l’adresse d’un tiers"
+    },
+    {
+      "path": "docs/discovery/captures/2026-09-07/prior-art/m2027-ch12-s1.html",
+      "kind": "third-party-page",
+      "bytes": 130573,
+      "sha256": "dc8c89a4b0bbbccedd322f0942a7a498d10924e3bb20daca124eb6e8520b127b",
+      "captured_at": "2026-09-07",
+      "why_removed_fr": "melenchon2027.fr chapitre 12 section 1 — reproduit le texte du programme et l’adresse d’un tiers"
+    }
+  ]
+}

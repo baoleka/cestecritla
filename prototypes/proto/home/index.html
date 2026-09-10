@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex">
+<title>Accueil — C’est écrit là</title>
+<link rel="preload" href="../shared/fonts/PublicSans-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../shared/fonts/PublicSans-Italic-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../shared/tokens.css">
+<link rel="stylesheet" href="../shared/base.css">
+<script type="module" src="./home.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Aller au contenu</a>
+<main class="page" id="main">
+<header class="top">
+  <a class="wordmark block-3d" href="./" aria-label="C’est écrit là, accueil">C’est écrit <span class="la">là</span></a>
+  <nav class="nav" aria-label="Navigation"><a href="#chapitres">Chapitres</a><a href="#riposte">Riposte</a></nav>
+</header>
+<h1 class="display xl"><span class="l">Ta munition,</span><span class="l">en dix</span><span class="l">secondes.</span></h1>
+<p class="lead">Un mot, une objection, un thème : la mesure exacte, prête à envoyer.</p>
+<form id="search" role="search" autocomplete="off">
+  <label class="label" for="q">Chercher</label>
+  <input class="field" id="q" name="q" type="search" placeholder="Un mot, une objection, un sujet…" autocomplete="off" spellcheck="false" aria-describedby="hint" enterkeyhint="search">
+  <p class="hint" id="hint">Essaie : règle verte, SMIC, 6e République, planification écologique. Ce que tu tapes reste sur ton téléphone.</p>
+  <div id="results" aria-live="polite"></div>
+  <button class="btn center" type="submit"><span class="t">Chercher dans le programme</span></button>
+</form>
+<hr>
+<section id="riposte" aria-labelledby="riposte-title">
+  <h2 class="h" id="riposte-title">Mode riposte</h2>
+  <p>Une objection, dix secondes, la mesure exacte.</p>
+  <div id="riposte-card"></div>
+</section>
+<hr>
+<section id="jour" aria-labelledby="daily-title">
+  <h2 class="h" id="daily-title">La mesure du jour</h2>
+  <p>Une mesure du programme, tirée au sort chaque jour, la même pour tout le monde.</p>
+  <div id="daily"></div>
+</section>
+<hr>
+<section id="lecture" aria-labelledby="progress-title">
+  <h2 class="h" id="progress-title">Ta lecture</h2>
+  <div id="progress"></div>
+</section>
+<hr>
+<section id="chapitres" aria-labelledby="chapters-title">
+  <h2 class="h" id="chapters-title">Chapitres</h2>
+  <div id="chapters"></div>
+</section>
+<footer class="footer">
+  <p>Projet militant indépendant, fait pour donner envie de lire le programme.</p>
+  <p>Pas de compte, pas de cookie de suivi, aucune trace de tes questions.</p>
+  <p>La France insoumise – <span class="book">L’Avenir en commun</span> · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" rel="noopener"><span class="nowrap">CC BY-NC-SA 4.0</span></a></p>
+  <div class="legal"><a href="../#a-propos">À propos</a></div>
+</footer>
+</main>
+</body>
+</html>

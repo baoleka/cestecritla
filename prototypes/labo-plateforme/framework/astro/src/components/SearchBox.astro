@@ -1,0 +1,104 @@
+---
+// Search box: static markup; the script below is the only JavaScript of the page. MiniSearch and
+// the corpus are loaded on first focus (dynamic import + fetch), the query is re-run when ready.
+---
+<section class="search" aria-labelledby="search-title">
+  <label id="search-title" for="q" class="label">Chercher dans le programme</label>
+  <input id="q" type="search" autocomplete="off" placeholder="Un mot, une objection, un sujet…" />
+  <p class="hint small">Essaie : règle verte, SMIC, 6e République, planification écologique.</p>
+  <div class="live" aria-live="polite">
+    <p class="status small" hidden></p>
+    <ol data-results hidden></ol>
+  </div>
+</section>
+
+<script>
+  import { KIND_LABEL, loadSearcher } from '../../../shared/search/lazy.ts';
+  import type { Searcher } from '../../../shared/search/search-core.ts';
+  import type { SearchHit } from '../../../shared/types.ts';
+
+  type State = 'idle' | 'loading' | 'ready' | 'error';
+
+  const input = document.getElementById('q') as HTMLInputElement | null;
+  const status = document.querySelector<HTMLParagraphElement>('.search .status');
+  const list = document.querySelector<HTMLOListElement>('.search [data-results]');
+  if (input === null || status === null || list === null) throw new Error('search box markup missing');
+
+  let state: State = 'idle';
+  let searcher: Searcher | null = null;
+
+  const setStatus = (text: string): void => {
+    status.textContent = text;
+    status.hidden = text.length === 0;
+  };
+
+  const renderHits = (hits: SearchHit[] | null): void => {
+    list.replaceChildren();
+    list.hidden = hits === null || hits.length === 0;
+    if (hits === null) return;
+    for (const h of hits) {
+      const li = document.createElement('li');
+      li.className = 'hit';
+      const label = document.createElement('span');
+      label.className = 'label';
+      label.textContent = `${KIND_LABEL[h.kind] ?? h.kind} · ${h.sectionTitle}`;
+      const p = document.createElement('p');
+      p.className = 'verbatim';
+      p.textContent = h.text;
+      const a = document.createElement('a');
+      a.href = h.url;
+      a.rel = 'noopener';
+      a.className = 'small';
+      a.textContent = h.chapterTitle;
+      li.append(label, p, a);
+      list.append(li);
+    }
+  };
+
+  const run = (): void => {
+    const query = input.value;
+    if (state === 'error') {
+      setStatus('La recherche n’a pas pu se charger. Réessaie plus tard.');
+      renderHits(null);
+      return;
+    }
+    if (query.trim().length === 0) {
+      setStatus('');
+      renderHits(null);
+      return;
+    }
+    if (state !== 'ready' || searcher === null) {
+      setStatus('Chargement de la recherche…');
+      return;
+    }
+    const hits = searcher.search(query);
+    setStatus(
+      hits.length === 0
+        ? 'Rien avec ces mots. Essaie un synonyme ou un sujet plus large.'
+        : `${String(hits.length)} passages trouvés`,
+    );
+    renderHits(hits);
+  };
+
+  const warm = (): void => {
+    if (searcher !== null || state === 'loading') return;
+    state = 'loading';
+    loadSearcher().then(
+      (s) => {
+        searcher = s;
+        state = 'ready';
+        run();
+      },
+      () => {
+        state = 'error';
+        run();
+      },
+    );
+  };
+
+  input.addEventListener('focus', warm);
+  input.addEventListener('input', () => {
+    warm();
+    run();
+  });
+</script>

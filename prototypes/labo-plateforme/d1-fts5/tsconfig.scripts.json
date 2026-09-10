@@ -1,0 +1,11 @@
+{
+  // Node-side scripts (build-sql, bench, cpu-graphql): checked from the repository root with the
+  // root toolchain (`npm run typecheck` here runs both configs).
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "allowImportingTsExtensions": true
+  },
+  "include": ["scripts/**/*.ts", "src/query.ts", "src/stopwords.generated.ts"],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,42 @@
+{
+  "model": "@cf/mistralai/mistral-small-3.1-24b-instruct",
+  "gateway": {
+    "id": "aec",
+    "cacheTtl": 2592000,
+    "collectLog": false
+  },
+  "input": {
+    "text": "Décris en une phrase le temps qu’il fait à Paris un matin de printemps. ",
+    "maxTokens": 40,
+    "temperature": 0
+  },
+  "calls": [
+    {
+      "i": 1,
+      "status": 200,
+      "cacheStatus": "MISS",
+      "neurons": 2.5693278312683105,
+      "tokensIn": 22,
+      "tokensOut": 37,
+      "latencyMs": 1979,
+      "responsePreview": "Un matin de printemps à Paris est souvent marqué par un ciel clair et lumineux, avec une douce brise et des températures",
+      "aigHeaders": {
+        "cf-aig-cache-status": "MISS",
+        "cf-aig-event-id": "102f8e91-8c0d-4761-90fe-ff5cd3fd75af",
+        "cf-aig-log-id": "01M2341GA8SSFP08FNCMXBVV7V",
+        "cf-aig-request-id": "102f8e91-8c0d-4761-90fe-ff5cd3fd75af",
+        "cf-aig-step": "0",
+        "cf-aig-trace-id": "5174ed770b9b40d78ae82c847742b404",
+        "content-type": "application/json"
+      }
+    }
+  ],
+  "summary": {
+    "hit": 0,
+    "miss": 1,
+    "bypass": 0,
+    "other": 0,
+    "neuronsReportedTotal": 2.5693278312683105,
+    "neuronsReportedOnHits": 0
+  }
+}

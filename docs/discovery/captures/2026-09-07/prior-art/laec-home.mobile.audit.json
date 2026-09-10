@@ -1,0 +1,129 @@
+{
+  "title": "LAEC.fr - Le programme de Jean-Luc Mélenchon pour l'Union Populaire",
+  "themeColor": null,
+  "bodyBg": "#FFFFFF",
+  "htmlBg": "transparent",
+  "fontsLoaded": [
+    "icomoon normal normal",
+    "Roboto 400 normal",
+    "Roboto 700 normal",
+    "Apotek Comp 300 normal",
+    "Apotek Comp 500 normal"
+  ],
+  "fontFaceSrc": [
+    "icomoon <- \"/static/icomoon.woff?aqfmk4\"",
+    "\"Special Elite\" <- \"/static/fonts/special-elite-v6-latin-regular.woff2\"",
+    "Montserrat <- \"/static/fonts/montserrat-v7-latin-regular.woff2\"",
+    "Montserrat <- \"/static/fonts/montserrat-v7-latin-700.woff2\"",
+    "Roboto <- \"/static/fonts/roboto-v15-latin-300.woff2\"",
+    "Roboto <- \"/static/fonts/roboto-v15-latin-300italic.woff2\"",
+    "Roboto <- \"/static/fonts/roboto-v15-latin-regular.woff2\"",
+    "Roboto <- \"/static/fonts/roboto-v15-latin-italic.woff2\"",
+    "Roboto <- \"/static/fonts/roboto-v15-latin-700.woff2\"",
+    "Roboto <- \"/static/fonts/roboto-v15-latin-700italic.woff2\"",
+    "\"Apotek Comp\" <- \"../fonts/ApotekComp-Light.woff2\"",
+    "\"Apotek Comp\" <- \"../fonts/ApotekComp-Medium.woff2\"",
+    "\"Apotek Comp\" <- \"../fonts/ApotekComp-Regular.woff2\""
+  ],
+  "cssVars": {
+    "--aec_violet": "#3F2682",
+    "--aec_red": "#F53B3B",
+    "--aec_white": "#FFFFFF",
+    "--p-color": "#5B92E5",
+    "--p-color-1": "#5B92E588",
+    "--p-color-2": "#5B92E522"
+  },
+  "topColors": [
+    [
+      "#515151",
+      73
+    ],
+    [
+      "#3F2682",
+      43
+    ],
+    [
+      "#808080",
+      9
+    ],
+    [
+      "#F53B3B",
+      7
+    ],
+    [
+      "#E7E7E7",
+      1
+    ],
+    [
+      "#DDDDDD",
+      1
+    ]
+  ],
+  "topFonts": [
+    [
+      "Roboto",
+      65
+    ],
+    [
+      "Apotek Comp",
+      9
+    ],
+    [
+      "Verdana",
+      4
+    ]
+  ],
+  "samples": {
+    "h1": {
+      "font": "Apotek Comp",
+      "weight": "100",
+      "size": "90px",
+      "lineHeight": "65.7px",
+      "color": "#FFFFFF",
+      "bg": "transparent",
+      "transform": "uppercase",
+      "style": "normal",
+      "letterSpacing": "normal"
+    },
+    "h2": null,
+    "h3": null,
+    "p": {
+      "font": "Apotek Comp",
+      "weight": "300",
+      "size": "32px",
+      "lineHeight": "32px",
+      "color": "#FFFFFF",
+      "bg": "transparent",
+      "transform": "uppercase",
+      "style": "normal",
+      "letterSpacing": "normal"
+    },
+    "a": {
+      "font": "Roboto",
+      "weight": "400",
+      "size": "23px",
+      "lineHeight": "25px",
+      "color": "#808080",
+      "bg": "transparent",
+      "transform": "none",
+      "style": "normal",
+      "letterSpacing": "normal"
+    },
+    "button": {
+      "font": "Roboto",
+      "weight": "400",
+      "size": "18px",
+      "lineHeight": "25.7143px",
+      "color": "#FFFFFF",
+      "bg": "transparent",
+      "transform": "none",
+      "style": "normal",
+      "letterSpacing": "normal"
+    }
+  },
+  "links": [],
+  "hexInText": [],
+  "imgs": [
+    "https://laec.fr/static/assets/svg/LAEC-logo.svg"
+  ]
+}

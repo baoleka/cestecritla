@@ -1,0 +1,539 @@
+{
+  "f1-01-ecran0.light": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f1-01-ecran0.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 844,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#212320 on #EFECE3 = 13.41",
+      "#4C0297 on #FFFCF4 = 11.62",
+      "#212320 on #FFFCF4 = 15.45",
+      "#4C0297 on #FDEDFF = 10.63",
+      "#212320 on #FDEDFF = 14.13"
+    ],
+    "count": 17,
+    "externalRequests": []
+  },
+  "f1-02-10s.light": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f1-02-10s.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 844,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#212320 on #EFECE3 = 13.41",
+      "#4C0297 on #FFFCF4 = 11.62",
+      "#4C0297 on #FDEDFF = 10.63",
+      "#212320 on #FDEDFF = 14.13",
+      "#212320 on #FFFCF4 = 15.45"
+    ],
+    "count": 14,
+    "externalRequests": []
+  },
+  "f1-03-aha.light": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f1-03-aha.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 4325,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#212320 on #EFECE3 = 13.41",
+      "#4C0297 on #FFFCF4 = 11.62",
+      "#212320 on #FFFCF4 = 15.45",
+      "#4C0297 on #FDEDFF = 10.63",
+      "#212320 on #FDEDFF = 14.13",
+      "#FFFCF4 on #4C0297 = 11.62",
+      "#FFFCF4 on #D1271C = 5.1"
+    ],
+    "count": 40,
+    "externalRequests": []
+  },
+  "f1-04-resultat.light": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f1-04-resultat.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 1229,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#212320 on #EFECE3 = 13.41",
+      "#4C0297 on #FFFCF4 = 11.62",
+      "#4C0297 on #FDEDFF = 10.63",
+      "#212320 on #FDEDFF = 14.13",
+      "#212320 on #FFFCF4 = 15.45",
+      "#FFFCF4 on #D1271C = 5.1",
+      "#FFFCF4 on #4C0297 = 11.62"
+    ],
+    "count": 48,
+    "externalRequests": []
+  },
+  "f1-05-carte.light": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f1-05-carte.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 1384,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#212320 on #EFECE3 = 13.41",
+      "#4C0297 on #FFFCF4 = 11.62",
+      "#4C0297 on #FDEDFF = 10.63",
+      "#212320 on #FDEDFF = 14.13",
+      "#FFFCF4 on #4C0297 = 11.62",
+      "#FFFCF4 on #D1271C = 5.1",
+      "#212320 on #FFFCF4 = 15.45"
+    ],
+    "count": 46,
+    "externalRequests": []
+  },
+  "f1-06-lien.light": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f1-06-lien.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 1389,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#212320 on #EFECE3 = 13.41",
+      "#4C0297 on #FFFCF4 = 11.62",
+      "#212320 on #FFFCF4 = 15.45",
+      "#4C0297 on #FDEDFF = 10.63",
+      "#212320 on #FDEDFF = 14.13"
+    ],
+    "count": 33,
+    "externalRequests": []
+  },
+  "f2-01-ecran0.light": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f2-01-ecran0.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 4261,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#212320 on #EFECE3 = 13.41",
+      "#4C0297 on #FFFCF4 = 11.62",
+      "#212320 on #FFFCF4 = 15.45",
+      "#4C0297 on #FDEDFF = 10.63",
+      "#212320 on #FDEDFF = 14.13",
+      "#FFFCF4 on #4C0297 = 11.62"
+    ],
+    "count": 43,
+    "externalRequests": []
+  },
+  "f2-02-10s.light": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f2-02-10s.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 977,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#212320 on #EFECE3 = 13.41",
+      "#4C0297 on #FFFCF4 = 11.62",
+      "#212320 on #FFFCF4 = 15.45",
+      "#FFFCF4 on #4C0297 = 11.62",
+      "#4C0297 on #FDEDFF = 10.63",
+      "#212320 on #FDEDFF = 14.13"
+    ],
+    "count": 20,
+    "externalRequests": []
+  },
+  "f2-03-aha.light": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f2-03-aha.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 1269,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#212320 on #EFECE3 = 13.41",
+      "#4C0297 on #FFFCF4 = 11.62",
+      "#212320 on #FFFCF4 = 15.45",
+      "#FFFCF4 on #4C0297 = 11.62",
+      "#4C0297 on #FDEDFF = 10.63",
+      "#212320 on #FDEDFF = 14.13"
+    ],
+    "count": 27,
+    "externalRequests": []
+  },
+  "f2-04-resultat.light": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f2-04-resultat.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 1438,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#212320 on #EFECE3 = 13.41",
+      "#4C0297 on #FFFCF4 = 11.62",
+      "#212320 on #FFFCF4 = 15.45",
+      "#FFFCF4 on #4C0297 = 11.62",
+      "#4C0297 on #FDEDFF = 10.63",
+      "#212320 on #FDEDFF = 14.13"
+    ],
+    "count": 30,
+    "externalRequests": []
+  },
+  "f2-05-carte.light": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f2-05-carte.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 844,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#212320 on #EFECE3 = 13.41",
+      "#4C0297 on #FFFCF4 = 11.62",
+      "#FFFCF4 on #4C0297 = 11.62",
+      "#4C0297 on #FDEDFF = 10.63",
+      "#212320 on #FDEDFF = 14.13",
+      "#212320 on #FFFCF4 = 15.45",
+      "#FFFCF4 on #D1271C = 5.1"
+    ],
+    "count": 29,
+    "externalRequests": []
+  },
+  "f2-06-lien.light": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f2-06-lien.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 1340,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#212320 on #EFECE3 = 13.41",
+      "#4C0297 on #FFFCF4 = 11.62",
+      "#212320 on #FFFCF4 = 15.45",
+      "#FFFCF4 on #4C0297 = 11.62",
+      "#4C0297 on #FDEDFF = 10.63",
+      "#212320 on #FDEDFF = 14.13"
+    ],
+    "count": 29,
+    "externalRequests": []
+  },
+  "f1-01-ecran0.dark": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f1-01-ecran0.dark.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 844,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#FFFCF4 on #2C2E2B = 13.36",
+      "#E5CBFF on #212320 = 10.8",
+      "#FFFCF4 on #212320 = 15.45",
+      "#E5CBFF on #2C2E2B = 9.34"
+    ],
+    "count": 17,
+    "externalRequests": []
+  },
+  "f1-02-10s.dark": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f1-02-10s.dark.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 844,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#FFFCF4 on #2C2E2B = 13.36",
+      "#E5CBFF on #212320 = 10.8",
+      "#E5CBFF on #2C2E2B = 9.34",
+      "#FFFCF4 on #212320 = 15.45"
+    ],
+    "count": 14,
+    "externalRequests": []
+  },
+  "f1-03-aha.dark": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f1-03-aha.dark.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 4325,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#FFFCF4 on #2C2E2B = 13.36",
+      "#E5CBFF on #212320 = 10.8",
+      "#FFFCF4 on #212320 = 15.45",
+      "#E5CBFF on #2C2E2B = 9.34",
+      "#212320 on #E5CBFF = 10.8",
+      "#212320 on #F9C900 = 10.09"
+    ],
+    "count": 40,
+    "externalRequests": []
+  },
+  "f1-04-resultat.dark": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f1-04-resultat.dark.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 1229,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#FFFCF4 on #2C2E2B = 13.36",
+      "#E5CBFF on #212320 = 10.8",
+      "#E5CBFF on #2C2E2B = 9.34",
+      "#FFFCF4 on #212320 = 15.45",
+      "#212320 on #F9C900 = 10.09",
+      "#212320 on #E5CBFF = 10.8"
+    ],
+    "count": 48,
+    "externalRequests": []
+  },
+  "f1-05-carte.dark": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f1-05-carte.dark.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 1384,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#FFFCF4 on #2C2E2B = 13.36",
+      "#E5CBFF on #212320 = 10.8",
+      "#4C0297 on #FDEDFF = 10.63",
+      "#212320 on #FDEDFF = 14.13",
+      "#FFFCF4 on #4C0297 = 11.62",
+      "#FFFCF4 on #D1271C = 5.1",
+      "#FFFCF4 on #212320 = 15.45",
+      "#4C0297 on #FFFCF4 = 11.62",
+      "#212320 on #F9C900 = 10.09"
+    ],
+    "count": 46,
+    "externalRequests": []
+  },
+  "f1-06-lien.dark": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f1-06-lien.dark.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 1389,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#FFFCF4 on #2C2E2B = 13.36",
+      "#E5CBFF on #212320 = 10.8",
+      "#FFFCF4 on #212320 = 15.45",
+      "#E5CBFF on #2C2E2B = 9.34"
+    ],
+    "count": 33,
+    "externalRequests": []
+  },
+  "f2-01-ecran0.dark": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f2-01-ecran0.dark.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 4261,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#FFFCF4 on #2C2E2B = 13.36",
+      "#E5CBFF on #212320 = 10.8",
+      "#FFFCF4 on #212320 = 15.45",
+      "#E5CBFF on #2C2E2B = 9.34",
+      "#212320 on #E5CBFF = 10.8"
+    ],
+    "count": 43,
+    "externalRequests": []
+  },
+  "f2-02-10s.dark": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f2-02-10s.dark.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 977,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#FFFCF4 on #2C2E2B = 13.36",
+      "#E5CBFF on #212320 = 10.8",
+      "#FFFCF4 on #212320 = 15.45",
+      "#212320 on #E5CBFF = 10.8",
+      "#E5CBFF on #2C2E2B = 9.34"
+    ],
+    "count": 20,
+    "externalRequests": []
+  },
+  "f2-03-aha.dark": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f2-03-aha.dark.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 1269,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#FFFCF4 on #2C2E2B = 13.36",
+      "#E5CBFF on #212320 = 10.8",
+      "#FFFCF4 on #212320 = 15.45",
+      "#212320 on #E5CBFF = 10.8",
+      "#E5CBFF on #2C2E2B = 9.34"
+    ],
+    "count": 27,
+    "externalRequests": []
+  },
+  "f2-04-resultat.dark": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f2-04-resultat.dark.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 1438,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#FFFCF4 on #2C2E2B = 13.36",
+      "#E5CBFF on #212320 = 10.8",
+      "#FFFCF4 on #212320 = 15.45",
+      "#212320 on #E5CBFF = 10.8",
+      "#E5CBFF on #2C2E2B = 9.34"
+    ],
+    "count": 30,
+    "externalRequests": []
+  },
+  "f2-05-carte.dark": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f2-05-carte.dark.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 844,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#FFFCF4 on #2C2E2B = 13.36",
+      "#E5CBFF on #212320 = 10.8",
+      "#FFFCF4 on #4C0297 = 11.62",
+      "#4C0297 on #FDEDFF = 10.63",
+      "#212320 on #FDEDFF = 14.13",
+      "#FFFCF4 on #212320 = 15.45",
+      "#212320 on #F9C900 = 10.09"
+    ],
+    "count": 29,
+    "externalRequests": []
+  },
+  "f2-06-lien.dark": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f2-06-lien.dark.png",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ],
+    "scrollWidth": 390,
+    "scrollHeight": 1340,
+    "shadows3d": 1,
+    "failing": [],
+    "pairs": [
+      "#FFFCF4 on #2C2E2B = 13.36",
+      "#E5CBFF on #212320 = 10.8",
+      "#FFFCF4 on #212320 = 15.45",
+      "#212320 on #E5CBFF = 10.8",
+      "#E5CBFF on #2C2E2B = 9.34"
+    ],
+    "count": 29,
+    "externalRequests": []
+  },
+  "f1-05-carte.html.story": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f1-05-carte.story.png",
+    "width": 1080,
+    "height": 1920
+  },
+  "f1-05-carte.html.og": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f1-05-carte.og.png",
+    "width": 1200,
+    "height": 630
+  },
+  "f2-05-carte.html.og": {
+    "png": "<repo>/docs/discovery/captures/2026-09-09/maquettes/finalistes/f2-05-carte.og.png",
+    "width": 1200,
+    "height": 630
+  }
+}

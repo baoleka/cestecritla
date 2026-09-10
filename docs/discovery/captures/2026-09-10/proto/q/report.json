@@ -1,0 +1,1492 @@
+[
+  {
+    "shot": "q0-ecran0",
+    "scheme": "light",
+    "path": "/q/?s=c12-s01",
+    "note": "Écran 0 direct : titre, section, règle, trois options",
+    "file": "q/q0-ecran0.png",
+    "fileFull": "q/q0-ecran0.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 1078,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        10
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        8
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        6
+      ],
+      [
+        "#212320 on #FDEDFF",
+        3
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 11,
+    "optionTargets": [
+      97,
+      97,
+      122
+    ],
+    "blocks3d": 1,
+    "firstOptionBottom": 446,
+    "independenceBottom": 906,
+    "announce": "",
+    "activeElement": "BODY",
+    "localStorageKeys": [],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "q0-ecran0",
+    "scheme": "dark",
+    "path": "/q/?s=c12-s01",
+    "note": "Écran 0 direct : titre, section, règle, trois options",
+    "file": "q/q0-ecran0.dark.png",
+    "fileFull": "q/q0-ecran0.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 1078,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        10
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        8
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        6
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        3
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 11,
+    "optionTargets": [
+      97,
+      97,
+      122
+    ],
+    "blocks3d": 1,
+    "firstOptionBottom": 446,
+    "independenceBottom": 906,
+    "announce": "",
+    "activeElement": "BODY",
+    "localStorageKeys": [],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "q1-options",
+    "scheme": "light",
+    "path": "/q/?s=c12-s01",
+    "note": "10 s : lecture des options, focus clavier sur B, « Passer » et « Lire la section » sous les options",
+    "file": "q/q1-options.png",
+    "fileFull": "q/q1-options.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 1078,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        10
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        8
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        6
+      ],
+      [
+        "#212320 on #FDEDFF",
+        3
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 11,
+    "optionTargets": [
+      97,
+      97,
+      122
+    ],
+    "blocks3d": 1,
+    "firstOptionBottom": 446,
+    "independenceBottom": 906,
+    "announce": "",
+    "activeElement": "opt",
+    "localStorageKeys": [],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "q1-options",
+    "scheme": "dark",
+    "path": "/q/?s=c12-s01",
+    "note": "10 s : lecture des options, focus clavier sur B, « Passer » et « Lire la section » sous les options",
+    "file": "q/q1-options.dark.png",
+    "fileFull": "q/q1-options.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 1078,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        10
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        8
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        6
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        3
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 11,
+    "optionTargets": [
+      97,
+      97,
+      122
+    ],
+    "blocks3d": 1,
+    "firstOptionBottom": 446,
+    "independenceBottom": 906,
+    "announce": "",
+    "activeElement": "opt",
+    "localStorageKeys": [],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "q2-aha",
+    "scheme": "light",
+    "path": "/q/?s=c12-s01",
+    "note": "Aha : B touchée, « Celle-ci existe aussi, mais ailleurs » + « Y aller », A surlignée",
+    "file": "q/q2-aha.png",
+    "fileFull": "q/q2-aha.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 1495,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        15
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        12
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        6
+      ],
+      [
+        "#212320 on #FDEDFF",
+        3
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 15,
+    "optionTargets": [
+      97,
+      97,
+      122
+    ],
+    "blocks3d": 1,
+    "firstOptionBottom": 446,
+    "independenceBottom": 1323,
+    "announce": "Celle-ci existe aussi, mais ailleurs : « Faire le service public de la petite enfance », chapitre 5. C’est la mesure 3 de cette section.",
+    "activeElement": "fb show",
+    "localStorageKeys": [],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "q2-aha",
+    "scheme": "dark",
+    "path": "/q/?s=c12-s01",
+    "note": "Aha : B touchée, « Celle-ci existe aussi, mais ailleurs » + « Y aller », A surlignée",
+    "file": "q/q2-aha.dark.png",
+    "fileFull": "q/q2-aha.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 1495,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        15
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        12
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        6
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        3
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 15,
+    "optionTargets": [
+      97,
+      97,
+      122
+    ],
+    "blocks3d": 1,
+    "firstOptionBottom": 446,
+    "independenceBottom": 1323,
+    "announce": "Celle-ci existe aussi, mais ailleurs : « Faire le service public de la petite enfance », chapitre 5. C’est la mesure 3 de cette section.",
+    "activeElement": "fb show",
+    "localStorageKeys": [],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "q3-resultat",
+    "scheme": "light",
+    "path": "/q/?s=c12-s01",
+    "note": "Résultat : A touchée, trois localisations, « Lire la section », « Envoyer cette question », « Une autre section ? »",
+    "file": "q/q3-resultat.png",
+    "fileFull": "q/q3-resultat.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 1495,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        15
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        12
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        6
+      ],
+      [
+        "#212320 on #FDEDFF",
+        3
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 15,
+    "optionTargets": [
+      97,
+      97,
+      122
+    ],
+    "blocks3d": 1,
+    "firstOptionBottom": 446,
+    "independenceBottom": 1323,
+    "announce": "C’est la mesure 3 de cette section.",
+    "activeElement": "fb show",
+    "localStorageKeys": [],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "q3-resultat",
+    "scheme": "dark",
+    "path": "/q/?s=c12-s01",
+    "note": "Résultat : A touchée, trois localisations, « Lire la section », « Envoyer cette question », « Une autre section ? »",
+    "file": "q/q3-resultat.dark.png",
+    "fileFull": "q/q3-resultat.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 1495,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        15
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        12
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        6
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        3
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 15,
+    "optionTargets": [
+      97,
+      97,
+      122
+    ],
+    "blocks3d": 1,
+    "firstOptionBottom": 446,
+    "independenceBottom": 1323,
+    "announce": "C’est la mesure 3 de cette section.",
+    "activeElement": "fb show",
+    "localStorageKeys": [],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "q3b-section",
+    "scheme": "light",
+    "path": "/section/?id=c12-s01&back=%2Fq%2F%3Fs%3Dc12-s01&backLabel=Retour+%C3%A0+la+question#c12-s01-m03",
+    "note": "SectionVerbatim atteint depuis /q/ : mesure 3 ciblée, « Retour à la question », À savoir 77-808 plus bas",
+    "file": "q/q3b-section.png",
+    "fileFull": "q/q3b-section.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 4577,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        35
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        24
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        2
+      ],
+      [
+        "#212320 on #FDEDFF",
+        1
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "Voir sur melenchon2027.fr",
+        "w": 171,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "Voir l’encadré dans le program",
+        "w": 216,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "Voir sur melenchon2027.fr",
+        "w": 177,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 26,
+    "optionTargets": [],
+    "blocks3d": 1,
+    "firstOptionBottom": null,
+    "independenceBottom": null,
+    "announce": null,
+    "activeElement": "BODY",
+    "localStorageKeys": [
+      "cel.progress.v1"
+    ],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal",
+      "Gowun Batang 700 normal"
+    ]
+  },
+  {
+    "shot": "q3b-section",
+    "scheme": "dark",
+    "path": "/section/?id=c12-s01&back=%2Fq%2F%3Fs%3Dc12-s01&backLabel=Retour+%C3%A0+la+question#c12-s01-m03",
+    "note": "SectionVerbatim atteint depuis /q/ : mesure 3 ciblée, « Retour à la question », À savoir 77-808 plus bas",
+    "file": "q/q3b-section.dark.png",
+    "fileFull": "q/q3b-section.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 4577,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        35
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        24
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        2
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        1
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "Voir sur melenchon2027.fr",
+        "w": 171,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "Voir l’encadré dans le program",
+        "w": 216,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "Voir sur melenchon2027.fr",
+        "w": 177,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 26,
+    "optionTargets": [],
+    "blocks3d": 1,
+    "firstOptionBottom": null,
+    "independenceBottom": null,
+    "announce": null,
+    "activeElement": "BODY",
+    "localStorageKeys": [
+      "cel.progress.v1"
+    ],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal",
+      "Gowun Batang 700 normal"
+    ]
+  },
+  {
+    "shot": "q5-lien",
+    "scheme": "light",
+    "path": "/q/?s=c12-s01&from=link",
+    "note": "Variante arrivée par lien : kicker, aucune navigation, ligne impersonnelle, confidentialité impersonnelle",
+    "file": "q/q5-lien.png",
+    "fileFull": "q/q5-lien.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 1139,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        11
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        9
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        6
+      ],
+      [
+        "#212320 on #FDEDFF",
+        3
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 9,
+    "optionTargets": [
+      97,
+      97,
+      122
+    ],
+    "blocks3d": 1,
+    "firstOptionBottom": 470,
+    "independenceBottom": 0,
+    "announce": "",
+    "activeElement": "BODY",
+    "localStorageKeys": [],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "q5-lien",
+    "scheme": "dark",
+    "path": "/q/?s=c12-s01&from=link",
+    "note": "Variante arrivée par lien : kicker, aucune navigation, ligne impersonnelle, confidentialité impersonnelle",
+    "file": "q/q5-lien.dark.png",
+    "fileFull": "q/q5-lien.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 1139,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        11
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        9
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        6
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        3
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 9,
+    "optionTargets": [
+      97,
+      97,
+      122
+    ],
+    "blocks3d": 1,
+    "firstOptionBottom": 470,
+    "independenceBottom": 0,
+    "announce": "",
+    "activeElement": "BODY",
+    "localStorageKeys": [],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "q5b-lien-resultat",
+    "scheme": "light",
+    "path": "/q/?s=c12-s01&from=link",
+    "note": "Arrivée par lien après révélation : « Lire la section » en bouton principal",
+    "file": "q/q5b-lien-resultat.png",
+    "fileFull": "q/q5b-lien-resultat.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 1561,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        16
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        13
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        6
+      ],
+      [
+        "#212320 on #FDEDFF",
+        3
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 13,
+    "optionTargets": [
+      97,
+      97,
+      122
+    ],
+    "blocks3d": 1,
+    "firstOptionBottom": 470,
+    "independenceBottom": 717,
+    "announce": "Celle-ci existe aussi, mais ailleurs : « Protéger les mers et océans », chapitre 18. C’est la mesure 3 de cette section.",
+    "activeElement": "fb show",
+    "localStorageKeys": [],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "q5b-lien-resultat",
+    "scheme": "dark",
+    "path": "/q/?s=c12-s01&from=link",
+    "note": "Arrivée par lien après révélation : « Lire la section » en bouton principal",
+    "file": "q/q5b-lien-resultat.dark.png",
+    "fileFull": "q/q5b-lien-resultat.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 1561,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        16
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        13
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        6
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        3
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 13,
+    "optionTargets": [
+      97,
+      97,
+      122
+    ],
+    "blocks3d": 1,
+    "firstOptionBottom": 470,
+    "independenceBottom": 717,
+    "announce": "Celle-ci existe aussi, mais ailleurs : « Protéger les mers et océans », chapitre 18. C’est la mesure 3 de cette section.",
+    "activeElement": "fb show",
+    "localStorageKeys": [],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "q6-suivante",
+    "scheme": "light",
+    "path": "/q/?s=c12-s02",
+    "note": "Triplet 2 (c12-s02) : la mesure « ici » n’est pas en A",
+    "file": "q/q6-suivante.png",
+    "fileFull": "q/q6-suivante.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 1052,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        10
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        8
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        6
+      ],
+      [
+        "#212320 on #FDEDFF",
+        3
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 11,
+    "optionTargets": [
+      97,
+      71,
+      122
+    ],
+    "blocks3d": 1,
+    "firstOptionBottom": 446,
+    "independenceBottom": 880,
+    "announce": "",
+    "activeElement": "BODY",
+    "localStorageKeys": [],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "q6-suivante",
+    "scheme": "dark",
+    "path": "/q/?s=c12-s02",
+    "note": "Triplet 2 (c12-s02) : la mesure « ici » n’est pas en A",
+    "file": "q/q6-suivante.dark.png",
+    "fileFull": "q/q6-suivante.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 1052,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        10
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        8
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        6
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        3
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 11,
+    "optionTargets": [
+      97,
+      71,
+      122
+    ],
+    "blocks3d": 1,
+    "firstOptionBottom": 446,
+    "independenceBottom": 880,
+    "announce": "",
+    "activeElement": "BODY",
+    "localStorageKeys": [],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "q7-passer",
+    "scheme": "light",
+    "path": "/q/?s=c12-s01",
+    "note": "« Passer » : révélation sans choix",
+    "file": "q/q7-passer.png",
+    "fileFull": "q/q7-passer.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 1495,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        15
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        12
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        6
+      ],
+      [
+        "#212320 on #FDEDFF",
+        3
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 15,
+    "optionTargets": [
+      97,
+      97,
+      122
+    ],
+    "blocks3d": 1,
+    "firstOptionBottom": 446,
+    "independenceBottom": 1323,
+    "announce": "Voici où est chacune.",
+    "activeElement": "fb show",
+    "localStorageKeys": [],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "q7-passer",
+    "scheme": "dark",
+    "path": "/q/?s=c12-s01",
+    "note": "« Passer » : révélation sans choix",
+    "file": "q/q7-passer.dark.png",
+    "fileFull": "q/q7-passer.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 1495,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        15
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        12
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        6
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        3
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 15,
+    "optionTargets": [
+      97,
+      97,
+      122
+    ],
+    "blocks3d": 1,
+    "firstOptionBottom": 446,
+    "independenceBottom": 1323,
+    "announce": "Voici où est chacune.",
+    "activeElement": "fb show",
+    "localStorageKeys": [],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "q8-sensible",
+    "scheme": "light",
+    "path": "/q/?s=c4-s03",
+    "note": "Section sensible (D5.12) : question posée, leurres du quotidien, « Envoyer » = lien de section standard",
+    "file": "q/q8-sensible.png",
+    "fileFull": "q/q8-sensible.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 1452,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        15
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        12
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        6
+      ],
+      [
+        "#212320 on #FDEDFF",
+        3
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 15,
+    "optionTargets": [
+      97,
+      122,
+      97
+    ],
+    "blocks3d": 1,
+    "firstOptionBottom": 422,
+    "independenceBottom": 1280,
+    "announce": "C’est la mesure 8 de cette section.",
+    "activeElement": "fb show",
+    "localStorageKeys": [],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "q8-sensible",
+    "scheme": "dark",
+    "path": "/q/?s=c4-s03",
+    "note": "Section sensible (D5.12) : question posée, leurres du quotidien, « Envoyer » = lien de section standard",
+    "file": "q/q8-sensible.dark.png",
+    "fileFull": "q/q8-sensible.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 1452,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        15
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        12
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        6
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        3
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 15,
+    "optionTargets": [
+      97,
+      122,
+      97
+    ],
+    "blocks3d": 1,
+    "firstOptionBottom": 422,
+    "independenceBottom": 1280,
+    "announce": "C’est la mesure 8 de cette section.",
+    "activeElement": "fb show",
+    "localStorageKeys": [],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "q9-inconnue",
+    "scheme": "light",
+    "path": "/q/?s=c99-s99",
+    "note": "Identifiant inconnu",
+    "file": "q/q9-inconnue.png",
+    "fileFull": "q/q9-inconnue.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 844,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        6
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        7
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 7,
+    "optionTargets": [],
+    "blocks3d": 1,
+    "firstOptionBottom": null,
+    "independenceBottom": 378,
+    "announce": "",
+    "activeElement": "BODY",
+    "localStorageKeys": [],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic"
+    ]
+  },
+  {
+    "shot": "q9-inconnue",
+    "scheme": "dark",
+    "path": "/q/?s=c99-s99",
+    "note": "Identifiant inconnu",
+    "file": "q/q9-inconnue.dark.png",
+    "fileFull": "q/q9-inconnue.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 844,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        6
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        7
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 7,
+    "optionTargets": [],
+    "blocks3d": 1,
+    "firstOptionBottom": null,
+    "independenceBottom": 378,
+    "announce": "",
+    "activeElement": "BODY",
+    "localStorageKeys": [],
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic"
+    ]
+  },
+  {
+    "shot": "q4-carte-c12-s01",
+    "scheme": "light",
+    "path": "/q/card.html?s=c12-s01",
+    "note": "Carte de partage 1200 × 630 (aperçu HTML de l’image pré-générée au build)",
+    "file": "q/q4-carte-c12-s01.png",
+    "external": [],
+    "errors": [],
+    "blocks3d": 1
+  },
+  {
+    "shot": "q4-carte-c12-s01@2x",
+    "scheme": "light",
+    "path": "/q/card.html?s=c12-s01",
+    "note": "Carte de partage 1200 × 630 (aperçu HTML de l’image pré-générée au build)",
+    "file": "q/q4-carte-c12-s01@2x.png",
+    "external": [],
+    "errors": [],
+    "blocks3d": 1
+  },
+  {
+    "shot": "q4-carte-c12-s02",
+    "scheme": "light",
+    "path": "/q/card.html?s=c12-s02",
+    "note": "Carte de partage 1200 × 630 (aperçu HTML de l’image pré-générée au build)",
+    "file": "q/q4-carte-c12-s02.png",
+    "external": [],
+    "errors": [],
+    "blocks3d": 1
+  },
+  {
+    "shot": "q4-carte-sensible-c4-s03",
+    "scheme": "light",
+    "path": "/q/card.html?s=c4-s03",
+    "note": "Carte de partage 1200 × 630 (aperçu HTML de l’image pré-générée au build)",
+    "file": "q/q4-carte-sensible-c4-s03.png",
+    "external": [],
+    "errors": [],
+    "blocks3d": 1
+  }
+]

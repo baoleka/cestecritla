@@ -1,0 +1,362 @@
+{
+  "corpus_version": "d29c7422004ab27c",
+  "generated_at": "2026-09-07T16:30:57.692Z",
+  "sections": {
+    "c1-s01": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre1/s1/",
+      "hash": "d830ed72e91bd0779e535c75608f825b17dd91d7e0c88f4db3680d724c90cd12"
+    },
+    "c1-s02": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre1/s2/",
+      "hash": "2a6033b9b1b70d45975e629ad9221a4dd448615dbcae3c5f7f9d327be6afbccf"
+    },
+    "c1-s03": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre1/s3/",
+      "hash": "42affca8162c68066160a1c80369475352c7d38787470a91260cc067a16f5d14"
+    },
+    "c1-s04": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre1/s4/",
+      "hash": "7d6ea1e3923cf06c57eeba5d639724daf8755d9bb2531539ea58a0fec0f1b75d"
+    },
+    "c1-s05": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre1/s5/",
+      "hash": "93664b9154b9e97d625b8a0c8b5d093cc5b85b2a7fa0a34f49d97b448dfafff1"
+    },
+    "c1-s06": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre1/s6/",
+      "hash": "c9b0d15eb8e06298e6386538a1487abcf54a56310cfb1f0ecc6dfd3cccbf8414"
+    },
+    "c2-s01": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre2/s1/",
+      "hash": "ad588f13b4c0e34883fcff03f711cd0aae1560fe4e48301d61893025401b0131"
+    },
+    "c2-s02": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre2/s2/",
+      "hash": "bd3cfd01f824256b27d83b9d06aab6fb4ad279337c16ebdd518a28e9c95e921e"
+    },
+    "c3-s01": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre3/s1/",
+      "hash": "f29033f9b1b90f21bea83e83615884e75aef3df336ac694b40964b2538bc85d0"
+    },
+    "c3-s02": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre3/s2/",
+      "hash": "1a73c20a319e1a21182f7daded82f9add12a965c2bc86be3113110bcf224e916"
+    },
+    "c4-s01": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre4/s1/",
+      "hash": "71a80a8cb4ac52e77a42f24f8f8e9e90be0ba0e71734414bf945ffd070c7778c"
+    },
+    "c4-s02": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre4/s2/",
+      "hash": "21c189ccda7475189d0ffdad451dc5a317eb2c6f5d6fc55568b874bb99fe81ab"
+    },
+    "c4-s03": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre4/s3/",
+      "hash": "0374238cbf382213c70f544d72c50025b5e1c4155a82d3f6f3186606cf1c6355"
+    },
+    "c5-s01": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre5/s1/",
+      "hash": "170fdc6b49f0575f93ce92b2b1a6d581dbc4d44df6fe698ff0aa4e726b2f80ba"
+    },
+    "c5-s02": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre5/s2/",
+      "hash": "72735761f356aa861d8dc73fd7ea3c3765a65aa5a767b9427d03d6f847c32511"
+    },
+    "c5-s03": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre5/s3/",
+      "hash": "f664c0786974ff078e588aaa867ee8c60985a40782ea88d867e48e309fb2f031"
+    },
+    "c5-s04": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre5/s4/",
+      "hash": "44ce61da678f475d0400e6f7bc3e9ec59a62bf89f27b9f77265f42074c34276b"
+    },
+    "c5-s05": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre5/s5/",
+      "hash": "5f692d4f853e08310e1c7fe5c1b93aa515c8a2d6b830b55395448bda0ec18386"
+    },
+    "c5-s06": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre5/s6/",
+      "hash": "fa08d18270b37a1c88225698a3a454bb2c1484e667b2a6ea3feddd500b841a61"
+    },
+    "c5-s07": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre5/s7/",
+      "hash": "4083a1f2838ed9082c282be51451b5f394e8a9a7dac5419c307ac8323e7d69e6"
+    },
+    "c6-s01": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre6/s1/",
+      "hash": "708b74ef4cf053cbf89ffcf709bd82b1a45fe789a21994aae9e46c5cc8694f84"
+    },
+    "c6-s02": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre6/s2/",
+      "hash": "47ddbd75b07523ca5b07be6db13843dea912d2f66c58156de3693f223ac62605"
+    },
+    "c6-s03": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre6/s3/",
+      "hash": "ad107f3784e97f20cb24ec5e375b18a6842f4b5436dea2e93eac689c2ab23013"
+    },
+    "c6-s04": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre6/s4/",
+      "hash": "dd261eb3a73c27a8c33ccf929cae761e6cb3ee45e83a7bc276e60ded0811b0f0"
+    },
+    "c6-s05": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre6/s5/",
+      "hash": "33cd9c5bd974e3d91ba823c65ad7cc47de02563640829223be4f44ecc5eb2a35"
+    },
+    "c7-s01": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre7/s1/",
+      "hash": "6cf6b80e7295da163101d975aa2457d0e035b369f6181f98e0ed281c3586da43"
+    },
+    "c7-s02": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre7/s2/",
+      "hash": "037d816de52c9f6606c591a46a14753f2c1372bf18e8670c7cb9d929e41a1756"
+    },
+    "c7-s03": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre7/s3/",
+      "hash": "3211ebf2dc9bd48bd24bbcd1559a5773b386d6b6099545de83b4412ebfeef4ea"
+    },
+    "c7-s04": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre7/s4/",
+      "hash": "2ae5cb8a04b9288c20fbeea298afe7c1fead5fb73f8da7565f36c9c80051995d"
+    },
+    "c7-s05": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre7/s5/",
+      "hash": "e488e0a5234bb38ad6c6ff083c6ec330557041e2a3763391fd0b28e4d5afe6f2"
+    },
+    "c7-s06": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre7/s6/",
+      "hash": "1664a41da09ef4acf4f41c7c0513dc8e7b3b17e5e6390376600e36a6770b07d0"
+    },
+    "c7-s07": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre7/s7/",
+      "hash": "adfa68c537f0ddedda9af24b0ab3d8c873c2817dc690df906daa00fb0f16fa1e"
+    },
+    "c7-s08": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre7/s8/",
+      "hash": "8d904c946a77eecd70e92717ea469f7ed2e874dada06c33cad80b607fa59a926"
+    },
+    "c7-s09": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre7/s9/",
+      "hash": "4871e4cbe06fe812d5c14646e9d744997605ad48e15ce42620f59586ceb0ea5e"
+    },
+    "c8-s01": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre8/s1/",
+      "hash": "ff97f9c77bae00f6c811ae8391407b3bb2c009b8f90ad1b20926b11c32759251"
+    },
+    "c8-s02": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre8/s2/",
+      "hash": "7427bb58bfc837e1b563e9fdb4c349fb68c22bde1fdb5d621bf98f2052f4400d"
+    },
+    "c8-s03": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre8/s3/",
+      "hash": "ea528774bbf95befab7c10d2ff45e53f3026ce920f4798d06ac92c7fd9150f29"
+    },
+    "c8-s04": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre8/s4/",
+      "hash": "1148901cbcd14c997f31b0fc9b3cfdcb83521271cc71fb932c6919a5b25c3d8f"
+    },
+    "c8-s05": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre8/s5/",
+      "hash": "9fab6465edadca818afee6e6fb1ee0e1aa9086cc36084b328cc0ac3aea30b88a"
+    },
+    "c8-s06": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre8/s6/",
+      "hash": "53aff40d12518608f68e266212c554a6cffabbaf265f5ae7b17d44132445ddea"
+    },
+    "c8-s07": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre8/s7/",
+      "hash": "552690188a98b454c727f2fd2190d36af021033f232358633e25dadf6a03c2ca"
+    },
+    "c8-s08": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre8/s8/",
+      "hash": "efd9d52f5ea7a05bd1e742841ab1f37e5c9f37c5e181c2c3fd41ac8a0aac2b4f"
+    },
+    "c9-s01": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre9/s1/",
+      "hash": "ba16f06afea8e46346d7042825ef7cdf7245c24457ca09cbb9a132ae9d0b58bd"
+    },
+    "c9-s02": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre9/s2/",
+      "hash": "1ce159eb6709cf5f0f092eab3c210bfb9fe726f71c7dcae6b8c2fd5c8d964349"
+    },
+    "c9-s03": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre9/s3/",
+      "hash": "7f8781b6d4e638445a6b42c0b292f943620643862fef1cd37b1fe16d7e8b88ae"
+    },
+    "c10-s01": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre10/s1/",
+      "hash": "95735c97edf639e67bb0f052ab27755e062e8ea4cc19c65f4a924619dbc885cd"
+    },
+    "c10-s02": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre10/s2/",
+      "hash": "5b227455c9595df12e0efa98c2e50a7c94194cf96369ff698a08f2af13226c5f"
+    },
+    "c10-s03": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre10/s3/",
+      "hash": "46cfb62fe632529c8e6d9ca4c0a40804ed66b2f05b0917a855f7a5dd1c4afce5"
+    },
+    "c10-s04": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre10/s4/",
+      "hash": "2befa5242d63c5acc5b44a9ccb42d56184e3ab4bbd9caa6bbeaa032d5b75ce8a"
+    },
+    "c10-s05": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre10/s5/",
+      "hash": "6a1b52db9f0668f7582e7a90f5dd08a4e1c6c43ef42a733b99a076a894e0c4b8"
+    },
+    "c11-s01": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre11/s1/",
+      "hash": "83d2b7049665e4e5262124ee98aa3fe73224863a3c4678fa57774fa29c82beb1"
+    },
+    "c11-s02": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre11/s2/",
+      "hash": "0e119bbed86232407317a683ce9a79294924e4c8cf6417a3d53b98c72dccc889"
+    },
+    "c12-s01": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre12/s1/",
+      "hash": "b60dd20da3817b9a885b984ad4a0a72d5a7206dc4850ce43c8cc12187648daf8"
+    },
+    "c12-s02": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre12/s2/",
+      "hash": "9724fc2f4a0da9580db5d378027cf8dc622029bbde5af342078e3f0dce0bdf40"
+    },
+    "c12-s03": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre12/s3/",
+      "hash": "40a33a6171f0f8f537a83d5751573c0bea19dcf8c13c57c63f291774ef4df734"
+    },
+    "c13-s01": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre13/s1/",
+      "hash": "6bdcd5faad245e2a0b147fa7019c1e72e288e75e50b4bce4eee3a021a3893a4f"
+    },
+    "c13-s02": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre13/s2/",
+      "hash": "2587ccde7f7f37ae225c4bc00ed6cc45c1de9625f502c2db9f881bfc8307c997"
+    },
+    "c13-s03": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre13/s3/",
+      "hash": "ff2e5d3ea92a7c5ed15b57fba8a2d12b86663ec358971374b73b40372be8f235"
+    },
+    "c13-s04": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre13/s4/",
+      "hash": "3f96211dcbc0e78b57ec062722740e6e0f8699453f3821556a0b3f164999b859"
+    },
+    "c13-s05": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre13/s5/",
+      "hash": "34aff235b7a51f900cc444b8da3243dceb8f6976d33cb626e06e1a50bf72f71d"
+    },
+    "c14-s01": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre14/s1/",
+      "hash": "27e584251b59e19f87d581a15919de9f4ab50e793288a333674adeaa1add0a29"
+    },
+    "c14-s02": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre14/s2/",
+      "hash": "e2034f6ff9a99481a424d3435b5531dcc4aafb6de6786cecd4dae939ad388e68"
+    },
+    "c14-s03": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre14/s3/",
+      "hash": "fed909b7026b4f1ccb262406f2e25600b518976f120e750d21a5ef8f5309b15b"
+    },
+    "c14-s04": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre14/s4/",
+      "hash": "eedbbe23595a6ced67db4369c558a2e0bfbf75657bbedcc825cf5713328d8f65"
+    },
+    "c14-s05": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre14/s5/",
+      "hash": "e5c4eb62a29d1bd4909e63d06438a92cf8269fd6a5b7c36c801fa03ce8d2b9a1"
+    },
+    "c14-s06": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre14/s6/",
+      "hash": "036d0cb09a848b31c0d65c170a068f99116f06470b4bbff1bbfece0393375b88"
+    },
+    "c15-s01": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre15/s1/",
+      "hash": "44e821d3fbf0ed846bb7e374c5d8895e6e995a2e528ae2b88098a3c68b9c6854"
+    },
+    "c15-s02": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre15/s2/",
+      "hash": "3a20d77023329b6fd16aa6180abda0ea037c79ec5e5a22d5a5210f263de7e0b1"
+    },
+    "c15-s03": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre15/s3/",
+      "hash": "dc23192fab6df72629b8ab5a7cbe3960090c1798751c6c73ffbc4933bf44328d"
+    },
+    "c15-s04": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre15/s4/",
+      "hash": "acca90b531db291253283b31afcde526f8405cc403b8c1ce1e337ca1d0be6bcd"
+    },
+    "c16-s01": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre16/s1/",
+      "hash": "33f285f9e243c4dc751b1fdfa8532eb0f4d5353655c6444249f5da9e82e85ecf"
+    },
+    "c16-s02": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre16/s2/",
+      "hash": "0e603992214a914973d07222ecab73a0c5a708d5d125bca46e562ece2fabef96"
+    },
+    "c16-s03": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre16/s3/",
+      "hash": "e8ba00146ffb2a4e6c0c9e9ebac48a0ea2927b1bac8afcec316462dcadeab7f4"
+    },
+    "c16-s04": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre16/s4/",
+      "hash": "2619e1728fd0c33521c23e16bbf70ff4a1a6acac099e57c244b696a7cdfccfa4"
+    },
+    "c16-s05": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre16/s5/",
+      "hash": "14d5d7c5ffe24c99e92f858a1e6d8bd7983d6d45043517782c5176c8af5bb082"
+    },
+    "c16-s06": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre16/s6/",
+      "hash": "b2f9642d6335153c7fca2df5922638dae794b3d7e5e72bafc87676a9632fa58d"
+    },
+    "c16-s07": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre16/s7/",
+      "hash": "07f1f44fc7312bd1a417be7afa565fc0dbcb437cf9fa7f04b8f388b165d7742d"
+    },
+    "c16-s08": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre16/s8/",
+      "hash": "4b161782b576fd2f683de3c811cd9f68b5e0c272550f29b280c569386b157bd3"
+    },
+    "c16-s09": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre16/s9/",
+      "hash": "4aeedb5a5daed6719ae96747b80feccb71bf97aa63b249d8088628134bc269e4"
+    },
+    "c16-s10": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre16/s10/",
+      "hash": "372bf2852acd4cef2fbb8d366fc73a156eead1e2bbdd89ae241f388aaf6da06a"
+    },
+    "c16-s11": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre16/s11/",
+      "hash": "ee7b41ff805319d1a16dd9a2a111e37c870617cfda90be5fed6047c8414e7c8f"
+    },
+    "c16-s12": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre16/s12/",
+      "hash": "a62e012cdaf37af94c424d761bad1ab30ae03e0cc9e627ba30d16ef411e38149"
+    },
+    "c17-s01": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre17/s1/",
+      "hash": "461ff196ebace093208fa604eea82967080a303fe6eb03c20de89a38e04944d5"
+    },
+    "c17-s02": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre17/s2/",
+      "hash": "61b6ea60fdc22ffd25744383eaf2bb9fa36cc39d2bd981558c9ac511f5d5ed03"
+    },
+    "c18-s01": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre18/s1/",
+      "hash": "876b4a366af0a0c02878701372d742b15aec29e0d9a6e4df854ddb3cb61367ca"
+    },
+    "c18-s02": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre18/s2/",
+      "hash": "726bda1d1713ff09bb93042540f005604d7257989aebfeed3e16de3e9cbcfabb"
+    },
+    "c18-s03": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre18/s3/",
+      "hash": "dca028d2e861ff9f8a7867572b97245ccdbd0eea2d38d2918ea134833768ae11"
+    },
+    "c18-s04": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre18/s4/",
+      "hash": "f4e8720a22ed84659e7413fa7971d5b8d70bfe18bf4b2ea1271c923b34bca581"
+    },
+    "c18-s05": {
+      "url": "https://melenchon2027.fr/programme2025/livre/chapitre18/s5/",
+      "hash": "b2fd18834423da90c2e14a86d043456a080ab2a1023b376c4c6ef78bba815215"
+    }
+  }
+}

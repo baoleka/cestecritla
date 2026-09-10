@@ -1,0 +1,15 @@
+{
+  // The app's own type configuration. The root tsconfig.json is left untouched so that
+  // `npx tsc --noEmit` still means exactly what CLAUDE.md and the CI say it means: the gate
+  // over scripts/ and eval/. Those are Node scripts under NodeNext; the app is bundled by Vite
+  // under Bundler resolution, and the two cannot share one set of compiler options —
+  // `node:assert/strict` is default-importable in the first and not in the second, which alone
+  // turned every `assert.ok()` in the test suite into a lost type narrowing.
+  "extends": "astro/tsconfigs/strictest",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "types": ["astro/client"]
+  },
+  "include": [".astro/types.d.ts", "src/**/*", "scripts/build-projection.ts"],
+  "exclude": ["node_modules", "dist", "build", "prototypes", "eval", "src/worker"]
+}

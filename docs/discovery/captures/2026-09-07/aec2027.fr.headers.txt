@@ -1,0 +1,16 @@
+HTTP/2 200 
+date: Mon, 07 Sep 2026 15:08:30 GMT
+content-type: text/html
+content-length: 7231
+last-modified: Tue, 01 Sep 2026 15:03:34 GMT
+etag: "1c3f-65a6d38f87fa5"
+accept-ranges: bytes
+vary: Accept-Encoding
+x-orig-rid: ea3f1ab2f27d3a751664969dbd10481b
+x-anubis-action: 
+x-anubis-rule: 
+x-anubis-status: 
+edge-cache-engine-mode: INACTIVE
+alt-svc: h3=":443"
+x-request-id: ea3f1ab2f27d3a751664969dbd10481b
+

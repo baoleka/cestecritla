@@ -1,0 +1,83 @@
+---
+/**
+ * The section reader — the surface that proves the socle: cestecritla.fr serving a real
+ * section from corpus d29c7422004ab27c.
+ *
+ * There is deliberately NO rel=canonical to melenchon2027.fr. A cross-domain canonical is a
+ * machine-readable declaration that the official site owns this page; it would ask for our own
+ * pages to be de-indexed, and it contradicts the SEO channel the dossier counts as a
+ * differentiator. The licence requires attribution and a link to the source, not a canonical —
+ * so we credit with a visible link plus JSON-LD isBasedOn/citation.
+ */
+import Base from '../../layouts/Base.astro';
+import SectionVerbatim from '../../components/SectionVerbatim.astro';
+import { sections, chapterOf, scopeOf, isProposition, type SlimSection } from '../../lib/corpus.ts';
+
+export function getStaticPaths() {
+  return sections().map((section: SlimSection) => ({
+    params: { section: section.id },
+    props: { section },
+  }));
+}
+
+const { section } = Astro.props;
+const chapter = chapterOf(section);
+
+// Closing prose is rendered at the end, never as an introduction (prose_after_measures).
+const chapeaux = section.items.filter(
+  (i) => i.kind === 'paragraph' && i.isClosingProse !== true && i.isScopeHeading !== true && i.isStatistic !== true,
+);
+const closing = section.items.filter((i) => i.isClosingProse === true);
+const statistics = section.items.filter((i) => i.isStatistic === true);
+const propositions = section.items.filter(isProposition);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: section.title,
+  inLanguage: 'fr',
+  isBasedOn: section.url,
+  citation: section.url,
+  license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+  isPartOf: { '@type': 'Book', name: 'L’Avenir en commun', author: 'La France insoumise' },
+};
+---
+
+<Base title={`${section.title} — C'est écrit là`} description={chapeaux[0]?.text.slice(0, 155)}>
+  <p class="label">Chapitre {chapter.number} · {chapter.title}</p>
+  <h1>{section.title}</h1>
+
+  {chapeaux.map((p) => <p>{p.text}</p>)}
+
+  {
+    propositions.map((item) => (
+      <SectionVerbatim item={item} scope={scopeOf(section, item)} />
+    ))
+  }
+
+  {
+    statistics.length > 0 && (
+      <section aria-label="À savoir">
+        <h2>À savoir</h2>
+        {statistics.map((s) => (
+          <p id={s.id}>{s.text}</p>
+        ))}
+        {section.chiffres.map((c) => (
+          <p id={c.id}>{c.text}</p>
+        ))}
+      </section>
+    )
+  }
+
+  {closing.map((p) => <p id={p.id}>{p.text}</p>)}
+
+  <p>
+    <a class="source-link" href={section.url} rel="noopener">Lire sur melenchon2027.fr</a>
+  </p>
+  <p class="ref">
+    Texte : La France insoumise – L’Avenir en commun, sous licence CC BY-NC-SA 4.0. Version du
+    corpus {section.id.startsWith('c') ? 'd29c7422004ab27c' : ''}.
+  </p>
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+</Base>

@@ -1,0 +1,18 @@
+{
+  // Type-checks the browser script public/app.js (JSDoc) against the DOM and the Turnstile client API.
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2022", "DOM"],
+    "types": [],
+    "allowJs": true,
+    "checkJs": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noEmit": true,
+    "skipLibCheck": true
+  },
+  "include": ["public/app.js", "scripts/types/turnstile-global.d.ts"]
+}

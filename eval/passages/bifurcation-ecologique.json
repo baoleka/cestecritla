@@ -1,0 +1,728 @@
+{
+  "meta": {
+    "term": "bifurcation écologique",
+    "slug": "bifurcation-ecologique",
+    "aliases": [
+      "bifurcation écologique",
+      "bifurcation"
+    ],
+    "corpus_version": "d29c7422004ab27c",
+    "generated_by": "scripts/extract-passages.ts",
+    "rule_fr": "Seuls les passages « corpus » et « introduction_and_parts » sont le programme 2025 et peuvent être cités mot pour mot. Les passages « livrets_2022 » sont un contexte pédagogique de l'édition 2022 (chiffres périmés) : ils peuvent éclairer une définition mais jamais être présentés comme le programme. Les passages « désintox » servent à la rubrique objection, avec lien."
+  },
+  "corpus": [
+    {
+      "id": "c5-s03-p01",
+      "kind": "paragraph",
+      "text": "Une des grandes conquêtes sociales du siècle passé consiste à avoir arraché les enfants aux violences de l’usine pour les accueillir à l’école publique. Mais l’école publique, laïque et gratuite, qui est une des clés du progrès social et humain, sort terriblement affaiblie d’une quinzaine d’années marquées par des politiques destructrices. Les ministres de l’Éducation s’enchaînent sous Macron — pas moins de 4 en 2024 — mais partagent leurs attaques contre le service public de l’éducation et ses fondements en le livrant au marché. Il faut reconstruire l’école de l’égalité et de l’émancipation, une école qui participe à la prise en charge des grands défis de demain : la bifurcation écologique et la 6e République.",
+      "sectionId": "c5-s03",
+      "sectionTitle": "Reconstruire une école globale pour l’égalité et l’émancipation",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre5/s3/",
+      "chapterTitle": "Chapitre 5 : Élever le niveau d’instruction",
+      "chapeauId": "c5-s03-p01",
+      "chapeau": "Une des grandes conquêtes sociales du siècle passé consiste à avoir arraché les enfants aux violences de l’usine pour les accueillir à l’école publique. Mais l’école publique, laïque et gratuite, qui est une des clés du progrès social et humain, sort terriblement affaiblie d’une quinzaine d’années marquées par des politiques destructrices. Les ministres de l’Éducation s’enchaînent sous Macron — pas moins de 4 en 2024 — mais partagent leurs attaques contre le service public de l’éducation et ses "
+    },
+    {
+      "id": "c5-s03-m04",
+      "kind": "measure",
+      "text": "Faire de l’école le levier de la bifurcation écologique et démocratique :",
+      "sectionId": "c5-s03",
+      "sectionTitle": "Reconstruire une école globale pour l’égalité et l’émancipation",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre5/s3/",
+      "chapterTitle": "Chapitre 5 : Élever le niveau d’instruction",
+      "chapeauId": "c5-s03-p01",
+      "chapeau": "Une des grandes conquêtes sociales du siècle passé consiste à avoir arraché les enfants aux violences de l’usine pour les accueillir à l’école publique. Mais l’école publique, laïque et gratuite, qui est une des clés du progrès social et humain, sort terriblement affaiblie d’une quinzaine d’années marquées par des politiques destructrices. Les ministres de l’Éducation s’enchaînent sous Macron — pas moins de 4 en 2024 — mais partagent leurs attaques contre le service public de l’éducation et ses "
+    },
+    {
+      "id": "c5-s04-p01",
+      "kind": "paragraph",
+      "text": "L’élévation continue du niveau de qualification des travailleurs est essentielle. La bifurcation écologique nécessite des qualifications de pointe à tous les niveaux et dans tous les secteurs. Il est donc impératif de penser ensemble les offres de formation initiale et la formation tout au long de la carrière en cohérence avec les objectifs écologiques du pays.",
+      "sectionId": "c5-s04",
+      "sectionTitle": "Qualifier tout le monde",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre5/s4/",
+      "chapterTitle": "Chapitre 5 : Élever le niveau d’instruction",
+      "chapeauId": "c5-s04-p01",
+      "chapeau": "L’élévation continue du niveau de qualification des travailleurs est essentielle. La bifurcation écologique nécessite des qualifications de pointe à tous les niveaux et dans tous les secteurs. Il est donc impératif de penser ensemble les offres de formation initiale et la formation tout au long de la carrière en cohérence avec les objectifs écologiques du pays."
+    },
+    {
+      "id": "c5-s04-m06",
+      "kind": "measure",
+      "text": "Structurer les filières professionnelles qui répondent aux besoins en main-d’œuvre de la bifurcation écologique",
+      "sectionId": "c5-s04",
+      "sectionTitle": "Qualifier tout le monde",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre5/s4/",
+      "chapterTitle": "Chapitre 5 : Élever le niveau d’instruction",
+      "chapeauId": "c5-s04-p01",
+      "chapeau": "L’élévation continue du niveau de qualification des travailleurs est essentielle. La bifurcation écologique nécessite des qualifications de pointe à tous les niveaux et dans tous les secteurs. Il est donc impératif de penser ensemble les offres de formation initiale et la formation tout au long de la carrière en cohérence avec les objectifs écologiques du pays."
+    },
+    {
+      "id": "c5-s05-m08",
+      "kind": "measure",
+      "text": "Garantir un financement public des instituts de recherche impliqués dans la bifurcation écologique, afin de libérer cette recherche du poids des lobbies",
+      "sectionId": "c5-s05",
+      "sectionTitle": "Être une grande nation scientifique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre5/s5/",
+      "chapterTitle": "Chapitre 5 : Élever le niveau d’instruction",
+      "chapeauId": "c5-s05-p01",
+      "chapeau": "Le développement et le rayonnement scientifiques sont un pilier de notre indépendance et de notre épanouissement à l’ère des incertitudes écologiques. La France doit demeurer une nation du savoir scientifique. L’internationalisme humaniste auquel nous aspirons s’écrit aussi dans des coopérations scientifiques."
+    },
+    {
+      "id": "c9-s02-m02",
+      "kind": "measure",
+      "text": "Utiliser systématiquement le régime de contrôle public des investissements étrangers dans les secteurs où c’est possible (défense, santé, produits agricoles, recyclage de matières critiques, réseaux de transport) et élargir le décret qui le permet à tous les secteurs cruciaux de la bifurcation écologique",
+      "sectionId": "c9-s02",
+      "sectionTitle": "Réindustrialiser et relocaliser pour assurer notre indépendance",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre9/s2/",
+      "chapterTitle": "Chapitre 9 : Produire nous-mêmes pour répondre aux besoins",
+      "chapeauId": "c9-s02-p01",
+      "chapeau": "L’année 2024 marque la fin de la réindustrialisation en trompe-l’œil. Il y a davantage de fermetures d’usines que d’ouvertures, et ce sont plus de 30 000 emplois sacrifiés rien que dans l’industrie. Voilà le sinistre bilan de la politique ultra-libérale de Macron. Tandis que les actionnaires se gorgent de dividendes et bénéficient des aides de l’État, des dizaines de milliers de familles françaises voient leur vie bouleversée par les plans sociaux et les délocalisations. La France ne doit pas dé"
+    },
+    {
+      "id": "c9-s02-m03",
+      "kind": "measure",
+      "text": "Engager un plan de reconstruction industrielle pour mettre fin à la dépendance de la France dans les domaines stratégiques (semi-conducteurs, médicaments, etc.) et pour soutenir la bifurcation écologique (recyclage des batteries, aciers nécessaires aux énergies renouvelables, aluminium, etc.)",
+      "sectionId": "c9-s02",
+      "sectionTitle": "Réindustrialiser et relocaliser pour assurer notre indépendance",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre9/s2/",
+      "chapterTitle": "Chapitre 9 : Produire nous-mêmes pour répondre aux besoins",
+      "chapeauId": "c9-s02-p01",
+      "chapeau": "L’année 2024 marque la fin de la réindustrialisation en trompe-l’œil. Il y a davantage de fermetures d’usines que d’ouvertures, et ce sont plus de 30 000 emplois sacrifiés rien que dans l’industrie. Voilà le sinistre bilan de la politique ultra-libérale de Macron. Tandis que les actionnaires se gorgent de dividendes et bénéficient des aides de l’État, des dizaines de milliers de familles françaises voient leur vie bouleversée par les plans sociaux et les délocalisations. La France ne doit pas dé"
+    },
+    {
+      "id": "c9-s03-p01",
+      "kind": "paragraph",
+      "text": "Le changement climatique est commencé. Les mandats Sarkozy, Hollande et Macron nous ont fait prendre du retard dans les batailles pour y faire face et s’y adapter. Il y a urgence à planifier la bifurcation écologique de notre économie en lançant de grands chantiers pour relever ce défi. Ce plan peut créer plusieurs centaines de milliers d’emplois et réduire massivement le chômage.",
+      "sectionId": "c9-s03",
+      "sectionTitle": "Lancer des grands chantiers écologiques, créateurs d’emplois",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre9/s3/",
+      "chapterTitle": "Chapitre 9 : Produire nous-mêmes pour répondre aux besoins",
+      "chapeauId": "c9-s03-p01",
+      "chapeau": "Le changement climatique est commencé. Les mandats Sarkozy, Hollande et Macron nous ont fait prendre du retard dans les batailles pour y faire face et s’y adapter. Il y a urgence à planifier la bifurcation écologique de notre économie en lançant de grands chantiers pour relever ce défi. Ce plan peut créer plusieurs centaines de milliers d’emplois et réduire massivement le chômage."
+    },
+    {
+      "id": "c11-s01-k01",
+      "kind": "key_measure",
+      "text": "Porter le budget consacré à l’art, à la culture et à la création à 1 % du PIB par an pour mener une politique culturelle ambitieuse, émancipatrice et à l’image de la France d’aujourd’hui",
+      "sectionId": "c11-s01",
+      "sectionTitle": "La bifurcation dans les arts et la culture : pour un service public du progrès humain",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre11/s1/",
+      "chapterTitle": "Chapitre 11 : Humaniser par la culture et le sport",
+      "chapeauId": "c11-s01-p01",
+      "chapeau": "Relégués à un statut « non essentiel » pendant la crise sanitaire et désormais en première ligne face à l’austérité imposée aux collectivités, la culture, les arts et les travailleurs de l’art sont méprisés par le gouvernement. Unique mesure du quinquennat, le « Pass Culture » symbolise la vision purement marchande d’Emmanuel Macron. L’accès à la culture pour toutes et tous, ce n’est pas un bon d’achat ! Nous défendons au contraire une politique publique des arts et de la culture forte, où chacu"
+    },
+    {
+      "id": "c11-s01-m01",
+      "kind": "measure",
+      "text": "Reprendre les grands travaux culturels pour abroger les inégalités territoriales en matière de structures de création, d’enseignement, de diffusion et de mémoire artistique et culturelle",
+      "sectionId": "c11-s01",
+      "sectionTitle": "La bifurcation dans les arts et la culture : pour un service public du progrès humain",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre11/s1/",
+      "chapterTitle": "Chapitre 11 : Humaniser par la culture et le sport",
+      "chapeauId": "c11-s01-p01",
+      "chapeau": "Relégués à un statut « non essentiel » pendant la crise sanitaire et désormais en première ligne face à l’austérité imposée aux collectivités, la culture, les arts et les travailleurs de l’art sont méprisés par le gouvernement. Unique mesure du quinquennat, le « Pass Culture » symbolise la vision purement marchande d’Emmanuel Macron. L’accès à la culture pour toutes et tous, ce n’est pas un bon d’achat ! Nous défendons au contraire une politique publique des arts et de la culture forte, où chacu"
+    },
+    {
+      "id": "c11-s01-m02",
+      "kind": "measure",
+      "text": "Accompagner les collectivités territoriales pour la création d’une dynamique culturelle locale",
+      "sectionId": "c11-s01",
+      "sectionTitle": "La bifurcation dans les arts et la culture : pour un service public du progrès humain",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre11/s1/",
+      "chapterTitle": "Chapitre 11 : Humaniser par la culture et le sport",
+      "chapeauId": "c11-s01-p01",
+      "chapeau": "Relégués à un statut « non essentiel » pendant la crise sanitaire et désormais en première ligne face à l’austérité imposée aux collectivités, la culture, les arts et les travailleurs de l’art sont méprisés par le gouvernement. Unique mesure du quinquennat, le « Pass Culture » symbolise la vision purement marchande d’Emmanuel Macron. L’accès à la culture pour toutes et tous, ce n’est pas un bon d’achat ! Nous défendons au contraire une politique publique des arts et de la culture forte, où chacu"
+    },
+    {
+      "id": "c11-s01-m03",
+      "kind": "measure",
+      "text": "Étendre la gratuité dans tous les musées, garantir une tarification abordable dans les institutions publiques et encadrer les tarifs abusifs des lieux privés",
+      "sectionId": "c11-s01",
+      "sectionTitle": "La bifurcation dans les arts et la culture : pour un service public du progrès humain",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre11/s1/",
+      "chapterTitle": "Chapitre 11 : Humaniser par la culture et le sport",
+      "chapeauId": "c11-s01-p01",
+      "chapeau": "Relégués à un statut « non essentiel » pendant la crise sanitaire et désormais en première ligne face à l’austérité imposée aux collectivités, la culture, les arts et les travailleurs de l’art sont méprisés par le gouvernement. Unique mesure du quinquennat, le « Pass Culture » symbolise la vision purement marchande d’Emmanuel Macron. L’accès à la culture pour toutes et tous, ce n’est pas un bon d’achat ! Nous défendons au contraire une politique publique des arts et de la culture forte, où chacu"
+    },
+    {
+      "id": "c11-s01-m04",
+      "kind": "measure",
+      "text": "Créer une médiathèque publique en ligne gratuite regroupant les œuvre s tombées dans le domaine public et une proposition d’œuvre s récentes programmées temporairement sur la base de Gallica",
+      "sectionId": "c11-s01",
+      "sectionTitle": "La bifurcation dans les arts et la culture : pour un service public du progrès humain",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre11/s1/",
+      "chapterTitle": "Chapitre 11 : Humaniser par la culture et le sport",
+      "chapeauId": "c11-s01-p01",
+      "chapeau": "Relégués à un statut « non essentiel » pendant la crise sanitaire et désormais en première ligne face à l’austérité imposée aux collectivités, la culture, les arts et les travailleurs de l’art sont méprisés par le gouvernement. Unique mesure du quinquennat, le « Pass Culture » symbolise la vision purement marchande d’Emmanuel Macron. L’accès à la culture pour toutes et tous, ce n’est pas un bon d’achat ! Nous défendons au contraire une politique publique des arts et de la culture forte, où chacu"
+    },
+    {
+      "id": "c11-s01-m05",
+      "kind": "measure",
+      "text": "Faire de l’éducation artistique et culturelle une priorité en réorientant les moyens du Pass Culture vers des projets collectifs et d’éducation populaire, tout en renforçant l’enseignement artistique public pour garantir la démocratisation culturelle, notamment dans les domaines qui en manquent comme le jeu vidéo",
+      "sectionId": "c11-s01",
+      "sectionTitle": "La bifurcation dans les arts et la culture : pour un service public du progrès humain",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre11/s1/",
+      "chapterTitle": "Chapitre 11 : Humaniser par la culture et le sport",
+      "chapeauId": "c11-s01-p01",
+      "chapeau": "Relégués à un statut « non essentiel » pendant la crise sanitaire et désormais en première ligne face à l’austérité imposée aux collectivités, la culture, les arts et les travailleurs de l’art sont méprisés par le gouvernement. Unique mesure du quinquennat, le « Pass Culture » symbolise la vision purement marchande d’Emmanuel Macron. L’accès à la culture pour toutes et tous, ce n’est pas un bon d’achat ! Nous défendons au contraire une politique publique des arts et de la culture forte, où chacu"
+    },
+    {
+      "id": "c11-s01-m06",
+      "kind": "measure",
+      "text": "Mettre en place une politique de création et de programmation artistique fondée sur la diversité, en sortant de la logique d’appel à projet et en garantissant son indépendance",
+      "sectionId": "c11-s01",
+      "sectionTitle": "La bifurcation dans les arts et la culture : pour un service public du progrès humain",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre11/s1/",
+      "chapterTitle": "Chapitre 11 : Humaniser par la culture et le sport",
+      "chapeauId": "c11-s01-p01",
+      "chapeau": "Relégués à un statut « non essentiel » pendant la crise sanitaire et désormais en première ligne face à l’austérité imposée aux collectivités, la culture, les arts et les travailleurs de l’art sont méprisés par le gouvernement. Unique mesure du quinquennat, le « Pass Culture » symbolise la vision purement marchande d’Emmanuel Macron. L’accès à la culture pour toutes et tous, ce n’est pas un bon d’achat ! Nous défendons au contraire une politique publique des arts et de la culture forte, où chacu"
+    },
+    {
+      "id": "c11-s01-m07",
+      "kind": "measure",
+      "text": "Lutter activement contre les discriminations de genre et d’origine ainsi que contre toutes formes de violences sexuelles, racistes et pédagogiques qui persistent dans les arts et la culture",
+      "sectionId": "c11-s01",
+      "sectionTitle": "La bifurcation dans les arts et la culture : pour un service public du progrès humain",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre11/s1/",
+      "chapterTitle": "Chapitre 11 : Humaniser par la culture et le sport",
+      "chapeauId": "c11-s01-p01",
+      "chapeau": "Relégués à un statut « non essentiel » pendant la crise sanitaire et désormais en première ligne face à l’austérité imposée aux collectivités, la culture, les arts et les travailleurs de l’art sont méprisés par le gouvernement. Unique mesure du quinquennat, le « Pass Culture » symbolise la vision purement marchande d’Emmanuel Macron. L’accès à la culture pour toutes et tous, ce n’est pas un bon d’achat ! Nous défendons au contraire une politique publique des arts et de la culture forte, où chacu"
+    },
+    {
+      "id": "c11-s01-m08",
+      "kind": "measure",
+      "text": "Instituer un « domaine public commun » pour financer la création nouvelle, constitué d’une redevance sur les droits patrimoniaux des créateurs à partir de leur décès",
+      "sectionId": "c11-s01",
+      "sectionTitle": "La bifurcation dans les arts et la culture : pour un service public du progrès humain",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre11/s1/",
+      "chapterTitle": "Chapitre 11 : Humaniser par la culture et le sport",
+      "chapeauId": "c11-s01-p01",
+      "chapeau": "Relégués à un statut « non essentiel » pendant la crise sanitaire et désormais en première ligne face à l’austérité imposée aux collectivités, la culture, les arts et les travailleurs de l’art sont méprisés par le gouvernement. Unique mesure du quinquennat, le « Pass Culture » symbolise la vision purement marchande d’Emmanuel Macron. L’accès à la culture pour toutes et tous, ce n’est pas un bon d’achat ! Nous défendons au contraire une politique publique des arts et de la culture forte, où chacu"
+    },
+    {
+      "id": "c11-s01-m09",
+      "kind": "measure",
+      "text": "Abolir tous les privilèges fiscaux liés au mécénat culturel",
+      "sectionId": "c11-s01",
+      "sectionTitle": "La bifurcation dans les arts et la culture : pour un service public du progrès humain",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre11/s1/",
+      "chapterTitle": "Chapitre 11 : Humaniser par la culture et le sport",
+      "chapeauId": "c11-s01-p01",
+      "chapeau": "Relégués à un statut « non essentiel » pendant la crise sanitaire et désormais en première ligne face à l’austérité imposée aux collectivités, la culture, les arts et les travailleurs de l’art sont méprisés par le gouvernement. Unique mesure du quinquennat, le « Pass Culture » symbolise la vision purement marchande d’Emmanuel Macron. L’accès à la culture pour toutes et tous, ce n’est pas un bon d’achat ! Nous défendons au contraire une politique publique des arts et de la culture forte, où chacu"
+    },
+    {
+      "id": "c11-s01-m10",
+      "kind": "measure",
+      "text": "Créer un fonds pour la création en faveur des communes qui transforment les panneaux publicitaires en espaces d’affichage pour les artistes et l’expression libre",
+      "sectionId": "c11-s01",
+      "sectionTitle": "La bifurcation dans les arts et la culture : pour un service public du progrès humain",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre11/s1/",
+      "chapterTitle": "Chapitre 11 : Humaniser par la culture et le sport",
+      "chapeauId": "c11-s01-p01",
+      "chapeau": "Relégués à un statut « non essentiel » pendant la crise sanitaire et désormais en première ligne face à l’austérité imposée aux collectivités, la culture, les arts et les travailleurs de l’art sont méprisés par le gouvernement. Unique mesure du quinquennat, le « Pass Culture » symbolise la vision purement marchande d’Emmanuel Macron. L’accès à la culture pour toutes et tous, ce n’est pas un bon d’achat ! Nous défendons au contraire une politique publique des arts et de la culture forte, où chacu"
+    },
+    {
+      "id": "c11-s01-m11",
+      "kind": "measure",
+      "text": "Améliorer le régime des intermittents du spectacle sur la base du socle commun de revendications du mouvement des occupations de théâtres de 2021 et l’étendre aux autres professions culturelles et événementielles discontinues, comme les « extras » de l’hôtellerie-restauration et les guides-conférenciers",
+      "sectionId": "c11-s01",
+      "sectionTitle": "La bifurcation dans les arts et la culture : pour un service public du progrès humain",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre11/s1/",
+      "chapterTitle": "Chapitre 11 : Humaniser par la culture et le sport",
+      "chapeauId": "c11-s01-p01",
+      "chapeau": "Relégués à un statut « non essentiel » pendant la crise sanitaire et désormais en première ligne face à l’austérité imposée aux collectivités, la culture, les arts et les travailleurs de l’art sont méprisés par le gouvernement. Unique mesure du quinquennat, le « Pass Culture » symbolise la vision purement marchande d’Emmanuel Macron. L’accès à la culture pour toutes et tous, ce n’est pas un bon d’achat ! Nous défendons au contraire une politique publique des arts et de la culture forte, où chacu"
+    },
+    {
+      "id": "c11-s01-m12",
+      "kind": "measure",
+      "text": "Intégrer les travailleurs bénéficiant du statut d’artistes-auteurs au régime général de l’assurance-chômage, en instaurant un revenu de remplacement entre deux contrats, géré par leurs représentants",
+      "sectionId": "c11-s01",
+      "sectionTitle": "La bifurcation dans les arts et la culture : pour un service public du progrès humain",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre11/s1/",
+      "chapterTitle": "Chapitre 11 : Humaniser par la culture et le sport",
+      "chapeauId": "c11-s01-p01",
+      "chapeau": "Relégués à un statut « non essentiel » pendant la crise sanitaire et désormais en première ligne face à l’austérité imposée aux collectivités, la culture, les arts et les travailleurs de l’art sont méprisés par le gouvernement. Unique mesure du quinquennat, le « Pass Culture » symbolise la vision purement marchande d’Emmanuel Macron. L’accès à la culture pour toutes et tous, ce n’est pas un bon d’achat ! Nous défendons au contraire une politique publique des arts et de la culture forte, où chacu"
+    },
+    {
+      "id": "c11-s01-m13",
+      "kind": "measure",
+      "text": "Harmoniser les statuts des personnels enseignants artistiques et réorganiser la filière de la recherche artistique au travers de l’enseignement supérieur",
+      "sectionId": "c11-s01",
+      "sectionTitle": "La bifurcation dans les arts et la culture : pour un service public du progrès humain",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre11/s1/",
+      "chapterTitle": "Chapitre 11 : Humaniser par la culture et le sport",
+      "chapeauId": "c11-s01-p01",
+      "chapeau": "Relégués à un statut « non essentiel » pendant la crise sanitaire et désormais en première ligne face à l’austérité imposée aux collectivités, la culture, les arts et les travailleurs de l’art sont méprisés par le gouvernement. Unique mesure du quinquennat, le « Pass Culture » symbolise la vision purement marchande d’Emmanuel Macron. L’accès à la culture pour toutes et tous, ce n’est pas un bon d’achat ! Nous défendons au contraire une politique publique des arts et de la culture forte, où chacu"
+    },
+    {
+      "id": "c11-s01-m14",
+      "kind": "measure",
+      "text": "Lancer un plan de formation et de recrutement d’emplois culturels de proximité, notamment à destination des jeunes",
+      "sectionId": "c11-s01",
+      "sectionTitle": "La bifurcation dans les arts et la culture : pour un service public du progrès humain",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre11/s1/",
+      "chapterTitle": "Chapitre 11 : Humaniser par la culture et le sport",
+      "chapeauId": "c11-s01-p01",
+      "chapeau": "Relégués à un statut « non essentiel » pendant la crise sanitaire et désormais en première ligne face à l’austérité imposée aux collectivités, la culture, les arts et les travailleurs de l’art sont méprisés par le gouvernement. Unique mesure du quinquennat, le « Pass Culture » symbolise la vision purement marchande d’Emmanuel Macron. L’accès à la culture pour toutes et tous, ce n’est pas un bon d’achat ! Nous défendons au contraire une politique publique des arts et de la culture forte, où chacu"
+    },
+    {
+      "id": "c11-s01-m15",
+      "kind": "measure",
+      "text": "Encadrer et limiter la place des intelligences artificielles (IA) génératives culturelles en distinguant ses usages commerciaux et non-commerciaux, et améliorer la répartition de la valeur qu’elles produisent",
+      "sectionId": "c11-s01",
+      "sectionTitle": "La bifurcation dans les arts et la culture : pour un service public du progrès humain",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre11/s1/",
+      "chapterTitle": "Chapitre 11 : Humaniser par la culture et le sport",
+      "chapeauId": "c11-s01-p01",
+      "chapeau": "Relégués à un statut « non essentiel » pendant la crise sanitaire et désormais en première ligne face à l’austérité imposée aux collectivités, la culture, les arts et les travailleurs de l’art sont méprisés par le gouvernement. Unique mesure du quinquennat, le « Pass Culture » symbolise la vision purement marchande d’Emmanuel Macron. L’accès à la culture pour toutes et tous, ce n’est pas un bon d’achat ! Nous défendons au contraire une politique publique des arts et de la culture forte, où chacu"
+    },
+    {
+      "id": "c12-s01-k01",
+      "kind": "key_measure",
+      "text": "Inscrire dans la Constitution le principe de la « règle verte », selon laquelle on ne prélève pas davantage à la nature que ce qu’elle est en état de reconstituer",
+      "sectionId": "c12-s01",
+      "sectionTitle": "La bifurcation écologique pour une société de l’harmonie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s1/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s01-p01",
+      "chapeau": "L’urgence écologique et climatique suppose de rompre avec le système de l’argent-roi. L’exigence d’une société d’harmonie des êtres humains entre eux et avec la nature doit être inscrite au sommet de la hiérarchie des normes par la « règle verte » et conditionner l’action de l’État. L’enjeu est la reconquête collective du temps long. C’est le but de la planification écologique comme méthode pour gouverner par les besoins."
+    },
+    {
+      "id": "c12-s01-m01",
+      "kind": "measure",
+      "text": "Adopter des lois cadres instaurant une planification écologique et démocratique coordonnant les niveaux national et local",
+      "sectionId": "c12-s01",
+      "sectionTitle": "La bifurcation écologique pour une société de l’harmonie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s1/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s01-p01",
+      "chapeau": "L’urgence écologique et climatique suppose de rompre avec le système de l’argent-roi. L’exigence d’une société d’harmonie des êtres humains entre eux et avec la nature doit être inscrite au sommet de la hiérarchie des normes par la « règle verte » et conditionner l’action de l’État. L’enjeu est la reconquête collective du temps long. C’est le but de la planification écologique comme méthode pour gouverner par les besoins."
+    },
+    {
+      "id": "c12-s01-m02",
+      "kind": "measure",
+      "text": "Donner les moyens humains et financiers à l’État et ses opérateurs publics (comme le Cerema, l’Office national des forêts, l’Office français de la biodiversité ou Météo France) pour mener à bien leur rôle de planification",
+      "sectionId": "c12-s01",
+      "sectionTitle": "La bifurcation écologique pour une société de l’harmonie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s1/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s01-p01",
+      "chapeau": "L’urgence écologique et climatique suppose de rompre avec le système de l’argent-roi. L’exigence d’une société d’harmonie des êtres humains entre eux et avec la nature doit être inscrite au sommet de la hiérarchie des normes par la « règle verte » et conditionner l’action de l’État. L’enjeu est la reconquête collective du temps long. C’est le but de la planification écologique comme méthode pour gouverner par les besoins."
+    },
+    {
+      "id": "c12-s01-m03",
+      "kind": "measure",
+      "text": "Créer un Conseil à la planification écologique",
+      "sectionId": "c12-s01",
+      "sectionTitle": "La bifurcation écologique pour une société de l’harmonie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s1/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s01-p01",
+      "chapeau": "L’urgence écologique et climatique suppose de rompre avec le système de l’argent-roi. L’exigence d’une société d’harmonie des êtres humains entre eux et avec la nature doit être inscrite au sommet de la hiérarchie des normes par la « règle verte » et conditionner l’action de l’État. L’enjeu est la reconquête collective du temps long. C’est le but de la planification écologique comme méthode pour gouverner par les besoins."
+    },
+    {
+      "id": "c12-s01-m04",
+      "kind": "measure",
+      "text": "Relever les ambitions climatiques de la France avec pour objectif une baisse de 65 % des émissions en 2030 (au lieu de 50 % actuellement) et rendre public un bilan annuel",
+      "sectionId": "c12-s01",
+      "sectionTitle": "La bifurcation écologique pour une société de l’harmonie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s1/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s01-p01",
+      "chapeau": "L’urgence écologique et climatique suppose de rompre avec le système de l’argent-roi. L’exigence d’une société d’harmonie des êtres humains entre eux et avec la nature doit être inscrite au sommet de la hiérarchie des normes par la « règle verte » et conditionner l’action de l’État. L’enjeu est la reconquête collective du temps long. C’est le but de la planification écologique comme méthode pour gouverner par les besoins."
+    },
+    {
+      "id": "c12-s01-m05",
+      "kind": "measure",
+      "text": "Obliger les entreprises à mettre en œuvre une comptabilité carbone pour les émissions directes et indirectes certifiée par un organisme public agréé en commençant par les secteurs les plus émetteurs de gaz à effet de serre (GES) – énergie, transport, bâtiment, industrie lourde – puis selon la taille des entreprises, accompagnée d’une trajectoire de baisse de leurs émissions",
+      "sectionId": "c12-s01",
+      "sectionTitle": "La bifurcation écologique pour une société de l’harmonie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s1/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s01-p01",
+      "chapeau": "L’urgence écologique et climatique suppose de rompre avec le système de l’argent-roi. L’exigence d’une société d’harmonie des êtres humains entre eux et avec la nature doit être inscrite au sommet de la hiérarchie des normes par la « règle verte » et conditionner l’action de l’État. L’enjeu est la reconquête collective du temps long. C’est le but de la planification écologique comme méthode pour gouverner par les besoins."
+    },
+    {
+      "id": "c12-s01-m06",
+      "kind": "measure",
+      "text": "Instaurer un crime climatique de dissimulation et de tromperie sur les émissions carbone des entreprises",
+      "sectionId": "c12-s01",
+      "sectionTitle": "La bifurcation écologique pour une société de l’harmonie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s1/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s01-p01",
+      "chapeau": "L’urgence écologique et climatique suppose de rompre avec le système de l’argent-roi. L’exigence d’une société d’harmonie des êtres humains entre eux et avec la nature doit être inscrite au sommet de la hiérarchie des normes par la « règle verte » et conditionner l’action de l’État. L’enjeu est la reconquête collective du temps long. C’est le but de la planification écologique comme méthode pour gouverner par les besoins."
+    },
+    {
+      "id": "c12-s01-m07",
+      "kind": "measure",
+      "text": "Inscrire dans les comptes publics un diagnostic régulier de l’état des écosystèmes, avec des indicateurs biophysiques et économiques permettant d’évaluer les coûts nécessaires pour restaurer leurs capacités",
+      "sectionId": "c12-s01",
+      "sectionTitle": "La bifurcation écologique pour une société de l’harmonie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s1/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s01-p01",
+      "chapeau": "L’urgence écologique et climatique suppose de rompre avec le système de l’argent-roi. L’exigence d’une société d’harmonie des êtres humains entre eux et avec la nature doit être inscrite au sommet de la hiérarchie des normes par la « règle verte » et conditionner l’action de l’État. L’enjeu est la reconquête collective du temps long. C’est le but de la planification écologique comme méthode pour gouverner par les besoins."
+    },
+    {
+      "id": "c12-s01-m08",
+      "kind": "measure",
+      "text": "Créer une Agence pour les relocalisations dépendant du Conseil à la planification écologique, chargée de recenser les secteurs industriels indispensables à la souveraineté nationale et à la bifurcation écologique, et d’établir un plan de relocalisation pour chaque filière ou production stratégique identifiée",
+      "sectionId": "c12-s01",
+      "sectionTitle": "La bifurcation écologique pour une société de l’harmonie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s1/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s01-p01",
+      "chapeau": "L’urgence écologique et climatique suppose de rompre avec le système de l’argent-roi. L’exigence d’une société d’harmonie des êtres humains entre eux et avec la nature doit être inscrite au sommet de la hiérarchie des normes par la « règle verte » et conditionner l’action de l’État. L’enjeu est la reconquête collective du temps long. C’est le but de la planification écologique comme méthode pour gouverner par les besoins."
+    },
+    {
+      "id": "c12-s01-m09",
+      "kind": "measure",
+      "text": "Développer un outil national inspiré de Copernicus pour suivre en temps réel les données clés sur l’économie et l’environnement, en compilant des images satellites, des mesures terrestres et maritimes, des informations sur les actifs industriels énergétiques et leurs impacts, etc",
+      "sectionId": "c12-s01",
+      "sectionTitle": "La bifurcation écologique pour une société de l’harmonie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s1/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s01-p01",
+      "chapeau": "L’urgence écologique et climatique suppose de rompre avec le système de l’argent-roi. L’exigence d’une société d’harmonie des êtres humains entre eux et avec la nature doit être inscrite au sommet de la hiérarchie des normes par la « règle verte » et conditionner l’action de l’État. L’enjeu est la reconquête collective du temps long. C’est le but de la planification écologique comme méthode pour gouverner par les besoins."
+    },
+    {
+      "id": "c12-s01-m10",
+      "kind": "measure",
+      "text": "Mettre en place une logistique verte : rompre avec les flux tendus, développer les modes de transport propres et structurer une logistique territoriale, notamment en renforçant le rôle du train, du fluvial et en mutualisant les flux du dernier kilomètre",
+      "sectionId": "c12-s01",
+      "sectionTitle": "La bifurcation écologique pour une société de l’harmonie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s1/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s01-p01",
+      "chapeau": "L’urgence écologique et climatique suppose de rompre avec le système de l’argent-roi. L’exigence d’une société d’harmonie des êtres humains entre eux et avec la nature doit être inscrite au sommet de la hiérarchie des normes par la « règle verte » et conditionner l’action de l’État. L’enjeu est la reconquête collective du temps long. C’est le but de la planification écologique comme méthode pour gouverner par les besoins."
+    },
+    {
+      "id": "c12-s01-m11",
+      "kind": "measure",
+      "text": "Instaurer un moratoire sur les grands projets inutiles et écocidaires, les réévaluer au regard de la règle verte et de leur impact sur la biosphère",
+      "sectionId": "c12-s01",
+      "sectionTitle": "La bifurcation écologique pour une société de l’harmonie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s1/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s01-p01",
+      "chapeau": "L’urgence écologique et climatique suppose de rompre avec le système de l’argent-roi. L’exigence d’une société d’harmonie des êtres humains entre eux et avec la nature doit être inscrite au sommet de la hiérarchie des normes par la « règle verte » et conditionner l’action de l’État. L’enjeu est la reconquête collective du temps long. C’est le but de la planification écologique comme méthode pour gouverner par les besoins."
+    },
+    {
+      "id": "c12-s03-m07",
+      "kind": "measure",
+      "text": "Développer l’offre locale de formation aux métiers de la bifurcation écologique (électricité et déploiement d’énergies renouvelables, utilisation de matériaux biosourcées locaux, foresterie et pêche durables)",
+      "sectionId": "c12-s03",
+      "sectionTitle": "Les Outre-mer, avant-postes de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s3/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s03-p01",
+      "chapeau": "Les Outre-mer pourraient être les pilotes de la planification écologique et du progrès humain. Il existe déjà des « plans pays » bâtis par les Ultramarins eux-mêmes. Ils doivent servir de grands objectifs écologiques fixés à partir des besoins essentiels : autonomie énergétique, relocalisation de la production alimentaire, déploiement d’une économie de la mer."
+    },
+    {
+      "id": "c13-s01-p01",
+      "kind": "paragraph",
+      "text": "C’est à partir de l’urgence écologique et climatique que doit se penser la politique de la Nation. La bifurcation écologique nécessite des investissements massifs pour changer les modes de production, d’échange et de consommation. Il faut créer des millions d’emplois de qualité pour mettre en œuvre ces changements. L’État républicain en dialogue avec les communes doit planifier la mobilisation générale.",
+      "sectionId": "c13-s01",
+      "sectionTitle": "Investir pour lancer la bifurcation de notre économie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre13/s1/",
+      "chapterTitle": "Chapitre 13 : Les grands chantiers de la bifurcation écologique",
+      "chapeauId": "c13-s01-p01",
+      "chapeau": "C’est à partir de l’urgence écologique et climatique que doit se penser la politique de la Nation. La bifurcation écologique nécessite des investissements massifs pour changer les modes de production, d’échange et de consommation. Il faut créer des millions d’emplois de qualité pour mettre en œuvre ces changements. L’État républicain en dialogue avec les communes doit planifier la mobilisation générale."
+    },
+    {
+      "id": "c13-s01-k01",
+      "kind": "key_measure",
+      "text": "Lancer un plan massif de 200 milliards d’euros d’investissements écologiquement et socialement utiles",
+      "sectionId": "c13-s01",
+      "sectionTitle": "Investir pour lancer la bifurcation de notre économie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre13/s1/",
+      "chapterTitle": "Chapitre 13 : Les grands chantiers de la bifurcation écologique",
+      "chapeauId": "c13-s01-p01",
+      "chapeau": "C’est à partir de l’urgence écologique et climatique que doit se penser la politique de la Nation. La bifurcation écologique nécessite des investissements massifs pour changer les modes de production, d’échange et de consommation. Il faut créer des millions d’emplois de qualité pour mettre en œuvre ces changements. L’État républicain en dialogue avec les communes doit planifier la mobilisation générale."
+    },
+    {
+      "id": "c13-s01-m01",
+      "kind": "measure",
+      "text": "Annuler les cadeaux fiscaux accordés sans contrepartie aux plus grandes entreprises ces dix dernières années",
+      "sectionId": "c13-s01",
+      "sectionTitle": "Investir pour lancer la bifurcation de notre économie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre13/s1/",
+      "chapterTitle": "Chapitre 13 : Les grands chantiers de la bifurcation écologique",
+      "chapeauId": "c13-s01-p01",
+      "chapeau": "C’est à partir de l’urgence écologique et climatique que doit se penser la politique de la Nation. La bifurcation écologique nécessite des investissements massifs pour changer les modes de production, d’échange et de consommation. Il faut créer des millions d’emplois de qualité pour mettre en œuvre ces changements. L’État républicain en dialogue avec les communes doit planifier la mobilisation générale."
+    },
+    {
+      "id": "c13-s01-m02",
+      "kind": "measure",
+      "text": "Utiliser cet argent pour investir et rétablir des pôles publics dans l’énergie, les transports et la santé afin de réindustrialiser le pays par des plans de filières au service de la bifurcation écologique",
+      "sectionId": "c13-s01",
+      "sectionTitle": "Investir pour lancer la bifurcation de notre économie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre13/s1/",
+      "chapterTitle": "Chapitre 13 : Les grands chantiers de la bifurcation écologique",
+      "chapeauId": "c13-s01-p01",
+      "chapeau": "C’est à partir de l’urgence écologique et climatique que doit se penser la politique de la Nation. La bifurcation écologique nécessite des investissements massifs pour changer les modes de production, d’échange et de consommation. Il faut créer des millions d’emplois de qualité pour mettre en œuvre ces changements. L’État républicain en dialogue avec les communes doit planifier la mobilisation générale."
+    },
+    {
+      "id": "c13-s01-m03",
+      "kind": "measure",
+      "text": "Instaurer la possibilité de souscrire à un contrat de bifurcation écologique garantissant les droits sociaux, la formation, et la rémunération, pour assurer un cadre protecteur pour les salariés en cas de reconversion d’une entreprise",
+      "sectionId": "c13-s01",
+      "sectionTitle": "Investir pour lancer la bifurcation de notre économie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre13/s1/",
+      "chapterTitle": "Chapitre 13 : Les grands chantiers de la bifurcation écologique",
+      "chapeauId": "c13-s01-p01",
+      "chapeau": "C’est à partir de l’urgence écologique et climatique que doit se penser la politique de la Nation. La bifurcation écologique nécessite des investissements massifs pour changer les modes de production, d’échange et de consommation. Il faut créer des millions d’emplois de qualité pour mettre en œuvre ces changements. L’État républicain en dialogue avec les communes doit planifier la mobilisation générale."
+    },
+    {
+      "id": "c13-s01-m04",
+      "kind": "measure",
+      "text": "Créer un droit de reprise d’activité préférentiel pour les salariés dans un but écologique en cas de cession ou de fermeture d’entreprise",
+      "sectionId": "c13-s01",
+      "sectionTitle": "Investir pour lancer la bifurcation de notre économie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre13/s1/",
+      "chapterTitle": "Chapitre 13 : Les grands chantiers de la bifurcation écologique",
+      "chapeauId": "c13-s01-p01",
+      "chapeau": "C’est à partir de l’urgence écologique et climatique que doit se penser la politique de la Nation. La bifurcation écologique nécessite des investissements massifs pour changer les modes de production, d’échange et de consommation. Il faut créer des millions d’emplois de qualité pour mettre en œuvre ces changements. L’État républicain en dialogue avec les communes doit planifier la mobilisation générale."
+    },
+    {
+      "id": "c13-s02-p01",
+      "kind": "paragraph",
+      "text": "Le transport par rail a été sacrifié au nom de la concurrence. Des centaines de kilomètres de lignes ferroviaires sont menacées, tandis que les méga-camions envahissent nos routes. La libéralisation empêche toute politique de bifurcation écologique. Il est urgent de relocaliser les productions et de réduire les distances entre bassins de vie et bassins d’emploi.",
+      "sectionId": "c13-s02",
+      "sectionTitle": "Développer les transports publics écologiques, repenser la mobilité individuelle",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre13/s2/",
+      "chapterTitle": "Chapitre 13 : Les grands chantiers de la bifurcation écologique",
+      "chapeauId": "c13-s02-p01",
+      "chapeau": "Le transport par rail a été sacrifié au nom de la concurrence. Des centaines de kilomètres de lignes ferroviaires sont menacées, tandis que les méga-camions envahissent nos routes. La libéralisation empêche toute politique de bifurcation écologique. Il est urgent de relocaliser les productions et de réduire les distances entre bassins de vie et bassins d’emploi."
+    },
+    {
+      "id": "c13-s03-p01",
+      "kind": "paragraph",
+      "text": "Les énergies fossiles sont polluantes et responsables du changement climatique. Le nucléaire n’est pas non plus une solution d’avenir. Une bifurcation de notre modèle énergétique s’impose. Pour réduire les émissions de gaz à effet de serre (GES), nous devons atteindre le 100 % d’énergies renouvelables. L’impératif de sobriété implique un plan d’envergure pour rénover l’ensemble du parc immobilier.",
+      "sectionId": "c13-s03",
+      "sectionTitle": "Organiser le 100 % d’énergies renouvelables en 2050 et la rénovation énergétique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre13/s3/",
+      "chapterTitle": "Chapitre 13 : Les grands chantiers de la bifurcation écologique",
+      "chapeauId": "c13-s03-p01",
+      "chapeau": "Les énergies fossiles sont polluantes et responsables du changement climatique. Le nucléaire n’est pas non plus une solution d’avenir. Une bifurcation de notre modèle énergétique s’impose. Pour réduire les émissions de gaz à effet de serre (GES), nous devons atteindre le 100 % d’énergies renouvelables. L’impératif de sobriété implique un plan d’envergure pour rénover l’ensemble du parc immobilier."
+    },
+    {
+      "id": "c18-s01-m03",
+      "kind": "measure",
+      "text": "Développer la formation professionnelle dans le domaine des nouvelles techniques de pêche, d’aquaculture et d’algoculture durables au service de la bifurcation écologique",
+      "sectionId": "c18-s01",
+      "sectionTitle": "Protéger les mers et océans",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre18/s1/",
+      "chapterTitle": "Chapitre 18 : Nouvelles frontières de l’humanité",
+      "chapeauId": "c18-s01-p01",
+      "chapeau": "Les océans sont aujourd’hui en danger. La biodiversité marine se dégrade, du fait de la surpêche et de la pollution plastique. Il est urgent de protéger les mers et océans du pillage de leurs ressources et des tensions militaires. Il est nécessaire de sanctuariser les écosystèmes marins."
+    },
+    {
+      "id": "c18-s02-p01",
+      "kind": "paragraph",
+      "text": "La France est une puissance maritime qui s’ignore. La mer est pourtant une source formidable d’activité dans la bifurcation écologique. 400 000 emplois existent déjà dans ce domaine. On pourrait atteindre un million très rapidement. Mais les technologies marines sont délaissées des pouvoirs publics.",
+      "sectionId": "c18-s02",
+      "sectionTitle": "Être à la hauteur de la responsabilité maritime française",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre18/s2/",
+      "chapterTitle": "Chapitre 18 : Nouvelles frontières de l’humanité",
+      "chapeauId": "c18-s02-p01",
+      "chapeau": "La France est une puissance maritime qui s’ignore. La mer est pourtant une source formidable d’activité dans la bifurcation écologique. 400 000 emplois existent déjà dans ce domaine. On pourrait atteindre un million très rapidement. Mais les technologies marines sont délaissées des pouvoirs publics."
+    }
+  ],
+  "introduction_and_parts": [],
+  "livrets_2022": [
+    {
+      "kind": "livret 2022",
+      "title": "Économie sociale et solidaire : au cœur de la bifurcation écologique, sociale et solidaire de demain",
+      "url": "https://melenchon2027.fr/livrets-2022/economie-sociale-et-solidaire/",
+      "date": "2024-02-01T19:11:11",
+      "windows": [
+        {
+          "excerpt": "étermination collective des conditions de travail, ainsi qu’à la gestion des entreprises ».\n\nL’ESS fait vivre concrètement la démocratie sociale dans les entreprises et les associations. Les salarié·es sont les meilleurs connaisseur·ses de leur outil de travail. Ils et elles sont donc au cœur de la bifurcation écologique et sociale.\n\n### Les coopératives au cœur de la transformation\n\nLe modèle coopératif, à l’origine dans la dynamique associationniste, apparaît au 19e siècle avec les prémices de la révolution industrielle et l’émergence du mouvement ouvrier (utopistes, libertaires, marxistes…) et des initiatives so",
+          "offset": 2565
+        },
+        {
+          "excerpt": "e un pilotage concerté des territoires, par la mise en place de sociétés coopératives d’intérêt collectif (SCIC) territoriales, dans lesquelles les salarié·es, les habitant·es, les partenaires privés et les collectivités territoriales décident en commun de la mise en œuvre des actions locales de la bifurcation écologique et sociale, dans l’intérêt général\n- Dans le cadre du redéploiement des services publics (transport, énergie, éducation, formation, travail social, logement…), privilégier la création de pôles publics via la coopération entre organismes publics et structures de l’ESS du secteur concerné. Il s’agit",
+          "offset": 18479
+        },
+        {
+          "excerpt": "vités, ministères, universités, etc.)\n\n### Soutenir sa structuration à long terme\n\n- Développer la connaissance de l’ESS dans les programmes scolaires et universitaires et soutenir la recherche sur les évolutions de l’ESS\n- Soutenir la formation des salarié·es de l’ESS, notamment sur le sujet de la bifurcation écologique, du fait des besoins d’implication dans la gouvernance\n- Soutenir la représentation syndicale des salarié·es des structures de l’ESS",
+          "offset": 19878
+        }
+      ],
+      "full_text": "## Notre constat : les principes coopératifs, associatifs et mutualistes à la croisée des chemins\n\nL’économie solidaire est une réalité et une utopie. D’un côté, elle regroupe des espaces de travail et de production d’ores et déjà existants, qui s’organisent hors des principes capitalistes, privilégiant l’utilité sur le profit et la décision collective sur le féodalisme actionnarial. De l’autre, elle propose un avenir commun alternatif, en rupture avec le système capitaliste encore majoritaire. Ainsi, elle prend appui sur l’économie la plus humainement avancée pour engager la transition post-capitaliste. Cette grande transformation a actuellement lieu dans de très nombreux secteurs : santé, social, services aux personnes, protection de la nature, culture, éducation, formation, banques, assurances, commerce, BTP, agriculture, numérique, industries, réinsertion et lutte contre l’exclusion… Là, des centaines de milliers de professionnel·les s’unissent librement, suivant des principes démocratiques et solidaires, pour produire avec une lucrativité limitée (encadrement des salaires et rémunération plafonnée du capital) puis répartir de manière transparente et juste les excédents. Or, leurs capacités d’autofinancement et de résistance aux crises ou aux retournements conjoncturels s’avèrent désormais bien meilleures que celles des entreprises capitalistes. Il incombe donc désormais à la puissance publique de faire connaître, soutenir, encourager et organiser le passage général de la population vers l’économie solidaire.\n\nL’idée émerge dès les débuts du mouvement ouvrier, soucieux de gérer rationnellement les conditions de travail et de récupérer le profit capitaliste afin de le convertir en investissements utiles ou en hausses de salaire. À la fin du 19e siècle, Jaurès dénonçait ainsi le paradoxe de voir que la République avait fait du travailleur un citoyen dans la cité, mais qu’il restait un serf dans l’entreprise.\n\nLe principe de démocratie générale implique au contraire que la République garantisse les droits mais aussi le pouvoir des salarié·es, théoriquement protégé par notre bloc constitutionnel, puisque le préambule de la Constitution de 1946 prévoit que « tout travailleur participe par l’intermédiaire de ses délégués à la détermination collective des conditions de travail, ainsi qu’à la gestion des entreprises ».\n\nL’ESS fait vivre concrètement la démocratie sociale dans les entreprises et les associations. Les salarié·es sont les meilleurs connaisseur·ses de leur outil de travail. Ils et elles sont donc au cœur de la bifurcation écologique et sociale.\n\n### Les coopératives au cœur de la transformation\n\nLe modèle coopératif, à l’origine dans la dynamique associationniste, apparaît au 19e siècle avec les prémices de la révolution industrielle et l’émergence du mouvement ouvrier (utopistes, libertaires, marxistes…) et des initiatives solidaires qui en découlent. En France, de nos jours, c’est généralement le statut juridique de Scop, sociétés coopératives et participatives, qui permet la déclinaison de ces principes fondateurs. Les associé·es des Scop sont majoritairement salarié·es. L’échelle des salaires y est égalitaire, en moyenne de 1 à 3. Les coopératives sont la pointe avancée de l’ambition démocratique dans le monde de l’entreprise. Sur le mode « Une personne égale une voix », elles garantissent aux salarié·es le droit de décider collectivement des orientations et du mode de fonctionnement de l’entreprise. Les Scic, sociétés coopératives d’intérêt collectif, dessinent également un nouveau modèle qui associe non seulement les salarié·es, mais aussi les usager·es et client·es, les collectivités publiques et d’autres partenaires.\n\nParallèlement à ces évolutions, les coopératives de production connaissent depuis une douzaine d’années une progression spectaculaire : elles étaient 1 700 en 2005 et sont plus de 3600 à ce jour. Elles comptent aujourd’hui en France 67 000 salarié·es. Les délocalisations d’entreprises ont, dans le même mouvement, provoqué de beaux combats pour la reprise en coopérative par leurs salarié·es : Scop TI (ex-Fralib), La Fabrique du Sud (ex Pilpa)…]\n\nNon au social business !\n\nLes associations, coopératives et mutuelles, composantes fondatrices de l’ESS ont connu un nouvel élan en 2011, à l’occasion des États généraux de l’ESS. Cette dynamique a facilité la mise en place de la loi de 2014, qui a donné au secteur une visibilité inédite. Mais la question de la citoyenneté sociale, à savoir le partage du pouvoir entre les parties prenantes, salarié·es, usager·es-client·es et partenaires publics et privés, a été totalement ignorée. Et l’on a vu arriver en force les tenants de l’« entrepreneuriat social », vantant les mérites d’une activité économique à vocation sociale, voire écologique, tout en méprisant, au nom de l’exigence de rentabilité, le partage du pouvoir.\n\nLes deux derniers gouvernements ont accentué, en collaboration avec la Commission européenne, la marchandisation des activités associatives, à travers les « contrats à impact social ». Ces derniers visent à sous-traiter l’action sociale à des entreprises privées, afin de diminuer les dépenses publiques. Un tel désengagement de l’État et des collectivités territoriales au profit des groupes privés capitalistes transforme le monde associatif en un marché, le « social business ». Les investisseurs ne manqueront pas, au passage, de rafler 2,5% d’intérêts payés par la collectivité. In fine, l’action sociale est plus chère, l’État et les collectivités se ruinent, perdent le contrôle des priorités d’action et des moyens mis en place et les habitant·es ou bénéficiaires accèdent à des services dégradés.\n\nLes pôles publics du 21e siècle (en particulier dans les domaines de l’énergie, des transports et de la santé) devront articuler services publics et initiatives citoyennes, associatives et coopératives, à la condition du respect des droits des salarié·es, dans le cadre d’une démocratie intégrale et de l’intérêt général des communs, à l’encontre de toute démarche de profit financier. Cela permettra également de lancer une dynamique démocratique et sociale au cœur des services publics.\n\n### L’ESS en chiffres\n\nL’économie sociale et solidaire regroupe les structures suivantes : coopératives, mutuelles, associations, syndicats et fondations qui ont une gestion du capital démocratique (sur le principe un·e adhérent·e = une voix) et organisent un partage équitable des bénéfices.\n\nElle produit près de 10% du PIB national et représente 10,5% des salarié·es : 2,4 millions de personnes y travaillent en France. Les femmes y sont majoritaires, à hauteur de 68 %. Les emplois sont en majorité non-délocalisables. Ses structures ont généralement des fournisseurs et des débouchés de proximité, connaissent bien leurs clientèles, ce qui les rend soucieuses de la production locale et limite la division internationale du travail. Elles constituent même la première filière d’activité dans certaines zones rurales.\n\nEntre 2010 et 2016, l’ESS a créé 87 100 emplois, soit 25 % de l’ensemble des emplois créés dans le secteur privé. La croissance moyenne de l’emploi s’est établie à +0,7% par an, contre +0,3% dans le reste du secteur privé. A partir de 2017, l’ESS connaît pour la première fois une tendance négative pour l’emploi, suite à des évolutions successives des politiques publiques emblématiques de la politique macroniste. La suppression de l’ISF (les dons aux associations étaient déductibles de l’ISF, la fin de cet impôt a entraîné une baisse des dons), la fin des contrats aidés et la contraction des dépenses publiques ont particulièrement touché le secteur associatif (23 000 emplois détruits en 2017 et 2018), principal employeur de l’ESS. Or les associations sont particulièrement présentes dans les territoires ruraux et les quartiers prioritaires de la ville. Une nouvelle fois, ce sont donc les populations et les territoires les plus fragiles qui ont souffert de la politique gouvernementale.\n\nAjoutons que plus de 350 000 départs à la retraite sont anticipés entre 2023 et 2028, ce qui montre bien l’importance de l’ESS dans les évolutions de l’emploi des prochaines années en France.\n\nDe nouveaux mouvements citoyens, porteurs d’alternatives sociales et écologiques, ont par ailleurs émergé à travers tout le pays. Avec les mouvements citoyens alternatifs, les zones à défendre (ZAD) et les forums sociaux mondiaux, une nouvelle génération militante se déploie pour faire face à la crise climatique et à la mondialisation libérale. C’est un grand espoir de voir se développer ces mouvements citoyens, porteurs de projets alternatifs au capitalisme et au néo-libéralisme.\n\n## Notre projet : développer des alternatives économiques citoyennes, sociales et écologiques\n\nL’appropriation sociale ne se réduit pas à la propriété publique. Des formes coopératives, associatives, autogestionnaires, sont toujours possibles pour produire un bien ou un service.\n\nDe telles formes de propriété participent de l’objectif stratégique de rupture avec la marchandisation généralisée et de développement de l’autonomie des acteurs sociaux.\n\nPar ailleurs, nous veillerons à empêcher les pratiques contraires aux objectifs fondamentaux de l’ESS faisant de certaines structures des holdings d’un écosystème libéral.\n\nFace à la prédation de la finance et au règne des actionnaires, une autre économie est possible.\n\nDans cette période qui combine crises sanitaire, économique, financière, sociale et écologique, les projets de l’ESS permettent de développer ici et maintenant des démarches concrètes qui dessinent les contours d’un autre monde, plus juste et respectueux de l’avenir de la planète et de l’humanité. Les acteurs de l’ESS peuvent ainsi donner les moyens aux citoyen·nes mobilisé·es dans les mouvements de résistance à l’offensive destructrice des néo-libéraux et de reprendre la main en créant des coopératives et des associations d’action sociale ou culturelle, en développant les circuits courts et en soutenant la création de filières économiques écologiques et de nouveaux services.\n\nLe pouvoir au peuple, dans l’entreprise, dans les associations et à l’échelle locale, doit servir des productions utiles, répondant aux besoins des populations et respectueuses de la planète. La socialisation des entreprises répond à cette exigence de conférer aux citoyen·nes, à la fois comme travailleur·ses et comme usager·es, le pouvoir de décision.\n\nÀ l’heure de l’urgence écologique, il est également important de réhabiliter le droit d’usage face à la propriété privée exclusive par de nouveaux modes de gestion commune. Wikipédia, les licences libres ou encore les jardins et les bibliothèques partagés sont des communs, car les citoyen·nes qui en ont l’usage se dotent de règles communes, développent la ressource et l’entretiennent. Ces citoyen·nes-usager·es ne sont plus de simples consommateur·ices mais de véritables acteur·ices.\n\nConsidérant que les mouvements associatifs et coopératifs citoyens sont un puissant levier de cohésion sociale, de mobilisation citoyenne, de confiance retrouvée dans les institutions, nous défendrons un nouveau pacte entre les collectivités publiques et l’ESS, dans la démarche des services publics de demain. C’est pourquoi nous militons pour que les pouvoirs publics, en indépendance vis-à-vis du pouvoir des multinationales, mais en lien avec les citoyen·nes, s’engagent dans le soutien et le recours aux associations tout en favorisant leur autonomie financière.\n\nEn nous appuyant sur les valeurs et les idées développées au sein de l’Union Populaire, nous défendons une économie sociale et solidaire à dimension émancipatrice et à finalité sociale, démocratique et écologique. Nous la concevons comme un ensemble d’initiatives citoyennes agissant comme l’un des leviers de l’alternative au capitalisme. En revanche, nous n’entendons pas remplacer l’État dans ses missions de garantie d’égalité entre les citoyen·nes.\n\nNous privilégions trois principes intangibles "
+    },
+    {
+      "kind": "livret 2022",
+      "title": "Les Outre-mer à l’avant-garde de la bifurcation écologique et du progrès social",
+      "url": "https://melenchon2027.fr/livrets-2022/outre-mer/",
+      "date": "2024-02-02T10:40:47",
+      "windows": [
+        {
+          "excerpt": "et lancer un audit relatif à la situation oligopolistique du secteur aérien\n- Limiter la défiscalisation aux objectifs sociaux et écologiques (logement social, ESS, etc.)\n- Identifier les besoins en main d’œuvre et en formation professionnelle adaptés à chaque territoire, notamment en lien avec la bifurcation écologique : tourisme vert et bleu, économie de la montagne là ou cela s’y prête, énergies renouvelables, agriculture et pêche écologiques, nouvelles technologies\n- Planifier, organiser et accompagner le retour post-études des étudiant·es parti·es étudier ailleurs\n\n#### L’éducation pour toutes et tous\n\n- Augm",
+          "offset": 18257
+        }
+      ],
+      "full_text": "> « Agis dans ton lieu, pense avec le monde »\n>\n> Édouard Glissant\n\n## Notre constat : les Outre-mer, territoires abandonnés de la République\n\nLa République compte 2,5 millions d’habitant·es hors de ses frontières hexagonales. Un tiers d’entre eux a moins de vingt ans.\n\nSi la France possède le deuxième territoire maritime mondial en superficie, et le premier pour sa biodiversité, c’est grâce aux territoires ultramarins. Les Outre-mer rendent notre pays plus universaliste qu’européen. En effet, nous partageons des frontières maritimes ou terrestres avec des pays aussi divers que l’Australie, Madagascar, les îles Samoa, la Barbade ou encore le Canada. La plus longue frontière terrestre de la France est avec le Brésil, sa plus longue frontière maritime avec l’Australie.\n\nPourtant, les Outre-mer sont considérés comme des territoires de seconde zone. Leurs économies sont dominées par des monopoles commerciaux, groupes privés appuyés par le gouvernement français. Ainsi, les Outre-mer sont un terrain de jeu pour les grands projets inutiles « offerts » aux multinationales de l’équipement et du bâtiment. Cette prédation des grandes entreprises condamne les cinq départements français d’Outre-mer à une dépendance toujours accrue aux importations, à la vie chère et au chômage de masse. Ainsi, le niveau de vie de La Réunion est inférieur d’un tiers à celui de l’Hexagone, celui de la Guyane de moitié, et celui de Mayotte de plus de 80% ! La pauvreté frappe un tiers des Guadeloupéen·nes et Martiniquais·es, et trois quarts des Mahorais·es.\n\nLes Ultramarin·es et leurs terres ont subi l’empoisonnement pendant des décennies. Dans les Antilles, le chlordécone entraîne des taux records de cancers et des malformations congénitales. Le glyphosate intoxique les populations de La Réunion. En Guyane, le mercure contamine les humains et les écosystèmes. Enfin, il n’est pas possible d’oublier les 193 essais nucléaires pratiqués dans les eaux des atolls de Mururoa ou de Fangataufa entre 1966 et 1996. Les conséquences sont toujours désastreuses pour la population polynésienne et l’environnement.\n\nDes centaines de milliers de personnes subissent des coupures intermittentes ou incessantes d’eau (en Guadeloupe ou en Martinique), voire n’y ont pas accès du tout (comme à Mayotte ou en Guyane). Les systèmes de santé dans les Outre-mer sont dans un état désastreux : les structures hospitalières sont en ruine et en manque chronique de moyens, de matériel, de personnel, etc. La crise sanitaire a démontré la faiblesse des réseaux de soins dans toute la France, mais particulièrement dans ces territoires où les cancers, le diabète, l’obésité, l’hypertension, l’asthme ou les maladies cardio-vasculaires sont plus répandus qu’ailleurs. Les habitant·es des Outre-mer ressentent l’existence d’un régime d’apartheid social dans une ambiance de préférence hexagonale.\n\nL’abandon de ces territoires a provoqué des révoltes sociales historiques. De grands mouvements sociaux émaillés de manifestations violemment réprimées, relayant les aspirations et revendications des populations, ont été menés en 2009 dans les Antilles, en Guyane, mais aussi à La Réunion. Des émeutes ont secoué Mayotte en 2011, La Réunion en 2012, et Mayotte, encore, en 2016. En 2018, une grève générale a paralysé Mayotte durant plusieurs mois tandis que le mouvement des Gilets jaunes a bloqué La Réunion pendant plus de 3 semaines, préfigurant ainsi la vague de contestation sociale qui submergea l’Hexagone en 2019. Le gouvernement n’en est venu à bout qu’avec de fausses promesses et une répression sévère. De nouveaux mouvements sociaux ont vu le jour en 2020 et 2021, dans le contexte de la crise sanitaire.\n\nCes secousses témoignent des vents de révolte qui soufflent sur cette France du grand large, encore attisés par les espoirs déçus et les promesses non tenues qui ont émaillé les mandats de Nicolas Sarkozy, de François Hollande et d’Emmanuel Macron.\n\n## Notre projet : les Outre-mer, pionniers du progrès écologique et social\n\nPartout, les territoires ultramarins peuvent devenir des exemples de développement respectueux de l’harmonie des êtres humains entre eux et avec la nature. Ainsi, le développement des énergies renouvelables, surtout dans les territoires insulaires, permettrait d’assurer la production énergétique. Le plan d’autonomie énergétique de Paul Vergès pour La Réunion est un exemple du niveau d’ambition que nous devons avoir pour les Outre-mer.\n\nLes Outre-mer sont des membres à part entière de notre République, même s’ils aspirent également à faire reconnaître leurs spécificités ultramarines. Nul séparatisme, nul repli dans cette affirmation. En 1946, les « quatre vieilles » — la Guadeloupe, la Guyane, la Martinique et La Réunion — ont choisi de sortir du statut colonial en accédant au rang de département français. Ce fut une conquête majeure du camp progressiste emmené par Aimé Césaire, Léon de Lépervanche, Raymond Vergès, Léopold Bissol et Gaston Monnerville. En 2011, ce fut au tour de Mayotte de compléter la liste. Dix ans après, il convient de parachever la départementalisation en lui ouvrant l’accès au droit commun.\n\nRéussir le développement de nos territoires d’Outre-mer passe aussi par le retour d’une politique de production responsable et relocalisée. Il faut mettre fin aux économies de dépendance du continent européen dans lesquelles les Outre-mer ont été enfermés. Ce sera aussi l’occasion de conclure des accords commerciaux honnêtes et équilibrés, respectant les impératifs sociaux et écologiques et refusant la concurrence déloyale avec les pays voisins de chaque territoire.\n\nIl y a urgence à engager un plan pluriannuel d’investissement et de développement des services publics (transports, éducation, santé, logement, culture), dont la possibilité a été dessinée dans les propositions des mouvements sociaux notamment en Guyane, à Mayotte, en Guadeloupe et en Martinique. Pour garantir le droit à l’eau, la rénovation et l’adaptation des infrastructures s’imposent.\n\nLes territoires ultramarins doivent rejoindre les accords régionaux de coopération, afin de bénéficier d‘un appui diplomatique, matériel et technique important. La France pourrait apporter sa contribution sur le plan technique, scientifique ou commercial. Notre pays sera aussi capable de fournir une assistance médicale d’urgence et de génie civil en situation de catastrophe.\n\nNous proposons, par l’émancipation des territoires ultramarins contre la mainmise des accapareurs de toute nature, une voie de développement endogène et d’enrichissement mutuel des relations internationales. La République doit vivre partout et pour toutes et tous !\n\n—–\n\n## Nos propositions : L’égalité pour les Outre-mer\n\n### En finir avec l’abandon des Outre-mer\n\nLes Outre-mer sont maintenus dans un système de dépendance économique et de mal-développement, générateur de pauvreté et d’inégalités. Les habitant·es subissent le recul des services publics, les retards accumulés en matière d’investissements publics, le poids des situations d’oligarchie ou de monopoles dans l’économie, et les effets durables des pollutions comme celles dues au chlordécone. Nous refusons une telle rupture d’égalité. Il faut déclarer l’état d’urgence sociale avec pour objectif l’éradication de la pauvreté ultramarine.\n\n#### Un plan d’urgence sociale pour vivre décemment\n\n- Augmenter immédiatement le SMIC à 1 600 euros net\n- Étendre la prime de vie chère aux bénéficiaires des minima sociaux et du minimum vieillesse\n- Bloquer et faire baisser les prix des produits de première nécessité en réformant le bouclier qualité-prix pour lutter contre la vie chère\n- Garantir le droit au logement\n- Mettre en œuvre un plan d’aide pour l’insertion des jeunes\n- Réaffirmer la légitimité des sur-salaires dans les fonctions publiques (sécurisation de l’index de correction) et les généraliser dans tous les secteurs où ils sont instaurés\n- Titulariser les fonctionnaires territoriaux précaires\n- Instaurer un principe de faveur de manière à garantir 50% de recrutements locaux dans tous les corps de la fonction publique\n- Renforcer les dotations de l’État pour les territoires et régions en retard de développement économique et social\n- À Mayotte, aligner les prestations sociales et le droit du travail sur l’Hexagone\n\n#### Un plan d’urgence pour garantir l’accès à l’eau potable\n\n- Rétablir une distribution d’eau de bonne qualité et en volume suffisant dans les territoires d’Outre-mer où le service public de l’eau est défaillant\n- Financer par des fonds étatiques les travaux urgents de remplacement des canalisations, notamment en Guadeloupe, sur l’adduction d’eau potable et l’assainissement\n- Adopter la régie comme mode de gestion de l’eau et de l’assainissement\n- Déclencher, en cas de pénurie, catastrophe ou pandémie, un plan visant à la distribution de bouteilles d’eau (plan ORSEC-eau) et plafonner leur prix dans tous les endroits où le service public de l’eau potable et de l’assainissement est défaillant\n- Annuler la dette citoyenne résultant du problème de facturation des anciens opérateurs et/ou résultant d’impayés pour service non rendu et cesser le recouvrement forcé de celle-ci\n- Garantir que ni la dette existante, ni les investissements à venir des opérateurs de l’eau, ne seront répercutés sur la facture des usager·es de l’eau\n- En Guadeloupe et en Martinique, reconnaître le statut de crise sanitaire et écologique concernant l’eau potable et son assainissement, la contamination au chlordécone, et les effets cocktails avec d’autres substances dont les conséquences sont encore inconnues\n\n#### Un plan d’urgence sanitaire et de développement des services publics\n\n- Établir un plan d’urgence contre l’illettrisme et la déscolarisation\n- Garantir la santé publique gratuite pour tous\n- Abroger les lois sur l’état d’urgence sanitaire, le passe sanitaire et l’obligation vaccinale\n- Abandonner les poursuites et sanctions contre le personnel médical et paramédical\n- Garantir l’approvisionnement d’une réserve médicale stratégique en cas de crise ou catastrophe\n- Reconstruire ou rénover les hôpitaux, renforcer leurs moyens et ceux des structures médicales et paramédicales\n- Encadrer réellement les taux de sucre et sel dans l’alimentation (application de la Loi Lurel)\n- Revaloriser le coefficient géographique des établissements de santé de La Réunion, la Guadeloupe, la Martinique et la Guyane, afin d’augmenter leur budget\n- Développer un pôle de santé avec un déploiement physique de l’offre de soin, garantissant un accès aux soins égalitaire sur les territoires (du littoral à l’intérieur des terres)\n- Intégrer aux Antilles un deuxième cycle d’études de médecine afin de lutter contre les déserts médicaux\n\n#### Un plan d’urgence pour dépolluer et désempoisonner\n\n- Engager un plan d’urgence pour la dépollution et décontamination rapide des régions durablement polluées en France, en priorisant la Guadeloupe et la Martinique victimes du chlordécone\n- Mettre en place un plan Sargasse pour étudier la toxicité réelle de ces substances sur les populations\n- Investir dans la recherche, la cartographie et les études sur la dépollution des sols, des eaux et des corps\n- Aider les victimes des pollutions et les lanceur·ses d’alerte sur la base d’un fonds abondé en fonction des besoins\n- Planifier et accompagner la reconversion des agriculteur·ices vers une agriculture non polluante, libérée des pesticides\n- Généraliser et faciliter les prélèvements et analyses des sols des « jardins créoles » des particuliers (particulièrement en Martinique et Guadeloupe) afin de d’encourager les pratiques agroécologiques déjà à l’oeuvre\n\n### Les Outre-mer, avant-postes de la planification écologique\n\nLes Outre-mer vont prendre de plein fouet les conséquences du réchauffement climatique : manque d’eau potable, montée des eaux, sécheresses, multiplication des catastrophes naturelles. La prédation des multinationales nous mène à la catastrophe. Il faut réagir vite et fort. Les Outre-mer pourraie"
+    },
+    {
+      "kind": "plan 2022",
+      "title": "Comment nous allons : produire les qualifications et savoirs nécessaires à la bifurcation écologique",
+      "url": "https://melenchon2027.fr/plans-2022/qualifications/",
+      "date": "2024-01-30T17:48:31",
+      "windows": [
+        {
+          "excerpt": ". C’est pourquoi l’avenir du pays se décide dans ses lycées professionnels. De même, il ne peut y avoir de futur économique et social pour le pays sans une recherche publique puissante et disposant d’amples moyens.\n\nC’est encore plus vrai du fait de l’immense chantier qui s’annonce devant nous : la bifurcation écologique. Elle concerne tous les secteurs, de l’énergie aux transports, du bâtiment à la métallurgie, du bois à l’agriculture. Dans chacun de ces secteurs, il y aura des besoins énormes de travailleur ses qualifié es, et une impérative nécessité d’une progression permanente des savoirs.\n\nLa planification éc",
+          "offset": 1473
+        },
+        {
+          "excerpt": "fication de la main-d’œuvre, ni par l’État, ni par les employeurs.\n\nCette absence d’anticipation se traduit donc inévitablement par un déficit de main-d’œuvre qualifiée capable de répondre aux évolutions technologiques actuelles, aux besoins de réindustrialisation de l’économie et à l’indispensable bifurcation écologique.\n\n### Le service public de recherche affaibli\n\nDans la recherche, le bilan n’est guère meilleur.\n\nL’ensemble des activités de recherche et développement en France, public et privé confondus, représentaient seulement 2,2 % du PIB en 2019, contre 3 % en Allemagne et aux États-Unis et 2,5 % en moyenne",
+          "offset": 15764
+        },
+        {
+          "excerpt": "asiment aucun. Face aux enjeux de notre temps, la France devrait s’être dotée d’une recherche de pointe sur ces enjeux. Mais les gouvernements successifs ont préféré les effets d’annonces court-termistes et laisser s’en aller nos savoirs et nos savoir-faire.\n\nPire : sur certains secteurs clés de la bifurcation écologique, la France disposait d’importants instituts de recherche finalisée. Ces instituts ont été affaiblis par l’austérité. Mais de surcroît, ils ont été directement entravés par les volontés de réorganisation de l’espace de la recherche. Certains ont tout simplement disparu dans des fusions avec d’autres",
+          "offset": 18625
+        },
+        {
+          "excerpt": "ilan est d’autant plus dramatique dans le contexte de la crise écologique. Pour assurer la transformation radicale de nos modes de production, nous devons rapidement produire des connaissances finalisées et surtout former massivement des salarié·es dans de nombreux secteurs.\n\n## Notre stratégie\n\nLa bifurcation écologique nécessite de mobiliser des connaissances scientifiques et techniques, et de former les salarié·es dans de nombreux domaines. Face au changement climatique, cet objectif doit se traduire dans la recherche et la formation, en transformant en profondeur l’enseignement professionnel initial et continu.",
+          "offset": 19938
+        },
+        {
+          "excerpt": "es pesticides et herbicides et moins émettrice en gaz à effet de serre, nécessitera de développer nos connaissances et de former massivement en agronomie, en écologie, en biologie fondamentale. Au 21e siècle, le métier de paysan·ne sera un métier au contenu scientifique et technique très élevé.\n\nLa bifurcation de notre modèle énergétique requiert quant à elle de nouveaux savoirs et qualifications sur la production et le transport d’énergie, pour tirer parti de tout le potentiel énergétique du pays, notamment maritime. Pour passer au 100 % d’énergies renouvelables, il nous faudra des milliers de métallurg",
+          "offset": 20643
+        }
+      ],
+      "full_text": "## Introduction de Jean-Luc Mélenchon\n\nL’éducation est un enjeu central de l’élection présidentielle. Notre futur commun ne sera pas écrit dans le bureau d’un technocrate, mais construit par les jeunes générations. Pourtant, s’il n’est que rarement question d’éducation, il n’est jamais question d’enseignement professionnel.\n\nPourtant les filières technologiques et professionnelles réunissent la moitié des lycéen·nes de France. Une grande partie de la jeunesse populaire est là. Elle y apprend un métier, des savoirs, y atteint des qualifications professionnelles. Car une économie productive, une industrie, c’est d’abord des ouvrier·es, des technicien·nes, des ingénieur·es qualifié·es, femmes et hommes passionné·es par leur métier.\n\nMettre côte à côte un tas de matériaux et un tas d’argent n’a jamais créé le moindre avion, la moindre locomotive, la moindre turbine. La richesse réelle n’est créée que par le travail humain.\n\nLes qualifications sont le contenu concret du travail humain. Elles ne s’acquièrent, se transmettent et s’améliorent que par un seul moyen : l’éducation.\n\nSans enseignement professionnel de qualité, il ne peut y avoir de société développée. C’est pourquoi l’avenir du pays se décide dans ses lycées professionnels. De même, il ne peut y avoir de futur économique et social pour le pays sans une recherche publique puissante et disposant d’amples moyens.\n\nC’est encore plus vrai du fait de l’immense chantier qui s’annonce devant nous : la bifurcation écologique. Elle concerne tous les secteurs, de l’énergie aux transports, du bâtiment à la métallurgie, du bois à l’agriculture. Dans chacun de ces secteurs, il y aura des besoins énormes de travailleur ses qualifié es, et une impérative nécessité d’une progression permanente des savoirs.\n\nLa planification écologique nécessite un niveau de qualification très élevé. C’est pourquoi elle s’appuie en grande partie sur le relèvement du lycée professionnel. Ces vingt dernières années, la France a été gouvernée par des forces qui ont méprisé le lycée professionnel.\n\nPour faire des économies, le diplôme du baccalauréat professionnel a été réduit de quatre à trois années en 2007. Puis, Emmanuel Macron a transformé la première année en année de « découverte » d’une « famille de métiers », ne laissant plus que deux ans pour l’acquisition des savoirs.\n\nNous rétablirons le baccalauréat professionnel en quatre années pleines. C’est ce qu’il faut pour arriver au haut niveau de qualification dont nous avons besoin. Nous investirons dans l’enseignement professionnel et la recherche publique dans le but de produire la génération la plus qualifiée de l’histoire du pays.\n\nCela passera notamment par la création sur tout le territoire de centres polytechniques professionnels qui réuniront les formations du CAP au BTS, et assureront pour les salariés la validation des acquis d’expérience (VAE). Et bien sûr, nous donnerons les moyens aux lycéen·nes de l’enseignement professionnel d’apprendre grâce à la garantie d’autonomie de 1 063 euros.\n\nNous nous opposerons à la création d’un marché des qualifications professionnelles et du savoir. Ce projet a déjà été bien entamé par Macron. Nous le démantèlerons. Il faudra changer le mode de financement de la recherche pour réorienter les cadeaux fiscaux sans contrepartie au privé vers la recherche fondamentale et les instituts de recherche finalisée publics.\n\nIl y a urgence, car le développement et le rayonnement scientifique de la France sont un moteur essentiel de notre indépendance et de l’épanouissement de toutes et tous.\n\nLa France est une grande nation du savoir scientifique et technique. Grâce à sa recherche publique et au haut niveau de qualification de ses ouvrier·es, technicien·nes et ingénieur·es, elle a été la protagoniste de découvertes scientifiques essentielles pour l’humanité toute entière : premier micro-ordinateur, hélicoptère, photographie, vaccin contre la rage, moteur à explosion, transfusion sanguine, tablette tactile…\n\nToute élévation des qualifications est un don à l’humanité entière. La France a des atouts immenses pour construire l’appareil de formation et de recherche dont elle a besoin : des instituts de recherche finalisée de très haut niveau et un système d’enseignement professionnel d’excellence. À condition de réparer les dégâts infligés ces dernières années et de donner à nos systèmes publics d’enseignement et de recherche toute l’ambition, les moyens et la place qu’ils méritent. Ce plan détaille notre méthode pour y parvenir.\n\n### Recherche finalisée, transfert : qu’est-ce ?\n\n- Dans la recherche finalisée, les chercheur·ses ou enseignant·es-chercheur·ses partent des problèmes spécifiques posés par un acteur industriel, associatif ou institutionnel pour construire un programme de recherche (par exemple : supprimer les intrants – pesticides, semences, engrais… – dans l’agriculture). Contrairement à la recherche fondamentale, c’est le problème concret, finalisé qui détermine les questions scientifiques fondamentales qui vont être traitées et non l’inverse.\n\nLa recherche finalisée est effectuée par des instituts de recherche finalisés (Institut national de recherche pour l’agriculture, l’alimentation et l’environnement [INRAE], Institut national de la santé et de la recherche médicale [INSERM], Institut national de recherche en sciences et technologies du numérique [Inria]…), mais aussi par des unités impliquant l’université ou le CNRS et dans la recherche et développement des entreprises privées.\n\n- Le transfert est le processus qui désigne le passage à l’industrie ou aux acteurs institutionnels de savoirs ou de technologies résultant de la recherche publique, dans le but de produire de nouveaux produits et/ou services.\n  Ce transfert peut être réalisé par le biais d’institutions spécifiques – instituts de transfert – qui peuvent ou non être aussi des instituts de gestion. Par exemple, dans l’agriculture, le transfert passe notamment par les instituts techniques agricoles. L’Office national des forêts (ONF) est, quant à lui, à la fois un institut de transfert et de gestion.\n\n## Une formation privatisée et un service public de recherche affaibli\n\nCes cinq dernières années ont parachevé l’entreprise de sabotage des services publics de l’éducation et de la recherche. Jean-Michel Blanquer, déjà à la manœuvre sous Nicolas Sarkozy, et Frédérique Vidal, toute occupée à organiser la police de la pensée à l’université, en ont été les fossoyeurs.\n\nL’école et la recherche ont été saccagées par nos dirigeants – François Hollande inclus –, qui ont épousé la vision néolibérale promue par l’Union européenne : faire du savoir une marchandise, organiser la compétition entre établissements et abandonner la formation et l’enseignement professionnels aux entreprises.\n\nIl faut dire que l’enjeu est de taille : les dépenses annuelles d’éducation représentent plus de 160 milliards d’euros, soit près de 7 % du produit intérieur brut (PIB). De quoi aiguiser l’appétit des entreprises privées.\n\n### L’enseignement professionnel a été sabordé\n\nLoin d’être aveugles, les coupes budgétaires massives qu’a connues l’Éducation nationale ont frappé en priorité la voie professionnelle. Trente-sept ans après la création du bac professionnel, l’enseignement professionnel public est en voie de destruction.\n\nLes trois derniers quinquennats se sont acharnés sur l’enseignement professionnel dans un cocktail dévastateur fait de mépris pour les qualifications et de logique comptable bornée. Parce qu’il comporte, par nécessité pédagogique, un nombre beaucoup moins élevé de lycéen·nes par classe que l’enseignement général, c’est à lui qu’on a fait supporter l’essentiel des suppressions de moyens.\n\nDéjà sous Nicolas Sarkozy, l’enseignement professionnel était concerné par les deux tiers des suppressions de postes du second degré, alors qu’il ne représentait qu’un tiers des lycéen·nes. Un acharnement poursuivi sous François Hollande : les belles promesses d’ouverture de postes et de revalorisation des salaires sont restées lettre morte.\n\nAinsi, en 2020, l’enseignement professionnel accueillait 60 000 lycéen·nes en moins par rapport à 2010, tandis que, sur la même période, l’ensemble du second degré recevait 333 000 élèves supplémentaires !\n\nL’enseignement professionnel est uniquement pensé selon des critères comptables. Le passage de la durée de préparation du baccalauréat professionnel de quatre ans à trois ans en est un exemple frappant. C’est un choix aberrant sur le plan pédagogique et éducatif. Le résultat est prévisible : l’échec augmente et plus de 100 000 jeunes sortent chaque année du système scolaire sans qualification. Depuis, Jean-Michel Blanquer a encore aggravé la situation en transformant la seconde en année de découverte d’une « famille de métiers », limitant l’enseignement professionnel proprement dit à deux années avant le baccalauréat.\n\nLe cadre national de la formation a été démantelé bout par bout. Avec la réforme du collège de Najat Vallaud-Belkacem, chaque collège détermine une partie de ses enseignements. Avec la réforme du baccalauréat de Jean-Michel Blanquer, ce sont les lycées qui définissent chacun leurs spécialités. Avec la loi Pénicaud, ce sont chaque branche professionnelle et chaque entreprise qui ont la main sur la formation professionnelle et agricole. À tous les niveaux, la concurrence s’installe : chacun fait ce qu’il veut ou peut, les uns contre les autres.\n\n### L’impasse du tout-apprentissage\n\nLe « tout apprentissage », tant vanté par les quinquennats Sarkozy-Hollande-Macron, est une impasse. Les jeunes qui choisissent l’apprentissage ont beaucoup moins de chances d’obtenir leur diplôme que les jeunes qui choisissent de se former en lycée professionnel. La réalité derrière cette politique est surtout celle de milliards d’euros de subventions publiques versées aux entreprises pour l’embauche d’apprenti·es plutôt que dans les lycées professionnels et agricoles : 137 lycées professionnels autonomes ont fermé depuis 2010 et l’artisanat, première entreprise de France, fait face à une pénurie de main-d’œuvre qualifiée.\n\nLes centres de formation d’apprentis (CFA) ont été livrés au marché avec la suppression de l’autorisation préalable à l’ouverture. La réforme du financement de l’apprentissage a fait porter l’essentiel de leur financement sur les choix privés. Résultat : les formations les moins « rentables » ferment, tandis que les CFA d’entreprises, eux, se multiplient. Ainsi, le marché met la main sur la formation.\n\nÀ court terme, entreprises et jeunes pensent y trouver leur compte : les premières en formant des travailleuses et des travailleurs directement employables, modelé·es selon leurs besoins du moment ; les seconds dans l’espoir d’être embauchés dans l’entreprise qui les forme.\n\nDans la durée, tout le monde est perdant. L’école intégrée à l’entreprise est en effet incapable d’armer les jeunes gens concernés des savoirs et savoir-faire généraux. Ce sont pourtant ceux-là qui créent des qualifications durables, qui seules permettent aux travailleurs et aux travailleuses de s’approprier véritablement leur travail et de ne pas être seulement des exécutant·es assigné·es à des tâches rudimentaires.\n\nLa qualification des travailleur·ses doit être plus vaste que celle des postes qu’ils et elles occupent, pour leur permettre de s’adapter aux sauts technologiques de plus en plus rapprochés et aux bouleversements des process de production. C’est en ce sens que nous utilisons le terme de « qualifications » et non uniquement de « compétences », qui sont, elles, limitées dans le temps et non nécessairement transposables.\n\nLes jeunes ainsi formés sont perdants. Attachés à leur poste de travail, ils sont plus vulnérables que jamais en cas d’évolution de l’outil de production, de délocalisation ou de faillite de leur entreprise, car ils sont dotés uniquement d’une « employabilité » locale dont la validité est limitée dans le temps : en témoignent la durée désormais limitée de validité des cert"
+    },
+    {
+      "kind": "livret 2022",
+      "title": "Agriculture et alimentation : Pour une agriculture écologique, qui nourrit la population et ceux qui en vivent",
+      "url": "https://melenchon2027.fr/livrets-2022/agriculture-et-alimentation/",
+      "date": "2024-01-31T13:54:22",
+      "windows": [
+        {
+          "excerpt": "’est pourquoi nous transformerons radicalement la politique agricole commune et nous ferons la révolution citoyenne dans les structures agricoles aussi.\n\nAu niveau international, nous voulons contribuer à la sécurité alimentaire mondiale, à la protection et au développement des paysanneries et à la bifurcation écologique de l’agriculture et des systèmes alimentaires. Notre projet implique de ne plus déstabiliser les marchés des pays étrangers par des exportations massives subventionnées et d’affirmer le principe de souveraineté alimentaire des paysan·nes, des États et des régions, en s’appuyant notamment sur la Déc",
+          "offset": 12138
+        },
+        {
+          "excerpt": "long du mandat le budget consacré à l’accompagnement de l’installation (voir partie 5)\n\n### Des méthodes de production adaptées : une production écologique et respectueuse du bien-être des animaux\n\nNous mettrons en œuvre un plan national visant à accompagner l’ensemble des agriculteur·ices dans la bifurcation écologique de l’agriculture, l’adaptation au changement climatique et la sortie de l’élevage industriel. Cette transition devra ramener notre système alimentaire dans les limites planétaires, rendre les exploitations agricoles plus économes et autonomes et tenir pleinement compte du bien-être des animaux d’él",
+          "offset": 24691
+        },
+        {
+          "excerpt": "l’arboriculture, le maraîchage diversifié sur de petites surfaces ou la production de légumineuses à destination de l’alimentation humaine et animale\n- Créer un budget réservé à la transition vers des systèmes d’élevage respectueux du bien-être animal\n\n#### Mettre les institutions au service de la bifurcation écologique de l’agriculture – dans l’agriculture aussi, faire la révolution citoyenne\n\n- Créer un Ministère de la Production alimentaire pour remplacer le Ministère de l’Agriculture et de l’Alimentation et mettre résolument le système agricole au service d’une politique de production alimentaire durable\n\n- Tr",
+          "offset": 32473
+        },
+        {
+          "excerpt": "lobbys pharmaceutiques, renforçant les approches préventives et permettant aux agriculteurs et agricultrices d’accéder à des soins vétérinaires et à des conseils phytosanitaires de qualité à des tarifs abordables\n- Adapter les formations dispensées dans l’enseignement agricole aux nécessités de la bifurcation écologique de l’agriculture et du système alimentaire\n- Augmenter le nombre de lycées agricoles publics, y rétablir les postes supprimés et rétablir le bac professionnel en 4 ans\n\n### Une coopération internationale qui protège les agricultures locales et assure la souveraineté alimentaire partout dans le mond",
+          "offset": 34198
+        },
+        {
+          "excerpt": "(Mercosur…) et sortir de ceux déjà négociés par l’UE\n- Favoriser les accords de coopération avec les États mettant en œuvre des politiques de souveraineté alimentaire, de défense et de soutien à l’agriculture paysanne (réformes agraires et mise en œuvre des directives sur le foncier, notamment), de bifurcation écologique de l’agriculture\n- Défendre de façon intransigeante les appellations d’origine dans le cadre du protectionnisme écologique et solidaire\n- Renégocier la politique agricole commune, y compris l’Organisation commune des marchés, pour en finir avec le libre-échange généralisé, désobéir lorsque c’est né",
+          "offset": 35641
+        }
+      ]
+    },
+    {
+      "kind": "livret 2022",
+      "title": "Arts et culture : pour un service public du progrès humain",
+      "url": "https://melenchon2027.fr/livrets-2022/arts/",
+      "date": "2024-01-30T16:43:46",
+      "windows": [
+        {
+          "excerpt": "supérieur et la Recherche, mais également la Ville, la Ruralité, la Santé et bien d’autres. La planification sera la clé pour mener à bien nos objectifs, parmi lesquels :\n\n#### ➔ Inscrire les arts et la culture dans une écologie politique à l’inverse des logiques productivistes et consuméristes\n\nLa bifurcation écologique fait partie des grands défis que nous devons relever. Le service public de la culture y tiendra une place cruciale. Tout d’abord, en offrant aux travailleur·ses de l’art de meilleures conditions de création, il favorisera la multiplicité des imaginaires et des récits qui peuvent être autant d’alter",
+          "offset": 8438
+        },
+        {
+          "excerpt": "emps long, la coopération interministérielle, la connaissance des métiers, l’analyse, l’évaluation qualitative et le dialogue avec les travailleur·ses de l’art\n- Donner le statut de fonctionnaire à tou·tes les agent·es des établissements publics administratifs du ministère de la Culture\n\n- Mener la bifurcation écologique dans les arts et la culture, notamment en accélérant la rénovation des bâtiments, en permettant la formation massive des travailleur·ses de l’art à ces enjeux, en subventionnant et valorisant les initiatives collectives en faveur de l’éco-conception, des mobilités douces, des circuits courts, du re",
+          "offset": 16895
+        }
+      ]
+    },
+    {
+      "kind": "livret 2022",
+      "title": "Banques : pour un service public bancaire sous contrôle citoyen",
+      "url": "https://melenchon2027.fr/livrets-2022/banques/",
+      "date": "2024-02-01T18:51:36",
+      "windows": [
+        {
+          "excerpt": "catastrophe climatique est un désastre à double titre. D’une part, les activités dévastant la planète peuvent se poursuivre et continuer à se développer sans s’adapter car elles trouvent des financements abondants. D’autre part, le réchauffement climatique accroît le risque de crise financière. La bifurcation vers une économie bas carbone risque en effet de s’accompagner de dépréciations massives de la valeur des actifs financiers liés aux activités fortement émettrices en gaz à effet de serre. Une dévalorisation à la chaîne de ces actifs, qui deviendraient alors des actifs « échoués », fragiliserait le",
+          "offset": 10514
+        },
+        {
+          "excerpt": ". Il faut anticiper pour gérer au mieux la situation. Seul un Pôle public bancaire est en capacité de déconnecter les actifs utiles des titres carbonés, éliminer ces derniers du marché et envoyer la facture finale aux actionnaires irresponsables.\n\n## Notre projet : pour assurer le financement de la bifurcation écologique et de la transformation sociale, mettons au pas le secteur bancaire et financier !\n\nL’harmonie entre les êtres humains et la nature est incompatible avec les logiques prédatrices et spéculatives du capitalisme financiarisé. Les stopper est la condition même d’une politique de progrès social et écol",
+          "offset": 11221
+        },
+        {
+          "excerpt": "rojets privés en phase avec le grand plan d’investissements public. Notre projet met l’accent sur trois aspects centraux :\n\n- Prévenir toute nouvelle crise financière ou bancaire\n- Réorganiser le secteur bancaire pour le mettre au service de l’intérêt général\n- Réorienter le crédit pour financer la bifurcation sociale et écologique\n\n### Garantir la stabilité financière\n\nMalgré la violence de la crise financière de 2008 et ses conséquences dramatiques, la régulation du secteur bancaire et financier est très insuffisante et notre économie vit avec le risque permanent d’un nouveau cataclysme financier. Il f",
+          "offset": 12240
+        },
+        {
+          "excerpt": "ral et non une finalité marchande. La constitution d’un pôle public bancaire est essentielle à la mise en œuvre d’une politique de progrès social car il garantira l’accès de toutes et tous aux services bancaires, en plus de jouer un rôle clé dans la réorientation du crédit vers le financement de la bifurcation écologique et sociale.\n\n### Rediriger le crédit vers le financement de la bifurcation sociale et écologique\n\nLa catastrophe climatique se poursuit notamment parce que la finance et les banques accordent massivement des subsides aux entreprises fortement émettrices de gaz à effet de serre. Mener à bien la tran",
+          "offset": 13823
+        },
+        {
+          "excerpt": "liser le versement de dividendes et favoriser l’investissement\n- Interdire les rachats d’actions pour les entreprises du secteur bancaire et financier, afin de limiter le poids de la valorisation boursière dans la prise de décisions\n\n### Réorienter l’activité bancaire et les flux financiers vers la bifurcation écologique et le progrès social\n\n#### Tarir l’évasion fiscale\n\n- Établir une liste de paradis fiscaux sur des critères objectifs et crédibles et interdire aux banques françaises toute activité dans ces paradis fiscaux, sous peine de perdre leur licence bancaire\n\n- Imposer aux établissements bancaires étranger",
+          "offset": 30102
+        }
+      ]
+    },
+    {
+      "kind": "livret 2022",
+      "title": "Condition animale : respecter les animaux c’est affirmer notre humanité",
+      "url": "https://melenchon2027.fr/livrets-2022/condition-animale/",
+      "date": "2024-01-31T14:25:01",
+      "windows": [
+        {
+          "excerpt": "geons, etc.)\n\n- Pour une révolution alimentaire : bien nourrir tout le monde, c’est aussi planifier l’essor des protéines végétales avec une réduction de 50 % de notre consommation de protéines d’origine animale. Végétaliser nos assiettes et notre agriculture est un outil essentiel au service de la bifurcation écologique, de l’amélioration du sort des animaux et de la santé de toutes et tous.\n\n- Pour sortir de l’élevage intensif et de la pêche industrielle, de toutes les pratiques les plus cruelles d’élevage, de transport et d’abattage. Les animaux terrestres ou marins vivent un martyre que notre humanité nous obli",
+          "offset": 7797
+        },
+        {
+          "excerpt": "ent à des entreprises privées (ex : CFA des métiers fromagers de Lactalis) et ouvrir des formations publiques qui incluent des enseignements intégrant le bien être animal\n- Encadrer les lobbys de l’agro-industrie comme de la chasse\n\n### La végétalisation de l’alimentation : un outil essentiel de la bifurcation écologique\n\nUne alimentation durable, plus respectueuse des animaux, de la planète, de notre santé et de celle des agriculteur·ices passe par une démocratisation assumée d’un régime alimentaire beaucoup plus riche en protéines végétales.\nPour cela nous voulons :\n\n#### Planifier et accompagner la transition ve",
+          "offset": 12625
+        }
+      ]
+    },
+    {
+      "kind": "livret 2022",
+      "title": "Éducation : reconstruire une école de l’égalité et de l’émancipation",
+      "url": "https://melenchon2027.fr/livrets-2022/education/",
+      "date": "2024-02-02T16:08:01",
+      "windows": [
+        {
+          "excerpt": "ils méritent des professeur·es qualifié·es, formé·es et en nombre suffisant, qui leur dispensent un enseignement de haut niveau.\n\nNotre projet pour l’école est en effet inséparable de notre projet de société. À l’heure du défi climatique, l’école doit jouer un rôle décisif dans la préparation de la bifurcation écologique. Alors que les inégalités n’ont jamais été aussi fortes et que la société est traversée par de multiples tensions, elle doit s’affirmer comme un espace de coopération et d’échanges, plutôt que de concurrence et de compétition. Creuset du peuple en formation, elle doit devenir le lieu de l’éducation",
+          "offset": 5759
+        },
+        {
+          "excerpt": "est la garantie d’une maîtrise professionnelle durable parce que susceptible de s’enrichir et d’évoluer. Reconnue par les conventions collectives, elle est source de droits sociaux. Face aux défis qui découlent de la crise écologique, l’élévation générale du niveau de qualification au service de la bifurcation écologique est une priorité absolue pour le pays.\n\nÉmanciper, c’est affranchir l’individu de toute influence, développer l’esprit critique, parvenir à l’autonomie pour être libre. Condorcet assignait à l’école la mission de « former des citoyens qui ne s’en laissent pas conter mais qui entendent qu’on leur re",
+          "offset": 6803
+        },
+        {
+          "excerpt": "nts en supprimant les pôles inclusifs d’accompagnement localisés (PIAL)\n- Inclure une formation à l’accompagnement des élèves en situation de handicap dans les cursus de formation des enseignant·es\n\n### Une école qui apporte des savoirs à tous les élèves\n\nLes besoins éducatifs sont croissants et la bifurcation écologique nécessite des qualifications élevées. Face à ces défis, nous proposons donc les mesures suivantes :\n\n#### Garantir des moyens supplémentaires pour faire progresser tou·tes les élèves :\n\n- Réduire partout les effectifs par classe pour faire mieux que la moyenne européenne, qui est actuellement à 19",
+          "offset": 15918
+        },
+        {
+          "excerpt": "es activités périscolaires\n\n### Accroître la qualification pour répondre aux défis de demain\n\nÀ l’heure du défi climatique et des mutations du système productif, les voies professionnelle et technologique sont indispensables à la hausse du niveau de qualification nécessaire à la planification de la bifurcation écologique. Nous voulons reconstruire les filières de l’enseignement technologique et professionnel, aujourd’hui dévastées, pour en faire des voies d’excellence. Pour cela, nous proposons de :\n\n#### Développer l’enseignement professionnel et technologique public :\n\n- Construire des lycées professionnels dotés",
+          "offset": 25138
+        },
+        {
+          "excerpt": "r la place des enseignements généraux dans la filière professionnelle\n- Créer des centres polytechniques professionnels du CAP au BTS, afin de mailler le territoire national d’établissements intégrant lycée et enseignement supérieur, et former les jeunes aux métiers d’avenir, en particulier pour la bifurcation écologique et sociale\n- Créer les filières professionnelles qui répondent aux besoins de la bifurcation écologique\n- Refonder la voie technologique afin d’offrir une palette diversifiée de spécialisations de haut niveau\n- Garantir davantage de places pour les bachelier·es professionnel·les et technologiques d",
+          "offset": 27202
+        }
+      ]
+    }
+  ],
+  "desintox": [
+    {
+      "kind": "désintox",
+      "title": "« Vous êtes contre les agriculteurs »",
+      "url": "https://desintox.lafranceinsoumise.fr/vous-etes-contre-les-agriculteurs/",
+      "date": "2025-08-15T15:27:50",
+      "windows": [
+        {
+          "excerpt": "es et revaloriser les retraites\n\nPlutôt que l’agrobusiness, la France insoumise porte un modèle d’agriculture écologique et nourricière. Cela implique de réviser la Politique Agricole Commune (PAC) pour l’adapter aux besoins des agriculteurs et à la bifurcation écologique. L’objectif est notamment de permettre la création de 300 000 nouveaux emplois dans des projets d’agriculture vivrière écologique pour relancer un monde paysan. Nous plafonnerons les aides aux grandes exploitations et engagerons la sortie du système",
+          "offset": 1463
+        }
+      ]
+    }
+  ]
+}

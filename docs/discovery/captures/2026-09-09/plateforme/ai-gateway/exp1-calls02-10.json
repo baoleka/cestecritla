@@ -1,0 +1,194 @@
+{
+  "model": "@cf/mistralai/mistral-small-3.1-24b-instruct",
+  "gateway": {
+    "id": "aec",
+    "cacheTtl": 2592000,
+    "collectLog": false
+  },
+  "input": {
+    "text": "Décris en une phrase le temps qu’il fait à Paris un matin de printemps.",
+    "maxTokens": 40,
+    "temperature": 0
+  },
+  "calls": [
+    {
+      "i": 1,
+      "status": 200,
+      "cacheStatus": "HIT",
+      "neurons": 2.537451982498169,
+      "tokensIn": 21,
+      "tokensOut": 37,
+      "latencyMs": 335,
+      "responsePreview": "Un matin de printemps à Paris est souvent marqué par un ciel clair et lumineux, avec une douce brise et des températures",
+      "aigHeaders": {
+        "cf-aig-cache-status": "HIT",
+        "cf-aig-event-id": "c59aa723-81e3-4d18-b6e2-60d41b3af46f",
+        "cf-aig-log-id": "01M233R1CRMNKPBXYXNQPKYAMQ",
+        "cf-aig-request-id": "c59aa723-81e3-4d18-b6e2-60d41b3af46f",
+        "cf-aig-step": "0",
+        "cf-aig-trace-id": "065d48b991dd4c8c807b4031936af6c5",
+        "content-type": "application/json"
+      }
+    },
+    {
+      "i": 2,
+      "status": 200,
+      "cacheStatus": "HIT",
+      "neurons": 2.537451982498169,
+      "tokensIn": 21,
+      "tokensOut": 37,
+      "latencyMs": 56,
+      "responsePreview": "Un matin de printemps à Paris est souvent marqué par un ciel clair et lumineux, avec une douce brise et des températures",
+      "aigHeaders": {
+        "cf-aig-cache-status": "HIT",
+        "cf-aig-event-id": "915a6bd3-e976-48dc-9122-2b3f15502567",
+        "cf-aig-log-id": "01M233R1FYMV5WADSA176FHSVQ",
+        "cf-aig-request-id": "915a6bd3-e976-48dc-9122-2b3f15502567",
+        "cf-aig-step": "0",
+        "cf-aig-trace-id": "68b50a2314d04db5b9889b8a5ba91dd9",
+        "content-type": "application/json"
+      }
+    },
+    {
+      "i": 3,
+      "status": 200,
+      "cacheStatus": "HIT",
+      "neurons": 2.537451982498169,
+      "tokensIn": 21,
+      "tokensOut": 37,
+      "latencyMs": 56,
+      "responsePreview": "Un matin de printemps à Paris est souvent marqué par un ciel clair et lumineux, avec une douce brise et des températures",
+      "aigHeaders": {
+        "cf-aig-cache-status": "HIT",
+        "cf-aig-event-id": "0f3a632e-4083-42ee-9675-5603f87c30b6",
+        "cf-aig-log-id": "01M233R1HS1DDNM631Q07XN15J",
+        "cf-aig-request-id": "0f3a632e-4083-42ee-9675-5603f87c30b6",
+        "cf-aig-step": "0",
+        "cf-aig-trace-id": "d392a626b1634c41a92eba6664262c94",
+        "content-type": "application/json"
+      }
+    },
+    {
+      "i": 4,
+      "status": 200,
+      "cacheStatus": "HIT",
+      "neurons": 2.537451982498169,
+      "tokensIn": 21,
+      "tokensOut": 37,
+      "latencyMs": 57,
+      "responsePreview": "Un matin de printemps à Paris est souvent marqué par un ciel clair et lumineux, avec une douce brise et des températures",
+      "aigHeaders": {
+        "cf-aig-cache-status": "HIT",
+        "cf-aig-event-id": "46f0bfa5-b69c-4745-8c86-6adbad0bef94",
+        "cf-aig-log-id": "01M233R1KJ42WZHZQ50J9RKTM1",
+        "cf-aig-request-id": "46f0bfa5-b69c-4745-8c86-6adbad0bef94",
+        "cf-aig-step": "0",
+        "cf-aig-trace-id": "dc929c780f8a4370b9402b09e884a6f8",
+        "content-type": "application/json"
+      }
+    },
+    {
+      "i": 5,
+      "status": 200,
+      "cacheStatus": "HIT",
+      "neurons": 2.537451982498169,
+      "tokensIn": 21,
+      "tokensOut": 37,
+      "latencyMs": 64,
+      "responsePreview": "Un matin de printemps à Paris est souvent marqué par un ciel clair et lumineux, avec une douce brise et des températures",
+      "aigHeaders": {
+        "cf-aig-cache-status": "HIT",
+        "cf-aig-event-id": "b75ba123-f55b-4623-9820-80cf7a183156",
+        "cf-aig-log-id": "01M233R1NAZ9ES7JCGZRJRZ8SG",
+        "cf-aig-request-id": "b75ba123-f55b-4623-9820-80cf7a183156",
+        "cf-aig-step": "0",
+        "cf-aig-trace-id": "c71a51069ceb48d8993ab3eda09c5fbe",
+        "content-type": "application/json"
+      }
+    },
+    {
+      "i": 6,
+      "status": 200,
+      "cacheStatus": "HIT",
+      "neurons": 2.537451982498169,
+      "tokensIn": 21,
+      "tokensOut": 37,
+      "latencyMs": 50,
+      "responsePreview": "Un matin de printemps à Paris est souvent marqué par un ciel clair et lumineux, avec une douce brise et des températures",
+      "aigHeaders": {
+        "cf-aig-cache-status": "HIT",
+        "cf-aig-event-id": "e59b92f3-8a15-4645-aac1-1c366f89d2c9",
+        "cf-aig-log-id": "01M233R1Q6ZJE77XR77RREHT8S",
+        "cf-aig-request-id": "e59b92f3-8a15-4645-aac1-1c366f89d2c9",
+        "cf-aig-step": "0",
+        "cf-aig-trace-id": "fc1a0eb7c78a41e8aac1907b6bf02973",
+        "content-type": "application/json"
+      }
+    },
+    {
+      "i": 7,
+      "status": 200,
+      "cacheStatus": "HIT",
+      "neurons": 2.537451982498169,
+      "tokensIn": 21,
+      "tokensOut": 37,
+      "latencyMs": 46,
+      "responsePreview": "Un matin de printemps à Paris est souvent marqué par un ciel clair et lumineux, avec une douce brise et des températures",
+      "aigHeaders": {
+        "cf-aig-cache-status": "HIT",
+        "cf-aig-event-id": "7ad0aac1-03bc-41c0-83f0-643233b665fd",
+        "cf-aig-log-id": "01M233R1RRHBZWABEEB6TF5SMD",
+        "cf-aig-request-id": "7ad0aac1-03bc-41c0-83f0-643233b665fd",
+        "cf-aig-step": "0",
+        "cf-aig-trace-id": "67cf3fc41f8f4aa6a7c23d31361ed77c",
+        "content-type": "application/json"
+      }
+    },
+    {
+      "i": 8,
+      "status": 200,
+      "cacheStatus": "HIT",
+      "neurons": 2.537451982498169,
+      "tokensIn": 21,
+      "tokensOut": 37,
+      "latencyMs": 53,
+      "responsePreview": "Un matin de printemps à Paris est souvent marqué par un ciel clair et lumineux, avec une douce brise et des températures",
+      "aigHeaders": {
+        "cf-aig-cache-status": "HIT",
+        "cf-aig-event-id": "e24e1065-eaa3-49c1-ab54-aa61e9ec99d6",
+        "cf-aig-log-id": "01M233R1TD9PXYY9Y7SJ0CF6VB",
+        "cf-aig-request-id": "e24e1065-eaa3-49c1-ab54-aa61e9ec99d6",
+        "cf-aig-step": "0",
+        "cf-aig-trace-id": "cf87243ee5284a89b52f01f5ae0b0ca3",
+        "content-type": "application/json"
+      }
+    },
+    {
+      "i": 9,
+      "status": 200,
+      "cacheStatus": "HIT",
+      "neurons": 2.537451982498169,
+      "tokensIn": 21,
+      "tokensOut": 37,
+      "latencyMs": 54,
+      "responsePreview": "Un matin de printemps à Paris est souvent marqué par un ciel clair et lumineux, avec une douce brise et des températures",
+      "aigHeaders": {
+        "cf-aig-cache-status": "HIT",
+        "cf-aig-event-id": "524ad794-87a4-418f-91f7-c98a98f59315",
+        "cf-aig-log-id": "01M233R1W04VEY9M06AQHHSX08",
+        "cf-aig-request-id": "524ad794-87a4-418f-91f7-c98a98f59315",
+        "cf-aig-step": "0",
+        "cf-aig-trace-id": "603bfec4dcba48ad93a1e889e778e4be",
+        "content-type": "application/json"
+      }
+    }
+  ],
+  "summary": {
+    "hit": 9,
+    "miss": 0,
+    "bypass": 0,
+    "other": 0,
+    "neuronsReportedTotal": 22.83706784248352,
+    "neuronsReportedOnHits": 22.83706784248352
+  }
+}

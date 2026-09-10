@@ -1,0 +1,14 @@
+# Static Assets headers for the prototype (aec-proto). No third party, no inline script, no analytics (D0.22).
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  X-Robots-Tag: noindex
+  X-Frame-Options: DENY
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+
+/shared/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/shared/data/*
+  Cache-Control: public, max-age=3600

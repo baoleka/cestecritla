@@ -1,0 +1,37 @@
+├ Checking if file needs uploading
+│
+├ 🌀 Uploading c33d31bf-f390-42e7-96be-98377e7f9d89.8117ea49fb4e0e63.sql
+│ 🌀 Uploading complete.
+│
+[
+  {
+    "results": [
+      {
+        "Total queries executed": 26,
+        "Rows read": 0,
+        "Rows written": 1950,
+        "Database size (MB)": "0.50"
+      }
+    ],
+    "success": true,
+    "finalBookmark": "00000001-0000002b-000050e1-0c0f20b397cf434ccb4c007b109c932e",
+    "meta": {
+      "served_by": "v3-prod",
+      "served_by_region": "WEUR",
+      "served_by_colo": "CDG",
+      "served_by_primary": true,
+      "timings": {
+        "sql_duration_ms": 44.3694
+      },
+      "duration": 44.3694,
+      "changes": 976,
+      "last_row_id": 868,
+      "changed_db": true,
+      "size_after": 499712,
+      "rows_read": 0,
+      "rows_written": 1950,
+      "num_tables": 10,
+      "total_attempts": 1
+    }
+  }
+]

@@ -1,0 +1,136 @@
+{
+  "title": "Simulateur Populaire - Mélenchon 2027",
+  "themeColor": null,
+  "bodyBg": "#121212",
+  "htmlBg": "transparent",
+  "fontsLoaded": [
+    "Montserrat 300 normal",
+    "Montserrat 600 normal",
+    "Montserrat 800 normal"
+  ],
+  "fontFaceSrc": [],
+  "cssVars": {
+    "--lfi-red": "#cc2443",
+    "--lfi-dark": "#121212",
+    "--lfi-light": "#f8f9fa",
+    "--lfi-cyan": "#00938f",
+    "--lfi-green": "#2ecc71",
+    "--lfi-orange": "#e67e22",
+    "--lfi-purple": "#7928ca",
+    "--text-light": "#ffffff",
+    "--text-dark": "#1a1a1a"
+  },
+  "topColors": [
+    [
+      "#0000EE",
+      10
+    ],
+    [
+      "#121212",
+      4
+    ],
+    [
+      "#1E1E1E",
+      4
+    ],
+    [
+      "#CC2443",
+      3
+    ],
+    [
+      "#00938F",
+      2
+    ],
+    [
+      "#2ECC71",
+      2
+    ],
+    [
+      "#E67E22",
+      2
+    ]
+  ],
+  "topFonts": [
+    [
+      "Montserrat",
+      48
+    ],
+    [
+      "Arial",
+      1
+    ]
+  ],
+  "samples": {
+    "h1": {
+      "font": "Montserrat",
+      "weight": "800",
+      "size": "20px",
+      "lineHeight": "26px",
+      "color": "#FFFFFF",
+      "bg": "transparent",
+      "transform": "uppercase",
+      "style": "normal",
+      "letterSpacing": "-0.5px"
+    },
+    "h2": {
+      "font": "Montserrat",
+      "weight": "800",
+      "size": "18px",
+      "lineHeight": "normal",
+      "color": "#FFFFFF",
+      "bg": "transparent",
+      "transform": "uppercase",
+      "style": "normal",
+      "letterSpacing": "-0.5px"
+    },
+    "h3": {
+      "font": "Montserrat",
+      "weight": "600",
+      "size": "12px",
+      "lineHeight": "normal",
+      "color": "#CC2443",
+      "bg": "transparent",
+      "transform": "uppercase",
+      "style": "normal",
+      "letterSpacing": "2px"
+    },
+    "p": {
+      "font": "Montserrat",
+      "weight": "300",
+      "size": "14px",
+      "lineHeight": "normal",
+      "color": "#FFFFFF",
+      "bg": "transparent",
+      "transform": "none",
+      "style": "normal",
+      "letterSpacing": "normal"
+    },
+    "a": {
+      "font": "Montserrat",
+      "weight": "400",
+      "size": "16px",
+      "lineHeight": "normal",
+      "color": "#FFFFFF",
+      "bg": "transparent",
+      "transform": "none",
+      "style": "normal",
+      "letterSpacing": "normal"
+    },
+    "button": {
+      "font": "Arial",
+      "weight": "600",
+      "size": "13px",
+      "lineHeight": "normal",
+      "color": "#FFFFFF",
+      "bg": "transparent",
+      "transform": "uppercase",
+      "style": "normal",
+      "letterSpacing": "0.5px"
+    }
+  },
+  "links": [],
+  "hexInText": [],
+  "imgs": [
+    "https://avenir-en-commun.net/LFI_Logo.png"
+  ]
+}

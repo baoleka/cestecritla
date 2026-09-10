@@ -1,0 +1,462 @@
+{
+ "tradeMarks": [
+  {
+   "ST13": "FR500000001565367",
+   "tmName": "INSOUMISE",
+   "tmOffice": "FR",
+   "niceClass": [
+    16,
+    18,
+    24,
+    25,
+    26,
+    35
+   ],
+   "applicantName": [
+    "Monsieur Pierre PASSABOSC,"
+   ],
+   "applicationDate": "1989-12-04T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000003823843",
+   "tmName": "INSOUMISE LA MUSE",
+   "tmOffice": "FR",
+   "niceClass": [
+    14
+   ],
+   "applicantName": [
+    "MAUBOUSSIN, S.A.S."
+   ],
+   "applicationDate": "2011-04-15T12:00:00.000Z",
+   "registrationDate": "2011-08-05T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004611568",
+   "tmName": "Lyon insoumise",
+   "tmOffice": "FR",
+   "niceClass": [
+    45
+   ],
+   "applicantName": [
+    "Monsieur Mathieu AZCUE"
+   ],
+   "applicationDate": "2020-01-04T12:00:00.000Z",
+   "registrationDate": "2020-09-11T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000003826971",
+   "tmName": "TENDRE INSOUMISE",
+   "tmOffice": "FR",
+   "niceClass": [
+    3
+   ],
+   "applicantName": [
+    "Yvon MOUCHEL"
+   ],
+   "applicationDate": "2011-04-28T12:00:00.000Z",
+   "registrationDate": "2011-08-19T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004598068",
+   "tmName": "Amiens insoumise",
+   "tmOffice": "FR",
+   "niceClass": [
+    35,
+    41
+   ],
+   "applicantName": [
+    "Monsieur Fabien DOREMUS"
+   ],
+   "applicationDate": "2019-11-12T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004596832",
+   "tmName": "AMIENS INSOUMISE",
+   "tmOffice": "FR",
+   "niceClass": [
+    35
+   ],
+   "applicantName": [
+    "Monsieur PATRICK LE SCOUËZEC"
+   ],
+   "applicationDate": "2019-11-06T12:00:00.000Z",
+   "registrationDate": "2020-02-28T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004366759",
+   "tmName": "L'école insoumîse",
+   "tmOffice": "FR",
+   "niceClass": [
+    25,
+    28,
+    41
+   ],
+   "applicantName": [
+    "M. IGOR DEPERRAZ"
+   ],
+   "applicationDate": "2017-06-07T12:00:00.000Z",
+   "registrationDate": "2017-09-29T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004384900",
+   "tmName": "Nanterre insoumise",
+   "tmOffice": "FR",
+   "niceClass": [
+    16,
+    35,
+    38,
+    41
+   ],
+   "applicantName": [
+    "M. Nicolas Huyghe"
+   ],
+   "applicationDate": "2017-08-29T12:00:00.000Z",
+   "registrationDate": "2017-12-22T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004359956",
+   "tmName": "Martinique Insoumise",
+   "tmOffice": "FR",
+   "niceClass": [
+    16,
+    25,
+    35,
+    38,
+    41
+   ],
+   "applicantName": [
+    "M. David DESNEL"
+   ],
+   "applicationDate": "2017-05-09T12:00:00.000Z",
+   "registrationDate": "2017-09-01T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004459060",
+   "tmName": "L'insoumise",
+   "tmOffice": "FR",
+   "niceClass": [
+    16,
+    21,
+    32
+   ],
+   "applicantName": [
+    "Madame Sarah ALCALAY"
+   ],
+   "applicationDate": "2018-06-06T12:00:00.000Z",
+   "registrationDate": "2018-09-28T12:00:00.000Z"
+  },
+  {
+   "ST13": "WO500000000526523",
+   "tmName": "L'insoumise",
+   "tmOffice": "WO",
+   "niceClass": [
+    3
+   ],
+   "applicantName": [
+    "L'OREAL, Société anonyme"
+   ],
+   "applicationDate": "1988-09-12T12:00:00.000Z",
+   "registrationDate": "1988-09-12T12:00:00.000Z"
+  },
+  {
+   "ST13": "WO500000000517979",
+   "tmName": "L'INSOUMISE",
+   "tmOffice": "WO",
+   "niceClass": [
+    3
+   ],
+   "applicantName": [
+    "L'OREAL, Société anonyme"
+   ],
+   "applicationDate": "1987-11-10T12:00:00.000Z",
+   "registrationDate": "1987-11-10T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000003905125",
+   "tmName": "L'insoumise",
+   "tmOffice": "FR",
+   "niceClass": [
+    29,
+    30,
+    43
+   ],
+   "applicantName": [
+    "M. Thibaut Marès"
+   ],
+   "applicationDate": "2012-03-15T12:00:00.000Z",
+   "registrationDate": "2012-07-06T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000003722088",
+   "tmName": "L'INSOUMISE",
+   "tmOffice": "FR",
+   "niceClass": [
+    14,
+    28,
+    36,
+    38
+   ],
+   "applicantName": [
+    "CAROLE GUEZ"
+   ],
+   "applicationDate": "2010-03-16T12:00:00.000Z",
+   "registrationDate": "2010-08-20T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004752407",
+   "tmName": "L'insoumise",
+   "tmOffice": "FR",
+   "niceClass": [
+    16,
+    32,
+    33
+   ],
+   "applicantName": [
+    "Monsieur André Bordenave"
+   ],
+   "applicationDate": "2021-04-07T12:00:00.000Z",
+   "registrationDate": "2021-07-30T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000001420830",
+   "tmName": "L'INSOUMISE",
+   "tmOffice": "FR",
+   "niceClass": [
+    3
+   ],
+   "applicantName": [
+    "L'OREAL, Société Anonyme"
+   ],
+   "applicationDate": "1987-07-31T12:00:00.000Z"
+  },
+  {
+   "ST13": "WO500000000557133",
+   "tmName": "l'insoumise",
+   "tmOffice": "WO",
+   "niceClass": [
+    3
+   ],
+   "applicantName": [
+    "L'OREAL, Société anonyme"
+   ],
+   "applicationDate": "1990-06-28T12:00:00.000Z",
+   "registrationDate": "1990-06-28T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004594142",
+   "tmName": "Montpellier Insoumise",
+   "tmOffice": "FR",
+   "niceClass": [
+    41
+   ],
+   "applicantName": [
+    "Monsieur Matthieu Brabant"
+   ],
+   "applicationDate": "2019-10-28T12:00:00.000Z",
+   "registrationDate": "2020-02-21T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004403684",
+   "tmName": "LA CORSE INSOUMISE",
+   "tmOffice": "FR",
+   "niceClass": [
+    16,
+    25,
+    35,
+    38,
+    41
+   ],
+   "applicantName": [
+    "Monsieur FRANÇOIS PERETTI"
+   ],
+   "applicationDate": "2017-11-12T12:00:00.000Z",
+   "registrationDate": "2018-03-02T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004419979",
+   "tmName": "La Trance Insoumise",
+   "tmOffice": "FR",
+   "niceClass": [
+    41
+   ],
+   "applicantName": [
+    "Monsieur Jerome Lesterps"
+   ],
+   "applicationDate": "2018-01-15T12:00:00.000Z",
+   "registrationDate": "2018-05-11T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004278676",
+   "tmName": "La France insoumise",
+   "tmOffice": "FR",
+   "niceClass": [
+    16,
+    35,
+    38,
+    41
+   ],
+   "applicantName": [
+    "M. Amard gabriel"
+   ],
+   "applicationDate": "2016-06-09T12:00:00.000Z",
+   "registrationDate": "2017-01-20T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004078003",
+   "tmName": "LES PRESSES INSOUMISES",
+   "tmOffice": "FR",
+   "niceClass": [
+    40,
+    41
+   ],
+   "applicantName": [
+    "M. Lorenzo Ramero"
+   ],
+   "applicationDate": "2014-03-22T12:00:00.000Z",
+   "registrationDate": "2014-07-11T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000005193171",
+   "tmName": "Vendémiaires Insoumises",
+   "tmOffice": "FR",
+   "niceClass": [
+    45
+   ],
+   "applicantName": [
+    "Francis Daspe"
+   ],
+   "applicationDate": "2025-10-27T12:00:00.000Z",
+   "registrationDate": "2026-02-13T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004606346",
+   "tmName": "Insolente, Insoumise, et Insouciante",
+   "tmOffice": "FR",
+   "niceClass": [
+    16,
+    18,
+    25
+   ],
+   "applicantName": [
+    "La Belle Gabrielle SARL"
+   ],
+   "applicationDate": "2019-12-10T12:00:00.000Z",
+   "registrationDate": "2020-04-03T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000003210702",
+   "tmName": "Château l'Insoumise",
+   "tmOffice": "FR",
+   "niceClass": [
+    33
+   ],
+   "applicantName": [
+    "château l'insoumise SCEA"
+   ],
+   "applicationDate": "2003-02-12T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000005160076",
+   "tmName": "Vendémiaires, Vendémiaires Insoumises, Vendémiaires Citoyennes dans les Pyrénées-Orientales",
+   "tmOffice": "FR",
+   "niceClass": [
+    45
+   ],
+   "applicantName": [
+    "Francis Daspe"
+   ],
+   "applicationDate": "2025-06-29T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000001593164",
+   "tmName": "L'ECLAT DE PARFUM EAU JEUNE L'INSOUMISE",
+   "tmOffice": "FR",
+   "niceClass": [
+    3
+   ],
+   "applicantName": [
+    "L'OREAL, société anonyme,"
+   ],
+   "applicationDate": "1990-01-09T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004093842",
+   "tmName": "Les Trois Insoumises",
+   "tmOffice": "FR",
+   "niceClass": [
+    25,
+    29,
+    30,
+    32,
+    33
+   ],
+   "applicantName": [
+    "M. BLOTTIN Lionel",
+    "Mme DUBOIS-PAPIN Claudette"
+   ],
+   "applicationDate": "2014-05-27T12:00:00.000Z",
+   "registrationDate": "2014-10-17T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004609338",
+   "tmName": "LES INSOUMISES",
+   "tmOffice": "FR",
+   "niceClass": [
+    9,
+    38,
+    41
+   ],
+   "applicantName": [
+    "SOCIETE DU FIGARO SAS"
+   ],
+   "applicationDate": "2019-12-20T12:00:00.000Z",
+   "registrationDate": "2020-04-10T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000005098627",
+   "tmName": "Château L'Insoumise",
+   "tmOffice": "FR",
+   "niceClass": [
+    33
+   ],
+   "applicantName": [
+    "SCEA CHATEAU L'INSOUMISE Société civile d'exploitation agricole"
+   ],
+   "applicationDate": "2024-11-18T12:00:00.000Z",
+   "registrationDate": "2025-03-14T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004378627",
+   "tmName": "La France insoumise Paris 15",
+   "tmOffice": "FR",
+   "niceClass": [
+    35,
+    38,
+    41
+   ],
+   "applicantName": [
+    "Mme. Sophie Le Callennec"
+   ],
+   "applicationDate": "2017-07-24T12:00:00.000Z",
+   "registrationDate": "2017-11-24T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000001467472",
+   "tmName": "EAU JEUNE L'INSOUMISE",
+   "tmOffice": "FR",
+   "niceClass": [
+    3
+   ],
+   "applicantName": [
+    "L'OREAL, société anonyme,"
+   ],
+   "applicationDate": "1988-04-22T12:00:00.000Z"
+  }
+ ],
+ "page": 1,
+ "totalPages": 1,
+ "totalResults": 32,
+ "_query": "insoumise",
+ "_fetched_at": "2026-09-09T18:52Z",
+ "_source": "https://www.tmdn.org/tmview/ (EUIPN TMview, API search/results, offices FR + EM + WO ; data.inpi.fr renvoyait HTTP 403 le 9/9/2026)"
+}

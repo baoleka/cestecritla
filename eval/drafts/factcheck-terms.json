@@ -1,0 +1,168 @@
+[
+  {
+    "slug": "smic-1600",
+    "term": "SMIC à 1600 euros",
+    "aliases": ["SMIC", "1600 euros", "1 600 euros"]
+  },
+  {
+    "slug": "retraite-60",
+    "term": "retraite à 60 ans",
+    "aliases": ["retraite à 60 ans", "60 ans", "annuités"]
+  },
+  {
+    "slug": "vote-16-ans",
+    "term": "droit de vote à 16 ans",
+    "aliases": ["16 ans", "droit de vote"]
+  },
+  {
+    "slug": "otan",
+    "term": "OTAN",
+    "aliases": ["OTAN", "commandement intégré"]
+  },
+  {
+    "slug": "renouvelables-2050",
+    "term": "100 % renouvelables en 2050",
+    "aliases": ["100 % d.énergies renouvelables", "2050"]
+  },
+  {
+    "slug": "constituante-duree",
+    "term": "durée des travaux de la Constituante",
+    "aliases": ["deux ans de travaux", "Assemblée constituante"]
+  },
+  {
+    "slug": "impot-14-tranches",
+    "term": "impôt sur le revenu à 14 tranches",
+    "aliases": ["14 tranches"]
+  },
+  {
+    "slug": "heritage-max",
+    "term": "héritage maximal",
+    "aliases": ["héritage maximal", "12 millions"]
+  },
+  {
+    "slug": "emissions-2030",
+    "term": "baisse des émissions en 2030",
+    "aliases": ["65 %", "2030"]
+  },
+  {
+    "slug": "conscription-9-mois",
+    "term": "conscription citoyenne de neuf mois",
+    "aliases": ["conscription", "neuf mois"]
+  },
+  {
+    "slug": "cannabis",
+    "term": "cannabis",
+    "aliases": ["cannabis"]
+  },
+  {
+    "slug": "corrida",
+    "term": "corrida",
+    "aliases": ["corrida"]
+  },
+  {
+    "slug": "dons-partis-200",
+    "term": "plafond des dons aux partis",
+    "aliases": ["200 euros", "dons individuels"]
+  },
+  {
+    "slug": "zan-2027",
+    "term": "zéro artificialisation nette",
+    "aliases": ["zéro artificialisation nette", "artificialisation"]
+  },
+  {
+    "slug": "garantie-autonomie-1216",
+    "term": "garantie d'autonomie",
+    "aliases": ["garantie d.autonomie", "1 216"]
+  },
+  {
+    "slug": "compte-831",
+    "term": "831 mesures",
+    "aliases": ["831"]
+  },
+  {
+    "slug": "isf",
+    "term": "ISF",
+    "aliases": ["ISF", "impôt de solidarité sur la fortune"]
+  },
+  {
+    "slug": "parcoursup",
+    "term": "Parcoursup",
+    "aliases": ["Parcoursup"]
+  },
+  {
+    "slug": "amende-icpe",
+    "term": "amende ICPE",
+    "aliases": ["ICPE", "500 000 euros"]
+  },
+  {
+    "slug": "culture-1-pib",
+    "term": "1 % du PIB pour la culture",
+    "aliases": ["1 % du PIB"]
+  },
+  {
+    "slug": "peine-de-mort",
+    "term": "peine de mort",
+    "aliases": ["peine de mort", "peine capitale", "abolition"]
+  },
+  {
+    "slug": "euro-monnaie",
+    "term": "sortie de l'euro",
+    "aliases": ["\\beuro\\b", "monnaie unique", "zone euro", "\\bfranc\\b"]
+  },
+  {
+    "slug": "revenu-universel",
+    "term": "revenu universel",
+    "aliases": [
+      "revenu universel",
+      "revenu de base",
+      "revenu inconditionnel",
+      "allocation universelle",
+      "revenu d.existence"
+    ]
+  },
+  {
+    "slug": "regle-d-or",
+    "term": "règle d'or",
+    "aliases": ["règle d.or", "regle d.or"]
+  },
+  {
+    "slug": "pma",
+    "term": "PMA",
+    "aliases": ["PMA", "procréation médicalement assistée", "assistance médicale à la procréation"]
+  },
+  {
+    "slug": "uniforme",
+    "term": "uniforme",
+    "aliases": ["uniforme"]
+  },
+  {
+    "slug": "nucleaire-date",
+    "term": "sortie du nucléaire",
+    "aliases": ["nucléaire"]
+  },
+  {
+    "slug": "dette-annulation",
+    "term": "annulation de la dette publique",
+    "aliases": ["dette publique", "annuler la dette"]
+  },
+  {
+    "slug": "planification-seule",
+    "term": "planification",
+    "aliases": ["planification"]
+  },
+  {
+    "slug": "immigration-frontieres",
+    "term": "frontières / régularisation",
+    "aliases": ["frontières", "régularis", "migrant"]
+  },
+  {
+    "slug": "decroissance",
+    "term": "décroissance",
+    "aliases": ["décroissance"]
+  },
+  {
+    "slug": "frexit",
+    "term": "Frexit",
+    "aliases": ["Frexit", "sortir de l.Union", "quitter l.Union", "sortie de l.Union"]
+  }
+]

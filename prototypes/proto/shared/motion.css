@@ -1,0 +1,90 @@
+/* C'est écrit là — motion of the clickable prototypes (design/motion-spec.md; P6, P7 of design/perf-budget.md).
+   Three micro-interactions, wired through data-motion hooks only (shared/motion.js):
+     [data-motion="reveal"]    the verbatim block rises into place once, when it enters the viewport by scrolling (240 ms)
+     [data-motion="crossfade"] a link whose navigation cross-fades old -> new page (View Transitions, 200 ms)
+     [data-motion="content"]   a container filled by script: the cross-fade waits for it or gives way to a 200 ms fade-in
+     [data-motion="press"]     a button that shrinks under the finger (120 ms): « Passer » is a tap, never a swipe (D5.9)
+   Rules: transform and opacity only; nothing above 320 ms; durations and easings from tokens.css;
+   under prefers-reduced-motion every duration is 0 ms (tokens.css) and no transform is applied at all.
+   Hidden initial states exist only while <html class="m-motion"> is set by motion.js: without script,
+   or with reduced motion, everything is visible and static. */
+
+:root {
+  /* Proposed token motion.duration.reveal (between base and slow): the block travels 12 px while it fades in. */
+  --d-reveal: 240ms;
+  --reveal-y: 12px;
+  --press-scale: 0.96;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --d-reveal: 0ms;
+    --reveal-y: 0px;
+    --press-scale: 1;
+  }
+}
+
+/* ---------- 1. Reveal de citation (once, on entering the viewport) ---------- */
+.m-motion [data-motion='reveal'] {
+  transition:
+    opacity var(--d-reveal) var(--ease-enter),
+    transform var(--d-reveal) var(--ease-enter);
+}
+.m-motion [data-motion='reveal']:not(.m-in) {
+  opacity: 0;
+  transform: translateY(var(--reveal-y));
+}
+/* A block already visible when inserted is shown at once (no LCP delay): motion.js sets m-instant for two frames. */
+.m-motion [data-motion='reveal'].m-instant {
+  transition: none;
+}
+
+/* ---------- 2. Concept -> section: cross-document View Transition, 200 ms cross-fade ---------- */
+/* Both documents opt in; shared/motion.js skips the transition unless the navigation comes from a
+   [data-motion="crossfade"] link, and skips it under reduced motion (belt and braces with the 0 ms token). */
+@view-transition {
+  navigation: auto;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--d-base);
+  animation-timing-function: var(--ease-standard);
+}
+/* The overlay must never swallow a tap: hit testing goes through to the new page during the fade. */
+::view-transition {
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none;
+  }
+}
+/* Prototype fallback: the destination renders its content by script after load, so the transition
+   cannot capture it (T7 pre-renders the HTML and this rule becomes moot). motion.js then skips the
+   cross-document transition and fades the arriving content in instead, 200 ms, opacity only. */
+.m-motion.m-arriving [data-motion='content'] {
+  transition: opacity var(--d-base) var(--ease-standard);
+}
+.m-motion.m-arriving [data-motion='content']:not([data-ready]) {
+  opacity: 0;
+  transition: none; /* the hidden state is set at once; only the way back to 1 is animated */
+}
+
+/* ---------- 3. « Passer » : tap feedback, 120 ms scale under the finger ---------- */
+[data-motion='press'] {
+  transition:
+    transform var(--d-fast) var(--ease-enter),
+    opacity var(--d-fast) var(--ease-standard);
+}
+.m-motion [data-motion='press'].m-pressed {
+  transform: scale(var(--press-scale));
+  transition-timing-function: var(--ease-exit);
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Opacity only, instant (tokens: --d-fast = 0 ms): the tap is still acknowledged. */
+  [data-motion='press'].m-pressed {
+    opacity: 0.8;
+  }
+}

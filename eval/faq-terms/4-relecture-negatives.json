@@ -1,0 +1,120 @@
+[
+  {
+    "slug": "n-voile",
+    "term": "voile / abaya",
+    "aliases": [
+      "\\bvoiles?\\b",
+      "abaya",
+      "burkini",
+      "burqa",
+      "hijab",
+      "foulard",
+      "signes? religieux",
+      "tenues? religieuse"
+    ]
+  },
+  {
+    "slug": "n-euro",
+    "term": "sortie de l'euro",
+    "aliases": [
+      "\\beuros?\\b(?! net| par| brut|s? pour| de| d’|/)",
+      "zone euro",
+      "monnaie unique",
+      "\\bfranc\\b",
+      "frexit",
+      "sortir de l’Union",
+      "sortir de l'Union",
+      "sortie de l’Union",
+      "sortie de l'Union",
+      "quitter l’Union",
+      "quitter l'Union",
+      "plan [AB]\\b",
+      "\\bmonnaie\\b"
+    ]
+  },
+  {
+    "slug": "n-revenu-universel",
+    "term": "revenu universel",
+    "aliases": [
+      "revenu universel",
+      "revenu de base",
+      "revenu inconditionnel",
+      "allocation universelle",
+      "revenu d’existence",
+      "revenu d'existence",
+      "revenu minimum"
+    ]
+  },
+  {
+    "slug": "n-harcelement",
+    "term": "harcèlement scolaire",
+    "aliases": ["harc[eè]lement", "cyberharc", "brimade", "intimidation"]
+  },
+  {
+    "slug": "n-crypto",
+    "term": "cryptomonnaies",
+    "aliases": [
+      "crypto",
+      "bitcoin",
+      "blockchain",
+      "\\bNFT\\b",
+      "monnaie virtuelle",
+      "monnaie numérique",
+      "actifs numériques"
+    ]
+  },
+  {
+    "slug": "n-pma",
+    "term": "PMA",
+    "aliases": ["\\bPMA\\b", "procréation", "\\bGPA\\b", "gestation pour autrui"]
+  },
+  {
+    "slug": "n-4-jours",
+    "term": "semaine de 4 jours",
+    "aliases": ["4 jours", "quatre jours", "32 ?h", "32 heures", "semaine de"]
+  },
+  { "slug": "n-uniforme", "term": "uniforme", "aliases": ["uniforme", "tenue unique", "blouse"] },
+  {
+    "slug": "n-transports-gratuits",
+    "term": "gratuité des transports",
+    "aliases": [
+      "gratuit[ée]?s? .{0,40}transport",
+      "transports? .{0,60}gratuit",
+      "tarifs? .{0,40}transport",
+      "transports? .{0,60}tarif",
+      "tarifs accessibles",
+      "tarification"
+    ]
+  },
+  {
+    "slug": "n-corrida",
+    "term": "corrida",
+    "aliases": ["corrida", "tauromachie", "chasse à courre", "delphinarium", "cirque"]
+  },
+  {
+    "slug": "n-reseaux-sociaux",
+    "term": "réseaux sociaux",
+    "aliases": [
+      "réseaux sociaux",
+      "réseau social",
+      "tiktok",
+      "instagram",
+      "facebook",
+      "majorité numérique",
+      "écrans?\\b",
+      "plateformes numériques"
+    ]
+  },
+  {
+    "slug": "n-peine-de-mort",
+    "term": "peine de mort",
+    "aliases": ["peine de mort", "peine capitale"]
+  },
+  { "slug": "n-senat", "term": "Sénat", "aliases": ["\\bSénat\\b", "sénateurs?", "bicam"] },
+  {
+    "slug": "n-vote-electronique",
+    "term": "vote électronique",
+    "aliases": ["vote électronique", "vote par internet", "vote en ligne", "machines? à voter"]
+  },
+  { "slug": "n-gratuite", "term": "gratuité (tout)", "aliases": ["gratuit"] }
+]

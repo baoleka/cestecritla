@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="fr" data-lab-variant="static">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Labo Turnstile — C'est écrit là</title>
+    <link rel="stylesheet" href="/style.css" />
+    <!-- Explicit rendering: app.js renders the widget from onTurnstileLoad (invisible widget, no visual footprint). -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad&render=explicit" async defer></script>
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <h1>Labo Turnstile</h1>
+      <p>
+        Prototype jetable (T7). Un défi Turnstile invisible s'exécute au chargement ; le jeton est vérifié
+        côté serveur par le Worker (<code>/verify</code>), jamais depuis le navigateur.
+      </p>
+      <form id="verify-form" action="/verify" method="post">
+        <input type="hidden" name="cf-turnstile-response" id="token-field" value="" />
+        <div id="cf-turnstile" aria-live="polite"></div>
+        <button type="submit" id="submit-button" disabled>Vérifier le jeton</button>
+      </form>
+      <p id="status" role="status">Chargement du script Turnstile…</p>
+      <pre id="result" hidden></pre>
+      <p class="fine">
+        Variante <span id="variant"></span>. Aucune donnée saisie, aucun cookie posé par cette page. Les traceurs
+        éventuels sont ceux du défi Cloudflare (voir README).
+      </p>
+    </main>
+  </body>
+</html>

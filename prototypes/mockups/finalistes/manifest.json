@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-09-09T07:37:44.231Z",
+  "corpus_version": "d29c7422004ab27c",
+  "screens": [
+    "f1-01-ecran0",
+    "f1-02-10s",
+    "f1-03-aha",
+    "f1-04-resultat",
+    "f1-05-carte",
+    "f1-06-lien",
+    "f2-01-ecran0",
+    "f2-02-10s",
+    "f2-03-aha",
+    "f2-04-resultat",
+    "f2-05-carte",
+    "f2-06-lien"
+  ],
+  "f1": {
+    "route": "/defi/254",
+    "fragment_on_compare_link": "#r=sdddp",
+    "received_fragment": "#r=ddsdp",
+    "cards": [
+      "c9-s01-m04",
+      "c7-s04-m05",
+      "c14-s02-m09",
+      "c18-s04-k01",
+      "c3-s02-m03"
+    ],
+    "player": "sdddp",
+    "sender": "ddsdp"
+  },
+  "f2": {
+    "route": "/q/c12-s01",
+    "options": [
+      "c12-s01-m03",
+      "c5-s02-m06",
+      "c18-s01-m02"
+    ],
+    "next": {
+      "section": "c12-s02",
+      "options": [
+        "c8-s02-m02",
+        "c12-s02-m08",
+        "c16-s12-m02"
+      ]
+    }
+  },
+  "stat_cards_rendered": [
+    "c14-s02-a01",
+    "c12-s01-a01"
+  ],
+  "ids": {
+    "c9-s01-m04": "Revaloriser les APL de 10 %",
+    "c7-s04-m05": "Plafonner les frais bancaires",
+    "c14-s02-m09": "Mailler le territoire de fontaines à eau, de douches et de sanitaires publics et gratuits",
+    "c18-s04-k01": "Garantir le droit à un accès minimal gratuit à Internet",
+    "c3-s02-m03": "Refuser les fusions forcées de communes",
+    "c12-s01-m03": "Créer un Conseil à la planification écologique",
+    "c5-s02-m06": "Garantir la gratuité des crèches publiques",
+    "c18-s01-m02": "Créer un lycée de la mer dans chaque département maritime (y compris dans les Outre-mer)",
+    "c8-s02-m02": "Généraliser une sixième semaine de congés payés pour tous les salariés",
+    "c12-s02-m08": "Stopper l’étalement urbain : rapprocher les bassins de vie et les bassins d’emploi",
+    "c16-s12-m02": "Créer un Erasmus francophone",
+    "c12-s01-k01": "Inscrire dans la Constitution le principe de la « règle verte », selon laquelle on ne prélève pas davantage à la nature que ce qu’elle est en état de reconstituer",
+    "c14-s02-k01": "Consacrer une « règle bleue » qui applique le principe de la « règle verte » (ne pas prendre à la nature davantage qu’elle ne peut reconstituer) à l’eau pour son usage et pour la protection de sa qualité"
+  }
+}

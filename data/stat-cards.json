@@ -1,0 +1,1602 @@
+{
+  "meta": {
+    "corpus_version": "d29c7422004ab27c",
+    "source_crawled_at": "2026-09-07T16:30:57.692Z",
+    "license_fr": "Textes extraits mot pour mot de « L'Avenir en commun, édition 2025 » (https://melenchon2027.fr/programme2025/livre/), CC BY-NC-SA 4.0, attribution « La France insoumise – L'Avenir en commun ». Fichier dérivé diffusé sous la même licence.",
+    "generator": "scripts/derive.ts",
+    "count": 48,
+    "with_institute_and_date": 47,
+    "institutes": {
+      "Harris Interactive": 37,
+      "Ifop": 9,
+      "inconnu": 1,
+      "YouGov": 1
+    },
+    "date_range": {
+      "earliest_iso": "2018-01",
+      "latest_iso": "2024-10",
+      "earliest_text": "janvier 2018",
+      "latest_text": "octobre 2024",
+      "year_only": 3
+    },
+    "confidence": {
+      "high": 44,
+      "medium": 3,
+      "low": 1
+    },
+    "without_percentage": [],
+    "legal_77_808_fr": "La loi n° 77-808 du 19 juillet 1977 (art. 2, modifié en 2016) impose, pour toute publication d'un sondage, d'indiquer l'organisme qui l'a réalisé, le commanditaire, les dates d'interrogation et le média de première diffusion (ainsi que la taille de l'échantillon, le texte des questions et les marges d'erreur, jamais fournis ici). Les encadrés « À savoir » ne citent que l'organisme et un mois/année : les mentions manquantes sont listées dans legal_77_808.missing pour chaque carte.",
+    "paragraph_statistics_fr": "Statistiques publiées par le site comme simple paragraphe (hors encadré « À savoir »), signalées dans meta.source_anomalies du corpus (statistic_as_paragraph) ; analysées de la même façon, listées à part pour ne pas modifier le décompte des encadrés."
+  },
+  "cards": [
+    {
+      "id": "c1-s02-a01",
+      "section_id": "c1-s02",
+      "chapter_id": "c1",
+      "chapter_title": "Chapitre 1 : Le pouvoir au peuple",
+      "section_title": "Abolir la monarchie présidentielle",
+      "text": "68 % des Français sont favorables à l’instauration de la proportionnelle pour les prochaines élections législatives (sur la base de listes départementales) (Harris Interactive, mai 2021)",
+      "percentages": [
+        68
+      ],
+      "headline_percentage": 68,
+      "citation_text": "Harris Interactive, mai 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "mai 2021",
+      "survey_date_iso": "2021-05",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "mai 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c1-s06-a01",
+      "section_id": "c1-s06",
+      "chapter_id": "c1",
+      "chapter_title": "Chapitre 1 : Le pouvoir au peuple",
+      "section_title": "La Révolution citoyenne dans les médias",
+      "text": "73 % des Français sont favorables à la création d’un organisme citoyen chargé de contrôler la déontologie des médias (Harris Interactive, juillet 2021)",
+      "percentages": [
+        73
+      ],
+      "headline_percentage": 73,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c4-s01-a01",
+      "section_id": "c4-s01",
+      "chapter_id": "c4",
+      "chapter_title": "Chapitre 4 : Étendre le domaine de la liberté",
+      "section_title": "Une nouvelle étape des libertés et de l’émancipation individuelle",
+      "text": "89 % des Français sont favorables à la légalisation de l’euthanasie (acte déclenché par le corps médical) et 92 % à la légalisation du suicide assisté (acte déclenché par le patient lui-même) (Ifop, 2024)",
+      "percentages": [
+        89,
+        92
+      ],
+      "headline_percentage": 89,
+      "citation_text": "Ifop, 2024",
+      "institute": "Ifop",
+      "institute_raw": "Ifop",
+      "survey_date_text": "2024",
+      "survey_date_iso": null,
+      "survey_year": 2024,
+      "parse_confidence": "medium",
+      "legal_77_808": {
+        "organisme": "Ifop",
+        "dates": "2024",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c4-s03-a01",
+      "section_id": "c4-s03",
+      "chapter_id": "c4",
+      "chapter_title": "Chapitre 4 : Étendre le domaine de la liberté",
+      "section_title": "Refonder une police républicaine",
+      "text": "70 % des Français se disent favorable à une réforme de l’IGPN pour la rendre indépendante du ministère de l’Intérieur (Yougov, décembre 2020)",
+      "percentages": [
+        70
+      ],
+      "headline_percentage": 70,
+      "citation_text": "Yougov, décembre 2020",
+      "institute": "YouGov",
+      "institute_raw": "Yougov",
+      "survey_date_text": "décembre 2020",
+      "survey_date_iso": "2020-12",
+      "survey_year": 2020,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "YouGov",
+        "dates": "décembre 2020",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c5-s03-a01",
+      "section_id": "c5-s03",
+      "chapter_id": "c5",
+      "chapter_title": "Chapitre 5 : Élever le niveau d’instruction",
+      "section_title": "Reconstruire une école globale pour l’égalité et l’émancipation",
+      "text": "67 % des Français sont favorables à la gratuité intégrale de l’école, cantine et matériel scolaire compris (Harris Interactive, juillet 2021)",
+      "percentages": [
+        67
+      ],
+      "headline_percentage": 67,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c5-s06-a01",
+      "section_id": "c5-s06",
+      "chapter_id": "c5",
+      "chapter_title": "Chapitre 5 : Élever le niveau d’instruction",
+      "section_title": "Refonder l’enseignement supérieur",
+      "text": "76 % des Français sont pour rétablir le libre choix de sa filière d’inscription à l’université en supprimant Parcoursup (Harris Interactive, juillet 2021)",
+      "percentages": [
+        76
+      ],
+      "headline_percentage": 76,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c5-s07-a01",
+      "section_id": "c5-s07",
+      "chapter_id": "c5",
+      "chapter_title": "Chapitre 5 : Élever le niveau d’instruction",
+      "section_title": "Créer une conscription pour le secours collectif",
+      "text": "74 % des Français sont favorables à un service citoyen mixte, d’une durée de 9 mois, payé au SMIC (Harris Interactive, juillet 2021)",
+      "percentages": [
+        74
+      ],
+      "headline_percentage": 74,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c6-s05-a01",
+      "section_id": "c6-s05",
+      "chapter_id": "c6",
+      "chapter_title": "Chapitre 6 : Partage des richesses",
+      "section_title": "Faire la révolution fiscale",
+      "text": "68 % des Français sont pour que l’impôt sur le revenu augmente pour les personnes qui gagnent plus de 4000 euros net par mois et baisse pour les autres (Harris Interactive, juillet 2021)",
+      "percentages": [
+        68
+      ],
+      "headline_percentage": 68,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c6-s05-a02",
+      "section_id": "c6-s05",
+      "chapter_id": "c6",
+      "chapter_title": "Chapitre 6 : Partage des richesses",
+      "section_title": "Faire la révolution fiscale",
+      "text": "86 % des Français sont pour faire payer plus d’impôts à Google, Amazon, Facebook et Apple qu’ils n’en payent aujourd’hui (Harris Interactive, juillet 2021)",
+      "percentages": [
+        86
+      ],
+      "headline_percentage": 86,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c6-s05-a03",
+      "section_id": "c6-s05",
+      "chapter_id": "c6",
+      "chapter_title": "Chapitre 6 : Partage des richesses",
+      "section_title": "Faire la révolution fiscale",
+      "text": "79 % des Français se déclarent favorables à une taxe exceptionnelle sur les « surprofits », c’est-à-dire les profits exceptionnels par rapport aux années précédentes que les grandes entreprises ont réalisés pendant la crise sanitaire (Harris Interactive, mai 2021)",
+      "percentages": [
+        79
+      ],
+      "headline_percentage": 79,
+      "citation_text": "Harris Interactive, mai 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "mai 2021",
+      "survey_date_iso": "2021-05",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "mai 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c6-s05-a04",
+      "section_id": "c6-s05",
+      "chapter_id": "c6",
+      "chapter_title": "Chapitre 6 : Partage des richesses",
+      "section_title": "Faire la révolution fiscale",
+      "text": "78 % des Français sont pour le rétablissement de l’ISF (Ifop pour l’Humanité, mai 2021)",
+      "percentages": [
+        78
+      ],
+      "headline_percentage": 78,
+      "citation_text": "Ifop pour l’Humanité, mai 2021",
+      "institute": "Ifop",
+      "institute_raw": "Ifop",
+      "survey_date_text": "mai 2021",
+      "survey_date_iso": "2021-05",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Ifop",
+        "dates": "mai 2021",
+        "commanditaire": "l’Humanité",
+        "media_premiere_diffusion": null,
+        "missing": [
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c7-s01-a01",
+      "section_id": "c7-s01",
+      "chapter_id": "c7",
+      "chapter_title": "Chapitre 7 : La force de l’entraide",
+      "section_title": "L’égalité des populations par la démocratie et les services publics",
+      "text": "93 % des Français sont pour un grand plan d’investissement dans les services publics, en particulier de santé (Ifop pour L’Humanité, mai 2021)",
+      "percentages": [
+        93
+      ],
+      "headline_percentage": 93,
+      "citation_text": "Ifop pour L’Humanité, mai 2021",
+      "institute": "Ifop",
+      "institute_raw": "Ifop",
+      "survey_date_text": "mai 2021",
+      "survey_date_iso": "2021-05",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Ifop",
+        "dates": "mai 2021",
+        "commanditaire": "L’Humanité",
+        "media_premiere_diffusion": null,
+        "missing": [
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c7-s04-a01",
+      "section_id": "c7-s04",
+      "chapter_id": "c7",
+      "chapter_title": "Chapitre 7 : La force de l’entraide",
+      "section_title": "Éradiquer la pauvreté",
+      "text": "86 % des Français favorables au plafonnement des frais bancaires (Harris Interactive, juin 2020)",
+      "percentages": [
+        86
+      ],
+      "headline_percentage": 86,
+      "citation_text": "Harris Interactive, juin 2020",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juin 2020",
+      "survey_date_iso": "2020-06",
+      "survey_year": 2020,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juin 2020",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c7-s05-a01",
+      "section_id": "c7-s05",
+      "chapter_id": "c7",
+      "chapter_title": "Chapitre 7 : La force de l’entraide",
+      "section_title": "Garantir le droit au logement",
+      "text": "75 % des Français sont favorables à la fixation d’un loyer maximum par m2 (Harris Interactive, juillet 2021)",
+      "percentages": [
+        75
+      ],
+      "headline_percentage": 75,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c7-s05-a02",
+      "section_id": "c7-s05",
+      "chapter_id": "c7",
+      "chapter_title": "Chapitre 7 : La force de l’entraide",
+      "section_title": "Garantir le droit au logement",
+      "text": "87 % des Français sont favorables à un plan national d’isolation des bâtiments pour lutter contre la précarité énergétique (Harris Interactive, juillet 2021)",
+      "percentages": [
+        87
+      ],
+      "headline_percentage": 87,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c7-s08-a01",
+      "section_id": "c7-s08",
+      "chapter_id": "c7",
+      "chapter_title": "Chapitre 7 : La force de l’entraide",
+      "section_title": "Une police de proximité au service de la sûreté des citoyens",
+      "text": "60 % des Français sont favorables au remplacement des brigades anticriminalité (BAC) par une police de proximité (Harris Interactive, juillet 2021)",
+      "percentages": [
+        60
+      ],
+      "headline_percentage": 60,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c8-s01-a01",
+      "section_id": "c8-s01",
+      "chapter_id": "c8",
+      "chapter_title": "Chapitre 8 : Travailler tous, travailler moins, travailler mieux",
+      "section_title": "Établir la garantie d’emploi",
+      "text": "87 % des Français se déclarent favorables à ce que l’État garantisse un emploi à tout chômeur de longue durée qui souhaite travailler (Harris Interactive, mai 2021)",
+      "percentages": [
+        87
+      ],
+      "headline_percentage": 87,
+      "citation_text": "Harris Interactive, mai 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "mai 2021",
+      "survey_date_iso": "2021-05",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "mai 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c8-s02-a01",
+      "section_id": "c8-s02",
+      "chapter_id": "c8",
+      "chapter_title": "Chapitre 8 : Travailler tous, travailler moins, travailler mieux",
+      "section_title": "Réduire le temps de travail et faire naître une société du temps choisi",
+      "text": "70 % des Français se déclarent favorables à l’instauration de la semaine de 4 jours, 32h payées 35h (Ifop, 2024)",
+      "percentages": [
+        70
+      ],
+      "headline_percentage": 70,
+      "citation_text": "Ifop, 2024",
+      "institute": "Ifop",
+      "institute_raw": "Ifop",
+      "survey_date_text": "2024",
+      "survey_date_iso": null,
+      "survey_year": 2024,
+      "parse_confidence": "medium",
+      "legal_77_808": {
+        "organisme": "Ifop",
+        "dates": "2024",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c8-s04-a01",
+      "section_id": "c8-s04",
+      "chapter_id": "c8",
+      "chapter_title": "Chapitre 8 : Travailler tous, travailler moins, travailler mieux",
+      "section_title": "Augmenter les salaires et réduire les inégalités salariales dans l’entreprise",
+      "text": "76 % des Français sont pour l’augmentation du SMIC à 1400 euros net par mois (Harris Interactive, juillet 2021)",
+      "percentages": [
+        76
+      ],
+      "headline_percentage": 76,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c8-s07-a01",
+      "section_id": "c8-s07",
+      "chapter_id": "c8",
+      "chapter_title": "Chapitre 8 : Travailler tous, travailler moins, travailler mieux",
+      "section_title": "En finir avec la souffrance au travail",
+      "text": "63 % des Français sont pour l’abrogation des lois travail initiées par François Hollande et Emmanuel Macron (Harris Interactive, juillet 2021)",
+      "percentages": [
+        63
+      ],
+      "headline_percentage": 63,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c8-s07-a02",
+      "section_id": "c8-s07",
+      "chapter_id": "c8",
+      "chapter_title": "Chapitre 8 : Travailler tous, travailler moins, travailler mieux",
+      "section_title": "En finir avec la souffrance au travail",
+      "text": "81 % des Français s’expriment en faveur de la reconnaissance du burn-out comme une maladie professionnelle (Harris Interactive, janvier 2018)",
+      "percentages": [
+        81
+      ],
+      "headline_percentage": 81,
+      "citation_text": "Harris Interactive, janvier 2018",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "janvier 2018",
+      "survey_date_iso": "2018-01",
+      "survey_year": 2018,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "janvier 2018",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c8-s08-a01",
+      "section_id": "c8-s08",
+      "chapter_id": "c8",
+      "chapter_title": "Chapitre 8 : Travailler tous, travailler moins, travailler mieux",
+      "section_title": "Garantir une retraite digne",
+      "text": "83 % des Français sont pour que chaque retraité touche au minimum une pension égale au SMIC (Harris Interactive, juillet 2021)",
+      "percentages": [
+        83
+      ],
+      "headline_percentage": 83,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c8-s08-a02",
+      "section_id": "c8-s08",
+      "chapter_id": "c8",
+      "chapter_title": "Chapitre 8 : Travailler tous, travailler moins, travailler mieux",
+      "section_title": "Garantir une retraite digne",
+      "text": "71 % des Français sont favorables au retour de la retraite à 60 ans (Ifop 2022)",
+      "percentages": [
+        71
+      ],
+      "headline_percentage": 71,
+      "citation_text": "Ifop 2022",
+      "institute": "Ifop",
+      "institute_raw": "Ifop",
+      "survey_date_text": "2022",
+      "survey_date_iso": null,
+      "survey_year": 2022,
+      "parse_confidence": "medium",
+      "legal_77_808": {
+        "organisme": "Ifop",
+        "dates": "2022",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c9-s01-a01",
+      "section_id": "c9-s01",
+      "chapter_id": "c9",
+      "chapter_title": "Chapitre 9 : Produire nous-mêmes pour répondre aux besoins",
+      "section_title": "Créer un état d’urgence sociale",
+      "text": "87 % des Français sont pour le blocage des prix de l’énergie (Harris Interactive, octobre 2024)",
+      "percentages": [
+        87
+      ],
+      "headline_percentage": 87,
+      "citation_text": "Harris Interactive, octobre 2024",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "octobre 2024",
+      "survey_date_iso": "2024-10",
+      "survey_year": 2024,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "octobre 2024",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c9-s02-a01",
+      "section_id": "c9-s02",
+      "chapter_id": "c9",
+      "chapter_title": "Chapitre 9 : Produire nous-mêmes pour répondre aux besoins",
+      "section_title": "Réindustrialiser et relocaliser pour assurer notre indépendance",
+      "text": "90 % des Français sont pour conditionner les aides publiques aux entreprises à des contreparties sociales et environnementales (Ifop pour l’Humanité, septembre 2020)",
+      "percentages": [
+        90
+      ],
+      "headline_percentage": 90,
+      "citation_text": "Ifop pour l’Humanité, septembre 2020",
+      "institute": "Ifop",
+      "institute_raw": "Ifop",
+      "survey_date_text": "septembre 2020",
+      "survey_date_iso": "2020-09",
+      "survey_year": 2020,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Ifop",
+        "dates": "septembre 2020",
+        "commanditaire": "l’Humanité",
+        "media_premiere_diffusion": null,
+        "missing": [
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c10-s02-a01",
+      "section_id": "c10-s02",
+      "chapter_id": "c10",
+      "chapter_title": "Chapitre 10 : Faire place à la nouvelle France",
+      "section_title": "Une République universaliste contre le racisme et les discriminations",
+      "text": "61 % des Français sont en faveur de l’instauration d’un récépissé fourni par les forces de l’ordre aux citoyens à l’issue d’un contrôle d’identité (Harris Interactive, janvier 2018)",
+      "percentages": [
+        61
+      ],
+      "headline_percentage": 61,
+      "citation_text": "Harris Interactive, janvier 2018",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "janvier 2018",
+      "survey_date_iso": "2018-01",
+      "survey_year": 2018,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "janvier 2018",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c10-s04-a01",
+      "section_id": "c10-s04",
+      "chapter_id": "c10",
+      "chapter_title": "Chapitre 10 : Faire place à la nouvelle France",
+      "section_title": "Faire face collectivement à la perte d’autonomie individuelle",
+      "text": "86 % des Français sont pour la création d’un service public dédié au maintien à domicile des seniors (Harris Interactive, juillet 2021)",
+      "percentages": [
+        86
+      ],
+      "headline_percentage": 86,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c11-s01-a01",
+      "section_id": "c11-s01",
+      "chapter_id": "c11",
+      "chapter_title": "Chapitre 11 : Humaniser par la culture et le sport",
+      "section_title": "La bifurcation dans les arts et la culture : pour un service public du progrès humain",
+      "text": "76 % des Français sont d’accord pour que les droits d’auteur financent les artistes de demain (Harris Interactive, juillet 2021)",
+      "percentages": [
+        76
+      ],
+      "headline_percentage": 76,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c11-s01-a02",
+      "section_id": "c11-s01",
+      "chapter_id": "c11",
+      "chapter_title": "Chapitre 11 : Humaniser par la culture et le sport",
+      "section_title": "La bifurcation dans les arts et la culture : pour un service public du progrès humain",
+      "text": "76 % des Français se déclarent favorables à l’instauration d’un nouveau régime de protection sociale spécifique aux auteurs et autrices leurs donnant des droits identiques à ceux des salariés (Harris Interactive, mai 2021)",
+      "percentages": [
+        76
+      ],
+      "headline_percentage": 76,
+      "citation_text": "Harris Interactive, mai 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "mai 2021",
+      "survey_date_iso": "2021-05",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "mai 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c12-s01-a01",
+      "section_id": "c12-s01",
+      "chapter_id": "c12",
+      "chapter_title": "Chapitre 12 : Planification écologique",
+      "section_title": "La bifurcation écologique pour une société de l’harmonie",
+      "text": "83 % des Français sont d’accord pour interdire de prélever chaque année plus de matières premières que la Terre est capable de reconstituer en un an (Harris Interactive, juillet 2021)",
+      "percentages": [
+        83
+      ],
+      "headline_percentage": 83,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c13-s02-a01",
+      "section_id": "c13-s02",
+      "chapter_id": "c13",
+      "chapter_title": "Chapitre 13 : Les grands chantiers de la bifurcation écologique",
+      "section_title": "Développer les transports publics écologiques, repenser la mobilité individuelle",
+      "text": "76 % des Français sont pour le retour d’un contrôle public sur le rail et les trains (Harris Interactive, juillet 2021)",
+      "percentages": [
+        76
+      ],
+      "headline_percentage": 76,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c13-s03-a01",
+      "section_id": "c13-s03",
+      "chapter_id": "c13",
+      "chapter_title": "Chapitre 13 : Les grands chantiers de la bifurcation écologique",
+      "section_title": "Organiser le 100 % d’énergies renouvelables en 2050 et la rénovation énergétique",
+      "text": "74 % des Français sont favorables à un objectif de 100 % d’énergies renouvelables (Harris Interactive, juillet 2021)",
+      "percentages": [
+        74,
+        100
+      ],
+      "headline_percentage": 74,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c13-s03-a02",
+      "section_id": "c13-s03",
+      "chapter_id": "c13",
+      "chapter_title": "Chapitre 13 : Les grands chantiers de la bifurcation écologique",
+      "section_title": "Organiser le 100 % d’énergies renouvelables en 2050 et la rénovation énergétique",
+      "text": "314 530 personnes ont participé à la votation organisée sur la sortie du nucléaire en 2018 (93,13 % des votants y étaient favorables)",
+      "percentages": [
+        93.13
+      ],
+      "headline_percentage": 93.13,
+      "citation_text": "93,13 % des votants y étaient favorables",
+      "institute": null,
+      "institute_raw": "93,13 % des votants y étaient favorables",
+      "survey_date_text": null,
+      "survey_date_iso": null,
+      "survey_year": null,
+      "parse_confidence": "low",
+      "legal_77_808": {
+        "organisme": null,
+        "dates": null,
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "organisme",
+          "dates",
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c13-s04-a01",
+      "section_id": "c13-s04",
+      "chapter_id": "c13",
+      "chapter_title": "Chapitre 13 : Les grands chantiers de la bifurcation écologique",
+      "section_title": "Consommer autrement, une France « zéro déchet »",
+      "text": "78 % des Français se déclarent favorables à l’interdiction des publicités encourageant les pratiques alimentaires dangereuses pour la santé et celles relatives à des secteurs polluants (Harris Interactive, mai 2021)",
+      "percentages": [
+        78
+      ],
+      "headline_percentage": 78,
+      "citation_text": "Harris Interactive, mai 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "mai 2021",
+      "survey_date_iso": "2021-05",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "mai 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c13-s04-a02",
+      "section_id": "c13-s04",
+      "chapter_id": "c13",
+      "chapter_title": "Chapitre 13 : Les grands chantiers de la bifurcation écologique",
+      "section_title": "Consommer autrement, une France « zéro déchet »",
+      "text": "70 % des Français se montrent favorables à l’interdiction des publicités numériques et lumineuses (Harris Interactive, mai 2021)",
+      "percentages": [
+        70
+      ],
+      "headline_percentage": 70,
+      "citation_text": "Harris Interactive, mai 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "mai 2021",
+      "survey_date_iso": "2021-05",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "mai 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c13-s05-a01",
+      "section_id": "c13-s05",
+      "chapter_id": "c13",
+      "chapter_title": "Chapitre 13 : Les grands chantiers de la bifurcation écologique",
+      "section_title": "Souveraineté alimentaire et révolution agricole : pour une agriculture écologique et paysanne",
+      "text": "86 % des Français sont favorables à un plan de création de 300 000 emplois dans l’agriculture (Harris Interactive, juillet 2021)",
+      "percentages": [
+        86
+      ],
+      "headline_percentage": 86,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c13-s05-a02",
+      "section_id": "c13-s05",
+      "chapter_id": "c13",
+      "chapter_title": "Chapitre 13 : Les grands chantiers de la bifurcation écologique",
+      "section_title": "Souveraineté alimentaire et révolution agricole : pour une agriculture écologique et paysanne",
+      "text": "89 % des Français sont favorables à une loi pour l’interdiction du glyphosate (Ifop, février 2019)",
+      "percentages": [
+        89
+      ],
+      "headline_percentage": 89,
+      "citation_text": "Ifop, février 2019",
+      "institute": "Ifop",
+      "institute_raw": "Ifop",
+      "survey_date_text": "février 2019",
+      "survey_date_iso": "2019-02",
+      "survey_year": 2019,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Ifop",
+        "dates": "février 2019",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c14-s02-a01",
+      "section_id": "c14-s02",
+      "chapter_id": "c14",
+      "chapter_title": "Chapitre 14 : Protection des biens communs et des droits de l’espèce",
+      "section_title": "L’eau, enjeu central pour l’Humanité",
+      "text": "80 % des Français sont favorables à la gratuité des compteurs d’eau et des premiers m3 nécessaires à la vie (Harris Interactive, juillet 2021)",
+      "percentages": [
+        80
+      ],
+      "headline_percentage": 80,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c14-s05-a01",
+      "section_id": "c14-s05",
+      "chapter_id": "c14",
+      "chapter_title": "Chapitre 14 : Protection des biens communs et des droits de l’espèce",
+      "section_title": "Rompre avec la maltraitance animale",
+      "text": "59 % des Français soutiennent l’interdiction des « fermes-usines » en France, c’est-à-dire des fermes organisées sur un modèle de production industrielle, accueillant une concentration élevée d’animaux (Harris Interactive, mai 2021)",
+      "percentages": [
+        59
+      ],
+      "headline_percentage": 59,
+      "citation_text": "Harris Interactive, mai 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "mai 2021",
+      "survey_date_iso": "2021-05",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "mai 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c15-s01-a01",
+      "section_id": "c15-s01",
+      "chapter_id": "c15",
+      "chapter_title": "Chapitre 15 : Une approche de santé globale",
+      "section_title": "S’organiser pour faire face aux pandémies",
+      "text": "90 % des Français sont pour la création d’un pôle public du médicament, qui serait un établissement public scientifique et technique, ayant vocation à s’assurer de l’approvisionnement de la France en matière de dispositifs médicaux (Harris Interactive, juin 2020)",
+      "percentages": [
+        90
+      ],
+      "headline_percentage": 90,
+      "citation_text": "Harris Interactive, juin 2020",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juin 2020",
+      "survey_date_iso": "2020-06",
+      "survey_year": 2020,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juin 2020",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c15-s01-a02",
+      "section_id": "c15-s01",
+      "chapter_id": "c15",
+      "chapter_title": "Chapitre 15 : Une approche de santé globale",
+      "section_title": "S’organiser pour faire face aux pandémies",
+      "text": "83 % des Français sont favorables à ce que les pandémies soient reconnues comme des catastrophes naturelles (Harris Interactive, juin 2020)",
+      "percentages": [
+        83
+      ],
+      "headline_percentage": 83,
+      "citation_text": "Harris Interactive, juin 2020",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juin 2020",
+      "survey_date_iso": "2020-06",
+      "survey_year": 2020,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juin 2020",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c15-s02-a01",
+      "section_id": "c15-s02",
+      "chapter_id": "c15",
+      "chapter_title": "Chapitre 15 : Une approche de santé globale",
+      "section_title": "Faire passer la santé d’abord et reconstruire les établissements de santé publics, notamment les hôpitaux",
+      "text": "86 % des Français sont favorables à la réouverture des lits hospitaliers fermés depuis 2010 (Harris Interactive, juillet 2021)",
+      "percentages": [
+        86
+      ],
+      "headline_percentage": 86,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c15-s03-a01",
+      "section_id": "c15-s03",
+      "chapter_id": "c15",
+      "chapter_title": "Chapitre 15 : Une approche de santé globale",
+      "section_title": "Addictions et drogues : il faut changer de stratégie",
+      "text": "57 % des Français sont pour la légalisation, encadrée par l’État, de la consommation de cannabis (Harris Interactive, juillet 2021)",
+      "percentages": [
+        57
+      ],
+      "headline_percentage": 57,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c15-s04-a01",
+      "section_id": "c15-s04",
+      "chapter_id": "c15",
+      "chapter_title": "Chapitre 15 : Une approche de santé globale",
+      "section_title": "En finir avec la malbouffe",
+      "text": "91 % des Français sont favorables à une loi pour limiter la malbouffe (Ifop, février 2019)",
+      "percentages": [
+        91
+      ],
+      "headline_percentage": 91,
+      "citation_text": "Ifop, février 2019",
+      "institute": "Ifop",
+      "institute_raw": "Ifop",
+      "survey_date_text": "février 2019",
+      "survey_date_iso": "2019-02",
+      "survey_year": 2019,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Ifop",
+        "dates": "février 2019",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c16-s02-a01",
+      "section_id": "c16-s02",
+      "chapter_id": "c16",
+      "chapter_title": "Chapitre 16 : Une diplomatie altermondialiste pour la paix",
+      "section_title": "Construire une défense souveraine au service de la paix",
+      "text": "96 % des Français sont favorables à ce que les procédures administratives pour les blessés psychiques de guerre soient simplifiées (Harris Interactive, mai 2021)",
+      "percentages": [
+        96
+      ],
+      "headline_percentage": 96,
+      "citation_text": "Harris Interactive, mai 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "mai 2021",
+      "survey_date_iso": "2021-05",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "mai 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c16-s03-a01",
+      "section_id": "c16-s03",
+      "chapter_id": "c16",
+      "chapter_title": "Chapitre 16 : Une diplomatie altermondialiste pour la paix",
+      "section_title": "Renforcer l’ONU pour faire vivre un monde ordonné",
+      "text": "83 % des Français sont favorables à ce que l’ONU joue un rôle plus important pour assurer la paix sur Terre (Harris Interactive, juillet 2021)",
+      "percentages": [
+        83
+      ],
+      "headline_percentage": 83,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c16-s07-a01",
+      "section_id": "c16-s07",
+      "chapter_id": "c16",
+      "chapter_title": "Chapitre 16 : Une diplomatie altermondialiste pour la paix",
+      "section_title": "Pour une politique migratoire humaniste et réaliste",
+      "text": "83 % des Français sont favorables à un plan de co-développement initié par la France pour prévenir les migrations forcées (Harris Interactive, juillet 2021)",
+      "percentages": [
+        83
+      ],
+      "headline_percentage": 83,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c17-s02-a01",
+      "section_id": "c17-s02",
+      "chapter_id": "c17",
+      "chapter_title": "Chapitre 17 : Europe",
+      "section_title": "Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme",
+      "text": "68 % des Français sont favorables à l’interdiction du travail détaché qui permet à des salariés d’un pays de l’Union européenne de venir travailler en France sans payer les mêmes cotisations sociales que les salariés et dirigeants français (Ifop, février 2019)",
+      "percentages": [
+        68
+      ],
+      "headline_percentage": 68,
+      "citation_text": "Ifop, février 2019",
+      "institute": "Ifop",
+      "institute_raw": "Ifop",
+      "survey_date_text": "février 2019",
+      "survey_date_iso": "2019-02",
+      "survey_year": 2019,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Ifop",
+        "dates": "février 2019",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    }
+  ],
+  "paragraph_statistics": [
+    {
+      "id": "c1-s01-p02",
+      "section_id": "c1-s01",
+      "chapter_id": "c1",
+      "chapter_title": "Chapitre 1 : Le pouvoir au peuple",
+      "section_title": "Réunir une Assemblée constituante pour passer à la 6e République",
+      "text": "63 % des Français sont favorables à un processus constituant qui consisterait à donner le pouvoir aux Français d’écrire une nouvelle Constitution (Ifop, 2024)",
+      "percentages": [
+        63
+      ],
+      "headline_percentage": 63,
+      "citation_text": "Ifop, 2024",
+      "institute": "Ifop",
+      "institute_raw": "Ifop",
+      "survey_date_text": "2024",
+      "survey_date_iso": null,
+      "survey_year": 2024,
+      "parse_confidence": "medium",
+      "legal_77_808": {
+        "organisme": "Ifop",
+        "dates": "2024",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c1-s03-p03",
+      "section_id": "c1-s03",
+      "chapter_id": "c1",
+      "chapter_title": "Chapitre 1 : Le pouvoir au peuple",
+      "section_title": "Balayer l’oligarchie, abolir les privilèges de la caste",
+      "text": "85 % des Français sont pour durcir les règles contre les conflits d’intérêts (Harris Interactive, juillet 2021)",
+      "percentages": [
+        85
+      ],
+      "headline_percentage": 85,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c1-s04-p02",
+      "section_id": "c1-s04",
+      "chapter_id": "c1",
+      "chapter_title": "Chapitre 1 : Le pouvoir au peuple",
+      "section_title": "Une République permettant l’intervention populaire",
+      "text": "70 % des Français sont favorables à à l’instauration d’une procédure de parrainage citoyen pour l’élection présidentielle en alternative aux « 500 parrainages » d’élus actuellement en vigueur (Harris Interactive, mai 2021)",
+      "percentages": [
+        70
+      ],
+      "headline_percentage": 70,
+      "citation_text": "Harris Interactive, mai 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "mai 2021",
+      "survey_date_iso": "2021-05",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "mai 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c1-s04-p03",
+      "section_id": "c1-s04",
+      "chapter_id": "c1",
+      "chapter_title": "Chapitre 1 : Le pouvoir au peuple",
+      "section_title": "Une République permettant l’intervention populaire",
+      "text": "69 % des Français se déclarent favorables à l’instauration du Référendum d’initiative citoyenne (Ifop, février 2019)",
+      "percentages": [
+        69
+      ],
+      "headline_percentage": 69,
+      "citation_text": "Ifop, février 2019",
+      "institute": "Ifop",
+      "institute_raw": "Ifop",
+      "survey_date_text": "février 2019",
+      "survey_date_iso": "2019-02",
+      "survey_year": 2019,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Ifop",
+        "dates": "février 2019",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c1-s05-p02",
+      "section_id": "c1-s05",
+      "chapter_id": "c1",
+      "chapter_title": "Chapitre 1 : Le pouvoir au peuple",
+      "section_title": "Une République laïque",
+      "text": "70 % des Français sont pour la suppression du financement des cultes par l’argent public en Alsace-Moselle et en Outre-mer (Harris Interactive, juillet 2021)",
+      "percentages": [
+        70
+      ],
+      "headline_percentage": 70,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    },
+    {
+      "id": "c10-s01-p02",
+      "section_id": "c10-s01",
+      "chapter_id": "c10",
+      "chapter_title": "Chapitre 10 : Faire place à la nouvelle France",
+      "section_title": "Réaliser l’égalité entre les femmes et les hommes",
+      "text": "77 % des Français sont favorables à un plan d’un milliard d’euros afin d’en finir avec les violences sexuelles et sexistes (Harris Interactive, juillet 2021)",
+      "percentages": [
+        77
+      ],
+      "headline_percentage": 77,
+      "citation_text": "Harris Interactive, juillet 2021",
+      "institute": "Harris Interactive",
+      "institute_raw": "Harris Interactive",
+      "survey_date_text": "juillet 2021",
+      "survey_date_iso": "2021-07",
+      "survey_year": 2021,
+      "parse_confidence": "high",
+      "legal_77_808": {
+        "organisme": "Harris Interactive",
+        "dates": "juillet 2021",
+        "commanditaire": null,
+        "media_premiere_diffusion": null,
+        "missing": [
+          "commanditaire",
+          "media_premiere_diffusion"
+        ]
+      }
+    }
+  ]
+}

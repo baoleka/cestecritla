@@ -1,0 +1,136 @@
+{
+  "url": "https://avenir-en-commun.net/programme",
+  "finalUrl": "https://avenir-en-commun.net/programme",
+  "status": 200,
+  "loadMs": 944,
+  "responseHeaders": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=0, must-revalidate",
+    "cf-cache-status": "HIT",
+    "cf-ray": "a376f1c0abe6d3a3-CDG",
+    "content-encoding": "zstd",
+    "content-type": "text/html",
+    "date": "Mon, 07 Sep 2026 16:03:35 GMT",
+    "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+    "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=ngRYvF1uaiEA8W3Q4zPZKw1KfoCbzLCPvEv8irQEA1NtUNAhQ7jnmN%2BE6aIXP8Fqh%2BPJvozDOfUCYZFHWvXYyyVxXzHva0kWtTloNb45cBpmwwv4VIStgyTJd8UU2tK9bM1YlYPPeynZ%2FzQ5YtbUCGyWXQ%3D%3D\"}]}",
+    "server": "cloudflare"
+  },
+  "hosts": {
+    "avenir-en-commun.net": 2,
+    "fonts.googleapis.com": 1,
+    "fonts.gstatic.com": 1
+  },
+  "requestsCount": 4,
+  "responses": [],
+  "cookies": [],
+  "title": "Le Programme - Mélenchon 2027",
+  "lang": "fr",
+  "meta": {
+    "viewport": "width=device-width, initial-scale=1.0"
+  },
+  "links": {
+    "preconnect": [
+      "https://fonts.googleapis.com",
+      "https://fonts.gstatic.com"
+    ],
+    "stylesheet": [
+      "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,600;0,800;1,400&display=swap"
+    ],
+    "icon": [
+      "/LFI_Logo.png"
+    ],
+    "apple-touch-icon": [
+      "/LFI_Logo.png"
+    ]
+  },
+  "scripts": [],
+  "anchorsCount": 10,
+  "anchors": [
+    {
+      "href": "https://avenir-en-commun.net/index.html",
+      "text": "MÉLENCHON2027"
+    },
+    {
+      "href": "https://avenir-en-commun.net/index.html",
+      "text": "ACCUEIL"
+    },
+    {
+      "href": "https://avenir-en-commun.net/programme.html",
+      "text": "LE PROGRAMME"
+    },
+    {
+      "href": "https://avenir-en-commun.net/simulateur.html",
+      "text": "SIMULATEUR"
+    },
+    {
+      "href": "https://avenir-en-commun.net/revolution-citoyenne.html",
+      "text": "FAIRE LA RÉVOLUTION CITOYENNE .\n\nPasser à la 6e République pour redonner le pouv"
+    },
+    {
+      "href": "https://avenir-en-commun.net/harmonie-humains-entre-eux.html",
+      "text": "L'HARMONIE DES ÊTRES HUMAINS ENTRE EUX .\n\nRefonder le lien social par l’égalité "
+    },
+    {
+      "href": "https://avenir-en-commun.net/harmonie-humains-nature.html",
+      "text": "L'HARMONIE DES ÊTRES HUMAINS AVEC LA NATURE .\n\nAppliquer la règle verte : ne pas"
+    },
+    {
+      "href": "https://avenir-en-commun.net/ordonner-le-monde.html",
+      "text": "ORDONNER LE MONDE .\n\nDéfendre un ordre mondial altermondialiste basé sur la paix"
+    },
+    {
+      "href": "https://www.facebook.com/sharer/sharer.php?u=https://avenir-en-commun.net/%20target=",
+      "text": "Partager sur Facebook"
+    },
+    {
+      "href": "https://twitter.com/intent/tweet?url=https://avenir-en-commun.net/",
+      "text": "Partager sur X"
+    }
+  ],
+  "share": [
+    {
+      "href": "https://www.facebook.com/sharer/sharer.php?u=https://avenir-en-commun.net/%20target=",
+      "text": "Partager sur Facebook"
+    },
+    {
+      "href": "https://twitter.com/intent/tweet?url=https://avenir-en-commun.net/",
+      "text": "Partager sur X"
+    }
+  ],
+  "forms": [],
+  "headings": [
+    {
+      "tag": "H1",
+      "text": "LE PROGRAMME : LES 4 PILIERS THÉMATIQUES\n/\n/\n/\n/"
+    },
+    {
+      "tag": "H2",
+      "text": "FAIRE LA RÉVOLUTION CITOYENNE ."
+    },
+    {
+      "tag": "H2",
+      "text": "L'HARMONIE DES ÊTRES HUMAINS ENTRE EUX ."
+    },
+    {
+      "tag": "H2",
+      "text": "L'HARMONIE DES ÊTRES HUMAINS AVEC LA NATURE ."
+    },
+    {
+      "tag": "H2",
+      "text": "ORDONNER LE MONDE ."
+    }
+  ],
+  "jsonld": [],
+  "textLen": 4467,
+  "wordsFirst": "MÉLENCHON2027 ACCUEIL LE PROGRAMME SIMULATEUR LE PROGRAMME : LES 4 PILIERS THÉMATIQUES / / / / Découvrez les propositions fondamentales pour une transformation démocratique, écologique et sociale. FAIRE LA RÉVOLUTION CITOYENNE . Passer à la 6e République pour redonner le pouvoir au peuple et en finir avec la monarchie présidentielle. La Ve République a fait son temps. Une petite caste de privilégiés, dirigée par le président-monarque, désorganise l’État et dirige à son profit. Macron piétine même le résultat des élections, comme l’avait été le résultat du vote des français lors du référendum sur la constitution européenne en 2005. Ce système dresse les Français les uns contre les autres. Il efface le peuple au profit d’une dérive autoritaire toujours plus marquée. La France d’aujourd’hui n’a plus le visage de 1958, quand la Constitution actuelle a été adoptée. À cette nouvelle France doit correspondre une nouvelle République. Ce sera le moyen pour le peuple de se refonder en écrivant lui-même les règles du jeu : la nouvelle Constitution. La révolution citoyenne vise à faire progresser partout la démocratie et l’intervention populaire : dans les institutions mais aussi dans la ville, et dans l’entreprise. Elle veut établir le primat de l’intérêt général sur les intérêts particuliers des ultra-riches et des plus gros propriétaires du pays. Enfin, la France doit renouer avec l’amour de la liberté. DÉCOUVRIR LES MESURES → L'HARMONIE DES ÊTRES HUMAINS ENTRE EUX . Refonder le lien ",
+  "localStorage": {},
+  "buttons": [],
+  "ids": [],
+  "hints": {
+    "navigatorShare": false,
+    "serviceWorker": false,
+    "fetchUrls": [],
+    "apiWords": []
+  },
+  "swRegistered": []
+}

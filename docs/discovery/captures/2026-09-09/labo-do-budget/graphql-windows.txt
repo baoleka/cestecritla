@@ -1,0 +1,6 @@
+### /ask ×100 sequential + burst 40 (rate limiter + DO), 12:55:20-12:56:00
+  status=success requests=112 errors=0 subrequests=112 cpu p50=1.22 ms p90=1.95 ms p99=2.86 ms wall p50=27.25 ms p99=42.84 ms
+### /lab/ask ×280 sequential (DO only), 12:58:20-12:58:35
+  status=success requests=277 errors=0 subrequests=277 cpu p50=0.65 ms p90=0.82 ms p99=1.19 ms wall p50=18.86 ms p99=29.64 ms
+### /ask ×40 keep-alive (21 ok + 19×429), 12:58:00-12:58:04
+  status=success requests=39 errors=0 subrequests=20 cpu p50=0.64 ms p90=1.06 ms p99=1.55 ms wall p50=17.91 ms p99=86.73 ms

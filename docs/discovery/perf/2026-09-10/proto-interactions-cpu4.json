@@ -1,0 +1,2148 @@
+{
+ "measuredAt": "2026-09-09T15:22:12.931Z",
+ "base": "https://proto.cestecritla.fr",
+ "cpuRate": 4,
+ "runs": 3,
+ "cases": {
+  "search-key": {
+   "label": "(1) taper une lettre dans la recherche (/home/)",
+   "url": "/home/",
+   "samples": [
+    {
+     "run": 1,
+     "maxEventDurationMs": 32,
+     "worst": {
+      "name": "mousedown",
+      "start": 1893,
+      "duration": 32,
+      "processing": 0,
+      "delay": 13.1,
+      "target": "INPUT"
+     },
+     "events": [
+      {
+       "name": "mousedown",
+       "start": 1893,
+       "duration": 32,
+       "processing": 0,
+       "delay": 13.1,
+       "target": "INPUT"
+      },
+      {
+       "name": "mouseup",
+       "start": 1893,
+       "duration": 32,
+       "processing": 0.1,
+       "delay": 15.6,
+       "target": "INPUT"
+      },
+      {
+       "name": "click",
+       "start": 1893,
+       "duration": 32,
+       "processing": 0,
+       "delay": 15.7,
+       "target": "INPUT"
+      }
+     ],
+     "hoverBefore": [
+      [
+       "pointerover",
+       144,
+       130.4
+      ],
+      [
+       "pointerenter",
+       144,
+       130.4
+      ],
+      [
+       "pointerenter",
+       144,
+       130.4
+      ],
+      [
+       "pointerenter",
+       144,
+       130.4
+      ],
+      [
+       "pointerenter",
+       144,
+       130.4
+      ],
+      [
+       "mouseover",
+       144,
+       130.4
+      ],
+      [
+       "mouseout",
+       32,
+       13
+      ],
+      [
+       "mouseover",
+       32,
+       13
+      ]
+     ],
+     "errors": []
+    },
+    {
+     "run": 2,
+     "maxEventDurationMs": 32,
+     "worst": {
+      "name": "mousedown",
+      "start": 1825,
+      "duration": 32,
+      "processing": 0,
+      "delay": 11,
+      "target": "INPUT"
+     },
+     "events": [
+      {
+       "name": "mousedown",
+       "start": 1825,
+       "duration": 32,
+       "processing": 0,
+       "delay": 11,
+       "target": "INPUT"
+      },
+      {
+       "name": "mouseup",
+       "start": 1825,
+       "duration": 32,
+       "processing": 0.4,
+       "delay": 13.3,
+       "target": "INPUT"
+      },
+      {
+       "name": "click",
+       "start": 1825,
+       "duration": 32,
+       "processing": 0,
+       "delay": 13.7,
+       "target": "INPUT"
+      }
+     ],
+     "hoverBefore": [
+      [
+       "pointerover",
+       136,
+       117.2
+      ],
+      [
+       "pointerenter",
+       136,
+       117.2
+      ],
+      [
+       "pointerenter",
+       136,
+       117.2
+      ],
+      [
+       "pointerenter",
+       136,
+       117.2
+      ],
+      [
+       "pointerenter",
+       136,
+       117.2
+      ],
+      [
+       "mouseover",
+       136,
+       117.2
+      ],
+      [
+       "mouseout",
+       32,
+       10.2
+      ],
+      [
+       "mouseover",
+       32,
+       10.2
+      ]
+     ],
+     "errors": []
+    },
+    {
+     "run": 3,
+     "maxEventDurationMs": 24,
+     "worst": {
+      "name": "mousedown",
+      "start": 1915,
+      "duration": 24,
+      "processing": 0,
+      "delay": 9.1,
+      "target": "INPUT"
+     },
+     "events": [
+      {
+       "name": "mousedown",
+       "start": 1915,
+       "duration": 24,
+       "processing": 0,
+       "delay": 9.1,
+       "target": "INPUT"
+      },
+      {
+       "name": "mouseup",
+       "start": 1915,
+       "duration": 24,
+       "processing": 0,
+       "delay": 11.6,
+       "target": "INPUT"
+      },
+      {
+       "name": "click",
+       "start": 1915,
+       "duration": 24,
+       "processing": 0,
+       "delay": 11.6,
+       "target": "INPUT"
+      },
+      {
+       "name": "keydown",
+       "start": 2331,
+       "duration": 16,
+       "processing": 0.4,
+       "delay": 1,
+       "target": "INPUT"
+      },
+      {
+       "name": "keypress",
+       "start": 2331,
+       "duration": 16,
+       "processing": 3.8,
+       "delay": 1.4,
+       "target": "INPUT"
+      }
+     ],
+     "hoverBefore": [
+      [
+       "pointerover",
+       152,
+       134.2
+      ],
+      [
+       "pointerenter",
+       152,
+       134.2
+      ],
+      [
+       "pointerenter",
+       152,
+       134.2
+      ],
+      [
+       "pointerenter",
+       152,
+       134.2
+      ],
+      [
+       "pointerenter",
+       152,
+       134.2
+      ],
+      [
+       "mouseover",
+       152,
+       134.3
+      ],
+      [
+       "mouseout",
+       24,
+       9
+      ],
+      [
+       "mouseover",
+       24,
+       9
+      ]
+     ],
+     "errors": []
+    }
+   ]
+  },
+  "copy-link": {
+   "label": "(3) « Copier le lien » (/concept/)",
+   "url": "/concept/?slug=regle-verte",
+   "samples": [
+    {
+     "run": 1,
+     "maxEventDurationMs": 0,
+     "worst": {
+      "duration": 0
+     },
+     "events": [],
+     "hoverBefore": [],
+     "errors": []
+    },
+    {
+     "run": 2,
+     "maxEventDurationMs": 0,
+     "worst": {
+      "duration": 0
+     },
+     "events": [],
+     "hoverBefore": [],
+     "errors": []
+    },
+    {
+     "run": 3,
+     "maxEventDurationMs": 0,
+     "worst": {
+      "duration": 0
+     },
+     "events": [],
+     "hoverBefore": [],
+     "errors": []
+    }
+   ]
+  },
+  "defi-answer": {
+   "label": "(4) répondre « Je savais » (/defi/)",
+   "url": "/defi/?n=1",
+   "samples": [
+    {
+     "run": 1,
+     "maxEventDurationMs": 24,
+     "worst": {
+      "name": "pointerup",
+      "start": 1769,
+      "duration": 24,
+      "processing": 0.5,
+      "delay": 6.3
+     },
+     "events": [
+      {
+       "name": "pointerdown",
+       "start": 1762,
+       "duration": 16,
+       "processing": 2,
+       "delay": 3.6
+      },
+      {
+       "name": "touchstart",
+       "start": 1762,
+       "duration": 16,
+       "processing": 0,
+       "delay": 5.9
+      },
+      {
+       "name": "pointerup",
+       "start": 1769,
+       "duration": 24,
+       "processing": 0.5,
+       "delay": 6.3
+      },
+      {
+       "name": "touchend",
+       "start": 1769,
+       "duration": 24,
+       "processing": 0,
+       "delay": 6.8
+      },
+      {
+       "name": "mousedown",
+       "start": 1769,
+       "duration": 24,
+       "processing": 0,
+       "delay": 10.1
+      },
+      {
+       "name": "mouseup",
+       "start": 1769,
+       "duration": 24,
+       "processing": 0,
+       "delay": 10.3
+      },
+      {
+       "name": "click",
+       "start": 1769,
+       "duration": 24,
+       "processing": 8.7,
+       "delay": 10.3
+      }
+     ],
+     "hoverBefore": [
+      [
+       "pointerover",
+       168,
+       155.8
+      ],
+      [
+       "pointerenter",
+       168,
+       155.8
+      ],
+      [
+       "pointerenter",
+       168,
+       155.8
+      ],
+      [
+       "pointerenter",
+       168,
+       155.8
+      ],
+      [
+       "pointerenter",
+       168,
+       155.8
+      ],
+      [
+       "mouseover",
+       168,
+       155.8
+      ],
+      [
+       "pointerover",
+       16,
+       3.6
+      ],
+      [
+       "pointerenter",
+       16,
+       3.6
+      ],
+      [
+       "pointerenter",
+       16,
+       3.6
+      ],
+      [
+       "pointerenter",
+       16,
+       3.6
+      ],
+      [
+       "pointerenter",
+       16,
+       3.6
+      ],
+      [
+       "pointerenter",
+       16,
+       3.6
+      ],
+      [
+       "pointerenter",
+       16,
+       3.6
+      ],
+      [
+       "pointerenter",
+       16,
+       3.6
+      ],
+      [
+       "pointerenter",
+       16,
+       3.6
+      ],
+      [
+       "pointerout",
+       24,
+       6.8
+      ],
+      [
+       "pointerleave",
+       24,
+       6.8
+      ],
+      [
+       "pointerleave",
+       24,
+       6.8
+      ],
+      [
+       "pointerleave",
+       24,
+       6.8
+      ],
+      [
+       "pointerleave",
+       24,
+       6.8
+      ],
+      [
+       "pointerleave",
+       24,
+       6.8
+      ],
+      [
+       "pointerleave",
+       24,
+       6.8
+      ],
+      [
+       "pointerleave",
+       24,
+       6.8
+      ],
+      [
+       "pointerleave",
+       24,
+       6.8
+      ],
+      [
+       "mouseout",
+       24,
+       9.2
+      ],
+      [
+       "mouseover",
+       24,
+       9.2
+      ]
+     ],
+     "errors": []
+    },
+    {
+     "run": 2,
+     "maxEventDurationMs": 32,
+     "worst": {
+      "name": "pointerup",
+      "start": 1788,
+      "duration": 32,
+      "processing": 1.1,
+      "delay": 8.5
+     },
+     "events": [
+      {
+       "name": "pointerdown",
+       "start": 1779,
+       "duration": 16,
+       "processing": 2.7,
+       "delay": 4.3
+      },
+      {
+       "name": "touchstart",
+       "start": 1779,
+       "duration": 16,
+       "processing": 0,
+       "delay": 7.6
+      },
+      {
+       "name": "pointerup",
+       "start": 1788,
+       "duration": 32,
+       "processing": 1.1,
+       "delay": 8.5
+      },
+      {
+       "name": "touchend",
+       "start": 1788,
+       "duration": 32,
+       "processing": 0,
+       "delay": 9.6
+      },
+      {
+       "name": "mousedown",
+       "start": 1788,
+       "duration": 32,
+       "processing": 0,
+       "delay": 12.8
+      },
+      {
+       "name": "mouseup",
+       "start": 1788,
+       "duration": 32,
+       "processing": 0,
+       "delay": 13.6
+      },
+      {
+       "name": "click",
+       "start": 1788,
+       "duration": 32,
+       "processing": 8.8,
+       "delay": 13.6
+      }
+     ],
+     "hoverBefore": [
+      [
+       "pointerover",
+       184,
+       161.4
+      ],
+      [
+       "pointerenter",
+       184,
+       161.4
+      ],
+      [
+       "pointerenter",
+       184,
+       161.4
+      ],
+      [
+       "pointerenter",
+       184,
+       161.4
+      ],
+      [
+       "pointerenter",
+       184,
+       161.4
+      ],
+      [
+       "mouseover",
+       184,
+       161.5
+      ],
+      [
+       "pointerover",
+       16,
+       4.3
+      ],
+      [
+       "pointerenter",
+       16,
+       4.3
+      ],
+      [
+       "pointerenter",
+       16,
+       4.3
+      ],
+      [
+       "pointerenter",
+       16,
+       4.3
+      ],
+      [
+       "pointerenter",
+       16,
+       4.3
+      ],
+      [
+       "pointerenter",
+       16,
+       4.3
+      ],
+      [
+       "pointerenter",
+       16,
+       4.3
+      ],
+      [
+       "pointerenter",
+       16,
+       4.3
+      ],
+      [
+       "pointerenter",
+       16,
+       4.3
+      ],
+      [
+       "pointerout",
+       32,
+       9.6
+      ],
+      [
+       "pointerleave",
+       32,
+       9.6
+      ],
+      [
+       "pointerleave",
+       32,
+       9.6
+      ],
+      [
+       "pointerleave",
+       32,
+       9.6
+      ],
+      [
+       "pointerleave",
+       32,
+       9.6
+      ],
+      [
+       "pointerleave",
+       32,
+       9.6
+      ],
+      [
+       "pointerleave",
+       32,
+       9.6
+      ],
+      [
+       "pointerleave",
+       32,
+       9.6
+      ],
+      [
+       "pointerleave",
+       32,
+       9.6
+      ],
+      [
+       "mouseout",
+       32,
+       12
+      ],
+      [
+       "mouseover",
+       32,
+       12
+      ]
+     ],
+     "errors": []
+    },
+    {
+     "run": 3,
+     "maxEventDurationMs": 32,
+     "worst": {
+      "name": "pointerup",
+      "start": 1803,
+      "duration": 32,
+      "processing": 0.7,
+      "delay": 11.4
+     },
+     "events": [
+      {
+       "name": "pointerdown",
+       "start": 1797,
+       "duration": 16,
+       "processing": 2.8,
+       "delay": 2.3
+      },
+      {
+       "name": "touchstart",
+       "start": 1797,
+       "duration": 16,
+       "processing": 0.1,
+       "delay": 5.1
+      },
+      {
+       "name": "pointerup",
+       "start": 1803,
+       "duration": 32,
+       "processing": 0.7,
+       "delay": 11.4
+      },
+      {
+       "name": "touchend",
+       "start": 1803,
+       "duration": 32,
+       "processing": 0,
+       "delay": 12.2
+      },
+      {
+       "name": "mousedown",
+       "start": 1803,
+       "duration": 32,
+       "processing": 0,
+       "delay": 15.3
+      },
+      {
+       "name": "mouseup",
+       "start": 1803,
+       "duration": 32,
+       "processing": 0.4,
+       "delay": 15.8
+      },
+      {
+       "name": "click",
+       "start": 1803,
+       "duration": 32,
+       "processing": 7.8,
+       "delay": 16.2
+      }
+     ],
+     "hoverBefore": [
+      [
+       "pointerover",
+       184,
+       170.8
+      ],
+      [
+       "pointerenter",
+       184,
+       170.8
+      ],
+      [
+       "pointerenter",
+       184,
+       170.8
+      ],
+      [
+       "pointerenter",
+       184,
+       170.8
+      ],
+      [
+       "pointerenter",
+       184,
+       170.8
+      ],
+      [
+       "mouseover",
+       184,
+       170.8
+      ],
+      [
+       "pointerover",
+       16,
+       2.3
+      ],
+      [
+       "pointerenter",
+       16,
+       2.3
+      ],
+      [
+       "pointerenter",
+       16,
+       2.3
+      ],
+      [
+       "pointerenter",
+       16,
+       2.3
+      ],
+      [
+       "pointerenter",
+       16,
+       2.3
+      ],
+      [
+       "pointerenter",
+       16,
+       2.3
+      ],
+      [
+       "pointerenter",
+       16,
+       2.3
+      ],
+      [
+       "pointerenter",
+       16,
+       2.3
+      ],
+      [
+       "pointerenter",
+       16,
+       2.3
+      ],
+      [
+       "pointerout",
+       32,
+       12.1
+      ],
+      [
+       "pointerleave",
+       32,
+       12.1
+      ],
+      [
+       "pointerleave",
+       32,
+       12.1
+      ],
+      [
+       "pointerleave",
+       32,
+       12.1
+      ],
+      [
+       "pointerleave",
+       32,
+       12.1
+      ],
+      [
+       "pointerleave",
+       32,
+       12.1
+      ],
+      [
+       "pointerleave",
+       32,
+       12.1
+      ],
+      [
+       "pointerleave",
+       32,
+       12.1
+      ],
+      [
+       "pointerleave",
+       32,
+       12.1
+      ],
+      [
+       "mouseout",
+       32,
+       15.3
+      ],
+      [
+       "mouseover",
+       32,
+       15.3
+      ]
+     ],
+     "errors": []
+    }
+   ]
+  },
+  "q-answer": {
+   "label": "(4) choisir une option (/q/)",
+   "url": "/q/?s=c12-s01",
+   "samples": [
+    {
+     "run": 1,
+     "maxEventDurationMs": 48,
+     "worst": {
+      "name": "mousedown",
+      "start": 1845,
+      "duration": 48,
+      "processing": 0,
+      "delay": 19.9,
+      "target": "SPAN"
+     },
+     "events": [
+      {
+       "name": "pointerup",
+       "start": 1845,
+       "duration": 16,
+       "processing": 1.3,
+       "delay": 15,
+       "target": "SPAN"
+      },
+      {
+       "name": "touchend",
+       "start": 1845,
+       "duration": 16,
+       "processing": 0.1,
+       "delay": 16.3,
+       "target": "SPAN"
+      },
+      {
+       "name": "mousedown",
+       "start": 1845,
+       "duration": 48,
+       "processing": 0,
+       "delay": 19.9,
+       "target": "SPAN"
+      },
+      {
+       "name": "mouseup",
+       "start": 1845,
+       "duration": 48,
+       "processing": 0,
+       "delay": 20.7,
+       "target": "SPAN"
+      },
+      {
+       "name": "click",
+       "start": 1845,
+       "duration": 48,
+       "processing": 16.2,
+       "delay": 20.7,
+       "target": "SPAN"
+      }
+     ],
+     "hoverBefore": [
+      [
+       "pointerover",
+       208,
+       182.7
+      ],
+      [
+       "pointerenter",
+       208,
+       183.1
+      ],
+      [
+       "pointerenter",
+       208,
+       183.1
+      ],
+      [
+       "pointerenter",
+       208,
+       183.1
+      ],
+      [
+       "pointerenter",
+       208,
+       183.1
+      ],
+      [
+       "mouseover",
+       208,
+       183.1
+      ],
+      [
+       "pointerout",
+       16,
+       16.3
+      ],
+      [
+       "pointerleave",
+       16,
+       16.3
+      ],
+      [
+       "pointerleave",
+       16,
+       16.3
+      ],
+      [
+       "pointerleave",
+       16,
+       16.3
+      ],
+      [
+       "pointerleave",
+       16,
+       16.3
+      ],
+      [
+       "pointerleave",
+       16,
+       16.3
+      ],
+      [
+       "pointerleave",
+       16,
+       16.3
+      ],
+      [
+       "pointerleave",
+       16,
+       16.3
+      ],
+      [
+       "pointerleave",
+       16,
+       16.3
+      ],
+      [
+       "pointerleave",
+       16,
+       16.3
+      ],
+      [
+       "pointerleave",
+       16,
+       16.3
+      ],
+      [
+       "mouseout",
+       48,
+       19.8
+      ],
+      [
+       "mouseover",
+       48,
+       19.8
+      ],
+      [
+       "mouseout",
+       16,
+       0.1
+      ],
+      [
+       "mouseover",
+       16,
+       0.1
+      ]
+     ],
+     "errors": []
+    },
+    {
+     "run": 2,
+     "maxEventDurationMs": 48,
+     "worst": {
+      "name": "mousedown",
+      "start": 1722,
+      "duration": 48,
+      "processing": 0.8,
+      "delay": 14.1,
+      "target": "SPAN"
+     },
+     "events": [
+      {
+       "name": "pointerdown",
+       "start": 1714,
+       "duration": 16,
+       "processing": 2.6,
+       "delay": 4,
+       "target": "SPAN"
+      },
+      {
+       "name": "touchstart",
+       "start": 1714,
+       "duration": 16,
+       "processing": 0.1,
+       "delay": 6.6,
+       "target": "SPAN"
+      },
+      {
+       "name": "mousedown",
+       "start": 1722,
+       "duration": 48,
+       "processing": 0.8,
+       "delay": 14.1,
+       "target": "SPAN"
+      },
+      {
+       "name": "mouseup",
+       "start": 1722,
+       "duration": 48,
+       "processing": 0,
+       "delay": 15.3,
+       "target": "SPAN"
+      },
+      {
+       "name": "click",
+       "start": 1722,
+       "duration": 48,
+       "processing": 19.7,
+       "delay": 15.3,
+       "target": "SPAN"
+      }
+     ],
+     "hoverBefore": [
+      [
+       "pointerover",
+       184,
+       159.7
+      ],
+      [
+       "pointerenter",
+       184,
+       159.7
+      ],
+      [
+       "pointerenter",
+       184,
+       159.7
+      ],
+      [
+       "pointerenter",
+       184,
+       159.7
+      ],
+      [
+       "pointerenter",
+       184,
+       159.7
+      ],
+      [
+       "mouseover",
+       184,
+       159.7
+      ],
+      [
+       "pointerover",
+       16,
+       3.5
+      ],
+      [
+       "pointerenter",
+       16,
+       3.5
+      ],
+      [
+       "pointerenter",
+       16,
+       3.5
+      ],
+      [
+       "pointerenter",
+       16,
+       3.5
+      ],
+      [
+       "pointerenter",
+       16,
+       3.5
+      ],
+      [
+       "pointerenter",
+       16,
+       3.5
+      ],
+      [
+       "pointerenter",
+       16,
+       3.5
+      ],
+      [
+       "pointerenter",
+       16,
+       3.5
+      ],
+      [
+       "pointerenter",
+       16,
+       3.5
+      ],
+      [
+       "pointerenter",
+       16,
+       3.5
+      ],
+      [
+       "pointerenter",
+       16,
+       4
+      ],
+      [
+       "mouseout",
+       48,
+       14.1
+      ],
+      [
+       "mouseover",
+       48,
+       14.1
+      ],
+      [
+       "mouseout",
+       16,
+       0.1
+      ],
+      [
+       "mouseover",
+       16,
+       0.1
+      ]
+     ],
+     "errors": []
+    },
+    {
+     "run": 3,
+     "maxEventDurationMs": 48,
+     "worst": {
+      "name": "mousedown",
+      "start": 1800,
+      "duration": 48,
+      "processing": 0,
+      "delay": 15.8,
+      "target": "SPAN"
+     },
+     "events": [
+      {
+       "name": "pointerdown",
+       "start": 1794,
+       "duration": 16,
+       "processing": 2.7,
+       "delay": 2.7,
+       "target": "SPAN"
+      },
+      {
+       "name": "touchstart",
+       "start": 1794,
+       "duration": 16,
+       "processing": 0,
+       "delay": 5.5,
+       "target": "SPAN"
+      },
+      {
+       "name": "pointerup",
+       "start": 1800,
+       "duration": 16,
+       "processing": 0.9,
+       "delay": 12.1,
+       "target": "SPAN"
+      },
+      {
+       "name": "touchend",
+       "start": 1800,
+       "duration": 16,
+       "processing": 0,
+       "delay": 13,
+       "target": "SPAN"
+      },
+      {
+       "name": "mousedown",
+       "start": 1800,
+       "duration": 48,
+       "processing": 0,
+       "delay": 15.8,
+       "target": "SPAN"
+      },
+      {
+       "name": "mouseup",
+       "start": 1800,
+       "duration": 48,
+       "processing": 0,
+       "delay": 16.7,
+       "target": "SPAN"
+      },
+      {
+       "name": "click",
+       "start": 1800,
+       "duration": 48,
+       "processing": 15.9,
+       "delay": 16.8,
+       "target": "SPAN"
+      }
+     ],
+     "hoverBefore": [
+      [
+       "pointerover",
+       192,
+       173.6
+      ],
+      [
+       "pointerenter",
+       192,
+       173.6
+      ],
+      [
+       "pointerenter",
+       192,
+       173.6
+      ],
+      [
+       "pointerenter",
+       192,
+       173.6
+      ],
+      [
+       "pointerenter",
+       192,
+       173.6
+      ],
+      [
+       "mouseover",
+       192,
+       173.6
+      ],
+      [
+       "pointerover",
+       16,
+       2.7
+      ],
+      [
+       "pointerenter",
+       16,
+       2.7
+      ],
+      [
+       "pointerenter",
+       16,
+       2.7
+      ],
+      [
+       "pointerenter",
+       16,
+       2.7
+      ],
+      [
+       "pointerenter",
+       16,
+       2.7
+      ],
+      [
+       "pointerenter",
+       16,
+       2.7
+      ],
+      [
+       "pointerenter",
+       16,
+       2.7
+      ],
+      [
+       "pointerenter",
+       16,
+       2.7
+      ],
+      [
+       "pointerenter",
+       16,
+       2.7
+      ],
+      [
+       "pointerenter",
+       16,
+       2.7
+      ],
+      [
+       "pointerenter",
+       16,
+       2.7
+      ],
+      [
+       "pointerout",
+       16,
+       13
+      ],
+      [
+       "pointerleave",
+       16,
+       13
+      ],
+      [
+       "pointerleave",
+       16,
+       13
+      ],
+      [
+       "pointerleave",
+       16,
+       13
+      ],
+      [
+       "pointerleave",
+       16,
+       13
+      ],
+      [
+       "pointerleave",
+       16,
+       13
+      ],
+      [
+       "pointerleave",
+       16,
+       13
+      ],
+      [
+       "pointerleave",
+       16,
+       13
+      ],
+      [
+       "pointerleave",
+       16,
+       13
+      ],
+      [
+       "pointerleave",
+       16,
+       13
+      ],
+      [
+       "pointerleave",
+       16,
+       13
+      ],
+      [
+       "mouseout",
+       48,
+       15.7
+      ],
+      [
+       "mouseover",
+       48,
+       15.7
+      ],
+      [
+       "mouseout",
+       16,
+       0.1
+      ],
+      [
+       "mouseover",
+       16,
+       0.1
+      ]
+     ],
+     "errors": []
+    }
+   ]
+  },
+  "riposte-flip": {
+   "label": "(5) « Retourner la carte » (/riposte/)",
+   "url": "/riposte/?id=rip-01",
+   "samples": [
+    {
+     "run": 1,
+     "maxEventDurationMs": 64,
+     "worst": {
+      "name": "pointerup",
+      "start": 1726,
+      "duration": 64,
+      "processing": 1.8,
+      "delay": 5.6
+     },
+     "events": [
+      {
+       "name": "pointerdown",
+       "start": 1719,
+       "duration": 16,
+       "processing": 1.9,
+       "delay": 3.1
+      },
+      {
+       "name": "touchstart",
+       "start": 1719,
+       "duration": 16,
+       "processing": 0.6,
+       "delay": 5.1
+      },
+      {
+       "name": "pointerup",
+       "start": 1726,
+       "duration": 64,
+       "processing": 1.8,
+       "delay": 5.6
+      },
+      {
+       "name": "touchend",
+       "start": 1726,
+       "duration": 64,
+       "processing": 0,
+       "delay": 7.4
+      },
+      {
+       "name": "mousedown",
+       "start": 1726,
+       "duration": 64,
+       "processing": 0,
+       "delay": 12.2
+      },
+      {
+       "name": "mouseup",
+       "start": 1726,
+       "duration": 64,
+       "processing": 0,
+       "delay": 13.1
+      },
+      {
+       "name": "click",
+       "start": 1726,
+       "duration": 64,
+       "processing": 38.6,
+       "delay": 13.1
+      }
+     ],
+     "hoverBefore": [
+      [
+       "pointerover",
+       136,
+       116.9
+      ],
+      [
+       "pointerenter",
+       136,
+       116.9
+      ],
+      [
+       "pointerenter",
+       136,
+       116.9
+      ],
+      [
+       "pointerenter",
+       136,
+       116.9
+      ],
+      [
+       "pointerenter",
+       136,
+       116.9
+      ],
+      [
+       "mouseover",
+       136,
+       116.9
+      ],
+      [
+       "pointerover",
+       16,
+       2.4
+      ],
+      [
+       "pointerenter",
+       16,
+       3.1
+      ],
+      [
+       "pointerenter",
+       16,
+       3.1
+      ],
+      [
+       "pointerenter",
+       16,
+       3.1
+      ],
+      [
+       "pointerenter",
+       16,
+       3.1
+      ],
+      [
+       "pointerenter",
+       16,
+       3.1
+      ],
+      [
+       "pointerenter",
+       16,
+       3.1
+      ],
+      [
+       "pointerenter",
+       16,
+       3.1
+      ],
+      [
+       "pointerenter",
+       16,
+       3.1
+      ],
+      [
+       "pointerout",
+       64,
+       7.4
+      ],
+      [
+       "pointerleave",
+       64,
+       7.4
+      ],
+      [
+       "pointerleave",
+       64,
+       7.4
+      ],
+      [
+       "pointerleave",
+       64,
+       7.4
+      ],
+      [
+       "pointerleave",
+       64,
+       7.4
+      ],
+      [
+       "pointerleave",
+       64,
+       7.4
+      ],
+      [
+       "pointerleave",
+       64,
+       7.4
+      ],
+      [
+       "pointerleave",
+       64,
+       7.4
+      ],
+      [
+       "pointerleave",
+       64,
+       7.4
+      ],
+      [
+       "mouseout",
+       64,
+       12.2
+      ],
+      [
+       "mouseover",
+       64,
+       12.2
+      ],
+      [
+       "mouseover",
+       16,
+       0.8
+      ]
+     ],
+     "errors": []
+    },
+    {
+     "run": 2,
+     "maxEventDurationMs": 72,
+     "worst": {
+      "name": "pointerup",
+      "start": 1737,
+      "duration": 72,
+      "processing": 1.2,
+      "delay": 11.6
+     },
+     "events": [
+      {
+       "name": "pointerdown",
+       "start": 1730,
+       "duration": 16,
+       "processing": 2.6,
+       "delay": 3.3
+      },
+      {
+       "name": "touchstart",
+       "start": 1730,
+       "duration": 16,
+       "processing": 0,
+       "delay": 5.9
+      },
+      {
+       "name": "pointerup",
+       "start": 1737,
+       "duration": 72,
+       "processing": 1.2,
+       "delay": 11.6
+      },
+      {
+       "name": "touchend",
+       "start": 1737,
+       "duration": 72,
+       "processing": 0,
+       "delay": 12.8
+      },
+      {
+       "name": "mousedown",
+       "start": 1737,
+       "duration": 72,
+       "processing": 0,
+       "delay": 15.9
+      },
+      {
+       "name": "mouseup",
+       "start": 1737,
+       "duration": 72,
+       "processing": 0,
+       "delay": 16.7
+      },
+      {
+       "name": "click",
+       "start": 1737,
+       "duration": 72,
+       "processing": 32.2,
+       "delay": 17.1
+      }
+     ],
+     "hoverBefore": [
+      [
+       "pointerover",
+       168,
+       156.1
+      ],
+      [
+       "pointerenter",
+       168,
+       156.1
+      ],
+      [
+       "pointerenter",
+       168,
+       156.1
+      ],
+      [
+       "pointerenter",
+       168,
+       156.1
+      ],
+      [
+       "pointerenter",
+       168,
+       156.1
+      ],
+      [
+       "mouseover",
+       168,
+       156.1
+      ],
+      [
+       "pointerover",
+       16,
+       3.3
+      ],
+      [
+       "pointerenter",
+       16,
+       3.3
+      ],
+      [
+       "pointerenter",
+       16,
+       3.3
+      ],
+      [
+       "pointerenter",
+       16,
+       3.3
+      ],
+      [
+       "pointerenter",
+       16,
+       3.3
+      ],
+      [
+       "pointerenter",
+       16,
+       3.3
+      ],
+      [
+       "pointerenter",
+       16,
+       3.3
+      ],
+      [
+       "pointerenter",
+       16,
+       3.3
+      ],
+      [
+       "pointerenter",
+       16,
+       3.3
+      ],
+      [
+       "pointerout",
+       72,
+       12.8
+      ],
+      [
+       "pointerleave",
+       72,
+       12.8
+      ],
+      [
+       "pointerleave",
+       72,
+       12.8
+      ],
+      [
+       "pointerleave",
+       72,
+       12.8
+      ],
+      [
+       "pointerleave",
+       72,
+       12.8
+      ],
+      [
+       "pointerleave",
+       72,
+       12.8
+      ],
+      [
+       "pointerleave",
+       72,
+       12.8
+      ],
+      [
+       "pointerleave",
+       72,
+       12.8
+      ],
+      [
+       "pointerleave",
+       72,
+       12.8
+      ],
+      [
+       "mouseout",
+       72,
+       15.9
+      ],
+      [
+       "mouseover",
+       72,
+       15.9
+      ],
+      [
+       "mouseover",
+       24,
+       0.5
+      ]
+     ],
+     "errors": []
+    },
+    {
+     "run": 3,
+     "maxEventDurationMs": 64,
+     "worst": {
+      "name": "pointerup",
+      "start": 1714,
+      "duration": 64,
+      "processing": 1.1,
+      "delay": 10.9
+     },
+     "events": [
+      {
+       "name": "pointerdown",
+       "start": 1708,
+       "duration": 16,
+       "processing": 2.7,
+       "delay": 2.3
+      },
+      {
+       "name": "touchstart",
+       "start": 1708,
+       "duration": 16,
+       "processing": 0,
+       "delay": 5.1
+      },
+      {
+       "name": "pointerup",
+       "start": 1714,
+       "duration": 64,
+       "processing": 1.1,
+       "delay": 10.9
+      },
+      {
+       "name": "touchend",
+       "start": 1714,
+       "duration": 64,
+       "processing": 0,
+       "delay": 12
+      },
+      {
+       "name": "mousedown",
+       "start": 1714,
+       "duration": 64,
+       "processing": 0,
+       "delay": 15.4
+      },
+      {
+       "name": "mouseup",
+       "start": 1714,
+       "duration": 64,
+       "processing": 0,
+       "delay": 15.6
+      },
+      {
+       "name": "click",
+       "start": 1714,
+       "duration": 64,
+       "processing": 33,
+       "delay": 15.6
+      }
+     ],
+     "hoverBefore": [
+      [
+       "pointerover",
+       152,
+       139.2
+      ],
+      [
+       "pointerenter",
+       152,
+       139.3
+      ],
+      [
+       "pointerenter",
+       152,
+       139.3
+      ],
+      [
+       "pointerenter",
+       152,
+       139.3
+      ],
+      [
+       "pointerenter",
+       152,
+       139.3
+      ],
+      [
+       "mouseover",
+       152,
+       139.3
+      ],
+      [
+       "pointerover",
+       16,
+       2.3
+      ],
+      [
+       "pointerenter",
+       16,
+       2.3
+      ],
+      [
+       "pointerenter",
+       16,
+       2.3
+      ],
+      [
+       "pointerenter",
+       16,
+       2.3
+      ],
+      [
+       "pointerenter",
+       16,
+       2.3
+      ],
+      [
+       "pointerenter",
+       16,
+       2.3
+      ],
+      [
+       "pointerenter",
+       16,
+       2.3
+      ],
+      [
+       "pointerenter",
+       16,
+       2.3
+      ],
+      [
+       "pointerenter",
+       16,
+       2.3
+      ],
+      [
+       "pointerout",
+       64,
+       12
+      ],
+      [
+       "pointerleave",
+       64,
+       12
+      ],
+      [
+       "pointerleave",
+       64,
+       12
+      ],
+      [
+       "pointerleave",
+       64,
+       12
+      ],
+      [
+       "pointerleave",
+       64,
+       12
+      ],
+      [
+       "pointerleave",
+       64,
+       12
+      ],
+      [
+       "pointerleave",
+       64,
+       12
+      ],
+      [
+       "pointerleave",
+       64,
+       12
+      ],
+      [
+       "pointerleave",
+       64,
+       12
+      ],
+      [
+       "mouseout",
+       64,
+       15
+      ],
+      [
+       "mouseover",
+       64,
+       15
+      ]
+     ],
+     "errors": []
+    }
+   ]
+  },
+  "open-concept": {
+   "label": "(2) ouvrir la carte-concept depuis l’écran 0 par lien (navigation)",
+   "url": "/link/?id=c12-s01-k01",
+   "samples": [
+    {
+     "run": 1,
+     "tapToNewPageFirstFrameMs": 216,
+     "errors": []
+    },
+    {
+     "run": 2,
+     "tapToNewPageFirstFrameMs": 162,
+     "errors": []
+    },
+    {
+     "run": 3,
+     "tapToNewPageFirstFrameMs": 182,
+     "errors": []
+    }
+   ]
+  }
+ },
+ "p7": {
+  "/home/": {
+   "maxTransitionMs": 120,
+   "maxAnimationMs": 0,
+   "over320": []
+  },
+  "/concept/?slug=regle-verte": {
+   "maxTransitionMs": 240,
+   "maxAnimationMs": 0,
+   "over320": []
+  },
+  "/defi/?n=1": {
+   "maxTransitionMs": 120,
+   "maxAnimationMs": 0,
+   "over320": []
+  },
+  "/q/?s=c12-s01": {
+   "maxTransitionMs": 200,
+   "maxAnimationMs": 0,
+   "over320": []
+  },
+  "/riposte/?id=rip-01": {
+   "maxTransitionMs": 120,
+   "maxAnimationMs": 0,
+   "over320": []
+  },
+  "/link/?id=c12-s01-k01": {
+   "maxTransitionMs": 120,
+   "maxAnimationMs": 0,
+   "over320": []
+  }
+ },
+ "reducedMotion": {
+  "htmlClass": "",
+  "reveals": [
+   {
+    "opacity": "1",
+    "transform": "none",
+    "transitionDuration": "0s",
+    "cls": "verbatim hero m-in"
+   },
+   {
+    "opacity": "1",
+    "transform": "none",
+    "transitionDuration": "0s",
+    "cls": "verbatim compact m-in"
+   },
+   {
+    "opacity": "1",
+    "transform": "none",
+    "transitionDuration": "0s",
+    "cls": "verbatim compact m-in"
+   }
+  ],
+  "pressTransition": "0s",
+  "tokens": {
+   "dFast": "0ms",
+   "dBase": "0ms",
+   "dSlow": "0ms",
+   "dReveal": "0ms"
+  },
+  "maxAnyDurationMs": 0
+ }
+}

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Pose ta question — AEC Discover (maquette C)</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="screen">
+<header class="topbar">
+  <a class="wordmark" href="home-direct.html" aria-label="AEC Discover, accueil">AEC Discover</a>
+  <span class="where"><span class="swatch" aria-hidden="true"></span>Chat</span>
+</header>
+
+<section class="hero" style="padding-bottom:16px">
+  <h1 style="font-size:var(--fs-h1);font-weight:900;line-height:1.05;text-transform:uppercase;letter-spacing:-0.01em;margin:0 0 8px">Pose ta question</h1>
+  <p class="hint" style="margin:0">Un mot, une mesure, un thème : tu obtiens le passage exact du programme.</p>
+  <p class="ai-mention">Réponses assemblées par une IA française (Mistral, hébergée chez Cloudflare) à partir du texte officiel.</p>
+</section>
+<main class="thread" aria-live="polite">
+  <div class="bubble-user"><span class="who">Toi</span>C'est quoi, la règle verte ?</div>
+  <article class="answer">
+    <div class="head"><span class="badge">IA · Mistral</span></div>
+    <p class="liant">Deux mesures du chapitre 12 répondent à ta question.</p>
+    <figure class="verbatim-box">
+  <div class="labels"><span class="label">Texte du programme</span><span class="label">Mesure clé</span></div>
+  <blockquote class="verbatim" lang="fr">Inscrire dans la Constitution le principe de la « règle verte », selon laquelle on ne prélève pas davantage à la nature que ce qu’elle est en état de reconstituer</blockquote>
+  <figcaption class="where">Extrait de Chapitre 12 : Planification écologique, La bifurcation écologique pour une société de l’harmonie</figcaption>
+</figure>
+    <figure class="verbatim-box">
+  <div class="labels"><span class="label">Texte du programme</span></div>
+  <blockquote class="verbatim" lang="fr">Instaurer un moratoire sur les grands projets inutiles et écocidaires, les réévaluer au regard de la règle verte et de leur impact sur la biosphère</blockquote>
+  
+</figure>
+    <div class="links">
+      <a class="textlink" href="section.html">Lire la section complète</a>
+      <a class="textlink" href="concept.html">Voir la carte « règle verte »</a>
+    </div>
+  </article>
+  <div class="bubble-user"><span class="who">Toi</span>Et les jets privés, vous les interdisez ?</div>
+  <article class="answer warn">
+    <div class="head"><span class="badge">IA · Mistral</span></div>
+    <h3><span class="book">L'Avenir en commun</span> ne traite pas de ça.</h3>
+    <p class="liant">Aucune mesure ne répond à ta question mot pour mot. Voici ce qui s'en approche :</p>
+    <span class="label">Passages voisins</span>
+    <figure class="verbatim-box">
+  <div class="labels"><span class="label">Texte du programme</span></div>
+  <blockquote class="verbatim" lang="fr">Supprimer les lignes aériennes quand l’alternative en train est inférieure à quatre heures</blockquote>
+  <figcaption class="where">Chapitre 13 : Les grands chantiers de la bifurcation écologique · Développer les transports publics écologiques, repenser la mobilité individuelle</figcaption>
+</figure>
+    <figure class="verbatim-box">
+  <div class="labels"><span class="label">Texte du programme</span></div>
+  <blockquote class="verbatim" lang="fr">Mettre fin aux niches fiscales sur le kérosène pour limiter le dumping du e-commerce depuis l’étranger</blockquote>
+  <figcaption class="where">Chapitre 9 : Produire nous-mêmes pour répondre aux besoins · Réindustrialiser et relocaliser pour assurer notre indépendance</figcaption>
+</figure>
+    <div class="btn-row" style="margin-top:8px">
+      <a class="btn btn-secondary block" href="#">Reformuler avec un autre mot</a>
+    </div>
+  </article>
+  <div class="bubble-user"><span class="who">Toi</span>Et la règle bleue ?</div>
+  <aside class="notice" role="status"><strong>Beaucoup de questions aujourd'hui : l'IA revient à 2 h.</strong>La recherche et la lecture, elles, ne s'arrêtent jamais.</aside>
+  <article class="answer">
+    <div class="head"><span class="badge">Réponse directement extraite du programme</span></div>
+    <p class="liant">Voici les passages qui collent le mieux à tes mots.</p>
+    <figure class="verbatim-box">
+  <div class="labels"><span class="label">Texte du programme</span><span class="label">Mesure clé</span></div>
+  <blockquote class="verbatim" lang="fr">Consacrer une « règle bleue » qui applique le principe de la « règle verte » (ne pas prendre à la nature davantage qu’elle ne peut reconstituer) à l’eau pour son usage et pour la protection de sa qualité</blockquote>
+  <figcaption class="where">Chapitre 14 : Protection des biens communs et des droits de l’espèce · L’eau, enjeu central pour l’Humanité</figcaption>
+</figure>
+    <div class="links">
+      <a class="textlink" href="#">Comment on choisit les passages</a>
+      <a class="textlink" href="#">Autre question</a>
+    </div>
+  </article>
+</main>
+<form class="composer" action="#">
+  <label for="msg" style="position:absolute;left:-9999px">Pose ta question</label>
+  <input id="msg" type="text" placeholder="Ta question sur un mot ou une mesure" autocomplete="off">
+  <button class="btn" type="submit">Envoyer</button>
+</form>
+<footer class="foot">
+  <p>Projet militant indépendant, fait pour donner envie de lire le programme.</p>
+  <p>Texte du programme : La France insoumise – <span class="book">L'Avenir en commun</span>. Licence CC BY-NC-SA 4.0. </p>
+  <ul class="links">
+    <li><a href="#">À propos</a></li>
+    <li><a href="#">Confidentialité</a></li>
+    <li><a href="#">Exactitude</a></li>
+    <li><a href="#">Licence et sources</a></li>
+    <li><a href="#">Mentions légales</a></li>
+    <li><a href="#">Code source</a></li>
+  </ul>
+</footer>
+
+</div>
+</body>
+</html>

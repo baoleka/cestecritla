@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Accueil — AEC Discover (maquette C)</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="screen">
+<header class="topbar">
+  <a class="wordmark" href="home-direct.html" aria-label="AEC Discover, accueil">AEC Discover</a>
+  <span class="where"><span class="swatch" aria-hidden="true"></span>Accueil</span>
+</header>
+
+<section class="hero">
+  <h1 class="t3d small jaune"><span>Ta munition,</span><span>en dix secondes.</span></h1>
+  <p class="lead">Un mot, une objection, un thème : la mesure exacte, prête à envoyer.</p>
+  <form class="search" role="search" action="#">
+    <label class="label" for="q" style="position:absolute;left:-9999px">Chercher</label>
+    <input id="q" type="search" placeholder="Un mot, une objection, un sujet…" autocomplete="off">
+    <button class="btn btn-primary" type="submit">Chercher</button>
+  </form>
+  <p class="hintline">Essaie : règle verte, SMIC, 6<sup>e</sup> République, planification écologique.</p>
+</section>
+<section class="hero" style="padding-top:0" aria-labelledby="worlds-label">
+  <span class="label" id="worlds-label">Le livre en quatre mondes</span>
+  <ul class="worlds">
+    <li><a href="#"><span class="tile p1" aria-hidden="true">1</span><span class="name">Faire la révolution citoyenne<small>Chapitres 1 à 4</small></span></a></li>
+    <li><a href="#"><span class="tile p2" aria-hidden="true">2</span><span class="name">L’harmonie des êtres humains entre eux<small>Chapitres 5 à 11</small></span></a></li>
+    <li><a href="#"><span class="tile p3" aria-hidden="true">3</span><span class="name">L’harmonie des êtres humains avec la nature<small>Chapitres 12 à 15</small></span></a></li>
+    <li><a href="#"><span class="tile p4" aria-hidden="true">4</span><span class="name">Ordonner le monde<small>Chapitres 16 à 18</small></span></a></li>
+  </ul>
+</section>
+<section class="read" aria-labelledby="rip">
+  <span class="label">Mode riposte</span>
+  <h2 id="rip">Une objection, dix secondes, la mesure exacte.</h2>
+  <div class="card">
+    <span class="label">On te dit :</span>
+    <p class="plain" style="font-weight:700">« Sans nucléaire, on aura des coupures de courant »</p>
+    <span class="label" style="margin-top:12px">Tu réponds avec le texte :</span>
+    <figure class="verbatim-box">
+  <div class="labels"><span class="label">Texte du programme</span><span class="label">Mesure clé</span></div>
+  <blockquote class="verbatim" lang="fr">Planifier le passage à 100 % d’énergies renouvelables avec un double mot d’ordre : sobriété et efficacité énergétique</blockquote>
+  <figcaption class="where">Chapitre 13 : Les grands chantiers de la bifurcation écologique · Organiser le 100 % d’énergies renouvelables en 2050 et la rénovation énergétique</figcaption>
+</figure>
+  </div>
+  <a class="btn btn-primary btn-split" href="#"><span class="lbl">Mode riposte</span><span class="arrow" aria-hidden="true">&rarr;</span></a>
+</section>
+<section class="read" aria-labelledby="daily">
+  <span class="label">La mesure du jour</span>
+  <h2 id="daily">Une mesure du programme, tirée au sort chaque jour, la même pour tout le monde.</h2>
+  <p><span class="bignum" aria-hidden="true">65&nbsp;%</span></p>
+  <figure class="verbatim-box">
+  <div class="labels"><span class="label">Texte du programme</span></div>
+  <blockquote class="verbatim" lang="fr">Relever les ambitions climatiques de la France avec pour objectif une baisse de 65 % des émissions en 2030 (au lieu de 50 % actuellement) et rendre public un bilan annuel</blockquote>
+  <figcaption class="where">Chapitre 12 : Planification écologique · La bifurcation écologique pour une société de l’harmonie</figcaption>
+</figure>
+  <div class="btn-row">
+    <a class="btn btn-secondary" href="#">Envoyer la mesure du jour</a>
+    <a class="btn btn-secondary" href="#">Celle d'hier</a>
+  </div>
+</section>
+<section class="read" aria-labelledby="cont">
+  <span class="label">Ta lecture</span>
+  <a class="btn btn-secondary btn-split" href="section.html"><span class="lbl">Reprendre ta lecture</span><span class="arrow" aria-hidden="true">&rarr;</span></a>
+  <div class="progress" id="cont">
+    <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="18" aria-valuenow="3" aria-label="Ta lecture"><span style="width:16.7%"></span></div>
+    <p class="count"><strong>3 chapitres sur 18 parcourus</strong><span>Chapitre 12 : Planification écologique</span></p>
+  </div>
+</section>
+<footer class="foot">
+  <p>Projet militant indépendant, fait pour donner envie de lire le programme.</p>
+  <p>Texte du programme : La France insoumise – <span class="book">L'Avenir en commun</span>. Licence CC BY-NC-SA 4.0. </p>
+  <ul class="links">
+    <li><a href="#">À propos</a></li>
+    <li><a href="#">Confidentialité</a></li>
+    <li><a href="#">Exactitude</a></li>
+    <li><a href="#">Licence et sources</a></li>
+    <li><a href="#">Mentions légales</a></li>
+    <li><a href="#">Code source</a></li>
+  </ul>
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1052 @@
+{
+  "generated_at": "2026-09-07",
+  "palette": [
+    {
+      "name": "Violet",
+      "hex": "#4C0297",
+      "group": "core",
+      "source": "charte « Couleurs 2027 »"
+    },
+    {
+      "name": "Rouge",
+      "hex": "#D1271C",
+      "group": "core",
+      "source": "charte « Couleurs 2027 »"
+    },
+    {
+      "name": "Crème",
+      "hex": "#FFFCF4",
+      "group": "core",
+      "source": "charte « Couleurs 2027 »"
+    },
+    {
+      "name": "Charbon",
+      "hex": "#212320",
+      "group": "core",
+      "source": "charte « Couleurs 2027 »"
+    },
+    {
+      "name": "Violet 100",
+      "hex": "#FDEDFF",
+      "group": "tint",
+      "source": "LOGO-M27.svg (27 fills)"
+    },
+    {
+      "name": "Violet 200",
+      "hex": "#E5CBFF",
+      "group": "tint",
+      "source": "LOGO-M27.svg (57 fills)"
+    },
+    {
+      "name": "Corail 200",
+      "hex": "#FFD2CF",
+      "group": "tint",
+      "source": "LOGO-M27.svg (12 fills)"
+    },
+    {
+      "name": "Vif violet",
+      "hex": "#7B13D6",
+      "group": "vive",
+      "source": "charte « Codes HEX (web) »"
+    },
+    {
+      "name": "Vif rouge",
+      "hex": "#F91616",
+      "group": "vive",
+      "source": "charte « Codes HEX (web) »"
+    },
+    {
+      "name": "Vif bleu",
+      "hex": "#3885F4",
+      "group": "vive",
+      "source": "charte « Codes HEX (web) »"
+    },
+    {
+      "name": "Vif rose",
+      "hex": "#ED5FB1",
+      "group": "vive",
+      "source": "charte « Codes HEX (web) »"
+    },
+    {
+      "name": "Vif jaune",
+      "hex": "#F9C900",
+      "group": "vive",
+      "source": "charte « Codes HEX (web) »"
+    },
+    {
+      "name": "Vif vert",
+      "hex": "#2E9959",
+      "group": "vive",
+      "source": "charte « Codes HEX (web) »"
+    },
+    {
+      "name": "Gris M27",
+      "hex": "#707070",
+      "group": "observed",
+      "source": "melenchon2027.fr paragraphes (computed)"
+    },
+    {
+      "name": "Jaune M27",
+      "hex": "#F5C800",
+      "group": "observed",
+      "source": "melenchon2027.fr (computed)"
+    },
+    {
+      "name": "Beige M27",
+      "hex": "#E6DFC9",
+      "group": "observed",
+      "source": "melenchon2027.fr (computed)"
+    }
+  ],
+  "backgrounds": [
+    "Crème",
+    "Charbon",
+    "Violet",
+    "Rouge",
+    "Violet 100",
+    "Violet 200",
+    "Corail 200"
+  ],
+  "cells": [
+    {
+      "fg": "Violet",
+      "bg": "Crème",
+      "ratio": 11.62,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Violet",
+      "bg": "Charbon",
+      "ratio": 1.33,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Violet",
+      "bg": "Rouge",
+      "ratio": 2.28,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Violet",
+      "bg": "Violet 100",
+      "ratio": 10.63,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Violet",
+      "bg": "Violet 200",
+      "ratio": 8.12,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Violet",
+      "bg": "Corail 200",
+      "ratio": 8.72,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Rouge",
+      "bg": "Crème",
+      "ratio": 5.1,
+      "grade": "AA"
+    },
+    {
+      "fg": "Rouge",
+      "bg": "Charbon",
+      "ratio": 3.03,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Rouge",
+      "bg": "Violet",
+      "ratio": 2.28,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Rouge",
+      "bg": "Violet 100",
+      "ratio": 4.66,
+      "grade": "AA"
+    },
+    {
+      "fg": "Rouge",
+      "bg": "Violet 200",
+      "ratio": 3.56,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Rouge",
+      "bg": "Corail 200",
+      "ratio": 3.83,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Crème",
+      "bg": "Charbon",
+      "ratio": 15.45,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Crème",
+      "bg": "Violet",
+      "ratio": 11.62,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Crème",
+      "bg": "Rouge",
+      "ratio": 5.1,
+      "grade": "AA"
+    },
+    {
+      "fg": "Crème",
+      "bg": "Violet 100",
+      "ratio": 1.09,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Crème",
+      "bg": "Violet 200",
+      "ratio": 1.43,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Crème",
+      "bg": "Corail 200",
+      "ratio": 1.33,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Charbon",
+      "bg": "Crème",
+      "ratio": 15.45,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Charbon",
+      "bg": "Violet",
+      "ratio": 1.33,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Charbon",
+      "bg": "Rouge",
+      "ratio": 3.03,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Charbon",
+      "bg": "Violet 100",
+      "ratio": 14.13,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Charbon",
+      "bg": "Violet 200",
+      "ratio": 10.8,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Charbon",
+      "bg": "Corail 200",
+      "ratio": 11.59,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Violet 100",
+      "bg": "Crème",
+      "ratio": 1.09,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Violet 100",
+      "bg": "Charbon",
+      "ratio": 14.13,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Violet 100",
+      "bg": "Violet",
+      "ratio": 10.63,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Violet 100",
+      "bg": "Rouge",
+      "ratio": 4.66,
+      "grade": "AA"
+    },
+    {
+      "fg": "Violet 100",
+      "bg": "Violet 200",
+      "ratio": 1.31,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Violet 100",
+      "bg": "Corail 200",
+      "ratio": 1.22,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Violet 200",
+      "bg": "Crème",
+      "ratio": 1.43,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Violet 200",
+      "bg": "Charbon",
+      "ratio": 10.8,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Violet 200",
+      "bg": "Violet",
+      "ratio": 8.12,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Violet 200",
+      "bg": "Rouge",
+      "ratio": 3.56,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Violet 200",
+      "bg": "Violet 100",
+      "ratio": 1.31,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Violet 200",
+      "bg": "Corail 200",
+      "ratio": 1.07,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Corail 200",
+      "bg": "Crème",
+      "ratio": 1.33,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Corail 200",
+      "bg": "Charbon",
+      "ratio": 11.59,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Corail 200",
+      "bg": "Violet",
+      "ratio": 8.72,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Corail 200",
+      "bg": "Rouge",
+      "ratio": 3.83,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Corail 200",
+      "bg": "Violet 100",
+      "ratio": 1.22,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Corail 200",
+      "bg": "Violet 200",
+      "ratio": 1.07,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif violet",
+      "bg": "Crème",
+      "ratio": 7.05,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Vif violet",
+      "bg": "Charbon",
+      "ratio": 2.19,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif violet",
+      "bg": "Violet",
+      "ratio": 1.65,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif violet",
+      "bg": "Rouge",
+      "ratio": 1.38,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif violet",
+      "bg": "Violet 100",
+      "ratio": 6.45,
+      "grade": "AA"
+    },
+    {
+      "fg": "Vif violet",
+      "bg": "Violet 200",
+      "ratio": 4.93,
+      "grade": "AA"
+    },
+    {
+      "fg": "Vif violet",
+      "bg": "Corail 200",
+      "ratio": 5.29,
+      "grade": "AA"
+    },
+    {
+      "fg": "Vif rouge",
+      "bg": "Crème",
+      "ratio": 3.97,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Vif rouge",
+      "bg": "Charbon",
+      "ratio": 3.89,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Vif rouge",
+      "bg": "Violet",
+      "ratio": 2.92,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif rouge",
+      "bg": "Rouge",
+      "ratio": 1.28,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif rouge",
+      "bg": "Violet 100",
+      "ratio": 3.63,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Vif rouge",
+      "bg": "Violet 200",
+      "ratio": 2.78,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif rouge",
+      "bg": "Corail 200",
+      "ratio": 2.98,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif bleu",
+      "bg": "Crème",
+      "ratio": 3.51,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Vif bleu",
+      "bg": "Charbon",
+      "ratio": 4.4,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Vif bleu",
+      "bg": "Violet",
+      "ratio": 3.31,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Vif bleu",
+      "bg": "Rouge",
+      "ratio": 1.45,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif bleu",
+      "bg": "Violet 100",
+      "ratio": 3.21,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Vif bleu",
+      "bg": "Violet 200",
+      "ratio": 2.46,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif bleu",
+      "bg": "Corail 200",
+      "ratio": 2.64,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif rose",
+      "bg": "Crème",
+      "ratio": 2.98,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif rose",
+      "bg": "Charbon",
+      "ratio": 5.18,
+      "grade": "AA"
+    },
+    {
+      "fg": "Vif rose",
+      "bg": "Violet",
+      "ratio": 3.9,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Vif rose",
+      "bg": "Rouge",
+      "ratio": 1.71,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif rose",
+      "bg": "Violet 100",
+      "ratio": 2.73,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif rose",
+      "bg": "Violet 200",
+      "ratio": 2.08,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif rose",
+      "bg": "Corail 200",
+      "ratio": 2.24,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif jaune",
+      "bg": "Crème",
+      "ratio": 1.53,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif jaune",
+      "bg": "Charbon",
+      "ratio": 10.09,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Vif jaune",
+      "bg": "Violet",
+      "ratio": 7.59,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Vif jaune",
+      "bg": "Rouge",
+      "ratio": 3.33,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Vif jaune",
+      "bg": "Violet 100",
+      "ratio": 1.4,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif jaune",
+      "bg": "Violet 200",
+      "ratio": 1.07,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif jaune",
+      "bg": "Corail 200",
+      "ratio": 1.15,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif vert",
+      "bg": "Crème",
+      "ratio": 3.52,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Vif vert",
+      "bg": "Charbon",
+      "ratio": 4.39,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Vif vert",
+      "bg": "Violet",
+      "ratio": 3.3,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Vif vert",
+      "bg": "Rouge",
+      "ratio": 1.45,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif vert",
+      "bg": "Violet 100",
+      "ratio": 3.22,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Vif vert",
+      "bg": "Violet 200",
+      "ratio": 2.46,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Vif vert",
+      "bg": "Corail 200",
+      "ratio": 2.64,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Gris M27",
+      "bg": "Crème",
+      "ratio": 4.83,
+      "grade": "AA"
+    },
+    {
+      "fg": "Gris M27",
+      "bg": "Charbon",
+      "ratio": 3.2,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Gris M27",
+      "bg": "Violet",
+      "ratio": 2.41,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Gris M27",
+      "bg": "Rouge",
+      "ratio": 1.06,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Gris M27",
+      "bg": "Violet 100",
+      "ratio": 4.42,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Gris M27",
+      "bg": "Violet 200",
+      "ratio": 3.38,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Gris M27",
+      "bg": "Corail 200",
+      "ratio": 3.62,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Jaune M27",
+      "bg": "Crème",
+      "ratio": 1.56,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Jaune M27",
+      "bg": "Charbon",
+      "ratio": 9.91,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Jaune M27",
+      "bg": "Violet",
+      "ratio": 7.46,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Jaune M27",
+      "bg": "Rouge",
+      "ratio": 3.27,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Jaune M27",
+      "bg": "Violet 100",
+      "ratio": 1.43,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Jaune M27",
+      "bg": "Violet 200",
+      "ratio": 1.09,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Jaune M27",
+      "bg": "Corail 200",
+      "ratio": 1.17,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Beige M27",
+      "bg": "Crème",
+      "ratio": 1.3,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Beige M27",
+      "bg": "Charbon",
+      "ratio": 11.89,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Beige M27",
+      "bg": "Violet",
+      "ratio": 8.94,
+      "grade": "AAA"
+    },
+    {
+      "fg": "Beige M27",
+      "bg": "Rouge",
+      "ratio": 3.92,
+      "grade": "AA-large"
+    },
+    {
+      "fg": "Beige M27",
+      "bg": "Violet 100",
+      "ratio": 1.19,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Beige M27",
+      "bg": "Violet 200",
+      "ratio": 1.1,
+      "grade": "ÉCHEC"
+    },
+    {
+      "fg": "Beige M27",
+      "bg": "Corail 200",
+      "ratio": 1.03,
+      "grade": "ÉCHEC"
+    }
+  ],
+  "role_checks": [
+    {
+      "theme": "light",
+      "fg": "text",
+      "bg": "bg",
+      "fgHex": "#212320",
+      "bgHex": "#FFFCF4",
+      "kind": "text",
+      "ratio": 15.45,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "fg": "text",
+      "bg": "bg-elevated",
+      "fgHex": "#212320",
+      "bgHex": "#FDEDFF",
+      "kind": "text",
+      "ratio": 14.13,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "fg": "text-muted",
+      "bg": "bg",
+      "fgHex": "#212320",
+      "bgHex": "#FFFCF4",
+      "kind": "text",
+      "ratio": 15.45,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "fg": "text",
+      "bg": "verbatim-bg",
+      "fgHex": "#212320",
+      "bgHex": "#FDEDFF",
+      "kind": "text",
+      "ratio": 14.13,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "fg": "brand",
+      "bg": "bg",
+      "fgHex": "#4C0297",
+      "bgHex": "#FFFCF4",
+      "kind": "text",
+      "ratio": 11.62,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "fg": "brand-on",
+      "bg": "brand",
+      "fgHex": "#FFFCF4",
+      "bgHex": "#4C0297",
+      "kind": "text",
+      "ratio": 11.62,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "fg": "action",
+      "bg": "bg",
+      "fgHex": "#D1271C",
+      "bgHex": "#FFFCF4",
+      "kind": "text",
+      "ratio": 5.1,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "fg": "action-on",
+      "bg": "action",
+      "fgHex": "#FFFCF4",
+      "bgHex": "#D1271C",
+      "kind": "text",
+      "ratio": 5.1,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "fg": "warn-text",
+      "bg": "warn-bg",
+      "fgHex": "#212320",
+      "bgHex": "#FFD2CF",
+      "kind": "text",
+      "ratio": 11.59,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "fg": "wordmark",
+      "bg": "bg",
+      "fgHex": "#4C0297",
+      "bgHex": "#FFFCF4",
+      "kind": "text",
+      "ratio": 11.62,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "fg": "wordmark-accent",
+      "bg": "bg",
+      "fgHex": "#D1271C",
+      "bgHex": "#FFFCF4",
+      "kind": "text",
+      "ratio": 5.1,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "fg": "verbatim-rule",
+      "bg": "verbatim-bg",
+      "fgHex": "#4C0297",
+      "bgHex": "#FDEDFF",
+      "kind": "non-text",
+      "ratio": 10.63,
+      "min": 3,
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "fg": "focus",
+      "bg": "bg",
+      "fgHex": "#4C0297",
+      "bgHex": "#FFFCF4",
+      "kind": "non-text",
+      "ratio": 11.62,
+      "min": 3,
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "fg": "focus",
+      "bg": "bg-elevated",
+      "fgHex": "#4C0297",
+      "bgHex": "#FDEDFF",
+      "kind": "non-text",
+      "ratio": 10.63,
+      "min": 3,
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "fg": "text",
+      "bg": "bg",
+      "fgHex": "#FFFCF4",
+      "bgHex": "#212320",
+      "kind": "text",
+      "ratio": 15.45,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "fg": "text",
+      "bg": "bg-elevated",
+      "fgHex": "#FFFCF4",
+      "bgHex": "#2C2E2B",
+      "kind": "text",
+      "ratio": 13.36,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "fg": "text-muted",
+      "bg": "bg",
+      "fgHex": "#FFFCF4",
+      "bgHex": "#212320",
+      "kind": "text",
+      "ratio": 15.45,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "fg": "text",
+      "bg": "verbatim-bg",
+      "fgHex": "#FFFCF4",
+      "bgHex": "#2C2E2B",
+      "kind": "text",
+      "ratio": 13.36,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "fg": "brand",
+      "bg": "bg",
+      "fgHex": "#E5CBFF",
+      "bgHex": "#212320",
+      "kind": "text",
+      "ratio": 10.8,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "fg": "brand-on",
+      "bg": "brand",
+      "fgHex": "#212320",
+      "bgHex": "#E5CBFF",
+      "kind": "text",
+      "ratio": 10.8,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "fg": "action",
+      "bg": "bg",
+      "fgHex": "#F9C900",
+      "bgHex": "#212320",
+      "kind": "text",
+      "ratio": 10.09,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "fg": "action-on",
+      "bg": "action",
+      "fgHex": "#212320",
+      "bgHex": "#F9C900",
+      "kind": "text",
+      "ratio": 10.09,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "fg": "warn-text",
+      "bg": "warn-bg",
+      "fgHex": "#FFFCF4",
+      "bgHex": "#3A2A28",
+      "kind": "text",
+      "ratio": 13.29,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "fg": "wordmark",
+      "bg": "bg",
+      "fgHex": "#E5CBFF",
+      "bgHex": "#212320",
+      "kind": "text",
+      "ratio": 10.8,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "fg": "wordmark-accent",
+      "bg": "bg",
+      "fgHex": "#F9C900",
+      "bgHex": "#212320",
+      "kind": "text",
+      "ratio": 10.09,
+      "min": 4.5,
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "fg": "verbatim-rule",
+      "bg": "verbatim-bg",
+      "fgHex": "#E5CBFF",
+      "bgHex": "#2C2E2B",
+      "kind": "non-text",
+      "ratio": 9.34,
+      "min": 3,
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "fg": "focus",
+      "bg": "bg",
+      "fgHex": "#F9C900",
+      "bgHex": "#212320",
+      "kind": "non-text",
+      "ratio": 10.09,
+      "min": 3,
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "fg": "focus",
+      "bg": "bg-elevated",
+      "fgHex": "#F9C900",
+      "bgHex": "#2C2E2B",
+      "kind": "non-text",
+      "ratio": 8.73,
+      "min": 3,
+      "pass": true
+    }
+  ]
+}

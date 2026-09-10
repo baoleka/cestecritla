@@ -1,0 +1,1223 @@
+{
+ "measuredAt": "2026-09-09T14:46:04.256Z",
+ "base": "https://proto.cestecritla.fr",
+ "cpuRate": 4,
+ "series": [
+  [
+   {
+    "mode": "proto",
+    "cpuRate": 4,
+    "tapSentAt": 108,
+    "reveal": {
+     "t": 177,
+     "hasTransition": false,
+     "contentPending": true
+    },
+    "ready": null,
+    "finished": null,
+    "finishedErr": null,
+    "contentReadyAt": 205.7,
+    "htmlClass": "m-motion",
+    "hits": [
+     [
+      9,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      40,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      85,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      218,
+      "P",
+      "none"
+     ],
+     [
+      249,
+      "P",
+      "none"
+     ],
+     [
+      280,
+      "P",
+      "none"
+     ],
+     [
+      310,
+      "P",
+      "none"
+     ],
+     [
+      341,
+      "P",
+      "none"
+     ],
+     [
+      371,
+      "P",
+      "none"
+     ],
+     [
+      402,
+      "P",
+      "none"
+     ],
+     [
+      432,
+      "P",
+      "none"
+     ],
+     [
+      462,
+      "P",
+      "none"
+     ],
+     [
+      493,
+      "P",
+      "none"
+     ],
+     [
+      523,
+      "P",
+      "none"
+     ],
+     [
+      554,
+      "P",
+      "none"
+     ],
+     [
+      585,
+      "P",
+      "none"
+     ],
+     [
+      615,
+      "P",
+      "none"
+     ]
+    ],
+    "clicks": [
+     [
+      100,
+      "MAIN.page",
+      true
+     ]
+    ],
+    "frames600": {
+     "n": 34,
+     "p95": 16.8,
+     "max": 83.4,
+     "pctOver20": 2.9,
+     "pctOver50": 2.9
+    },
+    "renderFrame": [
+     220,
+     16.6
+    ],
+    "framesAnimated": {
+     "n": 18,
+     "p95": 16.8,
+     "max": 16.8,
+     "pctOver20": 0,
+     "pctOver50": 0
+    },
+    "longFrames": [
+     [
+      204,
+      83.4
+     ]
+    ],
+    "url": "/section/?id=c12-s01",
+    "errors": [
+     "Transition was aborted because of invalid state. ViewTransition opt-in disabled"
+    ]
+   },
+   {
+    "mode": "prerender",
+    "cpuRate": 4,
+    "tapSentAt": 99,
+    "reveal": {
+     "t": 143.30000007152557,
+     "hasTransition": false,
+     "contentPending": false
+    },
+    "ready": null,
+    "finished": null,
+    "finishedErr": null,
+    "contentReadyAt": null,
+    "htmlClass": "m-motion",
+    "hits": [
+     [
+      9,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      48,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      88,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      199,
+      "P",
+      "none"
+     ],
+     [
+      230,
+      "P",
+      "none"
+     ],
+     [
+      261,
+      "P",
+      "none"
+     ],
+     [
+      292,
+      "P",
+      "none"
+     ],
+     [
+      322,
+      "P",
+      "none"
+     ],
+     [
+      353,
+      "P",
+      "none"
+     ],
+     [
+      383,
+      "P",
+      "none"
+     ],
+     [
+      414,
+      "P",
+      "none"
+     ],
+     [
+      444,
+      "P",
+      "none"
+     ],
+     [
+      475,
+      "P",
+      "none"
+     ],
+     [
+      505,
+      "P",
+      "none"
+     ],
+     [
+      535,
+      "P",
+      "none"
+     ],
+     [
+      566,
+      "P",
+      "none"
+     ],
+     [
+      596,
+      "P",
+      "none"
+     ],
+     [
+      627,
+      "P",
+      "none"
+     ]
+    ],
+    "clicks": [
+     [
+      87,
+      "MAIN.page",
+      true
+     ]
+    ],
+    "frames600": {
+     "n": 34,
+     "p95": 16.8,
+     "max": 83.4,
+     "pctOver20": 2.9,
+     "pctOver50": 2.9
+    },
+    "renderFrame": null,
+    "framesAnimated": {
+     "n": 16,
+     "p95": 83.4,
+     "max": 83.4,
+     "pctOver20": 6.3,
+     "pctOver50": 6.3
+    },
+    "longFrames": [
+     [
+      193,
+      83.4
+     ]
+    ],
+    "url": "/section/?id=c12-s01",
+    "errors": [
+     "Transition was aborted because of invalid state. ViewTransition opt-in disabled"
+    ]
+   },
+   {
+    "mode": "slow",
+    "cpuRate": 4,
+    "tapSentAt": 89,
+    "reveal": {
+     "t": 178.10000002384186,
+     "hasTransition": false,
+     "contentPending": false
+    },
+    "ready": null,
+    "finished": null,
+    "finishedErr": null,
+    "contentReadyAt": null,
+    "htmlClass": "m-motion",
+    "hits": [
+     [
+      9,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      64,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      189,
+      "P",
+      "none"
+     ],
+     [
+      219,
+      "P",
+      "none"
+     ],
+     [
+      250,
+      "P",
+      "none"
+     ],
+     [
+      281,
+      "P",
+      "none"
+     ],
+     [
+      311,
+      "P",
+      "none"
+     ],
+     [
+      341,
+      "P",
+      "none"
+     ],
+     [
+      372,
+      "P",
+      "none"
+     ],
+     [
+      402,
+      "P",
+      "none"
+     ],
+     [
+      433,
+      "P",
+      "none"
+     ],
+     [
+      463,
+      "P",
+      "none"
+     ],
+     [
+      493,
+      "P",
+      "none"
+     ],
+     [
+      524,
+      "P",
+      "none"
+     ],
+     [
+      554,
+      "P",
+      "none"
+     ],
+     [
+      584,
+      "P",
+      "none"
+     ],
+     [
+      615,
+      "P",
+      "none"
+     ]
+    ],
+    "clicks": [
+     [
+      77,
+      "MAIN.page",
+      true
+     ]
+    ],
+    "frames600": {
+     "n": 80,
+     "p95": 3.4,
+     "max": 16.7,
+     "pctOver20": 0,
+     "pctOver50": 0
+    },
+    "renderFrame": null,
+    "framesAnimated": {
+     "n": 80,
+     "p95": 3.4,
+     "max": 16.7,
+     "pctOver20": 0,
+     "pctOver50": 0
+    },
+    "longFrames": [],
+    "url": "/section/?id=c12-s01",
+    "errors": [
+     "Transition was aborted because of invalid state. ViewTransition opt-in disabled"
+    ]
+   }
+  ],
+  [
+   {
+    "mode": "proto",
+    "cpuRate": 4,
+    "tapSentAt": 73,
+    "reveal": {
+     "t": 178.39999997615814,
+     "hasTransition": false,
+     "contentPending": true
+    },
+    "ready": null,
+    "finished": null,
+    "finishedErr": null,
+    "contentReadyAt": 186.6,
+    "htmlClass": "m-motion",
+    "hits": [
+     [
+      10,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      64,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      96,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      199,
+      "P",
+      "none"
+     ],
+     [
+      230,
+      "P",
+      "none"
+     ],
+     [
+      260,
+      "P",
+      "none"
+     ],
+     [
+      291,
+      "P",
+      "none"
+     ],
+     [
+      321,
+      "P",
+      "none"
+     ],
+     [
+      352,
+      "P",
+      "none"
+     ],
+     [
+      382,
+      "P",
+      "none"
+     ],
+     [
+      412,
+      "P",
+      "none"
+     ],
+     [
+      443,
+      "P",
+      "none"
+     ],
+     [
+      474,
+      "P",
+      "none"
+     ],
+     [
+      505,
+      "P",
+      "none"
+     ],
+     [
+      535,
+      "P",
+      "none"
+     ],
+     [
+      565,
+      "P",
+      "none"
+     ],
+     [
+      596,
+      "P",
+      "none"
+     ],
+     [
+      626,
+      "P",
+      "none"
+     ]
+    ],
+    "clicks": [
+     [
+      67,
+      "MAIN.page",
+      true
+     ]
+    ],
+    "frames600": {
+     "n": 34,
+     "p95": 16.8,
+     "max": 83.3,
+     "pctOver20": 2.9,
+     "pctOver50": 2.9
+    },
+    "renderFrame": [
+     192,
+     83.3
+    ],
+    "framesAnimated": {
+     "n": 18,
+     "p95": 16.8,
+     "max": 16.8,
+     "pctOver20": 0,
+     "pctOver50": 0
+    },
+    "longFrames": [
+     [
+      192,
+      83.3
+     ]
+    ],
+    "url": "/section/?id=c12-s01",
+    "errors": [
+     "Transition was aborted because of invalid state. ViewTransition opt-in disabled"
+    ]
+   },
+   {
+    "mode": "prerender",
+    "cpuRate": 4,
+    "tapSentAt": 80,
+    "reveal": {
+     "t": 155.39999997615814,
+     "hasTransition": false,
+     "contentPending": false
+    },
+    "ready": null,
+    "finished": null,
+    "finishedErr": null,
+    "contentReadyAt": null,
+    "htmlClass": "m-motion",
+    "hits": [
+     [
+      11,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      63,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      188,
+      "P",
+      "none"
+     ],
+     [
+      218,
+      "P",
+      "none"
+     ],
+     [
+      253,
+      "P",
+      "none"
+     ],
+     [
+      284,
+      "P",
+      "none"
+     ],
+     [
+      315,
+      "P",
+      "none"
+     ],
+     [
+      345,
+      "P",
+      "none"
+     ],
+     [
+      376,
+      "P",
+      "none"
+     ],
+     [
+      406,
+      "P",
+      "none"
+     ],
+     [
+      436,
+      "P",
+      "none"
+     ],
+     [
+      466,
+      "P",
+      "none"
+     ],
+     [
+      497,
+      "P",
+      "none"
+     ],
+     [
+      527,
+      "P",
+      "none"
+     ],
+     [
+      557,
+      "P",
+      "none"
+     ],
+     [
+      587,
+      "P",
+      "none"
+     ],
+     [
+      618,
+      "P",
+      "none"
+     ]
+    ],
+    "clicks": [
+     [
+      66,
+      "MAIN.page",
+      true
+     ]
+    ],
+    "frames600": {
+     "n": 34,
+     "p95": 33.3,
+     "max": 83.3,
+     "pctOver20": 5.9,
+     "pctOver50": 2.9
+    },
+    "renderFrame": null,
+    "framesAnimated": {
+     "n": 16,
+     "p95": 83.3,
+     "max": 83.3,
+     "pctOver20": 12.5,
+     "pctOver50": 6.3
+    },
+    "longFrames": [
+     [
+      182,
+      83.3
+     ]
+    ],
+    "url": "/section/?id=c12-s01",
+    "errors": [
+     "Transition was aborted because of invalid state. ViewTransition opt-in disabled"
+    ]
+   },
+   {
+    "mode": "slow",
+    "cpuRate": 4,
+    "tapSentAt": 81,
+    "reveal": {
+     "t": 177.79999995231628,
+     "hasTransition": false,
+     "contentPending": false
+    },
+    "ready": null,
+    "finished": null,
+    "finishedErr": null,
+    "contentReadyAt": null,
+    "htmlClass": "m-motion",
+    "hits": [
+     [
+      10,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      48,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      96,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      213,
+      "P",
+      "none"
+     ],
+     [
+      244,
+      "P",
+      "none"
+     ],
+     [
+      274,
+      "P",
+      "none"
+     ],
+     [
+      304,
+      "P",
+      "none"
+     ],
+     [
+      335,
+      "P",
+      "none"
+     ],
+     [
+      365,
+      "P",
+      "none"
+     ],
+     [
+      396,
+      "P",
+      "none"
+     ],
+     [
+      426,
+      "P",
+      "none"
+     ],
+     [
+      456,
+      "P",
+      "none"
+     ],
+     [
+      487,
+      "P",
+      "none"
+     ],
+     [
+      517,
+      "P",
+      "none"
+     ],
+     [
+      547,
+      "P",
+      "none"
+     ],
+     [
+      578,
+      "P",
+      "none"
+     ],
+     [
+      608,
+      "P",
+      "none"
+     ]
+    ],
+    "clicks": [
+     [
+      76,
+      "MAIN.page",
+      true
+     ]
+    ],
+    "frames600": {
+     "n": 79,
+     "p95": 3.4,
+     "max": 16.7,
+     "pctOver20": 0,
+     "pctOver50": 0
+    },
+    "renderFrame": null,
+    "framesAnimated": {
+     "n": 79,
+     "p95": 3.4,
+     "max": 16.7,
+     "pctOver20": 0,
+     "pctOver50": 0
+    },
+    "longFrames": [],
+    "url": "/section/?id=c12-s01",
+    "errors": [
+     "Transition was aborted because of invalid state. ViewTransition opt-in disabled"
+    ]
+   }
+  ],
+  [
+   {
+    "mode": "proto",
+    "cpuRate": 4,
+    "tapSentAt": 91,
+    "reveal": {
+     "t": 191.19999992847443,
+     "hasTransition": false,
+     "contentPending": true
+    },
+    "ready": null,
+    "finished": null,
+    "finishedErr": null,
+    "contentReadyAt": 179.7,
+    "htmlClass": "m-motion",
+    "hits": [
+     [
+      10,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      64,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      191,
+      "P",
+      "none"
+     ],
+     [
+      221,
+      "P",
+      "none"
+     ],
+     [
+      252,
+      "P",
+      "none"
+     ],
+     [
+      282,
+      "P",
+      "none"
+     ],
+     [
+      313,
+      "P",
+      "none"
+     ],
+     [
+      344,
+      "P",
+      "none"
+     ],
+     [
+      375,
+      "P",
+      "none"
+     ],
+     [
+      405,
+      "P",
+      "none"
+     ],
+     [
+      435,
+      "P",
+      "none"
+     ],
+     [
+      465,
+      "P",
+      "none"
+     ],
+     [
+      496,
+      "P",
+      "none"
+     ],
+     [
+      527,
+      "P",
+      "none"
+     ],
+     [
+      557,
+      "P",
+      "none"
+     ],
+     [
+      587,
+      "P",
+      "none"
+     ],
+     [
+      617,
+      "P",
+      "none"
+     ]
+    ],
+    "clicks": [
+     [
+      78,
+      "MAIN.page",
+      true
+     ]
+    ],
+    "frames600": {
+     "n": 34,
+     "p95": 16.8,
+     "max": 83.4,
+     "pctOver20": 2.9,
+     "pctOver50": 2.9
+    },
+    "renderFrame": [
+     180,
+     83.4
+    ],
+    "framesAnimated": {
+     "n": 19,
+     "p95": 16.8,
+     "max": 16.8,
+     "pctOver20": 0,
+     "pctOver50": 0
+    },
+    "longFrames": [
+     [
+      180,
+      83.4
+     ]
+    ],
+    "url": "/section/?id=c12-s01",
+    "errors": [
+     "Transition was aborted because of invalid state. ViewTransition opt-in disabled"
+    ]
+   },
+   {
+    "mode": "prerender",
+    "cpuRate": 4,
+    "tapSentAt": 129,
+    "reveal": {
+     "t": 177.79999995231628,
+     "hasTransition": false,
+     "contentPending": false
+    },
+    "ready": null,
+    "finished": null,
+    "finishedErr": null,
+    "contentReadyAt": null,
+    "htmlClass": "m-motion",
+    "hits": [
+     [
+      9,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      40,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      81,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      123,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      234,
+      "P",
+      "none"
+     ],
+     [
+      265,
+      "P",
+      "none"
+     ],
+     [
+      297,
+      "P",
+      "none"
+     ],
+     [
+      327,
+      "P",
+      "none"
+     ],
+     [
+      358,
+      "P",
+      "none"
+     ],
+     [
+      389,
+      "P",
+      "none"
+     ],
+     [
+      419,
+      "P",
+      "none"
+     ],
+     [
+      449,
+      "P",
+      "none"
+     ],
+     [
+      479,
+      "P",
+      "none"
+     ],
+     [
+      509,
+      "P",
+      "none"
+     ],
+     [
+      540,
+      "P",
+      "none"
+     ],
+     [
+      570,
+      "P",
+      "none"
+     ],
+     [
+      601,
+      "P",
+      "none"
+     ]
+    ],
+    "clicks": [
+     [
+      112,
+      "MAIN.page",
+      true
+     ]
+    ],
+    "frames600": {
+     "n": 34,
+     "p95": 16.8,
+     "max": 83.4,
+     "pctOver20": 2.9,
+     "pctOver50": 2.9
+    },
+    "renderFrame": null,
+    "framesAnimated": {
+     "n": 16,
+     "p95": 83.4,
+     "max": 83.4,
+     "pctOver20": 6.3,
+     "pctOver50": 6.3
+    },
+    "longFrames": [
+     [
+      226,
+      83.4
+     ]
+    ],
+    "url": "/section/?id=c12-s01",
+    "errors": [
+     "Transition was aborted because of invalid state. ViewTransition opt-in disabled"
+    ]
+   },
+   {
+    "mode": "slow",
+    "cpuRate": 4,
+    "tapSentAt": 80,
+    "reveal": {
+     "t": 186.60000002384186,
+     "hasTransition": false,
+     "contentPending": false
+    },
+    "ready": null,
+    "finished": null,
+    "finishedErr": null,
+    "contentReadyAt": null,
+    "htmlClass": "m-motion",
+    "hits": [
+     [
+      9,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      47,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      106,
+      "MAIN#main",
+      "none"
+     ],
+     [
+      209,
+      "P",
+      "none"
+     ],
+     [
+      239,
+      "P",
+      "none"
+     ],
+     [
+      270,
+      "P",
+      "none"
+     ],
+     [
+      300,
+      "P",
+      "none"
+     ],
+     [
+      331,
+      "P",
+      "none"
+     ],
+     [
+      361,
+      "P",
+      "none"
+     ],
+     [
+      392,
+      "P",
+      "none"
+     ],
+     [
+      423,
+      "P",
+      "none"
+     ],
+     [
+      453,
+      "P",
+      "none"
+     ],
+     [
+      483,
+      "P",
+      "none"
+     ],
+     [
+      513,
+      "P",
+      "none"
+     ],
+     [
+      543,
+      "P",
+      "none"
+     ],
+     [
+      574,
+      "P",
+      "none"
+     ],
+     [
+      604,
+      "P",
+      "none"
+     ]
+    ],
+    "clicks": [
+     [
+      76,
+      "MAIN.page",
+      true
+     ]
+    ],
+    "frames600": {
+     "n": 81,
+     "p95": 3.3,
+     "max": 13.3,
+     "pctOver20": 0,
+     "pctOver50": 0
+    },
+    "renderFrame": null,
+    "framesAnimated": {
+     "n": 81,
+     "p95": 3.3,
+     "max": 13.3,
+     "pctOver20": 0,
+     "pctOver50": 0
+    },
+    "longFrames": [],
+    "url": "/section/?id=c12-s01",
+    "errors": [
+     "Transition was aborted because of invalid state. ViewTransition opt-in disabled"
+    ]
+   }
+  ]
+ ]
+}

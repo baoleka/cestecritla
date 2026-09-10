@@ -1,0 +1,34 @@
+{
+  // T7 lab "do-budget" (PLAN-SESSION.md, T7): a global neuron budget counter in a
+  // SQLite-backed Durable Object + the rate limiting binding, on the Free plan only.
+  // Nothing here is billable: DO with SQLite (Free), ratelimits binding (Free), workers.dev.
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "aec-lab-budget",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-08",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "minify": true,
+  "durable_objects": {
+    "bindings": [{ "name": "NEURON_BUDGET", "class_name": "NeuronBudget" }]
+  },
+  // SQLite storage backend is the only one available on the Free plan.
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["NeuronBudget"] }],
+  // Rate limiting binding (first-class `ratelimits` field in wrangler 4.130; the
+  // `[[unsafe.bindings]] type = "ratelimit"` form is the legacy spelling of the same binding).
+  // Semantics: the counter is local to the Cloudflare location (colo) serving the request,
+  // not global — anti-burst only; the daily quota is the Durable Object's job.
+  "ratelimits": [
+    {
+      "name": "RATE_LIMITER",
+      "namespace_id": "1001",
+      "simple": { "limit": 20, "period": 60 }
+    }
+  ],
+  // D0.22: no invocation logs (they would carry client metadata). console.* stays on
+  // for structured error lines only; CPU is measured through GraphQL, not logs.
+  "observability": {
+    "enabled": true,
+    "logs": { "invocation_logs": false, "head_sampling_rate": 1 }
+  }
+}

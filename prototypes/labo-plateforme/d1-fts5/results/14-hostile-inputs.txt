@@ -1,0 +1,5 @@
+%22%20OR%201%3D1%20-- -> ['1'] ['c7-s05-k01', 'c7-s05-m01', 'c7-s05-m07'] None [ 200]
+NEAR(a%20b)%20%2A -> ['near'] [] None [ 200]
+le%20la%20les -> [] [] None [ 200]
+retraite%20%C3%A0%2060%20ans%20%3F -> ['retraite', '60', 'ans'] ['c8-s08-k01', 'c8-s02-m01', 'c8-s08-m04'] None [ 200]
+SMIC%201600%20euros%20net -> ['smic', '1600', 'euro', 'net'] ['c8-s04-k01', 'c9-s01-m02', 'c6-s05-m06'] None [ 200]

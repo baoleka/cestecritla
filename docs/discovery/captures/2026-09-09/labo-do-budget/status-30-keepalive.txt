@@ -1,0 +1,2 @@
+first_429_at: None
+latency_ms p50=33 p95=41 min=30 max=103

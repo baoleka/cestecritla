@@ -1,0 +1,90 @@
+# Continuous integration — every gate, on every pull request (D6.5, D12.3).
+#
+# Until now .github/workflows/ held only recrawl.yml: nothing checked a pull request, and none
+# of the conformity gates the dossier describes existed anywhere but on paper.
+#
+# Everything here runs at ZERO neurons and makes no outbound network call beyond `npm ci`
+# (D6.7: AI_MODE stays off; the corpus, the evaluation set and the fixtures are all in the repo).
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # Env is generated, never hand-written (09-architecture.md §2). Not versioned: 591 KB.
+      - name: Generate Worker types
+        run: npx wrangler types
+
+      # Gate 1 of CLAUDE.md, unchanged: scripts/ and eval/ under the root tsconfig. Then the
+      # Worker (workers-types, Bundler resolution) and the app (.astro), which cannot share one
+      # set of compiler options with the Node scripts.
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      # The build must come before the tests: the "no AI mention" gate reads dist/, because what
+      # matters is which strings actually ship, not which ones exist in the kit.
+      - name: Build
+        run: npm run build
+
+      # Gate 2 of CLAUDE.md. One command covers every test file, check-strings.test.ts included
+      # since it was renamed into the glob at 5c6ee51 — do not split it back into two arguments.
+      - name: Tests
+        run: npm test
+
+      # Gate 3: the 28 role pairs actually rendered, 4.5:1 for text and 3:1 for a rule, border or
+      # focus ring, non-zero exit on failure.
+      - name: Contrast
+        run: npm run contrast
+
+      - name: Worker startup budget
+        run: npx wrangler check startup
+
+      # Proves the v1/v2 scope rather than declaring it: no ai, no d1_databases, no
+      # durable_objects, no ratelimits, no kv_namespaces, no crons (D6.10, D13.1).
+      - name: Deploy dry run
+        run: npx wrangler deploy --dry-run --outdir /tmp/wdry
+
+  accessibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+
+      # A1/A2/A3, replayed on EVERY pull request and not only at the September milestone —
+      # the gap the red panel found. Zero serious/critical axe violation and no horizontal
+      # scroll, across 390 px, reflow 320 px, dark, system font at 130 % and 150 %, and
+      # reduced motion.
+      - name: Accessibility and reflow
+        run: npm run a11y

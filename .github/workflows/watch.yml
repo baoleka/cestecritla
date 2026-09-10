@@ -1,0 +1,70 @@
+# Daily watch on aec2027.fr (risk R6, runbook sheet 10).
+#
+# Kept out of recrawl.yml on purpose: the re-crawl is weekly and works, and 14-risques.md asks
+# for one HEAD PER DAY. (The dossier says "aec2027.fr hebdo" in prompt-final.md §12 and "une
+# requête HEAD par jour" in 14-risques.md §4 sheet 10. Daily is the stricter of the two and costs
+# three requests, so daily it is — the discrepancy is noted rather than silently resolved.)
+#
+# This job REPORTS. It never decides: D12.6 forbids any pivot on anything but an observed and
+# archived signal, and forbids any such decision during an L49 freeze.
+name: Watch aec2027.fr
+
+on:
+  schedule:
+    - cron: '30 5 * * *' # 05:30 UTC, before the Monday re-crawl at 06:00
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: watch-aec2027
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+
+      - name: HEAD aec2027.fr and compare the six signals
+        id: watch
+        run: |
+          set +e
+          npx tsx scripts/watch-aec2027.ts --json > /tmp/watch.json
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+          cat /tmp/watch.json
+
+      # Exit 3 means a signal moved. Exit 1 means unreachable, which is worth knowing but is
+      # NOT a signal: a network failure must never be read as "the site changed".
+      - name: Open an issue when a signal moves
+        if: steps.watch.outputs.code == '3'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "Un des six signaux de veille d'aec2027.fr a changé."
+            echo
+            echo '```json'
+            cat /tmp/watch.json
+            echo '```'
+            echo
+            echo "**Ce n'est pas une décision.** Archiver une capture datée dans"
+            echo "\`docs/discovery/captures/\`, puis lire la fiche 10 du runbook"
+            echo "(déclencheurs A-H, délai 0 h à 2 j)."
+            echo
+            echo "Règles de sang-froid (D12.6) : aucun pivot sur une rumeur, une capture ou un"
+            echo "message — seulement sur un signal observé et archivé ; **aucune décision"
+            echo "pendant un gel L49** (16-18 avril, 30 avril-2 mai 2027) : on note, on attend."
+          } > /tmp/issue.md
+          gh issue create \
+            --title "Veille R6 — un signal d'aec2027.fr a changé ($(date -u +%Y-%m-%d))" \
+            --body-file /tmp/issue.md \
+            --label veille

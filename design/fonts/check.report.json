@@ -1,0 +1,113 @@
+{
+  "fetched": [
+    {
+      "url": "file://<repo>/design/fonts/PublicSans-Italic-Variable-latin.woff2",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "url": "file://<repo>/design/fonts/PublicSans-Variable-latin.woff2",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "url": "file://<repo>/design/fonts/GowunBatang-Regular-latin.woff2",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "url": "file://<repo>/design/fonts/GowunBatang-Bold-latin.woff2",
+      "status": 200,
+      "ok": true
+    }
+  ],
+  "faces": [
+    {
+      "family": "Public Sans",
+      "weight": "100 900",
+      "style": "normal",
+      "status": "loaded",
+      "unicodeRange": "U+0-FF, U+100-17F, U+2000-206F, U+20AC, U+2122",
+      "display": "swap"
+    },
+    {
+      "family": "Public Sans",
+      "weight": "100 900",
+      "style": "italic",
+      "status": "loaded",
+      "unicodeRange": "U+0-FF, U+100-17F, U+2000-206F, U+20AC, U+2122",
+      "display": "swap"
+    },
+    {
+      "family": "Gowun Batang",
+      "weight": "400",
+      "style": "normal",
+      "status": "loaded",
+      "unicodeRange": "U+0-FF, U+100-17F, U+2000-206F, U+20AC, U+2122",
+      "display": "swap"
+    },
+    {
+      "family": "Gowun Batang",
+      "weight": "700",
+      "style": "normal",
+      "status": "loaded",
+      "unicodeRange": "U+0-FF, U+100-17F, U+2000-206F, U+20AC, U+2122",
+      "display": "swap"
+    }
+  ],
+  "rules": [
+    {
+      "family": "\"Public Sans\"",
+      "src": "url(\"PublicSans-Variable-latin.woff2\") format(\"woff2\")",
+      "weight": "100 900",
+      "style": "normal",
+      "display": "swap",
+      "range": "U+0-FF, U+100-17F, U+2000-206F, U+20AC, U+2122"
+    },
+    {
+      "family": "\"Public Sans\"",
+      "src": "url(\"PublicSans-Italic-Variable-latin.woff2\") format(\"woff2\")",
+      "weight": "100 900",
+      "style": "italic",
+      "display": "swap",
+      "range": "U+0-FF, U+100-17F, U+2000-206F, U+20AC, U+2122"
+    },
+    {
+      "family": "\"Gowun Batang\"",
+      "src": "url(\"GowunBatang-Regular-latin.woff2\") format(\"woff2\")",
+      "weight": "400",
+      "style": "normal",
+      "display": "swap",
+      "range": "U+0-FF, U+100-17F, U+2000-206F, U+20AC, U+2122"
+    },
+    {
+      "family": "\"Gowun Batang\"",
+      "src": "url(\"GowunBatang-Bold-latin.woff2\") format(\"woff2\")",
+      "weight": "700",
+      "style": "normal",
+      "display": "swap",
+      "range": "U+0-FF, U+100-17F, U+2000-206F, U+20AC, U+2122"
+    }
+  ],
+  "widths": {
+    "Public Sans 400": 663,
+    "sans-serif 400": 639.14,
+    "Public Sans 900": 731,
+    "Public Sans 900 italic": 698,
+    "Gowun Batang 400": 688,
+    "serif 400": 631.66,
+    "Gowun Batang 700": 720
+  },
+  "checks": {
+    "Public Sans 400 normal": true,
+    "Public Sans 900 italic": true,
+    "Gowun Batang 400": true,
+    "Gowun Batang 700": true
+  },
+  "computed": {
+    "body": "\"Public Sans\", system-ui, sans-serif",
+    "h1": "\"Public Sans\", sans-serif",
+    "blockquote": "\"Gowun Batang\", serif"
+  },
+  "bodyBg": "rgb(255, 252, 244)"
+}

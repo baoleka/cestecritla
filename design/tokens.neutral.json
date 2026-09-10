@@ -1,0 +1,130 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "meta": {
+    "name": "C'est écrit là — jeu de tokens neutre (rebrand light)",
+    "version": "1.0.0",
+    "date": "2026-09-10",
+    "decision": "D0.17, rendu exécutable par D14.12",
+    "purpose_fr": "Contingence « demande de retrait ou désaveu par LFI » (D0.17, risque R3). L'app reste en ligne, elle change d'habits : tokens neutres et wordmark propre, sans toucher au texte ni aux identifiants. Ce fichier était décrit depuis le 7 septembre et n'existait pas (H-PLA-23) : le rebrand était documenté, pas exécutable. D14.12 (aucun message 0 à LFI) en fait la SEULE réponse préparée à un désaveu, donc un prérequis de lancement et non plus une tâche de contingence.",
+    "method_fr": "Aucune couleur de la charte 2027 ne survit. Violet #4C0297 et Rouge #D1271C disparaissent, ainsi que les trois surfaces empruntées à LOGO-M27.svg (#FDEDFF, #E5CBFF, #FFD2CF) et les six vives. La marque passe sur un axe bleu-nuit / vert profond, absent de la charte comme de la ban list — #0098B6, #0e8a9c, l'ocre #C9462C et #8B24D9 y figurent et ne sont pas réutilisés. Crème et Charbon sont remplacés par un blanc cassé et un noir cassé qui ne portent aucune signature.",
+    "usage_fr": "npm run build -- --tokens=neutral (ou copier ce fichier sur design/tokens.json). Les 28 paires de rôles passent la même porte que le jeu principal : scripts/tokens-neutral.test.ts le rejoue à chaque PR, pour que la contingence reste exécutable le jour où on en a besoin plutôt que le jour où on l'écrit."
+  },
+
+  "color": {
+    "encre": {
+      "$value": "#1A1A18",
+      "$type": "color",
+      "$description": "Noir cassé. Texte principal en mode clair, fond en mode sombre."
+    },
+    "papier": {
+      "$value": "#FBFAF7",
+      "$type": "color",
+      "$description": "Blanc cassé. Fond en mode clair, texte en mode sombre."
+    },
+    "encre-douce": {
+      "$value": "#3F3F3A",
+      "$type": "color",
+      "$description": "Texte secondaire sur papier (7,86:1)."
+    },
+    "papier-doux": {
+      "$value": "#D6D6CE",
+      "$type": "color",
+      "$description": "Texte secondaire sur encre."
+    },
+    "surface": {
+      "$value": "#EFEFEA",
+      "$type": "color",
+      "$description": "Surface élevée en mode clair."
+    },
+    "surface-sombre": {
+      "$value": "#262622",
+      "$type": "color",
+      "$description": "Surface élevée en mode sombre."
+    },
+    "nuit": {
+      "$value": "#1E3A5F",
+      "$type": "color",
+      "$description": "Marque. Bleu nuit, absent de la charte 2027 et de la ban list."
+    },
+    "nuit-claire": {
+      "$value": "#A8C5E8",
+      "$type": "color",
+      "$description": "Marque en mode sombre."
+    },
+    "foret": {
+      "$value": "#0F5132",
+      "$type": "color",
+      "$description": "Action et focus. Vert profond, sur un axe que la charte n'utilise pas."
+    },
+    "foret-claire": {
+      "$value": "#7BD3A0",
+      "$type": "color",
+      "$description": "Action et focus en mode sombre."
+    },
+    "citation": {
+      "$value": "#F1F0EA",
+      "$type": "color",
+      "$description": "Fond de verbatim en mode clair."
+    },
+    "alerte": {
+      "$value": "#F5E6D3",
+      "$type": "color",
+      "$description": "Fond d'avertissement en mode clair. Jamais un refus ni le mode dégradé."
+    },
+    "alerte-sombre": {
+      "$value": "#33291F",
+      "$type": "color",
+      "$description": "Fond d'avertissement en mode sombre."
+    },
+    "relief": {
+      "$value": "#D9D9D2",
+      "$type": "color",
+      "$description": "Ombre pleine. Le bloc 3D reste interdit au titre d'écran."
+    },
+    "relief-sombre": {
+      "$value": "#3A3A34",
+      "$type": "color",
+      "$description": "Ombre pleine en mode sombre."
+    }
+  },
+
+  "color-role": {
+    "light": {
+      "bg": "{color.papier}",
+      "bg-elevated": "{color.surface}",
+      "text": "{color.encre}",
+      "text-muted": "{color.encre-douce}",
+      "brand": "{color.nuit}",
+      "brand-on": "{color.papier}",
+      "action": "{color.foret}",
+      "action-on": "{color.papier}",
+      "verbatim-bg": "{color.citation}",
+      "verbatim-rule": "{color.nuit}",
+      "shadow-3d": "{color.relief}",
+      "warn-bg": "{color.alerte}",
+      "warn-text": "{color.encre}",
+      "focus": "{color.foret}",
+      "wordmark": "{color.nuit}",
+      "wordmark-accent": "{color.foret}"
+    },
+    "dark": {
+      "$description": "Table complète des substitutions, comme le jeu principal : aucun rôle ne garde sa valeur claire.",
+      "bg": "{color.encre}",
+      "bg-elevated": "{color.surface-sombre}",
+      "text": "{color.papier}",
+      "text-muted": "{color.papier-doux}",
+      "brand": "{color.nuit-claire}",
+      "brand-on": "{color.encre}",
+      "action": "{color.foret-claire}",
+      "action-on": "{color.encre}",
+      "verbatim-bg": "{color.surface-sombre}",
+      "verbatim-rule": "{color.nuit-claire}",
+      "shadow-3d": "{color.relief-sombre}",
+      "warn-bg": "{color.alerte-sombre}",
+      "warn-text": "{color.papier}",
+      "focus": "{color.foret-claire}",
+      "wordmark": "{color.nuit-claire}",
+      "wordmark-accent": "{color.foret-claire}"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex">
+<title>Laquelle est ici ? — C’est écrit là</title>
+<link rel="preload" href="../shared/fonts/PublicSans-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../shared/fonts/GowunBatang-Regular-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../shared/tokens.css">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="../shared/motion.css">
+<link rel="stylesheet" href="./q.css">
+<script type="module" src="../shared/motion.js" blocking="render"></script>
+<script type="module" src="./q.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Aller au contenu</a>
+<main class="page" id="main">
+<header class="top" id="top">
+  <a class="wordmark block-3d" href="../home/" aria-label="C’est écrit là, accueil">C’est écrit <span class="la">là</span></a>
+  <nav class="nav" id="nav" aria-label="Navigation"><a href="../home/">Accueil</a><a href="../home/#q">Chercher</a></nav>
+</header>
+<p class="kicker" id="kicker" hidden>Extrait de <span class="book">L’Avenir en commun</span>, édition 2025</p>
+<div id="content" data-motion="content"><p class="small">Chargement…</p></div>
+<div class="sr-only" id="announce" role="status" aria-live="polite"></div>
+<footer class="footer">
+  <p id="independence">Projet militant indépendant, fait pour donner envie de lire le programme.</p>
+  <p id="privacy">Pas de compte, pas de cookie de suivi, aucune trace de tes questions.</p>
+  <p>Texte du programme : La France insoumise – <span class="book">L’Avenir en commun</span>. Licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" rel="noopener">CC BY-NC-SA 4.0</a>.</p>
+  <div class="legal"><a href="../#a-propos">À propos</a></div>
+</footer>
+</main>
+</body>
+</html>

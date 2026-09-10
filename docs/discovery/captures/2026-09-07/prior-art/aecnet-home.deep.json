@@ -1,0 +1,165 @@
+{
+  "url": "https://avenir-en-commun.net/",
+  "finalUrl": "https://avenir-en-commun.net/",
+  "status": 200,
+  "loadMs": 1214,
+  "responseHeaders": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=0, must-revalidate",
+    "cf-cache-status": "HIT",
+    "cf-ray": "a376f0f29b9ed09b-CDG",
+    "content-encoding": "zstd",
+    "content-type": "text/html",
+    "date": "Mon, 07 Sep 2026 16:03:02 GMT",
+    "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+    "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=rEm5%2BqvDLi%2BGluPQwfBp15mr4GVXNydaPFEoQnrGF0ZnBt6%2BaCsLQ33UxR1hkIr7ir8sesYgVevugsbIgY0x%2FCKNH209HJ2GoIQp7%2BOMqlR1u8YVCEG%2BULtXAwEuBabOEe0IpCZzRdtEe%2B%2FLeMxi%2BoyYEg%3D%3D\"}]}",
+    "server": "cloudflare"
+  },
+  "hosts": {
+    "avenir-en-commun.net": 3,
+    "fonts.googleapis.com": 1,
+    "www.youtube.com": 1,
+    "m.youtube.com": 1,
+    "fonts.gstatic.com": 1
+  },
+  "requestsCount": 7,
+  "responses": [
+    {
+      "url": "https://www.youtube.com/watch?v=b5atq_VZd2M",
+      "status": 302,
+      "ct": "application/binary",
+      "server": "ESF",
+      "cache": ""
+    }
+  ],
+  "cookies": [
+    {
+      "name": "YSC",
+      "domain": ".youtube.com",
+      "expires": -1
+    },
+    {
+      "name": "VISITOR_PRIVACY_METADATA",
+      "domain": ".youtube.com",
+      "expires": 1822924982.42763
+    }
+  ],
+  "title": "Accueil - Mélenchon 2027 - L'Avenir en Commun",
+  "lang": "fr",
+  "meta": {
+    "viewport": "width=device-width, initial-scale=1.0"
+  },
+  "links": {
+    "preconnect": [
+      "https://fonts.googleapis.com",
+      "https://fonts.gstatic.com"
+    ],
+    "stylesheet": [
+      "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,600;0,800;1,400&display=swap"
+    ],
+    "icon": [
+      "/LFI_Logo.png"
+    ],
+    "apple-touch-icon": [
+      "/LFI_Logo.png"
+    ]
+  },
+  "scripts": [],
+  "anchorsCount": 12,
+  "anchors": [
+    {
+      "href": "https://avenir-en-commun.net/#",
+      "text": "MÉLENCHON2027"
+    },
+    {
+      "href": "https://avenir-en-commun.net/#",
+      "text": "ACCUEIL"
+    },
+    {
+      "href": "https://avenir-en-commun.net/programme.html",
+      "text": "LE PROGRAMME"
+    },
+    {
+      "href": "https://avenir-en-commun.net/simulateur.html",
+      "text": "SIMULATEUR"
+    },
+    {
+      "href": "https://avenir-en-commun.net/simulateur.html",
+      "text": "TESTER LE SIMULATEUR"
+    },
+    {
+      "href": "https://avenir-en-commun.net/programme.html",
+      "text": "EXPLORER LES MESURES"
+    },
+    {
+      "href": "https://avenir-en-commun.net/revolution-citoyenne.html",
+      "text": "FAIRE LA RÉVOLUTION CITOYENNE\n\nPasser à la 6e République pour redonner le pouvoi"
+    },
+    {
+      "href": "https://avenir-en-commun.net/harmonie-humains-entre-eux.html",
+      "text": "L'HARMONIE DES ÊTRES HUMAINS ENTRE EUX\n\nRefonder le lien social par l’égalité ré"
+    },
+    {
+      "href": "https://avenir-en-commun.net/harmonie-humains-nature.html",
+      "text": "L'HARMONIE DES ÊTRES HUMAINS AVEC LA NATURE\n\nAppliquer la règle verte : ne pas p"
+    },
+    {
+      "href": "https://avenir-en-commun.net/ordonner-le-monde.html",
+      "text": "ORDONNER LE MONDE\n\nDéfendre un ordre mondial altermondialiste basé sur la paix, "
+    },
+    {
+      "href": "https://www.facebook.com/sharer/sharer.php?u=https://avenir-en-commun.net/",
+      "text": "Partager sur Facebook"
+    },
+    {
+      "href": "https://twitter.com/intent/tweet?url=https://avenir-en-commun.net/",
+      "text": "Partager sur X"
+    }
+  ],
+  "share": [
+    {
+      "href": "https://www.facebook.com/sharer/sharer.php?u=https://avenir-en-commun.net/",
+      "text": "Partager sur Facebook"
+    },
+    {
+      "href": "https://twitter.com/intent/tweet?url=https://avenir-en-commun.net/",
+      "text": "Partager sur X"
+    }
+  ],
+  "forms": [],
+  "headings": [
+    {
+      "tag": "H1",
+      "text": "L'AVENIR\nEN COMMUN ."
+    },
+    {
+      "tag": "H3",
+      "text": "FAIRE LA RÉVOLUTION CITOYENNE"
+    },
+    {
+      "tag": "H3",
+      "text": "L'HARMONIE DES ÊTRES HUMAINS ENTRE EUX"
+    },
+    {
+      "tag": "H3",
+      "text": "L'HARMONIE DES ÊTRES HUMAINS AVEC LA NATURE"
+    },
+    {
+      "tag": "H3",
+      "text": "ORDONNER LE MONDE"
+    }
+  ],
+  "jsonld": [],
+  "textLen": 1240,
+  "wordsFirst": "MÉLENCHON2027 ACCUEIL LE PROGRAMME SIMULATEUR LE PROGRAMME CITOYEN L'AVENIR EN COMMUN . Plus qu'un simple programme électoral, L'Avenir en commun est un projet global de transformation de la société porté par La France Insoumise. Construit de manière collaborative, il propose des réponses concrètes face aux crises démocratiques, écologiques et sociales actuelles pour redonner le pouvoir au peuple. Vous souhaitez savoir ce que le programme change concrètement pour vous ? Nous avons créé un simulateur qui vous permettra de voir en un clin d'oeil les mesures qui vous concernent directement. TESTER LE SIMULATEUR EXPLORER LES MESURES FAIRE LA RÉVOLUTION CITOYENNE Passer à la 6e République pour redonner le pouvoir au peuple et en finir avec la monarchie présidentielle. L'HARMONIE DES ÊTRES HUMAINS ENTRE EUX Refonder le lien social par l’égalité réelle, la lutte contre les discriminations et les violences. L'HARMONIE DES ÊTRES HUMAINS AVEC LA NATURE Appliquer la règle verte : ne pas prélever plus à la nature que ce qu’elle peut reconstituer. ORDONNER LE MONDE Défendre un ordre mondial altermondialiste basé sur la paix, le droit international et la coopération entre peuples. © 2026 - Proposition de refonte PARTAGER :",
+  "localStorage": {},
+  "buttons": [],
+  "ids": [],
+  "hints": {
+    "navigatorShare": false,
+    "serviceWorker": false,
+    "fetchUrls": [],
+    "apiWords": []
+  },
+  "swRegistered": []
+}

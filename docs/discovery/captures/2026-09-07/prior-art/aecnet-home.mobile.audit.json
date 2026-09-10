@@ -1,0 +1,117 @@
+{
+  "title": "Accueil - Mélenchon 2027 - L'Avenir en Commun",
+  "themeColor": null,
+  "bodyBg": "#121212",
+  "htmlBg": "transparent",
+  "fontsLoaded": [
+    "Montserrat 300 normal",
+    "Montserrat 600 normal",
+    "Montserrat 800 normal"
+  ],
+  "fontFaceSrc": [],
+  "cssVars": {
+    "--lfi-red": "#cc2443",
+    "--lfi-red-alpha": "rgba(204, 36, 67, 0.85)",
+    "--lfi-dark": "#121212",
+    "--lfi-purple": "#7928ca",
+    "--lfi-light": "#f8f9fa",
+    "--lfi-cyan": "#00938f",
+    "--text-light": "#ffffff",
+    "--text-dark": "#1a1a1a"
+  },
+  "topColors": [
+    [
+      "#0000EE",
+      10
+    ],
+    [
+      "#121212",
+      1
+    ],
+    [
+      "#CC2443",
+      1
+    ],
+    [
+      "#00938F",
+      1
+    ],
+    [
+      "#2ECC71",
+      1
+    ],
+    [
+      "#E67E22",
+      1
+    ]
+  ],
+  "topFonts": [
+    [
+      "Montserrat",
+      41
+    ]
+  ],
+  "samples": {
+    "h1": {
+      "font": "Montserrat",
+      "weight": "800",
+      "size": "26px",
+      "lineHeight": "29.9px",
+      "color": "#FFFFFF",
+      "bg": "transparent",
+      "transform": "uppercase",
+      "style": "normal",
+      "letterSpacing": "-0.5px"
+    },
+    "h2": null,
+    "h3": {
+      "font": "Montserrat",
+      "weight": "600",
+      "size": "16px",
+      "lineHeight": "normal",
+      "color": "#FFFFFF",
+      "bg": "transparent",
+      "transform": "uppercase",
+      "style": "normal",
+      "letterSpacing": "0.5px"
+    },
+    "p": {
+      "font": "Montserrat",
+      "weight": "300",
+      "size": "15px",
+      "lineHeight": "25.5px",
+      "color": "#FFFFFF",
+      "bg": "transparent",
+      "transform": "none",
+      "style": "normal",
+      "letterSpacing": "normal"
+    },
+    "a": {
+      "font": "Montserrat",
+      "weight": "400",
+      "size": "16px",
+      "lineHeight": "normal",
+      "color": "#FFFFFF",
+      "bg": "transparent",
+      "transform": "none",
+      "style": "normal",
+      "letterSpacing": "normal"
+    },
+    "button": {
+      "font": "Montserrat",
+      "weight": "600",
+      "size": "15px",
+      "lineHeight": "normal",
+      "color": "#FFFFFF",
+      "bg": "transparent",
+      "transform": "uppercase",
+      "style": "normal",
+      "letterSpacing": "normal"
+    }
+  },
+  "links": [],
+  "hexInText": [],
+  "imgs": [
+    "https://avenir-en-commun.net/LFI_Logo.png"
+  ]
+}

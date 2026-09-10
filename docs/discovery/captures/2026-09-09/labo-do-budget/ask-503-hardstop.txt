@@ -1,0 +1,14 @@
+HTTP/2 503 
+date: Wed, 09 Sep 2026 13:02:07 GMT
+content-type: application/json; charset=utf-8
+content-length: 177
+cache-control: no-store
+retry-after: 39473
+server-timing: do;dur=17
+x-content-type-options: nosniff
+x-robots-tag: noindex
+server: cloudflare
+cf-ray: a38662af7b4ad0a4-CDG
+alt-svc: h3=":443"; ma=86400
+
+{"allowed":false,"used":8480,"day":"2026-09-09","remaining":20,"budget":10000,"hardStop":8500,"resetAt":"2026-09-10T00:00:00.000Z","error":"budget_exhausted","retryAfter":39473}

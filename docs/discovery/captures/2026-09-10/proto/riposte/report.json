@@ -1,0 +1,544 @@
+[
+  {
+    "shot": "riposte-grille",
+    "scheme": "light",
+    "path": "/riposte/",
+    "file": "riposte-grille.png",
+    "fileFull": "riposte-grille.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 1463,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        8
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        36
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 21,
+    "minTileHeight": 93,
+    "blocks3d": 1,
+    "barScale": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic"
+    ]
+  },
+  {
+    "shot": "riposte-grille",
+    "scheme": "dark",
+    "path": "/riposte/",
+    "file": "riposte-grille.dark.png",
+    "fileFull": "riposte-grille.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 1463,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        8
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        36
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 21,
+    "minTileHeight": 93,
+    "blocks3d": 1,
+    "barScale": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic"
+    ]
+  },
+  {
+    "shot": "riposte-recto-rip-01",
+    "scheme": "light",
+    "path": "/riposte/?id=rip-01",
+    "file": "riposte-recto-rip-01.png",
+    "fileFull": "riposte-recto-rip-01.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 844,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        7
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        8
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 8,
+    "minTileHeight": null,
+    "blocks3d": 1,
+    "barScale": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic"
+    ]
+  },
+  {
+    "shot": "riposte-recto-rip-01",
+    "scheme": "dark",
+    "path": "/riposte/?id=rip-01",
+    "file": "riposte-recto-rip-01.dark.png",
+    "fileFull": "riposte-recto-rip-01.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 844,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        7
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        8
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 8,
+    "minTileHeight": null,
+    "blocks3d": 1,
+    "barScale": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic"
+    ]
+  },
+  {
+    "shot": "riposte-verso-rip-14",
+    "scheme": "light",
+    "path": "/riposte/?id=rip-14#texte",
+    "file": "riposte-verso-rip-14.png",
+    "fileFull": "riposte-verso-rip-14.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 2130,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        14
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        14
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        12
+      ],
+      [
+        "#212320 on #FDEDFF",
+        4
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "Voir l’encadré dans le program",
+        "w": 216,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 16,
+    "minTileHeight": null,
+    "blocks3d": 1,
+    "barScale": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "riposte-verso-rip-14",
+    "scheme": "dark",
+    "path": "/riposte/?id=rip-14#texte",
+    "file": "riposte-verso-rip-14.dark.png",
+    "fileFull": "riposte-verso-rip-14.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 2130,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        14
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        14
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        12
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        4
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "Voir l’encadré dans le program",
+        "w": 216,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 16,
+    "minTileHeight": null,
+    "blocks3d": 1,
+    "barScale": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "riposte-verso-rip-01-desintox",
+    "scheme": "light",
+    "path": "/riposte/?id=rip-01#texte",
+    "file": "riposte-verso-rip-01-desintox.png",
+    "fileFull": null,
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 2243,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        16
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        16
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        12
+      ],
+      [
+        "#212320 on #FDEDFF",
+        4
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "Voir l’encadré dans le program",
+        "w": 216,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 17,
+    "minTileHeight": null,
+    "blocks3d": 1,
+    "barScale": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "riposte-verso-rip-01-desintox",
+    "scheme": "dark",
+    "path": "/riposte/?id=rip-01#texte",
+    "file": "riposte-verso-rip-01-desintox.dark.png",
+    "fileFull": null,
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 2243,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        16
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        16
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        12
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        4
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "Voir l’encadré dans le program",
+        "w": 216,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 17,
+    "minTileHeight": null,
+    "blocks3d": 1,
+    "barScale": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "riposte-flash-rip-07",
+    "scheme": "light",
+    "path": "/riposte/?flash=1&date=2026-09-11",
+    "file": "riposte-flash-rip-07.png",
+    "fileFull": "riposte-flash-rip-07.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 844,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        9
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        8
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 9,
+    "minTileHeight": null,
+    "blocks3d": 1,
+    "barScale": "matrix(0.5, 0, 0, 1, 0, 0)",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic"
+    ]
+  },
+  {
+    "shot": "riposte-flash-rip-07",
+    "scheme": "dark",
+    "path": "/riposte/?flash=1&date=2026-09-11",
+    "file": "riposte-flash-rip-07.dark.png",
+    "fileFull": "riposte-flash-rip-07.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 844,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        9
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        8
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 9,
+    "minTileHeight": null,
+    "blocks3d": 1,
+    "barScale": "matrix(0.5, 0, 0, 1, 0, 0)",
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic"
+    ]
+  }
+]

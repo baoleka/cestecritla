@@ -1,0 +1,46 @@
+# Security and cache headers for Static Assets (security §14, D12.8).
+#
+# The CSP here carries ONLY the directives a <meta> tag cannot express: frame-ancestors is
+# ignored in meta, and base-uri / form-action belong with it. Everything about scripts, styles,
+# images and fonts is emitted by Astro as a meta CSP with per-file SHA-256 hashes
+# (astro.config.ts, experimental.csp). The two policies are enforced independently, so no
+# directive may appear in both — a header "style-src 'self'" would intersect with the meta
+# policy and block the inlined stylesheet.
+
+/*
+  Content-Security-Policy: frame-ancestors 'none'; base-uri 'none'; form-action 'self'; upgrade-insecure-requests
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Content-Type-Options: nosniff
+  Cross-Origin-Opener-Policy: same-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Cache-Control: public, max-age=300
+
+# Content-addressed by the build: safe to freeze for a year.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Share previews are versioned by corpus_version in their path (D13.2), so a re-crawl changes
+# the URL rather than the bytes: a permanent link never breaks and caches renew on their own.
+/og/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# The only client-side kill switch (D12.8). Revalidated on every start, BEFORE effectiveDate().
+# Never immutable, never stale-while-revalidate: those would make the L49 freeze unreachable.
+/flags.json
+  Cache-Control: no-cache
+  Content-Type: application/json; charset=utf-8
+
+# The service worker is the only component able to make an outage permanent (H-PLA-8).
+/sw.js
+  Cache-Control: no-cache
+/sw-kill.js
+  Cache-Control: no-cache
+
+# The beacon is the only server route in v1/v2. The Worker sets these itself; repeated here
+# so an asset can never be served under /api/ with a cacheable or referrer-leaking policy.
+/api/*
+  Cache-Control: no-store
+  X-Robots-Tag: noindex
+  Referrer-Policy: no-referrer

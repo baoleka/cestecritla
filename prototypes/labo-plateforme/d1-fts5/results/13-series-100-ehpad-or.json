@@ -1,0 +1,8 @@
+{
+  "q": "Ils proposent quoi pour les EHPAD et les personnes âgées ?",
+  "n": 100,
+  "window": { "start": "2026-09-09T13:05:00.863Z", "end": "2026-09-09T13:05:06.392Z" },
+  "latency_ms": { "p50": 52.2, "p95": 66, "max": 230.9 },
+  "rows_read": { "p50": 210, "max": 210 },
+  "d1_ms": { "p50": 0.74, "p95": 1.69 }
+}

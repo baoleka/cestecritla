@@ -1,0 +1,28 @@
+{
+  "name": "aec-lab-turnstile",
+  "version": "0.0.1",
+  "private": true,
+  "description": "T7 lab: invisible Turnstile on a Free-plan Worker with Static Assets, siteverify, strict CSP, cookie/storage evidence",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "dry-run": "wrangler deploy --dry-run --outdir dist",
+    "types": "wrangler types --strict-vars=false",
+    "typecheck": "tsc --noEmit",
+    "probe": "tsx scripts/probe.ts",
+    "cpu": "tsx scripts/cpu.ts",
+    "delete": "wrangler delete"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "playwright": "^1.63.0",
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.129.1"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "aec-lab-budget",
+  "version": "0.0.1",
+  "private": true,
+  "description": "T7 lab: Durable Object neuron budget (SQLite) + rate limiting binding on the Free plan",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "dry-run": "wrangler deploy --dry-run --outdir dist",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
+    "types": "wrangler types",
+    "test": "node --test test/*.test.ts",
+    "delete": "wrangler delete"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260907.1",
+    "@types/node": "^24.13.3",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.129.1"
+  }
+}

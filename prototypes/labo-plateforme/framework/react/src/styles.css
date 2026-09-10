@@ -1,0 +1,63 @@
+@import 'tailwindcss';
+@import '../../shared/generated/tokens.css';
+
+/* Tailwind v4 theme fed by the design tokens (design/tokens.json via tokens.css). The default
+   palette is dropped: only the charter colours exist. `inline` keeps the var() indirection so the
+   dark scheme (prefers-color-scheme) switches through the role variables. */
+@theme inline {
+  --color-*: initial;
+  --color-bg: var(--bg);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-text: var(--text);
+  --color-brand: var(--brand);
+  --color-brand-on: var(--brand-on);
+  --color-action: var(--action);
+  --color-action-on: var(--action-on);
+  --color-verbatim-bg: var(--verbatim-bg);
+  --color-verbatim-rule: var(--verbatim-rule);
+  --color-shadow-3d: var(--shadow-3d);
+  --color-warn-bg: var(--warn-bg);
+  --color-warn-text: var(--warn-text);
+  --color-focus: var(--focus);
+  --color-accent-rouge: var(--color-rouge);
+  --font-ui: var(--font-ui-stack);
+  --font-verbatim: var(--font-verbatim-stack);
+  --text-display: var(--size-display);
+  --text-display--line-height: var(--lh-display);
+  --text-h1: var(--size-h1);
+  --text-h1--line-height: var(--lh-h1);
+  --text-h2: var(--size-h2);
+  --text-h2--line-height: var(--lh-h2);
+  --text-h3: var(--size-h3);
+  --text-h3--line-height: var(--lh-h3);
+  --text-body: var(--size-body);
+  --text-body--line-height: var(--lh-body);
+  --text-verbatim: var(--size-verbatim);
+  --text-verbatim--line-height: var(--lh-verbatim);
+  --text-small: var(--size-small);
+  --text-small--line-height: var(--lh-small);
+  --text-label: var(--size-label);
+  --text-label--line-height: var(--lh-label);
+  --radius-card: var(--radius-m);
+  --radius-field: var(--radius-s);
+  --radius-pill: var(--radius-pill);
+}
+
+@layer base {
+  html {
+    background: var(--bg);
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-ui-stack);
+    font-size: var(--size-body);
+    line-height: var(--lh-body);
+    -webkit-text-size-adjust: 100%;
+  }
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+}

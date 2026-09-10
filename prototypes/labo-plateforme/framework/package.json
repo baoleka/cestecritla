@@ -1,0 +1,30 @@
+{
+  "name": "aec-lab-framework",
+  "version": "0.0.1",
+  "private": true,
+  "description": "T7 lab: the same hello-corpus page built with React 19 + Vite 6 + Tailwind v4 and with Astro 5, deployed as Static Assets Workers and measured (JS, LCP, search)",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build:shared": "node shared/build-shared.ts",
+    "build": "npm run build:shared && npm --prefix react run build && npm --prefix astro run build",
+    "deploy": "npm --prefix react run deploy && npm --prefix astro run deploy",
+    "measure:sizes": "node measure/sizes.ts",
+    "measure:lighthouse": "node measure/lighthouse.ts",
+    "measure:search": "node measure/search-timing.ts",
+    "measure:boxes": "node measure/boxes.ts",
+    "measure:invocations": "node measure/invocations.ts",
+    "report": "node measure/report.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "lighthouse": "13.4.1",
+    "minisearch": "7.2.0",
+    "playwright": "1.63.0",
+    "typescript": "^5.9.3"
+  }
+}

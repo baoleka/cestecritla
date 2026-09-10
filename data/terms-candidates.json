@@ -1,0 +1,4008 @@
+{
+  "meta": {
+    "corpus_version": "d29c7422004ab27c",
+    "source_crawled_at": "2026-09-07T16:30:57.692Z",
+    "license_fr": "Textes extraits mot pour mot de « L'Avenir en commun, édition 2025 » (https://melenchon2027.fr/programme2025/livre/), CC BY-NC-SA 4.0, attribution « La France insoumise – L'Avenir en commun ». Fichier dérivé diffusé sous la même licence.",
+    "generator": "scripts/derive.ts",
+    "method_fr": "Candidats de glossaire extraits sans IA : fréquences des 1-, 2- et 3-grammes (minuscules, NFC, accents conservés, élisions retirées, mots composés conservés, n-grammes limités à une même proposition ou membre de phrase) sur l'ensemble des mesures clés, mesures, sous-mesures et paragraphes (sections, introduction, parties), plus les titres (parties, chapitres, sections) ; les encadrés « À savoir » et les statistiques publiées en paragraphe sont exclus ; count_in_propositions isole les occurrences dans les mesures. Filtres : liste de mots vides français aux extrémités, verbes d'action et mots génériques exclus, unigrammes génériques exclus. Score = fréquence × spécificité (moyenne des ln(1 + N/df) des mots, N = nombre de contenants, df = nombre de contenants où le mot apparaît) × bonus de longueur (1 mot : 1, 2 mots : 1,6, 3 mots : 2). Les 150 meilleurs candidats sont conservés, plus tous les termes d'amorçage présents dans le corpus (comptés par correspondance exacte de l'expression, insensible à la casse). Aucune lemmatisation : singulier et pluriel sont comptés séparément.",
+    "documents": 112,
+    "items_scanned": 1082,
+    "candidates_total": 1316,
+    "kept": 187,
+    "top_n": 150,
+    "min_count": {
+      "unigram": 3,
+      "multiword": 2
+    },
+    "length_bonus": {
+      "1": 1,
+      "2": 1.6,
+      "3": 2
+    },
+    "seeds_present": [
+      "règle verte",
+      "bifurcation écologique",
+      "planification écologique",
+      "6e République",
+      "assemblée constituante",
+      "constituante",
+      "écocide",
+      "pôle public",
+      "SMIC",
+      "révolution citoyenne",
+      "flux tendus",
+      "protectionnisme solidaire",
+      "créolisation",
+      "garantie d'emploi",
+      "État d'urgence",
+      "référendum d'initiative citoyenne",
+      "RIC",
+      "monarchie présidentielle",
+      "planification",
+      "nationalisation",
+      "services publics",
+      "retraite à 60 ans",
+      "ISF",
+      "TVA",
+      "impôt universel",
+      "bouclier",
+      "harmonie",
+      "Outre-mer",
+      "francophonie",
+      "altermondialiste",
+      "OTAN",
+      "Union européenne",
+      "souveraineté alimentaire",
+      "nucléaire",
+      "ferroviaire",
+      "eau",
+      "biens communs"
+    ],
+    "seeds_absent": [
+      "sécurité sociale intégrale",
+      "socialisation",
+      "blocage des prix",
+      "allocation d'autonomie",
+      "désobéissance",
+      "agroécologie",
+      "100 % renouvelables"
+    ],
+    "seed_count_mismatches": []
+  },
+  "candidates": [
+    {
+      "term": "eau",
+      "normalized": "eau",
+      "count": 55,
+      "count_in_propositions": 35,
+      "sections": [
+        "intro",
+        "c2-s01",
+        "c7-s04",
+        "c9-s03",
+        "c12-s02",
+        "c14-s01",
+        "c14-s02",
+        "c14-s03",
+        "c14-s06",
+        "c16-s06"
+      ],
+      "examples": [
+        "c2-s01-m02",
+        "c7-s04-m03",
+        "c9-s03-m02"
+      ],
+      "ngram": 1,
+      "seed": true,
+      "score": 137.58
+    },
+    {
+      "term": "santé",
+      "normalized": "santé",
+      "count": 40,
+      "count_in_propositions": 27,
+      "sections": [
+        "intro",
+        "c2-s01",
+        "c5-s06",
+        "c5-s07",
+        "c6-s03",
+        "c7-s02",
+        "c7-s09",
+        "c8-s06",
+        "c8-s07",
+        "c8-s08",
+        "c9-s02",
+        "c10-s01",
+        "c10-s02",
+        "c10-s03",
+        "c11-s02",
+        "c13-s01",
+        "c13-s05",
+        "c14-s01",
+        "c15",
+        "c15-s01",
+        "c15-s02",
+        "c15-s03",
+        "c15-s04",
+        "c16-s02",
+        "c16-s03"
+      ],
+      "examples": [
+        "c2-s01-m02",
+        "c5-s06-m09",
+        "c5-s07-m02"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 68.04
+    },
+    {
+      "term": "Outre-mer",
+      "normalized": "outre-mer",
+      "count": 31,
+      "count_in_propositions": 21,
+      "sections": [
+        "c1-s04",
+        "c1-s05",
+        "c7-s01",
+        "c7-s02",
+        "c7-s06",
+        "c7-s09",
+        "c9-s01",
+        "c10-s02",
+        "c12-s02",
+        "c12-s03",
+        "c13-s02",
+        "c14-s02",
+        "c14-s03",
+        "c15-s04",
+        "c16-s08",
+        "c18-s01"
+      ],
+      "examples": [
+        "c1-s04-m14",
+        "c1-s05-m01",
+        "c7-s01-k01"
+      ],
+      "ngram": 1,
+      "seed": true,
+      "score": 64.46
+    },
+    {
+      "term": "éducation",
+      "normalized": "éducation",
+      "count": 27,
+      "count_in_propositions": 25,
+      "sections": [
+        "c5-s03",
+        "c6-s03",
+        "c7-s02",
+        "c7-s03",
+        "c10-s02",
+        "c10-s05",
+        "c11-s01",
+        "c11-s02",
+        "c15-s04",
+        "c16-s03",
+        "c18-s01",
+        "c18-s05"
+      ],
+      "examples": [
+        "c5-s03-k01",
+        "c5-s03-m01.s1",
+        "c5-s03-m02"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 63.06
+    },
+    {
+      "term": "enseignement",
+      "normalized": "enseignement",
+      "count": 25,
+      "count_in_propositions": 21,
+      "sections": [
+        "intro",
+        "c5-s03",
+        "c5-s04",
+        "c5-s05",
+        "c5-s06",
+        "c7-s02",
+        "c10-s05",
+        "c11-s01",
+        "c11-s02",
+        "c16-s10"
+      ],
+      "examples": [
+        "c5-s03-m01.s10",
+        "c5-s03-m01.s12",
+        "c5-s03-m02.s3"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 62.54
+    },
+    {
+      "term": "recherche",
+      "normalized": "recherche",
+      "count": 25,
+      "count_in_propositions": 25,
+      "sections": [
+        "c5-s03",
+        "c5-s05",
+        "c5-s06",
+        "c8-s07",
+        "c11-s01",
+        "c14-s05",
+        "c15-s01",
+        "c15-s02",
+        "c18-s01",
+        "c18-s02",
+        "c18-s05"
+      ],
+      "examples": [
+        "c5-s03-m02.s3",
+        "c5-s05-k01",
+        "c5-s05-m01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 60.36
+    },
+    {
+      "term": "justice",
+      "normalized": "justice",
+      "count": 24,
+      "count_in_propositions": 13,
+      "sections": [
+        "intro",
+        "c1-s03",
+        "c4-s03",
+        "c7-s01",
+        "c7-s06",
+        "c7-s07",
+        "c7-s09",
+        "c10-s01",
+        "part4",
+        "c16-s04",
+        "c16-s06"
+      ],
+      "examples": [
+        "c1-s03-m06",
+        "c4-s03-m10",
+        "c7-s06-k01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 57.94
+    },
+    {
+      "term": "République",
+      "normalized": "république",
+      "count": 27,
+      "count_in_propositions": 7,
+      "sections": [
+        "intro",
+        "part1",
+        "c1-s01",
+        "c1-s02",
+        "c1-s04",
+        "c1-s05",
+        "c3-s02",
+        "c4-s01",
+        "c4-s03",
+        "c5-s03",
+        "c7-s02",
+        "c7-s06",
+        "c7-s09",
+        "c10-s02",
+        "c17-s02"
+      ],
+      "examples": [
+        "c1-s01-k01",
+        "c1-s02-k01",
+        "c1-s02-m03"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 57.68
+    },
+    {
+      "term": "police",
+      "normalized": "police",
+      "count": 19,
+      "count_in_propositions": 13,
+      "sections": [
+        "c4-s03",
+        "c7-s07",
+        "c7-s08",
+        "c7-s09",
+        "c14-s02",
+        "c15-s03"
+      ],
+      "examples": [
+        "c4-s03-k01",
+        "c4-s03-m02",
+        "c4-s03-m08"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 56.6
+    },
+    {
+      "term": "services publics",
+      "normalized": "services publics",
+      "count": 20,
+      "count_in_propositions": 12,
+      "sections": [
+        "intro",
+        "c2-s02",
+        "c4-s03",
+        "c7-s01",
+        "c7-s02",
+        "c7-s04",
+        "c7-s05",
+        "c9-s01",
+        "c10-s02",
+        "c10-s05",
+        "c18-s04",
+        "c18-s05"
+      ],
+      "examples": [
+        "c4-s03-m01",
+        "c7-s01-k01",
+        "c7-s01-m01"
+      ],
+      "ngram": 2,
+      "seed": true,
+      "score": 53.99
+    },
+    {
+      "term": "bifurcation écologique",
+      "normalized": "bifurcation écologique",
+      "count": 18,
+      "count_in_propositions": 10,
+      "sections": [
+        "c5-s03",
+        "c5-s04",
+        "c5-s05",
+        "c9-s02",
+        "c9-s03",
+        "c12-s01",
+        "c12-s03",
+        "c13",
+        "c13-s01",
+        "c13-s02",
+        "c18-s01",
+        "c18-s02"
+      ],
+      "examples": [
+        "c5-s03-m04",
+        "c5-s04-m06",
+        "c5-s05-m08"
+      ],
+      "ngram": 2,
+      "seed": true,
+      "score": 53.3
+    },
+    {
+      "term": "sport",
+      "normalized": "sport",
+      "count": 13,
+      "count_in_propositions": 6,
+      "sections": [
+        "c11",
+        "c11-s02"
+      ],
+      "examples": [
+        "c11-s02-m01",
+        "c11-s02-m05",
+        "c11-s02-m07"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 52.56
+    },
+    {
+      "term": "intérêt général",
+      "normalized": "intérêt général",
+      "count": 15,
+      "count_in_propositions": 5,
+      "sections": [
+        "intro",
+        "part1",
+        "c2-s01",
+        "c2-s02",
+        "c5-s05",
+        "c5-s07",
+        "c6-s02",
+        "c9-s02",
+        "c11-s02",
+        "c16-s11",
+        "c18-s03",
+        "c18-s04"
+      ],
+      "examples": [
+        "c2-s02-m01",
+        "c5-s05-m06",
+        "c5-s07-m01"
+      ],
+      "ngram": 2,
+      "seed": false,
+      "score": 52.11
+    },
+    {
+      "term": "dette",
+      "normalized": "dette",
+      "count": 14,
+      "count_in_propositions": 10,
+      "sections": [
+        "intro",
+        "c6-s04",
+        "c14-s03"
+      ],
+      "examples": [
+        "c6-s04-k01",
+        "c6-s04-m01",
+        "c6-s04-m02"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 51.05
+    },
+    {
+      "term": "situation de handicap",
+      "normalized": "situation de handicap",
+      "count": 8,
+      "count_in_propositions": 5,
+      "sections": [
+        "c5-s03",
+        "c10-s05",
+        "c11-s02"
+      ],
+      "examples": [
+        "c5-s03-m02.s6",
+        "c10-s05-k01",
+        "c10-s05-m02"
+      ],
+      "ngram": 3,
+      "seed": false,
+      "score": 50.83
+    },
+    {
+      "term": "planification écologique",
+      "normalized": "planification écologique",
+      "count": 15,
+      "count_in_propositions": 7,
+      "sections": [
+        "intro",
+        "c8-s02",
+        "c12",
+        "c12-s01",
+        "c12-s02",
+        "c12-s03"
+      ],
+      "examples": [
+        "c12-s01-m01",
+        "c12-s01-m03",
+        "c12-s01-m08"
+      ],
+      "ngram": 2,
+      "seed": true,
+      "score": 50.55
+    },
+    {
+      "term": "école",
+      "normalized": "école",
+      "count": 16,
+      "count_in_propositions": 8,
+      "sections": [
+        "intro",
+        "c1-s05",
+        "c5-s03",
+        "c7-s01",
+        "c10-s05"
+      ],
+      "examples": [
+        "c1-s05-m05",
+        "c5-s03-k01",
+        "c5-s03-m01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 50.44
+    },
+    {
+      "term": "planification",
+      "normalized": "planification",
+      "count": 18,
+      "count_in_propositions": 9,
+      "sections": [
+        "intro",
+        "c8-s02",
+        "part3",
+        "c12",
+        "c12-s01",
+        "c12-s02",
+        "c12-s03",
+        "c15-s01"
+      ],
+      "examples": [
+        "c12-s01-m01",
+        "c12-s01-m02",
+        "c12-s01-m03"
+      ],
+      "ngram": 1,
+      "seed": true,
+      "score": 48.74
+    },
+    {
+      "term": "service public",
+      "normalized": "service public",
+      "count": 20,
+      "count_in_propositions": 15,
+      "sections": [
+        "c4-s03",
+        "c5-s02",
+        "c5-s03",
+        "c5-s04",
+        "c5-s05",
+        "c5-s06",
+        "c7-s02",
+        "c8-s07",
+        "c10-s04",
+        "c11-s01",
+        "c11-s02",
+        "c13-s04",
+        "c14-s03",
+        "c15-s02",
+        "c18-s04"
+      ],
+      "examples": [
+        "c4-s03-m01",
+        "c5-s02-k01",
+        "c5-s03-m02.s6"
+      ],
+      "ngram": 2,
+      "seed": false,
+      "score": 48.56
+    },
+    {
+      "term": "salariés",
+      "normalized": "salariés",
+      "count": 19,
+      "count_in_propositions": 13,
+      "sections": [
+        "intro",
+        "c1-s03",
+        "c3-s01",
+        "c6-s01",
+        "c7-s03",
+        "c8-s02",
+        "c8-s03",
+        "c8-s04",
+        "c8-s07",
+        "c13-s01"
+      ],
+      "examples": [
+        "c1-s03-m07",
+        "c3-s01-k01",
+        "c3-s01-m02"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 47.53
+    },
+    {
+      "term": "logement",
+      "normalized": "logement",
+      "count": 14,
+      "count_in_propositions": 7,
+      "sections": [
+        "intro",
+        "c7-s02",
+        "c7-s05",
+        "c10-s02"
+      ],
+      "examples": [
+        "c7-s02-k01",
+        "c7-s05-m06",
+        "c7-s05-m09"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 47.14
+    },
+    {
+      "term": "bifurcation",
+      "normalized": "bifurcation",
+      "count": 21,
+      "count_in_propositions": 10,
+      "sections": [
+        "c5-s03",
+        "c5-s04",
+        "c5-s05",
+        "c9-s02",
+        "c9-s03",
+        "c11-s01",
+        "c12-s01",
+        "c12-s03",
+        "c13",
+        "c13-s01",
+        "c13-s02",
+        "c13-s03",
+        "c18-s01",
+        "c18-s02"
+      ],
+      "examples": [
+        "c5-s03-m04",
+        "c5-s04-m06",
+        "c5-s05-m08"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 46.14
+    },
+    {
+      "term": "enseignement supérieur",
+      "normalized": "enseignement supérieur",
+      "count": 11,
+      "count_in_propositions": 9,
+      "sections": [
+        "c5-s04",
+        "c5-s05",
+        "c5-s06",
+        "c10-s05",
+        "c11-s01"
+      ],
+      "examples": [
+        "c5-s04-m05",
+        "c5-s05-m10",
+        "c5-s06-m01"
+      ],
+      "ngram": 2,
+      "seed": false,
+      "score": 45.84
+    },
+    {
+      "term": "économie",
+      "normalized": "économie",
+      "count": 19,
+      "count_in_propositions": 4,
+      "sections": [
+        "intro",
+        "c3-s01",
+        "part2",
+        "c6-s01",
+        "c6-s02",
+        "c6-s03",
+        "c7-s02",
+        "c7-s03",
+        "c9-s03",
+        "c12-s01",
+        "c12-s03",
+        "c13-s01"
+      ],
+      "examples": [
+        "c6-s03-k01",
+        "c7-s03-k01",
+        "c7-s03-m02"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 44.37
+    },
+    {
+      "term": "culture",
+      "normalized": "culture",
+      "count": 14,
+      "count_in_propositions": 5,
+      "sections": [
+        "intro",
+        "c7-s02",
+        "c11",
+        "c11-s01",
+        "c16-s03"
+      ],
+      "examples": [
+        "c7-s02-k01",
+        "c11-s01-k01",
+        "c11-s01-m05"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 44.14
+    },
+    {
+      "term": "logements",
+      "normalized": "logements",
+      "count": 14,
+      "count_in_propositions": 12,
+      "sections": [
+        "intro",
+        "c5-s06",
+        "c7-s05",
+        "c10-s05",
+        "c13-s03"
+      ],
+      "examples": [
+        "c5-s06-m07",
+        "c7-s05-m03",
+        "c7-s05-m05"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 44.14
+    },
+    {
+      "term": "ONU",
+      "normalized": "onu",
+      "count": 14,
+      "count_in_propositions": 13,
+      "sections": [
+        "c16-s02",
+        "c16-s03",
+        "c16-s05",
+        "c16-s06",
+        "c18-s05"
+      ],
+      "examples": [
+        "c16-s02-m10",
+        "c16-s02-m12",
+        "c16-s03-k01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 44.14
+    },
+    {
+      "term": "autonomie",
+      "normalized": "autonomie",
+      "count": 16,
+      "count_in_propositions": 8,
+      "sections": [
+        "intro",
+        "c1-s05",
+        "c5-s03",
+        "c7-s04",
+        "c10-s03",
+        "c10-s04",
+        "c10-s05",
+        "c12-s03"
+      ],
+      "examples": [
+        "c1-s05-m06",
+        "c5-s03-m01.s5",
+        "c7-s04-k01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 43.33
+    },
+    {
+      "term": "assemblée constituante",
+      "normalized": "assemblée constituante",
+      "count": 9,
+      "count_in_propositions": 4,
+      "sections": [
+        "intro",
+        "c1-s01",
+        "c1-s02",
+        "c7-s07"
+      ],
+      "examples": [
+        "c1-s01-m01",
+        "c1-s01-m02",
+        "c1-s01-m03"
+      ],
+      "ngram": 2,
+      "seed": true,
+      "score": 42.95
+    },
+    {
+      "term": "Constitution",
+      "normalized": "constitution",
+      "count": 17,
+      "count_in_propositions": 11,
+      "sections": [
+        "intro",
+        "part1",
+        "c1-s01",
+        "c1-s02",
+        "c1-s04",
+        "c4-s01",
+        "c7-s06",
+        "c12-s01",
+        "c14-s02",
+        "c17-s02"
+      ],
+      "examples": [
+        "c1-s01-m02",
+        "c1-s01-m03",
+        "c1-s02-m03"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 42.52
+    },
+    {
+      "term": "biens communs",
+      "normalized": "biens communs",
+      "count": 11,
+      "count_in_propositions": 4,
+      "sections": [
+        "c1-s01",
+        "c2-s01",
+        "c9-s01",
+        "c14",
+        "c14-s06",
+        "part4",
+        "c16-s06"
+      ],
+      "examples": [
+        "c2-s01-k01",
+        "c2-s01-m01",
+        "c14-s06-m02"
+      ],
+      "ngram": 2,
+      "seed": true,
+      "score": 41.8
+    },
+    {
+      "term": "Assemblée",
+      "normalized": "assemblée",
+      "count": 16,
+      "count_in_propositions": 9,
+      "sections": [
+        "intro",
+        "c1-s01",
+        "c1-s02",
+        "c1-s04",
+        "c7-s07",
+        "c8-s08",
+        "c16-s03",
+        "c16-s05",
+        "c16-s12"
+      ],
+      "examples": [
+        "c1-s01-m01",
+        "c1-s01-m02",
+        "c1-s01-m03"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 41.58
+    },
+    {
+      "term": "paix",
+      "normalized": "paix",
+      "count": 17,
+      "count_in_propositions": 9,
+      "sections": [
+        "intro",
+        "c1-s04",
+        "c4-s03",
+        "part4",
+        "c16",
+        "c16-s01",
+        "c16-s02",
+        "c16-s03",
+        "c16-s04",
+        "c16-s08",
+        "c16-s09"
+      ],
+      "examples": [
+        "c1-s04-m14",
+        "c4-s03-m02",
+        "c16-s01-m01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 41.04
+    },
+    {
+      "term": "médias",
+      "normalized": "médias",
+      "count": 10,
+      "count_in_propositions": 8,
+      "sections": [
+        "c1-s06",
+        "c16-s12"
+      ],
+      "examples": [
+        "c1-s06-m01",
+        "c1-s06-m01.s2",
+        "c1-s06-m02"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 40.43
+    },
+    {
+      "term": "sécurité sociale",
+      "normalized": "sécurité sociale",
+      "count": 13,
+      "count_in_propositions": 9,
+      "sections": [
+        "c1-s03",
+        "c6-s04",
+        "c8-s06",
+        "c10-s05",
+        "c11-s02",
+        "c15-s02",
+        "c15-s04"
+      ],
+      "examples": [
+        "c1-s03-m08",
+        "c6-s04-m05",
+        "c8-s06-m03"
+      ],
+      "ngram": 2,
+      "seed": false,
+      "score": 40.19
+    },
+    {
+      "term": "élèves",
+      "normalized": "élèves",
+      "count": 11,
+      "count_in_propositions": 11,
+      "sections": [
+        "c4-s03",
+        "c5-s03",
+        "c10-s05"
+      ],
+      "examples": [
+        "c4-s03-m02",
+        "c5-s03-k01",
+        "c5-s03-m01.s2"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 40.11
+    },
+    {
+      "term": "énergie",
+      "normalized": "énergie",
+      "count": 16,
+      "count_in_propositions": 15,
+      "sections": [
+        "c2-s01",
+        "c2-s02",
+        "c7-s05",
+        "c9-s01",
+        "c12-s01",
+        "c13-s01",
+        "c13-s03",
+        "c14-s01",
+        "c14-s04",
+        "c16-s02"
+      ],
+      "examples": [
+        "c2-s01-m02",
+        "c2-s02-m04",
+        "c7-s05-m03"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 40.02
+    },
+    {
+      "term": "assainissement",
+      "normalized": "assainissement",
+      "count": 12,
+      "count_in_propositions": 10,
+      "sections": [
+        "intro",
+        "c9-s03",
+        "c14-s01",
+        "c14-s02",
+        "c14-s03"
+      ],
+      "examples": [
+        "c9-s03-m02",
+        "c14-s01-m06",
+        "c14-s02-m02"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 37.83
+    },
+    {
+      "term": "souveraineté",
+      "normalized": "souveraineté",
+      "count": 17,
+      "count_in_propositions": 8,
+      "sections": [
+        "intro",
+        "c1-s05",
+        "c2-s02",
+        "c3-s02",
+        "c11-s02",
+        "c12-s01",
+        "c13-s05",
+        "c16-s02",
+        "c16-s03",
+        "c16-s09",
+        "c16-s11",
+        "c18-s02",
+        "c18-s03",
+        "c18-s05"
+      ],
+      "examples": [
+        "c11-s02-m03",
+        "c12-s01-m08",
+        "c16-s02-k01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 37.35
+    },
+    {
+      "term": "constituante",
+      "normalized": "constituante",
+      "count": 11,
+      "count_in_propositions": 6,
+      "sections": [
+        "intro",
+        "c1-s01",
+        "c1-s02",
+        "c7-s07"
+      ],
+      "examples": [
+        "c1-s01-k01",
+        "c1-s01-m01",
+        "c1-s01-m02"
+      ],
+      "ngram": 1,
+      "seed": true,
+      "score": 37.04
+    },
+    {
+      "term": "numérique",
+      "normalized": "numérique",
+      "count": 11,
+      "count_in_propositions": 6,
+      "sections": [
+        "part4",
+        "c16-s02",
+        "c18-s04",
+        "c18-s05"
+      ],
+      "examples": [
+        "c16-s02-m05",
+        "c18-s04-m01",
+        "c18-s04-m05"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 37.04
+    },
+    {
+      "term": "énergies",
+      "normalized": "énergies",
+      "count": 13,
+      "count_in_propositions": 10,
+      "sections": [
+        "c9-s02",
+        "c9-s03",
+        "c12-s02",
+        "c12-s03",
+        "c13-s03",
+        "c16-s03",
+        "c18-s02"
+      ],
+      "examples": [
+        "c9-s02-m03",
+        "c9-s03-m04",
+        "c12-s02-m09"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 36.83
+    },
+    {
+      "term": "enfance",
+      "normalized": "enfance",
+      "count": 9,
+      "count_in_propositions": 8,
+      "sections": [
+        "c5-s02",
+        "c7-s09"
+      ],
+      "examples": [
+        "c5-s02-k01",
+        "c7-s09-k01",
+        "c7-s09-m01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 36.39
+    },
+    {
+      "term": "transports",
+      "normalized": "transports",
+      "count": 13,
+      "count_in_propositions": 10,
+      "sections": [
+        "intro",
+        "c2-s02",
+        "c7-s01",
+        "c7-s02",
+        "c10-s01",
+        "c10-s05",
+        "c13-s01",
+        "c13-s02"
+      ],
+      "examples": [
+        "c2-s02-m04",
+        "c7-s01-k01",
+        "c7-s02-k01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 35.2
+    },
+    {
+      "term": "travailleurs",
+      "normalized": "travailleurs",
+      "count": 15,
+      "count_in_propositions": 9,
+      "sections": [
+        "c1-s06",
+        "c5-s04",
+        "c7-s05",
+        "c8-s06",
+        "c8-s07",
+        "c10-s04",
+        "c10-s05",
+        "c11-s01",
+        "c13-s03",
+        "c14-s01",
+        "c16-s07",
+        "c17-s02"
+      ],
+      "examples": [
+        "c1-s06-m08",
+        "c7-s05-m05",
+        "c8-s07-m09"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 35.03
+    },
+    {
+      "term": "biodiversité",
+      "normalized": "biodiversité",
+      "count": 12,
+      "count_in_propositions": 8,
+      "sections": [
+        "c12-s01",
+        "c12-s03",
+        "c14-s02",
+        "c14-s04",
+        "c14-s06",
+        "c16-s08",
+        "c18-s01"
+      ],
+      "examples": [
+        "c12-s01-m02",
+        "c12-s03-k01",
+        "c12-s03-m04"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 34
+    },
+    {
+      "term": "Avenir en Commun",
+      "normalized": "avenir en commun",
+      "count": 6,
+      "count_in_propositions": 0,
+      "sections": [
+        "intro",
+        "c17-s02"
+      ],
+      "examples": [
+        "intro-p03",
+        "intro-p04",
+        "intro-p05"
+      ],
+      "ngram": 3,
+      "seed": false,
+      "score": 33.46
+    },
+    {
+      "term": "banques",
+      "normalized": "banques",
+      "count": 9,
+      "count_in_propositions": 6,
+      "sections": [
+        "c6-s01",
+        "c6-s02",
+        "c6-s04"
+      ],
+      "examples": [
+        "c6-s01-m01",
+        "c6-s02-m01",
+        "c6-s02-m02"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 32.82
+    },
+    {
+      "term": "handicap",
+      "normalized": "handicap",
+      "count": 9,
+      "count_in_propositions": 6,
+      "sections": [
+        "c5-s03",
+        "c10-s05",
+        "c11-s02"
+      ],
+      "examples": [
+        "c5-s03-m02.s6",
+        "c10-s05-k01",
+        "c10-s05-m02"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 32.82
+    },
+    {
+      "term": "impôt",
+      "normalized": "impôt",
+      "count": 9,
+      "count_in_propositions": 9,
+      "sections": [
+        "c5-s05",
+        "c6-s03",
+        "c6-s05"
+      ],
+      "examples": [
+        "c5-s05-m07",
+        "c6-s03-m01",
+        "c6-s05-k01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 32.82
+    },
+    {
+      "term": "forêts",
+      "normalized": "forêts",
+      "count": 8,
+      "count_in_propositions": 5,
+      "sections": [
+        "c12-s01",
+        "c14-s04"
+      ],
+      "examples": [
+        "c12-s01-m02",
+        "c14-s04-m01",
+        "c14-s04-m04"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 32.34
+    },
+    {
+      "term": "règle verte",
+      "normalized": "règle verte",
+      "count": 6,
+      "count_in_propositions": 3,
+      "sections": [
+        "intro",
+        "c12-s01",
+        "c13-s04",
+        "c14-s02"
+      ],
+      "examples": [
+        "c12-s01-k01",
+        "c12-s01-m11",
+        "c14-s02-k01"
+      ],
+      "ngram": 2,
+      "seed": true,
+      "score": 32.33
+    },
+    {
+      "term": "énergies renouvelables",
+      "normalized": "énergies renouvelables",
+      "count": 7,
+      "count_in_propositions": 5,
+      "sections": [
+        "c9-s02",
+        "c12-s02",
+        "c12-s03",
+        "c13-s03",
+        "c18-s02"
+      ],
+      "examples": [
+        "c9-s02-m03",
+        "c12-s02-m09",
+        "c12-s03-m07"
+      ],
+      "ngram": 2,
+      "seed": false,
+      "score": 31.73
+    },
+    {
+      "term": "violences",
+      "normalized": "violences",
+      "count": 12,
+      "count_in_propositions": 10,
+      "sections": [
+        "c1-s06",
+        "c4-s01",
+        "c4-s02",
+        "c4-s03",
+        "c5-s03",
+        "c7-s09",
+        "c10-s01",
+        "c11-s01",
+        "c11-s02"
+      ],
+      "examples": [
+        "c1-s06-m10",
+        "c4-s01-m07",
+        "c4-s02-m07"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 31.18
+    },
+    {
+      "term": "défense",
+      "normalized": "défense",
+      "count": 11,
+      "count_in_propositions": 8,
+      "sections": [
+        "intro",
+        "c4-s03",
+        "c7-s06",
+        "c9-s02",
+        "c16-s02",
+        "c16-s11",
+        "c17-s02"
+      ],
+      "examples": [
+        "c4-s03-m04",
+        "c7-s06-m03",
+        "c9-s02-m02"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 31.17
+    },
+    {
+      "term": "pauvreté",
+      "normalized": "pauvreté",
+      "count": 11,
+      "count_in_propositions": 3,
+      "sections": [
+        "intro",
+        "c7-s02",
+        "c7-s04",
+        "c8-s04",
+        "c8-s08",
+        "c10-s03",
+        "part3"
+      ],
+      "examples": [
+        "c7-s04-k01",
+        "c8-s08-m01",
+        "c10-s03-k01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 31.17
+    },
+    {
+      "term": "dette publique",
+      "normalized": "dette publique",
+      "count": 7,
+      "count_in_propositions": 4,
+      "sections": [
+        "intro",
+        "c6-s04"
+      ],
+      "examples": [
+        "c6-s04-m01",
+        "c6-s04-m02",
+        "c6-s04-m03"
+      ],
+      "ngram": 2,
+      "seed": false,
+      "score": 30.33
+    },
+    {
+      "term": "bois",
+      "normalized": "bois",
+      "count": 9,
+      "count_in_propositions": 7,
+      "sections": [
+        "intro",
+        "c9-s03",
+        "c13-s03",
+        "c14-s04"
+      ],
+      "examples": [
+        "c9-s03-m07",
+        "c9-s03-m08",
+        "c13-s03-m14"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 30.31
+    },
+    {
+      "term": "associations",
+      "normalized": "associations",
+      "count": 11,
+      "count_in_propositions": 10,
+      "sections": [
+        "intro",
+        "c3-s01",
+        "c4-s02",
+        "c5-s07",
+        "c7-s03",
+        "c10-s01",
+        "c10-s04",
+        "c14-s02"
+      ],
+      "examples": [
+        "c3-s01-m03",
+        "c4-s02-m01",
+        "c5-s07-m01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 29.79
+    },
+    {
+      "term": "mer",
+      "normalized": "mer",
+      "count": 10,
+      "count_in_propositions": 7,
+      "sections": [
+        "c9-s03",
+        "c12-s03",
+        "c16-s06",
+        "c16-s10",
+        "c18-s01",
+        "c18-s02"
+      ],
+      "examples": [
+        "c9-s03-m01",
+        "c16-s06-m07",
+        "c16-s10-m01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 29.79
+    },
+    {
+      "term": "rénovation",
+      "normalized": "rénovation",
+      "count": 10,
+      "count_in_propositions": 8,
+      "sections": [
+        "intro",
+        "c5-s06",
+        "c7-s05",
+        "c9-s03",
+        "c11-s02",
+        "c13-s03"
+      ],
+      "examples": [
+        "c5-s06-m06",
+        "c7-s05-m07",
+        "c7-s05-m08"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 29.79
+    },
+    {
+      "term": "retraite",
+      "normalized": "retraite",
+      "count": 10,
+      "count_in_propositions": 7,
+      "sections": [
+        "intro",
+        "c8-s02",
+        "c8-s08",
+        "c10-s04",
+        "c13-s05",
+        "c14-s04"
+      ],
+      "examples": [
+        "c8-s02-m01",
+        "c8-s08-k01",
+        "c8-s08-m02"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 29.79
+    },
+    {
+      "term": "police de proximité",
+      "normalized": "police de proximité",
+      "count": 5,
+      "count_in_propositions": 3,
+      "sections": [
+        "c7-s08"
+      ],
+      "examples": [
+        "c7-s08-k01",
+        "c7-s08-m01",
+        "c7-s08-m02"
+      ],
+      "ngram": 3,
+      "seed": false,
+      "score": 29.79
+    },
+    {
+      "term": "Nations unies",
+      "normalized": "nations unies",
+      "count": 5,
+      "count_in_propositions": 4,
+      "sections": [
+        "c16-s03",
+        "c16-s05",
+        "c16-s07"
+      ],
+      "examples": [
+        "c16-s03-m01",
+        "c16-s03-m02",
+        "c16-s05-k01"
+      ],
+      "ngram": 2,
+      "seed": false,
+      "score": 29.17
+    },
+    {
+      "term": "seuil de pauvreté",
+      "normalized": "seuil de pauvreté",
+      "count": 5,
+      "count_in_propositions": 3,
+      "sections": [
+        "c7-s04",
+        "c8-s04",
+        "c8-s08",
+        "c10-s03"
+      ],
+      "examples": [
+        "c7-s04-k01",
+        "c8-s08-m01",
+        "c10-s03-k01"
+      ],
+      "ngram": 3,
+      "seed": false,
+      "score": 29.06
+    },
+    {
+      "term": "6e République",
+      "normalized": "6e république",
+      "count": 7,
+      "count_in_propositions": 3,
+      "sections": [
+        "intro",
+        "c1-s01",
+        "c1-s02",
+        "c4-s01",
+        "c5-s03",
+        "c17-s02"
+      ],
+      "examples": [
+        "c1-s01-k01",
+        "c1-s02-k01",
+        "c17-s02-m05"
+      ],
+      "ngram": 2,
+      "seed": true,
+      "score": 28.64
+    },
+    {
+      "term": "dettes",
+      "normalized": "dettes",
+      "count": 9,
+      "count_in_propositions": 8,
+      "sections": [
+        "c6-s04",
+        "c13-s05",
+        "c16-s05",
+        "c16-s09",
+        "c16-s11"
+      ],
+      "examples": [
+        "c6-s04-k01",
+        "c6-s04-m06",
+        "c13-s05-m01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 28.37
+    },
+    {
+      "term": "émissions",
+      "normalized": "émissions",
+      "count": 9,
+      "count_in_propositions": 8,
+      "sections": [
+        "c9-s02",
+        "c12-s01",
+        "c13-s02",
+        "c13-s03",
+        "c16-s10"
+      ],
+      "examples": [
+        "c9-s02-m06",
+        "c12-s01-m04",
+        "c12-s01-m05"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 28.37
+    },
+    {
+      "term": "pandémies",
+      "normalized": "pandémies",
+      "count": 9,
+      "count_in_propositions": 3,
+      "sections": [
+        "intro",
+        "part3",
+        "c14-s05",
+        "c15-s01",
+        "c16-s06"
+      ],
+      "examples": [
+        "c15-s01-k01",
+        "c15-s01-m02",
+        "c16-s06-m03"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 28.37
+    },
+    {
+      "term": "animaux",
+      "normalized": "animaux",
+      "count": 6,
+      "count_in_propositions": 5,
+      "sections": [
+        "c14-s05"
+      ],
+      "examples": [
+        "c14-s05-m01",
+        "c14-s05-m03",
+        "c14-s05-m05"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 28.36
+    },
+    {
+      "term": "chômage",
+      "normalized": "chômage",
+      "count": 10,
+      "count_in_propositions": 5,
+      "sections": [
+        "c8-s01",
+        "c8-s05",
+        "c8-s06",
+        "c8-s07",
+        "c9-s03",
+        "c10-s03",
+        "c16-s05"
+      ],
+      "examples": [
+        "c8-s05-m05",
+        "c8-s05-m06",
+        "c8-s05-m07"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 28.33
+    },
+    {
+      "term": "renouvelables",
+      "normalized": "renouvelables",
+      "count": 10,
+      "count_in_propositions": 8,
+      "sections": [
+        "c9-s02",
+        "c9-s03",
+        "c12-s02",
+        "c12-s03",
+        "c13-s03",
+        "c13-s04",
+        "c18-s02"
+      ],
+      "examples": [
+        "c9-s02-m03",
+        "c9-s03-m04",
+        "c12-s02-m09"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 28.33
+    },
+    {
+      "term": "salaires",
+      "normalized": "salaires",
+      "count": 10,
+      "count_in_propositions": 7,
+      "sections": [
+        "intro",
+        "c8-s04",
+        "c8-s05",
+        "c8-s08",
+        "c10-s04",
+        "c14-s04",
+        "c15-s02"
+      ],
+      "examples": [
+        "c8-s04-k01",
+        "c8-s04-m02",
+        "c8-s04-m02.s1"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 28.33
+    },
+    {
+      "term": "transport",
+      "normalized": "transport",
+      "count": 10,
+      "count_in_propositions": 9,
+      "sections": [
+        "c5-s03",
+        "c7-s01",
+        "c9-s02",
+        "c12-s01",
+        "c13-s02",
+        "c14-s02",
+        "c14-s05"
+      ],
+      "examples": [
+        "c5-s03-k01",
+        "c7-s01-k01",
+        "c9-s02-m02"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 28.33
+    },
+    {
+      "term": "nucléaire",
+      "normalized": "nucléaire",
+      "count": 7,
+      "count_in_propositions": 6,
+      "sections": [
+        "c13-s03",
+        "c16-s02"
+      ],
+      "examples": [
+        "c13-s03-m03",
+        "c13-s03-m04",
+        "c13-s03-m16"
+      ],
+      "ngram": 1,
+      "seed": true,
+      "score": 28.3
+    },
+    {
+      "term": "concurrence",
+      "normalized": "concurrence",
+      "count": 10,
+      "count_in_propositions": 5,
+      "sections": [
+        "intro",
+        "c5-s06",
+        "c9-s01",
+        "part3",
+        "c13-s02",
+        "c13-s05",
+        "c17-s02",
+        "c18-s02"
+      ],
+      "examples": [
+        "c13-s02-m01",
+        "c13-s05-m07",
+        "c13-s05-m10"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 27.08
+    },
+    {
+      "term": "finance",
+      "normalized": "finance",
+      "count": 10,
+      "count_in_propositions": 3,
+      "sections": [
+        "c1-s03",
+        "part2",
+        "c6-s01",
+        "c6-s02",
+        "c6-s03",
+        "c7-s03",
+        "c15-s02",
+        "c16-s05"
+      ],
+      "examples": [
+        "c6-s01-m03",
+        "c6-s02-m02",
+        "c15-s02-m21"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 27.08
+    },
+    {
+      "term": "pollutions",
+      "normalized": "pollutions",
+      "count": 10,
+      "count_in_propositions": 5,
+      "sections": [
+        "c7-s02",
+        "c7-s07",
+        "c9-s02",
+        "c14-s01",
+        "c14-s06",
+        "c15-s02",
+        "c16-s05",
+        "c16-s10"
+      ],
+      "examples": [
+        "c7-s07-m06",
+        "c9-s02-m06",
+        "c14-s01-k01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 27.08
+    },
+    {
+      "term": "taxe",
+      "normalized": "taxe",
+      "count": 10,
+      "count_in_propositions": 10,
+      "sections": [
+        "c5-s04",
+        "c6-s01",
+        "c6-s05",
+        "c7-s01",
+        "c7-s05",
+        "c9-s02",
+        "c11-s02",
+        "c12-s03"
+      ],
+      "examples": [
+        "c5-s04-m10",
+        "c6-s01-k01",
+        "c6-s05-m03"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 27.08
+    },
+    {
+      "term": "coopératives",
+      "normalized": "coopératives",
+      "count": 9,
+      "count_in_propositions": 9,
+      "sections": [
+        "c1-s06",
+        "c7-s03",
+        "c10-s04",
+        "c13-s03",
+        "c14-s04",
+        "c15-s02"
+      ],
+      "examples": [
+        "c1-s06-m08",
+        "c7-s03-m02",
+        "c7-s03-m03"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 26.81
+    },
+    {
+      "term": "écoles",
+      "normalized": "écoles",
+      "count": 9,
+      "count_in_propositions": 7,
+      "sections": [
+        "intro",
+        "c4-s03",
+        "c5-s03",
+        "c5-s06",
+        "c13-s04",
+        "c15-s02"
+      ],
+      "examples": [
+        "c4-s03-m02",
+        "c5-s03-m01.s12",
+        "c5-s03-m02.s3"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 26.81
+    },
+    {
+      "term": "référendum",
+      "normalized": "référendum",
+      "count": 9,
+      "count_in_propositions": 5,
+      "sections": [
+        "intro",
+        "part1",
+        "c1-s01",
+        "c1-s04",
+        "c2-s01",
+        "c17-s02"
+      ],
+      "examples": [
+        "c1-s01-m01",
+        "c1-s01-m03",
+        "c1-s04-k01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 26.81
+    },
+    {
+      "term": "coopération",
+      "normalized": "coopération",
+      "count": 11,
+      "count_in_propositions": 7,
+      "sections": [
+        "c1-s04",
+        "c5-s06",
+        "c14-s04",
+        "c16-s01",
+        "c16-s04",
+        "c16-s05",
+        "c16-s06",
+        "c16-s08",
+        "c16-s09",
+        "c16-s11",
+        "c18-s05"
+      ],
+      "examples": [
+        "c1-s04-m08",
+        "c14-s04-m15",
+        "c16-s04-m04"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 26.56
+    },
+    {
+      "term": "gratuité",
+      "normalized": "gratuité",
+      "count": 11,
+      "count_in_propositions": 10,
+      "sections": [
+        "intro",
+        "c5-s02",
+        "c5-s03",
+        "c5-s04",
+        "c5-s06",
+        "c7-s04",
+        "c7-s06",
+        "c11-s01",
+        "c11-s02",
+        "c13-s03",
+        "c14-s02"
+      ],
+      "examples": [
+        "c5-s02-m06",
+        "c5-s03-k01",
+        "c5-s04-m08"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 26.56
+    },
+    {
+      "term": "coopérations",
+      "normalized": "coopérations",
+      "count": 10,
+      "count_in_propositions": 4,
+      "sections": [
+        "c5-s05",
+        "c15-s03",
+        "c16-s04",
+        "c16-s08",
+        "c16-s09",
+        "c17-s01",
+        "c17-s02",
+        "c18-s03",
+        "c18-s05"
+      ],
+      "examples": [
+        "c15-s03-m04",
+        "c16-s04-m02",
+        "c16-s08-m02"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 25.99
+    },
+    {
+      "term": "environnement",
+      "normalized": "environnement",
+      "count": 10,
+      "count_in_propositions": 8,
+      "sections": [
+        "c5-s07",
+        "c8-s07",
+        "c12-s01",
+        "c14-s01",
+        "c14-s02",
+        "c15-s02",
+        "c16-s03",
+        "c16-s05",
+        "c16-s06"
+      ],
+      "examples": [
+        "c5-s07-m01",
+        "c12-s01-m09",
+        "c14-s01-m05"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 25.99
+    },
+    {
+      "term": "intelligence artificielle",
+      "normalized": "intelligence artificielle",
+      "count": 4,
+      "count_in_propositions": 4,
+      "sections": [
+        "c16-s02",
+        "c18-s05"
+      ],
+      "examples": [
+        "c16-s02-m02",
+        "c18-s05-m12",
+        "c18-s05-m13"
+      ],
+      "ngram": 2,
+      "seed": false,
+      "score": 25.88
+    },
+    {
+      "term": "Méditerranée",
+      "normalized": "méditerranée",
+      "count": 7,
+      "count_in_propositions": 5,
+      "sections": [
+        "c9-s03",
+        "c16-s10",
+        "c18-s01"
+      ],
+      "examples": [
+        "c9-s03-m01",
+        "c16-s10-m02",
+        "c16-s10-m04"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 25.52
+    },
+    {
+      "term": "publicité",
+      "normalized": "publicité",
+      "count": 7,
+      "count_in_propositions": 6,
+      "sections": [
+        "c11-s02",
+        "c13-s04",
+        "c15-s04"
+      ],
+      "examples": [
+        "c11-s02-m02",
+        "c13-s04-m05",
+        "c13-s04-m06"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 25.52
+    },
+    {
+      "term": "universités",
+      "normalized": "universités",
+      "count": 7,
+      "count_in_propositions": 7,
+      "sections": [
+        "c5-s05",
+        "c5-s06",
+        "c16-s10"
+      ],
+      "examples": [
+        "c5-s05-m03",
+        "c5-s05-m05",
+        "c5-s05-m07"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 25.52
+    },
+    {
+      "term": "pauvres",
+      "normalized": "pauvres",
+      "count": 9,
+      "count_in_propositions": 1,
+      "sections": [
+        "intro",
+        "c7-s01",
+        "c7-s04",
+        "c8-s05",
+        "c11-s02",
+        "c14-s01",
+        "c15-s04"
+      ],
+      "examples": [
+        "c11-s02-m12"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 25.5
+    },
+    {
+      "term": "précarité",
+      "normalized": "précarité",
+      "count": 9,
+      "count_in_propositions": 5,
+      "sections": [
+        "c2-s02",
+        "c5-s06",
+        "c8-s03",
+        "c10-s01",
+        "c10-s03",
+        "c13-s03",
+        "c15-s02"
+      ],
+      "examples": [
+        "c5-s06-m03",
+        "c10-s01-m07",
+        "c10-s03-m03"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 25.5
+    },
+    {
+      "term": "agriculture",
+      "normalized": "agriculture",
+      "count": 8,
+      "count_in_propositions": 5,
+      "sections": [
+        "intro",
+        "c12-s03",
+        "c13-s05",
+        "c15-s04",
+        "c16-s03"
+      ],
+      "examples": [
+        "c12-s03-m03",
+        "c13-s05-k01",
+        "c15-s04-m01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 25.22
+    },
+    {
+      "term": "discriminations",
+      "normalized": "discriminations",
+      "count": 8,
+      "count_in_propositions": 7,
+      "sections": [
+        "c5-s03",
+        "c10-s02",
+        "c10-s05",
+        "c11-s01",
+        "c18-s04"
+      ],
+      "examples": [
+        "c5-s03-m02.s3",
+        "c5-s03-m04.s5",
+        "c10-s02-k01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 25.22
+    },
+    {
+      "term": "dividendes",
+      "normalized": "dividendes",
+      "count": 8,
+      "count_in_propositions": 7,
+      "sections": [
+        "c6-s03",
+        "c6-s05",
+        "c8-s04",
+        "c8-s08",
+        "c9-s02"
+      ],
+      "examples": [
+        "c6-s03-m01",
+        "c6-s03-m02",
+        "c6-s03-m04"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 25.22
+    },
+    {
+      "term": "données",
+      "normalized": "données",
+      "count": 8,
+      "count_in_propositions": 8,
+      "sections": [
+        "c5-s05",
+        "c10-s02",
+        "c12-s01",
+        "c18-s04",
+        "c18-s05"
+      ],
+      "examples": [
+        "c5-s05-m05",
+        "c10-s02-m02",
+        "c12-s01-m09"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 25.22
+    },
+    {
+      "term": "harmonie",
+      "normalized": "harmonie",
+      "count": 8,
+      "count_in_propositions": 0,
+      "sections": [
+        "intro",
+        "part2",
+        "part3",
+        "c12-s01",
+        "c14-s05"
+      ],
+      "examples": [
+        "intro-p06",
+        "intro-p22",
+        "part2"
+      ],
+      "ngram": 1,
+      "seed": true,
+      "score": 25.22
+    },
+    {
+      "term": "langue",
+      "normalized": "langue",
+      "count": 8,
+      "count_in_propositions": 2,
+      "sections": [
+        "intro",
+        "c5-s01",
+        "c10-s05",
+        "c16-s10",
+        "c16-s12"
+      ],
+      "examples": [
+        "c5-s01-m01",
+        "c10-s05-m04.s2"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 25.22
+    },
+    {
+      "term": "révolution citoyenne",
+      "normalized": "révolution citoyenne",
+      "count": 6,
+      "count_in_propositions": 0,
+      "sections": [
+        "intro",
+        "part1",
+        "c1-s06",
+        "c3-s02"
+      ],
+      "examples": [
+        "intro-p06",
+        "part1",
+        "part1-p01"
+      ],
+      "ngram": 2,
+      "seed": true,
+      "score": 25.19
+    },
+    {
+      "term": "inégalités",
+      "normalized": "inégalités",
+      "count": 10,
+      "count_in_propositions": 4,
+      "sections": [
+        "intro",
+        "c3-s02",
+        "c6-s05",
+        "c7-s02",
+        "c8-s04",
+        "c10-s03",
+        "c11-s01",
+        "c13-s02",
+        "c16-s09",
+        "c18-s04"
+      ],
+      "examples": [
+        "c3-s02-m02",
+        "c6-s05-m13",
+        "c11-s01-m01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 25.01
+    },
+    {
+      "term": "protection de l’enfance",
+      "normalized": "protection de enfance",
+      "count": 4,
+      "count_in_propositions": 4,
+      "sections": [
+        "c7-s09"
+      ],
+      "examples": [
+        "c7-s09-k01",
+        "c7-s09-m02",
+        "c7-s09-m06"
+      ],
+      "ngram": 3,
+      "seed": false,
+      "score": 24.49
+    },
+    {
+      "term": "démocratie",
+      "normalized": "démocratie",
+      "count": 9,
+      "count_in_propositions": 2,
+      "sections": [
+        "part1",
+        "c1-s04",
+        "c3-s01",
+        "c3-s02",
+        "c5-s05",
+        "c7-s01",
+        "c7-s03",
+        "c12-s02"
+      ],
+      "examples": [
+        "c3-s02-k01",
+        "c5-s05-m10"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 24.37
+    },
+    {
+      "term": "pêche",
+      "normalized": "pêche",
+      "count": 6,
+      "count_in_propositions": 6,
+      "sections": [
+        "c12-s03",
+        "c18-s01"
+      ],
+      "examples": [
+        "c12-s03-m07",
+        "c18-s01-m03",
+        "c18-s01-m05"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 24.26
+    },
+    {
+      "term": "alimentation",
+      "normalized": "alimentation",
+      "count": 8,
+      "count_in_propositions": 7,
+      "sections": [
+        "intro",
+        "c2-s01",
+        "c5-s03",
+        "c9-s01",
+        "c15-s04",
+        "c16-s03"
+      ],
+      "examples": [
+        "c2-s01-m02",
+        "c5-s03-m04.s2",
+        "c9-s01-k01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 23.83
+    },
+    {
+      "term": "carbone",
+      "normalized": "carbone",
+      "count": 8,
+      "count_in_propositions": 8,
+      "sections": [
+        "c6-s02",
+        "c9-s02",
+        "c12-s01",
+        "c13-s04",
+        "c14-s04",
+        "c18-s05"
+      ],
+      "examples": [
+        "c6-s02-m04",
+        "c9-s02-m06",
+        "c12-s01-m05"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 23.83
+    },
+    {
+      "term": "étudiants",
+      "normalized": "étudiants",
+      "count": 8,
+      "count_in_propositions": 7,
+      "sections": [
+        "c5-s04",
+        "c5-s05",
+        "c5-s06",
+        "c10-s03",
+        "c16-s07",
+        "c16-s08"
+      ],
+      "examples": [
+        "c5-s04-m08",
+        "c5-s05-m04",
+        "c5-s06-m01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 23.83
+    },
+    {
+      "term": "SMIC",
+      "normalized": "smic",
+      "count": 8,
+      "count_in_propositions": 6,
+      "sections": [
+        "c5-s07",
+        "c8-s01",
+        "c8-s04",
+        "c8-s08",
+        "c9-s01",
+        "c10-s05"
+      ],
+      "examples": [
+        "c5-s07-m01",
+        "c8-s01-k01",
+        "c8-s04-k01"
+      ],
+      "ngram": 1,
+      "seed": true,
+      "score": 23.83
+    },
+    {
+      "term": "addictions",
+      "normalized": "addictions",
+      "count": 5,
+      "count_in_propositions": 2,
+      "sections": [
+        "c15-s03"
+      ],
+      "examples": [
+        "c15-s03-m01",
+        "c15-s03-m02"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 23.64
+    },
+    {
+      "term": "arts",
+      "normalized": "arts",
+      "count": 5,
+      "count_in_propositions": 1,
+      "sections": [
+        "c11-s01"
+      ],
+      "examples": [
+        "c11-s01-m07"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 23.64
+    },
+    {
+      "term": "chercheurs",
+      "normalized": "chercheurs",
+      "count": 7,
+      "count_in_propositions": 6,
+      "sections": [
+        "c5-s05",
+        "c5-s06",
+        "c16-s02",
+        "c18-s05"
+      ],
+      "examples": [
+        "c5-s05-m02",
+        "c5-s05-m03",
+        "c5-s05-m05"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 23.57
+    },
+    {
+      "term": "gaz",
+      "normalized": "gaz",
+      "count": 7,
+      "count_in_propositions": 6,
+      "sections": [
+        "c7-s04",
+        "c12-s01",
+        "c13-s03",
+        "c13-s04"
+      ],
+      "examples": [
+        "c7-s04-m03",
+        "c12-s01-m05",
+        "c13-s03-m06"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 23.57
+    },
+    {
+      "term": "lycée",
+      "normalized": "lycée",
+      "count": 7,
+      "count_in_propositions": 7,
+      "sections": [
+        "c5-s03",
+        "c5-s04",
+        "c10-s05",
+        "c18-s01"
+      ],
+      "examples": [
+        "c5-s03-m01.s11",
+        "c5-s03-m03.s1",
+        "c5-s03-m04.s1"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 23.57
+    },
+    {
+      "term": "maladies",
+      "normalized": "maladies",
+      "count": 7,
+      "count_in_propositions": 4,
+      "sections": [
+        "c8-s07",
+        "c14-s01",
+        "c15-s02",
+        "c15-s04"
+      ],
+      "examples": [
+        "c8-s07-m06",
+        "c8-s07-m10",
+        "c14-s01-m03"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 23.57
+    },
+    {
+      "term": "maltraitance",
+      "normalized": "maltraitance",
+      "count": 7,
+      "count_in_propositions": 0,
+      "sections": [
+        "intro",
+        "c5-s02",
+        "c10-s04",
+        "c14-s05"
+      ],
+      "examples": [
+        "intro-p15",
+        "intro-p25",
+        "c5-s02-p01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 23.57
+    },
+    {
+      "term": "médecine",
+      "normalized": "médecine",
+      "count": 7,
+      "count_in_propositions": 7,
+      "sections": [
+        "c5-s03",
+        "c8-s05",
+        "c8-s07",
+        "c15-s02"
+      ],
+      "examples": [
+        "c5-s03-m02.s9",
+        "c8-s05-m02",
+        "c8-s07-m04"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 23.57
+    },
+    {
+      "term": "droit international",
+      "normalized": "droit international",
+      "count": 8,
+      "count_in_propositions": 1,
+      "sections": [
+        "part4",
+        "c16-s01",
+        "c16-s03",
+        "c16-s04",
+        "c16-s06",
+        "c18-s01"
+      ],
+      "examples": [
+        "c18-s01-k01"
+      ],
+      "ngram": 2,
+      "seed": false,
+      "score": 23.49
+    },
+    {
+      "term": "quartiers populaires",
+      "normalized": "quartiers populaires",
+      "count": 4,
+      "count_in_propositions": 2,
+      "sections": [
+        "intro",
+        "c7-s01"
+      ],
+      "examples": [
+        "c7-s01-k01",
+        "c7-s01-m04"
+      ],
+      "ngram": 2,
+      "seed": false,
+      "score": 23.03
+    },
+    {
+      "term": "collectivités",
+      "normalized": "collectivités",
+      "count": 8,
+      "count_in_propositions": 7,
+      "sections": [
+        "c5-s03",
+        "c9-s01",
+        "c11-s01",
+        "c12-s02",
+        "c13-s03",
+        "c14-s01",
+        "c18-s04"
+      ],
+      "examples": [
+        "c5-s03-m03.s3",
+        "c9-s01-m03",
+        "c11-s01-m02"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 22.67
+    },
+    {
+      "term": "enfant",
+      "normalized": "enfant",
+      "count": 8,
+      "count_in_propositions": 6,
+      "sections": [
+        "intro",
+        "c4-s01",
+        "c5-s03",
+        "c6-s04",
+        "c6-s05",
+        "c7-s09",
+        "c10-s01"
+      ],
+      "examples": [
+        "c4-s01-m05",
+        "c5-s03-m02.s3",
+        "c6-s05-m13"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 22.67
+    },
+    {
+      "term": "Europe",
+      "normalized": "europe",
+      "count": 8,
+      "count_in_propositions": 6,
+      "sections": [
+        "c5-s03",
+        "c6-s05",
+        "c12-s03",
+        "c16-s04",
+        "c17",
+        "c17-s01",
+        "c17-s02"
+      ],
+      "examples": [
+        "c5-s03-m01.s2",
+        "c12-s03-m02",
+        "c16-s04-m02"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 22.67
+    },
+    {
+      "term": "profit",
+      "normalized": "profit",
+      "count": 8,
+      "count_in_propositions": 3,
+      "sections": [
+        "intro",
+        "part1",
+        "c5-s03",
+        "c5-s05",
+        "c15-s04",
+        "c16-s03",
+        "c16-s05"
+      ],
+      "examples": [
+        "c5-s03-m04.s2",
+        "c5-s05-m07",
+        "c15-s04-m08"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 22.67
+    },
+    {
+      "term": "réserve de sécurité",
+      "normalized": "réserve de sécurité",
+      "count": 4,
+      "count_in_propositions": 2,
+      "sections": [
+        "c5-s07"
+      ],
+      "examples": [
+        "c5-s07-m04"
+      ],
+      "ngram": 3,
+      "seed": false,
+      "score": 22.49
+    },
+    {
+      "term": "sécurité sociale professionnelle",
+      "normalized": "sécurité sociale professionnelle",
+      "count": 5,
+      "count_in_propositions": 1,
+      "sections": [
+        "c8-s06"
+      ],
+      "examples": [
+        "c8-s06-m03"
+      ],
+      "ngram": 3,
+      "seed": false,
+      "score": 22.32
+    },
+    {
+      "term": "pôle public",
+      "normalized": "pôle public",
+      "count": 6,
+      "count_in_propositions": 6,
+      "sections": [
+        "c6-s02",
+        "c13-s02",
+        "c13-s03",
+        "c15-s01",
+        "c16-s02"
+      ],
+      "examples": [
+        "c6-s02-k01",
+        "c6-s02-m01",
+        "c13-s02-k01"
+      ],
+      "ngram": 2,
+      "seed": true,
+      "score": 22.24
+    },
+    {
+      "term": "permis de conduire",
+      "normalized": "permis de conduire",
+      "count": 3,
+      "count_in_propositions": 2,
+      "sections": [
+        "c5-s07",
+        "c10-s03"
+      ],
+      "examples": [
+        "c5-s07-m02",
+        "c10-s03-m04"
+      ],
+      "ngram": 3,
+      "seed": false,
+      "score": 22.23
+    },
+    {
+      "term": "temps de travail",
+      "normalized": "temps de travail",
+      "count": 6,
+      "count_in_propositions": 2,
+      "sections": [
+        "c3-s02",
+        "c8-s02"
+      ],
+      "examples": [
+        "c3-s02-m05",
+        "c8-s02-m03"
+      ],
+      "ngram": 3,
+      "seed": false,
+      "score": 22.16
+    },
+    {
+      "term": "guerre",
+      "normalized": "guerre",
+      "count": 7,
+      "count_in_propositions": 3,
+      "sections": [
+        "intro",
+        "part4",
+        "c16-s02",
+        "c16-s04",
+        "c17-s02"
+      ],
+      "examples": [
+        "c16-s02-m12",
+        "c16-s04-k01",
+        "c17-s02-m03"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 22.07
+    },
+    {
+      "term": "soins",
+      "normalized": "soins",
+      "count": 7,
+      "count_in_propositions": 5,
+      "sections": [
+        "c4-s01",
+        "c5-s06",
+        "c7-s09",
+        "c10-s04",
+        "c15-s02"
+      ],
+      "examples": [
+        "c4-s01-m01",
+        "c5-s06-m09",
+        "c7-s09-m07"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 22.07
+    },
+    {
+      "term": "accidents",
+      "normalized": "accidents",
+      "count": 6,
+      "count_in_propositions": 4,
+      "sections": [
+        "c8-s06",
+        "c8-s07",
+        "c11-s02"
+      ],
+      "examples": [
+        "c8-s07-m07",
+        "c8-s07-m08",
+        "c8-s07-m09"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 21.88
+    },
+    {
+      "term": "Afrique",
+      "normalized": "afrique",
+      "count": 6,
+      "count_in_propositions": 4,
+      "sections": [
+        "c16-s03",
+        "c16-s08",
+        "c16-s11"
+      ],
+      "examples": [
+        "c16-s03-m06",
+        "c16-s08-m02"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 21.88
+    },
+    {
+      "term": "forêt",
+      "normalized": "forêt",
+      "count": 6,
+      "count_in_propositions": 4,
+      "sections": [
+        "c2-s01",
+        "c12-s02",
+        "c14-s04"
+      ],
+      "examples": [
+        "c2-s01-m02",
+        "c12-s02-m06",
+        "c14-s04-m12"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 21.88
+    },
+    {
+      "term": "francophones",
+      "normalized": "francophones",
+      "count": 6,
+      "count_in_propositions": 5,
+      "sections": [
+        "c5-s01",
+        "c5-s05",
+        "c16-s12"
+      ],
+      "examples": [
+        "c5-s01-m01",
+        "c5-s05-m09",
+        "c16-s12-m03"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 21.88
+    },
+    {
+      "term": "médecins",
+      "normalized": "médecins",
+      "count": 6,
+      "count_in_propositions": 5,
+      "sections": [
+        "intro",
+        "c10-s01",
+        "c15-s02"
+      ],
+      "examples": [
+        "c10-s01-m11",
+        "c15-s02-m05",
+        "c15-s02-m07"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 21.88
+    },
+    {
+      "term": "filière",
+      "normalized": "filière",
+      "count": 8,
+      "count_in_propositions": 7,
+      "sections": [
+        "c9-s03",
+        "c11-s01",
+        "c12-s01",
+        "c14-s04",
+        "c15-s02",
+        "c18-s02",
+        "c18-s03",
+        "c18-s05"
+      ],
+      "examples": [
+        "c9-s03-m08",
+        "c11-s01-m13",
+        "c12-s01-m08"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 21.66
+    },
+    {
+      "term": "gratuite",
+      "normalized": "gratuite",
+      "count": 8,
+      "count_in_propositions": 7,
+      "sections": [
+        "c5-s01",
+        "c5-s03",
+        "c5-s07",
+        "c7-s02",
+        "c7-s04",
+        "c10-s03",
+        "c11-s01",
+        "c11-s02"
+      ],
+      "examples": [
+        "c5-s01-m03",
+        "c5-s07-m02",
+        "c7-s02-m03"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 21.66
+    },
+    {
+      "term": "infrastructures",
+      "normalized": "infrastructures",
+      "count": 8,
+      "count_in_propositions": 6,
+      "sections": [
+        "c1-s06",
+        "c2-s02",
+        "c7-s02",
+        "c9-s03",
+        "c14-s03",
+        "c16-s02",
+        "c18-s02",
+        "c18-s05"
+      ],
+      "examples": [
+        "c1-s06-m01.s3",
+        "c7-s02-m02",
+        "c9-s03-k01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 21.66
+    },
+    {
+      "term": "sanctions",
+      "normalized": "sanctions",
+      "count": 8,
+      "count_in_propositions": 8,
+      "sections": [
+        "c4-s03",
+        "c6-s05",
+        "c7-s05",
+        "c8-s04",
+        "c10-s01",
+        "c10-s02",
+        "c14-s03",
+        "c16-s04"
+      ],
+      "examples": [
+        "c4-s03-m11",
+        "c6-s05-m16",
+        "c7-s05-m05"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 21.66
+    },
+    {
+      "term": "Gilets jaunes",
+      "normalized": "gilets jaunes",
+      "count": 4,
+      "count_in_propositions": 1,
+      "sections": [
+        "intro",
+        "c1-s04",
+        "c6-s05",
+        "c7-s01"
+      ],
+      "examples": [
+        "c1-s04-m14"
+      ],
+      "ngram": 2,
+      "seed": false,
+      "score": 21.55
+    },
+    {
+      "term": "sécurité civile",
+      "normalized": "sécurité civile",
+      "count": 5,
+      "count_in_propositions": 4,
+      "sections": [
+        "c5-s07",
+        "c7-s01",
+        "c16-s10"
+      ],
+      "examples": [
+        "c5-s07-m01",
+        "c5-s07-m04",
+        "c7-s01-m07"
+      ],
+      "ngram": 2,
+      "seed": false,
+      "score": 21.38
+    },
+    {
+      "term": "accords commerciaux",
+      "normalized": "accords commerciaux",
+      "count": 5,
+      "count_in_propositions": 4,
+      "sections": [
+        "c14-s04",
+        "c14-s06",
+        "c16-s05",
+        "c16-s07"
+      ],
+      "examples": [
+        "c14-s04-m13",
+        "c14-s06-m01",
+        "c16-s05-m01"
+      ],
+      "ngram": 2,
+      "seed": false,
+      "score": 21.23
+    },
+    {
+      "term": "SMIC revalorisé",
+      "normalized": "smic revalorisé",
+      "count": 4,
+      "count_in_propositions": 3,
+      "sections": [
+        "c5-s07",
+        "c8-s01",
+        "c8-s08"
+      ],
+      "examples": [
+        "c5-s07-m01",
+        "c8-s01-k01",
+        "c8-s08-m01"
+      ],
+      "ngram": 2,
+      "seed": false,
+      "score": 21.2
+    },
+    {
+      "term": "eau potable",
+      "normalized": "eau potable",
+      "count": 4,
+      "count_in_propositions": 3,
+      "sections": [
+        "intro",
+        "c14-s03"
+      ],
+      "examples": [
+        "c14-s03-m02",
+        "c14-s03-m04",
+        "c14-s03-m08"
+      ],
+      "ngram": 2,
+      "seed": false,
+      "score": 20.94
+    },
+    {
+      "term": "apprentissage",
+      "normalized": "apprentissage",
+      "count": 7,
+      "count_in_propositions": 6,
+      "sections": [
+        "intro",
+        "c5-s03",
+        "c5-s04",
+        "c8-s06",
+        "c10-s05",
+        "c11-s02"
+      ],
+      "examples": [
+        "c5-s03-m01.s6",
+        "c5-s04-m08",
+        "c5-s04-m10"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.85
+    },
+    {
+      "term": "Banque",
+      "normalized": "banque",
+      "count": 7,
+      "count_in_propositions": 5,
+      "sections": [
+        "intro",
+        "c2-s02",
+        "c6-s04",
+        "c7-s03",
+        "c9-s02",
+        "c16-s05"
+      ],
+      "examples": [
+        "c2-s02-m04",
+        "c6-s04-k01",
+        "c7-s03-m02"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.85
+    },
+    {
+      "term": "consommation",
+      "normalized": "consommation",
+      "count": 7,
+      "count_in_propositions": 4,
+      "sections": [
+        "intro",
+        "c7-s04",
+        "c13-s01",
+        "c13-s03",
+        "c15-s03",
+        "c18-s05"
+      ],
+      "examples": [
+        "c7-s04-m03",
+        "c13-s03-m02",
+        "c15-s03-k01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.85
+    },
+    {
+      "term": "filières",
+      "normalized": "filières",
+      "count": 7,
+      "count_in_propositions": 6,
+      "sections": [
+        "c1-s06",
+        "c5-s04",
+        "c12-s03",
+        "c13-s01",
+        "c13-s04",
+        "c15-s03"
+      ],
+      "examples": [
+        "c1-s06-m01.s2",
+        "c5-s04-m06",
+        "c12-s03-m03"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.85
+    },
+    {
+      "term": "Parlement",
+      "normalized": "parlement",
+      "count": 7,
+      "count_in_propositions": 4,
+      "sections": [
+        "intro",
+        "c1-s02",
+        "c1-s03",
+        "c1-s06",
+        "c7-s07",
+        "c8-s08"
+      ],
+      "examples": [
+        "c1-s02-m02",
+        "c1-s02-m03",
+        "c1-s06-m07"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.85
+    },
+    {
+      "term": "seuil",
+      "normalized": "seuil",
+      "count": 7,
+      "count_in_propositions": 5,
+      "sections": [
+        "c1-s04",
+        "c7-s04",
+        "c8-s04",
+        "c8-s08",
+        "c10-s03",
+        "c14-s01"
+      ],
+      "examples": [
+        "c1-s04-m02",
+        "c7-s04-k01",
+        "c8-s08-m01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.85
+    },
+    {
+      "term": "sexuelles",
+      "normalized": "sexuelles",
+      "count": 7,
+      "count_in_propositions": 6,
+      "sections": [
+        "c5-s07",
+        "c7-s09",
+        "c10-s01",
+        "c11-s01",
+        "c11-s02",
+        "c16-s07"
+      ],
+      "examples": [
+        "c7-s09-m03",
+        "c7-s09-m07",
+        "c10-s01-m10"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.85
+    },
+    {
+      "term": "soutien",
+      "normalized": "soutien",
+      "count": 7,
+      "count_in_propositions": 7,
+      "sections": [
+        "c3-s02",
+        "c7-s03",
+        "c7-s09",
+        "c10-s01",
+        "c13-s02",
+        "c18-s02"
+      ],
+      "examples": [
+        "c3-s02-m04",
+        "c7-s03-m02",
+        "c7-s09-k01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.85
+    },
+    {
+      "term": "Union européenne",
+      "normalized": "union européenne",
+      "count": 5,
+      "count_in_propositions": 4,
+      "sections": [
+        "c6-s04",
+        "c15-s02",
+        "c16-s01",
+        "c17-s01",
+        "c17-s02"
+      ],
+      "examples": [
+        "c6-s04-k01",
+        "c15-s02-m12",
+        "c16-s01-m04"
+      ],
+      "ngram": 2,
+      "seed": true,
+      "score": 20.84
+    },
+    {
+      "term": "aides publiques",
+      "normalized": "aides publiques",
+      "count": 6,
+      "count_in_propositions": 5,
+      "sections": [
+        "c1-s06",
+        "c6-s05",
+        "c7-s05",
+        "c10-s03",
+        "c13-s05",
+        "c14-s04"
+      ],
+      "examples": [
+        "c1-s06-m06",
+        "c6-s05-m18",
+        "c7-s05-m09"
+      ],
+      "ngram": 2,
+      "seed": false,
+      "score": 20.65
+    },
+    {
+      "term": "pays africains",
+      "normalized": "pays africains",
+      "count": 4,
+      "count_in_propositions": 4,
+      "sections": [
+        "c16-s11"
+      ],
+      "examples": [
+        "c16-s11-m02",
+        "c16-s11-m03",
+        "c16-s11-m04"
+      ],
+      "ngram": 2,
+      "seed": false,
+      "score": 20.47
+    },
+    {
+      "term": "assurance-chômage",
+      "normalized": "assurance-chômage",
+      "count": 5,
+      "count_in_propositions": 2,
+      "sections": [
+        "c8-s05",
+        "c11-s01"
+      ],
+      "examples": [
+        "c8-s05-m06",
+        "c11-s01-m12"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.22
+    },
+    {
+      "term": "chômeurs",
+      "normalized": "chômeurs",
+      "count": 5,
+      "count_in_propositions": 4,
+      "sections": [
+        "c8-s02",
+        "c8-s05"
+      ],
+      "examples": [
+        "c8-s05-k01",
+        "c8-s05-m02",
+        "c8-s05-m03"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.22
+    },
+    {
+      "term": "cycles",
+      "normalized": "cycles",
+      "count": 5,
+      "count_in_propositions": 0,
+      "sections": [
+        "intro",
+        "part3"
+      ],
+      "examples": [
+        "intro-p22",
+        "part3-p01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.22
+    },
+    {
+      "term": "garde",
+      "normalized": "garde",
+      "count": 5,
+      "count_in_propositions": 3,
+      "sections": [
+        "c5-s02",
+        "c5-s07"
+      ],
+      "examples": [
+        "c5-s02-k01",
+        "c5-s07-k01",
+        "c5-s07-m04"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.22
+    },
+    {
+      "term": "potable",
+      "normalized": "potable",
+      "count": 5,
+      "count_in_propositions": 4,
+      "sections": [
+        "intro",
+        "c14-s03"
+      ],
+      "examples": [
+        "c14-s03-k01",
+        "c14-s03-m02",
+        "c14-s03-m04"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.22
+    },
+    {
+      "term": "accéder",
+      "normalized": "accéder",
+      "count": 6,
+      "count_in_propositions": 1,
+      "sections": [
+        "intro",
+        "c5-s05",
+        "c8-s04",
+        "c10-s05"
+      ],
+      "examples": [
+        "c5-s05-m05"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.2
+    },
+    {
+      "term": "adaptation",
+      "normalized": "adaptation",
+      "count": 6,
+      "count_in_propositions": 4,
+      "sections": [
+        "c10-s05",
+        "c14-s03",
+        "c15-s01",
+        "c16-s02"
+      ],
+      "examples": [
+        "c10-s05-m01",
+        "c15-s01-k01",
+        "c16-s02-k01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.2
+    },
+    {
+      "term": "écologiquement",
+      "normalized": "écologiquement",
+      "count": 6,
+      "count_in_propositions": 5,
+      "sections": [
+        "c6-s02",
+        "c6-s05",
+        "c13-s01",
+        "c13-s05"
+      ],
+      "examples": [
+        "c6-s02-m03",
+        "c6-s02-m04",
+        "c6-s05-m08"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.2
+    },
+    {
+      "term": "existe",
+      "normalized": "existe",
+      "count": 6,
+      "count_in_propositions": 0,
+      "sections": [
+        "intro",
+        "c6-s04",
+        "c7-s03",
+        "c12-s03"
+      ],
+      "examples": [
+        "intro-p16",
+        "intro-p19",
+        "intro-p24"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.2
+    },
+    {
+      "term": "industriels",
+      "normalized": "industriels",
+      "count": 6,
+      "count_in_propositions": 5,
+      "sections": [
+        "c2-s02",
+        "c12-s01",
+        "c14-s01",
+        "c14-s02"
+      ],
+      "examples": [
+        "c12-s01-m08",
+        "c12-s01-m09",
+        "c14-s01-m05"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.2
+    },
+    {
+      "term": "juste",
+      "normalized": "juste",
+      "count": 6,
+      "count_in_propositions": 0,
+      "sections": [
+        "intro",
+        "c5-s02",
+        "c8-s02",
+        "c16-s09"
+      ],
+      "examples": [
+        "intro-p12",
+        "intro-p24",
+        "c5-s02-p01"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.2
+    },
+    {
+      "term": "médicaments",
+      "normalized": "médicaments",
+      "count": 6,
+      "count_in_propositions": 5,
+      "sections": [
+        "c2-s02",
+        "c9-s02",
+        "c15-s01",
+        "c15-s03"
+      ],
+      "examples": [
+        "c2-s02-m04",
+        "c9-s02-m03",
+        "c15-s01-m03"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.2
+    },
+    {
+      "term": "partenariats",
+      "normalized": "partenariats",
+      "count": 6,
+      "count_in_propositions": 5,
+      "sections": [
+        "c2-s02",
+        "c5-s03",
+        "c12-s03",
+        "c16-s09"
+      ],
+      "examples": [
+        "c2-s02-m02",
+        "c5-s03-m02.s3",
+        "c5-s03-m02.s10"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.2
+    },
+    {
+      "term": "patrimoine",
+      "normalized": "patrimoine",
+      "count": 6,
+      "count_in_propositions": 4,
+      "sections": [
+        "intro",
+        "c2-s02",
+        "c6-s04",
+        "c6-s05"
+      ],
+      "examples": [
+        "c2-s02-m03",
+        "c6-s05-m03",
+        "c6-s05-m06"
+      ],
+      "ngram": 1,
+      "seed": false,
+      "score": 20.2
+    },
+    {
+      "term": "francophonie",
+      "normalized": "francophonie",
+      "count": 4,
+      "count_in_propositions": 2,
+      "sections": [
+        "c16-s12"
+      ],
+      "examples": [
+        "c16-s12-m01",
+        "c16-s12-m05"
+      ],
+      "ngram": 1,
+      "seed": true,
+      "score": 18.91
+    },
+    {
+      "term": "État d'urgence",
+      "normalized": "état urgence",
+      "count": 5,
+      "count_in_propositions": 2,
+      "sections": [
+        "c4-s02",
+        "c9-s01",
+        "c15-s01"
+      ],
+      "examples": [
+        "c4-s02-m05",
+        "c15-s01-m01"
+      ],
+      "ngram": 2,
+      "seed": true,
+      "score": 13.99
+    },
+    {
+      "term": "référendum d'initiative citoyenne",
+      "normalized": "référendum initiative citoyenne",
+      "count": 2,
+      "count_in_propositions": 1,
+      "sections": [
+        "intro",
+        "c1-s04"
+      ],
+      "examples": [
+        "c1-s04-k01"
+      ],
+      "ngram": 3,
+      "seed": true,
+      "score": 12.58
+    },
+    {
+      "term": "OTAN",
+      "normalized": "otan",
+      "count": 3,
+      "count_in_propositions": 1,
+      "sections": [
+        "c16-s01",
+        "c16-s02"
+      ],
+      "examples": [
+        "c16-s01-k01"
+      ],
+      "ngram": 1,
+      "seed": true,
+      "score": 12.13
+    },
+    {
+      "term": "altermondialiste",
+      "normalized": "altermondialiste",
+      "count": 3,
+      "count_in_propositions": 1,
+      "sections": [
+        "c16",
+        "c16-s01",
+        "c16-s08"
+      ],
+      "examples": [
+        "c16-s01-m03"
+      ],
+      "ngram": 1,
+      "seed": true,
+      "score": 10.94
+    },
+    {
+      "term": "retraite à 60 ans",
+      "normalized": "retraite à 60 ans",
+      "count": 2,
+      "count_in_propositions": 2,
+      "sections": [
+        "c8-s02",
+        "c8-s08"
+      ],
+      "examples": [
+        "c8-s02-m01",
+        "c8-s08-k01"
+      ],
+      "ngram": 4,
+      "seed": true,
+      "score": 10.87
+    },
+    {
+      "term": "ferroviaire",
+      "normalized": "ferroviaire",
+      "count": 2,
+      "count_in_propositions": 2,
+      "sections": [
+        "c13-s02"
+      ],
+      "examples": [
+        "c13-s02-m03",
+        "c13-s02-m04"
+      ],
+      "ngram": 1,
+      "seed": true,
+      "score": 9.45
+    },
+    {
+      "term": "TVA",
+      "normalized": "tva",
+      "count": 2,
+      "count_in_propositions": 2,
+      "sections": [
+        "c6-s05"
+      ],
+      "examples": [
+        "c6-s05-m07"
+      ],
+      "ngram": 1,
+      "seed": true,
+      "score": 9.45
+    },
+    {
+      "term": "souveraineté alimentaire",
+      "normalized": "souveraineté alimentaire",
+      "count": 2,
+      "count_in_propositions": 1,
+      "sections": [
+        "c13-s05",
+        "c16-s03"
+      ],
+      "examples": [
+        "c16-s03-m04"
+      ],
+      "ngram": 2,
+      "seed": true,
+      "score": 8.56
+    },
+    {
+      "term": "bouclier",
+      "normalized": "bouclier",
+      "count": 2,
+      "count_in_propositions": 2,
+      "sections": [
+        "c9-s01",
+        "c12-s03"
+      ],
+      "examples": [
+        "c9-s01-m01",
+        "c12-s03-m01"
+      ],
+      "ngram": 1,
+      "seed": true,
+      "score": 8.09
+    },
+    {
+      "term": "garantie d'emploi",
+      "normalized": "garantie emploi",
+      "count": 2,
+      "count_in_propositions": 1,
+      "sections": [
+        "c8-s01"
+      ],
+      "examples": [
+        "c8-s01-k01"
+      ],
+      "ngram": 2,
+      "seed": true,
+      "score": 7.48
+    },
+    {
+      "term": "monarchie présidentielle",
+      "normalized": "monarchie présidentielle",
+      "count": 1,
+      "count_in_propositions": 0,
+      "sections": [
+        "c1-s02"
+      ],
+      "examples": [
+        "c1-s02"
+      ],
+      "ngram": 2,
+      "seed": true,
+      "score": 6.7
+    },
+    {
+      "term": "flux tendus",
+      "normalized": "flux tendus",
+      "count": 1,
+      "count_in_propositions": 1,
+      "sections": [
+        "c12-s01"
+      ],
+      "examples": [
+        "c12-s01-m10"
+      ],
+      "ngram": 2,
+      "seed": true,
+      "score": 6.48
+    },
+    {
+      "term": "protectionnisme solidaire",
+      "normalized": "protectionnisme solidaire",
+      "count": 1,
+      "count_in_propositions": 0,
+      "sections": [
+        "intro"
+      ],
+      "examples": [
+        "intro-p25"
+      ],
+      "ngram": 2,
+      "seed": true,
+      "score": 5.83
+    },
+    {
+      "term": "impôt universel",
+      "normalized": "impôt universel",
+      "count": 1,
+      "count_in_propositions": 1,
+      "sections": [
+        "c6-s05"
+      ],
+      "examples": [
+        "c6-s05-m09"
+      ],
+      "ngram": 2,
+      "seed": true,
+      "score": 5.44
+    },
+    {
+      "term": "créolisation",
+      "normalized": "créolisation",
+      "count": 1,
+      "count_in_propositions": 0,
+      "sections": [
+        "intro"
+      ],
+      "examples": [
+        "intro-p20"
+      ],
+      "ngram": 1,
+      "seed": true,
+      "score": 4.73
+    },
+    {
+      "term": "écocide",
+      "normalized": "écocide",
+      "count": 1,
+      "count_in_propositions": 1,
+      "sections": [
+        "c16-s06"
+      ],
+      "examples": [
+        "c16-s06-k01"
+      ],
+      "ngram": 1,
+      "seed": true,
+      "score": 4.73
+    },
+    {
+      "term": "ISF",
+      "normalized": "isf",
+      "count": 1,
+      "count_in_propositions": 1,
+      "sections": [
+        "c6-s05"
+      ],
+      "examples": [
+        "c6-s05-m02"
+      ],
+      "ngram": 1,
+      "seed": true,
+      "score": 4.73
+    },
+    {
+      "term": "nationalisation",
+      "normalized": "nationalisation",
+      "count": 1,
+      "count_in_propositions": 1,
+      "sections": [
+        "c18-s02"
+      ],
+      "examples": [
+        "c18-s02-m01"
+      ],
+      "ngram": 1,
+      "seed": true,
+      "score": 4.73
+    },
+    {
+      "term": "RIC",
+      "normalized": "ric",
+      "count": 1,
+      "count_in_propositions": 1,
+      "sections": [
+        "c1-s04"
+      ],
+      "examples": [
+        "c1-s04-k01"
+      ],
+      "ngram": 1,
+      "seed": true,
+      "score": 4.73
+    }
+  ]
+}

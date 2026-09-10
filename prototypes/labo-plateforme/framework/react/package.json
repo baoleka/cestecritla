@@ -1,0 +1,34 @@
+{
+  "name": "aec-lab-fw-react",
+  "version": "0.0.1",
+  "private": true,
+  "description": "T7 lab, variant 1: hello-corpus page with React 19 + Vite 6 + Tailwind v4, deployed as a Static Assets Worker",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build && node scripts/inline-css.ts && node scripts/prerender.ts",
+    "preview": "vite preview",
+    "deploy": "wrangler deploy && wrangler deploy -c wrangler.ssg.jsonc",
+    "typecheck": "tsc --noEmit"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "minisearch": "7.2.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "5.2.0",
+    "tailwindcss": "4.3.3",
+    "typescript": "^5.9.3",
+    "vite": "6.4.3",
+    "wrangler": "^4.129.1"
+  }
+}

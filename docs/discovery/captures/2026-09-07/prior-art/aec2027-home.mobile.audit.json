@@ -1,0 +1,52 @@
+{
+  "title": "L'AEC - Lisez l'Avenir en Commun, le programme de Jean-Luc Mélenchon pour 2027 | La France Insoumise",
+  "themeColor": "#8B24D9",
+  "bodyBg": "transparent",
+  "htmlBg": "transparent",
+  "fontsLoaded": [
+    "Montserrat 400 normal",
+    "Montserrat 700 normal"
+  ],
+  "fontFaceSrc": [],
+  "cssVars": {},
+  "topColors": [],
+  "topFonts": [
+    [
+      "Montserrat",
+      4
+    ]
+  ],
+  "samples": {
+    "h1": {
+      "font": "Montserrat",
+      "weight": "700",
+      "size": "32px",
+      "lineHeight": "normal",
+      "color": "#000000",
+      "bg": "transparent",
+      "transform": "none",
+      "style": "normal",
+      "letterSpacing": "normal"
+    },
+    "h2": null,
+    "h3": null,
+    "p": {
+      "font": "Montserrat",
+      "weight": "400",
+      "size": "16px",
+      "lineHeight": "normal",
+      "color": "#000000",
+      "bg": "transparent",
+      "transform": "none",
+      "style": "normal",
+      "letterSpacing": "normal"
+    },
+    "a": null,
+    "button": null
+  },
+  "links": [],
+  "hexInText": [],
+  "imgs": [
+    "https://aec2027.fr/assets/tortues_sagaces_par_hello_melro.png"
+  ]
+}

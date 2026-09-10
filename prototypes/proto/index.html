@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex">
+<title>Prototypes — C’est écrit là</title>
+<link rel="stylesheet" href="shared/tokens.css">
+<link rel="stylesheet" href="shared/base.css">
+<script type="module" src="root.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Aller au contenu</a>
+<main class="page" id="main">
+<header class="top">
+  <a class="wordmark block-3d" href="home/" aria-label="C’est écrit là, accueil">C’est écrit <span class="la">là</span></a>
+  <nav class="nav" aria-label="Navigation"><a href="home/">Accueil</a></nav>
+</header>
+<p class="kicker">Prototypes cliquables · J3 · proto.cestecritla.fr</p>
+<h1 class="display"><span class="l">Les</span><span class="l">modules</span></h1>
+<p class="lead">Direction A « éditorial-typographique », hybride D3.9. Contenu réel par identifiant, corpus <code>d29c7422004ab27c</code>. Aucun compte, aucun réseau hors les fichiers statiques.</p>
+
+<h2 class="h">Socle commun</h2>
+<ul class="modules">
+  <li><a href="home/">Accueil (écran 0 direct)</a> · <code>/home/</code> · recherche locale, riposte, mesure du jour, lecture</li>
+  <li><a href="link/?id=c12-s01-k01">Arrivée par lien, témoin T</a> · <code>/link/?id=c12-s01-k01</code> · la règle verte, mot pour mot</li>
+  <li><a href="link/?id=c9-s01-m04">Arrivée par lien, mesure simple</a> · <code>/link/?id=c9-s01-m04</code> · sans carte-concept</li>
+  <li><a href="section/?id=c12-s01">Lecteur de section</a> · <code>/section/?id=c12-s01</code> · chapeau, mesure clé, 11 mesures, À savoir</li>
+  <li><a href="section/?id=c14-s02#c14-s02-m09">Lecteur de section, mesure ciblée</a> · <code>/section/?id=c14-s02#c14-s02-m09</code> · 17 mesures, sidecar 77-808</li>
+  <li><a href="concept/?slug=regle-verte">Carte-concept « règle verte »</a> · <code>/concept/?slug=regle-verte</code> · dense corrigée, explorable replié</li>
+  <li><a href="concept/?slug=planification-ecologique">Carte-concept « planification écologique »</a> · <code>/concept/?slug=planification-ecologique</code></li>
+  <li><a href="riposte/">Mode riposte, grille marché</a> · <code>/riposte/</code> · 14 gros boutons par thème, verbatim en un tap</li>
+  <li><a href="riposte/?id=rip-01">Flashcard « impôts », recto</a> · <code>/riposte/?id=rip-01</code> · arrivée par lien ou QR, « Retourner la carte »</li>
+  <li><a href="riposte/?id=rip-14">Flashcard « loyers »</a> · <code>/riposte/?id=rip-14</code> · recto « Ce qu’on entend souvent », <code>#texte</code> = verso</li>
+  <li><a href="riposte/?flash=1">Entraînement dix secondes</a> · <code>/riposte/?flash=1</code> · barre discrète, « Passer », « Objection suivante », aucun score</li>
+</ul>
+
+<h2 class="h">Modules attendus (finalistes J3)</h2>
+<ul class="modules">
+  <li><a href="defi/?n=254">F1 « Tu savais que c’était dedans ? »</a> · <code>/defi/?n=254</code> · niveau 3, tirage du 11 septembre, réponses en <code>#r=</code> (cinq caractères)</li>
+  <li><a href="defi/?n=254#r=ddsdp">F1, arrivée par lien avec réponses</a> · <code>/defi/?n=254#r=ddsdp</code> · « Quelqu’un a joué ce défi », bloc « en commun » après les cinq réponses</li>
+  <li><a href="defi/">F1, arrivée directe</a> · <code>/defi/</code> · tirage du jour (table <code>defis.json</code>, 3 jours, 253-255)</li>
+  <li><a href="q/?s=c12-s01">F2 « Laquelle est ici ? »</a> · <code>/q/?s=c12-s01</code> · niveau 2, aucun état, trois mesures verbatim, « Passer », « Section suivante »</li>
+  <li><a href="q/?s=c12-s01&amp;from=link">F2, arrivée par lien</a> · <code>/q/?s=c12-s01&amp;from=link</code> · ligne impersonnelle, « Lire la section » en un tap après révélation</li>
+  <li><a href="q/card?s=c12-s01">F2, carte de partage 1200 × 630</a> · <code>/q/card?s=c12-s01</code> (<code>card.html</code>, servi sans extension) · aperçu de l’image pré-générée au build (section sensible : carte de section)</li>
+  <li><code>/m/</code> · carte de mesure standard (témoin T en production)</li>
+</ul>
+
+<h2 class="h">Démos</h2>
+<ul class="modules">
+  <li><a href="home/?silence=1">Silence électoral</a> · <code>?silence=1</code> · partage et mesure du jour en pause, lecture maintenue (D0.24)</li>
+  <li><a href="home/?date=2026-09-11#jour">Mesure du 11 septembre</a> · <code>?date=2026-09-11</code> · tirage déterministe</li>
+  <li><a href="home/#q=loyer">Recherche « loyer »</a> · <code>#q=loyer</code> · état dans le fragment</li>
+</ul>
+
+<section id="a-propos" aria-labelledby="about-title">
+  <h2 class="h" id="about-title">À propos</h2>
+  <p>C’est écrit là est un projet militant indépendant. La campagne et le mouvement n’y participent pas ; le texte, lui, est le leur.</p>
+  <p>Chaque mesure est affichée mot pour mot depuis le livre officiel. Nos explications sont écrites par nous, relues, jamais générées à la volée.</p>
+  <p>Ta progression vit dans ton téléphone. Efface-la quand tu veux.</p>
+  <p><button class="btn secondary center" type="button" id="clear"><span class="t">Effacer ma progression</span></button></p>
+  <p class="small">Texte du programme : La France insoumise – <span class="book">L’Avenir en commun</span>. Licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" rel="noopener">CC BY-NC-SA 4.0</a>. Nos explications, cartes et images sont sous la même licence. <a href="https://melenchon2027.fr/programme2025/livre/" rel="noopener">L’Avenir en commun, édition 2025</a>.</p>
+</section>
+
+<footer class="footer">
+  <p>Projet militant indépendant, fait pour donner envie de lire le programme.</p>
+  <p>Pas de compte, pas de cookie de suivi, aucune trace de tes questions.</p>
+</footer>
+</main>
+</body>
+</html>

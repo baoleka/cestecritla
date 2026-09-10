@@ -1,0 +1,749 @@
+[
+  {
+    "slug": "6e-republique",
+    "term": "6e République",
+    "aliases": [
+      "6e République",
+      "6ème République",
+      "sixième République",
+      "Assemblée constituante",
+      "constituante"
+    ]
+  },
+  {
+    "slug": "ric",
+    "term": "référendum d'initiative citoyenne",
+    "aliases": [
+      "référendum d['’]initiative citoyenne",
+      "\\bRIC\\b",
+      "référendum révocatoire",
+      "initiative citoyenne"
+    ]
+  },
+  {
+    "slug": "vote-16-ans",
+    "term": "vote à 16 ans",
+    "aliases": ["16 ans", "droit de vote", "vote obligatoire", "vote blanc"]
+  },
+  {
+    "slug": "laicite",
+    "term": "laïcité",
+    "aliases": ["laïcité", "laïque", "loi de 1905", "Concordat"]
+  },
+  {
+    "slug": "medias",
+    "term": "médias",
+    "aliases": [
+      "médias",
+      "concentration",
+      "audiovisuel public",
+      "conseil national des médias",
+      "milliardaires"
+    ]
+  },
+  {
+    "slug": "police",
+    "term": "police",
+    "aliases": [
+      "\\bpolice\\b",
+      "policier",
+      "IGPN",
+      "violences policières",
+      "récépissé",
+      "maintien de l['’]ordre",
+      "\\bLBD\\b"
+    ]
+  },
+  { "slug": "cannabis", "term": "cannabis", "aliases": ["cannabis", "légalis", "drogue"] },
+  {
+    "slug": "biens-communs",
+    "term": "biens communs",
+    "aliases": ["biens communs", "collectivis", "nationalis", "pôle public"]
+  },
+  {
+    "slug": "lgbt",
+    "term": "LGBT",
+    "aliases": [
+      "LGBT",
+      "trans\\b",
+      "transgenre",
+      "homophob",
+      "transphob",
+      "changement de sexe",
+      "état civil",
+      "PMA",
+      "procréation médicalement",
+      "GPA",
+      "gestation pour autrui"
+    ]
+  },
+  {
+    "slug": "communes",
+    "term": "communes",
+    "aliases": ["commune", "intercommunalit", "métropole", "maire"]
+  },
+  {
+    "slug": "salaries-entreprise",
+    "term": "droits des salariés",
+    "aliases": [
+      "conseil d['’]administration",
+      "comité social",
+      "représentants des salariés",
+      "citoyenneté dans l['’]entreprise",
+      "droit de veto"
+    ]
+  },
+  {
+    "slug": "fin-de-vie",
+    "term": "fin de vie",
+    "aliases": [
+      "fin de vie",
+      "mourir dans la dignité",
+      "aide à mourir",
+      "euthanasie",
+      "suicide assisté"
+    ]
+  },
+  {
+    "slug": "etudiants",
+    "term": "étudiants",
+    "aliases": [
+      "étudiant",
+      "garantie d['’]autonomie",
+      "bourses",
+      "\\bCROUS\\b",
+      "restaurant universitaire"
+    ]
+  },
+  {
+    "slug": "logement",
+    "term": "logement",
+    "aliases": [
+      "logement",
+      "loyer",
+      "\\bHLM\\b",
+      "expulsion",
+      "sans-abri",
+      "mal-logé",
+      "logements sociaux"
+    ]
+  },
+  { "slug": "smic", "term": "SMIC", "aliases": ["\\bSMIC\\b", "salaire minimum", "1 600", "1600"] },
+  {
+    "slug": "retraite",
+    "term": "retraite",
+    "aliases": ["retraite", "60 ans", "annuités", "pension"]
+  },
+  {
+    "slug": "garantie-emploi",
+    "term": "garantie d'emploi",
+    "aliases": ["garantie d['’]emploi", "Territoires zéro chômeur", "chômage de longue durée"]
+  },
+  {
+    "slug": "temps-de-travail",
+    "term": "temps de travail",
+    "aliases": [
+      "32 heures",
+      "35 heures",
+      "semaine de 4 jours",
+      "quatre jours",
+      "temps de travail",
+      "sixième semaine",
+      "6e semaine",
+      "congés payés"
+    ]
+  },
+  {
+    "slug": "isf",
+    "term": "ISF",
+    "aliases": [
+      "\\bISF\\b",
+      "impôt sur la fortune",
+      "impôt de solidarité",
+      "Zucman",
+      "impôt sur le revenu",
+      "tranches",
+      "héritage",
+      "succession"
+    ]
+  },
+  {
+    "slug": "dette",
+    "term": "dette",
+    "aliases": ["dette publique", "\\bdette\\b", "Banque centrale", "\\bBCE\\b"]
+  },
+  {
+    "slug": "euro",
+    "term": "sortie de l'euro",
+    "aliases": ["\\beuro\\b", "monnaie unique", "\\bfranc\\b", "plan B", "plan A"]
+  },
+  {
+    "slug": "service-militaire",
+    "term": "service militaire",
+    "aliases": [
+      "conscription",
+      "service militaire",
+      "service national",
+      "service civique",
+      "\\bSNU\\b"
+    ]
+  },
+  {
+    "slug": "ecole",
+    "term": "école",
+    "aliases": [
+      "\\bécole\\b",
+      "uniforme",
+      "mixité sociale",
+      "carte scolaire",
+      "harcèlement",
+      "enseignant",
+      "professeur",
+      "classe"
+    ]
+  },
+  {
+    "slug": "parcoursup",
+    "term": "Parcoursup",
+    "aliases": [
+      "Parcoursup",
+      "sélection à l['’]université",
+      "sélection",
+      "baccalauréat",
+      "\\bbac\\b"
+    ]
+  },
+  {
+    "slug": "outre-mer",
+    "term": "Outre-mer",
+    "aliases": [
+      "Outre-mer",
+      "outre-mer",
+      "Mayotte",
+      "Guadeloupe",
+      "Martinique",
+      "Guyane",
+      "Réunion",
+      "Kanaky",
+      "Nouvelle-Calédonie",
+      "Polynésie",
+      "chlordécone",
+      "vie chère"
+    ]
+  },
+  {
+    "slug": "discriminations",
+    "term": "discriminations",
+    "aliases": [
+      "discrimination",
+      "racisme",
+      "contrôle au faciès",
+      "contrôles au faciès",
+      "testing",
+      "antisémit",
+      "islamophob"
+    ]
+  },
+  {
+    "slug": "prix",
+    "term": "blocage des prix",
+    "aliases": [
+      "blocage des prix",
+      "bloquer les prix",
+      "prix",
+      "pouvoir d['’]achat",
+      "produits de première nécessité"
+    ]
+  },
+  {
+    "slug": "handicap",
+    "term": "handicap",
+    "aliases": [
+      "handicap",
+      "\\bAAH\\b",
+      "allocation aux adultes handicapés",
+      "accessibilité",
+      "\\bAESH\\b"
+    ]
+  },
+  {
+    "slug": "femmes",
+    "term": "égalité femmes-hommes",
+    "aliases": [
+      "femmes",
+      "féminicide",
+      "violences sexuelles",
+      "violences sexistes",
+      "\\bIVG\\b",
+      "avortement",
+      "égalité salariale",
+      "contraception",
+      "règles"
+    ]
+  },
+  {
+    "slug": "hopital",
+    "term": "hôpital",
+    "aliases": [
+      "hôpital",
+      "hôpitaux",
+      "déserts médicaux",
+      "désert médical",
+      "médecin",
+      "urgences",
+      "\\bT2A\\b",
+      "tarification à l['’]activité",
+      "lits"
+    ]
+  },
+  {
+    "slug": "sport",
+    "term": "sport",
+    "aliases": ["\\bsport", "\\bJO\\b", "Jeux olympiques", "\\bclubs?\\b"]
+  },
+  {
+    "slug": "rsa-jeunes",
+    "term": "RSA jeunes",
+    "aliases": [
+      "\\bRSA\\b",
+      "minima sociaux",
+      "moins de 25 ans",
+      "18 ans",
+      "revenu universel",
+      "revenu de base"
+    ]
+  },
+  {
+    "slug": "culture",
+    "term": "culture",
+    "aliases": [
+      "pass Culture",
+      "\\bculture\\b",
+      "intermittent",
+      "artistes",
+      "bibliothèque",
+      "musée"
+    ]
+  },
+  {
+    "slug": "ehpad",
+    "term": "EHPAD",
+    "aliases": [
+      "\\bEHPAD\\b",
+      "Ehpad",
+      "personnes âgées",
+      "grand âge",
+      "perte d['’]autonomie",
+      "aidant",
+      "dépendance"
+    ]
+  },
+  {
+    "slug": "premier-emploi",
+    "term": "premier emploi",
+    "aliases": [
+      "stage",
+      "stagiaire",
+      "apprenti",
+      "alternance",
+      "premier emploi",
+      "\\bCDD\\b",
+      "\\bCDI\\b",
+      "intérim",
+      "auto-entrepreneur",
+      "Uber",
+      "plateformes"
+    ]
+  },
+  {
+    "slug": "reindustrialisation",
+    "term": "réindustrialisation",
+    "aliases": ["réindustrialis", "relocalis", "délocalis", "industrie"]
+  },
+  { "slug": "regle-verte", "term": "règle verte", "aliases": ["règle verte"] },
+  {
+    "slug": "planification",
+    "term": "planification écologique",
+    "aliases": ["planification écologique", "planification", "Conseil à la planification"]
+  },
+  {
+    "slug": "transports",
+    "term": "transports",
+    "aliases": [
+      "gratuité des transports",
+      "transports en commun",
+      "transports publics",
+      "\\btrain",
+      "ferroviaire",
+      "\\bSNCF\\b",
+      "\\bvélo",
+      "\\bTGV\\b",
+      "trains de nuit",
+      "\\bavion",
+      "aérien",
+      "\\bZFE\\b",
+      "zones à faibles émissions",
+      "voiture",
+      "permis de conduire"
+    ]
+  },
+  {
+    "slug": "nucleaire",
+    "term": "nucléaire",
+    "aliases": ["nucléaire", "\\bEPR\\b", "Fessenheim", "réacteur"]
+  },
+  {
+    "slug": "renouvelables",
+    "term": "énergies renouvelables",
+    "aliases": [
+      "renouvelable",
+      "éolien",
+      "solaire",
+      "photovoltaïque",
+      "rénovation énergétique",
+      "rénovation thermique",
+      "passoires",
+      "isolation",
+      "100 %",
+      "neutralité carbone",
+      "climat"
+    ]
+  },
+  {
+    "slug": "agriculture",
+    "term": "agriculture",
+    "aliases": [
+      "pesticide",
+      "glyphosate",
+      "agriculteur",
+      "paysan",
+      "agricole",
+      "\\bbio\\b",
+      "biologique",
+      "\\bOGM\\b",
+      "\\bPAC\\b",
+      "fermes-usines",
+      "élevage industriel"
+    ]
+  },
+  {
+    "slug": "animaux",
+    "term": "animaux",
+    "aliases": [
+      "corrida",
+      "chasse",
+      "chasseur",
+      "animal",
+      "animaux",
+      "abattoir",
+      "fourrure",
+      "cirque",
+      "delphinarium",
+      "élevage en cage",
+      "maltraitance"
+    ]
+  },
+  {
+    "slug": "eau",
+    "term": "eau",
+    "aliases": [
+      "\\beau\\b",
+      "mégabassine",
+      "méga-bassine",
+      "bassine",
+      "gratuité des premiers",
+      "premiers mètres cubes",
+      "\\bnappes\\b"
+    ]
+  },
+  {
+    "slug": "malbouffe",
+    "term": "malbouffe",
+    "aliases": [
+      "malbouffe",
+      "cantine",
+      "restauration collective",
+      "obésité",
+      "Nutri-Score",
+      "nutriscore",
+      "additifs",
+      "sucre",
+      "publicité"
+    ]
+  },
+  {
+    "slug": "forets",
+    "term": "forêts",
+    "aliases": ["forêt", "\\bONF\\b", "déforestation", "coupes rases", "arbres"]
+  },
+  {
+    "slug": "pollutions",
+    "term": "pollutions",
+    "aliases": [
+      "pollution",
+      "\\bPFAS\\b",
+      "polluants éternels",
+      "perturbateurs endocriniens",
+      "amiante",
+      "plastique"
+    ]
+  },
+  {
+    "slug": "otan",
+    "term": "OTAN",
+    "aliases": ["\\bOTAN\\b", "commandement intégré", "non-alignement", "non-aligné", "\\bONU\\b"]
+  },
+  {
+    "slug": "immigration",
+    "term": "immigration",
+    "aliases": [
+      "immigration",
+      "migrant",
+      "migratoire",
+      "régularis",
+      "sans-papiers",
+      "sans papiers",
+      "asile",
+      "réfugié",
+      "Frontex",
+      "\\bOQTF\\b",
+      "centres de rétention",
+      "\\bAME\\b",
+      "aide médicale d['’]État"
+    ]
+  },
+  {
+    "slug": "europe",
+    "term": "Europe",
+    "aliases": [
+      "traités européens",
+      "désobéi",
+      "Union européenne",
+      "\\bUE\\b",
+      "Commission européenne",
+      "règles budgétaires",
+      "pacte de stabilité"
+    ]
+  },
+  {
+    "slug": "palestine",
+    "term": "Palestine",
+    "aliases": ["Palestin", "Gaza", "Israël", "Israel", "génocide", "colonisation", "Cisjordanie"]
+  },
+  {
+    "slug": "ukraine",
+    "term": "Ukraine",
+    "aliases": ["Ukrain", "Russie", "russe", "Poutine", "Sahel", "Mali", "Taïwan", "Chine"]
+  },
+  {
+    "slug": "numerique",
+    "term": "numérique",
+    "aliases": [
+      "numérique",
+      "réseaux sociaux",
+      "intelligence artificielle",
+      "\\bIA\\b",
+      "logiciel libre",
+      "logiciels libres",
+      "\\bGAFAM\\b",
+      "données personnelles",
+      "fibre",
+      "\\b5G\\b",
+      "jeux vidéo",
+      "jeu vidéo",
+      "TikTok",
+      "smartphone",
+      "écrans"
+    ]
+  },
+  {
+    "slug": "espace",
+    "term": "espace",
+    "aliases": [
+      "spatial",
+      "\\bespace\\b",
+      "Ariane",
+      "\\bCNES\\b",
+      "satellites",
+      "Lune",
+      "\\bMars\\b"
+    ]
+  },
+  {
+    "slug": "afrique",
+    "term": "Afrique",
+    "aliases": ["Afrique", "africain", "franc CFA", "\\bCFA\\b", "Françafrique", "francophonie"]
+  },
+  {
+    "slug": "49-3",
+    "term": "49.3",
+    "aliases": [
+      "49\\.3",
+      "49-3",
+      "article 49",
+      "proportionnelle",
+      "Sénat",
+      "Conseil constitutionnel"
+    ]
+  },
+  {
+    "slug": "peine-de-mort",
+    "term": "peine de mort",
+    "aliases": [
+      "peine de mort",
+      "prison",
+      "pénitentiaire",
+      "détenu",
+      "surpopulation carcérale",
+      "incarcér"
+    ]
+  },
+  {
+    "slug": "tva",
+    "term": "TVA",
+    "aliases": [
+      "\\bTVA\\b",
+      "taxe sur la valeur ajoutée",
+      "\\bCSG\\b",
+      "cotisations",
+      "niches fiscales",
+      "évasion fiscale",
+      "fraude fiscale",
+      "paradis fiscaux"
+    ]
+  },
+  {
+    "slug": "teletravail",
+    "term": "télétravail",
+    "aliases": [
+      "télétravail",
+      "droit à la déconnexion",
+      "burn-out",
+      "burn out",
+      "souffrance au travail",
+      "accidents du travail",
+      "médecine du travail"
+    ]
+  },
+  {
+    "slug": "voile",
+    "term": "voile",
+    "aliases": [
+      "voile",
+      "burkini",
+      "burqa",
+      "abaya",
+      "signes religieux",
+      "prostitution",
+      "pornograph",
+      "travail du sexe",
+      "travailleurs du sexe"
+    ]
+  },
+  {
+    "slug": "cryptomonnaies",
+    "term": "cryptomonnaies",
+    "aliases": ["crypto", "bitcoin", "blockchain", "\\bNFT\\b"]
+  },
+  {
+    "slug": "ena",
+    "term": "ENA",
+    "aliases": [
+      "\\bENA\\b",
+      "École nationale d['’]administration",
+      "grands corps",
+      "haute fonction publique",
+      "pantouflage",
+      "hauts fonctionnaires"
+    ]
+  },
+  {
+    "slug": "pandemie",
+    "term": "pandémie",
+    "aliases": ["pandémie", "Covid", "COVID", "vaccin", "masques", "épidémie"]
+  },
+  {
+    "slug": "petite-enfance",
+    "term": "petite enfance",
+    "aliases": [
+      "petite enfance",
+      "crèche",
+      "assistante maternelle",
+      "congé parental",
+      "congé paternité",
+      "allocations familiales",
+      "famille"
+    ]
+  },
+  {
+    "slug": "chomage",
+    "term": "assurance chômage",
+    "aliases": [
+      "assurance-chômage",
+      "assurance chômage",
+      "chômeur",
+      "demandeur d['’]emploi",
+      "France Travail",
+      "Pôle emploi",
+      "radiation",
+      "indemnisation"
+    ]
+  },
+  {
+    "slug": "pauvrete",
+    "term": "pauvreté",
+    "aliases": [
+      "pauvreté",
+      "précarité",
+      "précaire",
+      "Restos du cœur",
+      "aide alimentaire",
+      "seuil de pauvreté",
+      "minimum"
+    ]
+  },
+  {
+    "slug": "mer",
+    "term": "mer et océans",
+    "aliases": [
+      "\\bmer\\b",
+      "océan",
+      "pêche",
+      "pêcheur",
+      "chalutage",
+      "littoral",
+      "domaine maritime",
+      "\\bZEE\\b"
+    ]
+  },
+  {
+    "slug": "defense",
+    "term": "défense",
+    "aliases": [
+      "armée",
+      "défense",
+      "militaire",
+      "dissuasion",
+      "armement",
+      "ventes d['’]armes",
+      "industrie de défense"
+    ]
+  },
+  {
+    "slug": "libre-echange",
+    "term": "libre-échange",
+    "aliases": [
+      "libre-échange",
+      "protectionnisme",
+      "Mercosur",
+      "\\bCETA\\b",
+      "\\bOMC\\b",
+      "traités de libre-échange"
+    ]
+  },
+  {
+    "slug": "recherche",
+    "term": "recherche",
+    "aliases": ["recherche", "chercheur", "\\bCNRS\\b", "université", "universités", "doctorant"]
+  }
+]

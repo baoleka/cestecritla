@@ -1,0 +1,81 @@
+{
+  "url": "https://programme-lfi.julien-9b2.workers.dev/",
+  "finalUrl": "https://programme-lfi.julien-9b2.workers.dev/",
+  "status": 200,
+  "loadMs": 1313,
+  "responseHeaders": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=0, must-revalidate",
+    "cf-cache-status": "HIT",
+    "cf-ray": "a37703184db8bb27-CDG",
+    "content-encoding": "zstd",
+    "content-type": "text/html",
+    "date": "Mon, 07 Sep 2026 16:15:25 GMT",
+    "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+    "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=7xvGKEGN2U3IW8llcVPLdaGGkN3ZgFarHiTphA0LIe3EGRmt6CfPt91wk0ZKBhHr4YMtE9lxA%2FiOFSxTtcHnYKtHbt6lYl7DTBldqP5cKfu2pLKsZaXrvjtbkFDk6lvJoI%2FkPc%2F%2FbuxN1spvdKV56x%2BDaYXUNK9lhhIH767%2FM1YXWV8%3D\"}]}",
+    "server": "cloudflare"
+  },
+  "hosts": {
+    "programme-lfi.julien-9b2.workers.dev": 1,
+    "fonts.googleapis.com": 1,
+    "fonts.gstatic.com": 3
+  },
+  "requestsCount": 5,
+  "responses": [],
+  "cookies": [],
+  "title": "L'Avenir en commun 2027 — La France insoumise",
+  "lang": "fr",
+  "meta": {
+    "viewport": "width=device-width, initial-scale=1.0"
+  },
+  "links": {
+    "preconnect": [
+      "https://fonts.googleapis.com",
+      "https://fonts.gstatic.com"
+    ],
+    "stylesheet": [
+      "https://fonts.googleapis.com/css2?family=Public+Sans:wght@600;700;800;900&family=Gowun+Batang:wght@400;700&display=swap"
+    ]
+  },
+  "scripts": [],
+  "anchorsCount": 1,
+  "anchors": [
+    {
+      "href": "https://melenchon2027.fr/programme2025/livre/",
+      "text": "melenchon2027.fr"
+    }
+  ],
+  "share": [],
+  "forms": [],
+  "headings": [
+    {
+      "tag": "H1",
+      "text": "L'AVENIR\nEN COMMUN"
+    },
+    {
+      "tag": "H2",
+      "text": "HUIT ANS DE MACRONISME"
+    },
+    {
+      "tag": "H2",
+      "text": "ON NE RÉFORME PAS\nCE SYSTÈME.\nON LE REMPLACE."
+    },
+    {
+      "tag": "H2",
+      "text": "NEUF RUPTURES POUR CHANGER DE CAP"
+    }
+  ],
+  "jsonld": [],
+  "textLen": 4549,
+  "wordsFirst": "LA FRANCE INSOUMISE PRÉSIDENTIELLE 2027 L'AVENIR EN COMMUN Un monde s'effondre, un autre est prêt. 831 mesures pour partager les richesses, bifurquer écologiquement et rendre le pouvoir au peuple. LE BILAN QU'ILS LAISSENT HUIT ANS DE MACRONISME Le sommet s'enrichit, le pays décroche. Chiffres officiels, sources vérifiables. 9,8 M de personnes sous le seuil de pauvreté en 2023, un record depuis 1996. INSEE +220 Md€ captés par 32 milliardaires, dont la fortune a doublé depuis 2017. OXFAM FRANCE, 2026 113 % du PIB pour la dette publique, contre 97 % en 2017. INSEE 43 500 lits d'hôpital fermés en dix ans, urgences saturées. DREES 6 millions de Français sans médecin traitant. CNAM 64 ans la retraite imposée par 49.3. 73 % des salariés veulent l'abrogation. IFOP POUR LA CGT LA RUPTURE ON NE RÉFORME PAS CE SYSTÈME. ON LE REMPLACE. DU BILAN AU PROJET LE PROGRAMME NEUF RUPTURES POUR CHANGER DE CAP 01 LA 6E RÉPUBLIQUE 6e RÉPUBLIQUE PAR LE PEUPLE Assemblée constituante tirée au sort et élue Référendum d'initiative citoyenne (RIC) Révocation des élus en cours de mandat Loi anticoncentration contre les médias des milliardaires CE QUE ÇA CHANGE Plus besoin d'attendre cinq ans : les citoyens peuvent proposer une loi, en abroger une ou révoquer un élu qui trahit son mandat. 02 POUVOIR D'ACHAT 1 600 € SMIC NET IMMÉDIAT Blocage des prix des produits de première nécessité Point d'indice et APL revalorisés de 10 % Salaires indexés sur l'inflation Interdiction de la réduflation CE QUE ÇA CHANGE L",
+  "localStorage": {},
+  "buttons": [],
+  "ids": [],
+  "hints": {
+    "navigatorShare": false,
+    "serviceWorker": false,
+    "fetchUrls": [],
+    "apiWords": []
+  },
+  "swRegistered": []
+}

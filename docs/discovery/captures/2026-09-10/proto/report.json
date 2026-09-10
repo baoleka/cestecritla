@@ -1,0 +1,1988 @@
+[
+  {
+    "shot": "home",
+    "scheme": "light",
+    "path": "/home/",
+    "file": "home/home.png",
+    "fileFull": "home/home.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 3580,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        37
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        36
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ],
+      [
+        "#212320 on #FDEDFF",
+        2
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        5
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "Chapitre 1 · Le pouvoir au peu",
+        "w": 245,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 2 · Par delà la propr",
+        "w": 297,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 4 · Étendre le domain",
+        "w": 333,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 5 · Élever le niveau ",
+        "w": 311,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 6 · Partage des riche",
+        "w": 259,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 7 · La force de l’ent",
+        "w": 251,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 10 · Faire place à la",
+        "w": 338,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 12 · Planification éc",
+        "w": 282,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 15 · Une approche de ",
+        "w": 333,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 17 · Europe",
+        "w": 152,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 33,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "home",
+    "scheme": "dark",
+    "path": "/home/",
+    "file": "home/home.dark.png",
+    "fileFull": "home/home.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 3580,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        37
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        36
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        2
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        5
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "Chapitre 1 · Le pouvoir au peu",
+        "w": 245,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 2 · Par delà la propr",
+        "w": 297,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 4 · Étendre le domain",
+        "w": 333,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 5 · Élever le niveau ",
+        "w": 311,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 6 · Partage des riche",
+        "w": 259,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 7 · La force de l’ent",
+        "w": 251,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 10 · Faire place à la",
+        "w": 338,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 12 · Planification éc",
+        "w": 282,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 15 · Une approche de ",
+        "w": 333,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 17 · Europe",
+        "w": 152,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 33,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "home-recherche-loyer",
+    "scheme": "light",
+    "path": "/home/#q=loyer",
+    "file": "home/home-recherche-loyer.png",
+    "fileFull": "home/home-recherche-loyer.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 4716,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        49
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        55
+      ],
+      [
+        "#212320 on #E5CBFF",
+        6
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ],
+      [
+        "#212320 on #FDEDFF",
+        2
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        5
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "Lire la section",
+        "w": 87,
+        "h": 15
+      },
+      {
+        "tag": "A",
+        "text": "Lire la section",
+        "w": 87,
+        "h": 15
+      },
+      {
+        "tag": "A",
+        "text": "Lire la section",
+        "w": 87,
+        "h": 15
+      },
+      {
+        "tag": "A",
+        "text": "Lire la section",
+        "w": 87,
+        "h": 15
+      },
+      {
+        "tag": "A",
+        "text": "Lire la section",
+        "w": 87,
+        "h": 15
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 1 · Le pouvoir au peu",
+        "w": 245,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 2 · Par delà la propr",
+        "w": 297,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 4 · Étendre le domain",
+        "w": 333,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 5 · Élever le niveau ",
+        "w": 311,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 6 · Partage des riche",
+        "w": 259,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 7 · La force de l’ent",
+        "w": 251,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 10 · Faire place à la",
+        "w": 338,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 12 · Planification éc",
+        "w": 282,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 15 · Une approche de ",
+        "w": 333,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 17 · Europe",
+        "w": 152,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 39,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "home-recherche-loyer",
+    "scheme": "dark",
+    "path": "/home/#q=loyer",
+    "file": "home/home-recherche-loyer.dark.png",
+    "fileFull": "home/home-recherche-loyer.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 4716,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        49
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        55
+      ],
+      [
+        "#FFFCF4 on #4C0297",
+        6
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        2
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        5
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "Lire la section",
+        "w": 87,
+        "h": 15
+      },
+      {
+        "tag": "A",
+        "text": "Lire la section",
+        "w": 87,
+        "h": 15
+      },
+      {
+        "tag": "A",
+        "text": "Lire la section",
+        "w": 87,
+        "h": 15
+      },
+      {
+        "tag": "A",
+        "text": "Lire la section",
+        "w": 87,
+        "h": 15
+      },
+      {
+        "tag": "A",
+        "text": "Lire la section",
+        "w": 87,
+        "h": 15
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 1 · Le pouvoir au peu",
+        "w": 245,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 2 · Par delà la propr",
+        "w": 297,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 4 · Étendre le domain",
+        "w": 333,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 5 · Élever le niveau ",
+        "w": 311,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 6 · Partage des riche",
+        "w": 259,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 7 · La force de l’ent",
+        "w": 251,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 10 · Faire place à la",
+        "w": 338,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 12 · Planification éc",
+        "w": 282,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 15 · Une approche de ",
+        "w": 333,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 17 · Europe",
+        "w": 152,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 39,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "link-c12-s01-k01",
+    "scheme": "light",
+    "path": "/link/?id=c12-s01-k01",
+    "file": "link/link-c12-s01-k01.png",
+    "fileFull": "link/link-c12-s01-k01.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 951,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        10
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        2
+      ],
+      [
+        "#212320 on #FDEDFF",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        7
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 7,
+    "blocks3d": 1,
+    "ctaBottom": 560,
+    "independenceBottom": 613,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "link-c12-s01-k01",
+    "scheme": "dark",
+    "path": "/link/?id=c12-s01-k01",
+    "file": "link/link-c12-s01-k01.dark.png",
+    "fileFull": "link/link-c12-s01-k01.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 951,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        10
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        2
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        7
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 7,
+    "blocks3d": 1,
+    "ctaBottom": 560,
+    "independenceBottom": 613,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "link-c9-s01-m04",
+    "scheme": "light",
+    "path": "/link/?id=c9-s01-m04",
+    "file": "link/link-c9-s01-m04.png",
+    "fileFull": "link/link-c9-s01-m04.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 844,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        9
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        2
+      ],
+      [
+        "#212320 on #FDEDFF",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        7
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 6,
+    "blocks3d": 1,
+    "ctaBottom": 424,
+    "independenceBottom": 477,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "link-c9-s01-m04",
+    "scheme": "dark",
+    "path": "/link/?id=c9-s01-m04",
+    "file": "link/link-c9-s01-m04.dark.png",
+    "fileFull": "link/link-c9-s01-m04.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 844,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        9
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        2
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        7
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 6,
+    "blocks3d": 1,
+    "ctaBottom": 424,
+    "independenceBottom": 477,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "section-c12-s01",
+    "scheme": "light",
+    "path": "/section/?id=c12-s01",
+    "file": "section/section-c12-s01.png",
+    "fileFull": "section/section-c12-s01.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 4466,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        33
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        24
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        2
+      ],
+      [
+        "#212320 on #FDEDFF",
+        1
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "Voir sur melenchon2027.fr",
+        "w": 171,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "Voir l’encadré dans le program",
+        "w": 216,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "Voir sur melenchon2027.fr",
+        "w": 177,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 24,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal",
+      "Gowun Batang 700 normal"
+    ]
+  },
+  {
+    "shot": "section-c12-s01",
+    "scheme": "dark",
+    "path": "/section/?id=c12-s01",
+    "file": "section/section-c12-s01.dark.png",
+    "fileFull": "section/section-c12-s01.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 4466,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        33
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        24
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        2
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        1
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "Voir sur melenchon2027.fr",
+        "w": 171,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "Voir l’encadré dans le program",
+        "w": 216,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "Voir sur melenchon2027.fr",
+        "w": 177,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 24,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal",
+      "Gowun Batang 700 normal"
+    ]
+  },
+  {
+    "shot": "section-c14-s02-m09",
+    "scheme": "light",
+    "path": "/section/?id=c14-s02#c14-s02-m09",
+    "file": "section/section-c14-s02-m09.png",
+    "fileFull": "section/section-c14-s02-m09.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 5351,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        38
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        30
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        2
+      ],
+      [
+        "#212320 on #FDEDFF",
+        1
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "Voir sur melenchon2027.fr",
+        "w": 171,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "Voir l’encadré dans le program",
+        "w": 216,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "Voir sur melenchon2027.fr",
+        "w": 177,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 30,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal",
+      "Gowun Batang 700 normal"
+    ]
+  },
+  {
+    "shot": "section-c14-s02-m09",
+    "scheme": "dark",
+    "path": "/section/?id=c14-s02#c14-s02-m09",
+    "file": "section/section-c14-s02-m09.dark.png",
+    "fileFull": "section/section-c14-s02-m09.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 5351,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        38
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        30
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        2
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        1
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "Voir sur melenchon2027.fr",
+        "w": 171,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "Voir l’encadré dans le program",
+        "w": 216,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "Voir sur melenchon2027.fr",
+        "w": 177,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 30,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal",
+      "Gowun Batang 700 normal"
+    ]
+  },
+  {
+    "shot": "home-silence",
+    "scheme": "light",
+    "path": "/home/?silence=1#jour",
+    "file": "home/home-silence.png",
+    "fileFull": "home/home-silence.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 3201,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        34
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        34
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ],
+      [
+        "#212320 on #FDEDFF",
+        1
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        2
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "Chapitre 1 · Le pouvoir au peu",
+        "w": 245,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 2 · Par delà la propr",
+        "w": 297,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 4 · Étendre le domain",
+        "w": 333,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 5 · Élever le niveau ",
+        "w": 311,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 6 · Partage des riche",
+        "w": 259,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 7 · La force de l’ent",
+        "w": 251,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 10 · Faire place à la",
+        "w": 338,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 12 · Planification éc",
+        "w": 282,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 15 · Une approche de ",
+        "w": 333,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 17 · Europe",
+        "w": 152,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 28,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "home-silence",
+    "scheme": "dark",
+    "path": "/home/?silence=1#jour",
+    "file": "home/home-silence.dark.png",
+    "fileFull": "home/home-silence.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 3201,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        34
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        34
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        1
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        2
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "Chapitre 1 · Le pouvoir au peu",
+        "w": 245,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 2 · Par delà la propr",
+        "w": 297,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 4 · Étendre le domain",
+        "w": 333,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 5 · Élever le niveau ",
+        "w": 311,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 6 · Partage des riche",
+        "w": 259,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 7 · La force de l’ent",
+        "w": 251,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 10 · Faire place à la",
+        "w": 338,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 12 · Planification éc",
+        "w": 282,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 15 · Une approche de ",
+        "w": 333,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Chapitre 17 · Europe",
+        "w": 152,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 28,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "concept-regle-verte",
+    "scheme": "light",
+    "path": "/concept/?slug=regle-verte",
+    "file": "concept/concept-regle-verte.png",
+    "fileFull": "concept/concept-regle-verte.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 2968,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        36
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        34
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        7
+      ],
+      [
+        "#212320 on #FDEDFF",
+        3
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "12.1",
+        "w": 20,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "12.1",
+        "w": 20,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "14.2",
+        "w": 23,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "13.4",
+        "w": 23,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "intro",
+        "w": 26,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "Contexte 2022",
+        "w": 116,
+        "h": 21
+      },
+      {
+        "tag": "A",
+        "text": "12.1",
+        "w": 20,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "14.2",
+        "w": 23,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "Voir l’encadré dans le program",
+        "w": 216,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 31,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "concept-regle-verte",
+    "scheme": "dark",
+    "path": "/concept/?slug=regle-verte",
+    "file": "concept/concept-regle-verte.dark.png",
+    "fileFull": "concept/concept-regle-verte.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 2968,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        36
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        34
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        7
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        3
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "12.1",
+        "w": 20,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "12.1",
+        "w": 20,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "14.2",
+        "w": 23,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "13.4",
+        "w": 23,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "intro",
+        "w": 26,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "Contexte 2022",
+        "w": 116,
+        "h": 21
+      },
+      {
+        "tag": "A",
+        "text": "12.1",
+        "w": 20,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "14.2",
+        "w": 23,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "Voir l’encadré dans le program",
+        "w": 216,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 31,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "concept-regle-verte-explorable",
+    "scheme": "light",
+    "path": "/concept/?slug=regle-verte",
+    "file": "concept/concept-regle-verte-explorable.png",
+    "fileFull": "concept/concept-regle-verte-explorable.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 3459,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        36
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        34
+      ],
+      [
+        "#4C0297 on #FDEDFF",
+        7
+      ],
+      [
+        "#212320 on #FDEDFF",
+        3
+      ],
+      [
+        "#FFFCF4 on #D1271C",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "12.1",
+        "w": 20,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "12.1",
+        "w": 20,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "14.2",
+        "w": 23,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "13.4",
+        "w": 23,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "intro",
+        "w": 26,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "Contexte 2022",
+        "w": 116,
+        "h": 21
+      },
+      {
+        "tag": "A",
+        "text": "12.1",
+        "w": 20,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "14.2",
+        "w": 23,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "Voir l’encadré dans le program",
+        "w": 216,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 31,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "concept-regle-verte-explorable",
+    "scheme": "dark",
+    "path": "/concept/?slug=regle-verte",
+    "file": "concept/concept-regle-verte-explorable.dark.png",
+    "fileFull": "concept/concept-regle-verte-explorable.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 3459,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        36
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        34
+      ],
+      [
+        "#E5CBFF on #2C2E2B",
+        7
+      ],
+      [
+        "#FFFCF4 on #2C2E2B",
+        3
+      ],
+      [
+        "#212320 on #F9C900",
+        1
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "12.1",
+        "w": 20,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "12.1",
+        "w": 20,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "14.2",
+        "w": 23,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "13.4",
+        "w": 23,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "intro",
+        "w": 26,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "Contexte 2022",
+        "w": 116,
+        "h": 21
+      },
+      {
+        "tag": "A",
+        "text": "12.1",
+        "w": 20,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "14.2",
+        "w": 23,
+        "h": 12
+      },
+      {
+        "tag": "A",
+        "text": "Voir l’encadré dans le program",
+        "w": 216,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      }
+    ],
+    "targetsCount": 31,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic",
+      "Gowun Batang 400 normal"
+    ]
+  },
+  {
+    "shot": "index",
+    "scheme": "light",
+    "path": "/",
+    "file": "root/index.png",
+    "fileFull": "root/index.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 2332,
+    "pairs": [
+      [
+        "#FFFCF4 on #4C0297",
+        1
+      ],
+      [
+        "#4C0297 on #FFFCF4",
+        22
+      ],
+      [
+        "#D1271C on #FFFCF4",
+        1
+      ],
+      [
+        "#212320 on #FFFCF4",
+        50
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "Accueil (écran 0 direct)",
+        "w": 177,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Arrivée par lien, témoin T",
+        "w": 191,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Arrivée par lien, mesure simpl",
+        "w": 236,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Lecteur de section",
+        "w": 140,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Lecteur de section, mesure cib",
+        "w": 255,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Carte-concept « règle verte »",
+        "w": 220,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Carte-concept « planification ",
+        "w": 320,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Silence électoral",
+        "w": 128,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Mesure du 11 septembre",
+        "w": 184,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Recherche « loyer »",
+        "w": 147,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "L’Avenir en commun, édition 20",
+        "w": 217,
+        "h": 16
+      }
+    ],
+    "targetsCount": 16,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic"
+    ]
+  },
+  {
+    "shot": "index",
+    "scheme": "dark",
+    "path": "/",
+    "file": "root/index.dark.png",
+    "fileFull": "root/index.dark.full.png",
+    "external": [],
+    "errors": [],
+    "scrollWidth": 390,
+    "height": 2332,
+    "pairs": [
+      [
+        "#212320 on #E5CBFF",
+        1
+      ],
+      [
+        "#E5CBFF on #212320",
+        22
+      ],
+      [
+        "#F9C900 on #212320",
+        1
+      ],
+      [
+        "#FFFCF4 on #212320",
+        50
+      ]
+    ],
+    "smallTargets": [
+      {
+        "tag": "A",
+        "text": "Accueil (écran 0 direct)",
+        "w": 177,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Arrivée par lien, témoin T",
+        "w": 191,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Arrivée par lien, mesure simpl",
+        "w": 236,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Lecteur de section",
+        "w": 140,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Lecteur de section, mesure cib",
+        "w": 255,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Carte-concept « règle verte »",
+        "w": 220,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Carte-concept « planification ",
+        "w": 320,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Silence électoral",
+        "w": 128,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Mesure du 11 septembre",
+        "w": 184,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "Recherche « loyer »",
+        "w": 147,
+        "h": 19
+      },
+      {
+        "tag": "A",
+        "text": "CC BY-NC-SA 4.0",
+        "w": 112,
+        "h": 16
+      },
+      {
+        "tag": "A",
+        "text": "L’Avenir en commun, édition 20",
+        "w": 217,
+        "h": 16
+      }
+    ],
+    "targetsCount": 16,
+    "blocks3d": 1,
+    "ctaBottom": null,
+    "independenceBottom": null,
+    "fonts": [
+      "Public Sans 100 900 normal",
+      "Public Sans 100 900 italic"
+    ]
+  }
+]

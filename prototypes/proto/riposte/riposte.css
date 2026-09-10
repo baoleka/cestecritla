@@ -1,0 +1,175 @@
+/* Mode riposte (T8): market grid, flashcard recto / verso, flash training bar.
+   Depends on tokens.css + base.css; every text pair is AA in both themes (design/contrast-matrix.md):
+   Charbon on Crème (15,45), Violet on Crème (11,6); dark: Crème on Charbon, Violet 200 on Charbon.
+   Motion: one enter fade <= 200 ms (opacity / transform), nothing under prefers-reduced-motion. */
+
+/* ---------- Market grid: 14 big theme buttons, one hand, full sun (10-riposte.md §5.2) ---------- */
+.market {
+  list-style: none;
+  margin: 0 0 var(--s6);
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s2);
+}
+@media (max-width: 359px) {
+  .market {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.market > li {
+  display: flex; /* the link fills the grid cell: equal heights per row, bigger target */
+}
+.tile {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--s1);
+  min-height: 56px;
+  padding: 12px 12px 14px;
+  border: 1.5px solid var(--brand);
+  border-radius: var(--r-m);
+  background: var(--bg); /* no tinted surface: Charbon on Crème in full sun */
+  color: var(--text);
+  text-decoration: none;
+}
+.tile .part {
+  margin: 0 0 2px;
+}
+.tile .obj {
+  font: var(--weight-bold) 1.125rem/1.2 var(--font-ui); /* >= 18 px */
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.tile:hover,
+.tile:active {
+  background: var(--bg-elevated);
+}
+
+/* ---------- Flashcard ---------- */
+.recto {
+  border: 1px solid var(--brand);
+  border-radius: var(--r-m);
+  padding: var(--s5) var(--s4) var(--s4);
+  margin: 0 0 var(--s4);
+  background: var(--bg);
+}
+.recto .part {
+  margin-bottom: var(--s4);
+}
+/* The objection: quotes, bold, never bigger than the answer (correction 10). */
+.recto .objection {
+  font: var(--weight-bold) 1.125rem/1.35 var(--font-ui);
+  margin: 0 0 var(--s4);
+}
+.recto .btn:last-child {
+  margin-bottom: 0;
+}
+.heard {
+  font-size: var(--size-small);
+  line-height: 1.45;
+  margin: 0 0 var(--s4);
+}
+.heard q {
+  quotes: '«\00a0' '\00a0»';
+  font-weight: var(--weight-bold);
+}
+.verso .verbatim.compact {
+  margin-bottom: var(--s2);
+}
+.verso .statcard {
+  margin: var(--s5) 0;
+}
+.liant {
+  margin: var(--s5) 0;
+}
+.liant p {
+  margin: 0;
+}
+.desintox > a {
+  display: inline-block;
+  min-height: var(--tap-min); /* a standalone link, not inline in a sentence: WCAG 2.5.8 applies */
+  padding: var(--s1) 0;
+}
+.desintox .note {
+  font-size: var(--size-small);
+  line-height: 1.45;
+  margin: var(--s2) 0 0;
+}
+.desintox .offline-note {
+  display: none;
+  font-size: var(--size-small);
+  margin: var(--s1) 0 0;
+}
+html.offline .desintox .offline-note {
+  display: block;
+}
+details.reversal {
+  margin: var(--s4) 0 var(--s5);
+}
+details.reversal > summary {
+  cursor: pointer;
+  font: var(--weight-bold) var(--size-small)/1.4 var(--font-ui);
+  color: var(--brand);
+  list-style: none;
+  min-height: var(--tap-min);
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+}
+details.reversal > summary::-webkit-details-marker {
+  display: none;
+}
+details.reversal > summary::before {
+  content: '+';
+  font-weight: var(--weight-black);
+  width: 1em;
+}
+details.reversal[open] > summary::before {
+  content: '−';
+}
+details.reversal > p {
+  font-size: var(--size-small);
+  line-height: 1.45;
+  margin: var(--s2) 0 0;
+}
+
+/* ---------- Flash training: discreet ten-second bar, discrete steps (no CSS transition) ---------- */
+.flashbar {
+  height: 4px;
+  background: var(--track);
+  margin: var(--s2) 0 var(--s3);
+  overflow: hidden;
+}
+.flashbar .fill {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--fill);
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+.flashmsg {
+  min-height: 1.45em;
+  margin: 0 0 var(--s4);
+}
+
+/* ---------- Motion (P7): verso enters with a fade <= 200 ms; reduced-motion = nothing ---------- */
+.verso {
+  animation: riposte-enter var(--d-base) var(--ease-enter);
+}
+@keyframes riposte-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .verso {
+    animation: none;
+  }
+}

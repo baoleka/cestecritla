@@ -1,0 +1,35 @@
+---
+/**
+ * The programme's own words (D3.2, D3.10). Three things are non-negotiable here:
+ *   - the text is a verbatim pointed at by its identifier, never reflowed or corrected (D1.8);
+ *   - it is labelled "Texte du programme", so nobody mistakes it for our voice;
+ *   - when the item follows a heading_paragraph, its scope is printed ABOVE the verbatim.
+ *     Without that line, c1-s02-m03 ("abolir le 49.3", only inside a new Constituent Assembly)
+ *     reads exactly like an immediate repeal.
+ */
+import type { SlimItem } from '../lib/corpus.ts';
+
+interface Props {
+  item: SlimItem;
+  scope?: SlimItem | undefined;
+}
+const { item, scope } = Astro.props;
+---
+
+<figure class="verbatim" id={item.id}>
+  {scope && <span class="label scope">{scope.text.replace(/\s*:\s*$/u, '')}</span>}
+  <span class="label">Texte du programme</span>
+  <blockquote cite={`#${item.id}`}>
+    <p>{item.text}</p>
+    {
+      item.subMeasures && (
+        <ul>
+          {item.subMeasures.map((sm) => (
+            <li id={sm.id}>{sm.text}</li>
+          ))}
+        </ul>
+      )
+    }
+  </blockquote>
+  <figcaption class="ref">{item.id}</figcaption>
+</figure>

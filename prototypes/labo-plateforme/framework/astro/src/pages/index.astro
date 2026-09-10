@@ -1,0 +1,80 @@
+---
+import page from '../../../shared/generated/section.json';
+import type { PageData } from '../../../shared/types.ts';
+import SearchBox from '../components/SearchBox.astro';
+import '../styles/global.css';
+
+const { chapter, section, meta } = page as PageData;
+const paragraphs = section.items.filter((i) => i.kind === 'paragraph');
+const measures = section.items.filter((i) => i.kind !== 'paragraph');
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{section.title} — C’est écrit là</title>
+    <meta
+      name="description"
+      content="Section 1 du chapitre 12 de L’Avenir en commun 2025, texte intégral et recherche dans le programme. Labo T7, variante Astro 5."
+    />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="data:," />
+    <link rel="preload" href="/fonts/PublicSans-Variable-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/GowunBatang-Regular-latin.woff2" as="font" type="font/woff2" crossorigin />
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/" class="wordmark">C’est écrit <span class="la">là</span></a>
+    </header>
+    <main>
+      <SearchBox />
+      <article>
+        <p class="label">{chapter.title}</p>
+        <h1>{section.title}</h1>
+        {paragraphs.map((p) => <p class="verbatim chapeau">{p.text}</p>)}
+        <h2 class="label">Mesures de cette section</h2>
+        <ol class="measures">
+          {
+            measures.map((m) => (
+              <li class={m.kind === 'key_measure' ? 'measure key' : 'measure'}>
+                {m.kind === 'key_measure' ? <span class="label rouge">Mesure clé</span> : null}
+                <p class="verbatim">{m.text}</p>
+                {m.subMeasures ? (
+                  <ul class="verbatim">
+                    {m.subMeasures.map((sm) => (
+                      <li>{sm.text}</li>
+                    ))}
+                  </ul>
+                ) : null}
+              </li>
+            ))
+          }
+        </ol>
+        {
+          section.chiffres.map((a) => (
+            <aside class="chiffre">
+              <span class="label">À savoir</span>
+              <p class="verbatim">{a.text}</p>
+            </aside>
+          ))
+        }
+        <p class="source">
+          <a href={section.url} rel="noopener">Lire cette section sur melenchon2027.fr</a>
+        </p>
+      </article>
+    </main>
+    <footer>
+      <p>
+        Texte du programme : La France insoumise – L’Avenir en commun. Licence <a
+          href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr"
+          rel="license noopener">CC BY-NC-SA 4.0</a
+        >. Corpus {meta.corpus_version}.
+      </p>
+      <p>
+        Labo T7 — variante Astro 5 · <a href="https://aec-lab-fw-react.baoleka.workers.dev/">variante React 19 + Vite 6 + Tailwind v4</a>
+      </p>
+    </footer>
+  </body>
+</html>

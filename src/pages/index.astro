@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import { sections, corpus } from '../lib/corpus.ts';
+
+const all = sections();
+const chapters = corpus().chapters;
+---
+
+<Base title="C'est écrit là" description="Le texte de L’Avenir en commun 2025, mesure par mesure.">
+  <p class="label">Site non officiel.</p>
+  <h1>C’est écrit là</h1>
+  <p>Projet militant indépendant. Le texte est celui du livre officiel.</p>
+  <p>{all.length} sections, {corpus().meta.official_count} mesures.</p>
+  {
+    chapters.map((c) => (
+      <section>
+        <h2>{c.number}. {c.title}</h2>
+        <ul>
+          {all
+            .filter((s) => s.chapterId === c.id)
+            .map((s) => (
+              <li><a href={`/s/${s.id}/`}>{s.title}</a></li>
+            ))}
+        </ul>
+      </section>
+    ))
+  }
+</Base>

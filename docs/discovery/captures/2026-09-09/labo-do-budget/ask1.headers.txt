@@ -1,0 +1,11 @@
+HTTP/2 200 
+date: Wed, 09 Sep 2026 12:55:13 GMT
+content-type: application/json; charset=utf-8
+content-length: 130
+cache-control: no-store
+server-timing: do;dur=33
+x-content-type-options: nosniff
+x-robots-tag: noindex
+server: cloudflare
+alt-svc: h3=":443"; ma=86400
+

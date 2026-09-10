@@ -1,0 +1,590 @@
+[
+  {
+    "mode": "chromium-headed",
+    "variant": "/",
+    "startedAt": "2026-09-09T13:02:33.125Z",
+    "engine": "153.0.8010.12",
+    "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.8010.12 Mobile Safari/537.36",
+    "passed": false,
+    "scriptLoadedMs": 1328,
+    "renderedMs": 1335,
+    "events": [
+      "1328 ms script-loaded",
+      "1335 ms rendered (cf-chl-widget-hk9jz)",
+      "3917 ms error (600010)"
+    ],
+    "cspViolations": [],
+    "pageErrors": [],
+    "cookies": [],
+    "setCookieHeaders": [],
+    "storage": [
+      {
+        "origin": "https://lab.cestecritla.fr",
+        "localStorage": {},
+        "sessionStorage": [],
+        "documentCookie": "",
+        "indexedDb": [],
+        "error": null
+      },
+      {
+        "origin": "https://challenges.cloudflare.com",
+        "localStorage": {
+          "cf.turnstile.u": "oq82DCpcR.Lm…(149 chars)"
+        },
+        "sessionStorage": [],
+        "documentCookie": "",
+        "indexedDb": [],
+        "error": null
+      }
+    ],
+    "afterReload": "(not measured in this run)",
+    "thirdPartyHosts": [
+      "",
+      "challenges.cloudflare.com",
+      "hagen.challenges.cloudflare.com"
+    ],
+    "requests": [
+      "GET https://lab.cestecritla.fr/ [document] → 200",
+      "GET https://lab.cestecritla.fr/style.css [stylesheet] → 200",
+      "GET https://challenges.cloudflare.com/turnstile/v0/api.js?… [script] → 302",
+      "GET https://lab.cestecritla.fr/app.js [script] → 200",
+      "GET https://challenges.cloudflare.com/turnstile/v0/g/330e41bb475c/api.js [script] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/av0/rch/hk9jz/0x4AAAAAAEt3fczgKFO-ViPf/auto/fbE/new/normal?… [document] → 200",
+      "GET blob:https://challenges.cloudflare.com/ee97f3b1-ade2-41a9-b144-36ba09c58018 [script] → n/a",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a38663599a58e1e4 [xhr] → 200",
+      "GET blob:https://challenges.cloudflare.com/10b2559c-656a-4186-89e4-2724450b9311 [script] → 200",
+      "GET https://hagen.challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/i/a38663599a58e1e4/IXTUH97ST2ejDfQUGIdjXos4zlzpfK_QNaAOyHQwxtg-1788958954-1.2.1 [fetch] → 204",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/a38663599a58e1e4/1788958954847/3317ae2fd2dc42e82c029703d705be657cc3ee7af52d3f7c19 [fetch] → 401",
+      "GET blob:https://challenges.cloudflare.com/10b2559c-656a-4186-89e4-2724450b9311 [script] → 200",
+      "GET blob:https://challenges.cloudflare.com/10b2559c-656a-4186-89e4-2724450b9311 [script] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/ci/a38663599a58e1e4/1788958954851/bYPuBHNkDeNnTNJjmoZtaI8ibi_RbbXcCEQ6v.trK4k-1788958 [image] → 200",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a38663599a58e1e4 [xhr] → 200"
+    ]
+  },
+  {
+    "mode": "chromium-headed",
+    "variant": "/nonce",
+    "startedAt": "2026-09-09T13:02:39.509Z",
+    "engine": "153.0.8010.12",
+    "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.8010.12 Mobile Safari/537.36",
+    "passed": false,
+    "scriptLoadedMs": 231,
+    "renderedMs": 240,
+    "events": [
+      "231 ms script-loaded",
+      "240 ms rendered (cf-chl-widget-zl5e6)",
+      "2831 ms error (600010)"
+    ],
+    "cspViolations": [],
+    "pageErrors": [],
+    "cookies": [],
+    "setCookieHeaders": [],
+    "storage": [
+      {
+        "origin": "https://lab.cestecritla.fr",
+        "localStorage": {},
+        "sessionStorage": [],
+        "documentCookie": "",
+        "indexedDb": [],
+        "error": null
+      },
+      {
+        "origin": "https://challenges.cloudflare.com",
+        "localStorage": {
+          "cf.turnstile.u": "mA6EjXn_9GxD…(149 chars)"
+        },
+        "sessionStorage": [],
+        "documentCookie": "",
+        "indexedDb": [],
+        "error": null
+      }
+    ],
+    "afterReload": "(not measured in this run)",
+    "thirdPartyHosts": [
+      "",
+      "challenges.cloudflare.com",
+      "hagen.challenges.cloudflare.com"
+    ],
+    "requests": [
+      "GET https://lab.cestecritla.fr/nonce [document] → 200",
+      "GET https://lab.cestecritla.fr/style.css [stylesheet] → 200",
+      "GET https://challenges.cloudflare.com/turnstile/v0/api.js?… [script] → 302",
+      "GET https://lab.cestecritla.fr/app.js [script] → 200",
+      "GET https://challenges.cloudflare.com/turnstile/v0/g/330e41bb475c/api.js [script] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/av0/rch/zl5e6/0x4AAAAAAEt3fczgKFO-ViPf/auto/fbE/new/normal?… [document] → 200",
+      "GET blob:https://challenges.cloudflare.com/51439f89-69d5-4750-8c02-3b59aa16a573 [script] → n/a",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a386637aa8f19a62 [xhr] → 200",
+      "GET blob:https://challenges.cloudflare.com/a5129cb8-84e2-43b8-91f9-20fd484f1b8c [script] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/a386637aa8f19a62/1788958960159/0cc08849d7c758062324c1dff03ca553de58c3f843d4240d9b [fetch] → 401",
+      "GET https://hagen.challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/i/a386637aa8f19a62/GXNtlsmvq6k7MRDvZqON1llJnUDJdoeyJLbccGzhWWg-1788958959-1.2.1 [fetch] → 204",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/ci/a386637aa8f19a62/1788958960160/LD.JNTjCTIGaf8tG9699D3qQeqYV84otI5Qcb6R3ewQ-1788958 [image] → 200",
+      "GET blob:https://challenges.cloudflare.com/a5129cb8-84e2-43b8-91f9-20fd484f1b8c [script] → 200",
+      "GET blob:https://challenges.cloudflare.com/a5129cb8-84e2-43b8-91f9-20fd484f1b8c [script] → 200",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a386637aa8f19a62 [xhr] → 200"
+    ]
+  },
+  {
+    "mode": "chromium-headed-noautomation",
+    "variant": "/",
+    "startedAt": "2026-09-09T13:03:46.791Z",
+    "engine": "153.0.8010.12",
+    "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.8010.12 Mobile Safari/537.36",
+    "passed": false,
+    "scriptLoadedMs": 348,
+    "renderedMs": 356,
+    "events": [
+      "348 ms script-loaded",
+      "356 ms rendered (cf-chl-widget-doyq1)",
+      "3392 ms error (600010)"
+    ],
+    "cspViolations": [],
+    "pageErrors": [],
+    "cookies": [],
+    "setCookieHeaders": [],
+    "storage": [
+      {
+        "origin": "https://lab.cestecritla.fr",
+        "localStorage": {},
+        "sessionStorage": [],
+        "documentCookie": "",
+        "indexedDb": [],
+        "error": null
+      },
+      {
+        "origin": "https://challenges.cloudflare.com",
+        "localStorage": {
+          "cf.turnstile.u": "gTl9eGcBChz9…(149 chars)"
+        },
+        "sessionStorage": [],
+        "documentCookie": "",
+        "indexedDb": [],
+        "error": null
+      }
+    ],
+    "afterReload": "(not measured in this run)",
+    "thirdPartyHosts": [
+      "",
+      "challenges.cloudflare.com",
+      "hagen.challenges.cloudflare.com"
+    ],
+    "requests": [
+      "GET https://lab.cestecritla.fr/ [document] → 200",
+      "GET https://lab.cestecritla.fr/style.css [stylesheet] → 200",
+      "GET https://challenges.cloudflare.com/turnstile/v0/api.js?… [script] → 302",
+      "GET https://lab.cestecritla.fr/app.js [script] → 200",
+      "GET https://challenges.cloudflare.com/turnstile/v0/g/330e41bb475c/api.js [script] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/av0/rch/doyq1/0x4AAAAAAEt3fczgKFO-ViPf/auto/fbE/new/normal?… [document] → 200",
+      "GET blob:https://challenges.cloudflare.com/f1391454-9724-411d-9a9c-bf4e8c6013bc [script] → n/a",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a38665201bf0e242 [xhr] → 200",
+      "GET blob:https://challenges.cloudflare.com/291d7e63-6952-4fa4-84c2-9592d8dc62a4 [script] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/a38665201bf0e242/1788959027599/32a822f648eafb1d1243cbb39fa2a9efcbac3c3e06787ae7c4 [fetch] → 401",
+      "GET https://hagen.challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/i/a38665201bf0e242/4bmsbT8BeTusuGVdN.ElgW3mgkiLmyQjzm9BLr_Gt8w-1788959027-1.2.1 [fetch] → 204",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/ci/a38665201bf0e242/1788959027600/MZ1nVCFiNWSMxBEKKOIkOlC.9XsqoSZa55FUQqVOVUk-1788959 [image] → 200",
+      "GET blob:https://challenges.cloudflare.com/291d7e63-6952-4fa4-84c2-9592d8dc62a4 [script] → 200",
+      "GET blob:https://challenges.cloudflare.com/291d7e63-6952-4fa4-84c2-9592d8dc62a4 [script] → 200",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a38665201bf0e242 [xhr] → 200"
+    ]
+  },
+  {
+    "mode": "headless-shell",
+    "variant": "/nocsp",
+    "startedAt": "2026-09-09T13:05:08.291Z",
+    "engine": "153.0.8010.12",
+    "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.8010.12 Mobile Safari/537.36",
+    "passed": false,
+    "scriptLoadedMs": 336,
+    "renderedMs": 341,
+    "events": [
+      "336 ms script-loaded",
+      "341 ms rendered (cf-chl-widget-4urwg)",
+      "2942 ms error (600010)"
+    ],
+    "cspViolations": [],
+    "pageErrors": [],
+    "cookies": [],
+    "setCookieHeaders": [],
+    "storage": [
+      {
+        "origin": "https://lab.cestecritla.fr",
+        "localStorage": {},
+        "sessionStorage": [],
+        "documentCookie": "",
+        "indexedDb": [],
+        "error": null
+      },
+      {
+        "origin": "https://challenges.cloudflare.com",
+        "localStorage": {
+          "cf.turnstile.u": "PU1IbAVfPTyq…(149 chars)"
+        },
+        "sessionStorage": [],
+        "documentCookie": "",
+        "indexedDb": [],
+        "error": null
+      }
+    ],
+    "afterReload": "(not measured in this run)",
+    "thirdPartyHosts": [
+      "",
+      "challenges.cloudflare.com",
+      "hagen.challenges.cloudflare.com"
+    ],
+    "requests": [
+      "GET https://lab.cestecritla.fr/nocsp [document] → 200",
+      "GET https://lab.cestecritla.fr/style.css [stylesheet] → 200",
+      "GET https://challenges.cloudflare.com/turnstile/v0/api.js?… [script] → 302",
+      "GET https://lab.cestecritla.fr/app.js [script] → 200",
+      "GET https://challenges.cloudflare.com/turnstile/v0/g/330e41bb475c/api.js [script] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/av0/rch/4urwg/0x4AAAAAAEt3fczgKFO-ViPf/auto/fbE/new/normal?… [document] → 200",
+      "GET blob:https://challenges.cloudflare.com/11362562-f5d0-4d89-ab09-91e611b932f8 [script] → n/a",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a386671d0dc9c0ab [xhr] → 200",
+      "GET blob:https://challenges.cloudflare.com/743aae3b-a49a-4cb8-95ee-64ddd35130d2 [script] → 200",
+      "GET https://hagen.challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/i/a386671d0dc9c0ab/7Ngx1jix1pfy9OIh7agygebLLTK3OSqeFqmmTP5IYes-1788959108-1.2.1 [fetch] → 204",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/a386671d0dc9c0ab/1788959108967/fac16088139251d95643915c2b11edb2c23f11e638fcc4e77a [fetch] → 401",
+      "GET blob:https://challenges.cloudflare.com/743aae3b-a49a-4cb8-95ee-64ddd35130d2 [script] → 200",
+      "GET blob:https://challenges.cloudflare.com/743aae3b-a49a-4cb8-95ee-64ddd35130d2 [script] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/ci/a386671d0dc9c0ab/1788959108970/66nwOvCJPrtt4ySgz_RI8m_FRadLgcc0jHMBJfPhqoQ-1788959 [image] → 200",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a386671d0dc9c0ab [xhr] → 200"
+    ]
+  },
+  {
+    "mode": "headless-shell",
+    "variant": "/nonce",
+    "startedAt": "2026-09-09T13:11:00.005Z",
+    "engine": "153.0.8010.12",
+    "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.8010.12 Mobile Safari/537.36",
+    "passed": false,
+    "scriptLoadedMs": 268,
+    "renderedMs": 274,
+    "events": [
+      "268 ms script-loaded",
+      "274 ms rendered (cf-chl-widget-80sdh)",
+      "2764 ms error (600010)"
+    ],
+    "cspViolations": [],
+    "pageErrors": [],
+    "cookies": [],
+    "setCookieHeaders": [],
+    "storage": [
+      {
+        "origin": "https://lab.cestecritla.fr",
+        "localStorage": {},
+        "sessionStorage": [],
+        "documentCookie": "",
+        "indexedDb": [],
+        "error": null
+      },
+      {
+        "origin": "https://challenges.cloudflare.com",
+        "localStorage": {
+          "cf.turnstile.u": "TQiD8RO5nxub…(149 chars)"
+        },
+        "sessionStorage": [],
+        "documentCookie": "",
+        "indexedDb": [],
+        "error": null
+      }
+    ],
+    "afterReload": "(not measured in this run)",
+    "thirdPartyHosts": [
+      "",
+      "challenges.cloudflare.com",
+      "hagen.challenges.cloudflare.com"
+    ],
+    "requests": [
+      "GET https://lab.cestecritla.fr/nonce [document] → 200",
+      "GET https://lab.cestecritla.fr/style.css [stylesheet] → 200",
+      "GET https://challenges.cloudflare.com/turnstile/v0/api.js?… [script] → 302",
+      "GET https://lab.cestecritla.fr/app.js [script] → 200",
+      "GET https://challenges.cloudflare.com/turnstile/v0/g/330e41bb475c/api.js [script] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/av0/rch/80sdh/0x4AAAAAAEt3fczgKFO-ViPf/auto/fbE/new/normal?… [document] → 200",
+      "GET blob:https://challenges.cloudflare.com/c7d27553-611a-4f3e-a596-73e16d45a66c [script] → n/a",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a3866fb2dbd81b3e [xhr] → 200",
+      "GET blob:https://challenges.cloudflare.com/f432896c-f304-4048-b724-5d25af486095 [script] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/a3866fb2dbd81b3e/1788959460614/d28de6d0498818500f9239ce71af4c257d013df555b22f2c4f [fetch] → 401",
+      "GET https://hagen.challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/i/a3866fb2dbd81b3e/CCq2qwnpjLMAdAoCu_fqZYe0o4tDPIGVkvVmc3dBx3g-1788959460-1.2.1 [fetch] → 204",
+      "GET blob:https://challenges.cloudflare.com/f432896c-f304-4048-b724-5d25af486095 [script] → 200",
+      "GET blob:https://challenges.cloudflare.com/f432896c-f304-4048-b724-5d25af486095 [script] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/ci/a3866fb2dbd81b3e/1788959460622/RIYhBDWHgvuhliR7O429CuwQHeV8slc8UTCb6F.n0Mw-1788959 [image] → 200",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a3866fb2dbd81b3e [xhr] → 200"
+    ]
+  },
+  {
+    "mode": "chromium-headless",
+    "variant": "/",
+    "startedAt": "2026-09-09T13:11:05.647Z",
+    "engine": "153.0.8010.12",
+    "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.8010.12 Mobile Safari/537.36",
+    "passed": false,
+    "scriptLoadedMs": 256,
+    "renderedMs": 261,
+    "events": [
+      "256 ms script-loaded",
+      "261 ms rendered (cf-chl-widget-kwdqb)",
+      "2453 ms error (600010)"
+    ],
+    "cspViolations": [],
+    "pageErrors": [],
+    "cookies": [],
+    "setCookieHeaders": [],
+    "storage": [
+      {
+        "origin": "https://lab.cestecritla.fr",
+        "localStorage": {},
+        "sessionStorage": [],
+        "documentCookie": "",
+        "indexedDb": [],
+        "error": null
+      },
+      {
+        "origin": "https://challenges.cloudflare.com",
+        "localStorage": {
+          "cf.turnstile.u": "3Mxx9bn8UIqt…(149 chars)"
+        },
+        "sessionStorage": [],
+        "documentCookie": "",
+        "indexedDb": [],
+        "error": null
+      }
+    ],
+    "afterReload": "(not measured in this run)",
+    "thirdPartyHosts": [
+      "",
+      "challenges.cloudflare.com",
+      "hagen.challenges.cloudflare.com"
+    ],
+    "requests": [
+      "GET https://lab.cestecritla.fr/ [document] → 200",
+      "GET https://lab.cestecritla.fr/style.css [stylesheet] → 200",
+      "GET https://challenges.cloudflare.com/turnstile/v0/api.js?… [script] → 302",
+      "GET https://lab.cestecritla.fr/app.js [script] → 200",
+      "GET https://challenges.cloudflare.com/turnstile/v0/g/330e41bb475c/api.js [script] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/av0/rch/kwdqb/0x4AAAAAAEt3fczgKFO-ViPf/auto/fbE/new/normal?… [document] → 200",
+      "GET blob:https://challenges.cloudflare.com/f714b0ed-bd7f-4409-9b8f-b576ea2d449a [script] → n/a",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a3866fd63c29e1ba [xhr] → 200",
+      "GET blob:https://challenges.cloudflare.com/51e72dca-fc42-4593-b097-cc210231d5f2 [script] → 200",
+      "GET https://hagen.challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/i/a3866fd63c29e1ba/LvDdA02hFFB6xjLurEc8_gMIDCGmD5NUTt4PtnP9mgE-1788959465-1.2.1 [fetch] → 204",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/a3866fd63c29e1ba/1788959466256/dde9da6f568729c540c9922b103271ef867d00e63e51d9d890 [fetch] → 401",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/ci/a3866fd63c29e1ba/1788959466258/bx0HDSLgArHbTOYUP9G1Q9vdjVefgSitjIL90WhksNY-1788959 [image] → 200",
+      "GET blob:https://challenges.cloudflare.com/51e72dca-fc42-4593-b097-cc210231d5f2 [script] → 200",
+      "GET blob:https://challenges.cloudflare.com/51e72dca-fc42-4593-b097-cc210231d5f2 [script] → 200",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a3866fd63c29e1ba [xhr] → 200"
+    ]
+  },
+  {
+    "mode": "chromium-headless",
+    "variant": "/nonce",
+    "startedAt": "2026-09-09T13:11:10.436Z",
+    "engine": "153.0.8010.12",
+    "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.8010.12 Mobile Safari/537.36",
+    "passed": false,
+    "scriptLoadedMs": 178,
+    "renderedMs": 183,
+    "events": [
+      "178 ms script-loaded",
+      "183 ms rendered (cf-chl-widget-s6dn8)",
+      "2177 ms error (600010)"
+    ],
+    "cspViolations": [],
+    "pageErrors": [],
+    "cookies": [],
+    "setCookieHeaders": [],
+    "storage": [
+      {
+        "origin": "https://lab.cestecritla.fr",
+        "localStorage": {},
+        "sessionStorage": [],
+        "documentCookie": "",
+        "indexedDb": [],
+        "error": null
+      },
+      {
+        "origin": "https://challenges.cloudflare.com",
+        "localStorage": {
+          "cf.turnstile.u": "yn8i66j1wlkH…(149 chars)"
+        },
+        "sessionStorage": [],
+        "documentCookie": "",
+        "indexedDb": [],
+        "error": null
+      }
+    ],
+    "afterReload": "(not measured in this run)",
+    "thirdPartyHosts": [
+      "",
+      "challenges.cloudflare.com",
+      "hagen.challenges.cloudflare.com"
+    ],
+    "requests": [
+      "GET https://lab.cestecritla.fr/nonce [document] → 200",
+      "GET https://lab.cestecritla.fr/style.css [stylesheet] → 200",
+      "GET https://challenges.cloudflare.com/turnstile/v0/api.js?… [script] → 302",
+      "GET https://lab.cestecritla.fr/app.js [script] → 200",
+      "GET https://challenges.cloudflare.com/turnstile/v0/g/330e41bb475c/api.js [script] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/av0/rch/s6dn8/0x4AAAAAAEt3fczgKFO-ViPf/auto/fbE/new/normal?… [document] → 200",
+      "GET blob:https://challenges.cloudflare.com/5bd2bc2d-2659-4e46-9f60-68f06b7542b1 [script] → n/a",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a3866ff39cbae23c [xhr] → 200",
+      "GET blob:https://challenges.cloudflare.com/8405fef8-dc92-4853-9604-44dd3d75da34 [script] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/a3866ff39cbae23c/1788959470957/70a5a81df84a67ca889085fb50799c419be5f8a920624cea50 [fetch] → 401",
+      "GET https://hagen.challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/i/a3866ff39cbae23c/yXzLd_Odlf7Zli4GlJK_SGp5sDjjKG208R_CydR_G8E-1788959470-1.2.1 [fetch] → 204",
+      "GET blob:https://challenges.cloudflare.com/8405fef8-dc92-4853-9604-44dd3d75da34 [script] → 200",
+      "GET blob:https://challenges.cloudflare.com/8405fef8-dc92-4853-9604-44dd3d75da34 [script] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/ci/a3866ff39cbae23c/1788959470961/AWarbMKjF.ZIRvQ3Mnuh0f__rYF5Y8B7LmLRFcvFgu4-1788959 [image] → 200",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a3866ff39cbae23c [xhr] → 200"
+    ]
+  },
+  {
+    "mode": "headless-shell",
+    "variant": "/",
+    "startedAt": "2026-09-09T13:11:41.644Z",
+    "engine": "153.0.8010.12",
+    "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.8010.12 Mobile Safari/537.36",
+    "passed": false,
+    "scriptLoadedMs": 257,
+    "renderedMs": 262,
+    "events": [
+      "257 ms script-loaded",
+      "262 ms rendered (cf-chl-widget-houa1)",
+      "2478 ms error (600010)"
+    ],
+    "cspViolations": [],
+    "pageErrors": [],
+    "cookies": [],
+    "setCookieHeaders": [],
+    "storage": [
+      {
+        "origin": "https://lab.cestecritla.fr",
+        "localStorage": {},
+        "sessionStorage": [],
+        "documentCookie": "",
+        "indexedDb": [],
+        "error": null
+      },
+      {
+        "origin": "https://challenges.cloudflare.com",
+        "localStorage": {
+          "cf.turnstile.u": "SPh.bf1s05AD…(149 chars)"
+        },
+        "sessionStorage": [],
+        "documentCookie": "",
+        "indexedDb": [],
+        "error": null
+      }
+    ],
+    "afterReload": {
+      "keys": [
+        "cf.turnstile.u"
+      ],
+      "turnstileUSameValue": true
+    },
+    "thirdPartyHosts": [
+      "",
+      "challenges.cloudflare.com",
+      "hagen.challenges.cloudflare.com"
+    ],
+    "requests": [
+      "GET https://lab.cestecritla.fr/ [document] → 200",
+      "GET https://lab.cestecritla.fr/style.css [stylesheet] → 200",
+      "GET https://challenges.cloudflare.com/turnstile/v0/api.js?… [script] → 302",
+      "GET https://lab.cestecritla.fr/app.js [script] → 200",
+      "GET https://challenges.cloudflare.com/turnstile/v0/g/330e41bb475c/api.js [script] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/av0/rch/houa1/0x4AAAAAAEt3fczgKFO-ViPf/auto/fbE/new/normal?… [document] → 200",
+      "GET blob:https://challenges.cloudflare.com/e00b4674-8172-493c-a12e-61eaf357e949 [script] → n/a",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a38670b6fbf2b698 [xhr] → 200",
+      "GET blob:https://challenges.cloudflare.com/35e49e93-fd7a-4343-85fe-0589171f4842 [script] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/a38670b6fbf2b698/1788959502223/0afea99a70c70e25069e4bbbcd53361513cc9c29ddab392c4b [fetch] → 401",
+      "GET https://hagen.challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/i/a38670b6fbf2b698/_OxzZ4.54NuyDFcxs11wSttBR.RkuCKungdTmFB9cEU-1788959501-1.2.1 [fetch] → 204",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/ci/a38670b6fbf2b698/1788959502226/bPEe0E6lsl_4UAA3V4RxByFhn0palhr4wNpZTAVeDSM-1788959 [image] → 200",
+      "GET blob:https://challenges.cloudflare.com/35e49e93-fd7a-4343-85fe-0589171f4842 [script] → 200",
+      "GET blob:https://challenges.cloudflare.com/35e49e93-fd7a-4343-85fe-0589171f4842 [script] → 200",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a38670b6fbf2b698 [xhr] → 200",
+      "GET https://lab.cestecritla.fr/ [document] → 200",
+      "GET https://lab.cestecritla.fr/style.css [stylesheet] → 304",
+      "GET https://challenges.cloudflare.com/turnstile/v0/api.js?… [script] → 200",
+      "GET https://lab.cestecritla.fr/app.js [script] → 304",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/av0/rch/fu1x0/0x4AAAAAAEt3fczgKFO-ViPf/auto/fbE/new/normal?… [document] → 200",
+      "GET blob:https://challenges.cloudflare.com/d6fe78c4-1612-44a6-9ffe-684e8801a06d [script] → n/a",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a38670d9ddf9b698 [xhr] → 200",
+      "GET blob:https://challenges.cloudflare.com/c06e82c7-238d-4048-bf41-3f89c5e6270e [script] → 200",
+      "GET https://hagen.challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/i/a38670d9ddf9b698/nDk5X3SWJobrq2GUpmnBucTssFFrjxpsLOopmkdDvJg-1788959507-1.2.1 [fetch] → 204",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/a38670d9ddf9b698/1788959507815/8a5bc8b9149ceffd8564447985d4a3d5866daf44281fd7063f [fetch] → 401",
+      "GET blob:https://challenges.cloudflare.com/c06e82c7-238d-4048-bf41-3f89c5e6270e [script] → 200",
+      "GET blob:https://challenges.cloudflare.com/c06e82c7-238d-4048-bf41-3f89c5e6270e [script] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/ci/a38670d9ddf9b698/1788959507816/ADD3x090cePbhzHHpcxzuQZqcwHJXJkDA1YFp5TnoTs-1788959 [image] → 200",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a38670d9ddf9b698 [xhr] → 200"
+    ]
+  },
+  {
+    "mode": "firefox",
+    "variant": "/",
+    "startedAt": "2026-09-09T13:11:54.053Z",
+    "engine": "155.0",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:155.0) Gecko/20100101 Firefox/155.0",
+    "passed": false,
+    "scriptLoadedMs": 657,
+    "renderedMs": 668,
+    "events": [
+      "657 ms script-loaded",
+      "668 ms rendered (cf-chl-widget-12xp2)",
+      "3053 ms error (600010)"
+    ],
+    "cspViolations": [],
+    "pageErrors": [],
+    "cookies": [],
+    "setCookieHeaders": [],
+    "storage": [
+      {
+        "origin": "https://lab.cestecritla.fr",
+        "localStorage": {},
+        "sessionStorage": [],
+        "documentCookie": "",
+        "indexedDb": [],
+        "error": null
+      },
+      {
+        "origin": "https://challenges.cloudflare.com",
+        "localStorage": {
+          "cf.turnstile.u": "qUq1ZQhhaoQG…(149 chars)"
+        },
+        "sessionStorage": [],
+        "documentCookie": "",
+        "indexedDb": [],
+        "error": null
+      }
+    ],
+    "afterReload": {
+      "keys": [
+        "cf.turnstile.u"
+      ],
+      "turnstileUSameValue": true
+    },
+    "thirdPartyHosts": [
+      "challenges.cloudflare.com",
+      "hagen.challenges.cloudflare.com"
+    ],
+    "requests": [
+      "GET https://lab.cestecritla.fr/ [document] → 200",
+      "GET https://lab.cestecritla.fr/style.css [stylesheet] → 200",
+      "GET https://challenges.cloudflare.com/turnstile/v0/api.js?… [script] → 302",
+      "GET https://lab.cestecritla.fr/app.js [script] → 200",
+      "GET https://challenges.cloudflare.com/turnstile/v0/g/330e41bb475c/api.js [script] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/av0/rch/12xp2/0x4AAAAAAEt3fczgKFO-ViPf/auto/fbE/new/normal?… [document] → 200",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a38671077d3d5014 [xhr] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/a38671077d3d5014/1788959515206/8f70ab3db963015560f75374b1df70385246f87a61c8140f94 [fetch] → 401",
+      "GET https://hagen.challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/i/a38671077d3d5014/zJxSqB1sB8aogLkMMKOsY4Uk3KrOV7_.hSS8hnIBy_g-1788959514-1.2.1 [fetch] → 204",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/ci/a38671077d3d5014/1788959515208/d2jTbS.Mtc8HkXetlYEaKORvezjQJ2ja60ktYew.jv0-1788959 [image] → 200",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a38671077d3d5014 [xhr] → 200",
+      "GET https://lab.cestecritla.fr/ [document] → 304",
+      "GET https://lab.cestecritla.fr/style.css [stylesheet] → 304",
+      "GET https://challenges.cloudflare.com/turnstile/v0/api.js?… [script] → 302",
+      "GET https://lab.cestecritla.fr/app.js [script] → 304",
+      "GET https://challenges.cloudflare.com/turnstile/v0/g/330e41bb475c/api.js [script] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/av0/rch/mvpti/0x4AAAAAAEt3fczgKFO-ViPf/auto/fbE/new/normal?… [document] → 200",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a386712aaf6a5014 [xhr] → 200",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/a386712aaf6a5014/1788959520727/800d7b6ad0f3f5bd82a78ec585ee573434db3bb27ac37777d2 [fetch] → 401",
+      "GET https://hagen.challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/i/a386712aaf6a5014/k1q5XAKexykFFQFfZHl0PEOyEDNzWX95fqWh9xJy5jQ-1788959520-1.2.1 [fetch] → 204",
+      "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/ci/a386712aaf6a5014/1788959520730/_Rt99hcazz5LgbXzfZE4wcOJb4RhOhMg2jBdR0ACSN4-1788959 [image] → 200",
+      "POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/4073047268:1788955517:EH3qpsyAkW8QqfTidgHcWiYRK8ZBFprtxZ8BK9-biLY/a386712aaf6a5014 [xhr] → 200"
+    ]
+  }
+]

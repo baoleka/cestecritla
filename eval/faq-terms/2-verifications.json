@@ -1,0 +1,372 @@
+[
+  {
+    "slug": "v-euro",
+    "term": "sortie de l'euro (vérif)",
+    "aliases": [
+      "monnaie",
+      "zone euro",
+      "eurozone",
+      "Frexit",
+      "sortir de l['’]Union",
+      "quitter l['’]Union",
+      "sortie de l['’]Union"
+    ]
+  },
+  {
+    "slug": "v-revenu-universel",
+    "term": "revenu universel (vérif)",
+    "aliases": [
+      "revenu universel",
+      "revenu de base",
+      "revenu inconditionnel",
+      "allocation universelle",
+      "revenu d['’]existence"
+    ]
+  },
+  {
+    "slug": "v-peine-de-mort",
+    "term": "peine de mort (vérif)",
+    "aliases": ["peine de mort", "peine capitale", "perpétuité"]
+  },
+  {
+    "slug": "v-voile",
+    "term": "voile (vérif)",
+    "aliases": [
+      "voile",
+      "burkini",
+      "burqa",
+      "abaya",
+      "signes religieux",
+      "tenue",
+      "hijab",
+      "foulard"
+    ]
+  },
+  {
+    "slug": "v-crypto",
+    "term": "crypto (vérif)",
+    "aliases": [
+      "crypto",
+      "bitcoin",
+      "blockchain",
+      "\\bNFT\\b",
+      "monnaie virtuelle",
+      "monnaie numérique"
+    ]
+  },
+  {
+    "slug": "v-harcelement",
+    "term": "harcèlement scolaire (vérif)",
+    "aliases": ["harcèlement", "cyberharcèlement", "cyber-harcèlement", "brimade"]
+  },
+  {
+    "slug": "v-senat",
+    "term": "Sénat (vérif)",
+    "aliases": [
+      "Sénat",
+      "sénateur",
+      "bicaméral",
+      "Conseil constitutionnel",
+      "Cour constitutionnelle",
+      "proportionnel",
+      "cumul des mandats",
+      "cumul"
+    ]
+  },
+  {
+    "slug": "v-mariage",
+    "term": "mariage pour tous (vérif)",
+    "aliases": ["mariage", "adoption", "\\bpacs\\b", "concubinage"]
+  },
+  {
+    "slug": "v-animaux-compagnie",
+    "term": "animaux de compagnie (vérif)",
+    "aliases": [
+      "animaux de compagnie",
+      "animal de compagnie",
+      "\\bchien",
+      "\\bchat\\b",
+      "cirque",
+      "delphinarium",
+      "\\bzoo",
+      "abandon"
+    ]
+  },
+  {
+    "slug": "v-telephone-ecole",
+    "term": "téléphone à l'école (vérif)",
+    "aliases": [
+      "téléphone",
+      "portable",
+      "smartphone",
+      "écran",
+      "redoublement",
+      "\\bnotes\\b",
+      "devoirs"
+    ]
+  },
+  {
+    "slug": "v-reseaux-sociaux",
+    "term": "réseaux sociaux (vérif)",
+    "aliases": [
+      "réseaux sociaux",
+      "réseau social",
+      "TikTok",
+      "Instagram",
+      "Facebook",
+      "Twitter",
+      "\\bX\\b",
+      "majorité numérique",
+      "moins de 15 ans",
+      "\\b15 ans\\b",
+      "\\b13 ans\\b"
+    ]
+  },
+  {
+    "slug": "v-permis",
+    "term": "permis de conduire (vérif)",
+    "aliases": ["permis de conduire", "permis\\b", "code de la route", "auto-école"]
+  },
+  {
+    "slug": "v-apl",
+    "term": "APL (vérif)",
+    "aliases": [
+      "\\bAPL\\b",
+      "aide personnalisée au logement",
+      "aides au logement",
+      "allocation logement",
+      "caution",
+      "garant"
+    ]
+  },
+  {
+    "slug": "v-taxe-carbone",
+    "term": "taxe carbone (vérif)",
+    "aliases": [
+      "taxe carbone",
+      "prix du carbone",
+      "quota carbone",
+      "marché carbone",
+      "empreinte carbone",
+      "bilan carbone",
+      "kérosène",
+      "jet privé",
+      "jets privés"
+    ]
+  },
+  {
+    "slug": "v-vote-electronique",
+    "term": "vote électronique (vérif)",
+    "aliases": [
+      "vote électronique",
+      "vote par internet",
+      "vote par correspondance",
+      "procuration",
+      "machines à voter"
+    ]
+  },
+  {
+    "slug": "v-transports-gratuits",
+    "term": "gratuité des transports (vérif)",
+    "aliases": ["gratuit", "gratuité"]
+  },
+  {
+    "slug": "v-ecole-privee",
+    "term": "école privée (vérif)",
+    "aliases": [
+      "privé sous contrat",
+      "enseignement privé",
+      "école privée",
+      "écoles privées",
+      "établissements privés",
+      "loi Debré",
+      "Stanislas"
+    ]
+  },
+  {
+    "slug": "v-mutuelle",
+    "term": "mutuelle (vérif)",
+    "aliases": [
+      "mutuelle",
+      "100 % Sécu",
+      "complémentaire santé",
+      "dentaire",
+      "lunettes",
+      "optique",
+      "franchises médicales",
+      "dépassements d['’]honoraires"
+    ]
+  },
+  {
+    "slug": "v-vaccin",
+    "term": "vaccin (vérif)",
+    "aliases": [
+      "vaccin",
+      "obligation vaccinale",
+      "pass sanitaire",
+      "passe sanitaire",
+      "confinement"
+    ]
+  },
+  {
+    "slug": "v-chine",
+    "term": "Chine (vérif)",
+    "aliases": [
+      "Chine",
+      "chinois",
+      "Taïwan",
+      "Taiwan",
+      "États-Unis",
+      "Etats-Unis",
+      "américain",
+      "Trump"
+    ]
+  },
+  {
+    "slug": "v-5g",
+    "term": "5G (vérif)",
+    "aliases": ["\\b5G\\b", "\\b6G\\b", "antennes", "ondes", "Linky", "compteur"]
+  },
+  {
+    "slug": "v-independants",
+    "term": "indépendants (vérif)",
+    "aliases": [
+      "auto-entrepreneur",
+      "micro-entrepreneur",
+      "autoentrepreneur",
+      "indépendant",
+      "artisan",
+      "commerçant",
+      "\\bTPE\\b",
+      "\\bPME\\b"
+    ]
+  },
+  {
+    "slug": "v-cdi",
+    "term": "CDI (vérif)",
+    "aliases": [
+      "\\bCDI\\b",
+      "\\bCDD\\b",
+      "contrats courts",
+      "précaire",
+      "rupture conventionnelle",
+      "licenciement"
+    ]
+  },
+  {
+    "slug": "v-salaire-max",
+    "term": "salaire maximum (vérif)",
+    "aliases": [
+      "salaire maximum",
+      "écart de salaires",
+      "écart de 1 à",
+      "1 à 20",
+      "dividendes",
+      "actionnaires",
+      "rachat d['’]actions",
+      "superprofits",
+      "super-profits"
+    ]
+  },
+  {
+    "slug": "v-greve",
+    "term": "grève (vérif)",
+    "aliases": ["grève", "syndica", "manifestation", "manifester"]
+  },
+  {
+    "slug": "v-is",
+    "term": "impôt sur les sociétés (vérif)",
+    "aliases": ["impôt sur les sociétés", "\\bIS\\b", "impôt universel", "multinationales"]
+  },
+  {
+    "slug": "v-reversion",
+    "term": "pension de réversion (vérif)",
+    "aliases": ["réversion", "minimum vieillesse", "\\bASPA\\b", "veuf", "veuve"]
+  },
+  {
+    "slug": "v-fournitures",
+    "term": "fournitures scolaires (vérif)",
+    "aliases": ["fournitures", "matériel scolaire", "allocation de rentrée", "rentrée scolaire"]
+  },
+  {
+    "slug": "v-chlordecone",
+    "term": "chlordécone (vérif)",
+    "aliases": ["chlordécone", "chlordecone", "sargasses", "Antilles"]
+  },
+  {
+    "slug": "v-israel",
+    "term": "Israël (vérif)",
+    "aliases": [
+      "Israël",
+      "Israel",
+      "Netanyahou",
+      "Hamas",
+      "otage",
+      "génocide",
+      "\\bCPI\\b",
+      "Cour pénale internationale",
+      "Liban"
+    ]
+  },
+  {
+    "slug": "v-drogue-trafic",
+    "term": "trafic de drogue (vérif)",
+    "aliases": [
+      "narcotrafic",
+      "trafic de drogue",
+      "trafic de stupéfiants",
+      "points de deal",
+      "stupéfiant"
+    ]
+  },
+  {
+    "slug": "v-legion",
+    "term": "Légion d'honneur (vérif)",
+    "aliases": ["Légion d['’]honneur", "décorations", "Panthéon"]
+  },
+  {
+    "slug": "v-retraite-agri-etc",
+    "term": "cheminots régimes spéciaux (vérif)",
+    "aliases": ["régimes spéciaux", "régime spécial", "cheminot", "fonctionnaires"]
+  },
+  {
+    "slug": "v-alcool-tabac",
+    "term": "alcool et tabac (vérif)",
+    "aliases": ["alcool", "tabac", "cigarette", "vape", "vapotage", "puff"]
+  },
+  {
+    "slug": "v-jeunes-transport",
+    "term": "transport jeunes (vérif)",
+    "aliases": ["jeunes", "jeunesse"]
+  },
+  {
+    "slug": "v-jo",
+    "term": "JO (vérif)",
+    "aliases": ["olympi", "\\bJO\\b", "Coupe du monde", "esport", "e-sport"]
+  },
+  {
+    "slug": "v-adoption-lgbt",
+    "term": "homoparentalité (vérif)",
+    "aliases": [
+      "homoparent",
+      "coparent",
+      "filiation",
+      "orientation sexuelle",
+      "identité de genre",
+      "genre\\b"
+    ]
+  },
+  {
+    "slug": "v-idf-quartiers",
+    "term": "quartiers populaires (vérif)",
+    "aliases": [
+      "quartiers populaires",
+      "banlieue",
+      "cités",
+      "rénovation urbaine",
+      "ruralité",
+      "rural",
+      "campagne"
+    ]
+  }
+]

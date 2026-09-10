@@ -1,0 +1,16 @@
+{
+  // T7 lab « ai-gateway » (PLAN-SESSION.md §5 T7): measures the AI Gateway cache
+  // (cf-aig-cache-status HIT/MISS) against Workers AI neurons consumption, and the
+  // per-request log opt-out (gateway.collectLog: false). Free plan only: one Worker
+  // with the Workers AI binding, nothing else. The gateway « aec » was created by hand
+  // in the dashboard (authenticated, logs OFF, cache ON) before the first call.
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "aec-lab-aig",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-09",
+  "workers_dev": true,
+  "ai": { "binding": "AI" },
+  // No Workers logs at all for this lab: every measurement is returned in the response
+  // body, and the app itself must not keep invocation logs (D0.22).
+  "observability": { "enabled": false },
+}

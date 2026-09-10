@@ -1,0 +1,152 @@
+/* F2 « Laquelle est ici ? » — module styles on top of shared/base.css (direction A, hybrid D3.9).
+   Three options in the verbatim language (Gowun Batang on Violet 100, Violet rule), the whole block
+   is the tap target (>= 44 px). No red, no score, no game chrome. Motion: opacity / transform only,
+   <= 200 ms, nothing under prefers-reduced-motion (P7). */
+
+/* ---------- Section line under the display title ---------- */
+.q-section {
+  margin: 0 0 var(--s4);
+}
+.q-section .ttl {
+  display: block;
+  font: var(--weight-bold) 1.125rem/1.3 var(--font-ui);
+  color: var(--text);
+}
+
+/* ---------- The rule line sits above the options (§7.3) ---------- */
+.q-rule {
+  font-size: var(--size-lead);
+  line-height: 1.45;
+  margin: 0 0 var(--s4);
+}
+
+/* ---------- Options ---------- */
+.opts {
+  list-style: none;
+  margin: 0 0 var(--s4);
+  padding: 0;
+}
+.opt-item {
+  margin: 0 0 var(--s3);
+}
+.opt {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: var(--s2);
+  width: 100%;
+  min-height: var(--tap-comfortable);
+  text-align: left;
+  background: var(--verbatim-bg);
+  color: var(--text);
+  border: 0;
+  border-left: 4px solid var(--verbatim-rule);
+  border-radius: 0;
+  padding: 12px 14px 14px 12px;
+  cursor: pointer;
+  font: inherit;
+  /* Chromium's UA stylesheet resets text-rendering to auto on form controls: the unhinted subsets
+     then show « TEXT E » (05-direction-artistique.md §9 correction 2, base.css body rule). */
+  text-rendering: geometricPrecision;
+  transition: opacity var(--d-fast) var(--ease-standard);
+}
+.opt:hover {
+  opacity: 0.92;
+}
+.opt[disabled] {
+  cursor: default;
+  opacity: 1;
+}
+.opt .letter {
+  font: var(--weight-black) 1.125rem/1.3 var(--font-ui);
+  font-style: italic;
+  color: var(--brand);
+}
+.opt .body {
+  display: block;
+  min-width: 0;
+}
+.opt .label {
+  margin-bottom: var(--s1);
+}
+.opt .txt {
+  display: block;
+  font-family: var(--font-verbatim);
+  font-size: var(--size-verbatim);
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+@media (min-width: 400px) {
+  .opt .txt {
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+}
+/* The one that is here: the same outline as a targeted measure in the reader (no colour of its own). */
+.opt-item.is-here .opt {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+}
+
+/* ---------- Feedback under an option (revealed state) ---------- */
+/* Aligned with the option text: rule 4 px + padding 12 px + letter column 30 px + gap 8 px. */
+.fb {
+  margin: var(--s2) 0 0 54px;
+  font-size: var(--size-small);
+  line-height: 1.45;
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity var(--d-base) var(--ease-standard),
+    transform var(--d-base) var(--ease-standard);
+}
+.fb.show {
+  opacity: 1;
+  transform: none;
+}
+.fb:focus {
+  outline: none;
+}
+.fb p {
+  margin: 0;
+}
+.fb .here {
+  font-weight: var(--weight-bold);
+  color: var(--brand);
+}
+.fb .textlink {
+  padding-top: var(--s1);
+}
+
+/* ---------- Link arrival: the independence and privacy lines follow the CTA (D3.9, from B) ---------- */
+.q-lines {
+  margin: var(--s2) 0 var(--s4);
+}
+.q-lines p {
+  margin: 0 0 var(--s2);
+}
+
+/* ---------- Controls ---------- */
+.q-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2) var(--s5);
+  margin: 0 0 var(--s4);
+}
+.q-result {
+  margin-top: var(--s5);
+}
+.q-result .another {
+  margin: var(--s5) 0 var(--s1);
+}
+.q-result .next {
+  font-size: var(--size-small);
+  margin: 0 0 var(--s2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .opt,
+  .fb {
+    transition: none;
+  }
+}

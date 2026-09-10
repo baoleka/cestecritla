@@ -1,0 +1,1580 @@
+{
+  "meta": {
+    "title_fr": "FAQ v0 — 50 questions posées sur L’Avenir en commun 2025, routées sans IA vers le texte",
+    "version": "0.2.0",
+    "corpus_version": "d29c7422004ab27c",
+    "source_crawled_at": "2026-09-07T16:30:57.692Z",
+    "generated_at": "2026-09-07T23:22:32.000Z",
+    "generator": "T2 (FAQ) — sélection manuelle sur les fichiers de passages de scripts/extract-passages.ts, identifiants vérifiés par scripts/faq.test.ts",
+    "license_fr": "Les identifiants cités renvoient mot pour mot à « L'Avenir en commun, édition 2025 » (https://melenchon2027.fr/programme2025/livre/), CC BY-NC-SA 4.0, attribution « La France insoumise – L'Avenir en commun ». Les questions, alias, liants et notes de ce fichier sont des textes du projet, diffusés sous la même licence.",
+    "method_fr": "Cinquante questions rédigées en trois voix (militant sur le terrain : « ils proposent quoi sur … ? » ; indécis : « c'est quoi … ? », « est-ce que le programme parle de … ? » ; jeune de 18 à 30 ans : logement, études, premier emploi, transports, climat, police, discriminations, Outre-mer), en couvrant les quatre parties du livre. Pour chaque question, un fichier de termes (aliases en expressions régulières) a été passé à scripts/extract-passages.ts sur le corpus figé ; les identifiants de réponse sont choisis uniquement parmi les passages « corpus » retournés (jamais rédigés, jamais devinés). Trois passes : 69 sujets larges, 38 vérifications ciblées pour trancher les absences (euro, revenu universel, peine de mort, voile, crypto, harcèlement scolaire, Sénat, vote électronique…), 14 extractions de sections entières par leur titre pour lister toutes leurs mesures. Le routage à l'exécution se fait sans IA : la question de l'utilisateur est normalisée (minuscules, sans accents, sans ponctuation) et comparée au champ normalized puis aux alias normalisés de chaque entrée. Quatrième passe (8/9, relecture) : les onze réponses négatives ou partielles ont été re-vérifiées par une extraction élargie (voile, euro, revenu universel, harcèlement, crypto, PMA, semaine de quatre jours, uniforme, gratuité des transports, corrida, réseaux sociaux, plus peine de mort, Sénat, vote électronique et le mot « gratuit » dans tout le livre) ; deux liants qui affirmaient une absence trop large ont été ramenés à la formule « en parle seulement ici » ; chaque identifiant cité a été relu avec le texte de sa mesure.",
+    "answer_kind_fr": {
+      "sections": "La question porte sur un sujet : la réponse est une ou plusieurs sections entières (answer_section_ids), avec les mesures à afficher en premier (answer_measure_ids).",
+      "measures": "La question vise une mesure précise : la réponse est la liste answer_measure_ids, la section est donnée pour le lien « Lire la section entière ».",
+      "partial": "Le sujet n'est traité qu'à un seul endroit du livre, ou pas sous la forme demandée (par exemple la gratuité) : le liant le dit et pointe l'unique passage.",
+      "absent": "Le livre ne traite pas le SUJET : aucun identifiant de réponse, liant = refusal.title + première phrase de refusal.lead (design/strings.json). Trois voisins obligatoires, CHOISIS À LA MAIN dans neighbour_ids et jamais calculés par le retrieval (D6.4) ; les faux amis du moteur sont déclarés dans excluded_ids et filtrés au rendu. L'absence est rejouable : absence_probe porte les requêtes, le nombre de touches hors excluded_ids (0) et la corpus_version sur laquelle elle a été rejouée.",
+      "premise-false": "La PROPOSITION n'est pas dans le livre, mais le SUJET l'est : liant = refusal.premise_false + le titre de la section qui traite le sujet, puis les passages. refusal.title (« L'Avenir en commun ne traite pas de ça. ») est interdite ici : à un doute sur une prémisse fausse, « ça n'est pas traité » se lit « ils ne l'ont pas exclu »."
+    },
+    "liant_rule_fr": "Deux phrases au plus, étiquetées « reformulé », aucun chiffre (les titres de section contenant un nombre sont remplacés par le titre du chapitre), quinze mots au plus par phrase en comptant un titre cité entre guillemets pour un seul mot, aucune affirmation sur le contenu au-delà de « voici ce que dit le programme » et du nom des sections ou chapitres cités ; pour « partial », la phrase dit seulement que le sujet n'apparaît qu'à cet endroit. Chaque titre entre guillemets est vérifié mot pour mot contre le corpus par scripts/faq.test.ts.",
+    "normalized_rule_fr": "normalized = question en NFD sans signes diacritiques, en minuscules, tout caractère hors [a-z0-9] remplacé par une espace, espaces réduites. Les alias sont stockés tels quels et normalisés de la même façon à l'exécution ; ils sont uniques dans tout le fichier.",
+    "typography_fr": "Espace insécable (U+00A0) avant « ? ! : ; » et à l'intérieur des guillemets « », comme design/strings.json. Apostrophe droite dans la voix de l'app, apostrophe typographique « ’ » conservée dans les titres cités (règle 3 de design/voice.md).",
+    "coverage": {
+      "entries": 50,
+      "per_part": {
+        "part1": 9,
+        "part2": 21,
+        "part3": 11,
+        "part4": 10,
+        "none": 4
+      },
+      "per_part_note_fr": "Une entrée compte pour chaque partie où se trouve au moins un identifiant cité ; « none » = entrées « absent » (aucun identifiant).",
+      "per_voice": {
+        "militant": 16,
+        "indecis": 18,
+        "jeune": 16
+      },
+      "per_answer_kind": {
+        "sections": 19,
+        "measures": 20,
+        "partial": 6,
+        "absent": 4,
+        "premise-false": 1
+      },
+      "absent_count": 4,
+      "partial_count": 6,
+      "honest_negative_count": 11,
+      "sections_cited": 44,
+      "measures_cited": 119,
+      "premise_false_count": 1
+    },
+    "absent_topics_fr": [
+      "Est-ce que le programme parle du voile ou de l'abaya ?",
+      "Le revenu universel, c'est dans le programme ?",
+      "Est-ce que le programme parle du harcèlement scolaire ?",
+      "Est-ce que le programme parle des cryptomonnaies ?"
+    ],
+    "partial_topics_fr": [
+      "Est-ce que le programme parle de la PMA ?",
+      "Est-ce que le programme parle de la semaine de quatre jours ?",
+      "L'uniforme à l'école, ils sont pour ?",
+      "Les transports en commun seront gratuits ?",
+      "Est-ce que le programme parle de la corrida ?",
+      "Est-ce que le programme parle des réseaux sociaux ?"
+    ],
+    "review_fr": "À relire (D0.27) : utilisateur + 1-2 militants + 1 non-politisé. Fidélité : chaque identifiant ouvert et lu ; lisibilité : questions et liants au tu, phrases courtes. Points ouverts listés dans le rapport de la tâche. Les sujets absents confirmés sans entrée (place manquante dans les 50) : peine de mort, vote électronique ; le Sénat n'apparaît qu'incidemment (c1-s06-m11).",
+    "premise_false_topics_fr": [
+      "Est-ce qu'on sort de l'euro ?"
+    ],
+    "revised_at": "2026-09-10",
+    "changelog_fr": [
+      "0.2.0 (10/9/2026, panel rouge T12, docs/discovery/13-tests-humains.md §T12) : answer_kind « absent » scindé — faq-20 (« Est-ce qu'on sort de l'euro ? ») passe en « premise-false » et répond par c17-s02, au lieu de servir « L'Avenir en commun ne traite pas de ça. » pendant que rip-12 répondait par le chapitre 17. Les 4 entrées « absent » portent maintenant neighbour_ids (3 voisins choisis à la main, jamais calculés par un moteur mesuré à 5 faux amis sur 30 questions adversariales), excluded_ids (faux amis à filtrer au rendu) et absence_probe (requêtes + touches hors excluded_ids + corpus_version), rejoués par scripts/faq.test.ts. Les 6 entrées « partial » portent excluded_ids."
+    ]
+  },
+  "entries": [
+    {
+      "id": "faq-01",
+      "question": "C'est quoi la 6e République ?",
+      "voice": "indecis",
+      "normalized": "c est quoi la 6e republique",
+      "aliases": [
+        "sixième République",
+        "c'est quoi la 6ème République",
+        "nouvelle Constitution",
+        "assemblée constituante",
+        "constituante"
+      ],
+      "answer_kind": "sections",
+      "answer_section_ids": [
+        "c1-s01",
+        "c1-s02"
+      ],
+      "answer_measure_ids": [
+        "c1-s01-k01",
+        "c1-s02-k01"
+      ],
+      "part_ids": [
+        "part1"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur la sixième République. C'est dans le chapitre « Le pouvoir au peuple », section « Abolir la monarchie présidentielle » et la précédente.",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « 6e République | Assemblée constituante | constituante » : 11 passages, 6 sections. Les deux sections du chapitre 1 qui portent le sujet sont c1-s01 (Constituante, mesure clé k01) et c1-s02 (régime parlementaire, mesure clé k01). Le titre de c1-s01 contient un chiffre : le liant cite le chapitre et c1-s02."
+    },
+    {
+      "id": "faq-02",
+      "question": "Ils proposent quoi sur le RIC ?",
+      "voice": "militant",
+      "normalized": "ils proposent quoi sur le ric",
+      "aliases": [
+        "référendum d'initiative citoyenne",
+        "référendum révocatoire",
+        "révoquer les élus",
+        "RIC"
+      ],
+      "answer_kind": "measures",
+      "answer_section_ids": [
+        "c1-s04"
+      ],
+      "answer_measure_ids": [
+        "c1-s04-k01"
+      ],
+      "part_ids": [
+        "part1"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur le référendum d'initiative citoyenne. C'est dans « Une République permettant l’intervention populaire ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « référendum d'initiative citoyenne | RIC | référendum révocatoire » : 2 passages, 1 section. La mesure clé c1-s04-k01 définit le RIC ; le second passage (c1-s04-p03) est un sondage, hors réponse."
+    },
+    {
+      "id": "faq-03",
+      "question": "Je pourrai voter à 16 ans ?",
+      "voice": "jeune",
+      "normalized": "je pourrai voter a 16 ans",
+      "aliases": [
+        "vote à 16 ans",
+        "droit de vote à seize ans",
+        "voter à seize ans",
+        "âge du droit de vote"
+      ],
+      "answer_kind": "measures",
+      "answer_section_ids": [
+        "c1-s04"
+      ],
+      "answer_measure_ids": [
+        "c1-s04-m01",
+        "c1-s04-m02"
+      ],
+      "part_ids": [
+        "part1"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur l'âge du vote. C'est dans « Une République permettant l’intervention populaire ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « 16 ans | droit de vote | vote obligatoire | vote blanc » : 4 passages, 3 sections. c1-s04-m01 répond mot pour mot ; c1-s04-m02 (vote blanc, vote obligatoire) est la mesure voisine sur le vote. c5-s03-m01.s5 (garantie d'autonomie à partir de 16 ans) et c10-s02-m10 (vote des étrangers) sont hors sujet."
+    },
+    {
+      "id": "faq-04",
+      "question": "Est-ce que le programme parle de la laïcité ?",
+      "voice": "indecis",
+      "normalized": "est ce que le programme parle de la laicite",
+      "aliases": [
+        "laïcité",
+        "ils proposent quoi sur la laïcité",
+        "concordat",
+        "religion",
+        "loi de 1905"
+      ],
+      "answer_kind": "sections",
+      "answer_section_ids": [
+        "c1-s05"
+      ],
+      "answer_measure_ids": [
+        "c1-s05-k01",
+        "c1-s05-m01"
+      ],
+      "part_ids": [
+        "part1"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur la laïcité. C'est dans « Une République laïque ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « laïcité | laïque | loi de 1905 | Concordat » : 9 passages, 2 sections. La section c1-s05 porte le sujet en entier (mesure clé k01, concordat m01) ; c5-s03-p01 ne fait que qualifier l'école de laïque."
+    },
+    {
+      "id": "faq-05",
+      "question": "Ils proposent quoi contre la concentration des médias ?",
+      "voice": "militant",
+      "normalized": "ils proposent quoi contre la concentration des medias",
+      "aliases": [
+        "médias",
+        "Bolloré",
+        "milliardaires qui possèdent les médias",
+        "audiovisuel public",
+        "liberté de la presse"
+      ],
+      "answer_kind": "sections",
+      "answer_section_ids": [
+        "c1-s06"
+      ],
+      "answer_measure_ids": [
+        "c1-s06-k01",
+        "c1-s06-m01"
+      ],
+      "part_ids": [
+        "part1"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur les médias. C'est dans « La Révolution citoyenne dans les médias ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « médias | concentration | audiovisuel public | conseil national des médias | milliardaires » : 22 passages, 6 sections. Seule c1-s06 traite les médias comme sujet (mesure clé k01, loi anti-concentration m01 et ses sous-mesures) ; les autres occurrences de « concentration » (logement, fermes-usines) sont hors sujet."
+    },
+    {
+      "id": "faq-06",
+      "question": "Le programme dit quoi sur les violences policières ?",
+      "voice": "jeune",
+      "normalized": "le programme dit quoi sur les violences policieres",
+      "aliases": [
+        "police",
+        "ils proposent quoi sur la police",
+        "IGPN",
+        "BAC",
+        "police de proximité",
+        "LBD",
+        "flash-ball"
+      ],
+      "answer_kind": "sections",
+      "answer_section_ids": [
+        "c4-s03",
+        "c7-s08"
+      ],
+      "answer_measure_ids": [
+        "c4-s03-k01",
+        "c4-s03-m10",
+        "c4-s03-m11",
+        "c7-s08-k01"
+      ],
+      "part_ids": [
+        "part1",
+        "part2"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur la police. C'est dans « Refonder une police républicaine » et « Une police de proximité au service de la sûreté des citoyens ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « police | policier | IGPN | violences policières | récépissé | maintien de l'ordre | LBD » : 30 passages, 7 sections. Deux sections portent le sujet : c4-s03 (violences policières m10, IGPN m11, mesure clé k01) et c7-s08 (police de proximité, k01). Le récépissé (c10-s02-m05) est traité dans l'entrée racisme."
+    },
+    {
+      "id": "faq-07",
+      "question": "Est-ce que le programme parle des personnes trans ?",
+      "voice": "jeune",
+      "normalized": "est ce que le programme parle des personnes trans",
+      "aliases": [
+        "trans",
+        "transgenre",
+        "LGBT",
+        "LGBTI",
+        "changement de sexe à l’état civil",
+        "thérapies de conversion",
+        "homophobie"
+      ],
+      "answer_kind": "measures",
+      "answer_section_ids": [
+        "c4-s01"
+      ],
+      "answer_measure_ids": [
+        "c4-s01-m04",
+        "c4-s01-m07",
+        "c4-s01-m08"
+      ],
+      "part_ids": [
+        "part1"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur les personnes trans et LGBTI. C'est dans « Une nouvelle étape des libertés et de l’émancipation individuelle ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « LGBT | trans | transgenre | homophob | transphob | changement de sexe | état civil » : 7 passages, 4 sections. c4-s01-m04 (état civil), m07 (violences anti-LGBTI) et m08 (thérapies de conversion, vu dans l'extraction de la section entière) répondent ; les mentions dans l'école, le planning familial et le sport sont secondaires."
+    },
+    {
+      "id": "faq-08",
+      "question": "Est-ce que le programme parle de la fin de vie ?",
+      "voice": "indecis",
+      "normalized": "est ce que le programme parle de la fin de vie",
+      "aliases": [
+        "fin de vie",
+        "euthanasie",
+        "suicide assisté",
+        "mourir dans la dignité",
+        "aide à mourir",
+        "soins palliatifs"
+      ],
+      "answer_kind": "measures",
+      "answer_section_ids": [
+        "c4-s01"
+      ],
+      "answer_measure_ids": [
+        "c4-s01-m01"
+      ],
+      "part_ids": [
+        "part1"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur la fin de vie. C'est dans « Une nouvelle étape des libertés et de l’émancipation individuelle ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « fin de vie | mourir dans la dignité | aide à mourir | euthanasie | suicide assisté » : 2 passages, 1 section. c4-s01-m01 est la seule mesure ; c4-s01-a01 est un sondage (carte « À savoir »), affiché par l'app à côté mais pas cité comme mesure."
+    },
+    {
+      "id": "faq-09",
+      "question": "Est-ce que le programme parle de la PMA ?",
+      "voice": "indecis",
+      "normalized": "est ce que le programme parle de la pma",
+      "aliases": [
+        "PMA",
+        "procréation médicalement assistée",
+        "PMA pour toutes",
+        "GPA",
+        "gestation pour autrui"
+      ],
+      "answer_kind": "partial",
+      "answer_section_ids": [
+        "c4-s01"
+      ],
+      "answer_measure_ids": [
+        "c4-s01-m06",
+        "c4-s01-m05"
+      ],
+      "excluded_ids": [],
+      "part_ids": [
+        "part1"
+      ],
+      "liant_fr": "Le programme en parle seulement ici : « Une nouvelle étape des libertés et de l’émancipation individuelle ». Voici ce qu'il dit.",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « PMA | procréation médicalement | GPA | gestation pour autrui » : une seule section. c4-s01-m06 (moyens de la PMA) et c4-s01-m05 (refus de la GPA). L'ouverture de la PMA à toutes n'apparaît pas dans le texte 2025 : d'où « partial »."
+    },
+    {
+      "id": "faq-10",
+      "question": "Est-ce que le programme parle du voile ou de l'abaya ?",
+      "voice": "indecis",
+      "normalized": "est ce que le programme parle du voile ou de l abaya",
+      "aliases": [
+        "voile",
+        "abaya",
+        "burkini",
+        "signes religieux",
+        "voile à l’école",
+        "hijab"
+      ],
+      "answer_kind": "absent",
+      "answer_section_ids": [],
+      "answer_measure_ids": [],
+      "neighbour_ids": [
+        "c1-s05-k01",
+        "c1-s05-m03",
+        "c1-s05-m04"
+      ],
+      "excluded_ids": [],
+      "absence_probe": {
+        "queries": [
+          "voile",
+          "voiles",
+          "burkini",
+          "burqa",
+          "abaya",
+          "hijab",
+          "foulard",
+          "signes religieux"
+        ],
+        "hits_outside_excluded": 0,
+        "corpus_version": "d29c7422004ab27c",
+        "replayed_at": "2026-09-10",
+        "method_fr": "Chaque requête est normalisée (minuscules, sans accents) et cherchée en mot entier dans les 1 033 items du corpus figé. Tout item trouvé doit figurer dans excluded_ids (faux ami déclaré) : sinon l'absence est fausse et scripts/faq.test.ts échoue."
+      },
+      "part_ids": [],
+      "liant_fr": "L'Avenir en commun ne traite pas de ça. Aucune mesure ne répond à ta question mot pour mot.",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « voile | burkini | burqa | abaya | signes religieux | tenue | hijab | foulard » : 0 passage sur le sujet (« tenue » ne sort que dans « détenues »). La section « Une République laïque » (c1-s05) est le voisinage naturel ; la désintox traite 3 idées reçues voisines. Croisement : rip-11."
+    },
+    {
+      "id": "faq-11",
+      "question": "Il y a quoi pour les étudiants ?",
+      "voice": "jeune",
+      "normalized": "il y a quoi pour les etudiants",
+      "aliases": [
+        "étudiants",
+        "université gratuite",
+        "frais d’inscription",
+        "CVEC",
+        "repas à un euro",
+        "CROUS",
+        "bourses"
+      ],
+      "answer_kind": "sections",
+      "answer_section_ids": [
+        "c5-s06",
+        "c10-s03"
+      ],
+      "answer_measure_ids": [
+        "c5-s06-k01",
+        "c5-s06-m01",
+        "c5-s06-m02",
+        "c10-s03-m01"
+      ],
+      "part_ids": [
+        "part2"
+      ],
+      "liant_fr": "Voici ce que dit le programme pour les étudiants. C'est dans « Refonder l’enseignement supérieur » et « Construire l’autonomie des jeunes ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « étudiant | garantie d'autonomie | bourses | CROUS | restaurant universitaire » : 14 passages, 8 sections. Les deux sections qui portent le sujet : c5-s06 (gratuité m01, CVEC m02, mesure clé k01) et c10-s03 (repas à un euro m01). Aucune mesure ne contient le mot « bourse » : alias conservé pour le routage, réponse par la section."
+    },
+    {
+      "id": "faq-12",
+      "question": "Parcoursup, ils le suppriment ?",
+      "voice": "jeune",
+      "normalized": "parcoursup ils le suppriment",
+      "aliases": [
+        "Parcoursup",
+        "sélection à l’université",
+        "supprimer Parcoursup",
+        "accès à la fac"
+      ],
+      "answer_kind": "measures",
+      "answer_section_ids": [
+        "c5-s06"
+      ],
+      "answer_measure_ids": [
+        "c5-s06-k01"
+      ],
+      "part_ids": [
+        "part2"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur Parcoursup. C'est dans « Refonder l’enseignement supérieur ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « Parcoursup | sélection à l'université | sélection | baccalauréat | bac » : la mesure clé c5-s06-k01 nomme Parcoursup ; c5-s06-a01 est un sondage. Les occurrences « BAC » (police) et « sélection » (marchés publics) sont des homonymes."
+    },
+    {
+      "id": "faq-13",
+      "question": "Ils proposent quoi sur les loyers ?",
+      "voice": "jeune",
+      "normalized": "ils proposent quoi sur les loyers",
+      "aliases": [
+        "loyers",
+        "encadrement des loyers",
+        "logement",
+        "expulsions",
+        "HLM",
+        "logements sociaux",
+        "Airbnb"
+      ],
+      "answer_kind": "sections",
+      "answer_section_ids": [
+        "c7-s05"
+      ],
+      "answer_measure_ids": [
+        "c7-s05-k01",
+        "c7-s05-m04",
+        "c7-s05-m02"
+      ],
+      "part_ids": [
+        "part2"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur les loyers et le logement. C'est dans « Garantir le droit au logement ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « logement | loyer | HLM | expulsion | sans-abri | mal-logé | logements sociaux » : 30 passages, 10 sections. La section c7-s05 porte le sujet (mesure clé k01, encadrement des loyers m04, garantie universelle des loyers m02). Croisement : rip-14."
+    },
+    {
+      "id": "faq-14",
+      "question": "C'est quoi le SMIC à 1600 euros ?",
+      "voice": "indecis",
+      "normalized": "c est quoi le smic a 1600 euros",
+      "aliases": [
+        "SMIC",
+        "augmentation du SMIC",
+        "salaire minimum",
+        "SMIC à 1600",
+        "hausse des salaires"
+      ],
+      "answer_kind": "measures",
+      "answer_section_ids": [
+        "c8-s04"
+      ],
+      "answer_measure_ids": [
+        "c8-s04-k01",
+        "c9-s01-m02"
+      ],
+      "part_ids": [
+        "part2"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur le SMIC. C'est dans « Augmenter les salaires et réduire les inégalités salariales dans l’entreprise » et « Créer un état d’urgence sociale ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « SMIC | salaire minimum | 1 600 | 1600 » : 11 passages, 6 sections. Le montant figure dans c8-s04-k01 et c9-s01-m02 (même chiffre, deux sections). Les autres occurrences indexent d'autres mesures sur le SMIC (conscription, AAH, pensions). Croisement : rip-04."
+    },
+    {
+      "id": "faq-15",
+      "question": "La retraite à 60 ans, c'est dedans ?",
+      "voice": "indecis",
+      "normalized": "la retraite a 60 ans c est dedans",
+      "aliases": [
+        "retraite à 60 ans",
+        "retraites",
+        "âge de la retraite",
+        "réforme des retraites",
+        "abroger la réforme Macron",
+        "64 ans"
+      ],
+      "answer_kind": "measures",
+      "answer_section_ids": [
+        "c8-s08"
+      ],
+      "answer_measure_ids": [
+        "c8-s08-k01",
+        "c8-s02-m01"
+      ],
+      "part_ids": [
+        "part2"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur l'âge de la retraite. C'est dans « Garantir une retraite digne ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « retraite | 60 ans | annuités | pension » : 16 passages, 7 sections. c8-s08-k01 (abrogation de la réforme, 60 ans à taux plein pour 40 annuités) répond mot pour mot ; c8-s02-m01 répète la retraite à 60 ans dans la section temps de travail. Croisement : rip-02."
+    },
+    {
+      "id": "faq-16",
+      "question": "Ils proposent quoi contre le chômage ?",
+      "voice": "militant",
+      "normalized": "ils proposent quoi contre le chomage",
+      "aliases": [
+        "chômage",
+        "garantie d’emploi",
+        "assurance chômage",
+        "France Travail",
+        "chômeurs de longue durée",
+        "emploi jeune"
+      ],
+      "answer_kind": "sections",
+      "answer_section_ids": [
+        "c8-s01",
+        "c8-s05"
+      ],
+      "answer_measure_ids": [
+        "c8-s01-k01",
+        "c8-s05-k01",
+        "c10-s03-m02"
+      ],
+      "part_ids": [
+        "part2"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur le chômage. C'est dans « Établir la garantie d’emploi » et « Rétablir une assurance-chômage protectrice ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « garantie d'emploi | chômeur | assurance-chômage | France Travail | radiation » : c8-s01 (mesure clé k01, la seule à nommer la garantie d'emploi) et c8-s05 (k01, abrogation France Travail m01). c10-s03-m02 (emploi spécifique jeune) vient de l'extraction de la section c10-s03 entière."
+    },
+    {
+      "id": "faq-17",
+      "question": "Est-ce que le programme parle de la semaine de quatre jours ?",
+      "voice": "jeune",
+      "normalized": "est ce que le programme parle de la semaine de quatre jours",
+      "aliases": [
+        "semaine de 4 jours",
+        "4 jours",
+        "32 heures",
+        "35 heures",
+        "temps de travail",
+        "sixième semaine de congés payés"
+      ],
+      "answer_kind": "partial",
+      "answer_section_ids": [
+        "c8-s02"
+      ],
+      "answer_measure_ids": [
+        "c8-s02-k01",
+        "c8-s02-m02"
+      ],
+      "excluded_ids": [
+        "c8-s02-a01"
+      ],
+      "part_ids": [
+        "part2"
+      ],
+      "liant_fr": "Le programme en parle seulement ici : « Réduire le temps de travail et faire naître une société du temps choisi ». Voici ce qu'il dit.",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « 4 jours | quatre jours | 32 h | 32 heures | semaine de » (vérification n-4-jours du 8/9) : la « semaine de 4 jours » n'apparaît que dans la carte statistique c8-s02-a01, jamais dans une mesure. Les mesures affichées sont c8-s02-k01 (35 heures, 32 heures dans les métiers pénibles ou de nuit) et m02 (sixième semaine de congés). D'où « partial » : le sujet n'apparaît qu'à cet endroit du livre. La question est écrite en lettres pour qu'aucun chiffre ne soit affirmé hors passage cité."
+    },
+    {
+      "id": "faq-18",
+      "question": "Ils proposent quoi sur l'ISF ?",
+      "voice": "militant",
+      "normalized": "ils proposent quoi sur l isf",
+      "aliases": [
+        "ISF",
+        "impôt sur la fortune",
+        "taxe Zucman",
+        "taxer les riches",
+        "taxer les milliardaires",
+        "impôts"
+      ],
+      "answer_kind": "measures",
+      "answer_section_ids": [
+        "c6-s05"
+      ],
+      "answer_measure_ids": [
+        "c6-s05-m02",
+        "c6-s05-m03",
+        "c6-s05-k01"
+      ],
+      "part_ids": [
+        "part2"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur l'ISF et l'impôt des plus riches. C'est dans « Faire la révolution fiscale ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « ISF | impôt sur la fortune | impôt de solidarité | Zucman | impôt sur le revenu | tranches » : 9 passages, 3 sections. c6-s05-m02 (ISF), m03 (taxe Zucman), k01 (barème de l'impôt sur le revenu). Croisement : rip-01."
+    },
+    {
+      "id": "faq-19",
+      "question": "Ils proposent quoi sur la dette ?",
+      "voice": "militant",
+      "normalized": "ils proposent quoi sur la dette",
+      "aliases": [
+        "dette",
+        "dette publique",
+        "comment ils financent",
+        "audit de la dette",
+        "BCE",
+        "déficit"
+      ],
+      "answer_kind": "sections",
+      "answer_section_ids": [
+        "c6-s04"
+      ],
+      "answer_measure_ids": [
+        "c6-s04-k01",
+        "c6-s04-m03"
+      ],
+      "part_ids": [
+        "part2"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur la dette publique. C'est dans « Refuser le chantage : annuler la dette publique ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « dette publique | dette | Banque centrale | BCE » : 10 passages, 2 sections. La section c6-s04 porte le sujet (mesure clé k01 sur la BCE, audit citoyen m03) ; c14-s03 parle de la dette des usagers de l'eau, hors sujet. Croisement : rip-03."
+    },
+    {
+      "id": "faq-20",
+      "question": "Est-ce qu'on sort de l'euro ?",
+      "voice": "indecis",
+      "normalized": "est ce qu on sort de l euro",
+      "aliases": [
+        "sortie de l'euro",
+        "retour au franc",
+        "quitter la zone euro",
+        "monnaie nationale"
+      ],
+      "answer_kind": "premise-false",
+      "answer_section_ids": [
+        "c17-s02"
+      ],
+      "answer_measure_ids": [
+        "c17-s02-m02",
+        "c17-s02-m05"
+      ],
+      "excluded_ids": [
+        "c16-s09-m03",
+        "c16-s11-m03"
+      ],
+      "part_ids": [
+        "part4"
+      ],
+      "liant_fr": "Ce n'est pas dans le texte. Voici ce qu'il dit sur le sujet : « Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « euro (mot entier) | monnaie unique | franc | plan A | plan B | monnaie | zone euro | sortir de l'Union » : aucune mesure sur l'euro ou la sortie de l'Union. Seules occurrences de « monnaie » : monnaie commune mondiale face au dollar (c16-s09-m03) et zone CFA (c16-s11-m03). Le chapitre 17 traite la désobéissance aux règles européennes, pas la sortie : voir l'entrée Europe et rip-12. Vérification n-euro du 8/9 : 8 occurrences d'« euro », toutes des montants ; « monnaie » deux fois, hors euro. « Frexit » et « sortir de l'UE » routent vers l'entrée Europe. | 10/9/2026, panel rouge T12 : l'entrée servait « L'Avenir en commun ne traite pas de ça. » alors que sa propre note renvoyait au chapitre 17 et à rip-12 — deux réponses incompatibles selon la route. answer_kind passe de « absent » à « premise-false » : la proposition (sortir de l'euro) n'est pas dans le livre, mais le sujet (les règles européennes) l'est. refusal.title reste réservée aux « absent-sujet »."
+    },
+    {
+      "id": "faq-21",
+      "question": "Il y aura un service militaire obligatoire ?",
+      "voice": "jeune",
+      "normalized": "il y aura un service militaire obligatoire",
+      "aliases": [
+        "service militaire",
+        "service national",
+        "conscription",
+        "SNU",
+        "service citoyen obligatoire",
+        "garde nationale"
+      ],
+      "answer_kind": "measures",
+      "answer_section_ids": [
+        "c5-s07"
+      ],
+      "answer_measure_ids": [
+        "c5-s07-k01",
+        "c5-s07-m01",
+        "c5-s07-m03",
+        "c16-s02-m04"
+      ],
+      "part_ids": [
+        "part2",
+        "part4"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur la conscription et le service militaire. C'est dans « Créer une conscription pour le secours collectif » et « Construire une défense souveraine au service de la paix ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « conscription | service militaire | service national | service civique | SNU » : 8 passages, 3 sections. c5-s07 porte le sujet (k01, conscription citoyenne m01, abrogation du SNU m03) ; c16-s02-m04 précise que le service militaire est une composante optionnelle."
+    },
+    {
+      "id": "faq-22",
+      "question": "Ils proposent quoi pour l'école ?",
+      "voice": "militant",
+      "normalized": "ils proposent quoi pour l ecole",
+      "aliases": [
+        "école",
+        "éducation nationale",
+        "profs",
+        "salaire des enseignants",
+        "effectifs par classe",
+        "cantine gratuite",
+        "école privée"
+      ],
+      "answer_kind": "sections",
+      "answer_section_ids": [
+        "c5-s03"
+      ],
+      "answer_measure_ids": [
+        "c5-s03-k01",
+        "c5-s03-m01",
+        "c5-s03-m02",
+        "c5-s03-m03"
+      ],
+      "part_ids": [
+        "part2"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur l'école. C'est dans « Reconstruire une école globale pour l’égalité et l’émancipation ».",
+      "liant_kind": "reformulé",
+      "support_note": "Extraction de la section c5-s03 entière (titre) : mesure clé k01 (gratuité réelle), puis quatre mesures-titres m01 à m04 portant les sous-mesures (effectifs, carte scolaire, salaires des personnels, privé sous contrat). m04 (école et bifurcation écologique) est laissé à la lecture de la section."
+    },
+    {
+      "id": "faq-23",
+      "question": "L'uniforme à l'école, ils sont pour ?",
+      "voice": "indecis",
+      "normalized": "l uniforme a l ecole ils sont pour",
+      "aliases": [
+        "uniforme",
+        "uniforme à l’école",
+        "tenue unique",
+        "blouse à l’école"
+      ],
+      "answer_kind": "partial",
+      "answer_section_ids": [
+        "c5-s03"
+      ],
+      "answer_measure_ids": [
+        "c5-s03-m01.s8"
+      ],
+      "excluded_ids": [],
+      "part_ids": [
+        "part2"
+      ],
+      "liant_fr": "Le programme en parle seulement ici : « Reconstruire une école globale pour l’égalité et l’émancipation ». Voici ce qu'il dit.",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « uniforme » : une seule occurrence, la sous-mesure c5-s03-m01.s8 (« Suspendre l'expérimentation de l'uniforme »). Une seule ligne dans tout le livre : « partial »."
+    },
+    {
+      "id": "faq-24",
+      "question": "Ils proposent quoi pour les Outre-mer ?",
+      "voice": "militant",
+      "normalized": "ils proposent quoi pour les outre mer",
+      "aliases": [
+        "Outre-mer",
+        "DOM-TOM",
+        "Guadeloupe",
+        "Martinique",
+        "Réunion",
+        "Mayotte",
+        "Guyane",
+        "Kanaky Nouvelle-Calédonie"
+      ],
+      "answer_kind": "sections",
+      "answer_section_ids": [
+        "c7-s02",
+        "c12-s03",
+        "c14-s03",
+        "c16-s08"
+      ],
+      "answer_measure_ids": [
+        "c7-s02-k01",
+        "c12-s03-k01",
+        "c14-s03-k01",
+        "c16-s08-k01"
+      ],
+      "part_ids": [
+        "part2",
+        "part3",
+        "part4"
+      ],
+      "liant_fr": "Voici ce que dit le programme pour les Outre-mer, dans quatre sections. La première est « En finir avec l’abandon des Outre-mer ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « Outre-mer | Mayotte | Guadeloupe | Martinique | Guyane | Réunion | Kanaky | Nouvelle-Calédonie | Polynésie | chlordécone | vie chère » : 49 passages, 19 sections. Quatre sections ont les Outre-mer dans leur titre : c7-s02, c12-s03, c14-s03, c16-s08 ; on cite leur mesure clé. Les mentions dispersées (chlordécone c14-s01-m03, bouclier qualité-prix c9-s01-m01, transports c13-s02-m13) restent accessibles par la recherche. L'alias « vie chère » est porté par l'entrée blocage des prix (c7-s02-m01, mesure des Outre-mer sur les prix)."
+    },
+    {
+      "id": "faq-25",
+      "question": "Le programme dit quoi sur le racisme et le contrôle au faciès ?",
+      "voice": "jeune",
+      "normalized": "le programme dit quoi sur le racisme et le controle au facies",
+      "aliases": [
+        "racisme",
+        "contrôle au faciès",
+        "discriminations",
+        "récépissé de contrôle",
+        "islamophobie",
+        "antisémitisme",
+        "testing"
+      ],
+      "answer_kind": "sections",
+      "answer_section_ids": [
+        "c10-s02"
+      ],
+      "answer_measure_ids": [
+        "c10-s02-k01",
+        "c10-s02-m05",
+        "c10-s02-m11",
+        "c10-s02-m01"
+      ],
+      "part_ids": [
+        "part2"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur le racisme et les discriminations. C'est dans « Une République universaliste contre le racisme et les discriminations ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « discrimination | racisme | contrôle au faciès | testing | antisémit | islamophob » : 20 passages, 7 sections. La section c10-s02 porte le sujet : plan global k01, récépissé m05, plan contre l'islamophobie et l'antisémitisme m11, testing m01."
+    },
+    {
+      "id": "faq-26",
+      "question": "C'est quoi le blocage des prix ?",
+      "voice": "indecis",
+      "normalized": "c est quoi le blocage des prix",
+      "aliases": [
+        "blocage des prix",
+        "bloquer les prix",
+        "prix bloqués",
+        "pouvoir d’achat",
+        "vie chère",
+        "réduflation",
+        "inflation"
+      ],
+      "answer_kind": "measures",
+      "answer_section_ids": [
+        "c9-s01"
+      ],
+      "answer_measure_ids": [
+        "c9-s01-k01",
+        "c7-s04-m02",
+        "c7-s02-m01"
+      ],
+      "part_ids": [
+        "part2"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur le blocage des prix. C'est dans « Créer un état d’urgence sociale » et « Éradiquer la pauvreté ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « blocage des prix | bloquer les prix | prix | pouvoir d'achat | produits de première nécessité » : 17 passages, 13 sections. Trois mesures bloquent ou encadrent des prix : c9-s01-k01 (mesure clé), c7-s04-m02 (alimentaire et réduflation), c7-s02-m01 (Outre-mer). Le mot « prix » seul est trop ambigu pour un alias."
+    },
+    {
+      "id": "faq-27",
+      "question": "Ils proposent quoi sur le handicap ?",
+      "voice": "militant",
+      "normalized": "ils proposent quoi sur le handicap",
+      "aliases": [
+        "handicap",
+        "AAH",
+        "personnes en situation de handicap",
+        "accessibilité",
+        "AESH"
+      ],
+      "answer_kind": "sections",
+      "answer_section_ids": [
+        "c10-s05"
+      ],
+      "answer_measure_ids": [
+        "c10-s05-k01",
+        "c10-s05-m05",
+        "c10-s05-m04"
+      ],
+      "part_ids": [
+        "part2"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur le handicap. C'est dans « Lever les obstacles à l’autonomie des personnes en situation de handicap ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « handicap | AAH | allocation aux adultes handicapés | accessibilité | AESH » : 11 passages, 3 sections. La section c10-s05 porte le sujet (AAH au niveau du SMIC k01, zéro obstacle m05, école pour tous m04 avec les AESH en sous-mesure)."
+    },
+    {
+      "id": "faq-28",
+      "question": "Est-ce que le programme parle des violences faites aux femmes ?",
+      "voice": "indecis",
+      "normalized": "est ce que le programme parle des violences faites aux femmes",
+      "aliases": [
+        "violences faites aux femmes",
+        "féminicides",
+        "égalité femmes-hommes",
+        "droits des femmes",
+        "violences sexistes et sexuelles",
+        "IVG"
+      ],
+      "answer_kind": "sections",
+      "answer_section_ids": [
+        "c10-s01"
+      ],
+      "answer_measure_ids": [
+        "c10-s01-k01",
+        "c10-s01-m14",
+        "c10-s01-m11"
+      ],
+      "part_ids": [
+        "part2"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur les violences faites aux femmes. C'est dans « Réaliser l’égalité entre les femmes et les hommes ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « femmes | féminicide | violences sexuelles | violences sexistes | IVG | avortement | égalité salariale | contraception » : 42 passages, 19 sections. La section c10-s01 porte le sujet : loi contre les violences k01, violences obstétricales m14, IVG m11. Le mot « féminicide » n'apparaît pas dans le corpus : alias gardé pour le routage."
+    },
+    {
+      "id": "faq-29",
+      "question": "C'est quoi la garantie d'autonomie ?",
+      "voice": "jeune",
+      "normalized": "c est quoi la garantie d autonomie",
+      "aliases": [
+        "garantie d’autonomie",
+        "RSA jeunes",
+        "aide pour les moins de 25 ans",
+        "minimum pour vivre",
+        "seuil de pauvreté"
+      ],
+      "answer_kind": "measures",
+      "answer_section_ids": [
+        "c7-s04",
+        "c10-s03"
+      ],
+      "answer_measure_ids": [
+        "c7-s04-k01",
+        "c10-s03-k01"
+      ],
+      "part_ids": [
+        "part2"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur la garantie d'autonomie. C'est dans « Éradiquer la pauvreté » et « Construire l’autonomie des jeunes ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « garantie d'autonomie | RSA | minima sociaux | moins de 25 ans » : la garantie d'autonomie est définie dans deux mesures clés, c7-s04-k01 (tout le monde) et c10-s03-k01 (jeunes détachés du foyer fiscal). c5-s03-m01.s5 la mentionne pour les 16-18 ans."
+    },
+    {
+      "id": "faq-30",
+      "question": "Les stages seront mieux payés ?",
+      "voice": "jeune",
+      "normalized": "les stages seront mieux payes",
+      "aliases": [
+        "stages",
+        "indemnité de stage",
+        "stagiaires",
+        "apprentis",
+        "alternance",
+        "premier emploi",
+        "CDD déguisés"
+      ],
+      "answer_kind": "measures",
+      "answer_section_ids": [
+        "c10-s03"
+      ],
+      "answer_measure_ids": [
+        "c10-s03-m03",
+        "c8-s06-m03",
+        "c8-s04-m01"
+      ],
+      "part_ids": [
+        "part2"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur les stages et l'apprentissage. C'est dans « Construire l’autonomie des jeunes », « Une sécurité sociale professionnelle » et « Augmenter les salaires et réduire les inégalités salariales dans l’entreprise ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « stage | stagiaire | apprenti | alternance | premier emploi | CDD | CDI | intérim » : 19 passages, 14 sections. Trois mesures répondent : c10-s03-m03 (indemnités de stage, CDD déguisés), c8-s06-m03 (stages dans la sécurité sociale professionnelle), c8-s04-m01 (rémunération des apprentis et alternants)."
+    },
+    {
+      "id": "faq-31",
+      "question": "Le revenu universel, c'est dans le programme ?",
+      "voice": "indecis",
+      "normalized": "le revenu universel c est dans le programme",
+      "aliases": [
+        "revenu universel",
+        "revenu de base",
+        "revenu inconditionnel",
+        "allocation universelle",
+        "revenu d’existence"
+      ],
+      "answer_kind": "absent",
+      "answer_section_ids": [],
+      "answer_measure_ids": [],
+      "neighbour_ids": [
+        "c7-s04-k01",
+        "c10-s03-k01",
+        "c8-s01-k01"
+      ],
+      "excluded_ids": [],
+      "absence_probe": {
+        "queries": [
+          "revenu universel",
+          "revenu de base",
+          "revenu inconditionnel",
+          "allocation universelle",
+          "revenu d'existence"
+        ],
+        "hits_outside_excluded": 0,
+        "corpus_version": "d29c7422004ab27c",
+        "replayed_at": "2026-09-10",
+        "method_fr": "Chaque requête est normalisée (minuscules, sans accents) et cherchée en mot entier dans les 1 033 items du corpus figé. Tout item trouvé doit figurer dans excluded_ids (faux ami déclaré) : sinon l'absence est fausse et scripts/faq.test.ts échoue."
+      },
+      "part_ids": [],
+      "liant_fr": "L'Avenir en commun ne traite pas de ça. Aucune mesure ne répond à ta question mot pour mot.",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « revenu universel | revenu de base | revenu inconditionnel | allocation universelle | revenu d'existence » : 0 passage dans le corpus 2025 (0 livret 2022, 0 désintox). Le voisinage est la garantie d'autonomie (c7-s04-k01, c10-s03-k01), traitée dans sa propre entrée : l'app peut la proposer en « passage voisin » sans la présenter comme réponse."
+    },
+    {
+      "id": "faq-32",
+      "question": "Est-ce que le programme parle du harcèlement scolaire ?",
+      "voice": "indecis",
+      "normalized": "est ce que le programme parle du harcelement scolaire",
+      "aliases": [
+        "harcèlement scolaire",
+        "harcèlement à l’école",
+        "cyberharcèlement",
+        "harcèlement au collège"
+      ],
+      "answer_kind": "absent",
+      "answer_section_ids": [],
+      "answer_measure_ids": [],
+      "neighbour_ids": [
+        "c7-s09-k01",
+        "c7-s09-m01",
+        "c5-s03-k01"
+      ],
+      "excluded_ids": [
+        "c10-s01-m10",
+        "c5-s07-p01"
+      ],
+      "absence_probe": {
+        "queries": [
+          "harcèlement",
+          "cyberharcèlement",
+          "brimade",
+          "brimades"
+        ],
+        "hits_outside_excluded": 0,
+        "corpus_version": "d29c7422004ab27c",
+        "replayed_at": "2026-09-10",
+        "method_fr": "Chaque requête est normalisée (minuscules, sans accents) et cherchée en mot entier dans les 1 033 items du corpus figé. Tout item trouvé doit figurer dans excluded_ids (faux ami déclaré) : sinon l'absence est fausse et scripts/faq.test.ts échoue."
+      },
+      "part_ids": [],
+      "liant_fr": "L'Avenir en commun ne traite pas de ça. Aucune mesure ne répond à ta question mot pour mot.",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « harcèlement | cyberharcèlement | brimade » : 2 passages, aucun sur l'école : c10-s01-m10 (harcèlement sexiste dans les transports) et c5-s07-p01 (harcèlements au SNU). Voisinage : « Protéger les enfants » (c7-s09) et la section école (c5-s03)."
+    },
+    {
+      "id": "faq-33",
+      "question": "C'est quoi la règle verte ?",
+      "voice": "indecis",
+      "normalized": "c est quoi la regle verte",
+      "aliases": [
+        "règle verte",
+        "ne pas prélever plus que la nature peut reconstituer",
+        "règle bleue"
+      ],
+      "answer_kind": "measures",
+      "answer_section_ids": [
+        "c12-s01"
+      ],
+      "answer_measure_ids": [
+        "c12-s01-k01",
+        "c14-s02-k01"
+      ],
+      "part_ids": [
+        "part3"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur la règle verte. C'est dans « La bifurcation écologique pour une société de l’harmonie » et « L’eau, enjeu central pour l’Humanité ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « règle verte » : 5 passages, 3 sections. La définition est la mesure clé c12-s01-k01 ; c14-s02-k01 (règle bleue) l'applique à l'eau ; c12-s01-m11 (moratoire sur les grands projets) y renvoie. Même sélection que la fiche pilote du glossaire (eval/passages/regle-verte.json)."
+    },
+    {
+      "id": "faq-34",
+      "question": "C'est quoi la planification écologique ?",
+      "voice": "indecis",
+      "normalized": "c est quoi la planification ecologique",
+      "aliases": [
+        "planification écologique",
+        "planification",
+        "Conseil à la planification écologique",
+        "plan écologique"
+      ],
+      "answer_kind": "sections",
+      "answer_section_ids": [
+        "c12-s01",
+        "c12-s02"
+      ],
+      "answer_measure_ids": [
+        "c12-s01-m01",
+        "c12-s01-m03",
+        "c12-s02-k01"
+      ],
+      "part_ids": [
+        "part3"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur la planification écologique. C'est dans le chapitre « Planification écologique », sections « La bifurcation écologique pour une société de l’harmonie » et « L’organisation de l’État au service de la planification écologique ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « planification écologique | planification | Conseil à la planification » : 27 passages, 5 sections. Les deux premières sections du chapitre 12 définissent la méthode : lois cadres m01, Conseil à la planification m03, réorganisation de l'État par bassins versants c12-s02-k01. c12-s03 (Outre-mer) est dans l'entrée Outre-mer."
+    },
+    {
+      "id": "faq-35",
+      "question": "Les transports en commun seront gratuits ?",
+      "voice": "jeune",
+      "normalized": "les transports en commun seront gratuits",
+      "aliases": [
+        "gratuité des transports",
+        "transports gratuits",
+        "bus gratuit",
+        "train gratuit",
+        "prix des transports",
+        "tarifs SNCF"
+      ],
+      "answer_kind": "partial",
+      "answer_section_ids": [
+        "c13-s02"
+      ],
+      "answer_measure_ids": [
+        "c13-s02-m02",
+        "c13-s02-m01"
+      ],
+      "excluded_ids": [
+        "c13-s02-a01"
+      ],
+      "part_ids": [
+        "part3"
+      ],
+      "liant_fr": "Le programme parle des tarifs des transports seulement ici : « Développer les transports publics écologiques, repenser la mobilité individuelle ». Voici ce qu'il dit.",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « gratuité des transports | transports en commun | transports publics | train | SNCF | vélo | ZFE | voiture » puis vérification n-transports-gratuits (8/9 : « gratuit… transport », « tarif… transport », « tarifs accessibles », « tarification ») : la seule mesure sur le prix des transports est c13-s02-m02 (« garantir des tarifs accessibles ») ; m01 renationalise la SNCF. Aucune mesure ne rend les transports en commun gratuits. La gratuité du transport apparaît ailleurs pour l'école seulement (c5-s03-k01, dans l'entrée école) : à proposer en « passage voisin », pas comme réponse. Croisement : rip-10."
+    },
+    {
+      "id": "faq-36",
+      "question": "Ils proposent quoi sur le nucléaire ?",
+      "voice": "militant",
+      "normalized": "ils proposent quoi sur le nucleaire",
+      "aliases": [
+        "nucléaire",
+        "sortie du nucléaire",
+        "EPR",
+        "centrales nucléaires",
+        "énergies renouvelables",
+        "ASN IRSN"
+      ],
+      "answer_kind": "measures",
+      "answer_section_ids": [
+        "c13-s03"
+      ],
+      "answer_measure_ids": [
+        "c13-s03-m03",
+        "c13-s03-m04",
+        "c13-s03-m16",
+        "c13-s03-k01"
+      ],
+      "part_ids": [
+        "part3"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur le nucléaire et l'énergie. C'est dans le chapitre « Les grands chantiers de la bifurcation écologique ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « nucléaire | EPR | Fessenheim | réacteur » : 9 passages, 3 sections. La section c13-s03 porte le sujet : sortie du nucléaire m03, travailleurs du nucléaire m04, ASN-IRSN m16, mesure clé k01 (100 % renouvelables). Le titre de section contient des chiffres : le liant cite le chapitre. Les mentions en défense (c16-s02) et essais nucléaires (c14-s01-m04) sont hors sujet. Croisement : rip-13."
+    },
+    {
+      "id": "faq-37",
+      "question": "Ils proposent quoi sur les pesticides ?",
+      "voice": "militant",
+      "normalized": "ils proposent quoi sur les pesticides",
+      "aliases": [
+        "pesticides",
+        "glyphosate",
+        "agriculture bio",
+        "agriculteurs",
+        "fermes-usines",
+        "engrais"
+      ],
+      "answer_kind": "measures",
+      "answer_section_ids": [
+        "c13-s05"
+      ],
+      "answer_measure_ids": [
+        "c13-s05-m06",
+        "c14-s06-m03",
+        "c13-s05-k01"
+      ],
+      "part_ids": [
+        "part3"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur les pesticides et l'agriculture. C'est dans « Souveraineté alimentaire et révolution agricole : pour une agriculture écologique et paysanne » et « Sauver l’écosystème et la biodiversité ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « pesticide | glyphosate | agriculteur | paysan | agricole | bio | OGM | PAC | fermes-usines » : 31 passages, 13 sections. Deux mesures nomment les pesticides : c13-s05-m06 (réduction planifiée) et c14-s06-m03 (bannir les pesticides) ; c13-s05-k01 est la mesure clé agricole. « Glyphosate » n'est que dans le sondage c13-s05-a02. Croisement : rip-09."
+    },
+    {
+      "id": "faq-38",
+      "question": "Est-ce que le programme parle de la corrida ?",
+      "voice": "indecis",
+      "normalized": "est ce que le programme parle de la corrida",
+      "aliases": [
+        "corrida",
+        "chasse à courre",
+        "bien-être animal",
+        "maltraitance animale",
+        "chasse",
+        "cirques avec animaux"
+      ],
+      "answer_kind": "partial",
+      "answer_section_ids": [
+        "c14-s05"
+      ],
+      "answer_measure_ids": [
+        "c14-s05-m06"
+      ],
+      "excluded_ids": [],
+      "part_ids": [
+        "part3"
+      ],
+      "liant_fr": "Le programme en parle seulement ici : « Rompre avec la maltraitance animale ». Voici ce qu'il dit.",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « corrida | chasse | chasseur | animal | animaux | abattoir | fourrure | cirque | delphinarium » : la corrida n'apparaît qu'une fois, dans la liste de la mesure c14-s05-m06 (avec déterrage, chasse à courre, cirques, delphinariums). Le reste de la section traite l'élevage. D'où « partial » : une mention, dans une énumération."
+    },
+    {
+      "id": "faq-39",
+      "question": "Ils proposent quoi sur l'eau ?",
+      "voice": "militant",
+      "normalized": "ils proposent quoi sur l eau",
+      "aliases": [
+        "eau",
+        "mégabassines",
+        "méga-bassines",
+        "gratuité des premiers mètres cubes",
+        "eau bien commun",
+        "coupures d’eau"
+      ],
+      "answer_kind": "sections",
+      "answer_section_ids": [
+        "c14-s02"
+      ],
+      "answer_measure_ids": [
+        "c14-s02-k01",
+        "c14-s02-m07",
+        "c14-s02-m15",
+        "c14-s02-m04"
+      ],
+      "part_ids": [
+        "part3"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur l'eau. C'est dans « L’eau, enjeu central pour l’Humanité ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « eau (mot entier) | mégabassine | bassine | premiers mètres cubes | nappes » : 42 passages, 9 sections. La section c14-s02 porte le sujet : règle bleue k01, gratuité des mètres cubes indispensables m07, moratoire sur les méga-bassines m15, gestion 100 % publique m04. L'eau dans les Outre-mer (c14-s03) est dans l'entrée Outre-mer."
+    },
+    {
+      "id": "faq-40",
+      "question": "Ils proposent quoi pour l'hôpital et les déserts médicaux ?",
+      "voice": "militant",
+      "normalized": "ils proposent quoi pour l hopital et les deserts medicaux",
+      "aliases": [
+        "hôpital",
+        "déserts médicaux",
+        "santé",
+        "médecins",
+        "urgences",
+        "100 % Sécu",
+        "mutuelles",
+        "santé mentale"
+      ],
+      "answer_kind": "sections",
+      "answer_section_ids": [
+        "c15-s02"
+      ],
+      "answer_measure_ids": [
+        "c15-s02-k01",
+        "c15-s02-m01",
+        "c15-s02-m06",
+        "c15-s02-m11"
+      ],
+      "part_ids": [
+        "part3"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur l'hôpital et les déserts médicaux. C'est dans « Faire passer la santé d’abord et reconstruire les établissements de santé publics, notamment les hôpitaux ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « hôpital | hôpitaux | déserts médicaux | médecin | urgences | T2A | lits » : 33 passages, 9 sections. La section c15-s02 porte le sujet : 100 % Sécu k01, réouverture des urgences et maternités m01, leviers contre les déserts médicaux m06 (suivi de m07 à m11), régulation de l'installation m11."
+    },
+    {
+      "id": "faq-41",
+      "question": "Est-ce que le programme parle du cannabis ?",
+      "voice": "jeune",
+      "normalized": "est ce que le programme parle du cannabis",
+      "aliases": [
+        "cannabis",
+        "légalisation du cannabis",
+        "drogues",
+        "weed",
+        "addictions",
+        "légaliser"
+      ],
+      "answer_kind": "measures",
+      "answer_section_ids": [
+        "c15-s03"
+      ],
+      "answer_measure_ids": [
+        "c15-s03-k01",
+        "c15-s03-m01",
+        "c15-s03-m02"
+      ],
+      "part_ids": [
+        "part3"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur le cannabis et les drogues. C'est dans « Addictions et drogues : il faut changer de stratégie ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « cannabis | légalis | drogue » : 9 passages, 2 sections. La section c15-s03 porte le sujet : légalisation encadrée k01, affectation des taxes m01, réduction des risques m02. c4-s01-a01 (« légalisation de l'euthanasie ») est un homonyme."
+    },
+    {
+      "id": "faq-42",
+      "question": "Ils font quoi pour le climat ?",
+      "voice": "jeune",
+      "normalized": "ils font quoi pour le climat",
+      "aliases": [
+        "climat",
+        "réchauffement climatique",
+        "émissions de gaz à effet de serre",
+        "énergies fossiles",
+        "urgence climatique",
+        "écologie"
+      ],
+      "answer_kind": "sections",
+      "answer_section_ids": [
+        "c12-s01",
+        "c13-s03"
+      ],
+      "answer_measure_ids": [
+        "c12-s01-k01",
+        "c12-s01-m04",
+        "c13-s03-k01",
+        "c13-s03-m01"
+      ],
+      "part_ids": [
+        "part3"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur le climat. C'est dans « La bifurcation écologique pour une société de l’harmonie » et dans le chapitre « Les grands chantiers de la bifurcation écologique ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « renouvelable | éolien | solaire | rénovation énergétique | passoires | 100 % | neutralité carbone | climat » : 64 passages, 27 sections, trop large pour une réponse. On retient l'objectif climatique (c12-s01-m04), la règle verte (k01), la mesure clé énergie c13-s03-k01 et la sortie des énergies carbonées m01. Les entrées règle verte, planification, nucléaire et transports complètent."
+    },
+    {
+      "id": "faq-43",
+      "question": "Ils proposent quoi sur l'OTAN ?",
+      "voice": "militant",
+      "normalized": "ils proposent quoi sur l otan",
+      "aliases": [
+        "OTAN",
+        "sortir de l’OTAN",
+        "commandement intégré",
+        "non-alignement",
+        "alliance militaire"
+      ],
+      "answer_kind": "measures",
+      "answer_section_ids": [
+        "c16-s01"
+      ],
+      "answer_measure_ids": [
+        "c16-s01-k01",
+        "c16-s01-m02"
+      ],
+      "part_ids": [
+        "part4"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur l'OTAN. C'est dans « Assumer l’indépendance de la France dans le monde ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « OTAN | commandement intégré | non-alignement | ONU » : 18 passages, 6 sections. c16-s01-k01 est la mesure clé (retrait du commandement intégré puis de l'organisation) ; m02 refuse toute alliance militaire permanente. Les occurrences « ONU » vont à c16-s03, hors question."
+    },
+    {
+      "id": "faq-44",
+      "question": "Ils proposent quoi sur l'immigration ?",
+      "voice": "militant",
+      "normalized": "ils proposent quoi sur l immigration",
+      "aliases": [
+        "immigration",
+        "régularisation des sans-papiers",
+        "migrants",
+        "droit d’asile",
+        "AME",
+        "titres de séjour",
+        "Frontex"
+      ],
+      "answer_kind": "sections",
+      "answer_section_ids": [
+        "c16-s07"
+      ],
+      "answer_measure_ids": [
+        "c16-s07-k01",
+        "c16-s07-m05",
+        "c16-s07-m11",
+        "c16-s07-m12"
+      ],
+      "part_ids": [
+        "part4"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur l'immigration. C'est dans « Pour une politique migratoire humaniste et réaliste ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « immigration | migrant | migratoire | régularis | sans-papiers | asile | réfugié | Frontex | OQTF | centres de rétention | AME » : 16 passages, 4 sections. La section c16-s07 porte le sujet : mesure clé k01, régularisation et carte de dix ans m05, abrogation des lois asile-immigration m11, AME m12. Croisement : rip-05."
+    },
+    {
+      "id": "faq-45",
+      "question": "Ils proposent quoi sur l'Europe ?",
+      "voice": "militant",
+      "normalized": "ils proposent quoi sur l europe",
+      "aliases": [
+        "Europe",
+        "Union européenne",
+        "traités européens",
+        "désobéir aux traités",
+        "désobéissance européenne",
+        "règles budgétaires européennes",
+        "sortir de l’UE",
+        "Frexit"
+      ],
+      "answer_kind": "sections",
+      "answer_section_ids": [
+        "c17-s01",
+        "c17-s02"
+      ],
+      "answer_measure_ids": [
+        "c17-s01-m01",
+        "c17-s01-m02",
+        "c17-s02-m02",
+        "c17-s02-m05"
+      ],
+      "part_ids": [
+        "part4"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur l'Union européenne. C'est dans « Utiliser tous les leviers d’action face aux institutions européennes » et « Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme ».",
+      "liant_kind": "reformulé",
+      "support_note": "Extraction des deux sections du chapitre 17 par leur titre (elles n'ont pas de mesure clé) : droit de veto m01, contribution au budget m02 (c17-s01) ; non-application des normes incompatibles m02, primauté de la Constitution m05 (c17-s02). Aucune mesure ne parle de sortir de l'Union : l'alias « sortir de l'UE » route ici et l'entrée euro dit l'absence. Croisement : rip-12. « Frexit » route ici aussi : le lecteur voit ce que le livre dit de l'Union, sans qu'on affirme une sortie."
+    },
+    {
+      "id": "faq-46",
+      "question": "Est-ce que le programme parle de la Palestine ?",
+      "voice": "jeune",
+      "normalized": "est ce que le programme parle de la palestine",
+      "aliases": [
+        "Palestine",
+        "Gaza",
+        "Israël",
+        "reconnaître l’État de Palestine",
+        "sanctions contre Israël",
+        "Proche-Orient"
+      ],
+      "answer_kind": "measures",
+      "answer_section_ids": [
+        "c16-s04"
+      ],
+      "answer_measure_ids": [
+        "c16-s04-m03",
+        "c16-s04-m04",
+        "c16-s04-m05",
+        "c16-s03-m05"
+      ],
+      "part_ids": [
+        "part4"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur la Palestine. C'est dans « Agir pour le respect du droit international contre les guerres » et « Renforcer l’ONU pour faire vivre un monde ordonné ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « Palestin | Gaza | Israël | génocide | colonisation | Cisjordanie » : 5 passages, 3 sections. c16-s04-m03 (cessez-le-feu, blocus, annexion), m04 (sanctions, embargo), m05 (reconnaissance de l'État de Palestine), c16-s03-m05 (UNRWA). c10-s02-m07 (décolonisation) est hors sujet."
+    },
+    {
+      "id": "faq-47",
+      "question": "Le programme dit quoi sur l'Ukraine ?",
+      "voice": "indecis",
+      "normalized": "le programme dit quoi sur l ukraine",
+      "aliases": [
+        "Ukraine",
+        "guerre en Ukraine",
+        "Russie",
+        "Poutine",
+        "cessez-le-feu en Ukraine"
+      ],
+      "answer_kind": "measures",
+      "answer_section_ids": [
+        "c16-s04"
+      ],
+      "answer_measure_ids": [
+        "c16-s04-m01",
+        "c16-s04-m02"
+      ],
+      "part_ids": [
+        "part4"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur l'Ukraine. C'est dans « Agir pour le respect du droit international contre les guerres ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « Ukrain | Russie | russe | Poutine » : c16-s04-m01 (cessez-le-feu, retrait des troupes russes, négociations) et m02 (cadre paneuropéen après la paix). c16-s02-m12 (sites nucléaires en zone de guerre) cite l'Ukraine en exemple, hors réponse."
+    },
+    {
+      "id": "faq-48",
+      "question": "Est-ce que le programme parle des réseaux sociaux ?",
+      "voice": "jeune",
+      "normalized": "est ce que le programme parle des reseaux sociaux",
+      "aliases": [
+        "réseaux sociaux",
+        "TikTok",
+        "Instagram",
+        "interdire les réseaux sociaux aux mineurs",
+        "majorité numérique",
+        "GAFAM"
+      ],
+      "answer_kind": "partial",
+      "answer_section_ids": [
+        "c18-s05"
+      ],
+      "answer_measure_ids": [
+        "c18-s05-m06"
+      ],
+      "excluded_ids": [],
+      "part_ids": [
+        "part4"
+      ],
+      "liant_fr": "Le programme en parle seulement ici : « Garantir la souveraineté numérique de la France ». Voici ce qu'il dit.",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « réseaux sociaux | TikTok | Instagram | Facebook | majorité numérique | moins de 15 ans » : une seule mesure, c18-s05-m06 (refuser la censure privée des GAFAM). Aucune mesure sur l'accès des mineurs aux réseaux sociaux : « partial »."
+    },
+    {
+      "id": "faq-49",
+      "question": "Est-ce que le programme parle des cryptomonnaies ?",
+      "voice": "indecis",
+      "normalized": "est ce que le programme parle des cryptomonnaies",
+      "aliases": [
+        "cryptomonnaies",
+        "crypto",
+        "bitcoin",
+        "blockchain",
+        "NFT"
+      ],
+      "answer_kind": "absent",
+      "answer_section_ids": [],
+      "answer_measure_ids": [],
+      "neighbour_ids": [
+        "c6-s01-k01",
+        "c6-s01-m01",
+        "c18-s05-k01"
+      ],
+      "excluded_ids": [],
+      "absence_probe": {
+        "queries": [
+          "crypto",
+          "cryptomonnaie",
+          "cryptomonnaies",
+          "bitcoin",
+          "blockchain",
+          "NFT",
+          "monnaie virtuelle"
+        ],
+        "hits_outside_excluded": 0,
+        "corpus_version": "d29c7422004ab27c",
+        "replayed_at": "2026-09-10",
+        "method_fr": "Chaque requête est normalisée (minuscules, sans accents) et cherchée en mot entier dans les 1 033 items du corpus figé. Tout item trouvé doit figurer dans excluded_ids (faux ami déclaré) : sinon l'absence est fausse et scripts/faq.test.ts échoue."
+      },
+      "part_ids": [],
+      "liant_fr": "L'Avenir en commun ne traite pas de ça. Aucune mesure ne répond à ta question mot pour mot.",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « crypto | bitcoin | blockchain | NFT | monnaie virtuelle | monnaie numérique » : 0 passage dans le corpus 2025 (2 livrets 2022 en parlent, contexte seulement). Voisinage : « Mettre au pas la finance » (c6-s01) et le chapitre 18 sur le numérique."
+    },
+    {
+      "id": "faq-50",
+      "question": "Ils proposent quoi sur l'intelligence artificielle ?",
+      "voice": "militant",
+      "normalized": "ils proposent quoi sur l intelligence artificielle",
+      "aliases": [
+        "intelligence artificielle",
+        "IA",
+        "ChatGPT",
+        "reconnaissance faciale",
+        "algorithmes",
+        "numérique"
+      ],
+      "answer_kind": "measures",
+      "answer_section_ids": [
+        "c18-s05"
+      ],
+      "answer_measure_ids": [
+        "c18-s05-m12",
+        "c18-s05-m13",
+        "c11-s01-m15",
+        "c10-s02-m02"
+      ],
+      "part_ids": [
+        "part2",
+        "part4"
+      ],
+      "liant_fr": "Voici ce que dit le programme sur l'intelligence artificielle. C'est dans « Garantir la souveraineté numérique de la France », « La bifurcation dans les arts et la culture : pour un service public du progrès humain » et « Une République universaliste contre le racisme et les discriminations ».",
+      "liant_kind": "reformulé",
+      "support_note": "Recherche « intelligence artificielle | IA | logiciel libre | GAFAM | données personnelles | jeux vidéo » : 33 passages, 7 sections. Quatre mesures nomment l'IA : c18-s05-m12 (mission nationale), m13 (usages interdits), c11-s01-m15 (IA générative culturelle), c10-s02-m02 (biais discriminatoires). La reconnaissance faciale (c7-s08-m05) est dans la section police."
+    }
+  ]
+}

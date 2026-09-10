@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diagnostic in-app — AEC Discover</title>
+<meta name="robots" content="noindex">
+<style>
+  :root { color-scheme: light; }
+  body { margin: 0; background: #FFFCF4; color: #212320; font: 16px/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+  main { max-width: 640px; margin: 0 auto; padding: 20px; }
+  h1 { color: #4C0297; font-size: 22px; margin: 0 0 12px; }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  td { padding: 6px 8px; border-bottom: 1px solid #E5CBFF; vertical-align: top; }
+  td:first-child { font-weight: 700; width: 45%; }
+  .yes { color: #2E9959; font-weight: 700; } .no { color: #D1271C; font-weight: 700; }
+  pre { white-space: pre-wrap; word-break: break-all; font-size: 12px; background: #FDEDFF; padding: 10px; border-radius: 8px; }
+  button { font: inherit; padding: 12px 18px; margin: 12px 8px 0 0; background: #D1271C; color: #FFFCF4; border: 0; border-radius: 8px; font-weight: 700; }
+  a { color: #4C0297; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Diagnostic in-app</h1>
+  <p>Capture cet écran depuis chaque messagerie (WhatsApp, Telegram, Instagram, Messenger, TikTok), sur Android et iPhone. Ferme l'app hôte, rouvre le lien, recapture : le compteur de visites doit augmenter.</p>
+  <table id="t"></table>
+  <button id="share">Tester « Partager » (texte + lien)</button>
+  <button id="shareFiles">Tester « Partager » avec image</button>
+  <p id="shareResult"></p>
+  <p>Chaîne UA complète :</p>
+  <pre id="ua"></pre>
+  <p><a href="/">Retour aux exemples</a></p>
+</main>
+<script src="/diag.js" defer></script>
+</body>
+</html>

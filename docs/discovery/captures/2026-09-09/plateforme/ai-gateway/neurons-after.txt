@@ -1,0 +1,6 @@
+# Lecture APRÈS du jeu GraphQL aiInferenceAdaptive* — 2026-09-09T13:31:36Z
+# Fenêtre du labo 12:54-13:29 UTC : aucune ligne ingérée 37 min après le premier appel.
+TOTAL 2026-09-09T12:50:00Z -> 2026-09-09T13:31:37.386Z: rows=0 neurons=0.0000
+TOTAL 2026-09-09T12:50:00Z -> 2026-09-09T13:31:40.342Z: requests=0 neurons=0.0000
+# Journée entière (lecture groupée, valeur extrapolée/instable : 133 ou 160 selon la lecture, voir README §3.2) :
+TOTAL 2026-09-09T00:00:00Z -> 2026-09-09T13:31:42.954Z: requests=160 neurons=6213.8137

@@ -1,0 +1,7 @@
+2026-09-09T12:57:00Z success sum.requests 1 cpu p50/p99 us 2101 2101
+2026-09-09T12:59:00Z success sum.requests 408 cpu p50/p99 us 1834 4991
+2026-09-09T13:01:00Z success sum.requests 134 cpu p50/p99 us 1657 2652
+2026-09-09T13:02:00Z success sum.requests 89 cpu p50/p99 us 3835 7677
+2026-09-09T13:03:00Z success sum.requests 17 cpu p50/p99 us 612 1678
+2026-09-09T13:04:00Z success sum.requests 39 cpu p50/p99 us 1362 8864
+2026-09-09T13:05:00Z success sum.requests 103 cpu p50/p99 us 1404 3502

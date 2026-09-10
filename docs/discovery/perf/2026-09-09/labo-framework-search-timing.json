@@ -1,0 +1,182 @@
+{
+  "measuredAt": "2026-09-09T13:26:01.642Z",
+  "runsPerVariant": 3,
+  "query": "règle verte",
+  "warmQuery": "planification",
+  "emulation": {
+    "viewport": "412x823 @1.75",
+    "cpuSlowdown": 4,
+    "network": "devtools Slow 4G",
+    "chromePath": "<home>/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome"
+  },
+  "variants": {
+    "react": {
+      "label": "React 19 + Vite 6 + Tailwind v4",
+      "runs": [
+        {
+          "run": 1,
+          "focusToFirstHitMs": 1262.7000000476837,
+          "inputToFirstHitMs": 1224.5,
+          "lazyLoadMs": 1236.6000000238419,
+          "fetchPhaseMs": 1018.3000000715256,
+          "indexBuildMs": 218.29999995231628,
+          "hitCount": 8,
+          "warmInputToHitMs": 18.5,
+          "warmHitCount": 8,
+          "navigationLoadMs": 2103,
+          "hitIds": "Mesure clé · L’eau, enjeu central pour l’Humanité :: Consacrer une « règle bleue » qui appliq || Mesure · La bifurcation écologique pour une société de l’harmonie :: Instaurer un moratoire sur les grands pr || Mesure clé · La bifurcation écologique pour une société de l’harmonie :: Inscrire dans la Constitution le princip || Texte · Consommer autrement, une France « zéro déchet » :: La planète croule sous les déchets. À l’ || Texte · La bifurcation écologique pour une société de l’harmonie :: L’urgence écologique et climatique suppo || Mesure · Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme :: Cesser d’appliquer unilatéralement les n || Mesure · La bifurcation écologique pour une société de l’harmonie :: Mettre en place une logistique verte : r || Mesure · La Révolution citoyenne dans les médias :: Élargir les règles anti-concentration sa",
+          "fontsLoaded": "Gowun Batang 400 normal | Public Sans 100 900 normal"
+        },
+        {
+          "run": 2,
+          "focusToFirstHitMs": 1238.6000000238419,
+          "inputToFirstHitMs": 1199,
+          "lazyLoadMs": 1212.3999999761581,
+          "fetchPhaseMs": 1017.7000000476837,
+          "indexBuildMs": 194.69999992847443,
+          "hitCount": 8,
+          "warmInputToHitMs": 17.299999952316284,
+          "warmHitCount": 8,
+          "navigationLoadMs": 5986,
+          "hitIds": "Mesure clé · L’eau, enjeu central pour l’Humanité :: Consacrer une « règle bleue » qui appliq || Mesure · La bifurcation écologique pour une société de l’harmonie :: Instaurer un moratoire sur les grands pr || Mesure clé · La bifurcation écologique pour une société de l’harmonie :: Inscrire dans la Constitution le princip || Texte · Consommer autrement, une France « zéro déchet » :: La planète croule sous les déchets. À l’ || Texte · La bifurcation écologique pour une société de l’harmonie :: L’urgence écologique et climatique suppo || Mesure · Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme :: Cesser d’appliquer unilatéralement les n || Mesure · La bifurcation écologique pour une société de l’harmonie :: Mettre en place une logistique verte : r || Mesure · La Révolution citoyenne dans les médias :: Élargir les règles anti-concentration sa",
+          "fontsLoaded": "Gowun Batang 400 normal | Public Sans 100 900 normal"
+        },
+        {
+          "run": 3,
+          "focusToFirstHitMs": 1242.3000000715256,
+          "inputToFirstHitMs": 1203.4000000953674,
+          "lazyLoadMs": 1216.9000000953674,
+          "fetchPhaseMs": 1019.5,
+          "indexBuildMs": 197.40000009536743,
+          "hitCount": 8,
+          "warmInputToHitMs": 17.199999928474426,
+          "warmHitCount": 8,
+          "navigationLoadMs": 2089,
+          "hitIds": "Mesure clé · L’eau, enjeu central pour l’Humanité :: Consacrer une « règle bleue » qui appliq || Mesure · La bifurcation écologique pour une société de l’harmonie :: Instaurer un moratoire sur les grands pr || Mesure clé · La bifurcation écologique pour une société de l’harmonie :: Inscrire dans la Constitution le princip || Texte · Consommer autrement, une France « zéro déchet » :: La planète croule sous les déchets. À l’ || Texte · La bifurcation écologique pour une société de l’harmonie :: L’urgence écologique et climatique suppo || Mesure · Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme :: Cesser d’appliquer unilatéralement les n || Mesure · La bifurcation écologique pour une société de l’harmonie :: Mettre en place une logistique verte : r || Mesure · La Révolution citoyenne dans les médias :: Élargir les règles anti-concentration sa",
+          "fontsLoaded": "Gowun Batang 400 normal | Public Sans 100 900 normal"
+        }
+      ],
+      "median": {
+        "focusToFirstHitMs": 1242.3000000715256,
+        "inputToFirstHitMs": 1203.4000000953674,
+        "lazyLoadMs": 1216.9000000953674,
+        "fetchPhaseMs": 1018.3000000715256,
+        "indexBuildMs": 197.40000009536743,
+        "warmInputToHitMs": 17.299999952316284,
+        "navigationLoadMs": 2103
+      }
+    },
+    "react-ssg": {
+      "label": "React 19 + Vite 6 + Tailwind v4, prerendered + hydration",
+      "runs": [
+        {
+          "run": 1,
+          "focusToFirstHitMs": 1250.7999999523163,
+          "inputToFirstHitMs": 1212.2999999523163,
+          "lazyLoadMs": 1223.5,
+          "fetchPhaseMs": 1023.2999999523163,
+          "indexBuildMs": 200.20000004768372,
+          "hitCount": 8,
+          "warmInputToHitMs": 21.5,
+          "warmHitCount": 8,
+          "navigationLoadMs": 2076,
+          "hitIds": "Mesure clé · L’eau, enjeu central pour l’Humanité :: Consacrer une « règle bleue » qui appliq || Mesure · La bifurcation écologique pour une société de l’harmonie :: Instaurer un moratoire sur les grands pr || Mesure clé · La bifurcation écologique pour une société de l’harmonie :: Inscrire dans la Constitution le princip || Texte · Consommer autrement, une France « zéro déchet » :: La planète croule sous les déchets. À l’ || Texte · La bifurcation écologique pour une société de l’harmonie :: L’urgence écologique et climatique suppo || Mesure · Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme :: Cesser d’appliquer unilatéralement les n || Mesure · La bifurcation écologique pour une société de l’harmonie :: Mettre en place une logistique verte : r || Mesure · La Révolution citoyenne dans les médias :: Élargir les règles anti-concentration sa",
+          "fontsLoaded": "Gowun Batang 400 normal | Public Sans 100 900 normal | Public Sans Fallback Roboto normal normal"
+        },
+        {
+          "run": 2,
+          "focusToFirstHitMs": 1272.4000000953674,
+          "inputToFirstHitMs": 1231.4000000953674,
+          "lazyLoadMs": 1245.6999999284744,
+          "fetchPhaseMs": 1026.2999999523163,
+          "indexBuildMs": 219.39999997615814,
+          "hitCount": 8,
+          "warmInputToHitMs": 18.100000023841858,
+          "warmHitCount": 8,
+          "navigationLoadMs": 2073,
+          "hitIds": "Mesure clé · L’eau, enjeu central pour l’Humanité :: Consacrer une « règle bleue » qui appliq || Mesure · La bifurcation écologique pour une société de l’harmonie :: Instaurer un moratoire sur les grands pr || Mesure clé · La bifurcation écologique pour une société de l’harmonie :: Inscrire dans la Constitution le princip || Texte · Consommer autrement, une France « zéro déchet » :: La planète croule sous les déchets. À l’ || Texte · La bifurcation écologique pour une société de l’harmonie :: L’urgence écologique et climatique suppo || Mesure · Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme :: Cesser d’appliquer unilatéralement les n || Mesure · La bifurcation écologique pour une société de l’harmonie :: Mettre en place une logistique verte : r || Mesure · La Révolution citoyenne dans les médias :: Élargir les règles anti-concentration sa",
+          "fontsLoaded": "Gowun Batang 400 normal | Public Sans 100 900 normal | Public Sans Fallback Roboto normal normal"
+        },
+        {
+          "run": 3,
+          "focusToFirstHitMs": 1277.7999999523163,
+          "inputToFirstHitMs": 1239.8999999761581,
+          "lazyLoadMs": 1249,
+          "fetchPhaseMs": 1021.1000000238419,
+          "indexBuildMs": 227.89999997615814,
+          "hitCount": 8,
+          "warmInputToHitMs": 17.399999976158142,
+          "warmHitCount": 8,
+          "navigationLoadMs": 2051,
+          "hitIds": "Mesure clé · L’eau, enjeu central pour l’Humanité :: Consacrer une « règle bleue » qui appliq || Mesure · La bifurcation écologique pour une société de l’harmonie :: Instaurer un moratoire sur les grands pr || Mesure clé · La bifurcation écologique pour une société de l’harmonie :: Inscrire dans la Constitution le princip || Texte · Consommer autrement, une France « zéro déchet » :: La planète croule sous les déchets. À l’ || Texte · La bifurcation écologique pour une société de l’harmonie :: L’urgence écologique et climatique suppo || Mesure · Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme :: Cesser d’appliquer unilatéralement les n || Mesure · La bifurcation écologique pour une société de l’harmonie :: Mettre en place une logistique verte : r || Mesure · La Révolution citoyenne dans les médias :: Élargir les règles anti-concentration sa",
+          "fontsLoaded": "Gowun Batang 400 normal | Public Sans 100 900 normal | Public Sans Fallback Roboto normal normal"
+        }
+      ],
+      "median": {
+        "focusToFirstHitMs": 1272.4000000953674,
+        "inputToFirstHitMs": 1231.4000000953674,
+        "lazyLoadMs": 1245.6999999284744,
+        "fetchPhaseMs": 1023.2999999523163,
+        "indexBuildMs": 219.39999997615814,
+        "warmInputToHitMs": 18.100000023841858,
+        "navigationLoadMs": 2073
+      }
+    },
+    "astro": {
+      "label": "Astro 5 (static + vanilla script)",
+      "runs": [
+        {
+          "run": 1,
+          "focusToFirstHitMs": 1237.2000000476837,
+          "inputToFirstHitMs": 1219.6000000238419,
+          "lazyLoadMs": 1223.1999999284744,
+          "fetchPhaseMs": 1015.5,
+          "indexBuildMs": 207.69999992847443,
+          "hitCount": 8,
+          "warmInputToHitMs": 7.5,
+          "warmHitCount": 8,
+          "navigationLoadMs": 1628,
+          "hitIds": "Mesure clé · L’eau, enjeu central pour l’Humanité :: Consacrer une « règle bleue » qui appliq || Mesure · La bifurcation écologique pour une société de l’harmonie :: Instaurer un moratoire sur les grands pr || Mesure clé · La bifurcation écologique pour une société de l’harmonie :: Inscrire dans la Constitution le princip || Texte · Consommer autrement, une France « zéro déchet » :: La planète croule sous les déchets. À l’ || Texte · La bifurcation écologique pour une société de l’harmonie :: L’urgence écologique et climatique suppo || Mesure · Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme :: Cesser d’appliquer unilatéralement les n || Mesure · La bifurcation écologique pour une société de l’harmonie :: Mettre en place une logistique verte : r || Mesure · La Révolution citoyenne dans les médias :: Élargir les règles anti-concentration sa",
+          "fontsLoaded": "Gowun Batang 400 normal | Public Sans 100 900 normal | Public Sans Fallback Roboto normal normal"
+        },
+        {
+          "run": 2,
+          "focusToFirstHitMs": 1260.1000000238419,
+          "inputToFirstHitMs": 1242.8000000715256,
+          "lazyLoadMs": 1246.7000000476837,
+          "fetchPhaseMs": 1017,
+          "indexBuildMs": 229.70000004768372,
+          "hitCount": 8,
+          "warmInputToHitMs": 7.099999904632568,
+          "warmHitCount": 8,
+          "navigationLoadMs": 1606,
+          "hitIds": "Mesure clé · L’eau, enjeu central pour l’Humanité :: Consacrer une « règle bleue » qui appliq || Mesure · La bifurcation écologique pour une société de l’harmonie :: Instaurer un moratoire sur les grands pr || Mesure clé · La bifurcation écologique pour une société de l’harmonie :: Inscrire dans la Constitution le princip || Texte · Consommer autrement, une France « zéro déchet » :: La planète croule sous les déchets. À l’ || Texte · La bifurcation écologique pour une société de l’harmonie :: L’urgence écologique et climatique suppo || Mesure · Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme :: Cesser d’appliquer unilatéralement les n || Mesure · La bifurcation écologique pour une société de l’harmonie :: Mettre en place une logistique verte : r || Mesure · La Révolution citoyenne dans les médias :: Élargir les règles anti-concentration sa",
+          "fontsLoaded": "Gowun Batang 400 normal | Public Sans 100 900 normal | Public Sans Fallback Roboto normal normal"
+        },
+        {
+          "run": 3,
+          "focusToFirstHitMs": 1254.3999999761581,
+          "inputToFirstHitMs": 1237.1999999284744,
+          "lazyLoadMs": 1240.7999999523163,
+          "fetchPhaseMs": 1017.1000000238419,
+          "indexBuildMs": 223.69999992847443,
+          "hitCount": 8,
+          "warmInputToHitMs": 9.100000023841858,
+          "warmHitCount": 8,
+          "navigationLoadMs": 1607,
+          "hitIds": "Mesure clé · L’eau, enjeu central pour l’Humanité :: Consacrer une « règle bleue » qui appliq || Mesure · La bifurcation écologique pour une société de l’harmonie :: Instaurer un moratoire sur les grands pr || Mesure clé · La bifurcation écologique pour une société de l’harmonie :: Inscrire dans la Constitution le princip || Texte · Consommer autrement, une France « zéro déchet » :: La planète croule sous les déchets. À l’ || Texte · La bifurcation écologique pour une société de l’harmonie :: L’urgence écologique et climatique suppo || Mesure · Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme :: Cesser d’appliquer unilatéralement les n || Mesure · La bifurcation écologique pour une société de l’harmonie :: Mettre en place une logistique verte : r || Mesure · La Révolution citoyenne dans les médias :: Élargir les règles anti-concentration sa",
+          "fontsLoaded": "Gowun Batang 400 normal | Public Sans 100 900 normal | Public Sans Fallback Roboto normal normal"
+        }
+      ],
+      "median": {
+        "focusToFirstHitMs": 1254.3999999761581,
+        "inputToFirstHitMs": 1237.1999999284744,
+        "lazyLoadMs": 1240.7999999523163,
+        "fetchPhaseMs": 1017,
+        "indexBuildMs": 223.69999992847443,
+        "warmInputToHitMs": 7.5,
+        "navigationLoadMs": 1607
+      }
+    }
+  }
+}

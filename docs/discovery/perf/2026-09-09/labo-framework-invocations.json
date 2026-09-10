@@ -1,0 +1,22 @@
+{
+  "window": {
+    "start": "2026-09-09T05:32:42.160Z",
+    "end": "2026-09-09T13:32:42.160Z"
+  },
+  "scripts": [
+    "aec-lab-fw-react",
+    "aec-lab-fw-react-ssg",
+    "aec-lab-fw-astro"
+  ],
+  "status": 200,
+  "data": {
+    "viewer": {
+      "accounts": [
+        {
+          "workersInvocationsAdaptive": []
+        }
+      ]
+    }
+  },
+  "errors": null
+}

@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "title_fr": "Sidecar loi 77-808 des cartes « À savoir » (prototype J3, 07-mecaniques.md §9.0)",
+    "status_fr": "PROBABLE : mentions relevées dans 10-riposte.md §7.4 (Harris Interactive pour La France insoumise, 9-12 juillet 2021, 1 241 personnes), à archiver avec l'URL du rapport avant la v1 (T9, stat-cards-legal.json). Les cartes absentes de ce fichier affichent « Commanditaire non précisé dans le livre ».",
+    "law_fr": "Loi n° 77-808 du 19 juillet 1977, art. 2 et art. 11 (re-diffusion : organisme, date de première publication, média)."
+  },
+  "cards": {
+    "c12-s01-a01": {
+      "organisation": "Harris Interactive",
+      "dates": "9-12 juillet 2021",
+      "sponsor": "La France insoumise",
+      "sample": "1 241 personnes interrogées",
+      "status": "PROBABLE"
+    },
+    "c14-s02-a01": {
+      "organisation": "Harris Interactive",
+      "dates": "9-12 juillet 2021",
+      "sponsor": "La France insoumise",
+      "sample": "1 241 personnes interrogées",
+      "status": "PROBABLE"
+    }
+  }
+}

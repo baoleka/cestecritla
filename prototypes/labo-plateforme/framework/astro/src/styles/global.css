@@ -1,0 +1,183 @@
+@import '../../../shared/generated/tokens.css';
+
+/* Same visual spec as the React variant's Tailwind utilities (design/tokens.json). */
+html {
+  background: var(--bg);
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui-stack);
+  font-size: var(--size-body);
+  line-height: var(--lh-body);
+  -webkit-text-size-adjust: 100%;
+}
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+a {
+  color: var(--brand);
+}
+.label {
+  margin: 0;
+  font-size: var(--size-label);
+  line-height: var(--lh-label);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--brand);
+}
+.label.rouge {
+  color: var(--color-rouge);
+}
+.site-header {
+  border-bottom: 2px solid var(--brand);
+  padding: var(--space-3) var(--space-4);
+}
+.wordmark {
+  font-family: var(--font-ui-stack);
+  font-size: var(--size-h2);
+  line-height: var(--lh-h2);
+  font-weight: var(--weight-black);
+  text-transform: uppercase;
+  color: var(--brand);
+  text-decoration: none;
+}
+.wordmark .la {
+  color: var(--color-rouge);
+}
+main {
+  max-width: 43rem;
+  margin: 0 auto;
+  padding: 0 var(--space-4) var(--space-10);
+}
+article {
+  margin-top: var(--space-8);
+}
+h1 {
+  margin: var(--space-2) 0 0;
+  font-size: var(--size-h1);
+  line-height: var(--lh-h1);
+  font-weight: var(--weight-black);
+  text-wrap: balance;
+}
+h2.label {
+  margin: var(--space-8) 0 0;
+}
+.verbatim {
+  font-family: var(--font-verbatim-stack);
+  font-size: var(--size-verbatim);
+  line-height: var(--lh-verbatim);
+  margin: 0;
+}
+.chapeau {
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-left: 4px solid var(--verbatim-rule);
+  background: var(--verbatim-bg);
+}
+ol.measures {
+  list-style: none;
+  margin: var(--space-2) 0 0;
+  padding: 0;
+}
+.measure {
+  margin-top: var(--space-3);
+  border-top: 1px solid color-mix(in oklab, var(--verbatim-rule) 30%, transparent);
+  padding-top: var(--space-3);
+}
+.measure.key {
+  border-top: 0;
+  padding: var(--space-4);
+  border-radius: var(--radius-m);
+  background: var(--bg-elevated);
+  box-shadow: 6px 6px 0 var(--shadow-3d);
+}
+.measure ul {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-5);
+}
+.chiffre {
+  margin-top: var(--space-8);
+  padding: var(--space-4);
+  border: 2px solid var(--brand);
+  border-radius: var(--radius-m);
+}
+.chiffre .verbatim {
+  margin-top: var(--space-1);
+}
+.source {
+  margin: var(--space-6) 0 0;
+  font-size: var(--size-small);
+  line-height: var(--lh-small);
+}
+.small {
+  font-size: var(--size-small);
+  line-height: var(--lh-small);
+}
+footer {
+  border-top: 1px solid color-mix(in oklab, var(--verbatim-rule) 30%, transparent);
+  padding: var(--space-6) var(--space-4);
+  font-size: var(--size-small);
+  line-height: var(--lh-small);
+}
+footer p {
+  margin: 0;
+}
+footer p + p {
+  margin-top: var(--space-2);
+}
+
+/* Search box (same DOM as the React SearchBox) */
+.search {
+  margin-top: var(--space-6);
+}
+.search label {
+  display: block;
+}
+.search input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  margin-top: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 2px solid var(--brand);
+  border-radius: var(--radius-s);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui-stack);
+  font-size: var(--size-body);
+  line-height: var(--lh-body);
+}
+.search .hint {
+  margin: var(--space-2) 0 0;
+}
+.search .live {
+  margin-top: var(--space-3);
+}
+.search .status {
+  margin: 0;
+}
+.search ol {
+  list-style: none;
+  margin: var(--space-2) 0 0;
+  padding: 0;
+}
+.hit {
+  margin-top: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-m);
+  background: var(--bg-elevated);
+}
+.hit .label {
+  display: block;
+}
+.hit .verbatim {
+  margin-top: var(--space-1);
+}
+.hit a {
+  display: inline-block;
+  margin-top: var(--space-1);
+}

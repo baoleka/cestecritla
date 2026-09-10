@@ -1,0 +1,36 @@
+{
+  // T7 lab "turnstile" (PLAN-SESSION.md T7): invisible Turnstile widget on a Free-plan Worker
+  // with Static Assets, canonical siteverify in the Worker, strict CSP, cookie/storage evidence.
+  // Throwaway: delete with `npm run delete` (see README.md).
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "aec-lab-turnstile",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-09",
+  // Custom domain under the app zone (D10.2). DNS record and certificate are created by Cloudflare.
+  "routes": [{ "pattern": "lab.cestecritla.fr", "custom_domain": true }],
+  "workers_dev": false,
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "none",
+    // Only the verification endpoint and the Worker-rendered variants (/nonce, /nocsp control) hit the Worker;
+    // "/" and its assets are served by Static Assets (free, unlimited), with public/_headers.
+    "run_worker_first": ["/verify", "/nonce", "/nonce/", "/nocsp", "/nocsp/"]
+  },
+  // Non-secret configuration. TURNSTILE_SECRET is set with `wrangler secret put` (never here).
+  "vars": {
+    "TURNSTILE_SITEKEY": "0x4AAAAAAEt3fczgKFO-ViPf",
+    "TURNSTILE_ACTION": "lab-verify",
+    "TURNSTILE_HOSTNAMES": "lab.cestecritla.fr",
+    "TURNSTILE_SEND_REMOTEIP": "false"
+  },
+  "minify": true,
+  // D0.22: no invocation logs (they carry URL, client metadata). Only explicit console lines are kept,
+  // and the code logs no client data (no token, no IP, no user agent).
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "logs": { "invocation_logs": false }
+  }
+}

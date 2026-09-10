@@ -1,0 +1,24 @@
+---
+/**
+ * A reserved route (D14.7, default 7 of §19.3): one static page per prefix, no logic.
+ *
+ * These three prefixes are held so that nothing else can ever claim them — the "une route par
+ * objet, aucune collision" rule of 07-mecaniques.md §7.11 point 9. `/j/` is the morning measure,
+ * kept for v1.1; `/k/` and `/carte#` belonged to "La carte des 89", which got zero votes and is
+ * out of scope.
+ *
+ * The wording obeys voice.md rule 5: no "panne", "erreur", "indisponible", "désolé". Nothing
+ * here is broken. And rule 4: it says what the app does, never what it does not guarantee.
+ * Impersonal register, because a reserved route is reached by a link (D3.12).
+ */
+interface Props {
+  title: string;
+  lead: string;
+}
+const { title, lead } = Astro.props;
+---
+
+<p class="label">Site non officiel.</p>
+<h1>{title}</h1>
+<p>{lead}</p>
+<p><a class="cta" href="/">Lire le programme</a></p>

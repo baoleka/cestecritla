@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Font subsets check</title>
+<style>
+/* Self-hosted subsets (design/fonts/) — same block as in README.md */
+@font-face {
+  font-family: "Public Sans";
+  src: url("PublicSans-Variable-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0100-017F, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: "Public Sans";
+  src: url("PublicSans-Italic-Variable-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0100-017F, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: "Gowun Batang";
+  src: url("GowunBatang-Regular-latin.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0100-017F, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: "Gowun Batang";
+  src: url("GowunBatang-Bold-latin.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0100-017F, U+2000-206F, U+20AC, U+2122;
+}
+
+/* Tokens: Crème / Charbon / Violet / Rouge / Violet 100 / Violet 200 (design/tokens.json) */
+body { margin: 0; padding: 20px 18px 28px; background: #FFFCF4; color: #212320; font-family: "Public Sans", system-ui, sans-serif; font-size: 16px; line-height: 1.55; }
+h1 { font-family: "Public Sans", sans-serif; font-weight: 900; font-style: italic; text-transform: uppercase; font-size: 30px; line-height: .95; letter-spacing: -.01em; color: #4C0297; margin: 0 0 6px; text-shadow: 3px 3px 0 #E5CBFF; }
+.sub { font-weight: 700; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: #D1271C; margin: 0 0 18px; }
+.lab { font: 700 11px/1 "Public Sans", sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #4C0297; background: #FDEDFF; display: inline-block; padding: 5px 8px; border-radius: 4px; margin: 14px 0 8px; }
+p { margin: 0 0 8px; }
+.ps400 { font-weight: 400; }
+.ps700 { font-weight: 700; }
+.ps900 { font-weight: 900; }
+.ps900i { font-weight: 900; font-style: italic; }
+.gb { font-family: "Gowun Batang", serif; font-size: 17px; line-height: 1.55; }
+.gb700 { font-weight: 700; }
+blockquote { margin: 0; padding: 12px 14px 12px 16px; border-left: 4px solid #4C0297; background: #FDEDFF; }
+.k { display: block; font: 700 11px/1 "Public Sans", sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #4C0297; margin-bottom: 6px; }
+.glyphs { font-size: 15px; word-break: break-all; color: #212320; }
+footer { margin-top: 18px; font-size: 11px; color: #4C0297; }
+</style>
+</head>
+<body>
+<h1>Sous-ensembles latin</h1>
+<p class="sub">Public Sans (variable 100–900) · Gowun Batang 400/700 · fichiers locaux</p>
+
+<div class="lab">Public Sans 400</div>
+<p class="ps400">L’Avenir en commun — édition 2025 : « règle verte », 83 % (Harris Interactive, juillet 2021)</p>
+<div class="lab">Public Sans 700</div>
+<p class="ps700">L’Avenir en commun — édition 2025 : « règle verte », 83 % (Harris Interactive, juillet 2021)</p>
+<div class="lab">Public Sans 900 italique</div>
+<p class="ps900i">L’Avenir en commun — édition 2025 : « règle verte », 83 % (Harris Interactive, juillet 2021)</p>
+
+<div class="lab">Gowun Batang 400 · verbatim</div>
+<blockquote class="gb"><span class="k">Texte du programme</span>L’Avenir en commun — édition 2025 : « règle verte », 83 % (Harris Interactive, juillet 2021)</blockquote>
+<div class="lab">Gowun Batang 700</div>
+<p class="gb gb700">L’Avenir en commun — édition 2025 : « règle verte », 83 % (Harris Interactive, juillet 2021)</p>
+
+<div class="lab">Couverture FR (les deux familles)</div>
+<p class="glyphs">àâäéèêëîïôöùûüÿçœæ ÀÂÄÉÈÊËÎÏÔÖÙÛÜŸÇŒÆ « » ‘ ’ “ ” … – — € ™ § ¶ ° ½ fi fl 0123456789</p>
+<p class="glyphs gb">àâäéèêëîïôöùûüÿçœæ ÀÂÄÉÈÊËÎÏÔÖÙÛÜŸÇŒÆ « » ‘ ’ “ ” … – — € ™ § ¶ ° ½ fi fl 0123456789</p>
+
+<footer>Public Sans v2.001 (OFL 1.1) · Gowun Batang v2.000 (OFL 1.1) · design/fonts/README.md</footer>
+</body>
+</html>

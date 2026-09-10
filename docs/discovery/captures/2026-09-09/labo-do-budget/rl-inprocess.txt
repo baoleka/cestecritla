@@ -1,0 +1,6 @@
+# /lab/rl : appels limit() dans le même isolat, clé fixe (aucune donnée client), 2026-09-09 12:56-12:58 UTC
+GET /lab/rl?n=30&key=a  -> {"key":"diag:a","n":30,"allowed":21,"firstDeniedAt":22,"results":"111111111111111111111000000000"}
+GET /lab/rl?n=30&key=a  -> {"key":"diag:a","n":30,"allowed":0,"firstDeniedAt":1,"results":"000000000000000000000000000000"}
+GET /lab/rl?n=5&key=a x5 (connexions neuves) -> 0 00000 / 5 11111 / 5 11111 / 5 11111 / 5 11111
+GET /lab/rl?n=25&key=b  -> 21 1111111111111111111110000
+sleep 20 ; GET /lab/rl?n=3&key=b x6 (connexions neuves) -> 3 111 / 3 111 / 3 111 / 3 111 / 3 111 / 3 111

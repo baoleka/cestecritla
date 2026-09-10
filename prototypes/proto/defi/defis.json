@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "corpus_version": "d29c7422004ab27c",
+    "year": 2026,
+    "index": "day of the year (1-366) of `year`, in Europe/Paris; production numbering is decided in T7 (07-mecaniques.md §9.1)",
+    "default": 254,
+    "status": "HYPOTHÈSE — table composée à la main pour le prototype J3 selon les règles de build (§7.11, §8.4, §9.0) ; en production, générée par permutation semée puis relue (D0.27) par tranche de 30 jours",
+    "criteria": "surprise par la concrétude ; ≤ 130 caractères ; aucune section sensible ; aucun id de riposte.json ; aucun item à deux-points ni measure_split ; au plus une forme interdictive par tirage ; 4 parties couvertes ; 5 chapitres distincts",
+    "check": "node prototypes/proto/scripts/check-defis.mjs"
+  },
+  "draws": {
+    "253": {
+      "date": "2026-09-10",
+      "ids": ["c5-s02-m06", "c1-s04-m12", "c15-s04-m07", "c16-s12-m02", "c8-s02-m02"]
+    },
+    "254": {
+      "date": "2026-09-11",
+      "source": "07-mecaniques.md §9.0 (tirage F1 du prototype)",
+      "ids": ["c9-s01-m04", "c7-s04-m05", "c14-s02-m09", "c18-s04-k01", "c3-s02-m03"]
+    },
+    "255": {
+      "date": "2026-09-12",
+      "ids": ["c7-s04-m09", "c18-s01-m02", "c15-s01-m06", "c11-s02-m06", "c1-s04-m01"]
+    }
+  }
+}

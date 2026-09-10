@@ -1,0 +1,106 @@
+{
+ "tradeMarks": [
+  {
+   "ST13": "FR500000004711622",
+   "tmName": "C'est Écrit Dans La Bible",
+   "tmOffice": "FR",
+   "niceClass": [
+    9,
+    16,
+    35,
+    38,
+    41,
+    42
+   ],
+   "applicantName": [
+    "Madame Calliope GUIONNET"
+   ],
+   "applicationDate": "2020-12-12T12:00:00.000Z",
+   "registrationDate": "2023-02-03T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000001422995",
+   "tmName": "COSMOS STAR LA BONNE ETOILE C'EST ECRIT DANS LE CIEL L'AVENIR PRESENT",
+   "tmOffice": "FR",
+   "niceClass": [
+    16,
+    38,
+    41
+   ],
+   "applicantName": [
+    "GAMBA DUVAL Maria,"
+   ],
+   "applicationDate": "1985-09-13T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000003520824",
+   "tmName": "la recherche est ce qui s'écrit au présent et qui se conjugue au futur",
+   "tmOffice": "FR",
+   "niceClass": [
+    35,
+    42
+   ],
+   "applicantName": [
+    "GLASS WINDOW WORLD Entreprise unipersonnelle à responsabilité limitée"
+   ],
+   "applicationDate": "2007-08-23T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000003053540",
+   "tmName": "PETUNIA CLARKE L ECRITURE A LA PLUME SANS LA PLUME C EST GENIAL",
+   "tmOffice": "FR",
+   "niceClass": [
+    16
+   ],
+   "applicantName": [
+    "Madame CLARKE née Weil Danielle,"
+   ],
+   "applicationDate": "2000-09-25T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000003366198",
+   "tmName": "VIE-YAPLUME “ LA MARQUE DE L'ECRITURE ” PENSER VIE – YAPLUME! C'EST VOUS QUI DEVENEZ AUTEUR EXCEPTIONNEL : POUR NOTER, ECRIRE ; ORGANISER, ARCHIVER ; COMMUNIQUER OU PARTAGER…",
+   "tmOffice": "FR",
+   "niceClass": [
+    16,
+    35,
+    41
+   ],
+   "applicantName": [
+    "Monsieur GOSSÉ Amourès"
+   ],
+   "applicationDate": "2005-06-21T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000001582215",
+   "tmName": "VOS ONGLES VOUS POSENT UN PROBLEME LA SOLUTION... C'EST ECRIT C'EST ECRINAL",
+   "tmOffice": "FR",
+   "niceClass": [
+    3,
+    5
+   ],
+   "applicantName": [
+    "LABORATOIRES ASEPTA, Société Anonyme Monégasque,"
+   ],
+   "applicationDate": "1990-03-27T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004917307",
+   "tmName": "La Biographie Restaurative ou l'écriture résiliente",
+   "tmOffice": "FR",
+   "niceClass": [
+    41
+   ],
+   "applicantName": [
+    "Madame Christine Carmona"
+   ],
+   "applicationDate": "2022-12-07T12:00:00.000Z"
+  }
+ ],
+ "page": 1,
+ "totalPages": 1,
+ "totalResults": 7,
+ "_query": "c'est écrit là",
+ "_fetched_at": "2026-09-09T18:52Z",
+ "_source": "https://www.tmdn.org/tmview/ (EUIPN TMview, API search/results, offices FR + EM + WO ; data.inpi.fr renvoyait HTTP 403 le 9/9/2026)"
+}

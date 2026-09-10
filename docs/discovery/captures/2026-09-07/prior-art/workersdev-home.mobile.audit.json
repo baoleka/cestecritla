@@ -1,0 +1,108 @@
+{
+  "title": "L'Avenir en commun 2027 — La France insoumise",
+  "themeColor": null,
+  "bodyBg": "#212320",
+  "htmlBg": "#212320",
+  "fontsLoaded": [
+    "Gowun Batang 400 normal",
+    "Gowun Batang 700 normal",
+    "Public Sans 600 normal",
+    "Public Sans 700 normal",
+    "Public Sans 900 normal"
+  ],
+  "fontFaceSrc": [],
+  "cssVars": {
+    "--violet": "#4C0297",
+    "--violet-fonce": "#33015F",
+    "--rouge": "#D1271C",
+    "--creme": "#FFFCF4",
+    "--charbon": "#212320",
+    "--charbon-fonce": "#161714",
+    "--jaune": "#F9C900",
+    "--ligne-sombre": "rgba(255,252,244,.16)",
+    "--ligne-claire": "rgba(33,35,32,.14)"
+  },
+  "topColors": [
+    [
+      "#212320",
+      165
+    ],
+    [
+      "#FFFCF4",
+      141
+    ],
+    [
+      "#F9C900",
+      38
+    ],
+    [
+      "#D1271C",
+      37
+    ],
+    [
+      "#4C0297",
+      22
+    ]
+  ],
+  "topFonts": [
+    [
+      "Gowun Batang",
+      110
+    ],
+    [
+      "Public Sans",
+      84
+    ]
+  ],
+  "samples": {
+    "h1": {
+      "font": "Public Sans",
+      "weight": "900",
+      "size": "51.2px",
+      "lineHeight": "44.032px",
+      "color": "#FFFCF4",
+      "bg": "transparent",
+      "transform": "uppercase",
+      "style": "normal",
+      "letterSpacing": "-1.024px"
+    },
+    "h2": {
+      "font": "Public Sans",
+      "weight": "900",
+      "size": "33.6px",
+      "lineHeight": "32.256px",
+      "color": "#FFFCF4",
+      "bg": "transparent",
+      "transform": "uppercase",
+      "style": "normal",
+      "letterSpacing": "-0.672px"
+    },
+    "h3": null,
+    "p": {
+      "font": "Gowun Batang",
+      "weight": "400",
+      "size": "17.28px",
+      "lineHeight": "26.784px",
+      "color": "#FFFCF4",
+      "bg": "transparent",
+      "transform": "none",
+      "style": "normal",
+      "letterSpacing": "normal"
+    },
+    "a": {
+      "font": "Public Sans",
+      "weight": "600",
+      "size": "11.84px",
+      "lineHeight": "20.128px",
+      "color": "#FFFCF4",
+      "bg": "transparent",
+      "transform": "none",
+      "style": "normal",
+      "letterSpacing": "normal"
+    },
+    "button": null
+  },
+  "links": [],
+  "hexInText": [],
+  "imgs": []
+}

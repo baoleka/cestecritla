@@ -1,0 +1,10 @@
+# Not served by Static Assets (wrangler assets.directory = ./)
+wrangler.jsonc
+README.md
+.assetsignore
+.wrangler
+node_modules
+package.json
+package-lock.json
+scripts
+tools

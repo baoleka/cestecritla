@@ -1,0 +1,1045 @@
+/*
+ * AEC Discover — direction C « immersif, 4 mondes » — shared mockup styles.
+ * Tokens: design/tokens.json v0 (D3.1, D3.2, D3.4). Contrast: design/contrast-matrix.md.
+ * Dark-first: the hero/chrome is always Charbon; reading zones are Crème by default
+ * ("light reading mode") and become Charbon / Charbon-elevated under prefers-color-scheme: dark.
+ * Vives are used as flat background blocks only; body text is always Charbon or Crème.
+ * Static HTML/CSS, no JS, no framework, no third-party request (P8/P9 of design/perf-budget.md).
+ */
+
+/* Self-hosted subsets (design/fonts/, OFL). */
+@font-face {
+  font-family: "Public Sans";
+  src: url("fonts/PublicSans-Variable-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Public Sans";
+  src: url("fonts/PublicSans-Italic-Variable-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Gowun Batang";
+  src: url("fonts/GowunBatang-Regular-latin.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Gowun Batang";
+  src: url("fonts/GowunBatang-Bold-latin.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light dark;
+
+  /* Couleurs 2027 (root) */
+  --creme: #fffcf4;
+  --charbon: #212320;
+  --violet: #4c0297;
+  --rouge: #d1271c;
+  /* Tints (surfaces) */
+  --violet-100: #fdedff;
+  --violet-200: #e5cbff;
+  --corail-200: #ffd2cf;
+  /* Vives (flat blocks and part colours only) */
+  --vif-violet: #7b13d6;
+  --vif-rose: #ed5fb1;
+  --vif-vert: #2e9959;
+  --vif-bleu: #3885f4;
+  --vif-jaune: #f9c900;
+  /* Dark surfaces (tokens.json color-role.dark, v0 proposals) */
+  --charbon-elevated: #2c2e2b;
+  --charbon-warn: #3a2a28;
+
+  /* The world of this screen: part 3, « L'harmonie des êtres humains avec la nature » */
+  --world: var(--vif-vert);
+  --world-on: var(--creme); /* 3.52:1 — display titles >= 24 px / 900 only (AA-large) */
+
+  /* Hero / chrome roles — always Charbon (dark-first) */
+  --hero-bg: var(--charbon);
+  --hero-text: var(--creme); /* 15.45 */
+  --hero-accent: var(--violet-200); /* 10.80 */
+  --hero-action: var(--vif-jaune); /* Charbon on Vif jaune 10.09 */
+  --hero-action-on: var(--charbon);
+  --hero-surface: var(--charbon-elevated);
+  --hero-focus: var(--vif-jaune);
+  --shadow-3d: var(--violet-200); /* solid block shadow on Charbon (see README) */
+
+  /* Reading zone roles — light reading mode by default */
+  --read-bg: var(--creme);
+  --read-text: var(--charbon); /* 15.45 */
+  --read-accent: var(--violet); /* 11.62 */
+  --read-border: var(--violet);
+  --read-card: var(--violet-100); /* Charbon on Violet 100 14.13 */
+  --read-action: var(--rouge); /* Crème on Rouge 5.10 */
+  --read-action-on: var(--creme);
+  --verbatim-bg: var(--violet-100);
+  --verbatim-rule: var(--violet);
+  --verbatim-label: var(--violet); /* on Violet 100: 10.63 */
+  --warn-bg: var(--corail-200); /* Charbon on Corail 200 11.59 */
+  --warn-text: var(--charbon);
+  --progress-track: var(--violet-200);
+  --progress-fill: var(--violet);
+  --read-focus: var(--violet);
+
+  /* Type scale (tokens.json font.size), in rem so the system font size is honoured (A2) */
+  --fs-display: 2.125rem; /* 34 */
+  --fs-h1: 1.75rem; /* 28 */
+  --fs-h2: 1.375rem; /* 22 */
+  --fs-h3: 1.125rem; /* 18 */
+  --fs-body: 1rem;
+  --fs-verbatim: 1.0625rem; /* 17 */
+  --fs-small: 0.875rem; /* 14 */
+  --fs-label: 0.75rem; /* 12 (tokens say 11; 12 keeps labels legible at 390 px) */
+
+  --radius-s: 4px;
+  --radius-m: 8px;
+  --radius-l: 14px;
+  --font-ui: "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-verbatim: "Gowun Batang", "Iowan Old Style", Georgia, serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --read-bg: var(--charbon);
+    --read-text: var(--creme);
+    --read-accent: var(--violet-200);
+    --read-border: var(--violet-200);
+    --read-card: var(--charbon-elevated); /* Crème on #2C2E2B 13.36 */
+    --read-action: var(--vif-jaune);
+    --read-action-on: var(--charbon);
+    --verbatim-bg: var(--charbon-elevated);
+    --verbatim-rule: var(--violet-200);
+    --verbatim-label: var(--violet-200); /* on #2C2E2B 9.34 */
+    --warn-bg: var(--charbon-warn); /* Crème on #3A2A28 13.29 */
+    --warn-text: var(--creme);
+    --progress-track: var(--charbon-elevated);
+    --progress-fill: var(--violet-200);
+    --read-focus: var(--vif-jaune);
+  }
+}
+
+/* ---------- Base ---------- */
+* {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  background: var(--hero-bg);
+  color: var(--hero-text);
+  font-family: var(--font-ui);
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  font-variant-numeric: proportional-nums;
+}
+.screen {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+p {
+  margin: 0 0 0.75rem;
+}
+a {
+  color: inherit;
+}
+:focus-visible {
+  outline: 3px solid var(--hero-focus);
+  outline-offset: 2px;
+}
+.read :focus-visible {
+  outline-color: var(--read-focus);
+}
+sup {
+  font-size: 0.65em;
+  line-height: 0;
+  vertical-align: super;
+}
+.book {
+  font-style: italic;
+}
+.verbatim .book {
+  font-style: normal; /* never italic in Gowun Batang (D3.2) */
+}
+
+/* ---------- Top bar & wordmark ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px 10px;
+  min-height: 52px;
+}
+.wordmark {
+  display: inline-block;
+  font-weight: 900;
+  font-size: 1.125rem;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--hero-accent);
+  text-decoration: none;
+  transform: skewX(-8deg);
+  padding: 4px 2px;
+}
+.topbar .where {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hero-accent);
+  text-align: right;
+}
+.swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background: var(--world);
+  border-radius: 2px;
+  flex: none;
+}
+
+/* ---------- Labels, badges, chips ---------- */
+.label {
+  display: block;
+  font-size: var(--fs-label);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--read-accent);
+  margin: 0 0 8px;
+}
+.hero .label,
+.foot .label {
+  color: var(--hero-accent);
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 4px 10px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--read-accent);
+}
+.hero .badge {
+  color: var(--hero-accent);
+}
+.badge.solid {
+  background: var(--read-accent);
+  color: var(--read-bg);
+  border-color: transparent;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.chip {
+  display: inline-block;
+  min-height: 32px;
+  padding: 6px 12px;
+  line-height: 1.4;
+  border: 1px solid var(--read-border);
+  border-radius: 999px;
+  font-size: var(--fs-small);
+  font-weight: 700;
+  color: var(--read-text);
+  text-decoration: none;
+}
+
+/* ---------- Hero (Charbon) with flat world blocks ---------- */
+.hero {
+  background: var(--hero-bg);
+  color: var(--hero-text);
+  padding: 20px 20px 28px;
+}
+.hero .lead {
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  margin: 18px 0 0;
+}
+.hero .hint {
+  font-size: var(--fs-small);
+  line-height: 1.45;
+  margin: 0 0 12px;
+}
+
+/* The one 3D block of the screen: stacked title lines, each its own flat block,
+   offset 6 px per line, one solid shadow (no blur). */
+.t3d {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0;
+  transform: skewX(-5deg);
+  transform-origin: left bottom;
+}
+.t3d > span {
+  display: inline-block;
+  background: var(--world);
+  color: var(--world-on);
+  font-weight: 900;
+  font-size: var(--fs-display);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  padding: 8px 12px 6px;
+  box-shadow: 6px 6px 0 var(--shadow-3d);
+  position: relative;
+}
+.t3d > span:nth-child(2) {
+  margin-left: 8px;
+}
+.t3d > span:nth-child(3) {
+  margin-left: 16px;
+}
+.t3d > span:nth-child(4) {
+  margin-left: 24px;
+}
+.t3d > span + span {
+  margin-top: 4px;
+}
+.t3d.small > span {
+  font-size: 1.625rem; /* 26 px, still >= 24 px on Vif vert */
+  padding: 6px 10px 5px;
+}
+.t3d.jaune > span {
+  background: var(--vif-jaune);
+  color: var(--charbon); /* 10.09 */
+}
+.t3d.overlap {
+  margin-top: -44px; /* the title straddles the matière / aplat boundary (rule 1) */
+}
+
+/* Big number, poster style (Crème 900 on a flat world block) */
+.bignum {
+  display: inline-block;
+  background: var(--world);
+  color: var(--world-on);
+  font-weight: 900;
+  font-size: 2.75rem; /* 44 px */
+  line-height: 1;
+  letter-spacing: -0.03em;
+  padding: 10px 14px 8px;
+  border-radius: var(--radius-s);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Matière (verbatim as the "material", rule 1 / rule 7) ---------- */
+.matiere {
+  background: var(--verbatim-bg);
+  color: var(--read-text);
+  border-left: 6px solid var(--verbatim-rule);
+  padding: 22px 20px 56px 18px;
+}
+.matiere .labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.matiere .label {
+  margin: 0;
+  color: var(--verbatim-label);
+}
+.matiere .verbatim {
+  font-family: var(--font-verbatim);
+  font-size: 1.25rem; /* 20 px: the material is read first */
+  line-height: 1.5;
+  margin: 0 0 14px;
+}
+.matiere .where {
+  font-size: var(--fs-small);
+  font-weight: 700;
+  color: var(--verbatim-label);
+  margin: 0;
+}
+
+/* ---------- Reading zone ---------- */
+.read {
+  background: var(--read-bg);
+  color: var(--read-text);
+  padding: 26px 20px 30px;
+}
+.read + .read,
+.hero + .read {
+  border-top: 1px solid var(--read-border);
+}
+.read h2 {
+  font-size: var(--fs-h2);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin: 0 0 12px;
+}
+.read h3 {
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 8px;
+}
+.section-block + .section-block {
+  margin-top: 28px;
+}
+.read .plain {
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+.read .meta {
+  font-size: var(--fs-small);
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* Verbatim of the programme (D3.2): Gowun Batang, Violet rule, own label */
+.verbatim-box {
+  background: var(--verbatim-bg);
+  border-left: 4px solid var(--verbatim-rule);
+  border-radius: 0 var(--radius-m) var(--radius-m) 0;
+  padding: 14px 16px 14px 16px;
+  margin: 0 0 12px;
+}
+.verbatim-box .label {
+  color: var(--verbatim-label);
+  margin-bottom: 8px;
+}
+.verbatim-box .labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.verbatim-box .labels .label {
+  margin: 0;
+}
+.verbatim {
+  font-family: var(--font-verbatim);
+  font-size: var(--fs-verbatim);
+  line-height: 1.55;
+  font-style: normal;
+  margin: 0;
+}
+.verbatim.big {
+  font-size: 1.1875rem; /* 19 px key measure */
+  line-height: 1.5;
+}
+.verbatim-box .where {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: var(--fs-small);
+  font-weight: 700;
+  color: var(--verbatim-label);
+  margin: 10px 0 0;
+}
+.verbatim-box.collapsed {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.verbatim-box.collapsed .where {
+  margin: 0;
+  color: var(--read-text);
+  font-weight: 700;
+}
+.verbatim-box.collapsed .label {
+  margin: 0 0 4px;
+}
+
+/* Cards */
+.card {
+  border: 1px solid var(--read-border);
+  border-radius: var(--radius-l);
+  padding: 16px;
+  background: var(--read-bg);
+  margin: 0 0 12px;
+}
+.card.tint {
+  background: var(--read-card);
+  border-color: transparent;
+}
+.hero .card {
+  border-color: var(--hero-accent);
+  background: var(--hero-bg);
+  color: var(--hero-text);
+}
+
+/* Context 2022 line (glossary-style-guide §3) */
+.ctx2022 {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  border: 1px solid var(--violet-200);
+  border-radius: var(--radius-m);
+  padding: 10px 12px;
+  margin: 12px 0 0;
+  font-size: var(--fs-small);
+  line-height: 1.45;
+}
+.ctx2022 .pill {
+  flex: none;
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--read-accent);
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 3px 8px;
+  margin-top: 1px;
+}
+
+/* Measures list */
+.measures {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: m;
+}
+.measures li {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--violet-200);
+}
+.measures li:last-child {
+  border-bottom: 1px solid var(--violet-200);
+}
+.measures .num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--world);
+  color: var(--world-on);
+  font-weight: 900;
+  font-size: 1.5rem; /* 24 px on Vif vert: AA-large */
+  line-height: 1;
+  border-radius: var(--radius-s);
+}
+.measures .verbatim {
+  font-size: var(--fs-verbatim);
+}
+
+/* StatCard « À savoir » (loi 77-808 template, D5.5) */
+.statcard {
+  border: 1px solid var(--read-border);
+  border-radius: var(--radius-l);
+  overflow: hidden;
+  margin: 0 0 12px;
+}
+.statcard .head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+}
+.statcard .head .bignum {
+  border-radius: var(--radius-s);
+}
+.statcard .head .verbatim {
+  font-size: var(--fs-verbatim);
+}
+.statcard .legal {
+  border-top: 1px solid var(--read-border);
+  padding: 12px 16px 14px;
+  font-size: var(--fs-small);
+  line-height: 1.45;
+}
+.statcard .legal p {
+  margin: 0 0 6px;
+}
+.statcard .legal a {
+  font-weight: 700;
+}
+
+/* Warn surface: refusal, degraded mode, quota */
+.warn {
+  background: var(--warn-bg);
+  color: var(--warn-text);
+  border-radius: var(--radius-l);
+  padding: 16px;
+  margin: 0 0 12px;
+}
+.warn .label,
+.warn .badge {
+  color: var(--warn-text);
+}
+.warn h3 {
+  font-size: var(--fs-h3);
+  font-weight: 900;
+  line-height: 1.25;
+  margin: 0 0 8px;
+}
+.warn .verbatim-box {
+  background: var(--read-bg);
+  color: var(--read-text);
+}
+
+/* ---------- Buttons (rule 8) ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 10px 18px;
+  border-radius: var(--radius-m);
+  border: 2px solid transparent;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  line-height: 1.2;
+  cursor: pointer;
+  text-align: center;
+}
+.btn.block {
+  display: flex;
+  width: 100%;
+}
+.hero .btn-primary {
+  background: var(--hero-action);
+  color: var(--hero-action-on);
+}
+.hero .btn-secondary {
+  background: transparent;
+  color: var(--hero-text);
+  border-color: var(--hero-accent);
+}
+.read .btn-primary,
+.warn .btn-primary {
+  background: var(--read-action);
+  color: var(--read-action-on);
+}
+.read .btn-secondary,
+.warn .btn-secondary {
+  background: transparent;
+  color: var(--read-text);
+  border-color: var(--read-border);
+}
+.warn .btn-secondary {
+  border-color: currentColor;
+}
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+.btn-row .btn {
+  flex: 1 1 auto;
+}
+/* Split navigation button: label + separate arrow block (navigation only) */
+.btn-split {
+  display: flex;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+}
+.btn-split .lbl {
+  flex: 1 1 auto;
+  padding: 12px 16px;
+  text-align: left;
+}
+.btn-split .arrow {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  border-left: 2px solid currentColor;
+  font-size: 1.375rem;
+  font-weight: 900;
+}
+.hero .btn-split.btn-primary .arrow {
+  border-left-color: var(--charbon);
+}
+.textlink {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: var(--read-accent);
+  padding: 4px 0;
+  display: inline-block;
+}
+.hero .textlink {
+  color: var(--hero-accent);
+}
+.warn .textlink {
+  color: var(--warn-text);
+}
+
+/* Search field */
+.search {
+  display: flex;
+  gap: 8px;
+  margin: 18px 0 8px;
+}
+.search input {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 48px;
+  padding: 10px 14px;
+  border-radius: var(--radius-m);
+  border: 2px solid var(--hero-accent);
+  background: var(--hero-surface);
+  color: var(--hero-text);
+  font: inherit;
+  font-size: 1rem;
+}
+.search input::placeholder {
+  color: var(--creme);
+  opacity: 0.85;
+}
+.search .btn {
+  flex: none;
+}
+.hero .hintline {
+  font-size: var(--fs-small);
+  margin: 0;
+}
+
+/* Four worlds strip (part colours, tokens.json part-color) */
+.worlds {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.worlds li {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.worlds a {
+  text-decoration: none;
+  color: var(--hero-text);
+  display: block;
+}
+.worlds .tile {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  height: 72px;
+  padding: 8px 10px;
+  border-radius: var(--radius-s);
+  font-weight: 900;
+  font-size: 2rem; /* 32 px: AA-large on every vive */
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.worlds .p1 {
+  background: var(--vif-violet);
+  color: var(--creme); /* 7.05 */
+}
+.worlds .p2 {
+  background: var(--vif-rose);
+  color: var(--charbon); /* 5.18 */
+}
+.worlds .p3 {
+  background: var(--vif-vert);
+  color: var(--creme); /* 3.52, AA-large */
+}
+.worlds .p4 {
+  background: var(--vif-bleu);
+  color: var(--charbon); /* 4.40, AA-large */
+}
+.worlds .name {
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.3;
+  font-weight: 700;
+}
+.worlds .name small {
+  display: block;
+  font-weight: 400;
+  font-size: 0.8125rem;
+  margin-top: 2px;
+}
+
+/* Progress (rule 8: flat, straight, Violet on Violet 200) */
+.progress {
+  margin-top: 16px;
+}
+.progress .bar {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--progress-track);
+  overflow: hidden;
+  border: 1px solid var(--read-border);
+}
+.progress .bar span {
+  display: block;
+  height: 100%;
+  background: var(--progress-fill);
+}
+.progress .count {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: var(--fs-small);
+  margin: 8px 0 0;
+}
+.progress .count strong {
+  font-weight: 900;
+  font-size: 1rem;
+}
+
+/* ---------- Chat ---------- */
+.thread {
+  padding: 8px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.bubble-user {
+  align-self: flex-end;
+  max-width: 85%;
+  background: var(--violet-200);
+  color: var(--charbon); /* 10.80 */
+  border-radius: var(--radius-l) var(--radius-l) var(--radius-s) var(--radius-l);
+  padding: 12px 16px;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+.bubble-user .who {
+  display: block;
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.answer {
+  background: var(--read-bg);
+  color: var(--read-text);
+  border-radius: var(--radius-l);
+  padding: 16px;
+}
+.answer .head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.answer .liant {
+  font-size: 1.0625rem;
+  margin: 0 0 12px;
+}
+.answer .links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 4px;
+}
+.answer.warn {
+  background: var(--warn-bg);
+  color: var(--warn-text);
+}
+.ai-mention {
+  font-size: var(--fs-small);
+  line-height: 1.45;
+  margin: 8px 0 0;
+  padding: 10px 12px;
+  border: 1px solid var(--hero-accent);
+  border-radius: var(--radius-m);
+}
+.composer {
+  background: var(--hero-bg);
+  border-top: 1px solid var(--hero-accent);
+  padding: 12px 20px 14px;
+  display: flex;
+  gap: 8px;
+}
+.composer input {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 48px;
+  padding: 10px 14px;
+  border-radius: var(--radius-m);
+  border: 2px solid var(--hero-accent);
+  background: var(--hero-surface);
+  color: var(--hero-text);
+  font: inherit;
+}
+.composer input::placeholder {
+  color: var(--creme);
+  opacity: 0.85;
+}
+.composer .btn {
+  flex: none;
+  background: var(--hero-action);
+  color: var(--hero-action-on);
+}
+
+/* State notice on Charbon (quota, offline, silence): Crème text, accent border */
+.notice {
+  border: 1px solid var(--hero-accent);
+  border-left-width: 6px;
+  border-radius: var(--radius-m);
+  padding: 12px 14px;
+  color: var(--hero-text);
+  font-size: var(--fs-small);
+  line-height: 1.45;
+}
+.notice strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+/* ---------- Footer ---------- */
+.foot {
+  margin-top: auto;
+  background: var(--hero-bg);
+  color: var(--hero-text);
+  padding: 22px 20px 28px;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  border-top: 1px solid var(--hero-accent);
+}
+.foot p {
+  margin: 0 0 8px;
+}
+.foot .links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.foot .links a {
+  color: var(--hero-accent);
+  font-weight: 700;
+  text-decoration: none;
+  padding: 4px 0;
+  display: inline-block;
+}
+
+/* ---------- Story card 1080 × 1920 rendered at 360 × 640 CSS px (×3) ---------- */
+.story {
+  position: relative;
+  width: 360px;
+  height: 640px;
+  overflow: hidden;
+  background: var(--charbon);
+  color: var(--creme);
+  font-family: var(--font-ui);
+}
+.story .matiere {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 339px; /* 53 % */
+  padding: 22px 22px 0 20px;
+  border-left: 8px solid var(--violet); /* pinned: a share image never follows the viewer's scheme */
+  background: var(--violet-100);
+  color: var(--charbon);
+}
+.story .matiere .label {
+  color: var(--violet); /* on Violet 100: 10.63 */
+}
+.story .t3d > span {
+  background: var(--vif-vert);
+  color: var(--creme);
+  box-shadow: 6px 6px 0 var(--violet-200);
+}
+.story .matiere .verbatim {
+  font-size: 1.4375rem; /* 23 px CSS = 69 px on the 1080 export */
+  line-height: 1.4;
+}
+.story .aplat {
+  position: absolute;
+  inset: 339px 0 0 0;
+  padding: 0 22px;
+}
+.story .t3d {
+  position: absolute;
+  left: 22px;
+  top: -46px;
+}
+.story .t3d > span {
+  font-size: 1.875rem; /* 30 px */
+}
+.story .where-big {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  top: 128px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--creme);
+}
+.story .where-big .label {
+  color: var(--violet-200);
+  margin-bottom: 4px;
+}
+.story .signature {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 0;
+  height: 77px; /* ~12 % of the aplat */
+  border-top: 1px solid var(--violet-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.story .signature .wordmark {
+  font-size: 1rem;
+  white-space: nowrap;
+}
+.story .signature .cc {
+  font-size: 0.6875rem; /* 11 px CSS = 33 px on the 1080 export */
+  line-height: 1.35;
+  text-align: right;
+  max-width: 190px;
+  color: var(--creme);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

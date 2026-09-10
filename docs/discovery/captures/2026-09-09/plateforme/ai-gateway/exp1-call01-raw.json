@@ -1,0 +1,83 @@
+{
+  "model": "@cf/mistralai/mistral-small-3.1-24b-instruct",
+  "gateway": {
+    "id": "aec",
+    "cacheTtl": 2592000,
+    "collectLog": false
+  },
+  "input": {
+    "text": "Décris en une phrase le temps qu’il fait à Paris un matin de printemps.",
+    "maxTokens": 40,
+    "temperature": 0
+  },
+  "calls": [
+    {
+      "i": 1,
+      "status": 200,
+      "cacheStatus": "MISS",
+      "neurons": 2.537451982498169,
+      "tokensIn": 21,
+      "tokensOut": 37,
+      "latencyMs": 2237,
+      "responsePreview": "Un matin de printemps à Paris est souvent marqué par un ciel clair et lumineux, avec une douce brise et des températures",
+      "aigHeaders": {
+        "cf-aig-cache-status": "MISS",
+        "cf-aig-event-id": "3414e047-669e-44e3-8e92-623e28daa6a7",
+        "cf-aig-log-id": "01M233QMQ5FKTZ8TS8BQHKNS19",
+        "cf-aig-request-id": "3414e047-669e-44e3-8e92-623e28daa6a7",
+        "cf-aig-step": "0",
+        "cf-aig-trace-id": "f38044f9556a493e9f5da893a9c8acb6",
+        "content-type": "application/json"
+      },
+      "raw": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "logprobs": null,
+            "message": {
+              "annotations": null,
+              "audio": null,
+              "content": "Un matin de printemps à Paris est souvent marqué par un ciel clair et lumineux, avec une douce brise et des températures agréables autour de 15 degrés.",
+              "function_call": null,
+              "reasoning": null,
+              "refusal": null,
+              "role": "assistant",
+              "tool_calls": []
+            },
+            "stop_reason": null,
+            "token_ids": null
+          }
+        ],
+        "created": 1788958463,
+        "id": "chatcmpl-dbf3ff96-cd2d-4278-9617-5e97b06d2bdb",
+        "kv_transfer_params": null,
+        "model": "@cf/mistralai/mistral-small-3.1-24b-v2",
+        "object": "chat.completion",
+        "prompt_logprobs": null,
+        "prompt_token_ids": null,
+        "response": "Un matin de printemps à Paris est souvent marqué par un ciel clair et lumineux, avec une douce brise et des températures agréables autour de 15 degrés.",
+        "service_tier": null,
+        "system_fingerprint": null,
+        "tool_calls": [],
+        "usage": {
+          "prompt_tokens": 21,
+          "completion_tokens": 37,
+          "total_tokens": 58,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "neurons": 2.537451982498169
+        }
+      }
+    }
+  ],
+  "summary": {
+    "hit": 0,
+    "miss": 1,
+    "bypass": 0,
+    "other": 0,
+    "neuronsReportedTotal": 2.537451982498169,
+    "neuronsReportedOnHits": 0
+  }
+}

@@ -1,0 +1,1784 @@
+{
+ "base": "https://proto.cestecritla.fr",
+ "date": "2026-09-09T14:25:54.227Z",
+ "pages": {
+  "/ [light]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "Prototypes — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic"
+   ],
+   "bodyBg": "rgb(255, 252, 244)",
+   "bodyColor": "rgb(33, 35, 32)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ ACCUEIL PROTOTYPES CLIQUABLES · J3 · PROTO.CESTECRITLA.FR LES MODULES Direction A « édit",
+   "responses": [
+    {
+     "url": "/",
+     "status": 200,
+     "type": "text/html",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/base.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/tokens.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/root.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/ui.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/strings.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    }
+   ]
+  },
+  "/ [dark]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "Prototypes — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic"
+   ],
+   "bodyBg": "rgb(33, 35, 32)",
+   "bodyColor": "rgb(255, 252, 244)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ ACCUEIL PROTOTYPES CLIQUABLES · J3 · PROTO.CESTECRITLA.FR LES MODULES Direction A « édit"
+  },
+  "/home/ [light]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "Accueil — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic",
+    "Gowun Batang 400 normal"
+   ],
+   "bodyBg": "rgb(255, 252, 244)",
+   "bodyColor": "rgb(33, 35, 32)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ CHAPITRES RIPOSTE TA MUNITION, EN DIX SECONDES. Un mot, une objection, un thème : la mes",
+   "responses": [
+    {
+     "url": "/home/",
+     "status": 200,
+     "type": "text/html",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/tokens.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/base.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/home/home.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/ui.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/strings.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/extras.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/slim.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/concept-index.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/riposte.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    }
+   ]
+  },
+  "/home/ [dark]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "Accueil — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic",
+    "Gowun Batang 400 normal"
+   ],
+   "bodyBg": "rgb(33, 35, 32)",
+   "bodyColor": "rgb(255, 252, 244)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ CHAPITRES RIPOSTE TA MUNITION, EN DIX SECONDES. Un mot, une objection, un thème : la mes"
+  },
+  "/link/?id=c12-s01-k01 [light]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "La bifurcation écologique pour une société de l’harmonie — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic",
+    "Gowun Batang 400 normal"
+   ],
+   "bodyBg": "rgb(255, 252, 244)",
+   "bodyColor": "rgb(33, 35, 32)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ EXTRAIT DE L’AVENIR EN COMMUN, ÉDITION 2025 TEXTE DU PROGRAMME Inscrire dans la Constitu",
+   "responses": [
+    {
+     "url": "/link/?id=c12-s01-k01",
+     "status": 200,
+     "type": "text/html",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/tokens.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/base.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/link/link.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/ui.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/extras.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/concept-index.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/slim.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/strings.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    }
+   ]
+  },
+  "/link/?id=c12-s01-k01 [dark]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "La bifurcation écologique pour une société de l’harmonie — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic",
+    "Gowun Batang 400 normal"
+   ],
+   "bodyBg": "rgb(33, 35, 32)",
+   "bodyColor": "rgb(255, 252, 244)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ EXTRAIT DE L’AVENIR EN COMMUN, ÉDITION 2025 TEXTE DU PROGRAMME Inscrire dans la Constitu"
+  },
+  "/section/?id=c12-s01 [light]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "La bifurcation écologique pour une société de l’harmonie — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic",
+    "Gowun Batang 400 normal",
+    "Gowun Batang 700 normal"
+   ],
+   "bodyBg": "rgb(255, 252, 244)",
+   "bodyColor": "rgb(33, 35, 32)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ ACCUEIL CHERCHER PARTIE 3 · L’HARMONIE DES ÊTRES HUMAINS AVEC LA NATURE CHAPITRE 12 · PL",
+   "responses": [
+    {
+     "url": "/section/?id=c12-s01",
+     "status": 200,
+     "type": "text/html",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/base.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/motion.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/tokens.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/motion.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/section/section.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/ui.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/strings.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/concept-index.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/extras.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/slim.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/stat-cards-legal.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/stat-cards.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/GowunBatang-Bold-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    }
+   ]
+  },
+  "/section/?id=c12-s01 [dark]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "La bifurcation écologique pour une société de l’harmonie — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic",
+    "Gowun Batang 400 normal",
+    "Gowun Batang 700 normal"
+   ],
+   "bodyBg": "rgb(33, 35, 32)",
+   "bodyColor": "rgb(255, 252, 244)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ ACCUEIL CHERCHER PARTIE 3 · L’HARMONIE DES ÊTRES HUMAINS AVEC LA NATURE CHAPITRE 12 · PL"
+  },
+  "/concept/ [light]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "règle verte — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic",
+    "Gowun Batang 400 normal"
+   ],
+   "bodyBg": "rgb(255, 252, 244)",
+   "bodyColor": "rgb(33, 35, 32)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ ACCUEIL CHERCHER PARTIE 3 · L’HARMONIE DES ÊTRES HUMAINS AVEC LA NATURE RÈGLE VERTE Rédi",
+   "responses": [
+    {
+     "url": "/concept/",
+     "status": 200,
+     "type": "text/html",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/tokens.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/base.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/motion.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/motion.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/concept/concept.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/ui.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/slim.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/strings.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/extras.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/concept-index.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/glossary.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/stat-cards.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/stat-cards-legal.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    }
+   ]
+  },
+  "/concept/ [dark]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "règle verte — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic",
+    "Gowun Batang 400 normal"
+   ],
+   "bodyBg": "rgb(33, 35, 32)",
+   "bodyColor": "rgb(255, 252, 244)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ ACCUEIL CHERCHER PARTIE 3 · L’HARMONIE DES ÊTRES HUMAINS AVEC LA NATURE RÈGLE VERTE Rédi"
+  },
+  "/defi/?n=254 [light]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "Tu savais que c’était dedans ? — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic",
+    "Gowun Batang 400 normal"
+   ],
+   "bodyBg": "rgb(255, 252, 244)",
+   "bodyColor": "rgb(33, 35, 32)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ Quelqu’un partage 5 mesures de L’Avenir en commun 2025, le programme. TIRAGE DU 11 SEPTE",
+   "responses": [
+    {
+     "url": "/defi/?n=254",
+     "status": 200,
+     "type": "text/html",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/tokens.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/motion.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/base.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/motion.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/defi/defi.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/defi/defi.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/ui.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/defi/card.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/concept-index.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/defi/defis.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/strings.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/slim.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/extras.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    }
+   ]
+  },
+  "/defi/?n=254 [dark]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "Tu savais que c’était dedans ? — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic",
+    "Gowun Batang 400 normal"
+   ],
+   "bodyBg": "rgb(33, 35, 32)",
+   "bodyColor": "rgb(255, 252, 244)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ Quelqu’un partage 5 mesures de L’Avenir en commun 2025, le programme. TIRAGE DU 11 SEPTE"
+  },
+  "/defi/?n=1 [light]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "Tu savais que c’était dedans ? — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic",
+    "Gowun Batang 400 normal"
+   ],
+   "bodyBg": "rgb(255, 252, 244)",
+   "bodyColor": "rgb(33, 35, 32)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ Quelqu’un partage 5 mesures de L’Avenir en commun 2025, le programme. TIRAGE DU 11 SEPTE",
+   "responses": [
+    {
+     "url": "/defi/?n=1",
+     "status": 200,
+     "type": "text/html",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/motion.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/base.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/tokens.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/defi/defi.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/defi/defi.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/motion.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/defi/card.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/ui.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/defi/defis.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/extras.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/slim.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/strings.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/concept-index.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    }
+   ]
+  },
+  "/defi/?n=1 [dark]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "Tu savais que c’était dedans ? — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic",
+    "Gowun Batang 400 normal"
+   ],
+   "bodyBg": "rgb(33, 35, 32)",
+   "bodyColor": "rgb(255, 252, 244)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ Quelqu’un partage 5 mesures de L’Avenir en commun 2025, le programme. TIRAGE DU 11 SEPTE"
+  },
+  "/q/?s=c12-s01 [light]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "Laquelle est ici ? · La bifurcation écologique pour une société de l’harmonie — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic",
+    "Gowun Batang 400 normal"
+   ],
+   "bodyBg": "rgb(255, 252, 244)",
+   "bodyColor": "rgb(33, 35, 32)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ ACCUEIL CHERCHER LAQUELLE EST ICI ? SECTION · CHAPITRE 12 La bifurcation écologique pour",
+   "responses": [
+    {
+     "url": "/q/?s=c12-s01",
+     "status": 200,
+     "type": "text/html",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/tokens.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/base.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/motion.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/motion.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/q/q.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/q/q.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/ui.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/slim.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/strings.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/extras.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/concept-index.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/quiz-triplets.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    }
+   ]
+  },
+  "/q/?s=c12-s01 [dark]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "Laquelle est ici ? · La bifurcation écologique pour une société de l’harmonie — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic",
+    "Gowun Batang 400 normal"
+   ],
+   "bodyBg": "rgb(33, 35, 32)",
+   "bodyColor": "rgb(255, 252, 244)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ ACCUEIL CHERCHER LAQUELLE EST ICI ? SECTION · CHAPITRE 12 La bifurcation écologique pour"
+  },
+  "/q/card?s=c12-s01 [light]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "La bifurcation écologique pour une société de l’harmonie — C’est écrit là",
+   "scrollWidth": 1200,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic",
+    "Gowun Batang 400 normal"
+   ],
+   "bodyBg": "rgb(33, 35, 32)",
+   "bodyColor": "rgb(33, 35, 32)",
+   "shadows": 1,
+   "text": "C’EST ÉCRIT LÀ EXTRAIT DE L’AVENIR EN COMMUN, ÉDITION 2025 LAQUELLE EST DANS « LA BIFURCATION ÉCOLOGIQUE POUR UNE SOCIÉT",
+   "responses": [
+    {
+     "url": "/q/card?s=c12-s01",
+     "status": 200,
+     "type": "text/html",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/tokens.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/base.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/q/card.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/q/card.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/ui.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/strings.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/slim.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/extras.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/concept-index.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/quiz-triplets.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    }
+   ]
+  },
+  "/q/card?s=c12-s01 [dark]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "La bifurcation écologique pour une société de l’harmonie — C’est écrit là",
+   "scrollWidth": 1200,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic",
+    "Gowun Batang 400 normal"
+   ],
+   "bodyBg": "rgb(33, 35, 32)",
+   "bodyColor": "rgb(255, 252, 244)",
+   "shadows": 1,
+   "text": "C’EST ÉCRIT LÀ EXTRAIT DE L’AVENIR EN COMMUN, ÉDITION 2025 LAQUELLE EST DANS « LA BIFURCATION ÉCOLOGIQUE POUR UNE SOCIÉT"
+  },
+  "/riposte/ [light]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "Mode riposte — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic"
+   ],
+   "bodyBg": "rgb(255, 252, 244)",
+   "bodyColor": "rgb(33, 35, 32)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ THÈMES ACCUEIL MODE RIPOSTE Gros boutons, par thème, sans réseau. IMPÔTS « Les impôts vo",
+   "responses": [
+    {
+     "url": "/riposte/",
+     "status": 200,
+     "type": "text/html",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/tokens.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/motion.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/base.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/riposte/riposte.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/motion.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/riposte/riposte.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "MISS"
+    },
+    {
+     "url": "/shared/ui.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/strings.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/extras.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/riposte.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/stat-cards-legal.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/slim.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/concept-index.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/stat-cards.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    }
+   ]
+  },
+  "/riposte/ [dark]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "Mode riposte — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic"
+   ],
+   "bodyBg": "rgb(33, 35, 32)",
+   "bodyColor": "rgb(255, 252, 244)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ THÈMES ACCUEIL MODE RIPOSTE Gros boutons, par thème, sans réseau. IMPÔTS « Les impôts vo"
+  },
+  "/riposte/?id=rip-01 [light]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "Impôts · Mode riposte — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic"
+   ],
+   "bodyBg": "rgb(255, 252, 244)",
+   "bodyColor": "rgb(33, 35, 32)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ THÈMES ACCUEIL IMPÔTS CE QU’ON ENTEND SOUVENT « Avec vous, les impôts vont exploser » RE",
+   "responses": [
+    {
+     "url": "/riposte/?id=rip-01",
+     "status": 200,
+     "type": "text/html",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/tokens.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/motion.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/base.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/riposte/riposte.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/motion.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/riposte/riposte.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/ui.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/strings.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/concept-index.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/extras.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/riposte.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/stat-cards-legal.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/slim.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/stat-cards.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    }
+   ]
+  },
+  "/riposte/?id=rip-01 [dark]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "Impôts · Mode riposte — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic"
+   ],
+   "bodyBg": "rgb(33, 35, 32)",
+   "bodyColor": "rgb(255, 252, 244)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ THÈMES ACCUEIL IMPÔTS CE QU’ON ENTEND SOUVENT « Avec vous, les impôts vont exploser » RE"
+  },
+  "/riposte/?flash=1 [light]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "Europe · Mode riposte — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic"
+   ],
+   "bodyBg": "rgb(255, 252, 244)",
+   "bodyColor": "rgb(33, 35, 32)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ THÈMES ACCUEIL ENTRAÎNEMENT · DIX SECONDES PAR OBJECTION · 1 SUR 14 EUROPE CE QU’ON ENTE",
+   "responses": [
+    {
+     "url": "/riposte/?flash=1",
+     "status": 200,
+     "type": "text/html",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/tokens.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/base.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/motion.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/riposte/riposte.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/motion.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/riposte/riposte.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/ui.js",
+     "status": 200,
+     "type": "text/javascript",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/strings.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/stat-cards.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/stat-cards-legal.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/riposte.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/slim.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/extras.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/data/concept-index.json",
+     "status": 200,
+     "type": "application/json",
+     "enc": "zstd",
+     "cache": "HIT"
+    }
+   ]
+  },
+  "/riposte/?flash=1 [dark]": {
+   "status": 200,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "Europe · Mode riposte — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic"
+   ],
+   "bodyBg": "rgb(33, 35, 32)",
+   "bodyColor": "rgb(255, 252, 244)",
+   "shadows": 1,
+   "text": "Aller au contenu C’EST ÉCRIT LÀ THÈMES ACCUEIL ENTRAÎNEMENT · DIX SECONDES PAR OBJECTION · 1 SUR 14 EUROPE CE QU’ON ENTE"
+  },
+  "/nope [light]": {
+   "status": 404,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "Page introuvable — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic"
+   ],
+   "bodyBg": "rgb(255, 252, 244)",
+   "bodyColor": "rgb(33, 35, 32)",
+   "shadows": 1,
+   "text": "C’EST ÉCRIT LÀ Cette page n’existe pas. Le programme, lui, est entier : cherche un mot ou reviens à l’accueil. RETOUR À ",
+   "responses": [
+    {
+     "url": "/nope",
+     "status": 404,
+     "type": "text/html",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/tokens.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/base.css",
+     "status": 200,
+     "type": "text/css",
+     "enc": "zstd",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    },
+    {
+     "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+     "status": 200,
+     "type": "font/woff2",
+     "cache": "HIT"
+    }
+   ]
+  },
+  "/nope [dark]": {
+   "status": 404,
+   "errors": [],
+   "warnings": [],
+   "failed": [],
+   "external": [],
+   "title": "Page introuvable — C’est écrit là",
+   "scrollWidth": 390,
+   "fonts": [
+    "Public Sans 100 900 normal",
+    "Public Sans 100 900 italic"
+   ],
+   "bodyBg": "rgb(33, 35, 32)",
+   "bodyColor": "rgb(255, 252, 244)",
+   "shadows": 1,
+   "text": "C’EST ÉCRIT LÀ Cette page n’existe pas. Le programme, lui, est entier : cherche un mot ou reviens à l’accueil. RETOUR À "
+  }
+ }
+}

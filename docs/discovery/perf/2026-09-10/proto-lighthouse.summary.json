@@ -1,0 +1,3524 @@
+{
+  "measuredAt": "2026-09-09T14:42:22.782Z",
+  "lighthouseVersion": "13.4.1",
+  "throttlingMethod": "devtools",
+  "throttling": {
+    "rttMs": 150,
+    "throughputKbps": 1638.4,
+    "requestLatencyMs": 562.5,
+    "downloadThroughputKbps": 1474.56,
+    "uploadThroughputKbps": 675,
+    "cpuSlowdownMultiplier": 4
+  },
+  "formFactor": "mobile",
+  "chromePath": "<home>/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome",
+  "runsPerUrl": 3,
+  "pages": {
+    "link-c12-s01-k01": {
+      "url": "https://proto.cestecritla.fr/link/?id=c12-s01-k01",
+      "runs": [
+        {
+          "run": 1,
+          "fetchTime": "2026-09-09T14:36:11.158Z",
+          "score": 0.83,
+          "a11y": 1,
+          "fcp": 1599.856,
+          "lcp": 3097.816,
+          "tbt": 0,
+          "cls": 0.21619548697541782,
+          "mpfid": 22.357,
+          "si": 2192,
+          "ttfb": 40,
+          "requests": 13,
+          "transferTotal": 196626,
+          "transferByType": {
+            "Document": 1732,
+            "Font": 82205,
+            "Stylesheet": 9307,
+            "Script": 14331,
+            "Fetch": 87667,
+            "Other": 1384
+          },
+          "scriptTransfer": 14331,
+          "criticalPath": 93244,
+          "thirdParty": [],
+          "scripts": [
+            {
+              "url": "/link/link.js",
+              "transfer": 1865,
+              "raw": 2818
+            },
+            {
+              "url": "/shared/ui.js",
+              "transfer": 12466,
+              "raw": 32534
+            }
+          ],
+          "fonts": [
+            {
+              "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+              "transfer": 29936,
+              "raw": 29180
+            },
+            {
+              "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+              "transfer": 20399,
+              "raw": 19652
+            },
+            {
+              "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+              "transfer": 31870,
+              "raw": 31116
+            }
+          ],
+          "lcpInsight": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "label",
+                "valueType": "text",
+                "label": "Subpart"
+              },
+              {
+                "key": "duration",
+                "valueType": "ms",
+                "label": "Duration"
+              }
+            ],
+            "items": [
+              {
+                "subpart": "timeToFirstByte",
+                "label": "Time to first byte",
+                "duration": 101.63800012207031
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "label": "Element render delay",
+                "duration": 2996.17799987793
+              }
+            ]
+          },
+          "layoutShifts": [
+            {
+              "node": "body > main#main > h1#title",
+              "score": 0.214
+            },
+            {
+              "node": "body > main#main > h1#title > span.l",
+              "score": 0.002,
+              "reasons": [
+                "Web font loaded"
+              ]
+            },
+            {
+              "node": "main#main > footer.footer > p > span.book",
+              "score": 0.001,
+              "reasons": [
+                "Web font loaded",
+                "Web font loaded"
+              ]
+            }
+          ],
+          "clsInsight": {
+            "type": "list",
+            "items": [
+              {
+                "type": "table",
+                "headings": [
+                  {
+                    "key": "node",
+                    "valueType": "node",
+                    "subItemsHeading": {
+                      "key": "extra"
+                    },
+                    "label": "Element"
+                  },
+                  {
+                    "key": "score",
+                    "valueType": "numeric",
+                    "subItemsHeading": {
+                      "key": "cause",
+                      "valueType": "text"
+                    },
+                    "granularity": 0.001,
+                    "label": "Layout shift score"
+                  }
+                ],
+                "items": [
+                  {
+                    "node": {
+                      "type": "text",
+                      "value": "Total"
+                    },
+                    "score": 0.21619548697541782
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-6-H1",
+                      "path": "1,HTML,1,BODY,1,MAIN,4,H1",
+                      "selector": "body > main#main > h1#title",
+                      "boundingRect": {
+                        "top": 405,
+                        "bottom": 470,
+                        "left": 20,
+                        "right": 392,
+                        "width": 372,
+                        "height": 65
+                      },
+                      "snippet": "<h1 class=\"display\" id=\"title\">",
+                      "nodeLabel": "MOT\nPOUR MOT."
+                    },
+                    "score": 0.2141245486070951
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-2-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,4,H1,0,SPAN",
+                      "selector": "body > main#main > h1#title > span.l",
+                      "boundingRect": {
+                        "top": 405,
+                        "bottom": 438,
+                        "left": 20,
+                        "right": 392,
+                        "width": 372,
+                        "height": 32
+                      },
+                      "snippet": "<span class=\"l\">",
+                      "nodeLabel": "MOT"
+                    },
+                    "score": 0.001515848509867148,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Italic-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-1-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,9,FOOTER,0,P,1,SPAN",
+                      "selector": "main#main > footer.footer > p > span.book",
+                      "boundingRect": {
+                        "top": 816,
+                        "bottom": 853,
+                        "left": 20,
+                        "right": 373,
+                        "width": 353,
+                        "height": 37
+                      },
+                      "snippet": "<span class=\"book\">",
+                      "nodeLabel": "L’Avenir en commun"
+                    },
+                    "score": 0.0005550898584555867,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        },
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/GowunBatang-Regular-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "benchmarkIndex": 1081.5,
+          "a11yFailures": [],
+          "diagnostics": {
+            "numRequests": 13,
+            "numScripts": 2,
+            "numStylesheets": 2,
+            "numFonts": 3,
+            "numTasks": 581,
+            "numTasksOver10ms": 7,
+            "numTasksOver25ms": 2,
+            "numTasksOver50ms": 1,
+            "numTasksOver100ms": 0,
+            "numTasksOver500ms": 0,
+            "rtt": 24.607999999999997,
+            "throughput": 1472002.5330412986,
+            "maxRtt": 24.607999999999997,
+            "maxServerLatency": 556.0680000000001,
+            "totalByteWeight": 196626,
+            "totalTaskTime": 388.4659999999987,
+            "mainDocumentTransferSize": 1732
+          },
+          "mainThread": 388.4659999999998,
+          "bootup": 27.229,
+          "renderBlockingInsight": [
+            {
+              "url": "/shared/base.css",
+              "wastedMs": 1006
+            },
+            {
+              "url": "/shared/tokens.css",
+              "wastedMs": 706
+            }
+          ],
+          "unusedCss": []
+        },
+        {
+          "run": 2,
+          "fetchTime": "2026-09-09T14:36:37.983Z",
+          "score": 0.83,
+          "a11y": 1,
+          "fcp": 1568.737,
+          "lcp": 3059.695,
+          "tbt": 0,
+          "cls": 0.21619548697541782,
+          "mpfid": 21.836,
+          "si": 2158,
+          "ttfb": 57,
+          "requests": 13,
+          "transferTotal": 196580,
+          "transferByType": {
+            "Document": 1725,
+            "Font": 82198,
+            "Stylesheet": 9211,
+            "Script": 14337,
+            "Fetch": 87728,
+            "Other": 1381
+          },
+          "scriptTransfer": 14337,
+          "criticalPath": 93134,
+          "thirdParty": [],
+          "scripts": [
+            {
+              "url": "/link/link.js",
+              "transfer": 1869,
+              "raw": 2818
+            },
+            {
+              "url": "/shared/ui.js",
+              "transfer": 12468,
+              "raw": 32534
+            }
+          ],
+          "fonts": [
+            {
+              "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+              "transfer": 29932,
+              "raw": 29180
+            },
+            {
+              "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+              "transfer": 20402,
+              "raw": 19652
+            },
+            {
+              "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+              "transfer": 31864,
+              "raw": 31116
+            }
+          ],
+          "lcpInsight": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "label",
+                "valueType": "text",
+                "label": "Subpart"
+              },
+              {
+                "key": "duration",
+                "valueType": "ms",
+                "label": "Duration"
+              }
+            ],
+            "items": [
+              {
+                "subpart": "timeToFirstByte",
+                "label": "Time to first byte",
+                "duration": 101.339
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "label": "Element render delay",
+                "duration": 2958.356
+              }
+            ]
+          },
+          "layoutShifts": [
+            {
+              "node": "body > main#main > h1#title",
+              "score": 0.214
+            },
+            {
+              "node": "body > main#main > h1#title > span.l",
+              "score": 0.002,
+              "reasons": [
+                "Web font loaded"
+              ]
+            },
+            {
+              "node": "main#main > footer.footer > p > span.book",
+              "score": 0.001,
+              "reasons": [
+                "Web font loaded",
+                "Web font loaded"
+              ]
+            }
+          ],
+          "clsInsight": {
+            "type": "list",
+            "items": [
+              {
+                "type": "table",
+                "headings": [
+                  {
+                    "key": "node",
+                    "valueType": "node",
+                    "subItemsHeading": {
+                      "key": "extra"
+                    },
+                    "label": "Element"
+                  },
+                  {
+                    "key": "score",
+                    "valueType": "numeric",
+                    "subItemsHeading": {
+                      "key": "cause",
+                      "valueType": "text"
+                    },
+                    "granularity": 0.001,
+                    "label": "Layout shift score"
+                  }
+                ],
+                "items": [
+                  {
+                    "node": {
+                      "type": "text",
+                      "value": "Total"
+                    },
+                    "score": 0.21619548697541782
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-6-H1",
+                      "path": "1,HTML,1,BODY,1,MAIN,4,H1",
+                      "selector": "body > main#main > h1#title",
+                      "boundingRect": {
+                        "top": 405,
+                        "bottom": 470,
+                        "left": 20,
+                        "right": 392,
+                        "width": 372,
+                        "height": 65
+                      },
+                      "snippet": "<h1 class=\"display\" id=\"title\">",
+                      "nodeLabel": "MOT\nPOUR MOT."
+                    },
+                    "score": 0.2141245486070951
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-2-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,4,H1,0,SPAN",
+                      "selector": "body > main#main > h1#title > span.l",
+                      "boundingRect": {
+                        "top": 405,
+                        "bottom": 438,
+                        "left": 20,
+                        "right": 392,
+                        "width": 372,
+                        "height": 32
+                      },
+                      "snippet": "<span class=\"l\">",
+                      "nodeLabel": "MOT"
+                    },
+                    "score": 0.001515848509867148,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Italic-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-1-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,9,FOOTER,0,P,1,SPAN",
+                      "selector": "main#main > footer.footer > p > span.book",
+                      "boundingRect": {
+                        "top": 816,
+                        "bottom": 853,
+                        "left": 20,
+                        "right": 373,
+                        "width": 353,
+                        "height": 37
+                      },
+                      "snippet": "<span class=\"book\">",
+                      "nodeLabel": "L’Avenir en commun"
+                    },
+                    "score": 0.0005550898584555867,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        },
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/GowunBatang-Regular-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "benchmarkIndex": 1019,
+          "a11yFailures": [],
+          "diagnostics": {
+            "numRequests": 13,
+            "numScripts": 2,
+            "numStylesheets": 2,
+            "numFonts": 3,
+            "numTasks": 583,
+            "numTasksOver10ms": 8,
+            "numTasksOver25ms": 2,
+            "numTasksOver50ms": 1,
+            "numTasksOver100ms": 0,
+            "numTasksOver500ms": 0,
+            "rtt": 40.953,
+            "throughput": 1485715.0469328787,
+            "maxRtt": 40.953,
+            "maxServerLatency": 531.583,
+            "totalByteWeight": 196580,
+            "totalTaskTime": 367.687999999999,
+            "mainDocumentTransferSize": 1725
+          },
+          "mainThread": 367.68799999999976,
+          "bootup": 26.369,
+          "renderBlockingInsight": [
+            {
+              "url": "/shared/base.css",
+              "wastedMs": 982
+            },
+            {
+              "url": "/shared/tokens.css",
+              "wastedMs": 682
+            }
+          ],
+          "unusedCss": []
+        },
+        {
+          "run": 3,
+          "fetchTime": "2026-09-09T14:37:05.131Z",
+          "score": 0.83,
+          "a11y": 1,
+          "fcp": 1575.236,
+          "lcp": 3054.042,
+          "tbt": 0,
+          "cls": 0.21619548697541782,
+          "mpfid": 22.238,
+          "si": 2160,
+          "ttfb": 38,
+          "requests": 13,
+          "transferTotal": 196656,
+          "transferByType": {
+            "Document": 1726,
+            "Font": 82203,
+            "Stylesheet": 9295,
+            "Script": 14387,
+            "Fetch": 87664,
+            "Other": 1381
+          },
+          "scriptTransfer": 14387,
+          "criticalPath": 93224,
+          "thirdParty": [],
+          "scripts": [
+            {
+              "url": "/link/link.js",
+              "transfer": 1866,
+              "raw": 2818
+            },
+            {
+              "url": "/shared/ui.js",
+              "transfer": 12521,
+              "raw": 32534
+            }
+          ],
+          "fonts": [
+            {
+              "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+              "transfer": 29932,
+              "raw": 29180
+            },
+            {
+              "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+              "transfer": 20404,
+              "raw": 19652
+            },
+            {
+              "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+              "transfer": 31867,
+              "raw": 31116
+            }
+          ],
+          "lcpInsight": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "label",
+                "valueType": "text",
+                "label": "Subpart"
+              },
+              {
+                "key": "duration",
+                "valueType": "ms",
+                "label": "Duration"
+              }
+            ],
+            "items": [
+              {
+                "subpart": "timeToFirstByte",
+                "label": "Time to first byte",
+                "duration": 76.33799987792969
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "label": "Element render delay",
+                "duration": 2977.7040001220703
+              }
+            ]
+          },
+          "layoutShifts": [
+            {
+              "node": "body > main#main > h1#title",
+              "score": 0.214
+            },
+            {
+              "node": "body > main#main > h1#title > span.l",
+              "score": 0.002,
+              "reasons": [
+                "Web font loaded"
+              ]
+            },
+            {
+              "node": "main#main > footer.footer > p > span.book",
+              "score": 0.001,
+              "reasons": [
+                "Web font loaded",
+                "Web font loaded"
+              ]
+            }
+          ],
+          "clsInsight": {
+            "type": "list",
+            "items": [
+              {
+                "type": "table",
+                "headings": [
+                  {
+                    "key": "node",
+                    "valueType": "node",
+                    "subItemsHeading": {
+                      "key": "extra"
+                    },
+                    "label": "Element"
+                  },
+                  {
+                    "key": "score",
+                    "valueType": "numeric",
+                    "subItemsHeading": {
+                      "key": "cause",
+                      "valueType": "text"
+                    },
+                    "granularity": 0.001,
+                    "label": "Layout shift score"
+                  }
+                ],
+                "items": [
+                  {
+                    "node": {
+                      "type": "text",
+                      "value": "Total"
+                    },
+                    "score": 0.21619548697541782
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-6-H1",
+                      "path": "1,HTML,1,BODY,1,MAIN,4,H1",
+                      "selector": "body > main#main > h1#title",
+                      "boundingRect": {
+                        "top": 405,
+                        "bottom": 470,
+                        "left": 20,
+                        "right": 392,
+                        "width": 372,
+                        "height": 65
+                      },
+                      "snippet": "<h1 class=\"display\" id=\"title\">",
+                      "nodeLabel": "MOT\nPOUR MOT."
+                    },
+                    "score": 0.2141245486070951
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-2-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,4,H1,0,SPAN",
+                      "selector": "body > main#main > h1#title > span.l",
+                      "boundingRect": {
+                        "top": 405,
+                        "bottom": 438,
+                        "left": 20,
+                        "right": 392,
+                        "width": 372,
+                        "height": 32
+                      },
+                      "snippet": "<span class=\"l\">",
+                      "nodeLabel": "MOT"
+                    },
+                    "score": 0.001515848509867148,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Italic-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-1-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,9,FOOTER,0,P,1,SPAN",
+                      "selector": "main#main > footer.footer > p > span.book",
+                      "boundingRect": {
+                        "top": 816,
+                        "bottom": 853,
+                        "left": 20,
+                        "right": 373,
+                        "width": 353,
+                        "height": 37
+                      },
+                      "snippet": "<span class=\"book\">",
+                      "nodeLabel": "L’Avenir en commun"
+                    },
+                    "score": 0.0005550898584555867,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        },
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/GowunBatang-Regular-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "benchmarkIndex": 1009,
+          "a11yFailures": [],
+          "diagnostics": {
+            "numRequests": 13,
+            "numScripts": 2,
+            "numStylesheets": 2,
+            "numFonts": 3,
+            "numTasks": 586,
+            "numTasksOver10ms": 8,
+            "numTasksOver25ms": 2,
+            "numTasksOver50ms": 1,
+            "numTasksOver100ms": 1,
+            "numTasksOver500ms": 0,
+            "rtt": 34.358,
+            "throughput": 1473826.4203551828,
+            "maxRtt": 34.358,
+            "maxServerLatency": 537.456,
+            "totalByteWeight": 196656,
+            "totalTaskTime": 394.20199999999846,
+            "mainDocumentTransferSize": 1726
+          },
+          "mainThread": 394.2019999999999,
+          "bootup": 27.557999999999996,
+          "renderBlockingInsight": [
+            {
+              "url": "/shared/base.css",
+              "wastedMs": 987
+            },
+            {
+              "url": "/shared/tokens.css",
+              "wastedMs": 687
+            }
+          ],
+          "unusedCss": []
+        }
+      ],
+      "medians": {
+        "perf": 0.83,
+        "a11y": 1,
+        "fcp": 1575.236,
+        "lcp": 3059.695,
+        "tbt": 0,
+        "cls": 0.21619548697541782,
+        "mpfid": 22.238,
+        "si": 2160,
+        "ttfb": 40,
+        "transferTotal": 196626,
+        "scriptTransfer": 14337,
+        "criticalPath": 93224,
+        "requests": 13
+      }
+    },
+    "concept": {
+      "url": "https://proto.cestecritla.fr/concept/",
+      "runs": [
+        {
+          "run": 1,
+          "fetchTime": "2026-09-09T14:37:39.950Z",
+          "score": 0.74,
+          "a11y": 1,
+          "fcp": 1586.455,
+          "lcp": 4634.781,
+          "tbt": 3.2839999999996508,
+          "cls": 0.179924264766601,
+          "mpfid": 53.284,
+          "si": 3057,
+          "ttfb": 45,
+          "requests": 18,
+          "transferTotal": 254963,
+          "transferByType": {
+            "Document": 1652,
+            "Font": 82202,
+            "Stylesheet": 11654,
+            "Script": 22099,
+            "Fetch": 135974,
+            "Other": 1382
+          },
+          "scriptTransfer": 22099,
+          "criticalPath": 95508,
+          "thirdParty": [],
+          "scripts": [
+            {
+              "url": "/shared/motion.js",
+              "transfer": 4489,
+              "raw": 10024
+            },
+            {
+              "url": "/concept/concept.js",
+              "transfer": 5089,
+              "raw": 12064
+            },
+            {
+              "url": "/shared/ui.js",
+              "transfer": 12521,
+              "raw": 32534
+            }
+          ],
+          "fonts": [
+            {
+              "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+              "transfer": 29930,
+              "raw": 29180
+            },
+            {
+              "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+              "transfer": 20396,
+              "raw": 19652
+            },
+            {
+              "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+              "transfer": 31876,
+              "raw": 31116
+            }
+          ],
+          "lcpInsight": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "label",
+                "valueType": "text",
+                "label": "Subpart"
+              },
+              {
+                "key": "duration",
+                "valueType": "ms",
+                "label": "Duration"
+              }
+            ],
+            "items": [
+              {
+                "subpart": "timeToFirstByte",
+                "label": "Time to first byte",
+                "duration": 78.39899987792968
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "label": "Element render delay",
+                "duration": 4556.38200012207
+              }
+            ]
+          },
+          "layoutShifts": [
+            {
+              "node": "body > main#main > footer.footer",
+              "score": 0.18
+            },
+            {
+              "node": "body > main#main > footer.footer > p",
+              "score": 0.001,
+              "reasons": [
+                "Web font loaded"
+              ]
+            },
+            {
+              "node": "main#main > header.top > a.wordmark > span.la",
+              "score": 0,
+              "reasons": [
+                "Web font loaded"
+              ]
+            }
+          ],
+          "clsInsight": {
+            "type": "list",
+            "items": [
+              {
+                "type": "table",
+                "headings": [
+                  {
+                    "key": "node",
+                    "valueType": "node",
+                    "subItemsHeading": {
+                      "key": "extra"
+                    },
+                    "label": "Element"
+                  },
+                  {
+                    "key": "score",
+                    "valueType": "numeric",
+                    "subItemsHeading": {
+                      "key": "cause",
+                      "valueType": "text"
+                    },
+                    "granularity": 0.001,
+                    "label": "Layout shift score"
+                  }
+                ],
+                "items": [
+                  {
+                    "node": {
+                      "type": "text",
+                      "value": "Total"
+                    },
+                    "score": 0.0007280471191761552
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-1-P",
+                      "path": "1,HTML,1,BODY,1,MAIN,2,FOOTER,1,P",
+                      "selector": "body > main#main > footer.footer > p",
+                      "boundingRect": {
+                        "top": 2699,
+                        "bottom": 2762,
+                        "left": 20,
+                        "right": 392,
+                        "width": 372,
+                        "height": 63
+                      },
+                      "snippet": "<p>",
+                      "nodeLabel": "La France insoumise – L’Avenir en commun · CC BY-NC-SA 4.0. Nos explications, c…"
+                    },
+                    "score": 0.0006276384422438754,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-4-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,0,HEADER,0,A,1,SPAN",
+                      "selector": "main#main > header.top > a.wordmark > span.la",
+                      "boundingRect": {
+                        "top": 31,
+                        "bottom": 46,
+                        "left": 125,
+                        "right": 143,
+                        "width": 19,
+                        "height": 15
+                      },
+                      "snippet": "<span class=\"la\">",
+                      "nodeLabel": "LÀ"
+                    },
+                    "score": 0.0001004086769322797,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Italic-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "table",
+                "headings": [
+                  {
+                    "key": "node",
+                    "valueType": "node",
+                    "subItemsHeading": {
+                      "key": "extra"
+                    },
+                    "label": "Element"
+                  },
+                  {
+                    "key": "score",
+                    "valueType": "numeric",
+                    "subItemsHeading": {
+                      "key": "cause",
+                      "valueType": "text"
+                    },
+                    "granularity": 0.001,
+                    "label": "Layout shift score"
+                  }
+                ],
+                "items": [
+                  {
+                    "node": {
+                      "type": "text",
+                      "value": "Total"
+                    },
+                    "score": 0.179924264766601
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-5-FOOTER",
+                      "path": "1,HTML,1,BODY,1,MAIN,2,FOOTER",
+                      "selector": "body > main#main > footer.footer",
+                      "boundingRect": {
+                        "top": 2634,
+                        "bottom": 2798,
+                        "left": 20,
+                        "right": 392,
+                        "width": 372,
+                        "height": 164
+                      },
+                      "snippet": "<footer class=\"footer\">",
+                      "nodeLabel": "Projet militant indépendant, fait pour donner envie de lire le programme.\n\nLa F…"
+                    },
+                    "score": 0.179924264766601
+                  }
+                ]
+              }
+            ]
+          },
+          "benchmarkIndex": 1004.5,
+          "a11yFailures": [
+            "label-content-name-mismatch"
+          ],
+          "diagnostics": {
+            "numRequests": 18,
+            "numScripts": 3,
+            "numStylesheets": 3,
+            "numFonts": 3,
+            "numTasks": 725,
+            "numTasksOver10ms": 9,
+            "numTasksOver25ms": 3,
+            "numTasksOver50ms": 3,
+            "numTasksOver100ms": 0,
+            "numTasksOver500ms": 0,
+            "rtt": 30.744,
+            "throughput": 1490910.7749250655,
+            "maxRtt": 30.744,
+            "maxServerLatency": 545.4205,
+            "totalByteWeight": 254963,
+            "totalTaskTime": 495.03199999999924,
+            "mainDocumentTransferSize": 1652
+          },
+          "mainThread": 495.0319999999996,
+          "bootup": 50.000000000000014,
+          "renderBlockingInsight": [
+            {
+              "url": "/shared/base.css",
+              "wastedMs": 995
+            },
+            {
+              "url": "/shared/motion.js",
+              "wastedMs": 995
+            },
+            {
+              "url": "/shared/tokens.css",
+              "wastedMs": 695
+            },
+            {
+              "url": "/shared/motion.css",
+              "wastedMs": 995
+            }
+          ],
+          "unusedCss": []
+        },
+        {
+          "run": 2,
+          "fetchTime": "2026-09-09T14:38:08.840Z",
+          "score": 0.74,
+          "a11y": 1,
+          "fcp": 1569.676,
+          "lcp": 4625.889,
+          "tbt": 6.651999877929484,
+          "cls": 0.179924264766601,
+          "mpfid": 56.652,
+          "si": 3044,
+          "ttfb": 53,
+          "requests": 18,
+          "transferTotal": 254512,
+          "transferByType": {
+            "Document": 1648,
+            "Font": 82197,
+            "Stylesheet": 11556,
+            "Script": 21928,
+            "Fetch": 135792,
+            "Other": 1391
+          },
+          "scriptTransfer": 21928,
+          "criticalPath": 95401,
+          "thirdParty": [],
+          "scripts": [
+            {
+              "url": "/shared/motion.js",
+              "transfer": 4439,
+              "raw": 10024
+            },
+            {
+              "url": "/concept/concept.js",
+              "transfer": 5025,
+              "raw": 12064
+            },
+            {
+              "url": "/shared/ui.js",
+              "transfer": 12464,
+              "raw": 32534
+            }
+          ],
+          "fonts": [
+            {
+              "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+              "transfer": 29927,
+              "raw": 29180
+            },
+            {
+              "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+              "transfer": 20403,
+              "raw": 19652
+            },
+            {
+              "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+              "transfer": 31867,
+              "raw": 31116
+            }
+          ],
+          "lcpInsight": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "label",
+                "valueType": "text",
+                "label": "Subpart"
+              },
+              {
+                "key": "duration",
+                "valueType": "ms",
+                "label": "Duration"
+              }
+            ],
+            "items": [
+              {
+                "subpart": "timeToFirstByte",
+                "label": "Time to first byte",
+                "duration": 85.397
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "label": "Element render delay",
+                "duration": 4540.492
+              }
+            ]
+          },
+          "layoutShifts": [
+            {
+              "node": "body > main#main > footer.footer",
+              "score": 0.18
+            },
+            {
+              "node": "body > main#main > footer.footer > p",
+              "score": 0.001,
+              "reasons": [
+                "Web font loaded"
+              ]
+            },
+            {
+              "node": "main#main > header.top > a.wordmark > span.la",
+              "score": 0,
+              "reasons": [
+                "Web font loaded"
+              ]
+            }
+          ],
+          "clsInsight": {
+            "type": "list",
+            "items": [
+              {
+                "type": "table",
+                "headings": [
+                  {
+                    "key": "node",
+                    "valueType": "node",
+                    "subItemsHeading": {
+                      "key": "extra"
+                    },
+                    "label": "Element"
+                  },
+                  {
+                    "key": "score",
+                    "valueType": "numeric",
+                    "subItemsHeading": {
+                      "key": "cause",
+                      "valueType": "text"
+                    },
+                    "granularity": 0.001,
+                    "label": "Layout shift score"
+                  }
+                ],
+                "items": [
+                  {
+                    "node": {
+                      "type": "text",
+                      "value": "Total"
+                    },
+                    "score": 0.0007280471191761552
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-1-P",
+                      "path": "1,HTML,1,BODY,1,MAIN,2,FOOTER,1,P",
+                      "selector": "body > main#main > footer.footer > p",
+                      "boundingRect": {
+                        "top": 2699,
+                        "bottom": 2762,
+                        "left": 20,
+                        "right": 392,
+                        "width": 372,
+                        "height": 63
+                      },
+                      "snippet": "<p>",
+                      "nodeLabel": "La France insoumise – L’Avenir en commun · CC BY-NC-SA 4.0. Nos explications, c…"
+                    },
+                    "score": 0.0006276384422438754,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-4-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,0,HEADER,0,A,1,SPAN",
+                      "selector": "main#main > header.top > a.wordmark > span.la",
+                      "boundingRect": {
+                        "top": 31,
+                        "bottom": 46,
+                        "left": 125,
+                        "right": 143,
+                        "width": 19,
+                        "height": 15
+                      },
+                      "snippet": "<span class=\"la\">",
+                      "nodeLabel": "LÀ"
+                    },
+                    "score": 0.0001004086769322797,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Italic-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "table",
+                "headings": [
+                  {
+                    "key": "node",
+                    "valueType": "node",
+                    "subItemsHeading": {
+                      "key": "extra"
+                    },
+                    "label": "Element"
+                  },
+                  {
+                    "key": "score",
+                    "valueType": "numeric",
+                    "subItemsHeading": {
+                      "key": "cause",
+                      "valueType": "text"
+                    },
+                    "granularity": 0.001,
+                    "label": "Layout shift score"
+                  }
+                ],
+                "items": [
+                  {
+                    "node": {
+                      "type": "text",
+                      "value": "Total"
+                    },
+                    "score": 0.179924264766601
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-5-FOOTER",
+                      "path": "1,HTML,1,BODY,1,MAIN,2,FOOTER",
+                      "selector": "body > main#main > footer.footer",
+                      "boundingRect": {
+                        "top": 2634,
+                        "bottom": 2798,
+                        "left": 20,
+                        "right": 392,
+                        "width": 372,
+                        "height": 164
+                      },
+                      "snippet": "<footer class=\"footer\">",
+                      "nodeLabel": "Projet militant indépendant, fait pour donner envie de lire le programme.\n\nLa F…"
+                    },
+                    "score": 0.179924264766601
+                  }
+                ]
+              }
+            ]
+          },
+          "benchmarkIndex": 1017.5,
+          "a11yFailures": [
+            "label-content-name-mismatch"
+          ],
+          "diagnostics": {
+            "numRequests": 18,
+            "numScripts": 3,
+            "numStylesheets": 3,
+            "numFonts": 3,
+            "numTasks": 721,
+            "numTasksOver10ms": 9,
+            "numTasksOver25ms": 3,
+            "numTasksOver50ms": 2,
+            "numTasksOver100ms": 0,
+            "numTasksOver500ms": 0,
+            "rtt": 29.644,
+            "throughput": 1500754.465535393,
+            "maxRtt": 29.644,
+            "maxServerLatency": 546.2059999999999,
+            "totalByteWeight": 254512,
+            "totalTaskTime": 465.1659999999996,
+            "mainDocumentTransferSize": 1648
+          },
+          "mainThread": 465.1659999999995,
+          "bootup": 46.17299999999999,
+          "renderBlockingInsight": [
+            {
+              "url": "/shared/base.css",
+              "wastedMs": 996
+            },
+            {
+              "url": "/shared/motion.js",
+              "wastedMs": 996
+            },
+            {
+              "url": "/shared/motion.css",
+              "wastedMs": 996
+            },
+            {
+              "url": "/shared/tokens.css",
+              "wastedMs": 696
+            }
+          ],
+          "unusedCss": []
+        },
+        {
+          "run": 3,
+          "fetchTime": "2026-09-09T14:38:37.381Z",
+          "score": 0.74,
+          "a11y": 1,
+          "fcp": 1582.306,
+          "lcp": 4635.135,
+          "tbt": 5.934999999999491,
+          "cls": 0.179924264766601,
+          "mpfid": 55.935,
+          "si": 3055,
+          "ttfb": 49,
+          "requests": 18,
+          "transferTotal": 254711,
+          "transferByType": {
+            "Document": 1643,
+            "Font": 82205,
+            "Stylesheet": 11566,
+            "Script": 21992,
+            "Fetch": 135919,
+            "Other": 1386
+          },
+          "scriptTransfer": 21992,
+          "criticalPath": 95414,
+          "thirdParty": [],
+          "scripts": [
+            {
+              "url": "/shared/motion.js",
+              "transfer": 4447,
+              "raw": 10024
+            },
+            {
+              "url": "/concept/concept.js",
+              "transfer": 5032,
+              "raw": 12064
+            },
+            {
+              "url": "/shared/ui.js",
+              "transfer": 12513,
+              "raw": 32534
+            }
+          ],
+          "fonts": [
+            {
+              "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+              "transfer": 29929,
+              "raw": 29180
+            },
+            {
+              "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+              "transfer": 20405,
+              "raw": 19652
+            },
+            {
+              "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+              "transfer": 31871,
+              "raw": 31116
+            }
+          ],
+          "lcpInsight": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "label",
+                "valueType": "text",
+                "label": "Subpart"
+              },
+              {
+                "key": "duration",
+                "valueType": "ms",
+                "label": "Duration"
+              }
+            ],
+            "items": [
+              {
+                "subpart": "timeToFirstByte",
+                "label": "Time to first byte",
+                "duration": 77.28999987792969
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "label": "Element render delay",
+                "duration": 4557.84500012207
+              }
+            ]
+          },
+          "layoutShifts": [
+            {
+              "node": "body > main#main > footer.footer",
+              "score": 0.18
+            },
+            {
+              "node": "body > main#main > footer.footer > p",
+              "score": 0.001,
+              "reasons": [
+                "Web font loaded"
+              ]
+            },
+            {
+              "node": "main#main > header.top > a.wordmark > span.la",
+              "score": 0,
+              "reasons": [
+                "Web font loaded"
+              ]
+            }
+          ],
+          "clsInsight": {
+            "type": "list",
+            "items": [
+              {
+                "type": "table",
+                "headings": [
+                  {
+                    "key": "node",
+                    "valueType": "node",
+                    "subItemsHeading": {
+                      "key": "extra"
+                    },
+                    "label": "Element"
+                  },
+                  {
+                    "key": "score",
+                    "valueType": "numeric",
+                    "subItemsHeading": {
+                      "key": "cause",
+                      "valueType": "text"
+                    },
+                    "granularity": 0.001,
+                    "label": "Layout shift score"
+                  }
+                ],
+                "items": [
+                  {
+                    "node": {
+                      "type": "text",
+                      "value": "Total"
+                    },
+                    "score": 0.0007280471191761552
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-1-P",
+                      "path": "1,HTML,1,BODY,1,MAIN,2,FOOTER,1,P",
+                      "selector": "body > main#main > footer.footer > p",
+                      "boundingRect": {
+                        "top": 2699,
+                        "bottom": 2762,
+                        "left": 20,
+                        "right": 392,
+                        "width": 372,
+                        "height": 63
+                      },
+                      "snippet": "<p>",
+                      "nodeLabel": "La France insoumise – L’Avenir en commun · CC BY-NC-SA 4.0. Nos explications, c…"
+                    },
+                    "score": 0.0006276384422438754,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-4-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,0,HEADER,0,A,1,SPAN",
+                      "selector": "main#main > header.top > a.wordmark > span.la",
+                      "boundingRect": {
+                        "top": 31,
+                        "bottom": 46,
+                        "left": 125,
+                        "right": 143,
+                        "width": 19,
+                        "height": 15
+                      },
+                      "snippet": "<span class=\"la\">",
+                      "nodeLabel": "LÀ"
+                    },
+                    "score": 0.0001004086769322797,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Italic-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "table",
+                "headings": [
+                  {
+                    "key": "node",
+                    "valueType": "node",
+                    "subItemsHeading": {
+                      "key": "extra"
+                    },
+                    "label": "Element"
+                  },
+                  {
+                    "key": "score",
+                    "valueType": "numeric",
+                    "subItemsHeading": {
+                      "key": "cause",
+                      "valueType": "text"
+                    },
+                    "granularity": 0.001,
+                    "label": "Layout shift score"
+                  }
+                ],
+                "items": [
+                  {
+                    "node": {
+                      "type": "text",
+                      "value": "Total"
+                    },
+                    "score": 0.179924264766601
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-5-FOOTER",
+                      "path": "1,HTML,1,BODY,1,MAIN,2,FOOTER",
+                      "selector": "body > main#main > footer.footer",
+                      "boundingRect": {
+                        "top": 2634,
+                        "bottom": 2798,
+                        "left": 20,
+                        "right": 392,
+                        "width": 372,
+                        "height": 164
+                      },
+                      "snippet": "<footer class=\"footer\">",
+                      "nodeLabel": "Projet militant indépendant, fait pour donner envie de lire le programme.\n\nLa F…"
+                    },
+                    "score": 0.179924264766601
+                  }
+                ]
+              }
+            ]
+          },
+          "benchmarkIndex": 1006,
+          "a11yFailures": [
+            "label-content-name-mismatch"
+          ],
+          "diagnostics": {
+            "numRequests": 18,
+            "numScripts": 3,
+            "numStylesheets": 3,
+            "numFonts": 3,
+            "numTasks": 722,
+            "numTasksOver10ms": 9,
+            "numTasksOver25ms": 3,
+            "numTasksOver50ms": 2,
+            "numTasksOver100ms": 0,
+            "numTasksOver500ms": 0,
+            "rtt": 25.004,
+            "throughput": 1486874.840801204,
+            "maxRtt": 25.004,
+            "maxServerLatency": 552.2945,
+            "totalByteWeight": 254711,
+            "totalTaskTime": 478.8869999999986,
+            "mainDocumentTransferSize": 1643
+          },
+          "mainThread": 478.88699999999943,
+          "bootup": 50.361000000000004,
+          "renderBlockingInsight": [
+            {
+              "url": "/shared/base.css",
+              "wastedMs": 1002
+            },
+            {
+              "url": "/shared/motion.js",
+              "wastedMs": 1002
+            },
+            {
+              "url": "/shared/motion.css",
+              "wastedMs": 1002
+            },
+            {
+              "url": "/shared/tokens.css",
+              "wastedMs": 702
+            }
+          ],
+          "unusedCss": []
+        }
+      ],
+      "medians": {
+        "perf": 0.74,
+        "a11y": 1,
+        "fcp": 1582.306,
+        "lcp": 4634.781,
+        "tbt": 5.934999999999491,
+        "cls": 0.179924264766601,
+        "mpfid": 55.935,
+        "si": 3055,
+        "ttfb": 49,
+        "transferTotal": 254711,
+        "scriptTransfer": 21992,
+        "criticalPath": 95414,
+        "requests": 18
+      }
+    },
+    "defi-n1": {
+      "url": "https://proto.cestecritla.fr/defi/?n=254",
+      "runs": [
+        {
+          "run": 1,
+          "fetchTime": "2026-09-09T14:39:06.060Z",
+          "score": 0.87,
+          "a11y": 1,
+          "fcp": 1580.815,
+          "lcp": 1580.815,
+          "tbt": 0,
+          "cls": 0.24575168675110157,
+          "mpfid": 21.639,
+          "si": 2269,
+          "ttfb": 43,
+          "requests": 18,
+          "transferTotal": 218224,
+          "transferByType": {
+            "Document": 1755,
+            "Font": 82212,
+            "Stylesheet": 13968,
+            "Script": 29842,
+            "Fetch": 89061,
+            "Other": 1386
+          },
+          "scriptTransfer": 29842,
+          "criticalPath": 97935,
+          "thirdParty": [],
+          "scripts": [
+            {
+              "url": "/shared/motion.js",
+              "transfer": 4485,
+              "raw": 10024
+            },
+            {
+              "url": "/defi/defi.js",
+              "transfer": 8178,
+              "raw": 22494
+            },
+            {
+              "url": "/shared/ui.js",
+              "transfer": 12516,
+              "raw": 32534
+            },
+            {
+              "url": "/defi/card.js",
+              "transfer": 4663,
+              "raw": 10297
+            }
+          ],
+          "fonts": [
+            {
+              "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+              "transfer": 29932,
+              "raw": 29180
+            },
+            {
+              "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+              "transfer": 20408,
+              "raw": 19652
+            },
+            {
+              "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+              "transfer": 31872,
+              "raw": 31116
+            }
+          ],
+          "lcpInsight": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "label",
+                "valueType": "text",
+                "label": "Subpart"
+              },
+              {
+                "key": "duration",
+                "valueType": "ms",
+                "label": "Duration"
+              }
+            ],
+            "items": [
+              {
+                "subpart": "timeToFirstByte",
+                "label": "Time to first byte",
+                "duration": 76.835
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "label": "Element render delay",
+                "duration": 1503.98
+              }
+            ]
+          },
+          "layoutShifts": [
+            {
+              "node": "body > main#main > footer.footer",
+              "score": 0.245
+            },
+            {
+              "node": "main#main > footer.footer > p > span.book",
+              "score": 0.001,
+              "reasons": [
+                "Web font loaded"
+              ]
+            },
+            {
+              "node": "main#main > header.top > a.wordmark > span.la",
+              "score": 0,
+              "reasons": [
+                "Web font loaded"
+              ]
+            }
+          ],
+          "clsInsight": {
+            "type": "list",
+            "items": [
+              {
+                "type": "table",
+                "headings": [
+                  {
+                    "key": "node",
+                    "valueType": "node",
+                    "subItemsHeading": {
+                      "key": "extra"
+                    },
+                    "label": "Element"
+                  },
+                  {
+                    "key": "score",
+                    "valueType": "numeric",
+                    "subItemsHeading": {
+                      "key": "cause",
+                      "valueType": "text"
+                    },
+                    "granularity": 0.001,
+                    "label": "Layout shift score"
+                  }
+                ],
+                "items": [
+                  {
+                    "node": {
+                      "type": "text",
+                      "value": "Total"
+                    },
+                    "score": 0.24575168675110157
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-3-FOOTER",
+                      "path": "1,HTML,1,BODY,1,MAIN,2,FOOTER",
+                      "selector": "body > main#main > footer.footer",
+                      "boundingRect": {
+                        "top": 614,
+                        "bottom": 805,
+                        "left": 20,
+                        "right": 392,
+                        "width": 372,
+                        "height": 191
+                      },
+                      "snippet": "<footer class=\"footer\">",
+                      "nodeLabel": "Projet militant indépendant, fait pour donner envie de lire le programme.\n\nPas …"
+                    },
+                    "score": 0.2450961882157137
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-1-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,2,FOOTER,2,P,1,SPAN",
+                      "selector": "main#main > footer.footer > p > span.book",
+                      "boundingRect": {
+                        "top": 729,
+                        "bottom": 766,
+                        "left": 20,
+                        "right": 373,
+                        "width": 353,
+                        "height": 37
+                      },
+                      "snippet": "<span class=\"book\">",
+                      "nodeLabel": "L’Avenir en commun"
+                    },
+                    "score": 0.0005550898584555867,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-2-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,0,HEADER,0,A,1,SPAN",
+                      "selector": "main#main > header.top > a.wordmark > span.la",
+                      "boundingRect": {
+                        "top": 27,
+                        "bottom": 42,
+                        "left": 125,
+                        "right": 143,
+                        "width": 19,
+                        "height": 15
+                      },
+                      "snippet": "<span class=\"la\">",
+                      "nodeLabel": "LÀ"
+                    },
+                    "score": 0.0001004086769322797,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Italic-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "benchmarkIndex": 1008.5,
+          "a11yFailures": [],
+          "diagnostics": {
+            "numRequests": 18,
+            "numScripts": 4,
+            "numStylesheets": 4,
+            "numFonts": 3,
+            "numTasks": 654,
+            "numTasksOver10ms": 8,
+            "numTasksOver25ms": 2,
+            "numTasksOver50ms": 1,
+            "numTasksOver100ms": 0,
+            "numTasksOver500ms": 0,
+            "rtt": 31.302,
+            "throughput": 1468189.4435413047,
+            "maxRtt": 31.302,
+            "maxServerLatency": 551.472,
+            "totalByteWeight": 218224,
+            "totalTaskTime": 415.97799999999904,
+            "mainDocumentTransferSize": 1755
+          },
+          "mainThread": 415.9779999999995,
+          "bootup": 30.525,
+          "renderBlockingInsight": [
+            {
+              "url": "/shared/base.css",
+              "wastedMs": 1001
+            },
+            {
+              "url": "/shared/motion.js",
+              "wastedMs": 1151
+            },
+            {
+              "url": "/defi/defi.css",
+              "wastedMs": 1001
+            },
+            {
+              "url": "/shared/tokens.css",
+              "wastedMs": 701
+            },
+            {
+              "url": "/shared/motion.css",
+              "wastedMs": 1001
+            }
+          ],
+          "unusedCss": []
+        },
+        {
+          "run": 2,
+          "fetchTime": "2026-09-09T14:39:33.288Z",
+          "score": 0.87,
+          "a11y": 1,
+          "fcp": 1591.205,
+          "lcp": 1591.205,
+          "tbt": 0,
+          "cls": 0.24575168675110157,
+          "mpfid": 23.024,
+          "si": 2282,
+          "ttfb": 45,
+          "requests": 18,
+          "transferTotal": 218241,
+          "transferByType": {
+            "Document": 1753,
+            "Font": 82203,
+            "Stylesheet": 13969,
+            "Script": 29749,
+            "Fetch": 89174,
+            "Other": 1393
+          },
+          "scriptTransfer": 29749,
+          "criticalPath": 97925,
+          "thirdParty": [],
+          "scripts": [
+            {
+              "url": "/shared/motion.js",
+              "transfer": 4443,
+              "raw": 10024
+            },
+            {
+              "url": "/defi/defi.js",
+              "transfer": 8123,
+              "raw": 22494
+            },
+            {
+              "url": "/shared/ui.js",
+              "transfer": 12516,
+              "raw": 32534
+            },
+            {
+              "url": "/defi/card.js",
+              "transfer": 4667,
+              "raw": 10297
+            }
+          ],
+          "fonts": [
+            {
+              "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+              "transfer": 29930,
+              "raw": 29180
+            },
+            {
+              "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+              "transfer": 20401,
+              "raw": 19652
+            },
+            {
+              "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+              "transfer": 31872,
+              "raw": 31116
+            }
+          ],
+          "lcpInsight": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "label",
+                "valueType": "text",
+                "label": "Subpart"
+              },
+              {
+                "key": "duration",
+                "valueType": "ms",
+                "label": "Duration"
+              }
+            ],
+            "items": [
+              {
+                "subpart": "timeToFirstByte",
+                "label": "Time to first byte",
+                "duration": 90.877
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "label": "Element render delay",
+                "duration": 1500.328
+              }
+            ]
+          },
+          "layoutShifts": [
+            {
+              "node": "body > main#main > footer.footer",
+              "score": 0.245
+            },
+            {
+              "node": "main#main > footer.footer > p > span.book",
+              "score": 0.001,
+              "reasons": [
+                "Web font loaded"
+              ]
+            },
+            {
+              "node": "main#main > header.top > a.wordmark > span.la",
+              "score": 0,
+              "reasons": [
+                "Web font loaded"
+              ]
+            }
+          ],
+          "clsInsight": {
+            "type": "list",
+            "items": [
+              {
+                "type": "table",
+                "headings": [
+                  {
+                    "key": "node",
+                    "valueType": "node",
+                    "subItemsHeading": {
+                      "key": "extra"
+                    },
+                    "label": "Element"
+                  },
+                  {
+                    "key": "score",
+                    "valueType": "numeric",
+                    "subItemsHeading": {
+                      "key": "cause",
+                      "valueType": "text"
+                    },
+                    "granularity": 0.001,
+                    "label": "Layout shift score"
+                  }
+                ],
+                "items": [
+                  {
+                    "node": {
+                      "type": "text",
+                      "value": "Total"
+                    },
+                    "score": 0.24575168675110157
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-3-FOOTER",
+                      "path": "1,HTML,1,BODY,1,MAIN,2,FOOTER",
+                      "selector": "body > main#main > footer.footer",
+                      "boundingRect": {
+                        "top": 614,
+                        "bottom": 805,
+                        "left": 20,
+                        "right": 392,
+                        "width": 372,
+                        "height": 191
+                      },
+                      "snippet": "<footer class=\"footer\">",
+                      "nodeLabel": "Projet militant indépendant, fait pour donner envie de lire le programme.\n\nPas …"
+                    },
+                    "score": 0.2450961882157137
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-1-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,2,FOOTER,2,P,1,SPAN",
+                      "selector": "main#main > footer.footer > p > span.book",
+                      "boundingRect": {
+                        "top": 729,
+                        "bottom": 766,
+                        "left": 20,
+                        "right": 373,
+                        "width": 353,
+                        "height": 37
+                      },
+                      "snippet": "<span class=\"book\">",
+                      "nodeLabel": "L’Avenir en commun"
+                    },
+                    "score": 0.0005550898584555867,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-2-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,0,HEADER,0,A,1,SPAN",
+                      "selector": "main#main > header.top > a.wordmark > span.la",
+                      "boundingRect": {
+                        "top": 27,
+                        "bottom": 42,
+                        "left": 125,
+                        "right": 143,
+                        "width": 19,
+                        "height": 15
+                      },
+                      "snippet": "<span class=\"la\">",
+                      "nodeLabel": "LÀ"
+                    },
+                    "score": 0.0001004086769322797,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Italic-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "benchmarkIndex": 996,
+          "a11yFailures": [],
+          "diagnostics": {
+            "numRequests": 18,
+            "numScripts": 4,
+            "numStylesheets": 4,
+            "numFonts": 3,
+            "numTasks": 660,
+            "numTasksOver10ms": 8,
+            "numTasksOver25ms": 2,
+            "numTasksOver50ms": 1,
+            "numTasksOver100ms": 0,
+            "numTasksOver500ms": 0,
+            "rtt": 42.942,
+            "throughput": 1459716.485035425,
+            "maxRtt": 42.942,
+            "maxServerLatency": 540.018,
+            "totalByteWeight": 218241,
+            "totalTaskTime": 411.26999999999924,
+            "mainDocumentTransferSize": 1753
+          },
+          "mainThread": 411.26999999999936,
+          "bootup": 32.909000000000006,
+          "renderBlockingInsight": [
+            {
+              "url": "/shared/base.css",
+              "wastedMs": 990
+            },
+            {
+              "url": "/shared/motion.js",
+              "wastedMs": 1140
+            },
+            {
+              "url": "/defi/defi.css",
+              "wastedMs": 990
+            },
+            {
+              "url": "/shared/tokens.css",
+              "wastedMs": 690
+            },
+            {
+              "url": "/shared/motion.css",
+              "wastedMs": 990
+            }
+          ],
+          "unusedCss": []
+        },
+        {
+          "run": 3,
+          "fetchTime": "2026-09-09T14:40:00.584Z",
+          "score": 0.87,
+          "a11y": 1,
+          "fcp": 1573.676,
+          "lcp": 1573.676,
+          "tbt": 0,
+          "cls": 0.24575168675110157,
+          "mpfid": 21.703,
+          "si": 2255,
+          "ttfb": 42,
+          "requests": 18,
+          "transferTotal": 218424,
+          "transferByType": {
+            "Document": 1764,
+            "Font": 82207,
+            "Stylesheet": 14061,
+            "Script": 29898,
+            "Fetch": 89115,
+            "Other": 1379
+          },
+          "scriptTransfer": 29898,
+          "criticalPath": 98032,
+          "thirdParty": [],
+          "scripts": [
+            {
+              "url": "/shared/motion.js",
+              "transfer": 4483,
+              "raw": 10024
+            },
+            {
+              "url": "/defi/defi.js",
+              "transfer": 8183,
+              "raw": 22494
+            },
+            {
+              "url": "/shared/ui.js",
+              "transfer": 12523,
+              "raw": 32534
+            },
+            {
+              "url": "/defi/card.js",
+              "transfer": 4709,
+              "raw": 10297
+            }
+          ],
+          "fonts": [
+            {
+              "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+              "transfer": 29933,
+              "raw": 29180
+            },
+            {
+              "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+              "transfer": 20405,
+              "raw": 19652
+            },
+            {
+              "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+              "transfer": 31869,
+              "raw": 31116
+            }
+          ],
+          "lcpInsight": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "label",
+                "valueType": "text",
+                "label": "Subpart"
+              },
+              {
+                "key": "duration",
+                "valueType": "ms",
+                "label": "Duration"
+              }
+            ],
+            "items": [
+              {
+                "subpart": "timeToFirstByte",
+                "label": "Time to first byte",
+                "duration": 70.939
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "label": "Element render delay",
+                "duration": 1502.737
+              }
+            ]
+          },
+          "layoutShifts": [
+            {
+              "node": "body > main#main > footer.footer",
+              "score": 0.245
+            },
+            {
+              "node": "main#main > footer.footer > p > span.book",
+              "score": 0.001,
+              "reasons": [
+                "Web font loaded"
+              ]
+            },
+            {
+              "node": "main#main > header.top > a.wordmark > span.la",
+              "score": 0,
+              "reasons": [
+                "Web font loaded"
+              ]
+            }
+          ],
+          "clsInsight": {
+            "type": "list",
+            "items": [
+              {
+                "type": "table",
+                "headings": [
+                  {
+                    "key": "node",
+                    "valueType": "node",
+                    "subItemsHeading": {
+                      "key": "extra"
+                    },
+                    "label": "Element"
+                  },
+                  {
+                    "key": "score",
+                    "valueType": "numeric",
+                    "subItemsHeading": {
+                      "key": "cause",
+                      "valueType": "text"
+                    },
+                    "granularity": 0.001,
+                    "label": "Layout shift score"
+                  }
+                ],
+                "items": [
+                  {
+                    "node": {
+                      "type": "text",
+                      "value": "Total"
+                    },
+                    "score": 0.24575168675110157
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-3-FOOTER",
+                      "path": "1,HTML,1,BODY,1,MAIN,2,FOOTER",
+                      "selector": "body > main#main > footer.footer",
+                      "boundingRect": {
+                        "top": 614,
+                        "bottom": 805,
+                        "left": 20,
+                        "right": 392,
+                        "width": 372,
+                        "height": 191
+                      },
+                      "snippet": "<footer class=\"footer\">",
+                      "nodeLabel": "Projet militant indépendant, fait pour donner envie de lire le programme.\n\nPas …"
+                    },
+                    "score": 0.2450961882157137
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-1-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,2,FOOTER,2,P,1,SPAN",
+                      "selector": "main#main > footer.footer > p > span.book",
+                      "boundingRect": {
+                        "top": 729,
+                        "bottom": 766,
+                        "left": 20,
+                        "right": 373,
+                        "width": 353,
+                        "height": 37
+                      },
+                      "snippet": "<span class=\"book\">",
+                      "nodeLabel": "L’Avenir en commun"
+                    },
+                    "score": 0.0005550898584555867,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-2-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,0,HEADER,0,A,1,SPAN",
+                      "selector": "main#main > header.top > a.wordmark > span.la",
+                      "boundingRect": {
+                        "top": 27,
+                        "bottom": 42,
+                        "left": 125,
+                        "right": 143,
+                        "width": 19,
+                        "height": 15
+                      },
+                      "snippet": "<span class=\"la\">",
+                      "nodeLabel": "LÀ"
+                    },
+                    "score": 0.0001004086769322797,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Italic-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "benchmarkIndex": 1004,
+          "a11yFailures": [],
+          "diagnostics": {
+            "numRequests": 18,
+            "numScripts": 4,
+            "numStylesheets": 4,
+            "numFonts": 3,
+            "numTasks": 657,
+            "numTasksOver10ms": 8,
+            "numTasksOver25ms": 2,
+            "numTasksOver50ms": 2,
+            "numTasksOver100ms": 0,
+            "numTasksOver500ms": 0,
+            "rtt": 26.354,
+            "throughput": 1480969.7316362467,
+            "maxRtt": 26.354,
+            "maxServerLatency": 552.4309999999999,
+            "totalByteWeight": 218424,
+            "totalTaskTime": 417.9889999999992,
+            "mainDocumentTransferSize": 1764
+          },
+          "mainThread": 417.98899999999946,
+          "bootup": 33.642,
+          "renderBlockingInsight": [
+            {
+              "url": "/shared/base.css",
+              "wastedMs": 1002
+            },
+            {
+              "url": "/shared/motion.js",
+              "wastedMs": 1152
+            },
+            {
+              "url": "/shared/motion.css",
+              "wastedMs": 1002
+            },
+            {
+              "url": "/defi/defi.css",
+              "wastedMs": 1002
+            },
+            {
+              "url": "/shared/tokens.css",
+              "wastedMs": 702
+            }
+          ],
+          "unusedCss": []
+        }
+      ],
+      "medians": {
+        "perf": 0.87,
+        "a11y": 1,
+        "fcp": 1580.815,
+        "lcp": 1580.815,
+        "tbt": 0,
+        "cls": 0.24575168675110157,
+        "mpfid": 21.703,
+        "si": 2269,
+        "ttfb": 43,
+        "transferTotal": 218241,
+        "scriptTransfer": 29842,
+        "criticalPath": 97935,
+        "requests": 18
+      }
+    },
+    "riposte-rip-01": {
+      "url": "https://proto.cestecritla.fr/riposte/?id=rip-01",
+      "runs": [
+        {
+          "run": 1,
+          "fetchTime": "2026-09-09T14:40:33.381Z",
+          "score": 0.96,
+          "a11y": 1,
+          "fcp": 1608.61,
+          "lcp": 1608.61,
+          "tbt": 0,
+          "cls": 0.109976610619322,
+          "mpfid": 21.364,
+          "si": 1942,
+          "ttfb": 50,
+          "requests": 19,
+          "transferTotal": 228723,
+          "transferByType": {
+            "Document": 1682,
+            "Font": 82211,
+            "Stylesheet": 13920,
+            "Script": 24785,
+            "Fetch": 104741,
+            "Other": 1384
+          },
+          "scriptTransfer": 24785,
+          "criticalPath": 97813,
+          "thirdParty": [],
+          "scripts": [
+            {
+              "url": "/shared/motion.js",
+              "transfer": 4449,
+              "raw": 10024
+            },
+            {
+              "url": "/riposte/riposte.js",
+              "transfer": 7869,
+              "raw": 19395
+            },
+            {
+              "url": "/shared/ui.js",
+              "transfer": 12467,
+              "raw": 32534
+            }
+          ],
+          "fonts": [
+            {
+              "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+              "transfer": 29935,
+              "raw": 29180
+            },
+            {
+              "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+              "transfer": 31871,
+              "raw": 31116
+            },
+            {
+              "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+              "transfer": 20405,
+              "raw": 19652
+            }
+          ],
+          "lcpInsight": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "label",
+                "valueType": "text",
+                "label": "Subpart"
+              },
+              {
+                "key": "duration",
+                "valueType": "ms",
+                "label": "Duration"
+              }
+            ],
+            "items": [
+              {
+                "subpart": "timeToFirstByte",
+                "label": "Time to first byte",
+                "duration": 118.357
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "label": "Element render delay",
+                "duration": 1490.253
+              }
+            ]
+          },
+          "layoutShifts": [
+            {
+              "node": "body > main#main > footer.footer",
+              "score": 0.11
+            },
+            {
+              "node": "main#main > footer.footer > p > span.book",
+              "score": 0.001,
+              "reasons": [
+                "Web font loaded"
+              ]
+            },
+            {
+              "node": "main#main > header.top > a.wordmark > span.la",
+              "score": 0,
+              "reasons": [
+                "Web font loaded"
+              ]
+            }
+          ],
+          "clsInsight": {
+            "type": "list",
+            "items": [
+              {
+                "type": "table",
+                "headings": [
+                  {
+                    "key": "node",
+                    "valueType": "node",
+                    "subItemsHeading": {
+                      "key": "extra"
+                    },
+                    "label": "Element"
+                  },
+                  {
+                    "key": "score",
+                    "valueType": "numeric",
+                    "subItemsHeading": {
+                      "key": "cause",
+                      "valueType": "text"
+                    },
+                    "granularity": 0.001,
+                    "label": "Layout shift score"
+                  }
+                ],
+                "items": [
+                  {
+                    "node": {
+                      "type": "text",
+                      "value": "Total"
+                    },
+                    "score": 0.000793069979458291
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-1-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,2,FOOTER,2,P,1,SPAN",
+                      "selector": "main#main > footer.footer > p > span.book",
+                      "boundingRect": {
+                        "top": 475,
+                        "bottom": 512,
+                        "left": 20,
+                        "right": 373,
+                        "width": 353,
+                        "height": 37
+                      },
+                      "snippet": "<span class=\"book\">",
+                      "nodeLabel": "L’Avenir en commun"
+                    },
+                    "score": 0.0006926613025260113,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-3-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,0,HEADER,0,A,1,SPAN",
+                      "selector": "main#main > header.top > a.wordmark > span.la",
+                      "boundingRect": {
+                        "top": 31,
+                        "bottom": 46,
+                        "left": 125,
+                        "right": 143,
+                        "width": 19,
+                        "height": 15
+                      },
+                      "snippet": "<span class=\"la\">",
+                      "nodeLabel": "LÀ"
+                    },
+                    "score": 0.0001004086769322797,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Italic-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "table",
+                "headings": [
+                  {
+                    "key": "node",
+                    "valueType": "node",
+                    "subItemsHeading": {
+                      "key": "extra"
+                    },
+                    "label": "Element"
+                  },
+                  {
+                    "key": "score",
+                    "valueType": "numeric",
+                    "subItemsHeading": {
+                      "key": "cause",
+                      "valueType": "text"
+                    },
+                    "granularity": 0.001,
+                    "label": "Layout shift score"
+                  }
+                ],
+                "items": [
+                  {
+                    "node": {
+                      "type": "text",
+                      "value": "Total"
+                    },
+                    "score": 0.109976610619322
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-4-FOOTER",
+                      "path": "1,HTML,1,BODY,1,MAIN,2,FOOTER",
+                      "selector": "body > main#main > footer.footer",
+                      "boundingRect": {
+                        "top": 360,
+                        "bottom": 551,
+                        "left": 20,
+                        "right": 392,
+                        "width": 372,
+                        "height": 191
+                      },
+                      "snippet": "<footer class=\"footer\">",
+                      "nodeLabel": "Projet militant indépendant, fait pour donner envie de lire le programme.\n\nPas …"
+                    },
+                    "score": 0.109976610619322
+                  }
+                ]
+              }
+            ]
+          },
+          "benchmarkIndex": 1017,
+          "a11yFailures": [],
+          "diagnostics": {
+            "numRequests": 19,
+            "numScripts": 3,
+            "numStylesheets": 4,
+            "numFonts": 3,
+            "numTasks": 666,
+            "numTasksOver10ms": 7,
+            "numTasksOver25ms": 2,
+            "numTasksOver50ms": 2,
+            "numTasksOver100ms": 0,
+            "numTasksOver500ms": 0,
+            "rtt": 32.343,
+            "throughput": 1452915.7584765125,
+            "maxRtt": 32.343,
+            "maxServerLatency": 563.0020000000001,
+            "totalByteWeight": 228723,
+            "totalTaskTime": 417.425999999999,
+            "mainDocumentTransferSize": 1682
+          },
+          "mainThread": 417.4259999999992,
+          "bootup": 35.641,
+          "renderBlockingInsight": [
+            {
+              "url": "/shared/base.css",
+              "wastedMs": 1013
+            },
+            {
+              "url": "/shared/motion.js",
+              "wastedMs": 1163
+            },
+            {
+              "url": "/riposte/riposte.css",
+              "wastedMs": 1013
+            },
+            {
+              "url": "/shared/motion.css",
+              "wastedMs": 1013
+            },
+            {
+              "url": "/shared/tokens.css",
+              "wastedMs": 713
+            }
+          ],
+          "unusedCss": []
+        },
+        {
+          "run": 2,
+          "fetchTime": "2026-09-09T14:41:00.926Z",
+          "score": 0.96,
+          "a11y": 1,
+          "fcp": 1586.28,
+          "lcp": 1586.28,
+          "tbt": 0,
+          "cls": 0.109976610619322,
+          "mpfid": 23.607,
+          "si": 1922,
+          "ttfb": 50,
+          "requests": 19,
+          "transferTotal": 228688,
+          "transferByType": {
+            "Document": 1677,
+            "Font": 82206,
+            "Stylesheet": 14001,
+            "Script": 24719,
+            "Fetch": 104699,
+            "Other": 1386
+          },
+          "scriptTransfer": 24719,
+          "criticalPath": 97884,
+          "thirdParty": [],
+          "scripts": [
+            {
+              "url": "/shared/motion.js",
+              "transfer": 4439,
+              "raw": 10024
+            },
+            {
+              "url": "/riposte/riposte.js",
+              "transfer": 7808,
+              "raw": 19395
+            },
+            {
+              "url": "/shared/ui.js",
+              "transfer": 12472,
+              "raw": 32534
+            }
+          ],
+          "fonts": [
+            {
+              "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+              "transfer": 29929,
+              "raw": 29180
+            },
+            {
+              "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+              "transfer": 31866,
+              "raw": 31116
+            },
+            {
+              "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+              "transfer": 20411,
+              "raw": 19652
+            }
+          ],
+          "lcpInsight": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "label",
+                "valueType": "text",
+                "label": "Subpart"
+              },
+              {
+                "key": "duration",
+                "valueType": "ms",
+                "label": "Duration"
+              }
+            ],
+            "items": [
+              {
+                "subpart": "timeToFirstByte",
+                "label": "Time to first byte",
+                "duration": 87.33
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "label": "Element render delay",
+                "duration": 1498.95
+              }
+            ]
+          },
+          "layoutShifts": [
+            {
+              "node": "body > main#main > footer.footer",
+              "score": 0.11
+            },
+            {
+              "node": "main#main > footer.footer > p > span.book",
+              "score": 0.001,
+              "reasons": [
+                "Web font loaded"
+              ]
+            },
+            {
+              "node": "main#main > header.top > a.wordmark > span.la",
+              "score": 0,
+              "reasons": [
+                "Web font loaded"
+              ]
+            }
+          ],
+          "clsInsight": {
+            "type": "list",
+            "items": [
+              {
+                "type": "table",
+                "headings": [
+                  {
+                    "key": "node",
+                    "valueType": "node",
+                    "subItemsHeading": {
+                      "key": "extra"
+                    },
+                    "label": "Element"
+                  },
+                  {
+                    "key": "score",
+                    "valueType": "numeric",
+                    "subItemsHeading": {
+                      "key": "cause",
+                      "valueType": "text"
+                    },
+                    "granularity": 0.001,
+                    "label": "Layout shift score"
+                  }
+                ],
+                "items": [
+                  {
+                    "node": {
+                      "type": "text",
+                      "value": "Total"
+                    },
+                    "score": 0.000793069979458291
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-1-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,2,FOOTER,2,P,1,SPAN",
+                      "selector": "main#main > footer.footer > p > span.book",
+                      "boundingRect": {
+                        "top": 475,
+                        "bottom": 512,
+                        "left": 20,
+                        "right": 373,
+                        "width": 353,
+                        "height": 37
+                      },
+                      "snippet": "<span class=\"book\">",
+                      "nodeLabel": "L’Avenir en commun"
+                    },
+                    "score": 0.0006926613025260113,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-3-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,0,HEADER,0,A,1,SPAN",
+                      "selector": "main#main > header.top > a.wordmark > span.la",
+                      "boundingRect": {
+                        "top": 31,
+                        "bottom": 46,
+                        "left": 125,
+                        "right": 143,
+                        "width": 19,
+                        "height": 15
+                      },
+                      "snippet": "<span class=\"la\">",
+                      "nodeLabel": "LÀ"
+                    },
+                    "score": 0.0001004086769322797,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Italic-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "table",
+                "headings": [
+                  {
+                    "key": "node",
+                    "valueType": "node",
+                    "subItemsHeading": {
+                      "key": "extra"
+                    },
+                    "label": "Element"
+                  },
+                  {
+                    "key": "score",
+                    "valueType": "numeric",
+                    "subItemsHeading": {
+                      "key": "cause",
+                      "valueType": "text"
+                    },
+                    "granularity": 0.001,
+                    "label": "Layout shift score"
+                  }
+                ],
+                "items": [
+                  {
+                    "node": {
+                      "type": "text",
+                      "value": "Total"
+                    },
+                    "score": 0.109976610619322
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-4-FOOTER",
+                      "path": "1,HTML,1,BODY,1,MAIN,2,FOOTER",
+                      "selector": "body > main#main > footer.footer",
+                      "boundingRect": {
+                        "top": 360,
+                        "bottom": 551,
+                        "left": 20,
+                        "right": 392,
+                        "width": 372,
+                        "height": 191
+                      },
+                      "snippet": "<footer class=\"footer\">",
+                      "nodeLabel": "Projet militant indépendant, fait pour donner envie de lire le programme.\n\nPas …"
+                    },
+                    "score": 0.109976610619322
+                  }
+                ]
+              }
+            ]
+          },
+          "benchmarkIndex": 1010.5,
+          "a11yFailures": [],
+          "diagnostics": {
+            "numRequests": 19,
+            "numScripts": 3,
+            "numStylesheets": 4,
+            "numFonts": 3,
+            "numTasks": 668,
+            "numTasksOver10ms": 7,
+            "numTasksOver25ms": 2,
+            "numTasksOver50ms": 2,
+            "numTasksOver100ms": 0,
+            "numTasksOver500ms": 0,
+            "rtt": 33.857,
+            "throughput": 1454322.099427064,
+            "maxRtt": 33.857,
+            "maxServerLatency": 559.366,
+            "totalByteWeight": 228688,
+            "totalTaskTime": 428.4569999999993,
+            "mainDocumentTransferSize": 1677
+          },
+          "mainThread": 428.4569999999994,
+          "bootup": 35.08299999999999,
+          "renderBlockingInsight": [
+            {
+              "url": "/shared/base.css",
+              "wastedMs": 1009
+            },
+            {
+              "url": "/shared/motion.js",
+              "wastedMs": 1159
+            },
+            {
+              "url": "/riposte/riposte.css",
+              "wastedMs": 1009
+            },
+            {
+              "url": "/shared/motion.css",
+              "wastedMs": 1009
+            },
+            {
+              "url": "/shared/tokens.css",
+              "wastedMs": 709
+            }
+          ],
+          "unusedCss": []
+        },
+        {
+          "run": 3,
+          "fetchTime": "2026-09-09T14:41:28.371Z",
+          "score": 0.96,
+          "a11y": 1,
+          "fcp": 1607.21,
+          "lcp": 1607.21,
+          "tbt": 0,
+          "cls": 0.109976610619322,
+          "mpfid": 20.771,
+          "si": 1938,
+          "ttfb": 59,
+          "requests": 19,
+          "transferTotal": 228467,
+          "transferByType": {
+            "Document": 1681,
+            "Font": 82208,
+            "Stylesheet": 13914,
+            "Script": 24724,
+            "Fetch": 104560,
+            "Other": 1380
+          },
+          "scriptTransfer": 24724,
+          "criticalPath": 97803,
+          "thirdParty": [],
+          "scripts": [
+            {
+              "url": "/shared/motion.js",
+              "transfer": 4447,
+              "raw": 10024
+            },
+            {
+              "url": "/riposte/riposte.js",
+              "transfer": 7807,
+              "raw": 19395
+            },
+            {
+              "url": "/shared/ui.js",
+              "transfer": 12470,
+              "raw": 32534
+            }
+          ],
+          "fonts": [
+            {
+              "url": "/shared/fonts/PublicSans-Variable-latin.woff2",
+              "transfer": 29943,
+              "raw": 29180
+            },
+            {
+              "url": "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+              "transfer": 31867,
+              "raw": 31116
+            },
+            {
+              "url": "/shared/fonts/GowunBatang-Regular-latin.woff2",
+              "transfer": 20398,
+              "raw": 19652
+            }
+          ],
+          "lcpInsight": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "label",
+                "valueType": "text",
+                "label": "Subpart"
+              },
+              {
+                "key": "duration",
+                "valueType": "ms",
+                "label": "Duration"
+              }
+            ],
+            "items": [
+              {
+                "subpart": "timeToFirstByte",
+                "label": "Time to first byte",
+                "duration": 116.65699987792969
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "label": "Element render delay",
+                "duration": 1490.5530001220702
+              }
+            ]
+          },
+          "layoutShifts": [
+            {
+              "node": "body > main#main > footer.footer",
+              "score": 0.11
+            },
+            {
+              "node": "main#main > footer.footer > p > span.book",
+              "score": 0.001,
+              "reasons": [
+                "Web font loaded"
+              ]
+            },
+            {
+              "node": "main#main > header.top > a.wordmark > span.la",
+              "score": 0,
+              "reasons": [
+                "Web font loaded"
+              ]
+            }
+          ],
+          "clsInsight": {
+            "type": "list",
+            "items": [
+              {
+                "type": "table",
+                "headings": [
+                  {
+                    "key": "node",
+                    "valueType": "node",
+                    "subItemsHeading": {
+                      "key": "extra"
+                    },
+                    "label": "Element"
+                  },
+                  {
+                    "key": "score",
+                    "valueType": "numeric",
+                    "subItemsHeading": {
+                      "key": "cause",
+                      "valueType": "text"
+                    },
+                    "granularity": 0.001,
+                    "label": "Layout shift score"
+                  }
+                ],
+                "items": [
+                  {
+                    "node": {
+                      "type": "text",
+                      "value": "Total"
+                    },
+                    "score": 0.000793069979458291
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-1-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,2,FOOTER,2,P,1,SPAN",
+                      "selector": "main#main > footer.footer > p > span.book",
+                      "boundingRect": {
+                        "top": 475,
+                        "bottom": 512,
+                        "left": 20,
+                        "right": 373,
+                        "width": 353,
+                        "height": 37
+                      },
+                      "snippet": "<span class=\"book\">",
+                      "nodeLabel": "L’Avenir en commun"
+                    },
+                    "score": 0.0006926613025260113,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-3-SPAN",
+                      "path": "1,HTML,1,BODY,1,MAIN,0,HEADER,0,A,1,SPAN",
+                      "selector": "main#main > header.top > a.wordmark > span.la",
+                      "boundingRect": {
+                        "top": 31,
+                        "bottom": 46,
+                        "left": 125,
+                        "right": 143,
+                        "width": 19,
+                        "height": 15
+                      },
+                      "snippet": "<span class=\"la\">",
+                      "nodeLabel": "LÀ"
+                    },
+                    "score": 0.0001004086769322797,
+                    "subItems": {
+                      "type": "subitems",
+                      "items": [
+                        {
+                          "extra": {
+                            "type": "url",
+                            "value": "https://proto.cestecritla.fr/shared/fonts/PublicSans-Italic-Variable-latin.woff2"
+                          },
+                          "cause": "Web font"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "table",
+                "headings": [
+                  {
+                    "key": "node",
+                    "valueType": "node",
+                    "subItemsHeading": {
+                      "key": "extra"
+                    },
+                    "label": "Element"
+                  },
+                  {
+                    "key": "score",
+                    "valueType": "numeric",
+                    "subItemsHeading": {
+                      "key": "cause",
+                      "valueType": "text"
+                    },
+                    "granularity": 0.001,
+                    "label": "Layout shift score"
+                  }
+                ],
+                "items": [
+                  {
+                    "node": {
+                      "type": "text",
+                      "value": "Total"
+                    },
+                    "score": 0.109976610619322
+                  },
+                  {
+                    "node": {
+                      "type": "node",
+                      "lhId": "page-4-FOOTER",
+                      "path": "1,HTML,1,BODY,1,MAIN,2,FOOTER",
+                      "selector": "body > main#main > footer.footer",
+                      "boundingRect": {
+                        "top": 360,
+                        "bottom": 551,
+                        "left": 20,
+                        "right": 392,
+                        "width": 372,
+                        "height": 191
+                      },
+                      "snippet": "<footer class=\"footer\">",
+                      "nodeLabel": "Projet militant indépendant, fait pour donner envie de lire le programme.\n\nPas …"
+                    },
+                    "score": 0.109976610619322
+                  }
+                ]
+              }
+            ]
+          },
+          "benchmarkIndex": 1019.5,
+          "a11yFailures": [],
+          "diagnostics": {
+            "numRequests": 19,
+            "numScripts": 3,
+            "numStylesheets": 4,
+            "numFonts": 3,
+            "numTasks": 657,
+            "numTasksOver10ms": 7,
+            "numTasksOver25ms": 2,
+            "numTasksOver50ms": 1,
+            "numTasksOver100ms": 0,
+            "numTasksOver500ms": 0,
+            "rtt": 29.176000000000002,
+            "throughput": 1463359.1525951095,
+            "maxRtt": 29.176000000000002,
+            "maxServerLatency": 562.8219999999999,
+            "totalByteWeight": 228467,
+            "totalTaskTime": 418.055999999999,
+            "mainDocumentTransferSize": 1681
+          },
+          "mainThread": 418.0559999999997,
+          "bootup": 35.647000000000006,
+          "renderBlockingInsight": [
+            {
+              "url": "/shared/base.css",
+              "wastedMs": 1013
+            },
+            {
+              "url": "/shared/motion.js",
+              "wastedMs": 1163
+            },
+            {
+              "url": "/shared/motion.css",
+              "wastedMs": 1013
+            },
+            {
+              "url": "/riposte/riposte.css",
+              "wastedMs": 1013
+            },
+            {
+              "url": "/shared/tokens.css",
+              "wastedMs": 713
+            }
+          ],
+          "unusedCss": []
+        }
+      ],
+      "medians": {
+        "perf": 0.96,
+        "a11y": 1,
+        "fcp": 1607.21,
+        "lcp": 1607.21,
+        "tbt": 0,
+        "cls": 0.109976610619322,
+        "mpfid": 21.364,
+        "si": 1938,
+        "ttfb": 50,
+        "transferTotal": 228688,
+        "scriptTransfer": 24724,
+        "criticalPath": 97813,
+        "requests": 19
+      }
+    }
+  }
+}

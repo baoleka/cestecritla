@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=360, initial-scale=1">
+<title>Story — AEC Discover (maquette A)</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+/* Fixed-look share card: single palette, no dark mode (rendered once, never themed). */
+:root { color-scheme: light; }
+html, body { margin: 0; background: #4c0297; }
+.story { position: relative; width: 360px; height: 640px; overflow: hidden; background: #fdedff; color: #212320; font-family: var(--ui); }
+.matter { position: absolute; inset: 0 0 47% 0; padding: 26px 24px 0; background: #fdedff; border-bottom: 0; }
+.matter .part { color: #212320; font-size: 10px; margin-bottom: 14px; }
+.matter .part::before { background: #2e9959; }
+.matter .kicker { color: #4c0297; font-size: 10px; margin-bottom: 14px; }
+.matter .verbatim { background: transparent; border-left: 4px solid #4c0297; padding: 4px 0 4px 16px; margin: 0; color: #212320; font-size: 21px; line-height: 1.38; }
+.matter .verbatim .label { color: #4c0297; }
+.aplat { position: absolute; left: 0; right: 0; bottom: 0; height: 47%; background: #4c0297; color: #fffcf4; }
+.title { position: absolute; left: 24px; right: 24px; top: 48.5%; margin: 0; z-index: 2; }
+.title .l { display: inline-block; font: 900 33px/1 var(--ui); font-style: italic; text-transform: uppercase; letter-spacing: -.02em; color: #fffcf4; background: #4c0297; padding: 6px 10px 4px 8px; margin-bottom: 6px; }
+.title .l:nth-child(2) { margin-left: 14px; }
+.title .l:nth-child(3) { margin-left: 28px; }
+.loc2 { position: absolute; left: 24px; right: 24px; top: 74%; font: 700 11px/1.4 var(--ui); letter-spacing: .1em; text-transform: uppercase; color: #fffcf4; }
+.url { position: absolute; left: 24px; top: 80.5%; font: 400 14px/1.3 var(--ui); color: #fffcf4; }
+.sign { position: absolute; left: 24px; right: 24px; bottom: 0; height: 12%; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid #e5cbff; }
+.sign .wordmark { color: #4c0297; background: #fffcf4; border-color: #fffcf4; box-shadow: 5px 5px 0 #e5cbff; font-size: 11px; }
+.sign .cc { font: 400 9px/1.35 var(--ui); color: #fffcf4; text-align: right; max-width: 210px; }
+</style>
+</head>
+<body>
+<div class="story" role="img" aria-label="Carte de partage : Inscrire dans la Constitution le principe de la « règle verte », selon laquelle on ne prélève pas davantage à la nature que ce qu’elle est en état de reconstituer">
+<div class="matter">
+<p class="kicker">Extrait de <span class="book">L’Avenir en commun</span>, édition 2025</p>
+<p class="part">Partie 3 · L’harmonie des êtres humains avec la nature</p>
+<blockquote class="verbatim"><span class="label">Texte du programme</span><p>Inscrire dans la Constitution le principe de la « règle verte », selon laquelle on ne prélève pas davantage à la nature que ce qu’elle est en état de reconstituer</p></blockquote>
+</div>
+<div class="aplat"></div>
+<h1 class="title"><span class="l">Tu savais que</span><br><span class="l">c’était</span><br><span class="l">dedans&nbsp;?</span></h1>
+<p class="loc2">Chapitre 12 · Planification écologique · La bifurcation écologique pour une société de l’harmonie</p>
+<p class="url">aec-discover.fr/m/c12-s01-k01</p>
+<div class="sign"><span class="wordmark">AEC Discover</span><span class="cc">Texte : La France insoumise – <span class="book">L’Avenir en commun</span> (<span class="nowrap">CC BY-NC-SA 4.0</span>)</span></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+[
+  {
+    "slug": "s-c2-s01",
+    "term": "section c2-s01",
+    "aliases": ["Collectiviser les biens communs fondamentaux"]
+  },
+  {
+    "slug": "s-c5-s03",
+    "term": "section c5-s03",
+    "aliases": ["Reconstruire une école globale pour l['’]égalité et l['’]émancipation"]
+  },
+  {
+    "slug": "s-c17-s01",
+    "term": "section c17-s01",
+    "aliases": ["Utiliser tous les leviers d['’]action face aux institutions européennes"]
+  },
+  {
+    "slug": "s-c17-s02",
+    "term": "section c17-s02",
+    "aliases": ["Désobéir à chaque fois que c['’]est nécessaire"]
+  },
+  {
+    "slug": "s-c1-s04",
+    "term": "section c1-s04",
+    "aliases": ["Une République permettant l['’]intervention populaire"]
+  },
+  {
+    "slug": "s-c10-s03",
+    "term": "section c10-s03",
+    "aliases": ["Construire l['’]autonomie des jeunes"]
+  },
+  { "slug": "s-c7-s04", "term": "section c7-s04", "aliases": ["Éradiquer la pauvreté"] },
+  {
+    "slug": "s-c13-s03",
+    "term": "section c13-s03",
+    "aliases": ["Organiser le 100 % d['’]énergies renouvelables"]
+  },
+  {
+    "slug": "s-c12-s01",
+    "term": "section c12-s01",
+    "aliases": ["La bifurcation écologique pour une société de l['’]harmonie"]
+  },
+  {
+    "slug": "s-c12-s02",
+    "term": "section c12-s02",
+    "aliases": ["L['’]organisation de l['’]État au service de la planification écologique"]
+  },
+  {
+    "slug": "s-c16-s04",
+    "term": "section c16-s04",
+    "aliases": ["Agir pour le respect du droit international contre les guerres"]
+  },
+  {
+    "slug": "s-c4-s01",
+    "term": "section c4-s01",
+    "aliases": ["Une nouvelle étape des libertés et de l['’]émancipation individuelle"]
+  },
+  {
+    "slug": "s-c8-s04",
+    "term": "section c8-s04",
+    "aliases": ["Augmenter les salaires et réduire les inégalités salariales"]
+  },
+  { "slug": "s-c8-s01", "term": "section c8-s01", "aliases": ["Établir la garantie d['’]emploi"] }
+]

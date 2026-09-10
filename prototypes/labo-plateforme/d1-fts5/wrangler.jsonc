@@ -1,0 +1,22 @@
+{
+  // T7 lab (PLAN-SESSION.md): D1 + FTS5 lexical retrieval and the hashed Q/R cache table.
+  // Free plan only: one Worker on workers.dev, one D1 database, nothing else.
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "aec-lab-fts",
+  "main": "src/index.ts",
+  "workers_dev": true,
+  "compatibility_date": "2026-09-09",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "aec-lab-fts",
+      "database_id": "c33d31bf-f390-42e7-96be-98377e7f9d89"
+    }
+  ],
+  "minify": true,
+  // D0.22: no invocation logs (a question in a URL is an opinion). CPU is read from the
+  // analytics dataset (GraphQL workersInvocationsAdaptive), which does not need logs.
+  "observability": {
+    "enabled": false
+  }
+}

@@ -1,0 +1,395 @@
+{
+ "tradeMarks": [
+  {
+   "ST13": "FR500000001571175",
+   "tmName": "C'EST ECRIT",
+   "tmOffice": "FR",
+   "niceClass": [
+    35,
+    38,
+    42
+   ],
+   "applicantName": [
+    "P.R. ET ASSOCIES Société Anonyme,"
+   ],
+   "applicationDate": "1990-01-19T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000001710949",
+   "tmName": "C'EST ECRIT DESSUS",
+   "tmOffice": "FR",
+   "niceClass": [
+    29
+   ],
+   "applicantName": [
+    "SOCIETE ANONYME DES FERMIERS REUNIS par abréviation S.A.F.R., Société anonyme"
+   ],
+   "applicationDate": "1991-12-10T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000003108009",
+   "tmName": "C'EST ECRIT SUR LE SABLE",
+   "tmOffice": "FR",
+   "niceClass": [
+    38,
+    41
+   ],
+   "applicantName": [
+    "PERFORMANCES Société Anonyme,"
+   ],
+   "applicationDate": "2001-06-26T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004711622",
+   "tmName": "C'est Écrit Dans La Bible",
+   "tmOffice": "FR",
+   "niceClass": [
+    9,
+    16,
+    35,
+    38,
+    41,
+    42
+   ],
+   "applicantName": [
+    "Madame Calliope GUIONNET"
+   ],
+   "applicationDate": "2020-12-12T12:00:00.000Z",
+   "registrationDate": "2023-02-03T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000003004200",
+   "tmName": "C'est dit, C'est écrit !",
+   "tmOffice": "FR",
+   "niceClass": [
+    35,
+    38
+   ],
+   "applicantName": [
+    "BERMAN ET ASSOCIES CONSEIL, Société Anonyme"
+   ],
+   "applicationDate": "2000-01-25T12:00:00.000Z"
+  },
+  {
+   "ST13": "WO500000000321234",
+   "tmName": "Reynolds C'EST L'ECRITURE",
+   "tmOffice": "WO",
+   "niceClass": [
+    16
+   ],
+   "applicantName": [
+    "REYNOLDS"
+   ],
+   "applicationDate": "1966-09-21T12:00:00.000Z",
+   "registrationDate": "1966-09-21T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000001346654",
+   "tmName": "REYNOLDS C'EST L'ECRITURE",
+   "tmOffice": "FR",
+   "niceClass": [
+    16
+   ],
+   "applicantName": [
+    "REYNOLDS Société par actions simplifiée"
+   ],
+   "applicationDate": "1986-03-14T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000001422995",
+   "tmName": "COSMOS STAR LA BONNE ETOILE C'EST ECRIT DANS LE CIEL L'AVENIR PRESENT",
+   "tmOffice": "FR",
+   "niceClass": [
+    16,
+    38,
+    41
+   ],
+   "applicantName": [
+    "GAMBA DUVAL Maria,"
+   ],
+   "applicationDate": "1985-09-13T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000003520824",
+   "tmName": "la recherche est ce qui s'écrit au présent et qui se conjugue au futur",
+   "tmOffice": "FR",
+   "niceClass": [
+    35,
+    42
+   ],
+   "applicantName": [
+    "GLASS WINDOW WORLD Entreprise unipersonnelle à responsabilité limitée"
+   ],
+   "applicationDate": "2007-08-23T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000003077553",
+   "tmName": "CE QUI EST DIT EST ECRIT, CE QUI EST ECRIT EST DIT",
+   "tmOffice": "FR",
+   "niceClass": [
+    3,
+    14,
+    42
+   ],
+   "applicantName": [
+    "Monsieur de FRAISSINETTE Xavier,"
+   ],
+   "applicationDate": "2001-01-19T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000003053540",
+   "tmName": "PETUNIA CLARKE L ECRITURE A LA PLUME SANS LA PLUME C EST GENIAL",
+   "tmOffice": "FR",
+   "niceClass": [
+    16
+   ],
+   "applicantName": [
+    "Madame CLARKE née Weil Danielle,"
+   ],
+   "applicationDate": "2000-09-25T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000005219814",
+   "tmName": "Si le fruit de l’imagination est le raisin, alors l’écrit est vin.",
+   "tmOffice": "FR",
+   "niceClass": [
+    33,
+    35
+   ],
+   "applicantName": [
+    "Emmanuel Salvador Raymond MARTIN"
+   ],
+   "applicationDate": "2026-01-22T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004072258",
+   "tmName": "L'ECRITURE EST UN VOYAGE",
+   "tmOffice": "FR",
+   "niceClass": [
+    16
+   ],
+   "applicantName": [
+    "LOUIS VUITTON MALLETIER, Société Anonyme"
+   ],
+   "applicationDate": "2014-02-27T12:00:00.000Z",
+   "registrationDate": "2014-06-20T12:00:00.000Z"
+  },
+  {
+   "ST13": "EM500000013167176",
+   "tmName": "L'ECRITURE EST UN VOYAGE",
+   "tmOffice": "EM",
+   "niceClass": [
+    16
+   ],
+   "applicantName": [
+    "LOUIS VUITTON MALLETIER"
+   ],
+   "applicationDate": "2014-08-12T12:00:00.000Z",
+   "registrationDate": "2015-01-06T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000003571759",
+   "tmName": "les écrits restent …",
+   "tmOffice": "FR",
+   "niceClass": [
+    16,
+    35,
+    38,
+    41
+   ],
+   "applicantName": [
+    "tristan olphe-galliard"
+   ],
+   "applicationDate": "2008-04-23T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000003366198",
+   "tmName": "VIE-YAPLUME “ LA MARQUE DE L'ECRITURE ” PENSER VIE – YAPLUME! C'EST VOUS QUI DEVENEZ AUTEUR EXCEPTIONNEL : POUR NOTER, ECRIRE ; ORGANISER, ARCHIVER ; COMMUNIQUER OU PARTAGER…",
+   "tmOffice": "FR",
+   "niceClass": [
+    16,
+    35,
+    41
+   ],
+   "applicantName": [
+    "Monsieur GOSSÉ Amourès"
+   ],
+   "applicationDate": "2005-06-21T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000003669767",
+   "tmName": "One-Off c'est une marque de vetements avec differnts style d'ecriture et de dessin.",
+   "tmOffice": "FR",
+   "niceClass": [
+    25
+   ],
+   "applicantName": [
+    "Samir HASHAS"
+   ],
+   "applicationDate": "2009-08-08T12:00:00.000Z",
+   "registrationDate": "2010-01-15T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000003402102",
+   "tmName": "Deluxe Home Restauration Sous toutes ses formes d'écriture Sous toutes séparations des mots par symbole Par couleur Pour toute forme de commerce",
+   "tmOffice": "FR",
+   "niceClass": [
+    35,
+    41,
+    43
+   ],
+   "applicantName": [
+    "Deluxe Home Restauration EURL"
+   ],
+   "applicationDate": "2006-01-06T12:00:00.000Z"
+  },
+  {
+   "ST13": "WO500000001217724",
+   "tmName": "L'ECRITURE EST UN VOYAGE",
+   "tmOffice": "WO",
+   "niceClass": [
+    16
+   ],
+   "applicantName": [
+    "LOUIS VUITTON MALLETIER"
+   ],
+   "applicationDate": "2014-07-08T12:00:00.000Z",
+   "registrationDate": "2014-07-08T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004147219",
+   "tmName": "FESTIVAL INTERNATIONAL DES MUSIQUES (instrumentales, écrites, parlées et chantées) DE L'ELEGANCE",
+   "tmOffice": "FR",
+   "niceClass": [
+    35,
+    41,
+    42
+   ],
+   "applicantName": [
+    "D'OZOUVILLE Jean Claude"
+   ],
+   "applicationDate": "2015-01-09T12:00:00.000Z",
+   "registrationDate": "2015-04-30T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000099826656",
+   "tmName": "FESTIVAL INTERNATIONAL DE L'ECRITURE ET DE L'IMAGE F.I.E.I",
+   "tmOffice": "FR",
+   "niceClass": [
+    41
+   ],
+   "applicantName": [
+    "BREUVART CLAIRE,"
+   ],
+   "applicationDate": "1999-12-02T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000001582215",
+   "tmName": "VOS ONGLES VOUS POSENT UN PROBLEME LA SOLUTION... C'EST ECRIT C'EST ECRINAL",
+   "tmOffice": "FR",
+   "niceClass": [
+    3,
+    5
+   ],
+   "applicantName": [
+    "LABORATOIRES ASEPTA, Société Anonyme Monégasque,"
+   ],
+   "applicationDate": "1990-03-27T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000000949565",
+   "tmName": "REYNOLDS C EST L ECRITURE",
+   "tmOffice": "FR",
+   "niceClass": [
+    16
+   ],
+   "applicantName": [
+    "Reynolds Pen Products S.A."
+   ],
+   "applicationDate": "1976-03-16T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004917307",
+   "tmName": "La Biographie Restaurative ou l'écriture résiliente",
+   "tmOffice": "FR",
+   "niceClass": [
+    41
+   ],
+   "applicantName": [
+    "Madame Christine Carmona"
+   ],
+   "applicationDate": "2022-12-07T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000001089639",
+   "tmName": "ECRITS DE PARIS REVUE DES QUESTIONS ACTUELLES",
+   "tmOffice": "FR",
+   "niceClass": [
+    16
+   ],
+   "applicantName": [
+    "SOCIETE PARISIENNE D'EDITION ET DE PUBLICATION"
+   ],
+   "applicationDate": "1978-09-21T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000001483311",
+   "tmName": "FESTIVAL ECRITURES",
+   "tmOffice": "FR",
+   "niceClass": [
+    41
+   ],
+   "applicantName": [
+    "FOYERS RURAUX DU ROUSSILLON (association loi 1901),"
+   ],
+   "applicationDate": "1988-08-02T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000004451557",
+   "tmName": "fief Festival international des écrits de femmes",
+   "tmOffice": "FR",
+   "niceClass": [
+    41
+   ],
+   "applicantName": [
+    "Monsieur Frédéric Maget"
+   ],
+   "applicationDate": "2018-05-07T12:00:00.000Z",
+   "registrationDate": "2018-08-31T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000005156955",
+   "tmName": "Festival international des musiques (instrumentales, écrites, parlées, dansées et chantées) de l'Elégance comportementale",
+   "tmOffice": "FR",
+   "niceClass": [
+    35,
+    41,
+    42
+   ],
+   "applicantName": [
+    "JEAN CLAUDE D'OZOUVILLE"
+   ],
+   "applicationDate": "2025-06-18T12:00:00.000Z",
+   "registrationDate": "2025-10-10T12:00:00.000Z"
+  },
+  {
+   "ST13": "FR500000003912645",
+   "tmName": "MYLENIUM SCRIPTA L'ECRITURE EST UN ART",
+   "tmOffice": "FR",
+   "niceClass": [
+    35
+   ],
+   "applicantName": [
+    "PICHET Stephane"
+   ],
+   "applicationDate": "2012-04-12T12:00:00.000Z",
+   "registrationDate": "2012-08-31T12:00:00.000Z"
+  }
+ ],
+ "page": 1,
+ "totalPages": 1,
+ "totalResults": 29,
+ "_query": "c'est écrit",
+ "_fetched_at": "2026-09-09T18:52Z",
+ "_source": "https://www.tmdn.org/tmview/ (EUIPN TMview, API search/results, offices FR + EM + WO ; data.inpi.fr renvoyait HTTP 403 le 9/9/2026)"
+}

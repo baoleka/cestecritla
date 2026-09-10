@@ -1,0 +1,158 @@
+# Weekly re-crawl of "L'Avenir en commun 2025" (https://melenchon2027.fr/programme2025/livre/).
+#
+# The source site sends no Last-Modified / ETag, so freshness is hash-based, and the Cloudflare
+# Worker must never crawl (10 ms CPU, 50 subrequests): this job runs outside the Worker, on the
+# free GitHub Actions tier, in a public repository.
+#
+# Flow: ingest into a temp dir (structural + expected invariants enforced: a broken site structure
+# FAILS the job loudly, never publishes a truncated corpus) → diff against the committed corpus →
+# exit 0: nothing to do; exit 3: copy the candidate over data/ and open a pull request (never a
+# direct push to main). data/badge.json is produced by the ingestion itself so that the README
+# badge date follows every merged corpus PR.
+#
+# Crawling policy (non-negotiable): User-Agent "cestecritla/0.1 (+https://github.com/baoleka/cestecritla)",
+# concurrency <= 4, one pass, at most 2 retries with backoff, canonical URLs only, ng.melenchon2027.fr
+# never requested. ~108 requests per run, once a week.
+#
+# Texts are CC BY-NC-SA 4.0, attribution "La France insoumise – L'Avenir en commun".
+
+name: Re-crawl hebdomadaire du corpus
+
+on:
+  schedule:
+    - cron: '0 6 * * 1' # every Monday 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+# One re-crawl at a time; a manual run never cancels the scheduled one.
+concurrency:
+  group: recrawl
+  cancel-in-progress: false
+
+env:
+  RECRAWL_DIR: ${{ runner.temp }}/recrawl
+
+jobs:
+  recrawl:
+    name: Ingestion, diff et pull request
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Dépendances
+        run: npm ci
+
+      # The tooling must be sound before it is allowed to touch the corpus.
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Tests des parseurs (fixtures, hors ligne)
+        run: npx tsx --test scripts/ingest.test.ts
+
+      # Exit 1 on any violated invariant (structure of the site, counts of
+      # data/expected-invariants.json, canonical URLs): the job stops here, loudly, and nothing
+      # is written to data/.
+      - name: Ingestion vers un dossier temporaire (invariants imposés)
+        run: |
+          mkdir -p "$RECRAWL_DIR"
+          npx tsx scripts/ingest.ts --out "$RECRAWL_DIR/aec-2025.json"
+
+      # 0 = no change, 3 = changes detected, anything else = error (fails the job).
+      - name: Diff avec le corpus commité
+        id: diff
+        run: |
+          code=0
+          npx tsx scripts/diff.ts "$RECRAWL_DIR/aec-2025.json" --out "$RECRAWL_DIR/diff.md" > /dev/null || code=$?
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          case "$code" in
+            0) echo "Aucun changement : rien à publier." ;;
+            3)
+              n="$(tail -n 1 "$RECRAWL_DIR/diff.md" | grep -oE '^[0-9]+' || echo 0)"
+              date="$(jq -r .message "$RECRAWL_DIR/aec-2025.badge.json")"
+              echo "sections=$n" >> "$GITHUB_OUTPUT"
+              echo "date=$date" >> "$GITHUB_OUTPUT"
+              echo "Changements détectés : $n section(s) modifiée(s) au $date."
+              ;;
+            *)
+              echo "::error::scripts/diff.ts a échoué (code $code)"
+              exit "$code"
+              ;;
+          esac
+
+      - name: Rapport dans le résumé du run
+        if: always()
+        run: |
+          if [ -f "$RECRAWL_DIR/diff.md" ]; then
+            cat "$RECRAWL_DIR/diff.md" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "## Ingestion en échec — aucun rapport de diff (voir le journal du job)" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Rapport en artefact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapport-diff
+          path: ${{ env.RECRAWL_DIR }}/diff.md
+          if-no-files-found: ignore
+          retention-days: 90
+
+      - name: Promouvoir le corpus candidat dans data/
+        if: steps.diff.outputs.code == '3'
+        run: |
+          cp "$RECRAWL_DIR/aec-2025.json"        data/aec-2025.json
+          cp "$RECRAWL_DIR/aec-2025.hashes.json" data/hashes.json
+          cp "$RECRAWL_DIR/aec-2025.badge.json"  data/badge.json
+          git status --short data/
+
+      # GitHub caps a PR body at 65 536 characters: keep the head of the report and its final line,
+      # the full report stays available as the "rapport-diff" artifact.
+      - name: Corps de la pull request
+        if: steps.diff.outputs.code == '3'
+        run: |
+          report="$RECRAWL_DIR/diff.md"
+          body="$RECRAWL_DIR/pr-body.md"
+          if [ "$(wc -c < "$report")" -gt 60000 ]; then
+            {
+              head -c 50000 "$report" | sed '$d'
+              echo
+              echo '…'
+              echo
+              echo '_Rapport tronqué (trop long pour un corps de pull request) : le rapport complet est joint au run en tant qu’artefact « rapport-diff »._'
+              echo
+              tail -n 1 "$report"
+            } > "$body"
+          else
+            cp "$report" "$body"
+          fi
+
+      - name: Ouvrir la pull request
+        if: steps.diff.outputs.code == '3'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          branch: recrawl/${{ steps.diff.outputs.date }}
+          delete-branch: true
+          add-paths: |
+            data/aec-2025.json
+            data/hashes.json
+            data/badge.json
+          commit-message: 'chore(corpus): weekly re-crawl ${{ steps.diff.outputs.date }}, ${{ steps.diff.outputs.sections }} section(s) changed'
+          committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          title: 'Corpus : ${{ steps.diff.outputs.sections }} section(s) modifiée(s) au ${{ steps.diff.outputs.date }}'
+          body-path: ${{ env.RECRAWL_DIR }}/pr-body.md
+          labels: |
+            corpus

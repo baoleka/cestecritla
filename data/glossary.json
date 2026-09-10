@@ -1,0 +1,1884 @@
+{
+  "meta": {
+    "version": "0.2.0",
+    "title_fr": "Glossaire de L'Avenir en commun 2025 — v0 (5 termes pilotes)",
+    "corpus_version": "d29c7422004ab27c",
+    "corpus_crawled_at": "2026-09-07T16:30:57.692Z",
+    "generated_at": "2026-09-07T23:31:03Z",
+    "generator": "T2 (docs/discovery/PLAN-SESSION.md) — cartes rédigées au build à partir de eval/passages/<slug>.json, vérifiées, éditées, jugées, puis assemblées (typographie U+00A0, alias de routage, lisibilité mesurée) ; contrôlées par scripts/glossary.test.ts ; aucune IA à l’exécution (D0.3, D0.21)",
+    "license_fr": "Les passages du programme cités par identifiant (verbatim_ids, related_measure_ids, support_ids) et les phrases étiquetées « verbatim » sont extraits mot pour mot de « L'Avenir en commun, édition 2025 » (https://melenchon2027.fr/programme2025/livre/), licence CC BY-NC-SA 4.0 (https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr), attribution « La France insoumise – L'Avenir en commun ». Les textes « En clair », « Pourquoi ça compte » et « Objection fréquente » sont des définitions rédigées par nous, relues par … (D0.27 : l'utilisateur, un à deux militants, un non-politisé, désignés par pseudonyme, D0.15 ; en v0 la relecture humaine n'a pas encore eu lieu : review.human est vide et le badge affiché est « Rédigé par nous, relecture en cours »). Ce fichier dérivé est diffusé sous la même licence CC BY-NC-SA 4.0, même attribution (data/LICENSE). Les phrases « contexte-2022 » citent les livrets et plans 2022 de melenchon2027.fr (même licence) et ne sont jamais présentées comme le programme 2025 (D1.5). Les paraphrases attribuées au site Désintox (desintox.lafranceinsoumise.fr) sont citées avec lien ; la licence de ce site reste à vérifier avant toute reproduction (D1.5, T9).",
+    "style_guide": "design/glossary-style-guide.md",
+    "labels": {
+      "one_liner": "concept.label.plain",
+      "why_it_matters": "concept.label.why",
+      "verbatim_ids": "concept.label.verbatim",
+      "related_measure_ids": "concept.label.related_measures",
+      "objection": "concept.label.objection",
+      "related_terms": "concept.label.related_terms",
+      "authorship_reviewed": "concept.authorship.reviewed",
+      "authorship_pending": "concept.authorship.pending"
+    },
+    "schema_fr": {
+      "slug": "Identifiant URL du terme (ASCII, minuscules, tirets), servi à /c/<slug> ; clé des related_terms.",
+      "term": "Libellé affiché du terme, tel que le programme l'écrit (zone Titre).",
+      "aliases": "Formes lexicales pour le routage de la recherche (minuscules, avec et sans accents, apostrophes droite et typographique, tiret ou espace, pluriels, sigles) ; calculées à l’assemblage, jamais affichées, sans contenu factuel.",
+      "aliases_from_card": "Alias choisis par le rédacteur (expressions du programme) ; seuls alias affichables (« Aussi appelé… »), à relire avant affichage (voir guide §4.3).",
+      "one_liner": "Zone « En clair » : 2 à 4 phrases ≤ 15 mots, ≤ 40 mots, voix de l’app, chaque phrase étiquetée dans sentence_support ; jamais de phrase contexte-2022.",
+      "why_it_matters": "Zone « Pourquoi ça compte » : ≤ 80 mots, phrases ≤ 15 mots, chaque phrase étiquetée ; au plus une phrase contexte-2022, en dernière position.",
+      "verbatim_ids": "Zone « Texte du programme » : identifiants d’items du corpus 2025 affichés mot pour mot (Gowun Batang, D3.2) ; -k, -m, -m.s ou -p (intro-p, part-p admis), jamais un texte 2022.",
+      "related_measure_ids": "Zone « Mesures liées » : mesures 2025 (-k, -m, -m.s) qui citent le terme ou relèvent de sa section ; jamais un paragraphe.",
+      "objection": "Zone « Objection fréquente » : text (voix du sceptique, rédigé par nous, non étiqueté, ≤ 15 mots), answer (2 à 3 phrases étiquetées), desintox_url (lien Désintox ou null), support_ids (union des appuis des phrases).",
+      "related_terms": "Slugs de cartes voisines ; un slug absent du fichier est un lien pendant (déclaré dans meta.dangling_related_terms, non affiché tant que la carte n’existe pas).",
+      "sources": "Provenance : kind (programme-2025 | livret-2022 | plan-2022 | falc-2022 | désintox), ref (id du corpus ou URL), date (null pour programme-2025 : voir meta.corpus_version ; pour 2022 et Désintox, date de page du fichier source, pas date d’édition).",
+      "sentence_support": "Une entrée par phrase de one_liner, why_it_matters et objection.answer, dans l’ordre : field, sentence (texte exact du champ), kind (verbatim | reformule | contexte-2022), support_ids (ids 2025, ou URL 2022 / Désintox). La concaténation reproduit le champ au caractère près.",
+      "review_status": "Statut de relecture, voir meta.review_status_values ; draft si et seulement si le vérificateur a échoué.",
+      "readability": "Lisibilité mesurée à l’assemblage (mêmes règles que le test : sentences = phrases des 4 champs objection.text compris, max_sentence_words, sentences_over_15_words, words_*, sentences_by_kind) et jugée (double_negations = max des deux juges, jargon_unexplained = union des deux juges, judges_sentence_counts = comptes déclarés par chaque juge).",
+      "review": "Trace du protocole : pipeline, writer_versions, history_fr, verifier (pass, rejets par gravité, notes), judges (yanis = lecteur de 22 ans, fact = fact-checker hostile), judges_overall, human (reviewer, reviewed_at, fidelity_ok, clarity_ok ; vides en v0).",
+      "notes_for_reviewer": "Notes du rédacteur et de l’éditeur pour le relecteur humain (choix de paraphrase, omissions, liens indirects, variantes proposées) ; jamais affichées."
+    },
+    "sentence_kind_values": {
+      "verbatim": "Phrase citée mot pour mot (sous-chaîne exacte d'un passage 2025 cité) ; affichée en Gowun Batang avec l'étiquette « Texte du programme ».",
+      "reformule": "Paraphrase rédigée par nous, couverte par les support_ids ; affichée en Public Sans sous le badge « Rédigé par nous, relu par … ».",
+      "contexte-2022": "Phrase datée « en 2022 », appuyée sur un livret ou un plan 2022 ; jamais présentée comme le programme 2025 ; affichée avec l'étiquette « Contexte 2022 »."
+    },
+    "review_status_values": {
+      "draft": "Rédigée, vérificateur non passé ou rejet bloquant ; jamais servie.",
+      "verified-ai": "Vérificateur passé (ids, chiffres, entailment), passe éditeur faite, deux juges rendus ; badge « Rédigé par nous, relecture en cours ».",
+      "reviewed-human": "Relue par l'auteur le 9/9/2026 sans demande de modification (D2.9), relecture consignée dans review.human ; les relectures militante et non-politisée de D0.27 ont été jouées par des personas-agents et restent HYPOTHÈSE (personas) jusqu'au test humain du 2-5 novembre (D11.1). Badge « Rédigé par nous, relu par {reviewer} » : tant que {reviewer} et {author} désignent la même personne, la formulation du badge est à trancher par l'utilisateur.",
+      "published": "Validée par l'utilisateur, servie dans l'app."
+    },
+    "counts": {
+      "entries": 5,
+      "by_review_status": {
+        "draft": 0,
+        "verified-ai": 0,
+        "reviewed-human": 5,
+        "published": 0
+      },
+      "sentences_by_kind": {
+        "verbatim": 2,
+        "reformule": 55,
+        "contexte-2022": 3
+      },
+      "verifier_pass": 5,
+      "verifier_rejections_blocking": 0,
+      "verifier_rejections_minor": 32,
+      "judges_pass": 5,
+      "judges_fail": 0,
+      "sentences_over_15_words": 0,
+      "dangling_related_terms": 20,
+      "reviewed_human": 5
+    },
+    "dangling_related_terms": [
+      "bassins-versants",
+      "biens-communs-planetaires",
+      "conseil-planification-ecologique",
+      "contrat-de-bifurcation-ecologique",
+      "droit-international",
+      "energies-renouvelables",
+      "grands-chantiers-ecologiques",
+      "grands-projets-inutiles",
+      "hierarchie-des-normes",
+      "justice-climatique",
+      "monarchie-presidentielle",
+      "obsolescence-programmee",
+      "pollueur-payeur",
+      "reduction-du-temps-de-travail",
+      "referendum-initiative-citoyenne",
+      "referendum-revocatoire",
+      "regime-parlementaire",
+      "regle-bleue",
+      "relocalisation",
+      "tirage-au-sort"
+    ]
+  },
+  "entries": [
+    {
+      "slug": "regle-verte",
+      "term": "règle verte",
+      "aliases": [
+        "regle verte",
+        "règle verte",
+        "regle-verte",
+        "règle-verte",
+        "regles vertes",
+        "règles vertes"
+      ],
+      "aliases_from_card": [
+        "règle verte",
+        "regle verte"
+      ],
+      "one_liner": "La règle verte fixe une limite à ce qu'on prend à la nature. On ne prend pas à la nature plus que ce qu'elle peut reconstituer. Le programme veut écrire cette règle dans la Constitution.",
+      "why_it_matters": "La règle verte serait écrite dans la Constitution. L'État devrait respecter cette règle. Les grands projets inutiles et écocidaires seraient mis en pause. Ils seraient réévalués selon la règle verte. Pour l'eau, une « règle bleue » appliquerait le même principe. Pour les déchets, le programme préfère le réparable et le durable au tout-jetable. Le programme veut aussi réparer les dégâts et régénérer la nature détruite quand c'est possible. En 2022, le livret ajoutait une limite sur les pollutions et les déchets.",
+      "verbatim_ids": [
+        "c12-s01-k01",
+        "intro-p22"
+      ],
+      "related_measure_ids": [
+        "c12-s01-m11",
+        "c14-s02-k01"
+      ],
+      "objection": {
+        "text": "La règle verte, c'est juste un slogan. Ça ne change rien de concret.",
+        "answer": "Le programme veut l'écrire dans la Constitution. Elle servirait à réévaluer les grands projets inutiles et écocidaires. Une « règle bleue » l'appliquerait aussi à l'eau.",
+        "desintox_url": null,
+        "support_ids": [
+          "c12-s01-k01",
+          "c12-s01-m11",
+          "c14-s02-k01"
+        ]
+      },
+      "related_terms": [
+        "planification-ecologique",
+        "bifurcation-ecologique",
+        "ecocide",
+        "6e-republique",
+        "regle-bleue",
+        "grands-projets-inutiles",
+        "obsolescence-programmee",
+        "hierarchie-des-normes"
+      ],
+      "sources": [
+        {
+          "kind": "programme-2025",
+          "ref": "c12-s01-k01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "intro-p22",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c12-s01-p01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c12-s01-m11",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c13-s04-p01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c14-s02-k01",
+          "date": null
+        },
+        {
+          "kind": "livret-2022",
+          "ref": "https://melenchon2027.fr/livrets-2022/planification-ecologique/",
+          "date": "2024-02-01"
+        },
+        {
+          "kind": "plan-2022",
+          "ref": "https://melenchon2027.fr/plans-2022/regle-verte/",
+          "date": "2024-01-31"
+        }
+      ],
+      "sentence_support": [
+        {
+          "field": "one_liner",
+          "sentence": "La règle verte fixe une limite à ce qu'on prend à la nature.",
+          "kind": "reformule",
+          "support_ids": [
+            "c12-s01-k01",
+            "intro-p22"
+          ]
+        },
+        {
+          "field": "one_liner",
+          "sentence": "On ne prend pas à la nature plus que ce qu'elle peut reconstituer.",
+          "kind": "reformule",
+          "support_ids": [
+            "c12-s01-k01",
+            "intro-p22",
+            "c14-s02-k01"
+          ]
+        },
+        {
+          "field": "one_liner",
+          "sentence": "Le programme veut écrire cette règle dans la Constitution.",
+          "kind": "reformule",
+          "support_ids": [
+            "c12-s01-k01"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "La règle verte serait écrite dans la Constitution.",
+          "kind": "reformule",
+          "support_ids": [
+            "c12-s01-k01",
+            "c12-s01-p01"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "L'État devrait respecter cette règle.",
+          "kind": "reformule",
+          "support_ids": [
+            "c12-s01-p01"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Les grands projets inutiles et écocidaires seraient mis en pause.",
+          "kind": "reformule",
+          "support_ids": [
+            "c12-s01-m11"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Ils seraient réévalués selon la règle verte.",
+          "kind": "reformule",
+          "support_ids": [
+            "c12-s01-m11"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Pour l'eau, une « règle bleue » appliquerait le même principe.",
+          "kind": "reformule",
+          "support_ids": [
+            "c14-s02-k01"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Pour les déchets, le programme préfère le réparable et le durable au tout-jetable.",
+          "kind": "reformule",
+          "support_ids": [
+            "c13-s04-p01"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Le programme veut aussi réparer les dégâts et régénérer la nature détruite quand c'est possible.",
+          "kind": "reformule",
+          "support_ids": [
+            "intro-p22"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "En 2022, le livret ajoutait une limite sur les pollutions et les déchets.",
+          "kind": "contexte-2022",
+          "support_ids": [
+            "https://melenchon2027.fr/livrets-2022/planification-ecologique/"
+          ]
+        },
+        {
+          "field": "objection.answer",
+          "sentence": "Le programme veut l'écrire dans la Constitution.",
+          "kind": "reformule",
+          "support_ids": [
+            "c12-s01-k01"
+          ]
+        },
+        {
+          "field": "objection.answer",
+          "sentence": "Elle servirait à réévaluer les grands projets inutiles et écocidaires.",
+          "kind": "reformule",
+          "support_ids": [
+            "c12-s01-m11"
+          ]
+        },
+        {
+          "field": "objection.answer",
+          "sentence": "Une « règle bleue » l'appliquerait aussi à l'eau.",
+          "kind": "reformule",
+          "support_ids": [
+            "c14-s02-k01"
+          ]
+        }
+      ],
+      "review_status": "reviewed-human",
+      "readability": {
+        "sentences": 16,
+        "max_sentence_words": 15,
+        "sentences_over_15_words": 0,
+        "double_negations": 0,
+        "jargon_unexplained": [
+          "écocidaires",
+          "grands projets inutiles",
+          "le livret (2022)",
+          "réévalués",
+          "régénérer",
+          "le livret (lequel ? non nommé dans le texte affiché)"
+        ],
+        "words_one_liner": 35,
+        "words_why_it_matters": 80,
+        "words_objection_text": 13,
+        "words_objection_answer": 24,
+        "sentences_by_kind": {
+          "verbatim": 0,
+          "reformule": 13,
+          "contexte-2022": 1
+        },
+        "judges_sentence_counts": {
+          "yanis": 16,
+          "fact": 14
+        }
+      },
+      "review": {
+        "status": "reviewed-human",
+        "pipeline": [
+          "writer",
+          "verifier",
+          "editor",
+          "judges"
+        ],
+        "writer_versions": 1,
+        "history_fr": "Rédacteur 1 version (7/9) → vérificateur PASS, 0 bloquant, 6 mineurs → éditeur (7/9, puis passe FALC du 8/9 : retouches a à i, aucun fait changé) → juges du 8/9 : Yanis PASS 4/5, fact PASS 5/5.",
+        "verifier": {
+          "pass": true,
+          "checked_ids_exist": true,
+          "numbers_all_supported": true,
+          "rejections_blocking": 0,
+          "rejections_minor": 6,
+          "rejections": [
+            {
+              "field": "why_it_matters",
+              "sentence": "Pour l'eau, une « règle bleue » applique le même principe.",
+              "reason": "Le présent « applique » peut se lire comme une règle déjà en vigueur. Le passage c14-s02-k01 est une proposition (« Consacrer une « règle bleue » qui applique… »). La réponse à l'objection emploie correctement le conditionnel « l'appliquerait » ; aligner : « appliquerait le même principe ».",
+              "severity": "minor"
+            },
+            {
+              "field": "why_it_matters",
+              "sentence": "Les grands projets inutiles et écocidaires seraient mis en pause, puis réévalués selon cette règle.",
+              "reason": "« puis » ajoute un ordre chronologique que c12-s01-m11 n'énonce pas (« Instaurer un moratoire…, les réévaluer… » sans « puis »). « inutiles et écocidaires » est le qualificatif du programme rendu dans la voix de l'app sans guillemets : peut se lire comme une opinion de l'app, et « écocidaires » est un jargon pour la cible 18-30. Phrase à 15 mots (limite atteinte). Suggestion : « Les « grands projets inutiles et écocidaires » seraient mis en pause et réévalués selon cette règle. »",
+              "severity": "minor"
+            },
+            {
+              "field": "why_it_matters",
+              "sentence": "La règle verte serait écrite dans la Constitution, et l'État devrait la respecter.",
+              "reason": "Deux idées dans une phrase (règle FALC « une idée par phrase »). « l'État devrait la respecter » rend « conditionner l'action de l'État » (c12-s01-p01) : entailment acceptable mais indirect (le sujet du passage est « l'exigence d'une société d'harmonie », portée par la règle verte). Suggestion : scinder en deux phrases.",
+              "severity": "minor"
+            },
+            {
+              "field": "why_it_matters",
+              "sentence": "En 2022, le livret ajoutait une limite sur les pollutions et les déchets.",
+              "reason": "Fond correct (livret Planification écologique 2022 : « ni de produire plus de pollutions et de déchets que ce qu'elle peut supporter ») et bien daté « en 2022 ». Mais « le livret » n'est pas défini pour un lecteur arrivant par lien (quel livret ? qu'est-ce qu'un livret ?). « 2022 » n'apparaît que dans les métadonnées du passage (kind « livret 2022 », URL livrets-2022), pas dans son texte. « ajoutait » laisse entendre par contraste que le programme 2025 a abandonné cette limite : cohérent avec le fichier (toutes les définitions 2025 ne parlent que du prélèvement) mais c'est une implicature, pas un énoncé sourcé.",
+              "severity": "minor"
+            },
+            {
+              "field": "related_terms",
+              "sentence": "6e-republique",
+              "reason": "Aucun passage 2025 du fichier ne cite la 6e République ; le lien repose sur le livret Constituante 2022 (« inscription dans notre loi fondamentale de la règle verte ») et sur l'inférence « inscrire dans la Constitution » → 6e République. Le programme 2025 (c12-s01-k01) parle de « la Constitution » sans préciser laquelle. Retirer, ou n'afficher ce lien qu'avec l'étiquette contexte 2022.",
+              "severity": "minor"
+            },
+            {
+              "field": "one_liner",
+              "sentence": "La règle verte fixe une limite à ce qu'on prend à la nature.",
+              "reason": "Typographie : la carte utilise 9 apostrophes droites U+0027 (« qu'on », « l'inscrire », « l'État », « c'est », « l'eau »…) alors que le corpus utilise U+2019 et que D3.7 impose la typographie française. Les espaces insécables U+00A0 dans « règle bleue » n'ont pas pu être vérifiées sur la carte transmise en ligne (ma copie montre des espaces simples) : à contrôler au rendu.",
+              "severity": "minor"
+            }
+          ],
+          "notes": "Vérification adversariale de la carte regle-verte contre <repo>/eval/passages/regle-verte.json (corpus_version d29c7422004ab27c). Résultat : aucune rejection bloquante, 6 mineures. Couverture : 12/12 phrases (one_liner 3, why_it_matters 6, objection.answer 3) ont une entrée sentence_support exacte. Identifiants : c12-s01-p01, c12-s01-k01, c12-s01-m11, c13-s04-p01, c14-s02-k01, intro-p22 et les deux URL 2022 existent tous dans le fichier ; chaque passage 2025 cité contient littéralement « règle verte » (pas d'homonyme). verbatim_ids (c12-s01-k01, intro-p22) et related_measure_ids (c12-s01-m11, c14-s02-k01) portent bien sur le terme ; intro-p22 est un paragraphe d'introduction, id conforme au schéma D1.1 (intro-p{PP}). Entailment : aucune phrase n'est taguée verbatim, donc pas de test de sous-chaîne ; chaque phrase reformulée est couverte mot à mot par ses passages (« ne prélève pas davantage à la nature que ce qu'elle est en état de reconstituer », « Inscrire dans la Constitution le principe de la règle verte », « moratoire… les réévaluer au regard de la règle verte », « règle bleue… à l'eau », « Préférons la société du réparable et du durable… tout-jetable », « réparer les dégâts, régénérer là où c'est possible, la nature détruite »). Phrase contexte-2022 : dit « en 2022 », à l'imparfait, appuyée sur le full_text du livret Planification écologique (limite pollutions/déchets vérifiée). Chiffres : « 2022 » est le seul nombre ; il n'est pas dans le texte du livret mais dans les métadonnées du passage cité (kind « livret 2022 », URL livrets-2022) et il est exigé par la règle contexte-2022, donc considéré comme supporté. Objection : desintox vide → desintox_url null correct ; la réponse ne cite que des passages 2025 au conditionnel et ne surenchérit pas (pas de jugement sur le caractère « concret »). Ton : aucune opinion, aucun emoji, aucun disclaimer, aucun ton potache ; longueurs 7 à 15 mots ; une phrase à deux idées (why_it_matters 1) et un jargon du programme (« écocidaires ») signalés en mineur. Points hors périmètre fidélité : les slugs regle-bleue, grands-projets-inutiles, obsolescence-programmee, hierarchie-des-normes n'ont pas encore de carte (contrainte de build, pas de fidélité) ; la carte n'a pas été relue sur disque (pas de fichier carte dans eval/), donc les contrôles de caractères portent sur la copie transmise en ligne."
+        },
+        "judges": {
+          "yanis": {
+            "clarity_0_5": 4,
+            "fidelity_0_5": 0,
+            "can_reexplain_under_60s": true,
+            "verdict": "PASS",
+            "comments_fr": "Ma version à mon cousin (≈ 70 mots) : « La règle verte, c'est une limite. On ne prend pas à la nature plus que ce qu'elle peut refaire. Ils veulent la mettre dans la Constitution, donc l'État serait obligé de la respecter. Les gros projets jugés inutiles ou qui détruisent la nature seraient mis en pause, puis rejugés avec cette règle. Même idée pour l'eau, ils appellent ça la règle bleue. Et pour les déchets : réparer plutôt que jeter. »\n\nCe que j'ai compris tout de suite : la première phrase, c'est nickel, je vois l'image. « Dans la Constitution » = ça devient une règle au-dessus des lois, ok.\n\nCe qui m'a fait tiquer :\n- « écocidaires » : je devine que c'est « qui tue la nature », mais le mot n'est pas expliqué et il revient deux fois.\n- « grands projets inutiles » : inutiles pour qui ? Qui décide ? Pas un seul exemple concret (une autoroute ? une mégabassine ?). Du coup l'objection « c'est juste un slogan » n'est pas vraiment démontée : la réponse répète ce qu'il y a au-dessus sans donner un exemple qui rende la chose concrète.\n- « le livret » en 2022 : je ne sais pas ce que c'est, ni pourquoi on me parle de 2022 si le programme c'est 2025. Cette phrase me perd plus qu'elle ne m'aide.\n- « réévalués », « régénérer » : ça passe, mais c'est un peu langue d'administration.\n\nTon : sérieux, pas potache, pas d'emoji, pas de chiffres bizarres. Je le partagerais sans honte.\n\nLisibilité : 16 phrases, max 14 mots, aucune double négation. « On ne prend pas… plus que » demande une seconde de réflexion mais reste compréhensible.",
+            "readability": {
+              "sentences": 16,
+              "max_sentence_words": 14,
+              "double_negations": 0,
+              "jargon_unexplained": [
+                "écocidaires",
+                "grands projets inutiles",
+                "le livret (2022)",
+                "réévalués",
+                "régénérer"
+              ]
+            },
+            "unlabeled_claims": []
+          },
+          "fact": {
+            "clarity_0_5": 4,
+            "fidelity_0_5": 5,
+            "can_reexplain_under_60s": true,
+            "readability": {
+              "sentences": 14,
+              "max_sentence_words": 14,
+              "double_negations": 0,
+              "jargon_unexplained": [
+                "écocidaires",
+                "le livret (lequel ? non nommé dans le texte affiché)"
+              ]
+            },
+            "unlabeled_claims": [],
+            "verdict": "PASS",
+            "comments_fr": "Phrase la plus attaquable : « En 2022, le livret ajoutait une limite sur les pollutions et les déchets. » Le fait est bien appuyé (full_text du livret Planification écologique 2022 : « ni de produire plus de pollutions et de déchets que ce qu'elle peut supporter »), mais la phrase porte une comparaison implicite : à l'imparfait et après sept phrases sur 2025, elle se lit « le programme 2025 a abandonné cette limite ». Le fichier de passages ne permet ni d'affirmer ni d'exclure que le corpus 2025 pose cette limite ailleurs (il n'extrait que les passages contenant « règle verte »). Un lecteur hostile demandera « donc la pollution n'est plus limitée ? » et la carte n'a pas de réponse sourcée. De plus « le livret » n'est pas nommé dans le texte affiché : un lecteur arrivant par lien WhatsApp ne sait pas de quoi il s'agit. Reformulation possible, même appui : « En 2022, le livret Planification écologique définissait aussi une limite sur les pollutions et les déchets. » (« aussi » au lieu de « ajoutait » retire la comparaison ; 14 mots). Remarques secondaires, non bloquantes : (1) « L'État devrait respecter cette règle » traduit « conditionner l'action de l'État » (c12-s01-p01) : le sujet grammatical de la source est « l'exigence d'une société d'harmonie », inscrite « par la règle verte » ; l'inférence est légitime (sommet de la hiérarchie des normes) mais c'est la paraphrase la plus libre de la carte. (2) « Ils seraient réévalués selon la règle verte » omet « et de leur impact sur la biosphère » (c12-s01-m11) : omission acceptable pour une carte sur le terme, à noter. (3) « quand c'est possible » rend « là où c'est possible » (intro-p22) : glissement spatial → temporel sans changement de sens, étiqueté reformulé donc conforme. (4) 6e-republique en terme lié ne repose sur aucun passage 2025 du fichier, seulement sur le livret Constituante 2022 : lien de navigation, pas une affirmation, mais retirer si le relecteur exige un appui 2025. (5) La carte reçue ne contient aucune espace insécable U+00A0 dans « règle bleue » alors que les notes de l'éditeur disent en avoir posé quatre : vérifier que la version en dépôt n'a pas été normalisée. Aucun chiffre hors « 2022 » (convention contexte-2022 du test), registre impersonnel sans « vous », aucune double négation, aucun disclaimer."
+          }
+        },
+        "judges_overall": "PASS",
+        "human": {
+          "reviewer": "utilisateur (pseudonyme à choisir, D0.15)",
+          "date": "2026-09-09",
+          "changes_requested": false,
+          "note_fr": "Relu sans modification (D2.9). Relecture militante et non-politisée par personas-agents (D11.1) ; test humain avant lancement."
+        }
+      },
+      "notes_for_reviewer": "ÉDITION (passe éditeur, aucun fait ajouté ni retiré ; ids, sources, objection.text et faits de l'objection inchangés) : a) one_liner, phrase 3 : « Le programme veut l'inscrire dans la Constitution » → « Le programme veut écrire cette règle dans la Constitution ». Le pronom « l' » suivait « ce qu'elle peut reconstituer » et pouvait renvoyer à « la nature » (règle FALC 3, référent clair) ; « écrire » harmonise avec « écrite » (why_it_matters) et « l'écrire » (objection). Même appui c12-s01-k01. b) why_it_matters, phrase 1 (deux idées) scindée : « La règle verte serait écrite dans la Constitution. » [c12-s01-k01, c12-s01-p01] + « L'État devrait respecter cette règle. » [c12-s01-p01, « conditionner l'action de l'État »]. Les ids sont répartis selon ce que chaque phrase affirme : sous-ensembles des ids d'origine, même kind, aucun id nouveau. « cette règle » plutôt que « la » pour un référent explicite. c) why_it_matters, phrase 2 (15 mots, deux idées, « puis » non sourcé) scindée : « Les grands projets inutiles et écocidaires seraient mis en pause. » + « Ils seraient réévalués selon la règle verte. » Aucun connecteur chronologique (« puis », « ensuite ») : c12-s01-m11 n'en énonce pas (règle 8) ; « selon la règle verte » suit « au regard de la règle verte ». Les deux phrases sur c12-s01-m11. d) « applique le même principe » → « appliquerait » : la règle bleue est une proposition (c14-s02-k01, « Consacrer une règle bleue ») ; conditionnel cohérent avec le reste de la carte et avec l'objection (« l'appliquerait »), règle 7. e) Typographie : espaces insécables U+00A0 posées à l'intérieur des guillemets « règle bleue » dans why_it_matters, objection.answer et les deux entrées sentence_support correspondantes (4 occurrences) ; apostrophe droite conservée (design/voice.md §6, v0, conversion possible au rendu) ; aucun « : ; ! ? » dans les textes, donc rien d'autre à poser. f) Non scindée volontairement : « Il faudra aussi réparer les dégâts et régénérer la nature détruite quand c'est possible. » (14 mots, un seul geste « réparer / régénérer », même construction que intro-p22). La scinder ferait passer why_it_matters à 9 phrases, au-delà du budget 4 à 8 du guide de style §2.2 ; si le relecteur préfère deux phrases (« Il faudra aussi réparer les dégâts. » + « Quand c'est possible, il faudra régénérer la nature détruite. »), le champ passe à 79 mots, toujours ≤ 80, sur le même appui intro-p22. g) Non touché : phrases sur les déchets et le contexte 2022, objection.text, les trois phrases de la réponse (hors U+00A0). « écocidaires » conservé sans glose : mot du programme, carte ecocide présente dans related_terms (règle 5) ; le vérificateur suggérait des guillemets autour de « grands projets inutiles et écocidaires » (fragment exact de c12-s01-m11) pour marquer que le qualificatif est celui du programme : non appliqué ici parce que la même expression figure dans l'objection, que l'éditeur ne retouche pas ; à trancher par le relecteur pour les deux zones à la fois. « le livret » conservé tel quel (schéma « En 2022, le livret… » du guide §3) ; la glose « le livret de campagne 2022 » proposée en §4.3 reste à trancher par le relecteur. h) Compteurs après édition (méthode de glossary.test.ts, jetons portant une lettre ou un chiffre) : one_liner 35 mots, 3 phrases ; why_it_matters 79 mots, 8 phrases ; objection.answer 24 mots ; phrase la plus longue 14 mots ; aucune double négation (« ne … pas … plus que » = comparaison, règle 4) ; registre impersonnel / tu, aucun « vous » ; sentence_support reproduit chaque champ au caractère près (vérifié par script sur le même découpage que le test). i) Appui de la phrase contexte-2022 revérifié dans eval/passages/regle-verte.json : la seconde limite (« ni de produire plus de pollutions et de déchets que ce qu'elle peut supporter ») figure dans le full_text du livret Planification écologique 2022 (pas dans ses fenêtres d'extraction) et dans les fenêtres du plan 2022 règle verte.\n\nNOTES DU RÉDACTEUR (conservées) : 1) verbatim_ids : intro-p22 est un paragraphe de l'introduction (pas une mesure) mais c'est la définition la plus complète du corpus 2025 (« ne jamais prendre à la nature davantage qu'elle ne peut reconstituer sur une période donnée »). Vérifier que le composant d'affichage accepte les ids intro-p{PP} ; sinon garder c12-s01-k01 seul. 2) « mis en pause » traduit « moratoire » (c12-s01-m11) : valider la reformulation FALC. 3) « l'État devrait respecter cette règle » traduit « conditionner l'action de l'État » (c12-s01-p01) ; « au sommet de la hiérarchie des normes » n'est pas repris tel quel, seulement « écrite dans la Constitution » (c12-s01-k01). 4) « écocidaires » est conservé parce que c'est le mot du programme ; il renvoie à la carte ecocide. Juger si c'est trop jargonneux pour la cible 18-30. 5) Phrase contexte-2022 : le livret Planification écologique 2022 définit la règle verte avec une seconde limite (« ni de produire plus de pollutions et de déchets que ce qu'elle peut supporter ») ; le plan 2022 règle verte dit la même chose. La définition 2025 (c12-s01-k01, intro-p22) ne parle que du prélèvement. Vérifier que la phrase, à l'imparfait et datée « en 2022 », ne sera pas lue comme le programme 2025. « 2022 » est la seule date de la carte : c'est l'édition de la source, pas un chiffre du programme. 6) Objection : le fichier ne contient aucun passage désintox (tableau vide), donc desintox_url = null. L'objection « c'est un slogan » est choisie par le rédacteur, sa fréquence n'est pas sourcée ; la réponse ne cite que des passages 2025 et ne porte aucun jugement. Si vous préférez une objection attestée, chercher dans data/desintox.json. 7) 6e-republique en terme lié : le lien passe par « inscrire dans la Constitution » (c12-s01-k01) et par le livret Constituante 2022 (« inscription dans notre loi fondamentale de la règle verte ») ; aucun passage 2025 du fichier ne cite la 6e République. Retirer si jugé trop indirect. Les slugs libres regle-bleue, grands-projets-inutiles, obsolescence-programmee, hierarchie-des-normes correspondent à des expressions présentes dans c14-s02-k01, c12-s01-m11, c13-s04-p01 et c12-s01-p01 ; ces cartes n'existent pas encore. 8) c13-s04-p01 est un chapeau (paragraphe), donc hors related_measure_ids ; il soutient seulement la phrase sur les déchets. Les mesures de la section c13-s04 ne citent pas le terme : elles n'ont pas été rattachées (pas d'inférence). 9) Les guillemets « règle bleue » contiennent des espaces insécables U+00A0 : vérifier au rendu. 10) L'encadré Harris (83 %) de c12-s01 n'est pas dans le fichier de passages et n'est pas repris ; possible StatCard associée à la carte (gabarit loi 77-808). | 10/9/2026, panel rouge T12 : « Il faudra aussi réparer… » était un futur de l'indicatif non attribué (règle 7 du guide) ; réécrit « Le programme veut aussi réparer… »."
+    },
+    {
+      "slug": "bifurcation-ecologique",
+      "term": "bifurcation écologique",
+      "aliases": [
+        "bifurcation",
+        "bifurcation de notre economie",
+        "bifurcation de notre économie",
+        "bifurcation de notre modele energetique",
+        "bifurcation de notre modèle énergétique",
+        "bifurcation ecologique",
+        "bifurcation écologique",
+        "bifurcation ecologique et democratique",
+        "bifurcation écologique et démocratique",
+        "bifurcation-ecologique",
+        "bifurcation-écologique",
+        "bifurcations ecologiques",
+        "bifurcations écologiques"
+      ],
+      "aliases_from_card": [
+        "bifurcation écologique",
+        "bifurcation",
+        "bifurcation écologique et démocratique",
+        "bifurcation de notre économie",
+        "bifurcation de notre modèle énergétique"
+      ],
+      "one_liner": "La bifurcation écologique, c'est changer de direction face à l'urgence climatique. Le programme veut changer notre façon de produire, d'échanger et de consommer. L'État doit planifier ce changement. Il faut de grands chantiers et des investissements massifs.",
+      "why_it_matters": "Le programme prévoit 200 milliards d'euros d'investissements utiles pour l'écologie et la société. Selon le programme, la bifurcation a besoin de millions d'emplois de qualité. Elle concerne l'industrie, l'énergie, les transports, l'école et la recherche. Si ton entreprise se reconvertit, un contrat de bifurcation écologique peut te protéger. Il garantit tes droits sociaux, ta formation et ta rémunération. Le programme veut organiser des formations pour les métiers de la bifurcation écologique.",
+      "verbatim_ids": [
+        "c13-s01-k01",
+        "c13-s01-m03",
+        "c9-s02-m03",
+        "c5-s04-m06"
+      ],
+      "related_measure_ids": [
+        "c5-s03-m04",
+        "c5-s05-m08",
+        "c9-s02-m02",
+        "c12-s01-m08",
+        "c12-s03-m07",
+        "c13-s01-m02",
+        "c13-s01-m04",
+        "c18-s01-m03"
+      ],
+      "objection": {
+        "text": "« La bifurcation écologique va détruire des emplois, dans l'industrie comme dans l'agriculture. »",
+        "answer": "Selon le programme, les grands chantiers écologiques peuvent créer plusieurs centaines de milliers d'emplois. Si une entreprise fermait, ses salariés seraient prioritaires pour la reprendre dans un but écologique.",
+        "desintox_url": "https://desintox.lafranceinsoumise.fr/vous-etes-contre-les-agriculteurs/",
+        "support_ids": [
+          "c9-s03-p01",
+          "c13-s01-m04"
+        ]
+      },
+      "related_terms": [
+        "regle-verte",
+        "planification-ecologique",
+        "ecocide",
+        "6e-republique",
+        "contrat-de-bifurcation-ecologique",
+        "grands-chantiers-ecologiques",
+        "relocalisation",
+        "energies-renouvelables"
+      ],
+      "sources": [
+        {
+          "kind": "programme-2025",
+          "ref": "c13-s01-p01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c9-s03-p01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c12-s01-p01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c13-s01-k01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c13-s01-m03",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c13-s01-m04",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c13-s01-m02",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c13-s03-p01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c9-s02-m03",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c5-s03-m04",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c5-s04-p01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c5-s04-m06",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c5-s05-m08",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c12-s03-m07",
+          "date": null
+        },
+        {
+          "kind": "désintox",
+          "ref": "https://desintox.lafranceinsoumise.fr/vous-etes-contre-les-agriculteurs/",
+          "date": "2025-08-15"
+        }
+      ],
+      "sentence_support": [
+        {
+          "field": "one_liner",
+          "sentence": "La bifurcation écologique, c'est changer de direction face à l'urgence climatique.",
+          "kind": "reformule",
+          "support_ids": [
+            "c13-s01-p01",
+            "c9-s03-p01",
+            "c12-s01-p01"
+          ]
+        },
+        {
+          "field": "one_liner",
+          "sentence": "Le programme veut changer notre façon de produire, d'échanger et de consommer.",
+          "kind": "reformule",
+          "support_ids": [
+            "c13-s01-p01"
+          ]
+        },
+        {
+          "field": "one_liner",
+          "sentence": "L'État doit planifier ce changement.",
+          "kind": "reformule",
+          "support_ids": [
+            "c13-s01-p01",
+            "c9-s03-p01"
+          ]
+        },
+        {
+          "field": "one_liner",
+          "sentence": "Il faut de grands chantiers et des investissements massifs.",
+          "kind": "reformule",
+          "support_ids": [
+            "c13-s01-p01",
+            "c9-s03-p01"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Le programme prévoit 200 milliards d'euros d'investissements utiles pour l'écologie et la société.",
+          "kind": "reformule",
+          "support_ids": [
+            "c13-s01-k01",
+            "c13-s01-p01"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Selon le programme, la bifurcation a besoin de millions d'emplois de qualité.",
+          "kind": "reformule",
+          "support_ids": [
+            "c13-s01-p01"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Elle concerne l'industrie, l'énergie, les transports, l'école et la recherche.",
+          "kind": "reformule",
+          "support_ids": [
+            "c9-s02-m03",
+            "c13-s01-m02",
+            "c13-s03-p01",
+            "c5-s03-m04",
+            "c5-s05-m08"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Si ton entreprise se reconvertit, un contrat de bifurcation écologique peut te protéger.",
+          "kind": "reformule",
+          "support_ids": [
+            "c13-s01-m03"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Il garantit tes droits sociaux, ta formation et ta rémunération.",
+          "kind": "reformule",
+          "support_ids": [
+            "c13-s01-m03"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Le programme veut organiser des formations pour les métiers de la bifurcation écologique.",
+          "kind": "reformule",
+          "support_ids": [
+            "c5-s04-m06",
+            "c5-s04-p01",
+            "c12-s03-m07"
+          ]
+        },
+        {
+          "field": "objection.answer",
+          "sentence": "Selon le programme, les grands chantiers écologiques peuvent créer plusieurs centaines de milliers d'emplois.",
+          "kind": "reformule",
+          "support_ids": [
+            "c9-s03-p01"
+          ]
+        },
+        {
+          "field": "objection.answer",
+          "sentence": "Si une entreprise fermait, ses salariés seraient prioritaires pour la reprendre dans un but écologique.",
+          "kind": "reformule",
+          "support_ids": [
+            "c13-s01-m04"
+          ]
+        }
+      ],
+      "review_status": "reviewed-human",
+      "readability": {
+        "sentences": 13,
+        "max_sentence_words": 15,
+        "sentences_over_15_words": 0,
+        "double_negations": 0,
+        "jargon_unexplained": [
+          "contrat de bifurcation écologique",
+          "reprendre (une entreprise)",
+          "investissements utiles",
+          "droits sociaux",
+          "se reconvertir (pour une entreprise)",
+          "grands chantiers",
+          "se reconvertit (reconversion d'une entreprise)"
+        ],
+        "words_one_liner": 37,
+        "words_why_it_matters": 71,
+        "words_objection_text": 12,
+        "words_objection_answer": 29,
+        "sentences_by_kind": {
+          "verbatim": 0,
+          "reformule": 12,
+          "contexte-2022": 0
+        },
+        "judges_sentence_counts": {
+          "yanis": 14,
+          "fact": 13
+        }
+      },
+      "review": {
+        "status": "reviewed-human",
+        "pipeline": [
+          "writer",
+          "verifier",
+          "editor",
+          "judges"
+        ],
+        "writer_versions": 1,
+        "history_fr": "Rédacteur 1 version (7/9) → vérificateur PASS, 0 bloquant, 8 mineurs → éditeur (8/9 : 8 retouches, aucun fait changé, test 10/10 sur copie) → juges du 8/9 : Yanis PASS 4/5, fact PASS 5/5.",
+        "verifier": {
+          "pass": true,
+          "checked_ids_exist": true,
+          "numbers_all_supported": true,
+          "rejections_blocking": 0,
+          "rejections_minor": 8,
+          "rejections": [
+            {
+              "field": "one_liner",
+              "sentence": "La bifurcation écologique, c'est changer de direction face à l'urgence climatique.",
+              "reason": "« changer de direction » n'apparaît dans aucun passage cité : c13-s01-p01 dit « changer les modes de production, d'échange et de consommation », c9-s03-p01 « planifier la bifurcation écologique de notre économie », c12-s01-p01 « rompre avec le système de l'argent-roi ». C'est une glose lexicale du mot « bifurcation », pas une formulation du programme. Acceptable comme définition de vocabulaire, mais la variante littérale « changer notre économie » (c9-s03-p01) serait plus sûre.",
+              "severity": "minor"
+            },
+            {
+              "field": "one_liner",
+              "sentence": "L'État doit planifier ce changement, avec de grands chantiers et des investissements massifs.",
+              "reason": "c13-s01-p01 dit « L'État républicain en dialogue avec les communes doit planifier la mobilisation générale ». La reformulation omet « en dialogue avec les communes » : aucun fait ajouté, mais la nuance (planification concertée, pas centrale) disparaît. Suggestion : « L'État doit planifier ce changement avec les communes. » puis une phrase séparée pour chantiers et investissements.",
+              "severity": "minor"
+            },
+            {
+              "field": "why_it_matters",
+              "sentence": "Selon le programme, ces changements demandent des millions d'emplois de qualité.",
+              "reason": "« ces changements » n'a pas d'antécédent dans why_it_matters : la phrase précédente parle des 200 milliards d'investissements, alors que dans c13-s01-p01 « ces changements » désigne les modes de production, d'échange et de consommation. Fidélité respectée (même section c13-s01), mais lisibilité FALC faible. Suggestion : « Selon le programme, changer l'économie demande des millions d'emplois de qualité. »",
+              "severity": "minor"
+            },
+            {
+              "field": "objection.answer",
+              "sentence": "Si l'entreprise ferme, les salariés sont prioritaires pour la reprendre, dans un but écologique.",
+              "reason": "c13-s01-m04 dit « Créer un droit de reprise d'activité préférentiel pour les salariés » : c'est une proposition, or « sont prioritaires » au présent de l'indicatif énonce un droit existant ; le « Selon le programme » de la phrase précédente ne se reporte pas explicitement. « prioritaires » pour « préférentiel » est acceptable en langage courant. Suggestion : « Le programme veut que les salariés soient prioritaires pour la reprendre. »",
+              "severity": "minor"
+            },
+            {
+              "field": "sentence_support / sources",
+              "sentence": "support_ids [\"c13-s01-p01\",\"c9-s03-p01\",\"c12-s01-p01\"] et source {\"ref\":\"c12-s01-p01\"}",
+              "reason": "c12-s01-p01 n'est pas un item de corpus[] dans eval/passages/bifurcation-ecologique.json ; il n'y figure que comme champ chapeauId/chapeau des 12 items c12-s01-*. Son texte y est complet (425 caractères, sous la troncature à 500 observée sur c5-s03-p01, c9-s02-p01, c11-s01-p01), donc l'appui est vérifiable, mais un contrôle automatique d'ids sur corpus[].id échouera. Soit retirer cet id (la phrase 1 a déjà c13-s01-p01 et c9-s03-p01), soit l'extraire comme item.",
+              "severity": "minor"
+            },
+            {
+              "field": "notes_for_reviewer / objection",
+              "sentence": "« Espaces insécables posées à la main dans « … » et dans « 300 000 » »",
+              "reason": "Dans la carte telle que reçue, objection.text a U+0020 après « et avant », et « 300 000 » utilise U+0020 (vérifié caractère par caractère). Soit perdu au transport, soit non appliqué. D3.6 attend U+00A0. À vérifier sur le fichier source de la carte.",
+              "severity": "minor"
+            },
+            {
+              "field": "related_terms",
+              "sentence": "[\"contrat-de-bifurcation-ecologique\",\"grands-chantiers-ecologiques\",\"relocalisation\",\"energies-renouvelables\"]",
+              "reason": "Ces 4 slugs n'existent pas dans eval/terms-pilot.json (qui contient regle-verte, bifurcation-ecologique, 6e-republique, planification-ecologique, ecocide). Déjà signalé dans les notes de la carte ; liens morts tant que les termes ne sont pas créés.",
+              "severity": "minor"
+            },
+            {
+              "field": "aliases",
+              "sentence": "\"bifurcation\"",
+              "reason": "L'alias nu « bifurcation » a fait entrer dans le fichier les 15 mesures c11-s01-* (« La bifurcation dans les arts et la culture »), exclues à juste titre par l'auteur. Conservé comme alias, il routera les recherches sur la bifurcation culturelle vers cette carte (homonyme). Suggestion : retirer l'alias nu ou le limiter aux formes « bifurcation écologique », « bifurcation de notre économie », « bifurcation de notre modèle énergétique ».",
+              "severity": "minor"
+            }
+          ],
+          "notes": "Vérification faite sur eval/passages/bifurcation-ecologique.json (corpus d29c7422004ab27c : 47 items corpus, 0 introduction_and_parts, 8 livrets/plans 2022, 1 désintox). Résultat : aucune rejection bloquante.\n\nCouverture : les 12 phrases de one_liner (3), why_it_matters (6) et objection.answer (3) ont chacune une entrée sentence_support, aucune entrée orpheline. Longueurs : 11/12/13, 11/11/11/13/10/14, 14/14/15 mots (« 300 000 » compté pour deux) — toutes ≤ 15.\n\nEntailment vérifié phrase par phrase : « changer notre façon de produire, d'échanger et de consommer » = c13-s01-p01 « changer les modes de production, d'échange et de consommation » ; « L'État doit planifier … investissements massifs » = c13-s01-p01 « doit planifier », « investissements massifs » + c9-s03-p01 « planifier la bifurcation écologique de notre économie en lançant de grands chantiers » ; « 200 milliards d'euros d'investissements écologiquement et socialement utiles » = c13-s01-k01 mot pour mot ; « des millions d'emplois de qualité » = c13-s01-p01 « Il faut créer des millions d'emplois de qualité pour mettre en œuvre ces changements » (le « demandent » traduit bien « Il faut ») ; liste des secteurs : industrie (c9-s02-m03), énergie et transports (c13-s01-m02, c13-s03-p01), école (c5-s03-m04), recherche (c5-s05-m08), sans prétention d'exhaustivité ; contrat de bifurcation : c13-s01-m03 « garantissant les droits sociaux, la formation, et la rémunération, pour assurer un cadre protecteur pour les salariés en cas de reconversion d'une entreprise » ; filières : c5-s04-m06 « Structurer les filières professionnelles » + c12-s03-m07 « métiers de la bifurcation écologique » ; « plusieurs centaines de milliers d'emplois » = c9-s03-p01 « Ce plan peut créer plusieurs centaines de milliers d'emplois » (modalité « peuvent » conservée) ; reprise par les salariés = c13-s01-m04 ; « 300 000 emplois dans une agriculture écologique » = désintox « la création de 300 000 nouveaux emplois dans des projets d'agriculture vivrière écologique », correctement attribué au site Désintox et non au programme.\n\nChiffres : « 200 » (c13-s01-k01) et « 300 000 » (désintox, date du fichier 2025-08-15 = date de la source) sont les seuls nombres ; tous deux verbatim dans un passage cité. Aucune date, aucun pourcentage.\n\nIds : verbatim_ids (c13-s01-k01, c13-s01-m03, c9-s02-m03, c5-s04-m06) et related_measure_ids (8) existent tous dans corpus[] et concernent bien la bifurcation écologique (c13-s01-k01 et c13-s01-m04 ne contiennent pas le mot mais sont dans la section « Investir pour lancer la bifurcation de notre économie », chapeau c13-s01-p01). Aucun homonyme retenu : les 15 mesures c11-s01 (bifurcation culturelle) sont exclues. Seule réserve : c12-s01-p01 présent uniquement comme champ chapeau (texte complet).\n\nObjection : la réponse ne surenchérit pas (« peuvent créer », droit de reprise, objectif attribué à Désintox) et ne prétend pas qu'aucun emploi ne sera détruit. L'objection elle-même est reformulée par l'auteur (la désintox s'intitule « Vous êtes contre les agriculteurs ») ; le lien reste cohérent avec la 3e phrase. Aucune phrase contexte-2022, les livrets ne sont pas utilisés.\n\nTon : tutoiement, pas d'opinion, pas d'emoji, pas de disclaimer, pas de double négation. Les 8 points relevés sont mineurs (glose « changer de direction », omission « en dialogue avec les communes », antécédent flou de « ces changements », présent « sont prioritaires » pour une proposition, id chapeau, insécables non constatées, 4 related_terms absents, alias nu « bifurcation »).\n\nIncident d'outillage pour l'orchestrateur : le scratchpad de session est partagé entre agents parallèles ; un fichier card.json que j'y avais écrit a été écrasé par une carte sœur (planification écologique) pendant ma vérification. J'ai refait les contrôles concernés sur un fichier à nom unique ; aucun résultat ci-dessus ne provient du fichier écrasé."
+        },
+        "judges": {
+          "yanis": {
+            "clarity_0_5": 4,
+            "fidelity_0_5": 0,
+            "can_reexplain_under_60s": true,
+            "verdict": "PASS",
+            "comments_fr": "Ré-explication (Yanis, 85 mots) : « La bifurcation écologique, c'est le plan du programme pour changer de direction à cause du climat. On change la façon de produire, d'échanger et de consommer. L'État organise ce changement avec de gros investissements, 200 milliards. Ça touche l'industrie, l'énergie, les transports, l'école, la recherche. Si ta boîte doit changer d'activité, un contrat te protège : salaire, formation, droits. Il y aurait aussi des formations pour ces nouveaux métiers. À ceux qui disent que ça détruit des emplois, le programme répond que ça en crée des centaines de milliers. »\n\nCe qui passe bien : la première phrase donne tout de suite l'image (changer de direction). Les phrases sont courtes, je n'ai rien relu deux fois.\n\nCe qui m'a gêné : (1) « contrat de bifurcation écologique » arrive sans explication : qui le signe, avec qui, c'est un contrat de travail ? (2) « prioritaires pour la reprendre dans un but écologique » : je ne suis pas sûr de ce que veut dire « reprendre » une entreprise, ni ce que « dans un but écologique » change concrètement. (3) La carte dit « millions d'emplois » puis « plusieurs centaines de milliers » : lequel des deux ? Ça sonne comme une contradiction. (4) « investissements utiles » : utiles par rapport à quoi ? (5) « Si ton entreprise se reconvertit » : je suis étudiant, je n'ai pas d'entreprise, la phrase ne me parle pas. (6) « L'État doit planifier » et « Il faut de grands chantiers » sont écrits comme des vérités, pas comme « le programme dit que ». Note 4 : je peux l'expliquer à mon cousin, mais je buterais sur le contrat et sur le chiffre d'emplois.",
+            "readability": {
+              "sentences": 14,
+              "max_sentence_words": 15,
+              "double_negations": 0,
+              "jargon_unexplained": [
+                "contrat de bifurcation écologique",
+                "reprendre (une entreprise)",
+                "investissements utiles",
+                "droits sociaux",
+                "se reconvertir (pour une entreprise)",
+                "grands chantiers"
+              ]
+            },
+            "unlabeled_claims": [
+              "L'État doit planifier ce changement.",
+              "Il faut de grands chantiers et des investissements massifs.",
+              "Si une entreprise fermait, ses salariés seraient prioritaires pour la reprendre dans un but écologique."
+            ]
+          },
+          "fact": {
+            "clarity_0_5": 4,
+            "fidelity_0_5": 5,
+            "can_reexplain_under_60s": true,
+            "verdict": "PASS",
+            "unlabeled_claims": [],
+            "readability": {
+              "sentences": 13,
+              "max_sentence_words": 15,
+              "double_negations": 0,
+              "jargon_unexplained": [
+                "grands chantiers",
+                "droits sociaux",
+                "se reconvertit (reconversion d'une entreprise)"
+              ]
+            },
+            "comments_fr": "Vérification hostile sur <repo>/eval/passages/bifurcation-ecologique.json (corpus d29c7422004ab27c). Les 13 phrases des trois champs sont étiquetées « reformule » et chaque appui existe dans le fichier de passages (c12-s01-p01 est présent comme chapeau de c12-s01-k01). Chiffres : « 200 milliards d'euros » (c13-s01-k01), « millions d'emplois de qualité » (c13-s01-p01), « plusieurs centaines de milliers d'emplois » (c9-s03-p01) et « 300 000 » (désintox, attribuée explicitement au site) figurent mot pour mot dans leurs appuis ; aucune date. Les secteurs de « Elle concerne… » sont chacun rattachés littéralement à la bifurcation dans un passage (c9-s02-m03, c13-s01-m02, c13-s03-p01, c5-s03-m04, c5-s05-m08). Aucune phrase contexte-2022, aucune double négation, aucune phrase > 15 mots.\n\nPhrase la plus attaquable : « Si ton entreprise se reconvertit, un contrat de bifurcation écologique peut te protéger. » La mesure c13-s01-m03 protège « les salariés en cas de reconversion d'une entreprise ». Or « ton entreprise » se lit aussi bien « l'entreprise que tu possèdes » que « l'entreprise où tu travailles » : un patron ou un indépendant peut comprendre qu'il serait protégé, ce que le texte ne dit pas. Le mot « salariés » a disparu de la carte alors qu'il délimite la mesure. S'ajoute le présent non attribué (« peut te protéger ») qui, isolé dans un partage, peut passer pour un droit existant. Correction possible sans dépasser 15 mots : « Si l'entreprise où tu travailles se reconvertit, un contrat de bifurcation écologique peut te protéger. » (15 mots). Ce n'est pas une invention (le contenu est celui de la mesure), d'où la note 5 maintenue, mais c'est la porte d'entrée d'un contradicteur.\n\nSecond point, mineur : « L'État doit planifier ce changement. » omet « en dialogue avec les communes » (c13-s01-p01) ; l'omission ne falsifie rien mais durcit la lecture centralisatrice. « L'État doit planifier ce changement avec les communes. » tiendrait en 8 mots.\n\nHors fidélité : dans la carte telle que reçue, « 300 000 » et l'intérieur des guillemets de l'objection contiennent des espaces ordinaires (U+0020), pas les U+00A0 annoncées au point 7 des notes ; à vérifier sur le fichier réel avant intégration (D3.6). L'alias nu « bifurcation » collisionne toujours avec c11-s01 (arts et culture), hors périmètre de cette carte."
+          }
+        },
+        "judges_overall": "PASS",
+        "human": {
+          "reviewer": "utilisateur (pseudonyme à choisir, D0.15)",
+          "date": "2026-09-09",
+          "changes_requested": false,
+          "note_fr": "Relu sans modification (D2.9). Relecture militante et non-politisée par personas-agents (D11.1) ; test humain avant lancement."
+        }
+      },
+      "notes_for_reviewer": "Corpus d29c7422004ab27c. Passe éditeur (FALC + mobile) sur eval/passages/bifurcation-ecologique.json : aucun fait ajouté ni retiré ; slug, term, aliases, verbatim_ids, related_measure_ids, related_terms, sources, desintox_url et support_ids de l'objection inchangés ; toutes les phrases restent « reformule » (aucune verbatim). Chaque triplet (champ, étiquette, appuis) de sentence_support existait déjà dans la carte reçue ; seule la phrase scindée a désormais deux entrées avec les mêmes appuis.\n\nRetouches :\n1. one_liner, phrase 3 scindée (deux idées : qui planifie / avec quels moyens) : « L'État doit planifier ce changement. » + « Il faut de grands chantiers et des investissements massifs. » Mêmes appuis pour les deux entrées (c13-s01-p01 « nécessite des investissements massifs », « doit planifier » ; c9-s03-p01 « Il y a urgence à planifier … en lançant de grands chantiers »). « Il faut » reprend « nécessite » / « Il y a urgence à ». 4 phrases, 37 mots.\n2. why_it_matters, phrase 1 : « écologiquement et socialement utiles » → « utiles pour l'écologie et la société » (deux adverbes en -ment empilés, lourds à 390 px). Même sens ; la formule exacte reste lisible dans la mesure clé c13-s01-k01 affichée en verbatim juste au-dessus. Revenir à la formule du programme si tu la préfères dans le liant (11 mots, conforme).\n3. why_it_matters, phrase 2 : « ces changements demandent » → « la bifurcation a besoin de ». Le référent « ces changements » suivait la phrase sur les 200 milliards (rejet mineur du vérificateur) alors que dans c13-s01-p01 il désigne « changer les modes de production, d'échange et de consommation », c'est-à-dire la bifurcation. « a besoin de » rend « Il faut créer … pour mettre en œuvre ces changements » (nécessité affirmée, pas engagement chiffré) ; le juge Yanis trouvait « demande » bizarre. « millions d'emplois de qualité » conservé mot pour mot.\n4. why_it_matters, phrase 3 : « La bifurcation concerne » → « Elle concerne » (le pronom renvoie au sujet de la phrase précédente, guide §2.1 règle 3 ; évite la répétition en tête de phrase).\n5. why_it_matters, phrase 6 : « structurer des filières professionnelles » → « organiser des formations » (jargon, signalé par les juges). Appuis inchangés : c5-s04-m06 (« Structurer les filières professionnelles … de la bifurcation écologique », section « Qualifier tout le monde », sens scolaire), c5-s04-p01 (« offres de formation initiale et la formation tout au long de la carrière en cohérence avec les objectifs écologiques »), c12-s03-m07 (« formation aux métiers de la bifurcation écologique », Outre-mer). « métiers » est littéral dans c12-s03-m07. Revenir à « filières » si tu y tiens (14 mots, conforme).\n6. objection.answer, phrase 2 : « Si l'entreprise ferme, les salariés sont prioritaires pour la reprendre, dans un but écologique. » → « Si une entreprise fermait, ses salariés seraient prioritaires pour la reprendre dans un but écologique. » Référent clair (« une entreprise », « ses salariés ») ; conditionnel pour une proposition (guide §2.1 règle 7 : le présent non attribué pouvait se lire comme un droit existant, rejet mineur du vérificateur et risque secondaire du juge fact) ; « si + imparfait » pour la concordance des temps ; virgule finale supprimée. « dans un but écologique » conservé : c'est une condition de la mesure c13-s01-m04, la retirer élargirait le fait. « ou de cession » toujours omis (omission, pas ajout). 15 mots.\n7. Typographie (D3.6, guide §2.3) : U+00A0 posées à l'intérieur des guillemets de l'objection et dans « 300 000 » (absentes de la carte reçue malgré la note d'origine, rejet mineur du vérificateur) ; aucun U+202F ; apostrophes droites conservées (voix de l'app, v0) ; aucun « : ; ! ? » dans les champs ; aucun emoji.\n8. Inchangées : one_liner phrases 1 et 2 ; why_it_matters phrases 4 et 5 (« peut te protéger », « Il garantit » au présent : formulation citée en exemple par le guide §2.1 règle 10, acceptée par le vérificateur) ; objection.text (12 mots) ; objection.answer phrases 1 et 3.\n9. Longueurs mesurées par script (mêmes règles que scripts/glossary.test.ts : jetons contenant une lettre ou un chiffre, U+00A0 = séparateur, « 300 000 » = 2) : one_liner 4 phrases 11/12/5/9 = 37 mots ; why_it_matters 6 phrases 13/12/10/13/10/13 = 71 mots ; réponse 3 phrases 14/15/15 = 44 mots ; objection 12 mots ; aucune double négation. scripts/glossary.test.ts exécuté sur une copie temporaire de data/glossary.json où cette carte remplace l'entrée bifurcation-ecologique : 10/10, 0 phrase > 15 mots. Dépôt non modifié (rien écrit hors du scratchpad).\n\nPoints d'origine toujours valables : glose « changer de direction » (phrase 1) = seule formulation interprétative de la carte, remplaçable par « changer notre économie » (c9-s03-p01) ; conservée parce qu'elle explique le mot « bifurcation » au lecteur (rôle FALC) et que le vérificateur et le juge fact l'ont classée mineure ; « écologique et » de « urgence écologique et climatique » reste omis pour éviter « écologique » deux fois dans la phrase. « plusieurs centaines de milliers d'emplois » (c9-s03-p01, grands chantiers du chapitre 9) ≠ plan à 200 milliards (c13-s01-k01, chapitre 13) : phrases tenues séparées. « 300 000 » vient de la désintox, attribué explicitement, paraphrase + lien (licence = HYPOTHÈSE, D1.5, T9). « peut te protéger » neutre sur qui souscrit (c13-s01-m03). Liste de secteurs non exhaustive (mer, Outre-mer, culture non cités). Mesures c11-s01-* (bifurcation dans les arts) hors sujet, exclues ; collision de l'alias « bifurcation » avec c11-s01 signalée par le vérificateur pour le routage, hors périmètre de l'éditeur. Aucune phrase contexte-2022. Jargon restant sans carte dans le pilote : « droits sociaux », « grands chantiers » (mots du programme, conservés). Slugs de related_terms absents de eval/terms-pilot.json : contrat-de-bifurcation-ecologique, grands-chantiers-ecologiques, relocalisation, energies-renouvelables. | 10/9/2026, panel rouge T12 : la troisième phrase de la réponse à l'objection citait un objectif chiffré (300 000 emplois) pris sur desintox.lafranceinsoumise.fr, dont la licence n'a jamais été lue (H-CNF-5) et que D9.10 réduit au titre et au lien. Elle mettait de plus une URL dans support_ids, ce qui casse « chaque phrase pointe un id du corpus », et un chiffre hors passage cité, ce qu'interdit D2.2. Phrase retirée ; l'objection tient sur ses deux premières phrases (c9-s03-p01, c13-s01-m04). Le lien Désintox reste, sous refusal.desintox_link."
+    },
+    {
+      "slug": "6e-republique",
+      "term": "6e République et Assemblée constituante",
+      "aliases": [
+        "6e republique",
+        "6e république",
+        "6e republique et assemblee constituante",
+        "6e république et assemblée constituante",
+        "6e-republique",
+        "6eme republique",
+        "6eme république",
+        "6ème république",
+        "assemblee constituante",
+        "assemblée constituante",
+        "constituante",
+        "constitution de la 6e republique",
+        "constitution de la 6e république",
+        "monarchie presidentielle",
+        "monarchie présidentielle",
+        "nouvelle constitution",
+        "processus constituant",
+        "sixieme republique",
+        "sixième république",
+        "vie republique",
+        "vie république"
+      ],
+      "aliases_from_card": [
+        "6e République",
+        "6ème République",
+        "sixième République",
+        "Assemblée constituante",
+        "Constituante",
+        "nouvelle Constitution",
+        "monarchie présidentielle"
+      ],
+      "one_liner": "La 6e République, c'est une nouvelle Constitution pour remplacer celle de la 5e République. Un référendum lancerait le processus, puis une Assemblée constituante écrirait le texte. Les Français voteraient ensuite ce texte par référendum.",
+      "why_it_matters": "Selon le programme, le gouvernement devrait rendre des comptes devant le Parlement. Dans le cadre de la Constituante, les « votes forcés » comme le 49.3 seraient abolis. La 6e République serait aussi l'occasion de nouveaux droits, comme le référendum d'initiative citoyenne. Une réelle réforme de la justice passerait par cette Constituante. Les principes fondamentaux de cette Constitution primeraient sur le droit européen.",
+      "verbatim_ids": [
+        "c1-s01-k01",
+        "c1-s01-m01",
+        "c1-s01-m03",
+        "c1-s02-k01"
+      ],
+      "related_measure_ids": [
+        "c1-s01-m02",
+        "c1-s02-m02",
+        "c1-s02-m03",
+        "c17-s02-m05"
+      ],
+      "objection": {
+        "text": "Ce seront encore les mêmes politiciens qui écriront la Constitution.",
+        "answer": "Aucun parlementaire des anciennes assemblées ne pourrait siéger dans la Constituante. Ses délégués ne pourraient pas être candidats aux élections suivant la nouvelle Constitution. Un référendum déciderait aussi de sa composition : mode de scrutin, parité, tirage au sort.",
+        "desintox_url": null,
+        "support_ids": [
+          "c1-s01-m02",
+          "c1-s01-m01"
+        ]
+      },
+      "related_terms": [
+        "bifurcation-ecologique",
+        "monarchie-presidentielle",
+        "referendum-initiative-citoyenne",
+        "referendum-revocatoire",
+        "regime-parlementaire",
+        "tirage-au-sort"
+      ],
+      "sources": [
+        {
+          "kind": "programme-2025",
+          "ref": "c1-s01-p01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c1-s01-k01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c1-s01-m01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c1-s01-m02",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c1-s01-m03",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c1-s02-k01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c1-s02-p03",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c1-s02-m02",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c1-s02-m03",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c4-s01-p01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c5-s03-p01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c7-s07-p01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c17-s02-m05",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "intro-p26",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "part1-p01",
+          "date": null
+        }
+      ],
+      "sentence_support": [
+        {
+          "field": "one_liner",
+          "sentence": "La 6e République, c'est une nouvelle Constitution pour remplacer celle de la 5e République.",
+          "kind": "reformule",
+          "support_ids": [
+            "c1-s01-p01",
+            "c1-s01-k01",
+            "part1-p01"
+          ]
+        },
+        {
+          "field": "one_liner",
+          "sentence": "Un référendum lancerait le processus, puis une Assemblée constituante écrirait le texte.",
+          "kind": "reformule",
+          "support_ids": [
+            "c1-s01-m01",
+            "c1-s01-p01"
+          ]
+        },
+        {
+          "field": "one_liner",
+          "sentence": "Les Français voteraient ensuite ce texte par référendum.",
+          "kind": "reformule",
+          "support_ids": [
+            "c1-s01-m03"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Selon le programme, le gouvernement devrait rendre des comptes devant le Parlement.",
+          "kind": "reformule",
+          "support_ids": [
+            "c1-s02-m02"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Dans le cadre de la Constituante, les « votes forcés » comme le 49.3 seraient abolis.",
+          "kind": "reformule",
+          "support_ids": [
+            "c1-s02-p03",
+            "c1-s02-m03"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "La 6e République serait aussi l'occasion de nouveaux droits, comme le référendum d'initiative citoyenne.",
+          "kind": "reformule",
+          "support_ids": [
+            "c4-s01-p01",
+            "intro-p26"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Une réelle réforme de la justice passerait par cette Constituante.",
+          "kind": "reformule",
+          "support_ids": [
+            "c7-s07-p01"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Les principes fondamentaux de cette Constitution primeraient sur le droit européen.",
+          "kind": "reformule",
+          "support_ids": [
+            "c17-s02-m05"
+          ]
+        },
+        {
+          "field": "objection.answer",
+          "sentence": "Aucun parlementaire des anciennes assemblées ne pourrait siéger dans la Constituante.",
+          "kind": "reformule",
+          "support_ids": [
+            "c1-s01-m02"
+          ]
+        },
+        {
+          "field": "objection.answer",
+          "sentence": "Ses délégués ne pourraient pas être candidats aux élections suivant la nouvelle Constitution.",
+          "kind": "reformule",
+          "support_ids": [
+            "c1-s01-m02"
+          ]
+        },
+        {
+          "field": "objection.answer",
+          "sentence": "Un référendum déciderait aussi de sa composition : mode de scrutin, parité, tirage au sort.",
+          "kind": "reformule",
+          "support_ids": [
+            "c1-s01-m01"
+          ]
+        }
+      ],
+      "review_status": "reviewed-human",
+      "readability": {
+        "sentences": 12,
+        "max_sentence_words": 14,
+        "sentences_over_15_words": 0,
+        "double_negations": 0,
+        "jargon_unexplained": [
+          "Constitution",
+          "49.3",
+          "rendre des comptes devant le Parlement",
+          "référendum d'initiative citoyenne",
+          "principes fondamentaux",
+          "droit européen",
+          "parlementaire",
+          "délégués",
+          "mode de scrutin",
+          "parité",
+          "tirage au sort",
+          "régime parlementaire stable (zone verbatim c1-s02-k01, terme voisin pendant)",
+          "délégués (réponse à l'objection, sans glose)",
+          "référendum d'initiative citoyenne (cité en exemple, jamais expliqué)",
+          "article 11 (zone verbatim c1-s01-m01)"
+        ],
+        "words_one_liner": 34,
+        "words_why_it_matters": 61,
+        "words_objection_text": 10,
+        "words_objection_answer": 38,
+        "sentences_by_kind": {
+          "verbatim": 0,
+          "reformule": 11,
+          "contexte-2022": 0
+        },
+        "judges_sentence_counts": {
+          "yanis": 12,
+          "fact": 12
+        }
+      },
+      "review": {
+        "status": "reviewed-human",
+        "pipeline": [
+          "writer",
+          "verifier",
+          "editor",
+          "judges"
+        ],
+        "writer_versions": 3,
+        "history_fr": "Rédacteur 3 versions : v1 rejetée (ids c1-s02-m02/m03 absents du fichier de passages), v2 jugée FAIL par le juge fact le 7/9 (objection, phrase 2 élargie), v3 du 8/9 sur fichier de passages régénéré (alias « monarchie présidentielle ») → vérificateur PASS, 0 bloquant, 6 mineurs → juges du 8/9 : Yanis PASS 4/5, fact PASS 5/5. Éditeur : retouches intégrées à la v3, pas de passe séparée.",
+        "verifier": {
+          "pass": true,
+          "checked_ids_exist": true,
+          "numbers_all_supported": true,
+          "rejections_blocking": 0,
+          "rejections_minor": 6,
+          "rejections": [
+            {
+              "field": "one_liner",
+              "sentence": "Un référendum lancerait le processus, puis une Assemblée constituante écrirait le texte.",
+              "reason": "« puis » enchaîne deux faits dans une phrase (guide §2.1 règle 2). L'ordre est ici couvert par c1-s01-m01 (« engager le processus constituant et décider des modalités de composition de l'Assemblée constituante »), donc pas d'ajout de chronologie ; mais la règle FALC demande deux phrases : « Un référendum lancerait le processus. Une Assemblée constituante écrirait ensuite le texte. »",
+              "severity": "minor"
+            },
+            {
+              "field": "one_liner",
+              "sentence": "Les Français voteraient ensuite ce texte par référendum.",
+              "reason": "Deux points. (a) L'acteur « Les Français » n'est pas dans le seul appui cité c1-s01-m03 (« sera soumis à référendum ») ; il est dans c1-s01-p01 (« Nous proposons que les Français se dotent d'une nouvelle Constitution ») : ajouter c1-s01-p01 aux support_ids. (b) « voteraient ce texte » se lit en français comme « adopteraient ce texte », alors que m03 prévoit un vote négatif (« En cas de vote négatif, la Constituante reprendrait ses travaux »). Proposition neutre : « Les Français diraient ensuite oui ou non à ce texte par référendum. »",
+              "severity": "minor"
+            },
+            {
+              "field": "why_it_matters",
+              "sentence": "Avec la Constituante, le gouvernement devra rendre des comptes devant le Parlement.",
+              "reason": "Futur de l'indicatif (« devra ») pour une proposition écrite à l'infinitif dans le texte (« Obliger le gouvernement à rendre réellement des comptes ») et sans « Selon le programme » (guide §2.1 règle 7 : conditionnel pour ce qui n'existe pas encore). Même remarque pour « seront abolis » (phrase 2), « passeront avant » (phrase 5) et « décidera » (objection, phrase 3). Le one_liner est au conditionnel : la carte mélange les deux modes. Harmoniser au conditionnel (« devrait », « seraient abolis », « passeraient », « déciderait ») ou attribuer (« Selon le programme, … »). Les phrases 3 et 4 et les phrases 1-2 de l'objection reprennent le futur du texte lui-même (« seront l'occasion », « ne pourra se faire que », « ne pourra siéger », « ne pourront être candidats ») : acceptables, à aligner sur le choix retenu.",
+              "severity": "minor"
+            },
+            {
+              "field": "why_it_matters",
+              "sentence": "Les principes fondamentaux de cette Constitution passeront avant le droit européen.",
+              "reason": "Référent flou (guide §2.1 règle 3) : aucun « Constitution » ne précède dans why_it_matters, le nom le plus proche est « cette Constituante » (phrase 4). Le fond est couvert par c17-s02-m05 (« supériorité des principes fondamentaux inscrits dans la Constitution de la 6e République sur le droit européen »). Proposition, 14 mots : « Les principes fondamentaux de la Constitution de la 6e République passeraient avant le droit européen. »",
+              "severity": "minor"
+            },
+            {
+              "field": "objection.answer",
+              "sentence": "Un référendum décidera aussi de sa composition : mode de scrutin, parité, tirage au sort.",
+              "reason": "« sa composition » : le dernier nom féminin est « la nouvelle Constitution » (phrase 2), le sujet de la phrase 2 est « Ses délégués » ; un lecteur peut comprendre la composition de la Constitution. L'appui c1-s01-m01 parle des « modalités de composition de l'Assemblée constituante ». Répéter le nom (règle 3), 15 mots : « Un référendum décidera aussi de la composition de la Constituante : mode de scrutin, parité, tirage au sort. »",
+              "severity": "minor"
+            },
+            {
+              "field": "related_terms",
+              "sentence": "monarchie-presidentielle",
+              "reason": "« monarchie présidentielle » est à la fois un alias de cette carte (aliases) et un terme voisin distinct (related_terms « monarchie-presidentielle ») : une recherche de ce mot ne peut pas router vers la carte 6e-republique et vers une autre carte. Trancher : alias d'extraction seulement (à sortir des alias de recherche, cf. guide §4.3 point 6) ou terme voisin. Par ailleurs 5 des 6 slugs de related_terms sont pendants (seul bifurcation-ecologique existe dans eval/terms-pilot.json) : la zone « Termes voisins » n'afficherait qu'un terme.",
+              "severity": "minor"
+            }
+          ],
+          "notes": "Vérification faite contre <repo>/eval/passages/6e-republique.json lu en entier (meta, 15 passages corpus, intro-p26, part1-p01, 8 entrées livrets 2022 non utilisées, désintox vide ; corpus d29c7422004ab27c). Résultat : PASS, 0 rejet bloquant, 6 mineurs.\n\nContrôles mécaniques (script en scratchpad/verif-6e) : les 17 ids référencés (verbatim_ids, related_measure_ids, objection.support_ids, sources, sentence_support) existent tous ; chaque phrase des trois champs a exactement une entrée sentence_support et la concaténation reproduit les champs au caractère près ; longueurs : one_liner 3 phrases / 34 mots, why_it_matters 5 / 55, objection.text 10 mots, objection.answer 3 / 39, toutes les phrases ≤ 15 mots ; « 49.3 » et le fragment « votes forcés » sont mot pour mot dans c1-s02-m03 ; « 6e » et « 5e » figurent dans les passages cités ; aucun mot interdit (§2.4), aucun « vous », aucun emoji, aucun disclaimer ; espaces ordinaires (conforme §4.2, le build normalise) ; objection.support_ids = union des appuis des phrases.\n\nPoint critique VÉRIFIÉ : l'appartenance de c1-s02-m02 et c1-s02-m03 au bloc « Dans le cadre de l'Assemblée constituante : » (c1-s02-p03) n'est pas déductible du fichier de passages (les ids ne donnent pas l'ordre entre -p et -m). Confirmée sur la page source https://melenchon2027.fr/programme2025/livre/chapitre1/s2/ (WebFetch du 8/9/2026) : « Par la loi : » → « Élire l'Assemblée nationale au scrutin proportionnel » ; « Dans le cadre de l'Assemblée constituante : » → « Obliger le gouvernement à rendre réellement des comptes devant le Parlement » puis « Abolir les procédures de « votes forcés » … 49.3 ». Les phrases 1 et 2 de why_it_matters sont donc couvertes. La suggestion du rédacteur (champ headerId dans extract-passages.ts) mérite d'être retenue pour que le vérificateur n'ait plus à sortir du fichier.\n\nEntailment phrase par phrase : one_liner 1 couverte par c1-s01-p01 + c1-s01-k01 + part1-p01 (« Constitution actuelle » de 1958, « nouvelle République », « nouvelle Constitution ») ; one_liner 2 par c1-s01-m01 (« engager le processus constituant ») + c1-s01-p01 (« rédigée par une Assemblée constituante ») ; one_liner 3 par c1-s01-m03 (acteur « Les Français » à appuyer par c1-s01-p01, cf. mineur) ; why 3 par c4-s01-p01 (« seront l'occasion de consacrer de nouveaux droits ») + intro-p26 (RIC parmi les droits que la France « se reconnaitra » en passant à la 6e République) ; why 4 par c7-s07-p01 (« ne pourra se faire que … avec la convocation d'une Assemblée constituante ») ; why 5 par c17-s02-m05 (clause de non-régression omise, omission admise) ; objection 1-2 quasi mot pour mot de c1-s01-m02 (« élections qui suivront la nouvelle Constitution » est la formulation du juge fact, portée non élargie) ; objection 3 par c1-s01-m01 (« incompatibilités » omis). La réponse à l'objection ne surenchérit pas : elle n'affirme pas que « les mêmes politiciens » seront exclus au-delà des parlementaires des anciennes assemblées.\n\nverbatim_ids (c1-s01-k01, m01, m03, c1-s02-k01) et related_measure_ids (c1-s01-m02, c1-s02-m02, c1-s02-m03, c17-s02-m05) : tous existent, tous portent sur la 6e République / la Constituante, aucun homonyme, aucun paragraphe dans les mesures liées. Source c5-s03-p01 (école) n'appuie aucune phrase : elle ne sert qu'au terme voisin bifurcation-ecologique ; acceptable. Le chapeau c1-s01-p01 en appui sans affichage verbatim : cohérent, sa phrase « coup de force du bloc libéral » n'apparaît nulle part dans la voix de l'app.\n\nPour l'éditeur : les 6 mineurs sont des retouches de référent, de mode verbal et de découpage, sans changement de fait ; les reformulations proposées restent ≤ 15 mots et couvertes par les mêmes ids. Pour l'assembleur : la carte livre une clé « aliases » alors que le guide distingue « aliases » (calculés) et « aliases_from_card » (rédacteur, à relire) ; à mapper."
+        },
+        "judges": {
+          "yanis": {
+            "clarity_0_5": 4,
+            "fidelity_0_5": 0,
+            "can_reexplain_under_60s": true,
+            "verdict": "PASS",
+            "comments_fr": "[Yanis, 22 ans] Ma réexplication (84 mots) : « En gros, ils veulent réécrire les règles de la politique en France. Aujourd'hui on est en 5e République. Eux veulent une 6e, avec une nouvelle Constitution. Ça se fait en trois temps : les Français votent pour lancer le truc, une assemblée spéciale écrit le texte, puis les Français votent oui ou non. Le point clé : les députés actuels ne pourront pas siéger dans cette assemblée, et ses membres ne pourront pas se présenter aux élections d'après. Ça supprime aussi des trucs comme le 49.3. »\n\nCe qui marche : la première phrase donne le principe en une ligne, les trois étapes (référendum, assemblée, référendum) sont faciles à retenir, et la réponse à l'objection est concrète, c'est ce que je retiens le mieux. Rien de gênant à transférer sur WhatsApp, pas de ton lourd.\n\nCe qui me freine : le bloc « pourquoi c'est important » est une liste de cinq trucs sans lien entre eux, et il suppose que je sais déjà ce que veulent dire 49.3, « référendum d'initiative citoyenne » et « droit européen ». La phrase « le gouvernement devra rendre des comptes devant le Parlement » ne dit pas ce que ça change pour moi. « Une réelle réforme de la justice » reste vague : quelle réforme ? Le mot « Constitution » lui-même n'est jamais défini (le texte des règles du pays ?), alors que tout repose dessus. « Mode de scrutin », « parité », « tirage au sort » arrivent en rafale à la fin sans explication. Je comprends le principe général et je peux le redire, mais je serais incapable d'expliquer 49.3 ou RIC à mon cousin s'il me demande.\n\nSuggestion : une demi-phrase pour « Constitution » (les règles de base du pays) et une pour le 49.3 (adopter une loi sans vote des députés) suffiraient pour passer à 5.",
+            "readability": {
+              "sentences": 12,
+              "max_sentence_words": 14,
+              "double_negations": 0,
+              "jargon_unexplained": [
+                "Constitution",
+                "49.3",
+                "rendre des comptes devant le Parlement",
+                "référendum d'initiative citoyenne",
+                "principes fondamentaux",
+                "droit européen",
+                "parlementaire",
+                "délégués",
+                "mode de scrutin",
+                "parité",
+                "tirage au sort"
+              ]
+            },
+            "unlabeled_claims": []
+          },
+          "fact": {
+            "clarity_0_5": 4,
+            "fidelity_0_5": 5,
+            "can_reexplain_under_60s": true,
+            "verdict": "PASS",
+            "unlabeled_claims": [],
+            "readability": {
+              "sentences": 12,
+              "max_sentence_words": 14,
+              "double_negations": 0,
+              "jargon_unexplained": [
+                "régime parlementaire stable (zone verbatim c1-s02-k01, terme voisin pendant)",
+                "délégués (réponse à l'objection, sans glose)",
+                "mode de scrutin",
+                "principes fondamentaux",
+                "référendum d'initiative citoyenne (cité en exemple, jamais expliqué)",
+                "article 11 (zone verbatim c1-s01-m01)"
+              ]
+            },
+            "comments_fr": "Phrase la plus attaquable : « Les Français voteraient ensuite ce texte par référendum. » (one_liner, phrase 3, appui c1-s01-m03). Le texte dit « sera soumis à référendum après deux ans de travaux. En cas de vote négatif, la Constituante reprendrait ses travaux ». En français courant, « voter un texte » signifie l'adopter : la carte penche vers l'approbation là où le programme prévoit explicitement un vote négatif possible. De plus « les Français » comme acteur ne figure pas dans m03 ; il vient de c1-s01-p01, cité ailleurs dans la carte mais pas dans les appuis de cette phrase. Le sens reste couvert grâce à « par référendum », donc pas de rejet, mais je recommande : « Les Français diraient ensuite oui ou non à ce texte par référendum. » (12 mots, même appui, plus « en cas de vote négatif » couvert). Points vérifiés qui tiennent : le rattachement de c1-s02-m02 et m03 à l'en-tête c1-s02-p03 « Dans le cadre de l'Assemblée constituante : » est confirmé par l'ordre du fichier (k01, m01, p03, m02, m03), que scripts/extract-passages.ts produit en parcourant section.items dans l'ordre du document ; la phrase 2 de l'objection reprend la forme proposée par le juge fact précédent ; « 49.3 » et « votes forcés » sont mot pour mot dans c1-s02-m03. Remarques secondaires, sans changement de fait : (1) mode verbal incohérent, one_liner au conditionnel, why_it_matters au futur de l'indicatif sans « Selon le programme » (règle 7 du guide) ; à harmoniser au conditionnel (« devrait », « seraient abolis », « serait l'occasion », « passerait », « passeraient »). (2) « cette Constituante » puis « cette Constitution » en deux phrases consécutives : risque de glissement de référent. (3) « Avec la Constituante » rend « Dans le cadre de l'Assemblée constituante » de façon un peu lâche ; « Dans le cadre de la Constituante » serait plus proche. (4) Cinq des six termes voisins sont pendants (seul bifurcation-ecologique existe) ; « régime parlementaire stable » reste donc affiché en verbatim sans glose ni lien, point déjà ouvert en §4.3 du guide. (5) objection.text n'est pas étiquetée, conformément au guide §3 ; je ne la compte pas comme revendication non étiquetée. (6) La note du rédacteur annonce des espaces insécables, mais la carte livrée est en espaces ordinaires, ce qui est la règle (guide §4.2, le build normalise). Suggestion d'outillage : ajouter un champ headerId aux items qui suivent un paragraphe terminé par « : », pour que le test vérifie mécaniquement ce rattachement."
+          }
+        },
+        "judges_overall": "PASS",
+        "human": {
+          "reviewer": "utilisateur (pseudonyme à choisir, D0.15)",
+          "date": "2026-09-09",
+          "changes_requested": false,
+          "note_fr": "Relu sans modification (D2.9). Relecture militante et non-politisée par personas-agents (D11.1) ; test humain avant lancement."
+        }
+      },
+      "notes_for_reviewer": "Corrections apportées à la version rejetée et points à contrôler.\n\n1. Fichier de passages régénéré (bloquants 1 à 3). <repo>/eval/passages/6e-republique.json a été régénéré avec scripts/extract-passages.ts en ajoutant l'alias « monarchie présidentielle » (titre de la section c1-s02 « Abolir la monarchie présidentielle », dont la mesure clé est « Passer à une 6e République qui soit un régime parlementaire stable »). Résultat : 15 passages corpus (au lieu de 12) ; ajout de c1-s02-m01, c1-s02-m02 et c1-s02-m03 ; aucun passage retiré, textes inchangés, intro/parties inchangées. Les fenêtres 2022 du livret Constituante et du plan 2022 se sont décalées (l'alias y apparaît plus tôt) : elles ne servent à aucune phrase. Par cohérence, l'alias a aussi été ajouté à l'entrée 6e-republique de <repo>/eval/terms-pilot.json (sinon une régénération complète ferait disparaître les deux ids). Rien n'a été commité ; eval/ est de toute façon non suivi par git. Copie de l'ancien fichier : scratchpad/6e-republique.before.json.\n\n2. Pourquoi cet alias et pas des ancres de texte. L'ordre du document (vérifié par extraction complète en scratchpad, jamais en ouvrant data/aec-2025.json) est : p01 (chapeau), k01, p02 « Par la loi : », m01 (proportionnelle), p03 « Dans le cadre de l'Assemblée constituante : », m02, m03, a01. Donc m02 et m03 sont bien les mesures « dans le cadre de l'Assemblée constituante » ; m01 relève de « Par la loi » et n'est volontairement pas citée. Le script ne rattache pas les items d'une liste à leur paragraphe d'en-tête : suggestion d'amélioration (inclure les items qui suivent un paragraphe correspondant terminé par « : », avec un champ headerId), à décider par l'équipe, pas fait ici. À valider : garder « monarchie présidentielle » dans les alias de recherche de la carte, ou le réserver à l'extraction.\n\n3. Phrases why_it_matters. Les deux phrases bloquantes sont reprises mot pour mot de la version rejetée, désormais appuyées sur c1-s02-p03 + c1-s02-m02 et c1-s02-p03 + c1-s02-m03 (« votes forcés » et « 49.3 » sont dans m03 ; le corpus écrit « votes forcés » avec espaces simples, la carte avec espaces insécables selon voice.md). La phrase « apportera » est remplacée par l'alternative demandée (« sera aussi l'occasion de nouveaux droits… »). Deux phrases ajoutées : justice (c7-s07-p01 : « ne pourra se faire que … avec la convocation d'une Assemblée constituante ») et droit européen (c17-s02-m05 : « supériorité des principes fondamentaux inscrits dans la Constitution de la 6e République sur le droit européen » ; la clause « non-régression » n'est pas reprise). Aucune phrase contexte-2022.\n\n4. one_liner. « remplacer celle de la 5e République » est déduit de c1-s01-p01 (institutions de la 5e République, nouvelle Constitution) et part1-p01 (« la Constitution actuelle », « nouvelle République ») : à valider. Conditionnel (« lancerait », « écrirait », « voteraient ») là où le programme est au futur : choix de prudence, à harmoniser si la charte préfère le futur. « deux ans » et « article 11 » ne sont pas repris dans les phrases ; ils s'affichent via les verbatims c1-s01-m03 et c1-s01-m01.\n\n5. verbatim_ids : c1-s01-k01, c1-s01-m01, c1-s01-m03 (le processus) et c1-s02-k01 (le régime). Le chapeau c1-s01-p01 (long, avec « coup de force du bloc libéral ») sert d'appui mais n'est pas affiché en verbatim : à confirmer.\n\n6. Objection : le champ désintox du fichier est vide, donc desintox_url = null ; réponse appuyée sur c1-s01-m02 et c1-s01-m01 seulement. « élections qui suivront la nouvelle Constitution » simplifie « élections suivant l'entrée en vigueur de la Constitution » ; « délégués » est le mot du programme.\n\n7. related_terms : regle-verte retiré (aucun passage dans le fichier). Slugs libres présents dans les passages : monarchie-presidentielle (titre c1-s02), referendum-initiative-citoyenne et referendum-revocatoire (intro-p26), regime-parlementaire (c1-s02-k01), tirage-au-sort (c1-s01-m01). bifurcation-ecologique via c5-s03-p01.\n\n8. Vérification mécanique faite (scratchpad/6e-republique-writer/card-6e-republique.json) : tous les ids existent dans le fichier régénéré, chaque phrase ≤ 15 mots (one_liner 34 mots, why_it_matters 56, réponse 39), chaque chiffre et chaque expression entre guillemets figure dans un passage cité. Corpus d29c7422004ab27c. Remarque de procédure : le scratchpad de session est partagé entre rédacteurs, un fichier card.json y a été écrasé par la carte bifurcation-ecologique en cours de travail ; j'ai donc utilisé un sous-dossier propre. | 10/9/2026, panel rouge T12 : « Pourquoi ça compte » était au futur de l'indicatif (« seront abolis », « passeront »), ce qu'interdit la règle 7 du guide (design/glossary-style-guide.md §2) et ce que 04-glossaire.md §10 point 1 demandait déjà d'harmoniser. Réécrit au conditionnel, avec une attribution en tête. La phrase sur le 49.3 porte désormais sa portée juridique : c1-s02-p03 est le heading_paragraph « Dans le cadre de l'Assemblée constituante : » (meta.source_anomalies), et sans cette étiquette l'abrogation se lit comme une abrogation par la loi. Le lien discret de D2.4 pointe c1-s02-m03, jamais le heading, qui n'est qu'un deux-points. | 10/9/2026, panel rouge T12 : la réponse à l'objection était au futur de l'indicatif (« ne pourra siéger », « suivront », « décidera ») ; passée au conditionnel comme « En clair »."
+    },
+    {
+      "slug": "planification-ecologique",
+      "term": "planification écologique",
+      "aliases": [
+        "etat planificateur",
+        "état planificateur",
+        "planification",
+        "planification ecologique",
+        "planification écologique",
+        "planification ecologique et democratique",
+        "planification écologique et démocratique",
+        "planification-ecologique",
+        "planification-écologique"
+      ],
+      "aliases_from_card": [
+        "planification écologique",
+        "planification",
+        "planification écologique et démocratique",
+        "État planificateur"
+      ],
+      "one_liner": "La planification écologique est un outil collectif pour guider l'économie, à la place des actionnaires. Le programme en fait sa méthode pour gouverner par les besoins. L'idée : décider ensemble, sur le temps long, au lieu de laisser faire le marché.",
+      "why_it_matters": "Le programme propose des lois cadres pour une planification démocratique, aux niveaux national et local. Il prévoit un Conseil à la planification écologique. Une agence dépendrait de ce Conseil. Elle préparerait un plan de relocalisation par filière stratégique. Les communes seraient pleinement impliquées dans les décisions et les investissements. Réduire le temps de travail en fait partie : moins de trajets pour aller travailler. Un plan de campagne 2022 citait des chantiers : énergies renouvelables, transports collectifs, isolation des bâtiments.",
+      "verbatim_ids": [
+        "c12-s01-p01",
+        "c12-s01-m01",
+        "c12-s01-m03",
+        "intro-p22"
+      ],
+      "related_measure_ids": [
+        "c12-s01-m02",
+        "c12-s01-m08",
+        "c12-s02-k01",
+        "c12-s02-m01",
+        "c12-s02-m07",
+        "c12-s02-m09",
+        "c12-s03-k01"
+      ],
+      "objection": {
+        "text": "La planification, c'est l'État qui décide tout, tout seul, d'en haut ?",
+        "answer": "Le programme demande une planification « écologique et démocratique ». Elle doit s'appuyer sur la commune, « échelon vital de la démocratie ». Des assemblées citoyennes régionales débattraient des projets d'aménagement et d'investissement.",
+        "desintox_url": null,
+        "support_ids": [
+          "c12-s01-m01",
+          "c12-s02-p01",
+          "c12-s02-m07"
+        ]
+      },
+      "related_terms": [
+        "regle-verte",
+        "bifurcation-ecologique",
+        "conseil-planification-ecologique",
+        "relocalisation",
+        "bassins-versants",
+        "reduction-du-temps-de-travail"
+      ],
+      "sources": [
+        {
+          "kind": "programme-2025",
+          "ref": "intro-p22",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "part3-p01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c12-s01-p01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c12-s01-m01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c12-s01-m03",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c12-s01-m08",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c12-s02-p01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c12-s02-m01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c12-s02-m07",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c8-s02-p02",
+          "date": null
+        },
+        {
+          "kind": "plan-2022",
+          "ref": "https://melenchon2027.fr/plans-2022/regle-verte/",
+          "date": "2024-01-31"
+        }
+      ],
+      "sentence_support": [
+        {
+          "field": "one_liner",
+          "sentence": "La planification écologique est un outil collectif pour guider l'économie, à la place des actionnaires.",
+          "kind": "reformule",
+          "support_ids": [
+            "intro-p22"
+          ]
+        },
+        {
+          "field": "one_liner",
+          "sentence": "Le programme en fait sa méthode pour gouverner par les besoins.",
+          "kind": "reformule",
+          "support_ids": [
+            "c12-s01-p01"
+          ]
+        },
+        {
+          "field": "one_liner",
+          "sentence": "L'idée : décider ensemble, sur le temps long, au lieu de laisser faire le marché.",
+          "kind": "reformule",
+          "support_ids": [
+            "c12-s01-p01",
+            "c12-s01-m01",
+            "part3-p01"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Le programme propose des lois cadres pour une planification démocratique, aux niveaux national et local.",
+          "kind": "reformule",
+          "support_ids": [
+            "c12-s01-m01"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Il prévoit un Conseil à la planification écologique.",
+          "kind": "reformule",
+          "support_ids": [
+            "c12-s01-m03"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Une agence dépendrait de ce Conseil.",
+          "kind": "reformule",
+          "support_ids": [
+            "c12-s01-m08"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Elle préparerait un plan de relocalisation par filière stratégique.",
+          "kind": "reformule",
+          "support_ids": [
+            "c12-s01-m08"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Les communes seraient pleinement impliquées dans les décisions et les investissements.",
+          "kind": "reformule",
+          "support_ids": [
+            "c12-s02-m01",
+            "c12-s02-p01"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Réduire le temps de travail en fait partie : moins de trajets pour aller travailler.",
+          "kind": "reformule",
+          "support_ids": [
+            "c8-s02-p02"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Un plan de campagne 2022 citait des chantiers : énergies renouvelables, transports collectifs, isolation des bâtiments.",
+          "kind": "contexte-2022",
+          "support_ids": [
+            "https://melenchon2027.fr/plans-2022/regle-verte/"
+          ]
+        },
+        {
+          "field": "objection.answer",
+          "sentence": "Le programme demande une planification « écologique et démocratique ».",
+          "kind": "reformule",
+          "support_ids": [
+            "c12-s01-m01"
+          ]
+        },
+        {
+          "field": "objection.answer",
+          "sentence": "Elle doit s'appuyer sur la commune, « échelon vital de la démocratie ».",
+          "kind": "reformule",
+          "support_ids": [
+            "c12-s02-p01"
+          ]
+        },
+        {
+          "field": "objection.answer",
+          "sentence": "Des assemblées citoyennes régionales débattraient des projets d'aménagement et d'investissement.",
+          "kind": "reformule",
+          "support_ids": [
+            "c12-s02-m07"
+          ]
+        }
+      ],
+      "review_status": "reviewed-human",
+      "readability": {
+        "sentences": 14,
+        "max_sentence_words": 15,
+        "sentences_over_15_words": 0,
+        "double_negations": 0,
+        "jargon_unexplained": [
+          "lois cadres",
+          "gouverner par les besoins",
+          "filière stratégique",
+          "relocalisation",
+          "échelon",
+          "projets d'aménagement",
+          "temps long",
+          "relocalisation (lien pendant, non rendu)"
+        ],
+        "words_one_liner": 40,
+        "words_why_it_matters": 78,
+        "words_objection_text": 11,
+        "words_objection_answer": 29,
+        "sentences_by_kind": {
+          "verbatim": 0,
+          "reformule": 12,
+          "contexte-2022": 1
+        },
+        "judges_sentence_counts": {
+          "yanis": 14,
+          "fact": 14
+        }
+      },
+      "review": {
+        "status": "reviewed-human",
+        "pipeline": [
+          "writer",
+          "verifier",
+          "editor",
+          "judges"
+        ],
+        "writer_versions": 1,
+        "history_fr": "Rédacteur 1 version (7/9) → vérificateur PASS, 0 bloquant, 7 mineurs → éditeur (8/9 : E1 à E9, aucune idée ajoutée ni retirée) → juges du 8/9 : Yanis PASS 4/5, fact PASS 5/5 (clarté 3,5).",
+        "verifier": {
+          "pass": true,
+          "checked_ids_exist": true,
+          "numbers_all_supported": true,
+          "rejections_blocking": 0,
+          "rejections_minor": 7,
+          "rejections": [
+            {
+              "field": "one_liner",
+              "sentence": "C'est un outil collectif pour guider l'économie, à la place des actionnaires.",
+              "reason": "intro-p22 dit « substituer à la dictature des actionnaires un outil d'intérêt plus collectif pour guider l'économie ». La paraphrase perd « dictature » (on remplace la dictature des actionnaires, pas les actionnaires) et « plus » (« plus collectif » devient « collectif »). Léger glissement d'intensité, pas de fait ajouté. Suggestion : « C'est un outil plus collectif pour guider l'économie, à la place de la dictature des actionnaires. »",
+              "severity": "minor"
+            },
+            {
+              "field": "why_it_matters",
+              "sentence": "Le programme propose des lois cadres pour une planification démocratique, du national au local.",
+              "reason": "c12-s01-m01 dit « coordonnant les niveaux national et local ». « du national au local » perd l'idée de coordination et peut se lire comme un flux descendant, ce qui va à contresens de l'objection traitée. Suggestion : « en coordonnant le national et le local ». Le mot « écologique » de la mesure est aussi omis (« planification démocratique » seule).",
+              "severity": "minor"
+            },
+            {
+              "field": "why_it_matters",
+              "sentence": "Réduire le temps de travail en fait partie : moins de trajets vers le travail.",
+              "reason": "c8-s02-p02 dit « C'est aussi un enjeu de planification écologique ». « en fait partie » transforme un « enjeu » (une question qui concerne la planification) en appartenance à la planification, ce que le texte ne dit pas littéralement. Suggestion : « Réduire le temps de travail est aussi un enjeu de planification écologique : moins de trajets. »",
+              "severity": "minor"
+            },
+            {
+              "field": "why_it_matters",
+              "sentence": "En 2022, un plan de campagne citait des chantiers : renouvelables, transports collectifs, isolation des bâtiments.",
+              "reason": "Trois points : (1) « 2022 » n'apparaît pas dans le texte du passage, seulement dans son kind (« plan 2022 ») et son URL (plans-2022), la date du fichier est 2024-01-31 ; acceptable car imposé par le format contexte-2022, à documenter. (2) « plan de campagne » est une étiquette absente du passage (titre : « Comment nous allons : mettre en œuvre la règle verte par la planification écologique ») ; préférer « un plan thématique » ou « un plan de la campagne 2022 ». (3) « renouvelables » seul abrège « passage à 100 % d'énergies renouvelables » ; écrire « énergies renouvelables » (jargon dans une définition, D0.32 / FALC).",
+              "severity": "minor"
+            },
+            {
+              "field": "objection.answer",
+              "sentence": "Le programme demande une planification « écologique et démocratique ».",
+              "reason": "c12-s01-m01 est une mesure (« Adopter des lois cadres instaurant… ») : le programme propose, il ne « demande » à personne. Verbe à remplacer par « propose » ou « prévoit ». La citation est exacte.",
+              "severity": "minor"
+            },
+            {
+              "field": "aliases",
+              "sentence": "État planificateur",
+              "reason": "Cet alias vient du chapeau c15-s01-p01 (pandémies : « L'État planificateur sera l'instrument principal de notre adaptation à l'ère des pandémies »), section que la carte exclut elle-même comme « planification sanitaire, autre notion » (note 6). Aucun passage 2025 du fichier ne rattache « État planificateur » à la planification écologique. À garder au plus comme clé de recherche invisible, pas comme « aussi appelé ».",
+              "severity": "minor"
+            },
+            {
+              "field": "related_measure_ids",
+              "sentence": "c12-s02-k01",
+              "reason": "Le texte de la mesure (« Redécouper les Régions à partir des bassins versants… ») ne nomme pas la planification écologique, alors que c12-s02-m08 est exclue pour exactement cette raison (note 6). Le lien existe via le chapeau c12-s02-p01 (« les bassins versants et les agences de l'eau en seront le socle ») : soit expliciter ce critère « rattachée par le chapeau », soit appliquer la même règle aux deux mesures. Même remarque pour c12-s01-m02 (« rôle de planification », sans « écologique »), défendable par le chapitre 12.",
+              "severity": "minor"
+            }
+          ],
+          "notes": "Vérification faite sur la totalité de eval/passages/planification-ecologique.json (496 lignes, corpus_version d29c7422004ab27c). Résultat : aucune rejection bloquante, pass = true.\n\nContrôles mécaniques (script node dans le scratchpad) : les 12 phrases de one_liner (3), why_it_matters (6) et objection.answer (3) ont chacune une entrée sentence_support au texte identique ; tous les support_ids, verbatim_ids (4), related_measure_ids (7) et sources (11) existent dans le fichier ; les deux citations « écologique et démocratique » (c12-s01-m01) et « échelon vital de la démocratie » (c12-s02-p01) sont des sous-chaînes exactes ; toutes les phrases font ≤ 15 mots (12, 11, 14 / 14, 8, 14, 11, 14, 15 / 8, 11, 10).\n\nFidélité vérifiée phrase par phrase : « outil collectif pour guider l'économie » ← intro-p22 ; « méthode pour gouverner par les besoins » ← c12-s01-p01 (mot pour mot) ; « temps long » ← « reconquête collective du temps long » ; « au lieu de laisser faire le marché » ← part3-p01 (« le marché et la concurrence ont montré leur incapacité ») ; Conseil ← c12-s01-m03 ; agence rattachée au Conseil, plan de relocalisation par filière stratégique ← c12-s01-m08 ; communes pleinement impliquées dans les décisions et les investissements ← c12-s02-m01 ; trajets vers le travail ← c8-s02-p02 ; chantiers renouvelables / transports collectifs / isolation des bâtiments ← plan 2022 regle-verte (« De grands chantiers seront engagés comme l'installation des infrastructures nécessaires au passage à 100 % d'énergies renouvelables, les transports collectifs, l'isolation thermique des bâtiments… ») ; assemblées citoyennes régionales ← c12-s02-m07. « décider ensemble » est une glose de « collective » + « démocratique », acceptable.\n\nNombres : seul « 2022 » apparaît. Il n'est pas dans le texte du passage cité (aucune occurrence de « 2022 » dans full_text ni dans les extraits), mais figure dans le kind (« plan 2022 ») et l'URL (plans-2022), et le format contexte-2022 impose « en 2022 ». Compté comme supporté, à confirmer par le donneur d'ordre si la règle exige le texte seul ; la carte tient sans cette phrase (note 3 de l'auteur).\n\nObjection : la réponse n'affirme pas que l'État ne décide pas ; elle aligne trois faits du corpus 2025 (démocratique, commune, assemblées qui « débattraient »). Pas de surenchère. desintox_url = null cohérent : les deux désintox du fichier mentionnent la planification sans répondre à cette objection.\n\nTon : pas d'opinion, pas de promesse au-delà du texte (conditionnels), pas d'emoji, pas de disclaimer. Jargon léger dans la définition : « lois cadres », « filière stratégique », « renouvelables » seul.\n\nHors fidélité, à signaler : (a) related_terms pointe vers 4 slugs sans fichier de passages dans eval/passages (conseil-planification-ecologique, relocalisation, bassins-versants, reduction-du-temps-de-travail) ; seuls regle-verte et bifurcation-ecologique existent. (b) Apostrophes droites (') dans la carte contre ’ dans le corpus et espaces simples autour des « » : à normaliser par check-strings comme prévu par la note 7 ; sans effet sur les phrases reformulées, mais à corriger avant tout affichage verbatim. (c) La date « 2024-01-31 » de la source plan-2022 est la date de page du fichier, pas une date d'édition 2022 ; cohérent avec D1.5."
+        },
+        "judges": {
+          "yanis": {
+            "clarity_0_5": 4,
+            "fidelity_0_5": 0,
+            "can_reexplain_under_60s": true,
+            "verdict": "PASS",
+            "comments_fr": "Ma version en 60 secondes (≈ 80 mots) : « La planification écologique, c'est faire un plan sur plusieurs années pour organiser l'économie, au lieu de laisser les grosses boîtes et le marché décider seuls. L'idée, c'est de choisir ensemble ce dont on a besoin : énergies renouvelables, transports en commun, isolation des logements. Un Conseil s'en occuperait, avec les communes et des assemblées de citoyens dans les régions. Ça prévoit aussi de ramener des usines en France et de travailler moins, pour moins de trajets. »\n\nCe qui passe bien : la première phrase (outil collectif contre actionnaires / marché), la question-réponse « c'est l'État tout seul ? » avec les communes et les assemblées, et les trois exemples concrets à la fin. Ce qui coince : le paragraphe du milieu ressemble à un organigramme (Conseil, agence, plan, lois cadres) ; je ne vois pas qui siège dans ce Conseil ni ce qui change pour moi. « Gouverner par les besoins » sonne comme un slogan, je ne sais pas ce que ça veut dire concrètement. Le lien « travailler moins = planification écologique » arrive sans transition, « moins de trajets » aide un peu mais reste léger. Pas de ton potache, pas d'emoji, rien de gênant à partager.",
+            "readability": {
+              "sentences": 14,
+              "max_sentence_words": 15,
+              "double_negations": 0,
+              "jargon_unexplained": [
+                "lois cadres",
+                "gouverner par les besoins",
+                "filière stratégique",
+                "relocalisation",
+                "échelon",
+                "projets d'aménagement",
+                "temps long"
+              ]
+            },
+            "unlabeled_claims": []
+          },
+          "fact": {
+            "clarity_0_5": 3.5,
+            "fidelity_0_5": 5,
+            "can_reexplain_under_60s": true,
+            "verdict": "PASS",
+            "unlabeled_claims": [],
+            "readability": {
+              "sentences": 14,
+              "max_sentence_words": 15,
+              "double_negations": 0,
+              "jargon_unexplained": [
+                "lois cadres",
+                "filière stratégique",
+                "gouverner par les besoins",
+                "projets d'aménagement",
+                "relocalisation (lien pendant, non rendu)"
+              ]
+            },
+            "comments_fr": "Phrase la plus attaquable : « Réduire le temps de travail en fait partie : moins de trajets pour aller travailler. » (why_it_matters, appui c8-s02-p02). Le texte écrit « C'est aussi un enjeu de planification écologique » : un enjeu (ce que la planification doit traiter) devient une partie (un composant de la planification), relation que le programme n'écrit pas. Le référent « en » est en outre à quatre phrases de la dernière mention de « planification », juste après une phrase sur les communes. Ce point est déjà ouvert (vérificateur, guide §4.3 point 4) et l'éditeur l'a laissé au relecteur : je recommande « Réduire le temps de travail est un enjeu de planification : moins de trajets pour aller travailler. » (16 mots, toléré) ou la forme avec « aussi » (17 mots). Ce n'est pas bloquant : la conclusion du lecteur (le programme relie RTT et planification à cause des trajets) est celle du texte, aucun acteur, cause ni chiffre ajouté. Vérifications faites : les trois champs sont exactement la concaténation des phrases étiquetées ; les 16 appuis, 4 verbatim_ids, 7 mesures liées et 11 sources existent dans le fichier ; les deux fragments entre guillemets sont des sous-chaînes exactes de c12-s01-m01 et c12-s02-p01 ; les trois chantiers 2022 sont mot pour mot dans le plan (« 100 % d'énergies renouvelables, les transports collectifs, l'isolation thermique des bâtiments »), sans reprise du chiffre. Points secondaires, non bloquants : (1) « à la place des actionnaires » omet « dictature » (intro-p22) ; l'expression reste attachée à « guider l'économie », un lecteur pressé pourrait lire « sans actionnaires », à surveiller en session humaine. (2) « 2022 » n'apparaît pas dans le corps du plan, seulement dans son kind et son URL ; accepté parce que le test l'exige dans une phrase contexte-2022. (3) « aux niveaux national et local » omet « coordonnant » (c12-s01-m01) : omission, pas ajout. (4) « impliquées dans les décisions et les investissements » omet « la mise en œuvre des » (c12-s02-m01), légèrement plus large que le texte. (5) « Le programme demande » : registre hors liste (veut / propose / prévoit), pas une infidélité. (6) Alias « État planificateur » vient du chapitre pandémies (c15-s01-p01), routage seulement, à retirer comme le guide le demande. (7) objection.text non étiquetée par convention (guide §3), aucune affirmation sur le programme. Lisibilité : why_it_matters reste un organigramme (lois cadres, Conseil, agence, plan, communes) ; « lois cadres », « filière stratégique », « gouverner par les besoins », « aménagement » sans glose ni lien rendu."
+          }
+        },
+        "judges_overall": "PASS",
+        "human": {
+          "reviewer": "utilisateur (pseudonyme à choisir, D0.15)",
+          "date": "2026-09-09",
+          "changes_requested": false,
+          "note_fr": "Relu sans modification (D2.9). Relecture militante et non-politisée par personas-agents (D11.1) ; test humain avant lancement."
+        }
+      },
+      "notes_for_reviewer": "PASSAGE ÉDITEUR (8 sept. 2026). E1. Aucune idée ajoutée ni retirée ; ids, sources, verbatim_ids, related_measure_ids, related_terms et faits de l'objection (texte, support_ids, desintox_url = null) inchangés. Toutes les phrases ont été recontrôlées contre eval/passages/planification-ecologique.json (corpus_version d29c7422004ab27c). E2. one_liner, phrase 1 : « C'est un outil collectif… » devient « La planification écologique est un outil collectif… » pour nommer le référent, comme les quatre autres cartes pilotes (règle 3 du guide) ; même kind, même appui intro-p22. Le one_liner passe de 37 à 40 mots, soit la limite exacte : pour regagner de la marge, revenir à « C'est » (37 mots). E3. why_it_matters, phrase 1 : « du national au local » devient « aux niveaux national et local » (source : « coordonnant les niveaux national et local », c12-s01-m01), pour ne pas suggérer un sens descendant que le texte n'écrit pas (point mineur du vérificateur) ; « coordonnant » reste omis (omission, règle 8). E4. why_it_matters : la phrase à incise « Une agence, rattachée à ce Conseil, préparerait… » est scindée en deux phrases, une idée chacune (« Une agence dépendrait de ce Conseil. » / « Elle préparerait un plan de relocalisation par filière stratégique. ») ; même kind, même appui c12-s01-m08 pour les deux ; « dépendrait de » reprend « dépendant du Conseil » du texte. E5. why_it_matters : « moins de trajets vers le travail » devient « moins de trajets pour aller travailler » (source : « réduire le nombre de trajets vers son lieu de travail », c8-s02-p02) pour éviter « temps de travail… vers le travail ». Le deux-points est gardé parce que le texte source relie lui-même les deux idées par un deux-points ; scinder obligerait à écrire une cause explicite (« Cela fait moins de trajets ») absente du texte (règle 8). « en fait partie » conservé tel que vérifié (voir note de rédaction 2). E6. Phrase contexte-2022 : « En 2022, un plan de campagne citait des chantiers : renouvelables, … » devient « Un plan de campagne 2022 citait des chantiers : énergies renouvelables, transports collectifs, isolation des bâtiments. » (15 mots) ; « énergies renouvelables » remplace « renouvelables » seul, elliptique pour un lecteur non politisé (point mineur du vérificateur), toujours sans le chiffre « 100 % » ; forme alignée sur le guide §3 (« Un plan de campagne 2022 citait… ») ; la date 2022 vient du kind « plan 2022 » du fichier, pas du passage (voir note de rédaction 3). E7. Typographie : U+00A0 (jamais U+202F, D3.6) inséré avant « : » et « ? » et à l'intérieur des guillemets « » (15 occurrences), y compris dans objection.text et objection.answer dont la formulation est intacte ; apostrophe droite conservée (voix de l'app v0, design/voice.md §6). Le build renormalise ces espaces de la même façon (guide §4.2), l'opération est idempotente. Trois deux-points subsistent (one_liner « L'idée : », why_it_matters phrases 6 et 7) alors que le guide §2.3 en souhaite un seul par carte : le premier est l'exemple accepté du guide, le deuxième reflète le texte source (E5), le troisième introduit une liste ; le relecteur peut retirer la phrase contexte-2022, la carte tient sans elle (why_it_matters passerait à 63 mots). E8. Registre : aucune phrase ne s'adresse au lecteur, rien à passer au tu ; aucune double négation, aucun emoji, aucun disclaimer. Objection non retouchée (rôle éditeur, guide §4.1) : « Le programme demande… » garde « demande », hors de la liste « veut / propose / prévoit / soutient » de la règle 6, à trancher par le relecteur. E9. Longueurs mesurées par script ad hoc reproduisant le comptage de scripts/glossary.test.ts (aucun script check-strings dans scripts/ à ce jour) : one_liner 40 mots (3 phrases), why_it_matters 78 mots (7 phrases), objection.answer 29 mots (3 phrases), objection.text 11 mots ; phrase la plus longue 15 mots ; chaque champ est exactement la concaténation de ses phrases de sentence_support ; seul nombre présent : 2022, dans la phrase contexte-2022 ; les deux fragments entre guillemets sont des sous-chaînes exactes de c12-s01-m01 et c12-s02-p01. NOTES DE RÉDACTION CONSERVÉES. 1. Fidélité des paraphrases à confirmer : « à la place des actionnaires » reprend « substituer à la dictature des actionnaires un outil d'intérêt plus collectif pour guider l'économie » (intro-p22) ; « décider ensemble » s'appuie sur « reconquête collective du temps long » (c12-s01-p01) et « démocratique » (c12-s01-m01) ; « au lieu de laisser faire le marché » vient de part3-p01 (« le marché et la concurrence ont montré leur incapacité »). 2. « Réduire le temps de travail en fait partie » paraphrase « C'est aussi un enjeu de planification écologique » (c8-s02-p02) : vérifier que « en fait partie » ne surinterprète pas « enjeu ». 3. Phrase contexte-2022 : elle vient d'un plan 2022 (« Comment nous allons : mettre en œuvre la règle verte par la planification écologique »), pas d'un livret ; le passage ne contient pas la date « 2022 » (page datée 2024-01-31 dans le fichier), la mention 2022 est imposée par la consigne. « énergies renouvelables » résume « passage à 100 % d'énergies renouvelables » sans reprendre le chiffre. Supprimer la phrase si le mélange 2022/2025 gêne, la carte tient sans elle. 4. Objection : les deux passages désintox du fichier (« ruralité », « économie ») mentionnent la planification sans y répondre ; la réponse est donc bâtie sur le corpus 2025 seul, desintox_url = null. Si une objection « la planification oublie la ruralité » paraît plus fréquente, la désintox ruralité (https://desintox.lafranceinsoumise.fr/la-france-insoumise-nen-a-rien-a-faire-de-la-ruralite/) peut la remplacer, avec licence à vérifier (D1.5). 5. verbatim_ids contient deux paragraphes (c12-s01-p01 = chapeau, intro-p22 ≈ 180 mots) en plus de deux mesures ; si l'app n'affiche que des mesures ou si intro-p22 est trop long, retirer intro-p22 en premier (part3-p01 est une alternative plus courte). 6. Volontairement exclus des related_measure_ids : c15-s01-k01 (« planification sanitaire », autre notion), c12-s02-m08 (section de la planification, mais le texte de la mesure ne la nomme pas). 7. Sources programme-2025 sans date : corpus_version d29c7422004ab27c (crawl du 2026-09-07), aucune date d'édition dans les passages. 8. Alias « État planificateur » vient du chapeau c15-s01-p01 ; « planification écologique et démocratique » de c12-s01-m01."
+    },
+    {
+      "slug": "ecocide",
+      "term": "écocide",
+      "aliases": [
+        "crime d'ecocide",
+        "crime d'écocide",
+        "crime d’ecocide",
+        "crime d’écocide",
+        "ecocidaire",
+        "écocidaire",
+        "ecocidaires",
+        "écocidaires",
+        "ecocide",
+        "écocide",
+        "ecocides",
+        "écocides"
+      ],
+      "aliases_from_card": [
+        "écocide",
+        "ecocide",
+        "crime d'écocide",
+        "crime d’écocide"
+      ],
+      "one_liner": "L'écocide est un crime que le programme veut reconnaître. Selon le programme, les grands pollueurs doivent répondre de leurs actes.",
+      "why_it_matters": "La pollution ne s'arrête pas aux frontières. Ce qu’un pays rejette dans l’air sera aussi respiré par ses voisins. Le programme veut donc élargir le droit international au climat et à l'écologie. Il soutient aussi la création d'un tribunal international de justice climatique et environnementale. En 2022, un livret de campagne parlait de « crime contre la nature (écocide) ».",
+      "verbatim_ids": [
+        "c16-s06-k01",
+        "c16-s06-p01"
+      ],
+      "related_measure_ids": [
+        "c16-s06-m01",
+        "c16-s06-m04",
+        "c7-s07-m06"
+      ],
+      "objection": {
+        "text": "Reconnaître un crime d'écocide, c'est symbolique. Ça ne changera rien.",
+        "answer": "Le programme soutient la création d'un tribunal international de justice climatique et environnementale. Il soutient aussi les négociations d'un traité contraignant les multinationales à respecter l'environnement. Les entreprises criminelles et les pollueurs de masse doivent répondre de leurs actes.",
+        "desintox_url": null,
+        "support_ids": [
+          "c16-s06-m01",
+          "c16-s06-m04",
+          "c16-s06-p01"
+        ]
+      },
+      "related_terms": [
+        "biens-communs-planetaires",
+        "justice-climatique",
+        "droit-international",
+        "pollueur-payeur",
+        "planification-ecologique",
+        "regle-verte"
+      ],
+      "sources": [
+        {
+          "kind": "programme-2025",
+          "ref": "c16-s06-k01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c16-s06-p01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c16-s06-m01",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c16-s06-m04",
+          "date": null
+        },
+        {
+          "kind": "programme-2025",
+          "ref": "c7-s07-m06",
+          "date": null
+        },
+        {
+          "kind": "livret-2022",
+          "ref": "https://melenchon2027.fr/livrets-2022/planification-ecologique/",
+          "date": "2024-02-01T19:46:57"
+        }
+      ],
+      "sentence_support": [
+        {
+          "field": "one_liner",
+          "sentence": "L'écocide est un crime que le programme veut reconnaître.",
+          "kind": "reformule",
+          "support_ids": [
+            "c16-s06-k01"
+          ]
+        },
+        {
+          "field": "one_liner",
+          "sentence": "Selon le programme, les grands pollueurs doivent répondre de leurs actes.",
+          "kind": "reformule",
+          "support_ids": [
+            "c16-s06-p01"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "La pollution ne s'arrête pas aux frontières.",
+          "kind": "reformule",
+          "support_ids": [
+            "c16-s06-p01"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Ce qu’un pays rejette dans l’air sera aussi respiré par ses voisins.",
+          "kind": "verbatim",
+          "support_ids": [
+            "c16-s06-p01"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Le programme veut donc élargir le droit international au climat et à l'écologie.",
+          "kind": "reformule",
+          "support_ids": [
+            "c16-s06-p01"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "Il soutient aussi la création d'un tribunal international de justice climatique et environnementale.",
+          "kind": "reformule",
+          "support_ids": [
+            "c16-s06-m01"
+          ]
+        },
+        {
+          "field": "why_it_matters",
+          "sentence": "En 2022, un livret de campagne parlait de « crime contre la nature (écocide) ».",
+          "kind": "contexte-2022",
+          "support_ids": [
+            "https://melenchon2027.fr/livrets-2022/planification-ecologique/"
+          ]
+        },
+        {
+          "field": "objection.answer",
+          "sentence": "Le programme soutient la création d'un tribunal international de justice climatique et environnementale.",
+          "kind": "reformule",
+          "support_ids": [
+            "c16-s06-m01"
+          ]
+        },
+        {
+          "field": "objection.answer",
+          "sentence": "Il soutient aussi les négociations d'un traité contraignant les multinationales à respecter l'environnement.",
+          "kind": "reformule",
+          "support_ids": [
+            "c16-s06-m04"
+          ]
+        },
+        {
+          "field": "objection.answer",
+          "sentence": "Les entreprises criminelles et les pollueurs de masse doivent répondre de leurs actes.",
+          "kind": "verbatim",
+          "support_ids": [
+            "c16-s06-p01"
+          ]
+        }
+      ],
+      "review_status": "reviewed-human",
+      "readability": {
+        "sentences": 12,
+        "max_sentence_words": 13,
+        "sentences_over_15_words": 0,
+        "double_negations": 0,
+        "jargon_unexplained": [
+          "droit international",
+          "traité contraignant",
+          "multinationales",
+          "livret de campagne",
+          "justice climatique et environnementale"
+        ],
+        "words_one_liner": 20,
+        "words_why_it_matters": 58,
+        "words_objection_text": 10,
+        "words_objection_answer": 39,
+        "sentences_by_kind": {
+          "verbatim": 2,
+          "reformule": 7,
+          "contexte-2022": 1
+        },
+        "judges_sentence_counts": {
+          "yanis": 12,
+          "fact": 11
+        }
+      },
+      "review": {
+        "status": "reviewed-human",
+        "pipeline": [
+          "writer",
+          "verifier",
+          "editor",
+          "judges"
+        ],
+        "writer_versions": 2,
+        "history_fr": "Rédacteur 2 versions : v1 rejetée (2 bloquants : 4 ids de mesures absents du fichier, définition « crime contre l’environnement » sans appui 2025), v2 du 8/9 (R1 à R6) → vérificateur PASS, 0 bloquant, 5 mineurs → éditeur (8/9 : 2 retouches) → juges du 8/9 : Yanis PASS 4/5, fact PASS 5/5.",
+        "verifier": {
+          "pass": true,
+          "checked_ids_exist": true,
+          "numbers_all_supported": true,
+          "rejections_blocking": 0,
+          "rejections_minor": 5,
+          "rejections": [
+            {
+              "field": "one_liner",
+              "sentence": "Les grands pollueurs doivent répondre de leurs actes.",
+              "reason": "Présent de l'indicatif non attribué, dans la voix de l'app (guide §2.1 règles 7 et 11) : la carte affirme elle-même que les pollueurs « doivent répondre de leurs actes », alors que c'est le programme qui le dit (c16-s06-p01). La v0 disait « Pour le programme, les pollueurs de masse doivent répondre de leurs actes. » ; la révision a retiré l'attribution. De plus, « grands pollueurs » remplace le qualificatif du texte « pollueurs de masse » par l'adjectif « grands », absent de tous les passages de c16-s06 (règle 8 : une paraphrase n'ajoute pas d'adjectif). Aucun fait ni intensité ajoutés, mais le mot n'est pas celui du programme. Reprendre la variante prudente proposée par le rédacteur : « Pour le programme, les pollueurs de masse doivent répondre de leurs actes. » (9 mots).",
+              "severity": "minor"
+            },
+            {
+              "field": "one_liner",
+              "sentence": "L'écocide est un crime que le programme veut reconnaître.",
+              "reason": "« est un crime » à l'indicatif pose comme un fait présent ce que c16-s06-k01 propose (« Reconnaître un crime d’écocide ») ; règle 7 : conditionnel ou attribution pour ce qui n'existe pas encore. Un juge fact peut attaquer « L'écocide est un crime » (le texte ne dit pas que c'en est déjà un). Formulation quasi verbatim, sans ce risque : « Le programme veut reconnaître un crime d'écocide. » (7 mots). Reste mineur : les seuls mots portés sont « crime », « écocide », « reconnaître », tous dans k01, et la relative attribue la reconnaissance au programme.",
+              "severity": "minor"
+            },
+            {
+              "field": "related_measure_ids",
+              "sentence": "c7-s07-m06",
+              "reason": "Contredit la règle de la zone « Mesures liées » (guide §1, zone 6, DÉCISION : « Mesures 2025 qui citent le terme ou relèvent de sa section »). c7-s07-m06 (chapitre 7, « Une politique de justice efficace », justice nationale) ne nomme pas l'écocide et n'est pas dans c16-s06 ; le fichier de passages ne l'a capté que par l'alias d'extraction « justice pénale environnementale ». Pas un homonyme, mais un lien éditorial que le corpus ne fait pas. Depuis la révision, aucune phrase ne s'y appuie : le retirer (avec sa ligne dans sources) laisse 2 mesures liées, dans le budget 2 à 8.",
+              "severity": "minor"
+            },
+            {
+              "field": "why_it_matters",
+              "sentence": "Il soutient aussi la création d'un tribunal international de justice climatique et environnementale.",
+              "reason": "Fidèle à c16-s06-m01, mais doublon quasi mot pour mot de la première phrase de objection.answer (« Le programme soutient la création d'un tribunal international de justice climatique et environnementale. »). Déjà signalé en v0, non traité par la révision. Redondance pour le lecteur, pas un défaut de fidélité.",
+              "severity": "minor"
+            },
+            {
+              "field": "related_terms",
+              "sentence": "justice-climatique",
+              "reason": "Slug pendant nouveau (absent de la v0 et de meta.dangling_related_terms de data/glossary.json) : le test « related_terms: known slugs are linked, dangling slugs are declared in meta » (deepEqual) échouera à l'assemblage si meta n'est pas mis à jour. Par ailleurs planification-ecologique et regle-verte ne sont reliés à l'écocide que par le titre du livret 2022 ; le lien retour est défendable (la carte regle-verte cite déjà « ecocide » via « écocidaires » de c12-s01), à trancher par le relecteur.",
+              "severity": "minor"
+            }
+          ],
+          "notes": "Vérification contre eval/passages/ecocide.json (corpus_version d29c7422004ab27c), par script ad hoc (fichier unique : un fichier partagé du scratchpad a été écrasé par un vérificateur frère pendant la session, les résultats ci-dessous viennent du second passage sur un chemin propre).\n\nIDENTIFIANTS. Les 6 ids du fichier : c7-s07-m06, c7-s07-p01 (chapeau), c16-s06-k01, c16-s06-p01 (chapeau), c16-s06-m01, c16-s06-m04. Tous les ids de verbatim_ids, related_measure_ids, objection.support_ids, sentence_support et sources existent. c16-s06-p01 n'est présent que comme chapeau (chapeauId + chapeau) des entrées k01/m01/m04, texte identique dans les trois ; le test (CORPUS_ID, corpusText sur section.items) accepte les -p et la carte planification-ecologique cite déjà c12-s01-p01. L'URL du livret « La planification écologique : La règle verte pour rompre avec le productivisme » est dans livrets_2022. Tableau désintox vide : desintox_url = null correct.\n\nÉTIQUETAGE. Les 10 phrases des 3 champs ont chacune une entrée sentence_support ; la concaténation reproduit chaque champ au caractère près (découpeur du test).\n\nVERBATIM. « Ce qu’un pays rejette dans l’air sera aussi respiré par ses voisins. » et « Les entreprises criminelles et les pollueurs de masse doivent répondre de leurs actes. » sont des sous-chaînes exactes de c16-s06-p01, apostrophe ’ et point compris.\n\nREFORMULÉ, entailment phrase par phrase. one_liner 1 ← k01 « Reconnaître un crime d’écocide » : mots portés tous présents (voir rejet mineur sur « est un crime »). one_liner 2 ← p01 : « grands » absent du passage, glose de « de masse », omission de « entreprises criminelles » (rejet mineur, attribution retirée). why 1 « La pollution ne s'arrête pas aux frontières. » ← p01 « La crise écologique ne connaît pas les frontières administratives » + les deux exemples (air, eau) : restriction de « crise écologique » à « pollution », couverte par les exemples, aucun ajout. why 3 ← p01 « Il est donc temps d’élargir le droit international à l’impératif climatique et écologique » : « veut » rend « il est temps de », « impératif » omis, « donc » présent dans la source. why 4 et answer 1 ← m01 : exact. answer 2 ← m04 : omissions de « activement », « en cours », « les droits humains », aucun ajout. Aucun acteur, cause, date ou intensité ajoutés.\n\nCONTEXTE-2022. « En 2022, un livret écrivait « crime contre la nature (écocide) ». » : dit « En 2022 », imparfait, dernière position, une seule ; le fragment entre guillemets est une sous-chaîne exacte de l'extrait du livret planification-ecologique (« la reconnaissance de la notion de crime contre la nature (écocide) »). Appui = URL 2022, jamais un id 2025. Absente de one_liner.\n\nCHIFFRES. Seul nombre : 2022, dans la phrase contexte-2022. Il n'apparaît pas dans le texte de l'extrait mais dans le kind « livret 2022 » et l'URL livrets-2022 du fichier ; autorisé par la règle 9 du guide (« 2022 » seulement en contexte-2022) ; le test des chiffres ne porte que sur les phrases reformule (aucun chiffre). La date de source 2024-02-01T19:46:57 est la date de page du fichier, correctement recopiée, non affichée.\n\nOBJECTION. Texte : 10 mots, 2 phrases, aucun chiffre. Réponse : 3 phrases, 39 mots, aucun « faux », aucun jugement ; « soutient » (pas « crée »), la carte ne dit jamais qui jugerait l'écocide ; aucune promesse au-delà du texte.\n\nTON ET BUDGETS (méthode du test). one_liner 17 mots / 2 phrases ; why_it_matters 55 / 5 ; objection.answer 39 / 3 ; phrase la plus longue 13 mots ; aucun « vous », « nous », emoji, mot interdit (§2.4), ni « : ; ! ? » dans les champs ; pas de double négation. Aliases en minuscules, NFC, uniques, contiennent le terme. Espaces autour des « » en U+0020 dans la carte reçue (les notes annoncent U+00A0) : sans effet, le build normalise (guide §4.2).\n\nVERDICT. Aucun rejet bloquant ; 5 mineurs (attribution et adjectif « grands » en one_liner 2, indicatif « est un crime » en one_liner 1, c7-s07-m06 hors règle de la zone 6, doublon tribunal, slug pendant justice-climatique à déclarer). Réponses R1 à R6 de la révision vérifiées et conformes."
+        },
+        "judges": {
+          "yanis": {
+            "clarity_0_5": 4,
+            "fidelity_0_5": 0,
+            "can_reexplain_under_60s": true,
+            "verdict": "PASS",
+            "comments_fr": "Ma réexplication (env. 70 mots) : « L'écocide, c'est un crime contre la nature. Genre quand une grosse boîte pollue massivement l'air ou l'eau. Le programme veut que ce soit reconnu comme un vrai crime, et que les gros pollueurs soient jugés pour ça. Comme la pollution passe les frontières, ils veulent aussi un tribunal international pour ces affaires, et un traité qui oblige les multinationales à respecter l'environnement. »\n\nCe qui me gêne : la première phrase tourne en rond. « Un crime que le programme veut reconnaître », OK, mais un crime de quoi ? Je comprends seulement à la fin, avec « crime contre la nature (écocide) », et en plus c'est marqué 2022, du coup je me demande si c'est encore d'actualité ou pas. Il faudrait mettre « crime contre la nature » dès la première phrase. Aussi, la phrase sur le tribunal international est copiée-collée deux fois (dans « pourquoi c'est important » et dans la réponse à l'objection), ça fait remplissage. Et la réponse à l'objection « c'est symbolique » ne dit pas vraiment ce qui se passerait concrètement pour un pollueur (prison ? amende ?), elle liste juste d'autres trucs que le programme soutient.\n\nJargon pas expliqué : « droit international », « traité contraignant », « multinationales », « livret de campagne » (je ne sais pas ce que c'est), « justice climatique et environnementale » (c'est long, on devine mais on ne sait pas ce que ça juge).\n\nLisibilité : 12 phrases, max 13 mots, 0 double négation. Les phrases sont courtes, ça se lit vite sur WhatsApp. Je pourrais l'expliquer à mon cousin, donc PASS, mais en déplaçant « crime contre la nature » en tête ça passerait à 5.",
+            "readability": {
+              "sentences": 12,
+              "max_sentence_words": 13,
+              "double_negations": 0,
+              "jargon_unexplained": [
+                "droit international",
+                "traité contraignant",
+                "multinationales",
+                "livret de campagne",
+                "justice climatique et environnementale"
+              ]
+            },
+            "unlabeled_claims": []
+          },
+          "fact": {
+            "clarity_0_5": 4,
+            "fidelity_0_5": 5,
+            "can_reexplain_under_60s": true,
+            "verdict": "PASS",
+            "unlabeled_claims": [],
+            "readability": {
+              "sentences": 11,
+              "max_sentence_words": 13,
+              "double_negations": 0,
+              "jargon_unexplained": [
+                "droit international",
+                "traité contraignant"
+              ]
+            },
+            "comments_fr": "Vérification contre eval/passages/ecocide.json (corpus d29c7422004ab27c) : les 10 phrases des trois champs sont étiquetées, la concaténation reproduit chaque champ, les deux phrases verbatim sont des sous-chaînes exactes de c16-s06-p01, tous les ids et l'URL du livret existent, seul chiffre « 2022 » dans la phrase contexte-2022, fragment « crime contre la nature (écocide) » présent tel quel dans le livret. objection.text n'est pas étiquetée par convention (guide §3) et n'affirme rien sur le programme : non comptée. Aucune phrase inventée ; les paraphrases n'ajoutent ni acteur, ni cause, ni chronologie (règle 8) ; m04 est réduite par omission seulement (« activement », « en cours », « droits humains »).\n\nPhrase la plus attaquable : « L'écocide est un crime que le programme veut reconnaître. » (one_liner, phrase 1). La copule « est un crime » présuppose, à l'indicatif et sans attribution (règle 7), un statut juridique que la mesure clé c16-s06-k01 veut précisément créer (« Reconnaître un crime d'écocide ») ; un lecteur hostile peut répondre qu'en droit français l'écocide est un délit et qu'aucun crime international n'existe. La relative sauve le sens, mais une forme plus courte et littérale évite l'attaque : « Le programme veut reconnaître un crime d'écocide. » (7 mots, même appui). Ce n'est pas un fait inventé sur le programme, d'où fidélité 5 ; c'est une formulation à durcir.\n\nPoints secondaires, non bloquants : « La pollution ne s'arrête pas aux frontières. » est un présent non attribué, couvert par le chapeau (« La crise écologique ne connaît pas les frontières administratives » et les deux exemples air/eau), donc admissible comme fait du texte ; « les grands pollueurs » glose « pollueurs de masse », la variante littérale proposée par l'éditeur est préférable. Clarté 4 : la seule définition (« crime contre la nature ») n'arrive qu'en dernière phrase, sous pastille 2022, ce que la fidélité impose. Réexplicable en moins de 60 s : oui (crime à reconnaître, tribunal international soutenu, traité contre les multinationales soutenu, pollueurs qui répondent de leurs actes)."
+          }
+        },
+        "judges_overall": "PASS",
+        "human": {
+          "reviewer": "utilisateur (pseudonyme à choisir, D0.15)",
+          "date": "2026-09-09",
+          "changes_requested": false,
+          "note_fr": "Relu sans modification (D2.9). Relecture militante et non-politisée par personas-agents (D11.1) ; test humain avant lancement."
+        }
+      },
+      "notes_for_reviewer": "PASSE ÉDITEUR (FALC / mobile, 8 sept. 2026). Aucun fait ajouté ni retiré ; aucun id, aucune source, aucun élément de l'objection modifié (objection.text, objection.answer, desintox_url, support_ids octet pour octet identiques à la carte vérifiée). Les deux phrases verbatim sont intactes. Deux retouches, toutes deux dans la voix de l'app, mêmes étiquettes et mêmes appuis qu'avant ; contrôlées par un script ad hoc reproduisant les règles de scripts/glossary.test.ts contre eval/passages/ecocide.json (corpus_version d29c7422004ab27c) : existence des ids, sous-chaînes verbatim après normalisation, découpage et concaténation des phrases, chiffres, insécables, apostrophes, budgets. Toutes les vérifications passent.\n\nRETOUCHE 1 (one_liner, phrase 2). « Les grands pollueurs doivent répondre de leurs actes. » devient « Selon le programme, les grands pollueurs doivent répondre de leurs actes. » (10 mots, reformule, c16-s06-p01 inchangé). Motif : règles 6 et 7 du guide de style, l'indicatif est réservé aux phrases précédées de « Selon le programme » ; sans attribution, la phrase se lisait comme une opinion de l'app (règle 11). C'est une clarification du locuteur, pas un fait nouveau : le contenu (les pollueurs doivent répondre de leurs actes) est celui du chapeau p01. Le mot « programme » apparaît deux fois de suite dans le one_liner ; c'est voulu, un pronom (« Pour lui ») renverrait à « L'écocide », sujet de la phrase précédente (règle 3).\n\nRETOUCHE 2 (why_it_matters, phrase 5, contexte-2022). « En 2022, un livret écrivait « crime contre la nature (écocide) ». » devient « En 2022, un livret de campagne parlait de « crime contre la nature (écocide) ». » (13 mots, même URL d'appui). Motifs : « un livret » sans antécédent laisse le lecteur de 22 ans sans repère (guide §4.3 point 3 : « le livret » sans antécédent, à préciser en « livret de campagne 2022 ») ; « de campagne » répond à la remarque R4 du vérificateur sans doubler « 2022 » en début de phrase. « écrivait » suivi d'un fragment nominal se lisait mal ; « parlait de » est la tournure de la version pilote de la carte. Le fragment entre guillemets est inchangé et reste une sous-chaîne exacte de l'extrait du livret (« la reconnaissance de la notion de crime contre la nature (écocide) »). Variante si le relecteur préfère nommer la source : « le livret sur la planification écologique » (15 mots, à la limite).\n\nCE QUI N'A PAS ÉTÉ SCINDÉ, ET POURQUOI. one_liner phrase 1 (« L'écocide est un crime que le programme veut reconnaître. ») porte une relative, mais la scinder donnerait « L'écocide est un crime. », affirmation nue qu'aucun passage 2025 ne porte (k01 dit « Reconnaître un crime d'écocide », donc un crime à reconnaître) ; la relative est ce qui tient la fidélité. objection.answer phrase 2 (participe « contraignant les multinationales… ») reprend la formulation de m04, 13 mots, une seule idée ; non retouchée car l'objection est hors périmètre de l'éditeur.\n\nTYPOGRAPHIE. U+00A0 à l'intérieur des « » de la phrase contexte-2022 (seuls guillemets de la carte) ; aucun « : ; ! ? » dans les quatre champs, donc aucune insécable à poser avant ponctuation double ; aucun U+202F ; apostrophe droite dans la voix de l'app, apostrophe typographique ’ conservée dans la phrase verbatim (D3.2) ; aucun emoji, aucun « vous », aucune double négation.\n\nCOMPTEURS (méthode du test). one_liner 20 mots / 2 phrases (budget 2 à 4 phrases, ≤ 40 mots) ; why_it_matters 58 mots / 5 phrases (≤ 80) ; objection.answer 39 mots / 3 phrases (≤ 45) ; objection.text 10 mots ; phrase la plus longue 13 mots ; 11 phrases comptées avec objection.text (readability.sentences = 11, max_sentence_words ≥ 13). Phrase optionnelle : la phrase contexte-2022 peut être retirée, why_it_matters passerait à 45 mots et la carte tient sans elle, mais elle porte la seule définition disponible de l'écocide.\n\nÀ VÉRIFIER PAR LE RELECTEUR (mis à jour après édition). 1) « les grands pollueurs » glose « pollueurs de masse » (p01) et omet « entreprises criminelles » ; l'attribution est maintenant explicite. Variante plus littérale : « Selon le programme, les pollueurs de masse doivent répondre de leurs actes. » 2) « La pollution ne s'arrête pas aux frontières. » paraphrase « La crise écologique ne connaît pas les frontières administratives » et les deux exemples du chapeau (air, eau). 3) « au climat et à l'écologie » rend « à l'impératif climatique et écologique » (p01). 4) Objection : aucun passage désintox dans le fichier (tableau vide), desintox_url = null ; l'objection est rédigée par nous, sa fréquence n'est pas sourcée. La réponse omet « activement », « en cours » et « les droits humains » de m04. 5) La carte ne dit jamais qui jugerait l'écocide : le tribunal (m01) est « soutenu », pas créé. 6) related_terms : biens-communs-planetaires, justice-climatique, droit-international et pollueur-payeur sont des slugs pendants ; planification-ecologique et regle-verte ne sont reliés que par le titre du livret 2022, à retirer si jugé trop indirect. 7) Sources programme-2025 sans date ; la date du livret est la date de page du fichier (2024-02-01), pas la date d'édition 2022. 8) Seul nombre de la carte : 2022, dans la phrase contexte-2022.\n\nNOTES DU RÉDACTEUR (révision après rejet, 8 sept. 2026, conservées). R1 (bloquant, related_measure_ids) : c16-s06-m05, m07, m08 et c14-s06-m02 retirés, ils n'existent pas dans le fichier de passages. Restent c16-s06-m01 et c16-s06-m04 (même section c16-s06, même chapeau p01 que la mesure clé) et c7-s07-m06, assumée explicitement comme mesure voisine : seule mesure 2025 du fichier sur la justice pénale environnementale (alias d'extraction présent dans meta.aliases du fichier, absent des alias de la carte) ; elle ne nomme pas l'écocide, aucune phrase de la carte ne s'appuie sur elle, et elle peut être retirée sans casser la carte (related_measure_ids passerait à 2, dans le budget 2 à 8). Elle ne doit pas être lue comme la juridiction qui jugerait l'écocide. R2 (bloquant, one_liner) : « Un écocide, c'est un crime contre l'environnement. » remplacée par « L'écocide est un crime que le programme veut reconnaître. », appuyée sur c16-s06-k01 seul. Aucun passage 2025 ne définit l'écocide ; la seule définition (« crime contre la nature ») vient du livret 2022 et reste en phrase contexte-2022 de why_it_matters, jamais dans one_liner. R3 (mineur, one_liner) : « Le programme veut faire reconnaître ce crime. » supprimée, doublon avec la nouvelle phrase 1. Dire moins plutôt qu'inventer. R4 (mineur, why_it_matters) : traité par la retouche 2 de l'éditeur (« un livret de campagne »). R5 (mineur, c7-s07-m06) : voir R1. R6 (mineur, verbatim_ids) : c16-s06-p01 conservé ; le gabarit admet un paragraphe (design/glossary-style-guide.md §1 zone 4 et §2.2 ; data/glossary.json meta.schema_fr.verbatim_ids ; scripts/glossary.test.ts CORPUS_ID accepte -p) ; une carte existante (planification-ecologique) cite déjà des -p dans verbatim_ids. Les deux phrases verbatim sont écrites nues, sans guillemets, comme les entrées existantes : le test compare la phrase entière au passage et son découpeur ne coupe pas après un » fermant ; l'app les affiche en Gowun Batang avec l'étiquette « Texte du programme » (D3.2)."
+    }
+  ]
+}

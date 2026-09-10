@@ -1,0 +1,14 @@
+HTTP/2 200 
+date: Wed, 09 Sep 2026 12:57:58 GMT
+content-type: text/html; charset=utf-8
+cache-control: no-store
+content-security-policy: default-src 'none'; script-src 'nonce-cmTeeFrcTydN2P4A7i/bzQ==' 'strict-dynamic'; frame-src https://challenges.cloudflare.com; connect-src 'self'; style-src 'self'; img-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'
+cross-origin-opener-policy: same-origin
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=SzBkzdt0VJeCSt%2FZPDBTshay0genpSh46AR9rYYF%2BiuXHSSANEm9DZTjv4LUin3d8bnW2NKLKVY0d7FneScXXax56yN6i0XGZgMXAzs4Eu5U9yIlqL0smCRsdMzqbgVjwa8M0gTf0784ZaKnJg6JFWw%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+server: cloudflare
+cf-ray: a3865c9c0fc5d152-CDG
+alt-svc: h3=":443"; ma=86400
+

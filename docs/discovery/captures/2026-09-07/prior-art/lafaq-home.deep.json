@@ -1,0 +1,415 @@
+{
+  "url": "https://www.lafaqdelavenirencommun.com/",
+  "finalUrl": "https://www.lafaqdelavenirencommun.com/",
+  "status": 200,
+  "loadMs": 1912,
+  "responseHeaders": {
+    "alt-svc": "h3=\":443\"; ma=2592000, h3-29=\":443\"; ma=2592000, h3-Q050=\":443\"; ma=2592000, h3-Q046=\":443\"; ma=2592000, h3-Q043=\":443\"; ma=2592000, quic=\":443\"; ma=2592000; v=\"43,46\"",
+    "cache-control": "public, max-age=0",
+    "content-encoding": "br",
+    "content-type": "text/html; charset=UTF-8",
+    "date": "Mon, 07 Sep 2026 16:16:35 GMT",
+    "expires": "Mon, 07 Sep 2026 16:16:35 GMT",
+    "last-modified": "Mon, 07 Sep 2026 16:16:35 GMT",
+    "link": "<https://www.lafaqdelavenirencommun.com/wp-json/>; rel=\"https://api.w.org/\"",
+    "permissions-policy": "private-state-token-redemption=(self \"https://www.google.com\" \"https://www.gstatic.com\" \"https://recaptcha.net\" \"https://challenges.cloudflare.com\" \"https://hcaptcha.com\"), private-state-token-issuance=(self \"https://www.google.com\" \"https://www.gstatic.com\" \"https://recaptcha.net\" \"https://challenges.cloudflare.com\" \"https://hcaptcha.com\")",
+    "server": "LiteSpeed",
+    "vary": "Accept-Encoding,User-Agent,Accept-Encoding"
+  },
+  "hosts": {
+    "www.lafaqdelavenirencommun.com": 21
+  },
+  "requestsCount": 21,
+  "responses": [],
+  "cookies": [],
+  "title": "L'avenir en commun - Ensemble, construisons demain.",
+  "lang": "fr-FR",
+  "meta": {
+    "viewport": "width=device-width, initial-scale=1",
+    "description": "Ensemble, construisons demain.",
+    "robots": "max-image-preview:large",
+    "generator": "AccelerateWP 3.23-1.1-46",
+    "og:locale": "fr_FR",
+    "og:site_name": "L'avenir en commun - Ensemble, construisons demain.",
+    "og:type": "website",
+    "og:title": "L'avenir en commun - Ensemble, construisons demain.",
+    "og:description": "Ensemble, construisons demain.",
+    "og:url": "https://www.lafaqdelavenirencommun.com/",
+    "og:image": "https://www.lafaqdelavenirencommun.com/wp-content/uploads/2024/10/cropped-cropped-logo-faq.jpg",
+    "og:image:secure_url": "https://www.lafaqdelavenirencommun.com/wp-content/uploads/2024/10/cropped-cropped-logo-faq.jpg",
+    "twitter:card": "summary",
+    "twitter:title": "L'avenir en commun - Ensemble, construisons demain.",
+    "twitter:description": "Ensemble, construisons demain.",
+    "twitter:image": "https://www.lafaqdelavenirencommun.com/wp-content/uploads/2024/10/cropped-cropped-logo-faq.jpg",
+    "msapplication-TileImage": "https://www.lafaqdelavenirencommun.com/wp-content/uploads/2024/10/cropped-cropped-logo-faq-270x270.jpg"
+  },
+  "links": {
+    "profile": [
+      "http://gmpg.org/xfn/11"
+    ],
+    "preload": [
+      "https://www.lafaqdelavenirencommun.com/wp-content/uploads/2026/05/Mutuelle-senior-Paris-2-comment-bien-comparer-les-offres-en-2026-720x380.webp"
+    ],
+    "canonical": [
+      "https://www.lafaqdelavenirencommun.com/"
+    ],
+    "next": [
+      "https://www.lafaqdelavenirencommun.com/page/2/"
+    ],
+    "alternate": [
+      "https://www.lafaqdelavenirencommun.com/feed/",
+      "https://www.lafaqdelavenirencommun.com/comments/feed/"
+    ],
+    "stylesheet": [
+      "https://www.lafaqdelavenirencommun.com/wp-content/cache/min/1/wp-content/fonts/d1ed04b45d5ec4f11929b8dbe3319c08.css?ver=1781007837",
+      "https://www.lafaqdelavenirencommun.com/wp-content/cache/min/1/wp-content/themes/blogdata/css/all.css?ver=1781007837",
+      "https://www.lafaqdelavenirencommun.com/wp-content/cache/min/1/wp-content/themes/blogdata/css/colors/dark.css?ver=1781007837",
+      "https://www.lafaqdelavenirencommun.com/wp-content/cache/min/1/wp-content/themes/blogdata/css/core.css?ver=1781007837",
+      "https://www.lafaqdelavenirencommun.com/wp-content/cache/min/1/wp-content/themes/blogdata/style.css?ver=1781007837",
+      "https://www.lafaqdelavenirencommun.com/wp-content/cache/min/1/wp-content/themes/blogdata/css/wp-core.css?ver=1781007837",
+      "https://www.lafaqdelavenirencommun.com/wp-content/cache/min/1/wp-content/themes/blogdata/css/woo.css?ver=1781007837",
+      "https://www.lafaqdelavenirencommun.com/wp-content/cache/min/1/wp-content/themes/blogdata/css/colors/default.css?ver=1781007837",
+      "https://www.lafaqdelavenirencommun.com/wp-content/cache/min/1/wp-content/themes/blogdata/css/swiper-bundle.css?ver=1781007837",
+      "https://www.lafaqdelavenirencommun.com/wp-content/cache/min/1/wp-content/themes/blogdata/css/sm-core-css.css?ver=1781007837",
+      "https://www.lafaqdelavenirencommun.com/wp-content/cache/min/1/wp-content/themes/blogdata/css/sm-clean.css?ver=1781007837"
+    ],
+    "https://api.w.org/": [
+      "https://www.lafaqdelavenirencommun.com/wp-json/"
+    ],
+    "EditURI": [
+      "https://www.lafaqdelavenirencommun.com/xmlrpc.php?rsd"
+    ],
+    "icon": [
+      "https://www.lafaqdelavenirencommun.com/wp-content/uploads/2024/10/cropped-cropped-logo-faq-32x32.jpg",
+      "https://www.lafaqdelavenirencommun.com/wp-content/uploads/2024/10/cropped-cropped-logo-faq-192x192.jpg"
+    ],
+    "apple-touch-icon": [
+      "https://www.lafaqdelavenirencommun.com/wp-content/uploads/2024/10/cropped-cropped-logo-faq-180x180.jpg"
+    ]
+  },
+  "scripts": [
+    "https://www.lafaqdelavenirencommun.com/wp-content/plugins/clsop/assets/js/lazyload/17.8.3/lazyload.min.js"
+  ],
+  "anchorsCount": 60,
+  "anchors": [
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/#content",
+      "text": "Passer au contenu"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/",
+      "text": "L'avenir en commun"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/category/education-et-formation/",
+      "text": "Éducation et Formation"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/category/societe-et-communaute/",
+      "text": "Société et Communauté"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/category/technologie-et-innovation/",
+      "text": "Technologie et Innovation"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/category/developpement-durable/",
+      "text": "Développement Durable"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/#",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/#",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/wp-admin/widgets.php",
+      "text": "widgets"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/prevoyance-pour-independants-guide-complet-pour-securiser-vos-revenus/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/prevoyance-pour-independants-guide-complet-pour-securiser-vos-revenus/",
+      "text": "Prévoyance pour indépendants : guide complet pour sécuriser vos revenus"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/capacite-demprunt-calcul-precis-et-conseils-pour-votre-projet-immobilier/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/capacite-demprunt-calcul-precis-et-conseils-pour-votre-projet-immobilier/",
+      "text": "Capacité d’emprunt : calcul précis et conseils pour votre projet immobilier"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/mutuelle-senior-paris-2-comment-bien-comparer-les-offres-en-2026/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/mutuelle-senior-paris-2-comment-bien-comparer-les-offres-en-2026/",
+      "text": "Mutuelle senior Paris 2 : comment bien comparer les offres en 2026"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/assurance-sante-senior-paris-2-guide-complet-pour-bien-choisir-sa-mutuelle/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/assurance-sante-senior-paris-2-guide-complet-pour-bien-choisir-sa-mutuelle/",
+      "text": "Assurance santé senior Paris 2 : guide complet pour bien choisir sa mutuelle"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/visites-vignobles-aix-en-provence-les-meilleurs-domaines-a-decouvrir/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/visites-vignobles-aix-en-provence-les-meilleurs-domaines-a-decouvrir/",
+      "text": "Visites vignobles aix en provence : les meilleurs domaines à découvrir"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/cours-oenologie-aix-en-provence-guide-complet-pour-choisir-sa-formation/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/cours-oenologie-aix-en-provence-guide-complet-pour-choisir-sa-formation/",
+      "text": "Cours oenologie aix en provence : guide complet pour choisir sa formation"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/rachat-de-credit-cdd-comment-obtenir-un-accord-avec-un-dossier-solide/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/rachat-de-credit-cdd-comment-obtenir-un-accord-avec-un-dossier-solide/",
+      "text": "Rachat de crédit CDD : comment obtenir un accord avec un dossier solide"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/rachat-de-credit-sans-cdi-solutions-concretes-pour-cdd-interim-et-independants/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/rachat-de-credit-sans-cdi-solutions-concretes-pour-cdd-interim-et-independants/",
+      "text": "Rachat de crédit sans CDI : solutions concrètes pour CDD, intérim et indépendant"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/comment-choisir-une-assurance-sante-complementaire/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/comment-choisir-une-assurance-sante-complementaire/",
+      "text": "Comment choisir une assurance santé complémentaire"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/a-quoi-sert-une-assurance-sante-complementaire/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/a-quoi-sert-une-assurance-sante-complementaire/",
+      "text": "À quoi sert une assurance santé complémentaire"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/rafraichisseur-adiabatique-guide-dachat-et-dinstallation-pour-un-confort-optimal/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/rafraichisseur-adiabatique-guide-dachat-et-dinstallation-pour-un-confort-optimal/",
+      "text": "Rafraîchisseur adiabatique : guide d’achat et d’installation pour un confort opt"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/rafraichissement-adiabatique-principe-de-fonctionnement-et-avantages-pour-vos-espaces/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/rafraichissement-adiabatique-principe-de-fonctionnement-et-avantages-pour-vos-espaces/",
+      "text": "Rafraichissement adiabatique : principe de fonctionnement et avantages pour vos "
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/previsions-taux-immobilier-2026-tendances-et-perspectives-selon-meilleurtauxcom/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/previsions-taux-immobilier-2026-tendances-et-perspectives-selon-meilleurtauxcom/",
+      "text": "Prévisions taux immobilier 2026 : tendances et perspectives selon meilleurtauxco"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/barometre-des-taux-immobiliers-meilleurtauxcom-les-taux-actuels-et-tendances-du-marche/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/barometre-des-taux-immobiliers-meilleurtauxcom-les-taux-actuels-et-tendances-du-marche/",
+      "text": "Baromètre des taux immobiliers meilleurtauxcom : les taux actuels et tendances d"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/meilleure-assurance-pour-association-loi-1901-comparatif-et-conseils-pour-bien-choisir/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/meilleure-assurance-pour-association-loi-1901-comparatif-et-conseils-pour-bien-choisir/",
+      "text": "Meilleure assurance pour association loi 1901 : comparatif et conseils pour bien"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/prix-assurance-trottinette-electrique-obligatoire-comparatif-2026-des-tarifs-reels/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/prix-assurance-trottinette-electrique-obligatoire-comparatif-2026-des-tarifs-reels/",
+      "text": "Prix assurance trottinette électrique obligatoire : comparatif 2026 des tarifs r"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/alternative-assurance-vie-les-meilleures-solutions-dinvestissement-en-2026/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/alternative-assurance-vie-les-meilleures-solutions-dinvestissement-en-2026/",
+      "text": "Alternative assurance vie : les meilleures solutions d’investissement en 2026"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/bien-choisir-son-cabinet-dexpertise-comptable-en-2026/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/bien-choisir-son-cabinet-dexpertise-comptable-en-2026/",
+      "text": "Bien choisir son cabinet d’expertise comptable en 2026"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/sms-marketing-pour-organisateurs-devenements-strategies-et-exemples-pratiques/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/sms-marketing-pour-organisateurs-devenements-strategies-et-exemples-pratiques/",
+      "text": "SMS marketing pour organisateurs d’événements : stratégies et exemples pratiques"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/page/2/",
+      "text": "2"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/page/2/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/prevoyance-pour-independants-guide-complet-pour-securiser-vos-revenus/",
+      "text": "Prévoyance pour indépendants : guide complet pour sécuriser vos revenus"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/capacite-demprunt-calcul-precis-et-conseils-pour-votre-projet-immobilier/",
+      "text": "Capacité d’emprunt : calcul précis et conseils pour votre projet immobilier"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/mutuelle-senior-paris-2-comment-bien-comparer-les-offres-en-2026/",
+      "text": "Mutuelle senior Paris 2 : comment bien comparer les offres en 2026"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/assurance-sante-senior-paris-2-guide-complet-pour-bien-choisir-sa-mutuelle/",
+      "text": "Assurance santé senior Paris 2 : guide complet pour bien choisir sa mutuelle"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/visites-vignobles-aix-en-provence-les-meilleurs-domaines-a-decouvrir/",
+      "text": "Visites vignobles aix en provence : les meilleurs domaines à découvrir"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/",
+      "text": ""
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/",
+      "text": "L'avenir en commun"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/mentions-legales/",
+      "text": "Mentions Légales"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/nous-contacter/",
+      "text": "Contacts"
+    },
+    {
+      "href": "https://www.lafaqdelavenirencommun.com/#",
+      "text": ""
+    }
+  ],
+  "share": [],
+  "forms": [
+    {
+      "action": "https://www.lafaqdelavenirencommun.com/",
+      "method": "get",
+      "inputs": [
+        {
+          "type": "search",
+          "name": "s",
+          "placeholder": "Rechercher…",
+          "required": false
+        },
+        {
+          "type": "submit",
+          "name": "",
+          "placeholder": "",
+          "required": false
+        }
+      ]
+    },
+    {
+      "action": "https://www.lafaqdelavenirencommun.com/",
+      "method": "get",
+      "inputs": [
+        {
+          "type": "search",
+          "name": "s",
+          "placeholder": "Rechercher…",
+          "required": false
+        },
+        {
+          "type": "submit",
+          "name": "",
+          "placeholder": "",
+          "required": false
+        }
+      ]
+    }
+  ],
+  "headings": [
+    {
+      "tag": "H1",
+      "text": "L'avenir en commun"
+    },
+    {
+      "tag": "H2",
+      "text": "Configurer la permutation de la colonne latérale"
+    },
+    {
+      "tag": "H2",
+      "text": "Pagination des publications"
+    },
+    {
+      "tag": "H2",
+      "text": "Articles récents"
+    }
+  ],
+  "jsonld": [
+    "\n\t\t\t{\"@context\":\"https:\\/\\/schema.org\",\"@graph\":[{\"@type\":\"BreadcrumbList\",\"@id\":\"https:\\/\\/www.lafaqdelavenirencommun.com\\/#breadcrumblist\",\"itemListElement\":[{\"@type\":\"ListItem\",\"@id\":\"https:\\/\\/www.lafaqdelavenirencommun.com#listItem\",\"position\":1,\"name\":\"Domicile\",\"item\":\"https:\\/\\/www.lafaqdelavenirencommun.com\",\"nextItem\":{\"@type\":\"ListItem\",\"@id\":\"https:\\/\\/www.lafaqdelavenirencommun.com\\/category\\/societe-et-communaute\\/#listItem\",\"name\":\"Soci\\u00e9t\\u00e9 et Communaut\\u00e9\"}},{\"@type\":\"ListItem\",\"@id\":\"https:\\/\\/www.lafaqdelavenirencommun.com\\/category\\/societe-et-communaute\\/#listItem\",\"position\":2,\"name\":\"Soci\\u00e9t\\u00e9 et Communaut\\u00e9\",\"item\":\"https:\\/\\/www.lafaqdelavenirencommun.com\\/category\\/societe-et-communaute\\/\",\"nextItem\":{\"@type\":\"ListItem\",\"@id\":\"https:\\/\\/www.lafaqdelavenirencommun.com\\/prevoyance-pour-independants-guide-complet-pour-securiser-vos-revenus\\/#listItem\",\"name\":\"Pr\\u00e9voyance pour ind\\u00e9pendants : guide complet pour s\\u00e9curiser vos revenus\"},\"previousItem\":{\"@type\":\"ListItem\",\"@id\":\"https:\\/\\/www.lafaqdelavenirencommun.com#listItem\",\"name\":\"Domicile\"}},{\"@type\":\"ListItem\",\"@id\":\"https:\\/\\/www.lafaqdelavenirencommun.com\\/prevoyance-pour-independants-guide-complet-pour-securiser-vos-revenus\\/#listItem\",\"position\":3,\"name\":\"Pr\\u00e9voyance pour ind\\u00e9pendants : guide complet pour s\\u00e9curiser vos revenus\",\"previousItem\":{\"@type\":\"ListItem\",\"@id\":\"https:\\/\\/www.lafaqdelavenirencommun.com\\/category\\/societe-et-communaute\\/#listItem\",\"name\":\"Soci\\u00e9t\\u00e9 et Communaut\\u00e9\"}}]},{\"@type\":\"CollectionPage\",\"@id\":\"https:\\/\\/www.lafaqdelavenirencommun.com\\/#collectionpage\",\"url\":\"https:\\/\\/www.lafaqdelavenirencommun.com\\/\",\"name\":\"L'avenir en commun - Ensemble, construisons demain.\",\"description\":\"Ensemble, construisons demain.\",\"inLanguage\":\"fr-FR\",\"isPartOf\":{\"@id\":\"https:\\/\\/www.lafaqdelavenirencommun.com\\/#website\"},\"breadcrumb\":{\"@id\":\"https:\\/\\/www.lafaqdelavenirencommun.com\\/#breadcrumblist\"},\"about\":{\"@id\":\"h"
+  ],
+  "textLen": 4202,
+  "wordsFirst": "Passer au contenu Configurer la permutation de la colonne latérale This is an example widget to show how the Header Toggle Sidebar looks by default. You can add custom widgets from the widgets in the admin. Prévoyance pour indépendants : guide complet pour sécuriser vos revenus Travailler en solo apporte une liberté rare, mais laisse face aux imprévus sans le filet... Capacité d’emprunt : calcul précis et conseils pour votre projet immobilier La capacité d’emprunt représente le montant maximum qu’une banque accepte de vous prêter pour un... Mutuelle senior Paris 2 : comment bien comparer les offres en 2026 Les seniors du 2e arrondissement de Paris cherchent souvent la mutuelle senior Paris 2 qui... Assurance santé senior Paris 2 : guide complet pour bien choisir sa mutuelle Les seniors du 2e arrondissement de Paris ont des besoins particuliers en matière de couverture... Visites vignobles aix en provence : les meilleurs domaines à découvrir Après avoir suivi un cours oenologie aix en provence, rien ne vaut une immersion directe... Cours oenologie aix en provence : guide complet pour choisir sa formation La ville d’Aix-en-Provence attire les amateurs de vin grâce à son emplacement au cœur des... Rachat de crédit CDD : comment obtenir un accord avec un dossier solide Les salariés en contrat à durée déterminée cherchent souvent à regrouper leurs emprunts pour faire... Rachat de crédit sans CDI : solutions concrètes pour CDD, intérim et indépendants De nombreux salariés en contra",
+  "localStorage": {},
+  "buttons": [
+    "Rechercher",
+    "Rechercher"
+  ],
+  "ids": [],
+  "hints": {
+    "navigatorShare": false,
+    "serviceWorker": false,
+    "fetchUrls": [
+      "https://i.ytimg.com/vi/ID/hqdefault.jpg"
+    ],
+    "apiWords": [
+      "sessionStorage"
+    ]
+  },
+  "swRegistered": []
+}

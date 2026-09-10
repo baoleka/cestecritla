@@ -1,0 +1,288 @@
+{
+  "url": "https://cachangequoi.fr/",
+  "finalUrl": "https://cachangequoi.fr/",
+  "status": 200,
+  "loadMs": 2933,
+  "responseHeaders": {
+    "accept-ranges": "bytes",
+    "content-encoding": "gzip",
+    "content-type": "text/html",
+    "date": "Mon, 07 Sep 2026 16:15:25 GMT",
+    "permissions-policy": "geolocation=(), microphone=(), camera=(), payment=()",
+    "referrer-policy": "no-referrer",
+    "server": "Apache",
+    "strict-transport-security": "max-age=31536000; includeSubDomains",
+    "vary": "Accept-Encoding",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY"
+  },
+  "hosts": {
+    "cachangequoi.fr": 3
+  },
+  "requestsCount": 3,
+  "responses": [],
+  "cookies": [],
+  "title": "Ça change quoi ? Simulateur citoyen du programme l'Avenir en commun (LFI) pour 2027",
+  "lang": "fr",
+  "meta": {
+    "viewport": "width=device-width, initial-scale=1",
+    "referrer": "no-referrer",
+    "description": "Calculez en deux minutes l'impact du programme l'Avenir en commun (La France insoumise, Jean-Luc Mélenchon) sur votre budget : SMIC à 1700 €, retraite à 60 ans, gratuité scolaire, transports, énergie, santé. Simulateur citoyen indépendant, sourcé et gratuit pour la présidentielle 2027.",
+    "author": "Site indépendant et citoyen, non officiel",
+    "robots": "index,follow,max-image-preview:large",
+    "theme-color": "#330068",
+    "format-detection": "telephone=no",
+    "og:type": "website",
+    "og:locale": "fr_FR",
+    "og:site_name": "Ça change quoi ?",
+    "og:title": "Ça change quoi pour vous ? Simulateur du programme l'Avenir en commun (LFI) 2027",
+    "og:description": "Calculez en deux minutes l'impact du programme l'Avenir en commun sur votre budget. SMIC à 1700 €, retraite à 60 ans, gratuité scolaire, transports, énergie, santé. Simulateur citoyen, indépendant et sourcé.",
+    "og:url": "https://cachangequoi.fr/",
+    "og:image": "https://cachangequoi.fr/og-image.png",
+    "og:image:width": "1200",
+    "og:image:height": "630",
+    "og:image:alt": "Ça change quoi pour vous ? Simulateur citoyen du programme l'Avenir en commun de La France insoumise.",
+    "twitter:card": "summary_large_image",
+    "twitter:title": "Ça change quoi pour vous ? Simulateur LFI 2027",
+    "twitter:description": "Calculez l'impact du programme l'Avenir en commun sur votre budget. SMIC, retraite, école, transports, énergie, santé. Simulateur citoyen et sourcé.",
+    "twitter:image": "https://cachangequoi.fr/og-image.png",
+    "twitter:image:alt": "Simulateur Ça change quoi : programme l'Avenir en commun de La France insoumise."
+  },
+  "links": {
+    "icon": [
+      "favicon-48.png",
+      "favicon-32.png",
+      "favicon-16.png",
+      "favicon.ico"
+    ],
+    "apple-touch-icon": [
+      "apple-touch-icon.png"
+    ],
+    "manifest": [
+      "site.webmanifest"
+    ],
+    "canonical": [
+      "https://cachangequoi.fr/"
+    ]
+  },
+  "scripts": [
+    "https://cachangequoi.fr/Matomo/matomo/matomo.js"
+  ],
+  "anchorsCount": 31,
+  "anchors": [
+    {
+      "href": "https://cachangequoi.fr/#contenu",
+      "text": "Aller au contenu"
+    },
+    {
+      "href": "https://cachangequoi.fr/parlementaires",
+      "text": "Nos parlementaires LFI\n→"
+    },
+    {
+      "href": "https://inscription-auth.elections.interieur.gouv.fr/login",
+      "text": "🗳️ M’inscrire sur les listes électorales"
+    },
+    {
+      "href": "https://melenchon2027.fr/",
+      "text": "🖋️\nParrainer la candidature\n\nLes élu·es peuvent accorder leur parrainage pour p"
+    },
+    {
+      "href": "https://actionpopulaire.fr/",
+      "text": "🤝\nRejoindre un groupe d'action\n\nDes milliers de groupes locaux et thématiques a"
+    },
+    {
+      "href": "https://cachangequoi.fr/#haut",
+      "text": "📣\nPartager ce résultat\n\nRemontez en haut de page, faites votre calcul et partag"
+    },
+    {
+      "href": "https://melenchon2027.fr/programme2025/livre/",
+      "text": "📖\nConnaître le programme\n\nLisez les mesures exactes, livret par livret, pour ré"
+    },
+    {
+      "href": "https://actionpopulaire.fr/",
+      "text": "🤝 Rejoindre un groupe d'action"
+    },
+    {
+      "href": "https://melenchon2027.fr/",
+      "text": "🖋️ Soutenir et parrainer la candidature"
+    },
+    {
+      "href": "https://melenchon.fr/2026/06/07/meeting-de-jean-luc-melenchon-a-saint-denis/",
+      "text": "Source : discours de Saint-Denis, 7 juin 2026"
+    },
+    {
+      "href": "https://melenchon2027.fr/programme2025/livre/chapitre6/s5",
+      "text": "Source : programme, chapitre 6"
+    },
+    {
+      "href": "https://melenchon.fr/2026/06/07/meeting-de-jean-luc-melenchon-a-saint-denis/",
+      "text": "Source : discours de Saint-Denis, 7 juin 2026"
+    },
+    {
+      "href": "https://melenchon2027.fr/programme2025/livre/chapitre12",
+      "text": "Source : programme, chapitre 12"
+    },
+    {
+      "href": "https://programme.lafranceinsoumise.fr/",
+      "text": "programme.lafranceinsoumise.fr"
+    },
+    {
+      "href": "https://materiel.actionpopulaire.fr/wp-content/uploads/2023/08/BROCHURE-LFI-WEB.pdf",
+      "text": "La France insoumise\nMouvement politique"
+    },
+    {
+      "href": "https://melenchon2027.fr/programme2025/livre/",
+      "text": "📚\nLire le programme en ligne\nTous les livrets thématiques, mesure par mesure"
+    },
+    {
+      "href": "https://www.amazon.fr/s?k=avenir+en+commun+programme",
+      "text": "🛒\nAcheter le livre\nL'Avenir en commun en version papier"
+    },
+    {
+      "href": "https://actionpopulaire.fr/groupes-thematiques/",
+      "text": "🧩\nGroupes thématiques d'action\nS'impliquer selon vos centres d'intérêt"
+    },
+    {
+      "href": "https://actionpopulaire.fr/dons/",
+      "text": "❤️ Faire un don pour la campagne →"
+    },
+    {
+      "href": "https://apps.apple.com/fr/app/action-populaire/id1559737444",
+      "text": "TÉLÉCHARGER SUR\nApp Store"
+    },
+    {
+      "href": "https://play.google.com/store/apps/details?id=fr.actionpopulaire.twa",
+      "text": "DISPONIBLE SUR\nGoogle Play"
+    },
+    {
+      "href": "https://whatsapp.com/channel/0029VaF8ghIFsn0hWYzCAy37",
+      "text": "WhatsApp"
+    },
+    {
+      "href": "https://t.me/JLMelenchon",
+      "text": "Telegram"
+    },
+    {
+      "href": "https://www.twitch.tv/jlmelenchon",
+      "text": "Twitch"
+    },
+    {
+      "href": "https://www.youtube.com/@JLMelenchon",
+      "text": "YouTube"
+    },
+    {
+      "href": "https://www.instagram.com/jlmelenchon/",
+      "text": "Instagram"
+    },
+    {
+      "href": "https://www.tiktok.com/@jlmelenchon",
+      "text": "TikTok"
+    },
+    {
+      "href": "https://x.com/jlmelenchon",
+      "text": "X (Twitter)"
+    },
+    {
+      "href": "https://www.facebook.com/JLMelenchon",
+      "text": "Facebook"
+    },
+    {
+      "href": "https://www.threads.com/@jlmelenchon",
+      "text": "Threads"
+    },
+    {
+      "href": "https://bsky.app/profile/jlmelenchon.bsky.social",
+      "text": "Bluesky"
+    }
+  ],
+  "share": [
+    {
+      "href": "https://whatsapp.com/channel/0029VaF8ghIFsn0hWYzCAy37",
+      "text": "WhatsApp"
+    },
+    {
+      "href": "https://t.me/JLMelenchon",
+      "text": "Telegram"
+    }
+  ],
+  "forms": [],
+  "headings": [
+    {
+      "tag": "H1",
+      "text": "ÇA CHANGE QUOI,\nPOUR VOUS ?"
+    },
+    {
+      "tag": "H2",
+      "text": "Votre situationi"
+    },
+    {
+      "tag": "H3",
+      "text": "Ce gain vous parle ? Passez à l'action"
+    },
+    {
+      "tag": "H3",
+      "text": "Et après ? Les premiers mois, selon le programme lui-même"
+    },
+    {
+      "tag": "H3",
+      "text": "Ce que ce simulateur dit, et ce qu'il ne dit pas"
+    },
+    {
+      "tag": "H3",
+      "text": "Découvrir le programme et ses sources"
+    },
+    {
+      "tag": "H3",
+      "text": "Faites un don pour la campagne"
+    },
+    {
+      "tag": "H3",
+      "text": "Installer Action Populaire"
+    },
+    {
+      "tag": "H3",
+      "text": "Suivre Jean-Luc Mélenchon"
+    }
+  ],
+  "jsonld": [
+    "\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"WebApplication\",\n  \"name\": \"Ça change quoi ?\",\n  \"alternateName\": \"cachangequoi.fr\",\n  \"url\": \"https://cachangequoi.fr/\",\n  \"description\": \"Simulateur citoyen qui calcule, mesure par mesure et source à l'appui, l'impact du programme l'Avenir en commun de La France insoumise sur votre budget.\",\n  \"inLanguage\": \"fr-FR\",\n  \"isAccessibleForFree\": true,\n  \"applicationCategory\": \"FinanceApplication\",\n  \"operatingSystem\": \"Any\",\n  \"offers\": {\"@type\": \"Offer\", \"price\": \"0\", \"priceCurrency\": \"EUR\"},\n  \"about\": [\n    {\"@type\": \"Thing\", \"name\": \"L'Avenir en commun\"},\n    {\"@type\": \"Organization\", \"name\": \"La France insoumise\"},\n    {\"@type\": \"Person\", \"name\": \"Jean-Luc Mélenchon\"},\n    {\"@type\": \"Event\", \"name\": \"Élection présidentielle française de 2027\"}\n  ],\n  \"keywords\": \"simulateur, budget, SMIC 1700, retraite 60 ans, programme LFI, l'Avenir en commun, Mélenchon, présidentielle 2027, gratuité scolaire, transports gratuits, énergie, sécurité sociale\"\n}\n"
+  ],
+  "textLen": 6372,
+  "wordsFirst": "Aller au contenu Site 100 % français, hébergé en France 🌱 Serveurs alimentés à 100 % en énergie renouvelable Outil citoyen non officiel 🌙 Mode nuit Nos parlementaires LFI → SIMULATEUR CITOYEN ET INDÉPENDANT ÇA CHANGE QUOI, POUR VOUS ? Renseignez votre situation et voyez, mesure par mesure et source à l'appui, l'effet du programme l'Avenir en commun sur votre budget. Rien de ce que vous saisissez ne quitte votre navigateur. Votre situationi Montants mensuels nets. Tous les champs sont facultatifs. Version express Version détaillée Votre statut principal Salarié du privé Fonctionnaire, agent public Indépendant, auto-entrepreneur Apprenti, alternant Stagiaire Étudiant Demandeur d'emploi indemnisé Au RSA, sans allocation chômage Retraité En situation de handicap, sans emploi Sans activité, au foyer Choisissez votre activité principale. L'AAH et l'AEEH se cochent plus bas, quel que soit votre statut, et se cumulent avec un salaire. Situation du foyer Personne seule En couple Votre âge (pour la gratuité des transports des jeunes) Votre revenu d'activité ou pension (salaire net, à vous seul) Personnes dans le logement (vous compris) Enfants scolarisés Je perçois l'AAH (allocation adulte handicapé, environ 1 042 €, cumulable avec un salaire) J'ai un enfant en situation de handicap (je perçois l'AEEH) Choisissez votre statut, puis indiquez votre revenu : entrez 0 si vous n'avez aucune ressource. Si vous êtes sans emploi, au RSA, au foyer ou retraité, la garantie d'autonomie s'affich",
+  "localStorage": {},
+  "buttons": [
+    "🌙\nMode nuit",
+    "i",
+    "Version express",
+    "Version détaillée",
+    "Précédent",
+    "Suivant"
+  ],
+  "ids": [],
+  "hints": {
+    "navigatorShare": true,
+    "serviceWorker": false,
+    "fetchUrls": [
+      "https://schema.org",
+      "https://cachangequoi.fr/",
+      "https://programme.lafranceinsoumise.fr/",
+      "https://melenchon.fr/2026/06/07/meeting-de-jean-luc-melenchon-a-saint-denis/",
+      "https://melenchon2027.fr/programme2025/livre/chapitre6/s5",
+      "https://melenchon2027.fr/programme2025/livre/chapitre7",
+      "https://melenchon2027.fr/programme2025/livre/chapitre13",
+      "https://www.assemblee-nationale.fr/dyn/16/textes/l16b0325_proposition-loi",
+      "https://www.apur.org/fr",
+      "https://cachangequoi.fr",
+      "https://lafranceinsoumise.fr/2025/11/05/niche-2025-suppression-de-la-csg-pour-les-apprentis/",
+      "https://www.institutmontaigne.org/legislatives-2024/nouveau-front-populaire/revaloriser-les-apl-de-10/",
+      "https://wa.me/?text="
+    ],
+    "apiWords": [
+      "localStorage",
+      "Matomo",
+      "matomo",
+      "fetch("
+    ]
+  },
+  "swRegistered": []
+}

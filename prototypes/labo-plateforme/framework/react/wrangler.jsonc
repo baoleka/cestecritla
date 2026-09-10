@@ -1,0 +1,15 @@
+{
+  // T7 lab, variant 1 (React 19 + Vite 6 + Tailwind v4): assets-only Worker on the Free plan.
+  // No `main`: every request is served by Static Assets (free, unmetered), nothing runs on the CPU limit.
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "aec-lab-fw-react",
+  "compatibility_date": "2026-09-09",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "none"
+  },
+  // D0.22: no invocation logs (nothing to log here anyway: assets-only).
+  "observability": { "enabled": false }
+}

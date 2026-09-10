@@ -1,0 +1,13 @@
+HTTP/2 200 
+date: Mon, 07 Sep 2026 15:08:31 GMT
+content-type: text/plain
+accept-ranges: bytes
+x-orig-rid: 0eec5204576ef55eaf32948110e31536
+x-anubis-action: 
+x-anubis-rule: 
+x-anubis-status: 
+edge-cache-engine-mode: INACTIVE
+cache-control: no-store
+alt-svc: h3=":443"
+x-request-id: 0eec5204576ef55eaf32948110e31536
+

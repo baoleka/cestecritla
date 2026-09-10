@@ -1,0 +1,150 @@
+/* C'est écrit là — design tokens as CSS custom properties.
+   Source: design/tokens.json v0 (D3.1, D3.2, D3.4) + the v0.2 corrections of
+   docs/discovery/05-direction-artistique.md §9 (label 12 px minimum, rem sizes,
+   dark 3D shadow = Violet 200). Contrast pairs: design/contrast-matrix.md.
+   Light roles live on :root; dark roles are redefined under prefers-color-scheme (D0.23). */
+
+:root {
+  color-scheme: light dark;
+
+  /* ---- Palette (raw, never used directly by components) ---- */
+  --violet: #4c0297;
+  --rouge: #d1271c;
+  --creme: #fffcf4;
+  --charbon: #212320;
+  --violet-100: #fdedff;
+  --violet-200: #e5cbff;
+  --corail-200: #ffd2cf;
+  --vif-violet: #7b13d6;
+  --vif-rouge: #f91616;
+  --vif-bleu: #3885f4;
+  --vif-rose: #ed5fb1;
+  --vif-jaune: #f9c900;
+  --vif-vert: #2e9959;
+  --charbon-elevated: #2c2e2b; /* bg-elevated / verbatim-bg in the dark theme (13,36:1 with Crème) */
+  --charbon-warn: #3a2a28; /* warn-bg in the dark theme (13,29:1 with Crème) */
+
+  /* ---- Colour roles, light (tokens.json color-role.light) ---- */
+  --bg: var(--creme);
+  --bg-elevated: var(--violet-100);
+  --text: var(--charbon);
+  --text-muted: var(--charbon);
+  --brand: var(--violet);
+  --brand-on: var(--creme);
+  --action: var(--rouge);
+  --action-on: var(--creme);
+  --verbatim-bg: var(--violet-100);
+  --verbatim-rule: var(--violet);
+  --shadow-3d: var(--violet-200);
+  --warn-bg: var(--corail-200);
+  --warn-text: var(--charbon);
+  --focus: var(--violet);
+  --rule: var(--violet-200); /* decorative separator, carries no information */
+  --rule-strong: var(--violet); /* structural rule */
+  --mark-bg: var(--violet-200); /* search highlight: Charbon on Violet 200 = 10,80 */
+  --mark-text: var(--charbon);
+  --track: var(--violet-200); /* flat gauge track */
+  --fill: var(--violet); /* flat gauge fill */
+
+  /* Code colour of the four parts: flat squares and titles >= 24 px only, never body text (D3.4).
+     The square is decorative; the part name next to it carries the information. */
+  --part1: var(--vif-violet);
+  --part2: var(--vif-rose);
+  --part3: var(--vif-vert);
+  --part4: var(--vif-bleu);
+
+  /* Mascot (D3.11: Marcheuse, gauge only), illustration-rules.md §2.3 */
+  --mascot-line: var(--violet);
+  --mascot-shell: var(--violet-200);
+  --mascot-body: var(--creme);
+  --mascot-eye: var(--charbon);
+
+  /* ---- Typography ---- */
+  --font-ui: 'Public Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-verbatim: 'Gowun Batang', 'Iowan Old Style', Georgia, serif;
+  --size-display: 2.125rem; /* 34 px, line-height .95, weight 900, capitals */
+  --size-display-xl: 2.5rem; /* 40 px, link-arrival and direct home only */
+  --size-h1: 1.75rem; /* 28 px */
+  --size-h2: 1.375rem; /* 22 px */
+  --size-h3: 1.125rem; /* 18 px */
+  --size-body: 1rem; /* 16 px */
+  --size-lead: 1.125rem; /* 18 px */
+  --size-verbatim: 1.0625rem; /* 17 px; 18 px / 1.6 from 400 px (see base.css) */
+  --size-small: 0.875rem; /* 14 px */
+  --size-label: 0.75rem; /* 12 px minimum (correction 13; was 11) */
+  --lh-display: 0.95;
+  --lh-body: 1.55;
+  --lh-verbatim: 1.55;
+  --weight-regular: 400;
+  --weight-bold: 700;
+  --weight-black: 900;
+
+  /* ---- Space, radius, shadow ---- */
+  --s1: 0.25rem;
+  --s2: 0.5rem;
+  --s3: 0.75rem;
+  --s4: 1rem;
+  --s5: 1.25rem;
+  --s6: 1.5rem;
+  --s8: 2rem;
+  --s10: 2.5rem;
+  --s12: 3rem;
+  --r-s: 4px;
+  --r-m: 8px;
+  --r-l: 14px;
+  --r-pill: 999px;
+  --shadow-block-3d: 6px 6px 0 var(--shadow-3d); /* one element per screen (rule 4) */
+
+  /* ---- Motion (P7: nothing above 320 ms, transform/opacity only) ---- */
+  --d-fast: 120ms;
+  --d-base: 200ms;
+  --d-slow: 320ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-enter: cubic-bezier(0, 0, 0.2, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  /* ---- Tap targets (WCAG 2.5.8) ---- */
+  --tap-min: 24px;
+  --tap-comfortable: 44px;
+
+  /* ---- Layout ---- */
+  --page-max: 480px;
+  --page-pad: 20px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: var(--charbon);
+    --bg-elevated: var(--charbon-elevated);
+    --text: var(--creme);
+    --text-muted: var(--creme);
+    --brand: var(--violet-200); /* Violet on Charbon = 1,33, forbidden (D3.4) */
+    --brand-on: var(--charbon);
+    --action: var(--vif-jaune); /* Charbon on Vif jaune = 10,09 */
+    --action-on: var(--charbon);
+    --verbatim-bg: var(--charbon-elevated);
+    --verbatim-rule: var(--violet-200);
+    --shadow-3d: var(--violet-200); /* correction 15: Violet is invisible on Charbon */
+    --warn-bg: var(--charbon-warn);
+    --warn-text: var(--creme);
+    --focus: var(--vif-jaune);
+    --rule: color-mix(in srgb, var(--violet-200) 40%, var(--charbon)); /* decorative only */
+    --rule-strong: var(--violet-200);
+    --mark-bg: var(--violet); /* Crème on Violet = 11,62 */
+    --mark-text: var(--creme);
+    --track: var(--charbon-elevated);
+    --fill: var(--violet-200);
+    --mascot-line: var(--violet-200);
+    --mascot-shell: var(--violet);
+    --mascot-body: var(--charbon);
+    --mascot-eye: var(--creme);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --d-fast: 0ms;
+    --d-base: 0ms;
+    --d-slow: 0ms;
+  }
+}

@@ -1,0 +1,178 @@
+/*
+ * Base styles. Every rule here answers a measured failure from the 9/9 prototype audit
+ * (13-tests-humains.md §3.11, design/perf-budget.md §2) — none is a preference.
+ */
+
+/* P8: self-hosted latin subsets, woff2, zero third-party request. The italic is deliberately
+   NOT shipped: the wordmark is straight capitals (§19.3 default 1) and D3.2 forbids italic in
+   the verbatim, so the 31 116 o italic file has no user. That alone takes the delivered fonts
+   from 99 744 o to 68 628 o, under the 75 KB budget, with no subsetting. */
+@font-face {
+  font-family: 'Public Sans';
+  src: url('/fonts/PublicSans-Variable-latin.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  /* P4: fallback metrics, so swapping the face does not move the page (perf-budget §1.4). */
+  size-adjust: 100%;
+  ascent-override: 95%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Gowun Batang';
+  src: url('/fonts/GowunBatang-Regular-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Gowun Batang';
+  src: url('/fonts/GowunBatang-Bold-latin.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* A2: everything in rem so the system font size is honoured. */
+  font-size: 100%;
+  /* 2.4.11: an anchored heading is never hidden under a sticky header. */
+  scroll-padding-block-start: var(--space-6);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-family-ui);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  /* Correction 11: "L'immigrati/on" was split without a hyphen. hyphens needs lang on <html>. */
+  hyphens: auto;
+  /* Correction 11 / 1.4.10: a long unbroken token must wrap rather than force a scrollbar. */
+  overflow-wrap: anywhere;
+}
+
+/* 1.4.12: never a fixed height on a block of text — it clips at 130 % system font. */
+main {
+  display: block;
+  max-width: 42rem;
+  margin-inline: auto;
+  padding: var(--space-4);
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  line-height: var(--line-height-h1);
+  font-weight: var(--font-weight-black, 900);
+  margin-block: 0 var(--space-4);
+}
+h2 {
+  font-size: var(--font-size-h2);
+  line-height: var(--line-height-h2);
+  margin-block: var(--space-6) var(--space-2);
+}
+
+/* 2.4.11 + 1.4.11: a focus ring that is visible on both grounds and never clipped. */
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+a {
+  color: var(--action);
+}
+
+/* Correction 10: the audit measured tap targets at 16 to 34 px. 44 px is the floor for any
+   primary gesture; 24 px is the WCAG 2.2 AA minimum for the rest. */
+.cta,
+button,
+[role='button'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--tap-comfortable);
+  min-inline-size: var(--tap-comfortable);
+  padding-inline: var(--space-4);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--action);
+  color: var(--action-on);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Correction 12: no rendered text below 12 px, no exception. */
+.label,
+.ref,
+small {
+  font-size: var(--font-size-min);
+}
+
+.label {
+  font-size: var(--font-size-label);
+  line-height: var(--line-height-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+/* D3.2/D3.10: the programme's own words, and only those, in Gowun Batang on the elevated
+   surface, behind a violet rule, under an explicit "Texte du programme" label. Never italic:
+   the face has no italic and a synthetic one is on the ban list. */
+.verbatim {
+  font-family: var(--font-family-verbatim);
+  font-size: var(--font-size-verbatim);
+  line-height: var(--line-height-verbatim);
+  font-style: normal;
+  background: var(--verbatim-bg);
+  border-inline-start: 4px solid var(--verbatim-rule);
+  padding: var(--space-4);
+  margin-block: var(--space-4);
+  border-radius: 0 var(--radius-s) var(--radius-s) 0;
+}
+@media (min-width: 25em) {
+  .verbatim {
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+}
+
+/*
+ * The scope label. This is the whole point of scope_id: "Dans le cadre de l'Assemblée
+ * constituante" sits above the verbatim so a measure conditioned on a new constitution is
+ * never read, shared or indexed as an immediate repeal.
+ */
+.scope {
+  display: block;
+  margin-block-end: var(--space-2);
+}
+
+.source-link {
+  display: inline-block;
+  margin-block-start: var(--space-2);
+}
+
+/* D3.14: reduced motion means zero duration and no transform, not a shorter animation. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+}

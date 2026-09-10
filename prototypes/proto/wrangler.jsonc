@@ -1,0 +1,18 @@
+{
+  // Clickable prototypes (J3): one Worker with Static Assets only, no code, no binding, free plan (D0.2).
+  // Custom domain proto.cestecritla.fr (zone cestecritla.fr, D10.2) + workers.dev kept for the testers' links.
+  // Deploy from this folder with Node 24 (nvm): npx wrangler deploy
+  "$schema": "../spike-share/node_modules/wrangler/config-schema.json",
+  "name": "aec-proto",
+  "compatibility_date": "2026-09-07",
+  "routes": [{ "pattern": "proto.cestecritla.fr", "custom_domain": true }],
+  "workers_dev": true,
+  "assets": {
+    "directory": "./",
+    // /section -> /section/ (index.html of the module), /section/?id=… served as is.
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  // No invocation logs: nothing about visitors is kept (D0.22).
+  "observability": { "enabled": false, "logs": { "invocation_logs": false } }
+}

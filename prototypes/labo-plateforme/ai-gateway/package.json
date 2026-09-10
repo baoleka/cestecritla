@@ -1,0 +1,26 @@
+{
+  "name": "aec-lab-aig",
+  "version": "0.0.1",
+  "private": true,
+  "description": "T7 lab: AI Gateway cache (HIT vs neurons), collectLog: false, request normalization — Worker aec-lab-aig",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "delete": "wrangler delete",
+    "typecheck": "tsc --noEmit",
+    "types": "wrangler types",
+    "neurons": "tsx scripts/neurons.ts",
+    "gateway-analytics": "tsx scripts/gateway-analytics.ts"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260908.1",
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.130.0"
+  }
+}

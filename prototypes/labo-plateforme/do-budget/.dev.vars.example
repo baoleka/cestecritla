@@ -1,0 +1,2 @@
+# Copy to .dev.vars for `wrangler dev`. In production: `npx wrangler secret put RL_SALT_SECRET < file`.
+RL_SALT_SECRET=local-dev-only-not-a-secret

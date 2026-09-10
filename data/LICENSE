@@ -1,0 +1,33 @@
+Licence des données du dossier data/
+====================================
+
+Les textes contenus dans les fichiers de ce dossier (data/aec-2025.json, data/hashes.json,
+data/expected-invariants.json, data/badge.json, data/stat-cards.json, data/terms-candidates.json,
+data/section-tags.json, et à venir glossary.json, faq.json, riposte.json) sont extraits mot pour
+mot du livre « L'Avenir en commun, édition 2025 », publié par La France insoumise à l'adresse :
+
+    https://melenchon2027.fr/programme2025/livre/
+
+Licence : Creative Commons Attribution – Pas d'Utilisation Commerciale – Partage dans les
+Mêmes Conditions 4.0 International (CC BY-NC-SA 4.0)
+https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr
+
+Attribution : « La France insoumise – L'Avenir en commun »
+
+Les fichiers de ce dossier sont des œuvres dérivées (extraction structurée, identifiants,
+empreintes SHA-256, métadonnées de comptage) et sont diffusés sous la même licence
+CC BY-NC-SA 4.0, avec la même attribution. Aucun texte n'a été réécrit, résumé ni corrigé :
+les mesures, sous-mesures, paragraphes et encadrés « À savoir » sont conservés tels qu'ils
+sont publiés sur le site source (normalisation Unicode NFC et espaces uniquement).
+
+Exceptions dans ce dossier : data/livrets-2022.json et data/falc-2022.json reprennent des pages
+de melenchon2027.fr (édition 2022, même licence CC BY-NC-SA 4.0, même attribution) ;
+data/desintox.json ne contient QUE des métadonnées et les titres des articles de
+desintox.lafranceinsoumise.fr, dont la licence n'est pas précisée sur le site : aucun texte
+d'article n'est reproduit ni versionné, ni à HEAD ni dans l'historique (D9.10, D13.9). L'app
+affiche le titre et le lien, jamais une phrase. Toute reproduction reste suspendue à la lecture
+de la licence du site (docs/discovery/decisions.md, D1.5 ; hypothèses H-CNF-5 et H-CNF-17b).
+
+Le code des scripts (scripts/) n'est pas couvert par ce fichier ; voir la licence MIT du dépôt.
+
+Date d'extraction : 7 septembre 2026.

@@ -1,0 +1,134 @@
+{
+  "meta": {
+    "term": "écocide",
+    "slug": "ecocide",
+    "aliases": [
+      "écocide",
+      "ecocide",
+      "tribunal international de justice climatique",
+      "traité contraignant les multinationales",
+      "justice pénale environnementale"
+    ],
+    "corpus_version": "d29c7422004ab27c",
+    "generated_by": "scripts/extract-passages.ts",
+    "rule_fr": "Seuls les passages « corpus » et « introduction_and_parts » sont le programme 2025 et peuvent être cités mot pour mot. Les passages « livrets_2022 » sont un contexte pédagogique de l'édition 2022 (chiffres périmés) : ils peuvent éclairer une définition mais jamais être présentés comme le programme. Les passages « désintox » servent à la rubrique objection, avec lien."
+  },
+  "corpus": [
+    {
+      "id": "c7-s07-m06",
+      "kind": "measure",
+      "text": "Donner les moyens d’une justice pénale environnementale efficace, punir les pollutions industrielles et appliquer strictement le principe pollueur-payeur",
+      "sectionId": "c7-s07",
+      "sectionTitle": "Une politique de justice efficace",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre7/s7/",
+      "chapterTitle": "Chapitre 7 : La force de l’entraide",
+      "chapeauId": "c7-s07-p01",
+      "chapeau": "La justice inspire de plus en plus la défiance de nos concitoyens. Elle est perçue comme trop lente, trop déconnectée de la réalité et du vécu des accusés ou des victimes au pénal, ou des parties au civil. Son indépendance est mise en cause dans les affaires politico-financières. Une réelle réforme de la justice ne pourra se faire que dans un grand rendez-vous entre le peuple et ses institutions avec la convocation d’une Assemblée constituante. En attendant, nous proposons d’ores et déjà de nomb"
+    },
+    {
+      "id": "c16-s06-k01",
+      "kind": "key_measure",
+      "text": "Reconnaître un crime d’écocide",
+      "sectionId": "c16-s06",
+      "sectionTitle": "Étendre les protections du droit international aux biens communs planétaires",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre16/s6/",
+      "chapterTitle": "Chapitre 16 : Une diplomatie altermondialiste pour la paix",
+      "chapeauId": "c16-s06-p01",
+      "chapeau": "La crise écologique ne connaît pas les frontières administratives. Ce qu’un pays rejette dans l’air sera aussi respiré par ses voisins. Ce qu’il déverse dans l’eau échouera sur la côte à l’autre bout du monde. Les responsabilités sont forcément collectives. Les entreprises criminelles et les pollueurs de masse doivent répondre de leurs actes. Il est donc temps d’élargir le droit international à l’impératif climatique et écologique."
+    },
+    {
+      "id": "c16-s06-m01",
+      "kind": "measure",
+      "text": "Soutenir la création d’un tribunal international de justice climatique et environnementale",
+      "sectionId": "c16-s06",
+      "sectionTitle": "Étendre les protections du droit international aux biens communs planétaires",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre16/s6/",
+      "chapterTitle": "Chapitre 16 : Une diplomatie altermondialiste pour la paix",
+      "chapeauId": "c16-s06-p01",
+      "chapeau": "La crise écologique ne connaît pas les frontières administratives. Ce qu’un pays rejette dans l’air sera aussi respiré par ses voisins. Ce qu’il déverse dans l’eau échouera sur la côte à l’autre bout du monde. Les responsabilités sont forcément collectives. Les entreprises criminelles et les pollueurs de masse doivent répondre de leurs actes. Il est donc temps d’élargir le droit international à l’impératif climatique et écologique."
+    },
+    {
+      "id": "c16-s06-m04",
+      "kind": "measure",
+      "text": "Soutenir activement les négociations en cours d’un traité contraignant les multinationales à respecter les droits humains et l’environnement",
+      "sectionId": "c16-s06",
+      "sectionTitle": "Étendre les protections du droit international aux biens communs planétaires",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre16/s6/",
+      "chapterTitle": "Chapitre 16 : Une diplomatie altermondialiste pour la paix",
+      "chapeauId": "c16-s06-p01",
+      "chapeau": "La crise écologique ne connaît pas les frontières administratives. Ce qu’un pays rejette dans l’air sera aussi respiré par ses voisins. Ce qu’il déverse dans l’eau échouera sur la côte à l’autre bout du monde. Les responsabilités sont forcément collectives. Les entreprises criminelles et les pollueurs de masse doivent répondre de leurs actes. Il est donc temps d’élargir le droit international à l’impératif climatique et écologique."
+    }
+  ],
+  "introduction_and_parts": [],
+  "livrets_2022": [
+    {
+      "kind": "livret 2022",
+      "title": "L’Eau, notre bien commun",
+      "url": "https://melenchon2027.fr/livrets-2022/eau-bien-commun/",
+      "date": "2024-02-01T19:17:29",
+      "windows": [
+        {
+          "excerpt": "maximum cible par mètre cube\n- Interdire les ponctions financières sur le budget des agences de l’eau\n- Instaurer une redevance pour la biodiversité afin de financer les nouvelles responsabilités des agences de l’eau\n- Imposer des pénalités financières lourdes aux entreprises se rendant coupables d’écocides\n\n### Garantir l’accès à l’eau potable et à l’assainissement\n\n- Rendre effectif le droit à l’eau par la gratuité des mètres cubes indispensables à la vie digne et la gratuité des compteurs aux domiciles principaux en supprimant les abonnements. Ces mesures seront financées par le renchérissement de",
+          "offset": 26701
+        },
+        {
+          "excerpt": "’eau\n- Défendre la mise en place d’une instance dédiée à l’eau et à l’assainissement au sein du système onusien\n- Défendre un traité d’interdiction des plastiques, un traité pour contraindre les multinationales à respecter les droits humains et l’environnement ou encore la reconnaissance du crime d’écocide\n- Renforcer la gestion démocratique dans le secteur de l’eau à l’échelle mondiale et la mise en œuvre effective du droit à l’eau et à l’assainissement avec des mécanismes de solidarité envers les peuples les plus défavorisés. Pour l’aide publique au développement concernant l’eau et l’assainissemen",
+          "offset": 33013
+        }
+      ]
+    },
+    {
+      "kind": "livret 2022",
+      "title": "Paix : pour une France indépendante, souveraine et non-alignée",
+      "url": "https://melenchon2027.fr/livrets-2022/paix/",
+      "date": "2024-02-02T15:56:49",
+      "windows": [
+        {
+          "excerpt": "ravail n’est pas une marchandise » ; « la pauvreté où qu’elle existe constitue un danger pour la prospérité de tous » ; les considérations humaines, sociales (et environnementales) priment sur les considérations économiques et financières\n\n- Nous appuierons les négociations en cours à l’ONU pour un Traité contraignant les multinationales à respecter des normes sociales et environnementales exigeantes\n\n- Pour que les infractions aux conventions internationales du travail par les États et les entreprises multinationales fassent l’objet de sanctions effectives, nous proposerons de doter l’OIT d’un corps d’inspectrices et inspecteurs i",
+          "offset": 23694
+        },
+        {
+          "excerpt": "d’un droit international, avec :\n\n- L’élargissement du dispositif de la licence d’office et la levée des brevets sur les vaccins et sur les autres moyens médicaux de lutte contre la pandémie de Covid-19, comme l’ont demandé plusieurs dizaines de pays et comme le préconise l’OMS\n\n- La création d’un tribunal international de justice climatique et environnementale et la reconnaissance internationale du crime d’écocide\n\n- La protection de l’eau et de son accès pour tous comme enjeu prioritaire de la politique internationale et de coopération de la France\n\n- L’adoption d’un traité international de protection des grands fonds marins\n\n- L’app",
+          "offset": 26429
+        }
+      ]
+    },
+    {
+      "kind": "livret 2022",
+      "title": "La planification écologique : La règle verte pour rompre avec le productivisme",
+      "url": "https://melenchon2027.fr/livrets-2022/planification-ecologique/",
+      "date": "2024-02-01T19:46:57",
+      "windows": [
+        {
+          "excerpt": "e réchauffement climatique en modifiant nos façons d’échanger, de produire et de consommer. Elle portera les principes de la planification écologique et de la règle verte à l’échelle internationale, ainsi que le principe de non-régression et la reconnaissance de la notion de crime contre la nature (écocide). La France doit montrer l’exemple : elle arrêtera d’importer des produits liés à la déforestation et s’interdira d’exploiter les fonds marins et de forer en Méditerranée.\n\nElle sera le fer de lance d’une nouvelle diplomatie climatique et écologique dans le cadre de l’Organisation des Nations unies",
+          "offset": 17146
+        }
+      ]
+    },
+    {
+      "kind": "plan 2022",
+      "title": "Comment nous allons : mettre en œuvre la règle verte par la planification écologique",
+      "url": "https://melenchon2027.fr/plans-2022/regle-verte/",
+      "date": "2024-01-31T18:21:30",
+      "windows": [
+        {
+          "excerpt": "e douane sur critères écologiques (émissions carbone, pollutions) et imposons le respect de normes sociales et écologiques pour pouvoir commercialiser des produits importés en France (voir plan dédié à la relocalisation).\n\n- des émissions des multinationales françaises.\n\nNous soutenons le projet de traité contraignant les multinationales à respecter les droits humains et l’environnement. Proposé par l’Équateur et l’Afrique du Sud, les gouvernements de François Hollande et d’Emmanuel Macron se sont alignés sur l’Union européenne pour tenter de ralentir et diminuer les ambitions du traité. On comprend pourquoi : la France, reconnue c",
+          "offset": 44538
+        }
+      ]
+    },
+    {
+      "kind": "plan 2022",
+      "title": "Relocalisation : produire ce dont la France a besoin",
+      "url": "https://melenchon2027.fr/plans-2022/relocalisation/",
+      "date": "2024-01-31T16:00:00",
+      "windows": [
+        {
+          "excerpt": "sur le continent européen, via l’agression de Poutine sur l’Ukraine, le prouve encore une fois. On a vu comment, pour refuser le pétrole et le gaz des criminels de guerre, les gouvernants ont accepté avec enthousiasme le pétrole et le gaz de schiste des États-Unis, responsables d’un des plus amples écocides contemporains.\n\nTout montre l’absurdité de la loi du marché prise comme une fin en soi et comme principe organisateur suprême de l’économie. La main invisible du marché est inefficace et dévastatrice. Le marché, c’est le chaos.\n\nL’autonomie, l’indépendance, la souveraineté sont devenues des object",
+          "offset": 2479
+        }
+      ]
+    }
+  ],
+  "desintox": []
+}

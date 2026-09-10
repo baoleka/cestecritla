@@ -1,0 +1,1358 @@
+{
+  "lab": "framework",
+  "date": "2026-09-09",
+  "budget": {
+    "lcpLabMs": 2500,
+    "jsInitialGzip": 100000,
+    "criticalPathBytes": 150000,
+    "cls": 0.1,
+    "clsFonts": 0.02
+  },
+  "environment": {
+    "lighthouseVersion": "13.4.1",
+    "hostUserAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "throttlingMethod": "devtools",
+    "throttling": {
+      "rttMs": 150,
+      "throughputKbps": 1638.4,
+      "requestLatencyMs": 562.5,
+      "downloadThroughputKbps": 1474.56,
+      "uploadThroughputKbps": 675,
+      "cpuSlowdownMultiplier": 4
+    },
+    "searchEmulation": {
+      "viewport": "412x823 @1.75",
+      "cpuSlowdown": 4,
+      "network": "devtools Slow 4G",
+      "chromePath": "<home>/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome"
+    },
+    "node": "v24.14.0"
+  },
+  "deployments": {
+    "react": "https://aec-lab-fw-react.baoleka.workers.dev/",
+    "astro": "https://aec-lab-fw-astro.baoleka.workers.dev/",
+    "react-ssg": "https://aec-lab-fw-react-ssg.baoleka.workers.dev/"
+  },
+  "sizes": {
+    "external-css": {
+      "measuredAt": "2026-09-09T13:01:25.505Z",
+      "variants": [
+        {
+          "name": "react",
+          "label": "React 19 + Vite 6 + Tailwind v4",
+          "files": [
+            {
+              "path": "/assets/index-Dv1bC0oP.js",
+              "raw": 204521,
+              "gzip": 64682,
+              "role": "js-initial",
+              "wire": 65201,
+              "encoding": "br"
+            },
+            {
+              "path": "/assets/index-OH5C0G9Z.css",
+              "raw": 13845,
+              "gzip": 3773,
+              "role": "css",
+              "wire": 3819,
+              "encoding": "br"
+            },
+            {
+              "path": "/assets/search-core-CUPmbxsA.js",
+              "raw": 21028,
+              "gzip": 7245,
+              "role": "js-lazy",
+              "wire": 7549,
+              "encoding": "br"
+            },
+            {
+              "path": "/data/slim.json",
+              "raw": 249153,
+              "gzip": 69166,
+              "role": "data",
+              "wire": 68646,
+              "encoding": "br"
+            },
+            {
+              "path": "/fonts/GowunBatang-Bold-latin.woff2",
+              "raw": 19796,
+              "gzip": 19824,
+              "role": "font",
+              "wire": 19796,
+              "encoding": "identity"
+            },
+            {
+              "path": "/fonts/GowunBatang-Regular-latin.woff2",
+              "raw": 19652,
+              "gzip": 19680,
+              "role": "font-preloaded",
+              "wire": 19652,
+              "encoding": "identity"
+            },
+            {
+              "path": "/fonts/OFL-GowunBatang.txt",
+              "raw": 4397,
+              "gzip": 1981,
+              "role": "other"
+            },
+            {
+              "path": "/fonts/OFL-PublicSans.txt",
+              "raw": 4390,
+              "gzip": 1974,
+              "role": "other"
+            },
+            {
+              "path": "/fonts/PublicSans-Italic-Variable-latin.woff2",
+              "raw": 31116,
+              "gzip": 31144,
+              "role": "font",
+              "wire": 31116,
+              "encoding": "identity"
+            },
+            {
+              "path": "/fonts/PublicSans-Variable-latin.woff2",
+              "raw": 29180,
+              "gzip": 29208,
+              "role": "font-preloaded",
+              "wire": 29180,
+              "encoding": "identity"
+            },
+            {
+              "path": "/index.html",
+              "raw": 934,
+              "gzip": 525,
+              "role": "html",
+              "wire": 471,
+              "encoding": "br"
+            }
+          ],
+          "totals": {
+            "htmlRaw": 934,
+            "htmlGzip": 525,
+            "htmlWire": 471,
+            "jsInitialGzip": 64682,
+            "jsInitialWire": 65201,
+            "jsLazyGzip": 7245,
+            "cssGzip": 3773,
+            "cssWire": 3819,
+            "fontsPreloaded": 48832,
+            "criticalPathWire": 118323,
+            "initialLoadWire": 118323
+          }
+        },
+        {
+          "name": "astro",
+          "label": "Astro 5 (static + vanilla script)",
+          "files": [
+            {
+              "path": "/_astro/index.DPgV6q0t.css",
+              "raw": 7117,
+              "gzip": 1903,
+              "role": "css",
+              "wire": 1925,
+              "encoding": "br"
+            },
+            {
+              "path": "/_astro/search-core.CUPmbxsA.js",
+              "raw": 21028,
+              "gzip": 7245,
+              "role": "js-lazy",
+              "wire": 7549,
+              "encoding": "br"
+            },
+            {
+              "path": "/_astro/SearchBox.astro_astro_type_script_index_0_lang.DzuQZjhz.js",
+              "raw": 3133,
+              "gzip": 1517,
+              "role": "js-initial",
+              "wire": 1498,
+              "encoding": "br"
+            },
+            {
+              "path": "/data/slim.json",
+              "raw": 249153,
+              "gzip": 69166,
+              "role": "data",
+              "wire": 68700,
+              "encoding": "br"
+            },
+            {
+              "path": "/fonts/GowunBatang-Bold-latin.woff2",
+              "raw": 19796,
+              "gzip": 19824,
+              "role": "font",
+              "wire": 19796,
+              "encoding": "identity"
+            },
+            {
+              "path": "/fonts/GowunBatang-Regular-latin.woff2",
+              "raw": 19652,
+              "gzip": 19680,
+              "role": "font-preloaded",
+              "wire": 19652,
+              "encoding": "identity"
+            },
+            {
+              "path": "/fonts/OFL-GowunBatang.txt",
+              "raw": 4397,
+              "gzip": 1981,
+              "role": "other"
+            },
+            {
+              "path": "/fonts/OFL-PublicSans.txt",
+              "raw": 4390,
+              "gzip": 1974,
+              "role": "other"
+            },
+            {
+              "path": "/fonts/PublicSans-Italic-Variable-latin.woff2",
+              "raw": 31116,
+              "gzip": 31144,
+              "role": "font",
+              "wire": 31116,
+              "encoding": "identity"
+            },
+            {
+              "path": "/fonts/PublicSans-Variable-latin.woff2",
+              "raw": 29180,
+              "gzip": 29208,
+              "role": "font-preloaded",
+              "wire": 29180,
+              "encoding": "identity"
+            },
+            {
+              "path": "/index.html",
+              "raw": 6138,
+              "gzip": 2645,
+              "role": "html",
+              "wire": 2624,
+              "encoding": "br"
+            }
+          ],
+          "totals": {
+            "htmlRaw": 6138,
+            "htmlGzip": 2645,
+            "htmlWire": 2624,
+            "jsInitialGzip": 1517,
+            "jsInitialWire": 1498,
+            "jsLazyGzip": 7245,
+            "cssGzip": 1903,
+            "cssWire": 1925,
+            "fontsPreloaded": 48832,
+            "criticalPathWire": 54879,
+            "initialLoadWire": 54879
+          }
+        }
+      ]
+    },
+    "inline-css": {
+      "measuredAt": "2026-09-09T13:24:25.090Z",
+      "variants": [
+        {
+          "name": "react",
+          "label": "React 19 + Vite 6 + Tailwind v4",
+          "files": [
+            {
+              "path": "/assets/index-BRvERXi3.css",
+              "raw": 13868,
+              "gzip": 3777,
+              "role": "css-unreferenced"
+            },
+            {
+              "path": "/assets/index-M-Gc2bjj.js",
+              "raw": 204588,
+              "gzip": 64726,
+              "role": "js-initial",
+              "wire": 65156,
+              "encoding": "br"
+            },
+            {
+              "path": "/assets/search-core-CUPmbxsA.js",
+              "raw": 21028,
+              "gzip": 7245,
+              "role": "js-lazy",
+              "wire": 7549,
+              "encoding": "br"
+            },
+            {
+              "path": "/data/slim.json",
+              "raw": 249153,
+              "gzip": 69166,
+              "role": "data",
+              "wire": 68700,
+              "encoding": "br"
+            },
+            {
+              "path": "/fonts/GowunBatang-Bold-latin.woff2",
+              "raw": 19796,
+              "gzip": 19824,
+              "role": "font",
+              "wire": 19796,
+              "encoding": "identity"
+            },
+            {
+              "path": "/fonts/GowunBatang-Regular-latin.woff2",
+              "raw": 19652,
+              "gzip": 19680,
+              "role": "font-preloaded",
+              "wire": 19652,
+              "encoding": "identity"
+            },
+            {
+              "path": "/fonts/OFL-GowunBatang.txt",
+              "raw": 4397,
+              "gzip": 1981,
+              "role": "other"
+            },
+            {
+              "path": "/fonts/OFL-PublicSans.txt",
+              "raw": 4390,
+              "gzip": 1974,
+              "role": "other"
+            },
+            {
+              "path": "/fonts/PublicSans-Italic-Variable-latin.woff2",
+              "raw": 31116,
+              "gzip": 31144,
+              "role": "font",
+              "wire": 31116,
+              "encoding": "identity"
+            },
+            {
+              "path": "/fonts/PublicSans-Variable-latin.woff2",
+              "raw": 29180,
+              "gzip": 29208,
+              "role": "font-preloaded",
+              "wire": 29180,
+              "encoding": "identity"
+            },
+            {
+              "path": "/index.html",
+              "raw": 14785,
+              "gzip": 4238,
+              "role": "html",
+              "wire": 4243,
+              "encoding": "br"
+            }
+          ],
+          "totals": {
+            "htmlRaw": 14785,
+            "htmlGzip": 4238,
+            "htmlWire": 4243,
+            "jsInitialGzip": 64726,
+            "jsInitialWire": 65156,
+            "jsLazyGzip": 7245,
+            "cssGzip": 0,
+            "cssWire": 0,
+            "cssInlineRaw": 13867,
+            "fontsPreloaded": 48832,
+            "criticalPathWire": 118231,
+            "initialLoadWire": 118231
+          }
+        },
+        {
+          "name": "react-ssg",
+          "label": "React 19 + Vite 6 + Tailwind v4, prerendered + hydration",
+          "files": [
+            {
+              "path": "/assets/index-BRvERXi3.css",
+              "raw": 13868,
+              "gzip": 3777,
+              "role": "css-unreferenced"
+            },
+            {
+              "path": "/assets/index-M-Gc2bjj.js",
+              "raw": 204588,
+              "gzip": 64726,
+              "role": "js-initial",
+              "wire": 65199,
+              "encoding": "br"
+            },
+            {
+              "path": "/assets/search-core-CUPmbxsA.js",
+              "raw": 21028,
+              "gzip": 7245,
+              "role": "js-lazy",
+              "wire": 7549,
+              "encoding": "br"
+            },
+            {
+              "path": "/data/slim.json",
+              "raw": 249153,
+              "gzip": 69166,
+              "role": "data",
+              "wire": 68700,
+              "encoding": "br"
+            },
+            {
+              "path": "/fonts/GowunBatang-Bold-latin.woff2",
+              "raw": 19796,
+              "gzip": 19824,
+              "role": "font",
+              "wire": 19796,
+              "encoding": "identity"
+            },
+            {
+              "path": "/fonts/GowunBatang-Regular-latin.woff2",
+              "raw": 19652,
+              "gzip": 19680,
+              "role": "font-preloaded",
+              "wire": 19652,
+              "encoding": "identity"
+            },
+            {
+              "path": "/fonts/OFL-GowunBatang.txt",
+              "raw": 4397,
+              "gzip": 1981,
+              "role": "other"
+            },
+            {
+              "path": "/fonts/OFL-PublicSans.txt",
+              "raw": 4390,
+              "gzip": 1974,
+              "role": "other"
+            },
+            {
+              "path": "/fonts/PublicSans-Italic-Variable-latin.woff2",
+              "raw": 31116,
+              "gzip": 31144,
+              "role": "font",
+              "wire": 31116,
+              "encoding": "identity"
+            },
+            {
+              "path": "/fonts/PublicSans-Variable-latin.woff2",
+              "raw": 29180,
+              "gzip": 29208,
+              "role": "font-preloaded",
+              "wire": 29180,
+              "encoding": "identity"
+            },
+            {
+              "path": "/index.html",
+              "raw": 22042,
+              "gzip": 6662,
+              "role": "html",
+              "wire": 6758,
+              "encoding": "br"
+            }
+          ],
+          "totals": {
+            "htmlRaw": 22042,
+            "htmlGzip": 6662,
+            "htmlWire": 6758,
+            "jsInitialGzip": 64726,
+            "jsInitialWire": 65199,
+            "jsLazyGzip": 7245,
+            "cssGzip": 0,
+            "cssWire": 0,
+            "cssInlineRaw": 13867,
+            "fontsPreloaded": 48832,
+            "criticalPathWire": 120789,
+            "initialLoadWire": 120789
+          }
+        },
+        {
+          "name": "astro",
+          "label": "Astro 5 (static + vanilla script)",
+          "files": [
+            {
+              "path": "/_astro/search-core.CUPmbxsA.js",
+              "raw": 21028,
+              "gzip": 7245,
+              "role": "js-lazy",
+              "wire": 7549,
+              "encoding": "br"
+            },
+            {
+              "path": "/_astro/SearchBox.astro_astro_type_script_index_0_lang.DzuQZjhz.js",
+              "raw": 3133,
+              "gzip": 1517,
+              "role": "js-initial",
+              "wire": 1498,
+              "encoding": "br"
+            },
+            {
+              "path": "/data/slim.json",
+              "raw": 249153,
+              "gzip": 69166,
+              "role": "data",
+              "wire": 68700,
+              "encoding": "br"
+            },
+            {
+              "path": "/fonts/GowunBatang-Bold-latin.woff2",
+              "raw": 19796,
+              "gzip": 19824,
+              "role": "font",
+              "wire": 19796,
+              "encoding": "identity"
+            },
+            {
+              "path": "/fonts/GowunBatang-Regular-latin.woff2",
+              "raw": 19652,
+              "gzip": 19680,
+              "role": "font-preloaded",
+              "wire": 19652,
+              "encoding": "identity"
+            },
+            {
+              "path": "/fonts/OFL-GowunBatang.txt",
+              "raw": 4397,
+              "gzip": 1981,
+              "role": "other"
+            },
+            {
+              "path": "/fonts/OFL-PublicSans.txt",
+              "raw": 4390,
+              "gzip": 1974,
+              "role": "other"
+            },
+            {
+              "path": "/fonts/PublicSans-Italic-Variable-latin.woff2",
+              "raw": 31116,
+              "gzip": 31144,
+              "role": "font",
+              "wire": 31116,
+              "encoding": "identity"
+            },
+            {
+              "path": "/fonts/PublicSans-Variable-latin.woff2",
+              "raw": 29180,
+              "gzip": 29208,
+              "role": "font-preloaded",
+              "wire": 29180,
+              "encoding": "identity"
+            },
+            {
+              "path": "/index.html",
+              "raw": 13253,
+              "gzip": 4523,
+              "role": "html",
+              "wire": 4564,
+              "encoding": "br"
+            }
+          ],
+          "totals": {
+            "htmlRaw": 13253,
+            "htmlGzip": 4523,
+            "htmlWire": 4564,
+            "jsInitialGzip": 1517,
+            "jsInitialWire": 1498,
+            "jsLazyGzip": 7245,
+            "cssGzip": 0,
+            "cssWire": 0,
+            "cssInlineRaw": 7126,
+            "fontsPreloaded": 48832,
+            "criticalPathWire": 54894,
+            "initialLoadWire": 54894
+          }
+        }
+      ]
+    }
+  },
+  "lighthouse": {
+    "external-css": {
+      "measuredAt": "2026-09-09T13:24:32.613Z",
+      "pass": "",
+      "runsPerVariant": 3,
+      "lighthouseVersion": "13.4.1",
+      "hostUserAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+      "networkUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Mobile Safari/537.36",
+      "throttlingMethod": "devtools",
+      "throttling": {
+        "rttMs": 150,
+        "throughputKbps": 1638.4,
+        "requestLatencyMs": 562.5,
+        "downloadThroughputKbps": 1474.56,
+        "uploadThroughputKbps": 675,
+        "cpuSlowdownMultiplier": 4
+      },
+      "formFactor": "mobile",
+      "chromePath": "<home>/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome",
+      "variants": {
+        "react": {
+          "label": "React 19 + Vite 6 + Tailwind v4",
+          "url": "https://aec-lab-fw-react.baoleka.workers.dev/",
+          "runs": [
+            {
+              "run": 1,
+              "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/react.1.json",
+              "fetchTime": "2026-09-09T13:07:18.714Z",
+              "score": 0.97,
+              "fcp": 2090.595,
+              "lcp": 2090.595,
+              "tbt": 0,
+              "cls": 0,
+              "speedIndex": 1933,
+              "ttfb": 41,
+              "lcpElement": "div#root > main.mx-auto > article.mt-8 > p.mt-4",
+              "lcpBreakdown": {
+                "timeToFirstByte": 75.278,
+                "elementRenderDelay": 2015.317
+              },
+              "mainThreadMs": 331.49499999999966,
+              "bootupMs": 102.66599999999991,
+              "requests": 5,
+              "transferTotal": 124007,
+              "transferByType": {
+                "Document": 1282,
+                "Font": 50249,
+                "Script": 67753,
+                "Stylesheet": 4723
+              },
+              "benchmarkIndex": 997
+            },
+            {
+              "run": 2,
+              "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/react.2.json",
+              "fetchTime": "2026-09-09T13:07:42.175Z",
+              "score": 0.97,
+              "fcp": 2077.782,
+              "lcp": 2077.782,
+              "tbt": 0,
+              "cls": 0,
+              "speedIndex": 1921,
+              "ttfb": 51,
+              "lcpElement": "div#root > main.mx-auto > article.mt-8 > p.mt-4",
+              "lcpBreakdown": {
+                "timeToFirstByte": 84.937,
+                "elementRenderDelay": 1992.845
+              },
+              "mainThreadMs": 325.5679999999998,
+              "bootupMs": 93.69299999999993,
+              "requests": 5,
+              "transferTotal": 123904,
+              "transferByType": {
+                "Document": 1285,
+                "Font": 50249,
+                "Script": 67707,
+                "Stylesheet": 4663
+              },
+              "benchmarkIndex": 1016
+            },
+            {
+              "run": 3,
+              "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/react.3.json",
+              "fetchTime": "2026-09-09T13:08:05.606Z",
+              "score": 0.97,
+              "fcp": 2077.855,
+              "lcp": 2077.855,
+              "tbt": 0,
+              "cls": 0,
+              "speedIndex": 1921,
+              "ttfb": 42,
+              "lcpElement": "div#root > main.mx-auto > article.mt-8 > p.mt-4",
+              "lcpBreakdown": {
+                "timeToFirstByte": 71.37900012207031,
+                "elementRenderDelay": 2006.4759998779298
+              },
+              "mainThreadMs": 332.14999999999964,
+              "bootupMs": 102.31799999999994,
+              "requests": 5,
+              "transferTotal": 123942,
+              "transferByType": {
+                "Document": 1290,
+                "Font": 50247,
+                "Script": 67752,
+                "Stylesheet": 4653
+              },
+              "benchmarkIndex": 1014.5
+            }
+          ],
+          "median": {
+            "score": 0.97,
+            "fcp": 2077.855,
+            "lcp": 2077.855,
+            "tbt": 0,
+            "cls": 0,
+            "speedIndex": 1921,
+            "ttfb": 42,
+            "mainThreadMs": 331.49499999999966,
+            "bootupMs": 102.31799999999994,
+            "transferTotal": 123942,
+            "requests": 5
+          }
+        },
+        "astro": {
+          "label": "Astro 5 (static + vanilla script)",
+          "url": "https://aec-lab-fw-astro.baoleka.workers.dev/",
+          "runs": [
+            {
+              "run": 1,
+              "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/astro.1.json",
+              "fetchTime": "2026-09-09T13:13:49.028Z",
+              "score": 1,
+              "fcp": 1473.408,
+              "lcp": 1473.408,
+              "tbt": 0,
+              "cls": 0.0019673959516339507,
+              "speedIndex": 1486,
+              "ttfb": 48,
+              "lcpElement": "body > main > article > p.verbatim",
+              "lcpBreakdown": {
+                "timeToFirstByte": 133.525,
+                "elementRenderDelay": 1339.883
+              },
+              "mainThreadMs": 301.75199999999995,
+              "bootupMs": 20.451999999999998,
+              "requests": 5,
+              "transferTotal": 58791,
+              "transferByType": {
+                "Document": 3475,
+                "Font": 50249,
+                "Stylesheet": 2775,
+                "Script": 2292
+              },
+              "benchmarkIndex": 1009
+            },
+            {
+              "run": 2,
+              "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/astro.2.json",
+              "fetchTime": "2026-09-09T13:14:11.668Z",
+              "score": 1,
+              "fcp": 1450.211,
+              "lcp": 1450.211,
+              "tbt": 0,
+              "cls": 0.0019673959516339507,
+              "speedIndex": 1462,
+              "ttfb": 49,
+              "lcpElement": "body > main > article > p.verbatim",
+              "lcpBreakdown": {
+                "timeToFirstByte": 83.111,
+                "elementRenderDelay": 1367.1
+              },
+              "mainThreadMs": 311.0090000000002,
+              "bootupMs": 20.794,
+              "requests": 5,
+              "transferTotal": 58767,
+              "transferByType": {
+                "Document": 3473,
+                "Font": 50237,
+                "Stylesheet": 2765,
+                "Script": 2292
+              },
+              "benchmarkIndex": 1008.5
+            },
+            {
+              "run": 3,
+              "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/astro.3.json",
+              "fetchTime": "2026-09-09T13:14:34.340Z",
+              "score": 1,
+              "fcp": 1459.366,
+              "lcp": 1459.366,
+              "tbt": 0,
+              "cls": 0.0019673959516339507,
+              "speedIndex": 1470,
+              "ttfb": 63,
+              "lcpElement": "body > main > article > p.verbatim",
+              "lcpBreakdown": {
+                "timeToFirstByte": 95.173,
+                "elementRenderDelay": 1364.193
+              },
+              "mainThreadMs": 329.35800000000006,
+              "bootupMs": 20.421,
+              "requests": 5,
+              "transferTotal": 58785,
+              "transferByType": {
+                "Document": 3471,
+                "Font": 50251,
+                "Stylesheet": 2770,
+                "Script": 2293
+              },
+              "benchmarkIndex": 989.5
+            }
+          ],
+          "median": {
+            "score": 1,
+            "fcp": 1459.366,
+            "lcp": 1459.366,
+            "tbt": 0,
+            "cls": 0.0019673959516339507,
+            "speedIndex": 1470,
+            "ttfb": 49,
+            "mainThreadMs": 311.0090000000002,
+            "bootupMs": 20.451999999999998,
+            "transferTotal": 58785,
+            "requests": 5
+          }
+        }
+      }
+    },
+    "inline-css": {
+      "measuredAt": "2026-09-09T13:24:32.845Z",
+      "pass": "inline-css",
+      "runsPerVariant": 3,
+      "lighthouseVersion": "13.4.1",
+      "hostUserAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+      "networkUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Mobile Safari/537.36",
+      "throttlingMethod": "devtools",
+      "throttling": {
+        "rttMs": 150,
+        "throughputKbps": 1638.4,
+        "requestLatencyMs": 562.5,
+        "downloadThroughputKbps": 1474.56,
+        "uploadThroughputKbps": 675,
+        "cpuSlowdownMultiplier": 4
+      },
+      "formFactor": "mobile",
+      "chromePath": "<home>/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome",
+      "variants": {
+        "react": {
+          "label": "React 19 + Vite 6 + Tailwind v4",
+          "url": "https://aec-lab-fw-react.baoleka.workers.dev/",
+          "runs": [
+            {
+              "run": 1,
+              "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/react-inline-css.1.json",
+              "fetchTime": "2026-09-09T13:21:31.472Z",
+              "score": 0.98,
+              "fcp": 2030.811,
+              "lcp": 2030.811,
+              "tbt": 0,
+              "cls": 0,
+              "speedIndex": 1714,
+              "ttfb": 48,
+              "lcpElement": "div#root > main.mx-auto > article.mt-8 > p.mt-4",
+              "lcpBreakdown": {
+                "timeToFirstByte": 86.74800012207031,
+                "elementRenderDelay": 1944.0629998779298
+              },
+              "mainThreadMs": 297.58899999999977,
+              "bootupMs": 91.28599999999994,
+              "requests": 4,
+              "transferTotal": 123172,
+              "transferByType": {
+                "Document": 5183,
+                "Font": 50252,
+                "Script": 67737
+              },
+              "benchmarkIndex": 1035
+            },
+            {
+              "run": 2,
+              "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/react-inline-css.2.json",
+              "fetchTime": "2026-09-09T13:21:54.690Z",
+              "score": 0.97,
+              "fcp": 2059.255,
+              "lcp": 2059.255,
+              "tbt": 0,
+              "cls": 0,
+              "speedIndex": 1743,
+              "ttfb": 45,
+              "lcpElement": "div#root > main.mx-auto > article.mt-8 > p.mt-4",
+              "lcpBreakdown": {
+                "timeToFirstByte": 106.34799987792968,
+                "elementRenderDelay": 1952.9070001220703
+              },
+              "mainThreadMs": 307.2229999999997,
+              "bootupMs": 91.56499999999994,
+              "requests": 4,
+              "transferTotal": 123156,
+              "transferByType": {
+                "Document": 5182,
+                "Font": 50252,
+                "Script": 67722
+              },
+              "benchmarkIndex": 1017.5
+            },
+            {
+              "run": 3,
+              "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/react-inline-css.3.json",
+              "fetchTime": "2026-09-09T13:22:17.905Z",
+              "score": 0.97,
+              "fcp": 2058.878,
+              "lcp": 2058.878,
+              "tbt": 0,
+              "cls": 0,
+              "speedIndex": 1742,
+              "ttfb": 49,
+              "lcpElement": "div#root > main.mx-auto > article.mt-8 > p.mt-4",
+              "lcpBreakdown": {
+                "timeToFirstByte": 108.636,
+                "elementRenderDelay": 1950.242
+              },
+              "mainThreadMs": 300.8249999999999,
+              "bootupMs": 94.84099999999998,
+              "requests": 4,
+              "transferTotal": 123217,
+              "transferByType": {
+                "Document": 5236,
+                "Font": 50245,
+                "Script": 67736
+              },
+              "benchmarkIndex": 1017
+            }
+          ],
+          "median": {
+            "score": 0.97,
+            "fcp": 2058.878,
+            "lcp": 2058.878,
+            "tbt": 0,
+            "cls": 0,
+            "speedIndex": 1742,
+            "ttfb": 48,
+            "mainThreadMs": 300.8249999999999,
+            "bootupMs": 91.56499999999994,
+            "transferTotal": 123172,
+            "requests": 4
+          }
+        },
+        "astro": {
+          "label": "Astro 5 (static + vanilla script)",
+          "url": "https://aec-lab-fw-astro.baoleka.workers.dev/",
+          "runs": [
+            {
+              "run": 1,
+              "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/astro-inline-css.1.json",
+              "fetchTime": "2026-09-09T13:18:13.204Z",
+              "score": 1,
+              "fcp": 965.46,
+              "lcp": 965.46,
+              "tbt": 0,
+              "cls": 0.0019673959516339507,
+              "speedIndex": 1016,
+              "ttfb": 46,
+              "lcpElement": "body > main > article > p.verbatim",
+              "lcpBreakdown": {
+                "timeToFirstByte": 135.30200012207033,
+                "elementRenderDelay": 830.1579998779297
+              },
+              "mainThreadMs": 321.9680000000001,
+              "bootupMs": 21.463,
+              "requests": 4,
+              "transferTotal": 58064,
+              "transferByType": {
+                "Document": 5520,
+                "Font": 50253,
+                "Script": 2291
+              },
+              "benchmarkIndex": 1021.5
+            },
+            {
+              "run": 2,
+              "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/astro-inline-css.2.json",
+              "fetchTime": "2026-09-09T13:18:35.855Z",
+              "score": 1,
+              "fcp": 920.826,
+              "lcp": 920.826,
+              "tbt": 0,
+              "cls": 0.0019673959516339507,
+              "speedIndex": 971,
+              "ttfb": 57,
+              "lcpElement": "body > main > article > p.verbatim",
+              "lcpBreakdown": {
+                "timeToFirstByte": 89.89199987792969,
+                "elementRenderDelay": 830.9340001220703
+              },
+              "mainThreadMs": 331.8740000000002,
+              "bootupMs": 23.688999999999993,
+              "requests": 4,
+              "transferTotal": 58056,
+              "transferByType": {
+                "Document": 5516,
+                "Font": 50250,
+                "Script": 2290
+              },
+              "benchmarkIndex": 1009
+            },
+            {
+              "run": 3,
+              "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/astro-inline-css.3.json",
+              "fetchTime": "2026-09-09T13:18:58.735Z",
+              "score": 1,
+              "fcp": 934.596,
+              "lcp": 934.596,
+              "tbt": 0,
+              "cls": 0.0019673959516339507,
+              "speedIndex": 986,
+              "ttfb": 80,
+              "lcpElement": "body > main > article > p.verbatim",
+              "lcpBreakdown": {
+                "timeToFirstByte": 149.292,
+                "elementRenderDelay": 785.304
+              },
+              "mainThreadMs": 319.76500000000016,
+              "bootupMs": 21.246000000000002,
+              "requests": 4,
+              "transferTotal": 58060,
+              "transferByType": {
+                "Document": 5525,
+                "Font": 50243,
+                "Script": 2292
+              },
+              "benchmarkIndex": 1009
+            }
+          ],
+          "median": {
+            "score": 1,
+            "fcp": 934.596,
+            "lcp": 934.596,
+            "tbt": 0,
+            "cls": 0.0019673959516339507,
+            "speedIndex": 986,
+            "ttfb": 57,
+            "mainThreadMs": 321.9680000000001,
+            "bootupMs": 21.463,
+            "transferTotal": 58060,
+            "requests": 4
+          }
+        },
+        "react-ssg": {
+          "label": "React 19 + Vite 6 + Tailwind v4, prerendered + hydration",
+          "url": "https://aec-lab-fw-react-ssg.baoleka.workers.dev/",
+          "runs": [
+            {
+              "run": 1,
+              "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/react-ssg-inline-css.1.json",
+              "fetchTime": "2026-09-09T13:22:41.258Z",
+              "score": 1,
+              "fcp": 967.62,
+              "lcp": 967.62,
+              "tbt": 0,
+              "cls": 0.0019673959516339507,
+              "speedIndex": 1027,
+              "ttfb": 50,
+              "lcpElement": "div#root > main.mx-auto > article.mt-8 > p.mt-4",
+              "lcpBreakdown": {
+                "timeToFirstByte": 128.739,
+                "elementRenderDelay": 838.881
+              },
+              "mainThreadMs": 431.3959999999999,
+              "bootupMs": 89.08299999999991,
+              "requests": 4,
+              "transferTotal": 125688,
+              "transferByType": {
+                "Document": 7705,
+                "Font": 50249,
+                "Script": 67734
+              },
+              "benchmarkIndex": 1009.5
+            },
+            {
+              "run": 2,
+              "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/react-ssg-inline-css.2.json",
+              "fetchTime": "2026-09-09T13:23:04.582Z",
+              "score": 1,
+              "fcp": 891.702,
+              "lcp": 891.702,
+              "tbt": 0,
+              "cls": 0.0019673959516339507,
+              "speedIndex": 953,
+              "ttfb": 52,
+              "lcpElement": "div#root > main.mx-auto > article.mt-8 > p.mt-4",
+              "lcpBreakdown": {
+                "timeToFirstByte": 79.915,
+                "elementRenderDelay": 811.787
+              },
+              "mainThreadMs": 406.0809999999997,
+              "bootupMs": 90.24399999999997,
+              "requests": 4,
+              "transferTotal": 125826,
+              "transferByType": {
+                "Document": 7786,
+                "Font": 50255,
+                "Script": 67785
+              },
+              "benchmarkIndex": 999.5
+            },
+            {
+              "run": 3,
+              "file": "<repo>/prototypes/labo-plateforme/framework/measure/out/lighthouse/react-ssg-inline-css.3.json",
+              "fetchTime": "2026-09-09T13:23:27.600Z",
+              "score": 1,
+              "fcp": 929.247,
+              "lcp": 929.247,
+              "tbt": 0,
+              "cls": 0.0019673959516339507,
+              "speedIndex": 989,
+              "ttfb": 57,
+              "lcpElement": "div#root > main.mx-auto > article.mt-8 > p.mt-4",
+              "lcpBreakdown": {
+                "timeToFirstByte": 92.572,
+                "elementRenderDelay": 836.675
+              },
+              "mainThreadMs": 436.586,
+              "bootupMs": 91.22499999999992,
+              "requests": 4,
+              "transferTotal": 125725,
+              "transferByType": {
+                "Document": 7708,
+                "Font": 50255,
+                "Script": 67762
+              },
+              "benchmarkIndex": 1021
+            }
+          ],
+          "median": {
+            "score": 1,
+            "fcp": 929.247,
+            "lcp": 929.247,
+            "tbt": 0,
+            "cls": 0.0019673959516339507,
+            "speedIndex": 989,
+            "ttfb": 52,
+            "mainThreadMs": 431.3959999999999,
+            "bootupMs": 90.24399999999997,
+            "transferTotal": 125725,
+            "requests": 4
+          }
+        }
+      }
+    }
+  },
+  "searchTiming": {
+    "measuredAt": "2026-09-09T13:26:01.642Z",
+    "runsPerVariant": 3,
+    "query": "règle verte",
+    "warmQuery": "planification",
+    "emulation": {
+      "viewport": "412x823 @1.75",
+      "cpuSlowdown": 4,
+      "network": "devtools Slow 4G",
+      "chromePath": "<home>/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome"
+    },
+    "variants": {
+      "react": {
+        "label": "React 19 + Vite 6 + Tailwind v4",
+        "runs": [
+          {
+            "run": 1,
+            "focusToFirstHitMs": 1262.7000000476837,
+            "inputToFirstHitMs": 1224.5,
+            "lazyLoadMs": 1236.6000000238419,
+            "fetchPhaseMs": 1018.3000000715256,
+            "indexBuildMs": 218.29999995231628,
+            "hitCount": 8,
+            "warmInputToHitMs": 18.5,
+            "warmHitCount": 8,
+            "navigationLoadMs": 2103,
+            "hitIds": "Mesure clé · L’eau, enjeu central pour l’Humanité :: Consacrer une « règle bleue » qui appliq || Mesure · La bifurcation écologique pour une société de l’harmonie :: Instaurer un moratoire sur les grands pr || Mesure clé · La bifurcation écologique pour une société de l’harmonie :: Inscrire dans la Constitution le princip || Texte · Consommer autrement, une France « zéro déchet » :: La planète croule sous les déchets. À l’ || Texte · La bifurcation écologique pour une société de l’harmonie :: L’urgence écologique et climatique suppo || Mesure · Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme :: Cesser d’appliquer unilatéralement les n || Mesure · La bifurcation écologique pour une société de l’harmonie :: Mettre en place une logistique verte : r || Mesure · La Révolution citoyenne dans les médias :: Élargir les règles anti-concentration sa",
+            "fontsLoaded": "Gowun Batang 400 normal | Public Sans 100 900 normal"
+          },
+          {
+            "run": 2,
+            "focusToFirstHitMs": 1238.6000000238419,
+            "inputToFirstHitMs": 1199,
+            "lazyLoadMs": 1212.3999999761581,
+            "fetchPhaseMs": 1017.7000000476837,
+            "indexBuildMs": 194.69999992847443,
+            "hitCount": 8,
+            "warmInputToHitMs": 17.299999952316284,
+            "warmHitCount": 8,
+            "navigationLoadMs": 5986,
+            "hitIds": "Mesure clé · L’eau, enjeu central pour l’Humanité :: Consacrer une « règle bleue » qui appliq || Mesure · La bifurcation écologique pour une société de l’harmonie :: Instaurer un moratoire sur les grands pr || Mesure clé · La bifurcation écologique pour une société de l’harmonie :: Inscrire dans la Constitution le princip || Texte · Consommer autrement, une France « zéro déchet » :: La planète croule sous les déchets. À l’ || Texte · La bifurcation écologique pour une société de l’harmonie :: L’urgence écologique et climatique suppo || Mesure · Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme :: Cesser d’appliquer unilatéralement les n || Mesure · La bifurcation écologique pour une société de l’harmonie :: Mettre en place une logistique verte : r || Mesure · La Révolution citoyenne dans les médias :: Élargir les règles anti-concentration sa",
+            "fontsLoaded": "Gowun Batang 400 normal | Public Sans 100 900 normal"
+          },
+          {
+            "run": 3,
+            "focusToFirstHitMs": 1242.3000000715256,
+            "inputToFirstHitMs": 1203.4000000953674,
+            "lazyLoadMs": 1216.9000000953674,
+            "fetchPhaseMs": 1019.5,
+            "indexBuildMs": 197.40000009536743,
+            "hitCount": 8,
+            "warmInputToHitMs": 17.199999928474426,
+            "warmHitCount": 8,
+            "navigationLoadMs": 2089,
+            "hitIds": "Mesure clé · L’eau, enjeu central pour l’Humanité :: Consacrer une « règle bleue » qui appliq || Mesure · La bifurcation écologique pour une société de l’harmonie :: Instaurer un moratoire sur les grands pr || Mesure clé · La bifurcation écologique pour une société de l’harmonie :: Inscrire dans la Constitution le princip || Texte · Consommer autrement, une France « zéro déchet » :: La planète croule sous les déchets. À l’ || Texte · La bifurcation écologique pour une société de l’harmonie :: L’urgence écologique et climatique suppo || Mesure · Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme :: Cesser d’appliquer unilatéralement les n || Mesure · La bifurcation écologique pour une société de l’harmonie :: Mettre en place une logistique verte : r || Mesure · La Révolution citoyenne dans les médias :: Élargir les règles anti-concentration sa",
+            "fontsLoaded": "Gowun Batang 400 normal | Public Sans 100 900 normal"
+          }
+        ],
+        "median": {
+          "focusToFirstHitMs": 1242.3000000715256,
+          "inputToFirstHitMs": 1203.4000000953674,
+          "lazyLoadMs": 1216.9000000953674,
+          "fetchPhaseMs": 1018.3000000715256,
+          "indexBuildMs": 197.40000009536743,
+          "warmInputToHitMs": 17.299999952316284,
+          "navigationLoadMs": 2103
+        }
+      },
+      "react-ssg": {
+        "label": "React 19 + Vite 6 + Tailwind v4, prerendered + hydration",
+        "runs": [
+          {
+            "run": 1,
+            "focusToFirstHitMs": 1250.7999999523163,
+            "inputToFirstHitMs": 1212.2999999523163,
+            "lazyLoadMs": 1223.5,
+            "fetchPhaseMs": 1023.2999999523163,
+            "indexBuildMs": 200.20000004768372,
+            "hitCount": 8,
+            "warmInputToHitMs": 21.5,
+            "warmHitCount": 8,
+            "navigationLoadMs": 2076,
+            "hitIds": "Mesure clé · L’eau, enjeu central pour l’Humanité :: Consacrer une « règle bleue » qui appliq || Mesure · La bifurcation écologique pour une société de l’harmonie :: Instaurer un moratoire sur les grands pr || Mesure clé · La bifurcation écologique pour une société de l’harmonie :: Inscrire dans la Constitution le princip || Texte · Consommer autrement, une France « zéro déchet » :: La planète croule sous les déchets. À l’ || Texte · La bifurcation écologique pour une société de l’harmonie :: L’urgence écologique et climatique suppo || Mesure · Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme :: Cesser d’appliquer unilatéralement les n || Mesure · La bifurcation écologique pour une société de l’harmonie :: Mettre en place une logistique verte : r || Mesure · La Révolution citoyenne dans les médias :: Élargir les règles anti-concentration sa",
+            "fontsLoaded": "Gowun Batang 400 normal | Public Sans 100 900 normal | Public Sans Fallback Roboto normal normal"
+          },
+          {
+            "run": 2,
+            "focusToFirstHitMs": 1272.4000000953674,
+            "inputToFirstHitMs": 1231.4000000953674,
+            "lazyLoadMs": 1245.6999999284744,
+            "fetchPhaseMs": 1026.2999999523163,
+            "indexBuildMs": 219.39999997615814,
+            "hitCount": 8,
+            "warmInputToHitMs": 18.100000023841858,
+            "warmHitCount": 8,
+            "navigationLoadMs": 2073,
+            "hitIds": "Mesure clé · L’eau, enjeu central pour l’Humanité :: Consacrer une « règle bleue » qui appliq || Mesure · La bifurcation écologique pour une société de l’harmonie :: Instaurer un moratoire sur les grands pr || Mesure clé · La bifurcation écologique pour une société de l’harmonie :: Inscrire dans la Constitution le princip || Texte · Consommer autrement, une France « zéro déchet » :: La planète croule sous les déchets. À l’ || Texte · La bifurcation écologique pour une société de l’harmonie :: L’urgence écologique et climatique suppo || Mesure · Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme :: Cesser d’appliquer unilatéralement les n || Mesure · La bifurcation écologique pour une société de l’harmonie :: Mettre en place une logistique verte : r || Mesure · La Révolution citoyenne dans les médias :: Élargir les règles anti-concentration sa",
+            "fontsLoaded": "Gowun Batang 400 normal | Public Sans 100 900 normal | Public Sans Fallback Roboto normal normal"
+          },
+          {
+            "run": 3,
+            "focusToFirstHitMs": 1277.7999999523163,
+            "inputToFirstHitMs": 1239.8999999761581,
+            "lazyLoadMs": 1249,
+            "fetchPhaseMs": 1021.1000000238419,
+            "indexBuildMs": 227.89999997615814,
+            "hitCount": 8,
+            "warmInputToHitMs": 17.399999976158142,
+            "warmHitCount": 8,
+            "navigationLoadMs": 2051,
+            "hitIds": "Mesure clé · L’eau, enjeu central pour l’Humanité :: Consacrer une « règle bleue » qui appliq || Mesure · La bifurcation écologique pour une société de l’harmonie :: Instaurer un moratoire sur les grands pr || Mesure clé · La bifurcation écologique pour une société de l’harmonie :: Inscrire dans la Constitution le princip || Texte · Consommer autrement, une France « zéro déchet » :: La planète croule sous les déchets. À l’ || Texte · La bifurcation écologique pour une société de l’harmonie :: L’urgence écologique et climatique suppo || Mesure · Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme :: Cesser d’appliquer unilatéralement les n || Mesure · La bifurcation écologique pour une société de l’harmonie :: Mettre en place une logistique verte : r || Mesure · La Révolution citoyenne dans les médias :: Élargir les règles anti-concentration sa",
+            "fontsLoaded": "Gowun Batang 400 normal | Public Sans 100 900 normal | Public Sans Fallback Roboto normal normal"
+          }
+        ],
+        "median": {
+          "focusToFirstHitMs": 1272.4000000953674,
+          "inputToFirstHitMs": 1231.4000000953674,
+          "lazyLoadMs": 1245.6999999284744,
+          "fetchPhaseMs": 1023.2999999523163,
+          "indexBuildMs": 219.39999997615814,
+          "warmInputToHitMs": 18.100000023841858,
+          "navigationLoadMs": 2073
+        }
+      },
+      "astro": {
+        "label": "Astro 5 (static + vanilla script)",
+        "runs": [
+          {
+            "run": 1,
+            "focusToFirstHitMs": 1237.2000000476837,
+            "inputToFirstHitMs": 1219.6000000238419,
+            "lazyLoadMs": 1223.1999999284744,
+            "fetchPhaseMs": 1015.5,
+            "indexBuildMs": 207.69999992847443,
+            "hitCount": 8,
+            "warmInputToHitMs": 7.5,
+            "warmHitCount": 8,
+            "navigationLoadMs": 1628,
+            "hitIds": "Mesure clé · L’eau, enjeu central pour l’Humanité :: Consacrer une « règle bleue » qui appliq || Mesure · La bifurcation écologique pour une société de l’harmonie :: Instaurer un moratoire sur les grands pr || Mesure clé · La bifurcation écologique pour une société de l’harmonie :: Inscrire dans la Constitution le princip || Texte · Consommer autrement, une France « zéro déchet » :: La planète croule sous les déchets. À l’ || Texte · La bifurcation écologique pour une société de l’harmonie :: L’urgence écologique et climatique suppo || Mesure · Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme :: Cesser d’appliquer unilatéralement les n || Mesure · La bifurcation écologique pour une société de l’harmonie :: Mettre en place une logistique verte : r || Mesure · La Révolution citoyenne dans les médias :: Élargir les règles anti-concentration sa",
+            "fontsLoaded": "Gowun Batang 400 normal | Public Sans 100 900 normal | Public Sans Fallback Roboto normal normal"
+          },
+          {
+            "run": 2,
+            "focusToFirstHitMs": 1260.1000000238419,
+            "inputToFirstHitMs": 1242.8000000715256,
+            "lazyLoadMs": 1246.7000000476837,
+            "fetchPhaseMs": 1017,
+            "indexBuildMs": 229.70000004768372,
+            "hitCount": 8,
+            "warmInputToHitMs": 7.099999904632568,
+            "warmHitCount": 8,
+            "navigationLoadMs": 1606,
+            "hitIds": "Mesure clé · L’eau, enjeu central pour l’Humanité :: Consacrer une « règle bleue » qui appliq || Mesure · La bifurcation écologique pour une société de l’harmonie :: Instaurer un moratoire sur les grands pr || Mesure clé · La bifurcation écologique pour une société de l’harmonie :: Inscrire dans la Constitution le princip || Texte · Consommer autrement, une France « zéro déchet » :: La planète croule sous les déchets. À l’ || Texte · La bifurcation écologique pour une société de l’harmonie :: L’urgence écologique et climatique suppo || Mesure · Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme :: Cesser d’appliquer unilatéralement les n || Mesure · La bifurcation écologique pour une société de l’harmonie :: Mettre en place une logistique verte : r || Mesure · La Révolution citoyenne dans les médias :: Élargir les règles anti-concentration sa",
+            "fontsLoaded": "Gowun Batang 400 normal | Public Sans 100 900 normal | Public Sans Fallback Roboto normal normal"
+          },
+          {
+            "run": 3,
+            "focusToFirstHitMs": 1254.3999999761581,
+            "inputToFirstHitMs": 1237.1999999284744,
+            "lazyLoadMs": 1240.7999999523163,
+            "fetchPhaseMs": 1017.1000000238419,
+            "indexBuildMs": 223.69999992847443,
+            "hitCount": 8,
+            "warmInputToHitMs": 9.100000023841858,
+            "warmHitCount": 8,
+            "navigationLoadMs": 1607,
+            "hitIds": "Mesure clé · L’eau, enjeu central pour l’Humanité :: Consacrer une « règle bleue » qui appliq || Mesure · La bifurcation écologique pour une société de l’harmonie :: Instaurer un moratoire sur les grands pr || Mesure clé · La bifurcation écologique pour une société de l’harmonie :: Inscrire dans la Constitution le princip || Texte · Consommer autrement, une France « zéro déchet » :: La planète croule sous les déchets. À l’ || Texte · La bifurcation écologique pour une société de l’harmonie :: L’urgence écologique et climatique suppo || Mesure · Désobéir à chaque fois que c’est nécessaire pour mettre en œuvre notre programme :: Cesser d’appliquer unilatéralement les n || Mesure · La bifurcation écologique pour une société de l’harmonie :: Mettre en place une logistique verte : r || Mesure · La Révolution citoyenne dans les médias :: Élargir les règles anti-concentration sa",
+            "fontsLoaded": "Gowun Batang 400 normal | Public Sans 100 900 normal | Public Sans Fallback Roboto normal normal"
+          }
+        ],
+        "median": {
+          "focusToFirstHitMs": 1254.3999999761581,
+          "inputToFirstHitMs": 1237.1999999284744,
+          "lazyLoadMs": 1240.7999999523163,
+          "fetchPhaseMs": 1017,
+          "indexBuildMs": 223.69999992847443,
+          "warmInputToHitMs": 7.5,
+          "navigationLoadMs": 1607
+        }
+      }
+    }
+  },
+  "verdicts": [
+    {
+      "variant": "react",
+      "pass": "external-css",
+      "lcpMs": 2078,
+      "jsInitialGzip": 64682,
+      "criticalPathWire": 118323,
+      "cls": 0,
+      "p1LcpOk": true,
+      "p2JsOk": true,
+      "p3CriticalOk": true,
+      "p4ClsOk": true,
+      "lcpMarginMs": 422,
+      "jsMarginBytes": 35318
+    },
+    {
+      "variant": "astro",
+      "pass": "external-css",
+      "lcpMs": 1459,
+      "jsInitialGzip": 1517,
+      "criticalPathWire": 54879,
+      "cls": 0.002,
+      "p1LcpOk": true,
+      "p2JsOk": true,
+      "p3CriticalOk": true,
+      "p4ClsOk": true,
+      "lcpMarginMs": 1041,
+      "jsMarginBytes": 98483
+    },
+    {
+      "variant": "react",
+      "pass": "inline-css",
+      "lcpMs": 2059,
+      "jsInitialGzip": 64726,
+      "criticalPathWire": 118231,
+      "cls": 0,
+      "p1LcpOk": true,
+      "p2JsOk": true,
+      "p3CriticalOk": true,
+      "p4ClsOk": true,
+      "lcpMarginMs": 441,
+      "jsMarginBytes": 35274
+    },
+    {
+      "variant": "astro",
+      "pass": "inline-css",
+      "lcpMs": 935,
+      "jsInitialGzip": 1517,
+      "criticalPathWire": 54894,
+      "cls": 0.002,
+      "p1LcpOk": true,
+      "p2JsOk": true,
+      "p3CriticalOk": true,
+      "p4ClsOk": true,
+      "lcpMarginMs": 1565,
+      "jsMarginBytes": 98483
+    },
+    {
+      "variant": "react-ssg",
+      "pass": "inline-css",
+      "lcpMs": 929,
+      "jsInitialGzip": 64726,
+      "criticalPathWire": 120789,
+      "cls": 0.002,
+      "p1LcpOk": true,
+      "p2JsOk": true,
+      "p3CriticalOk": true,
+      "p4ClsOk": true,
+      "lcpMarginMs": 1571,
+      "jsMarginBytes": 35274
+    }
+  ]
+}

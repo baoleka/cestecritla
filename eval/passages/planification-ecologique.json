@@ -1,0 +1,496 @@
+{
+  "meta": {
+    "term": "planification écologique",
+    "slug": "planification-ecologique",
+    "aliases": [
+      "planification écologique",
+      "planification"
+    ],
+    "corpus_version": "d29c7422004ab27c",
+    "generated_by": "scripts/extract-passages.ts",
+    "rule_fr": "Seuls les passages « corpus » et « introduction_and_parts » sont le programme 2025 et peuvent être cités mot pour mot. Les passages « livrets_2022 » sont un contexte pédagogique de l'édition 2022 (chiffres périmés) : ils peuvent éclairer une définition mais jamais être présentés comme le programme. Les passages « désintox » servent à la rubrique objection, avec lien."
+  },
+  "corpus": [
+    {
+      "id": "c8-s02-p02",
+      "kind": "paragraph",
+      "text": "La réduction du temps de travail est à la fois un objectif historique et la politique la plus juste, la plus efficace et la moins coûteuse contre l’usure des salariés et le sous-emploi. C’est aussi un enjeu de planification écologique : il est urgent de réduire le nombre de trajets vers son lieu de travail et d’augmenter le temps individuel dédié à d’autres activités.",
+      "sectionId": "c8-s02",
+      "sectionTitle": "Réduire le temps de travail et faire naître une société du temps choisi",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre8/s2/",
+      "chapterTitle": "Chapitre 8 : Travailler tous, travailler moins, travailler mieux",
+      "chapeauId": "c8-s02-p01",
+      "chapeau": "Le temps de travail des salariés français n’a pas diminué depuis 2002. La dernière fois qu’ils ont obtenu une semaine de congés payés supplémentaire remonte à quarante ans, avec l’arrivée au pouvoir de François Mitterrand. La réduction du temps de travail est un progrès social et humain, pour reposer le corps et l’esprit. C’est aussi une nécessité quand les emplois manquent : pour une offre d’emploi vacante, il y a 13 chômeurs dans notre pays !"
+    },
+    {
+      "id": "c12-s01-p01",
+      "kind": "paragraph",
+      "text": "L’urgence écologique et climatique suppose de rompre avec le système de l’argent-roi. L’exigence d’une société d’harmonie des êtres humains entre eux et avec la nature doit être inscrite au sommet de la hiérarchie des normes par la « règle verte » et conditionner l’action de l’État. L’enjeu est la reconquête collective du temps long. C’est le but de la planification écologique comme méthode pour gouverner par les besoins.",
+      "sectionId": "c12-s01",
+      "sectionTitle": "La bifurcation écologique pour une société de l’harmonie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s1/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s01-p01",
+      "chapeau": "L’urgence écologique et climatique suppose de rompre avec le système de l’argent-roi. L’exigence d’une société d’harmonie des êtres humains entre eux et avec la nature doit être inscrite au sommet de la hiérarchie des normes par la « règle verte » et conditionner l’action de l’État. L’enjeu est la reconquête collective du temps long. C’est le but de la planification écologique comme méthode pour gouverner par les besoins."
+    },
+    {
+      "id": "c12-s01-m01",
+      "kind": "measure",
+      "text": "Adopter des lois cadres instaurant une planification écologique et démocratique coordonnant les niveaux national et local",
+      "sectionId": "c12-s01",
+      "sectionTitle": "La bifurcation écologique pour une société de l’harmonie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s1/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s01-p01",
+      "chapeau": "L’urgence écologique et climatique suppose de rompre avec le système de l’argent-roi. L’exigence d’une société d’harmonie des êtres humains entre eux et avec la nature doit être inscrite au sommet de la hiérarchie des normes par la « règle verte » et conditionner l’action de l’État. L’enjeu est la reconquête collective du temps long. C’est le but de la planification écologique comme méthode pour gouverner par les besoins."
+    },
+    {
+      "id": "c12-s01-m02",
+      "kind": "measure",
+      "text": "Donner les moyens humains et financiers à l’État et ses opérateurs publics (comme le Cerema, l’Office national des forêts, l’Office français de la biodiversité ou Météo France) pour mener à bien leur rôle de planification",
+      "sectionId": "c12-s01",
+      "sectionTitle": "La bifurcation écologique pour une société de l’harmonie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s1/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s01-p01",
+      "chapeau": "L’urgence écologique et climatique suppose de rompre avec le système de l’argent-roi. L’exigence d’une société d’harmonie des êtres humains entre eux et avec la nature doit être inscrite au sommet de la hiérarchie des normes par la « règle verte » et conditionner l’action de l’État. L’enjeu est la reconquête collective du temps long. C’est le but de la planification écologique comme méthode pour gouverner par les besoins."
+    },
+    {
+      "id": "c12-s01-m03",
+      "kind": "measure",
+      "text": "Créer un Conseil à la planification écologique",
+      "sectionId": "c12-s01",
+      "sectionTitle": "La bifurcation écologique pour une société de l’harmonie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s1/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s01-p01",
+      "chapeau": "L’urgence écologique et climatique suppose de rompre avec le système de l’argent-roi. L’exigence d’une société d’harmonie des êtres humains entre eux et avec la nature doit être inscrite au sommet de la hiérarchie des normes par la « règle verte » et conditionner l’action de l’État. L’enjeu est la reconquête collective du temps long. C’est le but de la planification écologique comme méthode pour gouverner par les besoins."
+    },
+    {
+      "id": "c12-s01-m08",
+      "kind": "measure",
+      "text": "Créer une Agence pour les relocalisations dépendant du Conseil à la planification écologique, chargée de recenser les secteurs industriels indispensables à la souveraineté nationale et à la bifurcation écologique, et d’établir un plan de relocalisation pour chaque filière ou production stratégique identifiée",
+      "sectionId": "c12-s01",
+      "sectionTitle": "La bifurcation écologique pour une société de l’harmonie",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s1/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s01-p01",
+      "chapeau": "L’urgence écologique et climatique suppose de rompre avec le système de l’argent-roi. L’exigence d’une société d’harmonie des êtres humains entre eux et avec la nature doit être inscrite au sommet de la hiérarchie des normes par la « règle verte » et conditionner l’action de l’État. L’enjeu est la reconquête collective du temps long. C’est le but de la planification écologique comme méthode pour gouverner par les besoins."
+    },
+    {
+      "id": "c12-s02-p01",
+      "kind": "paragraph",
+      "text": "Nous devons réorganiser l’État républicain d’après des objectifs écologiques et démocratiques. La planification écologique devra s’appuyer sur la commune, échelon vital de la démocratie. L’objectif de maîtrise du cycle de l’eau doit guider la nouvelle organisation : les bassins versants et les agences de l’eau en seront le socle, pour atteindre un grand objectif « zéro pollution et zéro épuisement de la ressource en eau ».",
+      "sectionId": "c12-s02",
+      "sectionTitle": "L’organisation de l’État au service de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s2/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s02-p01",
+      "chapeau": "Nous devons réorganiser l’État républicain d’après des objectifs écologiques et démocratiques. La planification écologique devra s’appuyer sur la commune, échelon vital de la démocratie. L’objectif de maîtrise du cycle de l’eau doit guider la nouvelle organisation : les bassins versants et les agences de l’eau en seront le socle, pour atteindre un grand objectif « zéro pollution et zéro épuisement de la ressource en eau »."
+    },
+    {
+      "id": "c12-s02-k01",
+      "kind": "key_measure",
+      "text": "Redécouper les Régions à partir des bassins versants et leur confier l’eau comme première responsabilité",
+      "sectionId": "c12-s02",
+      "sectionTitle": "L’organisation de l’État au service de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s2/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s02-p01",
+      "chapeau": "Nous devons réorganiser l’État républicain d’après des objectifs écologiques et démocratiques. La planification écologique devra s’appuyer sur la commune, échelon vital de la démocratie. L’objectif de maîtrise du cycle de l’eau doit guider la nouvelle organisation : les bassins versants et les agences de l’eau en seront le socle, pour atteindre un grand objectif « zéro pollution et zéro épuisement de la ressource en eau »."
+    },
+    {
+      "id": "c12-s02-m01",
+      "kind": "measure",
+      "text": "Impliquer pleinement les communes dans les décisions et la mise en œuvre des investissements de la planification écologique",
+      "sectionId": "c12-s02",
+      "sectionTitle": "L’organisation de l’État au service de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s2/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s02-p01",
+      "chapeau": "Nous devons réorganiser l’État républicain d’après des objectifs écologiques et démocratiques. La planification écologique devra s’appuyer sur la commune, échelon vital de la démocratie. L’objectif de maîtrise du cycle de l’eau doit guider la nouvelle organisation : les bassins versants et les agences de l’eau en seront le socle, pour atteindre un grand objectif « zéro pollution et zéro épuisement de la ressource en eau »."
+    },
+    {
+      "id": "c12-s02-m02",
+      "kind": "measure",
+      "text": "Supprimer les régions transfrontalières (ou eurorégions)",
+      "sectionId": "c12-s02",
+      "sectionTitle": "L’organisation de l’État au service de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s2/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s02-p01",
+      "chapeau": "Nous devons réorganiser l’État républicain d’après des objectifs écologiques et démocratiques. La planification écologique devra s’appuyer sur la commune, échelon vital de la démocratie. L’objectif de maîtrise du cycle de l’eau doit guider la nouvelle organisation : les bassins versants et les agences de l’eau en seront le socle, pour atteindre un grand objectif « zéro pollution et zéro épuisement de la ressource en eau »."
+    },
+    {
+      "id": "c12-s02-m03",
+      "kind": "measure",
+      "text": "Interdire le « droit à la différenciation » – qui permettrait que des règles différentes s’appliquent selon les territoires – afin de garantir l’égalité entre les citoyens",
+      "sectionId": "c12-s02",
+      "sectionTitle": "L’organisation de l’État au service de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s2/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s02-p01",
+      "chapeau": "Nous devons réorganiser l’État républicain d’après des objectifs écologiques et démocratiques. La planification écologique devra s’appuyer sur la commune, échelon vital de la démocratie. L’objectif de maîtrise du cycle de l’eau doit guider la nouvelle organisation : les bassins versants et les agences de l’eau en seront le socle, pour atteindre un grand objectif « zéro pollution et zéro épuisement de la ressource en eau »."
+    },
+    {
+      "id": "c12-s02-m04",
+      "kind": "measure",
+      "text": "Réserver le statut de collectivité unique aux territoires insulaires et des Outre-mer",
+      "sectionId": "c12-s02",
+      "sectionTitle": "L’organisation de l’État au service de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s2/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s02-p01",
+      "chapeau": "Nous devons réorganiser l’État républicain d’après des objectifs écologiques et démocratiques. La planification écologique devra s’appuyer sur la commune, échelon vital de la démocratie. L’objectif de maîtrise du cycle de l’eau doit guider la nouvelle organisation : les bassins versants et les agences de l’eau en seront le socle, pour atteindre un grand objectif « zéro pollution et zéro épuisement de la ressource en eau »."
+    },
+    {
+      "id": "c12-s02-m05",
+      "kind": "measure",
+      "text": "Recomposer les assemblées régionales à partir des élections des conseillers départementaux",
+      "sectionId": "c12-s02",
+      "sectionTitle": "L’organisation de l’État au service de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s2/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s02-p01",
+      "chapeau": "Nous devons réorganiser l’État républicain d’après des objectifs écologiques et démocratiques. La planification écologique devra s’appuyer sur la commune, échelon vital de la démocratie. L’objectif de maîtrise du cycle de l’eau doit guider la nouvelle organisation : les bassins versants et les agences de l’eau en seront le socle, pour atteindre un grand objectif « zéro pollution et zéro épuisement de la ressource en eau »."
+    },
+    {
+      "id": "c12-s02-m06",
+      "kind": "measure",
+      "text": "Mettre en place des défenseurs de la nature chargés de l’eau, l’air, la forêt, la végétalisation et la perméabilité des sols au niveau communal",
+      "sectionId": "c12-s02",
+      "sectionTitle": "L’organisation de l’État au service de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s2/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s02-p01",
+      "chapeau": "Nous devons réorganiser l’État républicain d’après des objectifs écologiques et démocratiques. La planification écologique devra s’appuyer sur la commune, échelon vital de la démocratie. L’objectif de maîtrise du cycle de l’eau doit guider la nouvelle organisation : les bassins versants et les agences de l’eau en seront le socle, pour atteindre un grand objectif « zéro pollution et zéro épuisement de la ressource en eau »."
+    },
+    {
+      "id": "c12-s02-m07",
+      "kind": "measure",
+      "text": "Mettre en place des assemblées citoyennes régionales pour débattre des projets d’aménagement et d’investissement en lien avec la planification écologique",
+      "sectionId": "c12-s02",
+      "sectionTitle": "L’organisation de l’État au service de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s2/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s02-p01",
+      "chapeau": "Nous devons réorganiser l’État républicain d’après des objectifs écologiques et démocratiques. La planification écologique devra s’appuyer sur la commune, échelon vital de la démocratie. L’objectif de maîtrise du cycle de l’eau doit guider la nouvelle organisation : les bassins versants et les agences de l’eau en seront le socle, pour atteindre un grand objectif « zéro pollution et zéro épuisement de la ressource en eau »."
+    },
+    {
+      "id": "c12-s02-m08",
+      "kind": "measure",
+      "text": "Stopper l’étalement urbain : rapprocher les bassins de vie et les bassins d’emploi",
+      "sectionId": "c12-s02",
+      "sectionTitle": "L’organisation de l’État au service de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s2/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s02-p01",
+      "chapeau": "Nous devons réorganiser l’État républicain d’après des objectifs écologiques et démocratiques. La planification écologique devra s’appuyer sur la commune, échelon vital de la démocratie. L’objectif de maîtrise du cycle de l’eau doit guider la nouvelle organisation : les bassins versants et les agences de l’eau en seront le socle, pour atteindre un grand objectif « zéro pollution et zéro épuisement de la ressource en eau »."
+    },
+    {
+      "id": "c12-s02-m09",
+      "kind": "measure",
+      "text": "Renforcer les moyens humains et financiers de l’ingénierie des territoires pour appuyer les collectivités dans une planification écologique régénérative (restauration du cycle de l’eau, énergies renouvelables)",
+      "sectionId": "c12-s02",
+      "sectionTitle": "L’organisation de l’État au service de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s2/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s02-p01",
+      "chapeau": "Nous devons réorganiser l’État républicain d’après des objectifs écologiques et démocratiques. La planification écologique devra s’appuyer sur la commune, échelon vital de la démocratie. L’objectif de maîtrise du cycle de l’eau doit guider la nouvelle organisation : les bassins versants et les agences de l’eau en seront le socle, pour atteindre un grand objectif « zéro pollution et zéro épuisement de la ressource en eau »."
+    },
+    {
+      "id": "c12-s03-p01",
+      "kind": "paragraph",
+      "text": "Les Outre-mer pourraient être les pilotes de la planification écologique et du progrès humain. Il existe déjà des « plans pays » bâtis par les Ultramarins eux-mêmes. Ils doivent servir de grands objectifs écologiques fixés à partir des besoins essentiels : autonomie énergétique, relocalisation de la production alimentaire, déploiement d’une économie de la mer.",
+      "sectionId": "c12-s03",
+      "sectionTitle": "Les Outre-mer, avant-postes de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s3/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s03-p01",
+      "chapeau": "Les Outre-mer pourraient être les pilotes de la planification écologique et du progrès humain. Il existe déjà des « plans pays » bâtis par les Ultramarins eux-mêmes. Ils doivent servir de grands objectifs écologiques fixés à partir des besoins essentiels : autonomie énergétique, relocalisation de la production alimentaire, déploiement d’une économie de la mer."
+    },
+    {
+      "id": "c12-s03-k01",
+      "kind": "key_measure",
+      "text": "Faire des Outre-mer des territoires pilotes de la planification écologique et des circuits courts : autonomie énergétique et 100 % renouvelable, autosuffisance alimentaire, politique maritime, protection de la biodiversité",
+      "sectionId": "c12-s03",
+      "sectionTitle": "Les Outre-mer, avant-postes de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s3/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s03-p01",
+      "chapeau": "Les Outre-mer pourraient être les pilotes de la planification écologique et du progrès humain. Il existe déjà des « plans pays » bâtis par les Ultramarins eux-mêmes. Ils doivent servir de grands objectifs écologiques fixés à partir des besoins essentiels : autonomie énergétique, relocalisation de la production alimentaire, déploiement d’une économie de la mer."
+    },
+    {
+      "id": "c12-s03-m01",
+      "kind": "measure",
+      "text": "Instaurer un bouclier douanier via une taxe kilométrique en faveur des productions locales à faible empreinte écologique",
+      "sectionId": "c12-s03",
+      "sectionTitle": "Les Outre-mer, avant-postes de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s3/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s03-p01",
+      "chapeau": "Les Outre-mer pourraient être les pilotes de la planification écologique et du progrès humain. Il existe déjà des « plans pays » bâtis par les Ultramarins eux-mêmes. Ils doivent servir de grands objectifs écologiques fixés à partir des besoins essentiels : autonomie énergétique, relocalisation de la production alimentaire, déploiement d’une économie de la mer."
+    },
+    {
+      "id": "c12-s03-m02",
+      "kind": "measure",
+      "text": "Appliquer une préférence commerciale pour les produits ultramarins vers l’Hexagone et l’Europe et nouer des partenariats commerciaux équilibrés avec les voisins régionaux",
+      "sectionId": "c12-s03",
+      "sectionTitle": "Les Outre-mer, avant-postes de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s3/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s03-p01",
+      "chapeau": "Les Outre-mer pourraient être les pilotes de la planification écologique et du progrès humain. Il existe déjà des « plans pays » bâtis par les Ultramarins eux-mêmes. Ils doivent servir de grands objectifs écologiques fixés à partir des besoins essentiels : autonomie énergétique, relocalisation de la production alimentaire, déploiement d’une économie de la mer."
+    },
+    {
+      "id": "c12-s03-m03",
+      "kind": "measure",
+      "text": "Tendre vers l’autosuffisance alimentaire grâce à l’agriculture paysanne écologique et des filières agroalimentaires locales",
+      "sectionId": "c12-s03",
+      "sectionTitle": "Les Outre-mer, avant-postes de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s3/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s03-p01",
+      "chapeau": "Les Outre-mer pourraient être les pilotes de la planification écologique et du progrès humain. Il existe déjà des « plans pays » bâtis par les Ultramarins eux-mêmes. Ils doivent servir de grands objectifs écologiques fixés à partir des besoins essentiels : autonomie énergétique, relocalisation de la production alimentaire, déploiement d’une économie de la mer."
+    },
+    {
+      "id": "c12-s03-m04",
+      "kind": "measure",
+      "text": "Protéger la biodiversité exceptionnelle des Outre-mer",
+      "sectionId": "c12-s03",
+      "sectionTitle": "Les Outre-mer, avant-postes de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s3/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s03-p01",
+      "chapeau": "Les Outre-mer pourraient être les pilotes de la planification écologique et du progrès humain. Il existe déjà des « plans pays » bâtis par les Ultramarins eux-mêmes. Ils doivent servir de grands objectifs écologiques fixés à partir des besoins essentiels : autonomie énergétique, relocalisation de la production alimentaire, déploiement d’une économie de la mer."
+    },
+    {
+      "id": "c12-s03-m05",
+      "kind": "measure",
+      "text": "Promouvoir des plans d’autonomie énergétique",
+      "sectionId": "c12-s03",
+      "sectionTitle": "Les Outre-mer, avant-postes de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s3/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s03-p01",
+      "chapeau": "Les Outre-mer pourraient être les pilotes de la planification écologique et du progrès humain. Il existe déjà des « plans pays » bâtis par les Ultramarins eux-mêmes. Ils doivent servir de grands objectifs écologiques fixés à partir des besoins essentiels : autonomie énergétique, relocalisation de la production alimentaire, déploiement d’une économie de la mer."
+    },
+    {
+      "id": "c12-s03-m06",
+      "kind": "measure",
+      "text": "Renforcer la résilience des territoires ultramarins face aux risques naturels majeurs en améliorant les dispositifs de prévention, de gestion de crise et de réparation, avec des solutions innovantes et des moyens adaptés aux besoins des populations",
+      "sectionId": "c12-s03",
+      "sectionTitle": "Les Outre-mer, avant-postes de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s3/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s03-p01",
+      "chapeau": "Les Outre-mer pourraient être les pilotes de la planification écologique et du progrès humain. Il existe déjà des « plans pays » bâtis par les Ultramarins eux-mêmes. Ils doivent servir de grands objectifs écologiques fixés à partir des besoins essentiels : autonomie énergétique, relocalisation de la production alimentaire, déploiement d’une économie de la mer."
+    },
+    {
+      "id": "c12-s03-m07",
+      "kind": "measure",
+      "text": "Développer l’offre locale de formation aux métiers de la bifurcation écologique (électricité et déploiement d’énergies renouvelables, utilisation de matériaux biosourcées locaux, foresterie et pêche durables)",
+      "sectionId": "c12-s03",
+      "sectionTitle": "Les Outre-mer, avant-postes de la planification écologique",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre12/s3/",
+      "chapterTitle": "Chapitre 12 : Planification écologique",
+      "chapeauId": "c12-s03-p01",
+      "chapeau": "Les Outre-mer pourraient être les pilotes de la planification écologique et du progrès humain. Il existe déjà des « plans pays » bâtis par les Ultramarins eux-mêmes. Ils doivent servir de grands objectifs écologiques fixés à partir des besoins essentiels : autonomie énergétique, relocalisation de la production alimentaire, déploiement d’une économie de la mer."
+    },
+    {
+      "id": "c15-s01-k01",
+      "kind": "key_measure",
+      "text": "Adopter un plan d’adaptation aux pandémies et zoonoses non liberticide, basé sur la société du roulement et la planification sanitaire",
+      "sectionId": "c15-s01",
+      "sectionTitle": "S’organiser pour faire face aux pandémies",
+      "sectionUrl": "https://melenchon2027.fr/programme2025/livre/chapitre15/s1/",
+      "chapterTitle": "Chapitre 15 : Une approche de santé globale",
+      "chapeauId": "c15-s01-p01",
+      "chapeau": "Tant que les causes des pandémies n’auront pas été réglées, nous devons nous tenir prêts à des répliques de même nature que le Covid-19. Il nous faudra le faire de la manière la plus efficace et humaine, c’est-à-dire en choisissant le « tous ensemble » plutôt que le « chacun pour soi » et en sauvegardant nos libertés. L’État planificateur sera l’instrument principal de notre adaptation à l’ère des pandémies."
+    }
+  ],
+  "introduction_and_parts": [
+    {
+      "id": "intro-p22",
+      "text": "Nous devons tous surmonter la crise écologique. Il y a un seul écosystème compatible avec la vie humaine donc il y a un intérêt général humain. La vie humaine n’est pas séparée du reste de la nature. Elle est toute entière enchâssée dans les cycles biologiques, biophysiques et géologiques qui l’ont vu naître. Ces cycles sont aujourd’hui perturbés par une réalité destructrice : le capitalisme. Sa logique infernale est celle d’une soumission de tous les rythmes, humains et non humains, au seul cycle du profit lui-même en accélération permanente. Il faut remettre en harmonie les cycles de notre production, de notre consommation et de nos échanges avec les grands cycles écosystémiques. Découle de ce but la règle verte : ne jamais prendre à la nature davantage qu’elle ne peut reconstituer sur une période donnée. Mais ce n’est pas tout : il faudra aussi réparer les dégâts, régénérer là où c’est possible, la nature détruite. Pour cela, la nouvelle France doit se fixer l’objectif de rompre avec le capitalisme. Et de substituer à la dictature des actionnaires un outil d’intérêt plus collectif pour guider l’économie : la planification écologique."
+    },
+    {
+      "id": "part3-p01",
+      "text": "Le capitalisme financiarisé épuise les humains et les écosystèmes. Construire une société de l’harmonie avec la nature suppose donc de rompre avec ce système. Les destructions et dévastations dues à des phénomènes climatiques extrêmes, aux pandémies et aux autres conséquences du changement climatique s’intensifient et sont de plus en plus violentes. Si ces catastrophes détruisent, c’est l’impréparation, la pauvreté et le chacun pour soi qui tuent. Quand l’ère est à l’incertitude provoquée par le bouleversement des cycles de la nature, il est temps de passer au « tous ensemble ». Nos sociétés font face à une réalité : le changement climatique est irréversible et va s’aggraver tant qu’aucune de ses causes n’est traitée. Il s’agit donc désormais à la fois de le freiner pour garantir la survie des sociétés humaines et de nous adapter à cette nouvelle donne climatique. Notre outil sera la planification puisque le marché et la concurrence ont montré leur incapacité à relever ces défis."
+    }
+  ],
+  "livrets_2022": [
+    {
+      "kind": "livret 2022",
+      "title": "La planification écologique : La règle verte pour rompre avec le productivisme",
+      "url": "https://melenchon2027.fr/livrets-2022/planification-ecologique/",
+      "date": "2024-02-01T19:46:57",
+      "windows": [
+        {
+          "excerpt": "ermination, nous devons procéder à une bifurcation écologique de notre économie. Il s’agit de changer la façon dont nous produisons, consommons et échangeons pour nous mettre en harmonie avec la nature tout en garantissant des conditions de vie dignes pour chacun·e. Cela doit donc être planifié. La planification est d’abord une méthode. La règle directrice et le principe qui en oriente le contenu, nous l’appelons “règle verte”. Concrètement, cela signifie l’obligation, à l’échelle de la France, de ne pas prélever sur la nature plus de ressources renouvelables que ce qu’elle peut reconstituer, ni de produir",
+          "offset": 6618
+        },
+        {
+          "excerpt": "le protection environnementale et sociale ne soient importés en France, en contournant ainsi les obligations définies.\n\n> « De deux choses l’une : soit la solution du problème du changement climatique sera planifiée par une autorité publique agissant avec la puissance publique, soit on déléguera sa planification à des entreprises privées dont la grande priorité est de vendre du charbon, du pétrole et des voitures qui consomment de l’essence. Si c’est la seconde voie qui est suivie, dans un siècle ou deux, le monde industriel développé tel que nous le connaissons n’existera peut-être plus. »\n>\n> James K. Ga",
+          "offset": 11033
+        },
+        {
+          "excerpt": "i les marchés financiers continuent d’agir à leur guise. Il y a donc urgence à engager une transformation au service des citoyen·nes qui sorte de la logique du capital et de ses circuits financiers. Elle nécessite des objectifs et un calendrier de réalisation conformes aux dispositions d’une loi de planification votée par le Parlement.\n\nNotre société est dominée par le « toujours plus » : plus de croissance, de compétitivité, de vitesse, de consommation, de stress. La planification rétablit la gestion du temps long plutôt que la dictature du temps court, le qualitatif plutôt que le quantitatif, et le refus",
+          "offset": 11795
+        },
+        {
+          "excerpt": "ettrait de réaliser au mieux un quart du chemin à parcourir pour limiter le réchauffement à 2 degrés. En clair, les trois quarts de l’effort à fournir relèvent d’une transformation systémique où il “revient à l’État d’assumer pleinement son rôle de régulateur, d’investisseur et de catalyseur. Cette planification sera élaborée de façon participative, sur la base d’arbitrages citoyens entre les divers intérêts. Planifier permet d’identifier les biens communs et de développer les services publics nécessaires à leur protection. Elle explore les voies de la collectivisation et de la réappropriation citoyenne de",
+          "offset": 13453
+        },
+        {
+          "excerpt": "me la Commission européenne, dans ses premières années, se livrait à des exercices de programmation à moyen terme et fixait des objectifs généraux pour la production industrielle ou scientifique. À l’heure actuelle, il existe une multitude de plans élaborés par les administrations françaises, de la planification des sols aux plans climat-air-énergie territoriaux. Les grandes entreprises elles-mêmes planifient au quotidien leurs activités économiques, leurs investissements, leur production, leur gestion des stocks. Planifier signifie se réapproprier le temps long et donc les décisions de grande portée. Mais",
+          "offset": 14289
+        }
+      ],
+      "full_text": "> « Une croissance indéfinie est impossible, nous n’avons qu’une seule Terre, mais une civilisation du bonheur est possible. »\n>\n> René Dumont\n\n## Notre constat : le productivisme détruit l’écosystème compatible avec la vie humaine\n\nNotre écosystème global est désormais en état d’urgence écologique. La vie sur la seule planète à notre disposition est en danger.\n\nLes bouleversements climatiques, conséquence majeure des trop nombreuses émissions de gaz à effet de serre provoquées par les activités humaines, ont atteint un niveau tel qu’ils menacent la survie des espèces, dont la nôtre.\n\nLa limite impérative d’élévation des températures à un maximum de 1,5 degré par rapport à l’époque préindustrielle risque d’être atteinte avant 2030. Le seuil symbolique de 400 parties par million (ppm) de CO2, jamais franchi depuis 23 millions d’années, a été dépassé. De plus, les engagements pris par les États dans le cadre de l’accord de Paris sur le climat (COP21) puis lors de la COP26 de Glasgow ne permettront pas de respecter cette limite et nous conduisent tout droit vers un réchauffement de 2,7 degrés à la fin du siècle.\n\nLe changement climatique est commencé et une partie de ses effets est d’ores et déjà irréversibles. Le cycle de l’eau est déjà grandement perturbé. Ainsi, cela se traduit entre autres par l’acidification des océans, phénomène responsable de l’extinction d’écosystèmes marins entiers tels les récifs coralliens, la submersion d’îles et de zones côtières, y compris en France, l’augmentation de la fréquence et de l’intensité d’épisodes climatiques extrêmes (sécheresses, canicules, incendies, pluies diluviennes, inondations, ouragans, tornades, etc.) Ces fléaux frappent toujours plus les populations, à commencer par celles des pays les plus pauvres. À brève échéance, certaines régions vont devenir inhabitables.\n\nCes phénomènes s’accompagnent d’une régression massive de la biodiversité et d’une sixième extinction de masse des espèces à un rythme jamais constaté depuis la disparition des dinosaures. Un million d’espèces animales et végétales, soit 1 sur 8, sont menacées d’extinction à court terme. La biodiversité n’a pas de prix et sa perte signifie la destruction de biens communs aux dépens des générations à venir. Au-delà de la tragédie naturelle, scientifique et biologique, cette extinction a aussi des impacts économiques.\n\nLe changement climatique n’est pas seul en cause. La dégradation de la qualité des sols et leur artificialisation, ainsi que la pollution par les pesticides et par les rejets industriels, participent de la disparition d’habitats naturels tout en fragilisant l’agriculture. Les évolutions climatiques et plus largement la dégradation de l’environnement dont la multiplication des molécules chimiques ont des répercussions graves et nombreuses sur la santé humaine (cancers, maladies cardiovasculaires, asthme, atteintes neurodégénératives, baisse de la fertilité, etc.). Le fléau plastique se répand au fil du cycle de l’eau. Des études démontrent plus généralement la présence systématique de perturbateurs endocriniens, cancérigènes avérés ou suspectés dans l’organisme de tou·tes les Français·es. La pollution de l’air serait responsable chaque année de dizaines de milliers de décès.\n\nNous assistons en outre à une montée des conflits géopolitiques liés à l’accès aux ressources (terre, eau, énergies fossiles, métaux les plus utilisés) et à l’augmentation du nombre de réfugié·es climatiques qui pourraient être plus de 200 millions d’ici 2050.\n\nNotre modèle économique est devenu insoutenable pour la planète, avec l’extraction de plus en plus effrénée des matières premières non renouvelables comme les métaux, et parce que nous consommons en un an davantage que la capacité de régénération des ressources renouvelables par les écosystèmes.\n\nLe jour du dépassement correspond à la date à laquelle les ressources renouvelables de la planète pour cette année ont été consommées. Il est effectif dès le 29 juillet en 2021 au lieu du 1er octobre en l’an 2000. Nous consommons l’équivalent des ressources de 1,7 planète par an. De façon inégalitaire : 5 avec le mode de vie étasunien, 2,9 pour un·e Français·e, et seulement 0,7 pour un·e Indien·ne.\n\nLe productivisme détruit l’écosystème compatible avec la vie humaine. Selon une formule parfois attribuée à Antoine de Saint-Exupéry, « Nous n’héritons pas de la terre de nos parents, nous l’empruntons à nos enfants. » Or, nous avons déjà une dette écologique vis-à-vis des générations futures. Elle se double d’une dette des pays du Nord à l’égard des pays du Sud pour avoir pillé et exploité leurs ressources. Ce pillage se poursuit avec le brevetage du vivant, la déforestation importée au profit des pays du Nord et les accaparements de terres.\n\n### La montée des eaux\n\n> « Avant la fin du siècle, 75 % de la population mondiale vivra à moins de 100 kilomètres d’un rivage. De son côté, la mer monte. Pourtant, son niveau est resté quasi stable pendant plus de trois mille ans : elle montait de 0,1 millimètre par an. Depuis 1900, ça va nettement plus vite : 17 centimètres de plus au cours du XXe siècle ! L’eau devrait encore monter de 50 centimètres d’ici à 2050 et de 1,40 mètre d’ici à 2100 ! Une fois de plus, l’événement, c’est la rapidité du changement. Conséquence : plus de 200 millions de personnes à déplacer. Soit trois fois la population de la France ! Il va falloir quand même s’y intéresser. Huit des dix plus grandes villes du monde sont situées sur les littoraux. C’est déjà un risque majeur. L’ampleur de la catastrophe de Fukushima ne provient pas du tremblement de terre sous-marin. Il y en a toujours eu. Et des tsunamis aussi. Mais avant, ils détruisaient des cabanes de pêcheurs. Dorénavant, ils dévastent des centrales nucléaires qui les ont remplacées sur le rivage. En France, la tempête de 1999 a déjà failli noyer la centrale nucléaire du Blayais, installée à 50 kilomètres à peine du centre-ville de Bordeaux, sur l’estuaire de la Gironde. En 2010, en Vendée, on a vu aussi la mer recouvrir une zone habitée. »\n>\n> Jean-Luc Mélenchon, L’Ère du Peuple, 2016.\n\n## Notre projet : la règle verte pour mettre en œuvre la bifurcation écologique\n\nNotre défi est d’inscrire l’activité humaine dans le cadre des limites planétaires. Pour y répondre avec responsabilité et détermination, nous devons procéder à une bifurcation écologique de notre économie. Il s’agit de changer la façon dont nous produisons, consommons et échangeons pour nous mettre en harmonie avec la nature tout en garantissant des conditions de vie dignes pour chacun·e. Cela doit donc être planifié. La planification est d’abord une méthode. La règle directrice et le principe qui en oriente le contenu, nous l’appelons “règle verte”. Concrètement, cela signifie l’obligation, à l’échelle de la France, de ne pas prélever sur la nature plus de ressources renouvelables que ce qu’elle peut reconstituer, ni de produire plus de pollutions et de déchets que ce qu’elle peut supporter.\n\nCela inclut notamment l’atteinte de la neutralité carbone d’ici 2050, tant sur les émissions domestiques que les émissions importées (empreinte climatique nationale) avec une production d’énergie 100% renouvelable, la préservation de la biodiversité, un usage sobre des matières premières non renouvelables et l’objectif du zéro déchet.\n\nLa règle verte doit être inscrite dans la Constitution. Elle permettra d’empêcher le droit de propriété de prévaloir sur la protection de l’eau, de l’air, de l’alimentation, du vivant, de la santé et de l’énergie. La Charte de l’environnement, intégrée en 2005 dans le bloc de constitutionnalité, a affirmé trois principes : prévention, précaution et pollueur-payeur. Ces principes ayant été affaiblis ces dernières années (avec, par exemple, le système de compensation introduit par la loi Biodiversité en 2016), la règle verte permettra au contraire d’imposer par sa concrétisation dans la loi :\n\n- Une stratégie nationale bas carbone à la hauteur des défis climatiques, avec notamment la réduction de nos émissions de gaz à effet de serre de 65% en 2030 par rapport à 2020\n- L’évaluation de la pertinence écologique et sociale de chaque loi ou projet d’infrastructure d’ampleur\n- L’obligation d’un bilan écologique global pour tout projet industriel ou d’aménagement, comprenant ses conséquences en matière d’empreinte écologique et d’impacts sur la santé\n- La collectivisation des biens communs et services essentiels\n- L’élimination progressive des produits néfastes pour la santé et dommageables pour l’environnement par la fixation de normes et d’interdictions\n- Des obligations d’indépendance des recherches sur l’impact des produits phytosanitaires sur la biosphère et la santé humaine, et leur interdiction à la vente pour les plus dangereux (glyphosate, néonicotinoïdes)\n- Engager un plan d’urgence pour la dépollution et la décontamination rapide des régions durablement polluées\n- L’obligation, pour les branches industrielles, de fabriquer des produits éco-conçus : utilisation minimum de matière première non renouvelable, priorité aux mono-matériaux plutôt qu’aux multi-matériaux et composites plus difficiles à récupérer. Un allongement des durées de garantie obligatoire permettra de lutter contre l’obsolescence programmée. La réparation, le démontage, la réutilisation et le recyclage devront être prévus dès la conception\n- Une impulsion donnée à la diversification des technologies, en tenant compte de leur robustesse et de leur accessibilité\n- La limitation drastique de l’activité publicitaire à objet commercial et la suppression des panneaux numériques publicitaires\n\nCette bifurcation écologique ne peut se concevoir sans repenser le calcul de la richesse et sa répartition. Celle-ci doit être juste. Les 10% les plus riches du pays ont émis autant de CO2 que la moitié la plus pauvre entre 1990 et 2015. Les inégalités sont extrêmes : les 10% de Français·es les plus pauvres polluent 8 fois moins que les 10% les plus riches. Pourtant, ce sont les classes populaires qui subissent en premier les conséquences. Le Covid-19 a par exemple frappé plus durement les plus pauvres rendu·es vulnérables par les maladies liées à la pollution de l’air et la malbouffe ou encore une contagion accentuée par le mal-logement.\n\nLe produit intérieur brut (PIB) ne mesure pas le niveau de bien-être, ni ne rend compte des services rendus par les activités sociales ou culturelles, ni ne comptabilise le coût des dégâts écologiques, tandis qu’il intègre leur réparation. La règle verte nécessite donc de nouveaux indicateurs de progrès humain.\n\nElle suppose aussi la mise en place d’un protectionnisme écologique et solidaire pour éviter que des produits fabriqués dans des pays à faible protection environnementale et sociale ne soient importés en France, en contournant ainsi les obligations définies.\n\n> « De deux choses l’une : soit la solution du problème du changement climatique sera planifiée par une autorité publique agissant avec la puissance publique, soit on déléguera sa planification à des entreprises privées dont la grande priorité est de vendre du charbon, du pétrole et des voitures qui consomment de l’essence. Si c’est la seconde voie qui est suivie, dans un siècle ou deux, le monde industriel développé tel que nous le connaissons n’existera peut-être plus. »\n>\n> James K. Galbraith, économiste\n\n## Nos propositions : sortir du productivisme et du consumérisme\n\nLa planification écologique ne pourra pas être mise en œuvre si les marchés financiers continuent d’agir à leur guise. Il y a donc urgence à engager une transformation au service des citoyen·nes qui sorte de la logique du capital et de ses circuits financiers. Elle nécessite des objectifs et un calendrier de réalisation conformes aux dispositions d’une loi de planification votée par le Parlement.\n\nNotre société est dominée par le « toujours plus » : plus de croissance, de compétitivité, de vitesse, de consommation, de stress. La planification rétablit la gestio"
+    },
+    {
+      "kind": "plan 2022",
+      "title": "Comment nous allons : mettre en œuvre la règle verte par la planification écologique",
+      "url": "https://melenchon2027.fr/plans-2022/regle-verte/",
+      "date": "2024-01-31T18:21:30",
+      "windows": [
+        {
+          "excerpt": "s et offrir à chacun les moyens d’une vie digne. Pour ce faire, il est nécessaire de fixer des objectifs, développer des filières et anticiper les métiers dont nous avons besoin.\n\nCette nouvelle organisation de l’économie en vue de sa mobilisation pour un objectif d’intérêt général, nous l’appelons planification écologique.\n\nL’inaction coupable du quinquennat d’Emmanuel Macron rend la mise en place de la planification écologique encore plus urgente. Celle-ci se déploiera dans tous les secteurs avec comme principe directeur la règle verte. Elle devra pour cela accomplir plusieurs objectifs.\n\nD’une part, nous devons no",
+          "offset": 2700
+        },
+        {
+          "excerpt": "duction avec les nouvelles exigences écologiques. Enfin, alors que les émissions importées sont en train de dépasser celles émises en France, il faut organiser le raccourcissement des chaînes d’interdépendance économique par la relocalisation des activités. Des milliers d’emplois sont à la clé.\n\nLa planification est avant tout une méthode. Elle doit être démocratique. Il ne s’agit pas d’organiser une structure technocratique qui prendrait des décisions sans rapport avec la réalité. Cela serait contre-productif puisque la planification doit s’appuyer sur la mobilisation générale des acteurs économiques. Les",
+          "offset": 4068
+        },
+        {
+          "excerpt": "is discutés par le Parlement mais aussi par les syndicats de travailleur·ses et organisations patronales. Les communes seront placées au cœur de sa mise en œuvre, puisqu’elles sont les cellules de base de la démocratie. Elles savent gérer le « goutte à goutte » des investissements.\n\nUn Conseil à la planification écologique coordonnera ces concertations mais également la mise en œuvre de la planification écologique. Il associera largement les branches professionnelles, syndicats, associations et ONG dont la mobilisation est indispensable. Il pourra aussi s’appuyer sur des outils nouveaux. Une agence pour la relocalisa",
+          "offset": 4734
+        },
+        {
+          "excerpt": "versibilité de certains changements notamment sur le cycle de l’eau ; accélération et aggravation des impacts ; points de bascule climatiques — ces seuils au-delà desquels le système climatique se modifie de manière abrupte, entraînant un emballement de ce système — franchis.\n\nC’est peu dire que la planification n’a pas marqué le quinquennat d’Emmanuel Macron, qui préfère laisser notre destin dans les mains du marché. Conformément aux exigences européennes, il a tout misé sur la libéralisation et l’ouverture à la concurrence. Ainsi la SNCF a une nouvelle fois été leur cible, alors qu’elle est précisément u",
+          "offset": 10015
+        },
+        {
+          "excerpt": "ngement climatique est désormais irréversible, il est encore temps de le limiter et de mettre en œuvre des politiques d’atténuation et d’adaptation aux effets du changement climatique et de lutte contre la perte massive de biodiversité.\n\n## Notre stratégie\n\nNous proposons pour cela une méthode : la planification écologique.\n\nCette planification écologique aura pour principe directeur la « règle verte ». La France se fixe ainsi l’obligation de ne plus prélever sur la nature plus de ressources renouvelables que ce qu’elle peut reconstituer, ni de produire plus de pollutions et de déchets que ce qu’elle peut supporter.",
+          "offset": 15297
+        }
+      ],
+      "full_text": "## Introduction de Jean-Luc Mélenchon\n\nLes années à venir sont décisives pour l’Humanité. Le changement climatique a commencé, et il est irréversible. La sixième extinction de masse est enclenchée. Nous faisons face au plus important des défis : le seul écosystème compatible avec la vie humaine est menacé.\n\nDécisif, ce sujet devrait être le cœur du débat pour l’élection présidentielle. Ses conséquences se déploient déjà sous nos yeux. Le cycle de l’eau est gravement perturbé : sécheresses extrêmes et pluies diluviennes s’alternent et vont aller en s’empirant. D’ici 2030, la moitié de l’Humanité vivra dans des régions en situation de pénuries d’eau. Notre pays ne sera pas épargné. Le bon fonctionnement des biens communs dont nous dépendons pour reproduire notre existence matérielle est mis en péril. Ils sont au seuil de points de non retour. Ce ne sont pas là des processus linéaires. Encore moins prévisibles. Nous sommes entrés dans l’ère de l’incertitude écologique.\n\nNotre programme l’Avenir en commun est traversé de part en part par cet enjeu. Son but : construire une société d’entraide visant l’harmonie des êtres humains entre eux et avec la nature. Pour y parvenir, il faut aller à la racine du problème. Tous les défis écologiques s’enracinent dans la question sociale. Ainsi, au point de départ de la crise écologique se trouve une prédation humaine croissante. Celle-ci est démultipliée par un modèle économique à la frénésie productiviste sans limite : le capitalisme financiarisé. Ce système est incapable de se corriger. Pire, il se nourrit de la catastrophe qu’il provoque. La pandémie de Covid-19 en a été une démonstration implacable.\n\nIl ne peut y avoir de bifurcation de nos modes de production, d’échanges et de consommation sans rupture avec le capitalisme financier. La recherche du profit à court terme et de l’abaissement continu des coûts sociaux et environnementaux est incompatible avec l’harmonie avec la nature. Elle entre en contradiction frontale avec le principe de la règle verte : ne pas prélever sur la nature davantage que ce qu’elle peut reconstituer.\n\nIl faut donc faire coïncider les rythmes de nos productions, de nos échanges et de nos consommations avec les rythmes de la nature elle-même. Cela doit permettre de garantir les conditions collectives et individuelles d’existence. Notre objectif est double : ne pas dépasser les limites planétaires et offrir à chacun les moyens d’une vie digne. Pour ce faire, il est nécessaire de fixer des objectifs, développer des filières et anticiper les métiers dont nous avons besoin.\n\nCette nouvelle organisation de l’économie en vue de sa mobilisation pour un objectif d’intérêt général, nous l’appelons planification écologique.\n\nL’inaction coupable du quinquennat d’Emmanuel Macron rend la mise en place de la planification écologique encore plus urgente. Celle-ci se déploiera dans tous les secteurs avec comme principe directeur la règle verte. Elle devra pour cela accomplir plusieurs objectifs.\n\nD’une part, nous devons nous adapter à la part irréversible du changement climatique et à ses conséquences. Cela suppose de grands travaux sur les installations de la vie collective : canalisations, ponts, routes, barrages, etc.\n\nMais il faut également tout mettre en œuvre pour ne pas l’aggraver. Nous devons donc protéger sans attendre les biens communs. De grands chantiers seront engagés comme l’installation des infrastructures nécessaires au passage à 100 % d’énergies renouvelables, les transports collectifs, l’isolation thermique des bâtiments, l’augmentation des surfaces cultivées en agriculture écologique et paysanne, la fin des élevages industriels.\n\nEnsuite, elle devra orienter les investissements industriels pour rendre compatibles les processus de production avec les nouvelles exigences écologiques. Enfin, alors que les émissions importées sont en train de dépasser celles émises en France, il faut organiser le raccourcissement des chaînes d’interdépendance économique par la relocalisation des activités. Des milliers d’emplois sont à la clé.\n\nLa planification est avant tout une méthode. Elle doit être démocratique. Il ne s’agit pas d’organiser une structure technocratique qui prendrait des décisions sans rapport avec la réalité. Cela serait contre-productif puisque la planification doit s’appuyer sur la mobilisation générale des acteurs économiques. Les objectifs, calendriers, méthodes seront donc à la fois discutés par le Parlement mais aussi par les syndicats de travailleur·ses et organisations patronales. Les communes seront placées au cœur de sa mise en œuvre, puisqu’elles sont les cellules de base de la démocratie. Elles savent gérer le « goutte à goutte » des investissements.\n\nUn Conseil à la planification écologique coordonnera ces concertations mais également la mise en œuvre de la planification écologique. Il associera largement les branches professionnelles, syndicats, associations et ONG dont la mobilisation est indispensable. Il pourra aussi s’appuyer sur des outils nouveaux. Une agence pour la relocalisation pilotera l’élaboration des plans de relocalisation pour chaque filière identifiée. Pour suivre et évaluer le plan, de nouveaux indicateurs de progrès humains et une comptabilité environnementale sont nécessaires. Le produit intérieur brut (PIB) et les règles comptables habituelles passent en effet à côté de ces enjeux.\n\nL’ensemble des forces vives du pays doivent être mises en mouvement pour affronter le plus grand défi de l’Humanité. Ce plan expose de manière détaillée notre méthode pour y parvenir.\n\n## Un quinquennat perdu pour l’environnement\n\nLa liste des échecs et des renoncements d’Emmanuel Macron est interminable. Son bilan révèle et trahit son incapacité à planifier la bifurcation écologique et à atteindre des objectifs de progrès humain.\n\nLe bilan environnemental d’Emmanuel Macron, c’est l’échec du développement des énergies renouvelables et de la rénovation thermique des bâtiments. C’est la réintroduction des néonicotinoïdes et le refus d’interdire le glyphosate en dépit des promesses. C’est le refus d’interdire les fermes-usines et la mise en œuvre d’accords de libre-échange tels le CETA. C’est l’explosion des délocalisations et des émissions importées. C’est le refus catégorique de tout encadrement des multinationales du CAC 40, alors que 25 multinationales françaises émettent 8 fois plus de gaz à effet de serre que l’ensemble du pays. C’est le pari de la croissance verte et des technologies à outrance plutôt que des politiques de sobriété pourtant indispensables.\n\nC’est aussi la criminalisation des militant·es écologistes qui osent dénoncer sa politique, comme à Bure, contre le projet d’enfouissement des déchets nucléaires, à Notre-Dame-des-Landes ou encore les décrocheur·ses de portraits d’Emmanuel Macron. Le chef de l’Etat a également créé la cellule de gendarmerie Déméter chargée spécifiquement de lutter contre les militant·es qui dénoncent les dérives d’un système agro-industriel à bout de souffle et la maltraitance des animaux — la justice l’a forcé à la dissoudre.\n\nSans surprise, la France ne respecte pas ses objectifs de réduction des gaz à effet de serre pour 2030 : – 40 % depuis 1990, et même – 55 % au niveau européen. Le Haut Conseil pour le climat (HCC) indique, dans son rapport annuel de juin 2021, que « les efforts actuels sont insuffisants pour garantir l’atteinte des objectifs ».\n\nL’inaction coupable d’Emmanuel Macron nous a fait perdre un temps précieux… et a conduit à deux condamnations de l’État en justice : une première fois, en février 2021, pour son inaction climatique (non-respect du budget carbone pour 2015-2018) et une deuxième fois, en octobre 2021, afin qu’il répare les préjudices causés par son inaction. Le Conseil d’État a également condamné le gouvernement, le 4 août 2021, pour non-respect des normes concernant la qualité de l’air.\n\n### Le jour du dépassement\n\nLe jour du dépassement correspond à la date à laquelle les ressources renouvelables de la planète pour cette année ont été consommées. Ce jour tombait le 29 juillet en 2021 : en l’an 2000, c’était le 1er octobre.\n\nL’humanité consomme l’équivalent des ressources de 1,7 planète par an, mais le total monterait à cinq planètes si tout le monde vivait comme un nord-américain. Ce sont donc nos modes de production et de consommation, plutôt que le nombre de personnes sur Terre, qui importent.\n\nEmmanuel Macron a également échoué à mener une diplomatie environnementale française ambitieuse au cours de son quinquennat. Six ans après la COP21, la France a perdu de la crédibilité sur la scène internationale. Le Haut Conseil pour le climat souligne que la France n’a pas pris d’engagements additionnels de réduction de gaz à effet de serre lors de la COP26. À cette occasion, la France n’a rejoint que tardivement, et suite à une intense pression diplomatique et citoyenne, la coalition de pays qui mettront fin à leurs investissements publics dans des projets d’énergies fossiles à l’étranger… tout en ajoutant une mention en petites lettres en bas de page qui lui permet de continuer à financer de nouveaux projets gaziers jusqu’en 2035 et de nouveaux projets pétroliers associés à des « compensations carbone », dont on connaît l’inefficacité.\n\n### Le GIEC\n\nLe Groupe d’experts intergouvernemental sur l’évolution du climat (GIEC) est un organisme international, ouvert à tout État membre de l’ONU. Il réunit des représentants des pays participants et des scientifiques, essentiellement des climatologues et des socio-économistes, qui simulent l’évolution climatique et celle des activités humaines. Les derniers constats du rapport du GIEC sont alarmants : seuil de +1,5°C atteint avant 2040 ; irréversibilité de certains changements notamment sur le cycle de l’eau ; accélération et aggravation des impacts ; points de bascule climatiques — ces seuils au-delà desquels le système climatique se modifie de manière abrupte, entraînant un emballement de ce système — franchis.\n\nC’est peu dire que la planification n’a pas marqué le quinquennat d’Emmanuel Macron, qui préfère laisser notre destin dans les mains du marché. Conformément aux exigences européennes, il a tout misé sur la libéralisation et l’ouverture à la concurrence. Ainsi la SNCF a une nouvelle fois été leur cible, alors qu’elle est précisément un outil clé pour organiser le report modal. La même recette est prévue pour l’énergie, avec le projet « Hercule » de démantèlement d’EDF et de privatisation des barrages hydrauliques, qui menace le prix d’approvisionnement et l’entretien des installations. La loi du marché ne produit que pagaille et désordre. Depuis l’ouverture à la concurrence, le prix de l’électricité a augmenté de 60 % et celui du gaz de 80 % !\n\nLe quinquennat d’Emmanuel Macron aura également été synonyme de destruction des services publics et de suppressions successives de postes, en particulier au sein du ministère de la Transition écologique et de ses opérateurs, comme Météo-France, l’Office français de la biodiversité (OFB), l’Office national des Forêts (ONF) ou encore l’Institut national de l’information géographique et forestière (IGN). Depuis 2017, près de 15% des postes y ont été supprimés !\n\nLe dépeçage de l’État orchestré par Emmanuel Macron et son gouvernement vont à rebours de l’urgence écologique. Comment prévoir les aléas climatiques avec moins de moyens alloués à Météo-France ? Comment préserver les biens communs tels que la forêt en démantelant l’ONF ? Comment faire respecter les maigres lois environnementales votées sans aucun moyen de contrôle ? L’urgence impose que des moyens supplémentaires soient immédiatement alloués à ces organismes et aux ministères concernés.\n\nEmmanuel Macron a mené une politique autant anti-sociale qu’anti-écologique, reportant le poids de la bifurcation écologique sur les ménages les plus précaires. L’exemple le plus symptomatique de cette politique est la décision d’augmenter la taxe carbone, et donc le prix du carburant, sans auc"
+    },
+    {
+      "kind": "livret 2022",
+      "title": "Arts et culture : pour un service public du progrès humain",
+      "url": "https://melenchon2027.fr/livrets-2022/arts/",
+      "date": "2024-01-30T16:43:46",
+      "windows": [
+        {
+          "excerpt": "e se fait tout au long de la vie. Pour cela, il est essentiel que l’action publique dans la culture s’articule avec d’autres pans de l’action gouvernementale, comme l’Éducation nationale ou l’Enseignement supérieur et la Recherche, mais également la Ville, la Ruralité, la Santé et bien d’autres. La planification sera la clé pour mener à bien nos objectifs, parmi lesquels :\n\n#### ➔ Inscrire les arts et la culture dans une écologie politique à l’inverse des logiques productivistes et consuméristes\n\nLa bifurcation écologique fait partie des grands défis que nous devons relever. Le service public de la culture",
+          "offset": 8233
+        },
+        {
+          "excerpt": "u respect de la biodiversité, ou encore de la sobriété numérique\n- Valoriser la place des enjeux écologiques dans la formation des architectes et des designers, ainsi que dans toutes les autres formations supérieures artistiques\n- Réaffirmer le cadre de vie comme bien commun et se doter d’outils de planification permettant de concilier création architecturale et conservation du patrimoine\n\n- Systématiser le recours à un·e architecte dans la construction de lotissement et y garantir la présence d’espaces communs de pratique et/ou de création artistique\n- Conditionner les financements au respect du code du t",
+          "offset": 17545
+        }
+      ]
+    },
+    {
+      "kind": "livret 2022",
+      "title": "Banques : pour un service public bancaire sous contrôle citoyen",
+      "url": "https://melenchon2027.fr/livrets-2022/banques/",
+      "date": "2024-02-01T18:51:36",
+      "windows": [
+        {
+          "excerpt": "arce que la finance et les banques accordent massivement des subsides aux entreprises fortement émettrices de gaz à effet de serre. Mener à bien la transition écologique implique tout à la fois de combattre ces financements et de mobiliser le crédit au service de la bifurcation. Dans le cadre de la planification écologique, nous mobiliserons le pôle public bancaire en complément des investissements publics, afin de financer les projets socialement et écologiquement soutenables des ménages et des entreprises. Enfin, un circuit du trésor du XXIe siècle sera constitué afin de sécuriser le financement des services public",
+          "offset": 14293
+        },
+        {
+          "excerpt": "de calculer des bénéfices prévisionnels sur trois ans. Les composantes du pôle public accorderont des prêts dont les conditions (taux, maturité et frais) varieront selon l’adéquation des projets avec des critères sociaux et écologiques déterminés à partir des orientations fixées par le Conseil à la planification écologique nouvellement créé. Ainsi, pour les activités contribuant activement à la bifurcation écologique et à la relocalisation des productions, les prêts seront à taux zéro avec des maturités longues et des frais de dossier réduits. En un mot, ils bénéficieront de conditions de prêt spécifiquement favorabl",
+          "offset": 36167
+        }
+      ]
+    },
+    {
+      "kind": "livret 2022",
+      "title": "Défense : une défense au service de la souveraineté populaire",
+      "url": "https://melenchon2027.fr/livrets-2022/defense/",
+      "date": "2024-02-02T15:59:42",
+      "windows": [
+        {
+          "excerpt": "la puissance dont l’exhibition cache mal à présent les trous capacitaires n’est pas à la hauteur. Par exemple, il faudra considérer l’intérêt de constituer une véritable « flotte » de drones sous-marins. Cela devra en outre s’articuler aux grandes orientations qui seront données dans le cadre de la planification écologique. Par exemple, le développement massif du parc éolien offshore (au large) devra être anticipé. Les besoins en matière de souveraineté numérique (cloud) et industrielle (fonderie, câbles) devront être formalisés\n\n### Vers une « dissuasion spatiale » ?\n\nPour l’heure, disposer d’un arsenal atomique rep",
+          "offset": 16672
+        }
+      ]
+    },
+    {
+      "kind": "livret 2022",
+      "title": "Économie sociale et solidaire : au cœur de la bifurcation écologique, sociale et solidaire de demain",
+      "url": "https://melenchon2027.fr/livrets-2022/economie-sociale-et-solidaire/",
+      "date": "2024-02-01T19:11:11",
+      "windows": [
+        {
+          "excerpt": "e, éducation, formation, travail social, logement…), privilégier la création de pôles publics via la coopération entre organismes publics et structures de l’ESS du secteur concerné. Il s’agit ainsi d’intégrer les coopératives locales de production et de consommation d’énergies renouvelables dans la planification écologique, en favorisant l’autoproduction et le partage des excédents pour mettre en place la bifurcation énergétique vers le 100 % renouvelable, tout en garantissant l’égalité des territoires\n- Soutenir les regroupements et la gestion de filière d’acteurs atomisés (culture, patrimoine, bois, tourisme, numér",
+          "offset": 18909
+        }
+      ]
+    },
+    {
+      "kind": "livret 2022",
+      "title": "Éducation : reconstruire une école de l’égalité et de l’émancipation",
+      "url": "https://melenchon2027.fr/livrets-2022/education/",
+      "date": "2024-02-02T16:08:01",
+      "windows": [
+        {
+          "excerpt": "ammes scolaires et les activités périscolaires\n\n### Accroître la qualification pour répondre aux défis de demain\n\nÀ l’heure du défi climatique et des mutations du système productif, les voies professionnelle et technologique sont indispensables à la hausse du niveau de qualification nécessaire à la planification de la bifurcation écologique. Nous voulons reconstruire les filières de l’enseignement technologique et professionnel, aujourd’hui dévastées, pour en faire des voies d’excellence. Pour cela, nous proposons de :\n\n#### Développer l’enseignement professionnel et technologique public :\n\n- Construire de",
+          "offset": 25118
+        }
+      ]
+    },
+    {
+      "kind": "livret 2022",
+      "title": "100 % renouvelable : sortir des énergies fossiles et du nucléaire",
+      "url": "https://melenchon2027.fr/livrets-2022/energie/",
+      "date": "2024-02-02T15:49:38",
+      "windows": [
+        {
+          "excerpt": "ts passoires thermiques et/ou car elles ne peuvent payer les factures. On compte près de 600 000 coupures ou réductions de puissance chaque année par les fournisseurs d’énergie. Le droit d’accès inconditionnel à l’énergie doit plus que jamais être défendu.\n\n## Notre projet : l’énergie, pilier de la planification écologique\n\nDepuis plusieurs années, des stratégies de transition sont élaborées, notamment par des équipes de scientifiques. Elles se basent à la fois sur une forte baisse de la consommation – sans perte de qualité d’usage – et sur un recours massif aux énergies renouvelables. Ces trajectoires s’appuient pou",
+          "offset": 8350
+        },
+        {
+          "excerpt": "doivent être généralisées.\n\n### Créer un pôle public et réguler les prix\n\nL’énergie est un bien commun. Son accaparement par des intérêts privés conduit à une dégradation du système, à un surcoût pour les usager·es et à une perte de contrôle par la puissance publique de la politique énergétique. La planification écologique passe ainsi par le rétablissement d’un pôle public de l’énergie.\n\nNous reviendrons donc sur la libéralisation du secteur énergétique en abrogeant la loi NOME (Nouvelle organisation du marché de l’électricité), en refusant la privatisation des barrages hydroélectriques et le plan Hercule de démantèl",
+          "offset": 11193
+        },
+        {
+          "excerpt": "aux photovoltaïques, ou encore celui de Ferropem, fabricant de silicium essentiel à la production de panneaux photovoltaïques. Ces industries seront réquisitionnées et mises au service de l’intérêt général.\n\n### Intégrer l’énergie dans les choix d’aménagement\n\nNous veillerons à ce que les outils de planification énergétique, à l’échelle nationale et territoriale, respectent l’obligation de prise en compte de l’énergie dans les schémas d’aménagement du territoire.\n\nL’État devra montrer l’exemple, par exemple en intégrant une évaluation systématique de l’impact énergétique et en CO2 de la commande publique,",
+          "offset": 22936
+        }
+      ]
+    }
+  ],
+  "desintox": [
+    {
+      "kind": "désintox",
+      "title": "« La France insoumise n’en a rien à faire de la ruralité »",
+      "url": "https://desintox.lafranceinsoumise.fr/la-france-insoumise-nen-a-rien-a-faire-de-la-ruralite/",
+      "date": "2025-05-27T12:19:22",
+      "windows": [
+        {
+          "excerpt": "oles et de gares, disparition des commerces de proximité, éloignement des services essentiels.\n\nNous souhaitons mettre fin à l’ensemble de ces inégalités. Par un retour massif des services publics, par une organisation du territoire au service de la planification écologique, par la relocalisation de l’agriculture et de l’industrie.\n\nNous ne répondons pas à l’abandon par la division. Ce que nous combattons, ce ne sont pas des lieux, mais un système injuste. Ce que nous portons, c’est l’unité du peuple français. La nouve",
+          "offset": 1768
+        }
+      ]
+    },
+    {
+      "kind": "désintox",
+      "title": "« Vous y connaissez rien en économie, avec vous c’est la catastrophe assurée »",
+      "url": "https://desintox.lafranceinsoumise.fr/vous-y-connaissez-rien-en-economie-avec-vous-cest-la-catastrophe-assuree/",
+      "date": "2025-05-27T14:13:49",
+      "windows": [
+        {
+          "excerpt": ", creuserait le déficit et mènerait la France à la banqueroute. Ne nous trompons pas, ces mensonges cherchent juste à protéger leurs amis ultra-riches, qu’il faut pourtant mettre à contribution afin de répondre aux besoins du pays : urgence sociale, planification écologique et sauvetage des services publics. Notre programme est financé en allant chercher l’argent là où il est : entre les mains de quelques privilégiés.\n\nRappelons des ordres de grandeur :\n\n- Près de 100 milliards d’euros ont été versés aux actionnaires p",
+          "offset": 357
+        }
+      ]
+    }
+  ]
+}

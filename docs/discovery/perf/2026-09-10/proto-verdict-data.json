@@ -1,0 +1,321 @@
+{
+ "measuredAt": "2026-09-09T15:25:01.846Z",
+ "lighthouseMedians": {
+  "link-c12-s01-k01": {
+   "url": "https://proto.cestecritla.fr/link/?id=c12-s01-k01",
+   "perf": 0.83,
+   "a11y": 1,
+   "fcp": 1575.236,
+   "lcp": 3059.695,
+   "tbt": 0,
+   "cls": 0.21619548697541782,
+   "mpfid": 22.238,
+   "si": 2160,
+   "ttfb": 40,
+   "transferTotal": 196626,
+   "scriptTransfer": 14337,
+   "criticalPath": 93224,
+   "requests": 13,
+   "fonts": [
+    "/shared/fonts/PublicSans-Variable-latin.woff2",
+    "/shared/fonts/GowunBatang-Regular-latin.woff2",
+    "/shared/fonts/PublicSans-Italic-Variable-latin.woff2"
+   ],
+   "scripts": [
+    "/link/link.js",
+    "/shared/ui.js"
+   ],
+   "shiftsTop": {
+    "node": "body > main#main > h1#title",
+    "score": 0.214
+   }
+  },
+  "concept": {
+   "url": "https://proto.cestecritla.fr/concept/",
+   "perf": 0.74,
+   "a11y": 1,
+   "fcp": 1582.306,
+   "lcp": 4634.781,
+   "tbt": 5.934999999999491,
+   "cls": 0.179924264766601,
+   "mpfid": 55.935,
+   "si": 3055,
+   "ttfb": 49,
+   "transferTotal": 254711,
+   "scriptTransfer": 21992,
+   "criticalPath": 95414,
+   "requests": 18,
+   "fonts": [
+    "/shared/fonts/PublicSans-Variable-latin.woff2",
+    "/shared/fonts/GowunBatang-Regular-latin.woff2",
+    "/shared/fonts/PublicSans-Italic-Variable-latin.woff2"
+   ],
+   "scripts": [
+    "/shared/motion.js",
+    "/concept/concept.js",
+    "/shared/ui.js"
+   ],
+   "shiftsTop": {
+    "node": "body > main#main > footer.footer",
+    "score": 0.18
+   }
+  },
+  "defi-n1": {
+   "url": "https://proto.cestecritla.fr/defi/?n=254",
+   "perf": 0.87,
+   "a11y": 1,
+   "fcp": 1580.815,
+   "lcp": 1580.815,
+   "tbt": 0,
+   "cls": 0.24575168675110157,
+   "mpfid": 21.703,
+   "si": 2269,
+   "ttfb": 43,
+   "transferTotal": 218241,
+   "scriptTransfer": 29842,
+   "criticalPath": 97935,
+   "requests": 18,
+   "fonts": [
+    "/shared/fonts/PublicSans-Variable-latin.woff2",
+    "/shared/fonts/GowunBatang-Regular-latin.woff2",
+    "/shared/fonts/PublicSans-Italic-Variable-latin.woff2"
+   ],
+   "scripts": [
+    "/shared/motion.js",
+    "/defi/defi.js",
+    "/shared/ui.js",
+    "/defi/card.js"
+   ],
+   "shiftsTop": {
+    "node": "body > main#main > footer.footer",
+    "score": 0.245
+   }
+  },
+  "riposte-rip-01": {
+   "url": "https://proto.cestecritla.fr/riposte/?id=rip-01",
+   "perf": 0.96,
+   "a11y": 1,
+   "fcp": 1607.21,
+   "lcp": 1607.21,
+   "tbt": 0,
+   "cls": 0.109976610619322,
+   "mpfid": 21.364,
+   "si": 1938,
+   "ttfb": 50,
+   "transferTotal": 228688,
+   "scriptTransfer": 24724,
+   "criticalPath": 97813,
+   "requests": 19,
+   "fonts": [
+    "/shared/fonts/PublicSans-Variable-latin.woff2",
+    "/shared/fonts/PublicSans-Italic-Variable-latin.woff2",
+    "/shared/fonts/GowunBatang-Regular-latin.woff2"
+   ],
+   "scripts": [
+    "/shared/motion.js",
+    "/riposte/riposte.js",
+    "/shared/ui.js"
+   ],
+   "shiftsTop": {
+    "node": "body > main#main > footer.footer",
+    "score": 0.11
+   }
+  }
+ },
+ "fps": {
+  "concept-entry-reveal": {
+   "runs": 3,
+   "frames": 33,
+   "p95": 16.8,
+   "max": 50,
+   "maxOfRuns": 50,
+   "pctOver20": 2.8,
+   "pctOver50": 0,
+   "framesOver50": 0,
+   "wholeWindowMax": 50
+  },
+  "concept-reveal-scroll": {
+   "runs": 3,
+   "frames": 50,
+   "p95": 16.8,
+   "max": 16.8,
+   "maxOfRuns": 16.8,
+   "pctOver20": 0,
+   "pctOver50": 0,
+   "framesOver50": 0
+  },
+  "defi-answer-press": {
+   "runs": 3,
+   "frames": 90,
+   "p95": 16.8,
+   "max": 33.4,
+   "maxOfRuns": 50,
+   "pctOver20": 2.2,
+   "pctOver50": 0,
+   "framesOver50": 0
+  },
+  "defi-passer-press": {
+   "runs": 3,
+   "frames": 90,
+   "p95": 16.8,
+   "max": 33.4,
+   "maxOfRuns": 50,
+   "pctOver20": 2.2,
+   "pctOver50": 0,
+   "framesOver50": 0
+  },
+  "concept-to-section-arrival": {
+   "runs": 3,
+   "transitionEngaged": 0,
+   "fadeInPlayed": 0,
+   "contentReadyAt": 186.6,
+   "renderFrameMs": 83.3,
+   "framesAnimated": {
+    "p95": 16.8,
+    "max": 16.8,
+    "pctOver50": 0
+   },
+   "frames600": {
+    "max": 83.4,
+    "pctOver50": 2.9
+   },
+   "tapTarget": [
+    "MAIN.page"
+   ],
+   "errors": [
+    "Transition was aborted because of invalid state. ViewTransition opt-in disabled"
+   ]
+  }
+ },
+ "interactions": {
+  "search-key": {
+   "label": "(1) taper une lettre dans la recherche (/home/)",
+   "url": "/home/",
+   "samples": [
+    32,
+    32,
+    24
+   ],
+   "median": 32,
+   "metric": "max event-timing duration (INP proxy)"
+  },
+  "copy-link": {
+   "label": "(3) « Copier le lien » (/concept/)",
+   "url": "/concept/?slug=regle-verte",
+   "samples": [
+    0,
+    0,
+    0
+   ],
+   "median": 0,
+   "metric": "max event-timing duration (INP proxy)"
+  },
+  "defi-answer": {
+   "label": "(4) répondre « Je savais » (/defi/)",
+   "url": "/defi/?n=1",
+   "samples": [
+    24,
+    32,
+    32
+   ],
+   "median": 32,
+   "metric": "max event-timing duration (INP proxy)"
+  },
+  "q-answer": {
+   "label": "(4) choisir une option (/q/)",
+   "url": "/q/?s=c12-s01",
+   "samples": [
+    48,
+    48,
+    48
+   ],
+   "median": 48,
+   "metric": "max event-timing duration (INP proxy)"
+  },
+  "riposte-flip": {
+   "label": "(5) « Retourner la carte » (/riposte/)",
+   "url": "/riposte/?id=rip-01",
+   "samples": [
+    64,
+    72,
+    64
+   ],
+   "median": 64,
+   "metric": "max event-timing duration (INP proxy)"
+  },
+  "open-concept": {
+   "label": "(2) ouvrir la carte-concept depuis l’écran 0 par lien (navigation)",
+   "url": "/link/?id=c12-s01-k01",
+   "samples": [
+    216,
+    162,
+    182
+   ],
+   "median": 182,
+   "metric": "tap -> first frame of the new page (navigation, not INP)"
+  }
+ },
+ "p7": {
+  "/home/": {
+   "maxTransitionMs": 120,
+   "maxAnimationMs": 0,
+   "over320": []
+  },
+  "/concept/?slug=regle-verte": {
+   "maxTransitionMs": 240,
+   "maxAnimationMs": 0,
+   "over320": []
+  },
+  "/defi/?n=1": {
+   "maxTransitionMs": 120,
+   "maxAnimationMs": 0,
+   "over320": []
+  },
+  "/q/?s=c12-s01": {
+   "maxTransitionMs": 200,
+   "maxAnimationMs": 0,
+   "over320": []
+  },
+  "/riposte/?id=rip-01": {
+   "maxTransitionMs": 120,
+   "maxAnimationMs": 0,
+   "over320": []
+  },
+  "/link/?id=c12-s01-k01": {
+   "maxTransitionMs": 120,
+   "maxAnimationMs": 0,
+   "over320": []
+  }
+ },
+ "reducedMotion": {
+  "htmlClass": "",
+  "reveals": [
+   {
+    "opacity": "1",
+    "transform": "none",
+    "transitionDuration": "0s",
+    "cls": "verbatim hero m-in"
+   },
+   {
+    "opacity": "1",
+    "transform": "none",
+    "transitionDuration": "0s",
+    "cls": "verbatim compact m-in"
+   },
+   {
+    "opacity": "1",
+    "transform": "none",
+    "transitionDuration": "0s",
+    "cls": "verbatim compact m-in"
+   }
+  ],
+  "pressTransition": "0s",
+  "tokens": {
+   "dFast": "0ms",
+   "dBase": "0ms",
+   "dSlow": "0ms",
+   "dReveal": "0ms"
+  },
+  "maxAnyDurationMs": 0
+ }
+}

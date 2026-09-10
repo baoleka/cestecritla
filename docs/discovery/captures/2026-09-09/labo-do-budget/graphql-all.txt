@@ -1,0 +1,4 @@
+window 2026-09-09T12:55:00Z → 2026-09-09T13:05:00Z, script aec-lab-budget
+Worker invocations (workersInvocationsAdaptive, CPU/wall in ms):
+  status=success requests=513 errors=0 subrequests=471 cpu p50=0.72 ms p90=1.49 ms p99=2.44 ms wall p50=19.19 ms p99=41.28 ms
+Durable Object invocations (durableObjectsInvocationsAdaptiveGroups):

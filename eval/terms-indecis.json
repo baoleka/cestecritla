@@ -1,0 +1,273 @@
+[
+  {
+    "slug": "retraite-60",
+    "term": "retraite à 60 ans",
+    "aliases": ["retraite", "60 ans", "annuit", "âge légal", "pension"]
+  },
+  { "slug": "smic", "term": "SMIC", "aliases": ["SMIC", "1 600", "1600", "salaire minimum"] },
+  { "slug": "senat", "term": "Sénat", "aliases": ["Sénat", "sénat", "sénateur", "bicam"] },
+  {
+    "slug": "nucleaire",
+    "term": "nucléaire",
+    "aliases": ["nucléaire", "EPR", "réacteur", "2050", "renouvelable"]
+  },
+  {
+    "slug": "police",
+    "term": "police",
+    "aliases": ["désarm", "police", "LBD", "BAC\\b", "IGPN", "policier"]
+  },
+  {
+    "slug": "sans-papiers",
+    "term": "sans-papiers",
+    "aliases": [
+      "sans-papiers",
+      "sans papiers",
+      "régularis",
+      "frontière",
+      "expuls",
+      "OQTF",
+      "titre de séjour"
+    ]
+  },
+  {
+    "slug": "cannabis",
+    "term": "cannabis",
+    "aliases": ["cannabis", "drogue", "légalis", "dépénalis", "stupéfiant"]
+  },
+  {
+    "slug": "prix",
+    "term": "blocage des prix",
+    "aliases": ["blocage des prix", "bloquer les prix", "bloquer le prix", "prix bloqué"]
+  },
+  {
+    "slug": "heritage",
+    "term": "héritage",
+    "aliases": ["héritage", "succession", "12 millions", "revenu maximum", "100 %", "patrimoine"]
+  },
+  { "slug": "dette", "term": "dette", "aliases": ["dette"] },
+  {
+    "slug": "otan",
+    "term": "OTAN",
+    "aliases": ["OTAN", "Alliance atlantique", "commandement intégré"]
+  },
+  {
+    "slug": "vote-obligatoire",
+    "term": "vote obligatoire",
+    "aliases": ["vote obligatoire", "vote blanc", "obligatoire", "16 ans"]
+  },
+  { "slug": "licenciement", "term": "licenciements", "aliases": ["licenci"] },
+  {
+    "slug": "ric",
+    "term": "RIC",
+    "aliases": [
+      "\\bRIC\\b",
+      "référendum d'initiative citoyenne",
+      "révocatoire",
+      "révoquer",
+      "révocation"
+    ]
+  },
+  {
+    "slug": "banques",
+    "term": "banques",
+    "aliases": ["nationalis", "pôle public bancaire", "banque"]
+  },
+  {
+    "slug": "impots",
+    "term": "impôts",
+    "aliases": ["impôt sur le revenu", "tranche", "CSG", "TVA", "flat tax", "ISF"]
+  },
+  {
+    "slug": "ecole-18",
+    "term": "scolarité obligatoire",
+    "aliases": ["18 ans", "scolarité obligatoire", "obligatoire jusqu"]
+  },
+  {
+    "slug": "garantie-autonomie",
+    "term": "garantie d'autonomie",
+    "aliases": ["garantie d.autonomie", "seuil de pauvreté"]
+  },
+  {
+    "slug": "logements-vides",
+    "term": "réquisition",
+    "aliases": ["réquisition", "logements vides", "vacant", "encadrement des loyers", "loyer"]
+  },
+  {
+    "slug": "regles",
+    "term": "règles (menstruelles)",
+    "aliases": ["menstru", "\\brègles\\b", "protections périodiques", "hygiénique"]
+  },
+  { "slug": "chasse", "term": "chasse", "aliases": ["chasse", "chasseur"] },
+  {
+    "slug": "voiture",
+    "term": "voiture",
+    "aliases": ["voiture", "ZFE", "automobile", "thermique", "vitesse", "km/h", "autoroute"]
+  },
+  {
+    "slug": "creche-noel",
+    "term": "crèche / Noël",
+    "aliases": ["crèche", "Noël", "signes religieux", "religieu"]
+  },
+  { "slug": "ukraine", "term": "Ukraine", "aliases": ["Ukrain", "Russie", "Poutine", "russe"] },
+  { "slug": "prison", "term": "prison", "aliases": ["prison", "détenu", "incarcér", "peine"] },
+  {
+    "slug": "milliards",
+    "term": "milliards",
+    "aliases": ["milliard", "chiffrage", "chiffré", "financement du programme"]
+  },
+  { "slug": "dictature", "term": "dictature", "aliases": ["dictat", "totalitai", "autoritai"] },
+  { "slug": "protectionnisme", "term": "protectionnisme", "aliases": ["protectionnis"] },
+  { "slug": "urgence-sociale", "term": "état d'urgence sociale", "aliases": ["urgence sociale"] },
+  {
+    "slug": "euro-franc",
+    "term": "euro / franc",
+    "aliases": [
+      "\\bfranc\\b",
+      "zone euro",
+      "monnaie unique",
+      "sortie de l.euro",
+      "sortir de l.euro",
+      "sortir de l.Union",
+      "Frexit"
+    ]
+  },
+  { "slug": "cantine", "term": "cantine", "aliases": ["cantine", "gratuit"] },
+  {
+    "slug": "secu-100",
+    "term": "100 % Sécu",
+    "aliases": ["100 % Sécu", "100 % sécu", "mutuelle", "complémentaire", "remboursement"]
+  },
+  {
+    "slug": "armee",
+    "term": "armée",
+    "aliases": ["armée", "service militaire", "conscription", "dissuasion"]
+  },
+  {
+    "slug": "israel",
+    "term": "Israël",
+    "aliases": ["Israël", "Israel", "Hamas", "Gaza", "Palestin"]
+  },
+  { "slug": "laicite", "term": "laïcité", "aliases": ["laïc", "laïq", "concordat", "1905"] },
+  {
+    "slug": "riches",
+    "term": "riches",
+    "aliases": ["riches", "milliardaire", "exil fiscal", "évasion fiscale", "fraude fiscale"]
+  },
+  {
+    "slug": "venezuela",
+    "term": "Venezuela / Cuba / communisme",
+    "aliases": [
+      "Venezuela",
+      "Cuba",
+      "Chine",
+      "communis",
+      "collectivis",
+      "soviét",
+      "Maduro",
+      "Chavez"
+    ]
+  },
+  {
+    "slug": "propriete",
+    "term": "propriété privée",
+    "aliases": ["propriété privée", "propriété", "nationalis", "exproprier", "expropriation"]
+  },
+  {
+    "slug": "double-peine",
+    "term": "double peine",
+    "aliases": ["double peine", "peine de mort", "expuls", "OQTF", "reconduite"]
+  },
+  {
+    "slug": "vote",
+    "term": "vote obligatoire / blanc / 16 ans",
+    "aliases": ["vote obligatoire", "vote blanc", "droit de vote", "à 16 ans", "dès 16 ans"]
+  },
+  {
+    "slug": "chomeurs",
+    "term": "chômeurs / assistanat",
+    "aliases": [
+      "chômeur",
+      "assistanat",
+      "RSA",
+      "allocation chômage",
+      "assurance-chômage",
+      "assurance chômage",
+      "indemnis"
+    ]
+  },
+  { "slug": "ame", "term": "AME", "aliases": ["aide médicale d.État", "\\bAME\\b"] },
+  {
+    "slug": "euthanasie",
+    "term": "euthanasie / fin de vie",
+    "aliases": ["euthanasie", "fin de vie", "mourir dans la dignité", "suicide assisté"]
+  },
+  {
+    "slug": "temps-travail",
+    "term": "35 heures / 32 heures",
+    "aliases": ["35 heures", "32 heures", "sixième semaine", "6e semaine", "temps de travail"]
+  },
+  {
+    "slug": "fonctionnaires",
+    "term": "fonctionnaires",
+    "aliases": ["fonctionnaire", "point d.indice"]
+  },
+  {
+    "slug": "ruine",
+    "term": "ruine / faillite / coût",
+    "aliases": ["ruine", "faillite", "coût", "financ", "budget"]
+  },
+  {
+    "slug": "supprimer-police",
+    "term": "supprimer police",
+    "aliases": ["supprimer la police", "abolir la police", "désarmer", "sans arme"]
+  },
+  {
+    "slug": "cantine-gratuite",
+    "term": "cantine gratuite",
+    "aliases": ["cantine", "gratuité", "gratuit"]
+  },
+  {
+    "slug": "riches-exil",
+    "term": "riches",
+    "aliases": [
+      "riches",
+      "milliardaire",
+      "millionnaire",
+      "exil",
+      "évasion fiscale",
+      "fraude fiscale",
+      "impôt universel"
+    ]
+  },
+  { "slug": "nucleaire-court", "term": "nucléaire", "aliases": ["nucléaire", "EPR", "centrale"] },
+  {
+    "slug": "islam",
+    "term": "islam / musulman",
+    "aliases": ["islam", "musulman", "mosquée", "halal", "burkini", "voile", "abaya"]
+  },
+  {
+    "slug": "immigration-nb",
+    "term": "immigration",
+    "aliases": ["immigr", "migrant", "frontières ouvertes", "ouvrir les frontières", "quota"]
+  },
+  {
+    "slug": "armes-nucleaires",
+    "term": "dissuasion nucléaire",
+    "aliases": ["dissuasion", "arme nucléaire", "armes nucléaires", "TIAN"]
+  },
+  {
+    "slug": "tirage-au-sort",
+    "term": "tirage au sort",
+    "aliases": ["tirage au sort", "tirés au sort"]
+  },
+  {
+    "slug": "mariage",
+    "term": "mariage / famille",
+    "aliases": ["mariage", "famille", "allocations familiales", "quotient familial"]
+  },
+  {
+    "slug": "salaire-max",
+    "term": "salaire maximum",
+    "aliases": ["salaire maximum", "revenu maximum", "écart de 1 à", "1 à 20", "1 à 12"]
+  }
+]

@@ -1,0 +1,139 @@
+[
+  {
+    "results": [
+      {
+        "what": "fts_data (index segments)",
+        "rows": 60,
+        "bytes": 226011
+      },
+      {
+        "what": "fts_content (text copy)",
+        "rows": 868,
+        "bytes": 340380
+      },
+      {
+        "what": "fts_docsize",
+        "rows": 868,
+        "bytes": 4361
+      },
+      {
+        "what": "fts_idx",
+        "rows": 58,
+        "bytes": 284
+      },
+      {
+        "what": "propositions (text+prefix)",
+        "rows": 868,
+        "bytes": 323624
+      }
+    ],
+    "success": true,
+    "meta": {
+      "served_by": "v3-prod",
+      "served_by_region": "WEUR",
+      "served_by_colo": "CDG",
+      "served_by_primary": true,
+      "timings": {
+        "sql_duration_ms": 3.1456
+      },
+      "duration": 3.1456,
+      "changes": 0,
+      "last_row_id": 0,
+      "changed_db": false,
+      "size_after": 1150976,
+      "rows_read": 2722,
+      "rows_written": 0,
+      "total_attempts": 1
+    }
+  },
+  {
+    "results": [
+      {
+        "name": "_cf_KV",
+        "type": "table"
+      },
+      {
+        "name": "chapters",
+        "type": "table"
+      },
+      {
+        "name": "propositions",
+        "type": "table"
+      },
+      {
+        "name": "propositions_fts",
+        "type": "table"
+      },
+      {
+        "name": "propositions_fts_config",
+        "type": "table"
+      },
+      {
+        "name": "propositions_fts_content",
+        "type": "table"
+      },
+      {
+        "name": "propositions_fts_data",
+        "type": "table"
+      },
+      {
+        "name": "propositions_fts_docsize",
+        "type": "table"
+      },
+      {
+        "name": "propositions_fts_idx",
+        "type": "table"
+      },
+      {
+        "name": "propositions_fts_v",
+        "type": "table"
+      },
+      {
+        "name": "q_cache",
+        "type": "table"
+      },
+      {
+        "name": "q_cache_expires",
+        "type": "index"
+      },
+      {
+        "name": "sections",
+        "type": "table"
+      },
+      {
+        "name": "sqlite_autoindex_chapters_1",
+        "type": "index"
+      },
+      {
+        "name": "sqlite_autoindex_propositions_1",
+        "type": "index"
+      },
+      {
+        "name": "sqlite_autoindex_q_cache_1",
+        "type": "index"
+      },
+      {
+        "name": "sqlite_autoindex_sections_1",
+        "type": "index"
+      }
+    ],
+    "success": true,
+    "meta": {
+      "served_by": "v3-prod",
+      "served_by_region": "WEUR",
+      "served_by_colo": "CDG",
+      "served_by_primary": true,
+      "timings": {
+        "sql_duration_ms": 0.2186
+      },
+      "duration": 0.2186,
+      "changes": 0,
+      "last_row_id": 0,
+      "changed_db": false,
+      "size_after": 1150976,
+      "rows_read": 34,
+      "rows_written": 0,
+      "total_attempts": 1
+    }
+  }
+]

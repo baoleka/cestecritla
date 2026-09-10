@@ -1,0 +1,316 @@
+[
+  {
+    "slug": "j-logement-jeunes",
+    "term": "logement jeunes",
+    "aliases": [
+      "logement",
+      "loyer",
+      "\\bHLM\\b",
+      "colocation",
+      "caution",
+      "garant",
+      "\\bAPL\\b",
+      "aides? au logement",
+      "logements? étudiant",
+      "résidences? universitaire",
+      "CROUS",
+      "expulsion",
+      "trêve hivernale",
+      "passoire"
+    ]
+  },
+  {
+    "slug": "j-fac",
+    "term": "université",
+    "aliases": [
+      "universit",
+      "\\bfac\\b",
+      "frais d['’]inscription",
+      "gratuité",
+      "Parcoursup",
+      "CVEC",
+      "bourse",
+      "étudiant",
+      "restaurant universitaire",
+      "repas à un euro",
+      "\\b1 ?euro\\b",
+      "un euro",
+      "master",
+      "sélection"
+    ]
+  },
+  {
+    "slug": "j-premier-emploi",
+    "term": "premier emploi",
+    "aliases": [
+      "stage",
+      "stagiaire",
+      "apprenti",
+      "alternan",
+      "premier emploi",
+      "\\bCDD\\b",
+      "\\bCDI\\b",
+      "intérim",
+      "\\bSMIC\\b",
+      "1 ?600",
+      "salaire minimum",
+      "garantie d['’]emploi",
+      "période d['’]essai",
+      "plateforme",
+      "Uber",
+      "livreur",
+      "auto-?entrepreneur",
+      "micro-?entrepreneur",
+      "chômage des jeunes",
+      "moins de 25 ans",
+      "moins de 26 ans"
+    ]
+  },
+  {
+    "slug": "j-transports",
+    "term": "transports",
+    "aliases": [
+      "transport",
+      "\\btrain",
+      "SNCF",
+      "\\bTER\\b",
+      "petites lignes",
+      "vélo",
+      "cyclable",
+      "\\bZFE\\b",
+      "zone à faibles émissions",
+      "voiture",
+      "permis",
+      "auto-école",
+      "trottinette",
+      "\\bbus\\b",
+      "\\bavion",
+      "vols? intérieur",
+      "aérien",
+      "\\bcar\\b",
+      "covoiturage",
+      "tarif"
+    ]
+  },
+  {
+    "slug": "j-police",
+    "term": "police",
+    "aliases": [
+      "police",
+      "policier",
+      "\\bBAC\\b",
+      "brigade anti-?criminalité",
+      "\\bLBD\\b",
+      "grenade",
+      "contrôle au faciès",
+      "récépissé",
+      "\\bIGPN\\b",
+      "caméra",
+      "désarm",
+      "maintien de l['’]ordre",
+      "manifestation",
+      "garde à vue",
+      "fichage",
+      "vidéosurveillance"
+    ]
+  },
+  {
+    "slug": "j-climat",
+    "term": "climat",
+    "aliases": [
+      "climat",
+      "réchauffement",
+      "renouvelable",
+      "100 ?%",
+      "neutralité carbone",
+      "gaz à effet de serre",
+      "\\bGES\\b",
+      "\\bcarbone",
+      "nucléaire",
+      "rénovation",
+      "isolation",
+      "\\bviande\\b",
+      "végétarien",
+      "végétal",
+      "cantine",
+      "plastique",
+      "publicité",
+      "\\bpub\\b",
+      "fast[- ]?fashion",
+      "vêtement"
+    ]
+  },
+  {
+    "slug": "j-numerique",
+    "term": "réseaux sociaux et numérique",
+    "aliases": [
+      "réseaux sociaux",
+      "réseau social",
+      "TikTok",
+      "Instagram",
+      "Facebook",
+      "Snapchat",
+      "Twitter",
+      "GAFAM",
+      "majorité numérique",
+      "écran",
+      "jeu vidéo",
+      "jeux vidéo",
+      "e-?sport",
+      "streaming",
+      "intelligence artificielle",
+      "\\bIA\\b",
+      "algorithme",
+      "données personnelles",
+      "fibre",
+      "haut débit",
+      "logiciel libre",
+      "5G",
+      "cyberharc",
+      "harcèlement"
+    ]
+  },
+  {
+    "slug": "j-droits-jeunes",
+    "term": "droits des jeunes",
+    "aliases": [
+      "16 ans",
+      "18 ans",
+      "majorité",
+      "jeunes?\\b",
+      "jeunesse",
+      "garantie d['’]autonomie",
+      "\\bRSA\\b",
+      "autonomie",
+      "foyer fiscal",
+      "service national",
+      "\\bSNU\\b",
+      "conscription",
+      "service militaire",
+      "service civique"
+    ]
+  },
+  {
+    "slug": "j-sante-jeunes",
+    "term": "santé des jeunes",
+    "aliases": [
+      "santé mentale",
+      "psy",
+      "psychologue",
+      "psychiatr",
+      "contraception",
+      "\\bIVG\\b",
+      "avortement",
+      "règles",
+      "protections périodiques",
+      "précarité menstruelle",
+      "cannabis",
+      "drogue",
+      "alcool",
+      "tabac",
+      "dentaire",
+      "lunettes",
+      "mutuelle",
+      "sécurité sociale intégrale",
+      "100 ?% sécu"
+    ]
+  },
+  {
+    "slug": "j-culture-sport",
+    "term": "culture et sport",
+    "aliases": [
+      "pass culture",
+      "\\bculture",
+      "cinéma",
+      "musique",
+      "festival",
+      "concert",
+      "sport",
+      "\\bJO\\b",
+      "jeux olympiques",
+      "salle de sport",
+      "licence sportive",
+      "bibliothèque",
+      "musée"
+    ]
+  },
+  {
+    "slug": "j-notes-bac",
+    "term": "notes et bac (homonymes)",
+    "aliases": [
+      "\\bnotes?\\b",
+      "baccalauréat",
+      "\\bbac\\b",
+      "brevet",
+      "lycée",
+      "redoublement",
+      "devoirs",
+      "téléphone",
+      "portable",
+      "smartphone",
+      "uniforme"
+    ]
+  },
+  {
+    "slug": "j-immigration",
+    "term": "immigration (jargon adverse)",
+    "aliases": [
+      "régularis",
+      "sans-papiers",
+      "frontière",
+      "immigr",
+      "migrant",
+      "réfugié",
+      "asile",
+      "expuls",
+      "\\bOQTF\\b",
+      "titre de séjour",
+      "naturalisation"
+    ]
+  },
+  {
+    "slug": "j-banque-argent",
+    "term": "argent et banque",
+    "aliases": [
+      "frais bancaires",
+      "découvert",
+      "compte bancaire",
+      "crédit",
+      "prêt étudiant",
+      "\\bdette\\b étudiante",
+      "surendettement",
+      "livret A",
+      "épargne",
+      "héritage",
+      "succession"
+    ]
+  },
+  {
+    "slug": "j-armes-peine",
+    "term": "peine de mort / armes (absents)",
+    "aliases": [
+      "peine de mort",
+      "peine capitale",
+      "port d['’]arme",
+      "armes? à feu",
+      "légitime défense"
+    ]
+  },
+  {
+    "slug": "j-voter",
+    "term": "vote",
+    "aliases": [
+      "droit de vote",
+      "vote à 16",
+      "vote obligatoire",
+      "vote blanc",
+      "\\bRIC\\b",
+      "référendum d['’]initiative citoyenne",
+      "référendum",
+      "révocatoire",
+      "abstention",
+      "procuration",
+      "inscription sur les listes"
+    ]
+  }
+]

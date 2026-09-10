@@ -1,0 +1,401 @@
+[
+ {
+  "mode": "proto",
+  "cpuRate": 4,
+  "tapSentAt": 82,
+  "reveal": {
+   "t": 81.10000002384186,
+   "hasTransition": true,
+   "contentPending": true
+  },
+  "ready": null,
+  "finished": 12,
+  "finishedErr": null,
+  "contentReadyAt": 179,
+  "htmlClass": "m-motion",
+  "hits": [
+   [
+    11,
+    "HTML",
+    "none"
+   ],
+   [
+    61,
+    "MAIN#main",
+    "none"
+   ],
+   [
+    96,
+    "MAIN#main",
+    "none"
+   ],
+   [
+    199,
+    "P",
+    "none"
+   ],
+   [
+    229,
+    "P",
+    "none"
+   ],
+   [
+    260,
+    "P",
+    "none"
+   ],
+   [
+    290,
+    "P",
+    "none"
+   ],
+   [
+    320,
+    "P",
+    "none"
+   ],
+   [
+    350,
+    "P",
+    "none"
+   ],
+   [
+    381,
+    "P",
+    "none"
+   ],
+   [
+    412,
+    "P",
+    "none"
+   ],
+   [
+    442,
+    "P",
+    "none"
+   ],
+   [
+    472,
+    "P",
+    "none"
+   ],
+   [
+    503,
+    "P",
+    "none"
+   ],
+   [
+    534,
+    "P",
+    "none"
+   ],
+   [
+    565,
+    "P",
+    "none"
+   ],
+   [
+    595,
+    "P",
+    "none"
+   ],
+   [
+    625,
+    "P",
+    "none"
+   ]
+  ],
+  "clicks": [
+   [
+    77,
+    "MAIN.page",
+    true
+   ]
+  ],
+  "frames600": {
+   "n": 34,
+   "p95": 16.8,
+   "max": 83.3,
+   "pctOver20": 2.9,
+   "pctOver50": 2.9
+  },
+  "renderFrame": [
+   188,
+   83.3
+  ],
+  "framesAnimated": {
+   "n": 18,
+   "p95": 16.8,
+   "max": 16.8,
+   "pctOver20": 0,
+   "pctOver50": 0
+  },
+  "longFrames": [
+   [
+    188,
+    83.3
+   ]
+  ],
+  "url": "/section/?id=c12-s01",
+  "errors": []
+ },
+ {
+  "mode": "prerender",
+  "cpuRate": 4,
+  "tapSentAt": 72,
+  "reveal": {
+   "t": 101.5,
+   "hasTransition": true,
+   "contentPending": false
+  },
+  "ready": 9.8,
+  "finished": 270.6,
+  "finishedErr": null,
+  "contentReadyAt": null,
+  "htmlClass": "m-motion",
+  "hits": [
+   [
+    4,
+    "HTML",
+    "none"
+   ],
+   [
+    45,
+    "HTML",
+    "none"
+   ],
+   [
+    85,
+    "HTML",
+    "none"
+   ],
+   [
+    197,
+    "HTML",
+    "none"
+   ],
+   [
+    228,
+    "HTML",
+    "none"
+   ],
+   [
+    259,
+    "HTML",
+    "none"
+   ],
+   [
+    290,
+    "P",
+    "none"
+   ],
+   [
+    321,
+    "P",
+    "none"
+   ],
+   [
+    351,
+    "P",
+    "none"
+   ],
+   [
+    382,
+    "P",
+    "none"
+   ],
+   [
+    412,
+    "P",
+    "none"
+   ],
+   [
+    442,
+    "P",
+    "none"
+   ],
+   [
+    472,
+    "P",
+    "none"
+   ],
+   [
+    503,
+    "P",
+    "none"
+   ],
+   [
+    533,
+    "P",
+    "none"
+   ],
+   [
+    564,
+    "P",
+    "none"
+   ],
+   [
+    594,
+    "P",
+    "none"
+   ],
+   [
+    624,
+    "P",
+    "none"
+   ]
+  ],
+  "clicks": [
+   [
+    68,
+    "HTML.m-motion",
+    true
+   ]
+  ],
+  "frames600": {
+   "n": 32,
+   "p95": 33.3,
+   "max": 100,
+   "pctOver20": 6.3,
+   "pctOver50": 3.1
+  },
+  "renderFrame": null,
+  "framesAnimated": {
+   "n": 15,
+   "p95": 100,
+   "max": 100,
+   "pctOver20": 13.3,
+   "pctOver50": 6.7
+  },
+  "longFrames": [
+   [
+    184,
+    100
+   ]
+  ],
+  "url": "/section/?id=c12-s01",
+  "errors": []
+ },
+ {
+  "mode": "slow",
+  "cpuRate": 4,
+  "tapSentAt": 98,
+  "reveal": {
+   "t": 93.89999997615814,
+   "hasTransition": true,
+   "contentPending": false
+  },
+  "ready": 13.8,
+  "finished": 1237.7,
+  "finishedErr": null,
+  "contentReadyAt": null,
+  "htmlClass": "m-motion",
+  "hits": [
+   [
+    10,
+    "HTML",
+    "none"
+   ],
+   [
+    69,
+    "HTML",
+    "none"
+   ],
+   [
+    121,
+    "HTML",
+    "none"
+   ],
+   [
+    230,
+    "HTML",
+    "none"
+   ],
+   [
+    261,
+    "HTML",
+    "none"
+   ],
+   [
+    292,
+    "HTML",
+    "none"
+   ],
+   [
+    323,
+    "HTML",
+    "none"
+   ],
+   [
+    354,
+    "HTML",
+    "none"
+   ],
+   [
+    385,
+    "HTML",
+    "none"
+   ],
+   [
+    416,
+    "HTML",
+    "none"
+   ],
+   [
+    447,
+    "HTML",
+    "none"
+   ],
+   [
+    478,
+    "HTML",
+    "none"
+   ],
+   [
+    509,
+    "HTML",
+    "none"
+   ],
+   [
+    540,
+    "HTML",
+    "none"
+   ],
+   [
+    570,
+    "HTML",
+    "none"
+   ],
+   [
+    602,
+    "HTML",
+    "none"
+   ]
+  ],
+  "clicks": [
+   [
+    94,
+    "HTML.m-motion",
+    true
+   ]
+  ],
+  "frames600": {
+   "n": 66,
+   "p95": 6.7,
+   "max": 20,
+   "pctOver20": 0,
+   "pctOver50": 0
+  },
+  "renderFrame": null,
+  "framesAnimated": {
+   "n": 66,
+   "p95": 6.7,
+   "max": 20,
+   "pctOver20": 0,
+   "pctOver50": 0
+  },
+  "longFrames": [],
+  "url": "/section/?id=c12-s01",
+  "errors": []
+ }
+]

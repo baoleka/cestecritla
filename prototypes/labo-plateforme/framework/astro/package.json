@@ -1,0 +1,25 @@
+{
+  "name": "aec-lab-fw-astro",
+  "version": "0.0.1",
+  "private": true,
+  "description": "T7 lab, variant 2: hello-corpus page with Astro 5 (static HTML + one vanilla script island), deployed as a Static Assets Worker",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "deploy": "wrangler deploy",
+    "typecheck": "astro check"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "astro": "5.18.2",
+    "minisearch": "7.2.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.6",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.129.1"
+  }
+}
