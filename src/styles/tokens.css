@@ -81,7 +81,6 @@
   --duration-base: 200ms;
   --duration-reveal: 240ms;
   --duration-slow: 320ms;
-  --duration-$description: Aucune animation > 320 ms (plan T3). fast = retour de tap « Passer » (exit/enter), base = fondu d'arrivée concept → section (standard), reveal = apparition du bloc de citation (enter), slow = mascotte au jalon. prefers-reduced-motion : tout à 0 ms et aucun transform ; seule une opacité instantanée ou ≤ 120 ms subsiste (D3.14, PROPOSÉE ; design/motion-spec.md §5).;
 }
 
 @media (prefers-color-scheme: dark) {

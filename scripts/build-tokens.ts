@@ -53,6 +53,9 @@ export function resolveRefs(value: string, tree: { [k: string]: Json }): string 
   });
 }
 
+/** DTCG reserves `$`-prefixed keys for metadata: none of them is ever a value. */
+const isMeta = (key: string): boolean => key.startsWith('$');
+
 const decl = (name: string, value: string): string => `  --${name}: ${value};`;
 
 export function buildTokensCss(tokens: { [k: string]: Json }): string {
@@ -71,7 +74,7 @@ export function buildTokensCss(tokens: { [k: string]: Json }): string {
 
   // Raw palette.
   for (const [name, node] of Object.entries(colors)) {
-    if (!isObj(node) || typeof node['$value'] !== 'string') continue;
+    if (isMeta(name) || !isObj(node) || typeof node['$value'] !== 'string') continue;
     push(decl(`color-${name}`, node['$value']));
   }
 
@@ -79,7 +82,7 @@ export function buildTokensCss(tokens: { [k: string]: Json }): string {
   // definition inside a media query.
   push('');
   for (const [role, ref] of Object.entries(light)) {
-    if (typeof ref !== 'string') continue;
+    if (isMeta(role) || typeof ref !== 'string') continue;
     push(decl(role, resolveRefs(ref, tokens)));
   }
 
@@ -88,18 +91,19 @@ export function buildTokensCss(tokens: { [k: string]: Json }): string {
   const sizes = obj(font, 'size');
   push('');
   for (const [name, node] of Object.entries(sizes)) {
-    if (!isObj(node) || typeof node['$value'] !== 'string') continue;
+    if (isMeta(name) || !isObj(node) || typeof node['$value'] !== 'string') continue;
     push(decl(`font-size-${name}`, pxToRem(node['$value'])));
     const lh = node['line-height'];
     if (typeof lh === 'string') push(decl(`line-height-${name}`, lh));
   }
   const families = obj(font, 'family');
   for (const [name, node] of Object.entries(families)) {
-    if (!isObj(node) || typeof node['$value'] !== 'string') continue;
+    if (isMeta(name) || !isObj(node) || typeof node['$value'] !== 'string') continue;
     push(decl(`font-family-${name}`, node['$value']));
   }
   const weights = obj(font, 'weight');
   for (const [name, node] of Object.entries(weights)) {
+    if (isMeta(name)) continue;
     const v = isObj(node) ? node['$value'] : node;
     if (typeof v !== 'string' && typeof v !== 'number') continue;
     push(decl(`font-weight-${name}`, String(v)));
@@ -110,6 +114,7 @@ export function buildTokensCss(tokens: { [k: string]: Json }): string {
     const node = obj(tokens, group);
     push('');
     for (const [name, raw] of Object.entries(node)) {
+      if (isMeta(name)) continue;
       const v = isObj(raw) ? raw['$value'] : raw;
       if (typeof v !== 'string') continue;
       push(decl(`${group}-${name}`, pxToRem(resolveRefs(v, tokens))));
@@ -118,13 +123,14 @@ export function buildTokensCss(tokens: { [k: string]: Json }): string {
   const tap = obj(tokens, 'tap-target');
   push('');
   for (const [name, v] of Object.entries(tap)) {
-    if (typeof v !== 'string') continue;
+    if (isMeta(name) || typeof v !== 'string') continue;
     push(decl(`tap-${name}`, pxToRem(v)));
   }
 
   const shadow = obj(tokens, 'shadow');
   push('');
   for (const [name, node] of Object.entries(shadow)) {
+    if (isMeta(name)) continue;
     const v = isObj(node) ? node['$value'] : node;
     if (typeof v !== 'string') continue;
     push(decl(`shadow-${name}`, resolveRefs(v, tokens)));
@@ -134,7 +140,7 @@ export function buildTokensCss(tokens: { [k: string]: Json }): string {
   const duration = obj(motion, 'duration');
   push('');
   for (const [name, v] of Object.entries(duration)) {
-    if (typeof v !== 'string') continue;
+    if (isMeta(name) || typeof v !== 'string') continue;
     push(decl(`duration-${name}`, v));
   }
   push('}');
@@ -142,7 +148,7 @@ export function buildTokensCss(tokens: { [k: string]: Json }): string {
   // Dark: redefine ONLY the roles, guarded so an explicit light choice always wins.
   const darkBlock: string[] = [];
   for (const [role, ref] of Object.entries(dark)) {
-    if (typeof ref !== 'string' || role.startsWith('$')) continue;
+    if (isMeta(role) || typeof ref !== 'string') continue;
     darkBlock.push(decl(role, resolveRefs(ref, tokens)));
   }
   push('');
@@ -162,7 +168,7 @@ export function buildTokensCss(tokens: { [k: string]: Json }): string {
   push('/* Breakpoints in em, never px: Chrome Android M113+ applies the system font size as a');
   push('   page zoom, so a px breakpoint ignores it for ~40 % of users (perf-budget §2.3). */');
   for (const [name, v] of Object.entries(bp)) {
-    if (typeof v !== 'string') continue;
+    if (isMeta(name) || typeof v !== 'string') continue;
     push(`/* --breakpoint-${name}: ${pxToRem(v, 'em')} (${v}) */`);
   }
   push('');

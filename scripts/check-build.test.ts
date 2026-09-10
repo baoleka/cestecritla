@@ -27,9 +27,29 @@ const textFiles = files.filter((f) => ['.html', '.css', '.js', '.json'].includes
 const skip = files.length === 0;
 const read = (f: string): string => readFileSync(f, 'utf8');
 
-/** Only what the app itself asserts: the corpus is a citation, not our voice. */
+/**
+ * The app's own voice, with every quotation of the programme removed.
+ *
+ * This is not a convenience: the corpus itself legislates about AI. `c18-s05-m12` is "Créer la
+ * mission nationale de maîtrise de l'intelligence artificielle", `c18-s05-m13` restricts its
+ * uses, `c11-s01-m15` limits generative AI in culture, `c16-s02-m02` names it among military
+ * technologies, and `c5-s03-m02.s4` speaks of "assistants d'éducation". Scanned naively, this
+ * gate is red on five pages from the first build — and the answer is not to weaken it but to
+ * scope it to what the app ASSERTS, which is exactly the distinction the whole product rests on.
+ *
+ * A quotation reaches the page through four surfaces, not one: the verbatim block, the <title>,
+ * the description and Open Graph meta, and the JSON-LD (which carries the measure text as its
+ * `text` field). All four are the programme speaking. Everything left is us.
+ */
 const appVoiceOnly = (html: string): string =>
-  html.replace(/<figure class="verbatim"[\s\S]*?<\/figure>/g, ' ');
+  html
+    .replace(/<figure class="verbatim"[\s\S]*?<\/figure>/g, ' ')
+    .replace(/<script type="application\/ld\+json"[\s\S]*?<\/script>/g, ' ')
+    .replace(/<title>[\s\S]*?<\/title>/gi, ' ')
+    .replace(
+      /<meta\b[^>]*\b(?:name|property)=["'](?:description|og:[a-z:]+|twitter:[a-z:]+)["'][^>]*>/gi,
+      ' ',
+    );
 
 interface Ban {
   readonly what: string;
@@ -149,4 +169,25 @@ void test('a section page stays under the P3 critical-path budget', () => {
   const budget = 150 * 1024;
   assert.ok(gz <= budget, `critical path ${String(gz)} B gzip > ${String(budget)} B`);
   console.log(`  section page: ${String(gz)} B gzip of ${String(budget)} B`);
+});
+
+void test('no generated custom property carries token metadata', () => {
+  // DTCG reserves the `$`-prefix for metadata. motion.duration.$description was being emitted
+  // as `--duration-$description: <prose>;`, which is invalid CSS and produced two esbuild
+  // syntax errors on every page of the build. Zero `$` is the whole rule.
+  const css = readFileSync('src/styles/tokens.css', 'utf8');
+  const leaked = [...css.matchAll(/^\s*--[^:]*\$[^:]*:/gm)].map((m) => m[0].trim());
+  assert.deepEqual(leaked, [], `metadata leaked into CSS:\n${leaked.join('\n')}`);
+});
+
+void test('the built CSS is free of syntax errors esbuild would report', () => {
+  if (skip) return;
+  const css = readFileSync('src/styles/tokens.css', 'utf8');
+  // Balanced braces and one colon per declaration: enough to catch the class of defect above.
+  assert.equal((css.match(/{/g) ?? []).length, (css.match(/}/g) ?? []).length, 'unbalanced braces');
+  for (const line of css.split('\n')) {
+    const decl = line.trim();
+    if (!decl.startsWith('--')) continue;
+    assert.match(decl, /^--[a-z0-9-]+:\s*.+;$/i, `malformed declaration: ${decl}`);
+  }
 });
