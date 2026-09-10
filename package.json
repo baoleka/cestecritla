@@ -20,7 +20,8 @@
     "lint": "eslint scripts eval",
     "format": "prettier --write \"**/*.{ts,json,md}\"",
     "a11y": "tsx scripts/a11y.ts",
-    "build:neutral": "tsx scripts/build.ts --neutral"
+    "build:neutral": "tsx scripts/build.ts --neutral",
+    "recrawl": "tsx scripts/recrawl.ts"
   },
   "license": "MIT",
   "devDependencies": {

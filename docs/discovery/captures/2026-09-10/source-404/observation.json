@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "observed_at": "2026-09-10T11:53:09.418414+00:00",
+    "observer": "scripts/recrawl.ts (première exécution réelle, H-COR-2)",
+    "user_agent": "cestecritla/0.1 (+https://github.com/baoleka/cestecritla)",
+    "from": "connexion résidentielle (les mêmes URL répondent 200 le 7/9/2026)",
+    "finding_fr": "Les sous-pages du livre sur melenchon2027.fr renvoient 404. La page d'accueil du livre répond encore 200 et publie 24 liens de navigation — qui renvoient tous 404, y compris les formes qu'elle publie elle-même aujourd'hui (/chapitre1, /faire-la-revolution-citoyenne, /introduction). Aucune URL programme2025 dans wp-sitemap.xml. Les 89 URL de section enregistrées dans data/aec-2025.json le 7/9/2026 sont mortes.",
+    "not_a_conclusion_fr": "Observation archivée, pas une décision (D12.6). Peut être un déploiement en cours, une purge de CDN, ou un retrait. À revérifier avant toute action. Le corpus n'est PAS touché : le texte reste vérifié et figé, seules les URL de source le sont."
+  },
+  "landing": {
+    "url": "https://melenchon2027.fr/programme2025/livre/",
+    "status": "200",
+    "bytes": 117727,
+    "sha256": "5fad20eff3159b7c1f90209c0082376ad58312eef3029c58f365d4deb863e4e3",
+    "nav_links": 24
+  },
+  "subpages": [
+    {
+      "path": "/programme2025/livre/introduction",
+      "status": "404"
+    },
+    {
+      "path": "/programme2025/livre/chapitre1",
+      "status": "404"
+    },
+    {
+      "path": "/programme2025/livre/chapitre1/s1",
+      "status": "404"
+    },
+    {
+      "path": "/programme2025/livre/faire-la-revolution-citoyenne",
+      "status": "404"
+    },
+    {
+      "path": "/programme2025/livre/partie1",
+      "status": "404"
+    }
+  ]
+}

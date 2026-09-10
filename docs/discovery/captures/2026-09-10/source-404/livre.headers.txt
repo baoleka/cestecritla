@@ -1,0 +1,22 @@
+HTTP/2 200 
+date: Thu, 10 Sep 2026 11:53:06 GMT
+content-type: text/html; charset=UTF-8
+server: cloudflare
+vary: Accept-Encoding
+link: <https://melenchon2027.fr/wp-json/>; rel="https://api.w.org/"
+link: <https://melenchon2027.fr/?p=14981>; rel=shortlink
+expires: Thu, 10 Sep 2026 11:53:05 GMT
+cache-control: no-cache
+fastcgi-cache: HIT
+strict-transport-security: max-age=31536000; includeSubDomains; preload
+x-content-type-options: nosniff
+referrer-policy: strict-origin-when-cross-origin
+permissions-policy: geolocation=(), camera=(), microphone=()
+x-frame-options: SAMEORIGIN
+content-security-policy: default-src 'self' blob: data: https: 'unsafe-inline' 'unsafe-eval'; frame-src 'self' blob: data: https:; worker-src 'self' blob: data:; frame-ancestors 'self';
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+cf-cache-status: DYNAMIC
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=DXW1FvL9SBMHAS2%2FO4hJ1uh5v4Olu6AvXWw5iq5hzwi%2BShgfN1dUU0oTh2C13vR%2Fmj0DCYyP849vg3ouFY8bD1AzoooQ%2BuqQZbusfWTC0SM4o6WQ0xps9qXbuJC9Bw%2B6Can9mtl%2B2jtPUCO9IHXm"}]}
+cf-ray: a38e3af4abb742ba-CDG
+alt-svc: h3=":443"; ma=86400
+
