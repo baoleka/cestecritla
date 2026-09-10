@@ -1,0 +1,159 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "date": "2026-09-10",
+    "title_fr": "Sidecar loi 77-808 des cartes « À savoir »",
+    "decision": "H-COR-9, D9.3",
+    "rule_fr": "Aucune carte statistique n'est servie dans une riposte sans une entrée ici. L'entrée ne sert pas à combler le vide : elle le NOMME. data/stat-cards.json ne porte que ce que le livre imprime — institut 47/48, date 47/48, commanditaire 3/48, média de première diffusion 0/48 — et un écran qui tairait ces manques laisserait croire que la mention légale est complète.",
+    "law_fr": "Loi n° 77-808 du 19 juillet 1977, art. 2 et art. 11. Choix de PRUDENCE et non obligation : le constat C2 de 11-conformite.md conclut qu'aucun article n'impose de mentions à une re-diffusion. L'écrire évite de se créer une obligation intenable, le média de première diffusion étant inconnu pour 48 cartes sur 48.",
+    "freeze_fr": "Pendant une fenêtre de silence L49, la carte statistique disparaît de TOUS les écrans, /r/ et /m/ compris (H-CNF-17e).",
+    "count": 11,
+    "used_by_riposte": [
+      "c13-s02-a01",
+      "c13-s03-a01",
+      "c13-s05-a01",
+      "c16-s07-a01",
+      "c6-s05-a01",
+      "c6-s05-a03",
+      "c7-s01-a01",
+      "c7-s05-a01",
+      "c7-s08-a01",
+      "c8-s08-a02",
+      "c9-s02-a01"
+    ]
+  },
+  "cards": {
+    "c13-s02-a01": {
+      "pollster": "Harris Interactive",
+      "sponsor": "La France insoumise",
+      "dates": "9-12 juillet 2021",
+      "sample": "1 241 personnes interrogées",
+      "first_publication_media": null,
+      "report_url": null,
+      "status": "PROBABLE",
+      "source_fr": "Mentions relevées dans docs/discovery/10-riposte.md §7.4 et reprises du sidecar du prototype J3. Rattachées ici à toutes les cartes « Harris Interactive, juillet 2021 » du livre, qui sont vraisemblablement la même enquête — c'est une déduction, pas une lecture : le rapport de l'institut n'a jamais été ouvert (H-COR-8).",
+      "dates_in_book": "juillet 2021",
+      "missing_in_book": ["commanditaire", "media_premiere_diffusion"]
+    },
+    "c13-s03-a01": {
+      "pollster": "Harris Interactive",
+      "sponsor": "La France insoumise",
+      "dates": "9-12 juillet 2021",
+      "sample": "1 241 personnes interrogées",
+      "first_publication_media": null,
+      "report_url": null,
+      "status": "PROBABLE",
+      "source_fr": "Mentions relevées dans docs/discovery/10-riposte.md §7.4 et reprises du sidecar du prototype J3. Rattachées ici à toutes les cartes « Harris Interactive, juillet 2021 » du livre, qui sont vraisemblablement la même enquête — c'est une déduction, pas une lecture : le rapport de l'institut n'a jamais été ouvert (H-COR-8).",
+      "dates_in_book": "juillet 2021",
+      "missing_in_book": ["commanditaire", "media_premiere_diffusion"]
+    },
+    "c13-s05-a01": {
+      "pollster": "Harris Interactive",
+      "sponsor": "La France insoumise",
+      "dates": "9-12 juillet 2021",
+      "sample": "1 241 personnes interrogées",
+      "first_publication_media": null,
+      "report_url": null,
+      "status": "PROBABLE",
+      "source_fr": "Mentions relevées dans docs/discovery/10-riposte.md §7.4 et reprises du sidecar du prototype J3. Rattachées ici à toutes les cartes « Harris Interactive, juillet 2021 » du livre, qui sont vraisemblablement la même enquête — c'est une déduction, pas une lecture : le rapport de l'institut n'a jamais été ouvert (H-COR-8).",
+      "dates_in_book": "juillet 2021",
+      "missing_in_book": ["commanditaire", "media_premiere_diffusion"]
+    },
+    "c16-s07-a01": {
+      "pollster": "Harris Interactive",
+      "sponsor": "La France insoumise",
+      "dates": "9-12 juillet 2021",
+      "sample": "1 241 personnes interrogées",
+      "first_publication_media": null,
+      "report_url": null,
+      "status": "PROBABLE",
+      "source_fr": "Mentions relevées dans docs/discovery/10-riposte.md §7.4 et reprises du sidecar du prototype J3. Rattachées ici à toutes les cartes « Harris Interactive, juillet 2021 » du livre, qui sont vraisemblablement la même enquête — c'est une déduction, pas une lecture : le rapport de l'institut n'a jamais été ouvert (H-COR-8).",
+      "dates_in_book": "juillet 2021",
+      "missing_in_book": ["commanditaire", "media_premiere_diffusion"]
+    },
+    "c6-s05-a01": {
+      "pollster": "Harris Interactive",
+      "sponsor": "La France insoumise",
+      "dates": "9-12 juillet 2021",
+      "sample": "1 241 personnes interrogées",
+      "first_publication_media": null,
+      "report_url": null,
+      "status": "PROBABLE",
+      "source_fr": "Mentions relevées dans docs/discovery/10-riposte.md §7.4 et reprises du sidecar du prototype J3. Rattachées ici à toutes les cartes « Harris Interactive, juillet 2021 » du livre, qui sont vraisemblablement la même enquête — c'est une déduction, pas une lecture : le rapport de l'institut n'a jamais été ouvert (H-COR-8).",
+      "dates_in_book": "juillet 2021",
+      "missing_in_book": ["commanditaire", "media_premiere_diffusion"]
+    },
+    "c6-s05-a03": {
+      "pollster": "Harris Interactive",
+      "sponsor": null,
+      "dates": "mai 2021",
+      "dates_in_book": "mai 2021",
+      "sample": null,
+      "first_publication_media": null,
+      "report_url": null,
+      "status": "HYPOTHÈSE",
+      "source_fr": "Le livre ne donne que l'organisme et la date. Le commanditaire, la taille de l'échantillon et le média de première diffusion restent à lire dans le rapport de l'institut (H-COR-8). Rien n'est déduit ici : l'écran dit ce qui manque.",
+      "missing_in_book": ["commanditaire", "media_premiere_diffusion"]
+    },
+    "c7-s01-a01": {
+      "pollster": "Ifop",
+      "sponsor": null,
+      "dates": "mai 2021",
+      "dates_in_book": "mai 2021",
+      "sample": null,
+      "first_publication_media": null,
+      "report_url": null,
+      "status": "HYPOTHÈSE",
+      "source_fr": "Le livre ne donne que l'organisme et la date. Le commanditaire, la taille de l'échantillon et le média de première diffusion restent à lire dans le rapport de l'institut (H-COR-8). Rien n'est déduit ici : l'écran dit ce qui manque.",
+      "missing_in_book": ["media_premiere_diffusion"]
+    },
+    "c7-s05-a01": {
+      "pollster": "Harris Interactive",
+      "sponsor": "La France insoumise",
+      "dates": "9-12 juillet 2021",
+      "sample": "1 241 personnes interrogées",
+      "first_publication_media": null,
+      "report_url": null,
+      "status": "PROBABLE",
+      "source_fr": "Mentions relevées dans docs/discovery/10-riposte.md §7.4 et reprises du sidecar du prototype J3. Rattachées ici à toutes les cartes « Harris Interactive, juillet 2021 » du livre, qui sont vraisemblablement la même enquête — c'est une déduction, pas une lecture : le rapport de l'institut n'a jamais été ouvert (H-COR-8).",
+      "dates_in_book": "juillet 2021",
+      "missing_in_book": ["commanditaire", "media_premiere_diffusion"]
+    },
+    "c7-s08-a01": {
+      "pollster": "Harris Interactive",
+      "sponsor": "La France insoumise",
+      "dates": "9-12 juillet 2021",
+      "sample": "1 241 personnes interrogées",
+      "first_publication_media": null,
+      "report_url": null,
+      "status": "PROBABLE",
+      "source_fr": "Mentions relevées dans docs/discovery/10-riposte.md §7.4 et reprises du sidecar du prototype J3. Rattachées ici à toutes les cartes « Harris Interactive, juillet 2021 » du livre, qui sont vraisemblablement la même enquête — c'est une déduction, pas une lecture : le rapport de l'institut n'a jamais été ouvert (H-COR-8).",
+      "dates_in_book": "juillet 2021",
+      "missing_in_book": ["commanditaire", "media_premiere_diffusion"]
+    },
+    "c8-s08-a02": {
+      "pollster": "Ifop",
+      "sponsor": null,
+      "dates": "2022",
+      "dates_in_book": "2022",
+      "sample": null,
+      "first_publication_media": null,
+      "report_url": null,
+      "status": "HYPOTHÈSE",
+      "source_fr": "Le livre ne donne que l'organisme et la date. Le commanditaire, la taille de l'échantillon et le média de première diffusion restent à lire dans le rapport de l'institut (H-COR-8). Rien n'est déduit ici : l'écran dit ce qui manque.",
+      "missing_in_book": ["commanditaire", "media_premiere_diffusion"]
+    },
+    "c9-s02-a01": {
+      "pollster": "Ifop",
+      "sponsor": null,
+      "dates": "septembre 2020",
+      "dates_in_book": "septembre 2020",
+      "sample": null,
+      "first_publication_media": null,
+      "report_url": null,
+      "status": "HYPOTHÈSE",
+      "source_fr": "Le livre ne donne que l'organisme et la date. Le commanditaire, la taille de l'échantillon et le média de première diffusion restent à lire dans le rapport de l'institut (H-COR-8). Rien n'est déduit ici : l'écran dit ce qui manque.",
+      "missing_in_book": ["media_premiere_diffusion"]
+    }
+  }
+}
