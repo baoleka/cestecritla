@@ -31,6 +31,8 @@ export const AUDITED_PATHS = [
   '/s/c18-s05/',
   '/m/c12-s01-k01/',
   '/m/c1-s02-m03/',
+  '/a/c13-s02-a01/',
+  '/a/c13-s03-a02/',
   '/j/',
   '/k/',
   '/carte/',

@@ -1,0 +1,110 @@
+---
+/**
+ * A "À savoir" statistic, on its own page (D9.3, loi 77-808, H-COR-9).
+ *
+ * A PAGE, never an image. The ban list forbids "toute carte statistique sur une image" (D5.4,
+ * D5.5) for a measured reason: 33 of the 47 dated statistics are from 2021, and a 2021 poll
+ * shared as a picture in 2027 is a D0.32 eliminatory flag. So /a/<id> gets the generic preview,
+ * and the number never travels alone.
+ *
+ * The legal mentions are a choice of PRUDENCE, not an obligation — constat C2 concludes no
+ * article imposes them on a re-diffusion. What matters is that the screen says what the book
+ * does NOT give: sponsor in 3 cases out of 48, first-publication medium in 0 out of 48.
+ * Claiming a complete legal mention would be the actual fault.
+ */
+import Base from '../../layouts/Base.astro';
+import { sections, chapterOf, sourceLink, type SlimSection } from '../../lib/corpus.ts';
+import statCards from '../../../data/stat-cards.json';
+import legalSidecar from '../../../data/stat-cards-legal.json';
+
+interface Legal {
+  organisme: string | null;
+  dates: string | null;
+  commanditaire: string | null;
+  media_premiere_diffusion: string | null;
+  missing: string[];
+}
+interface Card {
+  id: string;
+  section_id: string;
+  chapter_title: string;
+  section_title: string;
+  text: string;
+  institute: string | null;
+  survey_date_text: string | null;
+  legal_77_808: Legal;
+}
+interface SidecarEntry {
+  sponsor: string | null;
+  sample: string | null;
+  status: string;
+}
+
+export function getStaticPaths() {
+  const bySection = new Map(sections().map((s: SlimSection) => [s.id, s]));
+  // flatMap rather than filter+map: `.has()` does not narrow `.get()`, and the section has to
+  // be a definite value for the page below.
+  return (statCards.cards as Card[]).flatMap((card) => {
+    const section = bySection.get(card.section_id);
+    return section === undefined ? [] : [{ params: { id: card.id }, props: { card, section } }];
+  });
+}
+
+const { card, section } = Astro.props;
+const chapter = chapterOf(section);
+const legal = card.legal_77_808;
+const side = (legalSidecar.cards as Record<string, SidecarEntry | undefined>)[card.id];
+
+// c13-s03-a02 is a turnout figure, not a poll: calling it one would be a small lie with a
+// legal shape (statcard.not_a_survey).
+const isSurvey = card.institute !== null;
+const missing = legal.missing.length > 0;
+---
+
+<Base title={`À savoir — ${section.title} — C'est écrit là`} description={card.text.slice(0, 155)}>
+  <p class="label">Site non officiel.</p>
+  <p class="label">{chapter.title}</p>
+  <h1>{section.title}</h1>
+
+  {/* Hook for the client-side L49 freeze: during a silence window every statistic leaves every
+      screen, /r/ and /m/ included (H-CNF-17e). The freeze is computed at render time on the
+      client, never by a server flag (D9.19). */}
+  <figure class="verbatim" id={card.id} data-freezes-on="silence">
+    <span class="label">À savoir</span>
+    <blockquote><p>{card.text}</p></blockquote>
+    <figcaption class="ref">{card.id}</figcaption>
+  </figure>
+
+  <p class="ref">
+    {
+      isSurvey
+        ? `Sondage ${card.institute ?? ''}${legal.dates ? `, ${legal.dates}` : ''}.` +
+          ` ${side?.sponsor ? `Commanditaire : ${side.sponsor}.` : 'Commanditaire non précisé dans le livre.'}` +
+          ` Publié dans L’Avenir en commun 2025, ${chapter.title}.`
+        : `Chiffre publié dans le livre. Ce n’est pas un sondage. Publié dans L’Avenir en commun 2025, ${chapter.title}.`
+    }
+  </p>
+  {
+    isSurvey && (
+      <p class="ref">
+        Le livre ne donne pas le nombre de personnes interrogées. Ni les questions, ni la marge
+        d’erreur. Tout sondage comporte une marge d’erreur.
+      </p>
+    )
+  }
+  {
+    missing && (
+      <p class="ref">
+        Mentions légales incomplètes dans la source : {legal.missing.join(', ')}.
+      </p>
+    )
+  }
+
+  <p><a class="cta" href={`/s/${section.id}/`}>Lire la section</a></p>
+  <p>
+    <a class="source-link" href={sourceLink(section)} rel="noopener">
+      Lire le livre sur melenchon2027.fr
+    </a>
+  </p>
+  <p class="ref">Texte : La France insoumise – L’Avenir en commun, sous licence CC BY-NC-SA 4.0.</p>
+</Base>

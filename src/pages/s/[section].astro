@@ -54,7 +54,7 @@ const jsonLd = {
 ---
 
 <Base title={`${section.title} — C'est écrit là`} description={chapeaux[0]?.text.slice(0, 155)}>
-  <p class="label">Chapitre {chapter.number} · {chapter.title}</p>
+  <p class="label">{chapter.title}</p>
   <h1>{section.title}</h1>
 
   {chapeaux.map((p) => <p>{p.text}</p>)}

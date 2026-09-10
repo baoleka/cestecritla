@@ -38,7 +38,12 @@ export const ROUTES: readonly Route[] = [
   { prefix: '/s/', status: 'built', object: 'section', sample: 's/c1-s02/index.html' },
   { prefix: '/m/', status: 'built', object: 'mesure', sample: 'm/c12-s01-k01/index.html' },
   { prefix: '/c/', status: 'planned', object: 'carte-concept' },
-  { prefix: '/a/', status: 'planned', object: 'carte statistique' },
+  {
+    prefix: '/a/',
+    status: 'built',
+    object: 'carte statistique',
+    sample: 'a/c13-s02-a01/index.html',
+  },
   { prefix: '/r/', status: 'planned', object: 'riposte (par thème)' },
   { prefix: '/mot/', status: 'planned', object: 'terme du glossaire' },
   { prefix: '/q/', status: 'planned', object: '« Laquelle est ici ? »' },
