@@ -36,7 +36,7 @@ interface Route {
 export const ROUTES: readonly Route[] = [
   { prefix: '/', status: 'built', object: 'accueil', sample: 'index.html' },
   { prefix: '/s/', status: 'built', object: 'section', sample: 's/c1-s02/index.html' },
-  { prefix: '/m/', status: 'planned', object: 'mesure' },
+  { prefix: '/m/', status: 'built', object: 'mesure', sample: 'm/c12-s01-k01/index.html' },
   { prefix: '/c/', status: 'planned', object: 'carte-concept' },
   { prefix: '/a/', status: 'planned', object: 'carte statistique' },
   { prefix: '/r/', status: 'planned', object: 'riposte (par thème)' },

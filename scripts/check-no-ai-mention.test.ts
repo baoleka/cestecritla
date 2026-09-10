@@ -65,18 +65,28 @@ void test('the deployed config carries no AI and no Turnstile (D6.10, D13.1)', (
 });
 
 /**
- * The app's own voice, with the programme's words removed.
+ * The app's own voice, with every quotation of the programme removed.
  *
  * This is not a convenience: the corpus itself legislates about AI. `c18-s05-m12` is "Créer la
- * mission nationale de maîtrise de l'intelligence artificielle", `c11-s01` limits generative AI
- * in culture, `c16-s02` names it among military technologies, and `c5-s03` speaks of "assistants
- * d'éducation". Scanned naively, this gate is red on four pages from the first build -- and the
- * answer is not to weaken it but to scope it to what the app ASSERTS, which is exactly the
- * distinction the whole product rests on. Verbatim blocks carry their own marker and their own
- * "Texte du programme" label; everything outside them is us talking.
+ * mission nationale de maîtrise de l'intelligence artificielle", `c18-s05-m13` restricts its
+ * uses, `c11-s01-m15` limits generative AI in culture, `c16-s02-m02` names it among military
+ * technologies, and `c5-s03-m02.s4` speaks of "assistants d'éducation". Scanned naively, this
+ * gate is red on five pages from the first build — and the answer is not to weaken it but to
+ * scope it to what the app ASSERTS, which is exactly the distinction the whole product rests on.
+ *
+ * A quotation reaches the page through four surfaces, not one: the verbatim block, the <title>,
+ * the description and Open Graph meta, and the JSON-LD (which carries the measure text as its
+ * `text` field). All four are the programme speaking. Everything left is us.
  */
 const appVoiceOnly = (html: string): string =>
-  html.replace(/<figure class="verbatim"[\s\S]*?<\/figure>/g, ' ');
+  html
+    .replace(/<figure class="verbatim"[\s\S]*?<\/figure>/g, ' ')
+    .replace(/<script type="application\/ld\+json"[\s\S]*?<\/script>/g, ' ')
+    .replace(/<title>[\s\S]*?<\/title>/gi, ' ')
+    .replace(
+      /<meta\b[^>]*\b(?:name|property)=["'](?:description|og:[a-z:]+|twitter:[a-z:]+)["'][^>]*>/gi,
+      ' ',
+    );
 
 void test('no built page mentions an AI or Turnstile while neither is deployed', () => {
   const pages = htmlFiles('dist');
