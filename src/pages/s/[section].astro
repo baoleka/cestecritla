@@ -11,7 +11,15 @@
  */
 import Base from '../../layouts/Base.astro';
 import SectionVerbatim from '../../components/SectionVerbatim.astro';
-import { sections, chapterOf, scopeOf, isProposition, type SlimSection } from '../../lib/corpus.ts';
+import {
+  sections,
+  chapterOf,
+  scopeOf,
+  isProposition,
+  sourceLink,
+  SOURCE_DEEP_LINKS_ALIVE,
+  type SlimSection,
+} from '../../lib/corpus.ts';
 
 export function getStaticPaths() {
   return sections().map((section: SlimSection) => ({
@@ -36,8 +44,10 @@ const jsonLd = {
   '@type': 'Article',
   headline: section.title,
   inLanguage: 'fr',
-  isBasedOn: section.url,
-  citation: section.url,
+  // Both point at what actually resolves. A machine-readable citation aimed at a 404 helps
+  // nobody, and the precise pointer into the work is our own identifier, printed on the page.
+  isBasedOn: sourceLink(section),
+  citation: sourceLink(section),
   license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
   isPartOf: { '@type': 'Book', name: 'L’Avenir en commun', author: 'La France insoumise' },
 };
@@ -72,7 +82,9 @@ const jsonLd = {
   {closing.map((p) => <p id={p.id}>{p.text}</p>)}
 
   <p>
-    <a class="source-link" href={section.url} rel="noopener">Lire sur melenchon2027.fr</a>
+    <a class="source-link" href={sourceLink(section)} rel="noopener">
+      {SOURCE_DEEP_LINKS_ALIVE ? 'Lire cette section sur melenchon2027.fr' : 'Lire le livre sur melenchon2027.fr'}
+    </a>
   </p>
   <p class="ref">
     Texte : La France insoumise – L’Avenir en commun, sous licence CC BY-NC-SA 4.0. Version du
