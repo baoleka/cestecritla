@@ -334,10 +334,15 @@ Fait et vérifié :
   `robots.txt` ; quatre pages brutes sous `private/captures/`, leurs empreintes au manifeste des tiers.
 - **A7** — `decisions.md` (187 décisions, D0-D15), `14-risques.md`, `16-hypotheses.md`.
 - **A8** — labels `recrawl`, `veille` et `corpus` créés ; les deux workflows planifiés réactivés ;
-  le rappel hebdomadaire réécrit pour l'édition 2026 et rendu insensible à un label manquant. À
-  vérifier après le push : lancé à la main, le rappel ouvre une issue.
+  le rappel hebdomadaire réécrit pour l'édition 2026 et rendu insensible à un label manquant.
+  **Prouvé après le push** : lancé à la main, le rappel a ouvert l'issue n° 1 avec le nouveau texte ;
+  elle est fermée, relevé du jour en commentaire, pour que celle du lundi s'ouvre.
 - **A9** — `CLAUDE.md`, `README.md`, `LICENSE`, `data/LICENSE`, `data/badge.json`, `.gitignore` ;
-  porte `private/` dans `scripts/check-repo.test.ts`. La description du dépôt GitHub attend un accord.
+  porte `private/` dans `scripts/check-repo.test.ts` ; description du dépôt GitHub remplacée, avec
+  l'accord de l'utilisateur.
+- **Poussé le 12/11/2026**, avec l'accord de l'utilisateur, qui a validé le texte de la page
+  d'attente : trois commits (`2642ca5`, `01544b3`, `5671c99`). CI verte sur les deux builds, dont
+  les nouvelles étapes (build d'attente, tests rejoués dessus, déploiements à blanc, accessibilité).
 
 Non fait, et pourquoi :
 
@@ -348,7 +353,9 @@ Non fait, et pourquoi :
 
 En attente d'un geste de l'utilisateur :
 
-- **A3** — valider le texte, puis `npm run build:holding && npm run deploy` dans son terminal.
+- **A3** — le texte est validé ; reste `nvm use 24 && npm run build:holding && npm run deploy` dans
+  son terminal, en répondant oui à la reprise des deux domaines. Tant que ce n'est pas fait,
+  `cestecritla.fr` sert le spike du 9/9.
 - **A4** — retrait du spike, de `aec-proto` et des Workers de labo, un à deux jours après A3.
 - **P0.5** — déclaration LCEN : l'apex est public sans mentions légales depuis le 9/9.
 - **D15.13** — Analytics Engine, avant tout déploiement de l'app.
