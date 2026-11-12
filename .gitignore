@@ -13,3 +13,9 @@ public/fonts/
 worker-configuration.d.ts
 .gate-forbidden
 docs/discovery/captures/assets-tiers/
+# The 2026 edition is "© La France insoumise, tous droits réservés" (D15.1): its pages and its
+# text live here, on one machine, and never in this repository or in dist/ (D15.6). Only
+# fingerprints of them are tracked. scripts/check-repo.test.ts fails if anything below is.
+private/
+# Written by `wrangler check startup`.
+*.cpuprofile

@@ -64,6 +64,11 @@ jobs:
             echo "message — seulement sur un signal observé et archivé ; **aucune décision"
             echo "pendant un gel L49** (16-18 avril, 30 avril-2 mai 2027) : on note, on attend."
           } > /tmp/issue.md
+          # This step only runs on the day a signal moves — the one day it must not fail. The
+          # label did not exist in the repository recreated on 10/9/2026 (found 12/11, D15.12):
+          # the job looked green for two months and would have gone red exactly when it mattered.
+          gh label create veille --force --color FBCA04 \
+            --description "Un signal de veille a changé : à archiver, pas à décider"
           gh issue create \
             --title "Veille R6 — un signal d'aec2027.fr a changé ($(date -u +%Y-%m-%d))" \
             --body-file /tmp/issue.md \

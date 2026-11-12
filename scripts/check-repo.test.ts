@@ -164,3 +164,34 @@ void test('third-party captures are accounted for (H-LAN-14)', () => {
       `prior-art screenshots still tracked, no manifest yet — P0)`,
   );
 });
+
+/**
+ * The 2026 edition is "© La France insoumise, tous droits réservés" (D15.1). Its pages and its
+ * text are kept on one machine, under private/, and only fingerprints of them are tracked
+ * (D15.6). This repository is public: a file committed here is published, and public history
+ * cannot be taken back. Two conditions, because either alone can be undone by one careless
+ * line — `git add -f` beats .gitignore, and a deleted ignore rule beats nothing at all.
+ */
+void test('private/ is ignored by git and carries no tracked file (D15.6)', () => {
+  const leaked = tracked().filter((p) => p.startsWith('private/'));
+  assert.deepEqual(leaked, [], `tracked files under private/:\n${leaked.join('\n')}`);
+
+  // `git check-ignore` exits 0 when the path is ignored, 1 when it is not.
+  let ignored = true;
+  try {
+    execFileSync('git', ['check-ignore', '-q', 'private/corpus/aec-2026.json']);
+  } catch {
+    ignored = false;
+  }
+  assert.ok(ignored, 'private/ is no longer covered by .gitignore');
+});
+
+void test('nothing the site is built from reads private/ (D15.6)', () => {
+  // CI builds dist/ with no private/ at all, so what is served is a function of tracked files
+  // only. That property is the leak gate; this test keeps anyone from quietly giving it up.
+  const builtFrom = tracked().filter(
+    (p) => p.startsWith('src/') || p === 'astro.config.ts' || /^scripts\/build[^/]*\.ts$/.test(p),
+  );
+  const offenders = builtFrom.filter((p) => isText(p) && /\bprivate\//.test(read(p)));
+  assert.deepEqual(offenders, [], `build inputs that mention private/:\n${offenders.join('\n')}`);
+});

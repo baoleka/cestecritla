@@ -1,4 +1,4 @@
-# Weekly reminder to re-crawl "L'Avenir en commun 2025" (D1.3, amended by D14.13).
+# Weekly reminder to check the source of the programme (D1.3, amended by D14.13 and D15.12).
 #
 # This workflow USED to do the crawl. It cannot: measured 10/9/2026, on the first real execution
 # the dossier ever attempted (H-COR-2), melenchon2027.fr answers HTTP 403 to GitHub Actions
@@ -7,11 +7,19 @@
 # ingest.ts uses); from the runner, 403. It is the source IP range, not the User-Agent and not
 # the TLS fingerprint. The site sits behind Cloudflare.
 #
-# So the crawl moved to `npm run recrawl`, run locally, which keeps the same order and the same
-# gates: nothing is written to data/ unless the invariants hold, and a change never lands on
-# main directly — it opens a pull request that a human reads. What remains here is the one thing
-# Actions can still do: remind, on a date, in a place that is not somebody's memory.
-name: Rappel de re-crawl hebdomadaire
+# So the check is local, and what remains here is the one thing Actions can still do: remind, on
+# a date, in a place that is not somebody's memory.
+#
+# What 12/11/2026 taught (D15.1, D15.12). The programme was re-issued on 5 November — another
+# structure, a rewritten text, a licence that no longer allows reproducing it — and this reminder
+# said nothing for seven days, for three stacked reasons:
+#   1. the label it attaches did not exist in the repository recreated on 10/9, so the step that
+#      opens the issue failed every Monday;
+#   2. nobody reads a red scheduled job;
+#   3. GitHub then disabled the workflow altogether, for repository inactivity.
+# Hence: the label is created here if missing (idempotent), and the body no longer reads the
+# 2025 corpus, which is an archive now and tells nothing about the state of the source.
+name: Rappel de vérification hebdomadaire de la source
 
 on:
   schedule:
@@ -32,42 +40,47 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
-
+      # No checkout: the reminder reads nothing from the tree, so nothing in the tree can break it.
       # One open reminder at a time: a second one would train the reader to ignore both.
       - name: Rappel, si aucun n'est déjà ouvert
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: |
+          # A label that does not exist makes `gh issue create --label` fail. --force makes this
+          # a no-op when it does exist, so the reminder can never again die of a missing label.
+          gh label create recrawl --force --color BFD4F2 \
+            --description "Vérification hebdomadaire de la source du programme"
+
           open="$(gh issue list --label recrawl --state open --json number --jq 'length')"
           if [ "$open" != "0" ]; then
             echo "Un rappel est déjà ouvert : rien à faire."
             exit 0
           fi
-          version="$(jq -r .meta.corpus_version data/aec-2025.json)"
-          asof="$(jq -r .message data/badge.json)"
           {
-            echo "Le re-crawl hebdomadaire est dû."
+            echo "La vérification hebdomadaire de la source est due."
             echo
-            echo '```'
-            echo 'npm run recrawl              # ingestion, invariants, diff, pull request'
-            echo 'npm run recrawl -- --dry-run # ingestion et diff, sans rien écrire'
-            echo '```'
+            echo "La source est \`https://melenchon2027.fr/programme/livre/\` : l'édition 2026"
+            echo "du programme, en ligne depuis le 5 novembre 2026 (D15.1). Elle répond 403 aux"
+            echo "runners GitHub (D14.13) : la vérification se fait **en local**."
             echo
-            echo "Corpus commité : \`$version\`, à jour au **$asof**."
+            echo "- [ ] **La clause de licence** des mentions légales a-t-elle changé ?"
+            echo "      Référence : \`docs/discovery/captures/2026-11-12/edition-2026/mentions-legales.txt\`"
+            echo "- [ ] **Le sommaire** a-t-il changé ? Référence : 6 parties, 23 chapitres (3-3-4-7-3-3)."
+            echo "- [ ] **Le flux** \`/feed/?post_type=lfi_programme_2026\` porte-t-il un \`lastBuildDate\`"
+            echo "      plus récent que le dernier relevé ?"
+            echo "- [ ] **cestecritla.fr** répond-il toujours ce qu'on croit qu'il répond ?"
             echo
-            echo "**Pourquoi en local et pas ici.** melenchon2027.fr est derrière Cloudflare et"
-            echo "renvoie 403 aux IP de datacenter : depuis un runner GitHub l'ingestion échoue"
-            echo "à la première requête, depuis une connexion résidentielle tout passe en 200"
-            echo "(mesuré le 10/9/2026, D14.13). Rien d'autre n'a changé : mêmes portes, même"
-            echo "diff, même pull request relue à la main."
+            echo "Tant que le lot B de \`docs/discovery/PLAN-EDITION-2026.md\` n'a pas livré"
+            echo "\`scripts/watch-source.ts\` et le re-crawl de l'édition 2026, ces points se relèvent"
+            echo "à la main. **Ne pas lancer \`npm run recrawl\`** : il vise l'édition 2025, que la"
+            echo "source ne sert plus."
             echo
-            echo "⚠️ **Constat du 10/9/2026 à revérifier d'abord (D14.14)** : les sous-pages du"
-            echo "livre renvoyaient 404, y compris les URL que la page d'accueil publie"
-            echo "elle-même. Si c'est toujours le cas, il n'y a rien à crawler — archiver une"
-            echo "capture datée et ne rien décider (D12.6)."
+            echo "Si quelque chose a bougé : archiver une pièce datée sous"
+            echo "\`docs/discovery/captures/\` **avant** toute décision (D12.6), et ne jamais y"
+            echo "commiter une page du livre — le texte de l'édition 2026 reste sous \`private/\` (D15.6)."
           } > /tmp/rappel.md
           gh issue create \
-            --title "Re-crawl du corpus — semaine du $(date -u +%Y-%m-%d)" \
+            --title "Vérification de la source — semaine du $(date -u +%Y-%m-%d)" \
             --body-file /tmp/rappel.md \
             --label recrawl
