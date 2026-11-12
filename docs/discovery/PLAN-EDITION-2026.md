@@ -351,12 +351,23 @@ Non fait, et pourquoi :
   branche, où la CI le prouve.
 - **`data/2025/`** : le déplacement de l'archive est la tâche B1.
 
+- **A3 — bascule de l'apex, faite par l'utilisateur le 12/11/2026 à 17:25 UTC.** Dans son terminal,
+  wrangler a listé les deux domaines comme attachés à `aec-spike-share` et demandé confirmation
+  avant de les reprendre ; le garde-fou avait vérifié que `dist/` était la build d'attente.
+  Vérifié à 17:28 UTC sur `cestecritla.fr` et `www` : `/` 200, anciens préfixes en 302 vers `/`,
+  `/og`, `/diag`, `/data/slim.json`, `/data/stat-cards.json` et `/mentions-legales` en 404 ; la page
+  est identique, à l'octet près, à celle de l'hôte d'aperçu et de la build locale ; plus aucune
+  trace de « Texte du programme », de la mention CC ni de `programme2025`. Pièce :
+  `captures/2026-11-12/edition-2026/apex-takeover.json`.
+
 En attente d'un geste de l'utilisateur :
 
-- **A3** — le texte est validé ; reste `nvm use 24 && npm run build:holding && npm run deploy` dans
-  son terminal, en répondant oui à la reprise des deux domaines. Tant que ce n'est pas fait,
-  `cestecritla.fr` sert le spike du 9/9.
-- **A4** — retrait du spike, de `aec-proto` et des Workers de labo, un à deux jours après A3.
+- **A4** — retrait des surfaces de septembre, un accord par suppression. Constaté le 12/11 après la
+  bascule : `aec-spike-share` existe encore (détaché des deux domaines, `workers_dev: true` et
+  journaux d'invocation dans sa configuration) ; `proto.cestecritla.fr` et `lab.cestecritla.fr`
+  répondent 200 ; six autres Workers de septembre sont sur le compte (`aec-proto`,
+  `aec-lab-turnstile`, `aec-lab-aig`, `aec-lab-budget`, `aec-lab-fts` et sa base D1,
+  `aec-lab-fw-astro`, `aec-lab-fw-react`).
 - **P0.5** — déclaration LCEN : l'apex est public sans mentions légales depuis le 9/9.
 - **D15.13** — Analytics Engine, avant tout déploiement de l'app.
 
@@ -372,3 +383,12 @@ En attente d'un geste de l'utilisateur :
 4. **Les pages brutes du livre ne sont pas encore conservées.** Les garder demande la collecte de
    35 requêtes, qui attend l'accord prévu au lot B ; le lot A n'a relevé que le sommaire, les mentions
    légales, la page « Découvrir » et le flux.
+
+### Un effet de bord de la bascule, relevé en la vérifiant
+
+Le spike envoyait `X-Robots-Tag: noindex` sur toutes ses réponses : l'apex n'avait donc jamais été
+indexable. La page d'attente, elle, ne portait aucune consigne — la bascule a ouvert l'indexation
+sans que personne l'ait décidé, alors que le playbook ne l'ouvre qu'à J-3, pages légales en place
+(`12-positionnement-lancement.md` §9.4.3). Corrigé le jour même : la page d'attente porte
+`<meta name="robots" content="noindex">`, un test le garantit, et l'hôte d'aperçu sert la version
+corrigée. **Le redéploiement de l'apex attend l'accord de l'utilisateur.** 174 tests.

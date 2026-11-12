@@ -18,6 +18,12 @@
  *
  * Old links (`/m/…`, `/a/…`, `/r/…`) are redirected here by dist/_redirects, written by
  * scripts/build.ts --holding. One sentence says so, so that nobody thinks they mistyped.
+ *
+ * Not indexed. The spike this page replaced sent `X-Robots-Tag: noindex` on every response, so
+ * the apex had never been indexable; the first holding deploy changed that without anyone
+ * having decided it (noticed on 12/11/2026 while verifying the takeover). The playbook opens
+ * indexing at J-3, with the legal pages in place — not before, and not for a page whose only
+ * message is "come back later".
  */
 import Base from '../../layouts/Base.astro';
 
@@ -29,7 +35,7 @@ const description =
   'Site non officiel. L’Avenir en commun a été réédité le 5 novembre 2026 : ce site se met à jour.';
 ---
 
-<Base title="C'est écrit là" description={description}>
+<Base title="C'est écrit là" description={description} noindex>
   <p class="label">Site non officiel.</p>
   <h1>C’est écrit là</h1>
   <p><cite>L’Avenir en commun</cite> a été réédité le 5 novembre 2026.</p>

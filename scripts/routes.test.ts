@@ -208,6 +208,15 @@ void test('the holding build redirects every old prefix and says only what is tr
   assert.match(html, /réédité le 5 novembre 2026/);
 });
 
+void test('the holding page is not indexed (playbook: indexing opens at J-3)', () => {
+  if (!holding) return;
+  // The spike it replaced sent X-Robots-Tag: noindex everywhere. The first holding deploy made
+  // the apex indexable for the first time, which nobody had decided. A meta tag rather than a
+  // header rule: public/_headers is shared with the app, whose pages must be indexable at J-3.
+  const html = readFileSync('dist/index.html', 'utf8');
+  assert.match(html, /<meta name="robots" content="noindex">/);
+});
+
 void test('an app build ships no redirect file yet (bridges are static pages, D15.8)', () => {
   if (!built || holding) return;
   // A _redirects rule matches the exact path and shadows any real page under it: the 2025

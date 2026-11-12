@@ -18,8 +18,14 @@ interface Props {
    * as many words — so it is opt-in.
    */
   verbatim?: boolean | undefined;
+  /**
+   * Keeps a page out of search indexes. The launch playbook opens indexing at J-3 and not
+   * before (12-positionnement-lancement.md §9.4.3); until then nothing we serve should be found
+   * by a search rather than by a link someone chose to send.
+   */
+  noindex?: boolean | undefined;
 }
-const { title, description, verbatim = false } = Astro.props;
+const { title, description, verbatim = false, noindex = false } = Astro.props;
 ---
 
 <html lang="fr">
@@ -36,6 +42,7 @@ const { title, description, verbatim = false } = Astro.props;
     <meta name="theme-color" content="#212320" media="(prefers-color-scheme: dark)" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+    {noindex && <meta name="robots" content="noindex" />}
     {/* P1: the faces of the first screen are preloaded; the italic is not shipped at all. */}
     <link
       rel="preload"

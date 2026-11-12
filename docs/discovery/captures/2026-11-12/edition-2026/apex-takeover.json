@@ -1,0 +1,246 @@
+{
+  "meta": {
+    "observed_at": "2026-11-12T17:28:30.000Z",
+    "observer": "vérification faite après la bascule, par requêtes vers nos seuls hôtes",
+    "finding_fr": "cestecritla.fr et www.cestecritla.fr servent la page d’attente (D15.4). Le spike de partage du 9/9/2026 ne répond plus sur ces deux domaines : plus de texte de l’édition 2025 présenté comme « Texte du programme », plus de corpus servi en JSON.",
+    "status": "VÉRIFIÉ"
+  },
+  "takeover": {
+    "done_by_fr": "l’éditeur, dans son terminal : `nvm use 24 && npm run build:holding && npm run deploy`",
+    "worker": "cestecritla",
+    "configuration": "wrangler.holding.jsonc — fichiers statiques seuls, aucun script, aucun binding",
+    "deployed_at": "2026-11-12T17:25:19Z",
+    "version_id": "054b50dd-90bf-4c33-b384-7aa382e97cde",
+    "previous_worker": "aec-spike-share",
+    "prompt_fr": "wrangler a listé les deux domaines comme attachés à « aec-spike-share » et demandé « Update them to point to this script instead? » ; réponse : oui. Le garde-fou de scripts/deploy.ts avait d’abord vérifié que dist/ était une build d’attente de deux pages.",
+    "timings_fr": "build 2,0 s ; envoi du Worker 9,1 s ; bascule des deux domaines 17,0 s"
+  },
+  "hosts": {
+    "cestecritla.fr": [
+      {
+        "path": "/",
+        "status": 200,
+        "location": null
+      },
+      {
+        "path": "/m/c12-s01-k01",
+        "status": 302,
+        "location": "/"
+      },
+      {
+        "path": "/m/c12-s01-k01/",
+        "status": 302,
+        "location": "/"
+      },
+      {
+        "path": "/a/c8-s02-a01",
+        "status": 302,
+        "location": "/"
+      },
+      {
+        "path": "/r/c6-s01-k01",
+        "status": 302,
+        "location": "/"
+      },
+      {
+        "path": "/p/14-89",
+        "status": 302,
+        "location": "/"
+      },
+      {
+        "path": "/res/c1-s01-k01,c12-s01-k01,c6-s01-k01",
+        "status": 302,
+        "location": "/"
+      },
+      {
+        "path": "/s/c1-s02/",
+        "status": 302,
+        "location": "/"
+      },
+      {
+        "path": "/og/m/c12-s01-k01.png",
+        "status": 404,
+        "location": null
+      },
+      {
+        "path": "/diag",
+        "status": 404,
+        "location": null
+      },
+      {
+        "path": "/data/slim.json",
+        "status": 404,
+        "location": null
+      },
+      {
+        "path": "/data/stat-cards.json",
+        "status": 404,
+        "location": null
+      },
+      {
+        "path": "/mentions-legales",
+        "status": 404,
+        "location": null
+      },
+      {
+        "path": "/_redirects",
+        "status": 404,
+        "location": null
+      },
+      {
+        "path": "/_headers",
+        "status": 404,
+        "location": null
+      },
+      {
+        "path": "/api/health",
+        "status": 404,
+        "location": null
+      },
+      {
+        "path": "/fonts/PublicSans-Variable-latin.woff2",
+        "status": 200,
+        "location": null
+      },
+      {
+        "path": "/flags.json",
+        "status": 200,
+        "location": null
+      },
+      {
+        "path": "POST /api/e",
+        "status": 405,
+        "location": null
+      }
+    ],
+    "www.cestecritla.fr": [
+      {
+        "path": "/",
+        "status": 200,
+        "location": null
+      },
+      {
+        "path": "/m/c12-s01-k01",
+        "status": 302,
+        "location": "/"
+      },
+      {
+        "path": "/m/c12-s01-k01/",
+        "status": 302,
+        "location": "/"
+      },
+      {
+        "path": "/a/c8-s02-a01",
+        "status": 302,
+        "location": "/"
+      },
+      {
+        "path": "/r/c6-s01-k01",
+        "status": 302,
+        "location": "/"
+      },
+      {
+        "path": "/p/14-89",
+        "status": 302,
+        "location": "/"
+      },
+      {
+        "path": "/res/c1-s01-k01,c12-s01-k01,c6-s01-k01",
+        "status": 302,
+        "location": "/"
+      },
+      {
+        "path": "/s/c1-s02/",
+        "status": 302,
+        "location": "/"
+      },
+      {
+        "path": "/og/m/c12-s01-k01.png",
+        "status": 404,
+        "location": null
+      },
+      {
+        "path": "/diag",
+        "status": 404,
+        "location": null
+      },
+      {
+        "path": "/data/slim.json",
+        "status": 404,
+        "location": null
+      },
+      {
+        "path": "/data/stat-cards.json",
+        "status": 404,
+        "location": null
+      },
+      {
+        "path": "/mentions-legales",
+        "status": 404,
+        "location": null
+      },
+      {
+        "path": "/_redirects",
+        "status": 404,
+        "location": null
+      },
+      {
+        "path": "/_headers",
+        "status": 404,
+        "location": null
+      },
+      {
+        "path": "/api/health",
+        "status": 404,
+        "location": null
+      },
+      {
+        "path": "/fonts/PublicSans-Variable-latin.woff2",
+        "status": 200,
+        "location": null
+      },
+      {
+        "path": "/flags.json",
+        "status": 200,
+        "location": null
+      },
+      {
+        "path": "POST /api/e",
+        "status": 405,
+        "location": null
+      }
+    ]
+  },
+  "home_page": {
+    "sha256": "fe8aafd48dce9301e72d47ffe6c691c461c13bbf2bb31fbdf910cfaf95abbaad",
+    "same_on_www": true,
+    "same_as_local_build": true,
+    "stale_strings_found": [],
+    "carries_fr": [
+      "Site non officiel.",
+      "réédité le 5 novembre 2026",
+      "Projet militant indépendant."
+    ],
+    "official_link": true,
+    "headers": {
+      "cache-control": "public, max-age=300",
+      "content-security-policy": "frame-ancestors 'none'; base-uri 'none'; form-action 'self'; upgrade-insecure-requests",
+      "content-type": "text/html",
+      "cross-origin-opener-policy": "same-origin",
+      "permissions-policy": "camera=(), microphone=(), geolocation=()",
+      "referrer-policy": "strict-origin-when-cross-origin",
+      "x-content-type-options": "nosniff"
+    },
+    "indexable_fr": "aucun X-Robots-Tag sur l’apex : la règle noindex ne vise que l’hôte d’aperçu"
+  },
+  "cache_headers": {
+    "/fonts/PublicSans-Variable-latin.woff2": "public, max-age=31536000, immutable",
+    "/flags.json": "no-cache",
+    "reading_fr": "une seule valeur par en-tête : le défaut de cumul corrigé au commit 2642ca5 est vérifié sur le réseau de production"
+  },
+  "still_public_at_observation": {
+    "proto.cestecritla.fr": 200,
+    "lab.cestecritla.fr": 200,
+    "reading_fr": "proto.cestecritla.fr et lab.cestecritla.fr répondent encore, sur du contenu de septembre. Le Worker aec-spike-share existe toujours, détaché des deux domaines ; sa configuration garde `workers_dev: true` et les journaux d’invocation. Leur retrait est la tâche A4, un accord par suppression."
+  }
+}

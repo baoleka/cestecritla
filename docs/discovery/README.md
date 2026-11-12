@@ -57,6 +57,6 @@ Dans le dépôt, ouvrir Claude Code **en plan mode** à la racine et coller le c
 ```
 nvm use 24                          # le node par défaut de la machine est v20
 npx tsc --noEmit                    # 0 erreur
-npx tsx --test scripts/*.test.ts    # 173/173 au 12/11/2026 (99 le 10/9 au matin, 150 le 10/9 au soir)
+npx tsx --test scripts/*.test.ts    # 174/174 au 12/11/2026 (99 le 10/9 au matin, 150 le 10/9 au soir)
 npx tsx scripts/contrast.ts         # 105 paires, 28 paires de rôles, 0 échec
 ```
