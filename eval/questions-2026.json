@@ -1,0 +1,1016 @@
+{
+  "meta": {
+    "derived_from": "eval/questions.json v1.0.0",
+    "corpus_version": "27ee6e713fe25e7e",
+    "left_out": [
+      {
+        "id": "q024",
+        "reason": "aucune section de 2026 ne reprend les mesures attendues"
+      },
+      {
+        "id": "q071",
+        "reason": "sujet absent du programme en 2025 : pas une question de recherche"
+      },
+      {
+        "id": "q072",
+        "reason": "sujet absent du programme en 2025 : pas une question de recherche"
+      },
+      {
+        "id": "q073",
+        "reason": "sujet absent du programme en 2025 : pas une question de recherche"
+      },
+      {
+        "id": "q078",
+        "reason": "sujet absent du programme en 2025 : pas une question de recherche"
+      },
+      {
+        "id": "q084",
+        "reason": "sujet absent du programme en 2025 : pas une question de recherche"
+      },
+      {
+        "id": "q085",
+        "reason": "sujet absent du programme en 2025 : pas une question de recherche"
+      },
+      {
+        "id": "q086",
+        "reason": "sujet absent du programme en 2025 : pas une question de recherche"
+      },
+      {
+        "id": "q089",
+        "reason": "sujet absent du programme en 2025 : pas une question de recherche"
+      },
+      {
+        "id": "q091",
+        "reason": "sujet absent du programme en 2025 : pas une question de recherche"
+      },
+      {
+        "id": "q093",
+        "reason": "aucune section de 2026 ne reprend les mesures attendues"
+      },
+      {
+        "id": "q094",
+        "reason": "sujet absent du programme en 2025 : pas une question de recherche"
+      },
+      {
+        "id": "q096",
+        "reason": "sujet absent du programme en 2025 : pas une question de recherche"
+      }
+    ],
+    "note_fr": "Attendus au niveau de la section. « primary » : la section porte une proposition identique ou proche d’une mesure attendue en 2025 ; « accepted » : elle en porte une version remaniée, ou hérite de la section. basis « judged » : attendu corrigé à la lecture du texte 2026."
+  },
+  "questions": [
+    {
+      "id": "q001",
+      "question": "Ils proposent quoi pour les EHPAD et les personnes âgées ?",
+      "kind": "golden",
+      "primary": [
+        "p3c2-s04"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q002",
+      "question": "Au marché, une dame me dit que sa facture d'électricité a doublé. Ils proposent quoi sur les prix de l'énergie ?",
+      "kind": "golden",
+      "primary": [
+        "p1c3-s04",
+        "p2c2-s01",
+        "p3c1-s01"
+      ],
+      "accepted": [
+        "p1c3-s05"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q003",
+      "question": "Un agriculteur me demande ce qu'il y a pour lui. Ils proposent quoi sur les prix agricoles ?",
+      "kind": "golden",
+      "primary": [
+        "p1c3-s08"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q004",
+      "question": "Ils proposent quoi pour les petites lignes de train et la SNCF ?",
+      "kind": "golden",
+      "primary": [
+        "p1c3-s01",
+        "p1c3-s03"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q005",
+      "question": "Un propriétaire me dit qu'il ne peut pas payer l'isolation de sa passoire thermique. Ils proposent quoi pour la rénovation ?",
+      "kind": "golden",
+      "primary": [
+        "p1c3-s05"
+      ],
+      "accepted": [
+        "p1c3-s04",
+        "p5c3-s04"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q006",
+      "question": "Ils construisent combien de logements sociaux ?",
+      "kind": "golden",
+      "primary": [],
+      "accepted": [
+        "p5c3-s04"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q007",
+      "question": "Le programme dit quoi sur l'héritage et les droits de succession ?",
+      "kind": "golden",
+      "primary": [
+        "p2c2-s02",
+        "p5c3-s04"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q008",
+      "question": "« Avec vous, les impôts vont exploser. » Je réponds quoi avec le texte du programme ?",
+      "kind": "golden",
+      "primary": [
+        "p2c2-s02"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q009",
+      "question": "Ils proposent quoi sur les autoroutes et les péages ?",
+      "kind": "golden",
+      "primary": [
+        "p1c3-s03",
+        "p2c1-s01"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q010",
+      "question": "Un commerçant me demande ce qu'il y a pour les petits patrons et les artisans.",
+      "kind": "golden",
+      "primary": [
+        "p2c2-s02",
+        "p2c3-s02",
+        "p2c3-s05"
+      ],
+      "accepted": [
+        "p1c3-s08",
+        "p2c3-s04",
+        "p3c1-s06",
+        "p5c3-s03"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q011",
+      "question": "Ils veulent interdire la chasse à courre ? Un chasseur m'a alpaguée.",
+      "kind": "golden",
+      "primary": [
+        "p1c3-s06"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q012",
+      "question": "Ils proposent quoi pour les cantines ?",
+      "kind": "golden",
+      "primary": [
+        "p4c4-s03"
+      ],
+      "accepted": [
+        "p4c2-s02",
+        "p4c2-s03"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q013",
+      "question": "Sur le marché on me parle de Gaza. Le programme dit quoi sur la Palestine et Israël ?",
+      "kind": "golden",
+      "primary": [],
+      "accepted": [
+        "p6c2-s03",
+        "p6c2-s04"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q014",
+      "question": "Est-ce que c'est vrai qu'ils veulent légaliser le cannabis ?",
+      "kind": "golden",
+      "primary": [
+        "p4c4-s06"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q015",
+      "question": "C'est vrai qu'ils veulent garder l'aide médicale d'État pour les étrangers en situation irrégulière ?",
+      "kind": "golden",
+      "primary": [],
+      "accepted": [
+        "p6c3-s02"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q016",
+      "question": "C'est vrai que les citoyens pourraient virer un élu en cours de mandat ?",
+      "kind": "golden",
+      "primary": [
+        "p5c1-s01"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q017",
+      "question": "C'est vrai qu'ils veulent donner le droit de vote aux étrangers ?",
+      "kind": "golden",
+      "primary": [
+        "p3c4-s02"
+      ],
+      "accepted": [
+        "p3c4-s01",
+        "p3c4-s03"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q018",
+      "question": "On m'a dit qu'ils allaient supprimer ma mutuelle, c'est vrai ?",
+      "kind": "golden",
+      "primary": [],
+      "accepted": [
+        "p3c1-s08",
+        "p4c4-s04"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q019",
+      "question": "C'est vrai qu'ils veulent réquisitionner les logements vides ?",
+      "kind": "golden",
+      "primary": [
+        "p5c3-s04"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q020",
+      "question": "C'est vrai qu'ils veulent supprimer le concordat en Alsace-Moselle ?",
+      "kind": "golden",
+      "primary": [
+        "p5c1-s05"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q021",
+      "question": "C'est vrai qu'ils veulent légaliser l'euthanasie ?",
+      "kind": "golden",
+      "primary": [
+        "p3c2-s01"
+      ],
+      "accepted": [
+        "p3c2-s06",
+        "p3c2-s07"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q022",
+      "question": "L'école obligatoire jusqu'à 18 ans, c'est vrai ?",
+      "kind": "golden",
+      "primary": [],
+      "accepted": [
+        "p4c2-s02",
+        "p4c2-s03"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q023",
+      "question": "C'est vrai qu'ils veulent supprimer le 49.3 ?",
+      "kind": "golden",
+      "primary": [
+        "p5c1-s03"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q025",
+      "question": "C'est vrai qu'Internet deviendrait gratuit ?",
+      "kind": "golden",
+      "primary": [
+        "p4c7-s01"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q026",
+      "question": "C'est vrai qu'ils veulent rendre le vote obligatoire ?",
+      "kind": "golden",
+      "primary": [
+        "p5c1-s01"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q027",
+      "question": "Je galère à trouver un appart : les loyers sont abusés et les proprios veulent un garant que j'ai pas. Le programme propose quoi ?",
+      "kind": "golden",
+      "primary": [
+        "p5c3-s04"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q028",
+      "question": "Mon studio est une passoire thermique, je me caille tout l'hiver. Ils font quoi pour ça ?",
+      "kind": "golden",
+      "primary": [
+        "p1c3-s05"
+      ],
+      "accepted": [
+        "p1c3-s04",
+        "p5c3-s04"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q029",
+      "question": "Les APL, ils les augmentent ou pas ?",
+      "kind": "golden",
+      "primary": [],
+      "accepted": [
+        "p2c2-s01"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q030",
+      "question": "La fac va vraiment être gratuite ? Et la CVEC qu'on paye chaque année ?",
+      "kind": "golden",
+      "primary": [
+        "p4c2-s06"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q031",
+      "question": "Je vais pas bien en ce moment à la fac, il y a des psys prévus pour les étudiants ?",
+      "kind": "golden",
+      "primary": [
+        "p4c2-s06"
+      ],
+      "accepted": [
+        "p4c4-s04",
+        "p4c4-s05"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q032",
+      "question": "Je trouve pas de taf depuis mon diplôme, il y a un plan pour le chômage des jeunes ?",
+      "kind": "golden",
+      "primary": [
+        "p3c1-s02",
+        "p3c2-s03"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q033",
+      "question": "Je livre pour Uber Eats en auto-entrepreneur, ça change quoi pour moi ?",
+      "kind": "golden",
+      "primary": [
+        "p2c1-s04",
+        "p3c1-s03"
+      ],
+      "accepted": [
+        "p2c3-s05"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q034",
+      "question": "Le permis coûte 1 500 balles, ils prévoient un truc pour le payer ?",
+      "kind": "golden",
+      "primary": [
+        "p3c2-s03",
+        "p4c2-s07"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q035",
+      "question": "Ils vont interdire de prendre l'avion quand on peut faire le trajet en train ?",
+      "kind": "golden",
+      "primary": [
+        "p1c3-s03"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q036",
+      "question": "Si je vais en manif, ils comptent interdire les LBD et les nasses ?",
+      "kind": "golden",
+      "primary": [
+        "p5c2-s02"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q037",
+      "question": "C'est vrai qu'ils veulent supprimer la BAC ?",
+      "kind": "golden",
+      "primary": [
+        "p5c2-s03"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q038",
+      "question": "Il y a un truc pour les jeux vidéo dans le programme ?",
+      "kind": "golden",
+      "primary": [
+        "p4c3-s01"
+      ],
+      "accepted": [
+        "p4c3-s03",
+        "p4c7-s02"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q039",
+      "question": "Le SMIC à 1 600 euros net, c'est bien écrit noir sur blanc dans le programme ?",
+      "kind": "golden",
+      "primary": [
+        "p2c2-s01",
+        "p2c2-s03"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q040",
+      "question": "Retraite à 60 ans : combien d'annuités demande le programme ?",
+      "kind": "golden",
+      "primary": [
+        "p3c1-s07"
+      ],
+      "accepted": [
+        "p3c1-s04"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q041",
+      "question": "Le droit de vote à 16 ans, c'est une mesure du programme ou juste une idée en l'air ?",
+      "kind": "golden",
+      "primary": [
+        "p5c1-s01"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q042",
+      "question": "Sortie de l'OTAN : le programme dit « immédiatement » ou « par étapes » ?",
+      "kind": "golden",
+      "primary": [
+        "p6c2-s01"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q043",
+      "question": "Le 100 % d'énergies renouvelables, c'est pour quelle année selon le programme ?",
+      "kind": "golden",
+      "primary": [
+        "p1c3-s04"
+      ],
+      "accepted": [
+        "p1c3-s05"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q044",
+      "question": "Le projet de Constitution de la Constituante est soumis à référendum au bout de combien de temps ?",
+      "kind": "golden",
+      "primary": [],
+      "accepted": [
+        "p5c1-s02"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q045",
+      "question": "Quel objectif de baisse des émissions en 2030 est écrit dans le programme ?",
+      "kind": "golden",
+      "primary": [],
+      "accepted": [
+        "p1c1-s01"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q046",
+      "question": "La conscription citoyenne dure combien de temps, et jusqu'à quel âge ?",
+      "kind": "golden",
+      "primary": [
+        "p4c2-s07"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q047",
+      "question": "Est-ce que l'interdiction de la corrida est écrite dans le programme ?",
+      "kind": "golden",
+      "primary": [
+        "p1c3-s06"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q048",
+      "question": "Le « zéro artificialisation nette » des sols, le programme le fixe à quelle date ?",
+      "kind": "golden",
+      "primary": [],
+      "accepted": [
+        "p1c3-s08"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q049",
+      "question": "L'aide publique au développement, le programme la fixe à quel pourcentage ?",
+      "kind": "golden",
+      "primary": [
+        "p6c3-s04"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q050",
+      "question": "Le tourisme spatial, le programme l’interdit ou il l’encadre seulement ?",
+      "kind": "golden",
+      "primary": [],
+      "accepted": [
+        "p4c6-s01",
+        "p4c6-s02",
+        "p4c6-s03"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q051",
+      "question": "Au marché on me demande « c'est quoi la règle verte ». Je réponds quoi en une phrase ?",
+      "kind": "glossary",
+      "primary": [
+        "p1c1-s01"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q052",
+      "question": "La bifurcation écologique, c'est juste un autre mot pour la transition écologique ?",
+      "kind": "glossary",
+      "primary": [
+        "p1c1-s01",
+        "p1c2-s01",
+        "p1c2-s02"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q053",
+      "question": "Un monsieur me dit que la constituante, c'est Mélenchon qui écrira la Constitution tout seul. Ça marche comment, vraiment ?",
+      "kind": "glossary",
+      "primary": [
+        "p5c1-s02"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q054",
+      "question": "C'est quoi « l'État planificateur » dont ils parlent ?",
+      "kind": "glossary",
+      "primary": [
+        "p1c1-s01"
+      ],
+      "accepted": [
+        "p5c3-s02"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q055",
+      "question": "La garantie d'emploi, c'est quoi exactement ? C'est un emploi aidé comme avant ?",
+      "kind": "glossary",
+      "primary": [
+        "p3c1-s02"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q056",
+      "question": "C'est quoi cette « règle verte » ? C'est une loi qui va m'interdire des choses ?",
+      "kind": "glossary",
+      "primary": [
+        "p1c1-s01"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q057",
+      "question": "Ils parlent tout le temps de « bifurcation écologique » : c'est du jargon ou ça veut dire quelque chose de précis ?",
+      "kind": "glossary",
+      "primary": [
+        "p1c2-s01",
+        "p1c2-s02"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q058",
+      "question": "La 6e République, ça change quoi concrètement pour moi ? C'est juste un slogan ?",
+      "kind": "glossary",
+      "primary": [
+        "p5c1-s02",
+        "p5c1-s03"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q059",
+      "question": "Un « écocide », c'est quoi ? C'est un vrai crime jugé par un tribunal ou juste un mot ?",
+      "kind": "glossary",
+      "primary": [
+        "p6c2-s05"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q060",
+      "question": "C'est quoi la « garantie d'autonomie » ? C'est le RSA pour les jeunes ?",
+      "kind": "glossary",
+      "primary": [
+        "p3c1-s01",
+        "p3c2-s03"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q061",
+      "question": "La bifurcation écologique, ça veut dire quoi concrètement pour moi ?",
+      "kind": "glossary",
+      "primary": [
+        "p1c2-s01",
+        "p1c2-s02"
+      ],
+      "accepted": [
+        "p1c1-s01"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q062",
+      "question": "La planification écologique, c'est l'État qui décide tout comme en URSS ?",
+      "kind": "glossary",
+      "primary": [
+        "p1c1-s01",
+        "p5c3-s02"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q063",
+      "question": "Écocide, ça veut dire quoi ? C'est un vrai crime ?",
+      "kind": "glossary",
+      "primary": [
+        "p6c2-s05"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q064",
+      "question": "C'est quoi le RIC ? On peut vraiment virer un élu ?",
+      "kind": "glossary",
+      "primary": [
+        "p5c1-s01"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q065",
+      "question": "La 6e République, ça veut dire qu'il n'y aura plus de président ?",
+      "kind": "glossary",
+      "primary": [
+        "p5c1-s03"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q066",
+      "question": "La règle verte, c'est écrit où exactement dans le programme ? Cite-moi la phrase.",
+      "kind": "glossary",
+      "primary": [
+        "p1c1-s01"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q067",
+      "question": "Écocide : le programme donne une définition juridique, ou il se contente du mot ?",
+      "kind": "glossary",
+      "primary": [
+        "p6c2-s05"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q068",
+      "question": "La planification écologique, concrètement, ça crée quoi comme institution ?",
+      "kind": "glossary",
+      "primary": [
+        "p1c1-s01",
+        "p1c2-s01"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q069",
+      "question": "La 6e République : qui siège dans l'Assemblée constituante, et qui en est exclu ?",
+      "kind": "glossary",
+      "primary": [],
+      "accepted": [
+        "p5c1-s02"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q070",
+      "question": "La « règle bleue », c'est quoi et c'est écrit où ?",
+      "kind": "glossary",
+      "primary": [],
+      "accepted": [
+        "p4c1-s02"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q074",
+      "question": "Les 32 heures pour tout le monde, c'est dans le programme ?",
+      "kind": "adversarial",
+      "primary": [
+        "p3c1-s04"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q075",
+      "question": "Une dame m'a demandé « c'est quoi la garantie dans votre programme ». Je ne sais plus laquelle. Tu peux m'aider ?",
+      "kind": "adversarial",
+      "primary": [
+        "p3c1-s01",
+        "p3c1-s02",
+        "p5c3-s04"
+      ],
+      "accepted": [
+        "p2c2-s02"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q076",
+      "question": "Vous voulez abolir la propriété privée, c'est ça ?",
+      "kind": "adversarial",
+      "primary": [
+        "p2c1-s02"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q077",
+      "question": "On m'accuse de vouloir interdire tous les licenciements. Le programme dit quoi exactement ?",
+      "kind": "adversarial",
+      "primary": [
+        "p2c1-s03",
+        "p2c3-s03"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q079",
+      "question": "Ils veulent désarmer la police, c'est ça ?",
+      "kind": "adversarial",
+      "primary": [
+        "p5c2-s02",
+        "p5c2-s03"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q080",
+      "question": "Avec leur laxisme, ils vont vider les prisons, c'est vrai ?",
+      "kind": "adversarial",
+      "primary": [
+        "p5c2-s04"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q081",
+      "question": "C'est vrai que leur programme coûte 250 milliards et qu'il va ruiner le pays ?",
+      "kind": "adversarial",
+      "primary": [
+        "p1c2-s02"
+      ],
+      "accepted": [
+        "p1c2-s01"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q082",
+      "question": "La 6e République, c'est pas une dictature ? On pourra encore voter ?",
+      "kind": "adversarial",
+      "primary": [
+        "p5c1-s03"
+      ],
+      "accepted": [
+        "p5c1-s02"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q083",
+      "question": "On m'a dit que je ne pourrais plus laisser ma maison à mes enfants, c'est vrai ?",
+      "kind": "adversarial",
+      "primary": [
+        "p2c2-s02",
+        "p5c3-s04"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q087",
+      "question": "Mon oncle dit qu'ils veulent régulariser tous les sans-papiers et ouvrir les frontières. C'est vrai ?",
+      "kind": "adversarial",
+      "primary": [
+        "p6c3-s02"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q088",
+      "question": "Ils suppriment le bac ?",
+      "kind": "adversarial",
+      "primary": [
+        "p4c2-s02",
+        "p4c2-s04"
+      ],
+      "accepted": [
+        "p4c2-s03"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q090",
+      "question": "Le RSA jeunes, ce serait combien par mois ?",
+      "kind": "adversarial",
+      "primary": [
+        "p3c1-s01",
+        "p3c2-s03"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q092",
+      "question": "Ils vont interdire les SUV ?",
+      "kind": "adversarial",
+      "primary": [],
+      "accepted": [
+        "p1c3-s03"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q095",
+      "question": "Le crime d'écocide, c'est puni de la peine de mort dans le programme ?",
+      "kind": "adversarial",
+      "primary": [
+        "p6c2-s05"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q097",
+      "question": "L'uniforme obligatoire à l'école, LFI est pour, c'est dans le programme ?",
+      "kind": "adversarial",
+      "primary": [
+        "p4c2-s02"
+      ],
+      "accepted": [
+        "p4c2-s03"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q098",
+      "question": "Le SMIC à 1 400 euros net, c'est bien la mesure du programme ?",
+      "kind": "adversarial",
+      "primary": [
+        "p2c2-s03"
+      ],
+      "accepted": [],
+      "basis": "mapped"
+    },
+    {
+      "id": "q099",
+      "question": "Le programme ferme la dernière centrale nucléaire en quelle année ?",
+      "kind": "adversarial",
+      "primary": [],
+      "accepted": [
+        "p1c3-s04",
+        "p1c3-s05"
+      ],
+      "basis": "mapped"
+    },
+    {
+      "id": "q100",
+      "question": "Le programme ouvre la PMA à toutes les femmes ?",
+      "kind": "adversarial",
+      "primary": [
+        "p3c2-s07"
+      ],
+      "accepted": [
+        "p3c2-s01",
+        "p3c2-s06"
+      ],
+      "basis": "mapped"
+    }
+  ]
+}

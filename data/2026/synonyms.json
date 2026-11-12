@@ -1,0 +1,642 @@
+{
+  "meta": {
+    "note_fr": "Mots des gens à côté des mots du livre. Chaque groupe réunit des expressions qui désignent le même sujet ; quand l'une apparaît dans une recherche, les autres sont cherchées aussi, avec un poids quatre fois moindre. Rédigé par nous : alias des cartes-concept et de la FAQ de septembre 2026, complétés pour le vocabulaire de l'édition 2026. Aucun mot ici n'est une citation."
+  },
+  "groups": [
+    [
+      "règle verte",
+      "regle verte",
+      "regle-verte",
+      "règle-verte",
+      "regles vertes",
+      "règles vertes"
+    ],
+    [
+      "bifurcation écologique",
+      "bifurcation",
+      "bifurcation de notre economie",
+      "bifurcation de notre économie",
+      "bifurcation de notre modele energetique",
+      "bifurcation de notre modèle énergétique",
+      "bifurcation ecologique",
+      "bifurcation ecologique et democratique",
+      "bifurcation écologique et démocratique",
+      "bifurcation-ecologique",
+      "bifurcation-écologique",
+      "bifurcations ecologiques",
+      "bifurcations écologiques"
+    ],
+    [
+      "6e République et Assemblée constituante",
+      "6e republique",
+      "6e république",
+      "6e republique et assemblee constituante",
+      "6e-republique",
+      "6eme republique",
+      "6eme république",
+      "6ème république",
+      "assemblee constituante",
+      "assemblée constituante",
+      "constituante",
+      "constitution de la 6e republique",
+      "constitution de la 6e république",
+      "monarchie presidentielle",
+      "monarchie présidentielle",
+      "nouvelle constitution",
+      "processus constituant",
+      "sixieme republique",
+      "sixième république",
+      "vie republique",
+      "vie république"
+    ],
+    [
+      "planification écologique",
+      "etat planificateur",
+      "état planificateur",
+      "planification",
+      "planification ecologique",
+      "planification ecologique et democratique",
+      "planification écologique et démocratique",
+      "planification-ecologique",
+      "planification-écologique"
+    ],
+    [
+      "écocide",
+      "crime d'ecocide",
+      "crime d'écocide",
+      "crime d’ecocide",
+      "crime d’écocide",
+      "ecocidaire",
+      "écocidaire",
+      "ecocidaires",
+      "écocidaires",
+      "ecocide",
+      "ecocides",
+      "écocides"
+    ],
+    [
+      "C'est quoi la 6e République ?",
+      "sixième République",
+      "c'est quoi la 6ème République",
+      "nouvelle Constitution",
+      "assemblée constituante",
+      "constituante"
+    ],
+    [
+      "Ils proposent quoi sur le RIC ?",
+      "référendum d'initiative citoyenne",
+      "référendum révocatoire",
+      "révoquer les élus",
+      "RIC"
+    ],
+    [
+      "Je pourrai voter à 16 ans ?",
+      "vote à 16 ans",
+      "droit de vote à seize ans",
+      "voter à seize ans",
+      "âge du droit de vote"
+    ],
+    [
+      "Est-ce que le programme parle de la laïcité ?",
+      "laïcité",
+      "ils proposent quoi sur la laïcité",
+      "concordat",
+      "religion",
+      "loi de 1905"
+    ],
+    [
+      "Ils proposent quoi contre la concentration des médias ?",
+      "médias",
+      "Bolloré",
+      "milliardaires qui possèdent les médias",
+      "audiovisuel public",
+      "liberté de la presse"
+    ],
+    [
+      "Le programme dit quoi sur les violences policières ?",
+      "police",
+      "ils proposent quoi sur la police",
+      "IGPN",
+      "police de proximité",
+      "LBD",
+      "flash-ball"
+    ],
+    [
+      "Est-ce que le programme parle des personnes trans ?",
+      "trans",
+      "transgenre",
+      "LGBT",
+      "LGBTI",
+      "changement de sexe à l’état civil",
+      "thérapies de conversion",
+      "homophobie"
+    ],
+    [
+      "Est-ce que le programme parle de la fin de vie ?",
+      "fin de vie",
+      "euthanasie",
+      "suicide assisté",
+      "mourir dans la dignité",
+      "aide à mourir",
+      "soins palliatifs"
+    ],
+    [
+      "Est-ce que le programme parle de la PMA ?",
+      "PMA",
+      "procréation médicalement assistée",
+      "PMA pour toutes",
+      "GPA",
+      "gestation pour autrui"
+    ],
+    [
+      "Est-ce que le programme parle du voile ou de l'abaya ?",
+      "voile",
+      "abaya",
+      "burkini",
+      "signes religieux",
+      "voile à l’école",
+      "hijab"
+    ],
+    [
+      "Il y a quoi pour les étudiants ?",
+      "étudiants",
+      "université gratuite",
+      "frais d’inscription",
+      "CVEC",
+      "repas à un euro",
+      "CROUS",
+      "bourses"
+    ],
+    [
+      "Parcoursup, ils le suppriment ?",
+      "Parcoursup",
+      "sélection à l’université",
+      "supprimer Parcoursup",
+      "accès à la fac"
+    ],
+    [
+      "Ils proposent quoi sur les loyers ?",
+      "loyers",
+      "encadrement des loyers",
+      "logement",
+      "expulsions",
+      "HLM",
+      "logements sociaux",
+      "Airbnb"
+    ],
+    [
+      "C'est quoi le SMIC à 1600 euros ?",
+      "SMIC",
+      "augmentation du SMIC",
+      "salaire minimum",
+      "SMIC à 1600",
+      "hausse des salaires"
+    ],
+    [
+      "La retraite à 60 ans, c'est dedans ?",
+      "retraite à 60 ans",
+      "retraites",
+      "âge de la retraite",
+      "réforme des retraites",
+      "abroger la réforme Macron",
+      "64 ans"
+    ],
+    [
+      "Ils proposent quoi contre le chômage ?",
+      "chômage",
+      "garantie d’emploi",
+      "assurance chômage",
+      "France Travail",
+      "chômeurs de longue durée",
+      "emploi jeune"
+    ],
+    [
+      "Est-ce que le programme parle de la semaine de quatre jours ?",
+      "semaine de 4 jours",
+      "4 jours",
+      "32 heures",
+      "35 heures",
+      "temps de travail",
+      "sixième semaine de congés payés"
+    ],
+    [
+      "Ils proposent quoi sur l'ISF ?",
+      "ISF",
+      "impôt sur la fortune",
+      "taxe Zucman",
+      "taxer les riches",
+      "taxer les milliardaires",
+      "impôts"
+    ],
+    [
+      "Ils proposent quoi sur la dette ?",
+      "dette",
+      "dette publique",
+      "comment ils financent",
+      "audit de la dette",
+      "BCE",
+      "déficit"
+    ],
+    [
+      "Est-ce qu'on sort de l'euro ?",
+      "sortie de l'euro",
+      "retour au franc",
+      "quitter la zone euro",
+      "monnaie nationale"
+    ],
+    [
+      "Il y aura un service militaire obligatoire ?",
+      "service militaire",
+      "service national",
+      "conscription",
+      "SNU",
+      "service citoyen obligatoire",
+      "garde nationale"
+    ],
+    [
+      "Ils proposent quoi pour l'école ?",
+      "école",
+      "éducation nationale",
+      "profs",
+      "salaire des enseignants",
+      "effectifs par classe",
+      "cantine gratuite",
+      "école privée"
+    ],
+    [
+      "L'uniforme à l'école, ils sont pour ?",
+      "uniforme",
+      "uniforme à l’école",
+      "tenue unique",
+      "blouse à l’école"
+    ],
+    [
+      "Ils proposent quoi pour les Outre-mer ?",
+      "Outre-mer",
+      "DOM-TOM",
+      "Guadeloupe",
+      "Martinique",
+      "Réunion",
+      "Mayotte",
+      "Guyane",
+      "Kanaky Nouvelle-Calédonie"
+    ],
+    [
+      "Le programme dit quoi sur le racisme et le contrôle au faciès ?",
+      "racisme",
+      "contrôle au faciès",
+      "discriminations",
+      "récépissé de contrôle",
+      "islamophobie",
+      "antisémitisme",
+      "testing"
+    ],
+    [
+      "C'est quoi le blocage des prix ?",
+      "blocage des prix",
+      "bloquer les prix",
+      "prix bloqués",
+      "pouvoir d’achat",
+      "vie chère",
+      "réduflation",
+      "inflation"
+    ],
+    [
+      "Ils proposent quoi sur le handicap ?",
+      "handicap",
+      "AAH",
+      "personnes en situation de handicap",
+      "accessibilité",
+      "AESH"
+    ],
+    [
+      "Est-ce que le programme parle des violences faites aux femmes ?",
+      "violences faites aux femmes",
+      "féminicides",
+      "égalité femmes-hommes",
+      "droits des femmes",
+      "violences sexistes et sexuelles",
+      "IVG"
+    ],
+    [
+      "C'est quoi la garantie d'autonomie ?",
+      "garantie d’autonomie",
+      "RSA jeunes",
+      "aide pour les moins de 25 ans",
+      "minimum pour vivre",
+      "seuil de pauvreté"
+    ],
+    [
+      "Les stages seront mieux payés ?",
+      "stages",
+      "indemnité de stage",
+      "stagiaires",
+      "apprentis",
+      "alternance",
+      "premier emploi",
+      "CDD déguisés"
+    ],
+    [
+      "Le revenu universel, c'est dans le programme ?",
+      "revenu universel",
+      "revenu de base",
+      "revenu inconditionnel",
+      "allocation universelle",
+      "revenu d’existence"
+    ],
+    [
+      "Est-ce que le programme parle du harcèlement scolaire ?",
+      "harcèlement scolaire",
+      "harcèlement à l’école",
+      "cyberharcèlement",
+      "harcèlement au collège"
+    ],
+    [
+      "C'est quoi la règle verte ?",
+      "règle verte",
+      "ne pas prélever plus que la nature peut reconstituer",
+      "règle bleue"
+    ],
+    [
+      "C'est quoi la planification écologique ?",
+      "planification écologique",
+      "planification",
+      "Conseil à la planification écologique",
+      "plan écologique"
+    ],
+    [
+      "Les transports en commun seront gratuits ?",
+      "gratuité des transports",
+      "transports gratuits",
+      "bus gratuit",
+      "train gratuit",
+      "prix des transports",
+      "tarifs SNCF"
+    ],
+    [
+      "Ils proposent quoi sur le nucléaire ?",
+      "nucléaire",
+      "sortie du nucléaire",
+      "EPR",
+      "centrales nucléaires",
+      "énergies renouvelables",
+      "ASN IRSN"
+    ],
+    [
+      "Ils proposent quoi sur les pesticides ?",
+      "pesticides",
+      "glyphosate",
+      "agriculture bio",
+      "agriculteurs",
+      "fermes-usines",
+      "engrais"
+    ],
+    [
+      "Est-ce que le programme parle de la corrida ?",
+      "corrida",
+      "chasse à courre",
+      "bien-être animal",
+      "maltraitance animale",
+      "chasse",
+      "cirques avec animaux"
+    ],
+    [
+      "Ils proposent quoi sur l'eau ?",
+      "eau",
+      "mégabassines",
+      "méga-bassines",
+      "gratuité des premiers mètres cubes",
+      "eau bien commun",
+      "coupures d’eau"
+    ],
+    [
+      "Ils proposent quoi pour l'hôpital et les déserts médicaux ?",
+      "hôpital",
+      "déserts médicaux",
+      "santé",
+      "médecins",
+      "urgences",
+      "100 % Sécu",
+      "mutuelles",
+      "santé mentale"
+    ],
+    [
+      "Est-ce que le programme parle du cannabis ?",
+      "cannabis",
+      "légalisation du cannabis",
+      "drogues",
+      "weed",
+      "addictions",
+      "légaliser"
+    ],
+    [
+      "Ils font quoi pour le climat ?",
+      "climat",
+      "réchauffement climatique",
+      "émissions de gaz à effet de serre",
+      "énergies fossiles",
+      "urgence climatique",
+      "écologie"
+    ],
+    [
+      "Ils proposent quoi sur l'OTAN ?",
+      "OTAN",
+      "sortir de l’OTAN",
+      "commandement intégré",
+      "non-alignement",
+      "alliance militaire"
+    ],
+    [
+      "Ils proposent quoi sur l'immigration ?",
+      "immigration",
+      "régularisation des sans-papiers",
+      "migrants",
+      "droit d’asile",
+      "AME",
+      "titres de séjour",
+      "Frontex"
+    ],
+    [
+      "Ils proposent quoi sur l'Europe ?",
+      "Europe",
+      "Union européenne",
+      "traités européens",
+      "désobéir aux traités",
+      "désobéissance européenne",
+      "règles budgétaires européennes",
+      "sortir de l’UE",
+      "Frexit"
+    ],
+    [
+      "Est-ce que le programme parle de la Palestine ?",
+      "Palestine",
+      "Gaza",
+      "Israël",
+      "reconnaître l’État de Palestine",
+      "sanctions contre Israël",
+      "Proche-Orient"
+    ],
+    [
+      "Le programme dit quoi sur l'Ukraine ?",
+      "Ukraine",
+      "guerre en Ukraine",
+      "Russie",
+      "Poutine",
+      "cessez-le-feu en Ukraine"
+    ],
+    [
+      "Est-ce que le programme parle des réseaux sociaux ?",
+      "réseaux sociaux",
+      "TikTok",
+      "Instagram",
+      "interdire les réseaux sociaux aux mineurs",
+      "majorité numérique",
+      "GAFAM"
+    ],
+    [
+      "Est-ce que le programme parle des cryptomonnaies ?",
+      "cryptomonnaies",
+      "crypto",
+      "bitcoin",
+      "blockchain",
+      "NFT"
+    ],
+    [
+      "Ils proposent quoi sur l'intelligence artificielle ?",
+      "intelligence artificielle",
+      "IA",
+      "ChatGPT",
+      "reconnaissance faciale",
+      "algorithmes",
+      "numérique"
+    ],
+    [
+      "bac",
+      "baccalauréat",
+      "diplôme du baccalauréat"
+    ],
+    [
+      "BAC police",
+      "brigade anti-criminalité",
+      "brigades anti-criminalité"
+    ],
+    [
+      "prison",
+      "prisons",
+      "détention",
+      "détenus",
+      "surpopulation carcérale",
+      "pénitentiaire"
+    ],
+    [
+      "cantine",
+      "cantines",
+      "restauration scolaire",
+      "repas à l'école"
+    ],
+    [
+      "Uber",
+      "Uber Eats",
+      "Deliveroo",
+      "livreur",
+      "livreurs",
+      "plateformes",
+      "auto-entrepreneur",
+      "faux indépendants",
+      "présomption de salariat"
+    ],
+    [
+      "héritage",
+      "hériter",
+      "succession",
+      "successions",
+      "laisser ma maison à mes enfants",
+      "transmission"
+    ],
+    [
+      "sans-papiers",
+      "régularisation",
+      "régulariser",
+      "titre de séjour"
+    ],
+    [
+      "coût du programme",
+      "chiffrage",
+      "milliards",
+      "financement du programme",
+      "ruiner le pays"
+    ],
+    [
+      "salaire minimum",
+      "SMIC"
+    ],
+    [
+      "impôt sur la fortune",
+      "ISF",
+      "taxer les riches",
+      "milliardaires"
+    ],
+    [
+      "alliance atlantique",
+      "OTAN"
+    ],
+    [
+      "maison de retraite",
+      "EHPAD",
+      "personnes âgées",
+      "perte d'autonomie",
+      "dépendance"
+    ],
+    [
+      "essence",
+      "carburant",
+      "carburants",
+      "prix à la pompe"
+    ],
+    [
+      "médecin",
+      "médecins",
+      "déserts médicaux",
+      "généraliste"
+    ],
+    [
+      "fac",
+      "université",
+      "universités",
+      "étudiants",
+      "Parcoursup"
+    ],
+    [
+      "flics",
+      "police",
+      "policiers",
+      "forces de l'ordre"
+    ],
+    [
+      "chômeurs",
+      "chômage",
+      "assurance chômage",
+      "France Travail"
+    ],
+    [
+      "bio",
+      "agriculture biologique",
+      "pesticides",
+      "agriculture paysanne"
+    ],
+    [
+      "train",
+      "trains",
+      "SNCF",
+      "ferroviaire",
+      "petites lignes"
+    ],
+    [
+      "loyer",
+      "loyers",
+      "encadrement des loyers",
+      "HLM",
+      "logement social"
+    ]
+  ]
+}
