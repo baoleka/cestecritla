@@ -1,10 +1,9 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Reserved from '../../components/Reserved.astro';
+import { t } from '../../lib/strings.ts';
 ---
-<Base title="Page réservée — C'est écrit là">
-  <Reserved
-    title="Cette adresse est gardée"
-    lead="Rien n'est publié ici. Les 89 sections se parcourent depuis l'accueil."
-  />
+
+<Base title={`${t('reserved.title')} — ${t('app.name')}`} noindex>
+  <Reserved title={t('reserved.carte.title')} lead={t('reserved.carte.lead')} />
 </Base>

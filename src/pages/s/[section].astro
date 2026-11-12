@@ -1,99 +1,186 @@
 ---
 /**
- * The section reader — the surface that proves the socle: cestecritla.fr serving a real
- * section from corpus d29c7422004ab27c.
+ * `/s/<id>/` — two kinds of page under one prefix.
  *
- * There is deliberately NO rel=canonical to melenchon2027.fr. A cross-domain canonical is a
- * machine-readable declaration that the official site owns this page; it would ask for our own
- * pages to be de-indexed, and it contradicts the SEO channel the dossier counts as a
- * differentiator. The licence requires attribution and a link to the source, not a canonical —
- * so we credit with a visible link plus JSON-LD isBasedOn/citation.
+ *   an identifier of the 2026 edition (`p2c2-s01`)   the section's pointer page;
+ *   an identifier of the 2025 edition (`c8-s04`)     a bridge to its heirs (D15.8).
+ *
+ * The two namespaces cannot collide: scripts/aec26.test.ts checks every 2025 id against the
+ * 2026 grammar.
+ *
+ * What a pointer page is. The 2026 edition is all rights reserved: this page does not reproduce
+ * the section, it says WHERE it is and takes the reader there (D15.2). It shows the official
+ * titles, what the section holds, the first words of its key measure, and one link per
+ * proposition — each landing, where the browser can, on the sentence itself.
+ *
+ * No rel=canonical to melenchon2027.fr: a cross-domain canonical would declare that the
+ * official site owns this page and ask for ours to be de-indexed. We credit with a visible link
+ * and JSON-LD `isBasedOn` instead. The JSON-LD carries titles and addresses — no licence (there
+ * is none to grant) and not a word of the text.
  */
 import Base from '../../layouts/Base.astro';
-import SectionVerbatim from '../../components/SectionVerbatim.astro';
+import Bridge from '../../components/Bridge.astro';
+import DeepLinks from '../../components/DeepLinks.astro';
+import Quote from '../../components/Quote.astro';
+import { oldSections } from '../../lib/archive-2025.ts';
 import {
-  sections,
   chapterOf,
-  scopeOf,
-  isProposition,
-  sourceLink,
-  SOURCE_DEEP_LINKS_ALIVE,
-  type SlimSection,
-} from '../../lib/corpus.ts';
+  countsOf,
+  keyMeasure,
+  manifest,
+  neighbours,
+  numberOf,
+  partOf,
+  propositions,
+  sections,
+  type Section,
+} from '../../lib/edition.ts';
+import { fr, frDate, t } from '../../lib/strings.ts';
 
 export function getStaticPaths() {
-  return sections().map((section: SlimSection) => ({
-    params: { section: section.id },
-    props: { section },
-  }));
+  return [
+    ...sections().map((section: Section) => ({
+      params: { section: section.id },
+      props: { section, bridgeFor: undefined },
+    })),
+    ...oldSections().map((old) => ({
+      params: { section: old.id },
+      props: { section: undefined, bridgeFor: old.sectionId },
+    })),
+  ];
 }
 
-const { section } = Astro.props;
-const chapter = chapterOf(section);
+const { section, bridgeFor } = Astro.props;
+const meta = manifest().meta;
 
-// Closing prose is rendered at the end, never as an introduction (prose_after_measures).
-const chapeaux = section.items.filter(
-  (i) => i.kind === 'paragraph' && i.isClosingProse !== true && i.isScopeHeading !== true && i.isStatistic !== true,
-);
-const closing = section.items.filter((i) => i.isClosingProse === true);
-const statistics = section.items.filter((i) => i.isStatistic === true);
-const propositions = section.items.filter(isProposition);
+const chapter = section && chapterOf(section);
+const part = section && partOf(section);
+const key = section && keyMeasure(section);
+const counts = section && countsOf(section);
+const around = section && neighbours(section);
 
-const jsonLd = {
+const jsonLd = section && {
   '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: section.title,
+  '@type': 'WebPage',
+  name: section.title,
   inLanguage: 'fr',
-  // Both point at what actually resolves. A machine-readable citation aimed at a 404 helps
-  // nobody, and the precise pointer into the work is our own identifier, printed on the page.
-  isBasedOn: sourceLink(section),
-  citation: sourceLink(section),
-  license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
-  isPartOf: { '@type': 'Book', name: 'L’Avenir en commun', author: 'La France insoumise' },
+  isBasedOn: section.url,
+  about: {
+    '@type': 'Book',
+    name: meta.title,
+    author: { '@type': 'Organization', name: meta.license.holder },
+    url: meta.source,
+  },
 };
 ---
 
-<Base
-  title={`${section.title} — C'est écrit là`}
-  description={chapeaux[0]?.text.slice(0, 155)}
-  verbatim
->
-  <p class="label">{chapter.title}</p>
-  <h1>{section.title}</h1>
+{bridgeFor !== undefined && <Bridge path={`s/${Astro.params.section}`} sectionId={bridgeFor} />}
 
-  {chapeaux.map((p) => <p>{p.text}</p>)}
+{
+  section && chapter && part && counts && around && (
+    <Base
+      title={`${section.title} — ${t('app.name')}`}
+      description={t('section.meta_description')}
+      verbatim={key?.incipit !== undefined}
+    >
+      <p class="label">{t('independence.unofficial')}</p>
+      <p class="where">
+        <span data-programme="title">{part.title}</span>
+        <span aria-hidden="true"> · </span>
+        <span data-programme="title">{chapter.title}</span>
+      </p>
+      <h1 data-programme="title">{section.title}</h1>
 
-  {
-    propositions.map((item) => (
-      <SectionVerbatim item={item} scope={scopeOf(section, item)} />
-    ))
-  }
+      {key?.incipit !== undefined && (
+        <Quote
+          kind="incipit"
+          text={key.incipit}
+          href={section.url}
+          fragment={key.locator ?? null}
+          sectionTitle={section.title}
+        />
+      )}
 
-  {
-    statistics.length > 0 && (
-      <section aria-label="À savoir">
-        <h2>À savoir</h2>
-        {statistics.map((s) => (
-          <p id={s.id}>{s.text}</p>
-        ))}
-        {section.chiffres.map((c) => (
-          <p id={c.id}>{c.text}</p>
-        ))}
+      <section class="pointer" aria-labelledby="pointer-title">
+        <h2 id="pointer-title">{t('pointer.title')}</h2>
+        <p>{t('pointer.lead')}</p>
+        <p>
+          <a class="cta" href={section.url} rel="noopener">{t('pointer.cta')}</a>
+        </p>
       </section>
-    )
-  }
 
-  {closing.map((p) => <p id={p.id}>{p.text}</p>)}
+      <section aria-labelledby="inside-title">
+        <h2 id="inside-title">{t('section.inside')}</h2>
+        <ul class="counts">
+          {counts.key > 0 && <li>{t('section.key_count_one')}</li>}
+          <li>
+            {counts.measures === 1
+              ? t('section.measure_count_one')
+              : t('section.measures_count', { count: fr(counts.measures) })}
+          </li>
+          {counts.subs > 0 && (
+            <li>
+              {counts.subs === 1
+                ? t('section.sub_count_one')
+                : t('section.sub_measures_count', { count: fr(counts.subs) })}
+            </li>
+          )}
+        </ul>
 
-  <p>
-    <a class="source-link" href={sourceLink(section)} rel="noopener">
-      {SOURCE_DEEP_LINKS_ALIVE ? 'Lire cette section sur melenchon2027.fr' : 'Lire le livre sur melenchon2027.fr'}
-    </a>
-  </p>
-  <p class="ref">
-    Texte : La France insoumise – L’Avenir en commun, sous licence CC BY-NC-SA 4.0. Version du
-    corpus {section.id.startsWith('c') ? 'd29c7422004ab27c' : ''}.
-  </p>
+        <h3 id="items-title">{t('pointer.items_title')}</h3>
+        <p>{t('pointer.items_lead')}</p>
+        <ol class="pills" aria-labelledby="items-title">
+          {propositions(section).map((item) => {
+            const n = numberOf(item);
+            // The visible text of a pill is its number; its name, for a screen reader, is whole.
+            const name = n === null ? t('measure.key_label') : t('pointer.item', { n });
+            return (
+              <li>
+                <a
+                  href={section.url}
+                  data-fragment={item.locator ?? null}
+                  rel="noopener"
+                  aria-label={n === null ? null : name}
+                >
+                  {n ?? name}
+                </a>
+              </li>
+            );
+          })}
+        </ol>
+      </section>
 
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
-</Base>
+      <nav class="around" aria-label="Sections voisines">
+        <ul>
+          {around.previous && (
+            <li>
+              <span class="ref">{t('section.previous')}</span>
+              <a href={`/s/${around.previous.id}/`} data-programme="title">{around.previous.title}</a>
+            </li>
+          )}
+          {around.next && (
+            <li>
+              <span class="ref">{t('section.next')}</span>
+              <a href={`/s/${around.next.id}/`} data-programme="title">{around.next.title}</a>
+            </li>
+          )}
+          <li>
+            <a href="/#sommaire">{t('section.back_toc')}</a>
+          </li>
+        </ul>
+      </nav>
+
+      <p class="ref">
+        {t('attribution.full')}
+        {t('section.corpus_ref', {
+          version: meta.corpus_version,
+          date: frDate(meta.crawled_at),
+        })}
+        <span>{section.id}</span>
+      </p>
+
+      <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+      <DeepLinks />
+    </Base>
+  )
+}

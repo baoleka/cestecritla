@@ -112,6 +112,9 @@ export function buildLeakIndex(corpus: readonly LeakSource[], known: readonly st
   return index;
 }
 
+/** A token no sentence contains: windows cannot span it. */
+const BREAK = ' xxbreakxx ';
+
 /** Makes percent-encoded text and HTML readable as words before they are compared. */
 export function readable(content: string): string {
   let text = content;
@@ -125,12 +128,22 @@ export function readable(content: string): string {
       }
     });
   }
-  return text
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/&nbsp;|&#160;|&#xa0;/gi, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&#39;|&#x27;|&rsquo;|&apos;/gi, '’')
-    .replace(/\\n|\\t/g, ' ');
+  return (
+    text
+      // An ellipsis and the end of a block are where a quotation STOPS. Without a marker there,
+      // the eight words of an incipit and the first word of the caption that follows it
+      // ("… La France insoumise") read as nine words in a row — found on the first build, on a
+      // key measure whose ninth word happens to be "la".
+      .replace(
+        /…|<\/(?:p|li|blockquote|figcaption|figure|h[1-6]|div|section|td|th|dd|dt)>/gi,
+        BREAK,
+      )
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/&nbsp;|&#160;|&#xa0;/gi, ' ')
+      .replace(/&amp;/g, '&')
+      .replace(/&#39;|&#x27;|&rsquo;|&apos;/gi, '’')
+      .replace(/\\n|\\t/g, ' ')
+  );
 }
 
 export interface LeakHit {

@@ -37,6 +37,12 @@ https://beta.cestecritla.fr/*
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
+# The search index and its titles carry the corpus version in their name (D15.7): a new state of
+# the book gets new files, so these can be frozen too.
+/data/*
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
+
 # Share previews are versioned by corpus_version in their path (D13.2), so a re-crawl changes
 # the URL rather than the bytes: a permanent link never breaks and caches renew on their own.
 /og/*

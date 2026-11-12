@@ -1,0 +1,45 @@
+{
+  // "C'est écrit là" — STATIC FILES ONLY: no script, no binding, no variable.
+  //
+  // Two builds are deployed with this file (scripts/deploy.ts picks it, never choose by hand):
+  //   - the holding site (D15.4), which is also the withdrawal gesture of runbook sheet 9 (D14.10);
+  //   - the v1 app (D15.14), which ships without the measurement beacon and is therefore nothing
+  //     but files: no invocation, no log, no /api/ route, nothing that can refuse to deploy.
+  //
+  // Why a second file rather than wrangler.jsonc with a flag. A page that stands in for the app
+  // when something has gone wrong must not depend on anything the app depends on. Measured on
+  // 12/11/2026, the first time a deploy of this project's Worker was ever attempted: it failed
+  // with "You need to enable Analytics Engine" (code 10089) — a dashboard opt-in the beacon
+  // needs and static files have no use for.
+  //
+  // wrangler.jsonc (the Worker and its dataset) is kept, type-checked and dry-run in CI: it comes
+  // back with the beacon. What MUST stay identical between the two files: the Worker name and
+  // every route — scripts/build-mode.test.ts fails if they drift.
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "cestecritla",
+  "compatibility_date": "2026-09-09",
+
+  "routes": [
+    { "pattern": "cestecritla.fr", "custom_domain": true },
+    { "pattern": "www.cestecritla.fr", "custom_domain": true },
+  ],
+  "workers_dev": false,
+  "preview_urls": false,
+
+  // No `binding` and no `run_worker_first`: both only mean something to a script.
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+  },
+
+  "observability": { "enabled": false },
+
+  // `routes` is inherited by an environment that does not define its own: the preview host
+  // must name its hostname here too, or its first deploy would take the apex.
+  "env": {
+    "preview": {
+      "routes": [{ "pattern": "beta.cestecritla.fr", "custom_domain": true }],
+    },
+  },
+}

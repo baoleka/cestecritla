@@ -1,0 +1,67 @@
+---
+/**
+ * The search island — the only interactive part of the app, and its first client-side script.
+ *
+ * Contract with the page around it:
+ *   - without JavaScript it does not exist: the form is `hidden` until the script shows it, and
+ *     the table of contents below is the navigation;
+ *   - the words typed never leave the device. The index (stems, no sentence) and the list of
+ *     titles are two static files fetched once; the query runs here. The address bar keeps the
+ *     query after `#`, the one part of a URL a browser does not send to a server;
+ *   - a result never prints a measure. It names the section, numbers the measures that match,
+ *     and each number is a link into the official page (D15.2).
+ *
+ * The strings the script needs are handed to it as JSON, so that they come from the kit like
+ * every other sentence of the interface.
+ */
+import { manifest } from '../lib/edition.ts';
+import { t } from '../lib/strings.ts';
+
+const version = manifest().meta.corpus_version;
+const strings = {
+  opening: t('search.opening'),
+  one: t('search.results_count_one'),
+  many: t('search.results_count', { count: '{count}' }),
+  none: t('search.no_results'),
+  noneHint: t('search.no_results_hint'),
+  where: t('search.result.where'),
+  incipit: t('quote.incipit_label'),
+  missing: `${t('error.data.title')} ${t('error.data.lead')}`,
+};
+---
+
+<form
+  id="search"
+  role="search"
+  hidden
+  data-index={`/data/index-${version}.json`}
+  data-meta={`/data/meta-${version}.json`}
+>
+  <label for="q">{t('search.label')}</label>
+  <div class="search-row">
+    <input
+      id="q"
+      name="q"
+      type="search"
+      autocomplete="off"
+      autocapitalize="none"
+      spellcheck="false"
+      enterkeyhint="search"
+      placeholder={t('search.placeholder')}
+      aria-describedby="search-hint"
+    />
+    <button type="submit">{t('search.submit')}</button>
+  </div>
+  <p id="search-hint" class="ref">{t('search.hint')} {t('search.local_promise')}</p>
+</form>
+<p id="search-status" role="status" class="ref"></p>
+<section id="search-results" aria-labelledby="search-results-title" hidden>
+  <h2 id="search-results-title">{t('search.results_title')}</h2>
+  <ol id="search-list"></ol>
+</section>
+<noscript><p>{t('search.no_js')}</p></noscript>
+
+<script type="application/json" id="search-strings" set:html={JSON.stringify(strings)} is:inline />
+<script>
+  import '../scripts/search.ts';
+</script>

@@ -10,6 +10,6 @@
     "allowImportingTsExtensions": true,
     "types": ["astro/client"]
   },
-  "include": [".astro/types.d.ts", "src/**/*", "scripts/build-projection.ts"],
+  "include": [".astro/types.d.ts", "src/**/*"],
   "exclude": ["node_modules", "dist", "build", "prototypes", "eval", "src/worker"]
 }

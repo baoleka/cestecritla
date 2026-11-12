@@ -56,6 +56,11 @@ jobs:
       - name: Tests
         run: npm test
 
+      # The app is static files in v1 (D15.14): it goes through scripts/deploy.ts like the holding
+      # site, to the preview host only — the apex refuses it until launch day (D15.5).
+      - name: Deploy dry run (app → preview host)
+        run: npx tsx scripts/deploy.ts preview --dry-run --outdir /tmp/wdry-app
+
       # Gate 3: the 28 role pairs actually rendered, 4.5:1 for text and 3:1 for a rule, border or
       # focus ring, non-zero exit on failure.
       - name: Contrast
@@ -111,6 +116,16 @@ jobs:
       # reduced motion.
       - name: Accessibility and reflow
         run: npm run a11y
+
+      # The search island, hostile input, links into the book, bridges, and the page's own
+      # Content-Security-Policy — on the built app, with every other host intercepted.
+      - name: End to end
+        run: npx tsx scripts/e2e.ts --engines chromium
+
+      # The parser's second opinion (D15.6): the synthetic official site — 2026 markup around the
+      # 2025 text — re-read by a real DOM, and a sample of deep links followed.
+      - name: Browser check of the 2026 parser (synthetic site)
+        run: npx tsx scripts/verify-2026.ts --synthetic --sample 60
 
       - name: Accessibility and reflow (holding build)
         run: npm run build:holding && npm run a11y

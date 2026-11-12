@@ -28,7 +28,10 @@
     "publish:2026": "tsx scripts/publish-2026.ts",
     "verify:2026": "tsx scripts/verify-2026.ts",
     "recrawl:2026": "tsx scripts/recrawl-2026.ts",
-    "watch:source": "tsx scripts/watch-source.ts"
+    "watch:source": "tsx scripts/watch-source.ts",
+    "e2e": "tsx scripts/e2e.ts",
+    "index:2026": "tsx scripts/index-2026.ts",
+    "eval:2026": "tsx scripts/eval-2026.ts"
   },
   "license": "MIT",
   "devDependencies": {

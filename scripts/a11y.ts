@@ -27,13 +27,16 @@ import { readBuildMode } from './build-mode.js';
 /** Pages that must pass in every condition. Grows as routes land. */
 const APP_PATHS: readonly string[] = [
   '/',
-  '/s/c1-s02/',
-  '/s/c7-s08/',
-  '/s/c18-s05/',
+  // A search already run: results are part of the page a reader actually sees.
+  '/#q=retraite',
+  '/s/p1c1-s01/',
+  // The Europe chapter: sections with no key measure, the longest lists of numbers.
+  '/s/p6c1-s02/',
+  '/s/p4c2-s02/',
+  // Bridges for the addresses of the 2025 edition.
   '/m/c12-s01-k01/',
-  '/m/c1-s02-m03/',
+  '/s/c1-s02/',
   '/a/c13-s02-a01/',
-  '/a/c13-s03-a02/',
   '/j/',
   '/k/',
   '/carte/',

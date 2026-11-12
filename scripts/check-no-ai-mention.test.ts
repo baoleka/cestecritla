@@ -25,6 +25,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
+import { appVoiceOnly } from './app-voice.js';
 
 const strings = JSON.parse(readFileSync('design/strings.json', 'utf8')) as Record<string, unknown>;
 const wrangler = readFileSync('wrangler.jsonc', 'utf8');
@@ -63,30 +64,6 @@ void test('the deployed config carries no AI and no Turnstile (D6.10, D13.1)', (
   assert.equal(aiBindingDeployed, false, 'wrangler.jsonc must not declare the AI binding');
   assert.equal(turnstileDeployed, false, 'wrangler.jsonc must not declare Turnstile vars');
 });
-
-/**
- * The app's own voice, with every quotation of the programme removed.
- *
- * This is not a convenience: the corpus itself legislates about AI. `c18-s05-m12` is "Créer la
- * mission nationale de maîtrise de l'intelligence artificielle", `c18-s05-m13` restricts its
- * uses, `c11-s01-m15` limits generative AI in culture, `c16-s02-m02` names it among military
- * technologies, and `c5-s03-m02.s4` speaks of "assistants d'éducation". Scanned naively, this
- * gate is red on five pages from the first build — and the answer is not to weaken it but to
- * scope it to what the app ASSERTS, which is exactly the distinction the whole product rests on.
- *
- * A quotation reaches the page through four surfaces, not one: the verbatim block, the <title>,
- * the description and Open Graph meta, and the JSON-LD (which carries the measure text as its
- * `text` field). All four are the programme speaking. Everything left is us.
- */
-const appVoiceOnly = (html: string): string =>
-  html
-    .replace(/<figure class="verbatim"[\s\S]*?<\/figure>/g, ' ')
-    .replace(/<script type="application\/ld\+json"[\s\S]*?<\/script>/g, ' ')
-    .replace(/<title>[\s\S]*?<\/title>/gi, ' ')
-    .replace(
-      /<meta\b[^>]*\b(?:name|property)=["'](?:description|og:[a-z:]+|twitter:[a-z:]+)["'][^>]*>/gi,
-      ' ',
-    );
 
 void test('no built page mentions an AI or Turnstile while neither is deployed', () => {
   const pages = htmlFiles('dist');

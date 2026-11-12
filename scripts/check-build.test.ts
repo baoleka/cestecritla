@@ -13,6 +13,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { gzipSync } from 'node:zlib';
 import { join, extname } from 'node:path';
 import { test } from 'node:test';
+import { appVoiceOnly } from './app-voice.js';
 
 const walk = (dir: string): string[] => {
   if (!existsSync(dir)) return [];
@@ -26,30 +27,6 @@ const files = walk('dist');
 const textFiles = files.filter((f) => ['.html', '.css', '.js', '.json'].includes(extname(f)));
 const skip = files.length === 0;
 const read = (f: string): string => readFileSync(f, 'utf8');
-
-/**
- * The app's own voice, with every quotation of the programme removed.
- *
- * This is not a convenience: the corpus itself legislates about AI. `c18-s05-m12` is "Créer la
- * mission nationale de maîtrise de l'intelligence artificielle", `c18-s05-m13` restricts its
- * uses, `c11-s01-m15` limits generative AI in culture, `c16-s02-m02` names it among military
- * technologies, and `c5-s03-m02.s4` speaks of "assistants d'éducation". Scanned naively, this
- * gate is red on five pages from the first build — and the answer is not to weaken it but to
- * scope it to what the app ASSERTS, which is exactly the distinction the whole product rests on.
- *
- * A quotation reaches the page through four surfaces, not one: the verbatim block, the <title>,
- * the description and Open Graph meta, and the JSON-LD (which carries the measure text as its
- * `text` field). All four are the programme speaking. Everything left is us.
- */
-const appVoiceOnly = (html: string): string =>
-  html
-    .replace(/<figure class="verbatim"[\s\S]*?<\/figure>/g, ' ')
-    .replace(/<script type="application\/ld\+json"[\s\S]*?<\/script>/g, ' ')
-    .replace(/<title>[\s\S]*?<\/title>/gi, ' ')
-    .replace(
-      /<meta\b[^>]*\b(?:name|property)=["'](?:description|og:[a-z:]+|twitter:[a-z:]+)["'][^>]*>/gi,
-      ' ',
-    );
 
 interface Ban {
   readonly what: string;
@@ -142,6 +119,18 @@ void test('media queries use em or rem, never px (A2)', () => {
   assert.deepEqual(offenders, [], `px breakpoints:\n${offenders.join('\n')}`);
 });
 
+void test('what the search downloads stays small enough for a phone on a slow network', () => {
+  if (skip) return;
+  const data = files.filter((f) => /dist\/data\/.*\.json$/.test(f));
+  if (data.length === 0) return; // holding build: no search
+  const total = data.reduce((n, f) => n + gzipSync(readFileSync(f), { level: 9 }).byteLength, 0);
+  // Measured 12/11/2026: index 64 KB + titles and locators 33 KB, gzip. Fetched once, on the
+  // first search, then cached for a year under a versioned name.
+  const budget = 130 * 1024;
+  assert.ok(total <= budget, `search data ${String(total)} B gzip > ${String(budget)} B`);
+  console.log(`  search data: ${String(total)} B gzip of ${String(budget)} B`);
+});
+
 void test('initial JS stays under the P2 budget of 100 KB gzip', () => {
   if (skip) return;
   const js = files.filter((f) => f.endsWith('.js'));
@@ -162,7 +151,7 @@ void test('fonts delivered stay under the P8 budget of 75 KB', () => {
 
 void test('a section page stays under the P3 critical-path budget', () => {
   if (skip) return;
-  const page = 'dist/s/c1-s02/index.html';
+  const page = 'dist/s/p1c1-s01/index.html';
   if (!existsSync(page)) return;
   // CSS is inlined, so the HTML carries the critical path on its own.
   const gz = gzipSync(readFileSync(page), { level: 9 }).byteLength;

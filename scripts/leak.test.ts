@@ -109,6 +109,17 @@ void test('scanner: reports identifiers and counts, never words', () => {
   assert.ok(hits.length > 0);
   for (const hit of hits) assert.deepEqual(Object.keys(hit).sort(), ['id', 'windows']);
   assert.equal(readable('a%20b%E2%80%99c &amp; <b>d</b>'), 'a b’c &  d ');
+  // A quotation stops at an ellipsis and at the end of its block: no window spans either.
+  const index9 = buildLeakIndex(
+    [{ id: 'x', text: 'un deux trois quatre cinq six sept huit neuf dix' }],
+    [],
+  );
+  assert.equal(scanForLeaks('un deux trois quatre cinq six sept huit neuf', index9).length, 1);
+  assert.equal(scanForLeaks('un deux trois quatre cinq six sept huit… neuf', index9).length, 0);
+  assert.equal(
+    scanForLeaks('<p>un deux trois quatre cinq six sept huit</p><p>neuf</p>', index9).length,
+    0,
+  );
 });
 
 // ---------------------------------------------------------------------------------------------
@@ -133,7 +144,7 @@ void test('structure: the words let out are the ones declared, and under the cei
 });
 
 /** Files of data/2026 whose long strings are our own words, reviewed as editorial content. */
-const EDITORIAL = new Set(['riposte.json', 'glossary.json']);
+const EDITORIAL = new Set(['riposte.json', 'glossary.json', 'synonyms.json']);
 /** Keys allowed to hold more than eight words in the generated files. */
 const LONG_OK = new Set(['title', 'id_scheme', 'hash_rule', 'note_fr', 'attribution']);
 
@@ -157,7 +168,10 @@ void test('structure: no generated file of data/2026 has room for a sentence', (
       }
       if (typeof value === 'object' && value !== null) {
         for (const [k, v] of Object.entries(value)) {
-          if (['raw', 'html', 'inline'].includes(k) || (k === 'text' && name !== 'quotes.json')) {
+          // `text` as a key is fine when it names a field (the index maps field names to
+          // numbers); it is a leak when it holds a string.
+          const holdsText = typeof v === 'string' && name !== 'quotes.json';
+          if (['raw', 'html', 'inline'].includes(k) || (k === 'text' && holdsText)) {
             assert.fail(`${name}: ${path}.${k} — a field that carries text`);
           }
           walk(v, `${path}.${k}`, k);

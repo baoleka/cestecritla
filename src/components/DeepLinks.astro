@@ -1,0 +1,15 @@
+---
+/**
+ * Loads the script that lets a link land on a sentence (src/scripts/deep-links.ts).
+ *
+ * A component rather than a line in the layout: only pages that link into the official book
+ * need it, and a page that needs no script should ship none — the reserved pages, the bridges
+ * and the 404 are plain HTML, and a gate holds them to it. Astro emits the script once per
+ * page however many components ask for it.
+ */
+---
+
+<script>
+  import { enhanceOfficialLinks } from '../scripts/deep-links.ts';
+  enhanceOfficialLinks(document);
+</script>

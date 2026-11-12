@@ -12,9 +12,12 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import {
+  APP_REDIRECT_PREFIXES,
   HOLDING_PAGES,
   HOLDING_REDIRECT_PREFIXES,
+  WORKER_CONFIG,
   WRANGLER_CONFIG,
+  appRedirects,
   citationPolicyValidated,
   deployRefusal,
   holdingRedirects,
@@ -50,7 +53,9 @@ const read = (file: string): WranglerConfig =>
 const hosts = (routes: Route[] | undefined): string[] =>
   (routes ?? []).map((r) => r.pattern).sort();
 
-const app = read(WRANGLER_CONFIG.app);
+/** The Worker configuration: not deployed in v1 (D15.14), kept honest for its return. */
+const app = read(WORKER_CONFIG);
+/** The static configuration both builds are deployed with. */
 const holding = read(WRANGLER_CONFIG.holding);
 const APEX = ['cestecritla.fr', 'www.cestecritla.fr'];
 
@@ -115,16 +120,19 @@ void test('each build is deployed with its own configuration, to a named environ
   assert.deepEqual(wranglerDeployArgs('apex', 'holding'), [
     'deploy',
     '--config',
-    'wrangler.holding.jsonc',
+    'wrangler.static.jsonc',
     '--env=',
   ]);
+  // v1 has no beacon (D15.14): the app is static files too, and deploys without Analytics Engine.
   assert.deepEqual(wranglerDeployArgs('preview', 'app', ['--dry-run']), [
     'deploy',
     '--config',
-    'wrangler.jsonc',
+    'wrangler.static.jsonc',
     '--env=preview',
     '--dry-run',
   ]);
+  assert.equal(WRANGLER_CONFIG.app, WRANGLER_CONFIG.holding);
+  assert.notEqual(WRANGLER_CONFIG.app, WORKER_CONFIG);
 });
 
 /**
@@ -134,7 +142,7 @@ void test('each build is deployed with its own configuration, to a named environ
  */
 void test('in both configurations the preview environment has its own host, never the apex', () => {
   for (const [file, config] of [
-    [WRANGLER_CONFIG.app, app],
+    [WORKER_CONFIG, app],
     [WRANGLER_CONFIG.holding, holding],
   ] as const) {
     assert.deepEqual(hosts(config.routes), APEX, `${file}: top-level routes`);
@@ -209,4 +217,15 @@ void test('the policy counts as validated only when it carries a date', () => {
     validated_on: string | null;
   };
   assert.equal(citationPolicyValidated(), policy.validated_on !== null);
+});
+
+void test('the app redirects only the two old prefixes it has nothing to put behind', () => {
+  const lines = appRedirects()
+    .split('\n')
+    .filter((l) => l !== '' && !l.startsWith('#'));
+  assert.deepEqual(lines, ['/p/* / 302', '/res/* / 302']);
+  // `/m/`, `/a/`, `/s/` and `/r/` are real pages in the app: a redirect rule would shadow them.
+  for (const prefix of ['m', 'a', 's', 'r']) {
+    assert.ok(!APP_REDIRECT_PREFIXES.includes(prefix), `/${prefix}/ must stay a real page`);
+  }
 });

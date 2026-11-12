@@ -1,0 +1,45 @@
+---
+/**
+ * The programme's own words — the ONLY component allowed to print them (D15.7).
+ *
+ * Two kinds, both rationed by data/2026/exposure-policy.json and counted by the build gate:
+ *   incipit   the first words of a key measure, cut by the publisher, followed by « … »;
+ *   quote     a whole proposition, listed in data/2026/quotes.json, exact to the hash.
+ *
+ * What the legal notice of the source asks of a short extract is on the page each time, not on
+ * a licence page somewhere: the author, and a link to the page of origin. The link lands on the
+ * sentence itself where the browser can (src/scripts/deep-links.ts).
+ *
+ * `class="verbatim"` is load-bearing: two gates (no AI mention, ban list) remove this block
+ * before judging the app's own voice, and the quote gate counts the words inside it.
+ * `data-programme` says which ration the words are drawn from.
+ */
+import DeepLinks from './DeepLinks.astro';
+import { t, typeset } from '../lib/strings.ts';
+
+interface Props {
+  kind: 'incipit' | 'quote';
+  text: string;
+  /** Official page, at the section anchor. */
+  href: string;
+  /** `text=…`, or null when the link stops at the anchor. */
+  fragment: string | null;
+  sectionTitle: string;
+  id?: string | undefined;
+}
+const { kind, text, href, fragment, sectionTitle, id } = Astro.props;
+---
+
+<figure class="verbatim" data-programme={kind} id={id}>
+  <span class="label">{kind === 'incipit' ? t('quote.incipit_label') : t('quote.label')}</span>
+  <blockquote cite={href}>
+    <p>{typeset(text)}{kind === 'incipit' && '…'}</p>
+  </blockquote>
+  <figcaption class="ref">
+    {t('quote.attribution')} «&nbsp;{sectionTitle}&nbsp;».
+    <a href={href} data-fragment={fragment} rel="noopener"
+      >{kind === 'incipit' ? t('quote.continue') : t('quote.open')}</a
+    >
+  </figcaption>
+</figure>
+<DeepLinks />

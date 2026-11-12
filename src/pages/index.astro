@@ -1,27 +1,66 @@
 ---
+/**
+ * Home: the search, then the whole table of contents.
+ *
+ * The table of contents is not a fallback bolted on for browsers without JavaScript — it is the
+ * page. 6 parts, 23 chapters, 111 sections, each one a link, readable and usable with no script
+ * at all; the search above it is the shortcut for those who can run it.
+ *
+ * Every title here is the book's (marked `data-programme="title"`): the sentences are ours.
+ */
 import Base from '../layouts/Base.astro';
-import { sections, corpus } from '../lib/corpus.ts';
+import Search from '../components/Search.astro';
+import { chaptersOf, manifest, parts, sectionsOf } from '../lib/edition.ts';
+import { fr, t } from '../lib/strings.ts';
 
-const all = sections();
-const chapters = corpus().chapters;
+const meta = manifest().meta;
+const introduction = manifest().introduction;
 ---
 
-<Base title="C'est écrit là" description="Le texte de L’Avenir en commun 2025, mesure par mesure.">
-  <p class="label">Site non officiel.</p>
-  <h1>C’est écrit là</h1>
-  <p>Projet militant indépendant. Le texte est celui du livre officiel.</p>
-  <p>{all.length} sections, {corpus().meta.official_count} mesures.</p>
+<Base title={t('app.name')} description={t('home.tagline')} home>
+  <p class="label">{t('independence.unofficial')}</p>
+  <h1>{t('app.name')}</h1>
+  <p class="lead">{t('home.direct.lead')}</p>
+
+  <Search />
+
+  <h2 id="sommaire">{t('home.toc.title')}</h2>
+  <p>
+    {t('home.counts', { count: fr(meta.counts.sections), total: fr(meta.official_count) })}
+    {t('home.toc.lead')}
+  </p>
+  <nav aria-label={t('home.parts_nav')}>
+    <ol class="parts">
+      {
+        parts().map((part) => (
+          <li>
+            <a href={`#${part.id}`} data-programme="title">{part.title}</a>
+          </li>
+        ))
+      }
+    </ol>
+  </nav>
+  <p>
+    <a href={introduction.url} rel="noopener" data-programme="title">{introduction.title}</a>
+    <span class="ref"> · melenchon2027.fr</span>
+  </p>
+
   {
-    chapters.map((c) => (
-      <section>
-        <h2>{c.number}. {c.title}</h2>
-        <ul>
-          {all
-            .filter((s) => s.chapterId === c.id)
-            .map((s) => (
-              <li><a href={`/s/${s.id}/`}>{s.title}</a></li>
-            ))}
-        </ul>
+    parts().map((part) => (
+      <section aria-labelledby={part.id} class="part">
+        <h3 id={part.id} data-programme="title">{part.title}</h3>
+        {chaptersOf(part).map((chapter) => (
+          <>
+            <h4 data-programme="title">{chapter.title}</h4>
+            <ul class="toc">
+              {sectionsOf(chapter).map((section) => (
+                <li>
+                  <a href={`/s/${section.id}/`} data-programme="title">{section.title}</a>
+                </li>
+              ))}
+            </ul>
+          </>
+        ))}
       </section>
     ))
   }

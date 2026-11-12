@@ -1,0 +1,52 @@
+---
+/**
+ * A bridge: what an address of the 2025 edition answers now (D15.8, D15.9).
+ *
+ * The 2025 edition is no longer served by its publisher, and eight of its addresses on this
+ * site were sent to people in September. They must not break — and they must not pretend: this
+ * page says the address belonged to another edition, and points at the section of the 2026
+ * edition where the subject is treated.
+ *
+ * What it deliberately does not say: whether the measure "still exists". The wording is the
+ * same for every bridge. A page that sorted old measures into kept and dropped would be a
+ * public comparison of the two editions, measure by measure — the one thing D15.9 rules out.
+ *
+ * Reached by a link, so impersonal (D3.12). Never indexed: a signpost is not a page.
+ */
+import Base from '../layouts/Base.astro';
+import { bridgeTarget } from '../lib/archive-2025.ts';
+import { t } from '../lib/strings.ts';
+
+interface Props {
+  /** The old address, as its last path segments: `m/c12-s01-k01`. */
+  path: string;
+  /** The 2025 section the address belonged to. */
+  sectionId: string;
+}
+const { path, sectionId } = Astro.props;
+const target = bridgeTarget(sectionId);
+---
+
+<Base title={`${t('bridge.title')} — ${t('app.name')}`} description={t('bridge.fact')} noindex>
+  <p class="label">{t('independence.unofficial')}</p>
+  <h1>{t('bridge.title')}</h1>
+  <p>{t('bridge.fact')}</p>
+  {
+    target.sections.length > 0 ? (
+      <>
+        <p>{t('bridge.lead')}</p>
+        <ul class="targets">
+          {target.sections.map((section) => (
+            <li>
+              <a href={`/s/${section.id}/`} data-programme="title">{section.title}</a>
+            </li>
+          ))}
+        </ul>
+      </>
+    ) : (
+      <p>{t('bridge.none')}</p>
+    )
+  }
+  <p><a class="cta" href="/">{t('bridge.cta_home')}</a></p>
+  <p class="ref">{t('bridge.ref', { url: `/${path}` })}</p>
+</Base>

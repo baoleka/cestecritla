@@ -14,39 +14,60 @@
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
-import { HOLDING_PAGES, holdingRedirects, htmlPages, readBuildMode } from './build-mode.js';
+import {
+  HOLDING_PAGES,
+  appRedirects,
+  holdingRedirects,
+  htmlPages,
+  readBuildMode,
+} from './build-mode.js';
 
 type Status =
   /** Built now: the prefix must produce pages in dist/. */
   | 'built'
+  /** Built, and every page under it answers for an address of the 2025 edition (D15.8). */
+  | 'bridge'
   /** Declared, lands in a later lot: must NOT be built yet, and must not collide. */
   | 'planned'
   /** Held so nothing else claims it: one static page, no logic (D14.7). */
   | 'reserved'
-  /** Served by the Worker, never by Static Assets. */
+  /** Temporarily redirected to the home page by dist/_redirects (D15.8). */
+  | 'redirected'
+  /** Served by the Worker, never by Static Assets. Not deployed in v1 (D15.14). */
   | 'worker';
 
 interface Route {
   readonly prefix: string;
   readonly status: Status;
   readonly object: string;
-  /** A concrete path that must exist in dist/ when status is built or reserved. */
+  /** A concrete path that must exist in dist/ when status is built, bridge or reserved. */
   readonly sample?: string;
 }
 
 export const ROUTES: readonly Route[] = [
-  { prefix: '/', status: 'built', object: 'accueil', sample: 'index.html' },
-  { prefix: '/s/', status: 'built', object: 'section', sample: 's/c1-s02/index.html' },
-  { prefix: '/m/', status: 'built', object: 'mesure', sample: 'm/c12-s01-k01/index.html' },
-  { prefix: '/c/', status: 'planned', object: 'carte-concept' },
+  { prefix: '/', status: 'built', object: 'accueil : recherche et sommaire', sample: 'index.html' },
+  {
+    prefix: '/s/',
+    status: 'built',
+    object: 'fiche de section (2026) ; pont pour une section de 2025',
+    sample: 's/p1c1-s01/index.html',
+  },
+  {
+    prefix: '/m/',
+    status: 'bridge',
+    object: 'pont : mesure de l’édition 2025',
+    sample: 'm/c12-s01-k01/index.html',
+  },
   {
     prefix: '/a/',
-    status: 'built',
-    object: 'carte statistique',
+    status: 'bridge',
+    object: 'pont : chiffre « À savoir » de l’édition 2025',
     sample: 'a/c13-s02-a01/index.html',
   },
-  { prefix: '/r/', status: 'planned', object: 'riposte (par thème)' },
-  { prefix: '/mot/', status: 'planned', object: 'terme du glossaire' },
+  { prefix: '/data/', status: 'built', object: 'index et titres de la recherche, versionnés' },
+  { prefix: '/c/', status: 'planned', object: 'carte-concept (remplacée par /mot/)' },
+  { prefix: '/r/', status: 'planned', object: 'réponse à une objection' },
+  { prefix: '/mot/', status: 'planned', object: 'mot du programme (carte-concept)' },
   { prefix: '/q/', status: 'planned', object: '« Laquelle est ici ? »' },
   { prefix: '/defi/', status: 'planned', object: '« Tu savais que c’était dedans ? »' },
   { prefix: '/verifier', status: 'planned', object: 'vérifier une citation' },
@@ -57,6 +78,8 @@ export const ROUTES: readonly Route[] = [
   { prefix: '/mentions-legales', status: 'planned', object: 'mentions légales' },
   { prefix: '/licence', status: 'planned', object: 'page licence' },
   { prefix: '/og/', status: 'planned', object: 'aperçus versionnés par corpus_version' },
+  { prefix: '/p/', status: 'redirected', object: 'carte de progression du prototype de septembre' },
+  { prefix: '/res/', status: 'redirected', object: '« Mes 3 mesures » du prototype de septembre' },
   { prefix: '/j/', status: 'reserved', object: 'mesure du matin (v1.1)', sample: 'j/index.html' },
   {
     prefix: '/k/',
@@ -70,7 +93,7 @@ export const ROUTES: readonly Route[] = [
     object: '« La carte des 89 » (écartée)',
     sample: 'carte/index.html',
   },
-  { prefix: '/api/', status: 'worker', object: 'balise d’événements' },
+  { prefix: '/api/', status: 'worker', object: 'balise d’événements (v1.1, D15.14)' },
 ];
 
 const built = existsSync('dist');
@@ -115,7 +138,7 @@ void test('every built or reserved route actually answers', () => {
     return;
   }
   const missing = ROUTES.filter(
-    (r) => (r.status === 'built' || r.status === 'reserved') && r.sample !== undefined,
+    (r) => ['built', 'bridge', 'reserved'].includes(r.status) && r.sample !== undefined,
   )
     .filter((r) => !existsSync(`dist/${r.sample ?? ''}`))
     .map((r) => `${r.prefix} -> dist/${r.sample ?? ''}`);
@@ -169,23 +192,18 @@ void test('a reserved page carries no logic — no script of its own (D14.7)', (
   }
 });
 
-void test('no page links a reader to a source URL known to be dead (D14.14)', () => {
+void test('no page links to the address of the 2025 edition, which its publisher retired', () => {
   if (!built) return;
-  // Observed and archived 10/9/2026: every sub-page of the book answers 404, including the URLs
-  // the landing page publishes itself. Until that changes, nothing we ship may point there —
-  // "va vérifier, c'est écrit là" is the promise, and a 404 is the one answer that breaks it.
-  const deadShapes =
-    /melenchon2027\.fr\/programme2025\/livre\/(?:introduction|chapitre\d|partie\d|[a-z-]{6,})/;
-  const offenders: string[] = [];
-  for (const page of ['dist/s/c1-s02/index.html', 'dist/s/c7-s08/index.html', 'dist/index.html']) {
-    if (!existsSync(page)) continue;
-    const html = readFileSync(page, 'utf8');
-    for (const m of html.matchAll(/(?:href|"(?:isBasedOn|citation)")\s*[:=]\s*"([^"]+)"/g)) {
-      const url = m[1] ?? '';
-      if (deadShapes.test(url)) offenders.push(`${page}: ${url}`);
-    }
-  }
-  assert.deepEqual(offenders, [], `links to a dead source URL:\n${offenders.join('\n')}`);
+  // Observed 12/11/2026: /programme2025/livre/ redirects to the 2026 book and its sections
+  // answer 404. "Va vérifier, c'est écrit là" is the promise; a dead link is what breaks it.
+  const offenders = htmlPages('dist')
+    .filter((page) => /programme2025/.test(readFileSync(`dist/${page}`, 'utf8')))
+    .slice(0, 10);
+  assert.deepEqual(
+    offenders,
+    [],
+    `pages still pointing at the 2025 book:\n${offenders.join('\n')}`,
+  );
 });
 
 void test('the holding build redirects every old prefix and says only what is true (D15.4)', () => {
@@ -217,9 +235,29 @@ void test('the holding page is not indexed (playbook: indexing opens at J-3)', (
   assert.match(html, /<meta name="robots" content="noindex">/);
 });
 
-void test('an app build ships no redirect file yet (bridges are static pages, D15.8)', () => {
+void test('an app build redirects only what it has no page for (D15.8)', () => {
   if (!built || holding) return;
-  // A _redirects rule matches the exact path and shadows any real page under it: the 2025
-  // addresses get generated bridge pages instead. Until then, no file at all.
-  assert.ok(!existsSync('dist/_redirects'), 'dist/_redirects in an app build shadows real pages');
+  // A _redirects rule matches a whole prefix and shadows any real page under it: the 2025
+  // addresses under /m/, /a/, /s/ and /r/ get generated bridge pages, never a rule.
+  assert.equal(readFileSync('dist/_redirects', 'utf8'), appRedirects());
+  const redirected = ROUTES.filter((r) => r.status === 'redirected').map((r) => r.prefix);
+  for (const prefix of redirected) {
+    assert.ok(!existsSync(`dist${prefix}`), `${prefix} is redirected AND built`);
+    assert.match(appRedirects(), new RegExp(`^${prefix}\\* / 302$`, 'm'));
+  }
+});
+
+void test('every bridge answers, is kept out of indexes and prints nothing of either edition', () => {
+  if (!built || holding) return;
+  const bridges = htmlPages('dist').filter(
+    (page) => /^(?:m|a)\//.test(page) || /^s\/c\d/.test(page),
+  );
+  // 837 propositions + 48 statistics + 89 sections of the 2025 edition.
+  assert.equal(bridges.length, 974, `${String(bridges.length)} bridge pages`);
+  for (const page of bridges) {
+    const html = readFileSync(`dist/${page}`, 'utf8');
+    assert.match(html, /<meta name="robots" content="noindex">/, `${page}: indexable`);
+    assert.doesNotMatch(html, /class="verbatim"/, `${page}: a bridge quotes nothing`);
+    assert.match(html, /Cette adresse renvoyait à l’édition 2025/, page);
+  }
 });

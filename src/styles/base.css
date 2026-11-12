@@ -183,3 +183,204 @@ small {
     scroll-behavior: auto !important;
   }
 }
+
+/* ------------------------------------------------------------------------------------------
+ * The 2026 app (D15): a table of contents, pointer pages, a search. Every colour below is a
+ * role token, so the dark substitution table applies without a single extra rule (A3).
+ * ---------------------------------------------------------------------------------------- */
+
+/* Text for screen readers only: "Mesure " in front of the number of a pill. */
+.sr-only {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+header.site,
+footer.site {
+  max-width: 42rem;
+  margin-inline: auto;
+  padding: var(--space-4);
+}
+header.site {
+  padding-block-end: 0;
+}
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--tap-comfortable);
+  color: var(--wordmark);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+footer.site {
+  margin-block-start: var(--space-8);
+  border-block-start: 2px solid var(--brand);
+}
+footer.site ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* Correction 10: a footer link is a tap target like any other. */
+footer.site a,
+.toc a,
+.parts a,
+.around a,
+.targets a,
+.result h3 a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--tap-comfortable);
+}
+
+h3 {
+  font-size: var(--font-size-h3);
+  line-height: var(--line-height-h3);
+  margin-block: var(--space-6) var(--space-2);
+}
+h4 {
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-h3);
+  margin-block: var(--space-4) var(--space-1);
+}
+
+.lead {
+  font-size: var(--font-size-h3);
+  line-height: var(--line-height-h3);
+}
+.where {
+  margin-block: 0 var(--space-2);
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+/* The table of contents: plain lists, one link per line, nothing to open or close. */
+.toc,
+.parts,
+.targets,
+.counts,
+.around ul {
+  margin: 0;
+  padding-inline-start: var(--space-5);
+}
+.part h3 {
+  padding-block-start: var(--space-4);
+  border-block-start: 2px solid var(--brand);
+  color: var(--brand);
+}
+.around ul {
+  padding: 0;
+  list-style: none;
+}
+.around li {
+  margin-block-end: var(--space-2);
+}
+.around .ref {
+  display: block;
+}
+
+/* The pointer: the one thing a section page is for. */
+.pointer {
+  margin-block: var(--space-6);
+  padding: var(--space-4);
+  border: 2px solid var(--brand);
+  border-radius: var(--radius-m);
+}
+.pointer h2 {
+  margin-block-start: 0;
+}
+
+/* One link per proposition: a number is enough, the sentence is on the official page. */
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pills a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--tap-comfortable);
+  min-inline-size: var(--tap-comfortable);
+  padding-inline: var(--space-3);
+  border: 2px solid var(--brand);
+  border-radius: var(--radius-pill);
+  color: var(--text);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.verbatim blockquote {
+  margin: var(--space-2) 0;
+}
+.verbatim blockquote p {
+  margin: 0;
+}
+.verbatim figcaption {
+  font-family: var(--font-family-ui);
+}
+
+/* Search: a labelled field and its button, wrapping rather than overflowing at 320 px. */
+#search label {
+  display: block;
+  margin-block-end: var(--space-2);
+  font-weight: 700;
+}
+.search-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.search-row input {
+  flex: 1 1 12rem;
+  min-inline-size: 0;
+  min-block-size: var(--tap-comfortable);
+  padding-inline: var(--space-3);
+  border: 2px solid var(--brand);
+  border-radius: var(--radius-m);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+}
+#search-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.result {
+  margin-block-end: var(--space-4);
+  padding-block-end: var(--space-4);
+  border-block-end: 1px solid var(--brand);
+}
+.result h3 {
+  margin-block: 0;
+}
+.result .incipit {
+  margin-block: var(--space-2);
+  padding-inline-start: var(--space-3);
+  border-inline-start: 4px solid var(--verbatim-rule);
+  font-family: var(--font-family-verbatim);
+}
+.result .hits {
+  margin-block: var(--space-2) 0;
+}
+.result .hits a {
+  display: inline-block;
+  min-block-size: var(--tap-min);
+  padding-block: var(--space-2);
+}

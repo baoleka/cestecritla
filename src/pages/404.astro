@@ -1,8 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
+import { t } from '../lib/strings.ts';
 ---
-<Base title="Page introuvable — C'est écrit là">
-  <h1>Cette page n’existe pas</h1>
-  <p>Le lien est peut-être incomplet.</p>
-  <p><a class="cta" href="/">Aller à l’accueil</a></p>
+
+<Base title={`${t('error.404.title')} — ${t('app.name')}`}>
+  <h1>{t('error.404.title')}</h1>
+  <p>{t('error.404.lead')}</p>
+  <p><a class="cta" href="/">{t('error.404.cta')}</a></p>
 </Base>

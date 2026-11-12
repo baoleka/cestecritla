@@ -1,85 +1,22 @@
 ---
 /**
- * A single proposition, at a permanent URL (D13.2).
+ * `/m/<id>` — bridges for the measures of the 2025 edition (D15.8).
  *
- * `https://cestecritla.fr/m/c12-s01-k01` is the link that goes into WhatsApp, gets printed as a
- * QR code, and must not move by one character at a re-crawl. The corpus version lives in the
- * IMAGE path, never here — that is what lets previews be regenerated without breaking a single
- * link already sent.
- *
- * Correction 18, measured on the prototype: the primary button shares THIS measure, never the
- * section's key measure. Arriving on a deep link and being offered something else to share is
- * the defect that makes a reader distrust everything around it.
+ * This prefix used to serve one page per proposition, with its text. The 2026 edition gives no
+ * right to do that (D15.1): a proposition is now reached by a deep link into the official page,
+ * from its section's pointer page. What remains here are the 837 old addresses, each answering
+ * with a bridge to the section where the subject is treated now.
  */
-import Base from '../../layouts/Base.astro';
-import SectionVerbatim from '../../components/SectionVerbatim.astro';
-import {
-  sections,
-  chapterOf,
-  scopeOf,
-  isProposition,
-  sourceLink,
-  type SlimItem,
-  type SlimSection,
-} from '../../lib/corpus.ts';
+import Bridge from '../../components/Bridge.astro';
+import { oldMeasures } from '../../lib/archive-2025.ts';
 
 export function getStaticPaths() {
-  return sections().flatMap((section: SlimSection) =>
-    section.items.filter(isProposition).flatMap((item: SlimItem) => [
-      { params: { id: item.id }, props: { section, item, parent: undefined } },
-      // A sub-measure quoted on its own gets its own URL: it is cited alone often enough to
-      // need one, and the render of a lone sub-measure had never been checked (H-COR-10).
-      ...(item.subMeasures ?? []).map((sub) => ({
-        params: { id: sub.id },
-        props: { section, item: { kind: 'measure' as const, id: sub.id, text: sub.text }, parent: item },
-      })),
-    ]),
-  );
+  return oldMeasures().map((old) => ({
+    params: { id: old.id },
+    props: { sectionId: old.sectionId },
+  }));
 }
-
-const { section, item, parent } = Astro.props;
-const chapter = chapterOf(section);
-const scope = scopeOf(section, item);
-
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Quotation',
-  text: item.text,
-  identifier: item.id,
-  inLanguage: 'fr',
-  isBasedOn: sourceLink(section),
-  citation: sourceLink(section),
-  license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
-  isPartOf: { '@type': 'Book', name: 'L’Avenir en commun', author: 'La France insoumise' },
-};
+const { sectionId } = Astro.props;
 ---
 
-<Base
-  title={`${section.title} — C'est écrit là`}
-  description={item.text.slice(0, 155)}
-  verbatim
->
-  <p class="label">Site non officiel.</p>
-  <p class="label">{chapter.title}</p>
-  <h1>{section.title}</h1>
-
-  <SectionVerbatim item={item} scope={scope} />
-
-  {
-    parent && (
-      <p class="ref">
-        Sous-mesure de <a href={`/m/${parent.id}/`}>{parent.id}</a>.
-      </p>
-    )
-  }
-
-  <p><a class="cta" href={`/s/${section.id}/`}>Lire la section entière</a></p>
-  <p>
-    <a class="source-link" href={sourceLink(section)} rel="noopener">
-      Lire le livre sur melenchon2027.fr
-    </a>
-  </p>
-  <p class="ref">Texte : La France insoumise – L’Avenir en commun, sous licence CC BY-NC-SA 4.0.</p>
-
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
-</Base>
+<Bridge path={`m/${Astro.params.id}`} sectionId={sectionId} />

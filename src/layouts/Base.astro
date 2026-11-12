@@ -2,9 +2,14 @@
 /**
  * The one document shell. Everything the accessibility gate checks at the document level is
  * decided here: lang, a single <main>, the viewport rule, and the theme colours.
+ *
+ * Two builds share it (D15.4): the app, and the holding site of src/holding/. The holding page
+ * gets the bare shell — no site header, no footer navigation, no social tags — because none of
+ * the pages those would point at exist in that build.
  */
 import '../styles/tokens.css';
 import '../styles/base.css';
+import { t } from '../lib/strings.ts';
 
 interface Props {
   title: string;
@@ -21,11 +26,19 @@ interface Props {
   /**
    * Keeps a page out of search indexes. The launch playbook opens indexing at J-3 and not
    * before (12-positionnement-lancement.md §9.4.3); until then nothing we serve should be found
-   * by a search rather than by a link someone chose to send.
+   * by a search rather than by a link someone chose to send. Bridges for the addresses of the
+   * 2025 edition stay out of indexes for good: they are signposts, not pages.
    */
   noindex?: boolean | undefined;
+  /** The home page shows the name as its <h1>: it does not repeat it in a header. */
+  home?: boolean | undefined;
 }
-const { title, description, verbatim = false, noindex = false } = Astro.props;
+const { title, description, verbatim = false, noindex = false, home = false } = Astro.props;
+
+const holding = process.env.CEL_BUILD === 'holding';
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const footer: readonly { href: string; label: string }[] = [{ href: '/', label: t('nav.toc') }];
 ---
 
 <html lang="fr">
@@ -43,6 +56,22 @@ const { title, description, verbatim = false, noindex = false } = Astro.props;
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
     {noindex && <meta name="robots" content="noindex" />}
+    {
+      !holding && (
+        <>
+          {/* Our own address, never the official one: a cross-domain canonical would declare
+              that the official site owns this page and ask for ours to be de-indexed. */}
+          <link rel="canonical" href={canonical} />
+          {/* Link previews carry our words only — never an extract of the programme (D15.7). */}
+          <meta property="og:site_name" content={t('app.name')} />
+          <meta property="og:title" content={title} />
+          {description && <meta property="og:description" content={description} />}
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content={canonical} />
+          <meta property="og:locale" content="fr_FR" />
+        </>
+      )
+    }
     {/* P1: the faces of the first screen are preloaded; the italic is not shipped at all. */}
     <link
       rel="preload"
@@ -64,8 +93,31 @@ const { title, description, verbatim = false, noindex = false } = Astro.props;
     }
   </head>
   <body>
+    {
+      !holding && !home && (
+        <header class="site">
+          <a class="wordmark" href="/">{t('app.name')}</a>
+        </header>
+      )
+    }
     <main>
       <slot />
     </main>
+    {
+      !holding && (
+        <footer class="site">
+          <nav aria-label="Pages du site">
+            <ul>
+              {footer.map((link) => (
+                <li>
+                  <a href={link.href}>{link.label}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <p class="ref">{t('independence.line')}</p>
+        </footer>
+      )
+    }
   </body>
 </html>
