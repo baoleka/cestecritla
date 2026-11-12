@@ -1,0 +1,43 @@
+{
+  // "C'est écrit là" — the HOLDING site (D15.4), and the withdrawal gesture of runbook sheet 9
+  // (D14.10). Static files only: no script, no binding, no variable.
+  //
+  // Why a second file rather than the app's configuration with a flag. A page that stands in
+  // for the app when something has gone wrong must not depend on anything the app depends on.
+  // Measured on 12/11/2026, the first time a deploy of this project's Worker was ever attempted:
+  // it failed with "You need to enable Analytics Engine" (code 10089) — a dashboard opt-in the
+  // app's beacon needs and a holding page has no use for. With no `main` there is no code to
+  // run: no invocation, no log, no /api/ route, nothing that can refuse to deploy.
+  //
+  // What MUST stay identical to wrangler.jsonc: the Worker name and every route. The same
+  // Worker serves the holding page today and the app on launch day; scripts/build-mode.test.ts
+  // fails if the two files drift. `scripts/deploy.ts` picks this file whenever dist/ is a
+  // holding build — never choose it by hand.
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "cestecritla",
+  "compatibility_date": "2026-09-09",
+
+  "routes": [
+    { "pattern": "cestecritla.fr", "custom_domain": true },
+    { "pattern": "www.cestecritla.fr", "custom_domain": true },
+  ],
+  "workers_dev": false,
+  "preview_urls": false,
+
+  // No `binding` and no `run_worker_first`: both only mean something to a script.
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+  },
+
+  "observability": { "enabled": false },
+
+  // `routes` is inherited by an environment that does not define its own: the preview host
+  // must name its hostname here too, or its first deploy would take the apex.
+  "env": {
+    "preview": {
+      "routes": [{ "pattern": "beta.cestecritla.fr", "custom_domain": true }],
+    },
+  },
+}

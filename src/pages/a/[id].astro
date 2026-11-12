@@ -61,7 +61,11 @@ const isSurvey = card.institute !== null;
 const missing = legal.missing.length > 0;
 ---
 
-<Base title={`À savoir — ${section.title} — C'est écrit là`} description={card.text.slice(0, 155)}>
+<Base
+  title={`À savoir — ${section.title} — C'est écrit là`}
+  description={card.text.slice(0, 155)}
+  verbatim
+>
   <p class="label">Site non officiel.</p>
   <p class="label">{chapter.title}</p>
   <h1>{section.title}</h1>

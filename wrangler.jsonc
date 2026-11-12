@@ -47,4 +47,22 @@
   "minify": true,
   "upload_source_maps": false,
   "keep_vars": false,
+
+  // The preview host (D15.12): where the app is built and tested on real phones while the apex
+  // keeps serving the holding page (D15.4). Deployed as the Worker "cestecritla-preview" by
+  // `npm run deploy:preview`; `noindex` comes from public/_headers.
+  //
+  // `routes` is an INHERITABLE key: without the block below this environment would inherit the
+  // apex and take it over on its first deploy (scripts/build-mode.test.ts holds that line).
+  // `vars` and `analytics_engine_datasets` are NOT inherited, so they are repeated — the dataset
+  // under its own name, so that a test session never lands in the figures we publish.
+  "env": {
+    "preview": {
+      "routes": [{ "pattern": "beta.cestecritla.fr", "custom_domain": true }],
+      "vars": {
+        "CORPUS_VERSION": "d29c7422004ab27c",
+      },
+      "analytics_engine_datasets": [{ "binding": "ANALYTICS", "dataset": "cel_events_preview" }],
+    },
+  },
 }

@@ -22,9 +22,10 @@ import { readFileSync } from 'node:fs';
 import { createServer, type Server } from 'node:http';
 import { extname, join, normalize } from 'node:path';
 import { chromium, type Browser, type BrowserContextOptions } from 'playwright';
+import { readBuildMode } from './build-mode.js';
 
 /** Pages that must pass in every condition. Grows as routes land. */
-export const AUDITED_PATHS = [
+const APP_PATHS: readonly string[] = [
   '/',
   '/s/c1-s02/',
   '/s/c7-s08/',
@@ -37,7 +38,13 @@ export const AUDITED_PATHS = [
   '/k/',
   '/carte/',
   '/404.html',
-] as const;
+];
+
+/** The holding build (D15.4) is the page the apex serves: it is audited like any other. */
+const HOLDING_PATHS: readonly string[] = ['/', '/404.html'];
+
+export const AUDITED_PATHS: readonly string[] =
+  readBuildMode() === 'holding' ? HOLDING_PATHS : APP_PATHS;
 
 interface Condition {
   readonly label: string;

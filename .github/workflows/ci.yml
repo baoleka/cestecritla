@@ -66,8 +66,31 @@ jobs:
 
       # Proves the v1/v2 scope rather than declaring it: no ai, no d1_databases, no
       # durable_objects, no ratelimits, no kv_namespaces, no crons (D6.10, D13.1).
+      # `--env=""` names the top-level environment explicitly: since a second environment
+      # exists, wrangler warns on any deploy that does not say which one it means.
       - name: Deploy dry run
-        run: npx wrangler deploy --dry-run --outdir /tmp/wdry
+        run: npx wrangler deploy --dry-run --env="" --outdir /tmp/wdry
+
+      # The preview environment (D15.12) is a second Worker with its own routes, vars and
+      # dataset: none of the three is inherited the way one would assume.
+      - name: Deploy dry run (preview environment)
+        run: npx wrangler deploy --dry-run --env preview --outdir /tmp/wdry-preview
+
+      # The holding site (D15.4) is what the apex actually serves until launch day, and the
+      # withdrawal gesture of runbook sheet 9. It is a second build of the same tree, so it goes
+      # through the same dist-bound gates — and through scripts/deploy.ts, the only caller of
+      # wrangler, which must accept it for the apex and pick the static-only configuration.
+      - name: Build (holding)
+        run: npm run build:holding
+
+      - name: Tests (on the holding build)
+        run: npm test
+
+      - name: Deploy dry run (holding → apex)
+        run: npx tsx scripts/deploy.ts apex --dry-run --outdir /tmp/wdry-holding
+
+      - name: Deploy dry run (holding → preview host)
+        run: npx tsx scripts/deploy.ts preview --dry-run --outdir /tmp/wdry-holding-preview
 
   accessibility:
     runs-on: ubuntu-latest
@@ -88,3 +111,6 @@ jobs:
       # reduced motion.
       - name: Accessibility and reflow
         run: npm run a11y
+
+      - name: Accessibility and reflow (holding build)
+        run: npm run build:holding && npm run a11y

@@ -54,7 +54,11 @@ const jsonLd = {
 };
 ---
 
-<Base title={`${section.title} — C'est écrit là`} description={item.text.slice(0, 155)}>
+<Base
+  title={`${section.title} — C'est écrit là`}
+  description={item.text.slice(0, 155)}
+  verbatim
+>
   <p class="label">Site non officiel.</p>
   <p class="label">{chapter.title}</p>
   <h1>{section.title}</h1>

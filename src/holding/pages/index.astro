@@ -1,0 +1,42 @@
+---
+/**
+ * The holding page (D15.4) — what cestecritla.fr serves while the app moves from the 2025 edition
+ * of the programme to the 2026 one.
+ *
+ * Why it exists: on 5 November 2026 the source replaced "L'Avenir en commun, édition 2025" with
+ * a new edition — a different structure, a rewritten text, and no longer under Creative Commons
+ * (D15.1). The apex was still serving the September share spike, which printed 2025 text under
+ * the label "Texte du programme". A page that says what is true is worth more than a page that
+ * looks finished.
+ *
+ * What it must never contain: a single word of the programme, or a licence line. The link to the
+ * book is the whole point — the legal notice of the source "authorises (and encourages)" links.
+ *
+ * Voice (design/voice.md): impersonal, because this page is reached by a link (D3.12); no word
+ * of failure (rule 5: nothing here is broken); no date promise we could miss; sentences of
+ * fifteen words or fewer.
+ *
+ * Old links (`/m/…`, `/a/…`, `/r/…`) are redirected here by dist/_redirects, written by
+ * scripts/build.ts --holding. One sentence says so, so that nobody thinks they mistyped.
+ */
+import Base from '../../layouts/Base.astro';
+
+/** The 2026 book. Answers 200; the 2025 URL now redirects to it (observed 12/11/2026). */
+const BOOK_URL = 'https://melenchon2027.fr/programme/livre/';
+
+/** French typography (voice.md): a no-break space before the colon, written out so it shows. */
+const description =
+  'Site non officiel. L’Avenir en commun a été réédité le 5 novembre 2026 : ce site se met à jour.';
+---
+
+<Base title="C'est écrit là" description={description}>
+  <p class="label">Site non officiel.</p>
+  <h1>C’est écrit là</h1>
+  <p><cite>L’Avenir en commun</cite> a été réédité le 5 novembre 2026.</p>
+  <p>Ce site s’appuyait sur l’édition 2025. Il se met à jour.</p>
+  <p>Les anciens liens arrivent ici pour l’instant.</p>
+  <p>
+    <a class="cta" href={BOOK_URL} rel="noopener">Lire le programme sur melenchon2027.fr</a>
+  </p>
+  <p><small>Projet militant indépendant.</small></p>
+</Base>

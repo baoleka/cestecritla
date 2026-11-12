@@ -7,17 +7,21 @@
  * measure_split and pose scope_id BEFORE anything downstream — search index, ~970 OG cards,
  * share pages, game pools — consumes the corpus, otherwise each of those has to be regenerated.
  *
- *   npm run build        everything
- *   npm run build:fast   everything except the OG cards and the share pages, for an urgent
- *                        deploy. The runbook claims "~1-2 min" for that path and it has never
- *                        been timed; this script prints the real number.
+ *   npm run build          everything
+ *   npm run build:fast     everything except the OG cards and the share pages, for an urgent
+ *                          deploy. The runbook claims "~1-2 min" for that path and it has never
+ *                          been timed; this script prints the real number.
+ *   npm run build:holding  the holding site (D15.4): two pages, nothing of the programme, and a
+ *                          _redirects file so old links land on it. Also the withdrawal gesture
+ *                          of runbook sheet 9 (D14.10). See scripts/build-mode.ts.
  *
  * The build is deterministic: no timestamp, no random seed, no network. Two runs in a row
  * produce byte-identical output.
  */
 import { execFileSync } from 'node:child_process';
-import { existsSync, statSync } from 'node:fs';
+import { existsSync, mkdirSync, statSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { BUILD_MARKER, holdingRedirects, type BuildMode } from './build-mode.js';
 
 interface Step {
   readonly name: string;
@@ -26,6 +30,8 @@ interface Step {
   readonly writes: readonly string[];
   /** Skipped by `build:fast`. */
   readonly slow?: true;
+  /** Skipped by `build:holding`: the holding site reads no corpus at all. */
+  readonly corpus?: true;
 }
 
 /** Steps not yet written are listed as `pending` so the pipeline says what it does not do. */
@@ -41,6 +47,7 @@ const STEPS: readonly Step[] = [
     script: 'scripts/build-projection.ts',
     reads: ['data/aec-2025.json'],
     writes: ['build/slim.json'],
+    corpus: true,
   },
   {
     name: 'fonts',
@@ -63,6 +70,8 @@ const root = process.cwd();
 const fast = process.argv.includes('--fast');
 /** Light rebrand (D0.17): every step is identical, only the token source changes. */
 const neutral = process.argv.includes('--neutral');
+/** The holding site (D15.4): astro.config.ts switches its source tree on CEL_BUILD. */
+const mode: BuildMode = process.argv.includes('--holding') ? 'holding' : 'app';
 
 function run(step: Step): number {
   for (const input of step.reads) {
@@ -89,20 +98,46 @@ for (const step of STEPS) {
     console.log(`· skipped (fast): ${step.name}`);
     continue;
   }
+  if (mode === 'holding' && step.corpus === true) {
+    console.log(`· skipped (holding): ${step.name}`);
+    continue;
+  }
   const ms = run(step);
   n += 1;
   console.log(`✓ ${step.name} (${String(ms)} ms)`);
 }
 
 const astroStarted = Date.now();
-execFileSync('npx', ['--no-install', 'astro', 'build'], { stdio: 'inherit', cwd: root });
+execFileSync('npx', ['--no-install', 'astro', 'build'], {
+  stdio: 'inherit',
+  cwd: root,
+  env: { ...process.env, CEL_BUILD: mode },
+});
 console.log(`✓ astro build (${String(Date.now() - astroStarted)} ms)`);
 
+// Old links must land somewhere (D15.4). Astro empties dist/ on every build, so a file written
+// here can never survive into a build of the other mode.
+if (mode === 'holding') {
+  writeFileSync(resolve(root, 'dist/_redirects'), holdingRedirects());
+  console.log('✓ dist/_redirects (holding)');
+}
+
+// What the dist-bound gates and the deploy guard read. Written last, so a build that failed
+// half-way leaves the previous marker — and the guard then inspects dist/ itself anyway.
+mkdirSync(resolve(root, 'build'), { recursive: true });
+writeFileSync(resolve(root, BUILD_MARKER), `${JSON.stringify({ mode })}\n`);
+
 const total = Date.now() - t0;
-const slim = statSync(resolve(root, 'build/slim.json')).size;
-console.log(
-  `${fast ? 'build:fast' : 'build'}: ${String(n)} data step(s) + astro, ${(total / 1000).toFixed(1)} s, slim.json ${String(slim)} B`,
-);
-if (PENDING.length > 0) {
-  console.log(`not built yet (${String(PENDING.length)}): ${PENDING.join(' · ')}`);
+const label = mode === 'holding' ? 'build:holding' : fast ? 'build:fast' : 'build';
+const seconds = (total / 1000).toFixed(1);
+if (mode === 'holding') {
+  console.log(`${label}: ${String(n)} data step(s) + astro, ${seconds} s`);
+} else {
+  const slim = statSync(resolve(root, 'build/slim.json')).size;
+  console.log(
+    `${label}: ${String(n)} data step(s) + astro, ${seconds} s, slim.json ${String(slim)} B`,
+  );
+  if (PENDING.length > 0) {
+    console.log(`not built yet (${String(PENDING.length)}): ${PENDING.join(' · ')}`);
+  }
 }

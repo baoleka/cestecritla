@@ -14,6 +14,7 @@
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
+import { HOLDING_PAGES, holdingRedirects, htmlPages, readBuildMode } from './build-mode.js';
 
 type Status =
   /** Built now: the prefix must produce pages in dist/. */
@@ -73,6 +74,11 @@ export const ROUTES: readonly Route[] = [
 ];
 
 const built = existsSync('dist');
+/**
+ * A holding dist/ (D15.4) is judged as what it is: two pages and a redirect file. Read against
+ * the table above it would look like an app with every route missing.
+ */
+const holding = built && readBuildMode() === 'holding';
 
 void test('every prefix names one object, and no two prefixes collide', () => {
   const seen = new Map<string, string>();
@@ -101,6 +107,11 @@ void test('every prefix names one object, and no two prefixes collide', () => {
 void test('every built or reserved route actually answers', () => {
   if (!built) {
     console.log('  (skipped: no dist/ — run `npm run build` first)');
+    return;
+  }
+  if (holding) {
+    // The whole point of the holding build: nothing of the app, so nothing of the programme.
+    assert.deepEqual(htmlPages('dist'), [...HOLDING_PAGES], 'a holding build is its two pages');
     return;
   }
   const missing = ROUTES.filter(
@@ -134,6 +145,9 @@ void test('reserved pages and the 404 say nothing is broken (voice.md rule 5)', 
     'dist/j/index.html',
     'dist/k/index.html',
     'dist/carte/index.html',
+    // The holding page stands in for the whole app: it is the page most exposed to the
+    // temptation of an apology.
+    ...(holding ? ['dist/index.html'] : []),
   ];
   const offenders = pages
     .filter((p) => existsSync(p))
@@ -172,4 +186,31 @@ void test('no page links a reader to a source URL known to be dead (D14.14)', ()
     }
   }
   assert.deepEqual(offenders, [], `links to a dead source URL:\n${offenders.join('\n')}`);
+});
+
+void test('the holding build redirects every old prefix and says only what is true (D15.4)', () => {
+  if (!holding) return;
+  assert.equal(readFileSync('dist/_redirects', 'utf8'), holdingRedirects());
+
+  const html = readFileSync('dist/index.html', 'utf8');
+  // The spike it replaces printed 2025 text under these three: none may survive the takeover.
+  for (const stale of [
+    /Texte du programme/i,
+    /CC BY-NC-SA/i,
+    /programme2025/i,
+    /creativecommons/i,
+  ]) {
+    assert.doesNotMatch(html, stale, `the holding page still carries ${String(stale)}`);
+  }
+  assert.match(html, /Site non officiel\./, 'the independence label is never cut');
+  assert.match(html, /href="https:\/\/melenchon2027\.fr\/programme\/livre\/"/, 'official link');
+  // It announces a fact with its date, and promises none of its own.
+  assert.match(html, /réédité le 5 novembre 2026/);
+});
+
+void test('an app build ships no redirect file yet (bridges are static pages, D15.8)', () => {
+  if (!built || holding) return;
+  // A _redirects rule matches the exact path and shadows any real page under it: the 2025
+  // addresses get generated bridge pages instead. Until then, no file at all.
+  assert.ok(!existsSync('dist/_redirects'), 'dist/_redirects in an app build shadows real pages');
 });

@@ -7,8 +7,18 @@ import { defineConfig } from 'astro/config';
 // Astro static with inlined CSS = LCP 935 ms, 1 517 o of initial JS, critical path 54 894 o,
 // against React 19 + Vite CSR at 2 059 ms / 64 726 o / 118 231 o. Inlining the stylesheet is
 // worth -525 ms of LCP on its own (perf-budget.md §1.2).
+//
+// Two source trees, one configuration (D15.4). `npm run build:holding` sets CEL_BUILD=holding and
+// Astro then reads its pages from src/holding/ — two pages that import the same layout, tokens
+// and fonts as the app. Switching `srcDir` rather than filtering routes means the holding build
+// CANNOT emit a page of the app by accident: those files are simply outside its tree. Everything
+// else below (CSP hashes, inlined stylesheet, trailing slashes) applies to both, so the page that
+// stands in for the app is held to the same gates as the app.
+const holding = process.env.CEL_BUILD === 'holding';
+
 export default defineConfig({
   output: 'static',
+  srcDir: holding ? './src/holding' : './src',
   site: 'https://cestecritla.fr',
   compressHTML: true,
   trailingSlash: 'always',

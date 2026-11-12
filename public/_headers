@@ -6,6 +6,15 @@
 # (astro.config.ts, experimental.csp). The two policies are enforced independently, so no
 # directive may appear in both — a header "style-src 'self'" would intersect with the meta
 # policy and block the inlined stylesheet.
+#
+# HOW RULES COMBINE — read this before adding one. Every rule that matches a request applies, in
+# file order, and a header set by two of them is JOINED with a comma, not replaced (Cloudflare
+# docs, "Custom headers"). Measured on 12/11/2026 under `wrangler dev`, before this file was ever
+# deployed: as first written, it served the fonts with
+# "public, max-age=300, public, max-age=31536000, immutable" — two max-age values, which a cache
+# is entitled to treat as stale — and the kill switch with "public, max-age=300, no-cache".
+# A specific rule must first DETACH what "/*" set ("! Header-Name"), then set its own value.
+# "/*" stays first; scripts/headers.test.ts holds both points.
 
 /*
   Content-Security-Policy: frame-ancestors 'none'; base-uri 'none'; form-action 'self'; upgrade-insecure-requests
@@ -15,32 +24,46 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Cache-Control: public, max-age=300
 
+# The preview host (D15.12) is where the app is built before launch: never indexed. An absolute
+# URL scopes the rule to that hostname, so the apex is untouched.
+https://beta.cestecritla.fr/*
+  X-Robots-Tag: noindex
+
 # Content-addressed by the build: safe to freeze for a year.
 /_astro/*
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 /fonts/*
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
 # Share previews are versioned by corpus_version in their path (D13.2), so a re-crawl changes
 # the URL rather than the bytes: a permanent link never breaks and caches renew on their own.
 /og/*
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
 # The only client-side kill switch (D12.8). Revalidated on every start, BEFORE effectiveDate().
 # Never immutable, never stale-while-revalidate: those would make the L49 freeze unreachable.
 /flags.json
+  ! Cache-Control
   Cache-Control: no-cache
   Content-Type: application/json; charset=utf-8
 
 # The service worker is the only component able to make an outage permanent (H-PLA-8).
 /sw.js
+  ! Cache-Control
   Cache-Control: no-cache
 /sw-kill.js
+  ! Cache-Control
   Cache-Control: no-cache
 
-# The beacon is the only server route in v1/v2. The Worker sets these itself; repeated here
-# so an asset can never be served under /api/ with a cacheable or referrer-leaking policy.
+# The beacon is the only server route in v1/v2. The Worker sets these itself (this file is not
+# applied to a Worker's own responses); repeated here so an asset can never be served under
+# /api/ with a cacheable or referrer-leaking policy.
 /api/*
+  ! Cache-Control
+  ! Referrer-Policy
   Cache-Control: no-store
   X-Robots-Tag: noindex
   Referrer-Policy: no-referrer

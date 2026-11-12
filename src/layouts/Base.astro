@@ -9,8 +9,17 @@ import '../styles/base.css';
 interface Props {
   title: string;
   description?: string | undefined;
+  /**
+   * Set by pages that render a verbatim block, the only place Gowun Batang is used.
+   *
+   * It used to be preloaded on every page: 19 652 bytes fetched at high priority by the home
+   * page, the 404 and the reserved pages, none of which draw a single glyph with it. A preload
+   * is a promise that the first screen needs the file — design/perf-budget.md §1.7 says so in
+   * as many words — so it is opt-in.
+   */
+  verbatim?: boolean | undefined;
 }
-const { title, description } = Astro.props;
+const { title, description, verbatim = false } = Astro.props;
 ---
 
 <html lang="fr">
@@ -27,7 +36,7 @@ const { title, description } = Astro.props;
     <meta name="theme-color" content="#212320" media="(prefers-color-scheme: dark)" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
-    {/* P1: the two faces of the first screen are preloaded; the italic is not shipped at all. */}
+    {/* P1: the faces of the first screen are preloaded; the italic is not shipped at all. */}
     <link
       rel="preload"
       href="/fonts/PublicSans-Variable-latin.woff2"
@@ -35,13 +44,17 @@ const { title, description } = Astro.props;
       type="font/woff2"
       crossorigin
     />
-    <link
-      rel="preload"
-      href="/fonts/GowunBatang-Regular-latin.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
+    {
+      verbatim && (
+        <link
+          rel="preload"
+          href="/fonts/GowunBatang-Regular-latin.woff2"
+          as="font"
+          type="font/woff2"
+          crossorigin
+        />
+      )
+    }
   </head>
   <body>
     <main>

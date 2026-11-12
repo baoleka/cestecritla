@@ -113,6 +113,13 @@ button,
   cursor: pointer;
 }
 
+/* The title of a work is marked up as <cite>, for what it is, and drawn upright: no italic face
+   is shipped (see the @font-face note above), so a browser would synthesise one by slanting the
+   upright — the "faux italic" the ban list names. Markup says it; the eye does not need to. */
+cite {
+  font-style: normal;
+}
+
 /* Correction 12: no rendered text below 12 px, no exception. */
 .label,
 .ref,
