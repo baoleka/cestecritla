@@ -1,8 +1,340 @@
 {
   "meta": {
     "corpus_version": "27ee6e713fe25e7e",
-    "count": 0,
-    "words": 0
+    "count": 33,
+    "words": 646
   },
-  "quotes": []
+  "quotes": [
+    {
+      "id": "p1c1-s01-k01",
+      "text": "Inscrire dans la Constitution le principe de la « règle verte », selon laquelle on ne prélève pas davantage sur la nature que ce qu’elle est en état de reconstituer",
+      "words": 30,
+      "sha256": "2f92fa38ada4c78275daa31dd695a061f8384e7fa56d51464ff67ac1a245f181",
+      "url": "https://melenchon2027.fr/programme/livre/pour-une-bifurcation-ecologique-et-sociale/chapitre1/#la-bifurcation-ecologique-pour-une-societe-de-l-harmonie:~:text=Inscrire%20dans%20la%20Constitution",
+      "used_by": [
+        "mot:regle-verte"
+      ]
+    },
+    {
+      "id": "p1c1-s01-m03",
+      "text": "Adopter des lois-cadres instaurant une planification écologique et démocratique coordonnant les échelles nationale et locale",
+      "words": 15,
+      "sha256": "b2a95f4530b1c1efaaef12e2566250c60e3a7ef15a10d5ee3ad44c63716b1ab9",
+      "url": "https://melenchon2027.fr/programme/livre/pour-une-bifurcation-ecologique-et-sociale/chapitre1/#la-bifurcation-ecologique-pour-une-societe-de-l-harmonie:~:text=Adopter%20des%20lois%2Dcadres%20instaurant",
+      "used_by": [
+        "mot:planification-ecologique"
+      ]
+    },
+    {
+      "id": "p1c2-s01-m06",
+      "text": "Instaurer un contrat de bifurcation écologique garantissant les droits sociaux, la formation et la rémunération des salariés pour leur assurer un cadre protecteur en cas de reconversion d’une entreprise",
+      "words": 29,
+      "sha256": "5ef1f10b5aff91d573a20535b7e014f23b8fb5adf576e25592f4b5396b0c7989",
+      "url": "https://melenchon2027.fr/programme/livre/pour-une-bifurcation-ecologique-et-sociale/chapitre2/#reindustrialiser-et-relocaliser-pour-assurer-notre-independance:~:text=Instaurer%20un%20contrat%20de",
+      "used_by": [
+        "mot:bifurcation-ecologique"
+      ]
+    },
+    {
+      "id": "p1c2-s02-k01",
+      "text": "Lancer un grand plan d’investissements écologiquement et socialement utiles",
+      "words": 9,
+      "sha256": "78f1960927bd4124eb57c3ffcdc5bb4b0c0c221948d465404a441873bd7aba70",
+      "url": "https://melenchon2027.fr/programme/livre/pour-une-bifurcation-ecologique-et-sociale/chapitre2/#investir-pour-lancer-la-bifurcation-de-notre-economie:~:text=Lancer%20un%20grand%20plan",
+      "used_by": [
+        "mot:bifurcation-ecologique"
+      ]
+    },
+    {
+      "id": "p1c3-s03-m08",
+      "text": "Supprimer les lignes aériennes intérieures quand l’alternative en train est inférieure à quatre heures",
+      "words": 14,
+      "sha256": "0bc9249e0a594bae6cfe843986437fde783351f59f044fc17c602309681f5aae",
+      "url": "https://melenchon2027.fr/programme/livre/pour-une-bifurcation-ecologique-et-sociale/chapitre3/#developper-les-transports-publics-ecologiques-repenser-la-mobilite-individuelle:~:text=Supprimer%20les%20lignes%20a%C3%A9riennes",
+      "used_by": [
+        "riposte:rip-10"
+      ]
+    },
+    {
+      "id": "p1c3-s04-m03",
+      "text": "Planifier la fermeture progressive des centrales nucléaires existantes en ne prolongeant pas au-delà de 60 ans leur durée de vie et arrêter le programme de nouveau nucléaire (EPR2)",
+      "words": 28,
+      "sha256": "e6779437f1c7b773cadb1108bb0db95d661a7f1c88ccd4d8efd4b9e6e5c33ff8",
+      "url": "https://melenchon2027.fr/programme/livre/pour-une-bifurcation-ecologique-et-sociale/chapitre3/#organiser-le-100-d-energies-renouvelables:~:text=Planifier%20la%20fermeture%20progressive",
+      "used_by": [
+        "riposte:rip-13"
+      ]
+    },
+    {
+      "id": "p1c3-s04-m06",
+      "text": "Planifier le déploiement de technologies de stockage d’énergie et de mécanismes nécessaires à l’équilibre d’un système énergétique 100 % renouvelable",
+      "words": 20,
+      "sha256": "ff2b98df0864e65ce29f64c2340212455eee6fe79cb9df2e129c32b2406f5601",
+      "url": "https://melenchon2027.fr/programme/livre/pour-une-bifurcation-ecologique-et-sociale/chapitre3/#organiser-le-100-d-energies-renouvelables:~:text=Planifier%20le%20d%C3%A9ploiement%20de",
+      "used_by": [
+        "riposte:rip-13"
+      ]
+    },
+    {
+      "id": "p1c3-s08-k01",
+      "text": "Instaurer une agriculture relocalisée, diversifiée et écologique et créer 500 000 emplois agricoles",
+      "words": 13,
+      "sha256": "48b2943cc1c65285e68058e21620c9dea2ba1fe38218c5b0b4c3dc649dcceca0",
+      "url": "https://melenchon2027.fr/programme/livre/pour-une-bifurcation-ecologique-et-sociale/chapitre3/#souverainete-alimentaire-et-revolution-agricole-pour-une-agriculture-ecologique-et-paysanne:~:text=Instaurer%20une%20agriculture%20relocalis%C3%A9e",
+      "used_by": [
+        "riposte:rip-09"
+      ]
+    },
+    {
+      "id": "p1c3-s08-m01",
+      "text": "Garantir des prix rémunérateurs aux producteurs en instaurant des prix planchers pour les agriculteurs, et créer une caisse de défaisance pour reprendre les dettes agricoles des exploitants qui se sont convertis au 100 % bio",
+      "words": 35,
+      "sha256": "96a1e72a4650356e7018df74aadf1fd6d98dfb8e3f5f5d22ee5bc551dcb29b8e",
+      "url": "https://melenchon2027.fr/programme/livre/pour-une-bifurcation-ecologique-et-sociale/chapitre3/#souverainete-alimentaire-et-revolution-agricole-pour-une-agriculture-ecologique-et-paysanne:~:text=Garantir%20des%20prix%20r%C3%A9mun%C3%A9rateurs",
+      "used_by": [
+        "riposte:rip-09"
+      ]
+    },
+    {
+      "id": "p2c1-s01-k01",
+      "text": "Revenir sur les privatisations (aéroports, autoroutes, Française des jeux, etc.)",
+      "words": 10,
+      "sha256": "cfac8c5779b60b63ec733757a3d563768dc9cf27e6ed843c5197e681548f255d",
+      "url": "https://melenchon2027.fr/programme/livre/une-economie-au-service-des-besoins/chapitre1/#mettre-fin-au-pillage-economique-de-la-nation:~:text=Revenir%20sur%20les%20privatisations",
+      "used_by": [
+        "riposte:rip-15"
+      ]
+    },
+    {
+      "id": "p2c1-s01-m04",
+      "text": "Constituer des pôles publics dans les secteurs stratégiques : médicament, transports et mobilité, banque et assurance, énergie, armement, mines, satellite",
+      "words": 20,
+      "sha256": "cb8ba2c984d6f4d7ec568a63e7a6b81964b68663446db02698717d80ffe8abaa",
+      "url": "https://melenchon2027.fr/programme/livre/une-economie-au-service-des-besoins/chapitre1/#mettre-fin-au-pillage-economique-de-la-nation:~:text=Constituer%20des%20p%C3%B4les%20publics",
+      "used_by": [
+        "riposte:rip-15"
+      ]
+    },
+    {
+      "id": "p2c2-s02-k01",
+      "text": "Rendre l’impôt sur le revenu plus progressif avec un barème à 14 tranches contre 5 aujourd’hui",
+      "words": 16,
+      "sha256": "bfbcdc7b899d7d3fb1324f83fca03b23ceda6dfdbd60eed45d5936f9641db1f1",
+      "url": "https://melenchon2027.fr/programme/livre/une-economie-au-service-des-besoins/chapitre2/#faire-la-revolution-fiscale:~:text=Rendre%20l%E2%80%99imp%C3%B4t%20sur%20le",
+      "used_by": [
+        "riposte:rip-01"
+      ]
+    },
+    {
+      "id": "p2c2-s02-m06",
+      "text": "Exonérer de droits de succession les héritages inférieurs à 150 000 euros",
+      "words": 12,
+      "sha256": "d22bae21acc30a0afd5835b36311afb045c89f9a59af7932eabf8658fce40ac9",
+      "url": "https://melenchon2027.fr/programme/livre/une-economie-au-service-des-besoins/chapitre2/#faire-la-revolution-fiscale:~:text=Exon%C3%A9rer%20de%20droits%20de",
+      "used_by": [
+        "riposte:rip-01"
+      ]
+    },
+    {
+      "id": "p2c2-s03-k01",
+      "text": "Porter immédiatement le SMIC mensuel à 1 700 euros net et indexer les salaires sur l’inflation dans le privé comme dans la fonction publique",
+      "words": 24,
+      "sha256": "dd01234c845b18ab83e9d1017fda01c930328402895194e56cc453592de7e9c0",
+      "url": "https://melenchon2027.fr/programme/livre/une-economie-au-service-des-besoins/chapitre2/#augmenter-les-salaires:~:text=Porter%20imm%C3%A9diatement%20le%20SMIC",
+      "used_by": [
+        "riposte:rip-04"
+      ]
+    },
+    {
+      "id": "p2c3-s04-m04",
+      "text": "Réinstaurer un circuit du Trésor pour sortir la dette publique de la main des marchés financiers",
+      "words": 16,
+      "sha256": "7acd596377e5218d147a99ec3dff7632f6d4b49ed83b0ceff14d50f6272c5349",
+      "url": "https://melenchon2027.fr/programme/livre/une-economie-au-service-des-besoins/chapitre3/#refuser-le-chantage-definanciariser-la-dette-publique:~:text=R%C3%A9instaurer%20un%20circuit%20du",
+      "used_by": [
+        "riposte:rip-03"
+      ]
+    },
+    {
+      "id": "p2c3-s05-m01",
+      "text": "Créer une caisse de péréquation interentreprises, financée grâce à un barème progressif, pour aider les TPE-PME à surmonter des difficultés temporaires de trésorerie",
+      "words": 23,
+      "sha256": "fee606818ed606b52a315047dfe36ad551111ca02fc521df0147930cf4159192",
+      "url": "https://melenchon2027.fr/programme/livre/une-economie-au-service-des-besoins/chapitre3/#un-nouveau-pacte-productif-pour-les-petites-entreprises:~:text=Cr%C3%A9er%20une%20caisse%20de",
+      "used_by": [
+        "riposte:rip-04"
+      ]
+    },
+    {
+      "id": "p3c1-s07-k01",
+      "text": "Abroger la réforme Macron passant l’âge de départ à la retraite à 64 ans, puis abaisser l’âge de départ jusqu’à restaurer le droit à la retraite à 60 ans à taux plein pour 40 annuités de cotisations",
+      "words": 37,
+      "sha256": "fe4d90bbad167952357dd9a8d2b6331bb0da0267e5b2a7452c8349e48ea16657",
+      "url": "https://melenchon2027.fr/programme/livre/mettre-en-securite-sociale/chapitre1/#garantir-une-retraite-digne:~:text=Abroger%20la%20r%C3%A9forme%20Macron",
+      "used_by": [
+        "riposte:rip-02"
+      ]
+    },
+    {
+      "id": "p3c1-s07-m03",
+      "text": "Supprimer les avantages fiscaux de la retraite par capitalisation pour financer le système par répartition",
+      "words": 15,
+      "sha256": "2c89531887557dd58d1f11ab5c6b01f8f89d4f32bf8cc5ef5c3370d527894571",
+      "url": "https://melenchon2027.fr/programme/livre/mettre-en-securite-sociale/chapitre1/#garantir-une-retraite-digne:~:text=Supprimer%20les%20avantages%20fiscaux",
+      "used_by": [
+        "riposte:rip-02"
+      ]
+    },
+    {
+      "id": "p4c1-s02-k01",
+      "text": "Consacrer une « règle bleue » sur le principe de la « règle verte » : ne pas prélever, ni transformer, ni polluer le cycle de l’eau au-delà de ce que la nature peut reconstituer",
+      "words": 35,
+      "sha256": "dc4cd3d14b167d63c3f48864570098c5bfb9ddc8c4e81f8a73face59d517ee3c",
+      "url": "https://melenchon2027.fr/programme/livre/le-gout-du-futur-aux-nouvelles-frontieres-de-l-humanite/chapitre1/#l-eau-enjeu-central-pour-l-humanite:~:text=Consacrer%20une%20%C2%AB%E2%80%AFr%C3%A8gle",
+      "used_by": [
+        "mot:regle-verte"
+      ]
+    },
+    {
+      "id": "p5c1-s01-k01",
+      "text": "Instaurer le référendum d’initiative citoyenne (RIC), par lequel les citoyens qui réunissent suffisamment de signatures peuvent révoquer des élus, proposer ou abroger une loi et modifier la Constitution",
+      "words": 28,
+      "sha256": "1ab56a0a89197563108197c9003fdafa394798fbff985305613b6c3e790e36a3",
+      "url": "https://melenchon2027.fr/programme/livre/fonder-la-6e-republique/chapitre1/#une-republique-de-la-souverainete-populaire-permanente:~:text=Instaurer%20le%20r%C3%A9f%C3%A9rendum%20d%E2%80%99initiative",
+      "used_by": [
+        "riposte:rip-08"
+      ]
+    },
+    {
+      "id": "p5c1-s02-k01",
+      "text": "Convoquer une Constituante pour passer à la 6e République",
+      "words": 9,
+      "sha256": "0d171bfb41481d8243a4b6c4c7d8f96f3e1ef31e790361dced029cb08822e519",
+      "url": "https://melenchon2027.fr/programme/livre/fonder-la-6e-republique/chapitre1/#reunir-une-assemblee-constituante-pour-passer-a-la-6e-republique:~:text=Convoquer%20une%20Constituante%20pour",
+      "used_by": [
+        "mot:6e-republique"
+      ]
+    },
+    {
+      "id": "p5c1-s02-m02",
+      "text": "Le projet de Constitution proposé par la Constituante sera soumis à référendum après ses travaux",
+      "words": 15,
+      "sha256": "68ed2d74e8dd364719b50b6b667158d78ed370da16b0d8da25225808822491bd",
+      "url": "https://melenchon2027.fr/programme/livre/fonder-la-6e-republique/chapitre1/#reunir-une-assemblee-constituante-pour-passer-a-la-6e-republique:~:text=Le%20projet%20de%20Constitution",
+      "used_by": [
+        "mot:6e-republique",
+        "riposte:rip-08"
+      ]
+    },
+    {
+      "id": "p5c1-s05-k01",
+      "text": "Garantir la liberté de conscience et l’application stricte de la laïcité",
+      "words": 11,
+      "sha256": "24b87ea33d5d5b85b0921cc7ef6577ac973a547bfb608175563d783ab7285a95",
+      "url": "https://melenchon2027.fr/programme/livre/fonder-la-6e-republique/chapitre1/#une-republique-laique:~:text=Garantir%20la%20libert%C3%A9%20de",
+      "used_by": [
+        "riposte:rip-11"
+      ]
+    },
+    {
+      "id": "p5c1-s05-m04",
+      "text": "Combattre tous les communautarismes et l’usage politique des religions",
+      "words": 9,
+      "sha256": "41ae6b26d8f233b558b47169267271eac5f89d2e277d73cfd350af73ea4088e8",
+      "url": "https://melenchon2027.fr/programme/livre/fonder-la-6e-republique/chapitre1/#une-republique-laique:~:text=Combattre%20tous%20les%20communautarismes",
+      "used_by": [
+        "riposte:rip-11"
+      ]
+    },
+    {
+      "id": "p5c2-s03-k01",
+      "text": "Rétablir la police de proximité comme pilier du service public et démanteler les brigades anticriminalité (BAC) ainsi que les brigades de répression des actions violentes motorisées (BRAV-M)",
+      "words": 27,
+      "sha256": "810312a8519264885c5df271bcb0ae020298ffed5a93d3cbfa5a19b01b2186f4",
+      "url": "https://melenchon2027.fr/programme/livre/fonder-la-6e-republique/chapitre2/#une-police-de-proximite-au-service-de-la-surete-des-citoyens:~:text=R%C3%A9tablir%20la%20police%20de",
+      "used_by": [
+        "riposte:rip-06"
+      ]
+    },
+    {
+      "id": "p5c2-s03-m04",
+      "text": "Faire de la lutte contre la criminalité organisée, les trafics, la corruption et la délinquance financière une priorité en renforçant les effectifs spécialisés",
+      "words": 23,
+      "sha256": "66b9852b4f538a40abc18951d3f9525e027da157922b6a1375388fa66cda06b1",
+      "url": "https://melenchon2027.fr/programme/livre/fonder-la-6e-republique/chapitre2/#une-police-de-proximite-au-service-de-la-surete-des-citoyens:~:text=Faire%20de%20la%20lutte",
+      "used_by": [
+        "riposte:rip-06"
+      ]
+    },
+    {
+      "id": "p5c3-s01-m04",
+      "text": "Augmenter l’enveloppe budgétaire des communes rurales par la création d’un fonds de soutien communal, notamment pour recruter et revaloriser les agents",
+      "words": 21,
+      "sha256": "28edf1fe8ace565118d8e374ffb92102822c72d2c6938b2883024a95713372e8",
+      "url": "https://melenchon2027.fr/programme/livre/fonder-la-6e-republique/chapitre3/#une-republique-affirmant-le-role-central-des-communes:~:text=Augmenter%20l%E2%80%99enveloppe%20budg%C3%A9taire%20des",
+      "used_by": [
+        "riposte:rip-07"
+      ]
+    },
+    {
+      "id": "p5c3-s02-m05",
+      "text": "Mettre en place des assemblées citoyennes régionales pour débattre des projets d’aménagement et d’investissement en lien avec la planification écologique",
+      "words": 20,
+      "sha256": "b5eec1f63e954c8c77615dbf3ae9078bfdaad40afc1d5f5a2934cef8c31accae",
+      "url": "https://melenchon2027.fr/programme/livre/fonder-la-6e-republique/chapitre3/#l-organisation-de-l-etat-au-service-de-la-planification-ecologique:~:text=Mettre%20en%20place%20des%20assembl%C3%A9es",
+      "used_by": [
+        "mot:planification-ecologique"
+      ]
+    },
+    {
+      "id": "p5c3-s04-m02",
+      "text": "Mettre en place une garantie universelle des loyers créant un filet de sécurité contre les impayés de loyers pour les locataires comme pour les propriétaires",
+      "words": 25,
+      "sha256": "4142c515b63c0fda5b9e3d791dd9bc01db1413d917176ba0f3416c31bcc759b1",
+      "url": "https://melenchon2027.fr/programme/livre/fonder-la-6e-republique/chapitre3/#garantir-le-droit-au-logement:~:text=Mettre%20en%20place%20une",
+      "used_by": [
+        "riposte:rip-14"
+      ]
+    },
+    {
+      "id": "p5c3-s04-m04",
+      "text": "Geler les loyers le temps de déployer un encadrement des loyers partout sur le territoire et à la baisse dans les grandes villes",
+      "words": 23,
+      "sha256": "458a6d2ff3d266d4be1e752889c6969631162908cdcebd5b5645927f23e64b4b",
+      "url": "https://melenchon2027.fr/programme/livre/fonder-la-6e-republique/chapitre3/#garantir-le-droit-au-logement:~:text=Geler%20les%20loyers%20le",
+      "used_by": [
+        "riposte:rip-14"
+      ]
+    },
+    {
+      "id": "p6c2-s05-k01",
+      "text": "Reconnaître le crime d’écocide",
+      "words": 4,
+      "sha256": "092800950b9c2ce61cf1bc1375a6a26cac1eb2d9e97b34660c5c48b566a9718b",
+      "url": "https://melenchon2027.fr/programme/livre/un-monde-ordonne/chapitre2/#etendre-les-protections-du-droit-international-aux-biens-communs-planetaires",
+      "used_by": [
+        "mot:ecocide"
+      ]
+    },
+    {
+      "id": "p6c2-s05-m02",
+      "text": "Soutenir la création d’un tribunal international de justice climatique et environnementale",
+      "words": 11,
+      "sha256": "b0955973023990b2ff15f956305b3f6ddf8dd5af14da80871094a3185d7a489e",
+      "url": "https://melenchon2027.fr/programme/livre/un-monde-ordonne/chapitre2/#etendre-les-protections-du-droit-international-aux-biens-communs-planetaires:~:text=Soutenir%20la%20cr%C3%A9ation%20d%E2%80%99un",
+      "used_by": [
+        "mot:ecocide"
+      ]
+    },
+    {
+      "id": "p6c3-s02-k01",
+      "text": "Faciliter l’accès aux visas et instituer la carte de séjour de dix ans comme titre de séjour de référence",
+      "words": 19,
+      "sha256": "aaa56d3e34e23837ffe2de929d977e8d4905b5b9551d416dffdd0c990c32878e",
+      "url": "https://melenchon2027.fr/programme/livre/un-monde-ordonne/chapitre3/#pour-une-politique-migratoire-humaniste-et-realiste:~:text=Faciliter%20l%E2%80%99acc%C3%A8s%20aux%20visas",
+      "used_by": [
+        "riposte:rip-05"
+      ]
+    }
+  ]
 }

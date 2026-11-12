@@ -1,0 +1,201 @@
+{
+  "meta": {
+    "title_fr": "Mots du programme — édition 2026",
+    "version": "1.0.0",
+    "corpus_version": "27ee6e713fe25e7e",
+    "note_fr": "Cinq cartes-concept. « plain », « why » et la réponse à l'objection sont rédigés par nous ; chaque phrase s'appuie sur les propositions listées, épinglées par empreinte. Réécrit le 12/11/2026 sur le texte de l'édition 2026 ; rien n'est publié avant relecture (D0.27)."
+  },
+  "entries": [
+    {
+      "id": "regle-verte",
+      "term": "règle verte",
+      "plain": "La règle verte fixe une limite à ce qu'on prend à la nature : pas plus que ce qu'elle peut reconstituer. Le programme veut l'inscrire dans la Constitution.",
+      "why": "Les grands projets inutiles seraient mis en pause, puis réévalués selon cette règle. Pour l'eau, une « règle bleue » applique le même principe.",
+      "objection": {
+        "text": "La règle verte, c'est juste un slogan.",
+        "answer": "Elle serait écrite dans la Constitution. Elle servirait à réévaluer les grands projets inutiles, imposés et écocidaires."
+      },
+      "supports": [
+        {
+          "id": "p1c1-s01-k01",
+          "sha256": "2f92fa38ada4c78275daa31dd695a061f8384e7fa56d51464ff67ac1a245f181",
+          "quote": true
+        },
+        {
+          "id": "p1c1-s01-m01",
+          "sha256": "4962adcc2bcc62362796b659b07c1e7c1a5801a16da1bb3da400b7c4470adfa7"
+        },
+        {
+          "id": "p4c1-s02-k01",
+          "sha256": "dc4cd3d14b167d63c3f48864570098c5bfb9ddc8c4e81f8a73face59d517ee3c",
+          "quote": true
+        }
+      ],
+      "related": [
+        "planification-ecologique",
+        "bifurcation-ecologique",
+        "ecocide"
+      ],
+      "review": {
+        "status": "pending",
+        "by": null,
+        "on": null
+      }
+    },
+    {
+      "id": "bifurcation-ecologique",
+      "term": "bifurcation écologique",
+      "plain": "La bifurcation écologique, c'est le changement de cap de l'économie que propose le programme. Il la lance par un grand plan d'investissements, utiles à l'écologie et à la société.",
+      "why": "Si ton entreprise se reconvertit, un contrat de bifurcation écologique te protège : droits sociaux, formation, rémunération. Les aides publiques aux entreprises dépendent des objectifs du Plan.",
+      "objection": {
+        "text": "La bifurcation écologique va détruire des emplois.",
+        "answer": "Le programme prévoit un contrat de bifurcation écologique pour les salariés des entreprises qui se reconvertissent. Il veut aussi produire en France l'acier décarboné."
+      },
+      "supports": [
+        {
+          "id": "p1c2-s02-k01",
+          "sha256": "78f1960927bd4124eb57c3ffcdc5bb4b0c0c221948d465404a441873bd7aba70",
+          "quote": true
+        },
+        {
+          "id": "p1c2-s01-m06",
+          "sha256": "5ef1f10b5aff91d573a20535b7e014f23b8fb5adf576e25592f4b5396b0c7989",
+          "quote": true
+        },
+        {
+          "id": "p1c2-s02-m01",
+          "sha256": "90783ee7fb79be3974d29bd360c7a269306334bc015519e73f1f2bbbbc342cd4"
+        },
+        {
+          "id": "p1c2-s02-m03",
+          "sha256": "feed0f5e00c80eab4e62719f0237ff849bf7318718f60d55665c23a563c4ec18"
+        }
+      ],
+      "related": [
+        "regle-verte",
+        "planification-ecologique"
+      ],
+      "review": {
+        "status": "pending",
+        "by": null,
+        "on": null
+      }
+    },
+    {
+      "id": "6e-republique",
+      "term": "6e République",
+      "plain": "La 6e République, c'est une nouvelle Constitution. Un référendum lance le processus. Une Assemblée constituante écrit le texte, puis un second référendum le valide.",
+      "why": "Le programme y attache un régime parlementaire, et de nouveaux droits. Parmi eux, le référendum d'initiative citoyenne : révoquer des élus, proposer ou abroger une loi.",
+      "objection": {
+        "text": "Ce seront encore les mêmes politiciens qui écriront la Constitution.",
+        "answer": "Un référendum décide de la composition de l'Assemblée constituante. Son projet est ensuite soumis au vote."
+      },
+      "supports": [
+        {
+          "id": "p5c1-s02-k01",
+          "sha256": "0d171bfb41481d8243a4b6c4c7d8f96f3e1ef31e790361dced029cb08822e519",
+          "quote": true
+        },
+        {
+          "id": "p5c1-s02-m01",
+          "sha256": "c27c1a2a0f7abc1fa5fd95e7464eaf277375a043516e93653a91642860dc7767"
+        },
+        {
+          "id": "p5c1-s02-m02",
+          "sha256": "68ed2d74e8dd364719b50b6b667158d78ed370da16b0d8da25225808822491bd",
+          "quote": true
+        },
+        {
+          "id": "p5c1-s03-k01",
+          "sha256": "1947995d4d94f00cf637dd15ab27bffb5d38cfc22068ab996676c5a7e04787f7"
+        },
+        {
+          "id": "p5c1-s01-k01",
+          "sha256": "1ab56a0a89197563108197c9003fdafa394798fbff985305613b6c3e790e36a3"
+        }
+      ],
+      "related": [
+        "planification-ecologique"
+      ],
+      "review": {
+        "status": "pending",
+        "by": null,
+        "on": null
+      }
+    },
+    {
+      "id": "planification-ecologique",
+      "term": "planification écologique",
+      "plain": "La planification écologique organise la transition par des choix collectifs, sur le temps long. Le programme veut des lois-cadres pour une planification « écologique et démocratique », du national au local.",
+      "why": "Un conseil à la planification écologique l'organise. Les communes sont impliquées dans les décisions et les investissements.",
+      "objection": {
+        "text": "La planification, c'est l'État qui décide tout, d'en haut ?",
+        "answer": "Le programme implique pleinement les communes. Des assemblées citoyennes régionales débattent des projets d'aménagement et d'investissement."
+      },
+      "supports": [
+        {
+          "id": "p1c1-s01-m03",
+          "sha256": "b2a95f4530b1c1efaaef12e2566250c60e3a7ef15a10d5ee3ad44c63716b1ab9",
+          "quote": true
+        },
+        {
+          "id": "p1c1-s01-m05",
+          "sha256": "98336107c9500fad126429e3d0b22b4bf3a77d818d96a7e2f387666ae38cf96a"
+        },
+        {
+          "id": "p5c3-s02-m01",
+          "sha256": "c7546d0166f589610c86bffa5487c042e77ddbcdaebcd459443c75e34573e9fd"
+        },
+        {
+          "id": "p5c3-s02-m05",
+          "sha256": "b5eec1f63e954c8c77615dbf3ae9078bfdaad40afc1d5f5a2934cef8c31accae",
+          "quote": true
+        }
+      ],
+      "related": [
+        "regle-verte",
+        "bifurcation-ecologique"
+      ],
+      "review": {
+        "status": "pending",
+        "by": null,
+        "on": null
+      }
+    },
+    {
+      "id": "ecocide",
+      "term": "écocide",
+      "plain": "L'écocide, c'est la destruction grave de la nature. Le programme veut que ce crime soit reconnu.",
+      "why": "Le programme soutient la création d'un tribunal international de justice climatique et environnementale. Il soutient aussi un traité qui oblige les multinationales à respecter l'environnement.",
+      "objection": {
+        "text": "Reconnaître un crime d'écocide, c'est symbolique.",
+        "answer": "Le programme l'adosse à un tribunal international et à un traité contraignant pour les multinationales."
+      },
+      "supports": [
+        {
+          "id": "p6c2-s05-k01",
+          "sha256": "092800950b9c2ce61cf1bc1375a6a26cac1eb2d9e97b34660c5c48b566a9718b",
+          "quote": true
+        },
+        {
+          "id": "p6c2-s05-m02",
+          "sha256": "b0955973023990b2ff15f956305b3f6ddf8dd5af14da80871094a3185d7a489e",
+          "quote": true
+        },
+        {
+          "id": "p6c2-s05-m05",
+          "sha256": "2b2ccda7aa2ac913855680ab376898d39424f5457bbdd265873e0dbd45d18a0e"
+        }
+      ],
+      "related": [
+        "regle-verte",
+        "bifurcation-ecologique"
+      ],
+      "review": {
+        "status": "pending",
+        "by": null,
+        "on": null
+      }
+    }
+  ]
+}

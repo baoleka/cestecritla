@@ -1,0 +1,479 @@
+{
+  "meta": {
+    "title_fr": "Réponses aux objections — édition 2026",
+    "version": "1.0.0",
+    "corpus_version": "27ee6e713fe25e7e",
+    "note_fr": "Quinze objections de terrain. Chaque réponse est rédigée par nous et ne dit que ce que portent ses appuis, cités par identifiant et épinglés par empreinte. « quote » : la proposition est citée en entier sur la page, avec son auteur et son lien. Réécrit le 12/11/2026 sur le texte de l'édition 2026 ; rien n'est publié avant relecture (D0.27)."
+  },
+  "entries": [
+    {
+      "id": "rip-01",
+      "slug": "impots",
+      "theme": "Impôts",
+      "objection": "« Avec vous, les impôts vont exploser »",
+      "answer": "Le programme rend l'impôt sur le revenu plus progressif : un barème à 14 tranches contre 5 aujourd'hui. Il rétablit l'ISF. Sous 150 000 euros, un héritage ne paie plus de droits de succession.",
+      "avoid": "Ne pas dire « personne ne paiera plus ». Ne pas avancer de seuil de revenu : le texte donne le nombre de tranches, pas leurs montants.",
+      "supports": [
+        {
+          "id": "p2c2-s02-k01",
+          "sha256": "bfbcdc7b899d7d3fb1324f83fca03b23ceda6dfdbd60eed45d5936f9641db1f1",
+          "quote": true
+        },
+        {
+          "id": "p2c2-s02-m02",
+          "sha256": "3701e770bc2839b843965abfc400937a7befc547d46c1bf07e89c13290766cc0"
+        },
+        {
+          "id": "p2c2-s02-m06",
+          "sha256": "d22bae21acc30a0afd5835b36311afb045c89f9a59af7932eabf8658fce40ac9",
+          "quote": true
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "by": null,
+        "on": null
+      }
+    },
+    {
+      "id": "rip-02",
+      "slug": "retraites",
+      "theme": "Retraites",
+      "objection": "« La retraite à 60 ans, c'est infinançable »",
+      "answer": "Le texte restaure le droit à la retraite à 60 ans à taux plein, pour 40 annuités. Il nomme des recettes : la fin des avantages fiscaux de la capitalisation, et la compensation des exonérations de cotisations.",
+      "avoid": "Ne pas avancer un coût en milliards de tête : la section n'en donne pas. Ne pas dire « ça ne coûte rien ».",
+      "supports": [
+        {
+          "id": "p3c1-s07-k01",
+          "sha256": "fe4d90bbad167952357dd9a8d2b6331bb0da0267e5b2a7452c8349e48ea16657",
+          "quote": true
+        },
+        {
+          "id": "p3c1-s07-m03",
+          "sha256": "2c89531887557dd58d1f11ab5c6b01f8f89d4f32bf8cc5ef5c3370d527894571",
+          "quote": true
+        },
+        {
+          "id": "p3c1-s07-m04",
+          "sha256": "b8d6c9ef19ac84d566619a85ba8e96f154aeec0cecf61c8f118557e18f134203"
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "by": null,
+        "on": null
+      }
+    },
+    {
+      "id": "rip-03",
+      "slug": "dette",
+      "theme": "Dette et financement",
+      "objection": "« Ils vont ruiner le pays, c'est infinançable »",
+      "answer": "Le programme dit où il prend l'argent : niches fiscales passées au crible, taxe sur les superprofits, fraude et évasion fiscales en priorité. Pour la dette publique, il réinstaure un circuit du Trésor, hors des marchés financiers.",
+      "avoid": "Ne pas improviser un chiffrage global : ces sections n'en contiennent pas. Citer les recettes que le texte nomme.",
+      "supports": [
+        {
+          "id": "p2c2-s02-m08",
+          "sha256": "7fdddb6389e9676125d4551870e0765f4ce68420859f2e3110f5a0efcbdc49a7"
+        },
+        {
+          "id": "p2c2-s02-m10",
+          "sha256": "a9d9f07a837c3243932b49f752bbbffa25500b9b3c7c2e6ed3bc1a99e7a769db"
+        },
+        {
+          "id": "p2c2-s02-m13",
+          "sha256": "9d2031d23e8049de248e758af0540e7c7dff060b9d4bdc86dfdfbcbe06284cbb"
+        },
+        {
+          "id": "p2c3-s04-m04",
+          "sha256": "7acd596377e5218d147a99ec3dff7632f6d4b49ed83b0ceff14d50f6272c5349",
+          "quote": true
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "by": null,
+        "on": null
+      }
+    },
+    {
+      "id": "rip-04",
+      "slug": "salaires",
+      "theme": "Salaires",
+      "objection": "« Augmenter le SMIC, ça tue les petites entreprises »",
+      "answer": "Le texte porte le SMIC à 1 700 euros net et indexe les salaires sur l'inflation. Il prévoit aussi une caisse de péréquation entre entreprises, pour les TPE-PME. Et l'égalité devant l'impôt entre PME et grands groupes.",
+      "avoid": "Ne pas nier que le coût du travail augmente : montrer la caisse de péréquation et les sanctions contre les retards de paiement.",
+      "supports": [
+        {
+          "id": "p2c2-s03-k01",
+          "sha256": "dd01234c845b18ab83e9d1017fda01c930328402895194e56cc453592de7e9c0",
+          "quote": true
+        },
+        {
+          "id": "p2c3-s05-m01",
+          "sha256": "fee606818ed606b52a315047dfe36ad551111ca02fc521df0147930cf4159192",
+          "quote": true
+        },
+        {
+          "id": "p2c2-s02-m01",
+          "sha256": "4ec98a1df2a495e01c4ed8a470edb7c99f1ef0a1e6e8c3a1ba2a3976eb178217"
+        },
+        {
+          "id": "p2c3-s05-k01",
+          "sha256": "aa44967e09d09b9e0baf34bb630288870526db919b7653bd7d0526691cafdc51"
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "by": null,
+        "on": null
+      }
+    },
+    {
+      "id": "rip-05",
+      "slug": "immigration",
+      "theme": "Immigration",
+      "objection": "« Avec eux, c'est l'immigration sans limite »",
+      "answer": "Le programme organise l'accueil : accès aux visas facilité, carte de séjour de dix ans comme titre de référence, guichet unique. Il agit aussi sur les causes des départs, comme les accords commerciaux inéquitables.",
+      "avoid": "Ne pas répondre par un chiffre de tête. Dire ce que la section organise : visas, titre de séjour, accueil.",
+      "supports": [
+        {
+          "id": "p6c3-s02-k01",
+          "sha256": "aaa56d3e34e23837ffe2de929d977e8d4905b5b9551d416dffdd0c990c32878e",
+          "quote": true
+        },
+        {
+          "id": "p6c3-s02-m07",
+          "sha256": "bbc53591c3e0156c807175c0013a23a54bf84ecba4ce8d62b38d2053a59fd2a2"
+        },
+        {
+          "id": "p6c3-s02-m02",
+          "sha256": "8f1afa5b5ca13cd9bfb2863052945e0bea03489e04d83bf9d3d15a3fd298a301"
+        },
+        {
+          "id": "p6c3-s02-m01",
+          "sha256": "7081cf995be3ff5d4530b18e01cbde1b3e52d73b8f3e36c566ebb8f312b6ff4d"
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "by": null,
+        "on": null
+      }
+    },
+    {
+      "id": "rip-06",
+      "slug": "police",
+      "theme": "Police et sécurité",
+      "objection": "« Vous êtes anti-flics, laxistes sur la sécurité »",
+      "answer": "Le programme renforce les effectifs spécialisés contre la criminalité organisée, les trafics et la délinquance financière. Il double les moyens de la police scientifique. Il porte à deux ans la formation des gardiens de la paix et rétablit la police de proximité.",
+      "avoid": "Ne pas cacher la mesure clé : elle rétablit la police de proximité et démantèle les BAC et les BRAV-M. Commencer par les effectifs et la formation.",
+      "supports": [
+        {
+          "id": "p5c2-s03-m04",
+          "sha256": "66b9852b4f538a40abc18951d3f9525e027da157922b6a1375388fa66cda06b1",
+          "quote": true
+        },
+        {
+          "id": "p5c2-s03-k01",
+          "sha256": "810312a8519264885c5df271bcb0ae020298ffed5a93d3cbfa5a19b01b2186f4",
+          "quote": true
+        },
+        {
+          "id": "p5c2-s03-m05",
+          "sha256": "d4c1873f87054029d46076c9b7d9337bf108b3091629706a74881d9fdaeeda43"
+        },
+        {
+          "id": "p5c2-s02-m04",
+          "sha256": "41541ebddb7e830cc80f19a1e09eba60385315c3abac58fa8ff0ce39b40c401c"
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "by": null,
+        "on": null
+      }
+    },
+    {
+      "id": "rip-07",
+      "slug": "campagnes",
+      "theme": "Campagnes",
+      "objection": "« Vous n'avez rien pour les campagnes »",
+      "answer": "Le programme garantit une distance maximale, de 15 à 30 minutes, entre chaque habitation et les services publics essentiels. Il rouvre des lignes de train du quotidien. Il crée un fonds de soutien pour les communes rurales.",
+      "avoid": "Ne pas opposer villes et campagnes. Ne pas promettre une gare ou une maternité précise : citer la règle de distance du texte.",
+      "supports": [
+        {
+          "id": "p5c3-s03-k01",
+          "sha256": "530416a5ca4aa2a03a654214306e8bf9ecd2681de8df8fbdf0cd1df69ec26e5d"
+        },
+        {
+          "id": "p5c3-s01-m04",
+          "sha256": "28edf1fe8ace565118d8e374ffb92102822c72d2c6938b2883024a95713372e8",
+          "quote": true
+        },
+        {
+          "id": "p1c3-s03-m03",
+          "sha256": "c52772b5874022ec608eac09ba46b9092d98731817e0cccc27fd901d43537623"
+        },
+        {
+          "id": "p4c4-s04-m04",
+          "sha256": "4a30bbc15d4cb5b14a8fe55b1042c451e6df9ed634ce4fa4e1feae83040435d4"
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "by": null,
+        "on": null
+      }
+    },
+    {
+      "id": "rip-08",
+      "slug": "institutions",
+      "theme": "Institutions",
+      "objection": "« La 6e République, c'est Mélenchon président à vie »",
+      "answer": "La nouvelle Constitution est écrite par une Assemblée constituante, puis soumise à référendum. Le programme instaure aussi le référendum d'initiative citoyenne, qui permet de révoquer des élus.",
+      "avoid": "Ne pas personnaliser : répondre par la procédure. Un référendum ouvre le processus, un autre le conclut.",
+      "supports": [
+        {
+          "id": "p5c1-s02-k01",
+          "sha256": "0d171bfb41481d8243a4b6c4c7d8f96f3e1ef31e790361dced029cb08822e519"
+        },
+        {
+          "id": "p5c1-s02-m01",
+          "sha256": "c27c1a2a0f7abc1fa5fd95e7464eaf277375a043516e93653a91642860dc7767"
+        },
+        {
+          "id": "p5c1-s02-m02",
+          "sha256": "68ed2d74e8dd364719b50b6b667158d78ed370da16b0d8da25225808822491bd",
+          "quote": true
+        },
+        {
+          "id": "p5c1-s01-k01",
+          "sha256": "1ab56a0a89197563108197c9003fdafa394798fbff985305613b6c3e790e36a3",
+          "quote": true
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "by": null,
+        "on": null
+      }
+    },
+    {
+      "id": "rip-09",
+      "slug": "agriculture",
+      "theme": "Agriculture",
+      "objection": "« Vous êtes contre les agriculteurs »",
+      "answer": "Le programme garantit des prix planchers aux agriculteurs. Il encadre les marges de l'agroalimentaire et de la grande distribution. Il reprend les dettes de ceux qui sont passés au 100 % bio et vise 500 000 emplois agricoles.",
+      "avoid": "Face à un agriculteur, commencer par le revenu : prix planchers, marges encadrées. Les pesticides viennent après.",
+      "supports": [
+        {
+          "id": "p1c3-s08-m01",
+          "sha256": "96a1e72a4650356e7018df74aadf1fd6d98dfb8e3f5f5d22ee5bc551dcb29b8e",
+          "quote": true
+        },
+        {
+          "id": "p1c3-s08-k01",
+          "sha256": "48b2943cc1c65285e68058e21620c9dea2ba1fe38218c5b0b4c3dc649dcceca0",
+          "quote": true
+        },
+        {
+          "id": "p1c3-s08-m07",
+          "sha256": "0155d4c8e97872e5c0fadf293323125fa4cec89b9e776f72eceddc9a6dbf4ab5"
+        },
+        {
+          "id": "p1c3-s08-m02",
+          "sha256": "107ed9303e42e1780e71f86ce11733473e0761dd2d3e77198731f0872f3909e9"
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "by": null,
+        "on": null
+      }
+    },
+    {
+      "id": "rip-10",
+      "slug": "transports",
+      "theme": "Transports",
+      "objection": "« Avec vous, on ne pourra plus prendre l'avion »",
+      "answer": "Le texte supprime les lignes aériennes intérieures quand le train fait le trajet en moins de quatre heures. Il rouvre des lignes de train du quotidien. Il développe les transports à la demande hors des zones denses.",
+      "avoid": "Ne pas dire « on ne touche pas à l'avion » : la suppression des lignes courtes est écrite.",
+      "supports": [
+        {
+          "id": "p1c3-s03-m08",
+          "sha256": "0bc9249e0a594bae6cfe843986437fde783351f59f044fc17c602309681f5aae",
+          "quote": true
+        },
+        {
+          "id": "p1c3-s03-m03",
+          "sha256": "c52772b5874022ec608eac09ba46b9092d98731817e0cccc27fd901d43537623"
+        },
+        {
+          "id": "p1c3-s03-m07",
+          "sha256": "d07776f6169957ab008ab3504e83c0bf5ed9660957907bb78e53befef54d3498"
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "by": null,
+        "on": null
+      }
+    },
+    {
+      "id": "rip-11",
+      "slug": "laicite",
+      "theme": "Laïcité",
+      "objection": "« Vous avez abandonné la laïcité »",
+      "answer": "Le programme garantit la liberté de conscience et l'application stricte de la laïcité. Il refuse les financements publics des édifices religieux. Il abroge le concordat d'Alsace-Moselle.",
+      "avoid": "Ne pas reprendre le mot de l'accusation ni débattre d'une religion : lire la mesure clé.",
+      "supports": [
+        {
+          "id": "p5c1-s05-k01",
+          "sha256": "24b87ea33d5d5b85b0921cc7ef6577ac973a547bfb608175563d783ab7285a95",
+          "quote": true
+        },
+        {
+          "id": "p5c1-s05-m04",
+          "sha256": "41ae6b26d8f233b558b47169267271eac5f89d2e277d73cfd350af73ea4088e8",
+          "quote": true
+        },
+        {
+          "id": "p5c1-s05-m05",
+          "sha256": "5ae004a8aab4613a50e162c2a37834c46489bb7a3c2ecf5ecee5b78f1c4bc584"
+        },
+        {
+          "id": "p5c1-s05-m01",
+          "sha256": "a9195a59b2d1e7ba3dea8d86523dfcf4b439b64b5a6f8e0b771d2efa60415ac7"
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "by": null,
+        "on": null
+      }
+    },
+    {
+      "id": "rip-12",
+      "slug": "europe",
+      "theme": "Europe",
+      "objection": "« Ils veulent sortir de l'UE et de l'euro »",
+      "answer": "Le chapitre Europe prévoit un droit d'objection : le Parlement français peut suspendre certaines règles européennes, le temps de les réviser. Il propose aussi de changer les traités. Tout accord est soumis à référendum.",
+      "avoid": "Ne dire ni « on restera quoi qu'il arrive » ni « on sortira » : le texte parle de suspension, de négociation et de référendum.",
+      "supports": [
+        {
+          "id": "p6c1-s02-p01",
+          "sha256": "1e4abca637b9728e5d486334f2077ef2a17e4accd936e2518b4b9ff479e47bf0"
+        },
+        {
+          "id": "p6c1-s04-p02",
+          "sha256": "4fdf6a904c41effd46ae5c3f078ac089badaeff18f2f2b079b832a9ed83415c0"
+        },
+        {
+          "id": "p6c1-s02-m01",
+          "sha256": "7d65c3427dfb357026de56f466bf37d5fd8d8659307c4d078e28885e1e86b4a6"
+        },
+        {
+          "id": "p6c1-s04-m01",
+          "sha256": "55d3ed28c5fff36c784c3809541ae5736b4aef9e6daf11ec09611bbb1dd9fce5"
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "by": null,
+        "on": null
+      }
+    },
+    {
+      "id": "rip-13",
+      "slug": "energie",
+      "theme": "Énergie",
+      "objection": "« Sans nucléaire, on aura des coupures de courant »",
+      "answer": "Le texte planifie le passage à 100 % d'énergies renouvelables, au plus tard en 2060. Il déploie des technologies de stockage pour équilibrer le système. Il ferme progressivement les centrales nucléaires, sans les prolonger au-delà de 60 ans.",
+      "avoid": "Ne pas cacher la sortie du nucléaire : elle est écrite, avec sa limite de 60 ans. Ne pas promettre une date de fermeture par centrale.",
+      "supports": [
+        {
+          "id": "p1c3-s04-k01",
+          "sha256": "0aa52287fa4b25e13c7218dd0f333a072059878837a95636e79f2957d8718744"
+        },
+        {
+          "id": "p1c3-s04-m01",
+          "sha256": "246fb3e7a60d600baf3aae8bd0b3e916755bcfa4cab3128377bdb6781e2ab05a"
+        },
+        {
+          "id": "p1c3-s04-m06",
+          "sha256": "ff2b98df0864e65ce29f64c2340212455eee6fe79cb9df2e129c32b2406f5601",
+          "quote": true
+        },
+        {
+          "id": "p1c3-s04-m03",
+          "sha256": "e6779437f1c7b773cadb1108bb0db95d661a7f1c88ccd4d8efd4b9e6e5c33ff8",
+          "quote": true
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "by": null,
+        "on": null
+      }
+    },
+    {
+      "id": "rip-14",
+      "slug": "logement",
+      "theme": "Logement",
+      "objection": "« Encadrer les loyers, plus personne ne louera »",
+      "answer": "Le programme encadre les loyers partout, à la baisse dans les grandes villes. Il protège aussi le bailleur : une garantie universelle couvre les impayés. Il produit 200 000 logements publics par an pendant 5 ans.",
+      "avoid": "Ne pas dire « les propriétaires paieront » : la garantie des loyers les protège aussi.",
+      "supports": [
+        {
+          "id": "p5c3-s04-m02",
+          "sha256": "4142c515b63c0fda5b9e3d791dd9bc01db1413d917176ba0f3416c31bcc759b1",
+          "quote": true
+        },
+        {
+          "id": "p5c3-s04-m04",
+          "sha256": "458a6d2ff3d266d4be1e752889c6969631162908cdcebd5b5645927f23e64b4b",
+          "quote": true
+        },
+        {
+          "id": "p5c3-s04-m03",
+          "sha256": "eaaa241aead7098ff0921d56f453bf60879fe737b249f3235c0286020e5b1b6a"
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "by": null,
+        "on": null
+      }
+    },
+    {
+      "id": "rip-15",
+      "slug": "industrie",
+      "theme": "Entreprises publiques",
+      "objection": "« Ils veulent tout nationaliser, c'est le communisme »",
+      "answer": "Le programme revient sur des privatisations qu'il nomme : aéroports, autoroutes, Française des jeux. Il crée des pôles publics dans des secteurs listés. Il inscrit dans la Constitution la liste des biens communs.",
+      "avoid": "Ne dire ni « rien ne sera nationalisé » ni « tout » : citer la liste.",
+      "supports": [
+        {
+          "id": "p2c1-s01-k01",
+          "sha256": "cfac8c5779b60b63ec733757a3d563768dc9cf27e6ed843c5197e681548f255d",
+          "quote": true
+        },
+        {
+          "id": "p2c1-s01-m04",
+          "sha256": "cb8ba2c984d6f4d7ec568a63e7a6b81964b68663446db02698717d80ffe8abaa",
+          "quote": true
+        },
+        {
+          "id": "p2c1-s02-m02",
+          "sha256": "14afc3e886651c2ab2240a8547e3006cfb1adea1258910e432300ab283b1e175"
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "by": null,
+        "on": null
+      }
+    }
+  ]
+}
