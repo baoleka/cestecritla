@@ -8,7 +8,7 @@
 
 **Le programme a été réédité le 5 novembre 2026.** La nouvelle édition — « L'Avenir en commun — Le programme de la Nouvelle France », 6 parties, 23 chapitres, 111 sections, 1 069 mesures — remplace l'édition 2025 sur laquelle ce dépôt a été construit. Son texte est réécrit, et il **n'est plus sous licence Creative Commons** : « © La France insoumise, tous droits réservés », le partage de liens étant « autorisé (et encouragé) » et les courts extraits admis avec l'auteur et un lien vers la page d'origine.
 
-Le projet change donc de régime : **renvoi + courte citation**. L'app trouve le passage et renvoie à la page officielle ; elle ne reproduit pas le texte. L'app de l'édition 2026 est construite : sommaire, recherche sur l'appareil, 111 fiches de section, ponts pour les adresses de l'édition 2025, réponses aux objections, cartes-concept, page « Exactitude ». Le plan et son journal sont dans `docs/discovery/PLAN-EDITION-2026.md`, les décisions sont D15.1 à D15.17 dans `docs/discovery/decisions.md`.
+Le projet change donc de régime : **renvoi + courte citation**. L'app trouve le passage et renvoie à la page officielle ; elle ne reproduit pas le texte. L'app de l'édition 2026 est construite : sommaire, recherche sur l'appareil, 111 fiches de section, ponts pour les adresses de l'édition 2025, réponses aux objections, cartes-concept, page « Exactitude ». Le plan et son journal sont dans `docs/discovery/PLAN-EDITION-2026.md`, les décisions sont D15.1 à D15.18 dans `docs/discovery/decisions.md`.
 
 La recherche est **extractive** : aucun modèle de langage ne tourne à l'exécution en v1 ni en v2 (D6.10). Si la piste IA est rouverte en v3, sur trois preuves, le seul fournisseur autorisé reste Mistral via Workers AI (D0.3).
 
@@ -24,7 +24,7 @@ La recherche est **extractive** : aucun modèle de langage ne tourne à l'exécu
 
 ## Dossier
 
-Point d'entrée : `docs/discovery/README.md`. À lire d'abord : `PLAN-EDITION-2026.md` (le plan en cours), `decisions.md` (191 décisions, D0-D15), `14-risques.md` et `16-hypotheses.md`. Le dossier de découverte des 7-10 septembre 2026 (`00-resume-executif.md`, `prompt-final.md`, `PLAN-IMPLEMENTATION.md`) décrit le produit d'avant la réédition ; il reste la référence pour tout ce que D15 ne touche pas.
+Point d'entrée : `docs/discovery/README.md`. À lire d'abord : `PLAN-EDITION-2026.md` (le plan en cours), `decisions.md` (192 décisions, D0-D15), `14-risques.md` et `16-hypotheses.md`. Le dossier de découverte des 7-10 septembre 2026 (`00-resume-executif.md`, `prompt-final.md`, `PLAN-IMPLEMENTATION.md`) décrit le produit d'avant la réédition ; il reste la référence pour tout ce que D15 ne touche pas.
 
 ## Licences
 
