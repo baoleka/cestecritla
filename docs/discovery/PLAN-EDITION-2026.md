@@ -394,3 +394,89 @@ sans que personne l'ait décidé, alors que le playbook ne l'ouvre qu'à J-3, pa
 `<meta name="robots" content="noindex">`, un test le garantit, et l'hôte d'aperçu sert la version
 corrigée. **L'apex a été redéployé le soir même, avec l'accord de l'utilisateur** : la balise est en
 ligne sur `cestecritla.fr` et `www`. 174 tests.
+
+### Lot B, au 12 novembre 2026
+
+L'utilisateur a demandé d'enchaîner les lots jusqu'au site complet (« continue jusqu'à ce que le
+site soit complet »), ce qui vaut accord pour la collecte de 35 requêtes. Deux garde-fous restent :
+**rien de ce qui dérive du texte 2026 n'est poussé ni déployé avant que l'utilisateur ait vu les
+parts mesurées** (D15.7), et la bascule de l'apex reste son geste. Le travail se fait sur la
+branche locale `edition-2026`, sans amont : un `git push` par habitude ne publie rien.
+
+Fait et vérifié :
+
+- **B2, collecte** — `scripts/crawl-2026.ts`, une passe le 12/11/2026 à 19:31 UTC : 35 requêtes,
+  0 reprise, 35 réponses 200, 6,4 Mo sous `private/html/20261112T193102Z/` (hors dépôt).
+- **B2, analyse** — `scripts/aec26-source.ts` (analyseurs purs), `aec26-core.ts` (identifiants,
+  empreintes, recoupements), `ingest-2026.ts` (hors ligne). **VÉRIFIÉ** : 6 parties, 23 chapitres,
+  111 sections ; 107 mesures clés + 881 mesures + 81 sous-mesures = **1 069 = chiffre officiel** ;
+  119 paragraphes de section, 6 de partie, 4 de chapitre ; introduction : 8 intertitres et
+  13 paragraphes. Les trois énoncés de la structure concordent (sommaire, pages de partie, pages de
+  chapitre). Ces comptes remplacent les mesures PROBABLES du lot A.
+- **Trois faits de balisage que le relevé du lot A n'avait pas vus** :
+  1. les sous-mesures ne sont pas imbriquées dans leur mesure : elles sont dans un `<li>` sans
+     classe, frère du `li.mesure` qui les précède (18 fois, 81 sous-mesures) ;
+  2. le chapitre Europe (`p6c1`) porte une introduction propre de 4 paragraphes
+     (`main > section.chapitre`) et ses 4 sections n'ont pas de mesure clé ;
+  3. le texte contient 15 traits d'union conditionnels (U+00AD), 4 accents non composés (hors NFC)
+     et un caractère de contrôle U+0085 dans un paragraphe : conservés tels quels, listés dans
+     `meta.anomalies` du corpus privé.
+- **B3, repères de lien** — `scripts/locator.ts`. Un repère est le plus court préfixe de 4 à 8
+  mots, unique dans toute la page du chapitre, jamais plus de la moitié de la proposition.
+  **Trouvé en vérifiant, et corrigé** : un repère qui s'arrête juste avant une espace fine
+  insécable (U+202F, celle de « prix : ») s'arrête, pour Unicode, au milieu d'un mot ; Chromium,
+  Firefox et WebKit refusent alors tous les trois la correspondance (6 liens sur 1 014). Le calcul
+  utilise désormais le découpage en mots d'Unicode (`Intl.Segmenter`).
+- **B4, publication** — `scripts/aec26-publish.ts`, `publish-2026.ts`, `data/2026/exposure-policy.json`,
+  `data/2026/NOTICE.md`. Le manifeste ne porte, par élément, qu'un identifiant, une nature, une
+  empreinte, un nombre de mots, et pour les propositions un incipit (mesures clés) et un repère.
+  Refus : clause de licence changée, plafond dépassé, citation épinglée périmée, prose citée.
+- **B5, vrai navigateur** — `scripts/verify-2026.ts`, pages servies depuis le disque, scripts
+  coupés, toute autre requête annulée. **VÉRIFIÉ sur trois moteurs** (Chromium 153, Firefox 155,
+  WebKit 26.6) : les 1 219 éléments ré-extraits dans le DOM ont la même empreinte que l'analyseur
+  Node, et **les 1 014 liens profonds atterrissent** sur la bonne proposition. Témoins : un repère
+  qui ne correspond à rien ne fait pas défiler la page ; l'ancre seule amène le titre de section.
+  À savoir : scripts coupés, WebKit ne défile vers le texte qu'une demi-seconde après `load`.
+- **B6, portes anti-fuite** — `scripts/leak-scan.ts`, `leak.test.ts`. Structure (en CI, sans
+  corpus) : aucun champ où loger une phrase, parts recalculées depuis le fichier, plafonds tenus.
+  Contenu (en local) : aucune fenêtre de neuf mots consécutifs de l'édition 2026 dans ce qui a
+  changé depuis le gel `16023da`, ni dans `dist/`, ni dans les messages de commit ; 21 300 fenêtres,
+  951 éléments sur 1 219 couverts. **Limite dite** : l'édition 2026 reprend mot pour mot des phrases
+  de l'édition 2025 et des livrets 2022 déjà présents dans `data/` ; la porte ne peut pas les
+  distinguer de leurs jumelles et ne les compte pas.
+- **B7, correspondance** — `scripts/id-map.ts`. **VÉRIFIÉ** (outil conservé) : sur 837 propositions
+  de 2025, 181 identiques, 115 à la ponctuation près, 198 proches, 170 remaniées, 173 sans
+  équivalent ; 87 sections de 2025 sur 89 ont au moins une section héritière (76 une seule, 8 deux,
+  3 trois ou plus), 69 gardent leur titre. La table complète reste sous `private/` ; le fichier
+  public ne donne que section → section(s).
+- **B8, veille** — `scripts/watch-source.ts` (six signaux, hors ligne par défaut, `--live` = cinq
+  requêtes) et `scripts/recrawl-2026.ts` (compare par ancre officielle, liste les appuis épinglés
+  cassés, n'écrit rien). Rejoués hors ligne : aucun changement.
+- **Garde de déploiement** — `scripts/deploy.ts` refuse de déployer l'app où que ce soit, hôte
+  d'aperçu compris, tant que `validated_on` est vide dans la politique de citation.
+- Portes : `tsc` 0 erreur, **218 tests**, contraste 0 échec, ESLint propre.
+
+Parts mesurées sous la politique par défaut (repères de 4 à 8 mots pour toutes les propositions,
+incipit de 4 à 8 mots pour les mesures clés, jamais plus de la moitié d'un élément) :
+
+| Niveau | Éléments | Mots | Part des 24 451 mots des propositions |
+|---|---|---|---|
+| Incipits visibles (mesures clés) | 101 | 724 | 2,96 % |
+| Repères de lien (dans les `href`) | 1 014 | 4 122 | 16,86 % |
+| Citations entières | 0 | 0 | 0 % (lot E) |
+| **Couvert, chaque élément compté une fois** | | **4 439** | **18,15 %** |
+| Propositions à deux mots près d'être entières | 0 | | |
+
+Curseurs, mesurés : repères seulement pour les mesures clés et les citées → 2,96 % ; plancher de
+3 mots → 15,09 % ; de 5 mots → 21,14 % ; aucun repère (`--anchor-only`) → 2,96 %.
+55 propositions n'ont pas de repère (51 trop courtes, 4 sans préfixe unique) : leur lien s'arrête
+à l'ancre de la section. S'y ajoutent les 140 titres officiels affichés (1 054 mots).
+
+Non fait, et pourquoi :
+
+- **B1** (déplacer l'archive 2025 sous `data/2025/`) : écarté. La porte anti-fuite compare au gel
+  `16023da` ; déplacer 17 fichiers ferait passer leur contenu pour du texte nouveau, sans rien
+  apporter au produit.
+- **Sonde 0** (ouvrir un lien profond sur de vrais téléphones) : geste de l'utilisateur. Les trois
+  moteurs de bureau sont couverts par B5.
+- **Veille en direct** (`watch-source.ts --live`) : non lancée, la collecte date du jour.
