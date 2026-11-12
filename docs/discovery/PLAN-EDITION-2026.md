@@ -480,3 +480,107 @@ Non fait, et pourquoi :
 - **Sonde 0** (ouvrir un lien profond sur de vrais téléphones) : geste de l'utilisateur. Les trois
   moteurs de bureau sont couverts par B5.
 - **Veille en direct** (`watch-source.ts --live`) : non lancée, la collecte date du jour.
+
+### Lots C et D, au 12 novembre 2026
+
+Fait et vérifié :
+
+- **C1** — `src/lib/edition.ts` lit le manifeste public et rien d'autre ; `src/lib/archive-2025.ts`
+  ne garde de l'édition 2025 que ses identifiants, pour les ponts. `src/lib/corpus.ts` et
+  `SectionVerbatim.astro` sont supprimés : l'app n'affiche plus le texte 2025.
+- **C2** — kit de chaînes **v0.6.0** (462 chaînes) lu par un `t()` typé (`src/lib/strings.ts`) :
+  une clé absente est une erreur de compilation. Les chaînes d'attribution ne nomment plus de
+  licence CC ; familles nouvelles `bridge.*`, `pointer.*`, `quote.*`, `method.*`.
+- **C3** — accueil : recherche, puis sommaire entier (6 parties, 23 chapitres, 111 sections),
+  utilisable sans JavaScript.
+- **C4** — 111 fiches `/s/<id>/` : titres officiels, contenu de la section en nombres, incipit de la
+  mesure clé (attribué, lié), un lien par proposition. Le `href` écrit est l'ancre de section ; le
+  repère voyage dans `data-fragment` et n'est ajouté que si `document.fragmentDirective` existe.
+- **C5** — **974 ponts** statiques (`/s/`, `/m/`, `/a/` avec un identifiant 2025), `noindex`, une
+  seule formulation pour tous. `/p/` et `/res/`, sans équivalent, sont les deux seuls préfixes
+  redirigés (302).
+- **C6** — `scripts/site.test.ts` sur `dist/` : liens internes, liens officiels tous au manifeste,
+  seuls mots du programme = titres, incipits du manifeste, citations listées ; aucune page ne cite
+  plus qu'elle ne dit ; rien du texte dans une description, un aperçu ou le JSON-LD.
+  `scripts/app-voice.ts` donne aux portes une seule définition de « notre voix ».
+- **C7** — **coupé** (D15.14) : pas de balise de mesure en v1. L'app est déployée avec
+  `wrangler.static.jsonc` (l'ancienne configuration de la page d'attente, renommée).
+- **C8** — balises `og:` sur toutes les pages, une seule image d'aperçu, sans texte du programme
+  (`scripts/og-image.ts` → `public/og/cestecritla-v1.png`).
+- **C9** — table des routes à jour ; accessibilité **23 pages × 6 conditions, 0 échec**.
+- **D1** — `src/lib/search-core.ts`, extrait du banc de septembre, tenu à sa sortie par un test.
+  Ajout : les traits d'union conditionnels sont retirés avant le découpage.
+- **D2** — `scripts/index-2026.ts` → `data/2026/search-index.json` : 1 069 propositions, 3 741
+  racines, **12,6 racines par proposition**, aucun champ stocké ; 64 Ko gzip. Avec les titres et
+  les repères : 90 Ko gzip, chargés à la première recherche, en cache un an.
+- **D3, D4** — îlot de recherche : requête après `#`, jamais envoyée ; résultats groupés par
+  section, construits par `textContent` ; chaque numéro de mesure est un lien profond.
+- **D5** — `eval/questions-2026.json` (87 questions, 13 écartées et listées) et
+  `data/2026/synonyms.json` (75 groupes, rédigés par nous). **VÉRIFIÉ** : bonne section première
+  pour 81,6 % des questions, dans les trois premières pour 96,6 %, dans les cinq premières pour
+  **98,9 %** (cible 95 %) ; rappel@3 **87,7 %** (cible 90 %, non atteinte, publiée telle quelle).
+- **D6** — `scripts/e2e.ts`, trois moteurs : sans JS, recherche, saisie hostile, liens profonds,
+  ponts, CSP. Avec `--real`, les pages officielles stockées répondent : **un clic sur une mesure
+  atterrit sur cette mesure** dans Chromium, Firefox et WebKit.
+
+Trouvé en chemin :
+
+- La porte anti-fuite a signalé, au premier build, un incipit de huit mots suivi de « La France
+  insoumise » : neuf mots à la suite, sur une mesure dont le neuvième est « la ». Le scanner sait
+  désormais qu'une citation s'arrête aux points de suspension et à la fin d'un bloc.
+- Scripts coupés, WebKit ne défile vers un fragment de texte qu'une demi-seconde après `load` :
+  une vérification qui lit la position tout de suite déclare cassé un lien qui marche.
+
+### Lots E et F, au 12 novembre 2026
+
+- **E1** — `scripts/reanchor-2026.ts` : 62 des 100 appuis de septembre sont identiques ou proches
+  dans l'édition 2026 (détail sous `private/reanchor/`).
+- **E2, E3** — `data/2026/riposte.json` (15 réponses) et `glossary.json` (5 cartes), **réécrits sur
+  le texte 2026** (D15.16) ; pages `/r/<slug>/` et `/mot/<slug>/` ; les anciens liens `/r/rip-NN`
+  répondent. 33 citations entières, 646 mots (2,64 %). `scripts/editorial.test.ts` : appuis au
+  manifeste sous leur empreinte ; en local, **chaque chiffre que nous écrivons figure dans un
+  appui**. La porte anti-fuite a refusé une de nos phrases, qui reprenait une mesure presque mot
+  pour mot hors de son bloc de citation : reformulée.
+- **E4 — non fait, et c'est voulu** : la relecture D0.27 est un geste de l'utilisateur. Les vingt
+  entrées sont `pending` ; chaque page l'affiche ; la garde de lancement refuse l'apex tant qu'il
+  en reste une.
+- **F1** — `/exactitude` (aucun chiffre tapé : `src/lib/facts.ts` les lit dans les fichiers de
+  mesure ; les quatre portes de jugement de D14.11 y figurent comme non levées), `/methodologie`,
+  `/licence` (2025 sous CC, archivée ; 2026 tous droits réservés, citée brièvement),
+  `/confidentialite` (v1 : rien n'est mesuré), `/a-propos`, `/mentions-legales`.
+- **F2** — le lancement est un fichier (`data/launch.json`, D15.15) et une règle testée
+  (`scripts/launch.ts`). `/mentions-legales` n'écrit que l'hébergeur détient l'identité de
+  l'éditeur que si la déclaration LCEN est datée.
+- **F5, en partie** — relecture de sécurité du code client : aucun `innerHTML`, JSON embarqué
+  échappé (`safeJson`), requêtes de même origine seulement, CSP par empreintes sans
+  `unsafe-inline`, vérifiée par `e2e.ts`.
+
+Non fait dans cette session, et pourquoi :
+
+- **F3** (essais sur de vrais téléphones, navigateurs intégrés de WhatsApp, Telegram, Instagram) :
+  geste de l'utilisateur, sur l'hôte d'aperçu — qui n'est pas déployé tant que la politique de
+  citation n'est pas validée.
+- **F4** (session personas sur l'app réelle) : non bloquante, non lancée.
+- **Mesure de performance sur un vrai Android** : même raison que F3. Poids mesurés en local,
+  gzip : accueil 7,9 Ko, fiche de section 4,8 Ko, 8,8 Ko de JavaScript en tout, 68,6 Ko de polices ;
+  1 133 pages, 20 Mo.
+- **Liens Désintox** : retirés de la v1 faute d'avoir été revérifiés (D15.16).
+
+### État au 12 novembre 2026 au soir, et ce qui attend l'utilisateur
+
+Tout le travail des lots B à F est **commité en local sur la branche `edition-2026`, non poussé,
+non déployé**. `origin/main` et les deux hôtes publics sont inchangés depuis la clôture du lot A.
+
+Dans l'ordre :
+
+1. **Valider la politique de citation** sur les parts mesurées (D15.7), puis dater `validated_on`
+   dans `data/2026/exposure-policy.json`. Curseurs : repères seulement pour les mesures clés et
+   citées (20,1 % → 5,2 %), plancher des repères, index par section, `--anchor-only`.
+2. **Pousser** (`git switch main && git merge --ff-only edition-2026 && git push`) puis
+   **déployer l'aperçu** (`npm run build && npm run deploy:preview`).
+3. **Relire les 20 textes** (D0.27) sur `beta.cestecritla.fr`, passer chacun à `reviewed`.
+4. **P0.5** (déclaration LCEN) et **P0.8** (boîte `contact@`), puis dater les deux champs de
+   `data/launch.json`.
+5. **Sonde 0 et essais sur téléphones** (F3).
+6. **Jour J** : `"apex": "app"` dans `data/launch.json`, `npm run build && npm run deploy` dans un
+   terminal.

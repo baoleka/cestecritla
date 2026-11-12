@@ -8,13 +8,13 @@
 
 **Le programme a été réédité le 5 novembre 2026.** La nouvelle édition — « L'Avenir en commun — Le programme de la Nouvelle France », 6 parties, 23 chapitres, 111 sections, 1 069 mesures — remplace l'édition 2025 sur laquelle ce dépôt a été construit. Son texte est réécrit, et il **n'est plus sous licence Creative Commons** : « © La France insoumise, tous droits réservés », le partage de liens étant « autorisé (et encouragé) » et les courts extraits admis avec l'auteur et un lien vers la page d'origine.
 
-Le projet change donc de régime : **renvoi + courte citation**. L'app trouve le passage et renvoie à la page officielle ; elle ne reproduit pas le texte. Le site est en cours de mise à jour ; le plan est `docs/discovery/PLAN-EDITION-2026.md`, les décisions sont D15.1 à D15.13 dans `docs/discovery/decisions.md`.
+Le projet change donc de régime : **renvoi + courte citation**. L'app trouve le passage et renvoie à la page officielle ; elle ne reproduit pas le texte. L'app de l'édition 2026 est construite : sommaire, recherche sur l'appareil, 111 fiches de section, ponts pour les adresses de l'édition 2025, réponses aux objections, cartes-concept, page « Exactitude ». Le plan et son journal sont dans `docs/discovery/PLAN-EDITION-2026.md`, les décisions sont D15.1 à D15.17 dans `docs/discovery/decisions.md`.
 
 La recherche est **extractive** : aucun modèle de langage ne tourne à l'exécution en v1 ni en v2 (D6.10). Si la piste IA est rouverte en v3, sur trois preuves, le seul fournisseur autorisé reste Mistral via Workers AI (D0.3).
 
 ## Ce que le dépôt contient, et sous quelle licence
 
-**L'édition 2026 : aucun texte.** Ce dépôt ne contient pas le texte de l'édition 2026 et ne le contiendra pas. Il publiera un manifeste — structure, titres, ancres, empreintes SHA-256 — qui permet de vérifier qu'une citation est exacte sans la republier.
+**L'édition 2026 : aucun texte.** Ce dépôt ne contient pas le texte de l'édition 2026 et ne le contiendra pas. Il publie, sous `data/2026/`, un manifeste — structure, titres officiels, ancres, empreintes SHA-256, et les premiers mots qui servent de repères aux liens — qui permet de retrouver un passage et de vérifier qu'une citation est exacte sans republier le texte. `data/2026/NOTICE.md` dit ce que chaque fichier contient et combien de mots en sortent ; la politique de citation est chiffrée dans `data/2026/exposure-policy.json`.
 
 **L'édition 2025 : une archive datée.** `data/aec-2025.json` est un relevé structuré et vérifié de l'édition 2025, fait le 7 septembre 2026, quand le site source plaçait tous ses textes sous CC BY-NC-SA 4.0 : 4 parties, 18 chapitres, 89 sections, 837 propositions, 48 encadrés « À savoir », empreintes SHA-256 par item et par section. **Ce n'est plus le programme en vigueur**, et la source ne sert plus ces pages.
 
@@ -24,8 +24,8 @@ La recherche est **extractive** : aucun modèle de langage ne tourne à l'exécu
 
 ## Dossier
 
-Point d'entrée : `docs/discovery/README.md`. À lire d'abord : `PLAN-EDITION-2026.md` (le plan en cours), `decisions.md` (187 décisions, D0-D15), `14-risques.md` et `16-hypotheses.md`. Le dossier de découverte des 7-10 septembre 2026 (`00-resume-executif.md`, `prompt-final.md`, `PLAN-IMPLEMENTATION.md`) décrit le produit d'avant la réédition ; il reste la référence pour tout ce que D15 ne touche pas.
+Point d'entrée : `docs/discovery/README.md`. À lire d'abord : `PLAN-EDITION-2026.md` (le plan en cours), `decisions.md` (191 décisions, D0-D15), `14-risques.md` et `16-hypotheses.md`. Le dossier de découverte des 7-10 septembre 2026 (`00-resume-executif.md`, `prompt-final.md`, `PLAN-IMPLEMENTATION.md`) décrit le produit d'avant la réédition ; il reste la référence pour tout ce que D15 ne touche pas.
 
 ## Licences
 
-Code : MIT (`LICENSE`). Relevé de l'édition 2025 et ses dérivés : CC BY-NC-SA 4.0 (`data/LICENSE`). Polices : SIL OFL 1.1 (`design/fonts/`). Le texte de l'édition 2026, les logos, affiches et illustrations de La France insoumise et de la campagne ne sont **pas** inclus dans ce dépôt.
+Code : MIT (`LICENSE`). Relevé de l'édition 2025 et ses dérivés : CC BY-NC-SA 4.0 (`data/LICENSE`). Polices : SIL OFL 1.1 (`design/fonts/`). `data/2026/` n'est ni l'un ni l'autre : voir `data/2026/NOTICE.md`. Le texte de l'édition 2026, les logos, affiches et illustrations de La France insoumise et de la campagne ne sont **pas** inclus dans ce dépôt.
