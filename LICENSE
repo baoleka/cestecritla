@@ -46,6 +46,15 @@ limited to:
 Because CC BY-NC-SA 4.0 forbids commercial use and requires ShareAlike, those files may not
 be relicensed under MIT. A reuser must therefore treat the two sets separately.
 
+THE 2026 EDITION IS NOT LICENSED HERE, AND IS NOT IN THIS REPOSITORY
+
+Since 5 November 2026 the programme is published in a new edition, "L'Avenir en commun — Le
+programme de la Nouvelle France". Its publisher's legal notice states that it is NOT under a
+Creative Commons licence: it is "© La France insoumise, tous droits réservés". This repository
+does not contain its text. Neither the MIT license above nor data/LICENSE grants any right over
+it. What the repository does publish about that edition — structure, titles, anchors and
+SHA-256 fingerprints — is there so that a quotation can be checked without being republished.
+
 Fonts under design/fonts/ are under the SIL Open Font License 1.1 (design/fonts/OFL-*.txt).
 The logos, posters and illustrations of La France insoumise and of the campaign are NOT
 included in this repository and are not licensed here.

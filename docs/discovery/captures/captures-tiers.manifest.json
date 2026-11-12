@@ -1,12 +1,13 @@
 {
   "meta": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "generated_at": "2026-09-10",
-    "decision": "H-LAN-14 (priorité 1), D14.9",
-    "purpose_fr": "Empreintes des pièces tierces sorties du dépôt public. Elles restent vérifiables sans être redistribuées : le dépôt ne republie ni le logo LFI, ni le wordmark M27, ni la tortue officielle, ni une photographie de personnes identifiables, ni l'adresse personnelle d'un tiers, ni le texte du programme sous une licence que le LICENSE racine ne couvre pas. Les fichiers eux-mêmes vivent hors du dépôt, dans docs/discovery/captures/assets-tiers/, non versionné.",
+    "decision": "H-LAN-14 (priorité 1), D14.9 ; D15.6 (pages de l’édition 2026 conservées sous private/)",
+    "purpose_fr": "Empreintes des pièces tierces sorties du dépôt public. Elles restent vérifiables sans être redistribuées : le dépôt ne republie ni le logo LFI, ni le wordmark M27, ni la tortue officielle, ni une photographie de personnes identifiables, ni l'adresse personnelle d'un tiers, ni le texte du programme sous une licence que le LICENSE racine ne couvre pas. Les fichiers eux-mêmes vivent hors du dépôt, dans docs/discovery/captures/assets-tiers/, non versionné. Depuis le 12/11/2026, les pages de l’édition 2026 (« tous droits réservés », D15.1) sont conservées sous private/captures/, ignoré par git : seules leurs empreintes figurent ici.",
     "verify_fr": "sha256sum <fichier> et comparer à l'empreinte ci-dessous",
-    "count": 10,
-    "total_bytes": 3745918
+    "count": 14,
+    "total_bytes": 4361250,
+    "updated_at": "2026-11-12"
   },
   "captures": [
     {
@@ -88,6 +89,38 @@
       "sha256": "dc8c89a4b0bbbccedd322f0942a7a498d10924e3bb20daca124eb6e8520b127b",
       "captured_at": "2026-09-07",
       "why_removed_fr": "melenchon2027.fr chapitre 12 section 1 — reproduit le texte du programme et l’adresse d’un tiers"
+    },
+    {
+      "path": "private/captures/2026-11-12/mentions-legales.html",
+      "kind": "source-page-2026",
+      "bytes": 143260,
+      "sha256": "5e2401bfa77dd4c706043ac025d9e01595f1701343c2628bb2179938fa4dceda",
+      "captured_at": "2026-11-12",
+      "why_removed_fr": "melenchon2027.fr, mentions légales du 12/11/2026, page entière — le texte utile est suivi en .txt ; la page porte l’habillage du site et un jeton propre à la requête"
+    },
+    {
+      "path": "private/captures/2026-11-12/livre.html",
+      "kind": "source-page-2026",
+      "bytes": 172993,
+      "sha256": "57826b020b337db74a936f51ef285451f03c16ec115699afafb0c1baada02edb",
+      "captured_at": "2026-11-12",
+      "why_removed_fr": "melenchon2027.fr, sommaire de l’édition 2026 — page du livre-programme, © La France insoumise, tous droits réservés (D15.1) : jamais dans le dépôt"
+    },
+    {
+      "path": "private/captures/2026-11-12/decouvrir.html",
+      "kind": "source-page-2026",
+      "bytes": 155480,
+      "sha256": "17e844ed19ed2dccfb182dd5a61970f2781653ded45b6f262f92af7273486c8d",
+      "captured_at": "2026-11-12",
+      "why_removed_fr": "melenchon2027.fr, page « Découvrir le programme » — source de la phrase « 1 069 mesures » ; page entière, habillage du site"
+    },
+    {
+      "path": "private/captures/2026-11-12/feed-lfi_programme_2026.xml",
+      "kind": "source-page-2026",
+      "bytes": 143599,
+      "sha256": "e1f7ce4929a72849d342c47175aef6cca3edc2e9e9e61761f2fc3f493f6f5466",
+      "captured_at": "2026-11-12",
+      "why_removed_fr": "melenchon2027.fr, flux du type de contenu lfi_programme_2026 — contient le texte intégral de dix pages du livre-programme : jamais dans le dépôt"
     }
   ]
 }

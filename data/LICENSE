@@ -1,10 +1,26 @@
 Licence des données du dossier data/
 ====================================
 
+ÉTAT AU 12 NOVEMBRE 2026 — à lire avant de réutiliser quoi que ce soit.
+
+Ce dossier contient un relevé de « L'Avenir en commun, édition 2025 ». Depuis le
+5 novembre 2026, cette édition est remplacée par « L'Avenir en commun — Le programme de la
+Nouvelle France » : la source ne sert plus les pages de 2025, et l'adresse ci-dessous redirige
+vers le nouveau livre. Ce dossier est donc une ARCHIVE DATÉE, pas le programme en vigueur.
+
+L'édition 2026 n'est PAS sous licence Creative Commons. Les mentions légales de la source la
+déclarent « © La France insoumise, tous droits réservés ». Aucun fichier de ce dossier n'en
+contient le texte, et rien de ce qui suit ne s'y applique.
+
+
+Le relevé de l'édition 2025
+---------------------------
+
 Les textes contenus dans les fichiers de ce dossier (data/aec-2025.json, data/hashes.json,
-data/expected-invariants.json, data/badge.json, data/stat-cards.json, data/terms-candidates.json,
-data/section-tags.json, et à venir glossary.json, faq.json, riposte.json) sont extraits mot pour
-mot du livre « L'Avenir en commun, édition 2025 », publié par La France insoumise à l'adresse :
+data/expected-invariants.json, data/badge.json, data/stat-cards.json,
+data/stat-cards-legal.json, data/terms-candidates.json, data/section-tags.json,
+data/glossary.json, data/faq.json, data/riposte.json) sont extraits mot pour mot du livre
+« L'Avenir en commun, édition 2025 », publié par La France insoumise à l'adresse :
 
     https://melenchon2027.fr/programme2025/livre/
 
@@ -14,14 +30,25 @@ https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr
 
 Attribution : « La France insoumise – L'Avenir en commun »
 
+Date d'extraction : 7 septembre 2026. À cette date, les mentions légales de la source plaçaient
+« tous les textes de ce site » sous cette licence, sans exception ; la pièce est conservée dans
+docs/discovery/captures/2026-09-07/melenchon2027.fr_mentions-legales.txt. Le code légal de la
+licence la dit irrévocable (section 2(a)(1)) et précise que la cessation de la mise à
+disposition par le donneur de licence n'y met pas fin (section 6(c)).
+
 Les fichiers de ce dossier sont des œuvres dérivées (extraction structurée, identifiants,
 empreintes SHA-256, métadonnées de comptage) et sont diffusés sous la même licence
 CC BY-NC-SA 4.0, avec la même attribution. Aucun texte n'a été réécrit, résumé ni corrigé :
 les mesures, sous-mesures, paragraphes et encadrés « À savoir » sont conservés tels qu'ils
-sont publiés sur le site source (normalisation Unicode NFC et espaces uniquement).
+étaient publiés sur le site source (normalisation Unicode NFC et espaces uniquement).
 
-Exceptions dans ce dossier : data/livrets-2022.json et data/falc-2022.json reprennent des pages
-de melenchon2027.fr (édition 2022, même licence CC BY-NC-SA 4.0, même attribution) ;
+
+Exceptions dans ce dossier
+--------------------------
+
+data/livrets-2022.json et data/falc-2022.json reprennent des pages de melenchon2027.fr
+(édition 2022, même licence CC BY-NC-SA 4.0, même attribution).
+
 data/desintox.json ne contient QUE des métadonnées et les titres des articles de
 desintox.lafranceinsoumise.fr, dont la licence n'est pas précisée sur le site : aucun texte
 d'article n'est reproduit ni versionné, ni à HEAD ni dans l'historique (D9.10, D13.9). L'app
@@ -29,5 +56,3 @@ affiche le titre et le lien, jamais une phrase. Toute reproduction reste suspend
 de la licence du site (docs/discovery/decisions.md, D1.5 ; hypothèses H-CNF-5 et H-CNF-17b).
 
 Le code des scripts (scripts/) n'est pas couvert par ce fichier ; voir la licence MIT du dépôt.
-
-Date d'extraction : 7 septembre 2026.

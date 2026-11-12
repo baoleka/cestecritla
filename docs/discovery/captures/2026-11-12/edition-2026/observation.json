@@ -1,0 +1,252 @@
+{
+  "meta": {
+    "observed_at": "2026-11-12T16:41:34.000Z",
+    "observer": "relevé manuel de la session du 12/11/2026 : 20 requêtes séquentielles (client générique, connexion résidentielle), plus une passe de mesure de 31 pages faite en mémoire le même jour",
+    "finding_fr": "melenchon2027.fr a remplacé « L’Avenir en commun, édition 2025 » par une nouvelle édition, « L’Avenir en commun — Le programme de la Nouvelle France » (6e édition, Éditions La Dispute). La structure, le texte et la licence changent : 6 parties, 23 chapitres, 111 sections, 1 069 propositions ; le livre-programme est désormais « © La France insoumise, tous droits réservés ». Les pages de l’édition 2025 ne sont plus servies.",
+    "statuses_fr": "VÉRIFIÉ = mesuré ou lu à la source, pièce citée · PROBABLE = déduit, ou mesuré une seule fois (définitions de docs/discovery/README.md)",
+    "not_legal_advice_fr": "Les lectures juridiques de ce fichier sont des lectures, pas des avis. La décision qu’elles éclairent est D15.2.",
+    "per_request_headers_fr": "Les en-têtes propres à chaque requête (cf-ray, report-to, nel, set-cookie) sont retirés des pièces suivies : ils décrivent le point d’accès du relevé, pas la source."
+  },
+  "edition": {
+    "title_fr": "L’Avenir en commun — Le programme de la Nouvelle France",
+    "wordpress_post_type": "lfi_programme_2026",
+    "online_since": "2026-11-05T16:14:50.000Z",
+    "online_since_source_fr": "pubDate des 10 premiers items du flux /feed/?post_type=lfi_programme_2026 (tous identiques)",
+    "feed_last_build_date": "2026-11-07T13:51:26.000Z",
+    "in_bookshops_fr": "vendredi 6 novembre 2026 (page /programme/commander/), Éditions La Dispute, ISBN 9782843033681",
+    "official_count": 1069,
+    "official_count_sentence_fr": "Il compte 1 069 mesures concrètes que Jean-Luc Mélenchon et les futurs membres de son gouvernement appliqueront dès mai 2027.",
+    "official_count_page": "/programme/decouvrir/",
+    "official_count_page_licence_fr": "page hors de /programme/livre, donc sous la licence CC BY-NC-SA 4.0 du site",
+    "status": "VÉRIFIÉ"
+  },
+  "structure": {
+    "parts": 6,
+    "part_slugs": [
+      "pour-une-bifurcation-ecologique-et-sociale",
+      "une-economie-au-service-des-besoins",
+      "mettre-en-securite-sociale",
+      "le-gout-du-futur-aux-nouvelles-frontieres-de-l-humanite",
+      "fonder-la-6e-republique",
+      "un-monde-ordonne"
+    ],
+    "chapters": 23,
+    "chapters_per_part": [3, 3, 4, 7, 3, 3],
+    "chapter_numbering_fr": "le numéro de chapitre repart de 1 dans chaque partie",
+    "sections": 111,
+    "section_paragraphs": 119,
+    "key_measures": 107,
+    "measures": 881,
+    "sub_measures": 81,
+    "propositions": 1069,
+    "chiffres_a_savoir": 0,
+    "sections_without_key_measure": 4,
+    "sections_without_key_measure_where_fr": "les quatre sections du chapitre 1 de la partie 6",
+    "introduction_fr": "1 h1, 8 h2, 13 paragraphes ; entièrement réécrite ; aucune phrase « N mesures »",
+    "part_pages_fr": "un paragraphe et un sommaire par partie ; plus d’épigraphes",
+    "markup_fr": "sections en ligne dans la page du chapitre : h3.section-title[id], p.wp-block-paragraph, div.mesure-cle (h6 + p), ul.wp-block-list > li.mesure, ul imbriqué > li.sous_mesure ; une page de chapitre porte un bloc section.chapitre inattendu sous main, à caractériser au lot B",
+    "url_shape_fr": "/programme/livre/<partie>/chapitre<K>/#<ancre-de-section>",
+    "method_fr": "liens du sommaire relevés par ce relevé (6 parties, 23 chapitres) : VÉRIFIÉ. Comptes par nature mesurés une fois en mémoire sur les 31 pages (pages non conservées) : PROBABLE, sauf le total des propositions.",
+    "propositions_status_fr": "VÉRIFIÉ — deux sources indépendantes concordent : 107 + 881 + 81 = 1 069 extraits, et « 1 069 mesures » annoncées par le site",
+    "status": "PROBABLE (à re-mesurer par la collecte du lot B, qui conservera les pages)"
+  },
+  "overlap_with_2025": {
+    "method_fr": "égalité exacte du texte normalisé (normalizeText de scripts/aec-common.ts), puis coefficient de Dice sur trigrammes de caractères du texte plié (minuscules, sans ponctuation), meilleur appariement parmi tous les éléments de l’autre édition",
+    "of_837_propositions_2025": {
+      "identical": 181,
+      "retouched_ge_0_95": 129,
+      "reworked_0_75_to_0_95": 213,
+      "related_0_5_to_0_75": 169,
+      "no_close_equivalent_lt_0_5": 145
+    },
+    "of_1069_propositions_2026": {
+      "identical": 181,
+      "retouched_ge_0_95": 129,
+      "reworked_0_75_to_0_95": 214,
+      "related_0_5_to_0_75": 183,
+      "no_close_equivalent_lt_0_5": 362
+    },
+    "of_48_chiffres_2025_found_in_2026": 0,
+    "section_titles_identical": {
+      "of_2026": "66 / 111",
+      "of_2025": "66 / 89"
+    },
+    "chapter_titles_identical": "5 / 23",
+    "where_2025_sections_went": {
+      "into_one_2026_section": 64,
+      "into_two": 18,
+      "into_three_or_more": 5,
+      "into_none": 2
+    },
+    "not_published_fr": "Ce fichier ne porte que des comptes. La correspondance élément par élément reste privée (D15.9).",
+    "status": "PROBABLE (mesuré une fois ; seuils choisis par l’observateur ; les 181 égalités exactes ne dépendent d’aucun seuil)"
+  },
+  "licence": {
+    "page": "/mentions-legales/",
+    "text_file": "docs/discovery/captures/2026-11-12/edition-2026/mentions-legales.txt",
+    "section_lines_fr": [
+      "Sauf mention contraire, tous les textes de ce site sont protégés par la licence Creative Commons Attribution – Pas d’Utilisation Commerciale – Partage dans les Mêmes Conditions 4.0 International, ce qui signifie que vous êtes libres de reproduire, diffuser et communiquer cette création au public dans les conditions de la licence.",
+      "Exception : Les contenus publiés tirés du livre-programme l’Avenir en Commun (Éditions La Dispute) (trouvable sous le chemin /programme/livre, et tous ses sous-chemins) ne sont pas placés sous licence Creative Commons. Ils sont © La France insoumise, tous droits réservés.",
+      "Toute reproduction, représentation, adaptation ou réutilisation, totale ou partielle, par quelque procédé que ce soit, est interdite sans autorisation écrite préalable, sous réserve des exceptions légales (courte citation, copie privée, etc.).",
+      "Le partage de liens vers ces pages est autorisé (et encouragé). Par exception, la reprise de courts extraits est admise dans les limites de l’exception de courte citation, à condition de mentionner l’auteur et de faire un lien vers la page d’origine."
+    ],
+    "section_sha256": "992a4407626137dbd058725113349a8e6282c2db7e0f319a404857e72f4722c4",
+    "section_sha256_rule_fr": "sha256 des lignes de la section « Licence » jointes par un saut de ligne, après normalizeText",
+    "before": {
+      "file": "docs/discovery/captures/2026-09-07/melenchon2027.fr_mentions-legales.txt",
+      "file_sha256": "8bb059f02731d3ac7db1ecc603ff6834ff57d89f0fba1c8242f1b70df3060c26",
+      "captured_at": "2026-09-07",
+      "section_fr": "la première phrase seule, sans exception"
+    },
+    "cc_licence_reading_fr": "CC BY-NC-SA 4.0, code légal français : la licence est accordée à titre « irrévocable » (§2(a)(1)) et la cessation de la mise à disposition « n’entraîne pas la fin de la présente Licence publique » (§6(c)). Lu le 12/11/2026 sur creativecommons.org.",
+    "status": "VÉRIFIÉ (texte de la clause) ; PROBABLE (ce qu’elle implique pour le corpus 2025 : lecture, pas avis)"
+  },
+  "machine_readable_reservations": {
+    "robots_txt": {
+      "file": "docs/discovery/captures/2026-11-12/edition-2026/robots.txt",
+      "sha256": "252862dda77770beb8cec2d6e0688846381543997dc7137a608652fa967b9082",
+      "unchanged_since": "2026-09-07"
+    },
+    "tdmrep_json_status": 404,
+    "chapter_page_headers": {
+      "cache-control": "no-cache",
+      "referrer-policy": "strict-origin-when-cross-origin",
+      "x-frame-options": "SAMEORIGIN"
+    },
+    "document_policy_fr": "aucun en-tête Document-Policy sur une page de chapitre : le site ne désactive pas le défilement vers un fragment de texte",
+    "status": "VÉRIFIÉ"
+  },
+  "urls": [
+    {
+      "path": "/programme2025/livre/",
+      "status": 301,
+      "location": "https://melenchon2027.fr/programme/livre/"
+    },
+    {
+      "path": "/programme2025/livre/introduction/",
+      "status": 301,
+      "location": "https://melenchon2027.fr/programme/livre/introduction/"
+    },
+    {
+      "path": "/programme2025/livre/faire-la-revolution-citoyenne/",
+      "status": 404,
+      "location": null
+    },
+    {
+      "path": "/programme2025/livre/chapitre1/",
+      "status": 301,
+      "location": "https://melenchon2027.fr/programme/livre/pour-une-bifurcation-ecologique-et-sociale/chapitre1/"
+    },
+    {
+      "path": "/programme2025/livre/chapitre12/",
+      "status": 404,
+      "location": null
+    },
+    {
+      "path": "/programme2025/livre/chapitre1/s1/",
+      "status": 404,
+      "location": null
+    },
+    {
+      "path": "/programme2025/livre/chapitre8/s7/",
+      "status": 404,
+      "location": null
+    },
+    {
+      "path": "/programme2025/livre/chapitre18/s5/",
+      "status": 404,
+      "location": null
+    },
+    {
+      "path": "/programme2025/",
+      "status": 404,
+      "location": null
+    },
+    {
+      "path": "/programme/",
+      "status": 302,
+      "location": "https://melenchon2027.fr/programme/livre"
+    },
+    {
+      "path": "/programme/livre/introduction/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "path": "/programme/livre/pour-une-bifurcation-ecologique-et-sociale/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "path": "/programme/livre/pour-une-bifurcation-ecologique-et-sociale/chapitre1/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "path": "/feed/?post_type=lfi_programme_2025",
+      "status": 200,
+      "location": null
+    },
+    {
+      "path": "/programme/livre/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "path": "/robots.txt",
+      "status": 200,
+      "location": null
+    },
+    {
+      "path": "/.well-known/tdmrep.json",
+      "status": 404,
+      "location": null
+    }
+  ],
+  "urls_reading_fr": "Les adresses de section de l’édition 2025 répondent 404. /programme2025/livre/ et son introduction redirigent vers le nouveau livre ; /programme2025/livre/chapitre1/ redirige vers le chapitre 1 de la nouvelle partie 1, qui traite d’un autre sujet. Le flux de l’ancien type de contenu répond encore 200.",
+  "raw_pages_not_tracked": [
+    {
+      "file": "private/captures/2026-11-12/mentions-legales.html",
+      "url": "https://melenchon2027.fr/mentions-legales/",
+      "bytes": 143260,
+      "sha256": "5e2401bfa77dd4c706043ac025d9e01595f1701343c2628bb2179938fa4dceda"
+    },
+    {
+      "file": "private/captures/2026-11-12/livre.html",
+      "url": "https://melenchon2027.fr/programme/livre/",
+      "bytes": 172993,
+      "sha256": "57826b020b337db74a936f51ef285451f03c16ec115699afafb0c1baada02edb"
+    },
+    {
+      "file": "private/captures/2026-11-12/decouvrir.html",
+      "url": "https://melenchon2027.fr/programme/decouvrir/",
+      "bytes": 155480,
+      "sha256": "17e844ed19ed2dccfb182dd5a61970f2781653ded45b6f262f92af7273486c8d"
+    },
+    {
+      "file": "private/captures/2026-11-12/feed-lfi_programme_2026.xml",
+      "url": "https://melenchon2027.fr/feed/?post_type=lfi_programme_2026",
+      "bytes": 143599,
+      "sha256": "e1f7ce4929a72849d342c47175aef6cca3edc2e9e9e61761f2fc3f493f6f5466"
+    }
+  ],
+  "raw_pages_fr": "Pages conservées hors dépôt (private/, ignoré par git). Leur empreinte est celle du fichier conservé ; elle ne sert pas à détecter un changement, chaque page portant un jeton propre à la requête.",
+  "own_public_surfaces_at_observation": {
+    "cestecritla.fr": "Worker aec-spike-share (spike de partage du 9/9/2026) : pages /m/, /a/, /r/ sur le texte 2025 présenté comme « Texte du programme », lien source en 404, /data/slim.json en 200 (249 153 o), aucune page de mentions légales, X-Robots-Tag: noindex, journaux d’invocation activés dans sa configuration",
+    "proto.cestecritla.fr": "en ligne (prototypes cliquables, texte 2025)",
+    "lab.cestecritla.fr": "en ligne (labo Turnstile)",
+    "worker_cestecritla": "n’existe pas sur le compte (code 10007) : l’app n’a jamais été déployée",
+    "status": "VÉRIFIÉ"
+  },
+  "watch_at_observation": {
+    "workflows": {
+      "Rappel de re-crawl hebdomadaire": "disabled_inactivity",
+      "Watch aec2027.fr": "disabled_inactivity",
+      "CI": "active"
+    },
+    "last_scheduled_runs": "2026-11-09",
+    "reminder_runs_fr": "le rappel du lundi a échoué chaque semaine à l’étape qui ouvre l’issue ; les labels recrawl, veille et corpus n’existent pas dans le dépôt recréé le 10/9",
+    "aec2027_fr": "inchangé (Last-Modified du 1/9/2026, même empreinte que la capture du 7/9)",
+    "status": "VÉRIFIÉ (état des workflows, labels) ; PROBABLE (cause de l’échec : le journal de l’exécution n’est plus disponible)"
+  }
+}

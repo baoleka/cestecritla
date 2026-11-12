@@ -1,29 +1,31 @@
 # C'est écrit là
 
-![corpus à jour au](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/baoleka/cestecritla/main/data/badge.json)
+![édition 2025](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/baoleka/cestecritla/main/data/badge.json)
 
-**« C'est écrit là »** (`cestecritla.fr`) est un projet militant **indépendant** pour faire découvrir *L'Avenir en commun, édition 2025* (programme de La France insoumise pour la présidentielle 2027) et retrouver la mesure exacte sur n'importe quel terme du programme. Application à venir sur Cloudflare (plan gratuit, 0 € d'exploitation, zéro compte, zéro donnée).
+**« C'est écrit là »** (`cestecritla.fr`) est un projet militant **indépendant** pour retrouver où une mesure est écrite dans *L'Avenir en commun* (programme de La France insoumise pour la présidentielle 2027) et renvoyer à la page officielle. Cloudflare, plan gratuit, 0 € d'exploitation, zéro compte, zéro donnée. Ce projet n'est pas édité par La France insoumise et n'engage pas le mouvement.
 
-La recherche et les réponses sont **extractives** : aucun modèle de langage ne tourne à l'exécution en v1 ni en v2 (D6.10). Le texte affiché est un verbatim du corpus, pointé par son identifiant. Si la piste IA est rouverte en v3, sur trois preuves, le seul fournisseur autorisé reste Mistral via Workers AI (D0.3).
+## Où en est le projet (12 novembre 2026)
 
-Ce dépôt contient pour l'instant la **session de découverte** (7-10 septembre 2026) : dossier de décisions, corpus canonique, design tokens, prototypes et le prompt qui lancera la session de planification.
+**Le programme a été réédité le 5 novembre 2026.** La nouvelle édition — « L'Avenir en commun — Le programme de la Nouvelle France », 6 parties, 23 chapitres, 111 sections, 1 069 mesures — remplace l'édition 2025 sur laquelle ce dépôt a été construit. Son texte est réécrit, et il **n'est plus sous licence Creative Commons** : « © La France insoumise, tous droits réservés », le partage de liens étant « autorisé (et encouragé) » et les courts extraits admis avec l'auteur et un lien vers la page d'origine.
 
-## Réutiliser les données
+Le projet change donc de régime : **renvoi + courte citation**. L'app trouve le passage et renvoie à la page officielle ; elle ne reproduit pas le texte. Le site est en cours de mise à jour ; le plan est `docs/discovery/PLAN-EDITION-2026.md`, les décisions sont D15.1 à D15.13 dans `docs/discovery/decisions.md`.
 
-`data/aec-2025.json` est, à notre connaissance, le premier jeu de données structuré et vérifié de l'édition 2025 : 4 parties, 18 chapitres, 89 sections, 837 propositions (87 mesures clés + 706 mesures + 44 sous-mesures), 48 encadrés « À savoir », identifiants stables (`c12-s01-k01`), empreintes SHA-256 par item et par section, version de corpus. Il est produit par `scripts/ingest.ts` (18 pages de chapitre → table des matières → sections, jamais de force brute) et vérifié mot à mot par `scripts/verify-corpus.ts`.
+La recherche est **extractive** : aucun modèle de langage ne tourne à l'exécution en v1 ni en v2 (D6.10). Si la piste IA est rouverte en v3, sur trois preuves, le seul fournisseur autorisé reste Mistral via Workers AI (D0.3).
 
-- Licence des textes et des dérivés : **CC BY-NC-SA 4.0**, attribution « **La France insoumise – L'Avenir en commun** », source https://melenchon2027.fr/programme2025/livre/ (voir `data/LICENSE`).
-- Le livre annonce **831 mesures** ; le jeu de données compte 837 blocs publiés. La règle de comptage est dans `meta.counting_rule_fr`.
-- Re-crawl hebdomadaire hors Worker (`.github/workflows/recrawl.yml`) : toute modification du texte source arrive par pull request de diff.
+## Ce que le dépôt contient, et sous quelle licence
 
-Voir `scripts/README.md` pour lancer l'ingestion, la vérification et le diff.
+**L'édition 2026 : aucun texte.** Ce dépôt ne contient pas le texte de l'édition 2026 et ne le contiendra pas. Il publiera un manifeste — structure, titres, ancres, empreintes SHA-256 — qui permet de vérifier qu'une citation est exacte sans la republier.
 
-## Dossier de découverte
+**L'édition 2025 : une archive datée.** `data/aec-2025.json` est un relevé structuré et vérifié de l'édition 2025, fait le 7 septembre 2026, quand le site source plaçait tous ses textes sous CC BY-NC-SA 4.0 : 4 parties, 18 chapitres, 89 sections, 837 propositions, 48 encadrés « À savoir », empreintes SHA-256 par item et par section. **Ce n'est plus le programme en vigueur**, et la source ne sert plus ces pages.
 
-Point d'entrée : `docs/discovery/README.md`, qui indexe le dossier. Le livrable n° 1 est **`docs/discovery/prompt-final.md`** — le prompt autoportant qui lance la session de planification en plan mode ; viennent ensuite `00-resume-executif.md`, `decisions.md` (158 décisions, D0-D13), `16-hypotheses.md` et le dry run `17-dry-run-prompt.md`. `PLAN-SESSION.md` est l'archive du plan de la session de découverte, déjà exécuté.
+- Licence de ce relevé et de ses dérivés : **CC BY-NC-SA 4.0**, attribution « **La France insoumise – L'Avenir en commun** » (voir `data/LICENSE`).
+- Le livre de 2025 annonçait **831 mesures** ; le relevé compte 837 blocs publiés. La règle de comptage est dans `meta.counting_rule_fr`.
+- `scripts/ingest.ts`, `scripts/verify-corpus.ts` et `scripts/recrawl.ts` visent cette édition : ils ne peuvent plus être rejoués contre la source et restent comme preuve de la méthode. Voir `scripts/README.md`.
+
+## Dossier
+
+Point d'entrée : `docs/discovery/README.md`. À lire d'abord : `PLAN-EDITION-2026.md` (le plan en cours), `decisions.md` (187 décisions, D0-D15), `14-risques.md` et `16-hypotheses.md`. Le dossier de découverte des 7-10 septembre 2026 (`00-resume-executif.md`, `prompt-final.md`, `PLAN-IMPLEMENTATION.md`) décrit le produit d'avant la réédition ; il reste la référence pour tout ce que D15 ne touche pas.
 
 ## Licences
 
-Code : MIT (`LICENSE`). Données et textes : CC BY-NC-SA 4.0 (`data/LICENSE`). Polices : SIL OFL 1.1 (`design/fonts/`). Les logos, affiches et illustrations de La France insoumise et de la campagne ne sont **pas** inclus dans ce dépôt.
-
-Attribution : *La France insoumise – L'Avenir en commun*. Ce projet n'est pas édité par La France insoumise et n'engage pas le mouvement.
+Code : MIT (`LICENSE`). Relevé de l'édition 2025 et ses dérivés : CC BY-NC-SA 4.0 (`data/LICENSE`). Polices : SIL OFL 1.1 (`design/fonts/`). Le texte de l'édition 2026, les logos, affiches et illustrations de La France insoumise et de la campagne ne sont **pas** inclus dans ce dépôt.

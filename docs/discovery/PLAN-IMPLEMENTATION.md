@@ -1,5 +1,17 @@
 # Plan d'implémentation — « C'est écrit là » (cestecritla.fr)
 
+> ⚠️ **Remplacé en partie le 12 novembre 2026.** Le programme a été réédité le 5 novembre 2026 :
+> autre structure, texte réécrit, livre-programme sorti de la licence Creative Commons (D15.1).
+> **Les lots 2 à 13 de ce plan, et sa date du 10 novembre, ne s'appliquent plus** : ils sont
+> remplacés par **`PLAN-EDITION-2026.md`** (v1 le mardi 15 décembre 2026, régime « renvoi + courte
+> citation », D15.2 et D15.5). **Restent acquis** : P0.0, P0.1, P0.7 et le lot 1, faits le 10/9 ;
+> les gestes P0.2 à P0.5 et P0.8, toujours dus ; les dates légales (L52-1, gel du 1er mars 2027,
+> silences L49) ; l'ordre de sacrifice, tel qu'amendé par le nouveau plan. Tout ce qui suit est
+> conservé comme pièce : c'est le plan tel qu'il a été approuvé le 10 septembre.
+>
+> Ce que ce plan n'avait pas prévu, et pourquoi : il comptait « 2 jours » pour une actualisation du
+> programme (R2, fiche 6). La réédition a changé le texte **et** le droit de le reproduire.
+
 > Produit par la session plan-mode lancée par `docs/discovery/prompt-final.md` (livrable n° 1 de la
 > session de découverte des 7-10 septembre 2026). **Approuvé le 10 septembre 2026.**
 > Horizon : 11 septembre 2026 → 3 mai 2027.

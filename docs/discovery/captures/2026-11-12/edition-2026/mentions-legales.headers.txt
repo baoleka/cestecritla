@@ -1,0 +1,18 @@
+HTTP 200
+cache-control: no-cache
+cf-cache-status: DYNAMIC
+connection: keep-alive
+content-encoding: br
+content-type: text/html; charset=UTF-8
+date: Thu, 12 Nov 2026 16:41:34 GMT
+expires: Thu, 12 Nov 2026 16:41:33 GMT
+fastcgi-cache: STALE
+link: <https://melenchon2027.fr/wp-json/>; rel="https://api.w.org/", <https://melenchon2027.fr/wp-json/wp/v2/pages/19228>; rel="alternate"; title="JSON"; type="application/json", <https://melenchon2027.fr/?p=19228>; rel=shortlink
+permissions-policy: geolocation=(), camera=(), microphone=()
+referrer-policy: strict-origin-when-cross-origin
+server: cloudflare
+strict-transport-security: max-age=31536000; includeSubDomains; preload
+transfer-encoding: chunked
+vary: Accept-Encoding
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
