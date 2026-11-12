@@ -1,0 +1,15 @@
+{
+  "locator_min_words": 4,
+  "locator_max_words": 8,
+  "locator_max_item_share": 0.5,
+  "locator_scope": "all",
+  "incipit_min_words": 4,
+  "incipit_max_words": 8,
+  "incipit_max_item_share": 0.5,
+  "max_share": 0.25,
+  "max_fully_exposed": 0,
+  "max_quotes": 40,
+  "max_quote_share": 0.05,
+  "license_statement_sha256": "992a4407626137dbd058725113349a8e6282c2db7e0f319a404857e72f4722c4",
+  "validated_on": null
+}

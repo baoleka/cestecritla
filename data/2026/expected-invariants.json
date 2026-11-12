@@ -1,0 +1,62 @@
+{
+  "counts": {
+    "parts": 6,
+    "chapters": 23,
+    "sections": 111,
+    "key_measures": 107,
+    "measures": 881,
+    "sub_measures": 81,
+    "propositions": 1069,
+    "section_paragraphs": 119,
+    "sections_without_key_measure": 4,
+    "sections_multi_paragraph": 4,
+    "measures_with_sub_measures": 18,
+    "introduction_headings": 8,
+    "introduction_paragraphs": 13,
+    "part_paragraphs": 6,
+    "chapter_paragraphs": 4
+  },
+  "chapters_per_part": [
+    3,
+    3,
+    4,
+    7,
+    3,
+    3
+  ],
+  "sections_per_chapter": {
+    "p1c1": 2,
+    "p1c2": 3,
+    "p1c3": 8,
+    "p2c1": 4,
+    "p2c2": 3,
+    "p2c3": 5,
+    "p3c1": 9,
+    "p3c2": 8,
+    "p3c3": 4,
+    "p3c4": 4,
+    "p4c1": 4,
+    "p4c2": 7,
+    "p4c3": 3,
+    "p4c4": 6,
+    "p4c5": 3,
+    "p4c6": 3,
+    "p4c7": 3,
+    "p5c1": 6,
+    "p5c2": 5,
+    "p5c3": 5,
+    "p6c1": 4,
+    "p6c2": 5,
+    "p6c3": 7
+  },
+  "sections_without_key_measure": [
+    "p6c1-s01",
+    "p6c1-s02",
+    "p6c1-s03",
+    "p6c1-s04"
+  ],
+  "chapters_with_introduction": [
+    "p6c1"
+  ],
+  "official_count": 1069
+}

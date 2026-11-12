@@ -23,7 +23,12 @@
     "format": "prettier --write \"**/*.{ts,json,md}\"",
     "a11y": "tsx scripts/a11y.ts",
     "build:neutral": "tsx scripts/build.ts --neutral",
-    "recrawl": "tsx scripts/recrawl.ts"
+    "recrawl": "tsx scripts/recrawl.ts",
+    "ingest:2026": "tsx scripts/ingest-2026.ts",
+    "publish:2026": "tsx scripts/publish-2026.ts",
+    "verify:2026": "tsx scripts/verify-2026.ts",
+    "recrawl:2026": "tsx scripts/recrawl-2026.ts",
+    "watch:source": "tsx scripts/watch-source.ts"
   },
   "license": "MIT",
   "devDependencies": {

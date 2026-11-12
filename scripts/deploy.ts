@@ -20,7 +20,13 @@
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
-import { deployRefusal, htmlPages, readBuildMode, wranglerDeployArgs } from './build-mode.js';
+import {
+  citationPolicyValidated,
+  deployRefusal,
+  htmlPages,
+  readBuildMode,
+  wranglerDeployArgs,
+} from './build-mode.js';
 
 const [target, ...passthrough] = process.argv.slice(2);
 if (target !== 'apex' && target !== 'preview') {
@@ -34,7 +40,10 @@ if (!existsSync('dist')) {
 
 const mode = readBuildMode();
 const pages = htmlPages('dist');
-const refusal = deployRefusal(target, mode, pages);
+const refusal = deployRefusal(target, mode, pages, {
+  policyValidated: citationPolicyValidated(),
+  dryRun: passthrough.includes('--dry-run'),
+});
 if (refusal !== null) {
   console.error(`deploy refused (${target}, ${mode} build): ${refusal}`);
   process.exit(1);

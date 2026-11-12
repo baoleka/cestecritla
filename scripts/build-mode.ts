@@ -104,21 +104,53 @@ export function htmlPages(dir = 'dist'): string[] {
   return walk(dir).sort();
 }
 
+export const EXPOSURE_POLICY_PATH = 'data/2026/exposure-policy.json';
+
+/** True once the editor has dated the citation policy (`validated_on`, D15.7). */
+export function citationPolicyValidated(path: string = EXPOSURE_POLICY_PATH): boolean {
+  if (!existsSync(path)) return false;
+  const parsed: unknown = JSON.parse(readFileSync(path, 'utf8'));
+  return (
+    typeof parsed === 'object' &&
+    parsed !== null &&
+    'validated_on' in parsed &&
+    typeof parsed.validated_on === 'string' &&
+    /^\d{4}-\d{2}-\d{2}$/.test(parsed.validated_on)
+  );
+}
+
+export interface DeployContext {
+  /** The editor has validated the citation policy on the measured numbers (D15.7). */
+  policyValidated: boolean;
+  /** `--dry-run`: wrangler bundles and uploads nothing. */
+  dryRun: boolean;
+}
+
 /**
  * Why this build must not be deployed to this target — or null when it may.
  *
- * Kept pure so the rule is tested without a dist/: the apex takes the holding build only, and a
- * holding build is exactly its two pages.
+ * Kept pure so the rule is tested without a dist/: the apex takes the holding build only, a
+ * holding build is exactly its two pages, and an app build — which carries incipits, locators
+ * and quotations of a book that is all rights reserved — goes nowhere public, not even to the
+ * noindex preview host, before the editor has seen and dated the measured exposure.
  */
 export function deployRefusal(
   target: DeployTarget,
   mode: BuildMode,
   pages: readonly string[],
+  context: DeployContext,
 ): string | null {
   if (target === 'apex' && mode !== 'holding') {
     return (
       'the apex serves the holding page until launch day (D15.5): ' +
       'run `npm run build:holding` first, or deploy the app with `npm run deploy:preview`'
+    );
+  }
+  if (mode === 'app' && !context.policyValidated && !context.dryRun) {
+    return (
+      'the citation policy has not been validated (D15.7): run ' +
+      '`npx tsx scripts/publish-2026.ts --report`, decide, then set "validated_on" in ' +
+      `${EXPOSURE_POLICY_PATH} — until then the app is not deployed anywhere, preview included`
     );
   }
   if (mode === 'holding') {

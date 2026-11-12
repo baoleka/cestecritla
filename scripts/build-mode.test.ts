@@ -15,11 +15,16 @@ import {
   HOLDING_PAGES,
   HOLDING_REDIRECT_PREFIXES,
   WRANGLER_CONFIG,
+  citationPolicyValidated,
   deployRefusal,
   holdingRedirects,
   wranglerDeployArgs,
+  type DeployContext,
 } from './build-mode.js';
 import { parseJsonc, stripJsoncComments } from './jsonc.js';
+
+/** The editor has dated the citation policy, and this is a real deployment. */
+const VALIDATED: DeployContext = { policyValidated: true, dryRun: false };
 
 interface Route {
   pattern: string;
@@ -56,27 +61,39 @@ void test('the JSONC reader keeps a URL inside a string and drops a comment afte
 });
 
 void test('the apex refuses an app build until launch day', () => {
-  const refusal = deployRefusal('apex', 'app', ['index.html', 's/c1-s02/index.html']);
+  const refusal = deployRefusal('apex', 'app', ['index.html', 's/c1-s02/index.html'], VALIDATED);
   assert.match(String(refusal), /holding page until launch day/);
 });
 
 void test('the apex accepts a holding build made of exactly its two pages', () => {
-  assert.equal(deployRefusal('apex', 'holding', [...HOLDING_PAGES]), null);
+  assert.equal(deployRefusal('apex', 'holding', [...HOLDING_PAGES], VALIDATED), null);
 });
 
 void test('a holding build that carries one page of the app is refused everywhere', () => {
   const leaked = [...HOLDING_PAGES, 'm/c12-s01-k01/index.html'];
-  assert.match(String(deployRefusal('apex', 'holding', leaked)), /unexpected: m\/c12-s01-k01/);
-  assert.match(String(deployRefusal('preview', 'holding', leaked)), /unexpected: m\/c12-s01-k01/);
+  assert.match(
+    String(deployRefusal('apex', 'holding', leaked, VALIDATED)),
+    /unexpected: m\/c12-s01-k01/,
+  );
+  assert.match(
+    String(deployRefusal('preview', 'holding', leaked, VALIDATED)),
+    /unexpected: m\/c12-s01-k01/,
+  );
 });
 
 void test('a holding build with a page missing is refused', () => {
-  assert.match(String(deployRefusal('apex', 'holding', ['index.html'])), /missing: 404\.html/);
+  assert.match(
+    String(deployRefusal('apex', 'holding', ['index.html'], VALIDATED)),
+    /missing: 404\.html/,
+  );
 });
 
 void test('the preview host takes either build', () => {
-  assert.equal(deployRefusal('preview', 'app', ['index.html', 's/c1-s02/index.html']), null);
-  assert.equal(deployRefusal('preview', 'holding', [...HOLDING_PAGES]), null);
+  assert.equal(
+    deployRefusal('preview', 'app', ['index.html', 's/c1-s02/index.html'], VALIDATED),
+    null,
+  );
+  assert.equal(deployRefusal('preview', 'holding', [...HOLDING_PAGES], VALIDATED), null);
 });
 
 void test('holding redirects are temporary, one per old prefix, and never touch the root', () => {
@@ -166,4 +183,30 @@ void test('the app carries its non-inherited settings into the preview environme
   assert.equal(dataset?.binding, app.analytics_engine_datasets?.[0]?.binding);
   // A test session must never land in the figures we publish.
   assert.notEqual(dataset?.dataset, app.analytics_engine_datasets?.[0]?.dataset);
+});
+
+void test('an app build is deployed nowhere before the citation policy is validated (D15.7)', () => {
+  const pages = ['index.html', 's/p1c1-s01/index.html'];
+  const pending: DeployContext = { policyValidated: false, dryRun: false };
+  // Not even to the noindex preview host: noindex is not private.
+  assert.match(
+    String(deployRefusal('preview', 'app', pages, pending)),
+    /citation policy has not been validated/,
+  );
+  // A dry run uploads nothing: CI keeps exercising the configuration.
+  assert.equal(
+    deployRefusal('preview', 'app', pages, { policyValidated: false, dryRun: true }),
+    null,
+  );
+  // The holding page carries nothing of the programme: it never waits for the policy.
+  assert.equal(deployRefusal('apex', 'holding', [...HOLDING_PAGES], pending), null);
+  assert.equal(deployRefusal('preview', 'holding', [...HOLDING_PAGES], pending), null);
+});
+
+void test('the policy counts as validated only when it carries a date', () => {
+  assert.equal(citationPolicyValidated('data/2026/does-not-exist.json'), false);
+  const policy = JSON.parse(readFileSync('data/2026/exposure-policy.json', 'utf8')) as {
+    validated_on: string | null;
+  };
+  assert.equal(citationPolicyValidated(), policy.validated_on !== null);
 });
