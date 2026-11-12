@@ -584,3 +584,33 @@ Dans l'ordre :
 5. **Sonde 0 et essais sur téléphones** (F3).
 6. **Jour J** : `"apex": "app"` dans `data/launch.json`, `npm run build && npm run deploy` dans un
    terminal.
+
+### Validation, push et aperçu, le 12 novembre 2026 au soir
+
+- **D15.18** — l'utilisateur valide la politique de citation sur les parts mesurées (repères de
+  lien pour toutes les propositions : 20,12 %) et demande de pousser, puis de déployer l'aperçu.
+  Les étapes 1 et 2 de la liste ci-dessus sont faites.
+- **Avant le push** : toutes les portes rejouées sur l'arbre validé (248 tests, dont la porte
+  anti-fuite de contenu sur 128 fichiers changés depuis le gel et 1 144 fichiers construits ;
+  accessibilité 23 pages × 6 conditions ; essais de bout en bout sur trois moteurs) ;
+  `publish-2026.ts --check` et `index-2026.ts --check` : les fichiers publiés sont exactement ceux
+  que produisent le corpus privé et la politique ; aucun fichier suivi sous `private/` ; aucun
+  chemin absolu ni adresse dans les lignes ajoutées ni dans les messages de commit.
+- **Poussé** : onze commits, `22035d0..1837890` sur `origin/main`.
+- **CI verte sur `1837890`**, les deux jobs : portes (types, lint, build, tests, contraste,
+  déploiements à blanc, build d'attente) et accessibilité (23 pages × 6 conditions, essais de bout
+  en bout, relecture du site synthétique par un vrai navigateur).
+- **Aperçu déployé** : `beta.cestecritla.fr` sert l'app (Worker `cestecritla-preview`, fichiers
+  statiques, 1 142 fichiers, 22 s). **VÉRIFIÉ** au `curl` : 200 pour l'accueil, une fiche, une
+  réponse, une carte, les pages institutionnelles, le plan du site et les deux fichiers de la
+  recherche ; 307 puis 200 pour un pont demandé sans barre finale ; 302 vers `/` pour `/p/` et
+  `/res/` ; 404 pour `/api/e` ; `X-Robots-Tag: noindex` sur tout ; `Cache-Control` à valeur unique
+  (300 s pour le HTML, un an pour `/data/`, `/og/` et `/fonts/`) ; une fiche de section identique à
+  l'octet près à la build locale. **VÉRIFIÉ** dans un vrai navigateur, sur l'hôte déployé : la
+  recherche « smic » rend 8 sections, la première est « Augmenter les salaires » ; les liens
+  reçoivent leur repère ; aucune violation de CSP ; aucune requête hors du domaine.
+- **L'apex n'a pas bougé** : page d'attente sur `cestecritla.fr` et `www`, anciens chemins en 302.
+
+Reste à l'utilisateur, dans l'ordre : relire les 20 textes sur l'aperçu (D0.27) ; P0.5 et P0.8, à
+dater dans `data/launch.json` ; sonde 0 et essais sur téléphones ; puis le jour J.
+
