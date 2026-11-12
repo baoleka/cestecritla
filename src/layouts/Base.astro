@@ -42,6 +42,12 @@ const footer: readonly { href: string; label: string }[] = [
   { href: '/', label: t('nav.toc') },
   { href: '/r/', label: t('riposte.title') },
   { href: '/mot/', label: t('nav.words') },
+  { href: '/exactitude/', label: t('legal.accuracy') },
+  { href: '/methodologie/', label: t('nav.method') },
+  { href: '/licence/', label: t('legal.license') },
+  { href: '/confidentialite/', label: t('legal.privacy') },
+  { href: '/a-propos/', label: t('legal.about') },
+  { href: '/mentions-legales/', label: t('legal.notice') },
 ];
 ---
 
@@ -65,6 +71,7 @@ const footer: readonly { href: string; label: string }[] = [
         <>
           {/* Our own address, never the official one: a cross-domain canonical would declare
               that the official site owns this page and ask for ours to be de-indexed. */}
+          <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
           <link rel="canonical" href={canonical} />
           {/* Link previews carry our words only — never an extract of the programme (D15.7). */}
           <meta property="og:site_name" content={t('app.name')} />
@@ -73,6 +80,10 @@ const footer: readonly { href: string; label: string }[] = [
           <meta property="og:type" content="website" />
           <meta property="og:url" content={canonical} />
           <meta property="og:locale" content="fr_FR" />
+          <meta property="og:image" content={new URL('/og/cestecritla-v1.png', Astro.site).href} />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="630" />
+          <meta name="twitter:card" content="summary_large_image" />
         </>
       )
     }

@@ -1,0 +1,26 @@
+---
+/**
+ * `/licence/` — whose text is whose, edition by edition.
+ *
+ * Two editions, two regimes, and the page must not blur them: the 2026 book is all rights
+ * reserved and the app links to it and quotes it briefly (D15.1, D15.2); the 2025 edition was
+ * CC BY-NC-SA and survives as a dated archive in the repository, which the app no longer shows.
+ */
+import Base from '../../layouts/Base.astro';
+import { LEGAL_URL } from '../../lib/edition.ts';
+import { t } from '../../lib/strings.ts';
+---
+
+<Base title={`${t('legal.license')} — ${t('app.name')}`} description={t('legal.license.text')}>
+  <p class="label">{t('independence.unofficial')}</p>
+  <h1>{t('legal.license')}</h1>
+  <p class="lead">{t('legal.license.text')}</p>
+  <p>{t('legal.license.quote_rule')}</p>
+  <p><a href={LEGAL_URL} rel="noopener">{t('legal.license.source_link')}</a></p>
+  <p>{t('attribution.unmodified')} {t('attribution.warranty')}</p>
+  <p>{t('legal.license.derived')}</p>
+  <p>{t('legal.license.archive')}</p>
+  <p>{t('legal.license.code')}</p>
+  <p>{t('legal.license.fonts')}</p>
+  <p>{t('legal.license.contact')}</p>
+</Base>

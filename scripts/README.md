@@ -1,5 +1,37 @@
 # Scripts du corpus — ingestion, vérification, diff
 
+> **Deux éditions, deux chaînes.** Ce fichier décrit d'abord la chaîne de l'**édition 2026**, la
+> seule en service. La suite (« Installation », « Ingestion »…) décrit les outils de l'édition
+> 2025 : ils ne peuvent plus être rejoués contre la source et restent comme preuve de la méthode.
+
+## Édition 2026 — la chaîne en vigueur
+
+Le livre-programme de 2026 est « tous droits réservés » (D15.1) : son texte **n'entre jamais dans
+ce dépôt**. Il vit sous `private/`, ignoré par git, sur la seule machine de l'éditeur. Le dépôt
+publie de quoi retrouver un passage et prouver une citation : `data/2026/` (voir son `NOTICE.md`).
+
+| Étape | Commande | Lit | Écrit |
+|---|---|---|---|
+| Collecte (35 requêtes, **avec accord**, une fois par jour au plus) | `npx tsx scripts/crawl-2026.ts` | la source | `private/html/<horodatage>/` |
+| Analyse hors ligne, recoupements, 1 069 = chiffre officiel | `npm run ingest:2026` | les pages stockées | `private/corpus/aec-2026.json` |
+| Manifeste, citations, rapport d'exposition | `npm run publish:2026` (`-- --report`, `--check`, `--anchor-only`) | corpus privé, politique, textes éditoriaux | `data/2026/manifest.json`, `quotes.json` |
+| Index de recherche (racines, aucun champ stocké) | `npm run index:2026` | corpus privé | `data/2026/search-index.json` |
+| Second avis par trois navigateurs | `npm run verify:2026 -- --engines chromium,firefox,webkit --write` | pages stockées, manifeste | `data/2026/verification.json` |
+| Correspondance 2025 → 2026 | `npx tsx scripts/id-map.ts` | les deux corpus | `private/id-map/`, `data/2026/id-map-2025.json` |
+| Mesure de la recherche | `npm run eval:2026` | index, questions, synonymes | — |
+| Veille | `npm run watch:source` (hors ligne ; `-- --live` = 5 requêtes) · `npm run recrawl:2026 -- --dry-run` | dernière collecte | — |
+
+Règles tenues par des tests : aucune sortie d'outil n'imprime de texte du programme (identifiants
+et nombres seulement) ; le site se construit sans `private/` (`scripts/check-repo.test.ts`) ; les
+fichiers publiés n'ont aucun champ où loger une phrase et restent sous les plafonds de
+`data/2026/exposure-policy.json` (`scripts/leak.test.ts`). La politique de crawl est celle
+ci-dessous, inchangée.
+
+Sur le site construit : `npm run build`, puis `npm test`, `npm run a11y`, `npm run e2e`
+(`-- --real` pour répondre avec les pages officielles stockées).
+
+---
+
 Outils Node 24 / TypeScript strict (`npx tsx`) qui produisent et surveillent le jeu de données
 `data/aec-2025.json`, extraction mot pour mot de _L'Avenir en commun, édition 2025_
 (https://melenchon2027.fr/programme2025/livre/, textes sous CC BY-NC-SA 4.0, attribution

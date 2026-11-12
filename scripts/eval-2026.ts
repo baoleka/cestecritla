@@ -5,6 +5,8 @@
  *   npx tsx scripts/eval-2026.ts --derive    (local) rewrites eval/questions-2026.json from the
  *                                            2025 set and the private map, keeping judged entries
  *   npx tsx scripts/eval-2026.ts --failures  also lists the questions that miss
+ *   npx tsx scripts/eval-2026.ts --write     records the result in data/2026/search-eval.json,
+ *                                            which /exactitude reads and CI recomputes
  *
  * The unit is the SECTION, because that is what the product answers: "where is it written?".
  * A question is a hit at k when one of the sections where its subject is treated appears among
@@ -34,6 +36,34 @@ import {
 
 export const QUESTIONS_2026_PATH = 'eval/questions-2026.json';
 export const SYNONYMS_PATH = 'data/2026/synonyms.json';
+export const SEARCH_EVAL_PATH = 'data/2026/search-eval.json';
+
+/** data/2026/search-eval.json — the measured quality, as /exactitude publishes it. */
+export interface SearchEvalFile {
+  corpus_version: string;
+  questions: number;
+  left_out: number;
+  /** Questions whose right section is first / among the first three / among the first five. */
+  first: number;
+  in_first_three: number;
+  in_first_five: number;
+  /** Share of the expected sections found among the first three. */
+  recall_at_3: number;
+}
+
+export function searchEval(file: Questions2026): SearchEvalFile {
+  const result = evaluate(file.questions);
+  const count = (rate: number): number => Math.round(rate * result.evaluated);
+  return {
+    corpus_version: file.meta.corpus_version,
+    questions: result.evaluated,
+    left_out: file.meta.left_out.length,
+    first: count(result.hit1),
+    in_first_three: count(result.hit3),
+    in_first_five: count(result.hit5),
+    recall_at_3: result.recall3,
+  };
+}
 const INDEX_PATH = 'data/2026/search-index.json';
 
 export interface Question2026 {
@@ -207,6 +237,10 @@ function main(): void {
       `hit@1 ${String(result.hit1)} · hit@3 ${String(result.hit3)} · hit@5 ${String(result.hit5)} · ` +
       `recall@3 ${String(result.recall3)}`,
   );
+  if (process.argv.includes('--write')) {
+    writeFileSync(SEARCH_EVAL_PATH, `${JSON.stringify(searchEval(file), null, 2)}\n`);
+    console.log(`written: ${SEARCH_EVAL_PATH}`);
+  }
   if (process.argv.includes('--failures')) {
     for (const miss of result.misses)
       console.log(`  ${miss.id}: proposed ${miss.top.join(', ') || 'nothing'}`);

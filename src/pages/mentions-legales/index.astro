@@ -1,0 +1,33 @@
+---
+/**
+ * `/mentions-legales/` — the legal notice of a site published by a private person.
+ *
+ * LCEN art. 1-1 II lets a non-professional editor publish the host only, provided the host
+ * holds the editor's identity. That last sentence is rendered ONLY when the declaration has
+ * been sent and its acknowledgement archived (P0.5, `lcen_declared_on` in data/launch.json):
+ * a legal notice that states something not yet done would be the one false page of the site.
+ * The launch gate refuses the apex until then (scripts/launch.ts).
+ */
+import Base from '../../layouts/Base.astro';
+import { launchFacts } from '../../lib/facts.ts';
+import { t } from '../../lib/strings.ts';
+
+const { lcenDeclared } = launchFacts();
+---
+
+<Base title={`${t('legal.notice.title')} — ${t('app.name')}`} description={t('independence.line')}>
+  <p class="label">{t('independence.unofficial')}</p>
+  <h1>{t('legal.notice.title')}</h1>
+  <p>{t('legal.notice.editor')}</p>
+  {lcenDeclared && <p>{t('legal.notice.editor_identity')}</p>}
+
+  <h2>{t('legal.notice.host_label')}</h2>
+  <p>{t('legal.notice.host')}</p>
+  <p>{t('legal.notice.host_report')}</p>
+  <p>{t('legal.notice.transfer')}</p>
+
+  <h2>{t('legal.contact')}</h2>
+  <p>{t('legal.notice.contact')}</p>
+  <p>{t('legal.notice.reply_right')}</p>
+  <p>{t('legal.notice.domain')}</p>
+</Base>

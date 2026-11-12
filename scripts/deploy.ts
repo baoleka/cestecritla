@@ -27,6 +27,7 @@ import {
   readBuildMode,
   wranglerDeployArgs,
 } from './build-mode.js';
+import { launchBlockers, readLaunchInputs } from './launch.js';
 
 const [target, ...passthrough] = process.argv.slice(2);
 if (target !== 'apex' && target !== 'preview') {
@@ -43,6 +44,7 @@ const pages = htmlPages('dist');
 const refusal = deployRefusal(target, mode, pages, {
   policyValidated: citationPolicyValidated(),
   dryRun: passthrough.includes('--dry-run'),
+  launchBlockers: launchBlockers(readLaunchInputs()),
 });
 if (refusal !== null) {
   console.error(`deploy refused (${target}, ${mode} build): ${refusal}`);

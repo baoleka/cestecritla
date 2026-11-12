@@ -27,7 +27,11 @@ import {
 import { parseJsonc, stripJsoncComments } from './jsonc.js';
 
 /** The editor has dated the citation policy, and this is a real deployment. */
-const VALIDATED: DeployContext = { policyValidated: true, dryRun: false };
+const VALIDATED: DeployContext = {
+  policyValidated: true,
+  dryRun: false,
+  launchBlockers: ['the launch has not been decided'],
+};
 
 interface Route {
   pattern: string;
@@ -195,7 +199,7 @@ void test('the app carries its non-inherited settings into the preview environme
 
 void test('an app build is deployed nowhere before the citation policy is validated (D15.7)', () => {
   const pages = ['index.html', 's/p1c1-s01/index.html'];
-  const pending: DeployContext = { policyValidated: false, dryRun: false };
+  const pending: DeployContext = { ...VALIDATED, policyValidated: false };
   // Not even to the noindex preview host: noindex is not private.
   assert.match(
     String(deployRefusal('preview', 'app', pages, pending)),
@@ -203,7 +207,7 @@ void test('an app build is deployed nowhere before the citation policy is valida
   );
   // A dry run uploads nothing: CI keeps exercising the configuration.
   assert.equal(
-    deployRefusal('preview', 'app', pages, { policyValidated: false, dryRun: true }),
+    deployRefusal('preview', 'app', pages, { ...VALIDATED, policyValidated: false, dryRun: true }),
     null,
   );
   // The holding page carries nothing of the programme: it never waits for the policy.

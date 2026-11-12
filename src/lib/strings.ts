@@ -61,3 +61,15 @@ export function frDate(iso: string): string {
 export function typeset(text: string): string {
   return text.replace(/ ([:;!?»%])/g, `${NBSP}$1`).replace(/« /g, `«${NBSP}`);
 }
+
+/**
+ * JSON for a `<script type="application/…json">` block.
+ *
+ * Learning note — `JSON.stringify` is not enough inside HTML. The HTML parser ends a script
+ * element at the first `</script` it meets, whatever the JSON says: a title containing that
+ * string would close the block and let the rest be parsed as markup. Escaping `<` as its
+ * Unicode escape keeps the JSON identical for any JSON parser and inert for the HTML one.
+ */
+export function safeJson(value: unknown): string {
+  return JSON.stringify(value).replace(/</g, String.raw`\u003c`);
+}

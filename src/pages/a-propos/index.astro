@@ -1,0 +1,27 @@
+---
+/**
+ * `/a-propos/` — who is behind this, in one line that is true: one person, outside the
+ * campaign, under a pseudonym (D0.15). The independence line is a fact about who publishes,
+ * never a reserve about what is published (voice.md §3).
+ */
+import Base from '../../layouts/Base.astro';
+import { t } from '../../lib/strings.ts';
+---
+
+<Base title={`${t('about.title')} — ${t('app.name')}`} description={t('home.tagline')}>
+  <p class="label">{t('independence.unofficial')}</p>
+  <h1>{t('about.title')}</h1>
+  <p class="lead">{t('about.intro')}</p>
+  <p>{t('independence.about')}</p>
+  <p>{t('about.who')}</p>
+
+  <h2>{t('method.writing_title')}</h2>
+  <p>{t('about.no_ai')}</p>
+  <p>{t('about.writing_method')}</p>
+  <p>{t('about.method')} <a href="/exactitude/">{t('accuracy.title')}</a></p>
+
+  <h2>{t('legal.contact')}</h2>
+  <p>{t('about.contact_lead')}</p>
+  <p>{t('legal.notice.contact')}</p>
+  <p>{t('about.a11y')}</p>
+</Base>

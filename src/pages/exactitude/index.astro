@@ -1,0 +1,111 @@
+---
+/**
+ * `/exactitude/` — what was checked, what was measured, and what was not (D14.11).
+ *
+ * Three rules for this page:
+ *   - no number is typed here: each comes from a file a tool wrote (src/lib/facts.ts);
+ *   - a target that was missed is printed as missed, next to its target;
+ *   - what only real people could establish, and no one has, is listed as open. The four
+ *     judgement gates of D14.11 were never lifted: saying so is the condition under which the
+ *     project decided to launch anyway.
+ */
+import Base from '../../layouts/Base.astro';
+import { manifest } from '../../lib/edition.ts';
+import { pendingReviewCount, quoteFacts, searchFacts, verification } from '../../lib/facts.ts';
+import { fr, frDate, t } from '../../lib/strings.ts';
+
+const meta = manifest().meta;
+const search = searchFacts();
+const checked = verification();
+const cited = quoteFacts();
+const pending = pendingReviewCount();
+const located = checked.locators;
+/** The engines by the names their makers give them. */
+const ENGINE_NAMES: Record<string, string> = {
+  chromium: 'Chromium',
+  firefox: 'Firefox',
+  webkit: 'WebKit',
+};
+---
+
+<Base title={`${t('accuracy.title')} — ${t('app.name')}`} description={t('accuracy.intro')}>
+  <p class="label">{t('independence.unofficial')}</p>
+  <h1>{t('accuracy.title')}</h1>
+  <p class="lead">{t('accuracy.intro')}</p>
+  <p>
+    {
+      t('accuracy.corpus_line', {
+        version: meta.corpus_version,
+        date: frDate(meta.crawled_at),
+        count: fr(meta.counts.sections),
+      })
+    }
+  </p>
+
+  <h2>{t('accuracy.count.title')}</h2>
+  <p>
+    {
+      t('accuracy.count.official', {
+        total: fr(meta.official_count),
+        count: fr(meta.counts.propositions),
+      })
+    }
+    {t('accuracy.count.structure')}
+  </p>
+
+  <h2>{t('accuracy.browsers.title')}</h2>
+  <p>{t('accuracy.browsers.text', { count: fr(checked.items) })}</p>
+  <p>
+    {t('accuracy.browsers.links', { count: fr(located) })}
+    {t('accuracy.browsers.links_fallback', { count: fr(cited.anchorOnly) })}
+  </p>
+  <ul class="counts">
+    {
+      checked.engines.map((engine) => (
+        <li>
+          {ENGINE_NAMES[engine.name] ?? engine.name}
+          {engine.version.split('.')[0]}&nbsp;: {fr(engine.links_landed)}&nbsp;/&nbsp;{
+            fr(engine.links_followed)
+          }
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>{t('accuracy.search.title')}</h2>
+  <p>
+    {t('accuracy.search.text', { total: fr(search.questions), count: fr(search.inFirstFive) })}
+    {t('accuracy.search.first', { count: fr(search.first) })}
+  </p>
+  <p>{t('accuracy.search.miss', { count: search.recall3 })}</p>
+
+  <h2>{t('accuracy.quotes.title')}</h2>
+  <p>{t('accuracy.quotes.lead')}</p>
+  <ul class="counts">
+    <li>{t('accuracy.quotes.incipit', { count: cited.incipit })}</li>
+    <li>{t('accuracy.quotes.locator', { count: cited.locator })}</li>
+    <li>{t('accuracy.quotes.whole', { count: fr(cited.whole), total: cited.wholeShare })}</li>
+    <li>{t('accuracy.quotes.total', { count: cited.total })}</li>
+  </ul>
+  <p>{t('accuracy.quotes.none')}</p>
+
+  <h2>{t('accuracy.review.title')}</h2>
+  <p>
+    {
+      pending === 0
+        ? t('accuracy.review.done')
+        : t('accuracy.review.pending', { count: fr(pending) })
+    }
+  </p>
+
+  <h2>{t('accuracy.unverified.title')}</h2>
+  <p>{t('accuracy.unverified.lead')}</p>
+  <ul class="counts">
+    <li>{t('accuracy.unverified.01')}</li>
+    <li>{t('accuracy.unverified.02')}</li>
+    <li>{t('accuracy.unverified.03')}</li>
+    <li>{t('accuracy.unverified.04')}</li>
+  </ul>
+
+  <p><a href="/methodologie/">{t('accuracy.method_link')}</a></p>
+</Base>

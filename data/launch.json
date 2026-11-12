@@ -1,0 +1,7 @@
+{
+  "apex": "holding",
+  "planned_on": "2026-12-15",
+  "lcen_declared_on": null,
+  "contact_mailbox_ready_on": null,
+  "note_fr": "Ce fichier est le geste de lancement (D15.5). Tant que « apex » vaut « holding », cestecritla.fr sert la page d'attente et scripts/deploy.ts refuse d'y mettre l'app. Pour lancer : renseigner les deux dates (déclaration LCEN archivée, P0.5 ; boîte de contact testée, P0.8), passer « apex » à « app », puis lancer npm run deploy dans un terminal. Revenir à « holding » puis npm run build:holding && npm run deploy est le geste de retrait (D14.10)."
+}

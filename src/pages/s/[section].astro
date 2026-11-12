@@ -35,7 +35,7 @@ import {
   sections,
   type Section,
 } from '../../lib/edition.ts';
-import { fr, frDate, t } from '../../lib/strings.ts';
+import { fr, frDate, safeJson, t } from '../../lib/strings.ts';
 
 export function getStaticPaths() {
   return [
@@ -170,16 +170,15 @@ const jsonLd = section && {
         </ul>
       </nav>
 
+      {/* One sentence per paragraph: between two expressions Astro keeps no space of its own. */}
+      <p class="ref">{t('attribution.full')}</p>
       <p class="ref">
-        {t('attribution.full')}
-        {t('section.corpus_ref', {
-          version: meta.corpus_version,
-          date: frDate(meta.crawled_at),
-        })}
+        {t('section.corpus_ref', { version: meta.corpus_version, date: frDate(meta.crawled_at) })}
+        {' '}
         <span>{section.id}</span>
       </p>
 
-      <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+      <script type="application/ld+json" set:html={safeJson(jsonLd)} is:inline />
       <DeepLinks />
     </Base>
   )

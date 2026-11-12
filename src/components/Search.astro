@@ -15,7 +15,7 @@
  * every other sentence of the interface.
  */
 import { manifest } from '../lib/edition.ts';
-import { t } from '../lib/strings.ts';
+import { safeJson, t } from '../lib/strings.ts';
 
 const version = manifest().meta.corpus_version;
 const strings = {
@@ -61,7 +61,7 @@ const strings = {
 </section>
 <noscript><p>{t('search.no_js')}</p></noscript>
 
-<script type="application/json" id="search-strings" set:html={JSON.stringify(strings)} is:inline />
+<script type="application/json" id="search-strings" set:html={safeJson(strings)} is:inline />
 <script>
   import '../scripts/search.ts';
 </script>

@@ -148,13 +148,19 @@ export interface DeployContext {
   policyValidated: boolean;
   /** `--dry-run`: wrangler bundles and uploads nothing. */
   dryRun: boolean;
+  /**
+   * What still stands between the app and the apex (scripts/launch.ts): the editor's decision,
+   * the legal declaration, the contact address, the reviews. Empty on launch day, and only then.
+   */
+  launchBlockers: readonly string[];
 }
 
 /**
  * Why this build must not be deployed to this target — or null when it may.
  *
- * Kept pure so the rule is tested without a dist/: the apex takes the holding build only, a
- * holding build is exactly its two pages, and an app build — which carries incipits, locators
+ * Kept pure so the rule is tested without a dist/: the apex takes the holding build until every
+ * launch condition is met (scripts/launch.ts), a holding build is exactly its two pages, and an
+ * app build — which carries incipits, locators
  * and quotations of a book that is all rights reserved — goes nowhere public, not even to the
  * noindex preview host, before the editor has seen and dated the measured exposure.
  */
@@ -164,10 +170,11 @@ export function deployRefusal(
   pages: readonly string[],
   context: DeployContext,
 ): string | null {
-  if (target === 'apex' && mode !== 'holding') {
+  if (target === 'apex' && mode !== 'holding' && context.launchBlockers.length > 0) {
     return (
       'the apex serves the holding page until launch day (D15.5): ' +
-      'run `npm run build:holding` first, or deploy the app with `npm run deploy:preview`'
+      'run `npm run build:holding` first, or deploy the app with `npm run deploy:preview`. ' +
+      `Before the app can go there — ${context.launchBlockers.join(' · ')}`
     );
   }
   if (mode === 'app' && !context.policyValidated && !context.dryRun) {

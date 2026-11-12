@@ -398,3 +398,21 @@ h4 {
 .authorship {
   margin-block-start: var(--space-6);
 }
+
+/* Seen on the first screenshots of the complete site (12/11/2026). */
+
+/* A <figure> comes with 40 px of side margin from the browser: on a 390 px screen that is a
+   fifth of the line, taken from the one block whose words are counted. */
+.verbatim {
+  margin-inline: 0;
+}
+/* A lead of several lines needs more air than a heading of two. */
+.lead {
+  line-height: 1.4;
+}
+.around {
+  margin-block-start: var(--space-6);
+}
+.result .hits a {
+  padding-block: var(--space-1);
+}

@@ -71,9 +71,12 @@ void test('no built page mentions an AI or Turnstile while neither is deployed',
     console.log('  (skipped: no dist/ — run `npm run build` first)');
     return;
   }
+  // The pages show typographic apostrophes (src/lib/strings.ts): an exempt sentence must be
+  // recognised in the form it is printed in, not only in the form the kit types it.
   const exemptText = [...EXEMPT]
     .map((k) => strings[k])
-    .filter((v): v is string => typeof v === 'string');
+    .filter((v): v is string => typeof v === 'string')
+    .flatMap((v) => [v, v.replace(/'/g, '’')]);
 
   const offenders: string[] = [];
   for (const page of pages) {

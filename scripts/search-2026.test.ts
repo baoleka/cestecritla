@@ -19,7 +19,13 @@ import {
 } from '../src/lib/search-core.js';
 import { manifestPropositions } from './aec26-publish.js';
 import type { Manifest } from './aec26-types.js';
-import { evaluate, type Questions2026, type SynonymsFile } from './eval-2026.js';
+import {
+  SEARCH_EVAL_PATH,
+  evaluate,
+  searchEval,
+  type Questions2026,
+  type SynonymsFile,
+} from './eval-2026.js';
 
 const json = (path: string): unknown => JSON.parse(readFileSync(path, 'utf8'));
 const manifest = json('data/2026/manifest.json') as Manifest;
@@ -129,4 +135,9 @@ void test('search quality on the evaluation set does not regress', () => {
   assert.ok(result.hit3 >= 0.94, `hit@3 ${String(result.hit3)}`);
   assert.ok(result.hit1 >= 0.79, `hit@1 ${String(result.hit1)}`);
   assert.ok(result.recall3 >= 0.86, `recall@3 ${String(result.recall3)}`);
+});
+
+void test('the figures /exactitude publishes are the ones a fresh evaluation gives', () => {
+  const file = json('eval/questions-2026.json') as Questions2026;
+  assert.deepEqual(json(SEARCH_EVAL_PATH), searchEval(file), `run eval-2026.ts --write`);
 });

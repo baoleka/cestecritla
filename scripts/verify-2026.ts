@@ -5,6 +5,8 @@
  *   npx tsx scripts/verify-2026.ts                   stored pages of the corpus' crawl, Chromium
  *   npx tsx scripts/verify-2026.ts --engines chromium,firefox,webkit
  *   npx tsx scripts/verify-2026.ts --sample 60       only 60 locators per engine (quick pass)
+ *   npx tsx scripts/verify-2026.ts --write           also records the result in
+ *                                                    data/2026/verification.json (/exactitude reads it)
  *   npx tsx scripts/verify-2026.ts --synthetic       the synthetic site of aec26-fixture.ts: no
  *                                                    private file needed, so CI can run it
  *
@@ -21,7 +23,7 @@
  *
  * It prints identifiers and numbers. Never a sentence.
  */
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { chromium, firefox, webkit, type Browser, type BrowserType, type Page } from 'playwright';
 import { SITE_ORIGIN, normalizeText, sha256 } from './aec-common.js';
@@ -174,6 +176,25 @@ const PROBE_IN_PAGE = `((args) => {
   const rect = range.getBoundingClientRect();
   return { found: true, top: rect.top, bottom: rect.bottom, scrollY: window.scrollY, innerHeight: window.innerHeight };
 })`;
+
+export const VERIFICATION_PATH = 'data/2026/verification.json';
+
+/** data/2026/verification.json — what the browsers found, as /exactitude publishes it. */
+export interface VerificationFile {
+  corpus_version: string;
+  verified_on: string;
+  /** Items re-extracted in each browser's DOM and compared by hash. */
+  items: number;
+  /** Deep links the manifest holds. */
+  locators: number;
+  engines: {
+    name: string;
+    version: string;
+    hash_mismatches: number;
+    links_followed: number;
+    links_landed: number;
+  }[];
+}
 
 interface EngineReport {
   engine: string;
@@ -397,8 +418,23 @@ async function main(): Promise<void> {
   );
 
   let failed = false;
+  const record: VerificationFile = {
+    corpus_version: site.corpus.meta.corpus_version,
+    verified_on: new Date().toISOString().slice(0, 10),
+    items: 0,
+    locators: located,
+    engines: [],
+  };
   for (const engine of engines) {
     const r = await verifyEngine(site, engine, sample);
+    record.items = r.itemsChecked;
+    record.engines.push({
+      name: r.engine,
+      version: r.version,
+      hash_mismatches: r.hashMismatches.length + r.rawMismatches.length,
+      links_followed: r.locatorsTried,
+      links_landed: r.locatorsTried - r.locatorsFailed.length,
+    });
     const list = (ids: readonly string[]): string =>
       ids.length === 0 ? '' : ` — ${ids.slice(0, 20).join(', ')}${ids.length > 20 ? ', …' : ''}`;
     console.log(
@@ -423,6 +459,13 @@ async function main(): Promise<void> {
     }
   }
   if (failed) process.exit(1);
+  if (args.includes('--write')) {
+    // Only a complete, clean run on the real pages is worth publishing as a result.
+    if (synthetic || sample !== null)
+      throw new Error('--write needs the real pages and every link');
+    writeFileSync(VERIFICATION_PATH, `${JSON.stringify(record, null, 2)}\n`);
+    console.log(`written: ${VERIFICATION_PATH}`);
+  }
 }
 
 await main();

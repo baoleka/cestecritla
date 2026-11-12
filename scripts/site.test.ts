@@ -238,3 +238,31 @@ void test(
     }
   },
 );
+
+void test(
+  'the sitemap lists what may be indexed, and nothing that asks not to be',
+  { skip },
+  () => {
+    const sitemap = readFileSync('dist/sitemap.xml', 'utf8');
+    const listed = [...sitemap.matchAll(/<loc>https:\/\/cestecritla\.fr([^<]*)<\/loc>/g)].map(
+      (m) => m[1] ?? '',
+    );
+    assert.ok(listed.length > manifest.sections.length, `${String(listed.length)} URLs`);
+    assert.equal(new Set(listed).size, listed.length, 'a URL listed twice');
+    for (const path of listed) {
+      const file = `dist${path}index.html`;
+      assert.ok(existsSync(file), `${path} is listed and does not exist`);
+      assert.doesNotMatch(
+        readFileSync(file, 'utf8'),
+        /<meta name="robots" content="noindex">/,
+        `${path} is listed and noindex`,
+      );
+    }
+    for (const section of manifest.sections)
+      assert.ok(listed.includes(`/s/${section.id}/`), section.id);
+    assert.match(
+      readFileSync('dist/robots.txt', 'utf8'),
+      /^Sitemap: https:\/\/cestecritla\.fr\/sitemap\.xml$/m,
+    );
+  },
+);

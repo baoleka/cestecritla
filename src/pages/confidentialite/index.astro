@@ -1,0 +1,53 @@
+---
+/**
+ * `/confidentialite/` — everything the app keeps: nothing.
+ *
+ * v1 is static files (D15.14): no account, no cookie, no beacon, no server of ours that could
+ * log anything. Political opinions are sensitive data (GDPR art. 9), and the surest way not to
+ * mishandle them is not to hold them. What remains to be said is what the HOST sees, as any
+ * host does — and that a link to the official site leaves this one.
+ *
+ * Only strings that are true of this build are rendered: the kit still holds the lines about a
+ * chat, a measurement beacon and Turnstile, for the versions that had or will have them.
+ */
+import Base from '../../layouts/Base.astro';
+import { t } from '../../lib/strings.ts';
+
+const CLOUDFLARE_POLICY = 'cloudflare.com/privacypolicy';
+---
+
+<Base title={`${t('privacy.title')} — ${t('app.name')}`} description={t('privacy.no_account')}>
+  <p class="label">{t('independence.unofficial')}</p>
+  <h1>{t('privacy.title')}</h1>
+  <p class="lead">{t('privacy.no_account')}</p>
+
+  <h2>{t('privacy.what_title')}</h2>
+  <ul class="counts">
+    <li>{t('privacy.policy.01')}</li>
+    <li>{t('privacy.policy.02.local')}</li>
+    <li>{t('privacy.no_measure')}</li>
+    <li>{t('privacy.policy.09')}</li>
+    <li>{t('privacy.outbound')}</li>
+  </ul>
+
+  <h2>{t('privacy.never.title')}</h2>
+  <ul class="counts">
+    <li>{t('privacy.never.01')}</li>
+    <li>{t('privacy.never.02')}</li>
+    <li>{t('privacy.never.03')}</li>
+    <li>{t('privacy.never.04')}</li>
+    <li>{t('privacy.never.06')}</li>
+    <li>{t('privacy.never.09')}</li>
+  </ul>
+  <p>{t('privacy.never.host_v1')}</p>
+
+  <h2>{t('legal.notice.host_label')}</h2>
+  <p>{t('privacy.policy.07')}</p>
+  <p>{t('privacy.host_logs_nel')}</p>
+  <p>{t('privacy.retention_host', { url: CLOUDFLARE_POLICY })}</p>
+
+  <h2>{t('legal.contact')}</h2>
+  <p>{t('privacy.controller')}</p>
+  <p>{t('privacy.rights')} {t('privacy.cnil')}</p>
+  <p>{t('privacy.policy.10')}</p>
+</Base>
