@@ -1,0 +1,29 @@
+{
+  "corpus_version": "27ee6e713fe25e7e",
+  "verified_on": "2026-11-12",
+  "items": 1219,
+  "locators": 1014,
+  "engines": [
+    {
+      "name": "chromium",
+      "version": "153.0.8010.12",
+      "hash_mismatches": 0,
+      "links_followed": 1014,
+      "links_landed": 1014
+    },
+    {
+      "name": "firefox",
+      "version": "155.0",
+      "hash_mismatches": 0,
+      "links_followed": 1014,
+      "links_landed": 1014
+    },
+    {
+      "name": "webkit",
+      "version": "26.6",
+      "hash_mismatches": 0,
+      "links_followed": 1014,
+      "links_landed": 1014
+    }
+  ]
+}

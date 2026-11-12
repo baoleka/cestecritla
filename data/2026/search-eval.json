@@ -1,0 +1,9 @@
+{
+  "corpus_version": "27ee6e713fe25e7e",
+  "questions": 87,
+  "left_out": 13,
+  "first": 71,
+  "in_first_three": 84,
+  "in_first_five": 86,
+  "recall_at_3": 0.877
+}

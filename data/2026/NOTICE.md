@@ -16,6 +16,11 @@ ses pages et admettent de courts extraits, avec l'auteur et un lien vers la page
 | `expected-invariants.json` | La forme attendue du livre (comptes) ; un écart arrête l'ingestion | `scripts/ingest-2026.ts --write-expected` |
 | `id-map-2025.json` | Section de l'édition 2025 → section(s) de l'édition 2026, pour les anciennes adresses | `scripts/id-map.ts` |
 | `watch.json` | Les six signaux de veille de la source | `scripts/watch-source.ts --write` |
+| `search-index.json` | L'index de recherche : les racines des mots de chaque proposition, sans ordre, sans mots-outils, aucun champ stocké | `scripts/index-2026.ts` |
+| `synonyms.json` | Les mots des gens à côté des mots du livre, pour la recherche. Rédigé par nous | à la main |
+| `riposte.json`, `glossary.json` | Nos réponses aux objections et nos cartes-concept. Chaque appui est épinglé `{id, sha256}` ; `review` dit si le texte a été relu | à la main |
+| `verification.json` | Ce que trois navigateurs ont trouvé en relisant les pages officielles et en suivant chaque lien | `scripts/verify-2026.ts --write` |
+| `search-eval.json` | La qualité mesurée de la recherche sur le jeu de questions | `scripts/eval-2026.ts --write` |
 
 ## Vérifier une citation
 
@@ -29,6 +34,13 @@ printf '%s' "le texte de la proposition" | sha256sum
 ```
 
 Une empreinte prouve une présence. Elle ne permet pas de reconstituer le texte.
+
+## Ce que l'index de recherche laisse voir
+
+L'index permet de répondre « quelles propositions parlent de ce sujet ? » sur le téléphone du
+lecteur, sans serveur ni journal. Il contient pour cela le vocabulaire de chaque proposition, réduit
+à ses racines (« salaires » devient « salaire »), en minuscules, sans accents, sans ordre. Il ne
+contient aucune phrase et ne permet pas d'en reconstituer une.
 
 ## Combien de mots sortent
 
