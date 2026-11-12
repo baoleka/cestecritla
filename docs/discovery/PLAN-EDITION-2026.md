@@ -360,14 +360,15 @@ Non fait, et pourquoi :
   trace de « Texte du programme », de la mention CC ni de `programme2025`. Pièce :
   `captures/2026-11-12/edition-2026/apex-takeover.json`.
 
-En attente d'un geste de l'utilisateur :
+- **A4 — surfaces de septembre retirées le 12/11/2026**, avec l'accord de l'utilisateur pour
+  chacun des quatre groupes : `aec-spike-share`, `aec-proto`, `aec-lab-turnstile`, `aec-lab-aig`,
+  `aec-lab-budget`, `aec-lab-fts` et sa base D1, `aec-lab-fw-astro`, `aec-lab-fw-react`. Vérifié :
+  `proto.cestecritla.fr` et `lab.cestecritla.fr` n'ont plus d'enregistrement DNS ; il ne reste sur
+  le compte que `cestecritla` et `cestecritla-preview`. Le code de chacun reste dans `prototypes/`.
+  Pièce : `captures/2026-11-12/edition-2026/surfaces-retired.json`. Non touchés, à vérifier au
+  tableau de bord : le widget Turnstile du labo et sa passerelle AI Gateway.
 
-- **A4** — retrait des surfaces de septembre, un accord par suppression. Constaté le 12/11 après la
-  bascule : `aec-spike-share` existe encore (détaché des deux domaines, `workers_dev: true` et
-  journaux d'invocation dans sa configuration) ; `proto.cestecritla.fr` et `lab.cestecritla.fr`
-  répondent 200 ; six autres Workers de septembre sont sur le compte (`aec-proto`,
-  `aec-lab-turnstile`, `aec-lab-aig`, `aec-lab-budget`, `aec-lab-fts` et sa base D1,
-  `aec-lab-fw-astro`, `aec-lab-fw-react`).
+**Le lot A est clos.** En attente d'un geste de l'utilisateur, sans bloquer le lot B :
 - **P0.5** — déclaration LCEN : l'apex est public sans mentions légales depuis le 9/9.
 - **D15.13** — Analytics Engine, avant tout déploiement de l'app.
 
@@ -391,4 +392,5 @@ indexable. La page d'attente, elle, ne portait aucune consigne — la bascule a 
 sans que personne l'ait décidé, alors que le playbook ne l'ouvre qu'à J-3, pages légales en place
 (`12-positionnement-lancement.md` §9.4.3). Corrigé le jour même : la page d'attente porte
 `<meta name="robots" content="noindex">`, un test le garantit, et l'hôte d'aperçu sert la version
-corrigée. **Le redéploiement de l'apex attend l'accord de l'utilisateur.** 174 tests.
+corrigée. **L'apex a été redéployé le soir même, avec l'accord de l'utilisateur** : la balise est en
+ligne sur `cestecritla.fr` et `www`. 174 tests.

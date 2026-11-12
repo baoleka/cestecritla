@@ -1,0 +1,72 @@
+{
+  "meta": {
+    "observed_at": "2026-11-12T17:37:12.000Z",
+    "observer": "vérification après les retraits, par requêtes vers nos seuls hôtes et lecture de l’état du compte",
+    "finding_fr": "Les huit Workers de septembre et la base D1 du labo FTS sont supprimés, avec l’accord de l’utilisateur pour chacun des quatre groupes. Seuls restent le Worker de production et celui de l’hôte d’aperçu, tous deux sur la page d’attente, non indexée.",
+    "status": "VÉRIFIÉ"
+  },
+  "apex_redeploy": {
+    "why_fr": "Le spike envoyait X-Robots-Tag: noindex ; la page d’attente du premier déploiement ne portait aucune consigne, ce qui ouvrait l’indexation avant J-3. Corrigé par une balise meta (commit d232479), redéployé avec l’accord de l’utilisateur.",
+    "version_id": "8d24a714-a0b6-4b1b-b6fe-c82e58518ab9",
+    "cestecritla.fr": {
+      "status": 200,
+      "noindex": true,
+      "date": "Thu, 12 Nov 2026 17:37:12 GMT"
+    },
+    "www.cestecritla.fr": {
+      "status": 200,
+      "noindex": true,
+      "date": "Thu, 12 Nov 2026 17:37:12 GMT"
+    }
+  },
+  "removed": {
+    "workers": [
+      {
+        "name": "aec-spike-share",
+        "was_fr": "spike de partage du 9/9/2026 : texte 2025, corpus en JSON, journaux d’invocation, workers_dev"
+      },
+      {
+        "name": "aec-proto",
+        "was_fr": "prototypes cliquables, custom domain proto.cestecritla.fr"
+      },
+      {
+        "name": "aec-lab-turnstile",
+        "was_fr": "labo Turnstile, custom domain lab.cestecritla.fr"
+      },
+      {
+        "name": "aec-lab-aig",
+        "was_fr": "labo AI Gateway"
+      },
+      {
+        "name": "aec-lab-budget",
+        "was_fr": "labo Durable Object + limiteur, routes /lab/* sans authentification (H-PLA-25)"
+      },
+      {
+        "name": "aec-lab-fts",
+        "was_fr": "labo D1 FTS5"
+      },
+      {
+        "name": "aec-lab-fw-astro",
+        "was_fr": "banc d’essai de framework (Astro)"
+      },
+      {
+        "name": "aec-lab-fw-react",
+        "was_fr": "banc d’essai de framework (React)"
+      }
+    ],
+    "d1_databases": [
+      {
+        "name": "aec-lab-fts",
+        "was_fr": "11 tables, 1,15 Mo, aucune requête sur 24 h avant suppression"
+      }
+    ],
+    "method_fr": "`wrangler delete <nom>` lancé depuis un dossier sans configuration wrangler, pour que seul le Worker nommé puisse être visé ; `wrangler d1 delete aec-lab-fts`. Aucune autre ressource du compte n’a été touchée.",
+    "code_kept_fr": "Le code de chacun reste dans prototypes/ : tous se redéploient."
+  },
+  "after": {
+    "workers_left": ["cestecritla", "cestecritla-preview"],
+    "proto.cestecritla.fr": "aucun enregistrement DNS",
+    "lab.cestecritla.fr": "aucun enregistrement DNS"
+  },
+  "not_touched_fr": "Deux ressources de labo ne sont pas des Workers et n’ont pas été supprimées : le widget Turnstile déclaré pour lab.cestecritla.fr, et la passerelle AI Gateway du labo. À vérifier au tableau de bord."
+}
