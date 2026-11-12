@@ -1,0 +1,42 @@
+---
+/**
+ * "Où c'est écrit": the supports of an answer or of a card — the quotations first, then one
+ * link per support into the official page (D15.2). The reader is never asked to take our
+ * sentence on trust: each one stands on something they can open.
+ */
+import DeepLinks from './DeepLinks.astro';
+import Quote from './Quote.astro';
+import type { ResolvedSupport } from '../lib/editorial.ts';
+import { t } from '../lib/strings.ts';
+
+interface Props {
+  supports: ResolvedSupport[];
+}
+const { supports } = Astro.props;
+const quoted = supports.filter((s) => s.quote !== null);
+---
+
+{
+  quoted.map((s) => (
+    <Quote
+      kind="quote"
+      text={s.quote?.text ?? ''}
+      href={s.section.url}
+      fragment={s.item.locator ?? null}
+      sectionTitle={s.section.title}
+    />
+  ))
+}
+<h2>{t('riposte.where_label')}</h2>
+<ul class="supports">
+  {
+    supports.map((s) => (
+      <li>
+        <a href={s.section.url} data-fragment={s.item.locator ?? null} rel="noopener">{s.label}</a>
+        <span aria-hidden="true"> · </span>
+        <a href={`/s/${s.section.id}/`} data-programme="title">{s.section.title}</a>
+      </li>
+    ))
+  }
+</ul>
+<DeepLinks />

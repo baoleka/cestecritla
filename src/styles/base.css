@@ -384,3 +384,17 @@ h4 {
   min-block-size: var(--tap-min);
   padding-block: var(--space-2);
 }
+
+/* Supports of an answer: the measure (into the official page), then its section (our page). */
+.supports {
+  margin: 0;
+  padding-inline-start: var(--space-5);
+}
+.supports a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--tap-comfortable);
+}
+.authorship {
+  margin-block-start: var(--space-6);
+}

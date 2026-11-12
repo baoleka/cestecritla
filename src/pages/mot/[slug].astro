@@ -1,0 +1,67 @@
+---
+/**
+ * `/mot/<slug>/` — a concept card: a word of the programme, in plain language, then in the
+ * programme's own words, then why it matters and what is said against it.
+ *
+ * "En clair" comes first and is labelled as ours: a reformulation that passed for the text
+ * would be the one fault this whole project exists to avoid.
+ */
+import Authorship from '../../components/Authorship.astro';
+import Base from '../../layouts/Base.astro';
+import Supports from '../../components/Supports.astro';
+import { cards, prose, resolve, type Card } from '../../lib/editorial.ts';
+import { t } from '../../lib/strings.ts';
+
+export function getStaticPaths() {
+  return cards().map((card: Card) => ({ params: { slug: card.id }, props: { card } }));
+}
+
+const { card } = Astro.props;
+const supports = resolve(`mot:${card.id}`, card.supports);
+const all = cards();
+const related = card.related
+  .map((id) => all.find((c) => c.id === id))
+  .filter((c): c is Card => c !== undefined);
+const term = prose(card.term);
+const title = term.charAt(0).toUpperCase() + term.slice(1);
+---
+
+<Base
+  title={`${title} — ${t('app.name')}`}
+  description={prose(card.plain)}
+  verbatim={supports.some((s) => s.quote !== null)}
+>
+  <p class="label">{t('independence.unofficial')}</p>
+  <p class="where">{t('nav.words')}</p>
+  <h1>{title}</h1>
+
+  <h2>{t('concept.label.plain')}</h2>
+  <p class="lead">{prose(card.plain)}</p>
+
+  <h2>{t('concept.label.why')}</h2>
+  <p>{prose(card.why)}</p>
+
+  <h2>{t('concept.label.objection')}</h2>
+  <p>«&nbsp;{prose(card.objection.text)}&nbsp;»</p>
+  <p>{prose(card.objection.answer)}</p>
+
+  <Supports supports={supports} />
+
+  {
+    related.length > 0 && (
+      <>
+        <h2>{t('concept.label.related_terms')}</h2>
+        <ul class="toc">
+          {related.map((other) => (
+            <li>
+              <a href={`/mot/${other.id}/`}>{prose(other.term)}</a>
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+
+  <Authorship review={card.review} />
+  <p><a href="/mot/">{t('nav.words')}</a></p>
+</Base>

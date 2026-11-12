@@ -38,7 +38,11 @@ const { title, description, verbatim = false, noindex = false, home = false } = 
 const holding = process.env.CEL_BUILD === 'holding';
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
-const footer: readonly { href: string; label: string }[] = [{ href: '/', label: t('nav.toc') }];
+const footer: readonly { href: string; label: string }[] = [
+  { href: '/', label: t('nav.toc') },
+  { href: '/r/', label: t('riposte.title') },
+  { href: '/mot/', label: t('nav.words') },
+];
 ---
 
 <html lang="fr">

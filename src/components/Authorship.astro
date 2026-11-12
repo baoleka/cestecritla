@@ -1,0 +1,21 @@
+---
+/**
+ * Who wrote this, and whether it has been re-read (D0.27, AI Act art. 50 § 4).
+ *
+ * Our texts are prepared with an AI tool, checked against the book and re-read by a person who
+ * takes editorial responsibility for them: that review is what the exception of art. 50 § 4
+ * rests on. So the state of the review is on the page, not in a footnote — and an entry that
+ * has not been re-read is not published on the public site (scripts/launch.ts).
+ */
+import type { Review } from '../lib/editorial.ts';
+import { t } from '../lib/strings.ts';
+
+interface Props {
+  review: Review;
+}
+const { review } = Astro.props;
+---
+
+<p class="ref authorship" data-review={review.status}>
+  {review.status === 'reviewed' ? t('concept.authorship.reviewed') : t('concept.authorship.pending')}
+</p>

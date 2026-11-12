@@ -1,0 +1,84 @@
+---
+/**
+ * `/r/<slug>/` — an objection people hear, and what the text says.
+ *
+ * Three voices, never mixed (design/voice.md §0): the objection is someone else's, in quotation
+ * marks; the answer is ours, and says only what its supports carry; the programme speaks in its
+ * own block, attributed and linked. What it is better not to say is part of the answer: an
+ * honest answer knows where it stops.
+ *
+ * `/r/rip-01/` — the identifiers the September prototype used in the links it sent — answers
+ * too, with a signpost to the page that replaced it.
+ */
+import Authorship from '../../components/Authorship.astro';
+import Base from '../../layouts/Base.astro';
+import Supports from '../../components/Supports.astro';
+import { prose, resolve, ripostes, type Riposte } from '../../lib/editorial.ts';
+import { t } from '../../lib/strings.ts';
+
+export function getStaticPaths() {
+  const entries = ripostes();
+  return [
+    ...entries.map((entry: Riposte, index: number) => ({
+      params: { slug: entry.slug },
+      props: { entry, next: entries[(index + 1) % entries.length], moved: false },
+    })),
+    ...entries.map((entry: Riposte) => ({
+      params: { slug: entry.id },
+      props: { entry, next: undefined, moved: true },
+    })),
+  ];
+}
+
+const { entry, next, moved } = Astro.props;
+const supports = moved ? [] : resolve(`riposte:${entry.id}`, entry.supports);
+---
+
+{
+  moved ? (
+    <Base title={`${t('moved.title')} — ${t('app.name')}`} noindex>
+      <p class="label">{t('independence.unofficial')}</p>
+      <h1>{t('moved.title')}</h1>
+      <p>{t('moved.lead')}</p>
+      <ul class="targets">
+        <li>
+          <a href={`/r/${entry.slug}/`}>{prose(entry.objection)}</a>
+        </li>
+      </ul>
+    </Base>
+  ) : (
+    <Base
+      title={`${prose(entry.objection)} — ${t('app.name')}`}
+      description={prose(entry.answer)}
+      verbatim={supports.some((s) => s.quote !== null)}
+    >
+      <p class="label">{t('independence.unofficial')}</p>
+      <p class="where">{t('riposte.heard_label')}</p>
+      <h1>{prose(entry.objection)}</h1>
+
+      <h2>{t('riposte.answer_label')}</h2>
+      <p class="lead">{prose(entry.answer)}</p>
+
+      <Supports supports={supports} />
+
+      <h2>{t('riposte.reversal_label')}</h2>
+      <p>{prose(entry.avoid)}</p>
+
+      <Authorship review={entry.review} />
+
+      <nav class="around" aria-label={t('riposte.all')}>
+        <ul>
+          {next && (
+            <li>
+              <span class="ref">{t('riposte.next')}</span>
+              <a href={`/r/${next.slug}/`}>{prose(next.objection)}</a>
+            </li>
+          )}
+          <li>
+            <a href="/r/">{t('riposte.all')}</a>
+          </li>
+        </ul>
+      </nav>
+    </Base>
+  )
+}
