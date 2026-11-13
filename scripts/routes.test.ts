@@ -6,8 +6,8 @@
  * collision"; this is what enforces it, and it grows as routes land rather than being rewritten.
  *
  * Also checked here: the three reserved prefixes really answer. `/j/`, `/k/` and `/carte` are
- * held so nothing else can ever claim them (D14.7) — `/j/` is the morning measure kept for
- * v1.1, the other two belonged to "La carte des 89", which got zero votes.
+ * held so nothing else can ever claim them (D14.7) — `/j/` was the morning measure, given up
+ * with D16.9; the other two belonged to "La carte des 89", which got zero votes.
  *
  * Run: npx tsx --test scripts/routes.test.ts
  */
@@ -45,7 +45,18 @@ interface Route {
 }
 
 export const ROUTES: readonly Route[] = [
-  { prefix: '/', status: 'built', object: 'accueil : recherche et sommaire', sample: 'index.html' },
+  {
+    prefix: '/',
+    status: 'built',
+    object: 'accueil : chercher, demander, puis le jeu (D16.1)',
+    sample: 'index.html',
+  },
+  {
+    prefix: '/sommaire',
+    status: 'built',
+    object: 'sommaire entier : 6 parties, 23 chapitres, 111 sections (D16.9)',
+    sample: 'sommaire/index.html',
+  },
   {
     prefix: '/s/',
     status: 'built',
@@ -81,11 +92,31 @@ export const ROUTES: readonly Route[] = [
   { prefix: '/q/', status: 'planned', object: '« Laquelle est ici ? »' },
   { prefix: '/defi/', status: 'planned', object: '« Tu savais que c’était dedans ? »' },
   { prefix: '/verifier', status: 'planned', object: 'vérifier une citation' },
-  { prefix: '/exactitude', status: 'built', object: 'page exactitude', sample: 'exactitude/index.html' },
-  { prefix: '/methodologie', status: 'built', object: 'page méthodologie', sample: 'methodologie/index.html' },
-  { prefix: '/confidentialite', status: 'built', object: 'page confidentialité', sample: 'confidentialite/index.html' },
+  {
+    prefix: '/exactitude',
+    status: 'built',
+    object: 'page exactitude',
+    sample: 'exactitude/index.html',
+  },
+  {
+    prefix: '/methodologie',
+    status: 'built',
+    object: 'page méthodologie',
+    sample: 'methodologie/index.html',
+  },
+  {
+    prefix: '/confidentialite',
+    status: 'built',
+    object: 'page confidentialité',
+    sample: 'confidentialite/index.html',
+  },
   { prefix: '/a-propos', status: 'built', object: 'page à propos', sample: 'a-propos/index.html' },
-  { prefix: '/mentions-legales', status: 'built', object: 'mentions légales', sample: 'mentions-legales/index.html' },
+  {
+    prefix: '/mentions-legales',
+    status: 'built',
+    object: 'mentions légales',
+    sample: 'mentions-legales/index.html',
+  },
   { prefix: '/licence', status: 'built', object: 'page licence', sample: 'licence/index.html' },
   {
     prefix: '/og/',
@@ -95,7 +126,12 @@ export const ROUTES: readonly Route[] = [
   },
   { prefix: '/p/', status: 'redirected', object: 'carte de progression du prototype de septembre' },
   { prefix: '/res/', status: 'redirected', object: '« Mes 3 mesures » du prototype de septembre' },
-  { prefix: '/j/', status: 'reserved', object: 'mesure du matin (v1.1)', sample: 'j/index.html' },
+  {
+    prefix: '/j/',
+    status: 'reserved',
+    object: '« la mesure du matin » (abandonnée, D16.9)',
+    sample: 'j/index.html',
+  },
   {
     prefix: '/k/',
     status: 'reserved',

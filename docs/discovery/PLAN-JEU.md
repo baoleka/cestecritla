@@ -709,3 +709,37 @@ tout effacer ; avancer l'horloge dans une fenêtre de gel.
   ces deux-là : la tortue ne vit que dans le jeu). L'archive de la FAQ 2025 garde, figées dans son
   test, les trois phrases de refus qu'elle citait. ESLint couvre maintenant `src/` (quatre défauts
   corrigés). 256 tests, build et `astro check` verts.
+
+### Lot H, au 13 novembre 2026
+
+- **H1 (S1)** — l'en-tête est le cadre de chaque écran : le nom, « Site non officiel. » et
+  « Sommaire », collés en haut à toute hauteur de défilement, sur les 1 134 pages de l'app. Sur
+  l'accueil le nom est le `<h1>` ; l'accueil n'a plus que le champ. Le sommaire entier vit sur
+  `/sommaire/` ; le pied de page, les fiches (retour à la partie de la section), les ponts et les
+  pages gardées y mènent. `/j/` ne promet plus « la mesure du matin » (D16.9).
+- **H2** — la recherche répond pendant la frappe : dès deux lettres, la liste suit la dernière
+  touche de 120 ms ; la phrase qui compte les résultats (`role="status"`) et l'adresse (`#q=`) ne
+  sont écrites qu'à la pause (700 ms), pour qu'un lecteur d'écran n'entende pas chaque lettre.
+  Plus de bouton : Entrée porte le focus sur les résultats. **Mesuré** (Chromium, CPU ×4 puis
+  ×6, frappe lente et rapide) : pire interaction 32 ms, pour 200 visés ; une seule tâche longue,
+  63 ms, au chargement de l'index. PROBABLE tant qu'un vrai Android ne l'a pas confirmé.
+- **Deux défauts de portes trouvés et corrigés en route.**
+  - *Accessibilité* — les conditions « police 130 % » et « 150 % » de `scripts/a11y.ts` ne
+    s'appliquaient pas : le script d'initialisation écrivait la taille sur un élément racine qui
+    n'existait pas encore, l'erreur n'était lue par personne, et les trois conditions auditaient
+    la page à 16 px. La taille est maintenant posée dès que la racine existe, **et chaque audit
+    vérifie d'abord qu'il a bien la taille qu'il prétend tester**. Trois conditions de plus :
+    200 %, 320 × 256, et le zoom de page à 150 % (390 px vus comme 260, ce que fait Chrome sur
+    Android). 225 contrôles, 0 échec — l'app tenait, mais personne ne le savait.
+  - *Bout en bout* — `page.waitForFunction` avec une chaîne installe, quand la condition n'est
+    pas vraie tout de suite, une boucle qui appelle `eval` dans la page : notre politique de
+    sécurité le refuse. L'attente passait ou cassait selon qui était le plus rapide. Remplacée
+    par une attente menée depuis Node.
+- **Portes** : 257 tests, `astro check`, lint, contraste, a11y (25 pages × 9 conditions), e2e
+  (29 contrôles × 3 moteurs), et la build d'attente rejouée.
+- **H3** — les quinze réponses relues sont à un geste de l'accueil : une puce par thème, sous
+  « Ce qu'on entend souvent », chacune un lien simple vers `/r/<slug>/` (elles marchent sans
+  JavaScript et n'envoient rien). Le nom accessible d'une puce porte l'objection entière, entre
+  guillemets. **Reste pour I7** : reconnaître une objection dans une question tapée et poser
+  « Notre réponse, relue » en tête — ce qui demande un jeu d'essai, pas une intuition. 258 tests,
+  e2e 30 × 3.

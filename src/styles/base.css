@@ -43,8 +43,9 @@
 html {
   /* A2: everything in rem so the system font size is honoured. */
   font-size: 100%;
-  /* 2.4.11: an anchored heading is never hidden under a sticky header. */
-  scroll-padding-block-start: var(--space-6);
+  /* 2.4.11: an anchored heading, or a link reached with Tab, is never hidden under the sticky
+     header — its height (two lines and their padding) plus a little air. */
+  scroll-padding-block-start: 5rem;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -202,24 +203,75 @@ small {
   border: 0;
 }
 
-header.site,
 footer.site {
   max-width: 42rem;
   margin-inline: auto;
   padding: var(--space-4);
 }
+
+/*
+ * The frame of every screen (D16.1): the name, « Site non officiel. » and the way to the table
+ * of contents, in view at any scroll height. A full-width band, so that nothing scrolls past
+ * beside it on a wide screen; its content keeps the measure of the page.
+ */
 header.site {
-  padding-block-end: 0;
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 10;
+  background: var(--bg);
+  border-block-end: 2px solid var(--brand);
+}
+.site-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  max-width: 42rem;
+  margin-inline: auto;
+  padding: var(--space-1) var(--space-4);
+}
+/* The name and the label under it are one target: the link stretches over both. */
+.site-id {
+  position: relative;
+  padding-block: var(--space-1);
 }
 .wordmark {
-  display: inline-flex;
-  align-items: center;
-  min-block-size: var(--tap-comfortable);
+  display: block;
+  margin: 0;
   color: var(--wordmark);
+  font-size: var(--font-size-body);
+  line-height: 1.25;
   font-weight: 900;
   letter-spacing: 0.02em;
   text-decoration: none;
   text-transform: uppercase;
+}
+a.wordmark::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+.unofficial {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--font-size-min);
+  line-height: 1.25;
+  font-weight: 700;
+}
+.site-toc {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--tap-comfortable);
+  font-weight: 700;
+  /* One word, one line: at 200 % text it would otherwise be cut as « Som-maire ». */
+  white-space: nowrap;
+}
+header.site {
+  hyphens: manual;
+}
+.site-toc[aria-current] {
+  color: var(--text);
+  text-decoration: none;
 }
 footer.site {
   margin-block-start: var(--space-8);
@@ -275,10 +327,16 @@ h4 {
   margin: 0;
   padding-inline-start: var(--space-5);
 }
-.part h3 {
+.part h2 {
   padding-block-start: var(--space-4);
   border-block-start: 2px solid var(--brand);
   color: var(--brand);
+  font-size: var(--font-size-h3);
+  line-height: var(--line-height-h3);
+}
+.part h3 {
+  font-size: var(--font-size-body);
+  margin-block: var(--space-4) var(--space-1);
 }
 .around ul {
   padding: 0;
@@ -335,20 +393,15 @@ h4 {
   font-family: var(--font-family-ui);
 }
 
-/* Search: a labelled field and its button, wrapping rather than overflowing at 320 px. */
+/* Search: a labelled field as wide as the page — no button, results follow the typing. */
 #search label {
   display: block;
   margin-block-end: var(--space-2);
   font-weight: 700;
 }
-.search-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-.search-row input {
-  flex: 1 1 12rem;
-  min-inline-size: 0;
+#q {
+  display: block;
+  inline-size: 100%;
   min-block-size: var(--tap-comfortable);
   padding-inline: var(--space-3);
   border: 2px solid var(--brand);
@@ -356,6 +409,16 @@ h4 {
   background: var(--bg);
   color: var(--text);
   font: inherit;
+}
+/* The line that counts the results is empty while one types: it keeps its place, so the list
+   under it does not move up and down with every pause. */
+#search-status {
+  min-block-size: calc(var(--font-size-min) * var(--line-height-body));
+  margin-block: var(--space-2);
+}
+/* The heading takes the focus after Enter: it shows it like any other target. */
+#search-results-title:focus-visible {
+  outline-offset: 4px;
 }
 #search-list {
   margin: 0;
@@ -383,6 +446,36 @@ h4 {
   display: inline-block;
   min-block-size: var(--tap-min);
   padding-block: var(--space-2);
+}
+
+/* The fifteen answers, as chips: the same shape as the pills of a section page, so that
+   everything one taps to go somewhere looks alike. */
+.chips {
+  margin-block-start: var(--space-4);
+}
+.chips h2 {
+  margin-block: 0 var(--space-2);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-h3);
+}
+.chips ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.chips a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--tap-comfortable);
+  padding-inline: var(--space-3);
+  border: 2px solid var(--brand);
+  border-radius: var(--radius-pill);
+  color: var(--text);
+  font-weight: 700;
+  text-decoration: none;
 }
 
 /* Supports of an answer: the measure (into the official page), then its section (our page). */

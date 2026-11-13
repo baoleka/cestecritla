@@ -1,0 +1,69 @@
+---
+/**
+ * `/sommaire/` — the whole table of contents, then nothing else.
+ *
+ * 6 parts, 23 chapters, 111 sections, each one a link, readable and usable with no script at
+ * all. It was the home page until D16.1 put the field first; it is where the header, the footer,
+ * the section pages and the bridges of the 2025 edition lead. The same search field sits above
+ * it, for those who would rather type than scroll.
+ *
+ * Every title here is the book's (marked `data-programme="title"`): the sentences are ours.
+ */
+import Base from '../../layouts/Base.astro';
+import Search from '../../components/Search.astro';
+import { chaptersOf, manifest, parts, sectionsOf } from '../../lib/edition.ts';
+import { fr, t } from '../../lib/strings.ts';
+
+const meta = manifest().meta;
+const introduction = manifest().introduction;
+---
+
+<Base
+  title={`${t('home.toc.title')} — ${t('app.name')}`}
+  description={t('home.toc.description')}
+  toc
+>
+  <h1>{t('home.toc.title')}</h1>
+  <p>
+    {t('home.counts', { count: fr(meta.counts.sections), total: fr(meta.official_count) })}
+    {t('home.toc.lead')}
+  </p>
+
+  <Search toc />
+
+  <nav aria-label={t('home.parts_nav')}>
+    <ol class="parts">
+      {
+        parts().map((part) => (
+          <li>
+            <a href={`#${part.id}`} data-programme="title">{part.title}</a>
+          </li>
+        ))
+      }
+    </ol>
+  </nav>
+  <p>
+    <a href={introduction.url} rel="noopener" data-programme="title">{introduction.title}</a>
+    <span class="ref"> · melenchon2027.fr</span>
+  </p>
+
+  {
+    parts().map((part) => (
+      <section aria-labelledby={part.id} class="part">
+        <h2 id={part.id} data-programme="title">{part.title}</h2>
+        {chaptersOf(part).map((chapter) => (
+          <>
+            <h3 data-programme="title">{chapter.title}</h3>
+            <ul class="toc">
+              {sectionsOf(chapter).map((section) => (
+                <li>
+                  <a href={`/s/${section.id}/`} data-programme="title">{section.title}</a>
+                </li>
+              ))}
+            </ul>
+          </>
+        ))}
+      </section>
+    ))
+  }
+</Base>

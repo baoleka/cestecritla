@@ -28,7 +28,6 @@ const target = bridgeTarget(sectionId);
 ---
 
 <Base title={`${t('bridge.title')} — ${t('app.name')}`} description={t('bridge.fact')} noindex>
-  <p class="label">{t('independence.unofficial')}</p>
   <h1>{t('bridge.title')}</h1>
   <p>{t('bridge.fact')}</p>
   {
@@ -47,6 +46,6 @@ const target = bridgeTarget(sectionId);
       <p>{t('bridge.none')}</p>
     )
   }
-  <p><a class="cta" href="/">{t('bridge.cta_home')}</a></p>
+  <p><a class="cta" href="/sommaire/">{t('bridge.cta_home')}</a></p>
   <p class="ref">{t('bridge.ref', { url: `/${path}` })}</p>
 </Base>

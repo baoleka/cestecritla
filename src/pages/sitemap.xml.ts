@@ -1,5 +1,5 @@
 /**
- * The pages worth finding by a search: the home page, the 111 pointer pages, the answers, the
+ * The pages worth finding by a search: the home page, the table of contents, the 111 pointer pages, the answers, the
  * concept cards, and the pages that say who we are and how this is made.
  *
  * Not listed, because they carry `noindex`: the 974 bridges of the 2025 edition, the moved
@@ -21,6 +21,7 @@ const INSTITUTIONAL = [
 export const GET: APIRoute = ({ site }) => {
   const paths = [
     '/',
+    '/sommaire/',
     ...sections().map((s) => `/s/${s.id}/`),
     '/r/',
     ...ripostes().map((r) => `/r/${r.slug}/`),

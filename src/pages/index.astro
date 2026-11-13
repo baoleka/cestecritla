@@ -1,67 +1,24 @@
 ---
 /**
- * Home: the search, then the whole table of contents.
+ * Home: the field first (D16.1, D16.9).
  *
- * The table of contents is not a fallback bolted on for browsers without JavaScript — it is the
- * page. 6 parts, 23 chapters, 111 sections, each one a link, readable and usable with no script
- * at all; the search above it is the shortcut for those who can run it.
+ * The page is where one asks and where one searches; the game comes below it. Its <h1> is the
+ * name, in the header every page shares, so the first thing under the header is the field — no
+ * lead in between: the label of the field says what it is for.
  *
- * Every title here is the book's (marked `data-programme="title"`): the sentences are ours.
+ * Under the field, the fifteen answers a person wrote and re-read, as chips (lot H3).
+ *
+ * The table of contents has its own page, /sommaire/, one tap away in the header. It is still
+ * the navigation for a browser without JavaScript: the sentence the search leaves behind there
+ * is a link to it.
  */
 import Base from '../layouts/Base.astro';
+import Chips from '../components/Chips.astro';
 import Search from '../components/Search.astro';
-import { chaptersOf, manifest, parts, sectionsOf } from '../lib/edition.ts';
-import { fr, t } from '../lib/strings.ts';
-
-const meta = manifest().meta;
-const introduction = manifest().introduction;
+import { t } from '../lib/strings.ts';
 ---
 
 <Base title={t('app.name')} description={t('home.tagline')} home>
-  <p class="label">{t('independence.unofficial')}</p>
-  <h1>{t('app.name')}</h1>
-  <p class="lead">{t('home.direct.lead')}</p>
-
   <Search />
-
-  <h2 id="sommaire">{t('home.toc.title')}</h2>
-  <p>
-    {t('home.counts', { count: fr(meta.counts.sections), total: fr(meta.official_count) })}
-    {t('home.toc.lead')}
-  </p>
-  <nav aria-label={t('home.parts_nav')}>
-    <ol class="parts">
-      {
-        parts().map((part) => (
-          <li>
-            <a href={`#${part.id}`} data-programme="title">{part.title}</a>
-          </li>
-        ))
-      }
-    </ol>
-  </nav>
-  <p>
-    <a href={introduction.url} rel="noopener" data-programme="title">{introduction.title}</a>
-    <span class="ref"> · melenchon2027.fr</span>
-  </p>
-
-  {
-    parts().map((part) => (
-      <section aria-labelledby={part.id} class="part">
-        <h3 id={part.id} data-programme="title">{part.title}</h3>
-        {chaptersOf(part).map((chapter) => (
-          <>
-            <h4 data-programme="title">{chapter.title}</h4>
-            <ul class="toc">
-              {sectionsOf(chapter).map((section) => (
-                <li>
-                  <a href={`/s/${section.id}/`} data-programme="title">{section.title}</a>
-                </li>
-              ))}
-            </ul>
-          </>
-        ))}
-      </section>
-    ))
-  }
+  <Chips />
 </Base>

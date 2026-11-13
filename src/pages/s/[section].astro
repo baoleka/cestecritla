@@ -83,7 +83,6 @@ const jsonLd = section && {
       description={t('section.meta_description')}
       verbatim={key?.incipit !== undefined}
     >
-      <p class="label">{t('independence.unofficial')}</p>
       <p class="where">
         <span data-programme="title">{part.title}</span>
         <span aria-hidden="true"> · </span>
@@ -165,7 +164,7 @@ const jsonLd = section && {
             </li>
           )}
           <li>
-            <a href="/#sommaire">{t('section.back_toc')}</a>
+            <a href={`/sommaire/#${part.id}`}>{t('section.back_toc')}</a>
           </li>
         </ul>
       </nav>

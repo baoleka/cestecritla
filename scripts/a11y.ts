@@ -5,13 +5,25 @@
  * Accessibilité >= 95" was a criterion of the 14-27 September milestone and nothing replayed it
  * afterwards, so a regression introduced in October would have shipped.
  *
- * Four conditions, because three of them are where the prototype actually failed:
+ * The conditions, chosen where the prototype actually failed:
  *   390 px      the reference viewport (arrival by WhatsApp link on a phone, D0.4)
  *   320 px      reflow (A1)
+ *   320 × 256   the same width on a short screen: the sticky header must leave room to read
  *   dark        the complete substitution table, not just the violet accent (A3, §9)
- *   150 % font  system font size. Chrome on Android M113+ applies it as a PAGE ZOOM, and the
- *               measured overflow appeared from 130 % — the prototype's nav bar reached a
- *               scrollWidth of 404-464 px for a 390 px viewport (correction 11).
+ *   font 130 %, 150 %, 200 %
+ *               the size of text chosen in the system or the browser, applied to the text
+ *               alone (Firefox, desktop browsers): the root font size grows, the viewport does
+ *               not. The measured overflow appeared from 130 % — the prototype's nav bar
+ *               reached a scrollWidth of 404-464 px for a 390 px viewport (correction 11).
+ *   zoom 150 %  the same setting as Chrome on Android M113+ applies it: a PAGE ZOOM, which
+ *               leaves the text alone and shrinks the viewport — 390 px become 260.
+ *
+ * Learning note — a condition that is not applied is a green light for nothing. Until
+ * 13/11/2026 the font conditions set the size in an init script as
+ * `document.documentElement.style.fontSize = …`. An init script runs when the document is
+ * created, before its root element exists: the line threw, nobody was listening, and the three
+ * "font" conditions audited the page at 16 px. The size is now set as soon as the root element
+ * appears, and every audit first CHECKS that the page really has the size it claims to test.
  *
  * Thresholds: zero serious/critical axe violation, and no horizontal scroll in any condition.
  * Lighthouse runs separately (npm run a11y:lighthouse) because it needs its own Chrome.
@@ -29,6 +41,9 @@ const APP_PATHS: readonly string[] = [
   '/',
   // A search already run: results are part of the page a reader actually sees.
   '/#q=retraite',
+  // The whole table of contents: the longest page, and the one a reader without script uses.
+  '/sommaire/',
+  '/sommaire/#q=retraite',
   '/s/p1c1-s01/',
   // The Europe chapter: sections with no key measure, the longest lists of numbers.
   '/s/p6c1-s02/',
@@ -73,9 +88,13 @@ export const CONDITIONS: readonly Condition[] = [
     options: { viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 },
   },
   { label: 'reflow 320px', options: { viewport: { width: 320, height: 640 } } },
+  { label: 'small 320x256', options: { viewport: { width: 320, height: 256 } } },
   { label: 'dark 390px', options: { viewport: { width: 390, height: 844 }, colorScheme: 'dark' } },
   { label: 'font 130%', options: { viewport: { width: 390, height: 844 } }, rootFontPercent: 130 },
   { label: 'font 150%', options: { viewport: { width: 390, height: 844 } }, rootFontPercent: 150 },
+  { label: 'font 200%', options: { viewport: { width: 390, height: 844 } }, rootFontPercent: 200 },
+  // 390 × 844 seen through a 150 % page zoom: every CSS pixel is one and a half device pixels.
+  { label: 'zoom 150%', options: { viewport: { width: 260, height: 563 }, deviceScaleFactor: 3 } },
   {
     label: 'reduced motion',
     options: { viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' },
@@ -115,6 +134,25 @@ function serveDist(port: number): Promise<Server> {
   });
 }
 
+/**
+ * Sets the root font size as soon as the root element exists — an init script runs before it
+ * does. Written as a string: under tsx a function would be wrapped in a helper the page lacks.
+ */
+function rootFontScript(percent: number): string {
+  return `(() => {
+    const apply = () => {
+      if (document.documentElement === null) return false;
+      document.documentElement.style.fontSize = '${String(percent)}%';
+      return true;
+    };
+    if (apply()) return;
+    const observer = new MutationObserver(() => {
+      if (apply()) observer.disconnect();
+    });
+    observer.observe(document, { childList: true });
+  })();`;
+}
+
 interface Finding {
   condition: string;
   path: string;
@@ -131,16 +169,21 @@ async function audit(browser: Browser, base: string): Promise<Finding[]> {
     // bypassCSP because axe is injected inline, which our own CSP correctly refuses — the
     // policy is enforced, and that is the point of shipping no 'unsafe-inline'.
     const context = await browser.newContext({ ...condition.options, bypassCSP: true });
-    if (condition.rootFontPercent !== undefined) {
-      const percent = condition.rootFontPercent;
-      await context.addInitScript(
-        `document.documentElement.style.fontSize = '${String(percent)}%';`,
-      );
-    }
+    const percent = condition.rootFontPercent ?? 100;
+    if (percent !== 100) await context.addInitScript(rootFontScript(percent));
     const page = await context.newPage();
 
     for (const path of AUDITED_PATHS) {
       await page.goto(base + path, { waitUntil: 'networkidle' });
+      // The condition must be real before anything is concluded from it.
+      const rootPx = await page.evaluate<number>(
+        'parseFloat(getComputedStyle(document.documentElement).fontSize)',
+      );
+      if (Math.abs(rootPx - (16 * percent) / 100) > 0.5) {
+        throw new Error(
+          `${condition.label} ${path}: the root font size is ${String(rootPx)} px, not ${String((16 * percent) / 100)}`,
+        );
+      }
       await page.addScriptTag({ content: axe });
       const result: { violations: { id: string; impact: string | null }[] } = await page.evaluate(
         'window.axe.run(document, { resultTypes: ["violations"] })',

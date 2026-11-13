@@ -37,7 +37,6 @@ const supports = moved ? [] : resolve(`riposte:${entry.id}`, entry.supports);
 {
   moved ? (
     <Base title={`${t('moved.title')} — ${t('app.name')}`} noindex>
-      <p class="label">{t('independence.unofficial')}</p>
       <h1>{t('moved.title')}</h1>
       <p>{t('moved.lead')}</p>
       <ul class="targets">
@@ -52,7 +51,6 @@ const supports = moved ? [] : resolve(`riposte:${entry.id}`, entry.supports);
       description={prose(entry.answer)}
       verbatim={supports.some((s) => s.quote !== null)}
     >
-      <p class="label">{t('independence.unofficial')}</p>
       <p class="where">{t('riposte.heard_label')}</p>
       <h1>{prose(entry.objection)}</h1>
 

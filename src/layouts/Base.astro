@@ -30,16 +30,25 @@ interface Props {
    * 2025 edition stay out of indexes for good: they are signposts, not pages.
    */
   noindex?: boolean | undefined;
-  /** The home page shows the name as its <h1>: it does not repeat it in a header. */
+  /** On the home page the name in the header is the <h1>; elsewhere it is the way back. */
   home?: boolean | undefined;
+  /** The table of contents: the header link then names the current page instead of leading to it. */
+  toc?: boolean | undefined;
 }
-const { title, description, verbatim = false, noindex = false, home = false } = Astro.props;
+const {
+  title,
+  description,
+  verbatim = false,
+  noindex = false,
+  home = false,
+  toc = false,
+} = Astro.props;
 
 const holding = process.env.CEL_BUILD === 'holding';
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 const footer: readonly { href: string; label: string }[] = [
-  { href: '/', label: t('nav.toc') },
+  { href: '/sommaire/', label: t('nav.toc') },
   { href: '/r/', label: t('riposte.title') },
   { href: '/mot/', label: t('nav.words') },
   { href: '/exactitude/', label: t('legal.accuracy') },
@@ -109,9 +118,28 @@ const footer: readonly { href: string; label: string }[] = [
   </head>
   <body>
     {
-      !holding && !home && (
+      /*
+        The frame of every screen (D16.1): the name, « Site non officiel. » and the way to the
+        table of contents stay in view at any scroll height — so that a screenshot taken anywhere
+        on the page still says whose page it is not.
+      */
+      !holding && (
         <header class="site">
-          <a class="wordmark" href="/">{t('app.name')}</a>
+          <div class="site-bar">
+            <div class="site-id">
+              {home ? (
+                <h1 class="wordmark">{t('app.name')}</h1>
+              ) : (
+                <a class="wordmark" href="/">
+                  {t('app.name')}
+                </a>
+              )}
+              <p class="unofficial">{t('independence.unofficial')}</p>
+            </div>
+            <a class="site-toc" href="/sommaire/" aria-current={toc ? 'page' : null}>
+              {t('nav.toc')}
+            </a>
+          </div>
         </header>
       )
     }

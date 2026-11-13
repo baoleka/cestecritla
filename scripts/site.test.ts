@@ -222,11 +222,11 @@ void test(
   'every section of the 2026 edition has its pointer page, in the table of contents',
   { skip },
   () => {
-    const home = read('index.html');
+    const toc = read('sommaire/index.html');
     for (const section of manifest.sections) {
       assert.ok(existsSync(`dist/s/${section.id}/index.html`), section.id);
       assert.ok(
-        home.includes(`href="/s/${section.id}/"`),
+        toc.includes(`href="/s/${section.id}/"`),
         `${section.id} is not in the table of contents`,
       );
       const html = read(`s/${section.id}/index.html`);
@@ -238,6 +238,40 @@ void test(
     }
   },
 );
+
+void test(
+  'every page says « Site non officiel. » in the header that stays on screen',
+  { skip },
+  () => {
+    // The frame of every screen (D16.1): the name, the label and the way to the table of contents.
+    const header =
+      /<header class="site">[\s\S]*?<p class="unofficial">Site non officiel\.<\/p>[\s\S]*?href="\/sommaire\/"[\s\S]*?<\/header>/;
+    const without = pages.filter((page) => !header.test(read(page)));
+    assert.deepEqual(without.slice(0, 10), [], 'pages without the label in their header');
+    // The name is the <h1> of the home page and of no other.
+    assert.match(read('index.html'), /<h1 class="wordmark">/);
+    const named = pages.filter(
+      (page) => page !== 'index.html' && /<h1 class="wordmark">/.test(read(page)),
+    );
+    assert.deepEqual(named, [], 'pages other than the home using the name as their <h1>');
+  },
+);
+
+void test('the home page puts the fifteen re-read answers one tap away', { skip }, () => {
+  const ripostes = (
+    json('data/2026/riposte.json') as { entries: { slug: string; theme: string }[] }
+  ).entries;
+  const home = read('index.html');
+  const chips = /<nav class="chips"[\s\S]*?<\/nav>/.exec(home)?.[0] ?? '';
+  const linked = [...chips.matchAll(/href="(\/r\/[a-z0-9-]+\/)"/g)].map((m) => m[1] ?? '');
+  assert.deepEqual(
+    linked,
+    ripostes.map((r) => `/r/${r.slug}/`),
+    'one chip per answer, in the order of the file',
+  );
+  // A closed list of links: nothing in it is a form control, nothing in it can send anything.
+  assert.doesNotMatch(chips, /<(?:button|input|form)\b/);
+});
 
 void test(
   'the sitemap lists what may be indexed, and nothing that asks not to be',

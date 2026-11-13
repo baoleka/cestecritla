@@ -1,0 +1,33 @@
+---
+/**
+ * The fifteen answers written and re-read by a person, one tap away (D16.1, lot H3).
+ *
+ * Each chip is the theme of an objection people hear, and a plain link to what the text says
+ * about it (`/r/<slug>/`): it works without JavaScript, and it sends nothing anywhere. The list
+ * is closed and ours — never computed from what a visitor types.
+ *
+ * A chip shows the theme alone, because fifteen whole objections would bury the field. Its
+ * accessible name adds the objection, in the quotation marks that mark it as someone else's
+ * sentence: a screen reader hears where the link leads, and the visible word is still the start
+ * of that name (WCAG 2.5.3).
+ */
+import { prose, ripostes } from '../lib/editorial.ts';
+import { t } from '../lib/strings.ts';
+
+const entries = ripostes();
+---
+
+<nav class="chips" aria-labelledby="chips-title">
+  <h2 id="chips-title">{t('riposte.heard_label')}</h2>
+  <ul>
+    {
+      entries.map((entry) => (
+        <li>
+          <a href={`/r/${entry.slug}/`} aria-label={`${entry.theme} : ${prose(entry.objection)}`}>
+            {entry.theme}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

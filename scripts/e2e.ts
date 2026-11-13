@@ -11,9 +11,10 @@
  * aborted and reported. Nothing leaves the machine, and nothing may try to.
  *
  * What is checked:
- *   1. without JavaScript the search does not exist and the table of contents does;
- *   2. a search finds sections, says how many, and keeps the query after `#` — and no request
- *      ever carries the words typed;
+ *   1. without JavaScript the search does not exist and the table of contents does, one link
+ *      away on its own page; « Site non officiel. » stays in the frame at any scroll height;
+ *   2. a search answers while one types, says how many sections it found once the typing has
+ *      paused, and keeps the query after `#` — and no request ever carries the words typed;
  *   3. hostile input is displayed as text: `#q=<img onerror=…>` creates no element and runs
  *      nothing;
  *   4. links into the book are section anchors in the HTML and gain their text directive from
@@ -72,6 +73,24 @@ function storedPages(stamp: string): Map<string, string> {
   const dir = resolve(CRAWL_ROOT, stamp);
   const log = JSON.parse(readFileSync(resolve(dir, 'fetch-log.json'), 'utf8')) as FetchLog;
   return new Map(log.pages.map((p) => [p.url, readFileSync(resolve(dir, p.file), 'utf8')]));
+}
+
+/**
+ * Waits until an expression is true in the page, asking from here.
+ *
+ * Learning note — why not `page.waitForFunction`. Given a string, Playwright evaluates it once
+ * through the debugging protocol, which no policy applies to; if it is not yet true, it installs
+ * a poll INSIDE the page that calls `eval` — and our Content-Security-Policy, which allows no
+ * `unsafe-eval`, refuses it. The wait then fails or passes depending on who was faster. Asking
+ * again from Node goes through the protocol every time.
+ */
+async function until(page: Page, expression: string, timeoutMs = 10_000): Promise<void> {
+  const deadline = Date.now() + timeoutMs;
+  for (;;) {
+    if (await page.evaluate<boolean>(`Boolean(${expression})`)) return;
+    if (Date.now() > deadline) throw new Error(`timed out waiting for: ${expression}`);
+    await page.waitForTimeout(50);
+  }
 }
 
 const STUB =
@@ -146,6 +165,15 @@ async function runEngine(
       await guard(page);
       await page.goto(`${origin}/`);
       check('no JS: the search form stays hidden', !(await page.locator('#search').isVisible()));
+      check(
+        'no JS: the home page leads to the table of contents',
+        (await page.locator('main a[href="/sommaire/"]').count()) === 1,
+      );
+      check(
+        'no JS: the fifteen re-read answers are one tap away',
+        (await page.locator('.chips a').count()) === 15,
+      );
+      await page.goto(`${origin}/sommaire/`);
       const links = await page.locator('.toc a').count();
       check(
         'no JS: the table of contents links every section',
@@ -159,20 +187,67 @@ async function runEngine(
     const page = await context.newPage();
     await guard(page);
 
+    // --- 1 bis. the frame: the label is on screen at the top of a page and at its bottom
+    await page.goto(`${origin}/sommaire/`);
+    const framed =
+      "(() => { const r = document.querySelector('header.site .unofficial').getBoundingClientRect();" +
+      ' return r.top >= 0 && r.bottom <= window.innerHeight && r.width > 0; })()';
+    check(
+      '« Site non officiel. » is in the frame at the top',
+      await page.evaluate<boolean>(framed),
+    );
+    await page.evaluate('window.scrollTo(0, document.documentElement.scrollHeight)');
+    check(
+      '« Site non officiel. » is still in the frame at the bottom of the longest page',
+      (await page.evaluate<number>('window.scrollY')) > 2000 &&
+        (await page.evaluate<boolean>(framed)),
+    );
+
     // --- 2. a search
     await page.goto(`${origin}/`);
     check('the search form appears with JavaScript', await page.locator('#search').isVisible());
-    await page.fill('#q', 'retraite à 60 ans');
-    await page.press('#q', 'Enter');
+    check(
+      'the field has no button: results follow the typing',
+      (await page.locator('#search button').count()) === 0,
+    );
+    // Every sentence the status line is given while the words are typed, in order.
+    await page.evaluate(
+      'window.__said = []; new MutationObserver(() => {' +
+        " const text = document.querySelector('#search-status').textContent;" +
+        " if (text !== '' && window.__said.at(-1) !== text) window.__said.push(text);" +
+        " }).observe(document.querySelector('#search-status'), { childList: true, characterData: true, subtree: true });",
+    );
+    await page.locator('#q').pressSequentially('r');
+    await page.waitForTimeout(400);
+    check('one letter searches nothing', await page.locator('#search-results').isHidden());
+    await page.locator('#q').pressSequentially('etraite à 60 ans', { delay: 40 });
     await page.waitForSelector('#search-list li');
     const found = await page.locator('#search-list li').count();
-    check('a search lists sections', found >= 1 && found <= 8, `${String(found)} results`);
+    check(
+      'results arrive while typing, without Enter',
+      found >= 1 && found <= 8,
+      `${String(found)} results`,
+    );
+    await until(page, "/trouvé/.test(document.querySelector('#search-status').textContent)");
     const status = (await page.locator('#search-status').textContent()) ?? '';
     check('the status says how many were found', /trouvé/.test(status), status);
+    const said = await page.evaluate<string[]>('window.__said');
+    check(
+      'the count is said once the typing has paused, not at every key',
+      said.filter((text) => /trouvé/.test(text)).length === 1 && said.length <= 2,
+      said.join(' | '),
+    );
+    await until(page, "location.hash.startsWith('#q=')");
     check(
       'the query is kept after #',
       page.url().endsWith('#q=retraite%20%C3%A0%2060%20ans'),
       page.url(),
+    );
+    await page.press('#q', 'Enter');
+    await until(page, "document.activeElement?.id === 'search-results-title'");
+    check(
+      'Enter moves the focus to the results',
+      (await page.evaluate<string>('document.activeElement.id')) === 'search-results-title',
     );
     const carrying = requested.filter((url) =>
       /retraite/i.test(decodeURIComponent(url.split('#')[0] ?? '')),
@@ -212,7 +287,7 @@ async function runEngine(
     await page.goto(
       `${origin}/#q=${encodeURIComponent('<img src=x onerror=alert(1)><script>alert(2)</script>')}`,
     );
-    await page.waitForFunction("document.querySelector('#search-status').textContent !== ''");
+    await until(page, "document.querySelector('#search-status').textContent !== ''");
     const injected = await page.evaluate<number>(
       "document.querySelectorAll('#search-list img, #search-status img, main script:not([type])').length",
     );

@@ -1,21 +1,31 @@
 ---
 /**
- * The search island — the only interactive part of the app, and its first client-side script.
+ * The search island: one field, and results while one types (D16.9).
  *
  * Contract with the page around it:
  *   - without JavaScript it does not exist: the form is `hidden` until the script shows it, and
- *     the table of contents below is the navigation;
+ *     the table of contents is the navigation — below the field on /sommaire/, one link away
+ *     everywhere else;
  *   - the words typed never leave the device. The index (stems, no sentence) and the list of
  *     titles are two static files fetched once; the query runs here. The address bar keeps the
  *     query after `#`, the one part of a URL a browser does not send to a server;
  *   - a result never prints a measure. It names the section, numbers the measures that match,
- *     and each number is a link into the official page (D15.2).
+ *     and each number is a link into the official page (D15.2);
+ *   - there is no button: results follow the typing, and Enter — the « Rechercher » key of a
+ *     phone keyboard — moves the focus to them. The sentence that counts them is a
+ *     `role="status"`, written once the typing has paused, never at every key.
  *
  * The strings the script needs are handed to it as JSON, so that they come from the kit like
  * every other sentence of the interface.
  */
 import { manifest } from '../lib/edition.ts';
 import { safeJson, t } from '../lib/strings.ts';
+
+interface Props {
+  /** The page already shows the table of contents: the sentence left without script is no link. */
+  toc?: boolean | undefined;
+}
+const { toc = false } = Astro.props;
 
 const version = manifest().meta.corpus_version;
 const strings = {
@@ -38,28 +48,28 @@ const strings = {
   data-meta={`/data/meta-${version}.json`}
 >
   <label for="q">{t('search.label')}</label>
-  <div class="search-row">
-    <input
-      id="q"
-      name="q"
-      type="search"
-      autocomplete="off"
-      autocapitalize="none"
-      spellcheck="false"
-      enterkeyhint="search"
-      placeholder={t('search.placeholder')}
-      aria-describedby="search-hint"
-    />
-    <button type="submit">{t('search.submit')}</button>
-  </div>
+  <input
+    id="q"
+    name="q"
+    type="search"
+    autocomplete="off"
+    autocapitalize="none"
+    spellcheck="false"
+    enterkeyhint="search"
+    maxlength="300"
+    placeholder={t('search.placeholder')}
+    aria-describedby="search-hint"
+  />
   <p id="search-hint" class="ref">{t('search.hint')} {t('search.local_promise')}</p>
 </form>
 <p id="search-status" role="status" class="ref"></p>
 <section id="search-results" aria-labelledby="search-results-title" hidden>
-  <h2 id="search-results-title">{t('search.results_title')}</h2>
+  <h2 id="search-results-title" tabindex="-1">{t('search.results_title')}</h2>
   <ol id="search-list"></ol>
 </section>
-<noscript><p>{t('search.no_js')}</p></noscript>
+<noscript>
+  <p>{toc ? t('search.no_js') : <a href="/sommaire/">{t('search.no_js')}</a>}</p>
+</noscript>
 
 <script type="application/json" id="search-strings" set:html={safeJson(strings)} is:inline />
 <script>
