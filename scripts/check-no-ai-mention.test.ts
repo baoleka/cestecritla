@@ -2,6 +2,15 @@
  * "No AI mention without AI" (D9.15, H-CNF-17g, blocking) — and no mention of any component
  * that is not deployed.
  *
+ * Since D16 a model may answer questions, and whether it does is DATA (data/2026/ask.json,
+ * D16.4): "answer", "select" or "off". This gate follows that file. While the mode is "off" —
+ * the state before a bench has passed, and the last rung of the ladder afterwards — the site is
+ * deployed as static files, no model runs, and everything below applies as it always did. When
+ * the mode opens, the gate inverts page by page: the notice is REQUIRED where the model
+ * answers — the home page — allowed on the four pages that explain it, and forbidden everywhere
+ * else. That half is exercised today on dist-ask/, the test build of the ask screen
+ * (`npm run build:ask`), so that it is not discovered broken on the day the mode opens.
+ *
  * The dossier first wrote this gate on KEY NAMES: "a `chat.*` or `*.ai_*` string". Measured, that
  * pattern misses five of the strings it must catch — `offline.chat`, `silence.chat`,
  * `quota.title`, `privacy.policy.02` and `privacy.policy.06`. Which means an app with no AI
@@ -26,12 +35,18 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import { appVoiceOnly } from './app-voice.js';
+import { MODELS, isModelKey } from '../src/worker/models.js';
+import { STATIC_CONFIG, WORKER_CONFIG, readAskMode, wranglerConfig } from './build-mode.js';
 
 const strings = JSON.parse(readFileSync('design/strings.json', 'utf8')) as Record<string, unknown>;
-const wrangler = readFileSync('wrangler.jsonc', 'utf8');
+/** What the site says it does with a question, and the configuration that mode deploys. */
+const askMode = readAskMode();
+const deployed = wranglerConfig('app', askMode);
+const wrangler = readFileSync(deployed, 'utf8');
 
-/** A runtime AI, or a component v1/v2 does not deploy. */
-const MENTIONS_ABSENT_COMPONENT = /\bIA\b|intelligence artificielle|Mistral|assistant|Turnstile/i;
+/** A runtime AI, or a component that is not deployed while the mode is "off". */
+const MENTIONS_ABSENT_COMPONENT =
+  /\bIA\b|intelligence artificielle|Mistral|Llama|Gemma|gpt-oss|assistant|Turnstile/i;
 
 const EXEMPT = new Set(['about.no_ai', 'about.writing_method']);
 
@@ -60,35 +75,115 @@ const htmlFiles = (dir: string): string[] => {
   });
 };
 
-void test('the deployed config carries no AI and no Turnstile (D6.10, D13.1)', () => {
-  assert.equal(aiBindingDeployed, false, 'wrangler.jsonc must not declare the AI binding');
-  assert.equal(turnstileDeployed, false, 'wrangler.jsonc must not declare Turnstile vars');
+void test('the configuration the mode deploys carries an AI exactly when the mode says so (D16.4)', () => {
+  // "off" deploys static files: no script, so no model and no Turnstile check can exist.
+  assert.equal(deployed, askMode === 'off' ? STATIC_CONFIG : WORKER_CONFIG);
+  assert.equal(aiBindingDeployed, askMode !== 'off', `${deployed}: the AI binding`);
+  assert.equal(turnstileDeployed, askMode !== 'off', `${deployed}: Turnstile`);
+  // The holding page never runs anything, whatever the mode.
+  assert.equal(wranglerConfig('holding', askMode), STATIC_CONFIG);
 });
 
-void test('no built page mentions an AI or Turnstile while neither is deployed', () => {
-  const pages = htmlFiles('dist');
-  if (pages.length === 0) {
-    console.log('  (skipped: no dist/ — run `npm run build` first)');
-    return;
-  }
-  // The pages show typographic apostrophes (src/lib/strings.ts): an exempt sentence must be
-  // recognised in the form it is printed in, not only in the form the kit types it.
-  const exemptText = [...EXEMPT]
-    .map((k) => strings[k])
-    .filter((v): v is string => typeof v === 'string')
-    .flatMap((v) => [v, v.replace(/'/g, '’')]);
+/**
+ * The sentences that may name an AI on any page, in the two forms a page prints them: the kit
+ * types straight apostrophes, the pages show typographic ones (src/lib/strings.ts).
+ */
+const exemptText = [...EXEMPT]
+  .map((k) => strings[k])
+  .filter((v): v is string => typeof v === 'string')
+  .flatMap((v) => [v, v.replace(/'/g, '’')]);
 
-  const offenders: string[] = [];
-  for (const page of pages) {
+/** Pages of a build whose own voice names an AI or Turnstile, each with the words around it. */
+function mentions(root: string): Map<string, string> {
+  const found = new Map<string, string>();
+  for (const page of htmlFiles(root)) {
     let body = appVoiceOnly(readFileSync(page, 'utf8'));
     for (const allowed of exemptText) body = body.split(allowed).join('');
     const hit = MENTIONS_ABSENT_COMPONENT.exec(body);
-    if (hit !== null) {
-      const at = Math.max(0, hit.index - 60);
-      offenders.push(`${page}: …${body.slice(at, hit.index + 60).replace(/\s+/g, ' ')}…`);
-    }
+    if (hit === null) continue;
+    const at = Math.max(0, hit.index - 60);
+    found.set(
+      page.slice(root.length + 1),
+      `…${body.slice(at, hit.index + 60).replace(/\s+/g, ' ')}…`,
+    );
   }
-  assert.deepEqual(offenders, [], `pages naming an absent component:\n${offenders.join('\n')}`);
+  return found;
+}
+
+/**
+ * Where a site that answers questions may speak of its AI: the page that asks, and the four
+ * that say how it works, what it keeps, and who is behind it. A section page, a bridge, an
+ * answer written by a person, the table of contents: none of them has anything to say about it.
+ */
+const PAGES_THAT_EXPLAIN = [
+  'index.html',
+  'exactitude/index.html',
+  'methodologie/index.html',
+  'confidentialite/index.html',
+  'a-propos/index.html',
+];
+
+/** Everything wrong with the AI notices of a build made for the given mode. */
+function noticeProblems(root: string, mode: 'off' | 'answer' | 'select', model: string): string[] {
+  const named = mentions(root);
+  if (mode === 'off') {
+    return [...named].map(([page, around]) => `${page} names an absent component: ${around}`);
+  }
+  const problems: string[] = [];
+  for (const [page, around] of named) {
+    if (!PAGES_THAT_EXPLAIN.includes(page)) problems.push(`${page} has no reason to: ${around}`);
+  }
+  const read = (page: string): string => appVoiceOnly(readFileSync(join(root, page), 'utf8'));
+  // Art. 50: at the latest at the first interaction — so before it, on the page that asks.
+  const home = read('index.html');
+  if (!/Demander envoie la question à une IA \(/.test(home) || !home.includes(model)) {
+    problems.push('index.html does not say, before the first use, that an AI answers and which');
+  }
+  if (!home.includes('Cloudflare')) problems.push('index.html does not say where the AI is hosted');
+  // The page that says what is kept must say where a question goes, and what guards the gesture.
+  const privacy = read('confidentialite/index.html');
+  if (!/Demander envoie ta question/.test(privacy)) {
+    problems.push('confidentialite does not say where a question goes');
+  }
+  if (!/Turnstile/.test(privacy)) problems.push('confidentialite does not name Turnstile');
+  // And no page may still say that no AI answers here: it would now be false.
+  const denial = String(strings['about.no_ai']).replace(/'/g, '’');
+  for (const page of PAGES_THAT_EXPLAIN) {
+    if (read(page).includes(denial)) problems.push(`${page} still says no AI answers here`);
+  }
+  return problems;
+}
+
+/** The name the notices print for the model data/2026/ask.json names. */
+function configuredModel(): string {
+  const file = JSON.parse(readFileSync('data/2026/ask.json', 'utf8')) as { model?: unknown };
+  return isModelKey(file.model) ? MODELS[file.model].name : '';
+}
+
+void test('the built app speaks of an AI exactly where its mode says one is at work', () => {
+  if (htmlFiles('dist').length === 0) {
+    console.log('  (skipped: no dist/ — run `npm run build` first)');
+    return;
+  }
+  if (!existsSync('dist/sommaire/index.html')) return; // a holding build: two pages, no AI
+  assert.deepEqual(noticeProblems('dist', askMode, configuredModel()), []);
+});
+
+void test('the ask screen, built for its tests, carries its notices and no page too many', () => {
+  if (!existsSync('dist-ask/index.html')) {
+    console.log('  (skipped: no dist-ask/ — run `npm run build:ask` first)');
+    return;
+  }
+  // The test build pretends the mode is "answer" with the first candidate of the catalogue.
+  assert.deepEqual(noticeProblems('dist-ask', 'answer', MODELS['mistral-small-3.1'].name), []);
+  // The rule sees what it is for: the same pages judged as a site without AI are all refused.
+  const asOff = noticeProblems('dist-ask', 'off', '');
+  for (const page of PAGES_THAT_EXPLAIN) {
+    assert.ok(
+      asOff.some((problem) => problem.startsWith(page)),
+      `${page} was not seen`,
+    );
+  }
 });
 
 void test('every string naming an absent component has a local fallback or is exempt', () => {

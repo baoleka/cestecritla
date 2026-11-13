@@ -1,5 +1,5 @@
 /**
- * The deploy rule and the two wrangler configurations (D15.4, D15.5, D15.12).
+ * The deploy rule and the two wrangler configurations (D15.4, D15.5, D15.12, D16.7).
  *
  * Read in wrangler 4.130.0's source before writing this: outside an interactive terminal,
  * `wrangler deploy` re-points a custom domain that belongs to another Worker WITHOUT asking.
@@ -15,14 +15,18 @@ import {
   APP_REDIRECT_PREFIXES,
   HOLDING_PAGES,
   HOLDING_REDIRECT_PREFIXES,
+  STATIC_CONFIG,
+  UNSET_DATABASE_ID,
   WORKER_CONFIG,
-  WRANGLER_CONFIG,
   appRedirects,
   citationPolicyValidated,
   deployRefusal,
   holdingRedirects,
   insideSilenceWindow,
+  readAskMode,
   readBuildScrutin,
+  workerProblems,
+  wranglerConfig,
   wranglerDeployArgs,
   type DeployContext,
 } from './build-mode.js';
@@ -35,6 +39,8 @@ const VALIDATED: DeployContext = {
   launchBlockers: ['the launch has not been decided'],
   insideSilenceWindow: false,
   scrutinBuild: false,
+  ask: 'off',
+  workerProblems: [],
 };
 
 interface Route {
@@ -44,7 +50,15 @@ interface Route {
 interface Environment {
   routes?: Route[];
   vars?: Record<string, string>;
-  analytics_engine_datasets?: { binding: string; dataset: string }[];
+  ai?: { binding?: string };
+  d1_databases?: { binding?: string; database_name?: string; database_id?: string }[];
+  durable_objects?: { bindings?: { name?: string; class_name?: string }[] };
+  ratelimits?: { name?: string; namespace_id?: string }[];
+  analytics_engine_datasets?: unknown;
+  kv_namespaces?: unknown;
+  triggers?: unknown;
+  tail_consumers?: unknown;
+  logpush?: unknown;
 }
 interface WranglerConfig extends Environment {
   name?: string;
@@ -61,10 +75,10 @@ const read = (file: string): WranglerConfig =>
 const hosts = (routes: Route[] | undefined): string[] =>
   (routes ?? []).map((r) => r.pattern).sort();
 
-/** The Worker configuration: not deployed in v1 (D15.14), kept honest for its return. */
+/** The Worker of « Demander »: deployed with the app only when the site answers questions. */
 const app = read(WORKER_CONFIG);
-/** The static configuration both builds are deployed with. */
-const holding = read(WRANGLER_CONFIG.holding);
+/** The static configuration: the holding page always, the app while it answers no question. */
+const holding = read(STATIC_CONFIG);
 const APEX = ['cestecritla.fr', 'www.cestecritla.fr'];
 
 void test('the JSONC reader keeps a URL inside a string and drops a comment after it', () => {
@@ -131,7 +145,7 @@ void test('each build is deployed with its own configuration, to a named environ
     'wrangler.static.jsonc',
     '--env=',
   ]);
-  // v1 has no beacon (D15.14): the app is static files too, and deploys without Analytics Engine.
+  // An app that answers no question is static files too: no script, nothing to invoke.
   assert.deepEqual(wranglerDeployArgs('preview', 'app', ['--dry-run']), [
     'deploy',
     '--config',
@@ -139,8 +153,87 @@ void test('each build is deployed with its own configuration, to a named environ
     '--env=preview',
     '--dry-run',
   ]);
-  assert.equal(WRANGLER_CONFIG.app, WRANGLER_CONFIG.holding);
-  assert.notEqual(WRANGLER_CONFIG.app, WORKER_CONFIG);
+  // The mode is data (D16.4): as soon as the site answers questions the Worker goes with it.
+  for (const ask of ['answer', 'select', 'bench'] as const) {
+    assert.deepEqual(wranglerDeployArgs('preview', 'app', [], ask), [
+      'deploy',
+      '--config',
+      'wrangler.jsonc',
+      '--env=preview',
+    ]);
+    // …with the app, never with the holding page, whatever the mode says.
+    assert.equal(wranglerConfig('holding', ask), STATIC_CONFIG);
+  }
+  assert.equal(wranglerConfig('app', 'off'), STATIC_CONFIG);
+  assert.notEqual(STATIC_CONFIG, WORKER_CONFIG);
+});
+
+void test('the mode read from the file is "off" unless it plainly says otherwise', () => {
+  assert.equal(readAskMode('data/2026/does-not-exist.json'), 'off');
+  const committed = JSON.parse(readFileSync('data/2026/ask.json', 'utf8')) as { mode: string };
+  assert.equal(
+    readAskMode(),
+    committed.mode === 'answer' || committed.mode === 'select' ? committed.mode : 'off',
+  );
+});
+
+void test('the Worker is deployed only when it is ready, and the bench only on the preview host', () => {
+  const pages = ['index.html', 's/p1c1-s01/index.html'];
+  const open: DeployContext = { ...VALIDATED, launchBlockers: [] };
+  const unready = ['wrangler.jsonc (top level): the private base has no identifier yet (lot I3)'];
+  for (const ask of ['answer', 'select', 'bench'] as const) {
+    assert.match(
+      String(deployRefusal('preview', 'app', pages, { ...open, ask, workerProblems: unready })),
+      /the Worker is not ready to be deployed — .*no identifier yet/,
+    );
+    // A dry run uploads nothing: CI keeps bundling the Worker before the base exists.
+    assert.equal(
+      deployRefusal('preview', 'app', pages, {
+        ...open,
+        ask,
+        workerProblems: unready,
+        dryRun: true,
+      }),
+      null,
+    );
+    assert.equal(deployRefusal('preview', 'app', pages, { ...open, ask }), null);
+  }
+  // The bench never reaches the apex: no model runs there that nobody has chosen yet.
+  assert.match(
+    String(deployRefusal('apex', 'app', pages, { ...open, ask: 'bench' })),
+    /bench runs on the preview host only/,
+  );
+  // An app that answers no question does not care what the Worker lacks…
+  assert.equal(deployRefusal('preview', 'app', pages, { ...open, workerProblems: unready }), null);
+  // …and neither does the holding page, ever: it is also the withdrawal gesture.
+  assert.equal(
+    deployRefusal('apex', 'holding', [...HOLDING_PAGES], {
+      ...open,
+      ask: 'answer',
+      workerProblems: unready,
+    }),
+    null,
+  );
+});
+
+void test('what the Worker lacks is read from the files: the base, and the state of the book', () => {
+  const manifest = JSON.parse(readFileSync('data/2026/manifest.json', 'utf8')) as {
+    meta: { corpus_version: string };
+  };
+  const preview = app.env?.['preview'];
+  assert.ok(preview, 'wrangler.jsonc must declare env.preview');
+  // The corpus version of both environments is the manifest's: a page and a Worker built from
+  // two states of the book would never understand each other's identifiers.
+  for (const env of [app, preview]) {
+    assert.equal((env.vars ?? {})['CORPUS_VERSION'], manifest.meta.corpus_version);
+  }
+  const problems = workerProblems();
+  assert.ok(!problems.some((p) => p.includes('CORPUS_VERSION')), problems.join('\n'));
+  // The base: its identifier is the editor's to write, once created. Until then, a refusal.
+  const unset = [app, preview].filter(
+    (env) => (env.d1_databases ?? [])[0]?.database_id === UNSET_DATABASE_ID,
+  ).length;
+  assert.equal(problems.filter((p) => p.includes('no identifier yet')).length, unset);
 });
 
 /**
@@ -151,7 +244,7 @@ void test('each build is deployed with its own configuration, to a named environ
 void test('in both configurations the preview environment has its own host, never the apex', () => {
   for (const [file, config] of [
     [WORKER_CONFIG, app],
-    [WRANGLER_CONFIG.holding, holding],
+    [STATIC_CONFIG, holding],
   ] as const) {
     assert.deepEqual(hosts(config.routes), APEX, `${file}: top-level routes`);
     const preview = config.env?.['preview'];
@@ -174,12 +267,54 @@ void test('the two configurations name the same Worker and the same hosts', () =
   assert.equal(holding.assets?.directory, app.assets?.directory);
 });
 
-void test('the holding configuration runs no code at all', () => {
+void test('the static configuration runs no code at all', () => {
   assert.equal(holding.main, undefined, 'a script makes the holding page depend on the app');
   assert.equal(holding.vars, undefined);
-  assert.equal(holding.analytics_engine_datasets, undefined);
+  for (const env of [holding, holding.env?.['preview']]) {
+    assert.equal(env?.ai, undefined);
+    assert.equal(env?.d1_databases, undefined);
+    assert.equal(env?.durable_objects, undefined);
+    assert.equal(env?.ratelimits, undefined);
+    assert.equal(env?.analytics_engine_datasets, undefined);
+  }
   assert.equal(holding.assets?.binding, undefined, 'an assets binding only exists for a script');
   assert.equal(holding.assets?.run_worker_first, undefined);
+});
+
+void test('the Worker binds what a question needs, and nothing that could keep a trace (D16.7)', () => {
+  const preview = app.env?.['preview'];
+  assert.ok(preview, 'wrangler.jsonc must declare env.preview');
+  const environments: [string, Environment][] = [
+    ['top level', app],
+    ['env.preview', preview],
+  ];
+  for (const [name, env] of environments) {
+    assert.equal(env.ai?.binding, 'AI', `${name}: the AI binding`);
+    assert.equal((env.d1_databases ?? [])[0]?.binding, 'DB', `${name}: the private base`);
+    assert.equal(
+      (env.durable_objects?.bindings ?? [])[0]?.name,
+      'BUDGET',
+      `${name}: the allowance`,
+    );
+    assert.equal((env.ratelimits ?? [])[0]?.name, 'RATE', `${name}: the rate limiter`);
+    // No measurement, no key-value store, no schedule, no log shipped anywhere.
+    const absent: (keyof Environment)[] = [
+      'analytics_engine_datasets',
+      'kv_namespaces',
+      'triggers',
+      'tail_consumers',
+      'logpush',
+    ];
+    for (const key of absent) assert.equal(env[key], undefined, `${name}: ${key}`);
+  }
+  // One copy of the text at Cloudflare, not two: both environments read the same base.
+  assert.deepEqual(preview.d1_databases, app.d1_databases);
+  // …but each counts its own questions: two limiters, two namespaces.
+  assert.notEqual(
+    (preview.ratelimits ?? [])[0]?.namespace_id,
+    (app.ratelimits ?? [])[0]?.namespace_id,
+  );
+  assert.deepEqual(app.assets?.run_worker_first, ['/api/*']);
 });
 
 void test('neither configuration answers anywhere but the .fr, and neither keeps logs', () => {
@@ -190,15 +325,19 @@ void test('neither configuration answers anywhere but the .fr, and neither keeps
   }
 });
 
-void test('the app carries its non-inherited settings into the preview environment', () => {
-  // `vars` and bindings are NOT inherited: without its own copy the preview beacon would
-  // compare a corpus version against undefined, and write to no dataset.
+void test('the Worker carries its non-inherited settings into the preview environment', () => {
+  // `vars` and bindings are NOT inherited: without its own copy the preview Worker would
+  // compare a corpus version against undefined and accept tokens for no hostname at all.
   const preview = app.env?.['preview'];
-  assert.equal(preview?.vars?.['CORPUS_VERSION'], app.vars?.['CORPUS_VERSION']);
-  const dataset = preview?.analytics_engine_datasets?.[0];
-  assert.equal(dataset?.binding, app.analytics_engine_datasets?.[0]?.binding);
-  // A test session must never land in the figures we publish.
-  assert.notEqual(dataset?.dataset, app.analytics_engine_datasets?.[0]?.dataset);
+  assert.ok(preview, 'wrangler.jsonc must declare env.preview');
+  const top = app.vars ?? {};
+  const own = preview.vars ?? {};
+  assert.deepEqual(Object.keys(own).sort(), Object.keys(top).sort());
+  assert.equal(own['ENVIRONMENT'], 'preview');
+  assert.equal(top['ENVIRONMENT'], 'production');
+  // A token is accepted only for the hosts of its own environment.
+  assert.deepEqual((top['TURNSTILE_HOSTNAMES'] ?? '').split(',').sort(), APEX);
+  assert.deepEqual((own['TURNSTILE_HOSTNAMES'] ?? '').split(','), hosts(preview.routes));
 });
 
 void test('an app build is deployed nowhere before the citation policy is validated (D15.7)', () => {

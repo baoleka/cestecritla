@@ -3,8 +3,12 @@
  * `/methodologie/` — how the app knows where a measure is written without copying the book.
  */
 import Base from '../../layouts/Base.astro';
+import { askSite } from '../../lib/ask-config.ts';
 import { manifest } from '../../lib/edition.ts';
 import { fr, t } from '../../lib/strings.ts';
+
+const site = askSite();
+const model = site.modelName ?? '';
 
 const counts = manifest().meta.counts;
 // One request per page the table of contents publishes (introduction, parts, chapters), plus
@@ -29,8 +33,23 @@ const requests = 1 + counts.parts + counts.chapters + 5;
   <h2>{t('method.hash.title')}</h2>
   <p>{t('method.hash.text')}</p>
 
+  {
+    site.mode !== 'off' && (
+      <>
+        <h2>{t('method.ask_title')}</h2>
+        <p>
+          {site.mode === 'answer'
+            ? t('about.ai_method', { model })
+            : t('about.ai_method.select', { model })}
+        </p>
+        <p>{t('about.ai_limits')}</p>
+        <p>{t('about.ai_reviewed')}</p>
+      </>
+    )
+  }
+
   <h2>{t('method.writing_title')}</h2>
-  <p>{t('about.no_ai')}</p>
+  {site.mode === 'off' && <p>{t('about.no_ai')}</p>}
   <p>{t('about.writing_method')}</p>
   <p>{t('legal.license.code')}</p>
 

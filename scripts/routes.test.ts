@@ -33,7 +33,7 @@ type Status =
   | 'reserved'
   /** Temporarily redirected to the home page by dist/_redirects (D15.8). */
   | 'redirected'
-  /** Served by the Worker, never by Static Assets. Not deployed in v1 (D15.14). */
+  /** Served by the Worker, never by Static Assets — and only when the site answers questions (D16.7). */
   | 'worker';
 
 interface Route {
@@ -144,7 +144,7 @@ export const ROUTES: readonly Route[] = [
     object: '« La carte des 89 » (écartée)',
     sample: 'carte/index.html',
   },
-  { prefix: '/api/', status: 'worker', object: 'balise d’événements (v1.1, D15.14)' },
+  { prefix: '/api/', status: 'worker', object: 'une question : /api/ask (D16.7)' },
 ];
 
 const built = existsSync('dist');

@@ -17,26 +17,9 @@
  * what a link someone sent them carries after `#q=` — is never parsed as HTML. And nothing typed
  * leaves the device: the index and the titles are two static files, fetched once.
  */
-import MiniSearch from 'minisearch';
-import {
-  INDEX_OPTIONS,
-  buildQuery,
-  expand,
-  groupBySection,
-  searchOptions,
-  type SearchDoc,
-  type SynonymGroup,
-} from '../lib/search-core.ts';
+import type { SectionHit } from '../lib/search-core.ts';
 import { enhanceOfficialLinks } from './deep-links.ts';
-
-/** /data/meta-<version>.json — built from the public manifest (src/pages/data/[name].json.ts). */
-interface Meta {
-  /** Section id → [title, where ("Partie 2 · chapitre 2"), official URL]. */
-  sections: Record<string, [string, string, string]>;
-  /** Proposition id → [label ("Mesure clé", "Mesure 7.2"), text directive or "", incipit or ""]. */
-  items: Record<string, [string, string, string]>;
-  synonyms: SynonymGroup[];
-}
+import { el, engineReady, findSections, loadEngine, measureLink, type Meta } from './engine.ts';
 
 interface Strings {
   opening: string;
@@ -47,11 +30,6 @@ interface Strings {
   where: string;
   incipit: string;
   missing: string;
-}
-
-interface Engine {
-  index: MiniSearch<SearchDoc>;
-  meta: Meta;
 }
 
 const MAX_SECTIONS = 8;
@@ -71,48 +49,16 @@ const stringsNode = document.querySelector('#search-strings');
 
 if (form && input && status && results && heading && list && stringsNode) {
   const strings = JSON.parse(stringsNode.textContent) as Strings;
-  let engine: Promise<Engine> | undefined;
-  let loaded = false;
+  /** Fetched once, on the first sign that someone is going to search (src/scripts/engine.ts). */
+  const load = (): ReturnType<typeof loadEngine> =>
+    loadEngine(form.dataset.index ?? '', form.dataset.meta ?? '');
 
-  /** Fetched once, on the first sign that someone is going to search. */
-  const load = (): Promise<Engine> => {
-    engine ??= Promise.all([
-      fetch(form.dataset.index ?? '').then((r) => {
-        if (!r.ok) throw new Error('index');
-        return r.json() as Promise<Parameters<typeof MiniSearch.loadJS>[0]>;
-      }),
-      fetch(form.dataset.meta ?? '').then((r) => {
-        if (!r.ok) throw new Error('meta');
-        return r.json() as Promise<Meta>;
-      }),
-    ]).then(([serialised, meta]) => {
-      loaded = true;
-      return { index: MiniSearch.loadJS<SearchDoc>(serialised, INDEX_OPTIONS), meta };
-    });
-    // A failed download must not be remembered as the answer: the next attempt starts again.
-    engine.catch(() => {
-      engine = undefined;
-    });
-    return engine;
-  };
-
-  const el = <K extends keyof HTMLElementTagNameMap>(
-    tag: K,
-    text?: string,
-    className?: string,
-  ): HTMLElementTagNameMap[K] => {
-    const node = document.createElement(tag);
-    if (text !== undefined) node.textContent = text;
-    if (className !== undefined) node.className = className;
-    return node;
-  };
-
-  const render = (meta: Meta, groups: ReturnType<typeof groupBySection>): void => {
+  const render = (meta: Meta, groups: readonly SectionHit[]): void => {
     list.replaceChildren();
     for (const group of groups) {
       const section = meta.sections[group.sectionId];
       if (section === undefined) continue;
-      const [title, where, url] = section;
+      const [title, where] = section;
       const item = el('li', undefined, 'result');
 
       const name = el('h3');
@@ -126,17 +72,15 @@ if (form && input && status && results && heading && list && stringsNode) {
       group.items.forEach((id, position) => {
         const entry = meta.items[id];
         if (entry === undefined) return;
-        const [label, fragment, incipit] = entry;
+        const incipit = entry[2];
         if (incipit !== '') {
           const first = el('p', `« ${incipit}… »`, 'incipit');
           first.dataset.programme = 'incipit';
           first.title = strings.incipit;
           item.append(first);
         }
-        const link = el('a', label.toLowerCase());
-        link.href = url;
-        link.rel = 'noopener';
-        if (fragment !== '') link.dataset.fragment = fragment;
+        const link = measureLink(meta, id);
+        if (link === null) return;
         if (position > 0) hits.append(', ');
         hits.append(link);
       });
@@ -169,15 +113,12 @@ if (form && input && status && results && heading && list && stringsNode) {
       empty();
       return '';
     }
-    if (!loaded) status.textContent = strings.opening;
+    if (!engineReady()) status.textContent = strings.opening;
     try {
-      const { index, meta } = await load();
+      const found = await load();
       if (turn !== latest) return null;
-      const query = buildQuery(question, expand(question, meta.synonyms));
-      const hits = index
-        .search(query as Parameters<typeof index.search>[0], searchOptions())
-        .map((r) => ({ id: String(r.id), score: r.score }));
-      const groups = groupBySection(hits).slice(0, MAX_SECTIONS);
+      const { meta } = found;
+      const groups = findSections(found, question, MAX_SECTIONS);
       const signature = groups.map((g) => `${g.sectionId}:${g.items.join('+')}`).join('|');
       if (signature !== shown || results.hidden !== (groups.length === 0)) {
         render(meta, groups);

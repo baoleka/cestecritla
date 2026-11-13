@@ -59,6 +59,8 @@ const OPEN: DeployContext = {
   launchBlockers: [],
   insideSilenceWindow: false,
   scrutinBuild: false,
+  ask: 'off',
+  workerProblems: [],
 };
 
 void test('when everything is in place, nothing blocks the launch', () => {
@@ -238,8 +240,11 @@ void test('the files that validate themselves: missing, in place, then edited af
   assert.match(stale, /drawing changed after the sheet was validated/);
   assert.match(stale, /private database is not at the corpus version/);
 
-  // "Search only" needs neither a bench nor a database.
-  writeFileSync(join(ready, ASK_PATH), JSON.stringify({ mode: 'off' }));
+  // "Search only" needs neither a bench nor a database — but it is a decision, with its date:
+  // a file that says "off" because no bench has run yet decides nothing.
+  writeFileSync(join(ready, ASK_PATH), JSON.stringify({ mode: 'off', decided_on: null }));
+  assert.match(artefactBlockers(ready).join('\n'), /"search only" is the editor's decision/);
+  writeFileSync(join(ready, ASK_PATH), JSON.stringify({ mode: 'off', decided_on: '2026-12-01' }));
   assert.doesNotMatch(artefactBlockers(ready).join('\n'), /ask\.json/);
   writeFileSync(join(ready, ASK_PATH), '{ not json');
   assert.match(artefactBlockers(ready).join('\n'), /ask\.json is missing/);

@@ -184,7 +184,15 @@ export function artefactBlockers(root = '.'): string[] {
     out.push(`how a question is answered is not decided: ${ASK_PATH} is missing (lot I6)`);
   } else if (ask.mode !== 'answer' && ask.mode !== 'select' && ask.mode !== 'off') {
     out.push(`${ASK_PATH}: mode must be "answer", "select" or "off"`);
-  } else if (ask.mode !== 'off') {
+  } else if (ask.mode === 'off') {
+    // "Search only" is the last rung of the ladder, and a decision like the others: a file
+    // that says "off" because no bench has run yet decides nothing, and must not pass for it.
+    if (!isDate(ask.decided_on)) {
+      out.push(
+        `${ASK_PATH}: "search only" is the editor's decision, not a default: decided_on (lot I5)`,
+      );
+    }
+  } else {
     if (typeof field(ask.bench, 'sha256') !== 'string' || !isDate(field(ask.bench, 'run_on'))) {
       out.push(`${ASK_PATH}: the mode "${ask.mode}" rests on no recorded bench (lot I5)`);
     }

@@ -1,12 +1,21 @@
 {
-  // "C'est écrit là" — production Worker (Free plan, no payment method: D0.2, D0.31).
-  // One Worker: Static Assets serve everything; the script only sees /api/*.
+  // "C'est écrit là" — the Worker of « Demander » (D16.7). Free plan, no payment method.
+  // One Worker: Static Assets serve everything; the script only sees /api/*, and of those it
+  // answers /api/ask (and /api/bench on the preview host, behind a key).
   //
-  // v1/v2 scope (D6.10 + D13.1): NO `ai`, NO `d1_databases`/`migrations_dir`, NO
-  // `durable_objects`/`migrations`, NO `ratelimits`, NO `kv_namespaces`, NO `triggers.crons`,
-  // NO AI_*/TURNSTILE_*/BUDGET_*/Q_CACHE_TTL_DAYS vars. They return only with the v3
-  // "ids only" contract; prototypes/labo-plateforme/d1-fts5 is kept as their proof.
-  // Do NOT copy the binding list from decisions.md D7.1: it predates D13.1 and is not struck out.
+  // This file is deployed only when data/2026/ask.json says the site answers questions
+  // ("answer" or "select") — scripts/deploy.ts picks it, never choose by hand. While the mode is
+  // "off" the app is static files only (wrangler.static.jsonc), and so is the holding page,
+  // always: the page that stands in for the app depends on nothing the app depends on.
+  //
+  // What it binds, and nothing else (the list of 09-architecture.md predates D13.1 and D16):
+  //   AI      Workers AI, through the AI Gateway "aec" (cache of 30 days, logs off)
+  //   DB      the private base: the text of the 2026 edition, read, never served (D16.6)
+  //   BUDGET  the daily allowance, one Durable Object for the whole site (D7.4)
+  //   RATE    the rate limiter, on a key that says nothing of an address (D7.5)
+  // No KV, no Analytics Engine, no cron, no queue. Three secrets are set in the editor's
+  // terminal with `wrangler secret put`, never written here: TURNSTILE_SECRET, RATE_SALT, and
+  // BENCH_KEY (preview only).
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "cestecritla",
   "main": "src/worker/index.ts",
@@ -23,7 +32,8 @@
 
   // Astro static output. Everything under ./dist is served by Static Assets: free, unlimited,
   // outside the invocation counter. Only /api/* reaches the script; over the daily request
-  // limit /api/* answers 429 while the static site keeps working.
+  // limit /api/* answers 429 while the static site keeps working — and the page then shows
+  // what it found by itself.
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
@@ -32,37 +42,76 @@
     "run_worker_first": ["/api/*"],
   },
 
-  // Aggregated events, no identifier (D0.22, D5.1): one beacon per session, sampled client-side.
-  "analytics_engine_datasets": [{ "binding": "ANALYTICS", "dataset": "cel_events" }],
+  "ai": { "binding": "AI" },
 
-  // The build's corpus version. The beacon is rejected if it does not match (D7.11).
+  // The private base. `database_id` is written here when the editor creates it
+  // (`wrangler d1 create cestecritla-ask`): until then the zeros below refuse to deploy, which
+  // is the point — scripts/build-mode.test.ts reads this line.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "cestecritla-ask",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+    },
+  ],
+
+  "durable_objects": {
+    "bindings": [{ "name": "BUDGET", "class_name": "NeuronBudget" }],
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["NeuronBudget"] }],
+
+  // Six questions a minute for one visitor: more than anyone reads, less than a script wants.
+  "ratelimits": [{ "name": "RATE", "namespace_id": "2026", "simple": { "limit": 6, "period": 60 } }],
+
   "vars": {
-    "CORPUS_VERSION": "d29c7422004ab27c",
+    // The state of the book the site was built from. A page or a base at another version gets
+    // the "local" answer (scripts/build-mode.test.ts holds this to the manifest).
+    "CORPUS_VERSION": "27ee6e713fe25e7e",
+    "ENVIRONMENT": "production",
+    "TURNSTILE_HOSTNAMES": "cestecritla.fr,www.cestecritla.fr",
+    // Neurons a day the site allows itself, of the 10 000 the free plan gives (D7.4).
+    "NEURON_HARD_STOP": "8500",
   },
 
-  // No logs at all in production (D0.22, ADR-10): no invocation logs, no traces.
-  // CPU and error rates are read from GraphQL workersInvocationsAdaptive, which needs no logs.
+  // No logs at all (D0.22, D7.8, ADR-10): no invocation logs, no traces. A question about a
+  // political programme is sensitive data; the one way not to leak it is not to write it.
   "observability": { "enabled": false },
 
   "minify": true,
   "upload_source_maps": false,
   "keep_vars": false,
 
-  // The preview host (D15.12): where the app is built and tested on real phones while the apex
-  // keeps serving the holding page (D15.4). Deployed as the Worker "cestecritla-preview" by
-  // `npm run deploy:preview`; `noindex` comes from public/_headers.
+  // The preview host (D15.12): where the app is built, benched and tried on real phones while
+  // the apex keeps serving the holding page (D15.4). Deployed as the Worker
+  // "cestecritla-preview" by `npm run deploy:preview`; `noindex` comes from public/_headers.
   //
   // `routes` is an INHERITABLE key: without the block below this environment would inherit the
   // apex and take it over on its first deploy (scripts/build-mode.test.ts holds that line).
-  // `vars` and `analytics_engine_datasets` are NOT inherited, so they are repeated — the dataset
-  // under its own name, so that a test session never lands in the figures we publish.
+  // Bindings and `vars` are NOT inherited, so they are repeated. The base is the same one —
+  // one copy of the text at Cloudflare, not two; the counter is this Worker's own.
   "env": {
     "preview": {
       "routes": [{ "pattern": "beta.cestecritla.fr", "custom_domain": true }],
-      "vars": {
-        "CORPUS_VERSION": "d29c7422004ab27c",
+      "ai": { "binding": "AI" },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "cestecritla-ask",
+          "database_id": "00000000-0000-0000-0000-000000000000",
+        },
+      ],
+      "durable_objects": {
+        "bindings": [{ "name": "BUDGET", "class_name": "NeuronBudget" }],
       },
-      "analytics_engine_datasets": [{ "binding": "ANALYTICS", "dataset": "cel_events_preview" }],
+      "ratelimits": [
+        { "name": "RATE", "namespace_id": "2027", "simple": { "limit": 6, "period": 60 } },
+      ],
+      "vars": {
+        "CORPUS_VERSION": "27ee6e713fe25e7e",
+        "ENVIRONMENT": "preview",
+        "TURNSTILE_HOSTNAMES": "beta.cestecritla.fr",
+        "NEURON_HARD_STOP": "8500",
+      },
     },
   },
 }

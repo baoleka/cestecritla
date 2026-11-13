@@ -1,0 +1,12 @@
+{
+  "mode": "off",
+  "decided_on": null,
+  "model": null,
+  "min_overlap": 0.5,
+  "bench": null,
+  "database": { "name": "cestecritla-ask", "corpus_version": null },
+  "turnstile_sitekey": null,
+  "answers_read_on": null,
+  "model_confirmed_on": null,
+  "note_fr": "Comment la page répond à une question (D16.4). « mode » : « answer » (le modèle rédige, sous contrôle), « select » (il choisit trois mesures et n'écrit rien) ou « off » (recherche seule : ni modèle, ni Worker, ni mention d'IA). Tant qu'aucun banc n'a tourné, le mode est « off » ET « decided_on » est null : ce n'est pas une décision, c'est une attente, et scripts/launch.ts le dit. « answer » et « select » exigent un banc au seuil (« bench » : empreinte et date), la base privée à la version du manifeste, le modèle confirmé par l'éditeur et quarante réponses lues. « model » est une clé de src/worker/models.ts ; « min_overlap » est le seuil de recouvrement du contrôle, fixé en rejouant le banc — 0,5 est provisoire. « turnstile_sitekey » est la clé publique du widget des deux hôtes."
+}

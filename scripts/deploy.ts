@@ -4,6 +4,7 @@
  *
  *   npm run deploy                     the apex — holding build only, until launch day
  *   npm run deploy:preview             the preview host (noindex) — either build
+ *   npm run deploy:preview -- --bench  the same, with the Worker, for the bench of the models
  *   npx tsx scripts/deploy.ts apex --dry-run --outdir /tmp/x     what CI runs
  *
  * Why a script and not a habit. Read in wrangler 4.130.0 (`publishCustomDomains`): when a custom
@@ -25,17 +26,24 @@ import {
   deployRefusal,
   htmlPages,
   insideSilenceWindow,
+  readAskMode,
   readBuildMode,
   readBuildScrutin,
+  workerProblems,
   wranglerDeployArgs,
+  type AskDeploy,
 } from './build-mode.js';
 import { launchBlockers, readLaunchInputs } from './launch.js';
 
-const [target, ...passthrough] = process.argv.slice(2);
+const [target, ...given] = process.argv.slice(2);
 if (target !== 'apex' && target !== 'preview') {
-  console.error('usage: tsx scripts/deploy.ts apex|preview [--dry-run] [--outdir <dir>]');
+  console.error('usage: tsx scripts/deploy.ts apex|preview [--bench] [--dry-run] [--outdir <dir>]');
   process.exit(2);
 }
+// `--bench` is ours, not wrangler's: the Worker goes to the preview host while the page still
+// answers no question, so that the bench can measure the candidates on the production path.
+const passthrough = given.filter((arg) => arg !== '--bench');
+const ask: AskDeploy = given.includes('--bench') ? 'bench' : readAskMode();
 if (!existsSync('dist')) {
   console.error('deploy refused: no dist/ — build first');
   process.exit(1);
@@ -49,14 +57,19 @@ const refusal = deployRefusal(target, mode, pages, {
   launchBlockers: launchBlockers(readLaunchInputs()),
   insideSilenceWindow: insideSilenceWindow(new Date()),
   scrutinBuild: readBuildScrutin(),
+  ask,
+  workerProblems: workerProblems(),
 });
 if (refusal !== null) {
   console.error(`deploy refused (${target}, ${mode} build): ${refusal}`);
   process.exit(1);
 }
 
-const args = wranglerDeployArgs(target, mode, passthrough);
-console.log(`deploy: ${mode} build, ${String(pages.length)} page(s) → ${target}`);
+const args = wranglerDeployArgs(target, mode, passthrough, ask);
+console.log(
+  `deploy: ${mode} build, ${String(pages.length)} page(s) → ${target}` +
+    (mode === 'app' ? ` — questions: ${ask}` : ''),
+);
 console.log(`        wrangler ${args.join(' ')}`);
 const result = spawnSync('npx', ['--no-install', 'wrangler', ...args], { stdio: 'inherit' });
 process.exit(result.status ?? 1);

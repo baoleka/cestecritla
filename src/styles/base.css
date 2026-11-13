@@ -410,6 +410,54 @@ h4 {
   color: var(--text);
   font: inherit;
 }
+/* « Demander au programme »: the one button of the block, in the colour of action, as wide as
+   the field on a phone so that it is found without being looked for. */
+#ask {
+  inline-size: 100%;
+  margin-block-start: var(--space-2);
+}
+#ask[disabled] {
+  opacity: 0.6;
+  cursor: progress;
+}
+#ask-status {
+  margin-block: var(--space-2) 0;
+}
+/* The answer: our sentences, each with the place where a reader can check it. */
+#answer {
+  margin-block: var(--space-4);
+  padding: var(--space-4);
+  border: 2px solid var(--brand);
+  border-radius: var(--radius-m);
+}
+#answer h2 {
+  margin-block-start: 0;
+  font-size: var(--font-size-h3);
+  line-height: var(--line-height-h3);
+}
+.answer-sentence {
+  margin-block-end: var(--space-4);
+}
+.answer-sentence > p:first-child {
+  margin-block: 0;
+}
+.sources {
+  margin-block: var(--space-1) 0;
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+.sources a {
+  display: block;
+  min-block-size: var(--tap-min);
+  padding-block: var(--space-1);
+}
+/* A second gesture, never competing with the first: outlined, not filled. */
+button.quiet {
+  border: 2px solid var(--brand);
+  background: transparent;
+  color: var(--text);
+}
+
 /* The line that counts the results is empty while one types: it keeps its place, so the list
    under it does not move up and down with every pause. */
 #search-status {

@@ -56,7 +56,7 @@ jobs:
       - name: Tests
         run: npm test
 
-      # The app is static files in v1 (D15.14): it goes through scripts/deploy.ts like the holding
+      # While data/2026/ask.json says "off" the app is static files: it goes through scripts/deploy.ts like the holding
       # site, to the preview host only — the apex refuses it until launch day (D15.5).
       - name: Deploy dry run (app → preview host)
         run: npx tsx scripts/deploy.ts preview --dry-run --outdir /tmp/wdry-app
@@ -69,17 +69,23 @@ jobs:
       - name: Worker startup budget
         run: npx wrangler check startup
 
-      # Proves the v1/v2 scope rather than declaring it: no ai, no d1_databases, no
-      # durable_objects, no ratelimits, no kv_namespaces, no crons (D6.10, D13.1).
+      # The Worker of « Demander » (D16.7) is bundled on every pull request, whether or not the
+      # site answers questions yet: its bindings are the AI, the private base, the allowance and
+      # the rate limiter, and nothing else (scripts/build-mode.test.ts holds the list).
       # `--env=""` names the top-level environment explicitly: since a second environment
       # exists, wrangler warns on any deploy that does not say which one it means.
-      - name: Deploy dry run
+      - name: Deploy dry run (Worker)
         run: npx wrangler deploy --dry-run --env="" --outdir /tmp/wdry
 
       # The preview environment (D15.12) is a second Worker with its own routes, vars and
-      # dataset: none of the three is inherited the way one would assume.
-      - name: Deploy dry run (preview environment)
+      # bindings: none of them is inherited the way one would assume.
+      - name: Deploy dry run (Worker, preview environment)
         run: npx wrangler deploy --dry-run --env preview --outdir /tmp/wdry-preview
+
+      # The same through scripts/deploy.ts, as the bench deploys it: the rule that keeps the
+      # Worker off the apex and waits for the base must accept a dry run.
+      - name: Deploy dry run (bench → preview host)
+        run: npx tsx scripts/deploy.ts preview --bench --dry-run --outdir /tmp/wdry-bench
 
       # The holding site (D15.4) is what the apex actually serves until launch day, and the
       # withdrawal gesture of runbook sheet 9. It is a second build of the same tree, so it goes
@@ -121,6 +127,18 @@ jobs:
       # Content-Security-Policy — on the built app, with every other host intercepted.
       - name: End to end
         run: npx tsx scripts/e2e.ts --engines chromium
+
+      # « Demander », before any bench allows it to ship: a test build of the app as it would be
+      # if the site answered questions, against a Worker that is simulated. No model runs, no
+      # neuron is spent. Typing sends nothing; the gesture sends one question; every answer of
+      # the Worker, right or wrong, becomes a page.
+      - name: End to end of the ask screen (test build, simulated Worker)
+        run: npm run build:ask && npx tsx scripts/e2e-ask.ts --engines chromium
+
+      # The two gates that judge the notices and the security policy read dist-ask/ when it is
+      # there: replayed now that it is, so that the "mode open" half of each is exercised too.
+      - name: Notices and policy of the ask screen
+        run: npx tsx --test scripts/check-no-ai-mention.test.ts scripts/check-build.test.ts
 
       # The parser's second opinion (D15.6): the synthetic official site — 2026 markup around the
       # 2025 text — re-read by a real DOM, and a sample of deep links followed.

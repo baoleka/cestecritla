@@ -375,8 +375,12 @@ const WITHDRAWN_LIANT_KEYS: Readonly<Record<string, string>> = {
  * the surface it belongs to is simply not built in that mode.
  */
 const RUNTIME_AI_KEYS: Readonly<Record<string, string | null>> = {
+  'about.ai_limits': null,
   'about.ai_line': 'about.no_ai',
+  'about.ai_line.select': 'about.no_ai',
   'about.ai_method': 'about.no_ai',
+  'about.ai_method.select': 'about.no_ai',
+  'about.ai_reviewed': null,
   'chat.ai_badge': null,
   'chat.ai_hint': 'search.local_promise',
   'chat.ai_mention': null,

@@ -8,6 +8,7 @@ scratch/
 data/aec-2025.next*.json
 build/
 dist/
+dist-ask/
 .astro/
 public/fonts/
 worker-configuration.d.ts

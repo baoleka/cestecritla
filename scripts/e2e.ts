@@ -356,6 +356,25 @@ async function runEngine(
       (await page.goto(`${origin}/m/c12-s01-k01`))?.status() === 200,
     );
 
+    // --- 5 bis. while the site answers no question, nothing of « Demander » exists on the page
+    const asking = (JSON.parse(readFileSync('data/2026/ask.json', 'utf8')) as { mode?: unknown })
+      .mode;
+    if (asking !== 'answer' && asking !== 'select') {
+      await page.goto(`${origin}/`);
+      await page.focus('#q');
+      await page.waitForTimeout(300);
+      check('mode "off": no button asks anything', (await page.locator('#ask').count()) === 0);
+      check(
+        'mode "off": the script of « Demander » is never fetched',
+        !requested.some((url) => /\/_astro\/ask\./.test(url)),
+      );
+      check(
+        'mode "off": the page says the search is local, and names no AI',
+        /rien n’est envoyé/.test((await page.locator('#search-hint').textContent()) ?? '') &&
+          !/\bIA\b/.test((await page.locator('main').textContent()) ?? ''),
+      );
+    }
+
     // --- 6. the page's own security policy
     check(
       'nothing we ship violates the Content-Security-Policy',

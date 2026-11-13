@@ -10,7 +10,9 @@
  * deployed to the preview host. `scripts/build.ts` records the mode in build/last-build.json
  * when it finishes, and every dist-bound gate reads it from here — so a holding dist/ is judged
  * as a holding dist/, not as an app with 977 pages missing. `scripts/deploy.ts` is the only
- * caller of wrangler: it applies the rule below, then picks the configuration for the build.
+ * caller of wrangler: it applies the rule below, then picks the configuration for the build —
+ * static files, or the Worker of « Demander » when data/2026/ask.json says the site answers
+ * questions (D16.4, D16.7).
  *
  * The holding mode is not a one-off. It is also the withdrawal gesture of runbook sheet 9
  * (D14.10: if exposure becomes untenable the app is withdrawn), and the first answer to the next
@@ -18,7 +20,8 @@
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
-import { silenceWindows, type SilenceWindow } from './silence.js';
+import { silenceWindows, type SilenceWindow } from '../src/lib/silence.js';
+import { parseJsonc } from './jsonc.js';
 
 export type BuildMode = 'app' | 'holding';
 export type DeployTarget = 'apex' | 'preview';
@@ -26,24 +29,82 @@ export type DeployTarget = 'apex' | 'preview';
 export const BUILD_MARKER = 'build/last-build.json';
 
 /**
- * The wrangler configuration each build is deployed with.
- *
- * Both are static files only since D15.14: v1 ships without the measurement beacon, so the app
- * has no script to run — and deploys without the Analytics Engine opt-in that stopped the first
- * attempt (D15.13). One file serves both, which also keeps the promise made for the holding
- * site: the page that stands in for the app depends on nothing a script could break.
+ * Static files only: no script, no binding, no variable. The holding page is always deployed
+ * with it — the page that stands in for the app depends on nothing a script could break — and
+ * so is the app while it answers no question.
  */
-export const WRANGLER_CONFIG: Readonly<Record<BuildMode, string>> = {
-  app: 'wrangler.static.jsonc',
-  holding: 'wrangler.static.jsonc',
-};
+export const STATIC_CONFIG = 'wrangler.static.jsonc';
 
 /**
- * The Worker (src/worker/, the `/api/e` beacon) and its Analytics Engine dataset. Not deployed
- * in v1; kept type-checked and dry-run in CI so that bringing the beacon back is a one-line
- * change here, not a reconstruction.
+ * The Worker of « Demander » (src/worker/, D16.7): `/api/ask`, the AI binding, the private
+ * base, the daily allowance. Deployed with the app only when the site answers questions.
  */
 export const WORKER_CONFIG = 'wrangler.jsonc';
+
+export const ASK_PATH = 'data/2026/ask.json';
+
+/**
+ * How the build about to be deployed answers a question: the mode of data/2026/ask.json —
+ * or "bench", the one case where the Worker goes out while the page still answers nothing
+ * (`npm run deploy:preview -- --bench`: the bench measures the candidates on the preview host).
+ */
+export type AskDeploy = 'off' | 'answer' | 'select' | 'bench';
+
+/** The mode the committed file says. Anything unreadable is "off": no Worker by accident. */
+export function readAskMode(path: string = ASK_PATH): Exclude<AskDeploy, 'bench'> {
+  if (!existsSync(path)) return 'off';
+  try {
+    const parsed: unknown = JSON.parse(readFileSync(path, 'utf8'));
+    if (typeof parsed === 'object' && parsed !== null && 'mode' in parsed) {
+      if (parsed.mode === 'answer' || parsed.mode === 'select') return parsed.mode;
+    }
+  } catch {
+    return 'off';
+  }
+  return 'off';
+}
+
+/** The configuration a build is deployed with (the mode is data: D16.4). */
+export function wranglerConfig(mode: BuildMode, ask: AskDeploy = 'off'): string {
+  return mode === 'app' && ask !== 'off' ? WORKER_CONFIG : STATIC_CONFIG;
+}
+
+/** A base nobody has created yet: `wrangler d1 create` gives the real identifier. */
+export const UNSET_DATABASE_ID = '00000000-0000-0000-0000-000000000000';
+
+/**
+ * What the Worker's configuration still lacks before it may be deployed — read from the files,
+ * so that the rule runs without Cloudflare. Empty when it is ready.
+ */
+export function workerProblems(root = '.'): string[] {
+  const out: string[] = [];
+  const read = (path: string): unknown => {
+    try {
+      return parseJsonc(readFileSync(join(root, path), 'utf8'));
+    } catch {
+      return null;
+    }
+  };
+  const record = (value: unknown): Record<string, unknown> =>
+    typeof value === 'object' && value !== null ? (value as Record<string, unknown>) : {};
+  const config = record(read(WORKER_CONFIG));
+  const manifest = record(record(read('data/2026/manifest.json'))['meta'])['corpus_version'];
+  const environments: [string, Record<string, unknown>][] = [
+    ['top level', config],
+    ['env.preview', record(record(config['env'])['preview'])],
+  ];
+  for (const [name, env] of environments) {
+    const bases = Array.isArray(env['d1_databases']) ? env['d1_databases'] : [];
+    const id = record(bases[0])['database_id'];
+    if (typeof id !== 'string' || id === UNSET_DATABASE_ID) {
+      out.push(`${WORKER_CONFIG} (${name}): the private base has no identifier yet (lot I3)`);
+    }
+    if (record(env['vars'])['CORPUS_VERSION'] !== manifest) {
+      out.push(`${WORKER_CONFIG} (${name}): CORPUS_VERSION is not the corpus of the manifest`);
+    }
+  }
+  return out;
+}
 
 /**
  * The arguments of `wrangler deploy` for this build and this target.
@@ -56,11 +117,12 @@ export function wranglerDeployArgs(
   target: DeployTarget,
   mode: BuildMode,
   passthrough: readonly string[] = [],
+  ask: AskDeploy = 'off',
 ): string[] {
   return [
     'deploy',
     '--config',
-    WRANGLER_CONFIG[mode],
+    wranglerConfig(mode, ask),
     `--env=${target === 'preview' ? 'preview' : ''}`,
     ...passthrough,
   ];
@@ -158,6 +220,10 @@ export interface DeployContext {
   insideSilenceWindow: boolean;
   /** The app build in dist/ is the "scrutin" one: its HTML holds neither a word nor a tile. */
   scrutinBuild: boolean;
+  /** How this build answers a question — which decides whether a Worker goes out with it. */
+  ask: AskDeploy;
+  /** What the Worker's configuration still lacks (`workerProblems`): empty when it is ready. */
+  workerProblems: readonly string[];
 }
 
 /** True when the build in dist/ was made with `--scrutin` (the build deployed before each window). */
@@ -209,6 +275,19 @@ export function deployRefusal(
       'electoral silence (L49, D16.16): inside a window only what closes is deployed — ' +
       'the scrutin build (`npm run build -- --scrutin`) or the holding page'
     );
+  }
+  // The Worker (D16.7) goes out only with an app that answers questions — and, for the bench,
+  // to the preview host alone: the apex never runs a model nobody has chosen yet.
+  if (mode === 'app' && context.ask === 'bench' && target !== 'preview') {
+    return 'the bench runs on the preview host only: `npm run deploy:preview -- --bench`';
+  }
+  if (
+    mode === 'app' &&
+    context.ask !== 'off' &&
+    context.workerProblems.length > 0 &&
+    !context.dryRun
+  ) {
+    return `the Worker is not ready to be deployed — ${context.workerProblems.join(' · ')}`;
   }
   if (mode === 'app' && !context.policyValidated && !context.dryRun) {
     return (

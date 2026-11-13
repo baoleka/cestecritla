@@ -10,11 +10,14 @@
  *     project decided to launch anyway.
  */
 import Base from '../../layouts/Base.astro';
+import { askSite } from '../../lib/ask-config.ts';
 import { manifest } from '../../lib/edition.ts';
 import { pendingReviewCount, quoteFacts, searchFacts, verification } from '../../lib/facts.ts';
 import { fr, frDate, t } from '../../lib/strings.ts';
 
 const meta = manifest().meta;
+const site = askSite();
+const model = site.modelName ?? '';
 const search = searchFacts();
 const checked = verification();
 const cited = quoteFacts();
@@ -40,6 +43,25 @@ const ENGINE_NAMES: Record<string, string> = {
       })
     }
   </p>
+
+  {
+    /* How a question is answered (D16.4) — said only when the site answers questions. The
+       figures of the bench join this block when a bench has run (lot I5). */
+    site.mode !== 'off' && (
+      <>
+        <h2 id="reponse">{t('accuracy.ask.title')}</h2>
+        <p>
+          {site.mode === 'answer'
+            ? t('about.ai_line', { model })
+            : t('about.ai_line.select', { model })}
+        </p>
+        <p>{t('about.ai_limits')}</p>
+        <p>
+          {t('about.ai_reviewed')} <a href="/methodologie/">{t('accuracy.method_link')}</a>
+        </p>
+      </>
+    )
+  }
 
   <h2>{t('accuracy.count.title')}</h2>
   <p>

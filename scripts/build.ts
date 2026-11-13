@@ -13,6 +13,11 @@
  *   npm run build:holding  the holding site (D15.4): two pages, nothing of the programme, and a
  *                          _redirects file so old links land on it. Also the withdrawal gesture
  *                          of runbook sheet 9 (D14.10). See scripts/build-mode.ts.
+ *   npm run build:ask      a TEST build of the app as it would be if the site answered
+ *                          questions (src/lib/ask-config.ts), into dist-ask/. It exists so that
+ *                          the ask screen is tested before any bench allows it to ship; it is
+ *                          never what scripts/deploy.ts deploys, and it leaves dist/ and its
+ *                          marker untouched.
  *
  * The build is deterministic: no timestamp, no random seed, no network. Two runs in a row
  * produce byte-identical output.
@@ -104,6 +109,14 @@ const fast = process.argv.includes('--fast');
 const neutral = process.argv.includes('--neutral');
 /** The holding site (D15.4): astro.config.ts switches its source tree on CEL_BUILD. */
 const mode: BuildMode = process.argv.includes('--holding') ? 'holding' : 'app';
+/** The ask screen, for its tests: `--ask-test answer|select` builds into dist-ask/. */
+const askTestAt = process.argv.indexOf('--ask-test');
+const askTest = askTestAt === -1 ? null : (process.argv[askTestAt + 1] ?? 'answer');
+if (askTest !== null && askTest !== 'answer' && askTest !== 'select') {
+  throw new Error('--ask-test takes "answer" or "select"');
+}
+if (askTest !== null && mode !== 'app') throw new Error('--ask-test is a build of the app');
+const outDir = askTest === null ? 'dist' : 'dist-ask';
 
 function run(step: Step): number {
   for (const input of step.reads) {
@@ -143,10 +156,15 @@ const corpusVersion = mode === 'app' ? checkEdition(root) : null;
 if (corpusVersion !== null) console.log(`✓ edition 2026, corpus ${corpusVersion}`);
 
 const astroStarted = Date.now();
-execFileSync('npx', ['--no-install', 'astro', 'build'], {
+execFileSync('npx', ['--no-install', 'astro', 'build', '--outDir', outDir], {
   stdio: 'inherit',
   cwd: root,
-  env: { ...process.env, CEL_BUILD: mode },
+  env: {
+    ...process.env,
+    CEL_BUILD: mode,
+    // Never inherited: a variable left in a shell must not turn a real build into a test one.
+    CEL_ASK_TEST: askTest ?? '',
+  },
 });
 console.log(`✓ astro build (${String(Date.now() - astroStarted)} ms)`);
 
@@ -155,17 +173,27 @@ console.log(`✓ astro build (${String(Date.now() - astroStarted)} ms)`);
 // every old prefix to its one page; the app answers `/m/`, `/a/`, `/s/` and `/r/` with real
 // bridge pages and only redirects the two prefixes it has nothing to put behind.
 writeFileSync(
-  resolve(root, 'dist/_redirects'),
+  resolve(root, outDir, '_redirects'),
   mode === 'holding' ? holdingRedirects() : appRedirects(),
 );
-console.log(`✓ dist/_redirects (${mode})`);
+console.log(`✓ ${outDir}/_redirects (${mode})`);
 
 // What the dist-bound gates and the deploy guard read. Written last, so a build that failed
 // half-way leaves the previous marker — and the guard then inspects dist/ itself anyway.
-mkdirSync(resolve(root, 'build'), { recursive: true });
-writeFileSync(resolve(root, BUILD_MARKER), `${JSON.stringify({ mode })}\n`);
+// A test build of the ask screen says nothing about dist/: it leaves the marker alone.
+if (askTest === null) {
+  mkdirSync(resolve(root, 'build'), { recursive: true });
+  writeFileSync(resolve(root, BUILD_MARKER), `${JSON.stringify({ mode })}\n`);
+}
 
 const total = Date.now() - t0;
-const label = mode === 'holding' ? 'build:holding' : fast ? 'build:fast' : 'build';
+const label =
+  askTest !== null
+    ? `build:ask (${askTest})`
+    : mode === 'holding'
+      ? 'build:holding'
+      : fast
+        ? 'build:fast'
+        : 'build';
 const seconds = (total / 1000).toFixed(1);
 console.log(`${label}: ${String(n)} data step(s) + astro, ${seconds} s`);

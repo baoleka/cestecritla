@@ -17,17 +17,54 @@
  *
  * The strings the script needs are handed to it as JSON, so that they come from the kit like
  * every other sentence of the interface.
+ *
+ * « Demander » (D16.2, D16.8). When data/2026/ask.json says the site answers questions, and the
+ * page asks for it (`ask`), the same field gains ONE button — the only gesture that sends
+ * anything — the notice that an AI is at work, before the first use, and the place where the
+ * answer lands, above the local results. In mode "off" none of it is rendered: no button, no
+ * notice, no script, and the page says the search is local, which is then the whole truth.
  */
+import { askSite } from '../lib/ask-config.ts';
+import { ripostes, prose } from '../lib/editorial.ts';
 import { manifest } from '../lib/edition.ts';
 import { safeJson, t } from '../lib/strings.ts';
 
 interface Props {
   /** The page already shows the table of contents: the sentence left without script is no link. */
   toc?: boolean | undefined;
+  /** The field of this page may also ask (the home page). Only when the mode allows it. */
+  ask?: boolean | undefined;
 }
-const { toc = false } = Astro.props;
+const { toc = false, ask = false } = Astro.props;
 
 const version = manifest().meta.corpus_version;
+const site = askSite();
+const asking = ask && site.mode !== 'off' && site.modelName !== null && site.sitekey !== null;
+const model = site.modelName ?? '';
+const askConfig = asking && {
+  mode: site.mode,
+  corpus: version,
+  sitekey: site.sitekey,
+  entries: ripostes().map((entry) => ({
+    slug: entry.slug,
+    theme: entry.theme,
+    objection: prose(entry.objection),
+  })),
+  strings: {
+    waiting: t('chat.waiting'),
+    answerTitle: t('chat.liant.voici'),
+    selectTitle: t('chat.liant.where'),
+    reviewedTitle: t('chat.reviewed.title'),
+    noneTitle: t('refusal.not_found.title'),
+    noneLead: t('search.no_results_hint'),
+    offTopic: t('refusal.off_topic'),
+    silence: t('silence.chat.local', { reopenTime: '{reopenTime}' }),
+    where: t('search.result.where'),
+    notice: t('chat.ai_mention', { model }),
+    noticeSelect: t('chat.ai_mention.select', { model }),
+    method: t('chat.method_link'),
+  },
+};
 const strings = {
   opening: t('search.opening'),
   one: t('search.results_count_one'),
@@ -47,7 +84,7 @@ const strings = {
   data-index={`/data/index-${version}.json`}
   data-meta={`/data/meta-${version}.json`}
 >
-  <label for="q">{t('search.label')}</label>
+  <label for="q">{asking ? t('chat.label') : t('search.label')}</label>
   <input
     id="q"
     name="q"
@@ -60,8 +97,44 @@ const strings = {
     placeholder={t('search.placeholder')}
     aria-describedby="search-hint"
   />
-  <p id="search-hint" class="ref">{t('search.hint')} {t('search.local_promise')}</p>
+  {
+    asking ? (
+      <>
+        {/* Hidden until the script that can answer a press has loaded. */}
+        <button type="button" id="ask" hidden>
+          {t('chat.send')}
+        </button>
+        {/* The AI notice, before the first use (AI Act, art. 50): what searching does, what
+            asking does, to whom the question goes. */}
+        <p id="search-hint" class="ref">{t('chat.ai_hint', { model })}</p>
+      </>
+    ) : (
+      <p id="search-hint" class="ref">
+        {t('search.hint')} {t('search.local_promise')}
+      </p>
+    )
+  }
 </form>
+{
+  asking && (
+    <>
+      <p id="ask-status" role="status" class="ref" />
+      <section id="answer" aria-labelledby="answer-title" hidden>
+        <h2 id="answer-title" tabindex="-1" />
+        <div id="answer-body" />
+        <p id="answer-notice" class="ref" />
+        <p>
+          <button type="button" id="ask-again" class="quiet">
+            {t('chat.ask_another')}
+          </button>
+        </p>
+      </section>
+      {/* Turnstile draws here only if the visitor must do something: normally nothing. */}
+      <div id="turnstile" />
+      <script type="application/json" id="ask-config" set:html={safeJson(askConfig)} is:inline />
+    </>
+  )
+}
 <p id="search-status" role="status" class="ref"></p>
 <section id="search-results" aria-labelledby="search-results-title" hidden>
   <h2 id="search-results-title" tabindex="-1">{t('search.results_title')}</h2>
@@ -72,6 +145,17 @@ const strings = {
 </noscript>
 
 <script type="application/json" id="search-strings" set:html={safeJson(strings)} is:inline />
+{
+  /*
+    ONE processed script, outside any condition. Learning note — found by the end-to-end test on
+    13/11/2026: a second <script> placed inside `{asking && …}` was bundled, but Astro numbered
+    the two scripts in an order the page did not follow. With the mode "off" the page loaded the
+    script of « Demander » instead of the search's, and the search silently never started.
+    So the search script is the only one the page names; it fetches the other itself, and only
+    on a page that carries the ask configuration.
+  */
+}
 <script>
   import '../scripts/search.ts';
+  if (document.querySelector('#ask-config') !== null) void import('../scripts/ask.ts');
 </script>

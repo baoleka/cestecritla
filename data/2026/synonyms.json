@@ -637,6 +637,36 @@
       "encadrement des loyers",
       "HLM",
       "logement social"
+    ],
+    [
+      "avion",
+      "avions",
+      "prendre l'avion",
+      "aérien",
+      "transport aérien",
+      "lignes aériennes",
+      "vols intérieurs",
+      "kérosène"
+    ],
+    [
+      "campagne",
+      "campagnes",
+      "à la campagne",
+      "rural",
+      "ruralité",
+      "zones rurales",
+      "villages",
+      "loin de tout"
+    ],
+    [
+      "nationaliser",
+      "nationalisation",
+      "nationalisations",
+      "tout nationaliser",
+      "renationaliser",
+      "collectiviser",
+      "collectivisation",
+      "pôle public"
     ]
   ]
 }

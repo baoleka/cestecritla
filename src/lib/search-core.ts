@@ -84,6 +84,22 @@ export function processTerm(term: string): string | null {
   return stem(term);
 }
 
+/**
+ * Same stem, or two forms of one word the light stemming above leaves apart: « nationaliser »
+ * and « nationalisation », « agriculteur » and « agriculture ». Five letters in common from the
+ * start, and most of the shorter word. Not used by the index — a search must stay exact about
+ * what it found — but by what compares a sentence of ours with a text: the control of an answer
+ * (ask-validate.ts) and the recognition of an objection (ask-reviewed.ts).
+ */
+export function sameWord(a: string, b: string): boolean {
+  if (a === b) return true;
+  const shorter = Math.min(a.length, b.length);
+  if (shorter < 5) return false;
+  let common = 0;
+  while (common < shorter && a[common] === b[common]) common += 1;
+  return common >= 5 && common >= shorter * 0.6;
+}
+
 /** The words of a text as the index sees them. */
 export function terms(text: string): string[] {
   return tokenize(text)

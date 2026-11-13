@@ -5,7 +5,12 @@
  * never a reserve about what is published (voice.md §3).
  */
 import Base from '../../layouts/Base.astro';
+import { askSite } from '../../lib/ask-config.ts';
 import { t } from '../../lib/strings.ts';
+
+// What is true of this build (D16.4): an AI answers questions, chooses measures, or does not exist.
+const site = askSite();
+const model = site.modelName ?? '';
 ---
 
 <Base title={`${t('about.title')} — ${t('app.name')}`} description={t('home.tagline')}>
@@ -15,7 +20,10 @@ import { t } from '../../lib/strings.ts';
   <p>{t('about.who')}</p>
 
   <h2>{t('method.writing_title')}</h2>
-  <p>{t('about.no_ai')}</p>
+  {site.mode === 'off' && <p>{t('about.no_ai')}</p>}
+  {site.mode === 'answer' && <p>{t('about.ai_line', { model })}</p>}
+  {site.mode === 'select' && <p>{t('about.ai_line.select', { model })}</p>}
+  {site.mode !== 'off' && <p>{t('about.ai_reviewed')}</p>}
   <p>{t('about.writing_method')}</p>
   <p>{t('about.method')} <a href="/exactitude/">{t('accuracy.title')}</a></p>
 

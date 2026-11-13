@@ -24,7 +24,7 @@ import {
   registrationDeadline,
   silenceWindows,
   type ElectionCalendar,
-} from './silence.js';
+} from '../src/lib/silence.js';
 
 const at = (iso: string): Date => new Date(iso);
 

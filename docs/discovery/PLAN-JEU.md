@@ -743,3 +743,143 @@ tout effacer ; avancer l'horloge dans une fenêtre de gel.
   guillemets. **Reste pour I7** : reconnaître une objection dans une question tapée et poser
   « Notre réponse, relue » en tête — ce qui demande un jeu d'essai, pas une intuition. 258 tests,
   e2e 30 × 3.
+
+### Lot I, au 13 novembre 2026
+
+- **I1** — le contrat et le contrôle sont écrits, purs, et partagés par le Worker, la page, le
+  banc et les tests (`src/lib/ask-contract.ts`, `src/lib/ask-validate.ts`).
+  - *Le contrat* : `/api/ask` répond l'une de sept choses — réponse écrite, sélection, « notre
+    réponse, relue », rien trouvé, hors sujet, gel, ou « local » (quota, arrêt, autre état du
+    livre, modèle lent : la page montre alors ce qu'elle a trouvé seule, sans dire pourquoi).
+    **Aucun champ ne peut porter un texte du livre**, et la page relit la réponse du Worker
+    strictement : un champ que le contrat ne nomme pas n'atteint jamais l'écran.
+  - *Le contrôle* : dix-neuf règles nommées, chacune avec son test. Aux règles du plan
+    s'ajoutent, par prudence : une seule phrase par phrase, ni première ni deuxième personne
+    (« nous » parlerait au nom du mouvement), aucune précaution oratoire (« probablement »),
+    aucune balise, et les quantités écrites en lettres comptent comme des nombres. Un nom de
+    parti ou de personnalité, le mot « vote » et « intelligence artificielle » ne passent que
+    si une mesure citée les emploie — ce nom-là, pas un autre de la même liste.
+  - *Six mots de suite* se comptent comme la porte du dépôt compte ses neuf : séparés par des
+    espaces, « 2 000 » en vaut deux. C'est sévère pour une paraphrase ; le banc dira combien de
+    réponses y laissent leur rédaction.
+  - *Le seuil de recouvrement* (part des mots d'une phrase que portent ses mesures) vaut 0,5
+    **à titre provisoire — HYPOTHÈSE** : le plan demande qu'il soit fixé en rejouant le banc.
+  - Les mesures des tests sont **inventées** (bibliothèques, arbres fruitiers, cars scolaires) :
+    aucune phrase du programme n'entre dans un fichier suivi. 278 tests.
+- **I2** — le jeu d'essai 2026 est `eval/ask-2026.json` : **170 items**. Les 87 questions du
+  dossier, telles que mappées le 12/11 ; les 15 objections mot pour mot (attendu : notre réponse
+  relue, sans modèle) et 16 variantes telles qu'on les taperait ; les 30 demandes hostiles de
+  septembre, transposées au contrat 2026 ; 12 sujets absents ; et 10 attaques que seule une
+  réponse *rédigée* ouvre (recopier une mesure, parler en « nous », glisser une adresse ou une
+  balise, faire confirmer un chiffre, faire affirmer une absence…), rapportées à part.
+  - *« Absent » veut dire : aucun mot.* Un sujet n'est classé absent que si ses sondes ne
+    trouvent rien dans les mesures, la prose **et** les titres de l'édition 2026 — ou seulement
+    les homonymes que l'item déclare. `scripts/probe-2026.ts` rejoue ces sondes en local et
+    n'imprime que des identifiants. Huit sujets de septembre restent absents ; quatre sont neufs
+    (burkini et abaya, changement d'heure, 110 sur autoroute, peines plancher).
+  - **Trois sujets « absents » en 2025 ne le sont plus et sortent du groupe** — VÉRIFIÉ par
+    sonde : « viande » a une occurrence dans une mesure ; « transports gratuits » croise trois
+    mesures qui portent les deux mots ; et la prose du chapitre Europe parle de l'euro. Je ne
+    peux pas dire ce que le texte en conclut sans l'imprimer : la question de l'euro est donc
+    une variante de la quinzième objection, dont la bonne page est la réponse relue.
+  - *Faux amis de septembre, retrouvés par identifiant* : « le bac » et « la BAC », le
+    désarmement nucléaire, « dictature », « frontière », la double peine des retraites, les
+    crèches de garde, les « notes » qui ne sont pas scolaires.
+  - **Un défaut de mes propres sondes, trouvé par le test** : le texte replié n'a plus
+    d'élisions (« l'euro » y est « euro »). Un motif écrit `l.euro` ne pouvait rien trouver, et
+    aurait fait dire « absent » à tort. Les motifs sont réécrits, rejoués (toujours 0), et le
+    test refuse désormais tout motif qui garde une élision.
+  - *Limite, dite* : l'absence est lexicale. Elle ne prouve pas que le livre ignore un sujet
+    sous d'autres mots — c'est pourquoi la page ne l'affirme jamais.
+- **Une faute de procédure corrigée** : le commit d'I1 portait, dans un test, une adresse e-mail
+  d'exemple écrite en clair. La porte du dépôt ne lit que les fichiers suivis : je l'avais lancée
+  avant `git add`, elle ne voyait pas le fichier. Corrigé (l'adresse est assemblée), et les
+  portes tournent désormais **après** l'ajout à l'index. 284 tests.
+- **I3** — la base privée est décrite et prête, **rien n'est envoyé**. Schéma :
+  `src/worker/sql/schema.sql` (les propositions, un index de *racines*, et trois lignes d'état
+  dont l'interrupteur `ask`). `scripts/seed-ask-2026.ts` écrit le SQL sous `private/ask/`,
+  vérifie sur le SQLite de Node que chaque ligne est le texte dont le manifeste publie
+  l'empreinte (1 069 propositions, 24 451 mots, 476 Ko), et n'envoie qu'avec
+  `--accord <date du jour>`. La base naît **arrêtée** : les réponses s'ouvrent par un second
+  geste (`--switch open`), et se coupent de même, sans déploiement.
+- **La recherche dans la base, mesurée en local à 0 neuron** (`scripts/ask-retrieval.ts`, le
+  code même du Worker sur SQLite) : pour **86 des 87 questions** une mesure d'une section
+  attendue est parmi les candidats, pour **82** parmi les trois premiers ; 22 mesures et 3 480
+  caractères par question en moyenne, 4 946 au plus. Trois groupes de synonymes ajoutés (avion,
+  campagne, nationaliser) : 16 variantes sur 16, et les chiffres publiés de la recherche de la
+  page ne bougent pas. **Écart au plan, dit** : le contexte n'est pas « une douzaine de
+  mesures » mais une vingtaine — « dix meilleures ∪ deux meilleures sections » veut dire les
+  sections entières, comme au banc de septembre. Cela compte dans le coût par question ; le
+  banc dira si dix suffisent.
+- **I4 (S8)** — le Worker est écrit, compilé, **non déployé**. `/api/ask` et lui seul : silence
+  électoral → objection reconnue (« notre réponse, relue », sans modèle : 15 sur 15, aucun faux
+  positif sur les 170 items) → jeton Turnstile → base privée → budget du jour (compteur en
+  Durable Object, arrêt à 8 500) → modèle par la passerelle (6 s, cache 30 jours, aucun
+  journal) → contrôle. Tout ce qui empêche le modèle de répondre donne « local », jamais une
+  erreur. La balise de mesure et Analytics Engine sont retirées. Quatre modèles au catalogue,
+  tous hébergés par Cloudflare. `/api/bench` n'existe que sur l'aperçu, derrière une clé.
+  - *Le mode est une donnée* : `data/2026/ask.json` vaut « off » **et** `decided_on` est nul —
+    une attente, pas une décision. `scripts/launch.ts` refuse désormais un « recherche seule »
+    qui ne serait pas daté par l'éditeur.
+  - *Déploiement* : le Worker ne part qu'avec une app qui répond aux questions (ou
+    `--bench`, sur l'aperçu seulement), et **jamais tant que la base n'a pas d'identifiant** :
+    essayé, refusé. La page d'attente reste des fichiers statiques, quoi qu'il arrive.
+  - *Ce que le Worker ne contient pas*, tenu par un test : aucun `console.*`, aucune écriture
+    en base hors de son propre compteur (un jour, un nombre), aucune adresse hors
+    `challenges.cloudflare.com`.
+  - 310 tests ; a11y 225 contrôles ; e2e 30 × 3 ; essais à blanc des deux environnements.
+- **I7 (S7)** — l'écran de « Demander » est construit, **et ne paraît pas** : tant que
+  `data/2026/ask.json` dit « off », la page n'a ni bouton, ni mention d'IA, ni Turnstile, ni
+  origine tierce dans sa politique de sécurité. Il se teste sur une build d'essai
+  (`npm run build:ask` → `dist-ask/`, jamais déployée) contre un Worker **simulé** :
+  - un seul bouton, « Demander au programme » ; la mention d'IA, avec le nom du modèle, sous le
+    champ avant le premier usage et sur chaque réponse ; « Comment c'est fabriqué » ;
+  - taper n'envoie rien ; le geste envoie la question une fois (question, jeton, état du
+    livre, rien d'autre) ; une objection reconnue ne quitte pas le téléphone ;
+  - chaque réponse du Worker devient sa page ; tout ce qu'il ferait mal — erreur, charabia,
+    autre état du livre, mesure inconnue, champ en trop — devient ce que la page a trouvé seule,
+    sans un mot de panne et sans mention d'IA (elle a choisi elle-même) ;
+  - une phrase du modèle est du texte : une balise n'y crée aucun élément ;
+  - Turnstile n'est demandé qu'au premier focus du champ, une fois.
+  `scripts/e2e-ask.ts` : 67 contrôles sous Chromium (audit d'accessibilité compris), 63 sous
+  Firefox et WebKit.
+- **Deux pièges d'Astro trouvés par les portes, et consignés dans le code.**
+  - Nommer une source de script (`challenges.cloudflare.com`) **remplace** la valeur par
+    défaut : `'self'` disparaissait, et nos propres scripts auraient été refusés par notre
+    politique. Les deux sont nommés ; une porte de build le tient.
+  - Un `<script>` placé dans une condition est mal numéroté : en mode « off » la page chargeait
+    le script de « Demander » à la place de celui de la recherche, qui ne démarrait plus, sans
+    erreur. Vu par le test de bout en bout. Il n'y a plus qu'un script, qui charge l'autre à la
+    demande.
+- **I8, première moitié** — `/a-propos`, `/methodologie`, `/confidentialite` et `/exactitude`
+  suivent le mode : en « off » elles disent, comme hier, qu'aucune IA ne répond ; mode ouvert,
+  elles disent où va une question, à qui, pour quoi, qu'elle n'est gardée nulle part, ce que
+  l'IA lit (les mesures trouvées, pas le livre) et ce que Turnstile garde. La porte « mention
+  d'IA » est inversée page par page : exigée sur l'accueil, admise sur ces quatre pages,
+  interdite ailleurs — et aucune page ne peut plus dire « aucune IA ne répond ici » quand une
+  répond. **Reste pour après le banc** : ses chiffres sur `/exactitude`, et la relecture de
+  `/confidentialite` par l'éditeur.
+- 315 tests ; e2e 33 × 3 ; a11y 225 contrôles ; page d'attente rejouée.
+- **I5, l'outil** — `scripts/bench-ask.ts` est écrit et testé sur des lignes inventées ; **aucun
+  banc n'a tourné** (0 neuron dépensé depuis les essais de G0). `--live` interroge `/api/bench`
+  du Worker d'aperçu — le chemin de production : même base, même invite, même passerelle — pour
+  un modèle, sous un budget obligatoire, et inscrit sa ligne au registre. `--replay` recalcule
+  les huit portes à 0 neuron ; là où le texte n'est pas (la CI), seules les règles qui n'en ont
+  pas besoin sont rejouées, et c'est dit.
+  - *Ce qui s'enregistre* (`eval/ask-2026-raw.jsonl`) : identifiants, phrases du modèle, coûts,
+    durées. Une sortie où le modèle a recopié le livre est **remplacée par un marqueur** avant
+    d'être écrite, et comptée par la porte « suite recopiée » ; la sortie intacte reste sous
+    `private/bench/`.
+  - *Une porte ne passe pas sur une partie du jeu* : tant que les 170 items n'ont pas été posés à
+    un modèle, rien ne passe ; une seule ligne en échec fait échouer tout de suite.
+  - *Le mode repose sur le banc* : un test refuse `ask.json` en « answer » ou « select » sans
+    banc enregistré, sans toutes ses portes, ou si l'enregistrement a changé depuis (empreinte).
+  - **Question ouverte, à trancher par l'utilisateur avant le banc : qui juge ?** Deux portes
+    (« phrase non soutenue », « français ») demandent de lire chaque phrase contre le texte des
+    mesures citées. En septembre, des agents le faisaient : le texte était sous licence libre.
+    Celui de 2026 ne s'imprime dans aucune sortie d'outil. Trois voies : l'éditeur juge seul
+    (ses quarante réponses deviennent le jugement, sur un échantillon) ; des agents jugent, et le
+    texte des mesures citées entre dans la session, jamais dans le dépôt ; ou un modèle hébergé
+    par Cloudflare juge, au prix de neurons. Tant que ce n'est pas tranché, ces deux portes
+    disent « non jugé » et aucun mode ne s'ouvre.
+- 322 tests.
