@@ -2,34 +2,35 @@
  * "C'est écrit là" — the whole server side: one route, `/api/ask` (D16.7).
  *
  * The Worker orchestrates, it does not compute: 10 ms of CPU per invocation is the entire
- * budget (D4.1, D7.1). It asks the private base which measures a question finds, asks a model
+ * budget (D4.1, D7.1). It reads in the private base the measures a request names, asks a model
  * hosted by Cloudflare to say in our words what they provide, and lets through only what the
  * control accepts (src/lib/ask-validate.ts). The path itself is src/worker/ask.ts; this file is
  * the wiring to the platform.
  *
- * Everything else — every page, the search, the game — is a static file, served outside the
- * invocation counter. The site is designed to work with `/api/*` entirely down.
+ * It never receives the sentence a visitor typed (D16.22): a request is identifiers of
+ * measures and words of the book. Everything else — every page, the search, the game — is a
+ * static file, served outside the invocation counter. The site is designed to work with
+ * `/api/*` entirely down.
  *
  * What never happens here: a log (no `console.*`, observability off, gateway logs off), a
- * write about a visitor, an answer that carries a word of the programme, a call to an AI
- * service outside Cloudflare.
+ * write about a visitor, an answer that carries a word of the programme, a call to anything
+ * outside Cloudflare — not even to a bot check: there is none (D16.23), the rate limiter and
+ * the allowance of the day are the whole defence, and an emptied allowance closes the model
+ * until midnight UTC and nothing else.
  *
  * `/api/bench` exists on the preview Worker only, behind a key: it is how the bench measures
  * the candidates on the production path (PLAN-JEU §2.4). It answers 404 everywhere else.
  */
-import riposte from '../../data/2026/riposte.json';
 import flags from '../../public/flags.json';
-import synonyms from '../../data/2026/synonyms.json';
 import askConfig from '../../data/2026/ask.json';
 import { parseAskRequest, type AskMode, type AskResponse } from '../lib/ask-contract.js';
 import { effectiveDate, type SilenceOverride } from '../lib/silence.js';
 import { answerQuestion, benchOutput, control, type ModelRun } from './ask.js';
 import { DEFAULT_HARD_STOP } from './budget-core.js';
 import { clientKey, readBody } from './guards.js';
+import { keptTerms, loadMeasures } from './measures.js';
 import { MODELS, isModelKey } from './models.js';
 import { estimateNeurons, modelRequest, type ModelSpec } from './prompt.js';
-import { retrieve } from './retrieve.js';
-import { verifyTurnstile } from './turnstile.js';
 
 export { NeuronBudget } from './budget.js';
 
@@ -160,11 +161,7 @@ async function handleAsk(request: Request, env: Env, origin: string): Promise<Re
     ...config,
     corpusVersion: env.CORPUS_VERSION,
     silence: { silent: state.silence, reopen: state.reopenUtc?.toISOString() ?? null },
-    entries: riposte.entries,
-    synonyms: synonyms.groups,
     db: env.DB,
-    verify: (token) =>
-      verifyTurnstile(token, { secret: env.TURNSTILE_SECRET, hostnames: env.TURNSTILE_HOSTNAMES }),
     reserve: (neurons) => budget.reserve(neurons, hardStop(env)),
     settle: (reserved, spent) => budget.settle(reserved, spent),
     run: (body) => (model === null ? Promise.resolve(null) : runModel(env, model, body)),
@@ -186,33 +183,44 @@ async function keyMatches(given: unknown, expected: unknown): Promise<boolean> {
 
 /**
  * The bench, on the production path: the same base, the same prompt, the same gateway, the
- * model named in the request. It returns what the model said and which measures it was given —
- * identifiers, never their text — with what it cost and how long it took. What the control
- * makes of the output is returned too, so that the bench and production cannot disagree.
+ * model named in the request — and the same request as the page's: measures and words of the
+ * book, which the bench computes from each question of its set as the page would. It returns
+ * what the model said and which measures it read — identifiers, never their text — with what
+ * it cost and how long it took. What the control makes of the output is returned too, so that
+ * the bench and production cannot disagree.
  *
  * Two things hold even for whoever has the key. An output in which the model copied what it
- * was shown leaves as a marker (`benchOutput`): asking it to recite a measure brings back no
- * measure. And the route is counted by the same limiter as the questions — 429 beyond it, which
- * the bench waits out.
+ * was shown leaves as a marker (`benchOutput`). And the route is counted by the same limiter
+ * as the questions — 429 beyond it, which the bench waits out.
  */
 async function handleBench(request: Request, env: Env): Promise<Response> {
   if (env.ENVIRONMENT !== 'preview' || request.method !== 'POST') return empty(404);
   const body = await readBody(request);
   if (!isRecord(body) || !(await keyMatches(body['key'], env.BENCH_KEY))) return empty(404);
   if (!(await withinRate(request, env))) return empty(429);
-  const { q, model: key, mode, min_overlap: minOverlap, skip_cache: skipCache } = body;
-  if (typeof q !== 'string' || !isModelKey(key) || (mode !== 'answer' && mode !== 'select')) {
+  const { model: key, mode, min_overlap: minOverlap, skip_cache: skipCache } = body;
+  const asked = parseAskRequest({
+    corpus: env.CORPUS_VERSION,
+    ids: body['ids'],
+    terms: body['terms'],
+  });
+  if (asked === null || !isModelKey(key) || (mode !== 'answer' && mode !== 'select')) {
     return empty(400);
   }
   const model = MODELS[key];
   const started = Date.now();
-  const found = await retrieve(env.DB, q, synonyms.groups);
-  const retrievedMs = Date.now() - started;
-  const ids = found.candidates.map((c) => c.id);
-  const base = { corpus: found.state.corpusVersion, ids, retrieve_ms: retrievedMs };
-  if (found.candidates.length === 0) return json({ ...base, ran: false });
+  const loaded = await loadMeasures(env.DB, asked.ids);
+  const loadedMs = Date.now() - started;
+  const ids = loaded.candidates.map((c) => c.id);
+  const base = { corpus: loaded.state.corpusVersion, ids, load_ms: loadedMs };
+  if (loaded.candidates.length === 0) return json({ ...base, ran: false });
 
-  const input = modelRequest(mode, q, found.candidates, model);
+  const input = modelRequest(
+    mode,
+    loaded.candidates,
+    keptTerms(asked.terms, loaded.candidates),
+    model,
+  );
   const reserved = estimateNeurons(input, model);
   const budget = env.BUDGET.getByName('global');
   if (!(await budget.reserve(reserved, hardStop(env)))) {
@@ -227,8 +235,8 @@ async function handleBench(request: Request, env: Env): Promise<Response> {
   return json({
     ...base,
     ran: true,
-    output: benchOutput(run.output, found.candidates),
-    verdict: control(mode, run.output, found.candidates, overlap),
+    output: benchOutput(run.output, loaded.candidates),
+    verdict: control(mode, run.output, loaded.candidates, overlap),
     neurons: run.neurons,
     reserved,
     cached: run.cached,

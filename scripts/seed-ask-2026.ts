@@ -21,10 +21,8 @@
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { terms } from '../src/lib/search-core.js';
 import type { Manifest, PrivateCorpus } from './aec26-types.js';
 import { LocalD1 } from './d1-local.js';
-import { searchDocs } from './index-2026.js';
 import { PRIVATE_CORPUS_PATH } from './ingest-2026.js';
 
 export const SCHEMA_PATH = 'src/worker/sql/schema.sql';
@@ -41,25 +39,12 @@ export interface SeedRow {
   text: string;
   /** For a sub-measure, the measure it details. */
   lead: string;
-  /** Stems of the proposition and of its context: what the index holds. */
-  stems: string;
-  context: string;
 }
 
 export function seedRows(corpus: PrivateCorpus): SeedRow[] {
-  const prefixes = new Map(searchDocs(corpus).map((doc) => [doc.id, doc.prefix]));
   const rows: SeedRow[] = [];
   const push = (id: string, sectionId: string, kind: string, text: string, lead: string): void => {
-    rows.push({
-      id,
-      sectionId,
-      kind,
-      ord: rows.length,
-      text,
-      lead,
-      stems: terms(text).join(' '),
-      context: terms(prefixes.get(id) ?? '').join(' '),
-    });
+    rows.push({ id, sectionId, kind, ord: rows.length, text, lead });
   };
   for (const section of corpus.sections) {
     for (const item of section.items) {
@@ -83,7 +68,13 @@ const quote = (value: string): string => `'${value.replaceAll("'", "''")}'`;
 export function seedSql(corpus: PrivateCorpus, schema: string, ask: 'open' | 'stopped'): string {
   const rows = seedRows(corpus);
   const out: string[] = [schema.trim(), ''];
-  out.push('DELETE FROM meta;', 'DELETE FROM propositions_fts;', 'DELETE FROM propositions;');
+  // The index of before D16.22 is dropped wherever a base still holds it: the Worker searches
+  // nothing any more, and a derived copy of the text nobody reads has no reason to stay.
+  out.push(
+    'DROP TABLE IF EXISTS propositions_fts;',
+    'DELETE FROM meta;',
+    'DELETE FROM propositions;',
+  );
   for (let i = 0; i < rows.length; i += ROWS_PER_INSERT) {
     const chunk = rows.slice(i, i + ROWS_PER_INSERT);
     out.push(
@@ -92,14 +83,6 @@ export function seedSql(corpus: PrivateCorpus, schema: string, ask: 'open' | 'st
           .map(
             (r) =>
               `(${quote(r.id)}, ${quote(r.sectionId)}, ${quote(r.kind)}, ${String(r.ord)}, ${quote(r.text)}, ${quote(r.lead)})`,
-          )
-          .join(',\n') +
-        ';',
-      'INSERT INTO propositions_fts (stems, context, id, section_id) VALUES\n' +
-        chunk
-          .map(
-            (r) =>
-              `(${quote(r.stems)}, ${quote(r.context)}, ${quote(r.id)}, ${quote(r.sectionId)})`,
           )
           .join(',\n') +
         ';',
@@ -139,8 +122,12 @@ export function baseProblems(db: LocalD1, manifest: Manifest): string[] {
     const hash = createHash('sha256').update(String(row['text'])).digest('hex');
     if (published.get(id) !== hash) problems.push(`${id}: not the published text`);
   }
-  const indexed = db.db.prepare('SELECT count(*) AS n FROM propositions_fts').get();
-  if (Number(indexed?.['n']) !== rows.length) problems.push('the index and the table differ');
+  // Nothing but the two tables of the schema: no index of the text, no copy of it.
+  const tables = db.db
+    .prepare("SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name")
+    .all()
+    .map((row) => String(row['name']));
+  if (tables.join(',') !== 'meta,propositions') problems.push(`tables: ${tables.join(', ')}`);
   const version = db.db.prepare("SELECT value FROM meta WHERE key = 'corpus_version'").get();
   if (version?.['value'] !== manifest.meta.corpus_version) {
     problems.push('the base is not at the corpus version of the manifest');

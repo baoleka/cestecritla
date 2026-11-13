@@ -292,8 +292,8 @@ for (const root of ['dist', 'dist-ask']) {
     const name = gameFile(root);
     assert.ok(name !== undefined);
     const data = gzipSync(readFileSync(join(root, 'data', name)), { level: 9 }).byteLength;
-    // Measured 13/11/2026 with nine words: 3.8 KB, most of it the titles of the tiles. Ninety
-    // words and their places stay under.
+    // Measured 13/11/2026: 3.8 KB with nine words, most of it the titles of the tiles; 7 KB with
+    // the whole list of 48 (D16.31).
     assert.ok(data <= 12 * 1024, `the game’s data: ${String(data)} B gzip`);
     const script = readdirSync(join(root, '_astro')).find((f) => f.startsWith('Game.'));
     assert.ok(script !== undefined, 'the script of the game is missing');

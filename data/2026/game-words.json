@@ -33,20 +33,21 @@
         "p6c1-s04": "play"
       }
     },
-    "pool_reviewed_on": null,
+    "pool_reviewed_on": "2026-11-13",
     "validated": {
       "on": "2026-11-13",
-      "list_sha256": "3dd5327cf8837c0cc292953b034aa83684b63d3cf3e76bbadea91c201f451229"
+      "list_sha256": "f90c52ad9a7f9511b10a91e284224896981200d12216f92b492bfe5f2bc670cb"
     },
     "attested": {
-      "list_sha256": "3dd5327cf8837c0cc292953b034aa83684b63d3cf3e76bbadea91c201f451229",
+      "list_sha256": "f90c52ad9a7f9511b10a91e284224896981200d12216f92b492bfe5f2bc670cb",
       "corpus_version": "27ee6e713fe25e7e",
       "on": "2026-11-13",
       "checks": [
         "written",
         "affirm",
         "prose",
-        "same"
+        "same",
+        "alone"
       ]
     },
     "note_fr": "Chaque mot est un extrait du programme, d’un mot : la liste est une catégorie d’extrait à part, validée par l’éditeur avec sa part mesurée avant tout push (D15.18, D16.15). « pool.sensitive_2025 » est la règle 11 de 07-mecaniques.md §7.11, dans les identifiants où elle a été écrite ; la build en déduit les sections héritières de 2026. « pool.judged » liste les sections sans ancêtre en 2025 : null tant que l’éditeur n’a pas tranché (hors du jeu), puis « play » ou « exclude ». « validated » et « attested » portent l’empreinte de la liste et de « pool » : un mot ajouté ou une section jugée après coup fait tomber les deux. Depuis D16.26, une section de « sensitive_2025 » ou jugée « exclude » reste une tuile du jeu comme les autres : seulement, aucun mot n’en est tiré. La preuve de chaque mot est dans src/lib/game.ts (fichiers publics) et scripts/words-2026.ts (texte privé, en local). Les critères de choix d’un mot sont écrits dans data/2026/NOTICE.md."
@@ -131,6 +132,357 @@
       "pin": {
         "id": "p5c3-s03-k01",
         "sha256": "530416a5ca4aa2a03a654214306e8bf9ecd2681de8df8fbdf0cd1df69ec26e5d"
+      }
+    },
+    {
+      "slot": 9,
+      "id": "w012",
+      "word": "train",
+      "pin": {
+        "id": "p1c1-s01-m10",
+        "sha256": "d9e5700edd0b3a241423def6ea44f87cad80a1c41d28a0c73022e94b7334734f"
+      }
+    },
+    {
+      "slot": 10,
+      "id": "w013",
+      "word": "légumes",
+      "pin": {
+        "id": "p4c4-s03-m06",
+        "sha256": "647fae2e6e4e5a73cacde34192bc826f4c7ccbdcc492fb199ef6539b5e4af54b"
+      }
+    },
+    {
+      "slot": 11,
+      "id": "w014",
+      "word": "aéroports",
+      "pin": {
+        "id": "p2c1-s01-k01",
+        "sha256": "cfac8c5779b60b63ec733757a3d563768dc9cf27e6ed843c5197e681548f255d"
+      }
+    },
+    {
+      "slot": 12,
+      "id": "w015",
+      "word": "bibliothèques",
+      "pin": {
+        "id": "p4c3-s01-m04",
+        "sha256": "64974260bd6537fb5b8d9c6ef5aa39b2063c08d94b9a99e9aedccf30a5c7cb45"
+      }
+    },
+    {
+      "slot": 13,
+      "id": "w016",
+      "word": "électricité",
+      "pin": {
+        "id": "p3c1-s01-m03",
+        "sha256": "58bb9258f2d1209cf25455168882f3e337469b8c9dfa321adb25c51f88e54aca"
+      }
+    },
+    {
+      "slot": 14,
+      "id": "w017",
+      "word": "pétitions",
+      "pin": {
+        "id": "p5c1-s01-m06",
+        "sha256": "127553d26ae795b0b104304e019d12af8127d3ff052de928aef99cd5f4c15652"
+      }
+    },
+    {
+      "slot": 15,
+      "id": "w018",
+      "word": "voitures",
+      "pin": {
+        "id": "p1c2-s02-m05",
+        "sha256": "187cd7bbf134b6d37f2b8ae87211249c87b48614ecec92a0badc404cbdff2e66"
+      }
+    },
+    {
+      "slot": 16,
+      "id": "w019",
+      "word": "lycée",
+      "pin": {
+        "id": "p4c5-s03-m03",
+        "sha256": "7208de48f00b6c4bc95cd8956579504c027fd1c7cf7f5ec0a18b6a55e91824d1"
+      }
+    },
+    {
+      "slot": 17,
+      "id": "w020",
+      "word": "satellite",
+      "pin": {
+        "id": "p4c6-s01-m03",
+        "sha256": "fbb46e7acdda4ef6293d5e6ca19c68a618b54f95504164717101db61e408981d"
+      }
+    },
+    {
+      "slot": 18,
+      "id": "w021",
+      "word": "formulaires",
+      "pin": {
+        "id": "p4c7-s01-m04",
+        "sha256": "3b183ca91b4cee428f7fadd5560146c33452a9d2fa460f1f766c1ec663bb4188"
+      }
+    },
+    {
+      "slot": 19,
+      "id": "w022",
+      "word": "université",
+      "pin": {
+        "id": "p6c3-s07-m08",
+        "sha256": "d11347cf7c6d0aa21df0a9a0f4054f0495fdb5a6401f5763b38ccb315625afc6"
+      }
+    },
+    {
+      "slot": 20,
+      "id": "w023",
+      "word": "bocaux",
+      "pin": {
+        "id": "p1c3-s07-m04",
+        "sha256": "a57103b0199b7b10d336e7d1d2fba7bd2059e4d93d4422d59db3225ededcdd07"
+      }
+    },
+    {
+      "slot": 21,
+      "id": "w024",
+      "word": "piscines",
+      "pin": {
+        "id": "p4c3-s02-m07",
+        "sha256": "c63149134d2deaa7fe38ca9fc5888d976be447e0ed09302b2e64d9f6bdb86275"
+      }
+    },
+    {
+      "slot": 22,
+      "id": "w025",
+      "word": "stationnement",
+      "pin": {
+        "id": "p3c1-s08-m03",
+        "sha256": "bea06131395ff85633e0d13c3b805f04fffb2bae4eacdf376c215941f18e9a86"
+      }
+    },
+    {
+      "slot": 23,
+      "id": "w026",
+      "word": "archipel",
+      "pin": {
+        "id": "p5c3-s05-m05",
+        "sha256": "540ed57ad5dc05ea0053a3b9c869a3ea64547ff97bc28d18711b4d62029d0591"
+      }
+    },
+    {
+      "slot": 24,
+      "id": "w027",
+      "word": "coopératives",
+      "pin": {
+        "id": "p2c1-s04-m03",
+        "sha256": "eb2472469f1e07ae4e029797cc90a7a54bc4cf178ea5216aa0384c4f714c01c9"
+      }
+    },
+    {
+      "slot": 25,
+      "id": "w028",
+      "word": "internat",
+      "pin": {
+        "id": "p4c2-s04-m09",
+        "sha256": "f68f6a5fa1998fc25f24ceb0d9ec54bb178de5a4ce49a43042e82380d5e003ea"
+      }
+    },
+    {
+      "slot": 26,
+      "id": "w029",
+      "word": "bouteilles",
+      "pin": {
+        "id": "p1c3-s02-m04",
+        "sha256": "5bb23ae37df671ad01c773841522fa4e93db59c53cb29dd79b82dbd5b0fb5288"
+      }
+    },
+    {
+      "slot": 27,
+      "id": "w030",
+      "word": "télévision",
+      "pin": {
+        "id": "p6c3-s05-m05",
+        "sha256": "538ce8b01d10e4360b1c664e96d1353207deacbcc3f3e86bbd11fba9f273951b"
+      }
+    },
+    {
+      "slot": 28,
+      "id": "w031",
+      "word": "campus",
+      "pin": {
+        "id": "p3c2-s03-m02",
+        "sha256": "3dac811c3706b1ef2f68ce0149279a3afa27b5a09dfcf05b3e1bbb31376a2103"
+      }
+    },
+    {
+      "slot": 29,
+      "id": "w032",
+      "word": "scieries",
+      "pin": {
+        "id": "p4c1-s03-m10",
+        "sha256": "6802788e369744497b4079c50c3e29cb89447a83dd2255cf093600b2f731daa1"
+      }
+    },
+    {
+      "slot": 30,
+      "id": "w033",
+      "word": "stores",
+      "pin": {
+        "id": "p1c3-s05-m03",
+        "sha256": "f914b8c624814fbefedf4b85724f61042b5d61852516d06009d02052e076ab6b"
+      }
+    },
+    {
+      "slot": 31,
+      "id": "w034",
+      "word": "natation",
+      "pin": {
+        "id": "p4c3-s03-m03",
+        "sha256": "ab4c59bb0e70c8f2329f79b77d5bf8a76628adf7020ab45e7c40797971c38dac"
+      }
+    },
+    {
+      "slot": 32,
+      "id": "w035",
+      "word": "pause",
+      "pin": {
+        "id": "p3c1-s06-m03",
+        "sha256": "2b5a664f078697b34aef6ea8a4d8fff5f2ea40aa85af318391b00c882e87cfe9"
+      }
+    },
+    {
+      "slot": 33,
+      "id": "w036",
+      "word": "dollar",
+      "pin": {
+        "id": "p6c3-s04-m03",
+        "sha256": "37370ead1ef9655046225366f4b08eb496da848aa969bd5a2793152bd86c0c8f"
+      }
+    },
+    {
+      "slot": 34,
+      "id": "w037",
+      "word": "collège",
+      "pin": {
+        "id": "p4c2-s03-m01.s4",
+        "sha256": "274e6319d7446420cd28ed4a81841b93c3d917096f9c48583e0de365a664c251"
+      }
+    },
+    {
+      "slot": 35,
+      "id": "w038",
+      "word": "barrages",
+      "pin": {
+        "id": "p1c3-s04-m08",
+        "sha256": "77ec5b307fc04582d2a1432789ed2ef742282338bcc3dfc975e82804b81c79c4"
+      }
+    },
+    {
+      "slot": 36,
+      "id": "w039",
+      "word": "sargasses",
+      "pin": {
+        "id": "p4c5-s01-m09",
+        "sha256": "f30dcff9968cf85c97c13941551891d7679bcd2b1beae71cd0387e867edd8cbe"
+      }
+    },
+    {
+      "slot": 37,
+      "id": "w040",
+      "word": "trimestres",
+      "pin": {
+        "id": "p3c1-s07-m02",
+        "sha256": "b7a4f51790034f78345ab66b489cd520304854668c0b1093cf96c4f017128148"
+      }
+    },
+    {
+      "slot": 38,
+      "id": "w041",
+      "word": "amphithéâtres",
+      "pin": {
+        "id": "p4c2-s06-m10",
+        "sha256": "0d006b15c79b51a8eaec409dfaa89951afc24ae33f33b907c9f237e0ecb37b94"
+      }
+    },
+    {
+      "slot": 39,
+      "id": "w042",
+      "word": "jardins",
+      "pin": {
+        "id": "p1c1-s02-m08",
+        "sha256": "e41597641056e36991d7eb5882b9402656073d8b418424e90e947888687ebd1a"
+      }
+    },
+    {
+      "slot": 40,
+      "id": "w043",
+      "word": "purificateurs",
+      "pin": {
+        "id": "p4c4-s02-m02",
+        "sha256": "bef04d27dd8d536bf342f7198e6802180d4153d9eb12e4dd5e75f7128061813a"
+      }
+    },
+    {
+      "slot": 41,
+      "id": "w044",
+      "word": "stages",
+      "pin": {
+        "id": "p3c1-s09-m03",
+        "sha256": "18d9d5f9bde367774f96b093def1f7d6747c7acb3bec1bc84a0a863565c87b7d"
+      }
+    },
+    {
+      "slot": 42,
+      "id": "w045",
+      "word": "houle",
+      "pin": {
+        "id": "p4c5-s02-k01",
+        "sha256": "46e69a79a68d3a232867e2400ed1583470a9f145417168a4793d50da56f89490"
+      }
+    },
+    {
+      "slot": 43,
+      "id": "w046",
+      "word": "pâturage",
+      "pin": {
+        "id": "p1c3-s06-m06",
+        "sha256": "65d21675187854b4212e586c84294fdd1e8168023d11dbe00c6d515913e607a5"
+      }
+    },
+    {
+      "slot": 44,
+      "id": "w047",
+      "word": "assainissement",
+      "pin": {
+        "id": "p4c1-s01-m09",
+        "sha256": "332b70fed7cadca8795f4dd3cedf8641640fd78fb99450ee668b6c1a35acb662"
+      }
+    },
+    {
+      "slot": 45,
+      "id": "w048",
+      "word": "météorologie",
+      "pin": {
+        "id": "p4c6-s02-m01",
+        "sha256": "7bfefd75914dd2f019a76e218d6b0859c7310fdf15b5b385c2f115ce71c7ffef"
+      }
+    },
+    {
+      "slot": 46,
+      "id": "w049",
+      "word": "terroir",
+      "pin": {
+        "id": "p1c3-s08-m09",
+        "sha256": "d1b3c40e436c560c803c417a95698ef2e00b8ddeb51ad9c3d098fa148353fd32"
+      }
+    },
+    {
+      "slot": 47,
+      "id": "w050",
+      "word": "microprocesseurs",
+      "pin": {
+        "id": "p4c7-s02-m08",
+        "sha256": "20a4ade1ec727bffe5dd831b3131141a9e226e20f9a50e150dff83059ab08e91"
       }
     }
   ]

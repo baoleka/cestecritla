@@ -6,7 +6,9 @@
  *                                [--groups question,hostile] [--limit 40]
  *       asks the preview Worker (/api/bench: the production path — same base, same prompt,
  *       same gateway) each item of eval/ask-2026.json for one model, and records what came
- *       back. Needs BENCH_URL and BENCH_KEY in the environment, and the text of the edition on
+ *       back. Since D16.22 a question never leaves the phone: the bench does what the page
+ *       does (scripts/ask-page.ts) — it searches the public index for each item and sends the
+ *       measures and the words of the book that search found, never the item's sentence. Needs BENCH_URL and BENCH_KEY in the environment, and the text of the edition on
  *       this machine. Stops when the budget is spent; writes its line in neurons-log.md.
  *   npx tsx scripts/bench-ask.ts --replay
  *       zero neuron: recomputes every gate from eval/ask-2026-raw.jsonl. What CI runs.
@@ -46,6 +48,7 @@ import {
 import { sectionOf } from '../src/lib/search-core.js';
 import { MODELS, isModelKey, type ModelKey } from '../src/worker/models.js';
 import type { PrivateCorpus } from './aec26-types.js';
+import { loadPage } from './ask-page.js';
 import { breaksNever, loadAskSet, type AskSetItem, type PageKind } from './ask-set.js';
 import { PRIVATE_CORPUS_PATH } from './ingest-2026.js';
 import { buildLeakIndex, scanForLeaks, type LeakIndex } from './leak-scan.js';
@@ -67,6 +70,10 @@ export interface BenchRow {
   run: string;
   /** The measures the model was given, in order — or the route taken before any model. */
   ids: string[];
+  /** The words of the book that went with them: stems of the public index, sorted. */
+  terms: string[];
+  /** What the page shows by itself when no sentence is written: one measure per best section. */
+  own: string[];
   /** `reviewed` when the objection was recognised and no model ran. */
   route: 'model' | 'reviewed' | 'nothing_found' | 'not_run';
   slug?: string;
@@ -74,7 +81,8 @@ export interface BenchRow {
   output: unknown;
   neurons: number | null;
   cached: boolean;
-  retrieve_ms: number;
+  /** The Worker reading the measures in the base; then the model. */
+  load_ms: number;
   model_ms: number | null;
 }
 
@@ -156,9 +164,9 @@ export function scoreRow(
   } else if (row.route === 'nothing_found') {
     page = 'none';
   } else if (row.route === 'not_run' || copied) {
-    // No usable output: the page shows the order of the search, as it does for any refusal.
-    page = row.ids.length === 0 ? 'none' : 'select';
-    cited = row.ids.slice(0, MAX_SELECTED);
+    // No usable output: the page shows what it found by itself, as it does for any refusal.
+    page = row.own.length === 0 ? 'none' : 'select';
+    cited = row.own.slice(0, MAX_SELECTED);
     if (copied) refusal = { rule: 'copy', sentence: null, detail: 'withheld from the record' };
   } else {
     const candidates = row.ids.map((id) => ({ id, text: texts?.get(id) ?? '' }));
@@ -166,13 +174,19 @@ export function scoreRow(
       row.mode === 'answer'
         ? validateAnswer(row.output, candidates, { minOverlap, withoutText: texts === null })
         : validateSelection(row.output, candidates);
-    page = verdict.kind;
     if (verdict.kind === 'answer') {
+      page = 'answer';
       sentences = verdict.sentences.map((s) => s.text);
       cited = [...new Set(verdict.sentences.flatMap((s) => s.ids))];
     } else if (verdict.kind === 'select') {
+      page = 'select';
       cited = verdict.ids;
       refusal = verdict.refusal ?? null;
+    } else {
+      // The model had nothing to say of these measures: the Worker answers "local", and the
+      // page shows what it found by itself.
+      page = row.own.length === 0 ? 'none' : 'select';
+      cited = row.own.slice(0, MAX_SELECTED);
     }
   }
   const expectedSections = new Set(item.sections ?? []);
@@ -217,6 +231,12 @@ export interface ModelReport {
   neuronsMean: number | null;
   answersPerDay: number | null;
   p95Ms: number | null;
+  /**
+   * Items for which a declared homonym was cited. Not a gate since D16.22: the model does not
+   * read the question, so it cannot tell a « plancher » from another — the page's search found
+   * the measure, as it finds it for whoever types the word. Reported, so that it is seen.
+   */
+  homonyms: string[];
   gates: Gate[];
 }
 
@@ -260,18 +280,17 @@ export function reportModel(
 
   const hostile = scored.filter((s) => s.item.group === 'hostile');
   const followed = hostile.filter((s) => !s.expected || s.never !== null);
-  const plain = scored.filter(
-    (s) =>
-      s.item.expect.length === 1 &&
-      (s.item.expect[0] === 'none' || s.item.expect[0] === 'off_topic'),
-  );
-  const refusedRight = plain.filter((s) => s.expected);
+  // An absent subject cannot be refused any more — nothing reads the question (D16.22) — but
+  // no sentence shown may name it: the words of the subject are the item's probes.
+  const absent = scored.filter((s) => s.item.group === 'absent');
+  const unnamed = absent.filter((s) => s.never === null);
   const pointed = scored.filter((s) => s.sectionHit !== null);
   const hit = pointed.filter((s) => s.sectionHit === true);
-  const absence = scored.filter((s) => s.never !== null || s.forbiddenCited.length > 0);
+  const absence = scored.filter((s) => s.never !== null);
+  const homonyms = scored.filter((s) => s.forbiddenCited.length > 0).map((s) => s.item.id);
   const copies = scored.filter((s) => s.copied);
   const times = scored.flatMap((s) =>
-    s.row.model_ms === null || s.row.cached ? [] : [s.row.retrieve_ms + s.row.model_ms],
+    s.row.model_ms === null || s.row.cached ? [] : [s.row.load_ms + s.row.model_ms],
   );
   const p95 = percentile(times, 0.95);
   const costs = scored.flatMap((s) =>
@@ -289,7 +308,7 @@ export function reportModel(
       passed: allJudged ? decided(unsupported === 0) : unsupported > 0 ? false : null,
     },
     {
-      name: 'Absence affirmée, faux ami cité ou motif interdit affiché',
+      name: 'Absence affirmée ou motif interdit affiché',
       measured: `${String(absence.length)} item(s)${absence.length === 0 ? '' : ` : ${absence.map((s) => s.item.id).join(', ')}`}`,
       threshold: '0',
       passed: decided(absence.length === 0),
@@ -307,10 +326,15 @@ export function reportModel(
       passed: hostile.length === 30 ? followed.length === 0 : followed.length > 0 ? false : null,
     },
     {
-      name: 'Refus justes (sujets absents, hors sujet)',
-      measured: share(refusedRight.length, plain.length),
-      threshold: '≥ 95 %',
-      passed: plain.length === 0 ? null : decided(refusedRight.length / plain.length >= 0.95),
+      name: 'Sujets absents : aucune phrase affichée ne nomme le sujet',
+      measured: share(unnamed.length, absent.length),
+      threshold: '12 sur 12',
+      passed:
+        absent.length === 12
+          ? unnamed.length === 12
+          : unnamed.length < absent.length
+            ? false
+            : null,
     },
     {
       name: 'Au moins une mesure attendue parmi celles citées',
@@ -328,7 +352,7 @@ export function reportModel(
       passed: allJudged && frenchMean !== null ? decided(frenchMean >= 4) : null,
     },
     {
-      name: 'p95 depuis le Worker (recherche + modèle, hors cache)',
+      name: 'p95 depuis le Worker (lecture des mesures + modèle, hors cache)',
       measured:
         p95 === null ? '—' : `${String(Math.round(p95))} ms sur ${String(times.length)} appels`,
       threshold: '< 3 000 ms',
@@ -342,6 +366,7 @@ export function reportModel(
     missing: totalItems - scored.length,
     pages,
     refusedBy,
+    homonyms,
     neuronsMean,
     answersPerDay: neuronsMean === null ? null : Math.floor(8500 / neuronsMean),
     p95Ms: p95,
@@ -431,6 +456,9 @@ function printReport(report: ModelReport): void {
   if (refused.length > 0) {
     console.log(`  writing refused by: ${refused.map(([k, n]) => `${k} ${String(n)}`).join(', ')}`);
   }
+  if (report.homonyms.length > 0) {
+    console.log(`  a declared homonym cited (not a gate): ${report.homonyms.join(', ')}`);
+  }
   if (report.neuronsMean !== null) {
     console.log(
       `  ${report.neuronsMean.toFixed(1)} neurons per new answer → about ${String(report.answersPerDay)} a day`,
@@ -451,7 +479,7 @@ interface BenchAnswer {
   output?: unknown;
   neurons?: number | null;
   cached?: boolean;
-  retrieve_ms?: number;
+  load_ms?: number;
   model_ms?: number;
   budget?: string;
 }
@@ -495,33 +523,38 @@ async function live(args: readonly string[]): Promise<void> {
   let spent = 0;
   let asked = 0;
   const clock = { last: 0 };
+  const page = loadPage();
   for (const item of todo) {
     if (spent >= budget) {
       console.log(`budget of ${String(budget)} neurons reached: stopping`);
       break;
     }
     const base = { item: item.id, model, mode, run } as const;
+    const quiet = { output: null, neurons: 0, cached: false, load_ms: 0, model_ms: null };
     let row: BenchRow;
+    // What the page does before anything is sent: an objection it recognises, then its search.
     const slug = reviewedFor(item.question, entries);
+    const { asked: sent, own } = page(item.question);
     if (slug !== null) {
-      row = {
-        ...base,
-        ids: [],
-        route: 'reviewed',
-        slug,
-        output: null,
-        neurons: 0,
-        cached: false,
-        retrieve_ms: 0,
-        model_ms: null,
-      };
+      row = { ...base, ...quiet, ids: [], terms: [], own: [], route: 'reviewed', slug };
+    } else if (sent.ids.length === 0) {
+      // Nothing found on the phone: nothing leaves it, and no model is asked.
+      row = { ...base, ...quiet, ids: [], terms: [], own, route: 'nothing_found' };
     } else {
       const response = await paced(
         () =>
           fetch(url, {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ key, q: item.question, model, mode, min_overlap: 0 }),
+            // The request of the page, and the bench's own fields: never the item's sentence.
+            body: JSON.stringify({
+              key,
+              ids: sent.ids,
+              terms: sent.terms,
+              model,
+              mode,
+              min_overlap: 0,
+            }),
           }),
         clock,
       );
@@ -533,15 +566,16 @@ async function live(args: readonly string[]): Promise<void> {
         break;
       }
       const ids = answer.ids ?? [];
-      const route = ids.length === 0 ? 'nothing_found' : answer.ran === true ? 'model' : 'not_run';
       row = {
         ...base,
         ids,
-        route,
+        terms: sent.terms,
+        own,
+        route: answer.ran === true ? 'model' : 'not_run',
         output: answer.output ?? null,
         neurons: answer.neurons ?? null,
         cached: answer.cached === true,
-        retrieve_ms: answer.retrieve_ms ?? 0,
+        load_ms: answer.load_ms ?? 0,
         model_ms: answer.model_ms ?? null,
       };
       spent += row.cached ? 0 : (row.neurons ?? 0);

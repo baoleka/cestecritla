@@ -1,21 +1,25 @@
 /**
- * The path of a question (PLAN-JEU §2.2) — every step in the order it happens, with what each
- * needs handed in (`AskDeps`), so that the whole path runs in a test without a network, a base
- * or a model.
+ * The path of a request (PLAN-JEU §2.2, as D16.22 left it) — every step in the order it
+ * happens, with what each needs handed in (`AskDeps`), so that the whole path runs in a test
+ * without a network, a base or a model.
  *
- *   1. electoral silence        → "silence": questions are closed, the search stays
- *   2. an objection we answered → "reviewed": a person wrote it, no model runs
- *   3. another state of the book, a refused token → "local"
- *   4. the private base         → stopped or out of date: "local"; nothing found: "none"
- *   5. the allowance of the day → spent: "local"
- *   6. the model, six seconds   → slow or broken: "local"
- *   7. the control              → the answer as written, or three measures and no sentence
+ *   1. electoral silence          → "silence": questions are closed, the search stays
+ *   2. another state of the book  → "local"
+ *   3. the private base           → stopped, out of date, or none of the measures named: "local"
+ *   4. the allowance of the day   → spent: "local"
+ *   5. the model, six seconds     → slow or broken: "local"
+ *   6. the control                → the answer as written, three measures and no sentence, or
+ *                                   "local" when the model had nothing to say of them
  *
  * None of these is an error for the visitor. "local" means: show what the page found by
  * itself, and say nothing of why — it is a normal mode, not a breakdown.
  *
- * Nothing is logged, here or anywhere on this path: no `console.*`, no write to the base. The
- * question lives for the length of this function.
+ * What is not here any more, because the Worker does not read the question (D16.22): the
+ * search — the page did it, and names the measures; the objections a person answered — the page
+ * recognises them before it sends anything; « nothing found » — the page then sends nothing.
+ *
+ * Nothing is logged, here or anywhere on this path: no `console.*`, no write to the base. And
+ * there is no sentence of a visitor to log: a request is identifiers and words of the book.
  */
 import {
   parseModelAnswer,
@@ -24,7 +28,6 @@ import {
   type AskResponse,
   type Candidate,
 } from '../lib/ask-contract.js';
-import { reviewedFor, type ReviewedEntry } from '../lib/ask-reviewed.js';
 import {
   carriesCopy,
   refusals,
@@ -32,9 +35,8 @@ import {
   validateSelection,
   type Verdict,
 } from '../lib/ask-validate.js';
-import type { SynonymGroup } from '../lib/search-core.js';
+import { keptTerms, loadMeasures, type AskDb } from './measures.js';
 import { estimateNeurons, modelRequest, type ModelSpec } from './prompt.js';
-import { retrieve, type AskDb } from './retrieve.js';
 
 /** What came back from the model: its output as returned, and what it cost. */
 export interface ModelRun {
@@ -55,11 +57,7 @@ export interface AskDeps {
   corpusVersion: string;
   /** Electoral silence at this instant (src/lib/silence.ts), with the hour questions reopen. */
   silence: { silent: boolean; reopen: string | null };
-  /** The fifteen objections a person answered. */
-  entries: readonly ReviewedEntry[];
-  synonyms: readonly SynonymGroup[];
   db: AskDb;
-  verify: (token: string) => Promise<boolean>;
   reserve: (neurons: number) => Promise<boolean>;
   settle: (reserved: number, spent: number) => Promise<void>;
   /** Calls the model. Null when it did not answer in time, or not at all. */
@@ -76,9 +74,8 @@ function toResponse(verdict: Verdict, corpus: string): AskResponse {
       // The reason the writing was refused stays here: the page has no use for it.
       return { kind: 'select', corpus, ids: verdict.ids };
     case 'none':
-      return { kind: 'none' };
-    case 'off_topic':
-      return { kind: 'off_topic' };
+      // It had nothing to say of these measures: the page shows what its own search found.
+      return LOCAL;
   }
 }
 
@@ -116,31 +113,26 @@ export async function answerQuestion(request: AskRequest, deps: AskDeps): Promis
   const { mode, model } = deps;
   if (mode === 'off' || model === null) return LOCAL;
 
-  // 2. An objection a person answered: the best answer we have, and it costs nothing.
-  const slug = reviewedFor(request.q, deps.entries);
-  if (slug !== null) return { kind: 'reviewed', slug };
-
-  // 3. The page must be showing the book this Worker knows: identifiers are resolved there.
+  // 2. The page must be showing the book this Worker knows: identifiers are resolved there.
   if (request.corpus !== deps.corpusVersion) return LOCAL;
-  if (!(await deps.verify(request.token))) return LOCAL;
 
-  // 4. The private base. An unreachable base is a closed base.
+  // 3. The private base, read by identifier. An unreachable base is a closed base.
   let candidates: Candidate[];
   try {
-    const found = await retrieve(deps.db, request.q, deps.synonyms);
-    if (!found.state.open || found.state.corpusVersion !== deps.corpusVersion) return LOCAL;
-    candidates = found.candidates;
+    const loaded = await loadMeasures(deps.db, request.ids);
+    if (!loaded.state.open || loaded.state.corpusVersion !== deps.corpusVersion) return LOCAL;
+    candidates = loaded.candidates;
   } catch {
     return LOCAL;
   }
-  if (candidates.length === 0) return { kind: 'none' };
+  if (candidates.length === 0) return LOCAL;
 
-  // 5. The allowance of the day, reserved before it is spent.
-  const body = modelRequest(mode, request.q, candidates, model);
+  // 4. The allowance of the day, reserved before it is spent.
+  const body = modelRequest(mode, candidates, keptTerms(request.terms, candidates), model);
   const reserved = estimateNeurons(body, model);
   if (!(await deps.reserve(reserved))) return LOCAL;
 
-  // 6. The model. A call that failed may still have been billed: the reservation stays.
+  // 5. The model. A call that failed may still have been billed: the reservation stays.
   let run: ModelRun | null;
   try {
     run = await deps.run(body);
@@ -150,6 +142,6 @@ export async function answerQuestion(request: AskRequest, deps: AskDeps): Promis
   if (run === null) return LOCAL;
   await deps.settle(reserved, run.cached ? 0 : (run.neurons ?? reserved));
 
-  // 7. The control. Whatever it decides is a page, never an error.
+  // 6. The control. Whatever it decides is a page, never an error.
   return toResponse(control(mode, run.output, candidates, deps.minOverlap), deps.corpusVersion);
 }

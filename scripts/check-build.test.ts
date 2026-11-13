@@ -14,7 +14,6 @@ import { gzipSync } from 'node:zlib';
 import { join, extname, relative } from 'node:path';
 import { test } from 'node:test';
 import { appVoiceOnly } from './app-voice.js';
-import { readAskMode } from './build-mode.js';
 
 const walk = (dir: string): string[] => {
   if (!existsSync(dir)) return [];
@@ -106,15 +105,13 @@ void test('no request leaves the origin (P9, D0.22: zero third party)', () => {
   assert.deepEqual(offenders, [], `third-party subresources:\n${offenders.join('\n')}`);
 });
 
-void test('a page opens no origin but ours — except the home page, to Turnstile, when the site answers questions', () => {
+void test('a page opens no origin but ours — none, on any page, whether the site answers questions or not', () => {
   // The security policy of each page is the list of who may be asked for anything (P9, D7.6).
   // Checked on what ships (dist/, in the mode data/2026/ask.json says) and on the test build
   // of the ask screen when it is there (dist-ask/, built as if the mode were open).
-  const builds: [string, boolean][] = [
-    ['dist', readAskMode() !== 'off'],
-    ['dist-ask', true],
-  ];
-  for (const [root, asking] of builds) {
+  // Until D16.23 the home page of a site that answers questions opened one: Turnstile's. There
+  // is no bot check any more, and so no exception: the policy of every page names nobody.
+  for (const root of ['dist', 'dist-ask']) {
     const pages = walk(root).filter((f) => f.endsWith('.html'));
     for (const file of pages) {
       const page = relative(root, file);
@@ -124,15 +121,8 @@ void test('a page opens no origin but ours — except the home page, to Turnstil
       assert.doesNotMatch(policy, /unsafe-inline|unsafe-eval|\*/, `${file}: a policy with a hole`);
       assert.match(policy, /default-src 'none'/, file);
       const origins = [...new Set(policy.match(/https?:\/\/[^\s;'"]+/g) ?? [])];
-      if (asking && page === 'index.html') {
-        assert.deepEqual(origins, ['https://challenges.cloudflare.com'], file);
-        // Naming one script source drops Astro's default: ours must be named too, or our own
-        // scripts are refused by our own policy (found on the first test build).
-        assert.match(policy, /script-src[^;]*'self'/, `${file}: our own scripts are not allowed`);
-        assert.match(policy, /frame-src https:\/\/challenges\.cloudflare\.com/, file);
-      } else {
-        assert.deepEqual(origins, [], `${file}: opens ${origins.join(', ')}`);
-      }
+      assert.deepEqual(origins, [], `${page}: opens ${origins.join(', ')}`);
+      assert.doesNotMatch(policy, /frame-src (?!'none')/, `${page}: allows a frame`);
     }
   }
 });

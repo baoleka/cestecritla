@@ -15,19 +15,9 @@
 import Base from '../layouts/Base.astro';
 import Chips from '../components/Chips.astro';
 import Search from '../components/Search.astro';
-import { askSite } from '../lib/ask-config.ts';
 import { silenceGuardHash, silenceGuardScript } from '../lib/silence-guard.ts';
 import { t } from '../lib/strings.ts';
 
-// Turnstile is the one third-party origin the site ever opens, and it opens it here only: on
-// the page that carries the field, and only when the site answers questions (D7.6, D16.8).
-// Every other page keeps a policy that allows nothing but our own origin.
-//
-// Learning note — naming one script source replaces Astro's default instead of adding to it:
-// `'self'` disappears, and our own bundled scripts would be refused by our own policy. Both
-// are therefore named. (The `frame-src` directive comes out repeated in the meta tag — Astro
-// writes an inserted directive after each of its own; a browser reads the first and ignores
-// the rest. scripts/check-build.test.ts holds what the policy allows, not how it is spelled.)
 // The game is imported only by a build that shows it (astro.config.ts): `__CEL_GAME__` is a
 // constant the bundler folds, so that without the game neither its stylesheet nor its script
 // reaches the page or dist/.
@@ -40,11 +30,6 @@ const Game = __CEL_GAME__ ? (await import('../components/Game.astro')).default :
 const guard = __CEL_GAME__ ? silenceGuardScript() : null;
 if (guard !== null) Astro.csp.insertScriptHash(silenceGuardHash());
 
-if (askSite().mode !== 'off') {
-  Astro.csp.insertScriptResource("'self'");
-  Astro.csp.insertScriptResource('https://challenges.cloudflare.com');
-  Astro.csp.insertDirective('frame-src https://challenges.cloudflare.com');
-}
 ---
 
 <Base title={t('app.name')} description={t('home.tagline')} home>

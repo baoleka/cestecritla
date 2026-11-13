@@ -12,6 +12,9 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
   COPY_WINDOW,
+  ASKED_TERM,
+  MAX_ASKED_IDS,
+  MAX_ASKED_TERMS,
   MAX_IDS_PER_SENTENCE,
   MAX_QUESTION_CHARS,
   MAX_SELECTED,
@@ -73,7 +76,6 @@ const OPTIONS = { minOverlap: 0.5 };
 
 const answer = (...phrases: [string, ...string[]][]): ModelAnswer => ({
   phrases: phrases.map(([texte, ...ids]) => ({ texte, ids })),
-  hors_programme: false,
 });
 
 const LIBRARY_SENTENCE =
@@ -116,10 +118,10 @@ void test('an anchored, affirmative answer in our own words is shown as written'
 void test('shape: anything that is not the JSON asked for gives the selection of the search', () => {
   for (const raw of [
     'Voici ma réponse : la retraite.',
-    '{"phrases":"une phrase","hors_programme":false}',
-    { phrases: [{ texte: 'x' }], hors_programme: false },
-    { phrases: [{ texte: 'x', ids: [1] }], hors_programme: false },
-    { phrases: [], hors_programme: 'non' },
+    '{"phrases":"une phrase"}',
+    { phrases: [{ texte: 'x' }] },
+    { phrases: [{ texte: 'x', ids: [1] }] },
+    { sentences: [] },
     null,
     42,
   ]) {
@@ -128,7 +130,9 @@ void test('shape: anything that is not the JSON asked for gives the selection of
     assert.equal(verdict.refusal?.rule, 'shape');
     assert.deepEqual(verdict.ids, [LIBRARY, TREES, BUSES]);
   }
-  assert.equal(parseModelAnswer('{"phrases":[],"hors_programme":false}')?.phrases.length, 0);
+  assert.equal(parseModelAnswer('{"phrases":[]}')?.phrases.length, 0);
+  // A flag of the old contract is read past, not obeyed: there is no « off the subject » left.
+  assert.deepEqual(parseModelAnswer({ phrases: [], hors_programme: true }), { phrases: [] });
 });
 
 void test('anchor: every sentence names one or two measures, among those it was given', () => {
@@ -441,7 +445,7 @@ void test('copy: an output is read as text, whatever shape the model gave it', (
   assert.ok(carriesCopy({ anything: [{ deep: [recited] }] }, CANDIDATES));
   // Sentences of ours, identifiers, nothing at all: no copy.
   assert.ok(!carriesCopy(answer([LIBRARY_SENTENCE, LIBRARY]), CANDIDATES));
-  assert.ok(!carriesCopy({ ids: [LIBRARY, TREES], hors_programme: false }, CANDIDATES));
+  assert.ok(!carriesCopy({ ids: [LIBRARY, TREES] }, CANDIDATES));
   assert.ok(!carriesCopy(null, CANDIDATES));
   assert.ok(!carriesCopy(42, CANDIDATES));
 });
@@ -634,16 +638,8 @@ void test('overlap: a sentence must share its words with the measure it points a
   assert.deepEqual(loose, []);
 });
 
-void test('outside the subject, or nothing to say: neither is an answer, neither is an error', () => {
-  assert.deepEqual(validateAnswer({ phrases: [], hors_programme: true }, CANDIDATES, OPTIONS), {
-    kind: 'off_topic',
-  });
-  assert.deepEqual(validateAnswer({ phrases: [], hors_programme: false }, CANDIDATES, OPTIONS), {
-    kind: 'none',
-  });
-  // Told it left the subject and still writing: the safe reading is that it left.
-  const both = { ...answer([LIBRARY_SENTENCE, LIBRARY]), hors_programme: true };
-  assert.deepEqual(validateAnswer(both, CANDIDATES, OPTIONS), { kind: 'off_topic' });
+void test('nothing to say of these measures is not an answer, and not an error', () => {
+  assert.deepEqual(validateAnswer({ phrases: [] }, CANDIDATES, OPTIONS), { kind: 'none' });
   // No candidate at all and an unreadable output: there is nothing to select from.
   assert.deepEqual(validateAnswer('…', [], OPTIONS), { kind: 'none' });
 });
@@ -692,7 +688,7 @@ void test('a refusal quotes the model or an identifier, never a measure', () => 
 });
 
 void test('a selection is identifiers among those offered, three at most, and no sentence', () => {
-  const pick = (ids: unknown, outside = false): unknown => ({ ids, hors_programme: outside });
+  const pick = (ids: unknown): unknown => ({ ids });
   assert.deepEqual(validateSelection(pick([BUSES, LIBRARY]), CANDIDATES), {
     kind: 'select',
     ids: [BUSES, LIBRARY],
@@ -707,7 +703,6 @@ void test('a selection is identifiers among those offered, three at most, and no
   assert.equal(many.ids.length, MAX_SELECTED);
   assert.deepEqual(validateSelection(pick([]), CANDIDATES), { kind: 'none' });
   assert.deepEqual(validateSelection(pick(['p9c9-s09-m09']), CANDIDATES), { kind: 'none' });
-  assert.deepEqual(validateSelection(pick([BUSES], true), CANDIDATES), { kind: 'off_topic' });
   // Unreadable: the order of the search, as for a refused writing.
   const unreadable = validateSelection('trois mesures', CANDIDATES);
   assert.equal(unreadable.kind, 'select');
@@ -753,16 +748,15 @@ void test('the page reads an answer of the Worker strictly, and carries no field
     }),
     { kind: 'answer', corpus, sentences },
   );
-  assert.deepEqual(parseAskResponse({ kind: 'reviewed', slug: 'retraites' }), {
-    kind: 'reviewed',
-    slug: 'retraites',
-  });
   assert.deepEqual(parseAskResponse({ kind: 'silence', reopen: '2027-04-18T18:00:00Z' }), {
     kind: 'silence',
     reopen: '2027-04-18T18:00:00Z',
   });
-  for (const kind of ['none', 'off_topic', 'local'] as const) {
-    assert.deepEqual(parseAskResponse({ kind, extra: 1 }), { kind });
+  assert.deepEqual(parseAskResponse({ kind: 'local', extra: 1 }), { kind: 'local' });
+  // What the Worker can no longer say, it is not believed to have said (D16.22): it does not
+  // read the question, so it knows neither an objection, nor an absence, nor a subject.
+  for (const kind of ['reviewed', 'none', 'off_topic']) {
+    assert.equal(parseAskResponse({ kind, slug: 'retraites' }), null, kind);
   }
   for (const bad of [
     null,
@@ -777,36 +771,63 @@ void test('the page reads an answer of the Worker strictly, and carries no field
     { kind: 'answer', corpus: 'latest', sentences },
     { kind: 'select', corpus, ids: [LIBRARY, LIBRARY] },
     { kind: 'select', corpus, ids: [LIBRARY, TREES, BUSES, GARDENS] },
-    { kind: 'reviewed', slug: '../exactitude' },
-    { kind: 'reviewed', slug: 'https://example.org' },
     { kind: 'silence', reopen: 'dimanche' },
   ]) {
     assert.equal(parseAskResponse(bad), null, JSON.stringify(bad));
   }
 });
 
-void test('the Worker reads a request strictly: a question, a token, a state of the book', () => {
+void test('a request names measures and words of the book: a sentence does not fit in it (D16.22)', () => {
   const corpus = '27ee6e713fe25e7e';
-  assert.deepEqual(parseAskRequest({ q: '  et les retraites ?  ', token: 't', corpus }), {
-    q: 'et les retraites ?',
-    token: 't',
-    corpus,
-  });
+  assert.deepEqual(
+    parseAskRequest({ corpus, ids: [LIBRARY, TREES], terms: ['quartier', 'bibliotheque'] }),
+    // The words come back sorted: whatever order they were sent in is not kept.
+    { corpus, ids: [LIBRARY, TREES], terms: ['bibliotheque', 'quartier'] },
+  );
+  // No word at all is a request too; a word twice is a word once.
+  assert.deepEqual(parseAskRequest({ corpus, ids: [LIBRARY], terms: [] })?.terms, []);
+  assert.deepEqual(parseAskRequest({ corpus, ids: [LIBRARY], terms: ['arbre', 'arbre'] })?.terms, [
+    'arbre',
+  ]);
+  // A field for what was typed does not exist: sent all the same, it is not carried.
+  assert.deepEqual(
+    parseAskRequest({ corpus, ids: [LIBRARY], terms: [], q: 'et ma retraite ?', token: 't' }),
+    { corpus, ids: [LIBRARY], terms: [] },
+  );
+  const ids = [LIBRARY];
   for (const bad of [
     null,
-    { q: '', token: 't', corpus },
-    { q: '   ', token: 't', corpus },
-    { q: 'x'.repeat(MAX_QUESTION_CHARS + 1), token: 't', corpus },
-    { q: 'retraites', corpus },
-    { q: 'retraites', token: 't' },
-    { q: 'retraites', token: 't', corpus: '../../etc' },
-    { q: ['retraites'], token: 't', corpus },
-    { q: 'retraites', token: 'x'.repeat(5000), corpus },
+    { ids, terms: [] },
+    { corpus: '../../etc', ids, terms: [] },
+    // Measures: one at least, identifiers of the book, each once, twenty-four at most.
+    { corpus, ids: [], terms: [] },
+    { corpus, ids: 'p1c1-s01-k01', terms: [] },
+    { corpus, ids: [LIBRARY, LIBRARY], terms: [] },
+    { corpus, ids: ['et ma retraite ?'], terms: [] },
+    {
+      corpus,
+      ids: Array.from({ length: MAX_ASKED_IDS + 1 }, (_, i) => `p1c1-s01-m${String(i + 10)}`),
+      terms: [],
+    },
+    // Words: one folded word each — no space, no capital, no accent, no punctuation.
+    { corpus, ids },
+    { corpus, ids, terms: 'retraite' },
+    { corpus, ids, terms: ['ma retraite'] },
+    { corpus, ids, terms: ['Retraite'] },
+    { corpus, ids, terms: ['retraité'] },
+    { corpus, ids, terms: ['ignore:', 'instructions'] },
+    { corpus, ids, terms: ['a'] },
+    { corpus, ids, terms: ['x'.repeat(33)] },
+    { corpus, ids, terms: [42] },
+    {
+      corpus,
+      ids,
+      terms: Array.from({ length: MAX_ASKED_TERMS + 1 }, (_, i) => `mot${String(i)}`),
+    },
   ]) {
-    assert.equal(parseAskRequest(bad), null, JSON.stringify(bad).slice(0, 80));
+    assert.equal(parseAskRequest(bad), null, JSON.stringify(bad).slice(0, 90));
   }
-  assert.equal(
-    parseAskRequest({ q: 'x'.repeat(MAX_QUESTION_CHARS), token: 't', corpus })?.q.length,
-    300,
-  );
+  // The field still bounds what the local search reads.
+  assert.equal(MAX_QUESTION_CHARS, 300);
+  assert.ok(ASKED_TERM.test('retraite') && !ASKED_TERM.test('ma retraite'));
 });

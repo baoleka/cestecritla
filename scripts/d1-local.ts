@@ -6,7 +6,7 @@
  * and answers `{ results }`. This file is that wrapping and nothing else.
  */
 import { DatabaseSync, type SQLInputValue } from 'node:sqlite';
-import type { AskDb, AskStatement } from '../src/worker/retrieve.js';
+import type { AskDb, AskStatement } from '../src/worker/measures.js';
 
 class LocalStatement implements AskStatement {
   constructor(

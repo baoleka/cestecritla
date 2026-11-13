@@ -62,6 +62,15 @@ export type Ask = 'part' | 'chapter' | 'section';
 export type Verdict = 'here' | 'also' | 'elsewhere';
 
 export const ROUND = 3;
+
+/**
+ * A word this long does not stand on one line at 320 px in the size the game shows a word in.
+ * Left to the browser it is cut — « microproces-seurs », or with no hyphen at all where the
+ * engine has no dictionary (measured on 13/11/2026 in three engines). A word of the programme is
+ * shown whole: the page sets it one step smaller instead (`data-long`, src/styles/game.css).
+ */
+export const LONG_WORD = 15;
+export const isLongWord = (word: string): boolean => word.normalize('NFC').length >= LONG_WORD;
 const ASKS: readonly Ask[] = ['part', 'chapter', 'section'];
 
 export interface Place {

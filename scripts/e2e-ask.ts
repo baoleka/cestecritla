@@ -7,29 +7,33 @@
  *
  * dist-ask/ — the app as it would be if the site answered questions (scripts/build.ts
  * --ask-test) — is served from a local port. `/api/ask` is answered here from a table, one
- * canned answer per marker word in the question; Turnstile's script is replaced by a stub that
- * hands out a token. Every other request to another host is aborted and reported.
+ * canned answer per scenario the test names before it presses « Demander ». (It used to be one
+ * per marker word in the question: the question no longer travels — D16.22 — so the Worker,
+ * simulated or not, has nothing of it to read.) Every request to another host is aborted and
+ * reported: there is none to expect, no bot check is loaded any more (D16.23).
  *
  * What is checked:
- *   1. before any gesture: the notice that an AI is at work, with the model's name; no request
- *      to anyone but us — Turnstile included — until « Demander » is pressed: focusing the
- *      field and typing in it are the local search, and ask nothing of a third party;
- *   2. typing sends nothing; « Demander » sends the question once, with a token and the state
- *      of the book, and nothing else;
- *   3. each answer of the Worker becomes its page — written, selected, re-read, nothing found,
- *      out of subject, silence — and the notice follows the model, not the page's own choice;
+ *   1. before any gesture: the notice that an AI is at work, with the model's name, and that
+ *      the sentence typed is not what is sent; no request to anyone but us;
+ *   2. typing sends nothing; « Demander » sends once — the measures the page's own search
+ *      found and the words of the book it matched, exactly what scripts/ask-page.ts computes
+ *      for the same question, and not a word that was typed and is not a word of the book;
+ *   3. each answer of the Worker becomes its page — written, selected, silence — and what the
+ *      phone decides alone — an objection a person answered, nothing found — sends nothing;
+ *      the notice follows the model, not the page's own choice;
  *   4. whatever the Worker does wrong — an error, gibberish, another book, an unknown measure,
- *      a field it should not send — the page shows what it found by itself, and never a word
- *      of failure;
+ *      a field it should not send, a page it can no longer say — the page shows what it found
+ *      by itself, and never a word of failure;
  *   5. a sentence of the model is text: markup in it creates no element and runs nothing;
- *   6. the Content-Security-Policy opens Turnstile on this page and on no other, and nothing we
- *      ship violates it; the answer is reachable by keyboard and passes the accessibility audit.
+ *   6. the Content-Security-Policy of every page names nobody but us, and nothing we ship
+ *      violates it; the answer is reachable by keyboard and passes the accessibility audit.
  */
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { createServer, type Server } from 'node:http';
 import { extname, join, normalize, resolve } from 'node:path';
 import { chromium, firefox, webkit, type BrowserType, type Page, type Route } from 'playwright';
 import type { Manifest } from './aec26-types.js';
+import { loadPage } from './ask-page.js';
 import { STILL, lateLayoutShift } from './e2e-kit.js';
 
 const ENGINES: Record<string, BrowserType> = { chromium, firefox, webkit };
@@ -44,22 +48,7 @@ const MIME: Record<string, string> = {
 };
 const ROOT = 'dist-ask';
 const OFFICIAL = 'https://melenchon2027.fr';
-const TURNSTILE = 'https://challenges.cloudflare.com';
 const MODEL = 'Mistral Small 3.1';
-
-/** A token straight away, and a new one each time the page asks: what Turnstile does, minus Turnstile. */
-const TURNSTILE_STUB = `
-  window.turnstile = {
-    render: function (holder, options) {
-      window.__turnstile = { options: options, renders: (window.__turnstile ? window.__turnstile.renders : 0) + 1 };
-      setTimeout(function () { options.callback('jeton-1'); }, 20);
-      return 'widget';
-    },
-    reset: function () {
-      var options = window.__turnstile.options;
-      setTimeout(function () { options.callback('jeton-' + Date.now()); }, 20);
-    }
-  };`;
 
 function serve(root: string): Promise<{ server: Server; origin: string }> {
   const server = createServer((req, res) => {
@@ -132,62 +121,84 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
   ).entries[1];
   if (objection === undefined) throw new Error('no objection to type');
 
-  /** One canned answer per marker word: the "replay" of a Worker that does not exist yet. */
-  const canned = (question: string): { status?: number; body: unknown } => {
+  /**
+   * One canned answer per scenario: the "replay" of a Worker that does not exist yet. The test
+   * names the scenario before it presses « Demander » — the request carries nothing to tell
+   * them apart by, and that is the point.
+   */
+  type Scenario =
+    | 'answer'
+    | 'select'
+    | 'silence'
+    | 'local'
+    | 'panne'
+    | 'charabia'
+    | 'autre livre'
+    | 'inconnue'
+    | 'balise'
+    | 'page perdue';
+  let scenario: Scenario = 'answer';
+  const canned = (): { status?: number; body: unknown } => {
     const say = (text: string, ...cited: string[]): { text: string; ids: string[] } => ({
       text,
       ids: cited,
     });
-    if (/sélection/.test(question)) return { body: { kind: 'select', corpus, ids } };
-    if (/hors sujet/.test(question)) return { body: { kind: 'off_topic' } };
-    if (/introuvable/.test(question)) return { body: { kind: 'none' } };
-    if (/scrutin/.test(question))
-      return { body: { kind: 'silence', reopen: '2027-04-18T18:00:00.000Z' } };
-    if (/local/.test(question)) return { body: { kind: 'local' } };
-    if (/panne/.test(question)) return { status: 500, body: { error: 'Service indisponible' } };
-    if (/charabia/.test(question)) return { body: 'pas du JSON' };
-    if (/autre livre/.test(question)) {
-      return {
-        body: {
-          kind: 'answer',
-          corpus: 'aaaaaaaaaaaaaaaa',
-          sentences: [say('Phrase d’un autre livre.', first)],
-        },
-      };
+    switch (scenario) {
+      case 'select':
+        return { body: { kind: 'select', corpus, ids } };
+      case 'silence':
+        return { body: { kind: 'silence', reopen: '2027-04-18T18:00:00.000Z' } };
+      case 'local':
+        return { body: { kind: 'local' } };
+      case 'panne':
+        return { status: 500, body: { error: 'Service indisponible' } };
+      case 'charabia':
+        return { body: 'pas du JSON' };
+      case 'autre livre':
+        return {
+          body: {
+            kind: 'answer',
+            corpus: 'aaaaaaaaaaaaaaaa',
+            sentences: [say('Phrase d’un autre livre.', first)],
+          },
+        };
+      case 'inconnue':
+        return {
+          body: {
+            kind: 'answer',
+            corpus,
+            sentences: [say('Phrase sur une mesure inconnue.', 'p9c9-s09-m09')],
+          },
+        };
+      case 'balise':
+        return {
+          body: {
+            kind: 'answer',
+            corpus,
+            sentences: [
+              say('<img src=x onerror=alert(1)><script>alert(2)</script> phrase d’essai.', first),
+            ],
+          },
+        };
+      // A page the Worker could say when it read the question, and can no longer mean.
+      case 'page perdue':
+        return { body: { kind: 'off_topic' } };
+      case 'answer':
+        return {
+          body: {
+            kind: 'answer',
+            corpus,
+            sentences: [
+              say('Première phrase d’essai, écrite pour ce test.', first),
+              say('Deuxième phrase d’essai, sur deux mesures.', second, third),
+            ],
+            // A field the contract does not name must never reach the page.
+            debug: 'TEXTE-QUI-NE-DOIT-PAS-PARAITRE',
+          },
+        };
     }
-    if (/inconnue/.test(question)) {
-      return {
-        body: {
-          kind: 'answer',
-          corpus,
-          sentences: [say('Phrase sur une mesure inconnue.', 'p9c9-s09-m09')],
-        },
-      };
-    }
-    if (/balise/.test(question)) {
-      return {
-        body: {
-          kind: 'answer',
-          corpus,
-          sentences: [
-            say('<img src=x onerror=alert(1)><script>alert(2)</script> phrase d’essai.', first),
-          ],
-        },
-      };
-    }
-    return {
-      body: {
-        kind: 'answer',
-        corpus,
-        sentences: [
-          say('Première phrase d’essai, écrite pour ce test.', first),
-          say('Deuxième phrase d’essai, sur deux mesures.', second, third),
-        ],
-        // A field the contract does not name must never reach the page.
-        debug: 'TEXTE-QUI-NE-DOIT-PAS-PARAITRE',
-      },
-    };
   };
+  const pageInNode = loadPage();
 
   const browser = await type.launch();
   try {
@@ -203,16 +214,8 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         const url = request.url();
         requested.push(url);
         if (url.startsWith(`${origin}/api/ask`)) {
-          const body = request.postData() ?? '';
-          posted.push(body);
-          let question = '';
-          try {
-            const asked = (JSON.parse(body) as { q?: unknown }).q;
-            question = typeof asked === 'string' ? asked : '';
-          } catch {
-            question = '';
-          }
-          const answer = canned(question);
+          posted.push(request.postData() ?? '');
+          const answer = canned();
           return route.fulfill({
             status: answer.status ?? 200,
             contentType: 'application/json; charset=utf-8',
@@ -220,13 +223,6 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
           });
         }
         if (url.startsWith(origin)) return route.continue();
-        if (url.startsWith(`${TURNSTILE}/turnstile/v0/api.js`)) {
-          return route.fulfill({
-            status: 200,
-            contentType: 'text/javascript',
-            body: TURNSTILE_STUB,
-          });
-        }
         if (url.startsWith(OFFICIAL) && request.resourceType() === 'document') {
           return route.fulfill({
             status: 200,
@@ -251,15 +247,16 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
     const page = await context.newPage();
     await guard(page);
-    const toTurnstile = (): number => requested.filter((url) => url.startsWith(TURNSTILE)).length;
     const text = (selector: string): Promise<string> =>
       page.evaluate<string>(
         `document.querySelector(${JSON.stringify(selector)})?.textContent ?? ''`,
       );
-    /** Types a question, presses « Demander », waits for the page it gives. */
+    /** Types a question, presses « Demander », waits for the page the scenario gives. */
     const ask = async (
       question: string,
+      as: Scenario = 'answer',
     ): Promise<{ kind: string; title: string; body: string; notice: string }> => {
+      scenario = as;
       await page.fill('#q', question);
       await page.click('#ask');
       await until(
@@ -276,39 +273,44 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
 
     // --- 1. before any gesture
     await page.goto(`${origin}/`);
-    await until(page, "!document.querySelector('#ask').hidden");
+    await until(page, "!document.querySelector('#ask').disabled");
     const hint = await text('#search-hint');
     check(
       'the notice names an AI and its model before the first use',
       /\bIA\b/.test(hint) && hint.includes(MODEL),
       hint,
     );
-    check('the notice says where the question goes', /Cloudflare/.test(hint));
+    check(
+      'the notice says what is sent — words of the book, never the sentence — and to whom',
+      /mots du livre/.test(hint) && /jamais la phrase/.test(hint) && /Cloudflare/.test(hint),
+      hint,
+    );
     check(
       '« Demander » is the one button of the field',
       (await page.locator('#search button').count()) === 1,
     );
-    await page.waitForTimeout(400);
-    check('nothing is asked of Turnstile before any gesture', toTurnstile() === 0);
     await page.focus('#q');
     await page.waitForTimeout(400);
     check(
-      'focusing the field — it is also the local search — asks nothing of Turnstile',
-      toTurnstile() === 0,
-      String(toTurnstile()),
+      'before any gesture nothing is asked of anyone but us',
+      escaped.length === 0,
+      escaped.slice(0, 3).join(' '),
     );
 
-    // --- 2. typing sends nothing; the gesture sends the question, once
-    await page.locator('#q').pressSequentially('et les retraites des infirmières', { delay: 20 });
+    // --- 2. typing sends nothing; the gesture sends what the search found — not the sentence
+    // « zorglub » and « montcuq » are words no programme writes: what a visitor says of
+    // themselves, in words the book does not hold, has nothing to leave the phone as.
+    const QUESTION = 'et les retraites des infirmières, moi zorglub de montcuq';
+    await page.locator('#q').pressSequentially(QUESTION, { delay: 20 });
     await page.waitForTimeout(900);
     const carrying = (): string[] =>
       requested.filter((url) =>
-        /infirmi|retraite/i.test(decodeURIComponent(url.split('#')[0] ?? '')),
+        /infirmi|retraite|zorglub|montcuq/i.test(decodeURIComponent(url.split('#')[0] ?? '')),
       );
     check('typing sends the words nowhere', carrying().length === 0 && posted.length === 0);
     check(
-      'typing asks nothing of Turnstile either, and leaves nothing in the address',
-      toTurnstile() === 0 && !page.url().includes('#') && !/retraite/i.test(page.url()),
+      'typing leaves nothing in the address',
+      !page.url().includes('#') && !/retraite/i.test(page.url()),
       page.url(),
     );
     // The field is still the search: results arrive while one types, under the button.
@@ -319,21 +321,32 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
     await page.click('#ask');
     await until(page, "!document.querySelector('#answer').hidden");
-    check('« Demander » sends the question once', posted.length === 1, String(posted.length));
-    const sent = JSON.parse(posted[0] ?? '{}') as Record<string, unknown>;
+    check('« Demander » sends once', posted.length === 1, String(posted.length));
+    const body = posted[0] ?? '{}';
+    const sent = JSON.parse(body) as { corpus?: unknown; ids?: string[]; terms?: string[] };
     check(
-      'the request is a question, a token and the state of the book — nothing else',
-      JSON.stringify(Object.keys(sent).sort()) === '["corpus","q","token"]' &&
-        sent['q'] === 'et les retraites des infirmières' &&
-        sent['corpus'] === corpus &&
-        typeof sent['token'] === 'string' &&
-        sent['token'] !== '',
+      'the request is the state of the book, measures and words — and nothing else',
+      JSON.stringify(Object.keys(sent).sort()) === '["corpus","ids","terms"]' &&
+        sent.corpus === corpus,
       JSON.stringify(Object.keys(sent)),
     );
+    const expected = pageInNode(QUESTION).asked;
     check(
-      'the words travel in the body of that request, never in an address',
-      carrying().length === 0,
+      'what leaves is what the search of the page found: the same measures, the same words',
+      JSON.stringify(sent.ids) === JSON.stringify(expected.ids) &&
+        JSON.stringify(sent.terms) === JSON.stringify(expected.terms) &&
+        (sent.ids ?? []).length >= 1,
+      `${String((sent.ids ?? []).length)} measures, words: ${(sent.terms ?? []).join(' ')}`,
     );
+    check(
+      'the sentence typed is not in it, and neither is a word the book does not write',
+      !body.includes(QUESTION) &&
+        !/zorglub|montcuq|moi|infirmières/i.test(body) &&
+        (sent.terms ?? []).every((term) => /^[a-z0-9]{2,32}$/.test(term)) &&
+        !/\s/.test((sent.terms ?? []).join('')),
+      body.slice(0, 200),
+    );
+    check('nothing typed travels in an address either', carrying().length === 0);
 
     // --- 3. a written answer
     check(
@@ -342,7 +355,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
     check(
       'the answer opens on the neutral sentence, not on a verdict',
-      /^Voici ce que le programme dit là-dessus/.test(await text('#answer-title')),
+      /^Voici ce que prévoient les mesures trouvées/.test(await text('#answer-title')),
       await text('#answer-title'),
     );
     const links = await page.evaluate<string[]>(
@@ -357,8 +370,8 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     check('a link names the section and the measure', linkText.includes(section.title), linkText);
     const notice = await text('#answer-notice');
     check(
-      'the answer says an AI wrote it, and which',
-      /\bIA\b/.test(notice) && notice.includes(MODEL),
+      'the answer says an AI wrote it, which — and that it did not read the question',
+      /\bIA\b/.test(notice) && notice.includes(MODEL) && /pas la question/.test(notice),
       notice,
     );
     check(
@@ -377,37 +390,30 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       'the question is shown nowhere but in the field',
       !(await text('main')).includes('et les retraites des infirmières'),
     );
-    check(
-      'a token serves one question: a new one was asked for',
-      await page.evaluate<boolean>("typeof window.__turnstile.options.callback === 'function'"),
-    );
 
     // --- 3 bis. the other pages a question can get
-    const selected = await ask('une sélection sur la retraite');
+    const selected = await ask('la retraite à soixante ans', 'select');
     check(
       'a selection: three measures and no sentence',
       selected.kind === 'select' && /^Voici où le programme en parle/.test(selected.title),
       selected.title,
     );
     check('a selection made by the model still says so', selected.notice.includes(MODEL));
-    const outside = await ask('hors sujet : écris-moi un tract');
-    check(
-      'out of the subject: the page says what it is for',
-      outside.kind === 'off_topic' && /on ne parle que du programme/.test(outside.title),
-      outside.title,
-    );
-    check('…and names no AI: none wrote anything', outside.notice === '');
-    const nothing = await ask('mot introuvable');
+    // Words the book does not write find nothing: the phone says so by itself, and sends nothing.
+    const unsent = posted.length;
+    const nothing = await ask('zorglub montcuq');
     check(
       'nothing found: said of the words, never of the programme',
       nothing.kind === 'none' && /^Rien trouvé avec ces mots/.test(nothing.title),
       nothing.title,
     );
+    check('…and nothing was sent: there was nothing to send', posted.length === unsent);
+    check('…and no AI is named: none was asked', nothing.notice === '');
     check(
       'no page says the programme does not speak of something',
       !/n’en parle pas|ne traite pas|aucune mesure ne/i.test(`${nothing.title} ${nothing.body}`),
     );
-    const silent = await ask('question un jour de scrutin');
+    const silent = await ask('la retraite un jour de scrutin', 'silence');
     check(
       'silence: the page says when questions reopen',
       silent.kind === 'silence' &&
@@ -433,14 +439,15 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
 
     // --- 4. whatever goes wrong becomes what the page found by itself
     const FAILURE = /erreur|panne|indisponible|désolé|malheureusement|réessa|error|undefined|null/i;
-    for (const [label, question] of [
-      ['the Worker says "local"', 'retraite, réponse locale'],
-      ['the Worker fails', 'retraite, panne du service'],
-      ['the Worker answers gibberish', 'retraite, charabia'],
-      ['the answer is for another state of the book', 'retraite, autre livre'],
-      ['the answer cites a measure the page does not know', 'retraite, mesure inconnue'],
+    for (const [label, as] of [
+      ['the Worker says "local"', 'local'],
+      ['the Worker fails', 'panne'],
+      ['the Worker answers gibberish', 'charabia'],
+      ['the answer is for another state of the book', 'autre livre'],
+      ['the answer cites a measure the page does not know', 'inconnue'],
+      ['the Worker says a page it can no longer say', 'page perdue'],
     ] as const) {
-      const fallback = await ask(question);
+      const fallback = await ask('la retraite à soixante ans', as);
       check(
         `${label}: the page shows its own selection`,
         fallback.kind === 'select' && /^Voici où le programme en parle/.test(fallback.title),
@@ -456,7 +463,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     }
 
     // --- 5. a sentence of the model is text
-    const hostile = await ask('retraite, une balise');
+    const hostile = await ask('la retraite à soixante ans', 'balise');
     const injected = await page.evaluate<number>(
       "document.querySelectorAll('#answer img, #answer script').length",
     );
@@ -480,13 +487,8 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       const html = readFileSync(join(ROOT, path), 'utf8');
       return /http-equiv="content-security-policy" content="([^"]*)"/.exec(html)?.[1] ?? '';
     };
-    const home = policy('index.html');
-    check(
-      'the home page opens Turnstile, and keeps its own scripts',
-      /script-src[^;]*'self'[^;]*https:\/\/challenges\.cloudflare\.com/.test(home) &&
-        /frame-src https:\/\/challenges\.cloudflare\.com/.test(home),
-    );
     for (const other of [
+      'index.html',
       'sommaire/index.html',
       `s/${section.id}/index.html`,
       'exactitude/index.html',
@@ -499,14 +501,9 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       violations.slice(0, 3).join(' | '),
     );
     check(
-      'no request went to anyone but us and Turnstile',
+      'no request went to anyone but us, from the first paint to the last answer',
       escaped.length === 0,
       escaped.slice(0, 3).join(' '),
-    );
-    check(
-      'Turnstile was loaded once for the whole visit',
-      toTurnstile() === 1,
-      String(toTurnstile()),
     );
     await context.close();
 
@@ -519,10 +516,11 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       await guard(view);
       await view.goto(`${origin}/`);
       await view.focus('#q');
-      await until(view, "document.querySelector('#ask') && !document.querySelector('#ask').hidden");
+      await until(view, "document.querySelector('#ask') && !document.querySelector('#ask').disabled");
       const sent = posted.length;
+      scenario = 'answer';
       await view.clock.setFixedTime(new Date(Date.now() + 10 * 60 * 1000));
-      await view.fill('#q', 'et dix minutes plus tard');
+      await view.fill('#q', 'la retraite, dix minutes plus tard');
       await view.click('#ask');
       await until(view, "!document.querySelector('#answer').hidden");
       check(

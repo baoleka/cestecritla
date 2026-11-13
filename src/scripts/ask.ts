@@ -1,34 +1,42 @@
 /**
- * « Demander au programme » — the one gesture that sends a question (D16.8).
+ * « Demander au programme » — the one gesture that sends anything (D16.8), and what it sends
+ * is not the question (D16.22).
  *
  * What happens, in order, when the button is pressed:
  *   1. electoral silence is checked here first — a frozen page sends nothing;
  *   2. an objection one of the fifteen re-read answers is about is recognised on the phone, and
  *      shown: nothing leaves;
- *   3. otherwise the question goes to /api/ask with a Turnstile token, and the page waits —
- *      eight seconds at most — under the local results that are already there;
- *   4. whatever comes back, or does not, becomes a page (src/lib/ask-view.ts).
+ *   3. the page searches, as it does while one types, and keeps what it found: the measures,
+ *      best first, and the words of the book the search matched. With nothing found, nothing
+ *      is sent;
+ *   4. those identifiers and those words go to /api/ask — the sentence that was typed stays in
+ *      the field — and the page waits, eight seconds at most, under the local results that are
+ *      already there;
+ *   5. whatever comes back, or does not, becomes a page (src/lib/ask-view.ts).
  *
- * Before that gesture, nothing typed is sent anywhere: the search is local. The only thing this
- * script fetches earlier is Turnstile's own script, at the first focus of the field — it takes
- * six to fourteen seconds to mint a token on a phone (D9.13), and a question should not wait
- * for it. That request carries no word of the question.
+ * Before that gesture, nothing typed is sent anywhere: the search is local. At that gesture,
+ * still nothing typed is sent. No third party is ever loaded: there is no bot check (D16.23).
  *
  * Everything shown is built with `createElement` and `textContent`: a sentence of the model is
  * text, never markup. The question is never displayed again: it stays in the field.
  */
-import { MAX_QUESTION_CHARS, parseAskResponse, type AskResponse } from '../lib/ask-contract.ts';
+import {
+  MAX_QUESTION_CHARS,
+  parseAskResponse,
+  type AskRequest,
+  type AskResponse,
+} from '../lib/ask-contract.ts';
+import type { Asked } from '../lib/ask-local.ts';
 import { reviewedFor, type ReviewedEntry } from '../lib/ask-reviewed.ts';
 import { viewOf, type AskView } from '../lib/ask-view.ts';
 import { formatReopenTimeFr, type effectiveDate } from '../lib/silence.ts';
 import { silenceReading } from './silence-now.ts';
 import { enhanceOfficialLinks } from './deep-links.ts';
-import { el, findSections, loadEngine, measureLink, type Engine } from './engine.ts';
+import { el, findForAsk, findSections, loadEngine, measureLink, type Engine } from './engine.ts';
 
 interface Config {
   mode: 'answer' | 'select';
   corpus: string;
-  sitekey: string;
   entries: (ReviewedEntry & { theme: string })[];
   strings: {
     waiting: string;
@@ -37,7 +45,6 @@ interface Config {
     reviewedTitle: string;
     noneTitle: string;
     noneLead: string;
-    offTopic: string;
     silence: string;
     where: string;
     notice: string;
@@ -46,15 +53,9 @@ interface Config {
   };
 }
 
-interface Turnstile {
-  render: (container: HTMLElement, options: Record<string, unknown>) => string | undefined;
-  reset: (widgetId?: string) => void;
-}
-
-const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
-/** How long the page waits for an answer, and for a token, before showing its own results. */
+/** How long the page waits for an answer before showing its own results. */
 const ANSWER_TIMEOUT_MS = 8_000;
-const TOKEN_TIMEOUT_MS = 10_000;
+/** What the page shows by itself: the best measure of each of its three best sections. */
 const LOCAL_SECTIONS = 3;
 
 const form = document.querySelector<HTMLFormElement>('#search');
@@ -66,103 +67,11 @@ const answer = document.querySelector<HTMLElement>('#answer');
 const title = document.querySelector<HTMLElement>('#answer-title');
 const body = document.querySelector<HTMLElement>('#answer-body');
 const notice = document.querySelector<HTMLElement>('#answer-notice');
-const holder = document.querySelector<HTMLElement>('#turnstile');
 const configNode = document.querySelector('#ask-config');
 
-if (
-  form &&
-  input &&
-  button &&
-  again &&
-  status &&
-  answer &&
-  title &&
-  body &&
-  notice &&
-  holder &&
-  configNode
-) {
+if (form && input && button && again && status && answer && title && body && notice && configNode) {
   const config = JSON.parse(configNode.textContent) as Config;
   const { strings } = config;
-
-  // --- Turnstile: asked for at the first focus, so that a token is ready at the gesture
-  let turnstile: Turnstile | undefined;
-  let widget: string | undefined;
-  let token: string | null = null;
-  let waiters: ((value: string | null) => void)[] = [];
-  const deliver = (value: string | null): void => {
-    token = value;
-    if (value === null) return;
-    for (const resolve of waiters) resolve(value);
-    waiters = [];
-  };
-  const startTurnstile = (): void => {
-    const script = document.createElement('script');
-    script.src = TURNSTILE_SRC;
-    script.async = true;
-    script.addEventListener('load', () => {
-      turnstile = (window as unknown as { turnstile?: Turnstile }).turnstile;
-      widget = turnstile?.render(holder, {
-        sitekey: config.sitekey,
-        action: 'ask',
-        // Nothing is drawn unless the visitor has to do something: the widget is invisible.
-        appearance: 'interaction-only',
-        language: 'fr',
-        theme: 'auto',
-        callback: (value: string) => {
-          deliver(value);
-        },
-        'expired-callback': () => {
-          deliver(null);
-        },
-        'error-callback': () => {
-          deliver(null);
-          return true;
-        },
-      });
-    });
-    document.head.append(script);
-  };
-  /** A token, now or within the deadline; null when Turnstile gives none. */
-  const takeToken = (): Promise<string | null> => {
-    needTurnstile();
-    if (token !== null) {
-      const ready = token;
-      token = null;
-      return Promise.resolve(ready);
-    }
-    return new Promise((resolve) => {
-      const timer = window.setTimeout(() => {
-        waiters = waiters.filter((w) => w !== taken);
-        resolve(null);
-      }, TOKEN_TIMEOUT_MS);
-      const taken = (value: string | null): void => {
-        window.clearTimeout(timer);
-        token = null;
-        resolve(value);
-      };
-      waiters.push(taken);
-    });
-  };
-  /** A token is good for one question: the next one needs a new one. */
-  const renewToken = (): void => {
-    token = null;
-    turnstile?.reset(widget);
-  };
-  /**
-   * Turnstile arrives with the first « Demander », never before (D7.6, D16.8). It used to come
-   * at the first focus of the field — but this field is also the local search: a visitor who
-   * only searches asked nothing of an AI, and the page tells them nothing is sent. Their
-   * browser must not load a third party's script, run its challenge and keep its storage for
-   * that (found by the hostile reading of 13/11/2026). The first question waits for the script;
-   * the page's own results are already on screen.
-   */
-  let turnstileAsked = false;
-  const needTurnstile = (): void => {
-    if (turnstileAsked) return;
-    turnstileAsked = true;
-    startTurnstile();
-  };
 
   // --- electoral silence: decided here before anything is sent, and closed when in doubt.
   // The hour of our server is read once and then ages with this device's clock
@@ -240,9 +149,6 @@ if (
       case 'none':
         say(strings.noneTitle, el('p', strings.noneLead));
         break;
-      case 'off_topic':
-        say(strings.offTopic);
-        break;
       case 'silence':
         say(strings.silence.replace('{reopenTime}', formatReopenTimeFr(new Date(view.reopen))));
         break;
@@ -253,12 +159,14 @@ if (
     title.focus();
   };
 
-  const post = async (question: string, given: string): Promise<AskResponse | null> => {
+  /** Sends what the search found — identifiers and words of the book — and nothing typed. */
+  const post = async (asked: Asked): Promise<AskResponse | null> => {
+    const request: AskRequest = { corpus: config.corpus, ids: asked.ids, terms: asked.terms };
     try {
       const response = await fetch('/api/ask', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ q: question, token: given, corpus: config.corpus }),
+        body: JSON.stringify(request),
         signal: AbortSignal.timeout(ANSWER_TIMEOUT_MS),
         credentials: 'omit',
         referrerPolicy: 'no-referrer',
@@ -298,9 +206,10 @@ if (
         show({ kind: 'reviewed', slug }, null);
         return;
       }
-      const [found, given] = await Promise.all([engine().catch(() => null), takeToken()]);
-      const response = given === null ? null : await post(question, given);
-      renewToken();
+      // The page's own search decides what is asked: with nothing found, nothing leaves.
+      const found = await engine().catch(() => null);
+      const asked = found === null ? null : findForAsk(found, question);
+      const response = asked === null || asked.ids.length === 0 ? null : await post(asked);
       show(viewOf(response, context(found, question)), found);
     } finally {
       asking = false;
@@ -308,10 +217,10 @@ if (
     }
   };
 
+  /** What the page can name, and what it shows by itself: the best measure of its best sections. */
   const context = (found: Engine | null, question: string): Parameters<typeof viewOf>[1] => ({
     corpus: config.corpus,
     knows: (id) => found !== null && id in found.meta.items,
-    hasAnswer: (slug) => config.entries.some((e) => e.slug === slug),
     localIds:
       found === null
         ? []

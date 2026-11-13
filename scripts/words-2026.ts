@@ -27,6 +27,11 @@
  *             singular or its plural, accents and all. The index folds accents and endings:
  *             « marchés » and « marche » share a stem, and the game says « Oui, là aussi » of
  *             every section the stem is in. Said of another word, it would be false.
+ *   alone     the pinned measure writes the word free-standing, not only glued to another by
+ *             a hyphen. « tram » is not a word of a book that writes « tram-train », nor
+ *             « abri » of one that writes « sans-abri »: shown alone, each would be a word the
+ *             book does not write. (A measure where the word is only glued still counts as a
+ *             place where it is written: a reader who searches the page finds it there.)
  *
  * What neither can decide — is it a concrete, everyday thing; has it one meaning; what would an
  * opponent write under it — is the editor's reading of the list, word by word (D16.15).
@@ -71,6 +76,16 @@ const holds = (text: string, word: string): boolean =>
     'u',
   ).test(text);
 
+/** The hyphens a compound is glued with: the keyboard's, the typographic one, the non-breaking one. */
+const HYPHENS = `\\-${String.fromCodePoint(0x2010)}${String.fromCodePoint(0x2011)}`;
+
+/** The word, free-standing: with no letter, digit or hyphen on either side. */
+const standsAlone = (text: string, word: string): boolean =>
+  new RegExp(
+    `(?<![\\p{L}\\p{N}${HYPHENS}])${word.replace(/[.*+?^${}()|[\]\\]/g, (c) => `\\${c}`)}(?![\\p{L}\\p{N}${HYPHENS}])`,
+    'u',
+  ).test(text);
+
 /** The forms one word takes: itself, its singular or plural — never another word. */
 export function formsOf(word: string): string[] {
   const forms = new Set([word]);
@@ -92,13 +107,15 @@ export interface LocalCheck {
   written: boolean;
   /** The measure does not open on a prohibition. */
   affirm: boolean;
+  /** The measure writes the word free-standing, not only glued to another by a hyphen. */
+  alone: boolean;
   /** Paragraphs and titles holding the stem outside the sections where a measure does. */
   prose: string[];
   /** Measures the index gives for the stem where the word itself, in any of its forms, is not. */
   others: string[];
 }
 
-/** The three checks only the text allows, for one word and its pin. */
+/** The checks only the text allows, for one word and its pin. */
 export function localCheck(
   corpus: PrivateCorpus,
   sources: GameSources,
@@ -126,13 +143,17 @@ export function localCheck(
     pin: word.pin.id,
     written: pinText !== '' && holds(pinText, word.word),
     affirm: pinText !== '' && !PROHIBITION.test(pinText.trim()),
+    alone: pinText !== '' && standsAlone(pinText, word.word),
     prose,
     others,
   };
 }
 
-const problemsOf = (check: LocalCheck): string[] => [
+export const problemsOf = (check: LocalCheck): string[] => [
   ...(check.written ? [] : [`« ${check.word} » is not written as such in ${check.pin}`]),
+  ...(check.written && !check.alone
+    ? [`« ${check.word} » is only written glued to another word in ${check.pin}`]
+    : []),
   ...(check.affirm ? [] : [`${check.pin} opens on a prohibition`]),
   ...(check.prose.length === 0
     ? []
@@ -250,7 +271,7 @@ function check(attest: boolean): boolean {
     return false;
   }
   console.log(
-    'every word is written as listed, in a measure that forbids nothing, and nowhere else; wherever its stem is, the word itself is',
+    'every word is written as listed and free-standing, in a measure that forbids nothing, and nowhere else; wherever its stem is, the word itself is',
   );
   if (!attest) return true;
   if (file.words.length === 0) {

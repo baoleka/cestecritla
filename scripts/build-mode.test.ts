@@ -345,9 +345,8 @@ void test('the Worker carries its non-inherited settings into the preview enviro
   assert.deepEqual(Object.keys(own).sort(), Object.keys(top).sort());
   assert.equal(own['ENVIRONMENT'], 'preview');
   assert.equal(top['ENVIRONMENT'], 'production');
-  // A token is accepted only for the hosts of its own environment.
-  assert.deepEqual((top['TURNSTILE_HOSTNAMES'] ?? '').split(',').sort(), APEX);
-  assert.deepEqual((own['TURNSTILE_HOSTNAMES'] ?? '').split(','), hosts(preview.routes));
+  // No bot check in either environment (D16.23): no host list for a token nobody mints.
+  for (const vars of [top, own]) assert.equal(vars['TURNSTILE_HOSTNAMES'], undefined);
 });
 
 void test('an app build is deployed nowhere before the citation policy is validated (D15.7)', () => {

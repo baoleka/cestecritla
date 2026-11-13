@@ -142,7 +142,13 @@ function scanSection(section: Section, re: RegExp): CorpusHit[] {
     if (item.kind === 'measure' && item.subMeasures !== undefined) {
       for (const sub of item.subMeasures) {
         if (re.test(sub.text)) {
-          hits.push({ id: sub.id, kind: sub.kind, text: sub.text, parentMeasureId: item.id, ...base });
+          hits.push({
+            id: sub.id,
+            kind: sub.kind,
+            text: sub.text,
+            parentMeasureId: item.id,
+            ...base,
+          });
         }
       }
     }

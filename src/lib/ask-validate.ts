@@ -33,8 +33,6 @@ import { sameWord, terms, tokenize } from './search-core.js';
 export type RuleId =
   /** Not the JSON it was asked for. */
   | 'shape'
-  /** `hors_programme` and sentences together: one of the two is not meant. */
-  | 'inconsistent'
   /** More than three sentences. */
   | 'count'
   /** Several sentences passed off as one, or a line break. */
@@ -85,8 +83,7 @@ export interface Refusal {
 export type Verdict =
   | { kind: 'answer'; sentences: AskSentence[] }
   | { kind: 'select'; ids: string[]; refusal?: Refusal }
-  | { kind: 'none' }
-  | { kind: 'off_topic' };
+  | { kind: 'none' };
 
 export interface ValidateOptions {
   /** Share of a sentence's own words that its cited measures must hold too, from 0 to 1. */
@@ -564,7 +561,7 @@ function sentenceRefusals(
 
 /**
  * Every rule the model's output breaks. Empty when the answer may be shown as written — or
- * when there is nothing to write about (`hors_programme`, or no sentence at all).
+ * when it wrote no sentence at all: none of the measures holds the words it was given.
  */
 export function refusals(
   raw: unknown,
@@ -573,11 +570,6 @@ export function refusals(
 ): Refusal[] {
   const answer = parseModelAnswer(raw);
   if (answer === null) return [{ rule: 'shape', sentence: null, detail: 'not the expected JSON' }];
-  if (answer.hors_programme) {
-    return answer.phrases.length === 0
-      ? []
-      : [{ rule: 'inconsistent', sentence: null, detail: 'hors_programme with sentences' }];
-  }
   const out: Refusal[] = [];
   if (answer.phrases.length > MAX_SENTENCES) {
     out.push({
@@ -651,7 +643,6 @@ export function validateSelection(raw: unknown, candidates: readonly Candidate[]
     const refusal: Refusal = { rule: 'shape', sentence: null, detail: 'not the expected JSON' };
     return fallback.length === 0 ? { kind: 'none' } : { kind: 'select', ids: fallback, refusal };
   }
-  if (chosen.hors_programme) return { kind: 'off_topic' };
   const ids = [...new Set(chosen.ids)].filter((id) => offered.has(id)).slice(0, MAX_SELECTED);
   if (ids.length === 0) return { kind: 'none' };
   const invented = chosen.ids.filter((id) => !offered.has(id)).length;
@@ -690,13 +681,10 @@ export function validateAnswer(
   const answer = parseModelAnswer(raw);
   const first = found[0];
   if (first !== undefined || answer === null) {
-    // Told to leave the subject and still writing: the safe reading is that it left.
-    if (first?.rule === 'inconsistent') return { kind: 'off_topic' };
     const ids = selection(raw, candidates);
     const refusal = first ?? { rule: 'shape', sentence: null, detail: 'not the expected JSON' };
     return ids.length === 0 ? { kind: 'none' } : { kind: 'select', ids, refusal };
   }
-  if (answer.hors_programme) return { kind: 'off_topic' };
   if (answer.phrases.length === 0) return { kind: 'none' };
   return {
     kind: 'answer',

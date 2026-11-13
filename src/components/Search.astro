@@ -39,12 +39,11 @@ const { toc = false, ask = false } = Astro.props;
 
 const version = manifest().meta.corpus_version;
 const site = askSite();
-const asking = ask && site.mode !== 'off' && site.modelName !== null && site.sitekey !== null;
+const asking = ask && site.mode !== 'off' && site.modelName !== null;
 const model = site.modelName ?? '';
 const askConfig = asking && {
   mode: site.mode,
   corpus: version,
-  sitekey: site.sitekey,
   entries: ripostes().map((entry) => ({
     slug: entry.slug,
     theme: entry.theme,
@@ -57,7 +56,6 @@ const askConfig = asking && {
     reviewedTitle: t('chat.reviewed.title'),
     noneTitle: t('refusal.not_found.title'),
     noneLead: t('search.no_results_hint'),
-    offTopic: t('refusal.off_topic'),
     silence: t('silence.chat.local', { reopenTime: '{reopenTime}' }),
     where: t('search.result.where'),
     notice: t('chat.ai_mention', { model }),
@@ -135,8 +133,6 @@ const strings = {
           </button>
         </p>
       </section>
-      {/* Turnstile draws here only if the visitor must do something: normally nothing. */}
-      <div id="turnstile" />
       <script type="application/json" id="ask-config" set:html={safeJson(askConfig)} is:inline />
     </>
   )

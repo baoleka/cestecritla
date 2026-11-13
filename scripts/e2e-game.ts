@@ -1118,6 +1118,45 @@ async function runEngine(
       );
       await deep.close();
 
+      // The longest words of the list, at the narrowest width the gates hold: each stands whole
+      // on one line. Fifteen letters or more are set one step smaller for that (LONG_WORD); a
+      // longer word, one day, is caught here before a phone cuts it in two.
+      const longest = [...data.words].sort((a, b) => b.word.length - a.word.length).slice(0, 3);
+      const cut: string[] = [];
+      for (const long of longest) {
+        const narrow = await browser.newContext({ viewport: { width: 320, height: 640 } });
+        await narrow.addInitScript(
+          `sessionStorage.setItem('${STORAGE_KEY}', ${JSON.stringify(
+            JSON.stringify({
+              corpus: data.corpus,
+              seen: seen.filter((id) => id !== long.id),
+              depth: 3,
+              turtle: 3,
+              arcs: [6, 6, 4],
+              round: null,
+              declined: true,
+            }),
+          )});`,
+        );
+        const small = await narrow.newPage();
+        await arrive(small);
+        const shown = small.locator('#game-live .g-the-word');
+        const lines: number = await shown.evaluate((node) =>
+          Math.round(
+            node.getBoundingClientRect().height / parseFloat(getComputedStyle(node).lineHeight),
+          ),
+        );
+        if (text(await shown.textContent()) !== long.word || lines !== 1) {
+          cut.push(`${long.id}: ${String(lines)} line(s)`);
+        }
+        await narrow.close();
+      }
+      check(
+        'at 320 px the three longest words of the list each stand whole on one line',
+        cut.length === 0,
+        cut.join(', '),
+      );
+
       // Less motion asked: her sheet opens, and nothing starts.
       const calm = await browser.newContext({
         viewport: { width: 390, height: 844 },

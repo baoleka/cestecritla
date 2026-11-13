@@ -5,12 +5,16 @@
 -- Nothing here is ever served: /api/ask answers with sentences of ours and identifiers
 -- (src/lib/ask-contract.ts). And nothing a visitor does is ever written here: no question, no
 -- answer, no date, no counter. The Worker only reads.
+--
+-- Since D16.22 the Worker reads measures by their identifier and searches nothing: the page
+-- searches, on the phone, and names what it found. The full-text index this file used to
+-- declare is gone with the search — one derived copy of the text less at Cloudflare.
 
 -- What the base is, and the one switch the editor keeps:
 --   corpus_version  the state of the book it holds; the Worker answers "local" when it is not
 --                   the one the site was built from
 --   propositions    how many rows it should hold
---   ask             'open' or 'stopped' — read at every question, so that written answers can
+--   ask             'open' or 'stopped' — read at every request, so that written answers can
 --                   be cut within the minute, with no deployment (runbook: « arrêt »)
 CREATE TABLE IF NOT EXISTS meta (
   key TEXT PRIMARY KEY,
@@ -26,16 +30,3 @@ CREATE TABLE IF NOT EXISTS propositions (
   text TEXT NOT NULL,           -- the proposition, word for word
   lead TEXT NOT NULL            -- for a sub-measure, the measure it details; '' otherwise
 ) WITHOUT ROWID;
-CREATE INDEX IF NOT EXISTS propositions_by_section ON propositions (section_id, ord);
-
--- The index. Its two columns hold STEMS, not sentences — the words of the proposition and of
--- its context, cut exactly as src/lib/search-core.ts cuts a question, so that a word is found
--- here whenever the search of the page would find it. bm25(propositions_fts, 1.0, 0.6) gives
--- the context the weight it has there.
-CREATE VIRTUAL TABLE IF NOT EXISTS propositions_fts USING fts5(
-  stems,
-  context,
-  id UNINDEXED,
-  section_id UNINDEXED,
-  tokenize = 'unicode61'
-);

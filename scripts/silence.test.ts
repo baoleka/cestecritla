@@ -248,10 +248,9 @@ void test('clock drift beyond 5 min fails CLOSED (+3 days and -3 days), and is r
 });
 
 void test('at the four bounds, no cta.* key is rendered (L49 2°, D9.19 extended)', () => {
-  const kit = JSON.parse(readFileSync(new URL('../design/strings.json', import.meta.url), 'utf8')) as Record<
-    string,
-    unknown
-  >;
+  const kit = JSON.parse(
+    readFileSync(new URL('../design/strings.json', import.meta.url), 'utf8'),
+  ) as Record<string, unknown>;
   const ctaKeys = Object.keys(kit).filter((key) => key.startsWith('cta.'));
   assert.ok(ctaKeys.length >= 4, 'the kit must still carry the militant calls to action');
 

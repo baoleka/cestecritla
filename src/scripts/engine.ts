@@ -7,6 +7,7 @@
  * (stems, no sentence) and the titles. Nothing typed is ever sent to get them.
  */
 import MiniSearch from 'minisearch';
+import { askedOf, type Asked } from '../lib/ask-local.ts';
 import {
   INDEX_OPTIONS,
   buildQuery,
@@ -66,6 +67,18 @@ export function findSections(engine: Engine, question: string, max: number): Sec
     .search(query as Parameters<typeof engine.index.search>[0], searchOptions())
     .map((r) => ({ id: String(r.id), score: r.score }));
   return groupBySection(hits).slice(0, max);
+}
+
+/**
+ * What « Demander » sends for a question (D16.22) — never the question: the measures this
+ * search finds for it, and the words of the book it matched (src/lib/ask-local.ts).
+ */
+export function findForAsk(engine: Engine, question: string): Asked {
+  const query = buildQuery(question, expand(question, engine.meta.synonyms));
+  const hits = engine.index
+    .search(query as Parameters<typeof engine.index.search>[0], searchOptions())
+    .map((r) => ({ id: String(r.id), score: r.score, terms: r.terms }));
+  return askedOf(hits, Object.keys(engine.meta.items));
 }
 
 /** An element holding text — never markup: what a visitor typed is not parsed as HTML. */

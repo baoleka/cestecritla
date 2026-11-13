@@ -63,7 +63,7 @@ export interface GameWordsFile {
  * it went through: when one is added here, every earlier attestation stops counting — a list
  * attested before a rule existed was not held to it.
  */
-export const LOCAL_CHECKS: readonly string[] = ['written', 'affirm', 'prose', 'same'];
+export const LOCAL_CHECKS: readonly string[] = ['written', 'affirm', 'prose', 'same', 'alone'];
 
 /** The parts of the public files the proof reads. */
 export interface GameSources {

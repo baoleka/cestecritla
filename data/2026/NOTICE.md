@@ -62,6 +62,8 @@ Un mot entre dans la liste s'il passe tous ces critères :
 - ce n'est ni un sujet de débat, ni un groupe de personnes, ni un lieu chargé, ni l'objet d'une
   interdiction, ni un mot du corps ou de la religion, ni un nom propre, ni un mot à deux sens ;
 - la mesure où il est épinglé ne commence pas par une interdiction, et un lien peut y arriver ;
+- cette mesure l'écrit seul, pas seulement collé à un autre mot par un trait d'union : un livre
+  qui n'écrirait que « tram-train » n'écrit pas « tram » ;
 - sa racine n'est dans aucun titre que le jeu propose comme réponse ;
 - il n'est écrit dans aucune section hors du périmètre du jeu, ni dans la prose ou un titre hors
   des sections où une mesure l'emploie ;
@@ -77,16 +79,22 @@ Tout sauf le premier, le deuxième et le dernier se prouve : `src/lib/game.ts` s
 publics, à chaque build, et `scripts/words-2026.ts` sur le texte, en local, qui atteste la liste
 et son vivier de sections par une même empreinte, et nomme les contrôles qu'elle a passés — une
 attestation plus ancienne qu'un contrôle ne compte plus, et une section jugée après coup la fait
-tomber.
+tomber. Les trois autres sont la lecture de l'éditeur, mot par mot ; pour l'y aider sans lire le
+texte à sa place, `scripts/probe-2026.ts` dit si la mesure d'un mot en porte aussi un autre —
+c'est ainsi qu'un sens se vérifie.
 
 Le lien d'un mot arrive sur le début de sa mesure. Le mot lui-même n'y est surligné que là où
 trois navigateurs l'ont vu surligné dans cette mesure, sur les pages enregistrées :
 `word-links.json` (`scripts/verify-2026.ts --words --write`) le dit par identifiants — aucun mot
-d'une page n'y entre —, et n'est cru que pour la liste et le livre sur lesquels il a été fait. Les trois autres sont la lecture de l'éditeur, mot par mot.
+d'une page n'y entre —, et n'est cru que pour la liste et le livre sur lesquels il a été fait.
 
-Le périmètre : les sections héritières des quatorze sections sensibles de l'édition 2025 ne sont
-jamais un jeu (règle 11 de `docs/discovery/07-mecaniques.md` §7.11), et les sections sans ancêtre
-en 2025 restent dehors tant que l'éditeur ne les a pas jugées une à une.
+Le périmètre (D16.26) : toutes les sections du livre sont des tuiles du jeu, mais aucun mot n'est
+tiré des sections sensibles — les héritières des quatorze sections sensibles de l'édition 2025
+(règle 11 de `docs/discovery/07-mecaniques.md` §7.11) et les sections sans ancêtre en 2025 que
+l'éditeur a écartées ; une section sans ancêtre ne prête un mot qu'une fois jugée par lui.
+
+La liste est aussi longue que ces critères le permettent, pas plus (D16.31) : des chapitres
+entiers n'ont aucun mot, et leurs sections restent des tuiles.
 
 ## Attribution
 

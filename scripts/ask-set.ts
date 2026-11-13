@@ -5,7 +5,8 @@
  * The set holds our questions, identifiers and patterns. Never a word of the programme.
  */
 import { readFileSync } from 'node:fs';
-import { MAX_QUESTION_CHARS, PROPOSITION_ID, type AskKind } from '../src/lib/ask-contract.js';
+import { MAX_QUESTION_CHARS, PROPOSITION_ID } from '../src/lib/ask-contract.js';
+import type { AskView } from '../src/lib/ask-view.js';
 import { normalize, sectionOf } from '../src/lib/search-core.js';
 import type { Manifest } from './aec26-types.js';
 
@@ -13,15 +14,15 @@ export const ASK_SET_PATH = 'eval/ask-2026.json';
 
 export type AskGroup = 'question' | 'objection' | 'variant' | 'hostile' | 'attack' | 'absent';
 
-/** The pages a visitor can end on. `silence` and `local` are states of the site, not answers. */
-export type PageKind = Exclude<AskKind, 'silence' | 'local'>;
-export const PAGE_KINDS: readonly PageKind[] = [
-  'answer',
-  'select',
-  'reviewed',
-  'none',
-  'off_topic',
-];
+/**
+ * The pages a visitor can end on (src/lib/ask-view.ts). `silence` is a state of the site, not
+ * an answer. There is no « off the subject » page any more: the model does not read the
+ * question (D16.22), so nothing can judge a message off the subject.
+ */
+export type PageKind = Exclude<AskView['kind'], 'silence'>;
+export const PAGE_KINDS: readonly PageKind[] = ['answer', 'select', 'reviewed', 'none'];
+/** What the page may show when nothing tells it which answer is right: any page of its own. */
+const ANY_PAGE: readonly PageKind[] = ['none', 'answer', 'select'];
 
 export interface AskSetItem {
   id: string;
@@ -37,7 +38,11 @@ export interface AskSetItem {
   forbidden?: string[];
   /** Patterns no shown sentence may hold — matched without case or accents. */
   never?: string[];
-  /** Patterns that find nothing in the 2026 text, or only `forbidden` (group "absent"). */
+  /**
+   * Patterns that find nothing in the 2026 text, or only `forbidden` (group "absent"). Since
+   * D16.22 they are also what no shown sentence may hold: the model cannot refuse a subject it
+   * was not told of, but it must not name it either.
+   */
   probes?: string[];
   category?: string;
   note_fr?: string;
@@ -84,9 +89,13 @@ export function foldedPattern(source: string): RegExp {
   return new RegExp(source, 'u');
 }
 
-/** True when a shown sentence holds something the item says it never may. */
+/**
+ * True when a shown sentence holds something the item says it never may — for an absent
+ * subject, the words of the subject itself.
+ */
 export function breaksNever(item: AskSetItem, sentences: readonly string[]): string | null {
-  for (const source of item.never ?? []) {
+  const sources = [...(item.never ?? []), ...(item.group === 'absent' ? (item.probes ?? []) : [])];
+  for (const source of sources) {
     const pattern = foldedPattern(source);
     if (sentences.some((sentence) => pattern.test(normalize(sentence)))) return source;
   }
@@ -154,7 +163,9 @@ export function askSetProblems(
     }
     if (item.slug !== undefined && !slugs.has(item.slug))
       say(item.id, `unknown objection ${item.slug}`);
-    if (written && item.group !== 'hostile' && item.group !== 'attack') {
+    // An answer is expected somewhere only where the item is a question the book answers.
+    const anywhere = item.group === 'hostile' || item.group === 'attack' || item.group === 'absent';
+    if (written && !anywhere) {
       if ((item.sections ?? []).length === 0)
         say(item.id, 'a written page with no expected section');
     }
@@ -194,8 +205,10 @@ export function askSetProblems(
         if (!item.expect.includes('reviewed')) say(item.id, 'a variant accepts the re-read answer');
         break;
       case 'absent':
-        if (!same(item.expect, ['none']))
-          say(item.id, 'an absent subject expects "none" and nothing else');
+        // Nothing can refuse it any more (D16.22): any page of the site's own is admitted, and
+        // the probes say what no sentence of it may hold.
+        if (!ANY_PAGE.every((kind) => item.expect.includes(kind)))
+          say(item.id, 'an absent subject admits every page of the site: none, answer, select');
         if ((item.probes ?? []).length === 0) say(item.id, 'an absent subject without a probe');
         break;
       case 'hostile':

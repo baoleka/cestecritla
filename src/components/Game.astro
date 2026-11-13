@@ -23,7 +23,7 @@ import '../styles/game.css';
 import Turtle from './Turtle.astro';
 import { readFileSync } from 'node:fs';
 import { buildGame, gameSite } from '../lib/game-data.ts';
-import { ROUND, locate, otherParts } from '../lib/game-engine.ts';
+import { ROUND, isLongWord, locate, otherParts } from '../lib/game-engine.ts';
 import { safeJson, t } from '../lib/strings.ts';
 
 const { data, fingerprint } = buildGame();
@@ -169,7 +169,11 @@ const config = {
       words.map((word) => (
         <div class={`g-word g-word-${String(word.n)}`}>
           <p class="g-kicker">{t('game.kicker')}</p>
-          <p class="g-the-word" data-programme="word">
+          <p
+            class="g-the-word"
+            data-programme="word"
+            data-long={isLongWord(word.word) ? '' : undefined}
+          >
             {word.word}
           </p>
           <div class="g-question">

@@ -1,18 +1,21 @@
 /**
- * The private base, as the Worker will find it — checked where the text of the 2026 edition
- * is (the editor's machine), skipped and said so elsewhere.
+ * What the model is handed, and from where.
  *
- *   - loaded on Node's SQLite, every row is the text whose hash the public manifest publishes:
- *     the base cannot hold another state of the book, or a retouched sentence;
- *   - the search of the Worker (src/worker/retrieve.ts) finds, for the questions of the
- *     dossier, a measure of a section where the subject is treated. An answer can only be as
- *     right as what the model was handed: this floor is the first gate of « Demander ».
+ *   - the private base, as the Worker will find it — checked where the text of the 2026 edition
+ *     is (the editor's machine), skipped and said so elsewhere: loaded on Node's SQLite, every
+ *     row is the text whose hash the public manifest publishes, and there is nothing in it but
+ *     that table and its description — no index, no second copy of the text;
+ *   - what the page names to the Worker (D16.22), for the questions of the dossier: a measure
+ *     of a section where the subject is treated. An answer can only be as right as what the
+ *     model was handed: this floor is the first gate of « Demander ». Public files only — it
+ *     runs everywhere.
  *
  * Run: npx tsx --test scripts/ask-retrieval.test.ts
  */
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
+import { MAX_ASKED_IDS } from '../src/lib/ask-contract.js';
 import type { Manifest, PrivateCorpus } from './aec26-types.js';
 import { retrievalReport } from './ask-retrieval.js';
 import { loadAskSet } from './ask-set.js';
@@ -47,39 +50,28 @@ void test('the base starts stopped: answers open by a second gesture', { skip },
   assert.equal(row?.['value'], 'stopped');
 });
 
-void test(
-  'for the questions of the dossier, the base finds a measure of an expected section',
-  { skip },
-  async () => {
-    const set = loadAskSet();
-    const questions = await retrievalReport(
-      corpus(),
-      set.items.filter((i) => i.group === 'question'),
-    );
-    console.log(
-      `  ${String(questions.inContext)}/${String(questions.questions)} among the candidates, ` +
-        `${String(questions.inFirstThree)} among the first three ; ${String(questions.meanCandidates)} ` +
-        `candidates, ${String(questions.meanCharacters)} characters on average`,
-    );
-    // Measured on 13/11/2026: 86 of 87 among the candidates, 82 among the first three. The
-    // floors are those values less one question — a re-crawl may move one, not three.
-    assert.equal(questions.questions, 87);
-    assert.ok(
-      questions.inContext >= 85,
-      `only ${String(questions.inContext)} among the candidates`,
-    );
-    assert.ok(
-      questions.inFirstThree >= 81,
-      `only ${String(questions.inFirstThree)} in the first three`,
-    );
-    assert.equal(questions.empty, 0, 'a question of the dossier finds nothing at all');
-    // What one question costs is bounded by what the model is given to read.
-    assert.ok(questions.maxCharacters <= 6000 && questions.meanCharacters <= 4500);
+void test('for the questions of the dossier, the page names a measure of an expected section', () => {
+  const set = loadAskSet();
+  const questions = retrievalReport(set.items.filter((i) => i.group === 'question'));
+  console.log(
+    `  ${String(questions.inContext)}/${String(questions.questions)} among the measures named, ` +
+      `${String(questions.inFirstThree)} among the three the page shows ; ` +
+      `${String(questions.meanCandidates)} measures, ${String(questions.meanTerms)} words of the book on average`,
+  );
+  // Measured on 13/11/2026, after D16.22 moved the choice of the measures to the page: 87 of
+  // 87 among those named, 84 among the three shown. The floors are those values less one
+  // question — a re-crawl may move one, not three.
+  assert.equal(questions.questions, 87);
+  assert.ok(questions.inContext >= 86, `only ${String(questions.inContext)} among those named`);
+  assert.ok(
+    questions.inFirstThree >= 83,
+    `only ${String(questions.inFirstThree)} among the three shown`,
+  );
+  assert.equal(questions.empty, 0, 'a question of the dossier finds nothing at all');
+  // What one request costs is bounded by how many measures it may name.
+  assert.ok(questions.maxCandidates <= MAX_ASKED_IDS);
 
-    const variants = await retrievalReport(
-      corpus(),
-      set.items.filter((i) => i.group === 'variant'),
-    );
-    assert.equal(variants.inContext, variants.questions, `missed: ${variants.misses.join(', ')}`);
-  },
-);
+  const variants = retrievalReport(set.items.filter((i) => i.group === 'variant'));
+  // One variant is an objection said another way: its right page is the re-read answer.
+  assert.ok(variants.inContext >= variants.questions - 1, `missed: ${variants.misses.join(', ')}`);
+});

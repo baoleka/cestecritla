@@ -94,13 +94,7 @@ const MAX_SENTENCE_WORDS = 15;
 const MIN_HONEST_NEGATIVE = 8;
 const NBSP = ' ';
 const VOICES: readonly Voice[] = ['militant', 'indecis', 'jeune'];
-const KINDS: readonly AnswerKind[] = [
-  'sections',
-  'measures',
-  'absent',
-  'partial',
-  'premise-false',
-];
+const KINDS: readonly AnswerKind[] = ['sections', 'measures', 'absent', 'partial', 'premise-false'];
 
 /** Same rule as data/faq.json meta.normalized_rule_fr. */
 const normalize = (text: string): string =>

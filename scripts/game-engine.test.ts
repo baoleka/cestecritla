@@ -8,6 +8,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
+  LONG_WORD,
   ROUND,
   advance,
   asksAt,
@@ -21,6 +22,7 @@ import {
   found,
   foundNow,
   hintFor,
+  isLongWord,
   judge,
   locate,
   otherParts,
@@ -464,4 +466,15 @@ void test('two tabs that played apart become one game: the most of each, in any 
     { ...emptyKept(), seen: ['w003', 'w004', 'w005'] },
   );
   assert.equal(depthOf(BOOK, merged.seen), 2);
+});
+
+void test('a long word is set smaller rather than cut: fifteen letters and more', () => {
+  assert.equal(LONG_WORD, 15);
+  assert.equal(isLongWord('microprocesseurs'), true);
+  assert.equal(isLongWord('assainissement'), false);
+  // Letters are counted as a reader counts them, however the accents are encoded.
+  const decomposed = 'bibliothe' + String.fromCodePoint(0x300) + 'ques';
+  assert.equal(decomposed.length, 14);
+  assert.equal(isLongWord(decomposed + 'ab'), true);
+  assert.equal(isLongWord(decomposed + 'a'), false);
 });

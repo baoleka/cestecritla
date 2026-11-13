@@ -13,11 +13,10 @@ export type AskView =
   | { kind: 'answer'; sentences: AskSentence[] }
   /** Three measures and no sentence. `local` when the page chose them itself. */
   | { kind: 'select'; ids: string[]; local: boolean }
-  /** One of the fifteen answers a person wrote. */
+  /** One of the fifteen answers a person wrote: recognised on the phone, never by the Worker. */
   | { kind: 'reviewed'; slug: string }
   /** Nothing found with these words — never "the programme does not speak of it". */
   | { kind: 'none' }
-  | { kind: 'off_topic' }
   | { kind: 'silence'; reopen: string };
 
 export interface ViewContext {
@@ -25,8 +24,6 @@ export interface ViewContext {
   corpus: string;
   /** True when the page can name this measure and link to it. */
   knows: (id: string) => boolean;
-  /** True when the page has an answer page for this objection. */
-  hasAnswer: (slug: string) => boolean;
   /** The measures the page's own search found for the question, best first. */
   localIds: readonly string[];
 }
@@ -47,12 +44,8 @@ export function viewOf(response: AskResponse | null, context: ViewContext): AskV
         return own();
       }
       return { kind: 'select', ids: response.ids, local: false };
-    case 'reviewed':
-      return context.hasAnswer(response.slug) ? response : own();
     case 'local':
       return own();
-    case 'none':
-    case 'off_topic':
     case 'silence':
       return response;
   }

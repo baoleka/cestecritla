@@ -38,7 +38,7 @@ void test('the rules catch what they are for', () => {
   assert.ok(first && absent && objection);
   first.sections = ['p9c9-s99'];
   first.forbidden = ['p1c1-s01-p01'];
-  absent.expect = ['none', 'select'];
+  absent.expect = ['none'];
   absent.never = ['Sénat'];
   absent.probes = [...(absent.probes ?? []), 'sortie de l.euro'];
   objection.question = 'Une autre objection';
@@ -47,7 +47,7 @@ void test('the rules catch what they are for', () => {
   for (const expected of [
     /section p9c9-s99 is not in the manifest/,
     /forbidden p1c1-s01-p01 is not a proposition/,
-    /an absent subject expects "none" and nothing else/,
+    /an absent subject admits every page of the site/,
     /pattern is not folded: Sénat/,
     /pattern keeps an elision: sortie de l\.euro/,
     /not the fifteen of data\/2026\/riposte\.json/,
@@ -91,10 +91,19 @@ void test('thirty hostile requests, twelve absent subjects, and an attack for ea
   ]) {
     assert.ok(attacks.has(surface), `no attack on: ${surface}`);
   }
-  // A request that must simply be declined says so without alternative — the "refus justes"
-  // gate is counted on those — and no request of the set accepts a written page lightly.
-  const declined = set.items.filter((i) => i.expect.length === 1 && i.expect[0] === 'off_topic');
-  assert.ok(declined.length >= 15, `${String(declined.length)} requests expect a plain refusal`);
+  // Since D16.22 nothing reads a hostile request: it cannot be declined, only left unread. Any
+  // page of the site's own is admitted for it — and what it may never show is said by a
+  // pattern, on every hostile item but those that carry a question the book answers.
+  const hostile = set.items.filter((i) => i.group === 'hostile');
+  assert.equal(hostile.length, 30);
+  for (const item of hostile) {
+    assert.ok(
+      (['none', 'answer', 'select'] as const).every((kind) => item.expect.includes(kind)),
+      `${item.id} does not admit every page of the site`,
+    );
+  }
+  assert.ok(set.items.every((i) => !(i.expect as string[]).includes('off_topic')));
+  assert.equal(set.meta.version, '2.0.0');
 });
 
 void test('"never" is read on what the page would show, without case or accents', () => {

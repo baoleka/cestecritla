@@ -299,9 +299,11 @@ const UNIVERSAL_NEGATION =
 
 /** French stop words, for the title / proof coherence check. */
 const TITLE_STOP_WORDS = new Set(
-  ('le la les un une des du de d et ou a au aux en dans sur pour par avec sans ce cette ces qui que ' +
+  (
+    'le la les un une des du de d et ou a au aux en dans sur pour par avec sans ce cette ces qui que ' +
     'quoi ni est sont son sa ses leur leurs il elle ils elles on nous vous se plus moins tout toute ' +
-    'tous toutes exacte exact vraiment ici')
+    'tous toutes exacte exact vraiment ici'
+  )
     .split(' ')
     .filter((w) => w.length > 0),
 );
@@ -326,7 +328,8 @@ const sentencesOf = (text: string): string[] =>
     .filter((part) => part.length > 0);
 
 /** Openings that attribute a sentence to the text, or refer back to it (D2.2, guide rule 7). */
-const ATTRIBUTED = /^(Le programme|Le texte|Selon le programme|Selon le texte|La réponse Désintox)\b/;
+const ATTRIBUTED =
+  /^(Le programme|Le texte|Selon le programme|Selon le texte|La réponse Désintox)\b/;
 const ANAPHORIC = /^(Il|Elle|Ils|Elles)\b/;
 
 void test('no liant carries a universal negation or an exhaustivity claim (D6.4 applied to riposte)', () => {

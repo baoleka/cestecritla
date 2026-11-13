@@ -14,7 +14,6 @@ const KNOWN = new Set(['p1c1-s01-k01', 'p1c1-s01-m01', 'p1c1-s02-m03', 'p2c1-s01
 const context = (overrides: Partial<ViewContext> = {}): ViewContext => ({
   corpus: CORPUS,
   knows: (id) => KNOWN.has(id),
-  hasAnswer: (slug) => slug === 'retraites',
   localIds: ['p1c1-s02-m03', 'p9c9-s09-m09', 'p1c1-s01-k01', 'p2c1-s01-m02', 'p1c1-s01-m01'],
   ...overrides,
 });
@@ -32,12 +31,6 @@ void test('an answer the page can use is shown as it came', () => {
     ids: ['p1c1-s01-m01'],
     local: false,
   });
-  assert.deepEqual(viewOf({ kind: 'reviewed', slug: 'retraites' }, context()), {
-    kind: 'reviewed',
-    slug: 'retraites',
-  });
-  const plain: AskResponse[] = [{ kind: 'none' }, { kind: 'off_topic' }];
-  for (const response of plain) assert.deepEqual(viewOf(response, context()), response);
   const silence: AskResponse = { kind: 'silence', reopen: '2027-04-18T18:00:00.000Z' };
   assert.deepEqual(viewOf(silence, context()), silence);
 });
@@ -51,7 +44,6 @@ void test('an answer the page cannot use becomes what the page found by itself',
     { kind: 'answer', corpus: CORPUS, sentences: [{ text: 'x', ids: ['p9c9-s09-m09'] }] },
     { kind: 'select', corpus: 'aaaaaaaaaaaaaaaa', ids: ['p1c1-s01-k01'] },
     { kind: 'select', corpus: CORPUS, ids: ['p1c1-s01-k01', 'p9c9-s09-m09'] },
-    { kind: 'reviewed', slug: 'une-reponse-qui-n-existe-pas' },
   ];
   for (const response of unusable) {
     assert.deepEqual(viewOf(response, context()), OWN, JSON.stringify(response));

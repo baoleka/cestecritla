@@ -1,16 +1,32 @@
 /**
- * The contract of a question (D16.2 to D16.8) — what the model is asked for, and what
- * `/api/ask` answers. One file, four users: the Worker, the page, the bench and the tests.
- * No import, no DOM, no Node API, no Workers API.
+ * The contract of « Demander » (D16.2 to D16.8, D16.22) — what leaves the phone, what the model
+ * is asked for, and what `/api/ask` answers. One file, four users: the Worker, the page, the
+ * bench and the tests. No import, no DOM, no Node API, no Workers API.
  *
- * The rule everything here serves: **no word of the programme leaves the Worker**. The model
- * reads the text of a dozen measures; what comes back to the browser is sentences of ours and
- * identifiers, and nothing else. No field of `AskResponse` can hold a text of the book — the
- * titles, the numbers and the links are resolved in the browser, from files already public.
+ * Two rules everything here serves.
+ *
+ * **The sentence never leaves the phone** (D16.22). A question on a political programme can
+ * say an opinion, a job, an illness: the editor wanted article 9 of the GDPR respected without
+ * having to ask for a consent, and the one way to be sure of what is not processed is not to
+ * receive it. So `AskRequest` has no field for a sentence. The page searches by itself, as it
+ * always did, and sends what the search found: identifiers of measures, and the words of the
+ * BOOK its search matched — stems of the public index, without order. The model then says what
+ * those measures provide; it does not know what was asked. Nothing a visitor writes of
+ * themselves can leave, and no instruction hidden in a question can reach the model.
+ *
+ * **No word of the programme leaves the Worker.** The model reads the text of the measures it
+ * is named; what comes back to the browser is sentences of ours and identifiers, and nothing
+ * else. No field of `AskResponse` can hold a text of the book — the titles, the numbers and the
+ * links are resolved in the browser, from files already public.
  */
 
-/** A question longer than this is not sent: it is a paste, not a question. */
+/** What the field accepts: more is a paste, not a question. It bounds the local search only. */
 export const MAX_QUESTION_CHARS = 300;
+/** How many measures a request may name, and how many words of the book may go with them. */
+export const MAX_ASKED_IDS = 24;
+export const MAX_ASKED_TERMS = 12;
+/** A stem of the public index, as src/lib/search-core.ts cuts it: folded, lower case, one word. */
+export const ASKED_TERM = /^[a-z0-9]{2,32}$/;
 /** An answer is one to three sentences, each of one to two measures, each short. */
 export const MAX_SENTENCES = 3;
 export const MAX_WORDS_PER_SENTENCE = 35;
@@ -40,10 +56,13 @@ export interface ModelSentence {
   ids: string[];
 }
 
+/**
+ * No sentence at all is an answer too: none of the measures holds the words that came with
+ * them. (There used to be a `hors_programme` flag, for a message that was not a question about
+ * the programme. The model no longer reads a message: it has nothing to judge off the subject.)
+ */
 export interface ModelAnswer {
   phrases: ModelSentence[];
-  /** True when the message is not a question about what the programme contains. */
-  hors_programme: boolean;
 }
 
 /** The JSON schema the model's output is constrained by (Workers AI `response_format`). */
@@ -69,9 +88,8 @@ export const MODEL_ANSWER_SCHEMA = {
         required: ['texte', 'ids'],
       },
     },
-    hors_programme: { type: 'boolean' },
   },
-  required: ['phrases', 'hors_programme'],
+  required: ['phrases'],
 } as const;
 
 /**
@@ -81,7 +99,6 @@ export const MODEL_ANSWER_SCHEMA = {
  */
 export interface ModelSelection {
   ids: string[];
-  hors_programme: boolean;
 }
 
 export const MODEL_SELECT_SCHEMA = {
@@ -89,9 +106,8 @@ export const MODEL_SELECT_SCHEMA = {
   additionalProperties: false,
   properties: {
     ids: { type: 'array', maxItems: MAX_SELECTED, items: { type: 'string' } },
-    hors_programme: { type: 'boolean' },
   },
-  required: ['ids', 'hors_programme'],
+  required: ['ids'],
 } as const;
 
 /** A measure offered to the model. Its text is private: it never leaves the Worker. */
@@ -121,10 +137,10 @@ function unwrap(raw: unknown): unknown {
 export function parseModelSelection(raw: unknown): ModelSelection | null {
   const value = unwrap(raw);
   if (!isRecord(value)) return null;
-  const { ids, hors_programme: outside } = value;
-  if (!Array.isArray(ids) || typeof outside !== 'boolean') return null;
+  const { ids } = value;
+  if (!Array.isArray(ids)) return null;
   if (!ids.every((id): id is string => typeof id === 'string')) return null;
-  return { ids: [...ids], hors_programme: outside };
+  return { ids: [...ids] };
 }
 
 /**
@@ -135,8 +151,8 @@ export function parseModelSelection(raw: unknown): ModelSelection | null {
 export function parseModelAnswer(raw: unknown): ModelAnswer | null {
   const value = unwrap(raw);
   if (!isRecord(value)) return null;
-  const { phrases, hors_programme: outside } = value;
-  if (!Array.isArray(phrases) || typeof outside !== 'boolean') return null;
+  const { phrases } = value;
+  if (!Array.isArray(phrases)) return null;
   const out: ModelSentence[] = [];
   for (const phrase of phrases) {
     if (!isRecord(phrase)) return null;
@@ -145,7 +161,7 @@ export function parseModelAnswer(raw: unknown): ModelAnswer | null {
     if (!ids.every((id): id is string => typeof id === 'string')) return null;
     out.push({ texte, ids: [...ids] });
   }
-  return { phrases: out, hors_programme: outside };
+  return { phrases: out };
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -164,27 +180,25 @@ export interface AskSentence {
  *   answer     sentences written by the model, each tied to measures, all through the control
  *   select     three measures and no sentence: the control refused the writing, or the mode is
  *              "select"
- *   reviewed   the question is one of the fifteen objections a person answered: no model ran
- *   none       nothing found with these words (never "the programme does not speak of it")
- *   off_topic  not a question about what the programme contains
  *   silence    electoral silence: questions reopen at `reopen` (ISO 8601, UTC)
- *   local      no model for this question — quota of the day, stop flag, another state of the
- *              book, a slow model. The page shows what the local search found, and says nothing
- *              of why: it is a normal mode.
+ *   local      no model this time — quota of the day, stop flag, another state of the book, a
+ *              slow model, nothing to say of these measures. The page shows what its own
+ *              search found, and says nothing of why: it is a normal mode.
+ *
+ * What the Worker no longer says, because it no longer can (D16.22): that an objection has a
+ * re-read answer, that nothing was found, that a message is off the subject. It does not read
+ * the question. The first two are decided on the phone, before anything is sent
+ * (src/scripts/ask.ts); the third has no object left.
  */
 export type AskResponse =
   | { kind: 'answer'; corpus: string; sentences: AskSentence[] }
   | { kind: 'select'; corpus: string; ids: string[] }
-  | { kind: 'reviewed'; slug: string }
-  | { kind: 'none' }
-  | { kind: 'off_topic' }
   | { kind: 'silence'; reopen: string }
   | { kind: 'local' };
 
 export type AskKind = AskResponse['kind'];
 
 const CORPUS_VERSION = /^[0-9a-f]{16}$/;
-const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const ISO_INSTANT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/;
 /** Generous: thirty-five French words. The control counts the words; this bounds the bytes. */
 const MAX_SENTENCE_CHARS = 400;
@@ -230,20 +244,11 @@ export function parseAskResponse(value: unknown): AskResponse | null {
       if (typeof corpus !== 'string' || !CORPUS_VERSION.test(corpus) || ids === null) return null;
       return { kind: 'select', corpus, ids };
     }
-    case 'reviewed': {
-      const { slug } = value;
-      if (typeof slug !== 'string' || slug.length > 64 || !SLUG.test(slug)) return null;
-      return { kind: 'reviewed', slug };
-    }
     case 'silence': {
       const { reopen } = value;
       if (typeof reopen !== 'string' || !ISO_INSTANT.test(reopen)) return null;
       return { kind: 'silence', reopen };
     }
-    case 'none':
-      return { kind: 'none' };
-    case 'off_topic':
-      return { kind: 'off_topic' };
     case 'local':
       return { kind: 'local' };
     default:
@@ -251,20 +256,34 @@ export function parseAskResponse(value: unknown): AskResponse | null {
   }
 }
 
-/** What the page sends. The token is Turnstile's; the corpus is the state of the book it shows. */
+/**
+ * What the page sends at the gesture « Demander », and all of it: the state of the book it
+ * shows, the measures its own search found — best first — and the words of the book that
+ * search matched. No sentence, no token, nothing typed.
+ */
 export interface AskRequest {
-  q: string;
-  token: string;
   corpus: string;
+  ids: string[];
+  terms: string[];
 }
 
-/** Reads a request in the Worker. `null` is a request nobody honest sends. */
+/**
+ * Reads a request in the Worker. `null` is a request the page never sends. The shape is the
+ * guarantee: an identifier is an identifier of the book, and a term is one folded word — a
+ * sentence does not fit, whoever writes the request. The terms come back sorted and without
+ * repeats: whatever order they were sent in is not kept.
+ */
 export function parseAskRequest(value: unknown): AskRequest | null {
   if (!isRecord(value)) return null;
-  const { q, token, corpus } = value;
-  if (typeof q !== 'string' || typeof token !== 'string' || typeof corpus !== 'string') return null;
-  const question = q.trim();
-  if (question === '' || question.length > MAX_QUESTION_CHARS) return null;
-  if (token.length > 4096 || !CORPUS_VERSION.test(corpus)) return null;
-  return { q: question, token, corpus };
+  const { corpus, ids, terms } = value;
+  if (typeof corpus !== 'string' || !CORPUS_VERSION.test(corpus)) return null;
+  const named = idList(ids, MAX_ASKED_IDS);
+  if (named === null) return null;
+  if (!Array.isArray(terms) || terms.length > MAX_ASKED_TERMS) return null;
+  const words: string[] = [];
+  for (const term of terms) {
+    if (typeof term !== 'string' || !ASKED_TERM.test(term)) return null;
+    if (!words.includes(term)) words.push(term);
+  }
+  return { corpus, ids: named, terms: words.sort() };
 }

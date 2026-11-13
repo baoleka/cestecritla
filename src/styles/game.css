@@ -65,6 +65,11 @@ html[data-silence] .game {
   line-height: 1.15;
   font-weight: 700;
 }
+/* Fifteen letters or more (LONG_WORD, src/lib/game-engine.ts): one step smaller, so that the
+   word stands on one line at 320 px instead of being cut by the browser. */
+.g-the-word[data-long] {
+  font-size: var(--font-size-h1);
+}
 .game h3 {
   margin-block: var(--space-2);
 }

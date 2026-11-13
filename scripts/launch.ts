@@ -54,7 +54,7 @@ export interface DatedGestures {
   legal_readings_done_on: string | null;
   /** How the data controller is named on the site (P0.4, GDPR art. 13). */
   controller_decided_on: string | null;
-  /** Cloudflare dashboard: gateway logs off, Turnstile widget for both hosts, no payment method. */
+  /** Cloudflare dashboard: gateway logs off, no payment method (no Turnstile widget: D16.23). */
   dashboard_checked_on: string | null;
   /** The preview was used on real phones, in-app browsers included. */
   phones_tried_on: string | null;
@@ -99,7 +99,7 @@ const DATED: readonly (readonly [keyof DatedGestures, string])[] = [
   ['controller_decided_on', 'how the data controller is named is not decided (P0.4)'],
   [
     'dashboard_checked_on',
-    'the Cloudflare dashboard is not checked: gateway logs off, Turnstile widget, no payment method',
+    'the Cloudflare dashboard is not checked: gateway logs off, no payment method',
   ],
   ['phones_tried_on', 'the preview has not been tried on real phones'],
   ['personas_session_on', 'the persona session has not been played (D14.8)'],

@@ -7,12 +7,13 @@
  * what the HOST sees, as any host does — and that a link to the official site leaves this one.
  *
  * Only what is true of this build is rendered (D16.4). While the site answers no question,
- * the search is local and that is the whole story. When it does, the page says where a question
- * goes at the gesture « Demander », to whom, what for, that we log none of it — and the two
- * things that are kept all the same, by Cloudflare, each for what it is: the answer, thirty days
- * under a code computed from the question (the gateway's cache), and a counter under a code
- * computed from the address, one minute (the rate limiter). Then Turnstile, which guards the
- * gesture: what was measured of it, not more.
+ * the search is local and that is the whole story. When it does, the page says that the
+ * sentence typed does not leave the phone (D16.22), what leaves in its place at the gesture
+ * « Demander » — words of the book and numbers of measures — to whom, that we log none of it,
+ * and the two things that are kept all the same, by Cloudflare, each for what it is: the
+ * answer, thirty days under a code computed from what was sent (the gateway's cache), and a
+ * counter under a code computed from the address, one minute (the rate limiter). No third
+ * party guards the gesture: there is no bot check (D16.23).
  *
  * In a build that shows the game (D16.14), the page also says what the game writes on the
  * phone — the one thing the site ever writes anywhere — from the one map of those writings
@@ -45,7 +46,6 @@ const GameStorage = __CEL_GAME_WRITES__
     <li>{asking ? t('privacy.policy.02', { model }) : t('privacy.policy.02.local')}</li>
     {asking && <li>{t('privacy.policy.03.ask')}</li>}
     {asking && <li>{t('privacy.policy.rate')}</li>}
-    {asking && <li>{t('privacy.policy.06')}</li>}
     <li>{t('privacy.no_measure')}</li>
     <li>{t('privacy.policy.09')}</li>
     <li>{t('privacy.outbound')}</li>
@@ -61,7 +61,6 @@ const GameStorage = __CEL_GAME_WRITES__
     <li>{t('privacy.never.04')}</li>
     {GameStorage !== null && <li>{t('privacy.never.05')}</li>}
     <li>{t('privacy.never.06')}</li>
-    {asking && <li>{t('privacy.never.08')}</li>}
     <li>{t('privacy.never.09')}</li>
   </ul>
   <p>{t('privacy.never.host_v1')}</p>

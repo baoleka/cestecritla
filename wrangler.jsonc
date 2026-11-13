@@ -10,12 +10,13 @@
   //
   // What it binds, and nothing else (the list of 09-architecture.md predates D13.1 and D16):
   //   AI      Workers AI, through the AI Gateway "aec" (cache of 30 days, logs off)
-  //   DB      the private base: the text of the 2026 edition, read, never served (D16.6)
+  //   DB      the private base: the text of the 2026 edition, read by identifier, never
+  //           served and never searched (D16.6, D16.22)
   //   BUDGET  the daily allowance, one Durable Object for the whole site (D7.4)
   //   RATE    the rate limiter, on a key that says nothing of an address (D7.5)
-  // No KV, no Analytics Engine, no cron, no queue. Three secrets are set in the editor's
-  // terminal with `wrangler secret put`, never written here: TURNSTILE_SECRET, RATE_SALT, and
-  // BENCH_KEY (preview only).
+  // No KV, no Analytics Engine, no cron, no queue — and no bot check: there is no Turnstile
+  // (D16.23). Two secrets are set in the editor's terminal with `wrangler secret put`, never
+  // written here: RATE_SALT, and BENCH_KEY (preview only).
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "cestecritla",
   "main": "src/worker/index.ts",
@@ -70,7 +71,6 @@
     // the "local" answer (scripts/build-mode.test.ts holds this to the manifest).
     "CORPUS_VERSION": "27ee6e713fe25e7e",
     "ENVIRONMENT": "production",
-    "TURNSTILE_HOSTNAMES": "cestecritla.fr,www.cestecritla.fr",
     // Neurons a day the site allows itself, of the 10 000 the free plan gives (D7.4).
     "NEURON_HARD_STOP": "8500",
   },
@@ -114,7 +114,6 @@
       "vars": {
         "CORPUS_VERSION": "27ee6e713fe25e7e",
         "ENVIRONMENT": "preview",
-        "TURNSTILE_HOSTNAMES": "beta.cestecritla.fr",
         "NEURON_HARD_STOP": "8500",
       },
     },

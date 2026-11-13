@@ -31,6 +31,7 @@ import {
   entryOf,
   foundNow,
   hintFor,
+  isLongWord,
   judge,
   otherParts,
   placeOf,
@@ -284,13 +285,19 @@ function start(
     store.save(memory());
   }
 
+  /** The word of the programme, marked as one — and one step smaller when it is long. */
+  function theWord(word: string): HTMLElement {
+    const shown = el('p', word, 'g-the-word');
+    shown.dataset.programme = 'word';
+    if (isLongWord(word)) shown.dataset.long = '';
+    return shown;
+  }
+
   function renderAsk(wordId: string, word: string, focus: boolean): void {
     if (session.play.screen.kind !== 'ask') return;
     const { ask, said } = session.play.screen;
     const panel = el('div', undefined, 'g-word');
-    const shown = el('p', word, 'g-the-word');
-    shown.dataset.programme = 'word';
-    panel.append(el('p', s.kicker, 'g-kicker'), shown);
+    panel.append(el('p', s.kicker, 'g-kicker'), theWord(word));
     if (said !== null) panel.append(el('p', sentence(wordId, said.ask, said.verdict), 'g-said'));
 
     const heading = el('h3', s.ask[ask], 'g-ask');
@@ -342,9 +349,7 @@ function start(
     const place = placeOf(data, wordId);
     if (entry === null || place === null) return;
     const panel = el('div', undefined, 'g-word');
-    const shown = el('p', word, 'g-the-word');
-    shown.dataset.programme = 'word';
-    panel.append(el('p', s.kicker, 'g-kicker'), shown);
+    panel.append(el('p', s.kicker, 'g-kicker'), theWord(word));
 
     const card = el('div', undefined, 'g-place');
     const heading = el(

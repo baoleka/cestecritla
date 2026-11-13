@@ -3,8 +3,29 @@
 > **Plan en vigueur, approuvé par l'utilisateur le 13 novembre 2026.** Il remplace ce qui restait
 > de `PLAN-EDITION-2026.md` (dont la date du 15 décembre) ; les décisions qu'il porte sont
 > **D16.1 à D16.21** dans `decisions.md`. Il s'adresse à l'utilisateur (« tu »). Son journal
-> d'exécution est en fin de fichier. Une correction depuis l'approbation, issue de l'inventaire du
-> code : le jeton Turnstile se demande au premier focus du champ, pas à l'envoi (D9.13, D16.8).
+> d'exécution est en fin de fichier.
+>
+> **Le corps du plan est laissé tel qu'il a été approuvé ; dix décisions du soir même le
+> changent** (D16.22 à D16.31 ; journal, « Les décisions du 13 novembre au soir » et suivants).
+> À lire par-dessus le texte :
+>
+> - **la phrase tapée ne quitte pas le téléphone** (D16.22) : partout où le plan écrit que « la
+>   question » part au Worker ou au modèle (§1.2 à §1.4, §2.1, §2.2, §2.7, §5), ce sont des
+>   identifiants de mesures et des mots du livre qui partent. Le modèle ne lit pas la question ;
+>   le Worker ne cherche plus, il lit les mesures qu'on lui nomme (la base n'a plus d'index) ;
+>   l'état « hors sujet » de §1.4 n'existe plus, personne ne lisant la question ; les portes
+>   « demandes hostiles » et « refus justes » de §2.5 ont changé de sens (`08-ia.md` §10.7) ;
+> - **il n'y a plus de Turnstile**, nulle part (D16.23) : ni widget, ni secret, ni ligne au
+>   tableau de §5 ;
+> - **chercher n'écrit rien dans l'adresse**, pas même après `#q=` (D16.25, contre §3 et §5) ;
+> - **toutes les sections sont des tuiles**, et aucun mot n'est tiré des dix-huit sections
+>   sensibles (D16.26, là où §4 et §6 retiraient ces sections du jeu) ;
+> - **les phrases de §1.2 et §1.3 sont réécrites** (D16.30) : « Voici ce que prévoient les
+>   mesures trouvées : », et une mention qui dit que l'IA a lu les mesures, pas la question ;
+> - **la liste du jeu fait 48 mots, pas « autour de 90 »** (D16.31, contre §6 et le lot J3) :
+>   c'est ce que les critères laissent passer, et des chapitres entiers n'ont aucun mot.
+>
+> Où en sont tes gestes : sous le titre de §9.1.
 
 > **Tes décisions du 13 novembre 2026, dans l'ordre où tu les as prises.**
 > *Matin* — le produit devient un jeu, avec une tortue « buddy », non négociable ; pas de
@@ -462,6 +483,20 @@ n'est enregistré » ne reste écrit que pour la recherche ; « aucune IA ne ré
 ## 9. Le chemin vers la production
 
 ### 9.1 Tes gestes, dans l'ordre — à faire pendant que je construis
+
+> **Où en sont ces gestes, au 13 novembre 2026 au soir.** *Faits* : le 8 en entier — les onze
+> sections, les neuf mots, puis la liste entière : 48 mots (D16.31) ; le 9 (la planche, le
+> lait-fraise) ;
+> la relecture des sections du jeu et la relecture hostile sont datées. *Changés* : plus de
+> widget ni de secret Turnstile aux gestes 4 et 6 (D16.23) — la base se crée d'abord
+> (`npx wrangler d1 create cestecritla-ask`), et les deux secrets du banc sont `RATE_SALT` et
+> `BENCH_KEY`. *L'aperçu sert la build de D16 depuis ce soir* (journal, lot O4) : les gestes 1, 5
+> et 10 se font dessus — sauf « demander », qui n'y paraît qu'après le banc ; s'y ajoute : jouer
+> les seize manches en suivant le lien de chaque mot neuf, dont le sens a été sondé, pas lu
+> (H-MEC-9). *Ajouté au
+> geste 4* : les deux hôtes servent, avant notre `robots.txt`, le bloc « Managed content » de
+> Cloudflare, un réglage de la zone qu'aucune décision n'a pris — à garder ou à couper en le
+> sachant. **Ce qui manque encore se calcule** : `npx tsx scripts/launch.ts`.
 
 Dès maintenant, sans m'attendre :
 
@@ -1459,3 +1494,175 @@ lui ont été posées, par petits lots, chacune avec ce qu'elle engage. Ses rép
 Portes, après la validation : 378 tests (377 passent, 1 sauté, 0 échoue) ; bout en bout,
 Chromium / Firefox / WebKit : l'app 37 / 34 / 34, « Demander » 70 / 65 / 65, le jeu
 112 / 103 / 103 ; accessibilité : 225 contrôles, 0 en échec.
+
+### D16.22 et D16.23, construits le 13 novembre au soir — la phrase reste, plus de Turnstile
+
+- **Le contrat n'a plus de champ pour une phrase** (`src/lib/ask-contract.ts`) : une demande est
+  la version du livre, jusqu'à vingt-quatre identifiants de mesures et jusqu'à douze mots du
+  livre — un mot plié de l'index chacun, renvoyés triés. Le Worker ne dit plus que quatre
+  choses : une réponse, une sélection, le silence, « local ». L'objection relue, « rien
+  trouvé » : c'est le téléphone qui les décide, avant d'envoyer quoi que ce soit ; « hors
+  sujet » n'a plus personne pour en juger.
+- **La page cherche, le Worker lit** : `src/lib/ask-local.ts` dit ce qui part (les dix mesures
+  les mieux classées, puis le reste des deux meilleures sections ; les mots du livre reconnus,
+  les plus partagés d'abord) ; `src/worker/measures.ts` lit ces mesures par identifiant, borne
+  ce qu'une demande peut coûter, et ne laisse passer vers le modèle que les mots que ces
+  mesures portent elles-mêmes. **La base n'a plus d'index** : une copie dérivée du texte en
+  moins chez Cloudflare (242 Ko de SQL).
+- **L'invite ne parle plus d'une question** : « Tu ne connais pas sa question. » Le modèle
+  ne rend plus `hors_programme`.
+- **L'écran dit ce que c'est** : « Voici ce que prévoient les mesures trouvées : » ; la mention
+  d'IA dit « Elle a lu les mesures trouvées, pas la question » ; sous le champ : « Demander
+  envoie des mots du livre, jamais la phrase ». **Ces trois phrases remplacent des phrases que
+  l'utilisateur avait validées** (« Voici ce que le programme dit là-dessus ») : dit à lui.
+- **Turnstile est retiré** : ni script, ni emplacement, ni clé, ni secret, ni phrase dans le
+  kit ; la politique de sécurité de chaque page ne nomme plus que notre origine, sans
+  exception ; le Worker n'appelle plus personne par son nom.
+- **Le jeu d'essai et le banc** : version 2.0.0. Le banc fait ce que fait la page
+  (`scripts/ask-page.ts`) et envoie ce qu'elle enverrait ; « refus justes » devient « sujets
+  absents : aucune phrase ne nomme le sujet » ; un faux ami cité est compté, plus bloquant.
+- **Mesuré sur fichiers publics, 0 neuron** : pour les 87 questions du dossier, une mesure
+  d'une section attendue est parmi celles que la page nomme 87 fois sur 87, parmi les trois
+  qu'elle montre seule 84 fois ; 22 mesures et 7 mots partent en moyenne.
+- **Portes neuves** : une phrase sous n'importe quel nom de champ n'est pas lue ; une phrase à
+  la place d'un mot fait refuser la demande ; des mots qui ne sont pas ceux des mesures nommées
+  n'atteignent pas le modèle ; de bout en bout, ce que le navigateur envoie est exactement ce que
+  le même calcul donne hors du navigateur, et deux mots tapés que le livre n'écrit pas ne sont
+  dans aucune requête.
+- **Ce qu'on perd, écrit** : `14-risques.md` R30, `16-hypotheses.md` H-IA-19.
+
+Portes, toutes vertes (batterie complète, code de sortie 0) : 378 tests (377 passent, 1 sauté,
+0 échoue) ; bout en bout, Chromium / Firefox / WebKit : l'app 37 / 34 / 34, « Demander »
+73 / 68 / 68, le jeu 112 / 103 / 103 ; accessibilité : 225 contrôles, 0 en échec.
+
+### Lot O4, première moitié, au 13 novembre 2026 au soir — l'aperçu sert la build de D16
+
+Quatre questions de plus lui ont été posées une fois D16.22 et D16.23 construits. Ses réponses :
+
+- **Les trois phrases réécrites sont gardées** (D16.30) : le titre d'une réponse, la mention
+  d'IA, la ligne sous le champ.
+- **Deux dates écrites avec son accord, au 13 novembre** : la relecture des sections du jeu
+  (`meta.pool_reviewed_on` — hors de ce que signe la validation des mots : l'empreinte de la
+  liste n'a pas bougé) et la relecture hostile (`hostile_review_on`). `/confidentialite` reste à
+  relire par lui, sur l'aperçu.
+- **« Oui, déploie »** : la build normale est sur l'aperçu.
+- **Le banc attend qu'il ait vu l'aperçu** ; chaque accord du banc se redemande au moment du
+  geste.
+
+**Ce qui est déployé** — `npm run build && npm run deploy:preview`, soit `wrangler deploy
+--config wrangler.static.jsonc --env=preview` : le Worker `cestecritla-preview`, **fichiers
+statiques seuls, aucune liaison, aucun code**, version `e6c7e2c8-726d-48f7-8c12-2fd074d64105` ;
+1 134 pages, 1 152 fichiers (1 143 envoyés, 9 déjà là) ; questions : « off ». Avant l'envoi : la
+porte anti-fuite sur cette build (7 tests, 0 échec) et un essai à blanc.
+
+**Ce que l'hôte sert, VÉRIFIÉ le 13/11 au soir** :
+
+- **chaque fichier de la build, relu sur l'hôte et comparé par empreinte : 1 150 sur 1 152
+  identiques, octet pour octet.** Les deux autres s'expliquent : `/404.html` renvoie à `/404`
+  (adresses sans extension), et une adresse inconnue rend bien un 404 dont le corps est
+  `dist/404.html` ; `/robots.txt` est le nôtre, précédé d'un bloc de Cloudflare (plus bas). Ce
+  que les portes ont testé est donc ce qui est servi ;
+- `x-robots-tag: noindex` sur tout l'hôte ; les fichiers nommés par leur empreinte (scripts, jeu,
+  index) sont servis pour un an, `flags.json` sans cache ; `/sommaire/` répond (404 avant le
+  déploiement) ; `/api/ask` vaut 404 — il n'y a pas de code ;
+- **trois navigateurs sur l'hôte en ligne, 27 contrôles chacun, 81 tenus** (script jetable sous
+  `private/tmp/`, 390 px) : taper trouve des sections sans rien envoyer — aucune requête ne
+  porte le mot tapé, toutes sont des GET, l'adresse ne bouge pas ; rien de « Demander » dans la
+  page ; le jeu est vivant (un mot marqué, six tuiles, la carte du lieu, un lien vers la page
+  officielle avec son repère — lu, jamais suivi) ; rien dans `localStorage` avant « Garder ta
+  tortue », une seule clé dans l'onglet ; « Site non officiel. » dans le cadre en haut comme en
+  bas de page ; aucun tiers appelé, aucune erreur de console ; `/sommaire/` liste 111 sections ;
+  `/confidentialite/` nomme la clé du jeu et ne dit rien d'une question envoyée ; sans script, la
+  première manche et ses trois mots sont dans la page, le sommaire à un lien ;
+- l'apex n'a pas bougé : la page d'attente.
+
+**Constaté au passage, VÉRIFIÉ** : sur les deux hôtes, `/robots.txt` est le nôtre **précédé d'un
+bloc « Cloudflare Managed content »** — `Content-Signal: search=yes,ai-train=no,use=reference`,
+et `Disallow: /` pour une liste de robots d'entraînement. C'est un réglage de la zone, au tableau
+de bord ; aucune décision du dossier ne l'a pris. Il ne rend rien indexable (l'en-tête `noindex`
+de l'aperçu fait foi) et il va dans le sens du projet — nos pages portent de courts extraits
+d'un livre « tous droits réservés ». Ajouté au geste du tableau de bord (§9.1, geste 4) : le
+garder ou le couper, en le sachant.
+
+**Ce que ce déploiement ne prouve pas** : rien sur un vrai téléphone (PROBABLE : trois moteurs de
+bureau à 390 px) ; le mot surligné dans la page officielle (aucune requête vers le site officiel
+n'est partie d'ici : c'est un appui de l'utilisateur) ; « sans JavaScript » tel que le règle un
+vrai navigateur ; la performance hors labo.
+
+**Rien d'autre n'a bougé** : rien n'est poussé, aucun Worker avec code n'est déployé, aucun neuron
+n'est dépensé, l'apex sert la page d'attente. `npx tsx scripts/launch.ts` nomme onze choses avant
+la décision : P0.5, P0.8, P0.2, P0.3, P0.4, le tableau de bord, les téléphones, la session des
+personas, les vingt textes, `/confidentialite`, et le mode de réponse (lot I5).
+
+Portes, au commit des dates : 378 tests (377 passent, 1 sauté, 0 échoue), types, lint et
+contraste verts ; la batterie complète est celle du commit précédent, le code n'ayant pas changé.
+
+### Lot J3, seconde moitié, au 13 novembre 2026 au soir — la liste entière : 48 mots, pas 90
+
+Le plan annonçait « autour de 90 mots, un par section où un mot passe les critères ». Ce que le
+livre permet est plus court, et c'est écrit ici pour que le chiffre du plan ne soit plus cru.
+
+- **D'où viennent les candidats** : des racines de l'index public (celles qui ne vivent que
+  dans des sections qui prêtent un mot), relues une à une, puis de mots de la vie courante tapés
+  par la session. **1 159 formes tapées (747 mots, singuliers et pluriels comptés à part)** ;
+  755 ont leur racine dans une mesure ; **276 formes — 250 mots — passent toutes les preuves
+  automatiques** dans au moins une section (écrit tel quel, mesure qui n'interdit rien, racine
+  dans aucun passage hors de ses mesures ni dans une section sensible, jamais un autre mot de
+  même racine). Rien de cela n'a été lu dans le texte : l'outil répond par oui ou non sur les
+  mots qu'on lui donne (`private/tmp/word-try.ts`, jetable).
+- **Puis la carte, mot par mot** : le mot sous les titres officiels de son lieu, la question de
+  l'opposant, et — nouveau — **le sens, sondé sans lire** : `scripts/probe-2026.ts` dit si la
+  mesure porte aussi tel autre mot. Écartés ainsi : « tram » (écrit seulement dans
+  « tram-train »), « abri » (« sans-abri »), « façades » (maritimes), « volets » (au figuré
+  ailleurs), « mutuelle » (un adjectif), « maternelles » (des assistantes), « jardins » de la
+  petite enfance (des jardins d'enfants : le mot reste, montré dans les Outre-mer), « engrais »
+  (ce que la mesure veut réduire), « navires » (sa mesure parle aussi du militaire), « masques »,
+  « punaises » ; et des sections entières dont la carte charge tout mot : les médias (comme
+  « journaux » le matin), « Décoloniser les mentalités », la défense, la justice.
+- **39 mots proposés à l'éditeur, en dix questions, chacun avec sa carte et mes doutes
+  écrits** (terroir, aéroports, coopératives, assainissement, sargasses, houle, météorologie,
+  microprocesseurs, dollar, barrages, jardins). **Il les a gardés tous les trente-neuf**, et à la
+  question de la taille : **« S'en tenir aux critères »** (D16.31).
+- **La liste** : 48 mots — 11, 3, 7, 19, 4 et 4 par partie —, 48 sections sur 111, 17 chapitres
+  sur 23, **0,196 % des mots des propositions** (9 mots : 0,037 %). Dans l'ordre de lecture, le
+  chapitre est demandé après six mots (deuxième manche), la section après dix-neuf (septième
+  manche) : les dix premiers mots neufs ouvrent chacun un chapitre. Seize manches en tout.
+  Dix-huit mots sont écrits dans plus d'une section. La finance, les institutions, la justice et
+  l'Europe n'ont aucun mot : leurs sections restent des tuiles.
+- **Le mot surligné** (`word-links.json`, pages enregistrées, rien ne quitte la machine) :
+  41 mots sur 48 sont surlignés dans leur mesure par les trois moteurs ; sept gardent le lien
+  vers leur mesure seule (une forme élidée, ou une première occurrence plus haut dans la page).
+- **Deux garde-fous trouvés en route, chacun avec sa porte.**
+  - *« Écrit seul »* (`alone`, cinquième contrôle de `scripts/words-2026.ts`) : la mesure
+    épinglée doit écrire le mot seul, pas seulement collé à un autre par un trait d'union.
+    L'outil acceptait « tram » d'un livre qui n'écrit que « tram-train » ; mes sondes l'avaient
+    attrapé à la main, la règle le fait maintenant. Une mesure où le mot n'est que collé compte
+    toujours comme un lieu où il est écrit : qui cherche le mot dans la page l'y trouve.
+    L'attestation nomme ses contrôles : la liste a été attestée de nouveau, et la porte de
+    lancement refuse une attestation plus ancienne qu'un contrôle. Les cinq contrôles ont enfin
+    leurs tests, sur un livre inventé (`scripts/words-2026.test.ts`, 7 tests).
+  - *Le mot long* : à 320 px, « microprocesseurs » — seize lettres, le seul des 48 — était coupé
+    par le navigateur, « microproces-seurs », et sans trait d'union sous WebKit. Un mot de quinze
+    lettres ou plus s'affiche un cran plus petit (`LONG_WORD`, `data-long`), jamais coupé. Porte
+    de bout en bout : à 320 px, les trois mots les plus longs de la liste tiennent chacun sur une
+    ligne, dans trois moteurs ; son témoin, règle coupée, rougit (« w050 : 2 lignes »).
+- **Validée avec son accord, à la question posée** : `words-2026.ts --validated 2026-11-13`
+  (empreinte de la liste et du vivier `f90c52ad…`). La build normale montre le jeu à 48 mots.
+- **Ce qui n'est pas prouvé** : le sens de chaque mot neuf dans sa mesure est sondé, pas lu
+  (H-MEC-9 — à lever par l'éditeur, en jouant les seize manches sur l'aperçu) ; le mot long n'a
+  été vu que dans des moteurs de bureau (H-MEC-10).
+- **Une erreur de ma part, dite ici** : la question de taille posée à l'éditeur parlait de
+  « plus de mille mots essayés ». C'étaient 1 159 formes, soit 747 mots.
+
+Portes, toutes vertes sur la liste validée (batterie complète, code de sortie 0) : 386 tests
+(385 passent, 1 sauté, 0 échoue) ; bout en bout, Chromium / Firefox / WebKit : l'app
+37 / 34 / 34, « Demander » 73 / 68 / 68, le jeu 113 / 104 / 104 ; accessibilité : 225 contrôles,
+0 en échec.
+
+**Redéployé sur l'aperçu le soir même, avec son accord à la question posée** — toujours
+`npm run build && npm run deploy:preview` : fichiers statiques seuls, aucune liaison, version
+`6d104664-5ec5-40b4-8b2c-e53739ee8086`. VÉRIFIÉ sur l'hôte en ligne : 1 150 fichiers sur 1 152
+identiques à la build, les deux mêmes écarts expliqués (`/404.html`, `/robots.txt`) ; le fichier
+du jeu porte 48 mots, l'ancien ne répond plus ; les 81 contrôles des trois navigateurs tiennent ;
+à 320 px, par le rendu du jeu lui-même, le mot de seize lettres est marqué long, à 28 px, sur
+une ligne, dans les trois moteurs. L'apex n'a pas bougé. Rien n'est poussé.

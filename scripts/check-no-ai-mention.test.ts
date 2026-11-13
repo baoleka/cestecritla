@@ -50,22 +50,8 @@ const MENTIONS_ABSENT_COMPONENT =
 
 const EXEMPT = new Set(['about.no_ai', 'about.writing_method']);
 
-/**
- * Kept in the kit, never rendered while the chat is extractive (D6.10, D13.1). Turnstile is
- * stage 1 of the defence in depth and is retired in v1/v2, so the /confidentialite lines that
- * describe it leave the page rather than gain an "AI-free variant" -- there is nothing to say.
- * They come back with the v3 "ids only" contract, unchanged. The build-output test below is
- * what actually enforces their absence.
- */
-const RETIRED_WITH_TURNSTILE = new Set([
-  'privacy.policy.06',
-  'privacy.turnstile',
-  'privacy.never.08',
-]);
-
 /** The deployed configuration, not the sketch in 09-architecture.md §2. */
 const aiBindingDeployed = /"ai"\s*:/.test(wrangler.replace(/\/\/.*$/gm, ''));
-const turnstileDeployed = /TURNSTILE_/.test(wrangler.replace(/\/\/.*$/gm, ''));
 
 const htmlFiles = (dir: string): string[] => {
   if (!existsSync(dir)) return [];
@@ -76,10 +62,14 @@ const htmlFiles = (dir: string): string[] => {
 };
 
 void test('the configuration the mode deploys carries an AI exactly when the mode says so (D16.4)', () => {
-  // "off" deploys static files: no script, so no model and no Turnstile check can exist.
+  // "off" deploys static files: no script, so no model can exist.
   assert.equal(deployed, askMode === 'off' ? STATIC_CONFIG : WORKER_CONFIG);
   assert.equal(aiBindingDeployed, askMode !== 'off', `${deployed}: the AI binding`);
-  assert.equal(turnstileDeployed, askMode !== 'off', `${deployed}: Turnstile`);
+  // No configuration carries a bot check, in any mode: there is none (D16.23).
+  for (const config of [STATIC_CONFIG, WORKER_CONFIG]) {
+    const code = readFileSync(config, 'utf8').replace(/\/\/.*$/gm, '');
+    assert.doesNotMatch(code, /turnstile/i, `${config}: Turnstile`);
+  }
   // The holding page never runs anything, whatever the mode.
   assert.equal(wranglerConfig('holding', askMode), STATIC_CONFIG);
 });
@@ -136,16 +126,20 @@ function noticeProblems(root: string, mode: 'off' | 'answer' | 'select', model: 
   const read = (page: string): string => appVoiceOnly(readFileSync(join(root, page), 'utf8'));
   // Art. 50: at the latest at the first interaction — so before it, on the page that asks.
   const home = read('index.html');
-  if (!/Demander envoie la question à une IA \(/.test(home) || !home.includes(model)) {
-    problems.push('index.html does not say, before the first use, that an AI answers and which');
+  if (!/Demander envoie des mots du livre, jamais la phrase, à une IA \(/.test(home)) {
+    problems.push('index.html does not say, before the first use, what is sent and to an AI');
   }
+  if (!home.includes(model)) problems.push('index.html does not name the model');
   if (!home.includes('Cloudflare')) problems.push('index.html does not say where the AI is hosted');
   // The page that says what is kept must say where a question goes, and what guards the gesture.
   const privacy = read('confidentialite/index.html');
-  if (!/Demander envoie ta question/.test(privacy)) {
-    problems.push('confidentialite does not say where a question goes');
+  if (!/Demander n’envoie pas ta phrase/.test(privacy)) {
+    problems.push('confidentialite does not say that the sentence typed stays on the phone');
   }
-  if (!/Turnstile/.test(privacy)) problems.push('confidentialite does not name Turnstile');
+  if (!/les mots du livre/.test(privacy) || !/trente jours/.test(privacy)) {
+    problems.push('confidentialite does not say what leaves, or what is kept of it');
+  }
+  if (/Turnstile/.test(privacy)) problems.push('confidentialite names a bot check there is not');
   // And no page may still say that no AI answers here: it would now be false.
   const denial = String(strings['about.no_ai']).replace(/'/g, '’');
   for (const page of PAGES_THAT_EXPLAIN) {
@@ -194,7 +188,6 @@ void test('every string naming an absent component has a local fallback or is ex
     if (!MENTIONS_ABSENT_COMPONENT.test(value)) continue;
     // A v3-only surface (the chat itself) needs no fallback: it is simply not built.
     if (key.startsWith('chat.') || key.startsWith('about.ai_')) continue;
-    if (RETIRED_WITH_TURNSTILE.has(key)) continue;
     if (typeof strings[`${key}.local`] !== 'string') missing.push(key);
   }
   assert.deepEqual(
@@ -204,11 +197,10 @@ void test('every string naming an absent component has a local fallback or is ex
   );
 });
 
-void test('the retired-with-Turnstile list is exact — no entry has gone stale', () => {
-  for (const key of RETIRED_WITH_TURNSTILE) {
-    const value = strings[key];
-    assert.equal(typeof value, 'string', `${key} left the kit: drop it from the retired list`);
-    assert.match(String(value), /Turnstile/i, `${key} no longer mentions Turnstile`);
+void test('no string of the kit names a bot check: there is none (D16.23)', () => {
+  for (const [key, value] of Object.entries(strings)) {
+    if (key === '$meta' || typeof value !== 'string') continue;
+    assert.doesNotMatch(value, /Turnstile|anti-robot|captcha/i, key);
   }
 });
 
