@@ -300,6 +300,56 @@ Quatre chaînes créées en `strings.json` v0.4, **sous** les dix lignes et non 
 
 Le dossier a lu **à qui** s'adresse une demande de droit de réponse (art. 1-1 III, §5.1) mais jamais le **régime de délai et de sanction** : insertion de la réponse **dans les trois jours de sa réception**, sous peine d'amende (LCEN art. 6-IV et décret n° 2007-1527 du 24 octobre 2007). **Ces deux textes n'ont pas été lus à la source** : le statut est HYPOTHÈSE. Aucune fiche de runbook n'existait — ni parmi les cinq de `09-architecture.md` §9, ni parmi les cinq proposées en `14-risques.md` §4 ; la fiche 11 y est ajoutée. Le déclencheur est plausible : l'app nomme La France insoumise partout par obligation de licence, et `share.message.cousin` nomme Mélenchon. Deux conséquences pratiques : `{contactEmail}` doit exister **avant** toute mise en ligne, et une **cadence de relève** doit être écrite (quotidienne à partir de J-3) — un délai de trois jours suppose une lecture quotidienne, que rien n'organisait. Chaîne à créer : `legal.notice.reply_delay`, parce qu'une page de mentions légales qui annonce le mécanisme sans son délai laisse croire qu'il n'y en a pas.
 
+### 6.2 quater L'état du jeu sur le terminal (article 82) — D16.14, écrit le 13/11/2026
+
+**Ce qui est écrit, et quand — VÉRIFIÉ** (`scripts/e2e-game.ts`, trois moteurs, sur les stockages réels d'un navigateur) :
+
+| Où | Quand | Quoi | Effacé par |
+|---|---|---|---|
+| `sessionStorage`, clé `cestecritla.jeu.v1` | à partir du premier mot **montré** ; rien avant | l'édition du livre, les mots déjà vus, la profondeur des questions, l'état de la tortue et ses arcs, la manche en cours, le choix « Ne pas garder » | la fermeture de l'onglet ; « Tout effacer » |
+| `localStorage`, même clé | **seulement après « Garder ta tortue »**, puis à chaque changement | les mots déjà vus, la profondeur, l'état de la tortue et ses arcs | « Tout effacer » (sa fiche, `/confidentialite`) |
+
+Jamais écrit, nulle part : un choix, une réponse, une heure, un identifiant. Ce n'est pas une promesse de texte : le format n'a aucun champ pour les porter (`src/lib/game-state.ts`), et la porte de bout en bout fait jouer le même mot à deux visiteurs qui choisissent des tuiles différentes — la chaîne écrite est la même, octet pour octet. Rien ne part : une manche n'émet aucune requête.
+
+**Ce que la loi demande — lu le 13/11/2026.** L'article 82 de la loi Informatique et Libertés vise **toute inscription d'informations** sur le terminal, cookie ou non (délibération CNIL n° 2020-091 du 17/9/2020, art. 1). Le consentement n'est pas requis quand l'inscription est « strictement nécessaire à la fourniture d'un service de communication en ligne à la demande expresse de l'utilisateur ». L'information préalable n'est alors pas imposée, mais **recommandée, dans la politique de confidentialité** (recommandation consolidée du 16/1/2026, §5) ; un traceur exempté **ne sert qu'une finalité** et porte **un nom explicite** (§6).
+
+**Qualification — PROBABLE, pas un avis juridique.**
+
+- *L'onglet* : le jeu ne peut pas se souvenir d'un mot déjà montré sans l'écrire ; c'est le service lui-même, demandé par le geste de jouer. Rien n'est écrit pour qui ne joue pas.
+- *Le téléphone* : écrit après un geste dont l'intitulé dit ce qu'il fait (« Garder ta tortue »), précédé de quatre phrases qui disent ce qui est gardé, ce qui ne l'est pas, ce qui se passe sinon, et qui le verra. C'est une demande expresse au sens le plus littéral. Les deux boutons ont le même poids ; refuser ne coûte rien d'autre que ce qui est annoncé.
+- *Une finalité, un nom* : une seule clé, `cestecritla.jeu.v1`, dans les deux stockages ; elle ne sert qu'au jeu. Elle ne sert **ni à mesurer, ni à reconnaître** : la v1 ne mesure rien (§6.2).
+- *RGPD art. 9* : l'état du jeu est une liste de mots vus, pas une opinion — mais sur un site consacré à un programme politique, sa seule présence sur un téléphone dit que le site a été ouvert. D'où la phrase « Qui ouvre le site sur ce téléphone la verra », écrite avant le geste, et l'absence de toute écriture durable sans lui.
+
+**Ce que la page dit.** `/confidentialite` nomme les deux stockages, la clé, chaque champ dans les mots du lecteur, la base (« Ce stockage ne sert qu'au jeu que tu demandes… »), et offre « Tout effacer ». Elle est **générée depuis la carte des écritures** (`src/lib/storage-map.ts`), elle-même construite sur les listes de champs avec lesquelles l'état est écrit : un champ ajouté au code sans sa phrase ne compile pas. La porte compare ensuite ce qu'un navigateur contient vraiment après une partie à ce que la carte nomme. « Rien n'est enregistré » ne reste écrit que de la recherche (`scripts/game-page.test.ts`).
+
+**Ce qui reste ouvert.** La limite de sept jours de Safari (écritures de script effacées après sept jours sans visite) est dite sur iPhone avant le geste ; elle n'est pas contournée. La relecture de `/confidentialite` par l'éditeur est un blocage de lancement (`data/launch.json`, `privacy_page`).
+
+### 6.2 quinquies « Demander » : ce qui part, ce qui est gardé, ce qui reste à trancher — relecture du 13/11/2026
+
+Écrit après la relecture hostile « juriste CNIL » du lot O3 (`PLAN-JEU.md`, journal). **Aucune question ne part aujourd'hui** : `data/2026/ask.json` vaut « off ». Ce qui suit décrit la build qui répondra.
+
+**Ce qui part, et quand — VÉRIFIÉ en local** (`scripts/e2e-ask.ts`, trois moteurs, Worker simulé) : rien avant le geste « Demander » — ni au focus du champ, ni pendant la frappe, ni vers nous, ni vers Turnstile. Au geste : la question, un jeton Turnstile et la version du livre, à notre Worker ; le Worker l'envoie, avec le texte d'une douzaine de mesures, au modèle hébergé par Cloudflare.
+
+**Ce qui est gardé — tel que configuré** (`src/worker/index.ts`, `wrangler.jsonc`) :
+
+| Quoi | Où | Combien de temps | Statut |
+|---|---|---|---|
+| Un journal de la question | nulle part : observabilité coupée dans les deux environnements, `collectLog: false`, aucun `console.*`, aucune écriture en base | — | VÉRIFIÉ (portes de configuration et de code) |
+| **La réponse du modèle**, rangée sous une empreinte SHA-256 du corps de la demande, question comprise | cache de la passerelle AI Gateway, chez Cloudflare | **trente jours** | VÉRIFIÉ pour le mécanisme (labo de septembre, doc « caching ») ; ce que Cloudflare conserve en interne à côté de l'empreinte : PROBABLE |
+| **Un compteur**, sous les seize premiers octets d'un HMAC de la date et de l'adresse IP (le /64 en IPv6), secret tenu par le Worker | limiteur de débit de Cloudflare | **une minute** (la période configurée) | VÉRIFIÉ pour la clé ; durée réelle de conservation par le limiteur : PROBABLE |
+| Un identifiant de sécurité (`cf.turnstile.u`) | stockage local du domaine de Turnstile, sur le téléphone | sans expiration | VÉRIFIÉ en septembre sur défi échoué ; sur défi réussi : HYPOTHÈSE (essai sur téléphone) |
+
+`/confidentialite` dit ces quatre lignes dans les mots du lecteur (`privacy.policy.02`, `.03.ask`, `.rate`, `.06`), et la liste « Ce que l'app ne garde pas » dit « une adresse IP en clair ».
+
+**Ce qui reste à trancher — par l'éditeur, pas par le code.**
+
+1. **« Gardée nulle part » (D16.8) et le cache de trente jours.** Le plan approuvé contient les deux. Au pied de la lettre, le cache y déroge : une empreinte de la demande et la réponse restent trente jours. Deux issues : garder le cache et la phrase qui le dit (état actuel), ou le couper, au prix des neurons (`14-risques.md` R26).
+2. **La base légale, et l'article 9.** Une question sur un programme politique peut révéler une opinion. Le traitement est bref et sans conservation de la question, mais il existe (l'adresse IP et la question passent ensemble par le Worker). Base de l'article 6 et exception de l'article 9 § 2 : **non écrites**. Le consentement explicite est le candidat naturel ; la page informe sous le champ avant le geste, elle ne le recueille pas en ces termes. HYPOTHÈSE — à lire avec le guide CNIL de la communication politique (P0.3).
+3. **L'article 13.** Manquent ou sont incomplets : l'identité du responsable (D0.15 ne la publie pas — H-CNF-20, §6.2 bis, ouverte depuis le 10/9), l'adresse de contact (P0.8), la garantie qui encadre les transferts hors de l'Union (la page dit « aux États-Unis comme en Europe », sans la nommer). Les durées sont maintenant écrites. Décision P0.4.
+4. **Turnstile.** L'exemption de consentement (article 82) vaut pour les traceurs « strictement nécessaires » ; la CNIL la rattache à la sécurité d'un mécanisme d'authentification, et « Demander » n'en a pas : elle ne joue que **par analogie** (§19, E4 — qui demandait de refaire cette analyse avant de remettre Turnstile). Ce qui a changé depuis : il ne se charge qu'au geste. Alternative sans stockage : le limiteur de débit et le compteur du jour seuls — un script qui change d'adresse viderait alors le quota du jour, ce qui coupe les réponses jusqu'à minuit UTC et rien d'autre.
+5. **Règlement IA, article 50.** Celui qui déploie un système dont le texte informe le public sur un sujet d'intérêt général dit que ce texte est généré (§ 4) : la mention est sous le champ avant le premier usage et sur chaque réponse, avec le nom du modèle. Le marquage lisible par une machine (§ 2) vise les fournisseurs ; l'app n'en est pas un, mais la réponse porte `data-generated-by="ai"`. PROBABLE — une lecture de l'article, pas un avis.
+6. **L'aperçu est public.** Y déployer la build qui répond, pour le banc ou pour les essais, c'est déjà traiter des questions : les points 2 et 3 se décident avant, pas à la bascule.
+
 ### 6.3 La politique en dix lignes — texte final
 
 Route `/confidentialite` (D5.10). Titre `privacy.title` = « Confidentialité », chapeau `privacy.lead` = « Dix lignes, toutes vraies, vérifiées contre la carte des données de l'app. » Chaque ligne est confrontée ligne à ligne au tableau §6 de `09-architecture.md`.

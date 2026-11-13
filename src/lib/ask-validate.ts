@@ -49,7 +49,7 @@ export type RuleId =
   | 'negation'
   /** Opens on a verdict, or passes one: oui, non, en réalité… */
   | 'verdict'
-  /** Six words in a row of a measure it was given. */
+  /** Six words in a row of a measure it was given — or most of a sentence in runs of four. */
   | 'copy'
   /** Quotation marks: a sentence of ours quotes nothing. */
   | 'quote'
@@ -65,7 +65,7 @@ export type RuleId =
   | 'self'
   /** An address: a link is ours to make, from an identifier. */
   | 'address'
-  /** Markup, code or control characters. */
+  /** Markup, code, characters that are not seen, letters that are not those of French. */
   | 'markup'
   /** Shares too few of its words with the measures it cites. */
   | 'overlap';
@@ -91,6 +91,8 @@ export type Verdict =
 export interface ValidateOptions {
   /** Share of a sentence's own words that its cited measures must hold too, from 0 to 1. */
   minOverlap: number;
+  /** Share of a sentence allowed in runs of four words of what was shown; provisional default. */
+  maxCopiedShare?: number;
   /**
    * Only the rules that need no text of a measure: the shape, the identifiers, and what a
    * sentence must never say. This is how the recorded outputs of the bench are replayed where
@@ -106,6 +108,22 @@ export interface ValidateOptions {
  * only exists so that the function can be called before a bench has run.
  */
 export const PROVISIONAL_MIN_OVERLAP = 0.5;
+
+/**
+ * Six words in a row is the rule (D16.5). It is walked round by changing one word in five: the
+ * text is then on the page, and no run is six long. So a sentence is also refused when more than
+ * this share of its words stands in runs of COPY_SHARE_WINDOW words of what the model was shown.
+ *
+ * PROBABLE, measured once on the answers of September (eval/generation-raw.jsonl, 2025 archive,
+ * 0 neuron): of the 101 written sentences with no six words in a row, none had more than 0.38 of
+ * its words in such runs (p95 0.25). Runs of three were tried and dropped: a short sentence that
+ * names the thing and its figure — both must be said as written — reaches 0.75 honestly. The
+ * bench draws the same distribution for the 2026 edition before this value is retained.
+ *
+ * What it does not see: one word changed in every four. Reading does — the judges, the editor.
+ */
+export const COPY_SHARE_WINDOW = 4;
+export const PROVISIONAL_MAX_COPIED_SHARE = 0.5;
 
 // ---------------------------------------------------------------------------------------------
 // Reading text
@@ -158,21 +176,65 @@ function windows(tokens: readonly string[], size: number): string[] {
   return out;
 }
 
+/** Share of these words that stand in a run of COPY_SHARE_WINDOW words found in `runs`. */
+function shareIn(tokens: readonly string[], runs: ReadonlySet<string>): number {
+  if (tokens.length === 0) return 0;
+  const covered = new Set<number>();
+  for (let i = 0; i + COPY_SHARE_WINDOW <= tokens.length; i += 1) {
+    if (!runs.has(tokens.slice(i, i + COPY_SHARE_WINDOW).join(' '))) continue;
+    for (let k = i; k < i + COPY_SHARE_WINDOW; k += 1) covered.add(k);
+  }
+  return covered.size / tokens.length;
+}
+
+/**
+ * Share of a sentence that stands in runs of four words of these texts, from 0 to 1. Exported
+ * for the bench, which draws the distribution before the provisional threshold is retained.
+ */
+export function copiedShare(sentence: string, texts: readonly string[]): number {
+  const runs = new Set(texts.flatMap((text) => windows(copyTokens(text), COPY_SHARE_WINDOW)));
+  return shareIn(copyTokens(plain(sentence)), runs);
+}
+
 /** Numbers as written, digit groups joined and the decimal comma read as a point: "1 600" → "1600". */
 function numbersOf(text: string): string[] {
   const found = plain(text).match(/\d+(?:[ .]\d{3})*(?:[,.]\d+)?/g) ?? [];
   return found.map((n) => n.replace(/[ .](?=\d{3}(?!\d))/g, '').replace(',', '.'));
 }
 
-/** Quantities written in letters. "un" and "une" are articles: they are left alone. */
-const NUMBER_WORDS: ReadonlySet<string> = new Set(
-  `zero deux trois quatre cinq six sept huit neuf dix onze douze treize quatorze quinze seize
-   vingt vingts trente quarante cinquante soixante cent cents mille million millions milliard
-   milliards moitie double triple tiers quart quarts demi demie dizaine dizaines douzaine
-   centaine centaines millier milliers`
-    .split(/\s+/)
-    .filter((word) => word !== ''),
+/** Figures `\d` does not read: superscripts, fractions, full-width, other scripts, Roman signs. */
+const ODD_FIGURE = /(?![0-9])\p{N}/u;
+/** « m² », « km² », « m³ »: a unit, not a quantity — the one place such a figure is left alone. */
+const UNIT_EXPONENT = new RegExp(`(?<=m)[${cp(0xb2, 0xb3)}]`, 'g');
+
+const listed = (words: string): string[] => words.split(/\s+/).filter((word) => word !== '');
+/** Ranks and shares, « sixième », « deux cinquièmes »: with their plural. */
+const ORDINALS = listed(
+  `deuxieme second seconde troisieme quatrieme cinquieme sixieme septieme huitieme neuvieme
+   dixieme onzieme douzieme vingtieme centieme millieme`,
 );
+/** « Une vingtaine » — a closed list: « semaine » and « domaine » end the same way. */
+const ROUND_LOTS = listed(
+  `huitaine dizaine douzaine quinzaine vingtaine trentaine quarantaine cinquantaine soixantaine
+   centaine millier`,
+);
+
+/** Quantities written in letters. "un" and "une" are articles: they are left alone. */
+const NUMBER_WORDS: ReadonlySet<string> = new Set([
+  ...listed(
+    `zero deux trois quatre cinq six sept huit neuf dix onze douze treize quatorze quinze seize
+     vingt vingts trente quarante cinquante soixante septante huitante octante nonante cent cents
+     mille million millions milliard milliards moitie tiers quart quarts demi demie`,
+  ),
+  ...[...ORDINALS, ...ROUND_LOTS].flatMap((word) => [word, `${word}s`]),
+]);
+
+/**
+ * « Doubler », « triplé », « quadruplement »: a multiplier is a number whatever its ending. The
+ * sentence may use one only if a measure it cites uses the same one. (« Doublon » is not one.)
+ */
+const MULTIPLIER = /^(doubl|tripl|quadrupl|quintupl|sextupl|decupl|centupl)(?!on|ure)/;
+const multiplierOf = (word: string): string | null => MULTIPLIER.exec(word)?.[1] ?? null;
 
 /** A text as a pattern that matches exactly it. */
 const literal = (text: string): string =>
@@ -195,10 +257,35 @@ const NEGATION: readonly RegExp[] = [
   alone('rien'),
   alone('guère'),
   alone('aucune?s?'),
-  alone('nulle part'),
+  alone('nul(?:le)?s?'),
+  alone('nullement'),
+  alone('aucunement'),
+  alone('ni'),
   alone('seulement'),
   alone('uniquement'),
+  alone('exclusivement'),
   alone('se (?:limite|borne|contente)'),
+  // An exception bounds as surely as « seulement » does.
+  alone('sauf'),
+  alone('hormis'),
+  alone('excepté(?:e|s|es)?'),
+  alone("à l'exception"),
+  // An absence said without a negation: the page never says what the book does not hold.
+  alone('muet(?:te)?s?'),
+  alone('sous silence'),
+  alone("l'impasse"),
+  alone('omet(?:tent|tre)?|omis(?:e|es)?'),
+];
+/**
+ * Words that bound or say an absence — and that a measure may hold for its own reasons (« le
+ * manque de médecins », « les seuls revenus du capital »). Allowed when a cited measure uses
+ * the very word.
+ */
+const NEGATION_UNLESS_CITED: readonly RegExp[] = [
+  alone('seule?s?'),
+  alone('absente?s?'),
+  alone('absence'),
+  alone('manque(?:nt)?'),
 ];
 
 /** A verdict on the question: the reader concludes, the page does not. */
@@ -294,6 +381,21 @@ const ADDRESS: readonly RegExp[] = [
 const QUOTES = new RegExp(`[${cp(0xab, 0xbb, 0x22, 0x201c, 0x201d, 0x201e, 0x2039, 0x203a)}]`);
 const MARKUP = /[<>{}[\]\\`*_#|~^]/;
 const CONTROL = /\p{Cc}/u;
+/**
+ * What is written and not seen — joiners, soft hyphens, marks that turn a line round — and what
+ * is seen and not read: an accent left without its letter once the text is composed, a letter
+ * of another alphabet, a letter in another form (full-width, ligature, raised). Each makes of
+ * « pas » or of « 300 » a word that no rule here recognises and that a reader reads all the same.
+ */
+const FORMAT = /\p{Cf}/u;
+const LOOSE_MARK = /\p{M}/u;
+const FOREIGN_LETTER = /(?!\p{Script=Latin})\p{L}/u;
+function otherForm(text: string): boolean {
+  for (const character of text) {
+    if (/\p{L}/u.test(character) && character.normalize('NFKC') !== character) return true;
+  }
+  return false;
+}
 
 /** What a sentence is made of once the scaffolding every answer shares is set aside. */
 const FRAME: ReadonlySet<string> = new Set(
@@ -330,12 +432,28 @@ const firstMatch = (text: string, patterns: readonly RegExp[]): string | null =>
   return null;
 };
 
+/** What the model was shown, as the runs of words a sentence must not hold. */
+interface Shown {
+  /** Runs of COPY_WINDOW words: one is enough. */
+  six: ReadonlySet<string>;
+  /** Runs of COPY_SHARE_WINDOW words: most of a sentence in them is a copy in pieces. */
+  runs: ReadonlySet<string>;
+}
+
+function shownOf(candidates: readonly Candidate[]): Shown {
+  const tokens = candidates.map((candidate) => copyTokens(candidate.text));
+  return {
+    six: new Set(tokens.flatMap((t) => windows(t, COPY_WINDOW))),
+    runs: new Set(tokens.flatMap((t) => windows(t, COPY_SHARE_WINDOW))),
+  };
+}
+
 /** Every rule one sentence breaks, in the order of the plan. */
 function sentenceRefusals(
   sentence: ModelSentence,
   index: number,
   candidates: ReadonlyMap<string, string>,
-  candidateWindows: ReadonlySet<string>,
+  shown: Shown,
   options: ValidateOptions,
 ): Refusal[] {
   const out: Refusal[] = [];
@@ -359,6 +477,10 @@ function sentenceRefusals(
   // --- its shape
   if (text === '') refuse('shape', 'empty sentence');
   if (CONTROL.test(sentence.texte)) refuse('markup', 'control character');
+  if (FORMAT.test(sentence.texte)) refuse('markup', 'character that is not seen');
+  if (LOOSE_MARK.test(text)) refuse('markup', 'accent without its letter');
+  if (FOREIGN_LETTER.test(text)) refuse('markup', 'letter of another alphabet');
+  else if (otherForm(text)) refuse('markup', 'letter in another form');
   const markup = MARKUP.exec(text);
   if (markup !== null) refuse('markup', markup[0]);
   if (/[.!?…]["»”]?\s+\p{Lu}/u.test(text)) refuse('several', 'more than one sentence');
@@ -382,6 +504,9 @@ function sentenceRefusals(
   if (address !== null) refuse('address', address);
   const self = firstMatch(text, SELF_ALWAYS);
   if (self !== null) refuse('self', self);
+  if (ODD_FIGURE.test(text.replace(UNIT_EXPONENT, ''))) {
+    refuse('number', 'figure not in plain digits');
+  }
 
   // --- what it may say only with a measure that says it
   const citedPlain = cited.map(plain);
@@ -403,6 +528,7 @@ function sentenceRefusals(
   }
   unlessCited('party', PARTY_NAMES);
   unlessCited('self', SELF_UNLESS_CITED);
+  if (negation === null) unlessCited('negation', NEGATION_UNLESS_CITED);
 
   // --- its numbers: as written in a measure it cites, or not at all
   const heldNumbers = new Set(cited.flatMap(numbersOf));
@@ -410,13 +536,23 @@ function sentenceRefusals(
     if (!heldNumbers.has(number)) refuse('number', number);
   }
   const heldWords = new Set(cited.flatMap((held) => tokenize(held)));
+  const heldMultipliers = new Set([...heldWords].flatMap((word) => multiplierOf(word) ?? []));
   for (const word of tokenize(text)) {
     if (NUMBER_WORDS.has(word) && !heldWords.has(word)) refuse('number', word);
+    const multiplier = multiplierOf(word);
+    if (multiplier !== null && !heldMultipliers.has(multiplier)) refuse('number', word);
   }
 
-  // --- copied: six words in a row of anything it was shown
-  const copied = windows(copyTokens(text), COPY_WINDOW).find((w) => candidateWindows.has(w));
-  if (copied !== undefined) refuse('copy', `${String(COPY_WINDOW)} words in a row`);
+  // --- copied: six words in a row of anything it was shown, or most of it in shorter runs
+  const own = copyTokens(text);
+  if (windows(own, COPY_WINDOW).some((w) => shown.six.has(w))) {
+    refuse('copy', `${String(COPY_WINDOW)} words in a row`);
+  } else {
+    const share = shareIn(own, shown.runs);
+    if (share > (options.maxCopiedShare ?? PROVISIONAL_MAX_COPIED_SHARE)) {
+      refuse('copy', `${share.toFixed(2)} in runs of ${String(COPY_SHARE_WINDOW)}`);
+    }
+  }
 
   // --- anchored in words, not only in an identifier
   if (cited.length > 0) {
@@ -451,11 +587,56 @@ export function refusals(
     });
   }
   const byId = new Map(candidates.map((c) => [c.id, c.text]));
-  const shown = new Set(candidates.flatMap((c) => windows(copyTokens(c.text), COPY_WINDOW)));
+  const shown = shownOf(candidates);
   answer.phrases.forEach((sentence, index) => {
     out.push(...sentenceRefusals(sentence, index, byId, shown, options));
   });
+  // Six words in a row are six words in a row on the page, whichever sentences they stand in.
+  if (options.withoutText !== true && !out.some((refusal) => refusal.rule === 'copy')) {
+    const whole = answer.phrases.flatMap((sentence) => copyTokens(plain(sentence.texte)));
+    if (windows(whole, COPY_WINDOW).some((w) => shown.six.has(w))) {
+      const detail = `${String(COPY_WINDOW)} words in a row across sentences`;
+      out.push({ rule: 'copy', sentence: null, detail });
+    }
+  }
   return out;
+}
+
+/** Every piece of text an output holds, whatever its shape; a JSON written as text is read. */
+function textsIn(value: unknown, depth = 0): string[] {
+  if (depth > 8) return [];
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    if (/^[[{]/.test(trimmed)) {
+      try {
+        return textsIn(JSON.parse(trimmed) as unknown, depth + 1);
+      } catch {
+        // Not JSON after all: read as the text it is.
+      }
+    }
+    // Escapes left as written would hide an accented word from the comparison.
+    return [
+      value.replace(/\\u([0-9a-f]{4})/gi, (_, hex: string) =>
+        String.fromCodePoint(Number.parseInt(hex, 16)),
+      ),
+    ];
+  }
+  if (Array.isArray(value)) return value.flatMap((item) => textsIn(item, depth + 1));
+  if (typeof value === 'object' && value !== null) {
+    return Object.values(value).flatMap((item) => textsIn(item, depth + 1));
+  }
+  return [];
+}
+
+/**
+ * True when an output — read as text, whatever shape the model gave it — holds six words in a
+ * row of a measure it was shown. For `/api/bench`: what the Worker returns of an output holds no
+ * more of the book than a page would (src/worker/ask.ts, `benchOutput`).
+ */
+export function carriesCopy(raw: unknown, candidates: readonly Candidate[]): boolean {
+  const { six } = shownOf(candidates);
+  const tokens = textsIn(raw).flatMap((text) => copyTokens(text));
+  return windows(tokens, COPY_WINDOW).some((w) => six.has(w));
 }
 
 /**

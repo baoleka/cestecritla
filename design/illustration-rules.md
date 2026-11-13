@@ -1,5 +1,7 @@
 # Règles d'illustration, mise en page et brief de la mascotte (T3)
 
+> **Révision du 13 novembre 2026 (D16.11 à D16.13) — la tortue revient, et elle est dessinée.** L'utilisateur a décidé une tortue « buddy » qui accompagne le jeu « Où est-ce écrit ? », qui évolue et avec laquelle on interagit : **non négociable, sans repli ni report** ; seule contrainte, ne pas être celle du site officiel. **Ce qui vaut pour elle aujourd'hui est écrit au §2.11**, qui dit aussi, point par point, ce qu'il amende des §2.2 à §2.10 ; le « défaut du 10/9 : la v1 sort sans mascotte » ci-dessous est **levé**. Le reste du document (règles 1 à 8, tableau faire / ne pas faire hors ligne 4) n'est pas touché.
+
 > Déduit sur pièces le **7 septembre 2026** des 5 affiches T27, du site melenchon2027.fr (capture mobile 390 px), de la charte LFI et de la page d'attente aec2027.fr. Les pièces tierces (affiches, tortues officielles, illustration Hello Melro, logos) ont été **analysées, jamais réutilisées** ; elles vivent dans `docs/discovery/captures/2026-09-07/identite/assets-tiers/` (non versionné, voir `.gitignore`).
 >
 > Ce document **applique** D0.1 (respect total de la charte, pas de disclaimer), D0.12 (mascotte originale + easter egg lait-fraise) — ⚠️ **deux défauts du 10/9/2026 s'appliquent par-dessus, et une session de planification doit les appliquer sans redemander** : (a) **la v1 sort sans mascotte**, la jauge de progression devient **purement typographique** (`prompt-final.md` §19.3 point 2, sur H-DES-8 qui écrit ce repli mot pour mot ; aucun `design/mascot/*.svg` n'existe, rien n'est perdu ; le brief ci-dessous reste la spécification du jour où quelqu'un dessine les états ≤ 4 Ko, ≈ 3 h, v1.1) ; (b) **l'easter egg lait-fraise n'est pas embarqué en v1** (§19.3 point 3 : son origine n'a jamais été vérifiée, H-DES-9, et il était l'unique exception à « aucun emoji »). Le mot « **tortue** » désigne dans ce fichier la mascotte **officielle M27**, analysée et jamais réutilisée ; la nôtre est la « **Marcheuse** », sans nom (D3.11), D0.25 (tu), D0.32 (critères « honteux à partager »), D3.1-D3.4 (`design/identity-decision.md`). Il ne rouvre aucune de ces décisions. Statuts : **VÉRIFIÉ** (lu/mesuré à la source aujourd'hui, fichier ou URL cité) / **PROBABLE** / **HYPOTHÈSE**.
@@ -103,6 +105,8 @@ La matière de l'app n'est pas une photo (règle 7) : c'est **le verbatim du pro
 | Tortues Hello Melro (`aec2027.fr.png`)                                                                                          | 2D cartoon à contours noirs, **roses** à joues rosées, carapace brun-rouge, **pancartes « J L M 2027 » et mégaphone**, groupe de cinq en marche, crédit « Illustration par Hello Melro »                                                                                                                                                                                                                     | VÉRIFIÉ |
 | Rôle sur le site                                                                                                                | La tortue **pousse la jauge de soutiens** (363 537 / 400 000) ; elle est un acteur de la progression, pas un sticker                                                                                                                                                                                                                                                                                         | VÉRIFIÉ |
 
+**Le rôle se refuse comme le dessin (13/11/2026, D16.11).** L'officielle est un *acteur de la progression collective* : elle pousse une jauge, elle avance le long d'une barre, elle porte un nombre (363 537 / 400 000), elle conduit un chariot. La nôtre ne fait rien de tout cela : elle est **posée sur rien**, ne pousse rien, n'avance le long de rien, ne porte ni nombre ni objet ; elle se tient dans le bloc du jeu, lève la tête quand on la touche et regarde les tuiles quand on lui demande un indice (§2.2, points 8 à 10).
+
 Le totem « tortue » est un esprit partagé (fable, ténacité), pas une propriété graphique ; ce sont **les traits ci-dessus** qui sont l'œuvre de quelqu'un d'autre. L'original doit être reconnaissable comme tortue et comme « famille 2027 » par la palette, et **impossible à confondre** avec l'une ou l'autre.
 
 ### 2.2 Contraintes dures
@@ -114,6 +118,11 @@ Le totem « tortue » est un esprit partagé (fable, ténacité), pas une propri
 5. **Aucune pancarte, aucun mégaphone, aucun logo, aucun sigle, aucun chiffre « 2027 »** sur elle (D3.3, Hello Melro) ; aucun couvre-chef ou accessoire à connotation politique.
 6. **Jamais de reproduction « lait-fraise »** de l'officielle : pas de tortue qui boit, pas de recoloration rose-lait ; l'easter egg est **textuel/emoji** (§2.8).
 7. Fichiers : **SVG écrit à la main** (formes géométriques, `currentColor` + 2 propriétés CSS), pas de bitmap, pas d'export d'outil 3D ; poids ≤ 4 Ko par état. Le dessin est produit **en code par la session** et validé par l'utilisateur sur le canvas J3 — l'app n'a pas d'illustrateur (HYPOTHÈSE d'organisation).
+8. **Elle ne pousse rien et n'avance le long de rien** (13/11/2026) : aucune barre, aucune jauge, aucun rail, aucun objet devant elle ; elle ne se déplace pas dans la page. C'est le constat du 10/9 (§2.4, encadré), tranché : *elle est sortie de la jauge*.
+9. **Elle n'est posée sur rien** : ni sol, ni ombre, ni socle, ni ligne d'horizon ; ses pieds s'arrêtent où le dessin s'arrête.
+10. **Elle ne porte aucun nombre et ne montre jamais ce qui reste** : pas de compteur, pas de pourcentage, pas de case vide, pas de tiret, pas de contour de ce qui manque. Ses arcs sont des traits continus qui grandissent ; ce qui n'a pas grandi n'est dessiné nulle part.
+
+> **Points 2 et 7, précisés le 13/11/2026.** *Point 2* — « la palette mauve/prune » se dit maintenant avec des nombres (`scripts/mascot.test.ts`, en OKLCH) : aucun rôle de couleur du corps, de la carapace ni des arcs ne tombe dans la lavande du corps officiel (clarté 0,60 à 0,82, chroma 0,04 à 0,12, teinte 295° à 335°), dans le prune de sa carapace (0,22 à 0,45 ; 0,03 à 0,12 ; 325° à 10°) ni dans le rose (0,55 à 0,85 ; ≥ 0,10 ; 330° à 15°) ; et **jamais un corps violet clair sous une carapace violet foncé**, l'appariement qui fait l'officielle au premier coup d'œil. Le Violet 200 de notre carapace claire est de la même famille de teinte que leur lavande (307° contre 314°) : il n'en sort que par la clarté (0,88). C'est la charte, et c'est dit. *Point 7* — « ≤ 4 Ko par état, `currentColor` + 2 propriétés » devient : **un seul fichier**, géométrie et classes seulement, **≤ 6 Ko gzip avec sa feuille de style**, ≤ 12 formes, cinq rôles de couleur (D16.13).
 
 ### 2.3 Palette (Couleurs 2027 + teintes, rien d'autre)
 
@@ -195,6 +204,57 @@ Un **clin d'œil textuel ou emoji**, jamais un dessin : par exemple un toast « 
 **Livrables** (§2.9) inchangés : `mascot-24.svg` (silhouette pleine), `mascot-96.svg`, `mascot-512.svg`, `mascot-states.svg` (`rest` / `walk` / `milestone`), variables `--mascot-line` / `--mascot-shell` / `--mascot-body`. Palette §2.3, contraintes §2.2 et style §2.4 s'appliquent tels quels à la Marcheuse.
 
 **Statut** : DÉCISION (utilisateur, 9/9) sur le choix de piste et l'usage restreint ; **HYPOTHÈSE (personas)** sur la reconnaissance à 24 px et le ressenti « pas enfantine », à lever par le test humain d'avant lancement (D11.1).
+
+### 2.11 Décisions D16.11 à D16.13 (13 novembre 2026) : la tortue du jeu
+
+**En vigueur.** Une tortue accompagne le joueur de « Où est-ce écrit ? » ; elle évolue par ce qu'il a découvert et il peut interagir avec elle ; elle n'a pas de nom (l'interface dit « ta tortue », D16.20). Elle est **non négociable** : ni version sans elle, ni repli, ni report, dans aucun ordre de coupe. Elle n'est pas celle du site officiel, et cela se prouve de trois façons : **par le dessin** (§2.2, points 1 à 7 ; `scripts/mascot.test.ts`), **par le rôle** (§2.2, points 8 à 10 ; porte de bout en bout quand le jeu est construit) et **par la question « même personnage ? »**, posée à des lecteurs neufs, images côte à côte — une réponse de personas, donc une HYPOTHÈSE, publiée non levée sur `/exactitude` (D14.11).
+
+**Le dessin.** `design/mascot/tortue.svg`, écrit à la main par la session sur une grille de 24 × 15 (`viewBox="0 0 96 60"`, marges comprises) : onze formes — une carapace cernée, trois arcs, un corps, deux pattes effilées, une tête sur son cou, un œil petit et clair, une queue, un point d'accent. Le fichier ne porte **que de la géométrie et des noms de classe** : aucune couleur, aucun style, aucune transformation. `src/styles/turtle.css` en fait cinq états et trois poses ; `src/lib/turtle.ts` dit jusqu'où chaque arc a grandi. De profil, quadrupède, tournée vers la droite, plate, sans bouche ni joues.
+
+| État | Déclenché par | Ce qui change sur elle |
+|---|---|---|
+| 0 | — | carapace unie ; petite ; pas de queue |
+| 1 | le premier mot | le premier arc paraît au sommet de la carapace |
+| 2 | les six parties | premier arc entier ; elle grandit ; la queue ; le deuxième arc commence |
+| 3 | les chapitres jouables | deuxième arc entier ; le cou s'allonge ; le troisième arc commence |
+| 4 | tous les mots du jeu | trois arcs entiers ; port de tête haut |
+
+Elle évolue par ce qu'on a **découvert**, que le choix ait été le bon ou non, en fin de manche ; elle ne réagit jamais au choix et **ne recule jamais** (`evolution()` refuse de la faire revenir en arrière). **Trois arcs continus**, chacun en six pas depuis le sommet : un seul trait, `pathLength="6"`, un tiret unique à cheval sur le haut — jamais des tirets, des cases ni un quadrillage, jamais le dessin de ce qui manque (règle 4 de `07-mecaniques.md` §7.11). **Trois poses**, qu'elle garde jusqu'au geste suivant : au repos ; tête levée quand on la touche ; tête baissée vers les tuiles quand on demande un indice.
+
+**Palette — cinq rôles** (amende §2.3), dans les deux jeux de tokens ; 38 paires de rôles mesurées, 0 en échec (`scripts/contrast.ts`, VÉRIFIÉ le 13/11) :
+
+| Rôle | Clair | Sombre | Jeu neutre, clair / sombre |
+|---|---|---|---|
+| `turtle-line` (corps, pattes, tête, contour) | Violet #4C0297 | **Crème #FFFCF4** | Nuit / Nuit claire |
+| `turtle-shell` | Violet 200 #E5CBFF | Violet #4C0297 | Relief / Nuit |
+| `turtle-arc` | Violet | Crème | Nuit / Nuit claire |
+| `turtle-eye` | Crème | Charbon | Papier / Encre |
+| `turtle-accent` (un passage seulement) | Rouge #D1271C | Vif jaune #F9C900 | Forêt / Forêt claire |
+
+*Pourquoi Crème en sombre, et pas Violet 200 comme le disait §2.3.* Dessinée avec la bascule de septembre, elle devenait en mode sombre un corps violet clair sous une carapace violet foncé : posée à côté des images officielles (planche locale, non versionnée), c'était leur appariement. Le corps crème l'en sort ; la règle est devenue une porte (§2.2, point 2).
+
+**Tailles : 48, 72, 168 et 240 px, un seul dessin** (amende §2.4 : « 24 et 48 » et la « règle des deux dessins »). 72 px dans le bloc du jeu, 168 px dans sa fiche. **Où elle vit : dans le bloc du jeu, et nulle part ailleurs** — jamais près du champ de question, d'une réponse du modèle, sur une fiche de section, l'aperçu de lien, le favicon ou une icône. **Mouvement** : `design/motion-spec.md` §2 (ligne « La tortue ») — `transform` et `opacity` seulement, jamais seule, rien en mouvement réduit.
+
+**Mesuré le 13/11/2026 — VÉRIFIÉ** : 552 octets gzip pour le dessin, 1706 pour sa feuille de style (budget : 6 Ko pour les deux) ; onze formes ; la planche jouée dans trois moteurs (Chromium, Firefox, WebKit) : mêmes états, mêmes transitions, rien ne sort de son cadre dans aucune pose. **HYPOTHÈSE, tant que l'éditeur n'a pas daté la planche et que les lecteurs neufs n'ont pas répondu** : qu'on y reconnaisse une tortue à 48 px, qu'elle ne soit « ni enfantine ni moche » (D0.32, toujours éliminatoire), que ses cinq états se distinguent à 72 px, qu'elle ne soit « pas la même ».
+
+**Validation.** `design/mascot/planche.html` — générée par `scripts/mascot-sheet.ts`, jamais retouchée à la main : l'écran du jeu en maquette, les cinq états à 168 et 72 px, clair et sombre, les arcs, les poses, les gestes à vitesse réelle et en mouvement réduit, les silhouettes en noir, le jeu neutre, sept contraintes en oui / non. L'éditeur la date dans `design/mascot/validation.json` ; la date est liée à l'empreinte du dessin, de sa feuille de style et de ses couleurs : **une retouche de l'un des trois la fait tomber** (`scripts/launch.ts`, et `scripts/mascot.test.ts` dès le commit).
+
+**Ce que ce paragraphe amende ou lève.**
+
+| Où | Ce qui était écrit | Ce qui vaut |
+|---|---|---|
+| En-tête, défaut du 10/9 | « la v1 sort sans mascotte » | **levé** (D16.11) |
+| §2.2, point 7 | ≤ 4 Ko par état, `currentColor` + 2 propriétés | un fichier, ≤ 6 Ko gzip avec sa feuille, cinq rôles |
+| §2.3 | trait Violet 200 en sombre ; trois variables `--mascot-*` | corps Crème en sombre ; cinq rôles `turtle-*` |
+| §2.4 | ≤ 6 formes ; 24 et 48 px ; deux dessins ; trois états `rest` / `walk` / `milestone` ; ≤ 320 ms ; « la jauge de progression, point » | ≤ 12 formes ; 48 à 240 px ; un dessin ; cinq états × trois poses ; un segment ≤ 320 ms, un geste ≤ 900 ms, une évolution ≤ 1 600 ms ; **le bloc du jeu, point** |
+| §2.4, encadré du 10/9 (« choisir l'un des deux ») | (a) la sortir de la jauge, ou (b) pas de mascotte | **(a)**, et plus loin : il n'y a plus de jauge |
+| §2.7, point 4 | « elle mesure une lecture (3 sections sur 18) » | elle ne porte aucun nombre ; ce qu'elle a trouvé se lit dans sa fiche, sans total |
+| §2.7, point 5 | « un “!” » au jalon | l'accent seul, un point au sommet de la carapace |
+| §2.9 | `mascot-24.svg`, `mascot-96.svg`, `mascot-512.svg`, `mascot-states.svg` | `tortue.svg`, `planche.html`, `validation.json` |
+| §2.10, points 1, 3 et 6 | jauge et écran vide seulement ; « utile ou absente » ; repli sans mascotte | le bloc du jeu ; **aucun repli** |
+| §3, ligne 4 | « sur la jauge et l'écran vide seulement » ; « mascotte sur … un jeu » interdite | le bloc du jeu seulement |
+
+Tiennent sans changement : §2.2 points 1 à 6 ; §2.6 (sans nom) ; §2.7 points 1 à 3 et 6 à 9 ; §2.8 (le lait-fraise reste une ligne de texte, jamais un dessin) ; §2.10 points 2 (jamais animée toute seule), 4 (sans nom, muette) et 5 (œil petit, reculé).
 
 ---
 

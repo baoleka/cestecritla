@@ -1,0 +1,326 @@
+/*
+ * « Où est-ce écrit ? » — the game block (D16.10; PLAN-JEU §4.1).
+ *
+ * Two ways of playing share these rules: the first round, in the HTML, moved by links and
+ * `:target` alone; and every round after the script has taken the block over. Nothing here is a
+ * colour of its own: roles only, so the dark theme and the neutral set follow without a rule.
+ *
+ * Never a colour that judges: a tile is a neutral surface before and after it is chosen, and
+ * the card of the place looks the same whatever was chosen.
+ */
+.game {
+  margin-block-start: var(--space-10);
+  padding-block-start: var(--space-4);
+  border-block-start: 2px solid var(--brand);
+}
+/* Electoral silence (D16.16): the game is not shown at all, and one sentence says why. The
+   attribute is set on <html> before the first paint (src/lib/silence-guard.ts). */
+.g-silence {
+  display: none;
+  margin-block-start: var(--space-10);
+  padding-block-start: var(--space-4);
+  border-block-start: 2px solid var(--brand);
+}
+html[data-silence] .g-silence {
+  display: block;
+}
+html[data-silence] .game {
+  display: none;
+}
+.g-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+.g-head h2 {
+  margin-block: 0;
+}
+/* She keeps her place whatever the screen of the game: the block never jumps around her. */
+.g-turtle {
+  flex: none;
+  --turtle-size: 4.5rem;
+}
+
+/* Whose word it is, right above it and at the size of the text: a capture that holds the word
+   holds this line. */
+.g-kicker {
+  margin-block: var(--space-4) 0;
+  font-weight: 700;
+}
+/* The one word: the programme's, so in the programme's face — and large, because it is the
+   whole subject of the screen. */
+/* …and it is a quotation: it wears its guillemets (drawn here, not typed: the element holds
+   the word and nothing else, which is what the build gates read). */
+.g-the-word::before {
+  content: '«\00a0';
+}
+.g-the-word::after {
+  content: '\00a0»';
+}
+.g-the-word {
+  margin-block: 0 var(--space-2);
+  font-family: var(--font-family-verbatim);
+  font-size: var(--font-size-display);
+  line-height: 1.15;
+  font-weight: 700;
+}
+.game h3 {
+  margin-block: var(--space-2);
+}
+.g-said {
+  margin-block: var(--space-2) 0;
+  font-weight: 700;
+}
+.g-with {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-block: var(--space-2) var(--space-3);
+}
+/* A second gesture, never competing with the tiles: outlined, as a link or as a button. */
+.g-quiet {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--tap-comfortable);
+  padding-inline: var(--space-4);
+  border: 2px solid var(--brand);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* The tiles: the official titles, whole. A long title wraps; it is never cut. */
+.g-tiles {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.g-tile {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-3);
+  inline-size: 100%;
+  min-block-size: var(--tap-comfortable);
+  padding: var(--space-2) var(--space-3);
+  border: 2px solid var(--brand);
+  border-radius: var(--radius-m);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-weight: 400;
+  text-align: start;
+  text-decoration: none;
+}
+/* « par ici »: where she looks when asked for a hint. Said in words, on the tile itself; no
+   other tile changes — nothing is ruled out. */
+.g-mark {
+  flex: none;
+  font-size: var(--font-size-small);
+  font-weight: 700;
+}
+
+/* The gestures of the game are in the colour of the name, never in the colour of action: on
+   this page one button only is — « Demander au programme » — and a red button under a choice
+   would read as a verdict (PLAN-JEU §4.1). The one thing of the block that takes the accent
+   colour is the turtle's dot, at a passage, and never because of a choice (§4.3). */
+.game .cta,
+.game button {
+  background: var(--brand);
+  color: var(--brand-on);
+}
+.game .g-tile,
+.game .g-quiet {
+  background: var(--bg);
+  color: var(--text);
+}
+/* A link of the game is underlined, in the colour of the text: the site's links are in the
+   colour of action, and nothing here is. */
+.game a:not(.cta) {
+  color: var(--text);
+}
+
+/* The card of the place: where the word is written, and the way there. */
+.g-place {
+  margin-block-start: var(--space-3);
+  padding: var(--space-4);
+  border: 2px solid var(--brand);
+  border-radius: var(--radius-m);
+}
+.g-place h3 {
+  margin-block-start: 0;
+}
+.g-where {
+  margin: 0 0 var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+.g-where li + li {
+  margin-block-start: var(--space-1);
+}
+.g-where li:last-child {
+  font-weight: 700;
+}
+.g-place p {
+  margin-block: var(--space-2);
+}
+.g-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-block: var(--space-4) 0;
+}
+.game h3:focus-visible {
+  outline-offset: 4px;
+}
+
+/* ------------------------------------------------------------------------------------------
+ * Without script: three words, moved by `:target`. Default: the first word's question.
+ * An anchor is a position — #m2 the second word, #m2-4 its fourth tile, #fin the end — and the
+ * panels after it show or hide by what is targeted.
+ * ---------------------------------------------------------------------------------------- */
+.g-at {
+  display: block;
+  /* The block stays in view when an anchor is followed: its title is what one lands on. */
+  scroll-margin-block-start: 9rem;
+}
+.g-word,
+.g-place,
+.g-end,
+.g-yes,
+.g-also {
+  display: none;
+}
+.g-word-1 {
+  display: block;
+}
+.g-over:target ~ .g-word-1,
+.g-w2:target ~ .g-word-1,
+.g-w3:target ~ .g-word-1 {
+  display: none;
+}
+.g-w2:target ~ .g-word-2,
+.g-w3:target ~ .g-word-3,
+.g-over:target ~ .g-end {
+  display: block;
+}
+/* A tile was followed: the tiles fold, the card of the place takes their room. */
+.g-r.g-w1:target ~ .g-word-1 .g-question,
+.g-r.g-w2:target ~ .g-word-2 .g-question,
+.g-r.g-w3:target ~ .g-word-3 .g-question {
+  display: none;
+}
+.g-r.g-w1:target ~ .g-word-1 .g-place,
+.g-r.g-w2:target ~ .g-word-2 .g-place,
+.g-r.g-w3:target ~ .g-word-3 .g-place {
+  display: block;
+}
+/* The sentence of the card: « Oui. » where the game shows the word, « Oui, là aussi. » where
+   it is written too, and otherwise simply where it is written. */
+.g-here.g-w1:target ~ .g-word-1 .g-yes,
+.g-here.g-w2:target ~ .g-word-2 .g-yes,
+.g-here.g-w3:target ~ .g-word-3 .g-yes,
+.g-there.g-w1:target ~ .g-word-1 .g-also,
+.g-there.g-w2:target ~ .g-word-2 .g-also,
+.g-there.g-w3:target ~ .g-word-3 .g-also {
+  display: block;
+}
+.g-here.g-w1:target ~ .g-word-1 .g-neutral,
+.g-here.g-w2:target ~ .g-word-2 .g-neutral,
+.g-here.g-w3:target ~ .g-word-3 .g-neutral,
+.g-there.g-w1:target ~ .g-word-1 .g-neutral,
+.g-there.g-w2:target ~ .g-word-2 .g-neutral,
+.g-there.g-w3:target ~ .g-word-3 .g-neutral {
+  display: none;
+}
+
+/* « Garder ta tortue »: what keeping means, said before the two gestures — which weigh the same. */
+.g-keep {
+  margin-block: var(--space-4);
+  padding: var(--space-4);
+  border: 2px solid var(--brand);
+  border-radius: var(--radius-m);
+}
+.g-keep p {
+  margin-block: 0 var(--space-2);
+}
+.g-keep .g-actions {
+  margin-block: var(--space-3) 0;
+}
+
+/* She is a button once the script has her: touching her opens her sheet. The button is hers
+   alone — no fill, no border — and shows its focus like every other target. */
+.game .g-press {
+  min-block-size: 0;
+  min-inline-size: var(--tap-comfortable);
+  padding: var(--space-1);
+  border-radius: var(--radius-m);
+  background: transparent;
+  color: inherit;
+}
+
+/* Her sheet: a dialog, on the page's own ground. */
+.t-sheet {
+  inline-size: min(100% - 2rem, 28rem);
+  max-block-size: calc(100% - 2rem);
+  padding: var(--space-4);
+  border: 2px solid var(--brand);
+  border-radius: var(--radius-m);
+  background: var(--bg);
+  color: var(--text);
+}
+.t-sheet::backdrop {
+  background: color-mix(in srgb, var(--text) 55%, transparent);
+}
+.t-sheet h3 {
+  margin-block: 0 var(--space-2);
+}
+.t-sheet .unofficial {
+  margin-block: var(--space-3) 0;
+}
+.t-sheet h4 {
+  margin-block: var(--space-4) var(--space-1);
+}
+.t-sheet-her {
+  display: flex;
+  justify-content: center;
+  --turtle-size: 10.5rem;
+}
+.t-sheet-said {
+  min-block-size: calc(var(--font-size-body) * var(--line-height-body));
+  margin-block: var(--space-1) 0;
+  text-align: center;
+}
+.t-found {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.t-found.t-by-place {
+  display: block;
+}
+.t-found [data-programme='word'] {
+  font-family: var(--font-family-verbatim);
+  font-weight: 700;
+}
+.t-found a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--tap-min);
+}
+
+/* With script: one screen at a time, built by src/scripts/game.ts. */
+.g-live .g-word,
+.g-live .g-place,
+.g-live .g-end {
+  display: block;
+}

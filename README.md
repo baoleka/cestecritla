@@ -26,7 +26,7 @@ La recherche reste **locale et extractive**. La réponse à une question sera é
 
 ## Dossier
 
-Point d'entrée : `docs/discovery/README.md`. À lire d'abord : `PLAN-JEU.md` (le plan en cours, approuvé le 13 novembre 2026), `PLAN-EDITION-2026.md` (le plan précédent et son journal), `decisions.md` (213 décisions, D0-D16), `14-risques.md` et `16-hypotheses.md`. Le dossier de découverte des 7-10 septembre 2026 (`00-resume-executif.md`, `prompt-final.md`, `PLAN-IMPLEMENTATION.md`) décrit le produit d'avant la réédition ; il reste la référence pour tout ce que D15 ne touche pas.
+Point d'entrée : `docs/discovery/README.md`. À lire d'abord : `PLAN-JEU.md` (le plan en cours, approuvé le 13 novembre 2026), `PLAN-EDITION-2026.md` (le plan précédent et son journal), `decisions.md` (221 décisions, D0-D16), `14-risques.md` et `16-hypotheses.md`. Le dossier de découverte des 7-10 septembre 2026 (`00-resume-executif.md`, `prompt-final.md`, `PLAN-IMPLEMENTATION.md`) décrit le produit d'avant la réédition ; il reste la référence pour tout ce que D15 ne touche pas.
 
 ## Licences
 

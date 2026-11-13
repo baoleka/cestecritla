@@ -4,16 +4,20 @@
  * Run: npx tsx --test scripts/launch.test.ts
  */
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { test } from 'node:test';
+import { listFingerprint } from '../src/lib/fingerprint.js';
+import { LOCAL_CHECKS } from '../src/lib/game.js';
+import { WORD_LINKS_PATH, WORD_LINK_ENGINES, wordsFingerprint } from '../src/lib/word-links.js';
 import { HOLDING_PAGES, deployRefusal, type DeployContext } from './build-mode.js';
 import {
   ASK_PATH,
   LAUNCH_PATH,
   MANIFEST_PATH,
+  TOKEN_SETS,
+  TURTLE_CSS_PATH,
   TURTLE_SVG_PATH,
   TURTLE_VALIDATION_PATH,
   WORDS_PATH,
@@ -22,6 +26,8 @@ import {
   launchBlockers,
   pendingReviews,
   privacyStringsHash,
+  turtleColours,
+  turtleFingerprint,
   type DatedGestures,
   type LaunchFile,
   type LaunchInputs,
@@ -61,6 +67,7 @@ const OPEN: DeployContext = {
   scrutinBuild: false,
   ask: 'off',
   workerProblems: [],
+  distProblems: [],
 };
 
 void test('when everything is in place, nothing blocks the launch', () => {
@@ -194,6 +201,7 @@ void test('the files that validate themselves: missing, in place, then edited af
   rmSync(empty, { recursive: true });
 
   const words = [{ slot: 0, id: 'w000', word: 'mot', pin: { id: 'p1c1-s01-m01', sha256: 'x' } }];
+  const pool = { sensitive_2025: ['c4-s01'], judged: { 'p6c1-s01': null } };
   const svg = '<svg xmlns="http://www.w3.org/2000/svg"/>';
   const complete = {
     [MANIFEST_PATH]: manifest,
@@ -206,22 +214,91 @@ void test('the files that validate themselves: missing, in place, then edited af
     },
     [WORDS_PATH]: {
       meta: {
+        pool,
         pool_reviewed_on: '2026-12-01',
-        validated: { on: '2026-12-02', list_sha256: canonicalHash(words) },
-        attested: { list_sha256: canonicalHash(words), corpus_version: corpus },
+        validated: { on: '2026-12-02', list_sha256: listFingerprint(words, pool) },
+        attested: {
+          list_sha256: listFingerprint(words, pool),
+          corpus_version: corpus,
+          checks: [...LOCAL_CHECKS],
+        },
       },
       words,
     },
+    [WORD_LINKS_PATH]: {
+      corpus_version: corpus,
+      words_sha256: wordsFingerprint(words),
+      engines: WORD_LINK_ENGINES.map((name) => ({ name, version: '1' })),
+      highlighted: ['w000'],
+      measure_only: [],
+    },
     [TURTLE_SVG_PATH]: svg,
-    [TURTLE_VALIDATION_PATH]: {
-      validated_on: '2026-12-03',
-      svg_sha256: createHash('sha256').update(svg).digest('hex'),
-      same_character_asked_on: '2026-12-03',
+    [TURTLE_CSS_PATH]: '.turtle { display: block; }',
+    [TOKEN_SETS[0]]: {
+      color: { violet: { $value: '#4C0297' } },
+      'color-role': { light: { bg: '#fff', 'turtle-line': '{color.violet}' } },
     },
   };
   const ready = tree(complete);
+  // The sheet is dated on the drawing as it stands: the file, its stylesheet, its colours.
+  const stamp = (): void => {
+    writeFileSync(
+      join(ready, TURTLE_VALIDATION_PATH),
+      JSON.stringify({
+        validated_on: '2026-12-03',
+        drawing_sha256: turtleFingerprint(ready),
+        same_character_asked_on: '2026-12-03',
+        same_character_sha256: turtleFingerprint(ready),
+      }),
+    );
+  };
+  assert.match(artefactBlockers(ready).join('\n'), /turtle is not drawn or not validated/);
+  stamp();
+  assert.deepEqual(artefactBlockers(ready), []);
+  assert.deepEqual(turtleColours(ready), [`${TOKEN_SETS[0]} light turtle-line #4C0297`]);
+
+  // Each of the three things the editor looked at un-validates her when it moves — and a colour
+  // that is not hers does not.
+  const retouches: [string, string][] = [
+    [TURTLE_CSS_PATH, '.turtle { display: inline; }'],
+    [
+      TOKEN_SETS[0],
+      JSON.stringify({
+        color: { violet: { $value: '#4C0298' } },
+        'color-role': { light: { bg: '#fff', 'turtle-line': '{color.violet}' } },
+      }),
+    ],
+  ];
+  for (const [path, content] of retouches) {
+    const before = readFileSync(join(ready, path), 'utf8');
+    writeFileSync(join(ready, path), content);
+    assert.match(artefactBlockers(ready).join('\n'), /drawing changed after the sheet/, path);
+    writeFileSync(join(ready, path), before);
+    assert.deepEqual(artefactBlockers(ready), [], path);
+  }
+  writeFileSync(
+    join(ready, TOKEN_SETS[0]),
+    JSON.stringify({
+      color: { violet: { $value: '#4C0297' } },
+      'color-role': { light: { bg: '#000', 'turtle-line': '{color.violet}' } },
+    }),
+  );
   assert.deepEqual(artefactBlockers(ready), []);
 
+  // A section judged after the editor validated the list: the tiles are no longer those he
+  // read the words among. Validation and attestation both fall, with not a word changed.
+  const judged = { ...pool, judged: { 'p6c1-s01': 'play' } };
+  writeFileSync(
+    join(ready, WORDS_PATH),
+    JSON.stringify({
+      ...complete[WORDS_PATH],
+      meta: { ...complete[WORDS_PATH].meta, pool: judged },
+    }),
+  );
+  assert.match(
+    artefactBlockers(ready).join('\n'),
+    /pool of sections changed after it was validated[\s\S]*has not attested this list/,
+  );
   // One more word after the editor validated the list: validation and attestation both fall.
   writeFileSync(
     join(ready, WORDS_PATH),
@@ -235,9 +312,12 @@ void test('the files that validate themselves: missing, in place, then edited af
   // A re-crawl changed the corpus under the private database.
   writeFileSync(join(ready, MANIFEST_PATH), JSON.stringify({ meta: { corpus_version: 'decaf' } }));
   const stale = artefactBlockers(ready).join('\n');
-  assert.match(stale, /list changed after it was validated/);
+  assert.match(stale, /list or its pool of sections changed after it was validated/);
+  // …and the browsers were asked about another list: the words' links are to be followed again.
+  assert.match(stale, /word-links\.json: followed on another (?:corpus|list of words)/);
   assert.match(stale, /has not attested this list on this corpus/);
   assert.match(stale, /drawing changed after the sheet was validated/);
+  assert.match(stale, /drawing changed after "same character\?" was asked/);
   assert.match(stale, /private database is not at the corpus version/);
 
   // "Search only" needs neither a bench nor a database — but it is a decision, with its date:

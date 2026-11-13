@@ -883,3 +883,579 @@ tout effacer ; avancer l'horloge dans une fenêtre de gel.
     par Cloudflare juge, au prix de neurons. Tant que ce n'est pas tranché, ces deux portes
     disent « non jugé » et aucun mode ne s'ouvre.
 - 322 tests.
+
+### Lot J, au 13 novembre 2026
+
+- **J1** — la règle 11 est transposée sans rien saisir à la main : les quatorze sections sensibles
+  de 2025 restent écrites dans leurs identifiants d'origine (`game-words.json`,
+  `pool.sensitive_2025`) et la build en déduit leurs **quinze héritières** par la carte publique
+  2025 → 2026. Les **onze sections sans ancêtre** (dont les quatre du chapitre Europe) sont
+  listées avec un jugement à `null` : hors du jeu tant que l'éditeur ne les a pas tranchées une à
+  une. Vingt-six sections sur 111 sont donc hors périmètre aujourd'hui.
+- **J0** — `src/lib/game.ts` prouve chaque mot sur les seuls fichiers publics, ou arrête la
+  build : un mot, une racine présente dans l'index, une épingle dont l'empreinte n'a pas bougé,
+  qui porte la racine, où un lien peut arriver ; la racine dans aucun titre proposé comme
+  réponse ; aucune section où elle est écrite hors périmètre. Il calcule les autres parties où le
+  mot est écrit et les trois tuiles de l'indice. Dix-neuf cas d'échec, chacun avec son test, sur
+  un livre inventé.
+- **J2** — `scripts/words-2026.ts` fait en local ce que la build ne peut pas voir : le mot est
+  écrit tel quel dans la mesure épinglée ; cette mesure ne s'ouvre pas sur une interdiction ; la
+  racine n'est dans aucun paragraphe ni aucun titre hors des sections où une mesure l'emploie.
+  Il atteste la liste par son empreinte, et mesure sa part.
+- **J3, première moitié — neuf mots PROPOSÉS, non validés** : wagon, cantine, mairies, sentiers,
+  dimanche, fontaines, bocaux, villages, journaux. Choisis parmi les racines de l'index public
+  qui ne vivent que dans une section ; les neuf passent toutes les preuves automatiques ; part
+  mesurée : **9 mots sur 24 451, soit 0,037 %** des mots des propositions. **Ils sont dans un
+  fichier suivi sur la branche locale : ne rien pousser avant la validation de l'éditeur**
+  (D15.18). Ce que seul l'éditeur peut dire, mot par mot : est-ce une chose concrète, un seul
+  sens, et qu'écrirait un opposant dessous — en particulier pour « dimanche », dont la mesure ne
+  s'ouvre pas sur une interdiction mais que je n'ai pas lue.
+  - Les critères de choix sont écrits dans `data/2026/NOTICE.md` : la porte anti-fuite refuse,
+    avec raison, toute phrase longue dans un fichier de données.
+  - La partie 6 n'a que sept sections jouables sur seize, et peu de mots concrets : le passage
+    « un mot dans chacune des six parties » en dépend. À regarder avec le jugement des onze
+    sections neuves.
+- 328 tests.
+
+### Lot K, au 13 novembre 2026
+
+- **K1** — cinq rôles de couleur pour la tortue (`turtle-line`, `turtle-shell`, `turtle-arc`,
+  `turtle-eye`, `turtle-accent`), dans les deux jeux de tokens, clair et sombre, en un commit
+  (S6). Cinq paires de plus à la porte de contraste — le trait sur le fond, l'arc sur la
+  carapace, l'œil sur le corps, l'accent sur la carapace et sur le fond : **38 paires de rôles,
+  0 en échec** (VÉRIFIÉ). Les courbes de mouvement deviennent des jetons CSS comme les durées
+  (`--easing-standard`, `--easing-enter`, `--easing-exit`).
+- **K2** — la tortue est dessinée. `design/mascot/tortue.svg` : onze formes écrites à la main,
+  552 octets gzip, géométrie et noms de classe seulement. `src/styles/turtle.css` en fait cinq
+  états et trois poses ; `src/lib/turtle.ts` dit jusqu'où chaque arc a grandi et dans quel ordre
+  elle évolue ; `src/components/Turtle.astro` la pose dans une page depuis le fichier validé ;
+  `scripts/mascot-sheet.ts` génère la planche ; `scripts/mascot.test.ts` (neuf tests) tient ce
+  que le dessin peut contenir, ses couleurs, son mouvement, et que la planche est celle du
+  dessin du jour.
+  - **Écart au plan, à valider sur la planche : en mode sombre son corps est Crème, pas
+    Violet 200.** La bascule de septembre (`illustration-rules.md` §2.3) lui donnait en sombre
+    un corps violet clair sous une carapace violet foncé : posée à côté des images officielles
+    gardées en local, c'était leur appariement. La porte de couleur est partie de là : elle
+    refuse, en OKLCH, la lavande, le prune et le rose observés, et l'appariement « corps violet
+    clair sous carapace violet foncé ». Une distance seule ne suffisait pas — elle disait un
+    bleu pâle « proche » d'un mauve pâle.
+  - **Ce que la première planche a montré** : les arcs sortaient en points. Une règle CSS gagne
+    toujours sur un attribut de présentation ; la feuille de style posait un tiret, les
+    attributs de chaque arc n'avaient plus d'effet. La feuille ne pose plus aucun tiret, et un
+    test le refuse.
+  - **La validation est liée à trois choses, pas au seul fichier SVG** : le dessin, sa feuille
+    de style et ses couleurs dans les deux jeux. Retoucher l'une des trois fait tomber la date
+    (`scripts/launch.ts`), et le test le dit dès le commit. La question « même personnage ? »
+    porte la même empreinte : posée sur un autre dessin, elle n'a pas été posée.
+  - **Le mouvement est écrit, pas encore branché** : une pose en 240 ms, une évolution en trois
+    temps (taille et port, puis les arcs, puis l'accent : 840 ms, budget 1 600), jamais au
+    chargement, rien en mouvement réduit. Joué sur la planche dans trois moteurs (VÉRIFIÉ) ;
+    son coût à CPU ×4 n'est pas mesuré (HYPOTHÈSE, lot M1).
+  - **Les arcs 2 et 3** montrent un pas dès qu'ils commencent, le sixième quand il ne reste
+    rien, et quatre entre les deux (`arcSteps`) : une profondeur longue n'a pas de plateau. Le
+    premier arc compte les parties, une à une.
+  - Non fait : la porte « elle ne pousse rien, n'est posée sur rien, ne porte aucun nombre »
+    attend que le jeu soit dans la page (lot M1). La planche « côte à côte » reste locale : les
+    images officielles ne sont pas versionnées.
+- **« Même personnage ? », posée le 13/11 à trois lecteurs neufs** (agents sans contexte, une
+  seule image : les deux séries côte à côte, clair et sombre, sans un mot qui dise d'où vient
+  l'une ou l'autre) — un lecteur sans rôle, un bénévole de campagne attaché à sa mascotte, un
+  lecteur hostile chargé de démontrer la copie. **Trois sur trois : « pas le même »** ; le
+  lecteur hostile conclut « même famille de couleurs seulement » (dessin, proportions, pose et
+  rendu : « pas repris »). Ce qui reste, et que le dessin ne peut pas lever : la couleur. Le
+  bénévole se dit « un peu » gêné — « une tortue violette sur nos couleurs me fait penser qu'on
+  pourrait nous confondre » — et le lecteur sans rôle répond « peut-être » à « même
+  organisation ? ». C'est la charte suivie, pas la tortue : le risque est celui de
+  `identity-decision.md` §5.2, tenu par « Site non officiel. » dans le cadre de chaque écran et
+  par le jeu neutre en réserve. **HYPOTHÈSE** (lecteurs joués par des agents, D14.11) ; comptée
+  dans `design/mascot/validation.json`, liée à l'empreinte du dessin : une retouche oblige à
+  reposer la question. La session des sept personas (O5) la reposera.
+- **K3 attend l'éditeur** : ouvrir `design/mascot/planche.html`, répondre aux sept contraintes,
+  dater (`npx tsx scripts/mascot-sheet.ts --validated AAAA-MM-JJ`).
+- 337 tests.
+
+### Lot L, au 13 novembre 2026
+
+- **L1** — les règles du jeu et sa mémoire sont écrites en fonctions pures et jouées sans
+  navigateur, sur un livre inventé (`src/lib/game-engine.ts`, `src/lib/game-state.ts`, onze
+  tests).
+  - **Un choix n'est jamais « faux »** : le moteur ne connaît que trois verdicts — le mot est
+    écrit là où le jeu le montre, ou là aussi, ou ailleurs — et aucune fonction ne peut produire
+    une phrase d'absence.
+  - **Trouvé = montré** : un mot compte pour l'endroit où le jeu l'a montré, quel qu'ait été le
+    choix, et seulement à l'apparition de la carte du lieu. La profondeur et la tortue ne
+    changent qu'en fin de manche, et ne redescendent jamais — pas même si une réédition retire
+    des mots.
+  - **Les seuils sont comptés sur ce qui est jouable** : « les six parties » veut dire les
+    parties où la liste a un mot, « les chapitres jouables » ceux où elle en a un. Avec les neuf
+    mots proposés la partie 6 n'en a aucun : c'est la liste qui doit la couvrir (J3), pas le
+    seuil qui doit s'y plier.
+  - **Le tirage est celui du jeu** : l'ordre de lecture de la liste, les mots pas encore trouvés
+    d'abord ; une fois tout trouvé, la liste continue en boucle. Même passé, même manche.
+  - **« Je ne sais pas » montre le lieu tout de suite**, à toute profondeur — choix de
+    conception : ne pas faire traverser deux questions à qui vient de dire qu'il ne sait pas.
+  - **La mémoire n'a aucun champ pour un choix** : l'état se relit champ par champ ; une chaîne
+    écrite par autre chose revient en jeu vide. Deux onglets se fondent en prenant le plus de
+    chacun — la seule fusion qui ne puisse jamais la faire reculer.
+  - Une manche retrouvée dans l'onglet reprend à son mot, à la première question ou à sa carte ;
+    la carte dit alors où le mot est écrit, sans rien dire d'un choix qu'elle ne connaît plus.
+- **L2** — le bloc du jeu est dans la page d'accueil, sous le champ et les puces
+  (`src/components/Game.astro`, `src/scripts/game.ts`, `src/styles/game.css`), et ses données
+  publiques sont calculées au build (`src/lib/game-data.ts`, `/data/jeu-<empreinte>.json`).
+  - **Le jeu ne paraît que si l'éditeur a validé la liste telle qu'elle est** — comme
+    « Demander » ne paraît que si `ask.json` le dit. Tant que `validated.on` est vide, aucune
+    build déployable ne contient un mot, une tuile ni la tortue : D15.18 est tenue par
+    construction, aperçu compris. La build d'essai (`npm run build:ask`, `dist-ask/`, jamais
+    déployée) montre le jeu avec la liste en l'état : c'est elle que les portes jouent. Le
+    geste de l'éditeur : `npx tsx scripts/words-2026.ts --validated <date du jour>`.
+  - **Sans JavaScript, la première manche est entière dans le HTML** : trois mots, les six
+    titres officiels, la carte du lieu de chaque tuile, « Mot suivant », la fin de manche. Elle
+    se joue par liens et `:target` ; une ancre dit une position (`#m1-3`), jamais un mot ni une
+    réponse.
+  - **Avec JavaScript**, le script reprend le bloc quand il approche de l'écran : une requête,
+    pour un fichier statique dont l'adresse ne dit rien du joueur ; ensuite une manche n'envoie
+    rien et, à ce stade, n'écrit rien (l'état vit dans la page ; le lot M2 l'écrit dans
+    l'onglet). Si le fichier ne vient pas, la manche du HTML continue de marcher. Le focus va à
+    la phrase qui répond à un geste, et ne bouge jamais à l'arrivée du script.
+  - **Aucun bouton du jeu n'est en couleur d'action** : sur cette page un seul l'est,
+    « Demander au programme », et un bouton rouge sous un choix se lirait comme un verdict. Les
+    gestes du jeu sont dans la couleur du nom.
+  - **Écart au plan** : la tortue est dans l'en-tête du bloc, à côté du titre « Où est-ce
+    écrit ? », et non entre la question et les tuiles — elle garde ainsi sa place sur les trois
+    écrans (question, carte du lieu, fin de manche), et le bloc ne saute jamais autour d'elle.
+  - Sept chaînes de plus au kit (502) : les phrases de révélation pour le chapitre et la
+    section, et la phrase de fin de manche sans script.
+  - Portes : `scripts/e2e-game.ts` (58 contrôles sous Chromium, 40 sous Firefox et WebKit ; un
+    témoin modifié échoue bien) ; `scripts/game-page.test.ts` (aucun mot ni tortue hors du bloc,
+    fichier de données égal à la liste prouvée, chaque chaîne du fichier justifiée par un
+    fichier public) ; `scripts/e2e.ts` (rien du jeu tant que la liste n'est pas validée).
+  - **Ce que la porte de build a trouvé** : avec un simple `{on && <Game />}`, la build sans jeu
+    embarquait quand même toute sa feuille de style dans la page d'accueil, et son script dans
+    `dist/` — Astro attache les styles de tout composant *importé*, rendu ou non. Le jeu est
+    donc une condition que le bundler voit (`__CEL_GAME__`, posée par `astro.config.ts`) : une
+    build qui ne le montre pas ne l'importe pas.
+  - Mesuré (VÉRIFIÉ) : données du jeu 3,8 Ko gzip avec neuf mots, script 3,6 Ko gzip.
+  - Non fait ici : l'état dans l'onglet et « Garder ta tortue » (M2), toucher la tortue et sa
+    fiche (M1), le partage et le gel (N), la matrice d'accessibilité complète sur les états du
+    jeu (O1), la part publiée sur `/exactitude` (J4).
+
+### Lot M, au 13 novembre 2026
+
+- **M2** — ce que le jeu retient, et où (`src/scripts/game-store.ts`, `src/lib/storage-map.ts`,
+  `src/components/GameStorage.astro`).
+  - **L'onglet dès le premier mot montré, le téléphone seulement après « Garder ta tortue »** :
+    une clé, `cestecritla.jeu.v1`, dans les deux. La carte « Garder » paraît à chaque fin de
+    manche tant qu'on n'a pas répondu : quatre phrases d'abord, deux boutons de même poids
+    ensuite, et sur iPhone la limite de sept jours de Safari.
+  - **Un choix n'a nulle part où aller** : la porte fait jouer le même mot à deux visiteurs qui
+    choisissent des tuiles différentes ; ce qui est écrit est la même chaîne.
+  - **Deux onglets** : ce que l'un trouve, l'autre le voit sur sa carapace, sans mouvement ;
+    « Tout effacer » dans l'un vide aussi l'autre.
+  - **Un stockage qui refuse n'est pas une erreur** : la manche se joue, la suivante commence,
+    et rien n'est dit.
+  - **`/confidentialite` est générée depuis la carte des écritures**, elle-même construite sur
+    les listes de champs de l'état : un champ sans sa phrase ne compile pas ; la porte compare
+    ensuite les stockages réels d'un navigateur à ce que la carte nomme. Quinze chaînes
+    `privacy.game.*` et `turtle.keep.done` (518 clés). L'analyse de l'article 82 est écrite
+    dans `11-conformite.md` §6.2 quater — qualification PROBABLE, faits VÉRIFIÉS.
+  - **Ce que le contrôle « deux onglets » a trouvé** : sous Chromium, un onglet passé en
+    arrière-plan reçoit ses minuteries en retard ; les dernières images de sa propre évolution
+    arrivaient *après* ce que l'autre onglet venait d'apporter, et la ramenaient en arrière.
+    Quand un autre onglet parle, les images en attente sont maintenant abandonnées et son
+    aspect est posé d'un coup. (Ce que l'autre onglet a écrit est lu dans l'événement lui-même,
+    pas relu dans le stockage.)
+  - `scripts/e2e-game.ts` : 77 contrôles sous Chromium, 59 sous Firefox et WebKit ; un
+    stockage qui écrirait avant le geste fait tomber la porte (témoin joué).
+  - **À l'éditeur** : relire `/confidentialite` sur la build où le jeu paraît (blocage de
+    lancement, `privacy_page` dans `data/launch.json`).
+- **M1** — on peut la toucher, et elle a sa fiche.
+  - **Elle est un bouton**, « Ta tortue » : la toucher lui fait lever la tête et ouvre sa fiche
+    (un `<dialog>` : le focus y entre, Échap la ferme, le focus lui revient, elle repose la
+    tête). Dans la fiche elle est grande (168 px) et on peut la toucher encore ; on y lit les
+    mots qu'elle a trouvés — et, à la troisième profondeur, où chacun est écrit, dans l'ordre du
+    livre, avec son lien vers le livre officiel — ce qui est gardé, « Garder ta tortue » si ce
+    n'est pas fait, « Tout effacer ». Jamais un total.
+  - **L'indice** : elle baisse la tête vers les tuiles et garde la pose jusqu'au geste suivant.
+  - **Mouvement réduit** : la fiche s'ouvre, les tuiles de l'indice sont marquées et la phrase
+    est dite ; elle ne bouge pas, et aucune phrase n'annonce un mouvement qui n'a pas lieu. Ce
+    qu'elle est devenue en fin de manche s'affiche d'un coup, sans transition.
+  - **La porte du rôle** (`scripts/e2e-game.ts`) : sa place dans le bloc est la même sur la
+    question, la carte et la fin de manche ; le bloc n'a ni barre ni jauge ; ni son dessin ni
+    son nom ne portent de chiffre ; elle est seule dans sa case.
+  - **Mesuré** : rien ne bouge 2,1 s après un geste ; un appui pendant son évolution atteint sa
+    cible ; à processeur ralenti ×4 (Chromium sans tête, trois passes) l'évolution et le geste
+    tiennent 60 images par seconde — p95 16,7 ms, aucune image au-delà de 20 ms (VÉRIFIÉ sur
+    cette machine ; un Android réel reste à faire).
+  - **Ce que la porte a trouvé** : un bouton que le script avait caché restait à l'écran. Tous
+    les boutons du site sont des `inline-flex`, et cette règle gagnait sur le `[hidden]` du
+    navigateur. Une règle `[hidden] { display: none !important }` vaut maintenant pour tout le
+    site, avec son test de build — le bouton « Demander », caché jusqu'à l'arrivée de son
+    script, en profite.
+  - Les liens du jeu sont soulignés, dans la couleur du texte : rien, dans le bloc, n'est dans
+    la couleur d'action.
+  - Trois chaînes de plus (521) ; `scripts/e2e-game.ts` : 100 contrôles sous Chromium, 76 sous
+    Firefox et WebKit.
+
+### Lot N, au 13 novembre 2026
+
+- **N1** — le gel L49 est branché sur le jeu, en quatre couches (D16.16).
+  - **Avant le premier rendu** : quelques lignes synchrones dans le `<head>` de la page
+    d'accueil (`src/lib/silence-guard.ts`), autorisées par leur seule empreinte, cachent le jeu
+    si l'horloge du téléphone est dans une fenêtre de silence ou à moins de cinq minutes d'une.
+    Les fenêtres y sont écrites en nombres, calculés au build depuis le calendrier unique.
+  - **Puis le script** lit l'heure de notre serveur (`/flags.json`) et a le dernier mot, dans
+    les deux sens : à l'arrivée, à chaque changement d'écran, au retour sur l'onglet
+    (`src/scripts/silence-now.ts`, partagé avec « Demander »). Une horloge qui contredit la
+    nôtre n'est pas crue : fermé dans le doute. Un gel qui commence pendant une manche l'arrête
+    au geste suivant ; ce qui était trouvé reste dans l'onglet ; à la fin de la fenêtre, le jeu
+    revient. Pendant le gel une phrase dit ce qui est en pause et quand tout revient ; la
+    recherche et la lecture restent.
+  - **La build « scrutin »** (`npm run build:scrutin`) : ni question ni jeu dans le HTML, une
+    phrase qui dit pourquoi. À déployer avant chaque fenêtre ; dans une fenêtre, c'est la seule
+    build de l'app que `scripts/deploy.ts` accepte (règle déjà écrite au lot G2). Sans
+    JavaScript, c'est elle qui tient le gel.
+  - **« Tout effacer » reste à portée pendant un gel** : la page `/confidentialite` de la build
+    scrutin garde la section du jeu et son bouton — ce qui a été écrit avant peut être effacé
+    pendant.
+  - **L'interrupteur** : `silence_override: "on"` dans `/flags.json` ferme les questions et le
+    jeu hors de tout scrutin, sans retirer le site.
+  - **Ce que ce lot a trouvé dans « Demander »** : l'heure du serveur était lue à l'arrivée
+    puis comparée à « maintenant » à chaque question. Cinq minutes après l'arrivée, les deux ne
+    s'accordaient plus, l'horloge était jugée fausse, et la page répondait à toute question par
+    sa propre sélection — sans jamais interroger le modèle, et sans un mot. L'heure lue vieillit
+    maintenant avec l'horloge du téléphone ; un contrôle pose une question dix minutes après
+    l'arrivée.
+  - **Ce que le contrôle du gel a trouvé** : pendant un gel la phrase « Tout revient à… » ne
+    s'écrivait pas — le script ne démarrait qu'à l'approche du bloc, et un bloc masqué
+    n'approche jamais. Quand la garde a masqué le jeu, l'heure du serveur est maintenant
+    demandée tout de suite.
+  - `silence.banner` réécrite : « Veille et jour du vote, les questions, le jeu et le partage
+    sont en pause. La recherche et la lecture restent ouvertes. »
+- **N2** — « Envoyer le jeu » ne partage que l'adresse nue du site (D16.17) :
+  `navigator.share({ url })`, sans texte, sans mot, sans rien de la tortue ; sans feuille de
+  partage l'adresse est copiée et c'est dit ; sans l'un ni l'autre le bouton n'existe pas.
+- Portes : `scripts/e2e-game.ts` (113 contrôles sous Chromium, 89 sous Firefox et WebKit, dont
+  dix sur le gel avec une horloge réglée et l'heure du serveur réglable) ; `scripts/e2e-ask.ts`
+  (68 / 64 / 64) ; `scripts/game-page.test.ts` lit la build scrutin d'essai (`dist-scrutin/`).
+- **À l'éditeur, au printemps 2027** : `npm run build:scrutin && npm run deploy` avant le
+  vendredi de chaque tour, `npm run build && npm run deploy` après le dimanche 20 h — quatre
+  déploiements. Le déploiement refuse toute autre build de l'app pendant une fenêtre.
+
+### Lots M3 et J4, au 13 novembre 2026
+
+- **M3 — lait-fraise** : la ligne est écrite et tenue par ses règles, **et elle n'est rendue
+  que si l'éditeur la confirme** (`easter_confirmed_on` dans `data/launch.json`, aujourd'hui
+  vide) — la build d'essai la montre, pour que les portes la jugent avant lui.
+  - **Son origine est trouvée** (H-DES-9 : PROBABLE, par la presse) : une vidéo TikTok de
+    l'équipe du candidat, en terrasse de café, avant le débat face à Éric Zemmour de septembre
+    2021 ; France Inter écrit en avril 2022 que « le lait fraise […] restera aussi comme l'une
+    des images de la campagne sur les réseaux ». Sources dans `16-hypotheses.md`.
+  - **Ce que l'éditeur doit savoir avant de dire oui** : depuis mai 2026 le visuel de la
+    campagne 2027 est *une tortue qui tient un lait fraise*. Notre ligne n'est que du texte —
+    la fraise, le verre de lait, « Lait-fraise. Pause bien méritée. » — parmi les phrases de
+    fin de manche, jamais dans la case de la tortue, jamais dans son dessin, à ses deuxième,
+    troisième et quatrième passages seulement. Mais elle paraît sur l'écran où notre tortue
+    vient d'évoluer : c'est le seul endroit du site où les deux signes officiels sont réunis.
+    C'est sa décision ; la refuser ne coûte rien (la clé reste, la ligne ne paraît pas).
+- **J4, première moitié — la part publiée** : dans une build d'un site qui joue, `/exactitude`
+  dit combien de mots le jeu montre et quelle part des mots des mesures cela fait (9 mots :
+  0,037 %), calculés au build ; la question « confond-on le personnage du jeu avec celui de la
+  campagne ? » rejoint les questions ouvertes publiées (D14.11).
+- **J4, non fait** : le mot lui-même surligné dans la page officielle (deux directives
+  `text=`). Le lien arrive aujourd'hui sur le début de la mesure, ce que `verify-2026.ts`
+  tient ; surligner aussi le mot demande l'essai sur les pages enregistrées, dans trois
+  moteurs, avec son témoin qui doit échouer.
+- **J3, non fait** : la liste entière (autour de 90 mots). Deux passes de l'outil local sur
+  des mots de la vie courante en ont trouvé 79 qui passent toutes les preuves automatiques,
+  dans 45 sections ; restent à en retenir un par section, à couvrir la partie 6, et surtout le
+  jugement de l'éditeur, mot par mot. Rien n'a été ajouté au fichier suivi : les neuf mots
+  proposés attendent d'abord sa lecture.
+
+### Lot O3, au 13 novembre 2026 — relecture hostile du jeu
+
+Quatre relecteurs, chacun avec son rôle et sans les notes des autres, en lecture seule (aucune
+build, aucun test, rien sous `private/`) : chasseur de captures, vérificateur de faits, juriste
+CNIL, sécurité. Leurs constats sont des lectures d'agents : ce qui en est retenu est ce qui a
+été **vérifié dans le code** puis corrigé avec sa porte.
+
+**Chasseur de captures** — douze constats. Retenus et corrigés :
+
+- **Un mot ne se lit jamais seul** : la carte l'affiche avec les titres officiels de son lieu.
+  « journaux » tombait sous « La Révolution citoyenne dans les médias », « sentiers » sous
+  « Collectiviser les biens communs fondamentaux » (chapitre « L'ère d'un nouveau
+  collectivisme »). **La proposition de neuf mots est refaite** en lisant chaque carte :
+  wagon, cantine, mairies, carburant, crèches, îles, fontaines, ponts, braille — six parties
+  dans les six premiers mots, donc le chapitre s'ouvre après deux manches. Sortent : sentiers,
+  dimanche, bocaux, villages, journaux. `scripts/words-2026.ts --check` écrit désormais la carte
+  de chaque mot, et le critère est dans `data/2026/NOTICE.md`.
+- **Le mot porte ses guillemets**, et la ligne qui dit d'où il vient est à la taille du texte,
+  en gras, juste au-dessus : une capture qui tient le mot tient la ligne.
+- **« Site non officiel. » est aussi dans la fiche de la tortue** (elle liste des mots du
+  programme) ; un contrôle vérifie par rectangles que l'étiquette est dans le cadre sur la
+  question, la carte, la fin de manche et la fiche.
+
+Non retenus, parce que c'est le plan approuvé — **mais dits à l'éditeur, qui tranche** : le
+« Oui. » réservé à la tuile où le jeu montre le mot (lu comme un verdict par omission) ;
+l'accent Rouge de la tortue à un passage (lu comme une récompense) ; « C'est écrit là » sur le
+bouton qui mène au livre officiel ; « Maintenant, le jeu demande aussi le chapitre » (lu comme
+un niveau) ; la famille de couleurs de la charte.
+
+**Vérificateur de faits** — douze constats ; il n'a pu démontrer aucune fausseté sur les mots
+(chaque racine n'a qu'un lieu dans l'index). Retenus et corrigés :
+
+- **Une ancre écrivait une partie que personne n'avait jouée** : `/#fin` marquait trois mots
+  comme trouvés, faisait évoluer la tortue et écrivait le stockage — et un lien envoyé pouvait
+  ainsi déplacer la tortue gardée de quelqu'un. Une ancre est maintenant une position, jamais un
+  passé : seul le mot dont la carte est à l'écran est trouvé ; `#fin` est oublié.
+- **Trois phrases de confidentialité disaient plus que le code** : « Rien sur ce téléphone »
+  (l'onglet écrit bien sur l'appareil) → « Rien n'est gardé après la fermeture de l'onglet » ;
+  « Tout effacer vide l'onglet et le téléphone » ne vidait pas un autre onglet qui n'avait rien
+  gardé → l'effacement écrit puis retire la clé, ce que les autres onglets entendent, et la
+  phrase le dit ; « Cette liste dit ce que l'app garde », sous le titre « ne garde pas » →
+  « Rien de cette liste n'arrive chez nous ».
+- **La carte « Garder »** parlait au présent avant le choix et taisait un champ → « Garder,
+  c'est écrire sur ce téléphone. Il retient alors les mots déjà vus, où en est le jeu et ta
+  tortue. » ; « Qui ouvre le site dans ce navigateur la verra ».
+- **Le droit était affirmé comme un fait** → « D'après notre lecture de la loi… ».
+- **`/exactitude` de la build scrutin décrivait un jeu absent** → les chiffres du jeu ne
+  paraissent que là où il est montré.
+- **« Veille et jour du vote »** ne décrivait pas la fenêtre (vendredi 0 h → dimanche 20 h) ni
+  l'interrupteur → la phrase affichée est « Les questions, le jeu et le partage sont en pause.
+  La recherche et la lecture restent ouvertes. » ; la raison et l'heure de reprise ne sont
+  dites que d'un gel décidé par le calendrier, sur une horloge que notre serveur ne contredit
+  pas — une heure lue sur une horloge fausse serait fausse.
+- **« Chaque mot est vérifié à chaque fabrication »** était trop fort → la phrase distingue ce
+  que la build vérifie (l'empreinte de la mesure) de ce qui est relu sur le texte. Et
+  **l'attestation nomme maintenant les contrôles qu'elle a passés** : attestée avant qu'un
+  contrôle existe, une liste ne compte plus.
+- **« Trois mots, trois endroits »** : la preuve refuse deux mots dans une même section, et une
+  manche retrouvée incomplète n'est plus rejouée telle quelle.
+
+### Lot O1, au 13 novembre 2026 — les écrans du jeu sous les neuf conditions
+
+Les quatre écrans du jeu — la question, la carte du lieu, la fin de manche avec la carte
+« Garder », la fiche de la tortue — passent l'audit d'accessibilité sous les **neuf conditions**
+de chaque page du site : 390 px, 320 px, 320 × 256, mode sombre, polices système à 130, 150 et
+200 %, zoom de 150 %, mouvement réduit. Pour chacun : aucune violation sérieuse, aucun
+débordement, toute cible à 44 px au moins, aucun titre officiel coupé. Les conditions sont
+maintenant un module partagé (`scripts/a11y-conditions.ts`) entre l'audit des pages et celui des
+écrans qu'un script doit d'abord atteindre (`scripts/e2e-game.ts`). VÉRIFIÉ sous Chromium ; un
+passage au lecteur d'écran reste un geste de l'éditeur.
+
+### Lot O3, suite, au 13 novembre 2026 — relectures « sécurité » et « juriste CNIL »
+
+Deux lectures de plus, en lecture seule, sur « Demander », le jeu et le déploiement : douze
+constats chacune. Même règle que pour les deux premières : n'est retenu que ce qui a été
+**vérifié dans le code**, et chaque correction a sa porte. Rien n'est poussé, rien n'est
+déployé, aucun neuron dépensé.
+
+**Ce que le site promettait et ne tenait pas — corrigé.**
+
+- **Chercher écrivait ce qu'on tape dans l'adresse** (`#q=…`, 700 ms après la dernière touche).
+  Une adresse reste dans l'historique, dans les suggestions de la barre, sur les appareils
+  synchronisés ; la page disait « rien n'est enregistré ». Ce qui est tapé n'est plus écrit
+  nulle part ; un lien `#q=` reçu est exécuté, puis retiré de l'adresse. **C'est un écart au §3
+  du plan** (« la requête vit après `#q=` ») : dit à l'éditeur.
+- **Turnstile se chargeait au premier focus du champ**, qui est aussi la recherche locale. Il
+  se charge au premier « Demander », jamais avant (D16.8) ; la porte regarde le focus et la
+  frappe.
+- **`/confidentialite`, dans la build qui répond, disait « aucune trace des questions ».** Deux
+  choses sont gardées, par Cloudflare, et la page les nomme : la réponse, trente jours, sous un
+  code calculé depuis la question (le cache de la passerelle) ; un compteur de débit, une
+  minute, sous un code calculé depuis l'adresse IP. Les phrases sur Turnstile ne disent plus
+  que ce qui a été mesuré en septembre (aucun cookie vu ; un identifiant dans le stockage de
+  son domaine). **D16.8 écrit « gardée nulle part » : au pied de la lettre, le cache y déroge**
+  — dit à l'éditeur, avec l'option de le couper (`14-risques.md` R26).
+- **Un arrêt à la main ne fermait pas `/api/ask`** : `silence_override` masquait le bloc, et
+  le Worker répondait encore à qui l'appelait directement. Le Worker embarque maintenant le
+  même fichier : le déploiement qui ferme la page ferme les questions. (Trouvé en relisant la
+  fiche 6 du runbook, qui affirmait le contraire.)
+- **Le gel sur un onglet resté ouvert** : il n'était relu qu'aux changements d'écran. Il l'est
+  toutes les trente secondes, avant « Garder » et avant le partage ; une fiche ouverte se
+  ferme. La lecture de l'heure du serveur a un délai de quatre secondes.
+- **Le doute du gel, écrit.** La page tient deux heures : celle de l'appareil, et celle de
+  notre serveur, vieillie sur une horloge que l'appareil ne règle pas. Elles s'écartent pour
+  deux raisons qu'elle ne peut pas distinguer — une horloge déplacée à la main, un téléphone
+  qui a dormi (son horloge monotone ne compte pas la veille). Elle est fermée quand une fenêtre
+  de silence, élargie de cinq minutes, touche l'intervalle entre les deux heures ; ouverte
+  sinon. *La première écriture fermait sur tout écart de cinq minutes : chaque réveil aurait
+  masqué le jeu. C'est la porte « dix minutes après l'arrivée » de « Demander » qui l'a
+  montré.*
+- **Une ancre écrivait encore à l'arrivée** : `/#m2-3` écrivait l'onglet. Arriver n'est pas un
+  geste : rien n'est écrit avant le premier ; le mot de la carte ouvre alors une manche entière.
+- **« Tout effacer »** : trois tentatives indépendantes (un stockage qui en refuse une ne
+  retient plus les autres) ; une page revenue du cache du navigateur relit ce qui reste.
+- **« Garder » se reprend aussi simplement qu'il se donne** : « Ne plus garder sur ce
+  téléphone », dans sa fiche — le téléphone oublie, l'onglet continue, les autres onglets ne
+  sont pas vidés. Et sa fiche dit, avant le geste, ce que « Garder » écrit et qui le verra.
+- **`public/flags.json` disait `events: on`** — un reste de septembre, alors que rien n'est
+  mesuré. Il n'a plus qu'un champ ; les règles d'en-têtes d'un service worker qui n'existe pas
+  sortent.
+
+**Le Worker et le contrôle.**
+
+- **`/api/bench` rendait la sortie brute du modèle** : à qui tient la clé, « récite la
+  mesure » rendait la mesure. Une sortie qui recopie ce qui a été montré ne quitte plus le
+  Worker — un marqueur et un compte à sa place ; la route passe par le limiteur de débit, et
+  le client du banc s'y règle (une demande toutes les onze secondes, un 429 attendu une
+  minute : un jeu entier prend une demi-heure).
+- **Débit** : la clé est calculée sur le /64 d'une adresse IPv6, pas sur l'adresse.
+  **Corps** : lu jusqu'à 6 144 octets et pas un de plus ; annoncé plus long, il n'est pas lu.
+- **Le contrôle refuse en plus** : ce qui s'écrit et ne se voit pas (caractères de format),
+  un accent sans sa lettre, une lettre d'un autre alphabet ou sous une autre forme — chacun
+  fait de « pas » un mot qu'aucune règle ne lit et qu'un lecteur lit quand même ; les chiffres
+  que `\d` ne voit pas (pleine chasse, exposants, fractions, autres écritures — « m² »
+  excepté) ; les multiplicateurs (« doubler », « triplé »), les rangs et les lots
+  (« sixième », « une vingtaine ») hors d'une mesure citée qui les porte ; « sauf »,
+  « hormis », « excepté », « ni », « nul », « nullement », « exclusivement », et l'absence
+  dite sans négation (« muet », « passe sous silence », « fait l'impasse », « omet ») ;
+  « seul », « absence », « manque » hors d'une mesure citée qui emploie le mot.
+- **Recopie par morceaux.** Six mots de suite reste la règle. S'y ajoutent : plus de la moitié
+  d'une phrase dans des suites de quatre mots de ce qui a été montré, et six mots de suite à
+  cheval sur deux phrases. Seuil **PROBABLE, mesuré une fois** sur les réponses de septembre
+  (`eval/generation-raw.jsonl`, archive 2025, 0 neuron) : des 101 phrases sans six mots de
+  suite, aucune ne dépasse 0,38 (p95 : 0,25). Les suites de trois mots ont été essayées et
+  écartées : une phrase courte qui nomme la chose et son chiffre y monte à 0,75 honnêtement.
+  Au passage : **30 des 89 phrases de septembre qui citaient une mesure en recopiaient six
+  mots de suite** — la règle mordra, et le banc dira combien. Ce qu'elle ne voit pas : un mot
+  changé sur quatre ; cela, c'est la lecture qui le voit.
+
+**Le déploiement.**
+
+- `scripts/deploy.ts` ne passe plus à wrangler que `--dry-run` et `--outdir` : un second
+  `--env` ou `--config` défaisait le choix que la garde venait de faire.
+- **`dist/` est lu, quoi que dise le marqueur** : un jeu sans liste validée telle quelle, ou
+  bâti d'une autre liste, des questions que `ask.json` n'autorise pas — refusé.
+- **L'empreinte validée couvre les mots et leur vivier** (`pool`) : une section jugée après
+  coup change les tuiles de mots déjà lus, et fait tomber validation et attestation. **Ordre
+  des gestes : juger les onze sections, puis valider les mots.**
+- **Scrutin** : dès la veille d'une fenêtre (vingt-quatre heures) et jusqu'à sa fermeture,
+  seule la build « scrutin » ou la page d'attente se déploie — une correction du vendredi
+  matin ne remplace plus la build de la veille. `scripts/scrutin-reminder.ts` ouvre un rappel
+  par fenêtre, cinq jours avant, depuis la tâche planifiée de veille ; ce n'est pas une garde
+  (GitHub suspend les tâches d'un dépôt resté soixante jours sans activité).
+- `observability` est écrit aussi dans l'environnement d'aperçu : il en héritait déjà (VÉRIFIÉ
+  dans le code de wrangler 4.130.0), la porte le lit maintenant là où il s'applique.
+
+**Non corrigé : à l'éditeur de trancher** (`14-risques.md` R26 à R29, `11-conformite.md`
+§6.2 quinquies) — le cache de trente jours face à « gardée nulle part » ; la base légale de
+« Demander » et l'article 9 ; ce qui manque à l'information de l'article 13 ; l'exemption de
+consentement de Turnstile, tenue par analogie seulement ; la descente d'un Worker vers les
+fichiers statiques, jamais essayée (classe Durable Object) ; l'historique local, qui contient
+la première liste de mots, jamais validée ; un étalement horaire du quota du jour.
+
+Portes, toutes vertes (batterie complète rejouée après les corrections) : 371 tests — 369
+passent, 2 sont sautés (ceux qui lisent le jeu dans `dist/`, où il ne paraît pas tant que la
+liste n'est pas validée), 0 échoue ; sur la build de la page d'attente, 357 passent et 14 sont
+sautés. Bout en bout, Chromium / Firefox / WebKit : l'app 36 / 36 / 36, « Demander »
+69 / 65 / 65, le jeu 111 / 102 / 102. Accessibilité : 225 contrôles (25 pages × 9 conditions),
+0 en échec. Types, lint, contrastes : verts. Un contrôle Prettier ajouté pour l'occasion signale
+neuf fichiers : huit que ce lot ne touche pas, et `data/2026/game-words.json`, écrit par son
+outil — aucun n'est une porte du dépôt.
+
+### Lot J4, seconde moitié, au 13 novembre 2026 — le mot surligné dans la page officielle
+
+Le lien d'un mot arrivait sur le début de sa mesure. Il porte maintenant une seconde directive
+de texte, pour le mot lui-même — **seulement là où trois navigateurs l'ont vu surligné dans sa
+mesure**.
+
+- **Pourquoi pas partout** : une directive de texte surligne le premier endroit où la page
+  écrit ces lettres. Ailleurs que dans la mesure épinglée, le surlignage désignerait une autre
+  phrase. Les fichiers publics ne portent pas le texte : c'est aux navigateurs qu'on le demande,
+  sur les pages enregistrées (`scripts/verify-2026.ts --words` ; aucune requête ne sort, 899 à
+  937 demandes refusées par moteur).
+- **Ce qu'on demande au navigateur, et non au document** : où il est allé. Mesuré le 13/11 sur
+  le site synthétique : Chromium et WebKit ne trouvent pas « application » dans
+  « l'application » — un mot élidé est un seul mot pour eux ; Firefox le trouve. La sonde ne
+  cherche donc pas la première occurrence dans le document ; elle regarde ce qui est à l'écran
+  une fois que le navigateur a défilé vers **sa** première correspondance, et dit oui quand le
+  mot à l'écran est dans la mesure épinglée et nulle part ailleurs. Puis elle suit le lien tel
+  qu'il sera écrit — le repère de la mesure, puis le mot : la page doit toujours arriver sur le
+  début de la mesure.
+- **Résultat sur les neuf mots, les trois moteurs d'accord** : huit sont surlignés dans leur
+  mesure ; un (`w004`) est trouvé d'abord ailleurs dans sa page et garde le lien vers sa mesure
+  seule. `data/2026/word-links.json` ne porte que des identifiants, des versions de moteur et
+  deux empreintes.
+- **Lié à l'empreinte** : la build ne croit ce fichier que pour la liste (mot, mesure épinglée)
+  et le livre sur lesquels il a été fait, et pour les trois moteurs ; sinon chaque lien garde
+  son repère seul, comme avant. `scripts/launch.ts` nomme le blocage quand il est périmé, et le
+  fichier du jeu change de nom avec lui.
+- **Témoins** : le même mot, demandé à la proposition voisine, doit répondre non ; une
+  directive qui ne correspond à rien ne doit pas faire défiler. Sur le site synthétique
+  (rejoué en CI sous Chromium) : 24 mots tirés du texte, 10 surlignés dans leur mesure, 9
+  trouvés d'abord ailleurs, 5 trouvés nulle part par ce moteur.
+- **Ce qui reste PROBABLE** : les pages enregistrées sont lues sans feuille de style ni script.
+  Sans style, tout le texte est visible : l'essai est plus sévère que la page réelle sur « écrit
+  plus tôt ». Un texte que la page réelle ajouterait par script avant la mesure n'est pas vu.
+  À constater sur un vrai téléphone, avec les essais déjà dus.
+
+Portes, toutes vertes après ce lot : 377 tests (375 passent, 2 sautés, 0 échoue) ; bout en bout,
+Chromium / Firefox / WebKit : l'app 36 / 36 / 36, « Demander » 69 / 65 / 65, le jeu
+112 / 103 / 103 ; accessibilité : 225 contrôles, 0 en échec.
+
+### Lot O2, première moitié, au 13 novembre 2026 — la carte du budget, en labo
+
+`scripts/perf-probe.ts` mesure une build dans le labo que la carte définit
+(`design/perf-budget.md` : « Slow 4G » — 150 ms, 1,6 Mbit/s, 750 kbit/s — et un processeur
+quatre fois plus lent, 390 × 844, Chromium, fichiers servis compressés) : le LCP (médiane de
+cinq chargements à froid), le CLS (le pire des cinq), et la durée des interactions clés.
+
+- **Trouvé : la page bougeait.** CLS 0,17 sur l'accueil, pour un budget de 0,1. Le champ,
+  révélé par son script, poussait tout le reste de 130 px une seconde après le premier rendu ;
+  le bouton « Demander », révélé ensuite, de 52 px encore. **L'app d'avant D16, celle de
+  l'aperçu, a le même défaut** (0,13 sur `dist/` avant correction). Corrigé : le champ et le
+  bouton sont dans la page dès le premier rendu — le bouton inerte jusqu'à l'arrivée de son
+  script — et une requête média (`scripting: none`) cache le champ là où les scripts sont
+  coupés (tenue par les contrôles « sans JavaScript », trois moteurs). Si l'on a déjà tapé
+  quand le script arrive, ce qui est dans le champ est cherché.
+- **Mesuré après correction** — PROBABLE : cette machine, ralentie ; pas un téléphone. Build
+  d'essai (champ, « Demander » simulé, jeu) : LCP 352 ms, CLS 0,001, une touche dans le champ
+  40 ms, Entrée 16 ms, une tuile 16 ms, « Mot suivant » 16 ms, sa fiche 24 ms. App sans jeu ni
+  question : LCP 328 ms, CLS 0,0004, une touche 40 ms. Archivé dans
+  `docs/discovery/perf/2026-11-13/`. Le LCP du labo ignore la résolution du nom et la
+  poignée de main : il dit que la page est légère, pas ce qu'un téléphone attendra.
+- **La porte** : `scripts/e2e.ts` et `scripts/e2e-ask.ts` mesurent sous Chromium ce que la page
+  bouge après son premier rendu, ses scripts retenus 400 ms, et le veulent sous 0,02 ; un
+  témoin — le champ caché puis montré tard — doit être vu bouger.
+- **Reste dû** : un vrai Android (geste de l'éditeur), le p95 du Worker (après son premier
+  déploiement), Lighthouse sur l'aperçu.
+
+Portes, toutes vertes après ce lot : 377 tests (375 passent, 2 sautés, 0 échoue) ; bout en bout,
+Chromium / Firefox / WebKit : l'app 39 / 36 / 36, « Demander » 70 / 65 / 65, le jeu
+112 / 103 / 103 ; accessibilité : 225 contrôles, 0 en échec.
+
+### Les décisions du 13 novembre au soir (D16.22 à D16.29), et ce qui en est fait
+
+Après les quatre relectures, l'utilisateur a demandé qu'on lui pose les questions. Trente-quatre
+lui ont été posées, par petits lots, chacune avec ce qu'elle engage. Ses réponses sont au registre
+(`decisions.md`, D16.22 à D16.29). Ce qui en est fait le soir même :
+
+- **Le jeu est validé** (D16.27). Les onze sections neuves sont jugées : huit jouent — dont les
+  quatre du chapitre Europe —, trois ne prêtent aucun mot (violences sexistes et sexuelles,
+  brevet des policiers, santé mentale). Huit mots sur neuf sont gardés ; **« crèches » sort**
+  (deux sens : la crèche de Noël des mairies, polémique de laïcité — et c'était le seul que sa
+  page écrivait d'abord ailleurs) ; **« gare » entre**, choisi parmi trois sur sa carte. La liste
+  est datée par l'outil (`words-2026.ts --validated`), comme la planche de la tortue (les sept
+  contraintes tenues, corps crème en sombre) et le lait-fraise. **La build normale montre
+  maintenant le jeu.** Les neuf mots sont surlignés dans leur mesure par les trois moteurs.
+- **Toutes les sections sont des tuiles** (D16.26). L'utilisateur a écrit : « Toutes les
+  sections devraient jouer. » Précisé avec lui : les 111 titres sont des tuiles — le sommaire que
+  montre le jeu est entier, il manquait des titres dans huit chapitres — et aucun mot n'est tiré
+  des dix-huit sections sensibles, filet contre une erreur de choix. Dans le code, la liste des
+  tuiles et celle des sections « sans mot » sont maintenant deux choses
+  (`wordlessSections`, `src/lib/game.ts`).
+- **Ce qu'une porte a trouvé au passage** : la build « jeu montré, questions fermées » n'avait
+  jamais existé. Sa page Confidentialité disait « Rien n'est envoyé, rien n'est enregistré »
+  dans une phrase qui ne nommait plus la recherche — la porte l'a refusée, la phrase est
+  réécrite ; et un contrôle « sans JavaScript » comptait un seul lien vers le sommaire, alors
+  que la fin de la première manche en porte un second.
+- **Le Worker de labo `aec-lab-fw-react-ssg` est supprimé**, avec son accord au moment de le
+  faire.
+- **Restent à construire** : la phrase ne quitte pas le téléphone (D16.22) et le lancement sans
+  Turnstile (D16.23) — le contrat de « Demander », le Worker, l'invite, le jeu d'essai et le banc
+  changent. **Restent à dater par lui** : la relecture des sections (`pool_reviewed_on`), la
+  relecture hostile (`hostile_review_on`), `/confidentialite`.
+
+Portes, après la validation : 378 tests (377 passent, 1 sauté, 0 échoue) ; bout en bout,
+Chromium / Firefox / WebKit : l'app 37 / 34 / 34, « Demander » 70 / 65 / 65, le jeu
+112 / 103 / 103 ; accessibilité : 225 contrôles, 0 en échec.

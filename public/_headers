@@ -49,24 +49,17 @@ https://beta.cestecritla.fr/*
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
-# The only client-side kill switch (D12.8). Revalidated on every start, BEFORE effectiveDate().
-# Never immutable, never stale-while-revalidate: those would make the L49 freeze unreachable.
+# The only client-side kill switch (D12.8): one field, `silence_override`. Revalidated on every
+# start, BEFORE effectiveDate(). Never immutable, never stale-while-revalidate: those would
+# make the L49 freeze unreachable.
 /flags.json
   ! Cache-Control
   Cache-Control: no-cache
   Content-Type: application/json; charset=utf-8
 
-# The service worker is the only component able to make an outage permanent (H-PLA-8).
-/sw.js
-  ! Cache-Control
-  Cache-Control: no-cache
-/sw-kill.js
-  ! Cache-Control
-  Cache-Control: no-cache
-
-# The beacon is the only server route in v1/v2. The Worker sets these itself (this file is not
-# applied to a Worker's own responses); repeated here so an asset can never be served under
-# /api/ with a cacheable or referrer-leaking policy.
+# `/api/ask` is the only server route (D16.7), and only when the site answers questions. The
+# Worker sets these itself (this file is not applied to a Worker's own responses); repeated here
+# so an asset can never be served under /api/ with a cacheable or referrer-leaking policy.
 /api/*
   ! Cache-Control
   ! Referrer-Policy

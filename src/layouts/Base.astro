@@ -115,6 +115,8 @@ const footer: readonly { href: string; label: string }[] = [
         />
       )
     }
+    {/* What a page must run before its first paint (the home page's silence guard). */}
+    <slot name="head" />
   </head>
   <body>
     {

@@ -48,6 +48,46 @@ contient aucune phrase et ne permet pas d'en reconstituer une.
 comme incipit, portés par un repère de lien, ou cités en entier. La CI la recalcule à partir du
 fichier et refuse tout dépassement des plafonds (`scripts/leak.test.ts`).
 
+## Les mots du jeu
+
+`game-words.json` liste les mots du jeu « Où est-ce écrit ? » : chacun est un mot du programme,
+montré seul. C'est une catégorie d'extrait à part — un mot, jamais une phrase — que l'éditeur
+valide avec sa part mesurée avant toute publication (D15.18, D16.15). Le fichier n'a de place
+pour aucune phrase : un mot, l'identifiant de la mesure où il est écrit, l'empreinte de cette
+mesure.
+
+Un mot entre dans la liste s'il passe tous ces critères :
+
+- c'est une chose concrète de la vie de tous les jours, qui se lit seule, sans la phrase autour ;
+- ce n'est ni un sujet de débat, ni un groupe de personnes, ni un lieu chargé, ni l'objet d'une
+  interdiction, ni un mot du corps ou de la religion, ni un nom propre, ni un mot à deux sens ;
+- la mesure où il est épinglé ne commence pas par une interdiction, et un lien peut y arriver ;
+- sa racine n'est dans aucun titre que le jeu propose comme réponse ;
+- il n'est écrit dans aucune section hors du périmètre du jeu, ni dans la prose ou un titre hors
+  des sections où une mesure l'emploie ;
+- partout où l'index donne sa racine, c'est bien lui qui est écrit, au singulier ou au pluriel,
+  accents compris — jamais un autre mot de même racine ;
+- une seule section le montre : deux mots de la liste ne partagent jamais un lieu ;
+- il passe la question : qu'écrirait un opposant sous cette image ? **Un mot ne se lit jamais
+  seul** : la carte du lieu l'affiche avec les titres officiels de sa partie, de son chapitre et
+  de sa section. C'est cette carte que l'éditeur juge — `scripts/words-2026.ts --check` l'écrit
+  pour chaque mot.
+
+Tout sauf le premier, le deuxième et le dernier se prouve : `src/lib/game.ts` sur les fichiers
+publics, à chaque build, et `scripts/words-2026.ts` sur le texte, en local, qui atteste la liste
+et son vivier de sections par une même empreinte, et nomme les contrôles qu'elle a passés — une
+attestation plus ancienne qu'un contrôle ne compte plus, et une section jugée après coup la fait
+tomber.
+
+Le lien d'un mot arrive sur le début de sa mesure. Le mot lui-même n'y est surligné que là où
+trois navigateurs l'ont vu surligné dans cette mesure, sur les pages enregistrées :
+`word-links.json` (`scripts/verify-2026.ts --words --write`) le dit par identifiants — aucun mot
+d'une page n'y entre —, et n'est cru que pour la liste et le livre sur lesquels il a été fait. Les trois autres sont la lecture de l'éditeur, mot par mot.
+
+Le périmètre : les sections héritières des quatorze sections sensibles de l'édition 2025 ne sont
+jamais un jeu (règle 11 de `docs/discovery/07-mecaniques.md` §7.11), et les sections sans ancêtre
+en 2025 restent dehors tant que l'éditeur ne les a pas jugées une à une.
+
 ## Attribution
 
 Toute citation affichée porte : « La France insoumise, *L'Avenir en commun*, édition 2026 », le

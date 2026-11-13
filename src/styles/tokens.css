@@ -32,6 +32,11 @@
   --focus: #4C0297;
   --wordmark: #4C0297;
   --wordmark-accent: #D1271C;
+  --turtle-line: #4C0297;
+  --turtle-shell: #E5CBFF;
+  --turtle-arc: #4C0297;
+  --turtle-eye: #FFFCF4;
+  --turtle-accent: #D1271C;
 
   --font-size-display: 2.125rem;
   --line-height-display: 0.95;
@@ -81,6 +86,9 @@
   --duration-base: 200ms;
   --duration-reveal: 240ms;
   --duration-slow: 320ms;
+  --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --easing-enter: cubic-bezier(0, 0, 0.2, 1);
+  --easing-exit: cubic-bezier(0.4, 0, 1, 1);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -101,6 +109,11 @@
     --focus: #F9C900;
     --wordmark: #E5CBFF;
     --wordmark-accent: #F9C900;
+    --turtle-line: #FFFCF4;
+    --turtle-shell: #4C0297;
+    --turtle-arc: #FFFCF4;
+    --turtle-eye: #212320;
+    --turtle-accent: #F9C900;
   }
 }
 
@@ -121,6 +134,11 @@
   --focus: #F9C900;
   --wordmark: #E5CBFF;
   --wordmark-accent: #F9C900;
+  --turtle-line: #FFFCF4;
+  --turtle-shell: #4C0297;
+  --turtle-arc: #FFFCF4;
+  --turtle-eye: #212320;
+  --turtle-accent: #F9C900;
 }
 
 /* Breakpoints in em, never px: Chrome Android M113+ applies the system font size as a

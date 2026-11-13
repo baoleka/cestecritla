@@ -1,0 +1,31 @@
+{
+  "corpus_version": "27ee6e713fe25e7e",
+  "words_sha256": "927eb2c6614d06fa02dd1d154fbb32198c5fc8bd00b48cf3b5fd5caf1c79010f",
+  "verified_on": "2026-11-13",
+  "engines": [
+    {
+      "name": "chromium",
+      "version": "153.0.8010.12"
+    },
+    {
+      "name": "firefox",
+      "version": "155.0"
+    },
+    {
+      "name": "webkit",
+      "version": "26.6"
+    }
+  ],
+  "highlighted": [
+    "w000",
+    "w001",
+    "w002",
+    "w003",
+    "w008",
+    "w005",
+    "w006",
+    "w007",
+    "w011"
+  ],
+  "measure_only": []
+}

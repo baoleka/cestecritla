@@ -1,0 +1,121 @@
+/*
+ * The turtle (D16.11 to D16.13) — how the one drawing of design/mascot/tortue.svg becomes five
+ * states and three poses. The file itself carries geometry and class names only: no colour, no
+ * style, so that the drawing the editor validated is exactly the drawing that ships, whatever
+ * the theme.
+ *
+ * Five roles of colour, from the tokens (light, dark, neutral): line, shell, arc, eye, accent.
+ * Flat: no gradient, no shadow, no filter, one level of depth (illustration-rules §2.2).
+ *
+ * What changes with what she has found, and never with a right or a wrong choice:
+ *   0  a plain shell
+ *   1  the first arc appears at the crown
+ *   2  the first arc is whole; she grows; the tail shows; the second arc starts
+ *   3  the second arc is whole; the neck lengthens; the third arc starts
+ *   4  three whole arcs; head held high
+ * How far each arc has grown is written on the arc itself, as two attributes (src/lib/turtle.ts):
+ * nothing here may set a dash, or it would win over them.
+ */
+.turtle {
+  display: block;
+  inline-size: var(--turtle-size, 4.5rem);
+  block-size: auto;
+  aspect-ratio: 96 / 60;
+  overflow: visible;
+}
+
+.turtle .t-line {
+  fill: var(--turtle-line);
+}
+/* The shell is outlined: a pale dome on a pale page, or a dark one on a dark page, would
+   otherwise have no edge at all (violet on charbon is 1.33:1). */
+.turtle .t-shell {
+  fill: var(--turtle-shell);
+  stroke: var(--turtle-line);
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+}
+/* Continuous arcs, never dashes, cells or a grid: an arc shows the part of itself that has
+   grown, and nothing of what has not. An arc that has not started is not drawn at all — a
+   round cap on a dash of no length would leave a dot. */
+.turtle .t-arc {
+  fill: none;
+  stroke: var(--turtle-arc);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+.turtle .t-arc[stroke-dasharray^='0 '] {
+  visibility: hidden;
+}
+.turtle .t-eye {
+  fill: var(--turtle-eye);
+}
+/* The one accent, and only at a passage: never part of her resting look. */
+.turtle .t-accent {
+  fill: var(--turtle-accent);
+  opacity: 0;
+}
+.turtle[data-passage] .t-accent {
+  opacity: 1;
+}
+
+/* --- states: she grows from the ground up, so that her feet never leave their line */
+.turtle .t-all {
+  transform-box: view-box;
+  transform-origin: 46px 56px;
+  transform: scale(0.84);
+}
+.turtle[data-state='2'] .t-all,
+.turtle[data-state='3'] .t-all,
+.turtle[data-state='4'] .t-all {
+  transform: scale(1);
+}
+.turtle .t-tail {
+  opacity: 0;
+}
+.turtle[data-state='2'] .t-tail,
+.turtle[data-state='3'] .t-tail,
+.turtle[data-state='4'] .t-tail {
+  opacity: 1;
+}
+
+/* --- the head turns about the joint where the neck leaves the body, and reaches along the
+   neck. One transform, set whole: the state says how far the neck is out and how the head is
+   carried, the pose says where she looks. */
+.turtle .t-head {
+  transform-box: view-box;
+  transform-origin: 71.75px 39.75px;
+  transform: translate(var(--t-reach-x, 0px), var(--t-reach-y, 0px)) rotate(var(--t-turn, 0deg));
+}
+.turtle[data-state='3'] .t-head,
+.turtle[data-state='4'] .t-head {
+  --t-reach-x: 2.06px;
+  --t-reach-y: -2.18px;
+}
+.turtle[data-state='4'] .t-head {
+  --t-turn: -9deg;
+}
+/* She raises her head when touched; she looks down at the tiles when asked for a hint. */
+.turtle[data-pose='up'] .t-head {
+  --t-turn: -16deg;
+}
+.turtle[data-pose='look'] .t-head {
+  --t-turn: 13deg;
+}
+
+/* --- movement (D16.13). Only transform and opacity; never longer than the slow token; never by
+   herself: `data-live` is set by the script once the look she arrives with is drawn, so that a
+   page that loads never plays anything. Whoever asked for less motion gets no transition at
+   all — the rule is not "shorter", it is "none". */
+@media (prefers-reduced-motion: no-preference) {
+  .turtle[data-live] .t-all {
+    transition: transform var(--duration-slow) var(--easing-standard);
+  }
+  .turtle[data-live] .t-head {
+    transition: transform var(--duration-reveal) var(--easing-standard);
+  }
+  .turtle[data-live] .t-tail,
+  .turtle[data-live] .t-accent {
+    transition: opacity var(--duration-slow) var(--easing-enter);
+  }
+}

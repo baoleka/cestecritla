@@ -40,6 +40,8 @@
   "env": {
     "preview": {
       "routes": [{ "pattern": "beta.cestecritla.fr", "custom_domain": true }],
+      // Inherited, and said again: scripts/build-mode.test.ts reads it in every environment.
+      "observability": { "enabled": false },
     },
   },
 }

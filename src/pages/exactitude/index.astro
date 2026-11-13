@@ -12,7 +12,13 @@
 import Base from '../../layouts/Base.astro';
 import { askSite } from '../../lib/ask-config.ts';
 import { manifest } from '../../lib/edition.ts';
-import { pendingReviewCount, quoteFacts, searchFacts, verification } from '../../lib/facts.ts';
+import {
+  gameFacts,
+  pendingReviewCount,
+  quoteFacts,
+  searchFacts,
+  verification,
+} from '../../lib/facts.ts';
 import { fr, frDate, t } from '../../lib/strings.ts';
 
 const meta = manifest().meta;
@@ -22,6 +28,8 @@ const search = searchFacts();
 const checked = verification();
 const cited = quoteFacts();
 const pending = pendingReviewCount();
+// What the game shows of the book: only in a build of a site that plays.
+const game = gameFacts();
 const located = checked.locators;
 /** The engines by the names their makers give them. */
 const ENGINE_NAMES: Record<string, string> = {
@@ -109,6 +117,15 @@ const ENGINE_NAMES: Record<string, string> = {
     <li>{t('accuracy.quotes.total', { count: cited.total })}</li>
   </ul>
   <p>{t('accuracy.quotes.none')}</p>
+  {
+    game !== null && (
+      <>
+        <h2 id="mots-du-jeu">{t('accuracy.game.title')}</h2>
+        <p>{t('accuracy.game.words', { count: fr(game.words), total: game.share })}</p>
+        <p>{t('accuracy.game.proof')}</p>
+      </>
+    )
+  }
 
   <h2>{t('accuracy.review.title')}</h2>
   <p>
@@ -126,6 +143,7 @@ const ENGINE_NAMES: Record<string, string> = {
     <li>{t('accuracy.unverified.02')}</li>
     <li>{t('accuracy.unverified.03')}</li>
     <li>{t('accuracy.unverified.04')}</li>
+    {game !== null && <li>{t('accuracy.unverified.05')}</li>}
   </ul>
 
   <p><a href="/methodologie/">{t('accuracy.method_link')}</a></p>

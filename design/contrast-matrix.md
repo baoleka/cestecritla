@@ -185,6 +185,11 @@ Chaque paire ci-dessous est **rendue** par l’interface : elle est lue dans `co
 | light | `verbatim-rule` #4C0297 | `verbatim-bg` #FDEDFF | non-text | 10.63 | 3.0 | PASS |
 | light | `focus` #4C0297 | `bg` #FFFCF4 | non-text | 11.62 | 3.0 | PASS |
 | light | `focus` #4C0297 | `bg-elevated` #FDEDFF | non-text | 10.63 | 3.0 | PASS |
+| light | `turtle-line` #4C0297 | `bg` #FFFCF4 | non-text | 11.62 | 3.0 | PASS |
+| light | `turtle-arc` #4C0297 | `turtle-shell` #E5CBFF | non-text | 8.12 | 3.0 | PASS |
+| light | `turtle-eye` #FFFCF4 | `turtle-line` #4C0297 | non-text | 11.62 | 3.0 | PASS |
+| light | `turtle-accent` #D1271C | `turtle-shell` #E5CBFF | non-text | 3.56 | 3.0 | PASS |
+| light | `turtle-accent` #D1271C | `bg` #FFFCF4 | non-text | 5.10 | 3.0 | PASS |
 | dark | `text` #FFFCF4 | `bg` #212320 | text | 15.45 | 4.5 | PASS |
 | dark | `text` #FFFCF4 | `bg-elevated` #2C2E2B | text | 13.36 | 4.5 | PASS |
 | dark | `text-muted` #FFFCF4 | `bg` #212320 | text | 15.45 | 4.5 | PASS |
@@ -199,6 +204,11 @@ Chaque paire ci-dessous est **rendue** par l’interface : elle est lue dans `co
 | dark | `verbatim-rule` #E5CBFF | `verbatim-bg` #2C2E2B | non-text | 9.34 | 3.0 | PASS |
 | dark | `focus` #F9C900 | `bg` #212320 | non-text | 10.09 | 3.0 | PASS |
 | dark | `focus` #F9C900 | `bg-elevated` #2C2E2B | non-text | 8.73 | 3.0 | PASS |
+| dark | `turtle-line` #FFFCF4 | `bg` #212320 | non-text | 15.45 | 3.0 | PASS |
+| dark | `turtle-arc` #FFFCF4 | `turtle-shell` #4C0297 | non-text | 11.62 | 3.0 | PASS |
+| dark | `turtle-eye` #212320 | `turtle-line` #FFFCF4 | non-text | 15.45 | 3.0 | PASS |
+| dark | `turtle-accent` #F9C900 | `turtle-shell` #4C0297 | non-text | 7.59 | 3.0 | PASS |
+| dark | `turtle-accent` #F9C900 | `bg` #212320 | non-text | 10.09 | 3.0 | PASS |
 
-- 28 paires de rôles mesurées, 0 en échec.
+- 38 paires de rôles mesurées, 0 en échec.
 - Non couvert par cette porte, à écrire : le contraste de la **page rendue** (chaque nœud de texte contre son fond effectif, à sa taille et à sa graisse réelles), la ban list, le reflow 320 px, la police système à 130 % et 150 %, `prefers-reduced-motion` et `prefers-color-scheme`. Outils déjà écrits à promouvoir dans `scripts/` : `prototypes/mockups/finalistes/capture.mjs`, `prototypes/mockups/B/tools/contrast-check.mjs`, `docs/discovery/captures/2026-09-10/proto/integ-live.mjs`.

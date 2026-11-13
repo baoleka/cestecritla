@@ -9,6 +9,7 @@ data/aec-2025.next*.json
 build/
 dist/
 dist-ask/
+dist-scrutin/
 .astro/
 public/fonts/
 worker-configuration.d.ts

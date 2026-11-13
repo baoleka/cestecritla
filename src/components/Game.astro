@@ -1,0 +1,266 @@
+---
+/**
+ * « Où est-ce écrit ? » — the game block of the home page (D16.10; PLAN-JEU §4.1).
+ *
+ * One word of the programme, alone and large; a question; the six parts as tiles; and, once a
+ * tile is chosen, the card of the place — where the word is written, in the affirmative, with
+ * the link that lands on the measure in the official book. Never "wrong", never red, no timer,
+ * no score.
+ *
+ * Without JavaScript the first round is here, whole: three fixed words, played with links and
+ * `:target`. The anchors say a position only (#m1-3: first word, third tile) — never a word,
+ * never an answer. With JavaScript, src/scripts/game.ts takes the block over when it comes near
+ * the screen and plays every round from the published data of the game.
+ *
+ * What a visitor reads here that is the book's: the word (`data-programme="word"`) and the
+ * official titles (`data-programme="title"`), whole, never cut. Everything else is ours, and
+ * every number shown is computed from the list — none is typed.
+ *
+ * The turtle sits in the header of the block, once, whatever the screen (D16.11): she is not
+ * near the question field, nor near an answer of the model.
+ */
+import '../styles/game.css';
+import Turtle from './Turtle.astro';
+import { readFileSync } from 'node:fs';
+import { buildGame, gameSite } from '../lib/game-data.ts';
+import { ROUND, locate, otherParts } from '../lib/game-engine.ts';
+import { safeJson, t } from '../lib/strings.ts';
+
+const { data, fingerprint } = buildGame();
+
+// The lait-fraise line (D16.20): a sentence of the end of a round, in words and two emojis —
+// never a drawing, never against the turtle. It waits for the editor, who was shown where the
+// reference comes from and must say yes (data/launch.json). A test build shows it, so that the
+// gates can hold it to its rules before anyone decides.
+const easterConfirmed =
+  (JSON.parse(readFileSync('data/launch.json', 'utf8')) as { easter_confirmed_on: string | null })
+    .easter_confirmed_on !== null;
+const easter = easterConfirmed || gameSite().test ? t('easter.strawberry_milk') : '';
+const round = data.words.slice(0, ROUND);
+
+/** `[1, 3, 5]` → « 1, 3 et 5 »: a list the way a sentence writes it. */
+const list = (numbers: readonly number[]): string =>
+  numbers.length < 2
+    ? numbers.join('')
+    : `${numbers.slice(0, -1).join(', ')} et ${String(numbers.at(-1))}`;
+
+const words = round.map((word, index) => {
+  const place = locate(data, word.section);
+  if (place === null) throw new Error(`game: ${word.id} is shown in no tile`);
+  const also = otherParts(data, word.id);
+  return {
+    ...word,
+    n: index + 1,
+    place,
+    also,
+    alsoLine:
+      also.length === 0
+        ? null
+        : also.length === 1
+          ? t('game.reveal.elsewhere_one', { n: also[0] ?? 0 })
+          : t('game.reveal.elsewhere', { parts: list(also) }),
+    // A count only when it says something: from three sections on (PLAN-JEU §4.1).
+    countLine:
+      word.places.length >= 3 ? t('game.reveal.count', { count: word.places.length }) : null,
+    next: index + 1 < round.length ? `#m${String(index + 2)}` : '#fin',
+  };
+});
+
+const reveal = (ask: 'part' | 'chapter' | 'section') => ({
+  yes: ask === 'part' ? t('game.reveal.yes', { n: '{n}' }) : ask === 'chapter' ? t('game.reveal.chapter.yes', { n: '{n}' }) : t('game.reveal.section.yes'),
+  also: ask === 'part' ? t('game.reveal.also', { n: '{n}' }) : ask === 'chapter' ? t('game.reveal.chapter.also', { n: '{n}' }) : t('game.reveal.section.also'),
+  neutral: ask === 'part' ? t('game.reveal.neutral', { n: '{n}' }) : ask === 'chapter' ? t('game.reveal.chapter.neutral', { n: '{n}' }) : t('game.reveal.section.neutral'),
+});
+
+const config = {
+  data: `/data/jeu-${fingerprint}.json`,
+  strings: {
+    kicker: t('game.kicker'),
+    ask: {
+      part: t('game.question.part'),
+      chapter: t('game.question.chapter'),
+      section: t('game.question.section'),
+    },
+    reveal: { part: reveal('part'), chapter: reveal('chapter'), section: reveal('section') },
+    dontKnow: t('game.dont_know'),
+    hint: t('game.hint.cta'),
+    hintMark: t('game.hint.mark'),
+    hintSaid: t('turtle.hint.said', { parts: '{parts}' }),
+    also: t('game.reveal.elsewhere', { parts: '{parts}' }),
+    alsoOne: t('game.reveal.elsewhere_one', { n: '{n}' }),
+    count: t('game.reveal.count', { count: '{count}' }),
+    cta: t('game.reveal.cta'),
+    next: t('game.next_word'),
+    done: t('game.round.done'),
+    again: t('game.round.again'),
+    share: t('game.share'),
+    easter,
+    copied: t('share.toast_copied'),
+    depth: { 2: t('game.depth.chapter'), 3: t('game.depth.section') },
+    keep: {
+      what: t('turtle.keep.what'),
+      notKept: t('turtle.keep.not_kept'),
+      otherwise: t('turtle.keep.otherwise'),
+      seen: t('turtle.keep.seen'),
+      safari: t('turtle.keep.safari'),
+      cta: t('turtle.keep.cta'),
+      decline: t('turtle.keep.decline'),
+      done: t('turtle.keep.done'),
+    },
+    sheet: {
+      name: t('turtle.button'),
+      raises: t('turtle.raises_head'),
+      none: t('turtle.sheet.none'),
+      onPhone: t('turtle.sheet.on_phone'),
+      tabOnly: t('turtle.sheet.tab_only'),
+      released: t('turtle.released'),
+      erased: t('turtle.erased'),
+    },
+  },
+};
+---
+
+{
+  /* Electoral silence (D16.16): the block below is not shown at all, and this sentence says
+     what is paused. Shown by the attribute the guard in the <head> sets before the first paint,
+     and by the script once it has read the hour of our server. */
+}
+<p
+  class="g-silence"
+  id="game-silence"
+  data-reason={t('silence.reason')}
+  data-reopen={t('silence.reopen', { reopenTime: '{reopenTime}' })}
+>
+  {t('silence.paused')}
+  <span id="game-reopen"></span>
+</p>
+
+<section class="game" id="jeu" aria-labelledby="game-title">
+  <div class="g-head">
+    <h2 id="game-title">{t('game.title')}</h2>
+    <div class="g-turtle"><Turtle /></div>
+  </div>
+
+  <div class="g-static" id="game-static">
+    {
+      /* Position anchors, before everything they command: `:target ~ …` reads forwards only. */
+      words.map((word) => (
+        <>
+          {word.n > 1 && <span class={`g-at g-w${String(word.n)}`} id={`m${String(word.n)}`} />}
+          <span class={`g-at g-r g-w${String(word.n)}`} id={`m${String(word.n)}-0`} />
+          {data.parts.map((part) => (
+            <span
+              class:list={[
+                'g-at',
+                'g-r',
+                `g-w${String(word.n)}`,
+                part.number === word.place.part.number && 'g-here',
+                word.also.includes(part.number) && 'g-there',
+              ]}
+              id={`m${String(word.n)}-${String(part.number)}`}
+            />
+          ))}
+        </>
+      ))
+    }
+    <span class="g-at g-over" id="fin"></span>
+
+    {
+      words.map((word) => (
+        <div class={`g-word g-word-${String(word.n)}`}>
+          <p class="g-kicker">{t('game.kicker')}</p>
+          <p class="g-the-word" data-programme="word">
+            {word.word}
+          </p>
+          <div class="g-question">
+            <h3 class="g-ask">{t('game.question.part')}</h3>
+            <p class="g-with">
+              <a class="g-quiet" href={`#m${String(word.n)}-0`}>
+                {t('game.dont_know')}
+              </a>
+            </p>
+            <ul class="g-tiles">
+              {data.parts.map((part) => (
+                <li>
+                  <a class="g-tile" href={`#m${String(word.n)}-${String(part.number)}`}>
+                    <span data-programme="title">{part.title}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="g-place">
+            <h3 class="g-yes">{t('game.reveal.yes', { n: word.place.part.number })}</h3>
+            <h3 class="g-also">{t('game.reveal.also', { n: word.place.part.number })}</h3>
+            <h3 class="g-neutral">{t('game.reveal.neutral', { n: word.place.part.number })}</h3>
+            <ul class="g-where">
+              <li data-programme="title">{word.place.part.title}</li>
+              <li data-programme="title">{word.place.chapter.title}</li>
+              <li data-programme="title">{word.place.section.title}</li>
+            </ul>
+            {word.alsoLine !== null && <p>{word.alsoLine}</p>}
+            {word.countLine !== null && <p>{word.countLine}</p>}
+            <p class="g-actions">
+              <a
+                class="cta"
+                href={word.url}
+                rel="noopener"
+                data-fragment={word.fragment === '' ? undefined : word.fragment}
+              >
+                {t('game.reveal.cta')}
+              </a>
+              <a class="g-quiet" href={word.next}>
+                {t('game.next_word')}
+              </a>
+            </p>
+          </div>
+        </div>
+      ))
+    }
+    <div class="g-end">
+      <h3>{t('game.round.done')}</h3>
+      <p>
+        <a href="/sommaire/">{t('game.round.no_js')}</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="g-live" id="game-live" hidden></div>
+  <p class="sr-only" id="game-status" role="status"></p>
+
+  {
+    /* Her sheet (D16.13): opened by touching her, so only ever by the script. Inside she is
+       large and can be touched again; one reads what she has found, what is kept, and the
+       gesture that erases everything. */
+  }
+  <dialog class="t-sheet" id="turtle-sheet" aria-labelledby="turtle-sheet-title">
+    <h3 id="turtle-sheet-title">{t('turtle.button')}</h3>
+    <div class="t-sheet-her" id="turtle-sheet-her"></div>
+    <p class="t-sheet-said" id="turtle-sheet-said" role="status"></p>
+    <h4>{t('turtle.sheet.found')}</h4>
+    <div id="turtle-sheet-found"></div>
+    <h4>{t('turtle.sheet.kept')}</h4>
+    <div id="turtle-sheet-kept"></div>
+    <p class="g-actions">
+      <button type="button" class="g-quiet" id="turtle-sheet-keep" hidden>
+        {t('turtle.keep.cta')}
+      </button>
+      <button type="button" class="g-quiet" id="turtle-sheet-release" hidden>
+        {t('turtle.release')}
+      </button>
+      <button type="button" class="g-quiet" id="turtle-sheet-erase">{t('turtle.erase')}</button>
+    </p>
+    <p><a href="/confidentialite/#ce-que-le-jeu-ecrit">{t('turtle.sheet.privacy')}</a></p>
+    <form method="dialog">
+      <button class="g-quiet">{t('common.close')}</button>
+    </form>
+    {/* Her sheet lists words of the programme: it carries the label itself, so that no capture
+        of it alone can be shown without it. */}
+    <p class="unofficial">{t('independence.unofficial')}</p>
+  </dialog>
+  <script type="application/json" id="game-config" set:html={safeJson(config)} is:inline />
+</section>
+
+<script>
+  import '../scripts/game.ts';
+</script>

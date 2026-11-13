@@ -77,10 +77,15 @@ const strings = {
 };
 ---
 
+{
+  /* In the page from the first paint. Revealed by its script, the field pushed everything
+     under it down a second after the page could be read (0.17 of layout shift, measured on
+     13/11/2026: scripts/perf-probe.ts). Where scripts are off it would be a field that answers
+     nothing: a media query hides it there (base.css), and <noscript> says where the sommaire is. */
+}
 <form
   id="search"
   role="search"
-  hidden
   data-index={`/data/index-${version}.json`}
   data-meta={`/data/meta-${version}.json`}
 >
@@ -100,8 +105,9 @@ const strings = {
   {
     asking ? (
       <>
-        {/* Hidden until the script that can answer a press has loaded. */}
-        <button type="button" id="ask" hidden>
+        {/* In its place from the first paint, and inert until the script that can answer a
+            press has loaded: appearing then, it moved the lines under it. */}
+        <button type="button" id="ask" disabled>
           {t('chat.send')}
         </button>
         {/* The AI notice, before the first use (AI Act, art. 50): what searching does, what

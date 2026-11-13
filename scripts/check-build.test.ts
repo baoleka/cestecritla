@@ -137,6 +137,19 @@ void test('a page opens no origin but ours — except the home page, to Turnstil
   }
 });
 
+void test('`hidden` hides, whatever display a rule gives the element', () => {
+  if (skip) return;
+  // Every button of the site is an inline-flex: without this rule the browser's own
+  // `[hidden] { display: none }` loses to it, and what a script hid stays on screen.
+  for (const file of textFiles.filter((f) => f.endsWith('.html'))) {
+    assert.match(
+      read(file),
+      /\[hidden\]\{display:none!important\}/,
+      `${file}: no rule makes the hidden attribute final`,
+    );
+  }
+});
+
 void test('media queries use em or rem, never px (A2)', () => {
   if (skip) return;
   const offenders: string[] = [];

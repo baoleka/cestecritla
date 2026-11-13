@@ -143,6 +143,12 @@ export function buildTokensCss(tokens: { [k: string]: Json }): string {
     if (isMeta(name) || typeof v !== 'string') continue;
     push(decl(`duration-${name}`, v));
   }
+  // Easings are tokens too (motion-spec M3): a curve typed in a stylesheet is a curve nobody
+  // will find when the token changes.
+  for (const [name, v] of Object.entries(obj(motion, 'easing'))) {
+    if (isMeta(name) || typeof v !== 'string') continue;
+    push(decl(`easing-${name}`, v));
+  }
   push('}');
 
   // Dark: redefine ONLY the roles, guarded so an explicit light choice always wins.

@@ -18,9 +18,14 @@
  * one. `--budget` is mandatory for that reason.
  *
  * What is recorded (eval/ask-2026-raw.jsonl, tracked): our questions' identifiers, the model's
- * sentences, identifiers of measures, costs and times. Never a word of the book: an output in
- * which the model copied the text is replaced by a marker before it is written, and the gate
- * "copied sequence" counts it. The untouched outputs stay under private/bench/.
+ * sentences, identifiers of measures, costs and times. Never a word of the book. An output in
+ * which the model copied what it was shown does not even leave the Worker: a marker comes back
+ * in its place (src/worker/ask.ts, `benchOutput`), and the gate "copied sequence" counts it.
+ * The scan made here stays: it reads the whole book, where the Worker compares with the dozen
+ * measures it showed. What came back, as it came back, is kept under private/bench/.
+ *
+ * The route is counted by the limiter of the questions — six a minute. The bench asks one
+ * every eleven seconds and waits a minute when it is told 429: a full set is half an hour.
  *
  * What a machine can decide is decided here. What only a reader can — whether a sentence is
  * supported by the measures it cites, whether it is good French — comes from
@@ -101,6 +106,31 @@ export interface Scored {
   never: string | null;
   /** The output carried the text of the book and was withheld from the record. */
   copied: boolean;
+}
+
+/** One request every eleven seconds: under the six a minute the Worker lets through. */
+const PACE_MS = 11_000;
+const AFTER_429_MS = 61_000;
+const MAX_WAITS = 3;
+const wait = (ms: number): Promise<void> => new Promise((done) => setTimeout(done, ms));
+
+/**
+ * Asks the Worker, no faster than its limiter allows. `clock` says when the last request left;
+ * a 429 is waited out, three times at most, and then returned for what it is.
+ */
+export async function paced(
+  ask: () => Promise<Response>,
+  clock: { last: number },
+  timing = { pace: PACE_MS, after429: AFTER_429_MS },
+): Promise<Response> {
+  for (let waits = 0; ; waits += 1) {
+    const since = Date.now() - clock.last;
+    if (since < timing.pace) await wait(timing.pace - since);
+    clock.last = Date.now();
+    const response = await ask();
+    if (response.status !== 429 || waits >= MAX_WAITS) return response;
+    await wait(timing.after429);
+  }
 }
 
 const isWithheld = (output: unknown): boolean =>
@@ -464,6 +494,7 @@ async function live(args: readonly string[]): Promise<void> {
 
   let spent = 0;
   let asked = 0;
+  const clock = { last: 0 };
   for (const item of todo) {
     if (spent >= budget) {
       console.log(`budget of ${String(budget)} neurons reached: stopping`);
@@ -485,11 +516,15 @@ async function live(args: readonly string[]): Promise<void> {
         model_ms: null,
       };
     } else {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ key, q: item.question, model, mode, min_overlap: 0 }),
-      });
+      const response = await paced(
+        () =>
+          fetch(url, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ key, q: item.question, model, mode, min_overlap: 0 }),
+          }),
+        clock,
+      );
       if (!response.ok)
         throw new Error(`/api/bench answered ${String(response.status)} for ${item.id}`);
       const answer = (await response.json()) as BenchAnswer;

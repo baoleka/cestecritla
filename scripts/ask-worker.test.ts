@@ -18,7 +18,7 @@ import {
   type AskResponse,
 } from '../src/lib/ask-contract.js';
 import { terms } from '../src/lib/search-core.js';
-import { answerQuestion, type AskDeps, type ModelRun } from '../src/worker/ask.js';
+import { answerQuestion, benchOutput, type AskDeps, type ModelRun } from '../src/worker/ask.js';
 import {
   DEFAULT_HARD_STOP,
   MAX_RESERVATION,
@@ -27,6 +27,7 @@ import {
   rollover,
   settle,
 } from '../src/worker/budget-core.js';
+import { MAX_BODY_BYTES, clientKey, rateSubject, readBody } from '../src/worker/guards.js';
 import { MODELS } from '../src/worker/models.js';
 import {
   SYSTEM_ANSWER,
@@ -495,6 +496,112 @@ void test('Turnstile: a token counts only for our hosts and our action, and fail
   for (const [name, result] of refusals) assert.equal(await result, false, name);
 });
 
+void test('a request is read up to the size of a request of the page, and no further', async () => {
+  const post = (body: string, headers: Record<string, string> = {}): Request =>
+    new Request('https://cestecritla.fr/api/ask', { method: 'POST', body, headers });
+  assert.deepEqual(await readBody(post('{"q":"une bibliothèque ?"}')), { q: 'une bibliothèque ?' });
+  assert.equal(await readBody(post('{"q":')), null, 'not JSON');
+  assert.equal(await readBody(post('')), null, 'nothing');
+  assert.equal(await readBody(new Request('https://cestecritla.fr/api/ask')), null, 'no body');
+  // The limit is counted in bytes, on the wire: accents weigh two.
+  const atLimit = JSON.stringify({ q: 'a'.repeat(MAX_BODY_BYTES - 8) });
+  assert.equal(new TextEncoder().encode(atLimit).byteLength, MAX_BODY_BYTES);
+  assert.notEqual(await readBody(post(atLimit)), null);
+  assert.equal(await readBody(post(atLimit.replace('a', 'é'))), null, 'one byte over');
+  assert.equal(await readBody(post(String.fromCodePoint(0xfffd), {})), null, 'not JSON either');
+
+  // A body that says it is too long is not read at all; one that does not say is cut off.
+  const chunk = new Uint8Array(1024).fill(0x20);
+  let pulled = 0;
+  const endless = (): ReadableStream<Uint8Array> =>
+    new ReadableStream<Uint8Array>(
+      {
+        pull(controller) {
+          pulled += 1;
+          controller.enqueue(chunk);
+        },
+      },
+      // Nothing is fetched ahead: what is pulled is what was read.
+      { highWaterMark: 0 },
+    );
+  const faked = (headers: Record<string, string>): Request =>
+    ({ headers: new Headers(headers), body: endless() }) as unknown as Request;
+  assert.equal(await readBody(faked({ 'content-length': String(MAX_BODY_BYTES + 1) })), null);
+  assert.equal(pulled, 0, 'announced too long: nothing was read');
+  assert.equal(await readBody(faked({ 'content-length': 'beaucoup' })), null);
+  assert.equal(pulled, 0, 'a length that is not a number is not a length');
+  assert.equal(await readBody(faked({})), null);
+  assert.ok(
+    pulled <= MAX_BODY_BYTES / 1024 + 3,
+    `read ${String(pulled)} kilobytes of an endless body`,
+  );
+});
+
+void test('the rate limiter counts a subscriber: an IPv4 address, the /64 of an IPv6 one', async () => {
+  assert.equal(rateSubject('203.0.113.7'), '203.0.113.7');
+  // One subscriber, four spellings of four of its addresses.
+  const network = '2001:db8:abcd:12::/64';
+  for (const address of [
+    '2001:db8:abcd:12:1:2:3:4',
+    '2001:db8:abcd:12::9',
+    '2001:0DB8:ABCD:0012:ffff:ffff:ffff:ffff',
+    ' 2001:db8:abcd:12:0:0:0:1 ',
+  ]) {
+    assert.equal(rateSubject(address), network, address);
+  }
+  assert.notEqual(rateSubject('2001:db8:abcd:13::9'), network);
+  assert.equal(rateSubject('::1'), '0:0:0:0::/64');
+  assert.equal(rateSubject('2001:db8::'), '2001:db8:0:0::/64');
+  // An IPv4 address written the IPv6 way, and one carried in the last groups.
+  assert.equal(rateSubject('::ffff:203.0.113.7'), '203.0.113.7');
+  assert.equal(rateSubject('64:ff9b::203.0.113.7'), '64:ff9b:0:0::/64');
+  // What does not read as an address is counted as itself: one bucket, never none.
+  for (const odd of ['unknown', '2001:db8::1::2', '2001:db8:zz::1', '1:2:3:4:5:6:7:8:9']) {
+    assert.equal(rateSubject(odd), odd);
+  }
+
+  const salt = 'un-secret-de-test-assez-long';
+  const key = await clientKey('2001:db8:abcd:12:1:2:3:4', salt, '2026-11-13');
+  assert.match(key, /^[0-9a-f]{32}$/);
+  assert.equal(await clientKey('2001:db8:abcd:12::9', salt, '2026-11-13'), key, 'same /64');
+  assert.notEqual(await clientKey('2001:db8:abcd:13::9', salt, '2026-11-13'), key);
+  assert.notEqual(await clientKey('2001:db8:abcd:12::9', salt, '2026-11-14'), key, 'another day');
+  assert.notEqual(await clientKey('2001:db8:abcd:12::9', `${salt}!`, '2026-11-13'), key);
+});
+
+void test('the bench is handed no copied text: a marker and a count instead', () => {
+  const shown = INVENTED.map(({ id, text }) => ({ id, text }));
+  // A sentence of ours, a selection, a refusal to answer: returned as they came.
+  assert.equal(benchOutput(LIBRARY_ANSWER, shown), LIBRARY_ANSWER);
+  const chosen = { ids: ['p1c1-s01-k01'], hors_programme: false };
+  assert.equal(benchOutput(chosen, shown), chosen);
+  assert.equal(benchOutput('Je ne peux pas répondre.', shown), 'Je ne peux pas répondre.');
+
+  const recited = 'Ouvrir une bibliothèque de quartier sept jours sur sept dans chaque commune';
+  const marker = (sentences: number): unknown => ({ withheld: 'copy', sentences });
+  const copied = { phrases: [{ texte: recited, ids: ['p1c1-s01-k01'] }], hors_programme: false };
+  assert.deepEqual(benchOutput(copied, shown), marker(1));
+  // Whatever shape the recitation takes — asked for by whoever holds the key, or not.
+  assert.deepEqual(benchOutput(JSON.stringify(copied), shown), marker(1));
+  assert.deepEqual(benchOutput(`Voici la mesure : ${recited}.`, shown), marker(0));
+  assert.deepEqual(benchOutput({ note: [recited.toUpperCase()] }, shown), marker(0));
+  // In pieces: no run of six, most of the sentence in runs of four.
+  const pieces = {
+    phrases: [
+      {
+        texte:
+          'Ouvrir une bibliothèque de quartier ouverte sept jours sur sept, puis dans chaque commune.',
+        ids: ['p1c1-s01-k01'],
+      },
+    ],
+    hors_programme: false,
+  };
+  assert.deepEqual(benchOutput(pieces, shown), marker(1));
+  for (const output of [copied, JSON.stringify(copied), pieces]) {
+    assert.doesNotMatch(JSON.stringify(benchOutput(output, shown)), /biblioth/i);
+  }
+});
+
 void test('what the Worker does not contain: a log, a write about a visitor, an outside service', () => {
   const sources = readdirSync('src/worker')
     .filter((name) => name.endsWith('.ts'))
@@ -530,4 +637,14 @@ void test('what the Worker does not contain: a log, a write about a visitor, an 
     /ENVIRONMENT !== 'preview'/,
     'the bench route must be closed outside the preview',
   );
+  // The switch that closes the page closes the questions: the same file, in the same deploy.
+  assert.match(index, /import flags from '\.\.\/\.\.\/public\/flags\.json'/);
+  assert.match(index, /effectiveDate\(now, \{ serverDate: now, override: OVERRIDE \}\)/);
+  // What the model returned leaves the Worker through one door, and it is not the raw output.
+  assert.match(index, /output: benchOutput\(run\.output, found\.candidates\)/);
+  assert.doesNotMatch(index, /output: run\.output\b/, 'the bench must not return the raw output');
+  // Both routes are counted by the limiter, and neither reads a body by itself.
+  const bench = index.slice(index.indexOf('async function handleBench'));
+  assert.match(bench, /withinRate\(request, env\)\)\) return empty\(429\)/);
+  assert.doesNotMatch(index, /request\.(?:text|json|arrayBuffer|formData)\(/);
 });

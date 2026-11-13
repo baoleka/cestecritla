@@ -1,0 +1,38 @@
+{
+  "root": "dist",
+  "lab": "Slow 4G (150 ms, 1.6 Mbit/s down, 750 kbit/s up), CPU x4, 390x844, files gzipped",
+  "machine_note": "this machine, slowed down: not a phone. PROBABLE until a real Android is measured",
+  "measured_on": "2026-11-13",
+  "chromium": "153.0.8010.12",
+  "runs": 5,
+  "lcp_ms": {
+    "median": 328,
+    "all": [
+      332,
+      320,
+      328,
+      328,
+      336
+    ]
+  },
+  "cls": {
+    "worst": 0.0004,
+    "all": [
+      0.0004,
+      0.0004,
+      0.0004,
+      0.0004,
+      0.0004
+    ]
+  },
+  "interactions": {
+    "a key in the field, results while typing": 40,
+    "Enter, the focus moves to the results": 24
+  },
+  "budget": {
+    "lcpMs": 2500,
+    "cls": 0.1,
+    "inpMs": 200
+  },
+  "held": true
+}

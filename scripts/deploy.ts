@@ -21,14 +21,18 @@
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
+import { buildGame, gameSite } from '../src/lib/game-data.js';
 import {
   citationPolicyValidated,
   deployRefusal,
+  distProblems,
   htmlPages,
-  insideSilenceWindow,
+  nearSilenceWindow,
   readAskMode,
   readBuildMode,
   readBuildScrutin,
+  readDist,
+  refusedArguments,
   workerProblems,
   wranglerDeployArgs,
   type AskDeploy,
@@ -38,6 +42,13 @@ import { launchBlockers, readLaunchInputs } from './launch.js';
 const [target, ...given] = process.argv.slice(2);
 if (target !== 'apex' && target !== 'preview') {
   console.error('usage: tsx scripts/deploy.ts apex|preview [--bench] [--dry-run] [--outdir <dir>]');
+  process.exit(2);
+}
+// Nothing reaches wrangler that could undo a choice made here: a second `--env` or `--config`
+// is the bare `wrangler deploy` this script exists to prevent.
+const refused = refusedArguments(given);
+if (refused.length > 0) {
+  console.error(`deploy refused: ${refused.join(' ')} — only --bench, --dry-run and --outdir`);
   process.exit(2);
 }
 // `--bench` is ours, not wrangler's: the Worker goes to the preview host while the page still
@@ -51,14 +62,20 @@ if (!existsSync('dist')) {
 
 const mode = readBuildMode();
 const pages = htmlPages('dist');
+// What a build of today would publish of the game: its one file, or nothing — while the editor
+// has not validated the list as it stands, and in the build served during a silence window.
+const scrutinBuild = readBuildScrutin();
+const gameFile =
+  mode === 'app' && !scrutinBuild && gameSite().on ? `jeu-${buildGame().fingerprint}.json` : null;
 const refusal = deployRefusal(target, mode, pages, {
   policyValidated: citationPolicyValidated(),
   dryRun: passthrough.includes('--dry-run'),
   launchBlockers: launchBlockers(readLaunchInputs()),
-  insideSilenceWindow: insideSilenceWindow(new Date()),
-  scrutinBuild: readBuildScrutin(),
+  insideSilenceWindow: nearSilenceWindow(new Date()),
+  scrutinBuild,
   ask,
   workerProblems: workerProblems(),
+  distProblems: mode === 'app' ? distProblems(readDist('dist'), { gameFile, ask }) : [],
 });
 if (refusal !== null) {
   console.error(`deploy refused (${target}, ${mode} build): ${refusal}`);

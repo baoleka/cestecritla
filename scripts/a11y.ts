@@ -33,7 +33,8 @@
 import { readFileSync } from 'node:fs';
 import { createServer, type Server } from 'node:http';
 import { extname, join, normalize } from 'node:path';
-import { chromium, type Browser, type BrowserContextOptions } from 'playwright';
+import { chromium, type Browser } from 'playwright';
+import { CONDITIONS, rootFontScript } from './a11y-conditions.js';
 import { readBuildMode } from './build-mode.js';
 
 /** Pages that must pass in every condition. Grows as routes land. */
@@ -75,32 +76,6 @@ const HOLDING_PATHS: readonly string[] = ['/', '/404.html'];
 export const AUDITED_PATHS: readonly string[] =
   readBuildMode() === 'holding' ? HOLDING_PATHS : APP_PATHS;
 
-interface Condition {
-  readonly label: string;
-  readonly options: BrowserContextOptions;
-  /** Applied before navigation, to emulate the system font size. */
-  readonly rootFontPercent?: number;
-}
-
-export const CONDITIONS: readonly Condition[] = [
-  {
-    label: 'mobile 390px',
-    options: { viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 },
-  },
-  { label: 'reflow 320px', options: { viewport: { width: 320, height: 640 } } },
-  { label: 'small 320x256', options: { viewport: { width: 320, height: 256 } } },
-  { label: 'dark 390px', options: { viewport: { width: 390, height: 844 }, colorScheme: 'dark' } },
-  { label: 'font 130%', options: { viewport: { width: 390, height: 844 } }, rootFontPercent: 130 },
-  { label: 'font 150%', options: { viewport: { width: 390, height: 844 } }, rootFontPercent: 150 },
-  { label: 'font 200%', options: { viewport: { width: 390, height: 844 } }, rootFontPercent: 200 },
-  // 390 × 844 seen through a 150 % page zoom: every CSS pixel is one and a half device pixels.
-  { label: 'zoom 150%', options: { viewport: { width: 260, height: 563 }, deviceScaleFactor: 3 } },
-  {
-    label: 'reduced motion',
-    options: { viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' },
-  },
-];
-
 const MIME: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -132,25 +107,6 @@ function serveDist(port: number): Promise<Server> {
       resolve(server);
     });
   });
-}
-
-/**
- * Sets the root font size as soon as the root element exists — an init script runs before it
- * does. Written as a string: under tsx a function would be wrapped in a helper the page lacks.
- */
-function rootFontScript(percent: number): string {
-  return `(() => {
-    const apply = () => {
-      if (document.documentElement === null) return false;
-      document.documentElement.style.fontSize = '${String(percent)}%';
-      return true;
-    };
-    if (apply()) return;
-    const observer = new MutationObserver(() => {
-      if (apply()) observer.disconnect();
-    });
-    observer.observe(document, { childList: true });
-  })();`;
 }
 
 interface Finding {

@@ -1,5 +1,7 @@
 # Prompt de session plan-mode — « C'est écrit là » (cestecritla.fr)
 
+> **⛔ Mise à jour du 13 novembre 2026 — ne plus coller ce prompt tel quel.** Il décrit le produit de septembre : le corpus 2025 sous Creative Commons, et aucun modèle à l'exécution (D6.10). Deux séries de décisions l'ont dépassé : la réédition du programme du 5 novembre 2026 (D15 : « renvoi + courte citation », le texte hors du dépôt), puis la redéfinition du 13 novembre (D16 : un modèle répond sous portes, la recherche en tapant, le jeu et sa tortue). **Le plan en vigueur est `docs/discovery/PLAN-JEU.md` ; l'état courant est dans `CLAUDE.md`.** Ce prompt reste la référence pour ce que D15 et D16 ne touchent pas — la voix, la charte, l'accessibilité, la méthode des statuts ; son §9 (IA) est remplacé par `08-ia.md` §10.
+
 > **Livrable n° 1 de la session de découverte des 7-10 septembre 2026.** À coller tel quel dans une session Claude Code neuve, en plan mode, ouverte à la racine du dépôt. Il est **autoportant** : il ne raconte rien qu'un fichier du dépôt ne prouve, et il pointe vers ce fichier plutôt que de le recopier. Aucun canvas, aucun Artifact : tout ce qui compte vit en fichiers.
 >
 > **Statuts, partout dans ce prompt et dans le dossier.** **VÉRIFIÉ** = mesuré ou lu à la source, fichier / capture / commande cités · **PROBABLE** = déduit, ou mesuré une seule fois · **HYPOTHÈSE** = non prouvé, méthode de levée indiquée · **HYPOTHÈSE (personas)** = jugé par des personas-agents et non par des personnes (D11.1) · **DÉCLARÉ** = rapporté par l'utilisateur sans pièce collectée.

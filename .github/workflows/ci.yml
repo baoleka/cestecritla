@@ -135,15 +135,29 @@ jobs:
       - name: End to end of the ask screen (test build, simulated Worker)
         run: npm run build:ask && npx tsx scripts/e2e-ask.ts --engines chromium
 
-      # The two gates that judge the notices and the security policy read dist-ask/ when it is
-      # there: replayed now that it is, so that the "mode open" half of each is exercised too.
-      - name: Notices and policy of the ask screen
-        run: npx tsx --test scripts/check-no-ai-mention.test.ts scripts/check-build.test.ts
+      # « Où est-ce écrit ? », on the same test build: the page as it will be once the list of
+      # words is validated. Without script, then with it: a choice is never wrong, a round sends
+      # nothing and writes nothing, the turtle changes at the end of a round only.
+      - name: End to end of the game (test build)
+        run: npx tsx scripts/e2e-game.ts --engines chromium
+
+      # The gates that judge the notices, the security policy and the words of the game read
+      # dist-ask/ when it is there: replayed now that it is, so that the half of each that needs
+      # the screen to exist is exercised too.
+      - name: Notices, policy and words of the test build
+        run: npm run build:scrutin:test && npx tsx --test scripts/check-no-ai-mention.test.ts scripts/check-build.test.ts scripts/game-page.test.ts
 
       # The parser's second opinion (D15.6): the synthetic official site — 2026 markup around the
       # 2025 text — re-read by a real DOM, and a sample of deep links followed.
       - name: Browser check of the 2026 parser (synthetic site)
         run: npx tsx scripts/verify-2026.ts --synthetic --sample 60
+
+      # The word of the game lit up in the official page (lot J4): the pass that asks a browser
+      # where it goes for a word must be able to say yes, to say « matched elsewhere first »,
+      # and its control must be able to fail. The real words are asked on the stored pages, on
+      # the editor's machine, in three engines.
+      - name: Browser check of the words' links (synthetic site)
+        run: npx tsx scripts/verify-2026.ts --synthetic --words
 
       - name: Accessibility and reflow (holding build)
         run: npm run build:holding && npm run a11y

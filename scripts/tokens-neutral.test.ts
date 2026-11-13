@@ -38,7 +38,7 @@ function resolve(tokens: Tokens, theme: string, role: string): string {
   return value.toUpperCase();
 }
 
-/** The same fourteen pairs the interface really renders (scripts/contrast.ts). */
+/** The same eighteen pairs the interface really renders (scripts/contrast.ts). */
 const ROLE_PAIRS = [
   ['text', 'bg', 'text'],
   ['text', 'bg-elevated', 'text'],
@@ -54,6 +54,11 @@ const ROLE_PAIRS = [
   ['verbatim-rule', 'verbatim-bg', 'non-text'],
   ['focus', 'bg', 'non-text'],
   ['focus', 'bg-elevated', 'non-text'],
+  ['turtle-line', 'bg', 'non-text'],
+  ['turtle-arc', 'turtle-shell', 'non-text'],
+  ['turtle-eye', 'turtle-line', 'non-text'],
+  ['turtle-accent', 'turtle-shell', 'non-text'],
+  ['turtle-accent', 'bg', 'non-text'],
 ] as const;
 
 const MIN = { text: 4.5, 'non-text': 3 } as const;
@@ -68,7 +73,7 @@ void test('the neutral set declares exactly the same roles as the main one', () 
   }
 });
 
-void test('the neutral set passes the same 28-pair contrast gate', () => {
+void test('the neutral set passes the same contrast gate, pair for pair', () => {
   const failures: string[] = [];
   for (const theme of ['light', 'dark']) {
     for (const [fg, bg, kind] of ROLE_PAIRS) {

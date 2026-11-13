@@ -40,6 +40,13 @@
   box-sizing: border-box;
 }
 
+/* `hidden` means hidden. A rule that gives an element a display — every button here is an
+   inline-flex — otherwise wins over the browser's own `[hidden] { display: none }`: found on
+   13/11/2026, when a button the script had hidden in the turtle's sheet stayed on screen. */
+[hidden] {
+  display: none !important;
+}
+
 html {
   /* A2: everything in rem so the system font size is honoured. */
   font-size: 100%;
@@ -394,6 +401,15 @@ h4 {
 }
 
 /* Search: a labelled field as wide as the page — no button, results follow the typing. */
+/* The field is in the page from the first paint (a field revealed by its script moved the whole
+   page a second after it could be read). Without scripts it would answer nothing, so it is not
+   shown there; a browser too old to know this query, with scripts off, shows a field that stays
+   silent next to the sentence that says where the sommaire is. */
+@media (scripting: none) {
+  #search {
+    display: none;
+  }
+}
 #search label {
   display: block;
   margin-block-end: var(--space-2);

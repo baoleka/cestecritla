@@ -13,6 +13,8 @@
  *   npm run build:holding  the holding site (D15.4): two pages, nothing of the programme, and a
  *                          _redirects file so old links land on it. Also the withdrawal gesture
  *                          of runbook sheet 9 (D14.10). See scripts/build-mode.ts.
+ *   npm run build:scrutin  the app as served during an electoral silence window (D16.16):
+ *                          neither question nor game. Deployed before each window.
  *   npm run build:ask      a TEST build of the app as it would be if the site answered
  *                          questions (src/lib/ask-config.ts), into dist-ask/. It exists so that
  *                          the ask screen is tested before any bench allows it to ship; it is
@@ -116,7 +118,16 @@ if (askTest !== null && askTest !== 'answer' && askTest !== 'select') {
   throw new Error('--ask-test takes "answer" or "select"');
 }
 if (askTest !== null && mode !== 'app') throw new Error('--ask-test is a build of the app');
-const outDir = askTest === null ? 'dist' : 'dist-ask';
+/**
+ * The "scrutin" build (D16.16): the app as it is served during an electoral silence window —
+ * neither question nor game, a sentence that says why, and everything one reads still there.
+ * Deployed before each window; inside one, it is the only build of the app that may be.
+ * With `--ask-test` it is the scrutin build of the TEST site (dist-scrutin/, never deployed):
+ * what the gates read to check that a site which plays shows nothing of the game when it closes.
+ */
+const scrutin = process.argv.includes('--scrutin');
+if (scrutin && mode !== 'app') throw new Error('--scrutin is a build of the app');
+const outDir = askTest === null ? 'dist' : scrutin ? 'dist-scrutin' : 'dist-ask';
 
 function run(step: Step): number {
   for (const input of step.reads) {
@@ -164,6 +175,10 @@ execFileSync('npx', ['--no-install', 'astro', 'build', '--outDir', outDir], {
     CEL_BUILD: mode,
     // Never inherited: a variable left in a shell must not turn a real build into a test one.
     CEL_ASK_TEST: askTest ?? '',
+    // The test build is the whole page as it will be: it shows the game too, with the list as
+    // it stands, validated or not. It goes to dist-ask/, which nothing deploys.
+    CEL_GAME_TEST: askTest === null ? '' : '1',
+    CEL_SCRUTIN: scrutin ? '1' : '',
   },
 });
 console.log(`✓ astro build (${String(Date.now() - astroStarted)} ms)`);
@@ -183,12 +198,16 @@ console.log(`✓ ${outDir}/_redirects (${mode})`);
 // A test build of the ask screen says nothing about dist/: it leaves the marker alone.
 if (askTest === null) {
   mkdirSync(resolve(root, 'build'), { recursive: true });
-  writeFileSync(resolve(root, BUILD_MARKER), `${JSON.stringify({ mode })}\n`);
+  writeFileSync(
+    resolve(root, BUILD_MARKER),
+    `${JSON.stringify(scrutin ? { mode, scrutin: true } : { mode })}\n`,
+  );
 }
 
 const total = Date.now() - t0;
-const label =
-  askTest !== null
+const label = scrutin
+  ? `build:scrutin${askTest === null ? '' : ' (test)'}`
+  : askTest !== null
     ? `build:ask (${askTest})`
     : mode === 'holding'
       ? 'build:holding'

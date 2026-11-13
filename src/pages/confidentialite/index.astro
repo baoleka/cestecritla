@@ -8,8 +8,15 @@
  *
  * Only what is true of this build is rendered (D16.4). While the site answers no question,
  * the search is local and that is the whole story. When it does, the page says where a question
- * goes at the gesture « Demander », to whom, what for — and that it is kept nowhere — and that
- * Turnstile guards that gesture.
+ * goes at the gesture « Demander », to whom, what for, that we log none of it — and the two
+ * things that are kept all the same, by Cloudflare, each for what it is: the answer, thirty days
+ * under a code computed from the question (the gateway's cache), and a counter under a code
+ * computed from the address, one minute (the rate limiter). Then Turnstile, which guards the
+ * gesture: what was measured of it, not more.
+ *
+ * In a build that shows the game (D16.14), the page also says what the game writes on the
+ * phone — the one thing the site ever writes anywhere — from the one map of those writings
+ * (src/components/GameStorage.astro), and offers « Tout effacer ».
  */
 import Base from '../../layouts/Base.astro';
 import { askSite } from '../../lib/ask-config.ts';
@@ -18,30 +25,41 @@ import { t } from '../../lib/strings.ts';
 const site = askSite();
 const asking = site.mode !== 'off';
 const model = site.modelName ?? '';
+const promise = asking ? t('privacy.no_account.ask') : t('privacy.no_account');
 
 const CLOUDFLARE_POLICY = 'cloudflare.com/privacypolicy';
+// Imported only by a build of a site that shows the game (astro.config.ts) — the scrutin build
+// included: what was written before a freeze can still be erased during it.
+const GameStorage = __CEL_GAME_WRITES__
+  ? (await import('../../components/GameStorage.astro')).default
+  : null;
 ---
 
-<Base title={`${t('privacy.title')} — ${t('app.name')}`} description={t('privacy.no_account')}>
+<Base title={`${t('privacy.title')} — ${t('app.name')}`} description={promise}>
   <h1>{t('privacy.title')}</h1>
-  <p class="lead">{t('privacy.no_account')}</p>
+  <p class="lead">{promise}</p>
 
   <h2>{t('privacy.what_title')}</h2>
   <ul class="counts">
     <li>{t('privacy.policy.01')}</li>
     <li>{asking ? t('privacy.policy.02', { model }) : t('privacy.policy.02.local')}</li>
+    {asking && <li>{t('privacy.policy.03.ask')}</li>}
+    {asking && <li>{t('privacy.policy.rate')}</li>}
     {asking && <li>{t('privacy.policy.06')}</li>}
     <li>{t('privacy.no_measure')}</li>
     <li>{t('privacy.policy.09')}</li>
     <li>{t('privacy.outbound')}</li>
   </ul>
 
+  {GameStorage !== null && <GameStorage />}
+
   <h2>{t('privacy.never.title')}</h2>
   <ul class="counts">
     <li>{t('privacy.never.01')}</li>
-    <li>{t('privacy.never.02')}</li>
+    <li>{asking ? t('privacy.never.02.ask') : t('privacy.never.02')}</li>
     <li>{t('privacy.never.03')}</li>
     <li>{t('privacy.never.04')}</li>
+    {GameStorage !== null && <li>{t('privacy.never.05')}</li>}
     <li>{t('privacy.never.06')}</li>
     {asking && <li>{t('privacy.never.08')}</li>}
     <li>{t('privacy.never.09')}</li>

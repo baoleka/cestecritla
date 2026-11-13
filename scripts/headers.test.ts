@@ -91,12 +91,19 @@ void test('nothing is detached that no broader rule sets (a stale detach hides a
   assert.deepEqual(offenders, [], offenders.join('\n'));
 });
 
-void test('the kill switch and the service worker are never cacheable (D12.8, H-PLA-8)', () => {
-  for (const path of ['/flags.json', '/sw.js', '/sw-kill.js']) {
-    const rule = rules.find((r) => r.path === path);
-    assert.equal(rule?.set.get('cache-control'), 'no-cache', `${path} must revalidate every time`);
-    assert.ok(rule.unset.has('cache-control'), `${path} still inherits max-age=300`);
-  }
+void test('the kill switch is never cacheable, and says one thing (D12.8)', () => {
+  const rule = rules.find((r) => r.path === '/flags.json');
+  assert.equal(rule?.set.get('cache-control'), 'no-cache', 'it must revalidate every time');
+  assert.ok(rule.unset.has('cache-control'), 'it still inherits max-age=300');
+  // No rule for a file the site does not have: there is no service worker.
+  assert.deepEqual(
+    rules.filter((r) => /sw/.test(r.path)),
+    [],
+  );
+  // One field. A public file that said "events: on" would say the site measures something.
+  const flags = JSON.parse(readFileSync('public/flags.json', 'utf8')) as Record<string, unknown>;
+  assert.deepEqual(Object.keys(flags), ['silence_override']);
+  assert.ok(['auto', 'on', 'off'].includes(String(flags['silence_override'])));
 });
 
 void test('the preview host is never indexed, and the rule cannot reach the apex', () => {

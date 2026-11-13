@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import { gameSite } from './src/lib/game-data.ts';
 
 // Static output, no adapter (D7.2): every page is HTML at build time and is served by
 // Static Assets. The Worker (src/worker/index.ts) only handles /api/*.
@@ -15,6 +16,20 @@ import { defineConfig } from 'astro/config';
 // else below (CSP hashes, inlined stylesheet, trailing slashes) applies to both, so the page that
 // stands in for the app is held to the same gates as the app.
 const holding = process.env.CEL_BUILD === 'holding';
+
+// Is the game in this build? Decided here, once, and handed to the pages as a constant the
+// bundler can see (`__CEL_GAME__`): a page that must not show the game then does not even
+// import it. Learning note — Astro attaches the styles of every component a page IMPORTS,
+// rendered or not: with a plain `{on && <Game />}` the home page carried the game's whole
+// stylesheet, and its script sat in dist/, while no word was allowed on the page. A condition
+// the bundler can fold removes the import itself.
+const site = holding ? { on: false, writes: false } : gameSite();
+const game = site.on;
+// The privacy page of a site that plays outside silence names what the game writes and offers
+// to erase it — in the "scrutin" build too, where the game itself is not shown (D16.16).
+const gameWrites = site.writes;
+/** The build deployed before each electoral silence window: neither question nor game. */
+const scrutin = process.env.CEL_SCRUTIN === '1';
 
 export default defineConfig({
   output: 'static',
@@ -48,6 +63,11 @@ export default defineConfig({
   },
 
   vite: {
+    define: {
+      __CEL_GAME__: JSON.stringify(game),
+      __CEL_GAME_WRITES__: JSON.stringify(gameWrites),
+      __CEL_SCRUTIN__: JSON.stringify(scrutin),
+    },
     json: { stringify: true },
     build: { target: 'es2022', modulePreload: { polyfill: false }, sourcemap: false },
   },

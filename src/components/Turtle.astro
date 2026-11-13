@@ -1,0 +1,36 @@
+---
+/**
+ * The turtle, in a page (D16.11 to D16.13).
+ *
+ * The drawing is read from the very file the editor validated (design/mascot/tortue.svg): the
+ * fingerprint the launch gate checks is the fingerprint of what ships. This component writes
+ * nothing but attributes on it — which state, which pose, how far each arc has grown — and
+ * brings the one stylesheet that turns them into what is seen.
+ *
+ * She is decoration to assistive technology (aria-hidden in the file): whatever she does is
+ * said in words by the button that holds her and by the status line of the game.
+ *
+ * She lives in the game block only: never near the question field, an answer of the model, a
+ * section page, the preview card or the favicon (illustration-rules §2.4).
+ */
+import { readFileSync } from 'node:fs';
+import '../styles/turtle.css';
+import {
+  turtleMarkup,
+  type ArcProgress,
+  type TurtlePose,
+  type TurtleState,
+} from '../lib/turtle.ts';
+
+interface Props {
+  state?: TurtleState;
+  arcs?: ArcProgress;
+  pose?: TurtlePose;
+}
+
+const { state = 0, arcs, pose = 'rest' } = Astro.props;
+const drawing = readFileSync('design/mascot/tortue.svg', 'utf8').trim();
+const markup = turtleMarkup(drawing, arcs === undefined ? { state, pose } : { state, arcs, pose });
+---
+
+<Fragment set:html={markup} />

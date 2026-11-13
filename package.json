@@ -13,6 +13,8 @@
     "build:fast": "tsx scripts/build.ts --fast",
     "build:holding": "tsx scripts/build.ts --holding",
     "build:ask": "tsx scripts/build.ts --ask-test answer",
+    "build:scrutin": "tsx scripts/build.ts --scrutin",
+    "build:scrutin:test": "tsx scripts/build.ts --scrutin --ask-test answer",
     "preview": "astro preview",
     "deploy": "tsx scripts/deploy.ts apex",
     "deploy:preview": "tsx scripts/deploy.ts preview",
@@ -32,6 +34,7 @@
     "watch:source": "tsx scripts/watch-source.ts",
     "e2e": "tsx scripts/e2e.ts",
     "e2e:ask": "tsx scripts/e2e-ask.ts",
+    "e2e:game": "tsx scripts/e2e-game.ts",
     "index:2026": "tsx scripts/index-2026.ts",
     "eval:2026": "tsx scripts/eval-2026.ts"
   },

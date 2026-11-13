@@ -18,13 +18,20 @@
  * question lives for the length of this function.
  */
 import {
+  parseModelAnswer,
   type AskMode,
   type AskRequest,
   type AskResponse,
   type Candidate,
 } from '../lib/ask-contract.js';
 import { reviewedFor, type ReviewedEntry } from '../lib/ask-reviewed.js';
-import { validateAnswer, validateSelection, type Verdict } from '../lib/ask-validate.js';
+import {
+  carriesCopy,
+  refusals,
+  validateAnswer,
+  validateSelection,
+  type Verdict,
+} from '../lib/ask-validate.js';
 import type { SynonymGroup } from '../lib/search-core.js';
 import { estimateNeurons, modelRequest, type ModelSpec } from './prompt.js';
 import { retrieve, type AskDb } from './retrieve.js';
@@ -85,6 +92,20 @@ export function control(
   return mode === 'answer'
     ? validateAnswer(output, candidates, { minOverlap })
     : validateSelection(output, candidates);
+}
+
+/**
+ * What `/api/bench` returns of an output: the output — unless the model copied what it was
+ * shown. An answer of the Worker holds no more of the book than a page would, the bench's
+ * included (D16.6): then a marker and a count leave, never the text. The bench counts the
+ * marker under its gate "copied sequence"; nobody needs to read what it stands for.
+ */
+export function benchOutput(output: unknown, candidates: readonly Candidate[]): unknown {
+  const copied =
+    carriesCopy(output, candidates) ||
+    refusals(output, candidates, { minOverlap: 0 }).some((refusal) => refusal.rule === 'copy');
+  if (!copied) return output;
+  return { withheld: 'copy', sentences: parseModelAnswer(output)?.phrases.length ?? 0 };
 }
 
 export async function answerQuestion(request: AskRequest, deps: AskDeps): Promise<AskResponse> {

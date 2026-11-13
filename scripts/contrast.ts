@@ -41,12 +41,25 @@ const PALETTE: readonly Swatch[] = [
   { name: 'Vif rose', hex: '#ED5FB1', group: 'vive', source: 'charte « Codes HEX (web) »' },
   { name: 'Vif jaune', hex: '#F9C900', group: 'vive', source: 'charte « Codes HEX (web) »' },
   { name: 'Vif vert', hex: '#2E9959', group: 'vive', source: 'charte « Codes HEX (web) »' },
-  { name: 'Gris M27', hex: '#707070', group: 'observed', source: 'melenchon2027.fr paragraphes (computed)' },
+  {
+    name: 'Gris M27',
+    hex: '#707070',
+    group: 'observed',
+    source: 'melenchon2027.fr paragraphes (computed)',
+  },
   { name: 'Jaune M27', hex: '#F5C800', group: 'observed', source: 'melenchon2027.fr (computed)' },
   { name: 'Beige M27', hex: '#E6DFC9', group: 'observed', source: 'melenchon2027.fr (computed)' },
 ];
 
-const BACKGROUNDS = ['Crème', 'Charbon', 'Violet', 'Rouge', 'Violet 100', 'Violet 200', 'Corail 200'] as const;
+const BACKGROUNDS = [
+  'Crème',
+  'Charbon',
+  'Violet',
+  'Rouge',
+  'Violet 100',
+  'Violet 200',
+  'Corail 200',
+] as const;
 
 function channel(v: number): number {
   const c = v / 255;
@@ -90,7 +103,12 @@ for (const fg of PALETTE) {
     const bg = byName.get(bgName);
     if (!bg || bg.name === fg.name) continue;
     const ratio = contrast(fg.hex, bg.hex);
-    cells.push({ fg: fg.name, bg: bg.name, ratio: Math.round(ratio * 100) / 100, grade: grade(ratio) });
+    cells.push({
+      fg: fg.name,
+      bg: bg.name,
+      ratio: Math.round(ratio * 100) / 100,
+      grade: grade(ratio),
+    });
   }
 }
 
@@ -99,9 +117,13 @@ const fmt = (c: Cell | undefined): string => (c ? `${c.ratio.toFixed(2)} ${c.gra
 const lines: string[] = [];
 lines.push("# Matrice de contraste WCAG 2.2 — « C'est écrit là »");
 lines.push('');
-lines.push('Générée par `npx tsx scripts/contrast.ts` le 2026-09-07. Ratio texte/fond ; seuils : **AAA ≥ 7**, **AA ≥ 4,5** (texte courant), **AA-large ≥ 3** (≥ 24 px ou ≥ 19 px gras, et éléments non textuels), **ÉCHEC < 3**.');
+lines.push(
+  'Générée par `npx tsx scripts/contrast.ts` le 2026-09-07. Ratio texte/fond ; seuils : **AAA ≥ 7**, **AA ≥ 4,5** (texte courant), **AA-large ≥ 3** (≥ 24 px ou ≥ 19 px gras, et éléments non textuels), **ÉCHEC < 3**.',
+);
 lines.push('');
-lines.push('Règle éliminatoire du plan (T3) : 100 % des paires *texte courant* utilisées dans les maquettes doivent être ≥ 4,5:1.');
+lines.push(
+  'Règle éliminatoire du plan (T3) : 100 % des paires *texte courant* utilisées dans les maquettes doivent être ≥ 4,5:1.',
+);
 lines.push('');
 lines.push('## Palette (toutes les valeurs lues à la source le 7/9/2026)');
 lines.push('');
@@ -123,23 +145,40 @@ lines.push('');
 const ok = cells.filter((c) => c.ratio >= 4.5).sort((a, b) => b.ratio - a.ratio);
 for (const c of ok) lines.push(`- ${c.fg} sur ${c.bg} : ${c.ratio.toFixed(2)} (${c.grade})`);
 lines.push('');
-lines.push('## Paires interdites pour du texte courant (< 4,5:1), tolérées seulement en aplat, grand titre ≥ 3:1 ou décor');
+lines.push(
+  '## Paires interdites pour du texte courant (< 4,5:1), tolérées seulement en aplat, grand titre ≥ 3:1 ou décor',
+);
 lines.push('');
 const ko = cells.filter((c) => c.ratio < 4.5).sort((a, b) => b.ratio - a.ratio);
 for (const c of ko) lines.push(`- ${c.fg} sur ${c.bg} : ${c.ratio.toFixed(2)} (${c.grade})`);
 lines.push('');
 lines.push('## Lecture');
 lines.push('');
-const viveOnCreme = PALETTE.filter((s) => s.group === 'vive').map((s) => ({ s, c: cells.find((c) => c.fg === s.name && c.bg === 'Crème') }));
+const viveOnCreme = PALETTE.filter((s) => s.group === 'vive').map((s) => ({
+  s,
+  c: cells.find((c) => c.fg === s.name && c.bg === 'Crème'),
+}));
 const failing = viveOnCreme.filter((x) => x.c && x.c.ratio < 4.5).length;
-lines.push(`- Sur Crème, ${String(failing)} des 6 vives échouent AA en texte courant : les vives sont des couleurs d'aplat et de grands titres, jamais de corps de texte sur Crème.`);
-const viveOnCharbon = PALETTE.filter((s) => s.group === 'vive').map((s) => cells.find((c) => c.fg === s.name && c.bg === 'Charbon'));
-lines.push(`- Sur Charbon (dark mode), ${String(viveOnCharbon.filter((c) => c && c.ratio >= 4.5).length)} des 6 vives passent AA en texte courant et ${String(viveOnCharbon.filter((c) => c && c.ratio >= 3 && c.ratio < 4.5).length)} passent seulement AA-large : le thème sombre est le territoire des vives pour les titres et les aplats, pas pour le corps de texte (corriger l'annexe de reconnaissance qui disait « les vives passent »).`);
+lines.push(
+  `- Sur Crème, ${String(failing)} des 6 vives échouent AA en texte courant : les vives sont des couleurs d'aplat et de grands titres, jamais de corps de texte sur Crème.`,
+);
+const viveOnCharbon = PALETTE.filter((s) => s.group === 'vive').map((s) =>
+  cells.find((c) => c.fg === s.name && c.bg === 'Charbon'),
+);
+lines.push(
+  `- Sur Charbon (dark mode), ${String(viveOnCharbon.filter((c) => c && c.ratio >= 4.5).length)} des 6 vives passent AA en texte courant et ${String(viveOnCharbon.filter((c) => c && c.ratio >= 3 && c.ratio < 4.5).length)} passent seulement AA-large : le thème sombre est le territoire des vives pour les titres et les aplats, pas pour le corps de texte (corriger l'annexe de reconnaissance qui disait « les vives passent »).`,
+);
 const vOnC = cells.find((c) => c.fg === 'Violet' && c.bg === 'Charbon');
-lines.push(`- Violet sur Charbon = ${vOnC ? vOnC.ratio.toFixed(2) : '?'} : interdit. En dark mode, le violet de marque devient Violet 200 (${fmt(cells.find((c) => c.fg === 'Violet 200' && c.bg === 'Charbon'))}) ou Vif violet (${fmt(cells.find((c) => c.fg === 'Vif violet' && c.bg === 'Charbon'))}).`);
+lines.push(
+  `- Violet sur Charbon = ${vOnC ? vOnC.ratio.toFixed(2) : '?'} : interdit. En dark mode, le violet de marque devient Violet 200 (${fmt(cells.find((c) => c.fg === 'Violet 200' && c.bg === 'Charbon'))}) ou Vif violet (${fmt(cells.find((c) => c.fg === 'Vif violet' && c.bg === 'Charbon'))}).`,
+);
 const grey = cells.find((c) => c.fg === 'Gris M27' && c.bg === 'Crème');
-lines.push(`- Le gris de paragraphe de melenchon2027.fr (#707070) fait ${grey ? grey.ratio.toFixed(2) : '?'} sur Crème (${grey?.grade ?? '?'}, limite) : corps de texte en Charbon, le gris reste réservé aux métadonnées ≥ 16 px.`);
-lines.push(`- Crème sur Rouge = ${fmt(cells.find((c) => c.fg === 'Crème' && c.bg === 'Rouge'))}, Crème sur Violet = ${fmt(cells.find((c) => c.fg === 'Crème' && c.bg === 'Violet'))} : boutons et bandeaux pleins autorisés dans les deux couleurs de marque.`);
+lines.push(
+  `- Le gris de paragraphe de melenchon2027.fr (#707070) fait ${grey ? grey.ratio.toFixed(2) : '?'} sur Crème (${grey?.grade ?? '?'}, limite) : corps de texte en Charbon, le gris reste réservé aux métadonnées ≥ 16 px.`,
+);
+lines.push(
+  `- Crème sur Rouge = ${fmt(cells.find((c) => c.fg === 'Crème' && c.bg === 'Rouge'))}, Crème sur Violet = ${fmt(cells.find((c) => c.fg === 'Crème' && c.bg === 'Violet'))} : boutons et bandeaux pleins autorisés dans les deux couleurs de marque.`,
+);
 lines.push('');
 
 // ---------------------------------------------------------------------------------------------
@@ -187,6 +226,12 @@ const ROLE_PAIRS: readonly (readonly [string, string, 'text' | 'non-text'])[] = 
   ['verbatim-rule', 'verbatim-bg', 'non-text'],
   ['focus', 'bg', 'non-text'],
   ['focus', 'bg-elevated', 'non-text'],
+  // The turtle (D16.11): drawn, not written — every pair is a shape against what it sits on.
+  ['turtle-line', 'bg', 'non-text'],
+  ['turtle-arc', 'turtle-shell', 'non-text'],
+  ['turtle-eye', 'turtle-line', 'non-text'],
+  ['turtle-accent', 'turtle-shell', 'non-text'],
+  ['turtle-accent', 'bg', 'non-text'],
 ];
 
 const MIN = { text: 4.5, 'non-text': 3 } as const;
@@ -209,7 +254,17 @@ for (const theme of ['light', 'dark']) {
     const fgHex = resolve(theme, fg);
     const bgHex = resolve(theme, bg);
     const ratio = Math.round(contrast(fgHex, bgHex) * 100) / 100;
-    roleChecks.push({ theme, fg, bg, fgHex, bgHex, kind, ratio, min: MIN[kind], pass: ratio >= MIN[kind] });
+    roleChecks.push({
+      theme,
+      fg,
+      bg,
+      fgHex,
+      bgHex,
+      kind,
+      ratio,
+      min: MIN[kind],
+      pass: ratio >= MIN[kind],
+    });
   }
 }
 const roleFailures = roleChecks.filter((c) => !c.pass);
@@ -232,7 +287,7 @@ lines.push(
   `- ${String(roleChecks.length)} paires de rôles mesurées, ${String(roleFailures.length)} en échec.`,
 );
 lines.push(
-  "- Non couvert par cette porte, à écrire : le contraste de la **page rendue** (chaque nœud de texte contre son fond effectif, à sa taille et à sa graisse réelles), la ban list, le reflow 320 px, la police système à 130 % et 150 %, `prefers-reduced-motion` et `prefers-color-scheme`. Outils déjà écrits à promouvoir dans `scripts/` : `prototypes/mockups/finalistes/capture.mjs`, `prototypes/mockups/B/tools/contrast-check.mjs`, `docs/discovery/captures/2026-09-10/proto/integ-live.mjs`.",
+  '- Non couvert par cette porte, à écrire : le contraste de la **page rendue** (chaque nœud de texte contre son fond effectif, à sa taille et à sa graisse réelles), la ban list, le reflow 320 px, la police système à 130 % et 150 %, `prefers-reduced-motion` et `prefers-color-scheme`. Outils déjà écrits à promouvoir dans `scripts/` : `prototypes/mockups/finalistes/capture.mjs`, `prototypes/mockups/B/tools/contrast-check.mjs`, `docs/discovery/captures/2026-09-10/proto/integ-live.mjs`.',
 );
 lines.push('');
 
@@ -240,12 +295,20 @@ writeFileSync('design/contrast-matrix.md', lines.join('\n'));
 writeFileSync(
   'design/contrast-matrix.json',
   JSON.stringify(
-    { generated_at: '2026-09-07', palette: PALETTE, backgrounds: BACKGROUNDS, cells, role_checks: roleChecks },
+    {
+      generated_at: '2026-09-07',
+      palette: PALETTE,
+      backgrounds: BACKGROUNDS,
+      cells,
+      role_checks: roleChecks,
+    },
     null,
     2,
   ),
 );
-console.log(`${String(cells.length)} paires calculées ; ${String(ok.length)} ≥ 4,5:1 ; ${String(ko.length)} < 4,5:1`);
+console.log(
+  `${String(cells.length)} paires calculées ; ${String(ok.length)} ≥ 4,5:1 ; ${String(ko.length)} < 4,5:1`,
+);
 console.log(
   `${String(roleChecks.length)} paires de rôles (tokens color-role) ; ${String(roleFailures.length)} en échec`,
 );

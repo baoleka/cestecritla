@@ -29,6 +29,9 @@ const TEST_SITEKEY = '1x00000000000000000000AA';
 const OFF: AskSite = { mode: 'off', modelName: null, sitekey: null };
 
 export function askSite(): AskSite {
+  // The build deployed before each electoral silence window (D16.16) answers no question,
+  // whatever the mode: its pages carry no button, no notice and no script of « Demander ».
+  if (process.env['CEL_SCRUTIN'] === '1') return OFF;
   const test = process.env['CEL_ASK_TEST'];
   if (test === 'answer' || test === 'select') {
     return { mode: test, modelName: MODELS['mistral-small-3.1'].name, sitekey: TEST_SITEKEY };

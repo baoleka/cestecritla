@@ -1,0 +1,85 @@
+---
+/**
+ * What the game writes on a phone, on the privacy page — and « Tout effacer » (D16.14).
+ *
+ * Nothing here is typed by hand: the storages, the key and every field come from the one map
+ * (src/lib/storage-map.ts), which is itself built from the lists of fields the game's memory is
+ * written with. The page cannot say less than the code writes.
+ *
+ * « Tout effacer » stays within reach whatever happens to the game — a freeze included: this
+ * page is never frozen (src/lib/silence.ts).
+ */
+import { STORAGE_KEY } from '../lib/game-state.ts';
+import { STORAGE_MAP } from '../lib/storage-map.ts';
+import { t, type StringKey } from '../lib/strings.ts';
+---
+
+<h2 id="ce-que-le-jeu-ecrit">{t('privacy.game.title')}</h2>
+<p>{t('privacy.game.lead')}</p>
+{
+  STORAGE_MAP.map((entry) => (
+    <>
+      <p>
+        {t(entry.lead as StringKey)} <span class="ref">({entry.storage})</span>
+      </p>
+      <ul class="counts" data-storage={entry.storage}>
+        {entry.fields.map((field) => (
+          <li data-field={field.name}>{t(field.label as StringKey)}</li>
+        ))}
+      </ul>
+    </>
+  ))
+}
+<p>{t('privacy.game.key', { key: STORAGE_KEY })}</p>
+<p>{t('privacy.game.duration')}</p>
+<p>{t('privacy.game.never')}</p>
+<p>{t('privacy.game.basis')}</p>
+<p>{t('privacy.game.erase_lead')}</p>
+<p>
+  {/* Shown by the script that can answer a press: without script nothing was ever written. */}
+  <button
+    type="button"
+    class="quiet"
+    id="erase-all"
+    data-key={STORAGE_KEY}
+    data-done={t('turtle.erased')}
+    hidden
+  >
+    {t('turtle.erase')}
+  </button>
+</p>
+<p id="erase-status" role="status"></p>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('#erase-all');
+  const status = document.querySelector<HTMLElement>('#erase-status');
+  const key = button?.dataset.key;
+  if (button !== null && status !== null && key !== undefined) {
+    button.hidden = false;
+    button.addEventListener('click', () => {
+      // The tab and the phone, at once — each on its own: one storage that refuses must not
+      // keep the other from being emptied. On the phone the key is written before it is
+      // removed: removing a key that is not there tells nobody, and a tab open on the game
+      // must hear it to forget its own round.
+      const attempts: (() => void)[] = [
+        () => {
+          window.sessionStorage.removeItem(key);
+        },
+        () => {
+          window.localStorage.setItem(key, '');
+        },
+        () => {
+          window.localStorage.removeItem(key);
+        },
+      ];
+      for (const attempt of attempts) {
+        try {
+          attempt();
+        } catch {
+          // Refused: nothing was ever written there.
+        }
+      }
+      status.textContent = button.dataset.done ?? '';
+    });
+  }
+</script>

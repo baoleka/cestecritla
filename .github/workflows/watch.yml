@@ -73,3 +73,31 @@ jobs:
             --title "Veille R6 — un signal d'aec2027.fr a changé ($(date -u +%Y-%m-%d))" \
             --body-file /tmp/issue.md \
             --label veille
+
+      # The scrutin build (D16.16, runbook sheet 7) must be live before each electoral silence
+      # window, and nothing on the site can deploy it: it is a gesture of the editor. This job
+      # reminds, five days ahead, once per window. It is not a guard — GitHub suspends scheduled
+      # workflows after sixty days without activity; the guards are in the page, in the Worker
+      # and in scripts/deploy.ts.
+      - name: Is an electoral silence window near?
+        id: scrutin
+        run: |
+          set +e
+          npx tsx scripts/scrutin-reminder.ts > /tmp/scrutin.md
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+          cat /tmp/scrutin.md
+
+      - name: Open the reminder, once per window
+        if: steps.scrutin.outputs.code == '3'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="$(head -n 1 /tmp/scrutin.md)"
+          key="$(printf '%s' "$title" | cut -d']' -f1 | tr -d '[')"
+          tail -n +3 /tmp/scrutin.md > /tmp/scrutin-body.md
+          gh label create scrutin --force --color D1271C \
+            --description "Silence électoral : déployer la build scrutin"
+          found="$(gh issue list --state all --label scrutin --search "in:title $key" --json number --jq 'length')"
+          if [ "$found" = "0" ]; then
+            gh issue create --title "$title" --body-file /tmp/scrutin-body.md --label scrutin
+          fi

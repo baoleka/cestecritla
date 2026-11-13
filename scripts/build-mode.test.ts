@@ -9,22 +9,27 @@
  * Run: npx tsx --test scripts/build-mode.test.ts
  */
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import {
   APP_REDIRECT_PREFIXES,
   HOLDING_PAGES,
   HOLDING_REDIRECT_PREFIXES,
+  SILENCE_APPROACH_MS,
   STATIC_CONFIG,
   UNSET_DATABASE_ID,
   WORKER_CONFIG,
   appRedirects,
   citationPolicyValidated,
   deployRefusal,
+  distProblems,
   holdingRedirects,
   insideSilenceWindow,
+  nearSilenceWindow,
   readAskMode,
   readBuildScrutin,
+  readDist,
+  refusedArguments,
   workerProblems,
   wranglerConfig,
   wranglerDeployArgs,
@@ -41,6 +46,7 @@ const VALIDATED: DeployContext = {
   scrutinBuild: false,
   ask: 'off',
   workerProblems: [],
+  distProblems: [],
 };
 
 interface Route {
@@ -59,13 +65,13 @@ interface Environment {
   triggers?: unknown;
   tail_consumers?: unknown;
   logpush?: unknown;
+  observability?: { enabled?: boolean };
 }
 interface WranglerConfig extends Environment {
   name?: string;
   main?: string;
   workers_dev?: boolean;
   preview_urls?: boolean;
-  observability?: { enabled?: boolean };
   assets?: { directory?: string; binding?: string; run_worker_first?: unknown };
   env?: Record<string, Environment>;
 }
@@ -322,6 +328,10 @@ void test('neither configuration answers anywhere but the .fr, and neither keeps
     assert.equal(config.workers_dev, false);
     assert.equal(config.preview_urls, false);
     assert.equal(config.observability?.enabled, false, 'D0.22: no invocation log');
+    // Said again in every environment: the preview Worker is the one the bench asks.
+    for (const [name, env] of Object.entries(config.env ?? {})) {
+      assert.equal(env.observability?.enabled, false, `${name}: no invocation log`);
+    }
   }
 });
 
@@ -407,6 +417,105 @@ void test('the windows are those of the calendar, to the second', () => {
   assert.equal(insideSilenceWindow(new Date('2027-05-01T12:00:00Z')), true);
   // Any ordinary day.
   assert.equal(insideSilenceWindow(new Date('2026-11-13T12:00:00Z')), false);
+});
+
+void test('the day before a window is already too late for anything that opens', () => {
+  // The first round's window opens on Thursday 15 April 2027 at 22:00 UTC.
+  assert.equal(nearSilenceWindow(new Date('2027-04-14T21:59:59Z')), false);
+  assert.equal(nearSilenceWindow(new Date('2027-04-14T22:00:00Z')), true);
+  assert.equal(nearSilenceWindow(new Date('2027-04-15T22:00:00Z')), true);
+  assert.equal(nearSilenceWindow(new Date('2027-04-18T17:59:59Z')), true);
+  assert.equal(nearSilenceWindow(new Date('2027-04-18T18:00:00Z')), false);
+  // Between the rounds the site reopens, until the day before the second window.
+  assert.equal(nearSilenceWindow(new Date('2027-04-25T12:00:00Z')), false);
+  assert.equal(nearSilenceWindow(new Date('2027-04-28T21:59:59Z')), false);
+  assert.equal(nearSilenceWindow(new Date('2027-04-28T22:00:00Z')), true);
+  assert.equal(nearSilenceWindow(new Date('2026-11-13T12:00:00Z')), false);
+  assert.equal(SILENCE_APPROACH_MS, 86_400_000);
+  // …and it is this reading, not the window alone, that the deploy script hands to the rule.
+  const deploy = readFileSync('scripts/deploy.ts', 'utf8');
+  assert.match(deploy, /insideSilenceWindow: nearSilenceWindow\(new Date\(\)\)/);
+});
+
+void test('nothing reaches wrangler that could undo a choice of the guard', () => {
+  assert.deepEqual(refusedArguments([]), []);
+  assert.deepEqual(refusedArguments(['--bench', '--dry-run', '--outdir', 'build/worker']), []);
+  assert.deepEqual(refusedArguments(['--dry-run', '--outdir=build/worker']), []);
+  for (const args of [
+    ['--env', 'production'],
+    ['--env='],
+    ['--config', 'wrangler.jsonc'],
+    ['--name', 'cestecritla'],
+    ['--assets', 'dist-ask'],
+    ['--route', 'cestecritla.fr'],
+    ['--var', 'ENVIRONMENT:preview'],
+    ['dist-ask'],
+    ['--outdir'],
+    ['--outdir', '--env='],
+    ['--dry-run', '--minify=false'],
+  ]) {
+    assert.notDeepEqual(refusedArguments(args), [], args.join(' '));
+  }
+  assert.deepEqual(refusedArguments(['--dry-run', '--env', 'x']), ['--env', 'x']);
+  // The script refuses before it reads anything else, and long before it starts wrangler.
+  const deploy = readFileSync('scripts/deploy.ts', 'utf8');
+  const refusedAt = deploy.indexOf('refusedArguments(given)');
+  assert.ok(refusedAt > -1 && refusedAt < deploy.indexOf("existsSync('dist')"));
+  assert.ok(refusedAt < deploy.indexOf('spawnSync('));
+});
+
+void test('dist/ is read, whatever the marker says: no game without its list, no question without its mode', () => {
+  const game = 'jeu-0123456789abcdef.json';
+  const off = { gameFile: null, ask: 'off' } as const;
+  const playing = { gameFile: game, ask: 'off' } as const;
+  // Nothing shown is nothing to refuse — the scrutin build, or a build older than the list.
+  assert.deepEqual(distProblems({ gameFiles: [], asks: false }, off), []);
+  assert.deepEqual(distProblems({ gameFiles: [], asks: false }, playing), []);
+  assert.deepEqual(distProblems({ gameFiles: [game], asks: false }, playing), []);
+  // A test build copied over dist/, an `astro build` run by hand with the test variable.
+  assert.match(distProblems({ gameFiles: [game], asks: false }, off).join(), /not validated/);
+  // A build made before the list changed.
+  assert.match(
+    distProblems({ gameFiles: ['jeu-ffffffffffffffff.json'], asks: false }, playing).join(),
+    /another list of words/,
+  );
+  assert.match(
+    distProblems({ gameFiles: [game, 'jeu-ffffffffffffffff.json'], asks: false }, playing).join(),
+    /another list of words/,
+  );
+  // A page that sends questions while the data says none is answered — the bench included:
+  // there the Worker goes out, and the page still asks nothing.
+  assert.match(distProblems({ gameFiles: [], asks: true }, off).join(), /sends questions/);
+  assert.match(
+    distProblems({ gameFiles: [], asks: true }, { gameFile: null, ask: 'bench' }).join(),
+    /sends questions/,
+  );
+  assert.deepEqual(
+    distProblems({ gameFiles: [], asks: true }, { gameFile: null, ask: 'answer' }),
+    [],
+  );
+
+  // Any of them refuses the deployment, on both hosts; the holding page is never concerned.
+  const pages = ['index.html', 's/p1c1-s01/index.html'];
+  const wrong: DeployContext = {
+    ...VALIDATED,
+    launchBlockers: [],
+    distProblems: distProblems({ gameFiles: [game], asks: true }, off),
+  };
+  for (const target of ['apex', 'preview'] as const) {
+    const refusal = String(deployRefusal(target, 'app', pages, wrong));
+    assert.match(refusal, /shows the game.*sends questions.*npm run build/);
+    assert.equal(deployRefusal(target, 'holding', [...HOLDING_PAGES], wrong), null);
+  }
+
+  assert.deepEqual(readDist('build/does-not-exist'), { gameFiles: [], asks: false });
+  // The test builds are exactly what this refuses: they show everything, validated or not.
+  if (existsSync('dist-ask/index.html')) {
+    const test = readDist('dist-ask');
+    assert.equal(test.asks, true);
+    assert.equal(test.gameFiles.length, 1);
+    assert.notDeepEqual(distProblems(test, off), []);
+  }
 });
 
 void test('a build is a scrutin build only when its marker says so', () => {

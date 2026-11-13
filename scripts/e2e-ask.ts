@@ -12,7 +12,8 @@
  *
  * What is checked:
  *   1. before any gesture: the notice that an AI is at work, with the model's name; no request
- *      to anyone but us — Turnstile included — until the field is focused;
+ *      to anyone but us — Turnstile included — until « Demander » is pressed: focusing the
+ *      field and typing in it are the local search, and ask nothing of a third party;
  *   2. typing sends nothing; « Demander » sends the question once, with a token and the state
  *      of the book, and nothing else;
  *   3. each answer of the Worker becomes its page — written, selected, re-read, nothing found,
@@ -29,6 +30,7 @@ import { createServer, type Server } from 'node:http';
 import { extname, join, normalize, resolve } from 'node:path';
 import { chromium, firefox, webkit, type BrowserType, type Page, type Route } from 'playwright';
 import type { Manifest } from './aec26-types.js';
+import { STILL, lateLayoutShift } from './e2e-kit.js';
 
 const ENGINES: Record<string, BrowserType> = { chromium, firefox, webkit };
 const MIME: Record<string, string> = {
@@ -287,12 +289,12 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       (await page.locator('#search button').count()) === 1,
     );
     await page.waitForTimeout(400);
-    check('nothing is asked of Turnstile before the field is focused', toTurnstile() === 0);
+    check('nothing is asked of Turnstile before any gesture', toTurnstile() === 0);
     await page.focus('#q');
-    await until(page, 'window.__turnstile !== undefined');
+    await page.waitForTimeout(400);
     check(
-      'Turnstile is asked for at the first focus, once',
-      toTurnstile() === 1,
+      'focusing the field — it is also the local search — asks nothing of Turnstile',
+      toTurnstile() === 0,
       String(toTurnstile()),
     );
 
@@ -304,6 +306,11 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         /infirmi|retraite/i.test(decodeURIComponent(url.split('#')[0] ?? '')),
       );
     check('typing sends the words nowhere', carrying().length === 0 && posted.length === 0);
+    check(
+      'typing asks nothing of Turnstile either, and leaves nothing in the address',
+      toTurnstile() === 0 && !page.url().includes('#') && !/retraite/i.test(page.url()),
+      page.url(),
+    );
     // The field is still the search: results arrive while one types, under the button.
     await page.waitForSelector('#search-list li');
     check(
@@ -503,7 +510,42 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
     await context.close();
 
-    // --- 6 bis. accessibility of the answer (Chromium: axe is injected, so the policy is bypassed)
+    // --- 6. ten minutes on the page: the question is still sent. The hour of the server, read
+    // at arrival, ages with the device's clock — it used not to, and five minutes after arriving
+    // every question was answered by the page alone, without a word.
+    {
+      const late = await browser.newContext({ viewport: { width: 390, height: 844 } });
+      const view = await late.newPage();
+      await guard(view);
+      await view.goto(`${origin}/`);
+      await view.focus('#q');
+      await until(view, "document.querySelector('#ask') && !document.querySelector('#ask').hidden");
+      const sent = posted.length;
+      await view.clock.setFixedTime(new Date(Date.now() + 10 * 60 * 1000));
+      await view.fill('#q', 'et dix minutes plus tard');
+      await view.click('#ask');
+      await until(view, "!document.querySelector('#answer').hidden");
+      check(
+        'ten minutes after arriving, a question is still sent to the model',
+        posted.length === sent + 1 &&
+          ((await view.locator('#answer-notice').textContent()) ?? '').includes(MODEL),
+        String(posted.length - sent),
+      );
+      await late.close();
+    }
+
+    // --- 6 bis. once painted, the page does not move: the field, the button that asks and the
+    // game are all in their place before any script (Chromium is the engine that measures it)
+    if (name === 'chromium') {
+      const shift = await lateLayoutShift(browser, `${origin}/`);
+      check(
+        'the page does not move once painted, even when its scripts arrive late',
+        shift < STILL,
+        shift.toFixed(4),
+      );
+    }
+
+    // --- 6 ter. accessibility of the answer (Chromium: axe is injected, so the policy is bypassed)
     if (name === 'chromium') {
       const axe = readFileSync('node_modules/axe-core/axe.min.js', 'utf8');
       for (const [label, width] of [

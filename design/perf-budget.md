@@ -1,5 +1,7 @@
 # Budget de performance et d'accessibilité (T3, figé avant les maquettes)
 
+> **Mesuré le 13 novembre 2026.** Les seuils ne changent pas. P1, P4 et P5 se mesurent dans le labo du §1.2 par `npx tsx scripts/perf-probe.ts` (résultats archivés : `docs/discovery/perf/2026-11-13/`) — PROBABLE tant qu'un vrai Android n'a pas été mesuré. La sonde a trouvé P4 non tenu sur l'accueil (CLS 0,17 : le champ, révélé par son script, déplaçait la page) ; corrigé le jour même (0,001), et tenu depuis par une porte de bout en bout sous Chromium. P2 et P8 sont tenus par `scripts/check-build.test.ts`.
+
 > **Statut : FIGÉ le 7 septembre 2026.** Ce budget s'applique à toutes les maquettes (canvas T3, anatomies T2, artboards T5), à tous les prototypes (micro-interactions T3, spike de partage T4, prototypes jouables J3-J4, prototype workers.dev T7) et aux versions v1/v2/v3 décrites dans le prompt final (§13). Toute modification passe par une ligne datée dans `docs/discovery/decisions.md`. Il ne rouvre aucune décision D0.x ni D3.x : il les rend mesurables.
 >
 > Chaque fait porte un statut : **VÉRIFIÉ** (lu à la source ou mesuré le 7/9/2026, URL en §8), **PROBABLE** (source secondaire ou non reproduit), **HYPOTHÈSE** (à lever, méthode indiquée). Les seuils du budget eux-mêmes sont des **décisions** (plan T3, §3.5 « 60 fps sur mobile moyen »), pas des faits : ils sont notés DÉCISION.

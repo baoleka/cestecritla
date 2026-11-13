@@ -24,7 +24,12 @@
  */
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
+import { canonicalHash, listFingerprint } from '../src/lib/fingerprint.js';
+import { WORD_LINKS_PATH, highlightedWords, wordsFingerprint } from '../src/lib/word-links.js';
+import { LOCAL_CHECKS } from '../src/lib/game.js';
 import { citationPolicyValidated } from './build-mode.js';
+
+export { canonicalHash };
 
 export const LAUNCH_PATH = 'data/launch.json';
 export const STRINGS_PATH = 'design/strings.json';
@@ -32,7 +37,10 @@ export const MANIFEST_PATH = 'data/2026/manifest.json';
 export const ASK_PATH = 'data/2026/ask.json';
 export const WORDS_PATH = 'data/2026/game-words.json';
 export const TURTLE_SVG_PATH = 'design/mascot/tortue.svg';
+export const TURTLE_CSS_PATH = 'src/styles/turtle.css';
 export const TURTLE_VALIDATION_PATH = 'design/mascot/validation.json';
+/** The charter's colours, and the set that replaces them if the charter is withdrawn (D14.12). */
+export const TOKEN_SETS = ['design/tokens.json', 'design/tokens.neutral.json'] as const;
 
 /** Gestures of the editor that leave no file behind: each is a date, or null while it is due. */
 export interface DatedGestures {
@@ -129,20 +137,6 @@ export function launchBlockers(inputs: LaunchInputs): string[] {
   return out;
 }
 
-/** SHA-256 of a value written the same way whatever the order of its keys. */
-export function canonicalHash(value: unknown): string {
-  const write = (v: unknown): string => {
-    if (Array.isArray(v)) return `[${v.map(write).join(',')}]`;
-    if (typeof v === 'object' && v !== null) {
-      const entries = Object.entries(v).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
-      return `{${entries.map(([k, x]) => `${JSON.stringify(k)}:${write(x)}`).join(',')}}`;
-    }
-    // `undefined` has no JSON form: it is written as null, like a missing array slot.
-    return v === undefined ? 'null' : JSON.stringify(v);
-  };
-  return createHash('sha256').update(write(value)).digest('hex');
-}
-
 /** Fingerprint of everything the privacy page can say: the `privacy.*` strings of the kit. */
 export function privacyStringsHash(strings: Record<string, unknown>): string {
   const own = Object.fromEntries(
@@ -152,6 +146,49 @@ export function privacyStringsHash(strings: Record<string, unknown>): string {
 }
 
 type Json = Record<string, unknown>;
+
+/**
+ * The colours the turtle is drawn in: every `turtle-*` role of every theme of both token sets,
+ * resolved to its value — `tokens.json light turtle-line #4C0297`. Renaming a colour changes
+ * nothing here; changing what she looks like does.
+ */
+export function turtleColours(root = '.'): string[] {
+  const at = (path: string): string => (root === '.' ? path : `${root}/${path}`);
+  const out: string[] = [];
+  for (const path of TOKEN_SETS) {
+    const tokens = readObject(at(path));
+    const colours = field(tokens, 'color');
+    const themes = field(tokens, 'color-role');
+    if (typeof themes !== 'object' || themes === null) continue;
+    for (const [theme, roles] of Object.entries(themes as Json)) {
+      if (typeof roles !== 'object' || roles === null) continue;
+      for (const [role, raw] of Object.entries(roles as Json)) {
+        if (!role.startsWith('turtle-') || typeof raw !== 'string') continue;
+        const name = /^\{color\.([a-z0-9-]+)\}$/.exec(raw)?.[1];
+        const value = name === undefined ? raw : field(field(colours, name), '$value');
+        out.push(`${path} ${theme} ${role} ${typeof value === 'string' ? value : raw}`);
+      }
+    }
+  }
+  return out.sort();
+}
+
+/**
+ * What the editor validates when the sheet is dated: the drawing, the stylesheet that makes its
+ * five states and three poses, and the colours of both token sets. One fingerprint, so that a
+ * retouch of any of the three un-validates her. Null while she is not drawn.
+ */
+export function turtleFingerprint(root = '.'): string | null {
+  const at = (path: string): string => (root === '.' ? path : `${root}/${path}`);
+  if (!existsSync(at(TURTLE_SVG_PATH)) || !existsSync(at(TURTLE_CSS_PATH))) return null;
+  return createHash('sha256')
+    .update(readFileSync(at(TURTLE_SVG_PATH)))
+    .update('\n')
+    .update(readFileSync(at(TURTLE_CSS_PATH)))
+    .update('\n')
+    .update(JSON.stringify(turtleColours(root)))
+    .digest('hex');
+}
 
 /** Reads a JSON object, or says why it could not: these readers never throw (the withdrawal). */
 function readObject(path: string): Json | null {
@@ -216,8 +253,12 @@ export function artefactBlockers(root = '.'): string[] {
   if (words === null) {
     out.push(`the words of the game are not written: ${WORDS_PATH} is missing (lot J3)`);
   } else {
-    const list = canonicalHash(words.words);
     const meta = words.meta;
+    const list = listFingerprint(words.words, field(meta, 'pool'));
+    // The game is not optional (D16.11): a list with no word in it is a game that does not exist.
+    if (!Array.isArray(words.words) || words.words.length === 0) {
+      out.push(`${WORDS_PATH}: the list holds no word yet (lot J3)`);
+    }
     if (!isDate(field(meta, 'pool_reviewed_on'))) {
       out.push(
         `${WORDS_PATH}: the sections the game draws from are not reviewed: meta.pool_reviewed_on`,
@@ -226,31 +267,47 @@ export function artefactBlockers(root = '.'): string[] {
     if (!isDate(field(field(meta, 'validated'), 'on'))) {
       out.push(`${WORDS_PATH}: the list is not validated by the editor: meta.validated.on`);
     } else if (field(field(meta, 'validated'), 'list_sha256') !== list) {
-      out.push(`${WORDS_PATH}: the list changed after it was validated`);
+      out.push(`${WORDS_PATH}: the list or its pool of sections changed after it was validated`);
     }
     const attested = field(meta, 'attested');
+    const checks = field(attested, 'checks');
     if (field(attested, 'list_sha256') !== list || field(attested, 'corpus_version') !== corpus) {
       out.push(`${WORDS_PATH}: the local check has not attested this list on this corpus (lot J2)`);
+    } else if (!LOCAL_CHECKS.every((check) => Array.isArray(checks) && checks.includes(check))) {
+      out.push(`${WORDS_PATH}: attested before a check that exists today — attest again (lot J2)`);
+    }
+    // The word lit up in the official page: what three browsers did, on this very list (J4).
+    if (Array.isArray(words.words) && words.words.length > 0) {
+      const followed = highlightedWords(readObject(at(WORD_LINKS_PATH)), {
+        corpus: typeof corpus === 'string' ? corpus : '',
+        words: wordsFingerprint(words.words as Parameters<typeof wordsFingerprint>[0]),
+      });
+      if (followed.stale !== null) {
+        out.push(
+          `${WORD_LINKS_PATH}: ${followed.stale} — npx tsx scripts/verify-2026.ts --words --engines chromium,firefox,webkit --write (lot J4)`,
+        );
+      }
     }
   }
 
   // The turtle: validated on a sheet, and bound to the drawing it was validated on (D16.11).
   const turtle = readObject(at(TURTLE_VALIDATION_PATH));
-  if (turtle === null || !existsSync(at(TURTLE_SVG_PATH))) {
+  const drawing = turtleFingerprint(root);
+  if (turtle === null || drawing === null) {
     out.push(`the turtle is not drawn or not validated: ${TURTLE_VALIDATION_PATH} (lot K3)`);
   } else {
-    const drawing = createHash('sha256')
-      .update(readFileSync(at(TURTLE_SVG_PATH)))
-      .digest('hex');
     if (!isDate(turtle.validated_on)) {
       out.push(`${TURTLE_VALIDATION_PATH}: the sheet is not dated by the editor: validated_on`);
-    } else if (turtle.svg_sha256 !== drawing) {
+    } else if (turtle.drawing_sha256 !== drawing) {
       out.push(`${TURTLE_VALIDATION_PATH}: the drawing changed after the sheet was validated`);
     }
+    // The question is about a drawing too: asked of another one, it was not asked of her.
     if (!isDate(turtle.same_character_asked_on)) {
       out.push(
         `${TURTLE_VALIDATION_PATH}: "same character?" has not been asked: same_character_asked_on`,
       );
+    } else if (turtle.same_character_sha256 !== drawing) {
+      out.push(`${TURTLE_VALIDATION_PATH}: the drawing changed after "same character?" was asked`);
     }
   }
   return out;

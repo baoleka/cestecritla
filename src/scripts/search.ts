@@ -7,15 +7,14 @@
  *   120 ms   the list. Short enough to feel immediate, long enough that a burst of keys costs
  *            one search and not five — and the search runs in the timer, never in the key
  *            handler, so a key is never kept waiting for it (INP).
- *   700 ms   the sentence that says how many were found, and the address. A screen reader
- *            reads a `role="status"` every time its text changes: at 120 ms it would talk over
- *            every letter. So the count is said once, when the typing has paused. The address
- *            waits for the same pause — Safari refuses more than a hundred `replaceState` in
- *            thirty seconds.
+ *   700 ms   the sentence that says how many were found. A screen reader reads a
+ *            `role="status"` every time its text changes: at 120 ms it would talk over every
+ *            letter. So the count is said once, when the typing has paused.
  *
  * Everything shown is built with `createElement` and `textContent`: what a visitor types — or
  * what a link someone sent them carries after `#q=` — is never parsed as HTML. And nothing typed
- * leaves the device: the index and the titles are two static files, fetched once.
+ * leaves the device, nor stays on it: the index and the titles are two static files, fetched
+ * once, and the address never holds what is typed (`fromAddress`).
  */
 import type { SectionHit } from '../lib/search-core.ts';
 import { enhanceOfficialLinks } from './deep-links.ts';
@@ -137,26 +136,31 @@ if (form && input && status && results && heading && list && stringsNode) {
     }
   };
 
-  /** The query lives after `#`: the one part of the address that is never sent to a server. */
-  const fromHash = (): string => {
+  /**
+   * A link may CARRY a query after `#q=` — the one part of an address that is never sent to a
+   * server. It is read at arrival, run, and taken out of the address at once.
+   *
+   * What is TYPED is never written there. It used to be, 700 ms after the last key: but an
+   * address is kept by the browser — its history, the suggestions of its address bar, the tabs
+   * it syncs to other devices — and the privacy page says of a search that nothing is recorded.
+   * A search on a political programme, on a phone that may be lent, must leave nothing behind
+   * (found by the hostile reading of 13/11/2026).
+   */
+  const fromAddress = (): string => {
     const match = /^#q=(.*)$/.exec(location.hash);
     if (match === null) return '';
+    let question = '';
     try {
-      return clean(decodeURIComponent(match[1] ?? ''));
+      question = clean(decodeURIComponent(match[1] ?? ''));
     } catch {
-      return '';
+      question = '';
     }
-  };
-  const toHash = (question: string): void => {
-    const address =
-      question === ''
-        ? `${location.pathname}${location.search}`
-        : `#q=${encodeURIComponent(question)}`;
     try {
-      history.replaceState(null, '', address);
+      history.replaceState(null, '', `${location.pathname}${location.search}`);
     } catch {
-      // A browser that rations replaceState keeps the previous address: the search still works.
+      // A browser that rations replaceState keeps the address it was given: nothing more.
     }
+    return question;
   };
 
   let typing: number | undefined;
@@ -166,7 +170,7 @@ if (form && input && status && results && heading && list && stringsNode) {
     window.clearTimeout(settling);
   };
 
-  /** A search whose answer is wanted now: Enter, a link carrying `#q=`, back and forward. */
+  /** A search whose answer is wanted now: Enter, or a link carrying `#q=`. */
   const searchNow = async (question: string): Promise<void> => {
     cancelTimers();
     const sentence = await run(question);
@@ -174,8 +178,9 @@ if (form && input && status && results && heading && list && stringsNode) {
     status.textContent = sentence;
   };
 
-  form.hidden = false;
-  input.addEventListener('focus', () => void load().catch(() => undefined), { once: true });
+  // The field was in the page before this script: someone may already be in it.
+  if (document.activeElement === input) void load().catch(() => undefined);
+  else input.addEventListener('focus', () => void load().catch(() => undefined), { once: true });
 
   input.addEventListener('input', () => {
     cancelTimers();
@@ -188,7 +193,6 @@ if (form && input && status && results && heading && list && stringsNode) {
           if (status.textContent !== sentence) status.textContent = '';
           settling = window.setTimeout(() => {
             status.textContent = sentence;
-            toHash(longEnough(question) ? question : '');
           }, SETTLE_DELAY_MS - TYPING_DELAY_MS);
         });
       },
@@ -199,7 +203,6 @@ if (form && input && status && results && heading && list && stringsNode) {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     const question = clean(input.value);
-    toHash(longEnough(question) ? question : '');
     void searchNow(question).then(() => {
       // Enter means "I have finished typing": the results take the focus, which also folds the
       // keyboard of a phone away from them. With nothing found the field keeps it.
@@ -208,15 +211,18 @@ if (form && input && status && results && heading && list && stringsNode) {
   });
 
   window.addEventListener('hashchange', () => {
-    const question = fromHash();
-    if (question === clean(input.value)) return;
+    const question = fromAddress();
+    if (question === '' || question === clean(input.value)) return;
     input.value = question;
     void searchNow(question);
   });
 
-  const initial = fromHash();
+  const initial = fromAddress();
   if (initial !== '') {
     input.value = initial;
     void searchNow(initial);
+  } else if (longEnough(clean(input.value))) {
+    // …and may have typed: what is in the field is searched as if it had just been typed.
+    void searchNow(clean(input.value));
   }
 }

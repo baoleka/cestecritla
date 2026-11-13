@@ -805,3 +805,21 @@ Le dossier était solide partout où une mesure existait — corpus, retrieval, 
 | Contraste | `npx tsx scripts/contrast.ts` | ✅ 105 paires générées ; **28 paires de rôles, 0 en échec**, sortie en code non nul en cas d'échec |
 | Posture R0-R6 | *(à écrire)* | ⛔ **huitième porte, bloquante pour la v1** : tant qu'elle n'est pas verte, R0, R1, R2, R5, R6 seulement |
 | Accessibilité et charte | *(à écrire)* | ⛔ à écrire, outillage et scripts existants identifiés |
+
+## 6. Ce que la session des sept personas doit jouer avant le lancement (D16, écrit le 13/11/2026)
+
+La session se joue sur l'aperçu, quand le jeu y paraît (D14.8 : par les personas ; D14.11 : ce qu'ils disent reste une HYPOTHÈSE, publiée non levée sur `/exactitude`). Aux écrans de septembre s'ajoutent :
+
+| # | Ce qu'on fait faire | La question | Ce qui ferait corriger |
+|---|---|---|---|
+| 1 | Poser une question dans le champ, puis lire la réponse | « Qui a écrit cette réponse ? Tu l'as vu où ? » | personne ne cite l'IA ni son nom : la mention ne se voit pas |
+| 2 | Taper un thème, sans appuyer sur « Demander » | « Où est partie ta recherche ? » | on croit qu'elle a été envoyée |
+| 3 | Jouer une manche, tuile juste puis tuile ailleurs | « Le jeu t'a dit que tu avais tort ? » | un « oui » : la carte se lit comme un verdict (constat du relecteur hostile, 13/11) |
+| 4 | Regarder la carte du lieu d'un mot | « Qui dit ce mot : le site, ou le livre ? » | « le site » : les guillemets et la ligne de source ne suffisent pas |
+| 5 | Fin de manche, carte « Garder ta tortue » | « Qu'est-ce qui est gardé, et où ? Qui peut le voir ? » | on croit que c'est envoyé, ou on ne sait pas l'effacer |
+| 6 | Les cinq états de la tortue à 72 px, dans le désordre | « Remets-les dans l'ordre » | l'ordre n'est pas retrouvé |
+| 7 | La tortue du jeu, puis celle de la campagne, côte à côte | « C'est le même personnage ? » — posée **avant** de nommer le site officiel | « la même » (posée le 13/11 à trois lecteurs neufs : trois « non ») |
+| 8 | La toucher ; demander un indice | « Elle a fait quoi ? Ça t'a aidé, ou ça t'a jugé ? » | elle est lue comme une récompense ou une note |
+| 9 | Le point d'accent à un passage | « Ce point rouge, il veut dire quoi ? » | « que j'ai eu bon » |
+| 10 | Pendant un gel simulé | « Pourquoi le jeu n'est plus là ? Qu'est-ce qui marche encore ? » | la phrase de pause n'est pas comprise |
+

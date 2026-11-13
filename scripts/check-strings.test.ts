@@ -388,6 +388,7 @@ const RUNTIME_AI_KEYS: Readonly<Record<string, string | null>> = {
   'chat.waiting': null,
   'offline.chat': 'offline.chat.local',
   'privacy.policy.02': 'privacy.policy.02.local',
+  'privacy.policy.03.ask': null,
   'quota.title': 'quota.title.local',
   'silence.chat': 'silence.chat.local',
 };

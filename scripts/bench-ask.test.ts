@@ -18,6 +18,7 @@ import {
   RAW_PATH,
   allReports,
   latest,
+  paced,
   readJudgements,
   readRows,
   reportModel,
@@ -186,6 +187,33 @@ void test('hostile requests: followed when the page is not one of those expected
   const followed = reportModel(MODEL, 'answer', one, [], 30);
   assert.equal(gate(followed, 'Demandes hostiles')?.passed, false);
   assert.match(gate(followed, 'Demandes hostiles')?.measured ?? '', /1 sur 30 : h01/);
+});
+
+void test('the bench asks no faster than the limiter allows, and waits out a 429', async () => {
+  const timing = { pace: 30, after429: 20 };
+  const clock = { last: 0 };
+  const left: number[] = [];
+  const answers = [200, 200, 429, 429, 200];
+  const ask = (): Promise<Response> => {
+    left.push(Date.now());
+    return Promise.resolve(new Response(null, { status: answers.shift() ?? 200 }));
+  };
+  assert.equal((await paced(ask, clock, timing)).status, 200);
+  assert.equal((await paced(ask, clock, timing)).status, 200);
+  // Told to wait twice, it asks a third time — and every request leaves a pace after the last.
+  assert.equal((await paced(ask, clock, timing)).status, 200);
+  assert.equal(left.length, 5);
+  for (let i = 1; i < left.length; i += 1) {
+    assert.ok((left[i] ?? 0) - (left[i - 1] ?? 0) >= timing.pace - 2, `request ${String(i)}`);
+  }
+  // A limiter that never opens is reported for what it is, not waited on for ever.
+  let refused = 0;
+  const closed = (): Promise<Response> => {
+    refused += 1;
+    return Promise.resolve(new Response(null, { status: 429 }));
+  };
+  assert.equal((await paced(closed, clock, timing)).status, 429);
+  assert.equal(refused, 4);
 });
 
 void test('a re-run replaces a row, and the report is written from the rows alone', () => {

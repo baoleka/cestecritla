@@ -1,0 +1,13 @@
+{
+  "validated_on": "2026-11-13",
+  "drawing_sha256": "69099e1533fc781e0fcffca42943847f7a5acc99b50d51b2b98f4edb5cac5f66",
+  "same_character_asked_on": "2026-11-13",
+  "same_character_sha256": "69099e1533fc781e0fcffca42943847f7a5acc99b50d51b2b98f4edb5cac5f66",
+  "same_character_answers": {
+    "asked": 3,
+    "same": 0,
+    "not_same": 3,
+    "unsure": 0
+  },
+  "note_fr": "La tortue (D16.11). validated_on : le jour où l'éditeur a validé la planche design/mascot/planche.html ; drawing_sha256 : l'empreinte de ce qu'il a regardé — le dessin (tortue.svg), sa feuille de style (src/styles/turtle.css) et ses couleurs dans les deux jeux de tokens. same_character_asked_on et same_character_sha256 : le jour où la question « même personnage ? » a été posée à des lecteurs neufs, images côte à côte, et le dessin sur lequel elle l'a été ; same_character_answers compte leurs réponses ; ce sont des lecteurs joués par des agents, leur réponse reste une hypothèse, publiée non levée sur /exactitude (D14.11). Une retouche du dessin, de sa feuille de style ou de ses couleurs fait tomber les deux (scripts/launch.ts). La validation se pose par : npx tsx scripts/mascot-sheet.ts --validated AAAA-MM-JJ."
+}

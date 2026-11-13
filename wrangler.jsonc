@@ -61,7 +61,9 @@
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["NeuronBudget"] }],
 
   // Six questions a minute for one visitor: more than anyone reads, less than a script wants.
-  "ratelimits": [{ "name": "RATE", "namespace_id": "2026", "simple": { "limit": 6, "period": 60 } }],
+  "ratelimits": [
+    { "name": "RATE", "namespace_id": "2026", "simple": { "limit": 6, "period": 60 } },
+  ],
 
   "vars": {
     // The state of the book the site was built from. A page or a base at another version gets
@@ -92,6 +94,9 @@
   "env": {
     "preview": {
       "routes": [{ "pattern": "beta.cestecritla.fr", "custom_domain": true }],
+      // Inherited from the top in wrangler's own rules — and written again here, so that the
+      // gate reads it where it applies: the bench runs on this Worker, with real questions.
+      "observability": { "enabled": false },
       "ai": { "binding": "AI" },
       "d1_databases": [
         {

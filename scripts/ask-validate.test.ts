@@ -26,6 +26,10 @@ import {
   type ModelAnswer,
 } from '../src/lib/ask-contract.js';
 import {
+  COPY_SHARE_WINDOW,
+  PROVISIONAL_MAX_COPIED_SHARE,
+  carriesCopy,
+  copiedShare,
   copyTokens,
   overlap,
   refusals,
@@ -80,6 +84,16 @@ const BUSES_SENTENCE = 'Les transports scolaires deviendraient gratuits jusqu’
 const rulesOf = (texte: string, ...ids: string[]): RuleId[] => [
   ...new Set(refusals(answer([texte, ...ids]), CANDIDATES, OPTIONS).map((r) => r.rule)),
 ];
+/** The same among other measures — invented too. */
+const rulesAmong = (
+  candidates: readonly Candidate[],
+  texte: string,
+  ...ids: string[]
+): RuleId[] => [
+  ...new Set(refusals(answer([texte, ...ids]), candidates, OPTIONS).map((r) => r.rule)),
+];
+/** Characters by their code point: an invisible one typed here would be invisible here too. */
+const ch = (...codes: number[]): string => String.fromCodePoint(...codes);
 
 void test('an anchored, affirmative answer in our own words is shown as written', () => {
   const verdict = validateAnswer(
@@ -189,6 +203,80 @@ void test('number: a figure or a quantity in letters must stand, as written, in 
   );
 });
 
+void test('number: figures no digit rule reads, multipliers, ranks and round lots', () => {
+  // Full-width, another script, raised, a fraction, a Roman sign: a reader reads a number.
+  for (const figure of [
+    ch(0xff13, 0xff10, 0xff10),
+    ch(0x663, 0x660, 0x660),
+    ch(0xb3, 0x2070, 0x2070),
+    ch(0xbd),
+    ch(0x216b),
+  ]) {
+    assert.ok(
+      rulesOf(`Le programme prévoit de planter ${figure} arbres fruitiers.`, TREES).includes(
+        'number',
+      ),
+      `U+${(figure.codePointAt(0) ?? 0).toString(16)}`,
+    );
+  }
+  // The one exception is a unit: square and cubic metres say no quantity.
+  assert.deepEqual(
+    rulesOf(
+      `La bibliothèque de quartier de la commune occuperait 2 000 m${ch(0xb2)} pour ses habitants.`,
+      LIBRARY,
+    ),
+    [],
+  );
+  assert.ok(
+    rulesOf(
+      `La bibliothèque de quartier de la commune aurait 2${ch(0xb2)} salles.`,
+      LIBRARY,
+    ).includes('number'),
+  );
+
+  // A multiplier is a number whatever its ending — allowed when the cited measure uses it.
+  const doubling: readonly Candidate[] = [
+    ...CANDIDATES,
+    {
+      id: 'p3c1-s01-m01',
+      text: 'Doubler le nombre de bus scolaires électriques dans les communes rurales',
+    },
+  ];
+  const rural = 'Les bus scolaires électriques des communes rurales verraient leur nombre';
+  assert.ok(!rulesAmong(doubling, `${rural} doublé.`, 'p3c1-s01-m01').includes('number'));
+  assert.ok(!rulesAmong(doubling, `${rural} doubler.`, 'p3c1-s01-m01').includes('number'));
+  assert.ok(rulesAmong(doubling, `${rural} triplé.`, 'p3c1-s01-m01').includes('number'));
+  assert.ok(rulesAmong(doubling, `${rural} quadrupler.`, 'p3c1-s01-m01').includes('number'));
+  assert.ok(
+    rulesOf('Le programme prévoit le doublement des arbres fruitiers plantés.', TREES).includes(
+      'number',
+    ),
+  );
+  assert.ok(
+    !rulesOf(
+      'Le programme éviterait les doublons entre bibliothèque de quartier et commune.',
+      LIBRARY,
+    ).includes('number'),
+  );
+
+  // Ranks, shares and round lots are quantities too; « semaine » only ends like one.
+  for (const texte of [
+    'Une vingtaine de bibliothèques de quartier ouvriraient dans les communes.',
+    'Une seconde bibliothèque de quartier ouvrirait dans chaque commune.',
+    'La bibliothèque de quartier ouvrirait un sixième jour dans la commune.',
+    'Un cinquième des communes aurait sa bibliothèque de quartier.',
+    'Des milliers de communes auraient une bibliothèque de quartier.',
+  ]) {
+    assert.ok(rulesOf(texte, LIBRARY).includes('number'), texte);
+  }
+  assert.ok(
+    !rulesOf(
+      'La bibliothèque de quartier ouvrirait toute la semaine dans la commune.',
+      LIBRARY,
+    ).includes('number'),
+  );
+});
+
 void test('negation: a sentence that denies or bounds the programme is refused', () => {
   for (const texte of [
     'Le programme ne prévoit pas de bibliothèque payante.',
@@ -202,6 +290,45 @@ void test('negation: a sentence that denies or bounds the programme is refused',
   ]) {
     assert.ok(rulesOf(texte, LIBRARY).includes('negation'), texte);
   }
+  // An exception bounds; an absence said without « ne » is still an absence.
+  for (const texte of [
+    'La bibliothèque de quartier ouvrirait ni le lundi ni le mardi dans la commune.',
+    'Une bibliothèque de quartier ouvrirait dans chaque commune, sauf les plus petites.',
+    'Une bibliothèque de quartier ouvrirait partout, hormis dans les petites communes.',
+    'Une bibliothèque de quartier ouvrirait partout, excepté dans les petites communes.',
+    'Une bibliothèque de quartier ouvrirait partout, à l’exception des petites communes.',
+    'La bibliothèque de quartier serait réservée exclusivement aux grandes communes.',
+    'La bibliothèque de quartier payante serait nullement prévue dans la commune.',
+    'Nul besoin de bibliothèque de quartier payante dans la commune.',
+    'Le programme est muet sur la bibliothèque de quartier payante.',
+    'Le programme passe sous silence la bibliothèque de quartier payante.',
+    'Le programme fait l’impasse sur la bibliothèque de quartier payante.',
+    'Le programme omet la bibliothèque de quartier des petites communes.',
+  ]) {
+    assert.ok(rulesOf(texte, LIBRARY).includes('negation'), texte);
+  }
+  // Words that bound or say a lack — unless the cited measure itself holds the very word.
+  for (const texte of [
+    'Seules les grandes communes auraient une bibliothèque de quartier.',
+    'En l’absence de bibliothèque de quartier, la commune en ouvrirait une.',
+    'Le manque de bibliothèque de quartier serait comblé dans chaque commune.',
+  ]) {
+    assert.ok(rulesOf(texte, LIBRARY).includes('negation'), texte);
+  }
+  const lacking: readonly Candidate[] = [
+    ...CANDIDATES,
+    {
+      id: 'p3c1-s02-m01',
+      text: 'Combler le manque de bibliothécaires dans les seules communes rurales',
+    },
+  ];
+  assert.ok(
+    !rulesAmong(
+      lacking,
+      'Le manque de bibliothécaires des seules communes rurales serait comblé.',
+      'p3c1-s02-m01',
+    ).includes('negation'),
+  );
   // « sans » is a preposition, « non lucratif » an adjective: neither denies anything.
   assert.ok(
     !rulesOf(
@@ -262,6 +389,61 @@ void test('copy and quote: six words in a row of anything it was shown, or any q
     assert.ok(rulesOf(texte, LIBRARY).includes('quote'), texte);
   }
   assert.equal(COPY_WINDOW, 6);
+});
+
+void test('copy: a measure in pieces, or astride two sentences, is still the measure', () => {
+  // Runs of four and five words of the measure, one word changed between them: no run of six.
+  const pieces =
+    'Ouvrir une bibliothèque de quartier ouverte sept jours sur sept, puis dans chaque commune de plus grande taille.';
+  const found = refusals(answer([pieces, LIBRARY]), CANDIDATES, OPTIONS).filter(
+    (refusal) => refusal.rule === 'copy',
+  );
+  assert.equal(found.length, 1);
+  assert.match(found[0]?.detail ?? '', /^0\.\d\d in runs of 4$/);
+  const text = CANDIDATES[0]?.text ?? '';
+  assert.ok(copiedShare(pieces, [text]) > PROVISIONAL_MAX_COPIED_SHARE);
+  // A sentence of ours names the thing and its figure, and stays far below.
+  assert.ok(copiedShare(LIBRARY_SENTENCE, [text]) < 0.3);
+  assert.equal(copiedShare(BUSES_SENTENCE, [CANDIDATES[2]?.text ?? '']), 0);
+  assert.equal(copiedShare('', [text]), 0);
+  assert.deepEqual([COPY_SHARE_WINDOW, PROVISIONAL_MAX_COPIED_SHARE], [4, 0.5]);
+  // The threshold is an option: the bench moves it before a value is retained.
+  assert.ok(
+    !refusals(answer([pieces, LIBRARY]), CANDIDATES, { ...OPTIONS, maxCopiedShare: 1 }).some(
+      (refusal) => refusal.rule === 'copy',
+    ),
+  );
+
+  // Four words at the end of one sentence, four at the start of the next: eight on the page.
+  const astride = answer(
+    ['Le programme prévoit dans les villes et les villages une bibliothèque de quartier', LIBRARY],
+    ['Sept jours sur sept elle accueillerait gratuitement tous les habitants du secteur.', LIBRARY],
+  );
+  const across = refusals(astride, CANDIDATES, OPTIONS).filter((r) => r.rule === 'copy');
+  assert.deepEqual(across, [
+    { rule: 'copy', sentence: null, detail: '6 words in a row across sentences' },
+  ]);
+});
+
+void test('copy: an output is read as text, whatever shape the model gave it', () => {
+  const recited =
+    'Ouvrir une bibliothèque de quartier sept jours sur sept dans chaque commune de plus de 2 000 habitants';
+  // The shape asked for, a bare text, a JSON written as text, escapes left as written.
+  assert.ok(carriesCopy(answer([recited, LIBRARY]), CANDIDATES));
+  assert.ok(carriesCopy(`Voici la mesure demandée : ${recited}.`, CANDIDATES));
+  assert.ok(carriesCopy(JSON.stringify(answer([recited, LIBRARY])), CANDIDATES));
+  assert.ok(
+    carriesCopy(
+      '```json\n{"texte":"Ouvrir une biblioth\\u00e8que de quartier sept jours sur sept"}\n```',
+      CANDIDATES,
+    ),
+  );
+  assert.ok(carriesCopy({ anything: [{ deep: [recited] }] }, CANDIDATES));
+  // Sentences of ours, identifiers, nothing at all: no copy.
+  assert.ok(!carriesCopy(answer([LIBRARY_SENTENCE, LIBRARY]), CANDIDATES));
+  assert.ok(!carriesCopy({ ids: [LIBRARY, TREES], hors_programme: false }, CANDIDATES));
+  assert.ok(!carriesCopy(null, CANDIDATES));
+  assert.ok(!carriesCopy(42, CANDIDATES));
 });
 
 void test('copy: words are folded exactly as the repository gate folds them', () => {
@@ -397,6 +579,40 @@ void test('self, address, markup: it does not speak of itself, link anywhere or 
   ]) {
     assert.ok(rulesOf(texte, LIBRARY).includes('markup'), texte);
   }
+});
+
+void test('markup: what is written and not seen, or seen and not read, is refused', () => {
+  // A joiner in « ne », a soft hyphen in « pas »: the page shows a denial no rule here reads.
+  const hidden = `Le programme n${ch(0x200b)}e prévoit pa${ch(0xad)}s de bibliothèque de quartier payante.`;
+  const rules = rulesOf(hidden, LIBRARY);
+  assert.ok(rules.includes('markup'));
+  assert.ok(!rules.includes('negation'), 'the reason the characters themselves are refused');
+  for (const [what, texte] of [
+    ['a mark that turns the line round', `La bibliothèque de quartier${ch(0x202e)} de la commune.`],
+    ['a Cyrillic letter', `La biblioth${ch(0x435)}que de quartier de la commune.`],
+    ['a Greek letter', `La bibli${ch(0x3bf)}thèque de quartier de la commune.`],
+    ['a full-width letter', `La ${ch(0xff42)}ibliothèque de quartier de la commune.`],
+    ['a ligature', `La bibliothèque de quartier pro${ch(0xfb01)}terait à la commune.`],
+    ['an accent without its letter', `La bibliothèque de q${ch(0x301)}uartier de la commune.`],
+  ] as const) {
+    assert.ok(rulesOf(texte, LIBRARY).includes('markup'), what);
+  }
+  // French as it is written: ligatures of the language, capitals with accents, an ellipsis.
+  assert.deepEqual(
+    rulesOf(
+      'Au cœur de la commune, l’État ouvrirait une bibliothèque de quartier… à l’année.',
+      LIBRARY,
+    ),
+    [],
+  );
+  // An accent typed as a separate mark is the same letter once composed.
+  assert.deepEqual(
+    rulesOf(
+      `Le programme pre${ch(0x301)}voit une bibliothe${ch(0x300)}que de quartier dans chaque commune.`,
+      LIBRARY,
+    ),
+    [],
+  );
 });
 
 void test('overlap: a sentence must share its words with the measure it points at', () => {

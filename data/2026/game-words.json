@@ -1,0 +1,137 @@
+{
+  "meta": {
+    "title": "Les mots du jeu « Où est-ce écrit ? » — édition 2026",
+    "corpus_version": "27ee6e713fe25e7e",
+    "pool": {
+      "sensitive_2025": [
+        "c1-s05",
+        "c4-s01",
+        "c4-s02",
+        "c4-s03",
+        "c7-s08",
+        "c7-s09",
+        "c10-s01",
+        "c15-s03",
+        "c16-s01",
+        "c16-s03",
+        "c16-s04",
+        "c16-s07",
+        "c17-s01",
+        "c17-s02"
+      ],
+      "judged": {
+        "p3c1-s08": "play",
+        "p3c2-s08": "play",
+        "p3c3-s02": "exclude",
+        "p3c4-s04": "exclude",
+        "p4c4-s01": "play",
+        "p4c4-s05": "exclude",
+        "p4c7-s03": "play",
+        "p6c1-s01": "play",
+        "p6c1-s02": "play",
+        "p6c1-s03": "play",
+        "p6c1-s04": "play"
+      }
+    },
+    "pool_reviewed_on": null,
+    "validated": {
+      "on": "2026-11-13",
+      "list_sha256": "3dd5327cf8837c0cc292953b034aa83684b63d3cf3e76bbadea91c201f451229"
+    },
+    "attested": {
+      "list_sha256": "3dd5327cf8837c0cc292953b034aa83684b63d3cf3e76bbadea91c201f451229",
+      "corpus_version": "27ee6e713fe25e7e",
+      "on": "2026-11-13",
+      "checks": [
+        "written",
+        "affirm",
+        "prose",
+        "same"
+      ]
+    },
+    "note_fr": "Chaque mot est un extrait du programme, d’un mot : la liste est une catégorie d’extrait à part, validée par l’éditeur avec sa part mesurée avant tout push (D15.18, D16.15). « pool.sensitive_2025 » est la règle 11 de 07-mecaniques.md §7.11, dans les identifiants où elle a été écrite ; la build en déduit les sections héritières de 2026. « pool.judged » liste les sections sans ancêtre en 2025 : null tant que l’éditeur n’a pas tranché (hors du jeu), puis « play » ou « exclude ». « validated » et « attested » portent l’empreinte de la liste et de « pool » : un mot ajouté ou une section jugée après coup fait tomber les deux. Depuis D16.26, une section de « sensitive_2025 » ou jugée « exclude » reste une tuile du jeu comme les autres : seulement, aucun mot n’en est tiré. La preuve de chaque mot est dans src/lib/game.ts (fichiers publics) et scripts/words-2026.ts (texte privé, en local). Les critères de choix d’un mot sont écrits dans data/2026/NOTICE.md."
+  },
+  "words": [
+    {
+      "slot": 0,
+      "id": "w000",
+      "word": "wagon",
+      "pin": {
+        "id": "p1c3-s03-m06",
+        "sha256": "27a6641a7b16c27a513417ac68c18daabece34a88d855f67afaef5f6c793a71e"
+      }
+    },
+    {
+      "slot": 1,
+      "id": "w001",
+      "word": "cantine",
+      "pin": {
+        "id": "p4c2-s02-k01",
+        "sha256": "2acb6de95b3cf5e4958fb114cfcdbbe76f258ee9e779a59e1c03b0398e31e2f3"
+      }
+    },
+    {
+      "slot": 2,
+      "id": "w002",
+      "word": "mairies",
+      "pin": {
+        "id": "p5c3-s01-m06",
+        "sha256": "da7e613edf5822f042f00434f81801399919ed674e3c290b0b165f37d7c8f281"
+      }
+    },
+    {
+      "slot": 3,
+      "id": "w003",
+      "word": "carburant",
+      "pin": {
+        "id": "p2c2-s01-k01",
+        "sha256": "9330bf10c11a0f6c5a5d2fb0679e1bac51f4d51e2e1c204b94cb8503cdec3e77"
+      }
+    },
+    {
+      "slot": 4,
+      "id": "w008",
+      "word": "braille",
+      "pin": {
+        "id": "p3c2-s05-m06.s2",
+        "sha256": "183553aea372dd1cf638199668f2367dbb8e9cbc9de9031a0c1a6d3a4acd75f9"
+      }
+    },
+    {
+      "slot": 5,
+      "id": "w005",
+      "word": "îles",
+      "pin": {
+        "id": "p6c3-s03-m03",
+        "sha256": "8dd832a20ba8fb285d2ad394cba80a57d1e7b4978f3788fc743b62e233318c10"
+      }
+    },
+    {
+      "slot": 6,
+      "id": "w006",
+      "word": "fontaines",
+      "pin": {
+        "id": "p4c1-s02-m06",
+        "sha256": "606dfc55e2bd153b8025547e99ad716c92c9d30bd44bce6c77eb14b9b4545e2c"
+      }
+    },
+    {
+      "slot": 7,
+      "id": "w007",
+      "word": "ponts",
+      "pin": {
+        "id": "p1c3-s01-m06",
+        "sha256": "4768b7c12ed29942c47635f44d5ea8a029edd2f34c84884141afee406493c9ed"
+      }
+    },
+    {
+      "slot": 8,
+      "id": "w011",
+      "word": "gare",
+      "pin": {
+        "id": "p5c3-s03-k01",
+        "sha256": "530416a5ca4aa2a03a654214306e8bf9ecd2681de8df8fbdf0cd1df69ec26e5d"
+      }
+    }
+  ]
+}

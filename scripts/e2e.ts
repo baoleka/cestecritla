@@ -26,8 +26,10 @@ import { existsSync, readFileSync, statSync } from 'node:fs';
 import { createServer, type Server } from 'node:http';
 import { extname, join, normalize, resolve } from 'node:path';
 import { chromium, firefox, webkit, type BrowserType, type Page } from 'playwright';
+import { gameSite } from '../src/lib/game-data.js';
 import { CRAWL_ROOT, type FetchLog } from './aec26-source.js';
 import type { Manifest } from './aec26-types.js';
+import { STILL, lateLayoutShift } from './e2e-kit.js';
 
 const ENGINES: Record<string, BrowserType> = { chromium, firefox, webkit };
 const MIME: Record<string, string> = {
@@ -165,9 +167,14 @@ async function runEngine(
       await guard(page);
       await page.goto(`${origin}/`);
       check('no JS: the search form stays hidden', !(await page.locator('#search').isVisible()));
+      // Where the field would be, one sentence that leads to the sommaire. (The game, in a build
+      // that shows it, ends its first round on another link to the same page.)
+      const toSommaire = page.getByRole('link', { name: 'Le sommaire mène à chaque section.' });
       check(
         'no JS: the home page leads to the table of contents',
-        (await page.locator('main a[href="/sommaire/"]').count()) === 1,
+        (await toSommaire.count()) === 1 &&
+          (await toSommaire.getAttribute('href')) === '/sommaire/' &&
+          (await toSommaire.isVisible()),
       );
       check(
         'no JS: the fifteen re-read answers are one tap away',
@@ -181,6 +188,25 @@ async function runEngine(
         `${String(links)} links`,
       );
       await context.close();
+    }
+
+    // --- 1 bis. once painted, the page does not move (Chromium is the engine that measures it)
+    if (name === 'chromium') {
+      for (const path of ['/', '/sommaire/']) {
+        const shift = await lateLayoutShift(browser, `${origin}${path}`);
+        check(
+          `${path} does not move once painted, even when its scripts arrive late`,
+          shift < STILL,
+          shift.toFixed(4),
+        );
+      }
+      // The witness: the same page, its field hidden then shown late — as it was until today.
+      const moved = await lateLayoutShift(
+        browser,
+        `${origin}/`,
+        "document.addEventListener('DOMContentLoaded', () => { const form = document.querySelector('#search'); form.hidden = true; setTimeout(() => { form.hidden = false; }, 600); });",
+      );
+      check('…and a field revealed late is seen to move it', moved > STILL, moved.toFixed(4));
     }
 
     const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
@@ -237,10 +263,12 @@ async function runEngine(
       said.filter((text) => /trouvé/.test(text)).length === 1 && said.length <= 2,
       said.join(' | '),
     );
-    await until(page, "location.hash.startsWith('#q=')");
+    // Long after the pause at which the address used to be written: it still says nothing. An
+    // address stays in the history, in the suggestions of the address bar, on synced devices.
+    await page.waitForTimeout(900);
     check(
-      'the query is kept after #',
-      page.url().endsWith('#q=retraite%20%C3%A0%2060%20ans'),
+      'what is typed is never written in the address',
+      page.url() === `${origin}/` && (await page.evaluate<string>('location.hash')) === '',
       page.url(),
     );
     await page.press('#q', 'Enter');
@@ -293,6 +321,11 @@ async function runEngine(
     );
     const shown = await page.inputValue('#q');
     check('hostile input creates no element', injected === 0);
+    check(
+      'a question that came in the address is run, then taken out of it',
+      page.url() === `${origin}/`,
+      page.url(),
+    );
     check('hostile input is shown as the text it is', shown.startsWith('<img src=x'), shown);
     check('hostile input runs nothing', dialogs.length === 0, dialogs.join(' '));
 
@@ -372,6 +405,21 @@ async function runEngine(
         'mode "off": the page says the search is local, and names no AI',
         /rien n’est envoyé/.test((await page.locator('#search-hint').textContent()) ?? '') &&
           !/\bIA\b/.test((await page.locator('main').textContent()) ?? ''),
+      );
+    }
+
+    // --- 5 ter. while the list of words is not validated, nothing of the game exists either
+    if (!gameSite().on) {
+      await page.goto(`${origin}/`);
+      await page.mouse.wheel(0, 4000);
+      await page.waitForTimeout(300);
+      check(
+        'words not validated: no game block, no word, no turtle',
+        (await page.locator('#jeu, [data-programme="word"], svg.turtle').count()) === 0,
+      );
+      check(
+        'words not validated: neither the game’s data nor its script is fetched',
+        !requested.some((url) => /\/data\/jeu-|\/_astro\/Game\./.test(url)),
       );
     }
 

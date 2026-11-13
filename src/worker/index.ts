@@ -18,12 +18,14 @@
  * the candidates on the production path (PLAN-JEU §2.4). It answers 404 everywhere else.
  */
 import riposte from '../../data/2026/riposte.json';
+import flags from '../../public/flags.json';
 import synonyms from '../../data/2026/synonyms.json';
 import askConfig from '../../data/2026/ask.json';
 import { parseAskRequest, type AskMode, type AskResponse } from '../lib/ask-contract.js';
-import { effectiveDate } from '../lib/silence.js';
-import { answerQuestion, control, type ModelRun } from './ask.js';
+import { effectiveDate, type SilenceOverride } from '../lib/silence.js';
+import { answerQuestion, benchOutput, control, type ModelRun } from './ask.js';
 import { DEFAULT_HARD_STOP } from './budget-core.js';
+import { clientKey, readBody } from './guards.js';
 import { MODELS, isModelKey } from './models.js';
 import { estimateNeurons, modelRequest, type ModelSpec } from './prompt.js';
 import { retrieve } from './retrieve.js';
@@ -34,8 +36,6 @@ export { NeuronBudget } from './budget.js';
 /** The AI Gateway every call goes through: thirty days of cache, and no log of any request. */
 const GATEWAY = { id: 'aec', cacheTtl: 2_592_000, collectLog: false } as const;
 const MODEL_TIMEOUT_MS = 6_000;
-/** A question, a token and a version: more than this is not a request of the page. */
-const MAX_BODY_BYTES = 6_144;
 
 /** No cache, no referrer, never indexed: nothing here can leak into a log or an index. */
 const HEADERS: Record<string, string> = {
@@ -46,6 +46,17 @@ const HEADERS: Record<string, string> = {
   'referrer-policy': 'no-referrer',
   'content-security-policy': "default-src 'none'; frame-ancestors 'none'",
 };
+
+/**
+ * The switch the page reads (public/flags.json), read here too — built into the Worker, so that
+ * the deployment that closes the page closes the questions with it. Without this the sentence
+ * of the runbook was false: « silence_override: on » hid the block, and `/api/ask` still
+ * answered whoever asked it directly.
+ */
+const OVERRIDE: SilenceOverride =
+  flags.silence_override === 'on' || flags.silence_override === 'off'
+    ? flags.silence_override
+    : 'auto';
 
 const empty = (status: number): Response => new Response(null, { status, headers: HEADERS });
 const json = (body: unknown): Response =>
@@ -115,20 +126,6 @@ async function runModel(
   }
 }
 
-/** A key for the rate limiter that says nothing of the address it was made from (D7.5). */
-async function clientKey(ip: string, salt: string, day: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const key = await crypto.subtle.importKey(
-    'raw',
-    encoder.encode(salt),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign'],
-  );
-  const mac = await crypto.subtle.sign('HMAC', key, encoder.encode(`${day}:${ip}`));
-  return [...new Uint8Array(mac, 0, 16)].map((b) => b.toString(16).padStart(2, '0')).join('');
-}
-
 /** False when this visitor asks faster than anyone reads. Fails closed without its secret. */
 async function withinRate(request: Request, env: Env): Promise<boolean> {
   const salt: unknown = env.RATE_SALT;
@@ -137,16 +134,6 @@ async function withinRate(request: Request, env: Env): Promise<boolean> {
   const key = await clientKey(ip, salt, new Date().toISOString().slice(0, 10));
   const { success } = await env.RATE.limit({ key });
   return success;
-}
-
-async function readBody(request: Request): Promise<unknown> {
-  const text = await request.text();
-  if (text.length > MAX_BODY_BYTES) return null;
-  try {
-    return JSON.parse(text) as unknown;
-  } catch {
-    return null;
-  }
 }
 
 const hardStop = (env: Env): number => {
@@ -162,7 +149,7 @@ async function handleAsk(request: Request, env: Env, origin: string): Promise<Re
   if (asked === null) return empty(400);
 
   const now = new Date();
-  const state = effectiveDate(now, { serverDate: now });
+  const state = effectiveDate(now, { serverDate: now, override: OVERRIDE });
   const config = configured();
   if (!state.silence && config.mode !== 'off' && !(await withinRate(request, env))) {
     return json(LOCAL);
@@ -202,11 +189,17 @@ async function keyMatches(given: unknown, expected: unknown): Promise<boolean> {
  * model named in the request. It returns what the model said and which measures it was given —
  * identifiers, never their text — with what it cost and how long it took. What the control
  * makes of the output is returned too, so that the bench and production cannot disagree.
+ *
+ * Two things hold even for whoever has the key. An output in which the model copied what it
+ * was shown leaves as a marker (`benchOutput`): asking it to recite a measure brings back no
+ * measure. And the route is counted by the same limiter as the questions — 429 beyond it, which
+ * the bench waits out.
  */
 async function handleBench(request: Request, env: Env): Promise<Response> {
   if (env.ENVIRONMENT !== 'preview' || request.method !== 'POST') return empty(404);
   const body = await readBody(request);
   if (!isRecord(body) || !(await keyMatches(body['key'], env.BENCH_KEY))) return empty(404);
+  if (!(await withinRate(request, env))) return empty(429);
   const { q, model: key, mode, min_overlap: minOverlap, skip_cache: skipCache } = body;
   if (typeof q !== 'string' || !isModelKey(key) || (mode !== 'answer' && mode !== 'select')) {
     return empty(400);
@@ -234,7 +227,7 @@ async function handleBench(request: Request, env: Env): Promise<Response> {
   return json({
     ...base,
     ran: true,
-    output: run.output,
+    output: benchOutput(run.output, found.candidates),
     verdict: control(mode, run.output, found.candidates, overlap),
     neurons: run.neurons,
     reserved,

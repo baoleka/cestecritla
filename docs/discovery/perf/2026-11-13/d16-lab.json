@@ -1,0 +1,41 @@
+{
+  "root": "dist-ask",
+  "lab": "Slow 4G (150 ms, 1.6 Mbit/s down, 750 kbit/s up), CPU x4, 390x844, files gzipped",
+  "machine_note": "this machine, slowed down: not a phone. PROBABLE until a real Android is measured",
+  "measured_on": "2026-11-13",
+  "chromium": "153.0.8010.12",
+  "runs": 5,
+  "lcp_ms": {
+    "median": 352,
+    "all": [
+      380,
+      348,
+      352,
+      352,
+      352
+    ]
+  },
+  "cls": {
+    "worst": 0.001,
+    "all": [
+      0.001,
+      0.001,
+      0.001,
+      0.001,
+      0.001
+    ]
+  },
+  "interactions": {
+    "a key in the field, results while typing": 40,
+    "Enter, the focus moves to the results": 16,
+    "a tile of the game, the card of the place": 16,
+    "« Mot suivant »": 16,
+    "her sheet opens": 24
+  },
+  "budget": {
+    "lcpMs": 2500,
+    "cls": 0.1,
+    "inpMs": 200
+  },
+  "held": true
+}

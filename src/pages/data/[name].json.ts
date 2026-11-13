@@ -1,10 +1,12 @@
 /**
- * The two files the search island downloads, generated at build time from PUBLIC data only:
+ * The files the page downloads, generated at build time from PUBLIC data only:
  *
  *   /data/index-<version>.json   the serialised index (data/2026/search-index.json): stems;
  *   /data/meta-<version>.json    what a result shows: official titles, where each section is,
  *                                the label and the link locator of each proposition, and the
  *                                rationed incipit of the key measures. Plus our synonyms.
+ *   /data/jeu-<fingerprint>.json the game: its words, where each is written, and the titles
+ *                                of the tiles — only in a build that shows the game.
  *
  * The corpus version is in the file name, so the files can be cached for a year
  * (public/_headers): a new edition of the book gets new names, not stale bytes.
@@ -21,12 +23,20 @@ import {
   partShort,
   sections,
 } from '../../lib/edition.ts';
+import { buildGame, gameSite } from '../../lib/game-data.ts';
 import { t } from '../../lib/strings.ts';
 
 const version = manifest().meta.corpus_version;
 
+/** The game's data exists only in a build that shows the game (src/lib/game-data.ts). */
+const game = gameSite().on ? buildGame() : null;
+
 export function getStaticPaths() {
-  return [{ params: { name: `index-${version}` } }, { params: { name: `meta-${version}` } }];
+  return [
+    { params: { name: `index-${version}` } },
+    { params: { name: `meta-${version}` } },
+    ...(game === null ? [] : [{ params: { name: `jeu-${game.fingerprint}` } }]),
+  ];
 }
 
 function index(): string {
@@ -59,7 +69,13 @@ function meta(): string {
   return JSON.stringify({ sections: sectionEntries, items, synonyms });
 }
 
+function body(name: string | undefined): string {
+  if (name?.startsWith('index-') === true) return index();
+  if (name?.startsWith('jeu-') === true && game !== null) return JSON.stringify(game.data);
+  return meta();
+}
+
 export const GET: APIRoute = ({ params }) =>
-  new Response(params.name?.startsWith('index-') === true ? index() : meta(), {
+  new Response(body(params.name), {
     headers: { 'content-type': 'application/json; charset=utf-8' },
   });

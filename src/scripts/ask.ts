@@ -20,7 +20,8 @@
 import { MAX_QUESTION_CHARS, parseAskResponse, type AskResponse } from '../lib/ask-contract.ts';
 import { reviewedFor, type ReviewedEntry } from '../lib/ask-reviewed.ts';
 import { viewOf, type AskView } from '../lib/ask-view.ts';
-import { effectiveDate, formatReopenTimeFr } from '../lib/silence.ts';
+import { formatReopenTimeFr, type effectiveDate } from '../lib/silence.ts';
+import { silenceReading } from './silence-now.ts';
 import { enhanceOfficialLinks } from './deep-links.ts';
 import { el, findSections, loadEngine, measureLink, type Engine } from './engine.ts';
 
@@ -124,6 +125,7 @@ if (
   };
   /** A token, now or within the deadline; null when Turnstile gives none. */
   const takeToken = (): Promise<string | null> => {
+    needTurnstile();
     if (token !== null) {
       const ready = token;
       token = null;
@@ -147,27 +149,30 @@ if (
     token = null;
     turnstile?.reset(widget);
   };
-  input.addEventListener('focus', startTurnstile, { once: true });
-
-  // --- electoral silence: decided here before anything is sent, and closed when in doubt
-  let serverDate: Date | null = null;
-  let override: 'auto' | 'on' | 'off' = 'auto';
-  const readFlags = async (): Promise<void> => {
-    try {
-      const response = await fetch('/flags.json', { cache: 'no-store' });
-      const header = response.headers.get('date');
-      serverDate = header === null ? null : new Date(header);
-      const flags = (await response.json()) as { silence_override?: unknown };
-      const value = flags.silence_override;
-      override = value === 'on' || value === 'off' ? value : 'auto';
-    } catch {
-      // No flags, no trusted hour: the calendar alone decides, on this device's clock.
-      serverDate = null;
-    }
+  /**
+   * Turnstile arrives with the first « Demander », never before (D7.6, D16.8). It used to come
+   * at the first focus of the field — but this field is also the local search: a visitor who
+   * only searches asked nothing of an AI, and the page tells them nothing is sent. Their
+   * browser must not load a third party's script, run its challenge and keep its storage for
+   * that (found by the hostile reading of 13/11/2026). The first question waits for the script;
+   * the page's own results are already on screen.
+   */
+  let turnstileAsked = false;
+  const needTurnstile = (): void => {
+    if (turnstileAsked) return;
+    turnstileAsked = true;
+    startTurnstile();
   };
-  const flagsRead = readFlags();
-  const silenceNow = (): ReturnType<typeof effectiveDate> =>
-    effectiveDate(new Date(), { override, serverDate });
+
+  // --- electoral silence: decided here before anything is sent, and closed when in doubt.
+  // The hour of our server is read once and then ages with this device's clock
+  // (src/scripts/silence-now.ts). Learning note — found on 13/11/2026: the first version kept
+  // the server's hour as read at arrival and compared it with « now » at each question. Five
+  // minutes after arriving, the two no longer agreed, the clock was judged wrong, and the page
+  // answered every question with its own selection, never asking the model — in silence.
+  const silence = silenceReading();
+  const flagsRead = silence.refresh();
+  const silenceNow = (): ReturnType<typeof effectiveDate> => silence.now();
 
   // --- showing
   const engine = (): Promise<Engine> =>
@@ -192,6 +197,10 @@ if (
     body.replaceChildren();
     notice.replaceChildren();
     answer.dataset.kind = view.kind;
+    // A mark a machine can read on what a model wrote (AI Act, art. 50 § 2): on the block that
+    // holds its sentences, and only on it.
+    if (view.kind === 'answer') answer.dataset.generatedBy = 'ai';
+    else delete answer.dataset.generatedBy;
     const say = (heading: string, ...children: (HTMLElement | null)[]): void => {
       title.textContent = heading;
       for (const child of children) if (child !== null) body.append(child);
@@ -215,7 +224,9 @@ if (
       case 'select':
         say(strings.selectTitle, found === null ? null : sources(found, view.ids));
         // The page's own choice involved no model: it says so by saying nothing of one.
-        if (!view.local) aiNotice(config.mode === 'answer' ? strings.notice : strings.noticeSelect);
+        // What is shown decides the notice, not the mode: three links the model CHOSE are not
+        // sentences it wrote, even on a site whose model also writes (AI Act, art. 50).
+        if (!view.local) aiNotice(strings.noticeSelect);
         break;
       case 'reviewed': {
         const entry = config.entries.find((e) => e.slug === view.slug);
@@ -273,8 +284,10 @@ if (
       if (frozen.silence) {
         // Frozen with no hour to announce: the page keeps to what it found by itself.
         const found = await engine().catch(() => null);
+        // …and an hour is only announced on a clock our server does not contradict.
+        const believed = frozen.clockTrusted || frozen.driftMs === null;
         const view: AskView =
-          frozen.reopenUtc === null
+          frozen.reopenUtc === null || !believed || frozen.override !== 'auto'
             ? viewOf(null, context(found, question))
             : { kind: 'silence', reopen: frozen.reopenUtc.toISOString() };
         show(view, found);
@@ -307,7 +320,8 @@ if (
           ),
   });
 
-  button.hidden = false;
+  // In its place since the first paint, inert until now (src/components/Search.astro).
+  button.disabled = false;
   button.addEventListener('click', () => void ask());
   again.addEventListener('click', () => {
     answer.hidden = true;

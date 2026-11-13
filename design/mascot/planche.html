@@ -1,0 +1,1071 @@
+<!doctype html>
+<html lang="fr">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>La tortue — planche de validation</title>
+<style>
+:root{--duration-fast:120ms;--duration-base:200ms;--duration-reveal:240ms;--duration-slow:320ms;--easing-standard:cubic-bezier(0.2, 0, 0, 1);--easing-enter:cubic-bezier(0, 0, 0.2, 1);--easing-exit:cubic-bezier(0.4, 0, 1, 1)}
+body{margin:0;font:14px/1.45 system-ui,sans-serif;background:#fff;color:#212320}
+header,footer{padding:16px 20px;max-width:62rem}
+h1{font-size:20px;margin:0 0 4px}
+section{background:var(--bg);color:var(--text);padding:14px 20px 20px}
+h2{font-size:13px;font-weight:600;margin:0 0 10px}
+.note{margin:-6px 0 12px;font-size:12px;max-width:44rem}
+.row{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end}
+.row.top{align-items:flex-start}
+figure{margin:0;text-align:center;font-size:12px}
+li{margin:4px 0}
+code{font-size:12px}
+.phone{box-sizing:border-box;inline-size:390px;max-inline-size:100%;padding:0 16px 16px;background:var(--bg);color:var(--text);border:1px solid color-mix(in srgb,var(--text) 25%,transparent);border-radius:12px}
+.phone p{margin:0}
+.bar{display:flex;justify-content:space-between;padding-block-start:10px}
+.small{font-size:12px;padding-block-start:0}
+.kicker{font-weight:700;margin-block-start:22px!important}
+.word{font-size:34px;font-weight:700;line-height:1.2}
+.ask{font-size:17px;margin-block:6px 10px!important}
+.with{display:flex;justify-content:space-between;align-items:flex-end;margin-block-end:12px}
+.quiet{text-decoration:underline}
+.tiles{display:grid;gap:8px}
+.tiles span{padding:11px 12px;border:1px solid color-mix(in srgb,var(--text) 35%,transparent);border-radius:8px}
+.buttons{display:grid;gap:8px;justify-items:start}
+.buttons button{font:inherit;padding:8px 12px;min-block-size:44px}
+#dit{min-block-size:1.5em;margin:0;font-weight:600}
+.reduit .turtle *{transition:none!important}
+/*
+ * The turtle (D16.11 to D16.13) — how the one drawing of design/mascot/tortue.svg becomes five
+ * states and three poses. The file itself carries geometry and class names only: no colour, no
+ * style, so that the drawing the editor validated is exactly the drawing that ships, whatever
+ * the theme.
+ *
+ * Five roles of colour, from the tokens (light, dark, neutral): line, shell, arc, eye, accent.
+ * Flat: no gradient, no shadow, no filter, one level of depth (illustration-rules §2.2).
+ *
+ * What changes with what she has found, and never with a right or a wrong choice:
+ *   0  a plain shell
+ *   1  the first arc appears at the crown
+ *   2  the first arc is whole; she grows; the tail shows; the second arc starts
+ *   3  the second arc is whole; the neck lengthens; the third arc starts
+ *   4  three whole arcs; head held high
+ * How far each arc has grown is written on the arc itself, as two attributes (src/lib/turtle.ts):
+ * nothing here may set a dash, or it would win over them.
+ */
+.turtle {
+  display: block;
+  inline-size: var(--turtle-size, 4.5rem);
+  block-size: auto;
+  aspect-ratio: 96 / 60;
+  overflow: visible;
+}
+
+.turtle .t-line {
+  fill: var(--turtle-line);
+}
+/* The shell is outlined: a pale dome on a pale page, or a dark one on a dark page, would
+   otherwise have no edge at all (violet on charbon is 1.33:1). */
+.turtle .t-shell {
+  fill: var(--turtle-shell);
+  stroke: var(--turtle-line);
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+}
+/* Continuous arcs, never dashes, cells or a grid: an arc shows the part of itself that has
+   grown, and nothing of what has not. An arc that has not started is not drawn at all — a
+   round cap on a dash of no length would leave a dot. */
+.turtle .t-arc {
+  fill: none;
+  stroke: var(--turtle-arc);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+.turtle .t-arc[stroke-dasharray^='0 '] {
+  visibility: hidden;
+}
+.turtle .t-eye {
+  fill: var(--turtle-eye);
+}
+/* The one accent, and only at a passage: never part of her resting look. */
+.turtle .t-accent {
+  fill: var(--turtle-accent);
+  opacity: 0;
+}
+.turtle[data-passage] .t-accent {
+  opacity: 1;
+}
+
+/* --- states: she grows from the ground up, so that her feet never leave their line */
+.turtle .t-all {
+  transform-box: view-box;
+  transform-origin: 46px 56px;
+  transform: scale(0.84);
+}
+.turtle[data-state='2'] .t-all,
+.turtle[data-state='3'] .t-all,
+.turtle[data-state='4'] .t-all {
+  transform: scale(1);
+}
+.turtle .t-tail {
+  opacity: 0;
+}
+.turtle[data-state='2'] .t-tail,
+.turtle[data-state='3'] .t-tail,
+.turtle[data-state='4'] .t-tail {
+  opacity: 1;
+}
+
+/* --- the head turns about the joint where the neck leaves the body, and reaches along the
+   neck. One transform, set whole: the state says how far the neck is out and how the head is
+   carried, the pose says where she looks. */
+.turtle .t-head {
+  transform-box: view-box;
+  transform-origin: 71.75px 39.75px;
+  transform: translate(var(--t-reach-x, 0px), var(--t-reach-y, 0px)) rotate(var(--t-turn, 0deg));
+}
+.turtle[data-state='3'] .t-head,
+.turtle[data-state='4'] .t-head {
+  --t-reach-x: 2.06px;
+  --t-reach-y: -2.18px;
+}
+.turtle[data-state='4'] .t-head {
+  --t-turn: -9deg;
+}
+/* She raises her head when touched; she looks down at the tiles when asked for a hint. */
+.turtle[data-pose='up'] .t-head {
+  --t-turn: -16deg;
+}
+.turtle[data-pose='look'] .t-head {
+  --t-turn: 13deg;
+}
+
+/* --- movement (D16.13). Only transform and opacity; never longer than the slow token; never by
+   herself: `data-live` is set by the script once the look she arrives with is drawn, so that a
+   page that loads never plays anything. Whoever asked for less motion gets no transition at
+   all — the rule is not "shorter", it is "none". */
+@media (prefers-reduced-motion: no-preference) {
+  .turtle[data-live] .t-all {
+    transition: transform var(--duration-slow) var(--easing-standard);
+  }
+  .turtle[data-live] .t-head {
+    transition: transform var(--duration-reveal) var(--easing-standard);
+  }
+  .turtle[data-live] .t-tail,
+  .turtle[data-live] .t-accent {
+    transition: opacity var(--duration-slow) var(--easing-enter);
+  }
+}
+
+</style>
+<header>
+<h1>La tortue — planche de validation</h1>
+<p>Sans nom : l’interface dit « ta tortue ». Elle évolue par ce qu’on a découvert, jamais par un bon ou un mauvais choix ; elle ne recule pas et ne bouge jamais seule. Dessin : <code>design/mascot/tortue.svg</code>, états et poses : <code>src/styles/turtle.css</code>.</p>
+</header>
+<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C"><h2>Dans l’écran du jeu, à 390 px — maquette</h2><p class="note">Elle ne vit que dans le bloc du jeu, à 72 px ; jamais près du champ, d’une réponse ou d’une fiche. L’écran réel se juge sur l’aperçu.</p><div class="row top"><div class="phone" style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C"><p class="bar"><b>C’est écrit là</b><span>Sommaire</span></p><p class="bar small">Site non officiel.</p><p class="kicker">Un mot de L'Avenir en commun, édition 2026</p><p class="word">«&nbsp;un mot&nbsp;»</p><p class="ask">Dans quelle partie est-il écrit ?</p><div class="with"><span class="quiet">Je ne sais pas</span><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="2" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div></div><div class="tiles"><span>Titre de la partie 1</span><span>Titre de la partie 2</span><span>Titre de la partie 3</span><span>Titre de la partie 4</span><span>Titre de la partie 5</span><span>Titre de la partie 6</span></div></div><div class="phone" style="--bg:#212320;--text:#FFFCF4;--turtle-line:#FFFCF4;--turtle-shell:#4C0297;--turtle-arc:#FFFCF4;--turtle-eye:#212320;--turtle-accent:#F9C900"><p class="bar"><b>C’est écrit là</b><span>Sommaire</span></p><p class="bar small">Site non officiel.</p><p class="kicker">Un mot de L'Avenir en commun, édition 2026</p><p class="word">«&nbsp;un mot&nbsp;»</p><p class="ask">Dans quelle partie est-il écrit ?</p><div class="with"><span class="quiet">Je ne sais pas</span><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="2" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div></div><div class="tiles"><span>Titre de la partie 1</span><span>Titre de la partie 2</span><span>Titre de la partie 3</span><span>Titre de la partie 4</span><span>Titre de la partie 5</span><span>Titre de la partie 6</span></div></div></div></section>
+<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C"><h2>Les cinq états : à 168 px (sa fiche), puis à 72 px (le jeu)</h2><div class="row"><figure><div style="--turtle-size:168px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="0" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 0</figcaption></figure><figure><div style="--turtle-size:168px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="1" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 1</figcaption></figure><figure><div style="--turtle-size:168px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="2" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 2</figcaption></figure><figure><div style="--turtle-size:168px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="3" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 3</figcaption></figure><figure><div style="--turtle-size:168px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="4" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 4</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="0" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 0</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="1" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 1</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="2" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 2</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="3" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 3</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="4" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 4</figcaption></figure></div></section>
+<section style="--bg:#212320;--text:#FFFCF4;--turtle-line:#FFFCF4;--turtle-shell:#4C0297;--turtle-arc:#FFFCF4;--turtle-eye:#212320;--turtle-accent:#F9C900"><h2>Sur fond sombre</h2><div class="row"><figure><div style="--turtle-size:168px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="0" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 0</figcaption></figure><figure><div style="--turtle-size:168px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="1" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 1</figcaption></figure><figure><div style="--turtle-size:168px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="2" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 2</figcaption></figure><figure><div style="--turtle-size:168px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="3" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 3</figcaption></figure><figure><div style="--turtle-size:168px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="4" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 4</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="0" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 0</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="1" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 1</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="2" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 2</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="3" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 3</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="4" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 4</figcaption></figure></div></section>
+<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C"><h2>Les arcs grandissent depuis le sommet, en six pas chacun</h2><p class="note">Un trait continu : ce qui a grandi se voit, ce qui manque n’est dessiné nulle part.</p><div class="row"><figure><div style="--turtle-size:104px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="1" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>1<sup>er</sup> arc : 1 pas</figcaption></figure><figure><div style="--turtle-size:104px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="1" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="3 6" stroke-dashoffset="-1.5" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>3 pas</figcaption></figure><figure><div style="--turtle-size:104px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="1" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="5 6" stroke-dashoffset="-0.5" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>5 pas</figcaption></figure><figure><div style="--turtle-size:104px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="2" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>entier ; 2<sup>e</sup> : 1 pas</figcaption></figure><figure><div style="--turtle-size:104px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="2" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="4 6" stroke-dashoffset="-1" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>2<sup>e</sup> : 4 pas</figcaption></figure><figure><div style="--turtle-size:104px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="3" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>entier ; 3<sup>e</sup> : 1 pas</figcaption></figure><figure><div style="--turtle-size:104px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="3" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="4 6" stroke-dashoffset="-1" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>3<sup>e</sup> : 4 pas</figcaption></figure><figure><div style="--turtle-size:104px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="4" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>trois arcs entiers</figcaption></figure></div></section>
+<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C"><h2>Trois poses, et le seul accent</h2><div class="row"><figure><div style="--turtle-size:168px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="3" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>au repos</figcaption></figure><figure><div style="--turtle-size:168px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="3" data-pose="up" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>on la touche : tête levée</figcaption></figure><figure><div style="--turtle-size:168px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="3" data-pose="look" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>un indice : elle regarde les tuiles</figcaption></figure><figure><div style="--turtle-size:168px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="4" data-passage="" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>un passage : l’accent</figcaption></figure></div></section>
+<section id="gestes" style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C"><h2>Les gestes, à vitesse réelle</h2><p class="note">Elle ne bouge jamais seule : chaque mouvement répond à un geste. Une pose se garde jusqu’au geste suivant. Le passage le plus long dure 840 ms.</p><div class="row top"><div style="--turtle-size:240px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="0" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><div class="buttons"><button type="button" id="toucher">La toucher</button><button type="button" id="indice">Un indice</button><button type="button" id="suivant">Mot suivant</button><button type="button" id="evoluer">Fin de manche : elle évolue</button><button type="button" id="zero">Repartir de l’état 0</button><label><input type="checkbox" id="reduit"> Mouvement réduit</label><p id="dit" role="status"></p></div></div></section>
+<section style="--bg:#fff;--text:#000;--turtle-line:#000;--turtle-shell:#000;--turtle-arc:#000;--turtle-eye:#000;--turtle-accent:#000"><h2>Silhouettes en noir — reconnaît-on une tortue ?</h2><div class="row"><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="0" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 0</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="1" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 1</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="2" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 2</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="3" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 3</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="4" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 4</figcaption></figure><figure><div style="--turtle-size:48px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="4" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>à 48 px</figcaption></figure><figure><div style="--turtle-size:240px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="4" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>à 240 px</figcaption></figure></div></section>
+<section style="--bg:#FBFAF7;--text:#1A1A18;--turtle-line:#1E3A5F;--turtle-shell:#D9D9D2;--turtle-arc:#1E3A5F;--turtle-eye:#FBFAF7;--turtle-accent:#0F5132"><h2>Jeu de couleurs neutre (si la charte est retirée), clair puis sombre</h2><div class="row"><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="0" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 0</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="1" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 1</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="2" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 2</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="3" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 3</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="4" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 4</figcaption></figure></div></section>
+<section style="--bg:#1A1A18;--text:#FBFAF7;--turtle-line:#A8C5E8;--turtle-shell:#1E3A5F;--turtle-arc:#A8C5E8;--turtle-eye:#1A1A18;--turtle-accent:#7BD3A0"><div class="row"><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="0" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 0</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="1" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 1</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="2" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 2</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="3" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="1 6" stroke-dashoffset="-2.5" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 3</figcaption></figure><figure><div style="--turtle-size:72px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="turtle" data-state="4" data-pose="rest" focusable="false" aria-hidden="true">
+  <g class="t-all">
+    <path class="t-tail t-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="t-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="t-arc t-arc-1" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="t-arc t-arc-2" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="t-arc t-arc-3" pathLength="6" stroke-dasharray="6 6" stroke-dashoffset="0" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="t-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="t-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="t-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="t-head">
+      <path class="t-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="t-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+    <circle class="t-accent" cx="43" cy="12" r="2.4"/>
+  </g>
+</svg></div><figcaption>état 4</figcaption></figure></div></section>
+<footer>
+<h2>Sept contraintes, à cocher oui ou non</h2>
+<ol><li>De profil, tournée vers la droite, jamais de face ni en miroir</li><li>Plate : ni volume, ni ombre, ni dégradé</li><li>Quadrupède, tête sortie, cou visible — rien d’un personnage debout</li><li>Carapace sans quadrillage : des arcs continus, trois au plus</li><li>Les violets de la charte seulement — ni le mauve et le prune de l’officielle, ni rose ; aucun accessoire, aucune pancarte, aucun chiffre</li><li>Posée sur rien : elle ne pousse rien et n’avance le long de rien</li><li>Les cinq états se distinguent à 72 px</li></ol>
+<p>Et le critère éliminatoire de toujours : sobre et tenace — <strong>ni enfantine, ni moche</strong>.</p>
+<p>Valider : <code>npx tsx scripts/mascot-sheet.ts --validated AAAA-MM-JJ</code> (la date du jour) l’écrit dans <code>design/mascot/validation.json</code>, avec l’empreinte de ce qui est montré ici — le dessin, sa feuille de style, ses couleurs. Une retouche de l’un des trois fait tomber la validation.</p>
+<p>Empreinte : <code>69099e1533fc781e0fcffca42943847f7a5acc99b50d51b2b98f4edb5cac5f66</code></p>
+</footer>
+<script type="application/json" id="frames">{"start":{"at":0,"state":0,"pose":"rest","passage":false,"arcs":[["0 6","-3"],["0 6","-3"],["0 6","-3"]]},"passages":[[{"at":0,"state":1,"pose":"rest","passage":false,"arcs":[["0 6","-3"],["0 6","-3"],["0 6","-3"]]},{"at":360,"state":1,"pose":"rest","passage":false,"arcs":[["1 6","-2.5"],["0 6","-3"],["0 6","-3"]]},{"at":520,"state":1,"pose":"rest","passage":true,"arcs":[["1 6","-2.5"],["0 6","-3"],["0 6","-3"]]}],[{"at":0,"state":2,"pose":"rest","passage":false,"arcs":[["1 6","-2.5"],["0 6","-3"],["0 6","-3"]]},{"at":360,"state":2,"pose":"rest","passage":false,"arcs":[["6 6","0"],["1 6","-2.5"],["0 6","-3"]]},{"at":520,"state":2,"pose":"rest","passage":true,"arcs":[["6 6","0"],["1 6","-2.5"],["0 6","-3"]]}],[{"at":0,"state":3,"pose":"rest","passage":false,"arcs":[["6 6","0"],["1 6","-2.5"],["0 6","-3"]]},{"at":360,"state":3,"pose":"rest","passage":false,"arcs":[["6 6","0"],["6 6","0"],["1 6","-2.5"]]},{"at":520,"state":3,"pose":"rest","passage":true,"arcs":[["6 6","0"],["6 6","0"],["1 6","-2.5"]]}],[{"at":0,"state":4,"pose":"rest","passage":false,"arcs":[["6 6","0"],["6 6","0"],["1 6","-2.5"]]},{"at":360,"state":4,"pose":"rest","passage":false,"arcs":[["6 6","0"],["6 6","0"],["6 6","0"]]},{"at":520,"state":4,"pose":"rest","passage":true,"arcs":[["6 6","0"],["6 6","0"],["6 6","0"]]}]],"said":{"up":"Elle lève la tête.","look":"Elle regarde du côté des parties 1, 3 et 6.","still":"Mouvement réduit : aucun geste ne démarre. Sa fiche s’ouvre quand même.","grown":"Fin de manche : elle passe à l’état {n}.","last":"Elle a tout trouvé : plus rien ne change."}}</script>
+<script>(() => {
+  const data = JSON.parse(document.getElementById('frames').textContent);
+  const box = document.getElementById('gestes');
+  const svg = box.querySelector('svg');
+  const said = document.getElementById('dit');
+  const less = document.getElementById('reduit');
+  let look = data.start;
+  let timers = [];
+  const quiet = () => less.checked || matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const write = (frame) => {
+    look = frame;
+    svg.setAttribute('data-state', String(frame.state));
+    svg.setAttribute('data-pose', frame.pose);
+    svg.toggleAttribute('data-passage', frame.passage);
+    frame.arcs.forEach((pair, index) => {
+      const arc = svg.querySelector('.t-arc-' + String(index + 1));
+      arc.setAttribute('stroke-dasharray', pair[0]);
+      arc.setAttribute('stroke-dashoffset', pair[1]);
+    });
+  };
+  const play = (frames) => {
+    timers.forEach(clearTimeout);
+    timers = [];
+    if (quiet()) return write(frames[frames.length - 1]);
+    frames.forEach((frame) => timers.push(setTimeout(write, frame.at, frame)));
+  };
+  const pose = (name, sentence) => {
+    if (quiet()) {
+      said.textContent = data.said.still;
+      return;
+    }
+    play([{ ...look, at: 0, pose: name, passage: false }]);
+    said.textContent = sentence;
+  };
+  const on = (id, action) => document.getElementById(id).addEventListener('click', action);
+  on('toucher', () => pose('up', data.said.up));
+  on('indice', () => pose('look', data.said.look));
+  on('suivant', () => {
+    play([{ ...look, at: 0, pose: 'rest', passage: false }]);
+    said.textContent = '';
+  });
+  on('evoluer', () => {
+    const frames = data.passages[look.state];
+    if (frames === undefined) {
+      said.textContent = data.said.last;
+      return;
+    }
+    play(frames);
+    said.textContent = data.said.grown.replace('{n}', String(look.state + 1));
+  });
+  on('zero', () => {
+    timers.forEach(clearTimeout);
+    svg.removeAttribute('data-live');
+    write(data.start);
+    said.textContent = '';
+    requestAnimationFrame(() => svg.setAttribute('data-live', ''));
+  });
+  less.addEventListener('change', () => box.classList.toggle('reduit', less.checked));
+  svg.setAttribute('data-live', '');
+})();</script>
+</html>

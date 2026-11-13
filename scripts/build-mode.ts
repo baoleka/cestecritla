@@ -128,6 +128,74 @@ export function wranglerDeployArgs(
   ];
 }
 
+/**
+ * What `scripts/deploy.ts` hands on to wrangler: `--dry-run`, and `--outdir <dir>` for the
+ * bundle of a dry run. Nothing else — `--config`, `--env`, `--name`, `--assets` or `--route`
+ * would each undo a choice the guard has just made, and wrangler reads the last one it is given.
+ * Returns the arguments it refuses.
+ */
+export function refusedArguments(given: readonly string[]): string[] {
+  const refused: string[] = [];
+  for (let i = 0; i < given.length; i += 1) {
+    const arg = given[i] ?? '';
+    if (arg === '--bench' || arg === '--dry-run' || /^--outdir=.+/.test(arg)) continue;
+    const value = given[i + 1] ?? '';
+    if (arg === '--outdir' && value !== '' && !value.startsWith('-')) {
+      i += 1;
+      continue;
+    }
+    refused.push(arg);
+  }
+  return refused;
+}
+
+/** What a build directory shows of the game and of the questions, read from its files. */
+export interface DistContent {
+  /** The published files of the game: `data/jeu-<fingerprint>.json`. */
+  gameFiles: string[];
+  /** The home page carries the block that sends a question (`id="ask-config"`). */
+  asks: boolean;
+}
+
+export function readDist(dir = 'dist'): DistContent {
+  const data = join(dir, 'data');
+  const home = join(dir, 'index.html');
+  return {
+    gameFiles: existsSync(data)
+      ? readdirSync(data)
+          .filter((name) => /^jeu-.*\.json$/.test(name))
+          .sort()
+      : [],
+    asks: existsSync(home) && readFileSync(home, 'utf8').includes('id="ask-config"'),
+  };
+}
+
+/**
+ * Where a build directory disagrees with the data it would be deployed under. The marker says
+ * how the last `npm run build` was made; it says nothing of a directory filled another way — a
+ * test build copied over it, an `astro build` run by hand with a test variable, a build older
+ * than the list of words. So the directory itself is read:
+ *   - it shows the game only if the editor validated the list as it stands, and from that list;
+ *   - it sends questions only if data/2026/ask.json says the site answers them.
+ * `gameFile` is the file a build of today would publish — null while the list is not ready.
+ */
+export function distProblems(
+  dist: DistContent,
+  expected: { gameFile: string | null; ask: AskDeploy },
+): string[] {
+  const out: string[] = [];
+  const stray = dist.gameFiles.filter((name) => name !== expected.gameFile);
+  if (expected.gameFile === null && dist.gameFiles.length > 0) {
+    out.push('dist/ shows the game, and the list of words is not validated as it stands');
+  } else if (stray.length > 0) {
+    out.push('dist/ shows a game built from another list of words');
+  }
+  if (dist.asks && (expected.ask === 'off' || expected.ask === 'bench')) {
+    out.push(`dist/ sends questions, and ${ASK_PATH} says the site answers none`);
+  }
+  return out;
+}
+
 /** Every HTML file a holding build may contain. Anything else is a leak of the app into it. */
 export const HOLDING_PAGES: readonly string[] = ['404.html', 'index.html'];
 
@@ -216,7 +284,11 @@ export interface DeployContext {
    * the legal declaration, the contact address, the reviews. Empty on launch day, and only then.
    */
   launchBlockers: readonly string[];
-  /** Now is inside an electoral silence window (L49: Friday 00:00 to Sunday 20:00, Paris). */
+  /**
+   * Now is inside an electoral silence window (L49: Friday 00:00 to Sunday 20:00, Paris) — or
+   * less than a day before one (`nearSilenceWindow`): what goes out then is what will be served
+   * when it starts.
+   */
   insideSilenceWindow: boolean;
   /** The app build in dist/ is the "scrutin" one: its HTML holds neither a word nor a tile. */
   scrutinBuild: boolean;
@@ -224,6 +296,8 @@ export interface DeployContext {
   ask: AskDeploy;
   /** What the Worker's configuration still lacks (`workerProblems`): empty when it is ready. */
   workerProblems: readonly string[];
+  /** Where dist/ disagrees with the data it would go out under (`distProblems`). */
+  distProblems: readonly string[];
 }
 
 /** True when the build in dist/ was made with `--scrutin` (the build deployed before each window). */
@@ -242,6 +316,25 @@ export function insideSilenceWindow(
 ): boolean {
   return windows.some(
     (w) => now.getTime() >= w.startUtc.getTime() && now.getTime() < w.endUtc.getTime(),
+  );
+}
+
+/** A day: what is deployed that close to a window is what the window will be served with. */
+export const SILENCE_APPROACH_MS = 24 * 60 * 60 * 1000;
+
+/**
+ * Whether `now` is inside a silence window or less than a day before one. The deploy rule reads
+ * this, not the window alone: a correction pushed on the Friday morning would otherwise replace
+ * the scrutin build deployed the day before, and stay through the vote.
+ */
+export function nearSilenceWindow(
+  now: Date,
+  windows: readonly SilenceWindow[] = silenceWindows(),
+): boolean {
+  return windows.some(
+    (w) =>
+      now.getTime() >= w.startUtc.getTime() - SILENCE_APPROACH_MS &&
+      now.getTime() < w.endUtc.getTime(),
   );
 }
 
@@ -267,14 +360,19 @@ export function deployRefusal(
       `Before the app can go there — ${context.launchBlockers.join(' · ')}`
     );
   }
-  // L49 (D16.16): inside a window nothing that OPENS is deployed. What closes always may — the
-  // holding page (the withdrawal) and the scrutin build, whose HTML shows no word and no tile.
-  // A dry run uploads nothing, and CI must stay green on a polling Sunday.
+  // L49 (D16.16): inside a window, and from the day before, nothing that OPENS is deployed.
+  // What closes always may — the holding page (the withdrawal) and the scrutin build, whose
+  // HTML shows no word and no tile. A dry run uploads nothing, and CI must stay green on a
+  // polling Sunday.
   if (context.insideSilenceWindow && mode === 'app' && !context.scrutinBuild && !context.dryRun) {
     return (
-      'electoral silence (L49, D16.16): inside a window only what closes is deployed — ' +
-      'the scrutin build (`npm run build -- --scrutin`) or the holding page'
+      'electoral silence (L49, D16.16): inside a window and the day before it, only what ' +
+      'closes is deployed — the scrutin build (`npm run build:scrutin`) or the holding page'
     );
+  }
+  // The directory is read, whatever the marker says of the last build.
+  if (mode === 'app' && context.distProblems.length > 0) {
+    return `${context.distProblems.join(' · ')} — run \`npm run build\` and deploy that`;
   }
   // The Worker (D16.7) goes out only with an app that answers questions — and, for the bench,
   // to the preview host alone: the apex never runs a model nobody has chosen yet.
