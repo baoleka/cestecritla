@@ -1,5 +1,9 @@
 # Plan — « C'est écrit là » après la réédition du programme (édition 2026)
 
+> **Remplacé le 13 novembre 2026 par `PLAN-JEU.md`** (D16.1 à D16.21) pour tout ce qui restait à
+> faire. La date du 15 décembre 2026 n'est plus une cible (D16.19). Ce fichier reste la pièce de
+> ce qui a été construit du 12 au 13 novembre : lots A à F et leur journal, en fin de fichier.
+
 > Produit en plan mode le 12 novembre 2026, à la suite du constat D15.1. **Approuvé le 12 novembre
 > 2026.** Il **remplace les lots 2 à 13 de `PLAN-IMPLEMENTATION.md`** ; P0 et le lot 1 restent acquis.
 > Horizon : 12 novembre → 15 décembre 2026, puis une nouvelle session de planification en janvier.
@@ -614,3 +618,8 @@ Dans l'ordre :
 Reste à l'utilisateur, dans l'ordre : relire les 20 textes sur l'aperçu (D0.27) ; P0.5 et P0.8, à
 dater dans `data/launch.json` ; sonde 0 et essais sur téléphones ; puis le jour J.
 
+### Le 13 novembre 2026 : ce plan est remplacé
+
+L'utilisateur a redéfini le produit (D16.1 à D16.21) : demander, chercher, jouer. Ce qui restait
+ici — relecture des 20 textes, P0.5, P0.8, sonde 0, essais sur téléphones, jour J — est repris
+dans `PLAN-JEU.md` §9.1, sans date. La session personas F4 devient O5.

@@ -18,6 +18,7 @@
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import { silenceWindows, type SilenceWindow } from './silence.js';
 
 export type BuildMode = 'app' | 'holding';
 export type DeployTarget = 'apex' | 'preview';
@@ -153,6 +154,29 @@ export interface DeployContext {
    * the legal declaration, the contact address, the reviews. Empty on launch day, and only then.
    */
   launchBlockers: readonly string[];
+  /** Now is inside an electoral silence window (L49: Friday 00:00 to Sunday 20:00, Paris). */
+  insideSilenceWindow: boolean;
+  /** The app build in dist/ is the "scrutin" one: its HTML holds neither a word nor a tile. */
+  scrutinBuild: boolean;
+}
+
+/** True when the build in dist/ was made with `--scrutin` (the build deployed before each window). */
+export function readBuildScrutin(marker: string = BUILD_MARKER): boolean {
+  if (!existsSync(marker)) return false;
+  const parsed: unknown = JSON.parse(readFileSync(marker, 'utf8'));
+  return (
+    typeof parsed === 'object' && parsed !== null && 'scrutin' in parsed && parsed.scrutin === true
+  );
+}
+
+/** Whether `now` falls inside one of the electoral silence windows of the calendar (D9.7). */
+export function insideSilenceWindow(
+  now: Date,
+  windows: readonly SilenceWindow[] = silenceWindows(),
+): boolean {
+  return windows.some(
+    (w) => now.getTime() >= w.startUtc.getTime() && now.getTime() < w.endUtc.getTime(),
+  );
 }
 
 /**
@@ -172,9 +196,18 @@ export function deployRefusal(
 ): string | null {
   if (target === 'apex' && mode !== 'holding' && context.launchBlockers.length > 0) {
     return (
-      'the apex serves the holding page until launch day (D15.5): ' +
+      'the apex serves the holding page until the launch is decided (D15.15): ' +
       'run `npm run build:holding` first, or deploy the app with `npm run deploy:preview`. ' +
       `Before the app can go there — ${context.launchBlockers.join(' · ')}`
+    );
+  }
+  // L49 (D16.16): inside a window nothing that OPENS is deployed. What closes always may — the
+  // holding page (the withdrawal) and the scrutin build, whose HTML shows no word and no tile.
+  // A dry run uploads nothing, and CI must stay green on a polling Sunday.
+  if (context.insideSilenceWindow && mode === 'app' && !context.scrutinBuild && !context.dryRun) {
+    return (
+      'electoral silence (L49, D16.16): inside a window only what closes is deployed — ' +
+      'the scrutin build (`npm run build -- --scrutin`) or the holding page'
     );
   }
   if (mode === 'app' && !context.policyValidated && !context.dryRun) {

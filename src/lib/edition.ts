@@ -18,8 +18,9 @@ export type Section = Manifest['sections'][number];
 export type Chapter = Manifest['chapters'][number];
 export type Part = Manifest['parts'][number];
 
-function read<T>(path: string): T {
-  return JSON.parse(readFileSync(path, 'utf8')) as T;
+/** A published JSON file. The caller names the shape it expects: the cast is visible there. */
+function read(path: string): unknown {
+  return JSON.parse(readFileSync(path, 'utf8'));
 }
 
 let manifestCache: Manifest | undefined;
@@ -27,15 +28,15 @@ let quotesCache: QuotesFile | undefined;
 let idMapCache: IdMapPublic | undefined;
 
 export function manifest(): Manifest {
-  manifestCache ??= read<Manifest>('data/2026/manifest.json');
+  manifestCache ??= read('data/2026/manifest.json') as Manifest;
   return manifestCache;
 }
 export function quotes(): QuotesFile {
-  quotesCache ??= read<QuotesFile>('data/2026/quotes.json');
+  quotesCache ??= read('data/2026/quotes.json') as QuotesFile;
   return quotesCache;
 }
 export function idMap(): IdMapPublic {
-  idMapCache ??= read<IdMapPublic>('data/2026/id-map-2025.json');
+  idMapCache ??= read('data/2026/id-map-2025.json') as IdMapPublic;
   return idMapCache;
 }
 

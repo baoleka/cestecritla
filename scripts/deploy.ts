@@ -24,7 +24,9 @@ import {
   citationPolicyValidated,
   deployRefusal,
   htmlPages,
+  insideSilenceWindow,
   readBuildMode,
+  readBuildScrutin,
   wranglerDeployArgs,
 } from './build-mode.js';
 import { launchBlockers, readLaunchInputs } from './launch.js';
@@ -45,6 +47,8 @@ const refusal = deployRefusal(target, mode, pages, {
   policyValidated: citationPolicyValidated(),
   dryRun: passthrough.includes('--dry-run'),
   launchBlockers: launchBlockers(readLaunchInputs()),
+  insideSilenceWindow: insideSilenceWindow(new Date()),
+  scrutinBuild: readBuildScrutin(),
 });
 if (refusal !== null) {
   console.error(`deploy refused (${target}, ${mode} build): ${refusal}`);

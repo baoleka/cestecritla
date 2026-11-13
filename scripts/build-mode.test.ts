@@ -21,6 +21,8 @@ import {
   citationPolicyValidated,
   deployRefusal,
   holdingRedirects,
+  insideSilenceWindow,
+  readBuildScrutin,
   wranglerDeployArgs,
   type DeployContext,
 } from './build-mode.js';
@@ -31,6 +33,8 @@ const VALIDATED: DeployContext = {
   policyValidated: true,
   dryRun: false,
   launchBlockers: ['the launch has not been decided'],
+  insideSilenceWindow: false,
+  scrutinBuild: false,
 };
 
 interface Route {
@@ -71,7 +75,7 @@ void test('the JSONC reader keeps a URL inside a string and drops a comment afte
 
 void test('the apex refuses an app build until launch day', () => {
   const refusal = deployRefusal('apex', 'app', ['index.html', 's/c1-s02/index.html'], VALIDATED);
-  assert.match(String(refusal), /holding page until launch day/);
+  assert.match(String(refusal), /holding page until the launch is decided/);
 });
 
 void test('the apex accepts a holding build made of exactly its two pages', () => {
@@ -232,4 +236,40 @@ void test('the app redirects only the two old prefixes it has nothing to put beh
   for (const prefix of ['m', 'a', 's', 'r']) {
     assert.ok(!APP_REDIRECT_PREFIXES.includes(prefix), `/${prefix}/ must stay a real page`);
   }
+});
+
+void test('inside an electoral silence window only what closes is deployed (L49, D16.16)', () => {
+  const pages = ['index.html', 's/p1c1-s01/index.html'];
+  const inside: DeployContext = { ...VALIDATED, launchBlockers: [], insideSilenceWindow: true };
+  // What opens is refused on both hosts: the preview is public too.
+  for (const target of ['apex', 'preview'] as const) {
+    assert.match(String(deployRefusal(target, 'app', pages, inside)), /electoral silence \(L49/);
+    // The scrutin build shows neither a word nor a tile: deploying it closes, so it may go.
+    assert.equal(deployRefusal(target, 'app', pages, { ...inside, scrutinBuild: true }), null);
+    // The holding page is the withdrawal gesture: never blocked, least of all then.
+    assert.equal(deployRefusal(target, 'holding', [...HOLDING_PAGES], inside), null);
+    // A dry run uploads nothing, and CI runs on polling Sundays too.
+    assert.equal(deployRefusal(target, 'app', pages, { ...inside, dryRun: true }), null);
+  }
+  // Outside a window the rule is silent.
+  assert.equal(
+    deployRefusal('preview', 'app', pages, { ...inside, insideSilenceWindow: false }),
+    null,
+  );
+});
+
+void test('the windows are those of the calendar, to the second', () => {
+  // First round: Friday 16 April 2027 00:00 Paris (22:00 UTC the day before) to Sunday 20:00 Paris.
+  assert.equal(insideSilenceWindow(new Date('2027-04-15T21:59:59Z')), false);
+  assert.equal(insideSilenceWindow(new Date('2027-04-15T22:00:00Z')), true);
+  assert.equal(insideSilenceWindow(new Date('2027-04-18T17:59:59Z')), true);
+  assert.equal(insideSilenceWindow(new Date('2027-04-18T18:00:00Z')), false);
+  // Second round.
+  assert.equal(insideSilenceWindow(new Date('2027-05-01T12:00:00Z')), true);
+  // Any ordinary day.
+  assert.equal(insideSilenceWindow(new Date('2026-11-13T12:00:00Z')), false);
+});
+
+void test('a build is a scrutin build only when its marker says so', () => {
+  assert.equal(readBuildScrutin('build/does-not-exist.json'), false);
 });

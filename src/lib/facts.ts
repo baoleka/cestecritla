@@ -13,8 +13,9 @@ import type { VerificationFile } from '../../scripts/verify-2026.ts';
 import { cards, ripostes } from './editorial.ts';
 import { manifest, quotes } from './edition.ts';
 
-function read<T>(path: string): T {
-  return JSON.parse(readFileSync(path, 'utf8')) as T;
+/** A published JSON file. The caller names the shape it expects: the cast is visible there. */
+function read(path: string): unknown {
+  return JSON.parse(readFileSync(path, 'utf8'));
 }
 
 /** `0.1686` → `16,86`: a French percentage, without its sign. */
@@ -31,7 +32,7 @@ export interface SearchFacts {
 
 /** Written by scripts/eval-2026.ts --write; scripts/search-2026.test.ts holds it to a fresh run. */
 export function searchFacts(): SearchFacts {
-  const file = read<SearchEvalFile>('data/2026/search-eval.json');
+  const file = read('data/2026/search-eval.json') as SearchEvalFile;
   if (file.corpus_version !== manifest().meta.corpus_version) {
     throw new Error(
       'data/2026/search-eval.json describes another corpus: run eval-2026.ts --write',
@@ -46,7 +47,7 @@ export function searchFacts(): SearchFacts {
 }
 
 export function verification(): VerificationFile {
-  const file = read<VerificationFile>('data/2026/verification.json');
+  const file = read('data/2026/verification.json') as VerificationFile;
   if (file.corpus_version !== manifest().meta.corpus_version) {
     throw new Error(
       'data/2026/verification.json describes another corpus: run verify-2026.ts --write',
@@ -87,6 +88,6 @@ export interface LaunchFacts {
 }
 
 export function launchFacts(): LaunchFacts {
-  const launch = read<{ lcen_declared_on: string | null }>('data/launch.json');
+  const launch = read('data/launch.json') as { lcen_declared_on: string | null };
   return { lcenDeclared: launch.lcen_declared_on !== null };
 }

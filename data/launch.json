@@ -1,7 +1,15 @@
 {
   "apex": "holding",
-  "planned_on": "2026-12-15",
   "lcen_declared_on": null,
   "contact_mailbox_ready_on": null,
-  "note_fr": "Ce fichier est le geste de lancement (D15.5). Tant que « apex » vaut « holding », cestecritla.fr sert la page d'attente et scripts/deploy.ts refuse d'y mettre l'app. Pour lancer : renseigner les deux dates (déclaration LCEN archivée, P0.5 ; boîte de contact testée, P0.8), passer « apex » à « app », puis lancer npm run deploy dans un terminal. Revenir à « holding » puis npm run build:holding && npm run deploy est le geste de retrait (D14.10)."
+  "charter_texts_read_on": null,
+  "legal_readings_done_on": null,
+  "controller_decided_on": null,
+  "dashboard_checked_on": null,
+  "phones_tried_on": null,
+  "personas_session_on": null,
+  "hostile_review_on": null,
+  "easter_confirmed_on": null,
+  "privacy_page": { "reviewed_on": null, "sha256": null },
+  "note_fr": "Ce fichier est le geste de lancement (D15.15, D16.18). Il n'y a pas de date de lancement (D16.19). Tant que « apex » vaut « holding », cestecritla.fr sert la page d'attente et scripts/deploy.ts refuse d'y mettre l'app. Chaque champ à null est un geste encore dû : le dater (AAAA-MM-JJ) quand il est fait. « npx tsx scripts/launch.ts » liste tout ce qui manque, y compris ce qui se valide dans son propre fichier (mode de réponse, mots du jeu, tortue). Pour lancer, quand il ne reste que la décision : passer « apex » à « app », puis npm run build && npm run deploy dans un terminal. Revenir à « holding » puis npm run build:holding && npm run deploy est le geste de retrait (D14.10) : rien ne le bloque."
 }

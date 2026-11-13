@@ -52,13 +52,14 @@ export interface Card {
   review: Review;
 }
 
-function read<T>(path: string): T {
-  return JSON.parse(readFileSync(path, 'utf8')) as T;
+/** A published JSON file. The caller names the shape it expects: the cast is visible there. */
+function read(path: string): unknown {
+  return JSON.parse(readFileSync(path, 'utf8'));
 }
 
 export const ripostes = (): Riposte[] =>
-  read<{ entries: Riposte[] }>('data/2026/riposte.json').entries;
-export const cards = (): Card[] => read<{ entries: Card[] }>('data/2026/glossary.json').entries;
+  (read('data/2026/riposte.json') as { entries: Riposte[] }).entries;
+export const cards = (): Card[] => (read('data/2026/glossary.json') as { entries: Card[] }).entries;
 
 /** Our own sentences are typed with straight apostrophes; the page shows typographic ones. */
 export const prose = (text: string): string => text.replace(/'/g, '’');

@@ -19,7 +19,7 @@
     "typecheck": "wrangler types >/dev/null && tsc --noEmit && tsc -p src/worker/tsconfig.json --noEmit && astro check --tsconfig tsconfig.app.json",
     "test": "tsx --test scripts/*.test.ts",
     "contrast": "tsx scripts/contrast.ts",
-    "lint": "eslint scripts eval",
+    "lint": "eslint scripts eval src",
     "format": "prettier --write \"**/*.{ts,json,md}\"",
     "a11y": "tsx scripts/a11y.ts",
     "build:neutral": "tsx scripts/build.ts --neutral",

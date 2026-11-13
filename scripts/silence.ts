@@ -113,6 +113,9 @@ export const MAX_CLOCK_DRIFT_MS = 5 * 60 * 1000;
  * freeze lists of the dossier, and a "Le site officiel de la campagne" button served on polling Sunday is a
  * message of electoral propaganda within the meaning of L49 2° — harder to defend than the reading that
  * stays open, which is a text the reader comes looking for. Reading is never frozen.
+ * `game.`, `turtle.` and `easter.` were added with D16.16: the game shows words of the programme
+ * under our name, the turtle only lives in the game, and the lait-fraise line is one of her
+ * end-of-round sentences. `privacy.` is never frozen: « Tout effacer » must stay within reach during a freeze.
  */
 export const FROZEN_KEY_PREFIXES: readonly string[] = [
   'chat.',
@@ -122,6 +125,9 @@ export const FROZEN_KEY_PREFIXES: readonly string[] = [
   'daily.',
   'statcard.',
   'cta.',
+  'game.',
+  'turtle.',
+  'easter.',
 ];
 
 /** True when a string kit key must be withheld from the render because the L49 freeze is on. */

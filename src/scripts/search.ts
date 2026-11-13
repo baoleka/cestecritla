@@ -46,7 +46,7 @@ const list = document.querySelector<HTMLOListElement>('#search-list');
 const stringsNode = document.querySelector('#search-strings');
 
 if (form && input && status && results && list && stringsNode) {
-  const strings = JSON.parse(stringsNode.textContent ?? '{}') as Strings;
+  const strings = JSON.parse(stringsNode.textContent) as Strings;
   let engine: Promise<{ index: MiniSearch<SearchDoc>; meta: Meta }> | undefined;
 
   /** Fetched once, on the first sign that someone is going to search. */

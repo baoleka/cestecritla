@@ -3,7 +3,7 @@
  *
  * Guarantees, against the frozen corpus and the string kit:
  *   - every section id and measure id exists in data/aec-2025.json (nothing is invented);
- *   - "absent" entries carry no id and use the refusal wording of design/strings.json;
+ *   - "absent" entries carry no id and use the refusal wording the kit had in 2025;
  *   - the liant has no digit, at most 2 sentences of at most 15 words (a quoted title counts as one),
  *     French spacing outside the quoted titles, and every title quoted between « » is a verbatim
  *     section or chapter title (titles keep the source spacing, plain space before « : » included);
@@ -72,7 +72,19 @@ const readJson = (relativePath: string): unknown =>
 
 const faq = readJson('../data/faq.json') as FaqFile;
 const corpus = readJson('../data/aec-2025.json') as Dataset;
-const strings = readJson('../design/strings.json') as Record<string, string>;
+
+/**
+ * The refusal wording of the string kit as it stood when this FAQ was written (v0.6 and before).
+ * The three sentences left the kit with v0.7 (D16): the interface no longer says that the
+ * programme does not hold something. data/faq.json is a dated archive of the 2025 edition — it is
+ * rendered nowhere — so its wording is held here, frozen, instead of living on in the kit.
+ */
+const NO_BREAK = String.fromCodePoint(0xa0);
+const REFUSAL_2025 = {
+  title: "L'Avenir en commun ne traite pas de ça.",
+  lead: `Aucune mesure ne répond à ta question mot pour mot. Voici ce qui s'en approche${NO_BREAK}:`,
+  premiseFalse: `Ce n'est pas dans le texte. Voici ce qu'il dit sur le sujet${NO_BREAK}:`,
+} as const;
 
 const ENTRIES = 50;
 const MIN_ALIASES = 2;
@@ -205,10 +217,8 @@ void test('every section id and measure id exists in the corpus, no duplicates, 
 });
 
 void test('answer kinds: absent entries have no id and use the refusal wording; the others cite something', () => {
-  const refusalTitle = strings['refusal.title'];
-  const refusalLead = strings['refusal.lead'];
-  assert.ok(refusalTitle !== undefined && refusalLead !== undefined, 'refusal strings missing');
-  const refusalFirstSentence = refusalLead.split('. ')[0] ?? '';
+  const refusalTitle = REFUSAL_2025.title;
+  const refusalFirstSentence = REFUSAL_2025.lead.split('. ')[0] ?? '';
   for (const entry of faq.entries) {
     if (entry.answer_kind === 'absent') {
       assert.equal(entry.answer_section_ids.length, 0, `${entry.id}: absent entry cites a section`);
@@ -440,9 +450,8 @@ void test('the absence probe of every absent entry is replayed on the current co
 });
 
 void test('a premise-false entry answers with the subject and never uses refusal.title', () => {
-  const premiseFalse = strings['refusal.premise_false'];
-  const refusalTitle = strings['refusal.title'];
-  assert.ok(premiseFalse !== undefined, 'refusal.premise_false is missing from the string kit');
+  const premiseFalse = REFUSAL_2025.premiseFalse;
+  const refusalTitle = REFUSAL_2025.title;
   for (const entry of faq.entries) {
     if (entry.answer_kind !== 'premise-false') continue;
     assert.ok(
@@ -450,8 +459,8 @@ void test('a premise-false entry answers with the subject and never uses refusal
       `${entry.id}: the liant must start with refusal.premise_false`,
     );
     assert.ok(
-      !entry.liant_fr.includes(refusalTitle ?? '§'),
-      `${entry.id}: « ${refusalTitle ?? ''} » is reserved for absent-subject entries`,
+      !entry.liant_fr.includes(refusalTitle),
+      `${entry.id}: « ${refusalTitle} » is reserved for absent-subject entries`,
     );
     assert.ok(entry.answer_section_ids.length > 0, `${entry.id}: no section on the subject`);
     assert.ok(entry.answer_measure_ids.length > 0, `${entry.id}: no passage on the subject`);

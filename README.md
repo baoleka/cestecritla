@@ -4,13 +4,15 @@
 
 **« C'est écrit là »** (`cestecritla.fr`) est un projet militant **indépendant** pour retrouver où une mesure est écrite dans *L'Avenir en commun* (programme de La France insoumise pour la présidentielle 2027) et renvoyer à la page officielle. Cloudflare, plan gratuit, 0 € d'exploitation, zéro compte, zéro donnée. Ce projet n'est pas édité par La France insoumise et n'engage pas le mouvement.
 
-## Où en est le projet (12 novembre 2026)
+## Où en est le projet (13 novembre 2026)
 
 **Le programme a été réédité le 5 novembre 2026.** La nouvelle édition — « L'Avenir en commun — Le programme de la Nouvelle France », 6 parties, 23 chapitres, 111 sections, 1 069 mesures — remplace l'édition 2025 sur laquelle ce dépôt a été construit. Son texte est réécrit, et il **n'est plus sous licence Creative Commons** : « © La France insoumise, tous droits réservés », le partage de liens étant « autorisé (et encouragé) » et les courts extraits admis avec l'auteur et un lien vers la page d'origine.
 
 Le projet change donc de régime : **renvoi + courte citation**. L'app trouve le passage et renvoie à la page officielle ; elle ne reproduit pas le texte. L'app de l'édition 2026 est construite : sommaire, recherche sur l'appareil, 111 fiches de section, ponts pour les adresses de l'édition 2025, réponses aux objections, cartes-concept, page « Exactitude ». Le plan et son journal sont dans `docs/discovery/PLAN-EDITION-2026.md`, les décisions sont D15.1 à D15.18 dans `docs/discovery/decisions.md`.
 
-La recherche est **extractive** : aucun modèle de langage ne tourne à l'exécution en v1 ni en v2 (D6.10). Si la piste IA est rouverte en v3, sur trois preuves, le seul fournisseur autorisé reste Mistral via Workers AI (D0.3).
+**Depuis le 13 novembre 2026, le projet prend une autre forme** (D16.1 à D16.21, plan `docs/discovery/PLAN-JEU.md`) : la page devient d'abord l'endroit où l'on **demande** ce que le programme répond à une question ou à une objection, et où l'on **cherche** un thème pendant la frappe ; un **jeu** (« Où est-ce écrit ? ») suit, sur la même page. Rien de cela n'est encore en ligne.
+
+La recherche reste **locale et extractive**. La réponse à une question sera écrite par un modèle de langage, sous conditions (D16.2 à D16.5, qui renversent D6.10) : un modèle hébergé par Cloudflare dans son offre gratuite, choisi sur banc, Mistral à qualité égale ; il n'écrit que si le banc passe ses portes, chaque phrase est attachée à une mesure citée, et la page le dit. Aucun service d'IA extérieur.
 
 ## Ce que le dépôt contient, et sous quelle licence
 
@@ -24,7 +26,7 @@ La recherche est **extractive** : aucun modèle de langage ne tourne à l'exécu
 
 ## Dossier
 
-Point d'entrée : `docs/discovery/README.md`. À lire d'abord : `PLAN-EDITION-2026.md` (le plan en cours), `decisions.md` (192 décisions, D0-D15), `14-risques.md` et `16-hypotheses.md`. Le dossier de découverte des 7-10 septembre 2026 (`00-resume-executif.md`, `prompt-final.md`, `PLAN-IMPLEMENTATION.md`) décrit le produit d'avant la réédition ; il reste la référence pour tout ce que D15 ne touche pas.
+Point d'entrée : `docs/discovery/README.md`. À lire d'abord : `PLAN-JEU.md` (le plan en cours, approuvé le 13 novembre 2026), `PLAN-EDITION-2026.md` (le plan précédent et son journal), `decisions.md` (213 décisions, D0-D16), `14-risques.md` et `16-hypotheses.md`. Le dossier de découverte des 7-10 septembre 2026 (`00-resume-executif.md`, `prompt-final.md`, `PLAN-IMPLEMENTATION.md`) décrit le produit d'avant la réédition ; il reste la référence pour tout ce que D15 ne touche pas.
 
 ## Licences
 

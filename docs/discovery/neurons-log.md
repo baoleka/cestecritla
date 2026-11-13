@@ -47,3 +47,32 @@ Source du chiffre « Neurons » : le champ `result.usage.neurons` renvoyé par l
 **Cumul session : 6713,31 neurons / 8 000** — inchangé (aucun appel depuis le bench v2 de 18:58 UTC) ; **reste 1 286,69 neurons**, soit un seul bench v3 de 40 items depuis un Worker (≈ 1 084 neurons à ≈ 27,1 neurons/question, preuve P2 de D6.10) (somme `usage.neurons` des MISS ; facturation GraphQL ≈ +1,2 %).
 
 Rappel : désactiver la collecte de logs AI Gateway (`cf-aig-collect-log: false`, ou Settings → Logs OFF au niveau du gateway) **avant** le premier appel via AI Gateway, capture du dashboard à archiver dans `docs/discovery/09-architecture.md`. Les appels ci-dessus sont passés en REST direct (`/accounts/{id}/ai/run/`), sans gateway, donc sans log AI Gateway.
+
+## Novembre 2026 — la piste du modèle rouverte (D16.2, D16.3)
+
+Le budget de session de septembre (8 000 neurons, D0.7) est clos. Depuis D16.2 la règle est celle du
+quota gratuit du compte : **10 000 neurons par jour**, remise à zéro à 00:00 UTC, erreur 429 au-delà,
+jamais de facture (aucun moyen de paiement). Un banc consomme ce même quota : il s'inscrit ici avant
+d'être lancé, et le cumul du jour se relit avant chaque nouvel appel.
+
+Catalogue lu par l'API du compte le 13/11/2026 (`/ai/models/search`, 0 neuron, VÉRIFIÉ) : 40 modèles
+de génération de texte ; **`require_workers_paid=true`** sur DeepSeek V4 (flash, 4.1 flash, pro), Kimi
+K2.6 et K2.7, GLM 5.2, 5.3 et 5.3 flash — hors de la règle du 0 €. Sans cette marque, parmi les
+candidats : Mistral Small 3.1 24B (128 000 tokens de contexte ; 0,351 / 0,555 $ par million de tokens,
+entrée / sortie), gpt-oss-120b (128 000 ; 0,35 / 0,75), Gemma 4 26B (256 000 ; 0,10 / 0,30), Qwen 3.8
+27B (262 144 ; 0,45 / 3,20), Llama 3.3 70B (24 000 ; 0,293 / 2,253), GLM 4.7 Flash (131 072 ;
+0,0605 / 0,40). 1 000 neurons = 0,011 $.
+
+| Date/heure (UTC) | Étape | Modèle | Appels | Tokens in/out | Neurons (`usage.neurons`) | Cumul jour | Note |
+|---|---|---|---|---|---|---|---|
+| 2026-11-13 | G0 essai d'accès (REST direct, cinq questions neutres + un appel `json_schema`) | `@cf/mistralai/mistral-small-3.1-24b-instruct` | 6 | 202 / 96 | 11,29 | 11,29 | 200 partout ; JSON contraint valide ; médiane 645 ms |
+| 2026-11-13 | G0 essai d'accès | `@cf/openai/gpt-oss-120b` (raisonnement « low ») | 6 | 572 / 611 | 59,86 | 71,15 | 200 partout ; JSON valide ; médiane 1 146 ms ; le raisonnement compte en sortie (50 à 116 tokens pour une phrase) |
+| 2026-11-13 | G0 essai d'accès | `@cf/google/gemma-4-26b-a4b-it` (réflexion coupée) | 6 | 279 / 113 | 5,62 | 76,77 | 200 partout ; JSON valide ; médiane 514 ms |
+| 2026-11-13 | G0 essai d'accès | `@cf/qwen/qwen3.8-27b` (raisonnement « low ») | 6 | 418 / 609 | 194,26 | 271,03 | 200 partout ; JSON valide ; médiane 1 615 ms, deux appels à 5,8 et 7,0 s ; **une réponse vide** (200 tokens de sortie mangés par le raisonnement) |
+| 2026-11-13 | G0 essai d'accès | `@cf/meta/llama-3.3-70b-instruct-fp8-fast` | 6 | 394 / 132 | 37,54 | 308,57 | 200 partout ; JSON valide ; médiane 779 ms |
+
+**Lecture.** Les cinq répondent sans moyen de paiement, et `usage.neurons` égale le prix du catalogue
+au centième près. **Quatrième candidat du banc : Llama 3.3 70B, pas Qwen 3.8** — Qwen coûte cinq fois
+plus sur des questions d'une ligne, dépasse six secondes deux fois sur six, et rend une réponse vide.
+Latences mesurées depuis un portable, en REST : PROBABLE comme ordre de grandeur, HYPOTHÈSE pour le
+chemin de production (le banc se mesure depuis le Worker d'aperçu).
