@@ -176,3 +176,4 @@ soir et cette nuit. **PROBABLE** (deux observations concordantes, aucune lecture
 la plateforme) : l'essai ne se finira pas avant la nuit du 14 au 15, et l'écriture des 1 069
 phrases (lot C3) doit se compter en neurons par vingt-quatre heures glissantes, pas par jour.
 | 2026-11-14 | phrases écrites d'avance — Gemma 4 26B, Mistral Small 3.1, juges compris | 18 appels, 11 mesures | 157.40 neurons |
+| 2026-11-14 | phrases écrites d'avance — Gemma 4 26B, Mistral Small 3.1, juges compris | 30 appels, 14 mesures | 363.59 neurons |

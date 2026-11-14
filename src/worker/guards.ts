@@ -73,11 +73,24 @@ export function rateSubject(ip: string): string {
 }
 
 /**
- * A key for the rate limiter that says nothing of the address it was made from (D7.5): the
- * first half of an HMAC of the day and of the subscriber, under a secret only the Worker holds.
- * The limiter keeps it for the minute it counts in; nothing else ever sees it.
+ * What the limiter counts apart. A question is two sendings — the read sentences, then the
+ * explanation — and each follow-up one more: counted together, the third question of a minute
+ * would lose its read sentences without a word. Each route has its own count, and the bench
+ * its own too.
  */
-export async function clientKey(ip: string, salt: string, day: string): Promise<string> {
+export type RateLane = 'gists' | 'chat' | 'bench';
+
+/**
+ * A key for the rate limiter that says nothing of the address it was made from (D7.5): the
+ * first half of an HMAC of the day, of the route and of the subscriber, under a secret only the
+ * Worker holds. The limiter keeps it for the minute it counts in; nothing else ever sees it.
+ */
+export async function clientKey(
+  ip: string,
+  salt: string,
+  day: string,
+  lane: RateLane,
+): Promise<string> {
   const encoder = new TextEncoder();
   const key = await crypto.subtle.importKey(
     'raw',
@@ -86,6 +99,10 @@ export async function clientKey(ip: string, salt: string, day: string): Promise<
     false,
     ['sign'],
   );
-  const mac = await crypto.subtle.sign('HMAC', key, encoder.encode(`${day}:${rateSubject(ip)}`));
+  const mac = await crypto.subtle.sign(
+    'HMAC',
+    key,
+    encoder.encode(`${day}:${lane}:${rateSubject(ip)}`),
+  );
   return [...new Uint8Array(mac, 0, 16)].map((b) => b.toString(16).padStart(2, '0')).join('');
 }

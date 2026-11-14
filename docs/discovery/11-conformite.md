@@ -383,7 +383,7 @@ Jamais écrit, nulle part : un choix, une réponse, une heure, un identifiant. C
 | Notre Worker | l'adresse et la question ensemble, en mémoire | le temps de la requête ; aucun journal tant que l'observabilité reste coupée et qu'aucun `console.*` n'existe |
 | Le modèle (Workers AI) | la question, pas l'adresse du visiteur | « zéro rétention » pour les trois modèles admis ; pas d'entraînement ; sauf ce que la loi l'obligerait à garder (documentation du 16/10/2026) |
 | La passerelle AI Gateway | rien : **le chat ne passe pas par elle** — ni cache, ni journal | — |
-| Le limiteur | une empreinte du jour et de l'adresse | une minute |
+| Le limiteur | une empreinte du jour, de la route et de l'adresse | une minute |
 
 La page écrit donc « nous ne gardons rien » pour nous, et « Cloudflare s'engage à ne pas la conserver » pour Cloudflare — jamais « rien n'est gardé » tout court.
 

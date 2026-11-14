@@ -63,7 +63,8 @@
   },
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["NeuronBudget"] }],
 
-  // Six questions a minute for one visitor: more than anyone reads, less than a script wants.
+  // Six sendings a minute for one visitor, on each route apart (src/worker/guards.ts, `RateLane`):
+  // more than anyone reads, less than a script wants.
   "ratelimits": [
     { "name": "RATE", "namespace_id": "2026", "simple": { "limit": 6, "period": 60 } },
   ],

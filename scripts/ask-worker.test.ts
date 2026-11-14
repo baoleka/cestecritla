@@ -631,12 +631,20 @@ void test('the rate limiter counts a subscriber: an IPv4 address, the /64 of an 
   }
 
   const salt = 'un-secret-de-test-assez-long';
-  const key = await clientKey('2001:db8:abcd:12:1:2:3:4', salt, '2026-11-13');
+  const key = await clientKey('2001:db8:abcd:12:1:2:3:4', salt, '2026-11-13', 'chat');
   assert.match(key, /^[0-9a-f]{32}$/);
-  assert.equal(await clientKey('2001:db8:abcd:12::9', salt, '2026-11-13'), key, 'same /64');
-  assert.notEqual(await clientKey('2001:db8:abcd:13::9', salt, '2026-11-13'), key);
-  assert.notEqual(await clientKey('2001:db8:abcd:12::9', salt, '2026-11-14'), key, 'another day');
-  assert.notEqual(await clientKey('2001:db8:abcd:12::9', `${salt}!`, '2026-11-13'), key);
+  assert.equal(await clientKey('2001:db8:abcd:12::9', salt, '2026-11-13', 'chat'), key, 'same /64');
+  assert.notEqual(await clientKey('2001:db8:abcd:13::9', salt, '2026-11-13', 'chat'), key);
+  assert.notEqual(
+    await clientKey('2001:db8:abcd:12::9', salt, '2026-11-14', 'chat'),
+    key,
+    'another day',
+  );
+  // Each route is counted apart: the same visitor, the same day, another count.
+  for (const lane of ['gists', 'bench'] as const) {
+    assert.notEqual(await clientKey('2001:db8:abcd:12::9', salt, '2026-11-13', lane), key, lane);
+  }
+  assert.notEqual(await clientKey('2001:db8:abcd:12::9', `${salt}!`, '2026-11-13', 'chat'), key);
 });
 
 void test('the bench is handed no copied text: a marker and a count instead', () => {
@@ -852,7 +860,7 @@ void test('what the Worker does not contain: a log, a write about a visitor, an 
   );
   // Both routes are counted by the limiter, and neither reads a body by itself.
   const bench = index.slice(index.indexOf('async function handleBench'));
-  assert.match(bench, /withinRate\(request, env\)\)\) return empty\(429\)/);
+  assert.match(bench, /withinRate\(request, env, 'bench'\)\)\) return empty\(429\)/);
   // One route reads a sentence, and it is not this one: `/api/chat`, whose path is chat.ts
   // (scripts/chat-worker.test.ts holds it). Everywhere else every body goes through a reader
   // of requests that has no field for one, and the word « question » names no field.

@@ -502,16 +502,17 @@ void test('what the routes of the chat do not contain: the reader of the book, a
   assert.doesNotMatch(body, /gateway|GATEWAY|cacheTtl|skipCache/);
   assert.match(index, /run: \(body\) =>[^,]*runDirect\(env, model, body\)/);
   // Both routes: same origin, one reader of bodies, the rate limiter, and no other reader.
-  for (const [route, parser] of [
-    ['handleGists', 'parseGistsRequest'],
-    ['handleChat', 'parseChatRequest'],
+  for (const [route, parser, lane] of [
+    ['handleGists', 'parseGistsRequest', 'gists'],
+    ['handleChat', 'parseChatRequest', 'chat'],
   ] as const) {
     const handler = index.slice(index.indexOf(`async function ${route}`));
     const code = handler.slice(0, handler.indexOf('\n}\n'));
     assert.match(code, /request\.method !== 'POST'\) return empty\(405\)/, route);
     assert.match(code, /request\.headers\.get\('origin'\) !== origin\) return empty\(403\)/, route);
     assert.match(code, new RegExp(`${parser}\\(await readBody\\(request\\)\\)`), route);
-    assert.match(code, /withinRate\(request, env\)/, route);
+    // …each on its own count: reading sentences is not slowed by what the model answers.
+    assert.match(code, new RegExp(`withinRate\\(request, env, '${lane}'\\)`), route);
   }
   // The word « question » names something in three files and nowhere else: the path of the
   // chat, its prompt — and, in the wiring, the bench's own mode alone (a question of the

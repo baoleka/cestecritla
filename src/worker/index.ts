@@ -59,7 +59,7 @@ import {
 } from './ask.js';
 import { DEFAULT_HARD_STOP } from './budget-core.js';
 import { EXPLAIN_ROOM, answerChat, answerGists, explainedOutput } from './chat.js';
-import { clientKey, readBody } from './guards.js';
+import { clientKey, readBody, type RateLane } from './guards.js';
 import { keptTerms, loadMeasures } from './measures.js';
 import { MODELS, isModelKey, keepsNothing, type ModelKey } from './models.js';
 import {
@@ -189,12 +189,15 @@ async function runModel(
   }
 }
 
-/** False when this visitor asks faster than anyone reads. Fails closed without its secret. */
-async function withinRate(request: Request, env: Env): Promise<boolean> {
+/**
+ * False when this visitor asks faster than anyone reads — on this route: each has its own count
+ * (guards.ts, `RateLane`). Fails closed without its secret.
+ */
+async function withinRate(request: Request, env: Env, lane: RateLane): Promise<boolean> {
   const salt: unknown = env.RATE_SALT;
   if (typeof salt !== 'string' || salt.length < 16) return false;
   const ip = request.headers.get('cf-connecting-ip') ?? 'unknown';
-  const key = await clientKey(ip, salt, new Date().toISOString().slice(0, 10));
+  const key = await clientKey(ip, salt, new Date().toISOString().slice(0, 10), lane);
   const { success } = await env.RATE.limit({ key });
   return success;
 }
@@ -234,7 +237,7 @@ async function handleGists(request: Request, env: Env, origin: string): Promise<
 
   const silence = silenceNow();
   const config = chatConfigured();
-  if (!silence.silent && config.mode === 'chat' && !(await withinRate(request, env))) {
+  if (!silence.silent && config.mode === 'chat' && !(await withinRate(request, env, 'gists'))) {
     return json(LOCAL_GISTS);
   }
   const budget = env.BUDGET.getByName('global');
@@ -258,7 +261,7 @@ async function handleChat(request: Request, env: Env, origin: string): Promise<R
 
   const silence = silenceNow();
   const config = chatConfigured();
-  if (!silence.silent && config.mode === 'chat' && !(await withinRate(request, env))) {
+  if (!silence.silent && config.mode === 'chat' && !(await withinRate(request, env, 'chat'))) {
     return json(QUIET);
   }
   const budget = env.BUDGET.getByName('global');
@@ -379,7 +382,7 @@ async function handleBench(request: Request, env: Env): Promise<Response> {
   if (env.ENVIRONMENT !== 'preview' || request.method !== 'POST') return empty(404);
   const body = await readBody(request);
   if (!isRecord(body) || !(await keyMatches(body['key'], env.BENCH_KEY))) return empty(404);
-  if (!(await withinRate(request, env))) return empty(429);
+  if (!(await withinRate(request, env, 'bench'))) return empty(429);
   const { model: key, mode, min_overlap: minOverlap, skip_cache: skipCache, variant } = body;
   if (mode === 'explain') return benchExplain(body, env);
   const asked = parseAskRequest({

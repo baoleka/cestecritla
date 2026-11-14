@@ -490,3 +490,17 @@ en arrière ; le navigateur d'Instagram ; un lecteur d'écran.
   routes — six envois en tout. Une question vaut deux envois, chaque relance un de plus : la
   troisième question d'une minute perdrait ses phrases relues, sans un mot. Les deux routes
   doivent être comptées à part.
+
+### 14 novembre 2026 — le compteur de la minute : chaque route à part
+
+- **Le défaut.** Une question vaut deux envois — les phrases relues, puis l'explication — et
+  chaque relance un de plus. Comptés ensemble à six par minute, ils faisaient perdre ses phrases
+  relues à la troisième question d'une minute, sans un mot : la feuille aurait montré des liens
+  seuls à qui lit vite.
+- **Le correctif.** La clé du limiteur porte la route (`RateLane` : « gists », « chat »,
+  « bench », `src/worker/guards.ts`) : six envois par minute **sur chacune**. Lire des phrases
+  n'est plus ralenti par ce que le modèle répond, et le banc ne prend rien aux deux autres. La
+  clé reste une empreinte qui ne dit rien de l'adresse, gardée une minute.
+- **Ce que ça ne change pas** : la vitesse à laquelle un script peut lire les phrases relues —
+  six envois de huit phrases par minute et par adresse, comme avant (R35). La page
+  Confidentialité dit déjà « tes demandes sont comptées à la minute ».
