@@ -55,6 +55,25 @@ export const CHAT_CONFIG = 'wrangler.chat.jsonc';
 export const ASK_PATH = 'data/2026/ask.json';
 
 /**
+ * The guard every wrangler configuration of this repository runs as its « build » step
+ * (scripts/deploy-guard.mjs): wrangler stops before it bundles or sends anything unless the
+ * variable says who started it. scripts/deploy.ts says so once its gates have passed; the two
+ * commands that send nothing (`wrangler types`, `wrangler check startup`) say that instead.
+ * A tripwire for the command typed too fast, not a lock (14-risques.md R41).
+ */
+export const DEPLOY_GUARD = {
+  command: 'node scripts/deploy-guard.mjs',
+  variable: 'CEL_DEPLOY_FROM',
+  caller: 'scripts/deploy.ts',
+  readsOnly: 'nothing-is-sent',
+} as const;
+
+/** The environment scripts/deploy.ts hands wrangler: ours, plus the word the guard waits for. */
+export function guardedEnv(env: NodeJS.ProcessEnv = process.env): NodeJS.ProcessEnv {
+  return { ...env, [DEPLOY_GUARD.variable]: DEPLOY_GUARD.caller };
+}
+
+/**
  * How the build about to be deployed answers a question: the mode of data/2026/ask.json —
  * or "bench", the one case where the Worker goes out while the page still answers nothing
  * (`npm run deploy:preview -- --bench`: the bench measures the candidates on the preview host).

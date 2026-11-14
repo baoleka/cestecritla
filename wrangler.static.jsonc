@@ -12,12 +12,17 @@
   // with "You need to enable Analytics Engine" (code 10089) — a dashboard opt-in the beacon
   // needs and static files have no use for.
   //
-  // wrangler.jsonc (the Worker and its dataset) is kept, type-checked and dry-run in CI: it comes
-  // back with the beacon. What MUST stay identical between the two files: the Worker name and
-  // every route — scripts/build-mode.test.ts fails if they drift.
+  // wrangler.jsonc is the Worker of the preview host, and of that host only (PLAN-CHAT lot C10):
+  // the apex is deployed with THIS file whatever the mode. What MUST stay identical between the
+  // two files: the name and the route of the preview environment — the same Worker, with or
+  // without a script (scripts/build-mode.test.ts fails if they drift).
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "cestecritla",
   "compatibility_date": "2026-09-09",
+
+  // Builds nothing: stops a deploy that scripts/deploy.ts did not start (scripts/deploy-guard.mjs).
+  // This file is production's — the gates of the apex run in that script and nowhere else.
+  "build": { "command": "node scripts/deploy-guard.mjs" },
 
   "routes": [
     { "pattern": "cestecritla.fr", "custom_domain": true },

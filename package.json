@@ -22,7 +22,7 @@
     "deploy:chat": "tsx scripts/deploy.ts apex --chat",
     "deploy:chat:preview": "tsx scripts/deploy.ts preview --chat",
     "ingest": "tsx scripts/ingest.ts",
-    "typecheck": "wrangler types >/dev/null && tsc --noEmit && tsc -p src/worker/tsconfig.json --noEmit && astro check --tsconfig tsconfig.app.json",
+    "typecheck": "CEL_DEPLOY_FROM=nothing-is-sent wrangler types >/dev/null && tsc --noEmit && tsc -p src/worker/tsconfig.json --noEmit && astro check --tsconfig tsconfig.app.json",
     "test": "tsx --test scripts/*.test.ts",
     "contrast": "tsx scripts/contrast.ts",
     "lint": "eslint scripts eval src",

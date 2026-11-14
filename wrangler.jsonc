@@ -11,6 +11,15 @@
   // (wrangler.chat.jsonc). The top level below stays what CI bundles and what env.preview is
   // read against.
   //
+  // THIS IS THE FILE A BARE WRANGLER COMMAND READS — so nothing in its top level names
+  // production (14-risques.md R41, 14/11/2026):
+  //   - it must EXIST: with no default configuration, wrangler 4 « auto-configures » the
+  //     project and deploys a Worker named after package.json — `cestecritla`, production;
+  //   - its top-level `name` is a Worker that does not exist, and it has no route: a bare
+  //     `wrangler delete`, `rollback` or `secret put` finds nothing, and `--env` with a
+  //     mistyped name inherits no address (an unknown environment is read as the top level);
+  //   - its `build` step refuses any deploy that scripts/deploy.ts did not start.
+  //
   // What it binds, and nothing else (the list of 09-architecture.md predates D13.1 and D16):
   //   AI      Workers AI — through the AI Gateway "aec" for the bench (cache of 30 days, logs
   //           off), and directly for the chat: no gateway, no cache (D16.51)
@@ -22,16 +31,19 @@
   // (D16.23). Two secrets are set in the editor's terminal with `wrangler secret put`, never
   // written here: RATE_SALT, and BENCH_KEY (preview only).
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "cestecritla",
+  // Not a Worker of the account, on purpose (see above): the one this file deploys is named
+  // in env.preview.
+  "name": "cestecritla-not-deployed",
   "main": "src/worker/index.ts",
   "compatibility_date": "2026-09-09",
 
-  // Custom domains on the Free zone (D10.2). workers.dev stays off so the only public
-  // origin is the .fr (CSP, OG URLs, LCEN).
-  "routes": [
-    { "pattern": "cestecritla.fr", "custom_domain": true },
-    { "pattern": "www.cestecritla.fr", "custom_domain": true },
-  ],
+  // Runs before wrangler bundles or sends anything, and builds nothing: it stops a deploy
+  // that scripts/deploy.ts did not start. Inherited by env.preview.
+  "build": { "command": "node scripts/deploy-guard.mjs" },
+
+  // No route at the top level, and workers.dev off: nothing here can be reached, and nothing
+  // is inherited by an environment that forgets its own. The only public origin is the .fr
+  // (CSP, OG URLs, LCEN) — the preview host's, below.
   "workers_dev": false,
   "preview_urls": false,
 
@@ -95,12 +107,14 @@
   // the apex keeps serving the holding page (D15.4). Deployed as the Worker
   // "cestecritla-preview" by `npm run deploy:preview`; `noindex` comes from public/_headers.
   //
-  // `routes` is an INHERITABLE key: without the block below this environment would inherit the
-  // apex and take it over on its first deploy (scripts/build-mode.test.ts holds that line).
+  // `routes` is an INHERITABLE key, and so is `name` (as `<top level>-preview`): both are
+  // written here, so that this environment is the Worker "cestecritla-preview" on its one
+  // host whatever the top level says (scripts/build-mode.test.ts holds both lines).
   // Bindings and `vars` are NOT inherited, so they are repeated. The base is the same one —
   // one copy of the text at Cloudflare, not two; the counter is this Worker's own.
   "env": {
     "preview": {
+      "name": "cestecritla-preview",
       "routes": [{ "pattern": "beta.cestecritla.fr", "custom_domain": true }],
       // Inherited from the top in wrangler's own rules — and written again here, so that the
       // gate reads it where it applies: the bench runs on this Worker, with real questions.

@@ -30,6 +30,10 @@
   "main": "src/worker/index.ts",
   "compatibility_date": "2026-09-09",
 
+  // Builds nothing: stops a deploy that scripts/deploy.ts did not start (scripts/deploy-guard.mjs)
+  // — the accord of the day is asked for there. Inherited by env.preview.
+  "build": { "command": "node scripts/deploy-guard.mjs" },
+
   // Two exact addresses on each host, and no other: no wildcard, so nothing else under /api/
   // ever reaches this script. A route needs the zone; the hosts stay custom domains of the
   // Worker that serves the files (scripts/build-mode.test.ts holds both lists together).

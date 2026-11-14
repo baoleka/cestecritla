@@ -27,5 +27,16 @@ export default tseslint.config(
       },
     },
   },
+  {
+    // The deploy guard is plain JavaScript on purpose: wrangler runs it as a build step, under
+    // whatever `node` it was started with, and it must need nothing. No tsconfig knows it, so
+    // it is linted without type information.
+    files: ['scripts/deploy-guard.mjs'],
+    ...tseslint.configs.disableTypeChecked,
+  },
+  {
+    files: ['scripts/deploy-guard.mjs'],
+    languageOptions: { globals: { console: 'readonly', process: 'readonly' } },
+  },
   { ignores: ['node_modules/**', 'data/**', 'docs/**', 'design/**', 'prototypes/**'] },
 );

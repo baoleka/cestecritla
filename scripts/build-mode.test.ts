@@ -9,13 +9,15 @@
  * Run: npx tsx --test scripts/build-mode.test.ts
  */
 import assert from 'node:assert/strict';
-import { existsSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { existsSync, mkdtempSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import {
   APP_REDIRECT_PREFIXES,
   CHAT_CONFIG,
+  DEPLOY_GUARD,
   HOLDING_PAGES,
   HOLDING_REDIRECT_PREFIXES,
   SILENCE_APPROACH_MS,
@@ -33,6 +35,7 @@ import {
   citationPolicyValidated,
   deployRefusal,
   distProblems,
+  guardedEnv,
   holdingRedirects,
   insideSilenceWindow,
   nearSilenceWindow,
@@ -68,6 +71,7 @@ interface Route {
   zone_name?: string;
 }
 interface Environment {
+  name?: string;
   routes?: Route[];
   vars?: Record<string, string>;
   ai?: { binding?: string };
@@ -82,8 +86,8 @@ interface Environment {
   observability?: { enabled?: boolean };
 }
 interface WranglerConfig extends Environment {
-  name?: string;
   main?: string;
+  build?: { command?: string };
   workers_dev?: boolean;
   preview_urls?: boolean;
   assets?: { directory?: string; binding?: string; run_worker_first?: unknown };
@@ -305,11 +309,12 @@ void test('what the Worker lacks is read from the files: the base, and the state
  * on its first deploy. This is the test that makes that mistake impossible to commit.
  */
 void test('in both configurations the preview environment has its own host, never the apex', () => {
+  // The apex is named by the static configuration, and by it alone (lot C10).
+  assert.deepEqual(hosts(holding.routes), APEX, `${STATIC_CONFIG}: top-level routes`);
   for (const [file, config] of [
     [WORKER_CONFIG, app],
     [STATIC_CONFIG, holding],
   ] as const) {
-    assert.deepEqual(hosts(config.routes), APEX, `${file}: top-level routes`);
     const preview = config.env?.['preview'];
     assert.ok(preview, `${file} must declare env.preview`);
     const previewHosts = hosts(preview.routes);
@@ -321,13 +326,102 @@ void test('in both configurations the preview environment has its own host, neve
   }
 });
 
-void test('the two configurations name the same Worker and the same hosts', () => {
-  // One Worker serves the holding page today and the app on launch day. If these drift, the
-  // "takeover" on launch day silently becomes a second Worker on a different hostname.
-  assert.equal(holding.name, app.name);
-  assert.deepEqual(hosts(holding.routes), hosts(app.routes));
-  assert.deepEqual(hosts(holding.env?.['preview']?.routes), hosts(app.env?.['preview']?.routes));
+void test('on the preview host the two configurations name the same Worker and the same host', () => {
+  // One Worker serves the preview host, with its script or as files alone. If these drift, going
+  // from one to the other silently becomes a second Worker — or the same one on another host.
+  // In the static file the name is derived (`<top level>-preview`); in the Worker's it is written.
+  const ofWorker = app.env?.['preview'];
+  const ofFiles = holding.env?.['preview'];
+  assert.ok(ofWorker && ofFiles, 'both files must declare env.preview');
+  assert.equal(ofWorker.name, `${String(holding.name)}-preview`);
+  assert.equal(ofFiles.name, undefined, 'derived from the top level, as deployed');
+  assert.deepEqual(hosts(ofFiles.routes), hosts(ofWorker.routes));
   assert.equal(holding.assets?.directory, app.assets?.directory);
+});
+
+/**
+ * The file a bare wrangler command reads (14-risques.md R41). Read in wrangler 4.130.0 on
+ * 14/11/2026: with no default configuration, `wrangler deploy` « auto-configures » the project
+ * and names the Worker after package.json — production's name; an environment that does not
+ * exist is read as the top level, under the name `<top level>-<what was typed>`, with whatever
+ * routes the top level has; and `wrangler delete` or `rollback`, unattended, do not ask twice.
+ */
+void test('the file a bare wrangler command reads names nothing of production', () => {
+  assert.equal(WORKER_CONFIG, 'wrangler.jsonc', 'the default name: its presence is the point');
+  assert.ok(existsSync(WORKER_CONFIG), 'without it wrangler configures a Worker by itself');
+  const deployed = new Set<unknown>([
+    holding.name,
+    `${String(holding.name)}-preview`,
+    chat.name,
+    CHAT_WORKERS.apex,
+    CHAT_WORKERS.preview,
+    (JSON.parse(readFileSync('package.json', 'utf8')) as { name?: string }).name,
+  ]);
+  assert.ok(typeof app.name === 'string' && app.name.length > 0);
+  assert.ok(!deployed.has(app.name), `the top level names a Worker that exists: ${app.name}`);
+  // Nothing to inherit, nothing to reach: no route, no workers.dev address, no preview URL.
+  assert.equal(app.routes, undefined, 'a route at the top level is inherited by a mistyped --env');
+  assert.equal(app.workers_dev, false);
+  assert.equal(app.preview_urls, false);
+  // The one Worker this file deploys says its own name and its own host.
+  const preview = app.env?.['preview'];
+  assert.ok(preview, `${WORKER_CONFIG} must declare env.preview`);
+  assert.equal(preview.name, 'cestecritla-preview');
+  assert.deepEqual(hosts(preview.routes), ['beta.cestecritla.fr']);
+  assert.deepEqual(Object.keys(app.env ?? {}), ['preview']);
+});
+
+void test('every wrangler configuration stops a deploy that scripts/deploy.ts did not start', () => {
+  // Every configuration at the root, the ones this file knows and any that would be added.
+  const files = readdirSync('.').filter((name) => /^wrangler.*\.(?:jsonc?|toml)$/.test(name));
+  assert.deepEqual([...files].sort(), [CHAT_CONFIG, WORKER_CONFIG, STATIC_CONFIG].sort());
+  for (const file of files) {
+    const config = read(file);
+    assert.equal(config.build?.command, DEPLOY_GUARD.command, `${file}: the guard is its build`);
+    for (const [name, env] of Object.entries(config.env ?? {})) {
+      assert.ok(!('build' in env), `${file} (env.${name}): the guard is inherited, not replaced`);
+    }
+  }
+  // The guard itself: closed by default, open to the script and to what sends nothing.
+  const guard = DEPLOY_GUARD.command.replace(/^node /, '');
+  const run = (said: string | undefined): { status: number | null; stderr: string } => {
+    const env: NodeJS.ProcessEnv = Object.fromEntries(
+      Object.entries(process.env).filter(([name]) => name !== DEPLOY_GUARD.variable),
+    );
+    if (said !== undefined) env[DEPLOY_GUARD.variable] = said;
+    const done = spawnSync(process.execPath, [guard], { env, encoding: 'utf8' });
+    return { status: done.status, stderr: done.stderr };
+  };
+  for (const said of [undefined, '', '1', 'true', 'scripts/deploy', 'SCRIPTS/DEPLOY.TS']) {
+    const refused = run(said);
+    assert.equal(refused.status, 1, String(said));
+    assert.match(refused.stderr, /deploy refused: wrangler was not started by scripts\/deploy\.ts/);
+    assert.match(refused.stderr, /npm run deploy\b/);
+  }
+  assert.equal(run(DEPLOY_GUARD.caller).status, 0);
+  assert.equal(run(DEPLOY_GUARD.readsOnly).status, 0);
+  assert.equal(guardedEnv({ PATH: '/x' })[DEPLOY_GUARD.variable], DEPLOY_GUARD.caller);
+  assert.equal(guardedEnv({ PATH: '/x' })['PATH'], '/x');
+  // The script says the word on every wrangler it starts — and nothing else in the repository
+  // does, but the two commands that only read.
+  const deploy = readFileSync('scripts/deploy.ts', 'utf8');
+  const spawns = deploy.match(/spawnSync\('npx',[^;]*;/g) ?? [];
+  assert.equal(spawns.length, 3);
+  for (const call of spawns) assert.match(call, /env: guardedEnv\(\)/, call);
+  const pkg = JSON.parse(readFileSync('package.json', 'utf8')) as {
+    scripts: Record<string, string>;
+  };
+  for (const [name, script] of Object.entries(pkg.scripts)) {
+    if (!script.includes(DEPLOY_GUARD.variable)) continue;
+    assert.match(
+      script,
+      new RegExp(`^${DEPLOY_GUARD.variable}=${DEPLOY_GUARD.readsOnly} wrangler types\\b`),
+      `${name}: only what sends nothing may speak to the guard from package.json`,
+    );
+  }
+  for (const [name, script] of Object.entries(pkg.scripts)) {
+    assert.ok(!/\bwrangler (?:deploy|delete|rollback|versions)\b/.test(script), name);
+  }
 });
 
 void test('the static configuration runs no code at all', () => {
@@ -800,7 +894,7 @@ void test('the Worker of the chat is deployed by the script alone, with an accor
     }
   }
   assert.notEqual(CHAT_WORKERS.apex, app.name);
-  assert.notEqual(CHAT_WORKERS.preview, `${String(app.name)}-preview`);
+  assert.notEqual(CHAT_WORKERS.preview, app.env?.['preview']?.name);
   assert.equal(chatWorkerName('preview', '/nonexistent'), null);
   assert.deepEqual(refusedArguments(['--chat', '--withdraw', '--accord', '2026-11-20']), []);
   // On the preview host this Worker carries that host's mode: deploying it is what opens the

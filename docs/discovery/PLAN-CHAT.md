@@ -869,3 +869,51 @@ Ce paragraphe amende les §1 à §4 du plan ; le code suit, dans une copie de tr
   sujet, comme une page consultée (`18-dossier-chat.md` §2).
 - **À l'éditeur** : relire la section « Quand tu demandes » récrite (`privacy_chat`) ; dire si
   l'étiquette des phrases relues doit nommer l'IA (`18-dossier-chat.md` §4.2).
+
+### 14 novembre 2026, 19 h — D16.53 poussé, l'aperçu redéployé
+
+- **Poussé** sur `origin main` (`da72560`) ; **CI verte** (5 min 35). La branche locale
+  `d16-53` est supprimée.
+- **Aperçu redéployé à 18 h 01 UTC** (version `681171af`), pendant le sommeil de la boucle
+  d'écriture (elle venait d'essuyer un refus à 18 h 00 et dort 35 minutes). wrangler n'a envoyé
+  **aucun fichier de page** : mode fermé, les pages sont celles d'avant ; seul le Worker
+  change. Le protocole d'écriture des phrases par la route du banc n'a pas bougé (comparé
+  ligne à ligne) : la boucle continue.
+- **Vérifié en ligne** : `/api/gists` « local » et `/api/chat` « rien » quoi qu'on envoie —
+  une requête du nouveau contrat, une de l'ancien qui nommerait une question, un corps
+  illisible : même réponse, la route fermée ne lit rien ; autre origine ou sans origine 403 ;
+  GET 405 ; `/api/ask` 404 ; banc sans clé 404 ; `noindex`, `form-action 'none'`. 1 151
+  fichiers sur 1 154 identiques à `dist/`, les trois écarts connus. Trois navigateurs : chaque
+  contrôle tient, Entrée avant le script ne fait rien partir. VÉRIFIÉ.
+- **La destination du système est écrite** (`18-dossier-chat.md` §4.5 ; annexe III, point 8 b,
+  et art. 6 § 4 du règlement sur l'IA) : à quoi l'IA du site sert, à quoi elle ne sert pas et
+  ce qui l'en empêche, ce qui pèse en sens inverse. À relire par l'éditeur avec le dossier.
+
+### 14 novembre 2026, 19 h 30 — une commande wrangler tapée à la main ne peut plus toucher la production
+
+- **Une piste notée au lot C10 était fausse, et dangereuse** : « renommer `wrangler.jsonc` pour
+  qu'un `wrangler deploy` nu ne trouve aucune configuration ». Essayé à blanc dans un dossier
+  jetable, puis lu dans le code de wrangler 4.130.0 (`maybeRunAutoConfig`) : sans fichier par
+  défaut, l'outil **« auto-configure »** le projet — il reconnaît Astro, prend `dist/`, et
+  nomme le Worker d'après `package.json` : `cestecritla`, le Worker de la production. La
+  présence du fichier est ce qui l'en empêche. VÉRIFIÉ (essai à blanc ; code lu).
+- **Ce que le fichier par défaut permettait, lu au même endroit** : son premier niveau nommait
+  le Worker de la production, avec un script et les deux hôtes. Un `wrangler deploy` nu y
+  aurait mis du code et un Durable Object ; un `wrangler delete` nu l'aurait supprimé ; un
+  `--env` mal orthographié est lu comme le premier niveau et **hérite de ses routes**. Rien de
+  tel ne s'est produit : tout est toujours passé par `scripts/deploy.ts`.
+- **Ce qui change** (`14-risques.md` R41 ; fiche 13 du runbook) : (1) le premier niveau de
+  `wrangler.jsonc` ne nomme plus aucun Worker existant (`cestecritla-not-deployed`) et n'a plus
+  de route ; l'environnement de l'aperçu écrit son nom et son hôte lui-même — vérifié sans
+  rien déployer : `wrangler versions list --env preview` rend bien les versions de
+  `cestecritla-preview`, celle de 18 h 01 comprise, et le premier niveau « n'existe pas sur le
+  compte » ; (2) **chaque configuration lance `scripts/deploy-guard.mjs` comme étape de
+  build** : wrangler s'arrête avant d'empaqueter quoi que ce soit si `scripts/deploy.ts` ne
+  l'a pas lancé. Essayé à blanc sur les trois fichiers et leurs deux environnements : six
+  refus ; les cinq chemins du script passent. La CI rejoue les six refus à chaque poussée et
+  n'appelle plus `wrangler deploy` autrement que par le script.
+- **Ce que la garde n'est pas** : une serrure. Qui écrit la variable à la main passe ; elle
+  arrête la commande tapée trop vite, par une personne ou par un agent.
+- **La page Confidentialité, section « Quand tu demandes »** : la ligne sur les phrases dit
+  désormais qu'elles sont « écrites d'avance par une IA, lues par l'éditeur », comme la page
+  À propos le dit déjà. L'étiquette de la feuille, elle, attend la décision de l'éditeur.

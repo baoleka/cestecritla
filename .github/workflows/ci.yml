@@ -34,8 +34,13 @@ jobs:
       - run: npm ci
 
       # Env is generated, never hand-written (09-architecture.md §2). Not versioned: 591 KB.
+      # wrangler runs each configuration's « build » step even here: the guard that stops a
+      # deploy scripts/deploy.ts did not start (scripts/deploy-guard.mjs). This command sends
+      # nothing, and says so.
       - name: Generate Worker types
         run: npx wrangler types
+        env:
+          CEL_DEPLOY_FROM: nothing-is-sent
 
       # Gate 1 of CLAUDE.md, unchanged: scripts/ and eval/ under the root tsconfig. Then the
       # Worker (workers-types, Bundler resolution) and the app (.astro), which cannot share one
@@ -68,22 +73,29 @@ jobs:
 
       - name: Worker startup budget
         run: npx wrangler check startup
+        env:
+          CEL_DEPLOY_FROM: nothing-is-sent
+
+      # A `wrangler deploy` typed by hand must stop before it bundles anything, in every
+      # configuration: the file a bare command reads (wrangler.jsonc), production's files
+      # (wrangler.static.jsonc) and the chat's Worker (wrangler.chat.jsonc). A dry run is enough
+      # to see it, and it has to be the guard that speaks (14-risques.md R41).
+      - name: A bare wrangler deploy is refused
+        run: |
+          for config in "" "--config wrangler.static.jsonc" "--config wrangler.chat.jsonc"; do
+            for env in "" preview; do
+              if npx wrangler deploy --dry-run $config --env="$env" --outdir /tmp/wbare > /tmp/wbare.log 2>&1; then
+                echo "a bare deploy went through: ${config:-wrangler.jsonc} --env=$env"; exit 1
+              fi
+              grep -q "deploy refused: wrangler was not started by scripts/deploy.ts" /tmp/wbare.log
+            done
+          done
 
       # The Worker of « Demander » (D16.7) is bundled on every pull request, whether or not the
       # site answers questions yet: its bindings are the AI, the private base, the allowance and
-      # the rate limiter, and nothing else (scripts/build-mode.test.ts holds the list).
-      # `--env=""` names the top-level environment explicitly: since a second environment
-      # exists, wrangler warns on any deploy that does not say which one it means.
-      - name: Deploy dry run (Worker)
-        run: npx wrangler deploy --dry-run --env="" --outdir /tmp/wdry
-
-      # The preview environment (D15.12) is a second Worker with its own routes, vars and
-      # bindings: none of them is inherited the way one would assume.
-      - name: Deploy dry run (Worker, preview environment)
-        run: npx wrangler deploy --dry-run --env preview --outdir /tmp/wdry-preview
-
-      # The same through scripts/deploy.ts, as the bench deploys it: the rule that keeps the
-      # Worker off the apex and waits for the base must accept a dry run.
+      # the rate limiter, and nothing else (scripts/build-mode.test.ts holds the list) — through
+      # scripts/deploy.ts, as the bench deploys it: the rule that keeps the Worker off the apex
+      # and waits for the base must accept a dry run.
       - name: Deploy dry run (bench → preview host)
         run: npx tsx scripts/deploy.ts preview --bench --dry-run --outdir /tmp/wdry-bench
 

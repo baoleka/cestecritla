@@ -17,7 +17,9 @@
  * takes the domain without a word. And `dist/` still held the 979 pages of the 2025 edition from
  * September: one bare `wrangler deploy` away from publishing a superseded programme as the
  * current one. So the rule is executable (`deployRefusal`, tested in build-mode.test.ts), and a
- * bare `wrangler deploy` is no longer anyone's reflex.
+ * bare `wrangler deploy` is no longer anyone's reflex — nor anyone's accident: every
+ * configuration runs scripts/deploy-guard.mjs as its build step, which stops wrangler unless
+ * this script started it (`guardedEnv`, below).
  *
  * Learning note — stdio: 'inherit' is what keeps wrangler's confirmation prompt alive. A child
  * process only sees a terminal if it inherits ours; with piped stdio wrangler would conclude it
@@ -35,6 +37,7 @@ import {
   citationPolicyValidated,
   deployRefusal,
   distProblems,
+  guardedEnv,
   htmlPages,
   nearSilenceWindow,
   readAskMode,
@@ -116,6 +119,7 @@ if (given.includes('--chat')) {
     console.log(`          wrangler ${withdrawArgs.join(' ')}`);
     const gone = spawnSync('npx', ['--no-install', 'wrangler', ...withdrawArgs], {
       stdio: 'inherit',
+      env: guardedEnv(),
     });
     process.exit(gone.status ?? 1);
   }
@@ -135,7 +139,10 @@ if (given.includes('--chat')) {
   const chatArgs = chatDeployArgs(target, forWrangler);
   console.log(`deploy: the Worker of the chat → ${target}`);
   console.log(`        wrangler ${chatArgs.join(' ')}`);
-  const sent = spawnSync('npx', ['--no-install', 'wrangler', ...chatArgs], { stdio: 'inherit' });
+  const sent = spawnSync('npx', ['--no-install', 'wrangler', ...chatArgs], {
+    stdio: 'inherit',
+    env: guardedEnv(),
+  });
   process.exit(sent.status ?? 1);
 }
 // `--bench` is ours, not wrangler's: the Worker goes to the preview host while the page still
@@ -179,5 +186,8 @@ console.log(
     (mode === 'app' ? ` — questions: ${ask}` : ''),
 );
 console.log(`        wrangler ${args.join(' ')}`);
-const result = spawnSync('npx', ['--no-install', 'wrangler', ...args], { stdio: 'inherit' });
+const result = spawnSync('npx', ['--no-install', 'wrangler', ...args], {
+  stdio: 'inherit',
+  env: guardedEnv(),
+});
 process.exit(result.status ?? 1);
