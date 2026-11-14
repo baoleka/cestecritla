@@ -128,6 +128,22 @@ export function reserve(
 }
 
 /**
+ * True when `amount` neurons could be reserved at `nowMs` — asked without reserving anything:
+ * how the page is told whether a model may be asked at all, before any question leaves.
+ */
+export function hasRoom(
+  state: BudgetState,
+  amount: number,
+  nowMs: number,
+  hardStop: number = DEFAULT_HARD_STOP,
+): boolean {
+  const live = prune(state, nowMs);
+  return (
+    isValidAmount(amount) && !isClosed(live, nowMs) && usedAt(live, nowMs) + amount <= hardStop
+  );
+}
+
+/**
  * Replaces what was reserved by what was really spent — less when the answer came from the
  * cache, more when the estimate was short. A cost nobody states is the reservation itself.
  */

@@ -12,18 +12,13 @@
  * the order of `CONSENT_LINES` — the first is its title — into a <template> the script copies
  * without touching a word:
  * what the visitor reads is what the version of the agreement was computed on
- * (src/lib/chat-data.ts), and a request that carries another version is not read (D16.46).
+ * (src/lib/chat-consent.ts), and a request that carries another version is not read (D16.46).
  *
  * Rendered only in a build whose field asks: in mode "off" this file is not even imported.
  */
 import '../styles/chat.css';
-import {
-  CONSENT_BUTTONS,
-  CONSENT_LINES,
-  chatPlain,
-  consentOf,
-  recognisable,
-} from '../lib/chat-data.ts';
+import { CONSENT_BUTTONS, CONSENT_LINES, consentOf } from '../lib/chat-consent.ts';
+import { chatPlain, recognisable } from '../lib/chat-data.ts';
 import { manifest } from '../lib/edition.ts';
 import { safeJson, t } from '../lib/strings.ts';
 

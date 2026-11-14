@@ -390,3 +390,35 @@ en arrière ; le navigateur d'Instagram ; un lecteur d'écran.
   banc (le quota), et le confort de lecture sur de vraies phrases.
 - **L'essai du chapitre p4c1** (D16.38) se poursuit désormais par cet outil : les phrases déjà
   écrites dans la nuit reviennent du cache de la passerelle, sans neuron.
+
+### 14 novembre 2026 — lot C5 : les deux routes, et le mode « explain » du banc
+
+- **Fait, et fermé partout** : `/api/gists` et `/api/chat` existent dans le Worker
+  (`src/worker/chat.ts` pour les chemins, `index.ts` pour le câblage), et répondent « local » et
+  « rien » tant que `data/2026/ask.json` dit « off » — avant d'avoir regardé quoi que ce soit.
+  13 tests sans réseau (`scripts/chat-worker.test.ts`), sur une base inventée dont le « texte du
+  livre » porte un marqueur : il n'arrive jamais au modèle, ni dans une réponse.
+- **`/api/gists`** : silence, mode, état du livre, base — puis les phrases relues des mesures
+  nommées, et `ai` : le compteur dit s'il y a de la place **sans rien réserver**
+  (`NeuronBudget.available`), et n'est même pas consulté quand il n'y a ni phrase ni modèle.
+- **`/api/chat`** : rien ne part vers le modèle si le site ne demande pas, si l'accord n'est pas
+  celui que ce Worker connaît (la même fonction que la page, du même kit :
+  `src/lib/chat-consent.ts`), si la question porte une objection qu'une personne a déjà
+  répondue ou demande pour qui voter, s'il n'y a aucune phrase relue à l'écran, si le compteur
+  est fermé. Puis le modèle, **appelé directement** (`runDirect` : ni passerelle, ni cache), et
+  le contrôle : tout, ou rien. Le chemin n'importe même pas le lecteur des mesures.
+- **Ce que le modèle lit** (`explainRequest`) : nos phrases relues, la carte que la question
+  nomme, et la question — en dernier, écrite comme une chaîne JSON, pour qu'elle ne puisse pas
+  refermer son propre bloc. L'invite ne dit ni de quel livre ni de quel mouvement il s'agit.
+- **Un modèle ne lit une question que si son hôte écrit ne rien garder** : drapeau `keeps` de
+  `src/worker/models.ts` — Mistral Small 3.1, Gemma 4 26B, Llama 3.3 70B ; gpt-oss-120b reste
+  un candidat du banc, pas du chat.
+- **Le banc sait demander une explication** (`mode: "explain"` de `/api/bench`, aperçu seul,
+  derrière sa clé) : mêmes consigne, appel et contrôle que `/api/chat`, avec des phrases que le
+  banc fournit — les nôtres, depuis la machine de l'éditeur — pour mesurer avant tout dépôt.
+  Il ne rend que les phrases que le schéma nomme, jamais la sortie brute.
+- **Trois portes réécrites** pour dire la règle nouvelle au lieu de l'ancienne : une seule route
+  lit une question ; le mot « question » ne nomme rien hors de `chat.ts`, de `prompt.ts` et du
+  mode du banc ; chaque requête du chat passe une fois par son propre lecteur strict.
+- **Reste ouvert, pour C10 et C11** : le mode par hôte (ouvrir l'aperçu sans la production) ;
+  le Worker pèse 137 Kio avec le kit et les deux fichiers éditoriaux (40 avant).

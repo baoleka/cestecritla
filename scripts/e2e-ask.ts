@@ -77,9 +77,11 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
 
   /** The simulated Worker: what each route answers until the test says otherwise. */
   const sim: { gists: GistsScenario; chat: ChatScenario } = { gists: 'deux', chat: 'explique' };
+  /** As the base holds it — a straight apostrophe — and as the page must show it. */
+  const stored = (id: string): string => `Phrase relue d'essai pour ${id}.`;
   const sentence = (id: string): string => `Phrase relue d’essai pour ${id}.`;
   const gistsAnswer = (ids: readonly string[]): { status?: number; body: unknown } => {
-    const all = ids.map((id) => ({ id, text: sentence(id) }));
+    const all = ids.map((id) => ({ id, text: stored(id) }));
     switch (sim.gists) {
       case 'toutes':
         return { body: { kind: 'gists', corpus, gists: all, ai: true } };

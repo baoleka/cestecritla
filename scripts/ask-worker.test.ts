@@ -1057,11 +1057,19 @@ void test('what the Worker does not contain: a log, a write about a visitor, an 
   // Both routes are counted by the limiter, and neither reads a body by itself.
   const bench = index.slice(index.indexOf('async function handleBench'));
   assert.match(bench, /withinRate\(request, env\)\)\) return empty\(429\)/);
-  // No route reads a sentence: every body goes through the one reader of requests, and the
-  // word « question » names no field anywhere in the Worker.
+  // One route reads a sentence, and it is not this one: `/api/chat`, whose path is chat.ts
+  // (scripts/chat-worker.test.ts holds it). Everywhere else every body goes through a reader
+  // of requests that has no field for one, and the word « question » names no field.
   assert.match(bench, /parseAskRequest\(/);
   for (const [name, source] of sources) {
-    const code = source.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
+    if (name === 'chat.ts') continue;
+    let code = source.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
+    // The bench's own mode for an explanation reads a question too — one of the bench's set,
+    // behind its key, on the preview: that function is set aside, and nothing else is.
+    const explain = code.indexOf('async function benchExplain');
+    if (name === 'index.ts' && explain !== -1) {
+      code = code.slice(0, explain) + code.slice(code.indexOf('\n}\n', explain));
+    }
     assert.doesNotMatch(
       code,
       /\b(?:q|question|message|prompt)\s*[:=]\s*(?:body|request|asked)\b/,

@@ -117,3 +117,35 @@ export function recognise(
     cards: notionsIn(question, known.cards),
   };
 }
+
+/** A card as it is handed to the model, or shown: its term and what we wrote of it. */
+export interface KnownCard extends NotionEntry {
+  plain: string;
+}
+
+/** An objection with the answer a person wrote. */
+export interface KnownObjection extends ReviewedEntry {
+  answer: string;
+}
+
+interface Reviewable {
+  review: { status: string };
+}
+
+/**
+ * What a person wrote AND re-read, out of the two editorial files (data/2026/glossary.json,
+ * data/2026/riposte.json): nothing is recognised, shown as « relu par un humain » or handed to
+ * a model before that (D0.27). The page and the Worker both come through here.
+ */
+export function knownOf(
+  cards: readonly (Reviewable & KnownCard)[],
+  objections: readonly (Reviewable & KnownObjection)[],
+): { cards: KnownCard[]; objections: KnownObjection[] } {
+  const reread = (entry: Reviewable): boolean => entry.review.status === 'reviewed';
+  return {
+    cards: cards.filter(reread).map(({ id, term, plain }) => ({ id, term, plain })),
+    objections: objections
+      .filter(reread)
+      .map(({ slug, objection, answer }) => ({ slug, objection, answer })),
+  };
+}

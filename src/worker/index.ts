@@ -1,16 +1,21 @@
 /**
- * "C'est écrit là" — the whole server side: one route, `/api/ask` (D16.7).
+ * "C'est écrit là" — the whole server side: the routes under `/api/` (D16.7, D16.51).
  *
  * The Worker orchestrates, it does not compute: 10 ms of CPU per invocation is the entire
- * budget (D4.1, D7.1). It reads in the private base the measures a request names, asks a model
- * hosted by Cloudflare to say in our words what they provide, and lets through only what the
- * control accepts (src/lib/ask-validate.ts). The path itself is src/worker/ask.ts; this file is
- * the wiring to the platform.
+ * budget (D4.1, D7.1). This file is the wiring to the platform; the paths themselves are
+ * src/worker/chat.ts and src/worker/ask.ts.
  *
- * It never receives the sentence a visitor typed (D16.22): a request is identifiers of
- * measures and words of the book. Everything else — every page, the search, the game — is a
- * static file, served outside the invocation counter. The site is designed to work with
- * `/api/*` entirely down.
+ *   /api/gists   the sentences the editor read, for the measures a request names. No model.
+ *   /api/chat    THE ONLY ROUTE THAT RECEIVES A SENTENCE A VISITOR TYPED (D16.46) — after
+ *                their agreement, whose version the request must carry. A model whose host
+ *                keeps nothing explains words of the read sentences; it is called directly,
+ *                through no gateway and no cache, and it is never shown a text of the book.
+ *   /api/ask     the written answer of D16.4, which the bench closed (D16.33): it answers
+ *                "local" while the mode is not one of its own, and it receives no sentence
+ *                (D16.22) — identifiers of measures and words of the book.
+ *
+ * Everything else — every page, the search, the game — is a static file, served outside the
+ * invocation counter. The site is designed to work with `/api/*` entirely down.
  *
  * What never happens here: a log (no `console.*`, observability off, gateway logs off), a
  * write about a visitor, an answer that carries a word of the programme, a call to anything
@@ -24,7 +29,23 @@
  */
 import flags from '../../public/flags.json';
 import askConfig from '../../data/2026/ask.json';
+import glossary from '../../data/2026/glossary.json';
+import riposte from '../../data/2026/riposte.json';
 import { parseAskRequest, type AskMode, type AskResponse } from '../lib/ask-contract.js';
+import { validateExplanation } from '../lib/ask-validate.js';
+import { consentOf } from '../lib/chat-consent.js';
+import {
+  FOLLOW_UPS,
+  MAX_CHAT_IDS,
+  cleanQuestion,
+  parseChatRequest,
+  parseGistsRequest,
+  parseGistsResponse,
+  type ChatResponse,
+  type FollowUp,
+  type GistsResponse,
+} from '../lib/chat-contract.js';
+import { knownOf, notionsIn } from '../lib/notions.js';
 import { effectiveDate, type SilenceOverride } from '../lib/silence.js';
 import {
   EXHAUSTED,
@@ -37,11 +58,13 @@ import {
   type ModelRun,
 } from './ask.js';
 import { DEFAULT_HARD_STOP } from './budget-core.js';
+import { EXPLAIN_ROOM, answerChat, answerGists, explainedOutput } from './chat.js';
 import { clientKey, readBody } from './guards.js';
 import { keptTerms, loadMeasures } from './measures.js';
-import { MODELS, isModelKey, type ModelKey } from './models.js';
+import { MODELS, isModelKey, keepsNothing, type ModelKey } from './models.js';
 import {
   estimateNeurons,
+  explainRequest,
   gistRequest,
   isGistVariant,
   judgeRequest,
@@ -96,6 +119,59 @@ function configured(): { mode: AskMode; model: ModelSpec | null; minOverlap: num
     model: isModelKey(model) ? MODELS[model] : null,
     minOverlap: typeof minOverlap === 'number' ? minOverlap : 1,
   };
+}
+
+/**
+ * What a person wrote and re-read (data/2026/glossary.json, riposte.json), built into the
+ * Worker: the objections that never reach a model, the cards handed to it with a question.
+ */
+const KNOWN = knownOf(glossary.entries, riposte.entries);
+
+/**
+ * The chat as this Worker runs it: open only when data/2026/ask.json says "chat" AND names a
+ * model whose host writes that it keeps nothing of a call (src/worker/models.ts) — a question
+ * is never handed to another.
+ */
+function chatConfigured(): {
+  mode: 'chat' | 'off';
+  model: ModelSpec | null;
+  minShared: number | undefined;
+} {
+  const config: Record<string, unknown> = askConfig;
+  const { mode, model, min_shared: minShared } = config;
+  const reads = isModelKey(model) && keepsNothing(model) ? MODELS[model] : null;
+  return {
+    mode: mode === 'chat' && reads !== null ? 'chat' : 'off',
+    model: reads,
+    minShared: typeof minShared === 'number' ? minShared : undefined,
+  };
+}
+
+/**
+ * One call to the model of the chat, straight to Workers AI, with a deadline. No gateway: so no
+ * cache keeping an answer under a key computed from a question, and no log of one (D16.51).
+ */
+async function runDirect(
+  env: Env,
+  model: ModelSpec,
+  request: Record<string, unknown>,
+): Promise<ModelRun | Exhausted | null> {
+  const ai = env.AI as unknown as {
+    run: (
+      model: string,
+      input: unknown,
+      options: { returnRawResponse: true; signal: AbortSignal },
+    ) => Promise<Response>;
+  };
+  try {
+    const response = await ai.run(model.id, request, {
+      returnRawResponse: true,
+      signal: AbortSignal.timeout(MODEL_TIMEOUT_MS),
+    });
+    return await readRun(response);
+  } catch (error) {
+    return saysExhausted(error) ? EXHAUSTED : null;
+  }
 }
 
 /**
@@ -177,6 +253,74 @@ async function handleAsk(request: Request, env: Env, origin: string): Promise<Re
     release: (reserved) => budget.release(reserved),
     close: () => budget.close(),
     run: (body) => (model === null ? Promise.resolve(null) : runModel(env, model, body)),
+  });
+  return json(answer);
+}
+
+const LOCAL_GISTS: GistsResponse = { kind: 'local' };
+const QUIET: ChatResponse = { kind: 'quiet', why: 'none' };
+
+/** The hour, as both routes of the chat need it: frozen or not, and until when. */
+function silenceNow(): { silent: boolean; reopen: string | null } {
+  const now = new Date();
+  const state = effectiveDate(now, { serverDate: now, override: OVERRIDE });
+  return { silent: state.silence, reopen: state.reopenUtc?.toISOString() ?? null };
+}
+
+async function handleGists(request: Request, env: Env, origin: string): Promise<Response> {
+  if (request.method !== 'POST') return empty(405);
+  // Same origin only: no CORS is sent, and a page of another site cannot read our sentences.
+  if (request.headers.get('origin') !== origin) return empty(403);
+  const asked = parseGistsRequest(await readBody(request));
+  if (asked === null) return empty(400);
+
+  const silence = silenceNow();
+  const config = chatConfigured();
+  if (!silence.silent && config.mode === 'chat' && !(await withinRate(request, env))) {
+    return json(LOCAL_GISTS);
+  }
+  const budget = env.BUDGET.getByName('global');
+  const answer = await answerGists(asked, {
+    mode: config.mode,
+    model: config.model,
+    corpusVersion: env.CORPUS_VERSION,
+    silence,
+    db: env.DB,
+    available: () => budget.available(EXPLAIN_ROOM, hardStop(env)),
+  });
+  return json(answer);
+}
+
+async function handleChat(request: Request, env: Env, origin: string): Promise<Response> {
+  if (request.method !== 'POST') return empty(405);
+  // Same origin only: a form on another site cannot spend our allowance, nor send a question.
+  if (request.headers.get('origin') !== origin) return empty(403);
+  const asked = parseChatRequest(await readBody(request));
+  if (asked === null) return empty(400);
+
+  const silence = silenceNow();
+  const config = chatConfigured();
+  if (!silence.silent && config.mode === 'chat' && !(await withinRate(request, env))) {
+    return json(QUIET);
+  }
+  const budget = env.BUDGET.getByName('global');
+  const model = config.model;
+  const answer = await answerChat(asked, {
+    mode: config.mode,
+    model,
+    corpusVersion: env.CORPUS_VERSION,
+    silence,
+    db: env.DB,
+    // The agreement this Worker knows: the kit it was built with, worded for its model.
+    consent: model === null ? '' : consentOf(model.name),
+    objections: KNOWN.objections,
+    cards: KNOWN.cards,
+    minShared: config.minShared,
+    reserve: (neurons) => budget.reserve(neurons, hardStop(env)),
+    settle: (reserved, spent) => budget.settle(reserved, spent),
+    release: (reserved) => budget.release(reserved),
+    close: () => budget.close(),
+    run: (body) => (model === null ? Promise.resolve(null) : runDirect(env, model, body)),
   });
   return json(answer);
 }
@@ -279,6 +423,7 @@ async function handleBench(request: Request, env: Env): Promise<Response> {
   if (!isRecord(body) || !(await keyMatches(body['key'], env.BENCH_KEY))) return empty(404);
   if (!(await withinRate(request, env))) return empty(429);
   const { model: key, mode, min_overlap: minOverlap, skip_cache: skipCache, variant } = body;
+  if (mode === 'explain') return benchExplain(body, env);
   const asked = parseAskRequest({
     corpus: env.CORPUS_VERSION,
     ids: body['ids'],
@@ -357,14 +502,88 @@ async function handleBench(request: Request, env: Env): Promise<Response> {
   });
 }
 
+/**
+ * The explanation, on the bench (PLAN-CHAT §6, lot C8): the same instruction, the same direct
+ * call and the same control as `/api/chat` — with a question of the bench's own set, and read
+ * sentences the bench hands in: ours, written on the editor's machine, so that explanations can
+ * be measured before any sentence is deposited. The base is not read at all.
+ *
+ * What the model wrote leaves as sentences — it was shown no text of the book, so it holds
+ * none — and only as sentences: whatever else an output carries stays here (`explainedOutput`).
+ */
+async function benchExplain(body: Record<string, unknown>, env: Env): Promise<Response> {
+  const { model: key, question, follow, min_shared: minShared } = body;
+  // Read as the page would read them: identifiers of the book, one line each, each once.
+  const read = parseGistsResponse({
+    kind: 'gists',
+    corpus: env.CORPUS_VERSION,
+    gists: body['gists'],
+    ai: false,
+  });
+  const gists = read?.kind === 'gists' ? read.gists : [];
+  const asked = typeof question === 'string' ? cleanQuestion(question) : null;
+  const again: FollowUp | null | undefined =
+    follow === undefined ? null : FOLLOW_UPS.find((known) => known === follow);
+  if (
+    !isModelKey(key) ||
+    asked === null ||
+    again === undefined ||
+    gists.length === 0 ||
+    gists.length > MAX_CHAT_IDS
+  ) {
+    return empty(400);
+  }
+  const model = MODELS[key];
+  const named = new Set(notionsIn(asked, KNOWN.cards));
+  const cards = KNOWN.cards.filter((card) => named.has(card.id));
+  const input = explainRequest(asked, gists, cards, again, model);
+  const reserved = estimateNeurons(input, model);
+  const budget = env.BUDGET.getByName('global');
+  const base = { corpus: env.CORPUS_VERSION, ids: gists.map((gist) => gist.id) };
+  if (!(await budget.reserve(reserved, hardStop(env)))) {
+    return json({ ...base, ran: false, budget: 'spent', used: await budget.used() });
+  }
+  const called = Date.now();
+  const run = await runDirect(env, model, input);
+  const modelMs = Date.now() - called;
+  if (run === EXHAUSTED) {
+    await closeAndRelease(env, reserved);
+    return json({ ...base, ran: false, budget: 'spent', used: await budget.used() });
+  }
+  if (run === null) return json({ ...base, ran: false, model_ms: modelMs, reserved });
+  await budget.settle(reserved, run.neurons ?? reserved);
+  const verdict = validateExplanation(
+    run.output,
+    { question: asked, shown: [...gists.map((g) => g.text), ...cards.map((c) => c.plain)] },
+    typeof minShared === 'number' ? { minShared } : {},
+  );
+  return json({
+    ...base,
+    ran: true,
+    // What the schema names and nothing else: an output of another shape leaves as a marker.
+    output: explainedOutput(run.output),
+    verdict,
+    cards: cards.map((card) => card.id),
+    neurons: run.neurons,
+    reserved,
+    model_ms: modelMs,
+    used: await budget.used(),
+  });
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
     try {
+      if (url.pathname === '/api/gists') return await handleGists(request, env, url.origin);
+      if (url.pathname === '/api/chat') return await handleChat(request, env, url.origin);
       if (url.pathname === '/api/ask') return await handleAsk(request, env, url.origin);
       if (url.pathname === '/api/bench') return await handleBench(request, env);
     } catch {
-      // Whatever broke, the page has an answer to show: what it found by itself.
+      // Whatever broke, the page has something to show: what it found by itself, and its read
+      // sentences without an explanation.
+      if (url.pathname === '/api/gists') return json(LOCAL_GISTS);
+      if (url.pathname === '/api/chat') return json(QUIET);
       return url.pathname === '/api/ask' ? json(LOCAL) : empty(500);
     }
     return empty(404);

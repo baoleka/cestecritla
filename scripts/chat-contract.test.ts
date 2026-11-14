@@ -294,17 +294,22 @@ void test('one script of the page sends a question, and only what the pure modul
   }
 });
 
-void test('until its routes exist, the Worker reads no question', () => {
-  // Lot C5 replaces this test by the gates of the routes — in the same commit that gives the
-  // contract its first user in src/worker/. Until then no file there names it.
-  const users = readdirSync('src/worker')
-    .filter((name) => name.endsWith('.ts'))
-    .filter((name) =>
-      /chat-(?:contract|local|view)|api\/chat|api\/gists/.test(
-        readFileSync(join('src/worker', name), 'utf8'),
-      ),
-    );
-  assert.deepEqual(users, []);
+void test('in the Worker, each request of the chat is read once, by its own strict reader', () => {
+  const index = readFileSync('src/worker/index.ts', 'utf8').replace(
+    /\/\*[\s\S]*?\*\/|\/\/.*$/gm,
+    '',
+  );
+  // One call of each reader, each on the body of its own route — and no other way in.
+  assert.equal((index.match(/parseChatRequest\(/g) ?? []).length, 1);
+  assert.equal((index.match(/parseGistsRequest\(/g) ?? []).length, 1);
+  assert.match(index, /const asked = parseChatRequest\(await readBody\(request\)\);/);
+  assert.match(index, /const asked = parseGistsRequest\(await readBody\(request\)\);/);
+  // The agreement the Worker asks for is the one the page words: the same function, of the
+  // same kit, for the model that explains (src/lib/chat-consent.ts).
+  assert.match(index, /consent: model === null \? '' : consentOf\(model\.name\)/);
+  const sheet = readFileSync('src/components/ChatSheet.astro', 'utf8');
+  assert.match(sheet, /consent: consentOf\(model\)/);
+  assert.match(sheet, /from '\.\.\/lib\/chat-consent\.ts'/);
 });
 
 void test('the page reads the read sentences strictly, and carries no field it cannot name', () => {

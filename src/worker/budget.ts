@@ -18,6 +18,7 @@ import {
   BREAKER_MS,
   DEFAULT_HARD_STOP,
   close,
+  hasRoom,
   prune,
   release,
   reserve,
@@ -79,6 +80,15 @@ export class NeuronBudget extends DurableObject<Env> {
     const before = this.load();
     const now = Date.now();
     this.save(before, close(prune(before, now), now + BREAKER_MS));
+  }
+
+  /**
+   * True when `amount` neurons could be set aside now: the ledger has room and the breaker is
+   * open. Reserves nothing and writes nothing — what `/api/gists` asks before telling the page
+   * whether a model may explain.
+   */
+  available(amount: number, hardStop: number = DEFAULT_HARD_STOP): boolean {
+    return hasRoom(this.load(), amount, Date.now(), hardStop);
   }
 
   /** Neurons counted over the last twenty-four hours — what the bench reads. */

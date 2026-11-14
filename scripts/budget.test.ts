@@ -28,6 +28,7 @@ import {
   MAX_RESERVATION,
   WINDOW_HOURS,
   close,
+  hasRoom,
   hourOf,
   isClosed,
   prune,
@@ -201,6 +202,30 @@ void test('the breaker: closed, nothing is reserved; reopened, the next reservat
   assert.equal(close(closed, until + 60_000).closedUntil, until + 60_000);
 });
 
+void test('asking whether there is room reserves nothing — and says no at the stop, or when closed', () => {
+  const noon = utc(14, 12);
+  const state = counted([utc(14, 9), DEFAULT_HARD_STOP - 150]);
+  assert.equal(hasRoom(state, 100, noon), true);
+  // Asked a hundred times, the ledger has not moved: nothing was set aside.
+  for (let i = 0; i < 100; i += 1) hasRoom(state, 100, noon);
+  assert.equal(usedAt(state, noon), DEFAULT_HARD_STOP - 150);
+  assert.equal(reserve(state, 100, noon).allowed, true);
+  // At the stop — not across it by a neuron — and never for an amount that is not one.
+  assert.equal(hasRoom(state, 150, noon), true);
+  assert.equal(hasRoom(state, 151, noon), false);
+  for (const amount of [0, -1, Number.NaN, MAX_RESERVATION + 1]) {
+    assert.equal(hasRoom(state, amount, noon), false, String(amount));
+  }
+  // Closed by the platform's refusal: no room, whatever the ledger says — until it reopens.
+  const closed = close(EMPTY, noon + BREAKER_MS);
+  assert.equal(hasRoom(closed, 100, noon), false);
+  assert.equal(hasRoom(closed, 100, noon + BREAKER_MS), true);
+  // What is twenty-four hours old no longer counts.
+  const old = counted([utc(13, 9), DEFAULT_HARD_STOP]);
+  assert.equal(hasRoom(old, 100, utc(14, 9, 59)), false);
+  assert.equal(hasRoom(old, 100, utc(14, 10)), true);
+});
+
 void test('nothing is changed in place: every call returns another state', () => {
   const noon = utc(13, 12, 0);
   const state = close(counted([noon, 100], [utc(12, 9, 0), 40]), noon + BREAKER_MS);
@@ -246,6 +271,7 @@ interface Budget {
   settle(reserved: number, spent: number): void;
   release(reserved: number): void;
   close(): void;
+  available(amount: number, hardStop?: number): boolean;
   used(): number;
 }
 
@@ -406,13 +432,20 @@ void test('the object, refused by the platform: given back, closed thirty minute
   assert.deepEqual(state.rows('ledger'), []);
   assert.deepEqual(state.rows('breaker'), [{ id: 1, closed_until: refused + BREAKER_MS }]);
   assert.equal(budget.reserve(55), false);
+  // Asked whether a model may be asked, the object says no — and writes nothing to say it.
+  assert.equal(budget.available(55), false);
+  assert.deepEqual(state.rows('ledger'), []);
 
   // Twenty-nine minutes on, and woken again in between: still closed.
   t.mock.timers.setTime(refused + BREAKER_MS - 60_000);
   assert.equal((await wake(state)).reserve(55), false);
   assert.equal(state.rows('ledger').length, 0);
-  // Thirty minutes on: the next reservation is let through, and the instant is erased.
+  // Thirty minutes on: there is room again — said without setting anything aside — the next
+  // reservation is let through, and the instant is erased.
   t.mock.timers.setTime(refused + BREAKER_MS);
+  assert.equal(budget.available(55), true);
+  assert.deepEqual(state.rows('ledger'), []);
+  assert.equal(budget.available(55, 54), false);
   assert.equal(budget.reserve(55), true);
   assert.deepEqual(state.rows('breaker'), []);
   // The platform refuses the probe too: closed again, from now.

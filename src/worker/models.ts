@@ -12,6 +12,11 @@
  *
  * Prices are dollars per million tokens in the catalogue, turned into neurons at the public
  * rate of $0.011 per thousand: what the daily allowance of 10 000 neurons is counted in.
+ *
+ * `keeps` says what the host writes it keeps of a call (PLAN-CHAT §4, read on 14/11/2026 in
+ * the documentation of Workers AI): "nothing" for the models whose page states that neither
+ * the input nor the output is stored or used for training. Only those may read a question
+ * (`keepsNothing`); the others stay candidates of the bench, which sends no visitor's words.
  */
 import type { ModelSpec } from './prompt.js';
 
@@ -25,6 +30,7 @@ export const MODELS = {
     neuronsIn: neurons(0.351),
     neuronsOut: neurons(0.555),
     options: {},
+    keeps: 'nothing',
   },
   'gpt-oss-120b': {
     id: '@cf/openai/gpt-oss-120b',
@@ -33,6 +39,7 @@ export const MODELS = {
     neuronsOut: neurons(0.75),
     // A reasoning model: asked to think as little as it can, or it pays for thoughts nobody reads.
     options: { reasoning: { effort: 'low' } },
+    keeps: 'unstated',
   },
   'gemma-4-26b': {
     id: '@cf/google/gemma-4-26b-a4b-it',
@@ -40,6 +47,7 @@ export const MODELS = {
     neuronsIn: neurons(0.1),
     neuronsOut: neurons(0.3),
     options: { chat_template_kwargs: { enable_thinking: false } },
+    keeps: 'nothing',
   },
   'llama-3.3-70b': {
     id: '@cf/meta/llama-3.3-70b-instruct-fp8-fast',
@@ -47,6 +55,7 @@ export const MODELS = {
     neuronsIn: neurons(0.293),
     neuronsOut: neurons(2.253),
     options: {},
+    keeps: 'nothing',
   },
 } as const satisfies Record<string, ModelSpec>;
 
@@ -54,3 +63,6 @@ export type ModelKey = keyof typeof MODELS;
 
 export const isModelKey = (value: unknown): value is ModelKey =>
   typeof value === 'string' && value in MODELS;
+
+/** True for a model that may read a visitor's question: its host writes that it keeps nothing. */
+export const keepsNothing = (key: ModelKey): boolean => MODELS[key].keeps === 'nothing';

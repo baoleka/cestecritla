@@ -175,6 +175,11 @@ if (
   };
 
   // --- drawing
+  /**
+   * A sentence of ours or of the model, set as the site sets its own: the base and the control
+   * keep one spelling of apostrophes, the page shows typographic ones (src/lib/strings.ts).
+   */
+  const set = (text: string): string => text.replace(/'/g, '’');
   const block = (title: string, badge: string | null, className = ''): HTMLElement => {
     const node = el('section', undefined, `c-block ${className}`.trim());
     node.tabIndex = -1;
@@ -267,7 +272,7 @@ if (
         const part = block(s.gistsTitle, read ? s.gistsBadge : null, 'c-gists');
         for (const row of measures.rows) {
           const item = el('div', undefined, 'c-row');
-          if (row.gist !== null) item.append(el('p', row.gist));
+          if (row.gist !== null) item.append(el('p', set(row.gist)));
           const line = source(row.id, row.gist === null);
           if (line !== null) item.append(line);
           part.append(item);
@@ -286,7 +291,10 @@ if (
         // a person reads, in the text itself.
         const text = el('p');
         text.dataset.generatedBy = 'ai';
-        text.append(el('span', `${s.aiMark} — `, 'c-ai-mark'), explanation.sentences.join(' '));
+        text.append(
+          el('span', `${s.aiMark} — `, 'c-ai-mark'),
+          set(explanation.sentences.join(' ')),
+        );
         part.append(text);
       }
       if (view.ai.explanations.length > 0) {
