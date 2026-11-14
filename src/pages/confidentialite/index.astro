@@ -7,13 +7,16 @@
  * what the HOST sees, as any host does — and that a link to the official site leaves this one.
  *
  * Only what is true of this build is rendered (D16.4). While the site answers no question,
- * the search is local and that is the whole story. When it does, the page says that the
- * sentence typed does not leave the phone (D16.22), what leaves in its place at the gesture
- * « Demander » — words of the book and numbers of measures — to whom, that we log none of it,
- * and the two things that are kept all the same, by Cloudflare, each for what it is: the
- * answer, thirty days under a code computed from what was sent (the gateway's cache), and a
- * counter under a code computed from the address, one minute (the rate limiter). No third
- * party guards the gesture: there is no bot check (D16.23).
+ * the search is local and that is the whole story. When it does (D16.45 to D16.51), the page
+ * says what leaves at the gesture « Demander » — numbers of measures, not the sentence — that
+ * the question itself leaves only after the visitor agreed, to whom, that neither we nor the
+ * host of the model keep it, that the agreement and the conversation live in the open page
+ * and nowhere else, and the one thing that is kept all the same, by Cloudflare: a counter
+ * under a code computed from the address, one minute (the rate limiter). The call of the chat
+ * goes through no cache. No third party guards the gesture: there is no bot check (D16.23).
+ *
+ * This is what the sheet needs to be true today. The whole page — the legal basis, the
+ * register, the editor's reading and its date — is lot C9 of PLAN-CHAT.
  *
  * In a build that shows the game (D16.14), the page also says what the game writes on the
  * phone — the one thing the site ever writes anywhere — from the one map of those writings
@@ -44,7 +47,8 @@ const GameStorage = __CEL_GAME_WRITES__
   <ul class="counts">
     <li>{t('privacy.policy.01')}</li>
     <li>{asking ? t('privacy.policy.02', { model }) : t('privacy.policy.02.local')}</li>
-    {asking && <li>{t('privacy.policy.03.ask')}</li>}
+    {asking && <li id="demander">{t('privacy.policy.consent')}</li>}
+    {asking && <li>{t('privacy.policy.thread')}</li>}
     {asking && <li>{t('privacy.policy.rate')}</li>}
     <li>{t('privacy.no_measure')}</li>
     <li>{t('privacy.policy.09')}</li>

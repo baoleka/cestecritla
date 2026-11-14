@@ -1,0 +1,118 @@
+---
+/**
+ * The sheet of « Demander » (PLAN-CHAT §1, D16.48) — a dialog that rises from the bottom of
+ * the screen and holds the conversation: the thread, then the field.
+ *
+ * It is in the page from the first paint, closed and empty; its script is fetched at the first
+ * press of the button, never with the page (src/components/Search.astro). Everything a turn
+ * shows is drawn by that script from what the pure modules decide (src/lib/chat-view.ts).
+ *
+ * What is written here, and not by the script: the frame — « Site non officiel. » stands in it,
+ * as in the frame of every screen — and THE AGREEMENT. Its lines are rendered from the kit in
+ * the order of `CONSENT_LINES` — the first is its title — into a <template> the script copies
+ * without touching a word:
+ * what the visitor reads is what the version of the agreement was computed on
+ * (src/lib/chat-data.ts), and a request that carries another version is not read (D16.46).
+ *
+ * Rendered only in a build whose field asks: in mode "off" this file is not even imported.
+ */
+import '../styles/chat.css';
+import {
+  CONSENT_BUTTONS,
+  CONSENT_LINES,
+  chatPlain,
+  consentOf,
+  recognisable,
+} from '../lib/chat-data.ts';
+import { manifest } from '../lib/edition.ts';
+import { safeJson, t } from '../lib/strings.ts';
+
+interface Props {
+  /** The name of the model that explains, as data/2026/ask.json gives it. */
+  model: string;
+}
+const { model } = Astro.props;
+
+const [title = '', ...lines] = CONSENT_LINES.map((key) => t(key, { model }));
+const [accept = '', decline = ''] = CONSENT_BUTTONS.map((key) => t(key, { model }));
+
+const config = {
+  corpus: manifest().meta.corpus_version,
+  consent: consentOf(model),
+  plain: `/data/clair-${chatPlain().fingerprint}.json`,
+  ...recognisable(),
+  strings: {
+    question: t('chat.question_label'),
+    searching: t('chat.searching'),
+    plainTitle: t('chat.plain.title'),
+    reviewed: t('chat.human_reviewed_badge'),
+    reviewedLink: t('chat.reviewed.link'),
+    card: t('chat.glossary_link', { term: '{term}' }),
+    gistsTitle: t('chat.gists.title'),
+    gistsBadge: t('chat.gists.badge'),
+    where: t('search.result.where'),
+    incipit: t('quote.incipit_label'),
+    firstWords: t('quote.first_words_label'),
+    noneTitle: t('refusal.not_found.title'),
+    noneLead: t('search.no_results_hint'),
+    offTopic: t('refusal.off_topic'),
+    silence: t('silence.chat.local', { reopenTime: '{reopenTime}' }),
+    paused: t('silence.paused'),
+    aiTitle: t('chat.ai.title'),
+    aiMark: t('chat.ai_badge', { model }),
+    aiNote: t('chat.ai_mention', { model }),
+    aiWaiting: t('chat.ai.waiting'),
+    method: t('chat.method_link'),
+    simpler: t('chat.follow.simpler'),
+    example: t('chat.follow.example'),
+  },
+};
+---
+
+<dialog class="c-sheet" id="chat-sheet" aria-labelledby="chat-title">
+  <div class="c-head">
+    <p class="unofficial">{t('independence.unofficial')}</p>
+    <h2 id="chat-title">{t('chat.title')}</h2>
+    <form method="dialog">
+      <button class="quiet">{t('common.close')}</button>
+    </form>
+  </div>
+
+  {/* What scrolls: a line that says where the conversation lives, then the thread. */}
+  <div class="c-scroll" id="chat-scroll" tabindex="-1">
+    <p class="c-intro ref">{t('chat.memory')}</p>
+    <div class="c-thread" id="chat-thread" role="log" aria-labelledby="chat-title"></div>
+  </div>
+
+  {/* The agreement, word for word as its version was computed: the script copies it. */}
+  <template id="chat-consent" data-title={title}>
+    {lines.map((line) => <p data-consent-line>{line}</p>)}
+    <p><a href="/confidentialite/#demander">{t('chat.consent.more')}</a></p>
+    <p class="c-actions">
+      <button type="button" class="quiet" data-consent="accept">{accept}</button>
+      <button type="button" class="quiet" data-consent="decline">{decline}</button>
+    </p>
+  </template>
+
+  <form class="c-composer" id="chat-form">
+    <label class="sr-only" for="chat-q">{t('chat.field.label')}</label>
+    <input
+      id="chat-q"
+      name="chat-q"
+      type="text"
+      autocomplete="off"
+      autocapitalize="sentences"
+      enterkeyhint="send"
+      maxlength="300"
+      placeholder={t('chat.field.label')}
+    />
+    <button type="submit">{t('chat.field.send')}</button>
+  </form>
+  {/* Second gestures, kept small: the thread is what the sheet is for. */}
+  <p class="c-foot">
+    <button type="button" class="c-link" id="chat-clear">{t('chat.clear')}</button>
+    <button type="button" class="c-link" id="chat-ai-stop" hidden>{t('chat.ai.stop')}</button>
+    <button type="button" class="c-link" id="chat-ai-start" hidden>{t('chat.ai.start')}</button>
+  </p>
+  <script type="application/json" id="chat-config" set:html={safeJson(config)} is:inline />
+</dialog>

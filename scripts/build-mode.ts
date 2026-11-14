@@ -153,7 +153,7 @@ export function refusedArguments(given: readonly string[]): string[] {
 export interface DistContent {
   /** The published files of the game: `data/jeu-<fingerprint>.json`. */
   gameFiles: string[];
-  /** The home page carries the block that sends a question (`id="ask-config"`). */
+  /** The home page carries the sheet that sends a question (`id="chat-config"`). */
   asks: boolean;
 }
 
@@ -166,7 +166,7 @@ export function readDist(dir = 'dist'): DistContent {
           .filter((name) => /^jeu-.*\.json$/.test(name))
           .sort()
       : [],
-    asks: existsSync(home) && readFileSync(home, 'utf8').includes('id="ask-config"'),
+    asks: existsSync(home) && readFileSync(home, 'utf8').includes('id="chat-config"'),
   };
 }
 

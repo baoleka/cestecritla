@@ -111,11 +111,11 @@ const fast = process.argv.includes('--fast');
 const neutral = process.argv.includes('--neutral');
 /** The holding site (D15.4): astro.config.ts switches its source tree on CEL_BUILD. */
 const mode: BuildMode = process.argv.includes('--holding') ? 'holding' : 'app';
-/** The ask screen, for its tests: `--ask-test answer|select` builds into dist-ask/. */
+/** The sheet of « Demander », for its tests: `--ask-test chat` builds into dist-ask/. */
 const askTestAt = process.argv.indexOf('--ask-test');
-const askTest = askTestAt === -1 ? null : (process.argv[askTestAt + 1] ?? 'answer');
-if (askTest !== null && askTest !== 'answer' && askTest !== 'select') {
-  throw new Error('--ask-test takes "answer" or "select"');
+const askTest = askTestAt === -1 ? null : (process.argv[askTestAt + 1] ?? 'chat');
+if (askTest !== null && askTest !== 'chat') {
+  throw new Error('--ask-test takes "chat"');
 }
 if (askTest !== null && mode !== 'app') throw new Error('--ask-test is a build of the app');
 /**

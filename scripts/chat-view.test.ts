@@ -12,6 +12,7 @@ import {
   explainable,
   newTurn,
   nextStep,
+  settled,
   shownIds,
   viewOf,
   withExplanation,
@@ -294,6 +295,26 @@ void test('whom to vote for: « Ici, on ne parle que du programme. » — no mea
   const read = withGists(turn, gists(true, A));
   assert.equal(nextStep(read, page({ consent: 'given' })), null);
   assert.deepEqual(shownIds(read, page()), []);
+});
+
+void test('a turn is settled when it waits for nothing and owes nothing', () => {
+  const given = page({ consent: 'given' });
+  assert.equal(settled(newTurn(QUESTION, NOTHING, null), given), false);
+  assert.equal(settled(searched(), given), false);
+  assert.equal(settled({ ...searched(), gists: 'pending' }, given), false);
+  const read = withGists(searched(), gists(true, A));
+  // Agreed: the explanation is due, then awaited, then there — or not, and that is whole too.
+  assert.equal(settled(read, given), false);
+  assert.equal(settled({ ...read, awaited: null }, given), false);
+  assert.equal(
+    settled(withExplanation({ ...read, awaited: null }, null, null, given).turn, given),
+    true,
+  );
+  // Not agreed: the turn waits for nobody but the visitor.
+  assert.equal(settled(read, page()), true);
+  assert.equal(settled(searched({ rows: [] }), given), true);
+  assert.equal(settled({ ...searched(), silence: '' }, given), true);
+  assert.equal(settled(withGists(searched(), null), given), true);
 });
 
 void test('a turn lives in memory: nothing here reads or writes a storage, an address or a cookie', () => {

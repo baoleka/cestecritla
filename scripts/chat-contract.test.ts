@@ -242,34 +242,69 @@ void test('the two contracts keep their promises apart: `/api/ask` still has no 
   assert.deepEqual(carrying, ['src/lib/chat-contract.ts']);
 });
 
-void test('until the routes and the sheet exist, nothing that runs can send or read a question', () => {
-  // Lots C5 and C6 replace this test by the gates of PLAN-CHAT §8 — in the same commit that
-  // gives the contract its first user that RUNS: a script of the page, a component, a route of
-  // the Worker. Until then it is read by pure modules alone: the control, and what decides —
-  // without sending anything — what a gesture would send and what the sheet would show.
-  const users = (dir: string): string[] =>
+void test('one script of the page sends a question, and only what the pure modules built (PLAN-CHAT §8)', () => {
+  const strip = (source: string): string => source.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
+  const under = (dir: string): string[] =>
     readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
       const path = join(dir, entry.name);
-      if (entry.isDirectory()) return users(path);
-      const reads =
-        /\.(?:ts|astro)$/.test(entry.name) &&
-        /chat-(?:contract|local|view)/.test(readFileSync(path, 'utf8'));
-      return reads ? [path] : [];
+      if (entry.isDirectory()) return under(path);
+      return /\.(?:ts|astro)$/.test(entry.name) ? [path] : [];
     });
-  assert.deepEqual(users('src').sort(), [
-    'src/lib/ask-validate.ts',
-    'src/lib/chat-local.ts',
-    'src/lib/chat-view.ts',
+  // What the visitor's browser runs or renders: everything under src/ but the pure modules of
+  // src/lib/ and the Worker. There, one file names the two routes of the chat.
+  const page = under('src').filter((file) => !/^src\/(?:lib|worker)\//.test(file));
+  const naming = page.filter((file) =>
+    /api\/(?:chat|gists)/.test(strip(readFileSync(file, 'utf8'))),
+  );
+  assert.deepEqual(naming, ['src/scripts/chat.ts']);
+  const sheet = strip(readFileSync('src/scripts/chat.ts', 'utf8'));
+  // Two requests leave it, each through the one sender, each with the object a pure module
+  // built — and that sender is its only way out, with the fetch of our own static texts.
+  assert.deepEqual(sheet.match(/\bpost\('[^']+', \w+,/g), [
+    "post('/api/gists', request,",
+    "post('/api/chat', request,",
   ]);
-  // …and those modules send nothing themselves: no request, no storage, no address.
+  assert.match(sheet, /const request = turn === undefined \? null : gistsRequestOf\(/);
+  assert.match(sheet, /const request = chatRequestOf\(\{/);
+  assert.equal((sheet.match(/\bfetch\(/g) ?? []).length, 2);
+  assert.match(sheet, /fetch\(config\.plain, \{ credentials: 'omit' \}\)/);
+  assert.doesNotMatch(sheet, /XMLHttpRequest|sendBeacon|WebSocket|EventSource/);
+  // The agreement travels only when it was given on this page.
+  assert.match(sheet, /consent: page\.consent === 'given' \? config\.consent : null/);
+  // Nothing typed is written anywhere: no storage, no address, no cookie — and no log.
+  assert.doesNotMatch(
+    sheet,
+    /localStorage|sessionStorage|indexedDB|document\.cookie|location\.|history\.|console\./,
+  );
+  // What is shown is text: no markup is ever built from a string.
+  assert.doesNotMatch(sheet, /innerHTML|outerHTML|insertAdjacentHTML|document\.write/);
+  // The thread is emptied when the page is left.
+  assert.match(sheet, /addEventListener\('pagehide'/);
+  // The pure modules send nothing themselves.
   for (const file of [
     'src/lib/chat-contract.ts',
     'src/lib/chat-local.ts',
     'src/lib/chat-view.ts',
   ]) {
-    const code = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
-    assert.doesNotMatch(code, /fetch\(|XMLHttpRequest|sendBeacon|WebSocket|Storage|cookie/, file);
+    assert.doesNotMatch(
+      strip(readFileSync(file, 'utf8')),
+      /fetch\(|XMLHttpRequest|sendBeacon|WebSocket|Storage|cookie/,
+      file,
+    );
   }
+});
+
+void test('until its routes exist, the Worker reads no question', () => {
+  // Lot C5 replaces this test by the gates of the routes — in the same commit that gives the
+  // contract its first user in src/worker/. Until then no file there names it.
+  const users = readdirSync('src/worker')
+    .filter((name) => name.endsWith('.ts'))
+    .filter((name) =>
+      /chat-(?:contract|local|view)|api\/chat|api\/gists/.test(
+        readFileSync(join('src/worker', name), 'utf8'),
+      ),
+    );
+  assert.deepEqual(users, []);
 });
 
 void test('the page reads the read sentences strictly, and carries no field it cannot name', () => {

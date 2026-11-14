@@ -56,14 +56,10 @@ const ENGINE_NAMES: Record<string, string> = {
   {
     /* How a question is answered (D16.4) — said only when the site answers questions. The
        figures of the bench join this block when a bench has run (lot I5). */
-    site.mode !== 'off' && (
+    site.mode === 'chat' && (
       <>
         <h2 id="reponse">{t('accuracy.ask.title')}</h2>
-        <p>
-          {site.mode === 'answer'
-            ? t('about.ai_line', { model })
-            : t('about.ai_line.select', { model })}
-        </p>
+        <p>{t('about.ai_line', { model })}</p>
         <p>{t('about.ai_limits')}</p>
         <p>
           {t('about.ai_reviewed')} <a href="/methodologie/">{t('accuracy.method_link')}</a>

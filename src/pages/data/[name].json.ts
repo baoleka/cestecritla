@@ -7,6 +7,10 @@
  *                                rationed incipit of the key measures. Plus our synonyms.
  *   /data/jeu-<fingerprint>.json the game: its words, where each is written, and the titles
  *                                of the tiles — only in a build that shows the game.
+ *   /data/clair-<fingerprint>.json  « En clair »: our cards and our answers to objections, the
+ *                                texts a person re-read — only in a build whose field asks
+ *                                (src/lib/chat-data.ts). Fetched with the sheet, never with
+ *                                the page.
  *
  * The corpus version is in the file name, so the files can be cached for a year
  * (public/_headers): a new edition of the book gets new names, not stale bytes.
@@ -23,6 +27,8 @@ import {
   partShort,
   sections,
 } from '../../lib/edition.ts';
+import { askSite } from '../../lib/ask-config.ts';
+import { chatPlain } from '../../lib/chat-data.ts';
 import { buildGame, gameSite } from '../../lib/game-data.ts';
 import { t } from '../../lib/strings.ts';
 
@@ -30,12 +36,15 @@ const version = manifest().meta.corpus_version;
 
 /** The game's data exists only in a build that shows the game (src/lib/game-data.ts). */
 const game = gameSite().on ? buildGame() : null;
+/** The texts of « En clair » exist only in a build whose field opens the sheet. */
+const plain = askSite().mode === 'chat' ? chatPlain() : null;
 
 export function getStaticPaths() {
   return [
     { params: { name: `index-${version}` } },
     { params: { name: `meta-${version}` } },
     ...(game === null ? [] : [{ params: { name: `jeu-${game.fingerprint}` } }]),
+    ...(plain === null ? [] : [{ params: { name: `clair-${plain.fingerprint}` } }]),
   ];
 }
 
@@ -72,6 +81,7 @@ function meta(): string {
 function body(name: string | undefined): string {
   if (name?.startsWith('index-') === true) return index();
   if (name?.startsWith('jeu-') === true && game !== null) return JSON.stringify(game.data);
+  if (name?.startsWith('clair-') === true && plain !== null) return JSON.stringify(plain.data);
   return meta();
 }
 

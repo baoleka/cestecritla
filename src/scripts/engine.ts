@@ -1,13 +1,13 @@
 /**
  * The search engine of the page, loaded once and shared: the search uses it while one types,
- * and « Demander » uses it to name the measures an answer points at — and to show what the
- * page found by itself when no model answers.
+ * and the sheet of « Demander » uses it to choose the measures it shows, name them and link
+ * them.
  *
  * Two static files, fetched on the first sign that someone is going to search: the index
  * (stems, no sentence) and the titles. Nothing typed is ever sent to get them.
  */
 import MiniSearch from 'minisearch';
-import { askedOf, type Asked } from '../lib/ask-local.ts';
+import type { Ranked } from '../lib/chat-local.ts';
 import {
   INDEX_OPTIONS,
   buildQuery,
@@ -71,15 +71,14 @@ export function findSections(engine: Engine, question: string, max: number): Sec
 }
 
 /**
- * What « Demander » sends for a question (D16.22) — never the question: the measures this
- * search finds for it, and the words of the book it matched (src/lib/ask-local.ts).
+ * The measures a question finds, best first, each with its score — what the sheet of
+ * « Demander » chooses its rows from (src/lib/chat-local.ts). The same search as while typing.
  */
-export function findForAsk(engine: Engine, question: string): Asked {
+export function findRanked(engine: Engine, question: string): Ranked[] {
   const query = buildQuery(question, expand(question, engine.meta.synonyms));
-  const hits = engine.index
+  return engine.index
     .search(query as Parameters<typeof engine.index.search>[0], searchOptions())
-    .map((r) => ({ id: String(r.id), score: r.score, terms: r.terms }));
-  return askedOf(hits, Object.keys(engine.meta.items));
+    .map((r) => ({ id: String(r.id), score: r.score }));
 }
 
 /** An element holding text — never markup: what a visitor typed is not parsed as HTML. */

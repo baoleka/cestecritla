@@ -1,16 +1,22 @@
 /**
  * What the page does at the gesture « Demander », in Node — for the bench and for the tests.
  *
- * Since D16.22 the question never leaves the phone: the page searches, and sends the measures
- * its search found and the words of the book it matched (src/lib/ask-local.ts). Whoever wants
- * to ask what the page would ask — the bench, which must measure the production path — has to
- * search as the page does: the same public index, the same synonyms, the same options, the
- * same function. Only public files are read: this runs anywhere, CI included.
+ * The page searches by itself, and what it sends is what its search found. Whoever wants to
+ * ask what the page would ask has to search as the page does: the same public index, the same
+ * synonyms, the same options, the same functions. Only public files are read: this runs
+ * anywhere, CI included.
+ *
+ *   rows    what the sheet of the chat shows and names to `/api/gists` (src/lib/chat-local.ts):
+ *           the three measures the search ranks best;
+ *   asked   what the bench of the written answer names to `/api/bench` (src/lib/ask-local.ts):
+ *           measures and words of the book — the request of D16.22, kept for the bench;
+ *   own     one measure per best section: what the page of D16.22 showed by itself.
  */
 import { readFileSync } from 'node:fs';
 import MiniSearch from 'minisearch';
 import { MAX_SELECTED } from '../src/lib/ask-contract.js';
 import { askedOf, type Asked } from '../src/lib/ask-local.js';
+import { rowsOf } from '../src/lib/chat-local.js';
 import {
   INDEX_OPTIONS,
   buildQuery,
@@ -23,7 +29,9 @@ import {
 import type { Manifest } from './aec26-types.js';
 
 export interface PageAsk {
-  /** What leaves the phone. `ids` empty: nothing is sent, the page says « rien trouvé ». */
+  /** The measures the sheet shows, best first. Empty: nothing is sent, « rien trouvé ». */
+  rows: string[];
+  /** What the bench sends for a written answer. */
   asked: Asked;
   /** What the page shows by itself when no model answers: one measure per best section. */
   own: string[];
@@ -48,7 +56,9 @@ export function loadPage(): (question: string) => PageAsk {
     const hits = index
       .search(query as Parameters<typeof index.search>[0], searchOptions())
       .map((r) => ({ id: String(r.id), score: r.score, terms: r.terms }));
+    const known = new Set(order);
     return {
+      rows: rowsOf(hits, (id) => known.has(id)),
       asked: askedOf(hits, order),
       own: groupBySection(hits)
         .slice(0, MAX_SELECTED)

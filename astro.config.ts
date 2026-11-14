@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import { askSite } from './src/lib/ask-config.ts';
 import { gameSite } from './src/lib/game-data.ts';
 
 // Static output, no adapter (D7.2): every page is HTML at build time and is served by
@@ -30,6 +31,10 @@ const game = site.on;
 const gameWrites = site.writes;
 /** The build deployed before each electoral silence window: neither question nor game. */
 const scrutin = process.env.CEL_SCRUTIN === '1';
+// Does the field of this build open the sheet of « Demander »? A constant the bundler can see,
+// like the game's: in mode "off" the page does not even import the sheet, and neither its
+// script nor its stylesheet nor a word of it reaches dist/ (PLAN-CHAT §4).
+const chat = !holding && askSite().mode === 'chat';
 
 export default defineConfig({
   output: 'static',
@@ -66,6 +71,7 @@ export default defineConfig({
     define: {
       __CEL_GAME__: JSON.stringify(game),
       __CEL_GAME_WRITES__: JSON.stringify(gameWrites),
+      __CEL_CHAT__: JSON.stringify(chat),
       __CEL_SCRUTIN__: JSON.stringify(scrutin),
     },
     json: { stringify: true },

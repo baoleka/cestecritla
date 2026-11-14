@@ -316,3 +316,38 @@ en arrière ; le navigateur d'Instagram ; un lecteur d'écran.
 - **Reste PROBABLE** : la forme du refus à travers le lien et la passerelle (lue dans le moteur
   local seulement). **Reste vrai** : chaque Worker a son propre registre pour un seul quota de
   compte — seul le coupe-circuit voit ce qui est dépensé ailleurs (à reprendre au lot C10).
+
+### 14 novembre 2026 — lot C6 : la feuille, côté page
+
+- **Fait, dans la build d'essai seulement** (`npm run build:ask`, `dist-ask/` ; Worker simulé,
+  0 neuron). Le site n'a plus que deux modes, « chat » ou « off » (`src/lib/ask-config.ts`) :
+  l'écran de la réponse écrite et de la sélection est retiré de la page avec son script. Le
+  bouton « Demander » ouvre `src/components/ChatSheet.astro` ; son script
+  (`src/scripts/chat.ts`, 5,3 Ko compressé) n'est chargé qu'au premier appui ; ce qui se décide
+  l'est par les modules purs du lot précédent. Les textes d'« En clair » sont un fichier
+  statique (`/data/clair-<empreinte>.json`), chargé avec la feuille.
+- **En mode « off » — la production — rien de la feuille n'est livré** : ni script, ni feuille
+  de style, ni un mot (`__CEL_CHAT__`, tenu par `scripts/check-build.test.ts`). L'ancien script
+  de « Demander », qui partait dans `dist/` sans jamais être chargé, n'y est plus.
+- **L'accord** est rendu depuis le kit dans l'ordre de `CONSENT_LINES`
+  (`src/lib/chat-data.ts`) : un titre, sept lignes, deux boutons de même poids. Sa version est
+  calculée sur ces mots-là, et le test de bout en bout la recalcule depuis l'écran.
+- **Le test de bout en bout est réécrit** (`scripts/e2e-ask.ts`, trois moteurs : 111 contrôles
+  dans Chromium, 104 dans Firefox et WebKit) : rien avant le geste ; au geste `corpus` et `ids`
+  seulement, les trois mesures que la recherche classe en tête ; aucune requête ne porte la
+  question avant l'accord, ni après un refus ; après l'accord, la question telle qu'affichée,
+  les mesures dont la phrase est à l'écran, la version de l'accord — et rien d'autre, relances
+  comprises ; chaque autre état sans un mot de panne ; rien d'écrit sur le téléphone ; le fil
+  vidé au retour arrière.
+- **Ce que les captures ont montré et que les contrôles ne voyaient pas** : à la deuxième
+  question la feuille entière défilait et son en-tête sortait de l'écran (un texte masqué,
+  positionné par rapport à la feuille au lieu du fil). Corrigé, et tenu depuis par un contrôle.
+  Le pied de la feuille a été resserré, le champ mis au gabarit du site, les césures coupées.
+- **Trois choix à relire sur l'aperçu** : les trois mesures les mieux classées plutôt qu'une
+  par section (mesuré : 239 lignes sur 396 dans une section attendue, contre 159 sur 394) ;
+  l'accord placé sous les phrases relues, donc sous la ligne de flottaison d'un téléphone ;
+  chaque relance proposée une seule fois par question.
+- **Reste pour ouvrir quoi que ce soit** : les routes (C5), le retrait de l'échelle côté Worker
+  et du déploiement (C7), `/confidentialite` entière (C9). Le kit passe en 0.8.0 ; les pages
+  « À propos », « Méthode », « Exactitude » et « Confidentialité » disent déjà ce que fait le
+  mode « chat », pour qu'aucune build d'essai ne dise faux.

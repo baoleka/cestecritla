@@ -175,6 +175,50 @@ void test('initial JS stays under the P2 budget of 100 KB gzip', () => {
   console.log(`  JS gzip: ${String(total)} B of ${String(budget)} B (${String(js.length)} files)`);
 });
 
+void test('a site that answers no question ships nothing of the sheet: not a script, not a text, not a word', () => {
+  if (skip || !existsSync('dist/sommaire/index.html')) return; // no build, or the holding one
+  // dist/ is the build of the mode data/2026/ask.json says. While that mode is "off" the home
+  // page does not even import the sheet (astro.config.ts, `__CEL_CHAT__`).
+  const mode = (JSON.parse(read('data/2026/ask.json')) as { mode?: unknown }).mode;
+  if (mode === 'chat') return;
+  assert.deepEqual(
+    files.filter((f) => /\/_astro\/chat\.|\/data\/clair-/.test(f)),
+    [],
+    'the script or the texts of the sheet are in dist/',
+  );
+  for (const file of textFiles.filter((f) => /\.(?:html|js)$/.test(f))) {
+    assert.doesNotMatch(
+      read(file),
+      /api\/chat|api\/gists|chat-sheet|chat-config|c-consent/,
+      `${relative('dist', file)} carries a piece of the sheet`,
+    );
+  }
+});
+
+void test('the script of the sheet is small, and fetched at the first press — never announced before', () => {
+  const sheet = walk('dist-ask/_astro').filter((f) => /\/chat\.[^/]+\.js$/.test(f));
+  if (sheet.length === 0) {
+    console.log('  (skipped: no dist-ask/ — run `npm run build:ask` first)');
+    return;
+  }
+  assert.equal(sheet.length, 1, 'one script for the sheet');
+  const [script = ''] = sheet;
+  const gz = gzipSync(readFileSync(script), { level: 9 }).byteLength;
+  // PLAN-CHAT §8: 12 KB at most. Measured 14/11/2026: about a third of it.
+  const budget = 12 * 1024;
+  assert.ok(gz <= budget, `the sheet's script: ${String(gz)} B gzip > ${String(budget)} B`);
+  console.log(`  sheet script: ${String(gz)} B gzip of ${String(budget)} B`);
+  // No page names it: neither as a script, nor as a preload. The search's script imports it
+  // when the button is pressed, and that import is the only mention of it anywhere.
+  const name = script.slice(script.lastIndexOf('/') + 1);
+  for (const page of walk('dist-ask').filter((f) => f.endsWith('.html'))) {
+    assert.ok(!read(page).includes(name), `${relative('dist-ask', page)} names ${name}`);
+  }
+  const importers = walk('dist-ask/_astro').filter((f) => f !== script && read(f).includes(name));
+  assert.equal(importers.length, 1, importers.join(', '));
+  assert.match(importers[0] ?? '', /Search\.astro/);
+});
+
 void test('fonts delivered stay under the P8 budget of 75 KB', () => {
   if (skip) return;
   const fonts = files.filter((f) => f.endsWith('.woff2') || f.endsWith('.woff'));

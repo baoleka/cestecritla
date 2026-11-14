@@ -2,14 +2,14 @@
  * "No AI mention without AI" (D9.15, H-CNF-17g, blocking) — and no mention of any component
  * that is not deployed.
  *
- * Since D16 a model may answer questions, and whether it does is DATA (data/2026/ask.json,
- * D16.4): "answer", "select" or "off". This gate follows that file. While the mode is "off" —
- * the state before a bench has passed, and the last rung of the ladder afterwards — the site is
- * deployed as static files, no model runs, and everything below applies as it always did. When
- * the mode opens, the gate inverts page by page: the notice is REQUIRED where the model
- * answers — the home page — allowed on the four pages that explain it, and forbidden everywhere
- * else. That half is exercised today on dist-ask/, the test build of the ask screen
- * (`npm run build:ask`), so that it is not discovered broken on the day the mode opens.
+ * Since D16 a model may be at work, and whether it is is DATA (data/2026/ask.json, D16.4):
+ * "chat" (D16.45 to D16.51) or "off". This gate follows that file. While the mode is "off" —
+ * the state of production since D16.33 — the site is deployed as static files, no model runs,
+ * and everything below applies as it always did. When the mode opens, the gate inverts page by
+ * page: the notice is REQUIRED where the model may explain — the home page — allowed on the
+ * four pages that explain it, and forbidden everywhere else. That half is exercised today on
+ * dist-ask/, the test build of the sheet (`npm run build:ask`), so that it is not discovered
+ * broken on the day the mode opens.
  *
  * The dossier first wrote this gate on KEY NAMES: "a `chat.*` or `*.ai_*` string". Measured, that
  * pattern misses five of the strings it must catch — `offline.chat`, `silence.chat`,
@@ -114,7 +114,7 @@ const PAGES_THAT_EXPLAIN = [
 ];
 
 /** Everything wrong with the AI notices of a build made for the given mode. */
-function noticeProblems(root: string, mode: 'off' | 'answer' | 'select', model: string): string[] {
+function noticeProblems(root: string, mode: 'off' | 'chat', model: string): string[] {
   const named = mentions(root);
   if (mode === 'off') {
     return [...named].map(([page, around]) => `${page} names an absent component: ${around}`);
@@ -126,19 +126,33 @@ function noticeProblems(root: string, mode: 'off' | 'answer' | 'select', model: 
   const read = (page: string): string => appVoiceOnly(readFileSync(join(root, page), 'utf8'));
   // Art. 50: at the latest at the first interaction — so before it, on the page that asks.
   const home = read('index.html');
-  if (!/Demander envoie des mots du livre, jamais la phrase, à une IA \(/.test(home)) {
-    problems.push('index.html does not say, before the first use, what is sent and to an AI');
+  if (!/Demander donne des phrases relues\. Une IA \(/.test(home) || !/avec accord/.test(home)) {
+    problems.push(
+      'index.html does not say, before the first use, what asking gives and that an AI explains only with an agreement',
+    );
+  }
+  // The agreement is in the page before it is asked: its words are part of what the page says.
+  if (!/J’accepte que cette IA lise ma question/.test(home) || !/Non, sans IA/.test(home)) {
+    problems.push('index.html does not carry the agreement and its two answers');
   }
   if (!home.includes(model)) problems.push('index.html does not name the model');
   if (!home.includes('Cloudflare')) problems.push('index.html does not say where the AI is hosted');
   // The page that says what is kept must say where a question goes, and what guards the gesture.
   const privacy = read('confidentialite/index.html');
-  if (!/Demander n’envoie pas ta phrase/.test(privacy)) {
-    problems.push('confidentialite does not say that the sentence typed stays on the phone');
+  if (!/Demander envoie les numéros des mesures trouvées, pas ta phrase/.test(privacy)) {
+    problems.push('confidentialite does not say what « Demander » sends');
   }
-  if (!/les mots du livre/.test(privacy) || !/trente jours/.test(privacy)) {
-    problems.push('confidentialite does not say what leaves, or what is kept of it');
+  if (!/Ta question ne part que si tu l’acceptes/.test(privacy)) {
+    problems.push('confidentialite does not say that the question leaves only after an agreement');
   }
+  if (
+    !/On ne l’enregistre pas/.test(privacy) ||
+    !/rien n’est écrit sur ton téléphone/.test(privacy)
+  ) {
+    problems.push('confidentialite does not say what is kept of a question: nothing, anywhere');
+  }
+  // The call of the chat goes through no cache: nothing is kept « thirty days » any more.
+  if (/trente jours/.test(privacy)) problems.push('confidentialite still speaks of a cache');
   if (/Turnstile/.test(privacy)) problems.push('confidentialite names a bot check there is not');
   // And no page may still say that no AI answers here: it would now be false.
   const denial = String(strings['about.no_ai']).replace(/'/g, '’');
@@ -160,16 +174,19 @@ void test('the built app speaks of an AI exactly where its mode says one is at w
     return;
   }
   if (!existsSync('dist/sommaire/index.html')) return; // a holding build: two pages, no AI
-  assert.deepEqual(noticeProblems('dist', askMode, configuredModel()), []);
+  assert.deepEqual(
+    noticeProblems('dist', askMode === 'off' ? 'off' : 'chat', configuredModel()),
+    [],
+  );
 });
 
-void test('the ask screen, built for its tests, carries its notices and no page too many', () => {
+void test('the sheet, built for its tests, carries its notices and no page too many', () => {
   if (!existsSync('dist-ask/index.html')) {
     console.log('  (skipped: no dist-ask/ — run `npm run build:ask` first)');
     return;
   }
-  // The test build pretends the mode is "answer" with the first candidate of the catalogue.
-  assert.deepEqual(noticeProblems('dist-ask', 'answer', MODELS['mistral-small-3.1'].name), []);
+  // The test build pretends the mode is "chat" with the first candidate of the catalogue.
+  assert.deepEqual(noticeProblems('dist-ask', 'chat', MODELS['mistral-small-3.1'].name), []);
   // The rule sees what it is for: the same pages judged as a site without AI are all refused.
   const asOff = noticeProblems('dist-ask', 'off', '');
   for (const page of PAGES_THAT_EXPLAIN) {

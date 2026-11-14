@@ -1,153 +1,93 @@
 /**
- * End-to-end checks of « Demander » (lot I7), in three browser engines, against a Worker that
- * is SIMULATED: nothing is deployed, no model runs, no neuron is spent.
+ * End-to-end checks of the sheet of « Demander » (PLAN-CHAT §1, §2 and §8), in three browser
+ * engines, against a Worker that is SIMULATED: nothing is deployed, no model runs, no neuron
+ * is spent.
  *
  *   npm run build:ask && npx tsx scripts/e2e-ask.ts            Chromium, Firefox, WebKit
  *   npx tsx scripts/e2e-ask.ts --engines chromium
  *
  * dist-ask/ — the app as it would be if the site answered questions (scripts/build.ts
- * --ask-test) — is served from a local port. `/api/ask` is answered here from a table, one
- * canned answer per scenario the test names before it presses « Demander ». (It used to be one
- * per marker word in the question: the question no longer travels — D16.22 — so the Worker,
- * simulated or not, has nothing of it to read.) Every request to another host is aborted and
- * reported: there is none to expect, no bot check is loaded any more (D16.23).
+ * --ask-test chat) — is served from a local port. `/api/gists` and `/api/chat` are answered
+ * here from a table, one canned answer per scenario the test names before a gesture. Every
+ * request to another host is aborted and reported: there is none to expect.
  *
  * What is checked:
- *   1. before any gesture: the notice that an AI is at work, with the model's name, and that
- *      the sentence typed is not what is sent; no request to anyone but us;
- *   2. typing sends nothing; « Demander » sends once — the measures the page's own search
- *      found and the words of the book it matched, exactly what scripts/ask-page.ts computes
- *      for the same question, and not a word that was typed and is not a word of the book;
- *   3. each answer of the Worker becomes its page — written, selected, silence — and what the
- *      phone decides alone — an objection a person answered, nothing found — sends nothing;
- *      the notice follows the model, not the page's own choice;
- *   4. whatever the Worker does wrong — an error, gibberish, another book, an unknown measure,
- *      a field it should not send, a page it can no longer say — the page shows what it found
- *      by itself, and never a word of failure;
- *   5. a sentence of the model is text: markup in it creates no element and runs nothing;
- *   6. the Content-Security-Policy of every page names nobody but us, and nothing we ship
- *      violates it; the answer is reachable by keyboard and passes the accessibility audit.
+ *   1. before any gesture: the notice of what asking does, with the model's name; the sheet
+ *      closed, its script not even fetched; no request to anyone but us;
+ *   2. typing sends nothing. « Demander » opens the sheet and sends ONCE, to `/api/gists`,
+ *      `corpus` and `ids` and nothing else — the measures the page's own search ranks best,
+ *      exactly what scripts/ask-page.ts computes for the same question — and not a word typed;
+ *   3. the read sentences are shown with their links; a measure without one keeps its link
+ *      alone; the agreement stands in place of the explanation, and until it is accepted no
+ *      request carries the question — refused, none ever does;
+ *   4. accepted: `/api/chat` carries the question as shown, the measures whose sentence is on
+ *      the screen, the version of the agreement — and nothing else, follow-ups included: no
+ *      history. What the model wrote carries its label in the text and a mark a machine reads;
+ *   5. every other state is a normal one, and none says a word of failure: the model silent,
+ *      the allowance spent (and then no question leaves any more), the Worker broken, another
+ *      state of the book, nothing found, an objection a person answered (never sent), a card,
+ *      a request for a vote, electoral silence;
+ *   6. a sentence of the base or of the model is text: markup in it creates no element;
+ *   7. nothing is written on the phone — no storage, no address — after a whole conversation;
+ *      the thread is emptied by its button, and is gone when the page is left;
+ *   8. the Content-Security-Policy of every page names nobody but us and nothing we ship
+ *      violates it; the sheet is reachable by keyboard, passes the accessibility audit at 390
+ *      and 320 px, and does not make the page move.
  */
-import { existsSync, readFileSync, statSync } from 'node:fs';
-import { createServer, type Server } from 'node:http';
-import { extname, join, normalize, resolve } from 'node:path';
-import { chromium, firefox, webkit, type BrowserType, type Page, type Route } from 'playwright';
+import { existsSync, readFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import type { Page, Route } from 'playwright';
+import { cleanQuestion, consentVersion } from '../src/lib/chat-contract.js';
 import type { Manifest } from './aec26-types.js';
 import { loadPage } from './ask-page.js';
-import { STILL, lateLayoutShift } from './e2e-kit.js';
+import { ENGINES, STILL, checker, lateLayoutShift, report, serve, until } from './e2e-kit.js';
+import type { Outcome } from './e2e-kit.js';
 
-const ENGINES: Record<string, BrowserType> = { chromium, firefox, webkit };
-const MIME: Record<string, string> = {
-  '.html': 'text/html; charset=utf-8',
-  '.js': 'text/javascript; charset=utf-8',
-  '.json': 'application/json; charset=utf-8',
-  '.css': 'text/css; charset=utf-8',
-  '.woff2': 'font/woff2',
-  '.png': 'image/png',
-  '.svg': 'image/svg+xml',
-};
 const ROOT = 'dist-ask';
 const OFFICIAL = 'https://melenchon2027.fr';
 const MODEL = 'Mistral Small 3.1';
+/** Words a page must never show when something did not come: every state is a normal one. */
+const FAILURE = /erreur|panne|indisponible|désolé|malheureusement|réessa|error|undefined|\bnull\b/i;
 
-function serve(root: string): Promise<{ server: Server; origin: string }> {
-  const server = createServer((req, res) => {
-    const path = decodeURIComponent((req.url ?? '/').split('?')[0] ?? '/');
-    let file = normalize(join(root, path));
-    if (!file.startsWith(root)) {
-      res.writeHead(403).end();
-      return;
-    }
-    if (existsSync(file) && statSync(file).isDirectory()) file = join(file, 'index.html');
-    if (!existsSync(file)) {
-      res
-        .writeHead(404, { 'content-type': MIME['.html'] })
-        .end(readFileSync(join(root, '404.html')));
-      return;
-    }
-    res.writeHead(200, {
-      'content-type': MIME[extname(file)] ?? 'application/octet-stream',
-      date: new Date().toUTCString(),
-    });
-    res.end(readFileSync(file));
-  });
-  return new Promise((done) => {
-    server.listen(0, '127.0.0.1', () => {
-      const address = server.address();
-      const port = typeof address === 'object' && address !== null ? address.port : 0;
-      done({ server, origin: `http://127.0.0.1:${String(port)}` });
-    });
-  });
-}
-
-/** Asks from Node: the page's policy refuses the `eval` a string given to waitForFunction needs. */
-async function until(page: Page, expression: string, timeoutMs = 10_000): Promise<void> {
-  const deadline = Date.now() + timeoutMs;
-  for (;;) {
-    if (await page.evaluate<boolean>(`Boolean(${expression})`)) return;
-    if (Date.now() > deadline) throw new Error(`timed out waiting for: ${expression}`);
-    await page.waitForTimeout(40);
-  }
-}
-
-interface Outcome {
-  engine: string;
-  passed: string[];
-  failed: string[];
-}
+type GistsScenario =
+  | 'toutes'
+  | 'deux'
+  | 'fermée'
+  | 'local'
+  | 'panne'
+  | 'charabia'
+  | 'autre livre'
+  | 'silence'
+  | 'balise';
+type ChatScenario =
+  'explique' | 'rien' | 'épuisé' | 'panne' | 'charabia' | 'autre livre' | 'balise';
 
 async function runEngine(name: string, origin: string, manifest: Manifest): Promise<Outcome> {
   const type = ENGINES[name];
   if (type === undefined) throw new Error(`unknown engine ${name}`);
-  const out: Outcome = { engine: name, passed: [], failed: [] };
-  const check = (label: string, ok: boolean, detail = ''): void => {
-    (ok ? out.passed : out.failed).push(detail === '' || ok ? label : `${label} — ${detail}`);
-  };
+  const { out, check } = checker(name);
   const corpus = manifest.meta.corpus_version;
-  const section = manifest.sections.find(
-    (s) =>
-      s.items.filter((i) => i.kind !== 'paragraph' && typeof i.locator === 'string').length >= 3,
-  );
-  if (section === undefined) throw new Error('no section with three located propositions');
-  const ids = section.items
-    .filter((i) => i.kind !== 'paragraph' && typeof i.locator === 'string')
-    .slice(0, 3)
-    .map((i) => i.id);
-  const [first = '', second = '', third = ''] = ids;
   const objection = (
     JSON.parse(readFileSync('data/2026/riposte.json', 'utf8')) as {
       entries: { slug: string; objection: string }[];
     }
   ).entries[1];
   if (objection === undefined) throw new Error('no objection to type');
+  const pageInNode = loadPage();
 
-  /**
-   * One canned answer per scenario: the "replay" of a Worker that does not exist yet. The test
-   * names the scenario before it presses « Demander » — the request carries nothing to tell
-   * them apart by, and that is the point.
-   */
-  type Scenario =
-    | 'answer'
-    | 'select'
-    | 'silence'
-    | 'local'
-    | 'panne'
-    | 'charabia'
-    | 'autre livre'
-    | 'inconnue'
-    | 'balise'
-    | 'page perdue';
-  let scenario: Scenario = 'answer';
-  const canned = (): { status?: number; body: unknown } => {
-    const say = (text: string, ...cited: string[]): { text: string; ids: string[] } => ({
-      text,
-      ids: cited,
-    });
-    switch (scenario) {
-      case 'select':
-        return { body: { kind: 'select', corpus, ids } };
-      case 'silence':
-        return { body: { kind: 'silence', reopen: '2027-04-18T18:00:00.000Z' } };
+  /** The simulated Worker: what each route answers until the test says otherwise. */
+  const sim: { gists: GistsScenario; chat: ChatScenario } = { gists: 'deux', chat: 'explique' };
+  const sentence = (id: string): string => `Phrase relue d’essai pour ${id}.`;
+  const gistsAnswer = (ids: readonly string[]): { status?: number; body: unknown } => {
+    const all = ids.map((id) => ({ id, text: sentence(id) }));
+    switch (sim.gists) {
+      case 'toutes':
+        return { body: { kind: 'gists', corpus, gists: all, ai: true } };
+      case 'deux':
+        // The third measure has no read sentence: it keeps its link alone.
+        return { body: { kind: 'gists', corpus, gists: all.slice(0, 2), ai: true, debug: 'X' } };
+      case 'fermée':
+        return { body: { kind: 'gists', corpus, gists: all, ai: false } };
       case 'local':
         return { body: { kind: 'local' } };
       case 'panne':
@@ -155,56 +95,57 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       case 'charabia':
         return { body: 'pas du JSON' };
       case 'autre livre':
-        return {
-          body: {
-            kind: 'answer',
-            corpus: 'aaaaaaaaaaaaaaaa',
-            sentences: [say('Phrase d’un autre livre.', first)],
-          },
-        };
-      case 'inconnue':
-        return {
-          body: {
-            kind: 'answer',
-            corpus,
-            sentences: [say('Phrase sur une mesure inconnue.', 'p9c9-s09-m09')],
-          },
-        };
+        return { body: { kind: 'gists', corpus: 'ffffffffffffffff', gists: all, ai: true } };
+      case 'silence':
+        return { body: { kind: 'silence', reopen: '2027-04-18T18:00:00.000Z' } };
       case 'balise':
         return {
           body: {
-            kind: 'answer',
+            kind: 'gists',
             corpus,
-            sentences: [
-              say('<img src=x onerror=alert(1)><script>alert(2)</script> phrase d’essai.', first),
-            ],
-          },
-        };
-      // A page the Worker could say when it read the question, and can no longer mean.
-      case 'page perdue':
-        return { body: { kind: 'off_topic' } };
-      case 'answer':
-        return {
-          body: {
-            kind: 'answer',
-            corpus,
-            sentences: [
-              say('Première phrase d’essai, écrite pour ce test.', first),
-              say('Deuxième phrase d’essai, sur deux mesures.', second, third),
-            ],
-            // A field the contract does not name must never reach the page.
-            debug: 'TEXTE-QUI-NE-DOIT-PAS-PARAITRE',
+            gists: all.map((gist) => ({
+              ...gist,
+              text: `<img src=x onerror=alert(1)> ${gist.text}`,
+            })),
+            ai: true,
           },
         };
     }
   };
-  const pageInNode = loadPage();
+  const chatAnswer = (follow: unknown): { status?: number; body: unknown } => {
+    const sentences =
+      follow === 'simpler'
+        ? ['Une explication plus simple, écrite pour ce test.']
+        : ['Une première explication d’essai.', 'Une seconde, sur un autre mot.'];
+    switch (sim.chat) {
+      case 'explique':
+        return { body: { kind: 'explain', corpus, sentences, model: 'X', ids: ['p1c1-s01-k01'] } };
+      case 'rien':
+        return { body: { kind: 'quiet', why: 'none' } };
+      case 'épuisé':
+        return { body: { kind: 'quiet', why: 'spent' } };
+      case 'panne':
+        return { status: 500, body: { error: 'Service indisponible' } };
+      case 'charabia':
+        return { body: 'pas du JSON' };
+      case 'autre livre':
+        return { body: { kind: 'explain', corpus: 'ffffffffffffffff', sentences } };
+      case 'balise':
+        return {
+          body: {
+            kind: 'explain',
+            corpus,
+            sentences: ['<script>alert(2)</script><img src=x onerror=alert(3)> texte d’essai.'],
+          },
+        };
+    }
+  };
 
   const browser = await type.launch();
   try {
     const escaped: string[] = [];
     const requested: string[] = [];
-    const posted: string[] = [];
+    const posted = { gists: [] as string[], chat: [] as string[] };
     const violations: string[] = [];
     const dialogs: string[] = [];
 
@@ -213,14 +154,22 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         const request = route.request();
         const url = request.url();
         requested.push(url);
-        if (url.startsWith(`${origin}/api/ask`)) {
-          posted.push(request.postData() ?? '');
-          const answer = canned();
-          return route.fulfill({
+        const fulfil = (answer: { status?: number; body: unknown }): Promise<void> =>
+          route.fulfill({
             status: answer.status ?? 200,
             contentType: 'application/json; charset=utf-8',
             body: typeof answer.body === 'string' ? answer.body : JSON.stringify(answer.body),
           });
+        if (url === `${origin}/api/gists`) {
+          const body = request.postData() ?? '';
+          posted.gists.push(body);
+          const ids = (JSON.parse(body) as { ids?: string[] }).ids ?? [];
+          return fulfil(gistsAnswer(ids));
+        }
+        if (url === `${origin}/api/chat`) {
+          const body = request.postData() ?? '';
+          posted.chat.push(body);
+          return fulfil(chatAnswer((JSON.parse(body) as { follow?: unknown }).follow));
         }
         if (url.startsWith(origin)) return route.continue();
         if (url.startsWith(OFFICIAL) && request.resourceType() === 'document') {
@@ -251,55 +200,68 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       page.evaluate<string>(
         `document.querySelector(${JSON.stringify(selector)})?.textContent ?? ''`,
       );
-    /** Types a question, presses « Demander », waits for the page the scenario gives. */
-    const ask = async (
-      question: string,
-      as: Scenario = 'answer',
-    ): Promise<{ kind: string; title: string; body: string; notice: string }> => {
-      scenario = as;
-      await page.fill('#q', question);
-      await page.click('#ask');
+    const count = (selector: string): Promise<number> =>
+      page.evaluate<number>(`document.querySelectorAll(${JSON.stringify(selector)}).length`);
+    const LAST = '#chat-thread .c-turn:last-child';
+    /** True once the last turn has stopped waiting for anything. */
+    const settled = `document.querySelector(${JSON.stringify(LAST)})?.getAttribute('aria-busy') === 'false'`;
+    /** Asks from the field of the sheet, and waits for the turn to come to rest. */
+    const ask = async (question: string): Promise<string> => {
+      const turns = await count('#chat-thread .c-turn');
+      await page.fill('#chat-q', question);
+      await page.press('#chat-q', 'Enter');
       await until(
         page,
-        "!document.querySelector('#answer').hidden && !document.querySelector('#ask').disabled",
+        `document.querySelectorAll('#chat-thread .c-turn').length === ${String(turns + 1)}`,
       );
-      return {
-        kind: await page.evaluate<string>("document.querySelector('#answer').dataset.kind"),
-        title: await text('#answer-title'),
-        body: await text('#answer-body'),
-        notice: await text('#answer-notice'),
-      };
+      await until(page, settled);
+      return text(LAST);
     };
 
     // --- 1. before any gesture
     await page.goto(`${origin}/`);
     await until(page, "!document.querySelector('#ask').disabled");
+    const stored = await page.evaluate<string>(
+      'JSON.stringify([Object.keys(localStorage), Object.keys(sessionStorage)])',
+    );
     const hint = await text('#search-hint');
     check(
       'the notice names an AI and its model before the first use',
-      /\bIA\b/.test(hint) && hint.includes(MODEL),
+      /\bIA\b/.test(hint) && hint.includes(MODEL) && /Cloudflare/.test(hint),
       hint,
     );
     check(
-      'the notice says what is sent — words of the book, never the sentence — and to whom',
-      /mots du livre/.test(hint) && /jamais la phrase/.test(hint) && /Cloudflare/.test(hint),
+      'the notice says what asking gives, and that the AI explains only with an agreement',
+      /phrases relues/.test(hint) && /accord/.test(hint) && /reste sur ce téléphone/.test(hint),
       hint,
     );
     check(
       '« Demander » is the one button of the field',
       (await page.locator('#search button').count()) === 1,
     );
+    check(
+      'the sheet is in the page, closed',
+      await page.evaluate<boolean>("document.querySelector('#chat-sheet').open === false"),
+    );
     await page.focus('#q');
     await page.waitForTimeout(400);
+    check(
+      'the script of the sheet is not fetched with the page',
+      !requested.some((url) => /\/_astro\/chat\./.test(url)),
+    );
+    check(
+      '…nor announced to the browser in advance',
+      !/rel="modulepreload"[^>]*chat\./.test(readFileSync(join(ROOT, 'index.html'), 'utf8')),
+    );
     check(
       'before any gesture nothing is asked of anyone but us',
       escaped.length === 0,
       escaped.slice(0, 3).join(' '),
     );
 
-    // --- 2. typing sends nothing; the gesture sends what the search found — not the sentence
+    // --- 2. typing sends nothing; the gesture sends identifiers — not the sentence
     // « zorglub » and « montcuq » are words no programme writes: what a visitor says of
-    // themselves, in words the book does not hold, has nothing to leave the phone as.
+    // themselves has nothing to leave the phone as, until they agree to send the question.
     const QUESTION = 'et les retraites des infirmières, moi zorglub de montcuq';
     await page.locator('#q').pressSequentially(QUESTION, { delay: 20 });
     await page.waitForTimeout(900);
@@ -307,211 +269,529 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       requested.filter((url) =>
         /infirmi|retraite|zorglub|montcuq/i.test(decodeURIComponent(url.split('#')[0] ?? '')),
       );
-    check('typing sends the words nowhere', carrying().length === 0 && posted.length === 0);
+    check(
+      'typing sends the words nowhere',
+      carrying().length === 0 && posted.gists.length === 0 && posted.chat.length === 0,
+    );
     check(
       'typing leaves nothing in the address',
       !page.url().includes('#') && !/retraite/i.test(page.url()),
       page.url(),
     );
-    // The field is still the search: results arrive while one types, under the button.
     await page.waitForSelector('#search-list > li');
     check(
       'the same field still searches while one types',
       (await page.locator('#search-list > li').count()) >= 1,
     );
+
     await page.click('#ask');
-    await until(page, "!document.querySelector('#answer').hidden");
-    check('« Demander » sends once', posted.length === 1, String(posted.length));
-    const body = posted[0] ?? '{}';
-    const sent = JSON.parse(body) as { corpus?: unknown; ids?: string[]; terms?: string[] };
+    await until(page, "document.querySelector('#chat-sheet').open");
+    await until(page, settled);
     check(
-      'the request is the state of the book, measures and words — and nothing else',
-      JSON.stringify(Object.keys(sent).sort()) === '["corpus","ids","terms"]' &&
-        sent.corpus === corpus,
-      JSON.stringify(Object.keys(sent)),
+      'the script of the sheet is fetched at the first press',
+      requested.filter((url) => /\/_astro\/chat\./.test(url)).length === 1,
     );
-    const expected = pageInNode(QUESTION).asked;
+    check('« Demander » sends once, to /api/gists', posted.gists.length === 1);
+    const gistsBody = posted.gists[0] ?? '{}';
+    const sentGists = JSON.parse(gistsBody) as { corpus?: unknown; ids?: string[] };
     check(
-      'what leaves is what the search of the page found: the same measures, the same words',
-      JSON.stringify(sent.ids) === JSON.stringify(expected.ids) &&
-        JSON.stringify(sent.terms) === JSON.stringify(expected.terms) &&
-        (sent.ids ?? []).length >= 1,
-      `${String((sent.ids ?? []).length)} measures, words: ${(sent.terms ?? []).join(' ')}`,
+      'the request is the state of the book and measures — and nothing else',
+      JSON.stringify(Object.keys(sentGists).sort()) === '["corpus","ids"]' &&
+        sentGists.corpus === corpus,
+      JSON.stringify(Object.keys(sentGists)),
+    );
+    const rows = pageInNode(QUESTION).rows;
+    check(
+      'what leaves is what the search of the page ranks best: the same measures, in order',
+      JSON.stringify(sentGists.ids) === JSON.stringify(rows) && rows.length === 3,
+      JSON.stringify(sentGists.ids),
     );
     check(
-      'the sentence typed is not in it, and neither is a word the book does not write',
-      !body.includes(QUESTION) &&
-        !/zorglub|montcuq|moi|infirmières/i.test(body) &&
-        (sent.terms ?? []).every((term) => /^[a-z0-9]{2,32}$/.test(term)) &&
-        !/\s/.test((sent.terms ?? []).join('')),
-      body.slice(0, 200),
+      'the sentence typed is not in it, nor a word of it',
+      !/zorglub|montcuq|infirmi|retraite|moi/i.test(gistsBody),
+      gistsBody.slice(0, 160),
     );
+    check('no request carries the question before the agreement', posted.chat.length === 0);
     check('nothing typed travels in an address either', carrying().length === 0);
 
-    // --- 3. a written answer
+    // --- 3. the sheet: the frame, the thread, the read sentences, the agreement
     check(
-      'a written answer shows its sentences',
-      /Première phrase d’essai/.test(await text('#answer-body')),
+      'the sheet says « Site non officiel. » in its frame',
+      /Site non officiel\./.test(await text('#chat-sheet .c-head')),
     );
     check(
-      'the answer opens on the neutral sentence, not on a verdict',
-      /^Voici ce que prévoient les mesures trouvées/.test(await text('#answer-title')),
-      await text('#answer-title'),
-    );
-    const links = await page.evaluate<string[]>(
-      "Array.from(document.querySelectorAll('#answer-body .sources a')).map((a) => a.href)",
+      'the question stands in the thread, as written',
+      (await text(`${LAST} .c-question`)).includes(QUESTION),
     );
     check(
-      'each sentence carries a link per measure, into the official page',
-      links.length === 3 && links.every((href) => href.startsWith(section.url)),
-      String(links.length),
+      'the read sentences come under their title, with what they are',
+      /Ce que prévoit le programme/.test(await text(`${LAST} .c-gists h3`)) &&
+        /écrites d’avance, relues par l’éditeur/.test(await text(`${LAST} .c-gists .c-badge`)),
+      await text(`${LAST} .c-gists`),
     );
-    const linkText = await text('#answer-body .sources a');
-    check('a link names the section and the measure', linkText.includes(section.title), linkText);
-    // A sentence of the model already says what its measure provides: no first words under it.
-    check(
-      'a written answer shows no first words of a measure',
-      (await page.locator('#answer-body .first-words').count()) === 0,
-    );
-    const notice = await text('#answer-notice');
-    check(
-      'the answer says an AI wrote it, which — and that it did not read the question',
-      /\bIA\b/.test(notice) && notice.includes(MODEL) && /pas la question/.test(notice),
-      notice,
+    const shownRows = await page.evaluate<{ gist: string; href: string; words: number }[]>(
+      `Array.from(document.querySelectorAll(${JSON.stringify(`${LAST} .c-gists .c-row`)})).map((row) => ({ gist: row.querySelector(':scope > p:not(.sources)')?.textContent ?? '', href: row.querySelector('.sources a')?.href ?? '', words: row.querySelectorAll('.first-words').length }))`,
     );
     check(
-      '« Comment c’est fabriqué » leads to the accuracy page',
-      (await page.locator('#answer-notice a').getAttribute('href')) === '/exactitude/',
+      'a row per measure, each with its link into the official page',
+      shownRows.length === 3 && shownRows.every((row) => row.href.startsWith(OFFICIAL)),
+      JSON.stringify(shownRows.map((row) => row.href)).slice(0, 200),
     );
     check(
-      'the answer takes the focus',
-      (await page.evaluate<string>('document.activeElement.id')) === 'answer-title',
+      'a measure with a read sentence shows it; one without keeps its link alone',
+      shownRows[0]?.gist === sentence(rows[0] ?? '') &&
+        shownRows[1]?.gist === sentence(rows[1] ?? '') &&
+        shownRows[2]?.gist === '',
+      JSON.stringify(shownRows.map((row) => row.gist)),
+    );
+    // A link that stands alone shows the first words its measure allows (D16.32); a read
+    // sentence already says what the measure provides.
+    const policy = await page.evaluate<string>(
+      "document.querySelector('#search').dataset.firstWords",
+    );
+    check(
+      'first words stand under a link alone, as the citation policy allows — never under a sentence',
+      shownRows[0]?.words === 0 &&
+        shownRows[1]?.words === 0 &&
+        (policy === 'search' ? (shownRows[2]?.words ?? 0) <= 1 : shownRows[2]?.words === 0),
+      JSON.stringify(shownRows.map((row) => row.words)),
     );
     check(
       'a field the contract does not name never reaches the page',
-      !(await page.content()).includes('TEXTE-QUI-NE-DOIT-PAS-PARAITRE'),
+      !(await text('#chat-sheet')).includes('debug'),
+    );
+    const agreement = await text(`${LAST} .c-consent`);
+    check(
+      'the agreement stands in place of the explanation: what leaves, who reads it, what is kept',
+      agreement.includes(MODEL) &&
+        /Cloudflare/.test(agreement) &&
+        /telle que tu l’as écrite/.test(agreement) &&
+        /On n’enregistre rien/.test(agreement),
+      agreement,
     );
     check(
-      'the question is shown nowhere but in the field',
-      !(await text('main')).includes('et les retraites des infirmières'),
+      '…what not to write, from what age, for how long, and who answers for it',
+      /rien sur toi/.test(agreement) &&
+        /15 ans/.test(agreement) &&
+        /quand tu veux/.test(agreement) &&
+        /Baoleka/.test(agreement) &&
+        /contact@cestecritla\.fr/.test(agreement),
+      agreement,
+    );
+    const buttons = await page.evaluate<{ label: string; width: number; classes: string }[]>(
+      `Array.from(document.querySelectorAll(${JSON.stringify(`${LAST} .c-consent [data-consent]`)})).map((b) => ({ label: b.textContent.trim(), width: Math.round(b.getBoundingClientRect().width), classes: b.className }))`,
+    );
+    check(
+      'two buttons of the same weight: neither answer is the easy one',
+      buttons.length === 2 &&
+        buttons[0]?.label === 'J’accepte que cette IA lise ma question' &&
+        buttons[1]?.label === 'Non, sans IA' &&
+        buttons[0].width === buttons[1].width &&
+        buttons[0].classes === buttons[1].classes,
+      JSON.stringify(buttons),
+    );
+    check(
+      'the focus is in the sheet',
+      await page.evaluate<boolean>(
+        "document.querySelector('#chat-sheet').contains(document.activeElement)",
+      ),
+    );
+    check(
+      'no explanation is shown before the agreement',
+      (await count('[data-generated-by]')) === 0,
     );
 
-    // --- 3 bis. the other pages a question can get
-    const selected = await ask('la retraite à soixante ans', 'select');
+    // --- 3 bis. refused: nothing leaves, and the choice can be taken back
+    await page.click(`${LAST} [data-consent="decline"]`);
+    await page.waitForTimeout(300);
     check(
-      'a selection: three measures and no sentence',
-      selected.kind === 'select' && /^Voici où le programme en parle/.test(selected.title),
-      selected.title,
-    );
-    check('a selection made by the model still says so', selected.notice.includes(MODEL));
-    // Three links alone would say nothing of what each measure is: where the citation policy
-    // allows, each shows its first words — marked as words of the programme (D16.32).
-    const under = await page.evaluate<{ links: number; words: number; marked: number }>(
-      "(() => { const all = Array.from(document.querySelectorAll('#answer-body .sources .first-words')); return { links: document.querySelectorAll('#answer-body .sources a').length, words: all.length, marked: all.filter((w) => w.dataset.programme === 'incipit' && /^«\\s.+…\\s»$/.test(w.textContent)).length }; })()",
+      'refused: the agreement is gone, and no question was sent',
+      (await count('.c-consent')) === 0 && posted.chat.length === 0,
     );
     check(
-      'a selection shows the first words of its measures, as the citation policy allows',
-      (await page.evaluate<string>("document.querySelector('#search').dataset.firstWords")) ===
-        'search'
-        ? under.words >= 1 && under.words <= under.links && under.marked === under.words
-        : under.words === 0,
-      `${String(under.words)} of ${String(under.links)} links`,
+      '…and « Demander aussi à l’IA » stays within reach',
+      await page.locator('#chat-ai-start').isVisible(),
     );
-    // Words the book does not write find nothing: the phone says so by itself, and sends nothing.
-    const unsent = posted.length;
-    const nothing = await ask('zorglub montcuq');
-    check(
-      'nothing found: said of the words, never of the programme',
-      nothing.kind === 'none' && /^Rien trouvé avec ces mots/.test(nothing.title),
-      nothing.title,
+    await page.click('#chat-ai-start');
+    await until(page, `document.querySelector(${JSON.stringify(`${LAST} .c-consent`)}) !== null`);
+    check('…it brings the agreement back, and still sends nothing', posted.chat.length === 0);
+
+    // --- 4. accepted: the question leaves, once, with what it needs and nothing else
+    // The version is recomputed here from the very words on the screen: the title of the
+    // agreement, its lines, its two buttons — what was read is what is vouched for.
+    const read = await page.evaluate<string[]>(
+      `(() => { const c = document.querySelector(${JSON.stringify(`${LAST} .c-consent`)}); return [c.querySelector('h3').textContent, ...Array.from(c.querySelectorAll('[data-consent-line]')).map((p) => p.textContent), ...Array.from(c.querySelectorAll('[data-consent]')).map((b) => b.textContent.trim())]; })()`,
     );
-    check('…and nothing was sent: there was nothing to send', posted.length === unsent);
-    check('…and no AI is named: none was asked', nothing.notice === '');
+    const consent = consentVersion(read);
     check(
-      'no page says the programme does not speak of something',
-      !/n’en parle pas|ne traite pas|aucune mesure ne/i.test(`${nothing.title} ${nothing.body}`),
+      'the agreement is a title, seven lines and two buttons',
+      read.length === 10,
+      String(read.length),
     );
-    const silent = await ask('la retraite un jour de scrutin', 'silence');
+    await page.click(`${LAST} [data-consent="accept"]`);
+    await until(
+      page,
+      `document.querySelector(${JSON.stringify(`${LAST} [data-generated-by="ai"]`)}) !== null`,
+    );
+    check('accepted: the question is sent once, to /api/chat', posted.chat.length === 1);
+    const chatBody = JSON.parse(posted.chat[0] ?? '{}') as Record<string, unknown>;
     check(
-      'silence: the page says when questions reopen',
-      silent.kind === 'silence' &&
-        /Les questions reprennent/.test(silent.title) &&
-        /18 avril/.test(silent.title),
-      silent.title,
+      'the request is the question, its measures, the state of the book and the agreement — nothing else',
+      JSON.stringify(Object.keys(chatBody).sort()) === '["consent","corpus","ids","question"]',
+      JSON.stringify(Object.keys(chatBody)),
+    );
+    check(
+      'the question leaves as it is shown',
+      chatBody['question'] === cleanQuestion(QUESTION) && chatBody['corpus'] === corpus,
+      String(chatBody['question']),
+    );
+    check(
+      'the measures named are those whose read sentence is on the screen',
+      JSON.stringify(chatBody['ids']) === JSON.stringify(rows.slice(0, 2)),
+      JSON.stringify(chatBody['ids']),
+    );
+    check(
+      'the agreement travels as the version of the words that were read',
+      chatBody['consent'] === consent && /^[0-9a-f]{16}$/.test(consent),
+      String(chatBody['consent']),
+    );
+    const explained = await text(`${LAST} .c-ai`);
+    check(
+      'the explanation is shown, with its label in the text itself',
+      /Une première explication d’essai\. Une seconde, sur un autre mot\./.test(explained) &&
+        explained.includes(`IA · ${MODEL}`),
+      explained,
+    );
+    check(
+      'what a model wrote carries a mark a machine can read — and only that',
+      (await count(`${LAST} .c-ai [data-generated-by="ai"]`)) === 1 &&
+        (await count('.c-gists [data-generated-by], .c-plain [data-generated-by]')) === 0,
+    );
+    check(
+      'the mention says an AI wrote it, which, where — and what it does not say',
+      /Écrit par une IA/.test(explained) && /pas le programme/.test(explained),
+      explained,
+    );
+    check(
+      '« Comment c’est fabriqué » leads to the accuracy page',
+      (await page.locator(`${LAST} .c-ai .ref a`).getAttribute('href')) === '/exactitude/',
+    );
+    check(
+      '« Ne plus envoyer à l’IA » stays within reach once agreed',
+      (await page.locator('#chat-ai-stop').isVisible()) &&
+        !(await page.locator('#chat-ai-start').isVisible()),
     );
 
-    // --- 3 ter. an objection a person answered never leaves the phone
-    const before = posted.length;
-    const reviewed = await ask(objection.objection.replace(/[«»]/g, '').trim());
-    check(
-      'an objection we answered is recognised on the phone',
-      reviewed.kind === 'reviewed' && /Notre réponse, relue/.test(reviewed.title),
-      reviewed.title,
+    // --- 4 bis. a follow-up is a word, never a text: nothing of the thread travels back
+    const follow = page.locator(`${LAST} .c-ai .c-actions button`);
+    check('two follow-ups are offered', (await follow.count()) === 2, String(await follow.count()));
+    await follow.filter({ hasText: 'Plus simple' }).click();
+    await until(
+      page,
+      `document.querySelectorAll(${JSON.stringify(`${LAST} [data-generated-by="ai"]`)}).length === 2`,
     );
-    check('…and sends nothing', posted.length === before);
+    const followBody = JSON.parse(posted.chat[1] ?? '{}') as Record<string, unknown>;
     check(
-      '…and links to the answer a person wrote',
-      (await page.locator('#answer-body a').getAttribute('href')) === `/r/${objection.slug}/`,
+      'a follow-up sends the same request with one word more',
+      posted.chat.length === 2 &&
+        JSON.stringify(Object.keys(followBody).sort()) ===
+          '["consent","corpus","follow","ids","question"]' &&
+        followBody['follow'] === 'simpler' &&
+        followBody['question'] === chatBody['question'] &&
+        JSON.stringify(followBody['ids']) === JSON.stringify(chatBody['ids']),
+      JSON.stringify(followBody).slice(0, 200),
     );
-    check('…with no AI notice: no AI was involved', reviewed.notice === '');
+    check(
+      'no sentence of the model, nor of the thread, is sent back',
+      !/explication|Phrase relue|history|messages/i.test(posted.chat[1] ?? ''),
+    );
+    check(
+      'a follow-up asked once is not offered again; the other stays',
+      (await text(`${LAST} .c-ai .c-actions`)).trim() === 'Un exemple',
+      await text(`${LAST} .c-ai .c-actions`),
+    );
+    check(
+      'the focus stays in the sheet after a follow-up',
+      await page.evaluate<boolean>(
+        "document.querySelector('#chat-sheet').contains(document.activeElement)",
+      ),
+    );
 
-    // --- 4. whatever goes wrong becomes what the page found by itself
-    const FAILURE = /erreur|panne|indisponible|désolé|malheureusement|réessa|error|undefined|null/i;
+    // --- 4 ter. the next question: agreed once for the page, sent without asking again
+    const second = await ask('la retraite à soixante ans');
+    check(
+      'a second question gets its turn under the first',
+      (await count('#chat-thread .c-turn')) === 2 && second.includes('la retraite à soixante ans'),
+    );
+    check(
+      '…its read sentences, then its explanation, without a second agreement',
+      posted.gists.length === 2 &&
+        posted.chat.length === 3 &&
+        (await count(`${LAST} .c-consent`)) === 0 &&
+        (await count(`${LAST} [data-generated-by="ai"]`)) === 1,
+      `${String(posted.gists.length)} / ${String(posted.chat.length)}`,
+    );
+    check(
+      'the first turn keeps what was explained',
+      (await count('#chat-thread .c-turn:first-child [data-generated-by="ai"]')) === 2,
+    );
+
+    // --- 5. every other state is a normal one
     for (const [label, as] of [
-      ['the Worker says "local"', 'local'],
-      ['the Worker fails', 'panne'],
+      ['the model has nothing to explain', 'rien'],
+      ['the Worker fails on the explanation', 'panne'],
       ['the Worker answers gibberish', 'charabia'],
-      ['the answer is for another state of the book', 'autre livre'],
-      ['the answer cites a measure the page does not know', 'inconnue'],
-      ['the Worker says a page it can no longer say', 'page perdue'],
+      ['the explanation is for another state of the book', 'autre livre'],
     ] as const) {
-      const fallback = await ask('la retraite à soixante ans', as);
+      sim.chat = as;
+      const turn = await ask('la retraite à soixante ans');
       check(
-        `${label}: the page shows its own selection`,
-        fallback.kind === 'select' && /^Voici où le programme en parle/.test(fallback.title),
-        `${fallback.kind} / ${fallback.title}`,
+        `${label}: the read sentences stand alone`,
+        (await count(`${LAST} .c-gists .c-row`)) >= 1 && (await count(`${LAST} .c-ai`)) === 0,
+      );
+      check(`${label}: no word of failure`, !FAILURE.test(turn), turn.slice(0, 200));
+    }
+    sim.chat = 'explique';
+    for (const [label, as] of [
+      ['the base is closed', 'local'],
+      ['the Worker fails on the sentences', 'panne'],
+      ['the Worker answers gibberish for the sentences', 'charabia'],
+      ['the sentences are for another state of the book', 'autre livre'],
+    ] as const) {
+      sim.gists = as;
+      const before = posted.chat.length;
+      const turn = await ask('la retraite à soixante ans');
+      const links = await count(`${LAST} .c-gists .sources a`);
+      check(
+        `${label}: the measures keep their links, at most three`,
+        links >= 1 && links <= 3,
+        String(links),
       );
       check(
-        `${label}: no word of failure`,
-        !FAILURE.test(`${fallback.title} ${fallback.body} ${fallback.notice}`),
+        `${label}: no sentence, no AI, no question sent`,
+        (await count(`${LAST} .c-gists .c-row > p:not(.sources)`)) === 0 &&
+          (await count(`${LAST} .c-ai`)) === 0 &&
+          posted.chat.length === before,
       );
-      check(`${label}: no AI notice — the page chose by itself`, fallback.notice === '');
-      const own = await page.locator('#answer-body .sources a').count();
-      check(`${label}: at most three measures, each a link`, own >= 1 && own <= 3, String(own));
+      check(`${label}: no word of failure`, !FAILURE.test(turn), turn.slice(0, 200));
+    }
+    sim.gists = 'fermée';
+    {
+      const before = posted.chat.length;
+      await ask('la retraite à soixante ans');
+      check(
+        'the model does not answer now: the read sentences are shown, the question stays',
+        (await count(`${LAST} .c-gists .c-row > p:not(.sources)`)) === 3 &&
+          (await count(`${LAST} .c-ai`)) === 0 &&
+          posted.chat.length === before,
+      );
+    }
+    sim.gists = 'silence';
+    {
+      const silent = await ask('la retraite un jour de scrutin');
+      check(
+        'silence: the sheet says when questions reopen, and nothing else',
+        /Les questions reprennent/.test(silent) &&
+          /18 avril/.test(silent) &&
+          (await count(`${LAST} .c-gists`)) === 0,
+        silent,
+      );
+    }
+    sim.gists = 'toutes';
+
+    // An objection a person answered: « En clair » first — and the question never leaves.
+    {
+      const before = posted.chat.length;
+      const typed = objection.objection.replace(/[«»]/g, '').trim();
+      await ask(typed);
+      const plain = await text(`${LAST} .c-plain`);
+      check(
+        'an objection we answered is recognised on the phone, and answered « en clair »',
+        /En clair/.test(plain) && /Relu par un humain/.test(plain) && plain.length > 120,
+        plain.slice(0, 160),
+      );
+      check(
+        '…with the link to the answer a person wrote',
+        (await page.locator(`${LAST} .c-plain a`).getAttribute('href')) === `/r/${objection.slug}/`,
+      );
+      check(
+        '…the read sentences come all the same; the question is not sent, agreed or not',
+        (await count(`${LAST} .c-gists .c-row`)) >= 1 &&
+          (await count(`${LAST} .c-ai`)) === 0 &&
+          posted.chat.length === before,
+      );
+    }
+    {
+      await ask('c’est quoi la règle verte ?');
+      const plain = await text(`${LAST} .c-plain`);
+      check(
+        'a notion we wrote a card for is explained by the card first',
+        /En clair/.test(plain) && /Relu par un humain/.test(plain) && /Voir la carte/.test(plain),
+        plain.slice(0, 200),
+      );
+      check(
+        '…with the link to its card',
+        (await page.locator(`${LAST} .c-plain a`).getAttribute('href')) === '/mot/regle-verte/',
+      );
+      check(
+        '…and the model may still explain its words',
+        (await count(`${LAST} [data-generated-by="ai"]`)) === 1,
+      );
+    }
+    {
+      const before = [posted.gists.length, posted.chat.length];
+      const nothing = await ask('zorglub montcuq');
+      check(
+        'nothing found: said of the words, never of the programme',
+        /Rien trouvé avec ces mots/.test(nothing) &&
+          !/n’en parle pas|ne traite pas|aucune mesure ne/i.test(nothing),
+        nothing,
+      );
+      check(
+        '…and nothing was sent: there was nothing to send',
+        posted.gists.length === before[0] && posted.chat.length === before[1],
+      );
+      const vote = await ask('franchement je dois voter pour qui ?');
+      check(
+        'whom to vote for: « Ici, on ne parle que du programme. »',
+        /Ici, on ne parle que du programme/.test(vote),
+        vote,
+      );
+      check(
+        '…no measure shown, nothing sent',
+        (await count(`${LAST} .c-gists`)) === 0 &&
+          posted.gists.length === before[0] &&
+          posted.chat.length === before[1],
+      );
     }
 
-    // --- 5. a sentence of the model is text
-    const hostile = await ask('la retraite à soixante ans', 'balise');
-    const injected = await page.evaluate<number>(
-      "document.querySelectorAll('#answer img, #answer script').length",
-    );
-    check('markup in a sentence creates no element', hostile.kind === 'answer' && injected === 0);
-    check('…and is shown as the text it is', hostile.body.includes('<img src=x'));
-    check('…and runs nothing', dialogs.length === 0, dialogs.join(' '));
+    // --- 6. a sentence of the base, a sentence of the model: text, never markup
+    sim.gists = 'balise';
+    sim.chat = 'balise';
+    {
+      const hostile = await ask('la retraite à soixante ans');
+      const injected = await count(
+        '#chat-sheet img, #chat-sheet script:not(#chat-config), #chat-sheet [onerror]',
+      );
+      check('markup in a sentence creates no element', injected === 0, String(injected));
+      check(
+        '…and is shown as the text it is',
+        hostile.includes('<img src=x') && hostile.includes('<script>alert(2)</script>'),
+      );
+      check('…and runs nothing', dialogs.length === 0, dialogs.join(' '));
+    }
+    sim.gists = 'toutes';
 
-    // --- « Autre question »
-    await page.click('#ask-again');
+    // --- 5 bis. the allowance spent: this question gets no explanation, the next is not sent
+    sim.chat = 'épuisé';
+    {
+      const spent = await ask('la retraite à soixante ans');
+      check(
+        'the allowance spent: no explanation, no word of it',
+        (await count(`${LAST} .c-ai`)) === 0 &&
+          !FAILURE.test(spent) &&
+          !/quota|limite/i.test(spent),
+      );
+      const before = posted.chat.length;
+      sim.chat = 'explique';
+      await ask('et les loyers ?');
+      check(
+        '…and no question leaves any more on this page: the read sentences answer alone',
+        posted.chat.length === before &&
+          (await count(`${LAST} .c-gists .c-row`)) >= 1 &&
+          (await count(`${LAST} .c-ai`)) === 0,
+      );
+    }
+
+    // --- 6 bis. after a dozen turns the sheet has not moved: only its thread scrolls
+    {
+      const frame = await page.evaluate<{
+        sheet: number;
+        over: number;
+        head: number;
+        top: number;
+        field: number;
+        bottom: number;
+        page: number;
+      }>(
+        "(() => { const d = document.querySelector('#chat-sheet'); const box = (e) => e.getBoundingClientRect(); return { sheet: d.scrollTop, over: d.scrollHeight - d.clientHeight, head: Math.round(box(d.querySelector('.c-head')).top), top: Math.round(box(d).top), field: Math.round(box(d.querySelector('.c-foot')).bottom), bottom: Math.round(box(d).bottom), page: window.scrollY }; })()",
+      );
+      check(
+        'the sheet itself never scrolls: its head and its field stay where they are',
+        frame.sheet === 0 &&
+          frame.over <= 0 &&
+          frame.head >= frame.top &&
+          frame.field <= frame.bottom,
+        JSON.stringify(frame),
+      );
+      check('…and the page behind it has not moved', frame.page === 0, String(frame.page));
+      const last = await page.evaluate<{ top: number; scroll: number }>(
+        `(() => { const s = document.querySelector('#chat-scroll'); const t = document.querySelector(${JSON.stringify(LAST)}); return { top: Math.round(t.getBoundingClientRect().top - s.getBoundingClientRect().top), scroll: s.scrollTop }; })()`,
+      );
+      check(
+        'the last question stands at the top of what scrolls, its answer under it',
+        last.scroll > 0 && last.top >= -1 && last.top <= 24,
+        JSON.stringify(last),
+      );
+    }
+
+    // --- 7. nothing written on the phone; the thread emptied, the sheet closed and reopened
     check(
-      '« Autre question » empties the field and folds the answer away',
-      (await page.inputValue('#q')) === '' && (await page.locator('#answer').isHidden()),
+      'after a whole conversation nothing was written: no storage, no address',
+      (await page.evaluate<string>(
+        'JSON.stringify([Object.keys(localStorage), Object.keys(sessionStorage)])',
+      )) === stored && page.url() === `${origin}/`,
+      page.url(),
     );
     check(
-      '…and gives the field the focus',
-      (await page.evaluate<string>('document.activeElement.id')) === 'q',
+      'no page says the programme does not speak of something',
+      !/n’en parle pas|ne traite pas|aucune mesure ne/i.test(await text('#chat-thread')),
+    );
+    await page.click('#chat-clear');
+    check(
+      '« Effacer la conversation » empties the thread',
+      (await count('#chat-thread .c-turn')) === 0,
+    );
+    await page.keyboard.press('Escape');
+    await until(page, "!document.querySelector('#chat-sheet').open");
+    check(
+      'Escape closes the sheet and gives the focus back to its button',
+      (await page.evaluate<string>('document.activeElement.id')) === 'ask',
+      await page.evaluate<string>('document.activeElement.id'),
+    );
+    await page.click('#ask');
+    await until(page, "document.querySelector('#chat-sheet').open");
+    await until(page, settled);
+    check(
+      'reopened: what is in the field is asked again, once',
+      (await count('#chat-thread .c-turn')) === 1,
+    );
+    await page.keyboard.press('Escape');
+    await page.click('#ask');
+    await until(page, "document.querySelector('#chat-sheet').open");
+    await page.waitForTimeout(300);
+    check(
+      'closed and reopened: the thread is still there, and nothing is asked twice',
+      (await count('#chat-thread .c-turn')) === 1,
+    );
+    await page.keyboard.press('Escape');
+    // Leaving the page and coming back: the thread is gone.
+    await page.goto(`${origin}/sommaire/`);
+    await page.goBack();
+    await until(page, "document.querySelector('#ask') && !document.querySelector('#ask').disabled");
+    check(
+      'back from another page: the sheet is closed and the thread empty',
+      (await page.evaluate<boolean>("document.querySelector('#chat-sheet').open === false")) &&
+        (await count('#chat-thread .c-turn')) === 0,
     );
 
-    // --- 6. the policy, here and elsewhere
-    const policy = (path: string): string => {
+    // --- 8. the policy, here and elsewhere
+    const policyOf = (path: string): string => {
       const html = readFileSync(join(ROOT, path), 'utf8');
       return /http-equiv="content-security-policy" content="([^"]*)"/.exec(html)?.[1] ?? '';
     };
-    for (const other of [
-      'index.html',
-      'sommaire/index.html',
-      `s/${section.id}/index.html`,
-      'exactitude/index.html',
-    ]) {
-      check(`${other} opens no third party`, !policy(other).includes('https://'));
+    for (const other of ['index.html', 'sommaire/index.html', 'exactitude/index.html']) {
+      check(`${other} opens no third party`, !policyOf(other).includes('https://'));
     }
     check(
       'nothing we ship violates the Content-Security-Policy',
@@ -525,36 +805,35 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
     await context.close();
 
-    // --- 6. ten minutes on the page: the question is still sent. The hour of the server, read
-    // at arrival, ages with the device's clock — it used not to, and five minutes after arriving
-    // every question was answered by the page alone, without a word.
+    // --- 8 bis. ten minutes on the page: a question still gets its sentences and, once agreed,
+    // its explanation. The hour of the server, read at arrival, ages with the device's clock —
+    // it used not to, and five minutes after arriving every question stayed on the phone.
     {
       const late = await browser.newContext({ viewport: { width: 390, height: 844 } });
       const view = await late.newPage();
       await guard(view);
       await view.goto(`${origin}/`);
-      await view.focus('#q');
       await until(
         view,
         "document.querySelector('#ask') && !document.querySelector('#ask').disabled",
       );
-      const sent = posted.length;
-      scenario = 'answer';
+      const sent = [posted.gists.length, posted.chat.length];
+      sim.gists = 'toutes';
+      sim.chat = 'explique';
       await view.clock.setFixedTime(new Date(Date.now() + 10 * 60 * 1000));
       await view.fill('#q', 'la retraite, dix minutes plus tard');
       await view.click('#ask');
-      await until(view, "!document.querySelector('#answer').hidden");
+      await until(view, "document.querySelector('#chat-thread .c-consent') !== null");
+      await view.click('#chat-thread [data-consent="accept"]');
+      await until(view, "document.querySelector('#chat-thread [data-generated-by]') !== null");
       check(
-        'ten minutes after arriving, a question is still sent to the model',
-        posted.length === sent + 1 &&
-          ((await view.locator('#answer-notice').textContent()) ?? '').includes(MODEL),
-        String(posted.length - sent),
+        'ten minutes after arriving, a question is still answered and, agreed, explained',
+        posted.gists.length === (sent[0] ?? 0) + 1 && posted.chat.length === (sent[1] ?? 0) + 1,
       );
       await late.close();
     }
 
-    // --- 6 bis. once painted, the page does not move: the field, the button that asks and the
-    // game are all in their place before any script (Chromium is the engine that measures it)
+    // --- 8 ter. once painted, the page does not move (Chromium is the engine that measures it)
     if (name === 'chromium') {
       const shift = await lateLayoutShift(browser, `${origin}/`);
       check(
@@ -564,7 +843,8 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       );
     }
 
-    // --- 6 ter. accessibility of the answer (Chromium: axe is injected, so the policy is bypassed)
+    // --- 8 quater. accessibility of the open sheet (Chromium: axe is injected, so the policy
+    // is bypassed), with the agreement, then with an explanation
     if (name === 'chromium') {
       const axe = readFileSync('node_modules/axe-core/axe.min.js', 'utf8');
       for (const [label, width] of [
@@ -578,28 +858,42 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         const view = await audited.newPage();
         await guard(view);
         await view.goto(`${origin}/`);
-        await view.fill('#q', 'et les retraites');
+        await until(
+          view,
+          "document.querySelector('#ask') && !document.querySelector('#ask').disabled",
+        );
+        await view.fill('#q', 'c’est quoi la règle verte ?');
         await view.click('#ask');
-        await until(view, "!document.querySelector('#answer').hidden");
+        await until(view, "document.querySelector('#chat-thread .c-consent') !== null");
         await view.addScriptTag({ content: axe });
-        const result: { violations: { id: string; impact: string | null }[] } = await view.evaluate(
-          'window.axe.run(document, { resultTypes: ["violations"] })',
+        const audit = async (): Promise<string[]> => {
+          const result: { violations: { id: string; impact: string | null }[] } =
+            await view.evaluate('window.axe.run(document, { resultTypes: ["violations"] })');
+          return result.violations
+            .filter((v) => v.impact === 'serious' || v.impact === 'critical')
+            .map((v) => v.id);
+        };
+        const asked = await audit();
+        check(
+          `the sheet with its agreement passes the accessibility audit at ${label}`,
+          asked.length === 0,
+          asked.join(','),
         );
-        const serious = result.violations.filter(
-          (v) => v.impact === 'serious' || v.impact === 'critical',
+        await view.click('#chat-thread [data-consent="accept"]');
+        await until(view, "document.querySelector('#chat-thread [data-generated-by]') !== null");
+        const answered = await audit();
+        check(
+          `the sheet with an explanation passes the accessibility audit at ${label}`,
+          answered.length === 0,
+          answered.join(','),
+        );
+        const box: { sw: number; cw: number; sheet: number } = await view.evaluate(
+          "({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth, sheet: document.querySelector('#chat-sheet').scrollWidth - document.querySelector('#chat-sheet').clientWidth })",
         );
         check(
-          `the answer passes the accessibility audit at ${label}`,
-          serious.length === 0,
-          serious.map((v) => v.id).join(','),
-        );
-        const box: { sw: number; cw: number } = await view.evaluate(
-          '({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth })',
-        );
-        check(
-          `the answer does not overflow at ${label}`,
-          box.sw <= box.cw,
-          `${String(box.sw)} > ${String(box.cw)}`,
+          `the sheet does not overflow at ${label}`,
+          box.sw <= box.cw && box.sheet <= 0,
+          `${String(box.sw)} > ${String(box.cw)} / ${String(box.sheet)}`,
         );
         await audited.close();
       }
@@ -615,25 +909,13 @@ async function main(): Promise<void> {
     console.error(`e2e-ask: no ${ROOT}/ — run \`npm run build:ask\` first`);
     process.exit(1);
   }
-  const args = process.argv.slice(2);
-  const engines = (args[args.indexOf('--engines') + 1] ?? 'chromium,firefox,webkit').split(',');
-  const selected = args.includes('--engines') ? engines : ['chromium', 'firefox', 'webkit'];
   const manifest = JSON.parse(readFileSync('data/2026/manifest.json', 'utf8')) as Manifest;
   const { server, origin } = await serve(resolve(ROOT));
-  let failed = 0;
   try {
-    for (const engine of selected) {
-      const result = await runEngine(engine, origin, manifest);
-      console.log(
-        `${result.engine}: ${String(result.passed.length)} passed, ${String(result.failed.length)} failed`,
-      );
-      for (const line of result.failed) console.log(`  ✖ ${line}`);
-      failed += result.failed.length;
-    }
+    await report((engine) => runEngine(engine, origin, manifest));
   } finally {
     server.close();
   }
-  if (failed > 0) process.exit(1);
 }
 
 await main();

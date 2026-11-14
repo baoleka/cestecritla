@@ -18,14 +18,14 @@
  * The strings the script needs are handed to it as JSON, so that they come from the kit like
  * every other sentence of the interface.
  *
- * « Demander » (D16.2, D16.8). When data/2026/ask.json says the site answers questions, and the
- * page asks for it (`ask`), the same field gains ONE button — the only gesture that sends
- * anything — the notice that an AI is at work, before the first use, and the place where the
- * answer lands, above the local results. In mode "off" none of it is rendered: no button, no
- * notice, no script, and the page says the search is local, which is then the whole truth.
+ * « Demander » (D16.45 to D16.51). When data/2026/ask.json says the site answers questions, and
+ * the page asks for it (`ask`), the same field gains ONE button — it opens the sheet of
+ * src/components/ChatSheet.astro, and what was typed becomes the first question — and the
+ * notice, before the first use, of what asking does and of the AI that may explain. In mode
+ * "off" none of it is rendered: no button, no notice, no sheet, no script, and the page says
+ * the search is local, which is then the whole truth.
  */
 import { askSite } from '../lib/ask-config.ts';
-import { ripostes, prose } from '../lib/editorial.ts';
 import { manifest } from '../lib/edition.ts';
 import { locatorDisplay } from '../lib/facts.ts';
 import { safeJson, t } from '../lib/strings.ts';
@@ -40,32 +40,11 @@ const { toc = false, ask = false } = Astro.props;
 
 const version = manifest().meta.corpus_version;
 const site = askSite();
-const asking = ask && site.mode !== 'off' && site.modelName !== null;
+const asking = ask && site.mode === 'chat' && site.modelName !== null;
 const model = site.modelName ?? '';
-const askConfig = asking && {
-  mode: site.mode,
-  corpus: version,
-  entries: ripostes().map((entry) => ({
-    slug: entry.slug,
-    theme: entry.theme,
-    objection: prose(entry.objection),
-  })),
-  strings: {
-    waiting: t('chat.waiting'),
-    answerTitle: t('chat.liant.voici'),
-    selectTitle: t('chat.liant.where'),
-    reviewedTitle: t('chat.reviewed.title'),
-    noneTitle: t('refusal.not_found.title'),
-    noneLead: t('search.no_results_hint'),
-    silence: t('silence.chat.local', { reopenTime: '{reopenTime}' }),
-    where: t('search.result.where'),
-    incipit: t('quote.incipit_label'),
-    firstWords: t('quote.first_words_label'),
-    notice: t('chat.ai_mention', { model }),
-    noticeSelect: t('chat.ai_mention.select', { model }),
-    method: t('chat.method_link'),
-  },
-};
+// Imported only by a build whose field asks (astro.config.ts): a condition the bundler can
+// fold removes the import itself — and with it the sheet's stylesheet and its script.
+const ChatSheet = __CEL_CHAT__ ? (await import('./ChatSheet.astro')).default : null;
 const strings = {
   opening: t('search.opening'),
   one: t('search.results_count_one'),
@@ -110,11 +89,11 @@ const strings = {
       <>
         {/* In its place from the first paint, and inert until the script that can answer a
             press has loaded: appearing then, it moved the lines under it. */}
-        <button type="button" id="ask" disabled>
+        <button type="button" id="ask" aria-haspopup="dialog" disabled>
           {t('chat.send')}
         </button>
-        {/* The AI notice, before the first use (AI Act, art. 50): what searching does, what
-            asking does, to whom the question goes. */}
+        {/* The notice, before the first use (AI Act, art. 50): what searching does, what asking
+            does, and that an AI explains only with the visitor's agreement. */}
         <p id="search-hint" class="ref">{t('chat.ai_hint', { model })}</p>
       </>
     ) : (
@@ -124,24 +103,7 @@ const strings = {
     )
   }
 </form>
-{
-  asking && (
-    <>
-      <p id="ask-status" role="status" class="ref" />
-      <section id="answer" aria-labelledby="answer-title" hidden>
-        <h2 id="answer-title" tabindex="-1" />
-        <div id="answer-body" />
-        <p id="answer-notice" class="ref" />
-        <p>
-          <button type="button" id="ask-again" class="quiet">
-            {t('chat.ask_another')}
-          </button>
-        </p>
-      </section>
-      <script type="application/json" id="ask-config" set:html={safeJson(askConfig)} is:inline />
-    </>
-  )
-}
+{asking && ChatSheet !== null && <ChatSheet model={model} />}
 <p id="search-status" role="status" class="ref"></p>
 <section id="search-results" aria-labelledby="search-results-title" hidden>
   <h2 id="search-results-title" tabindex="-1">{t('search.results_title')}</h2>
@@ -158,13 +120,24 @@ const strings = {
     13/11/2026: a second <script> placed inside `{asking && …}` was bundled, but Astro numbered
     the two scripts in an order the page did not follow. With the mode "off" the page loaded the
     script of « Demander » instead of the search's, and the search silently never started.
-    So the search script is the only one the page names; it fetches the other itself, and only
-    on a page that carries the ask configuration.
+    So the search script is the only one the page names. The sheet's script is fetched by it,
+    at the first press of the button and never before (PLAN-CHAT §4) — and only in a build
+    whose field asks: elsewhere the constant folds the whole block away.
   */
 }
 <script>
   import '../scripts/search.ts';
-  if (document.querySelector('#ask-config') !== null) void import('../scripts/ask.ts');
+  if (__CEL_CHAT__) {
+    const opener = document.querySelector<HTMLButtonElement>('#ask');
+    if (opener !== null && document.querySelector('#chat-sheet') !== null) {
+      opener.disabled = false;
+      opener.addEventListener('click', () => {
+        void import('../scripts/chat.ts').then((sheet) => {
+          sheet.open();
+        });
+      });
+    }
+  }
   // The scrutin build's note (home page only): fetched the same way, for the same reason.
   if (document.querySelector('#scrutin-reopen') !== null) {
     void import('../scripts/scrutin-note.ts');

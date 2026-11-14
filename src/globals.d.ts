@@ -10,3 +10,6 @@ declare const __CEL_GAME_WRITES__: boolean;
 
 /** True in the build deployed before each electoral silence window (D16.16). */
 declare const __CEL_SCRUTIN__: boolean;
+
+/** True in a build whose field opens the sheet of « Demander » (data/2026/ask.json: "chat"). */
+declare const __CEL_CHAT__: boolean;

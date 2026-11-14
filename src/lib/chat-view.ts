@@ -181,6 +181,20 @@ export function nextStep(turn: Turn, page: PageState): 'gists' | 'explain' | nul
   return first && page.consent === 'given' && explainable(turn, page) ? 'explain' : null;
 }
 
+/**
+ * True once a turn waits for nothing: the search is done, no answer is awaited, and nothing is
+ * due to be sent. What a reader — or a screen reader — can take as the turn being whole.
+ */
+export function settled(turn: Turn, page: PageState): boolean {
+  if (closedTurn(turn)) return true;
+  return (
+    turn.rows !== null &&
+    turn.gists !== 'pending' &&
+    turn.awaited === undefined &&
+    nextStep(turn, page) === null
+  );
+}
+
 /** The turn once `/api/gists` has answered — or has not: `null` is an answer too. */
 export function withGists(turn: Turn, response: GistsResponse | null): Turn {
   return { ...turn, gists: response };

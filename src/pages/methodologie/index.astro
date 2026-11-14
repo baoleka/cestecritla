@@ -34,14 +34,10 @@ const requests = 1 + counts.parts + counts.chapters + 5;
   <p>{t('method.hash.text')}</p>
 
   {
-    site.mode !== 'off' && (
+    site.mode === 'chat' && (
       <>
         <h2>{t('method.ask_title')}</h2>
-        <p>
-          {site.mode === 'answer'
-            ? t('about.ai_method', { model })
-            : t('about.ai_method.select', { model })}
-        </p>
+        <p>{t('about.ai_method', { model })}</p>
         <p>{t('about.ai_limits')}</p>
         <p>{t('about.ai_reviewed')}</p>
       </>

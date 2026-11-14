@@ -21,9 +21,8 @@ const model = site.modelName ?? '';
 
   <h2>{t('method.writing_title')}</h2>
   {site.mode === 'off' && <p>{t('about.no_ai')}</p>}
-  {site.mode === 'answer' && <p>{t('about.ai_line', { model })}</p>}
-  {site.mode === 'select' && <p>{t('about.ai_line.select', { model })}</p>}
-  {site.mode !== 'off' && <p>{t('about.ai_reviewed')}</p>}
+  {site.mode === 'chat' && <p>{t('about.ai_line', { model })}</p>}
+  {site.mode === 'chat' && <p>{t('about.ai_reviewed')}</p>}
   <p>{t('about.writing_method')}</p>
   <p>{t('about.method')} <a href="/exactitude/">{t('accuracy.title')}</a></p>
 

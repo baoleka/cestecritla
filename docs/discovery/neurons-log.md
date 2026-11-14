@@ -161,3 +161,17 @@ encore refusé à 10 h 49 UTC, il répond à 13 h 47 UTC — entre treize et vin
 les premières dépenses de la veille ; la fenêtre exacte reste une HYPOTHÈSE, et ce qu'il rend
 à cette heure n'est pas connu. Le refus « quota épuisé » n'a pas été revu depuis le déploiement :
 la lecture du 429 par le Worker en ligne reste PROBABLE.
+
+**14 novembre 2026, 13 h 52 à 13 h 55 UTC — l'essai des phrases reprend, puis s'arrête : 22,73 neurons.**
+Le script local qui attendait le quota (D16.38) a vu la plateforme répondre et a relancé l'essai
+sur le chapitre d'essai : Gemma 4 26B écrit, les deux autres modèles étiquettent. Vingt-six mesures
+tentées sur quarante-trois, deux phrases laissées passer par le contrôle, **22,73 neurons** comptés
+par le script — puis la plateforme a de nouveau répondu « quota épuisé » (quatorze étiquettes sans
+réponse par juge), et le script s'est remis en attente. **Ce que cela apprend** : à 13 h 47 UTC le
+quota n'avait rendu que quelques dizaines de neurons — 21,89 pour mes deux sondes, 22,73 ici —
+alors que 10 086 avaient été dépensés entre l'après-midi et la nuit du 13. C'est ce que donne une
+fenêtre de vingt-quatre heures qui glisse : seules les petites dépenses du début d'après-midi du 13
+avaient vingt-quatre heures ; le gros, dépensé le 13 entre le soir et 0 h 36 UTC, ne revient que ce
+soir et cette nuit. **PROBABLE** (deux observations concordantes, aucune lecture d'un compteur de
+la plateforme) : l'essai ne se finira pas avant la nuit du 14 au 15, et l'écriture des 1 069
+phrases (lot C3) doit se compter en neurons par vingt-quatre heures glissantes, pas par jour.

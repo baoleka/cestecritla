@@ -138,7 +138,7 @@ Rendu type d'une StatCard (chapitre 12, section 1) :
 | ~~`{organisation}`, `{sponsor}`~~ | **LEVÉ (10/9/2026)** : renommés `{pollster}` et `{pollSponsor}`. Ils portent les mentions légales d'un **sondage cité par le livre**, jamais l'organisation ou le commanditaire de l'app, qui n'en a aucun |
 | `{contactEmail}` | Valeur tranchée : **contact@cestecritla.fr**, résolue au build. Reste un placeholder dans les fichiers suivis parce que la porte de dépôt (D12.3, H-CNF-17c) refuse une adresse littérale. **Boîte à créer** (Email Routing) |
 | `home.hook.*`, `challenge.*` (niveau 3 de gamification, D0.18) | T5 (grille utile vs gadget) puis T11 session 2 ; supprimer les chaînes des mécaniques écartées |
-| Valeur de `{resetTime}` (reset Workers AI à 00:00 UTC, soit 1 h ou 2 h à Paris selon la saison) | T7, calcul côté client depuis l'UTC |
+| ~~Valeur de `{resetTime}`~~ | **LEVÉ (14/11/2026, kit v0.8.0)** : le quota de Workers AI n'a pas d'heure de retour à annoncer (mesuré les 13 et 14/11 : pas de remise à zéro à 00:00 UTC). `quota.title` et le placeholder sortent du kit ; quota épuisé, la feuille continue avec les phrases relues, sans un mot de plus |
 | `privacy.turnstile` (formulation « sans publicité ni profilage ») | T7, après lecture des cookies posés par Turnstile ; T9 revue juriste hostile |
 | Liens vers Désintox (`refusal.desintox_link`, `riposte.desintox_link`) : site LFI, non listé nommément dans les CTA de D0.16 | T9 : confirmer qu'un lien de lecture vers desintox.lafranceinsoumise.fr relève bien de la « source », pas d'un CTA |
 | « Mélenchon » dans `share.message.cousin` (registre oral) vs « L'Avenir en commun » | Test humain 2 : lequel des trois messages est réellement envoyé |

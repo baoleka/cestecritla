@@ -35,11 +35,7 @@ const NBSP = String.fromCodePoint(0xa0);
  * The three places where the page says an AI is at work (art. 50 of the AI Act): under the field
  * before the first use, on a written answer, on a selection. Nothing else may sit in the family.
  */
-const AI_NOTICE_KEYS: readonly string[] = [
-  'chat.ai_hint',
-  'chat.ai_mention',
-  'chat.ai_mention.select',
-];
+const AI_NOTICE_KEYS: readonly string[] = ['chat.ai_hint', 'chat.ai_mention'];
 /** Room for the longest name the bench could print: "Mistral Small 3.1" has 17 characters. */
 const LONGEST_MODEL_NAME = 'x'.repeat(24);
 
@@ -339,7 +335,7 @@ void test('the question, the game and the turtle reward, rank and judge nobody (
  * written answer; `where` opens a selection — the model chose and wrote nothing, or no model
  * ran. Neither confirms, corrects nor qualifies: the reader concludes.
  */
-const LIANT_KEYS: readonly string[] = ['chat.liant.voici', 'chat.liant.where'];
+const LIANT_KEYS: readonly string[] = [];
 
 /** Liant keys a decision has withdrawn: their presence is a regression, not a leftover. */
 const WITHDRAWN_LIANT_KEYS: Readonly<Record<string, string>> = {
@@ -349,6 +345,8 @@ const WITHDRAWN_LIANT_KEYS: Readonly<Record<string, string>> = {
   'chat.liant.corrige': 'D16.5 — une réponse ne corrige pas la personne qui demande',
   'chat.liant.precise': 'D16.5 — une nuance est un jugement porté sur la question',
   'chat.liant.absent': 'D16.4 — remplacée par refusal.not_found.*, que la recherche affiche déjà',
+  'chat.liant.voici': 'D16.47 — le modèle ne dit plus ce que prévoient les mesures : les phrases relues le disent',
+  'chat.liant.where': 'D16.47 — la sélection par le modèle est retirée avec la réponse écrite',
 };
 
 /**
@@ -362,19 +360,20 @@ const WITHDRAWN_LIANT_KEYS: Readonly<Record<string, string>> = {
 const RUNTIME_AI_KEYS: Readonly<Record<string, string | null>> = {
   'about.ai_limits': null,
   'about.ai_line': 'about.no_ai',
-  'about.ai_line.select': 'about.no_ai',
   'about.ai_method': 'about.no_ai',
-  'about.ai_method.select': 'about.no_ai',
   'about.ai_reviewed': null,
+  'chat.ai.start': null,
+  'chat.ai.stop': null,
+  'chat.ai.waiting': null,
   'chat.ai_badge': null,
   'chat.ai_hint': 'search.local_promise',
   'chat.ai_mention': null,
-  'chat.ai_mention.select': null,
-  'chat.waiting': null,
+  'chat.consent.accept': null,
+  'chat.consent.decline': null,
+  'chat.consent.title': null,
+  'chat.consent.who': null,
   'offline.chat': 'offline.chat.local',
   'privacy.policy.02': 'privacy.policy.02.local',
-  'privacy.policy.03.ask': null,
-  'quota.title': 'quota.title.local',
   'silence.chat': 'silence.chat.local',
 };
 const AI_EXEMPT = new Set(['about.no_ai', 'about.writing_method']);
