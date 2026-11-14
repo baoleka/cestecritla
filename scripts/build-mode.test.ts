@@ -22,12 +22,14 @@ import {
   STATIC_CONFIG,
   UNSET_DATABASE_ID,
   WORKER_CONFIG,
+  CHAT_WORKERS,
   appRedirects,
   builtAskMode,
   chatDeployArgs,
   chatDeployRefusal,
   chatWithdrawArgs,
   chatWithdrawRefusal,
+  chatWorkerName,
   citationPolicyValidated,
   deployRefusal,
   distProblems,
@@ -777,13 +779,29 @@ void test('the Worker of the chat is deployed by the script alone, with an accor
     'wrangler.chat.jsonc',
     '--env=',
   ]);
-  assert.equal(chatWithdrawRefusal('2026-11-20', '2026-11-20'), null);
-  for (const accord of [null, '2026-11-19']) {
-    assert.match(
-      String(chatWithdrawRefusal(accord, '2026-11-20')),
-      /deleting the Worker of the chat needs the editor's accord, given today/,
-    );
+  for (const target of ['preview', 'apex'] as const) {
+    const named = chatWorkerName(target);
+    assert.equal(named, CHAT_WORKERS[target], 'the committed file names the Worker of the chat');
+    assert.equal(chatWithdrawRefusal('2026-11-20', '2026-11-20', target, named), null);
+    for (const accord of [null, '2026-11-19']) {
+      assert.match(
+        String(chatWithdrawRefusal(accord, '2026-11-20', target, named)),
+        /deleting the Worker of the chat needs the editor's accord, given today/,
+      );
+    }
+    // Outside a terminal wrangler deletes without asking: a configuration that names another
+    // Worker — the site's own, the preview's, none — deletes nothing, accord or not.
+    for (const other of ['cestecritla', 'cestecritla-preview', `${CHAT_WORKERS[target]}-x`, null]) {
+      assert.match(
+        String(chatWithdrawRefusal('2026-11-20', '2026-11-20', target, other)),
+        /nothing is deleted/,
+        String(other),
+      );
+    }
   }
+  assert.notEqual(CHAT_WORKERS.apex, app.name);
+  assert.notEqual(CHAT_WORKERS.preview, `${String(app.name)}-preview`);
+  assert.equal(chatWorkerName('preview', '/nonexistent'), null);
   assert.deepEqual(refusedArguments(['--chat', '--withdraw', '--accord', '2026-11-20']), []);
   // On the preview host this Worker carries that host's mode: deploying it is what opens the
   // two addresses there. Whatever stands before the first question holds it back — an accord
@@ -803,7 +821,7 @@ void test('the Worker of the chat is deployed by the script alone, with an accor
   const deploy = readFileSync('scripts/deploy.ts', 'utf8');
   // `wrangler delete` is reached by one path, which never names a Worker by hand…
   assert.equal((deploy.match(/'delete'/g) ?? []).length, 0, 'the script spells no delete itself');
-  assert.match(deploy, /chatWithdrawRefusal\(accord, today\)/);
+  assert.match(deploy, /chatWithdrawRefusal\(accord, today, target, named\)/);
   assert.match(deploy, /--withdraw takes --accord <day> and nothing else/);
   // …and it means nothing without `--chat`: the site is withdrawn with the holding build.
   assert.match(deploy, /given\.includes\('--withdraw'\) && !given\.includes\('--chat'\)/);

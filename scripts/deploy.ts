@@ -31,6 +31,7 @@ import {
   chatDeployRefusal,
   chatWithdrawArgs,
   chatWithdrawRefusal,
+  chatWorkerName,
   citationPolicyValidated,
   deployRefusal,
   distProblems,
@@ -104,13 +105,14 @@ if (given.includes('--chat')) {
       console.error(`deploy refused: --withdraw takes --accord <day> and nothing else`);
       process.exit(2);
     }
-    const kept = chatWithdrawRefusal(accord, today);
+    const named = chatWorkerName(target);
+    const kept = chatWithdrawRefusal(accord, today, target, named);
     if (kept !== null) {
       console.error(`withdrawal refused (${target}, the Worker of the chat): ${kept}`);
       process.exit(1);
     }
     const withdrawArgs = chatWithdrawArgs(target);
-    console.log(`withdraw: the Worker of the chat ← ${target}`);
+    console.log(`withdraw: the Worker of the chat ← ${target} (${String(named)})`);
     console.log(`          wrangler ${withdrawArgs.join(' ')}`);
     const gone = spawnSync('npx', ['--no-install', 'wrangler', ...withdrawArgs], {
       stdio: 'inherit',

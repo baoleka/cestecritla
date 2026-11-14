@@ -681,3 +681,26 @@ mineurs. Chacun a été relu dans le code avant d'être retenu.
   vérifiés et liés, aucun journal, aucun tiers, rien d'écrit sur le téléphone, tout en
   `textContent`, la clé du banc comparée en temps constant, aucune adresse ni chemin personnel
   dans les fichiers suivis ni dans les builds.
+
+### 14 novembre 2026 — la production redéployée avec le correctif du champ (D16.52)
+
+- **Avant** (constaté en ligne à 16 h 31 UTC, mots inventés, trois navigateurs) : Entrée avant
+  le script → `/?q=…` dans l'adresse, une requête portant les mots.
+- **L'éditeur a relu la page Confidentialité** telle que la production la sert, ses deux
+  passages neufs sous les yeux, et demandé le redéploiement. `privacy_page` porte l'empreinte
+  du jour ; la porte de lancement ne trouve plus rien.
+- **Redéployé à 16 h 44 UTC** : `npm run build && npm run deploy`, commit `a7050d0`, version
+  `53092a0f`, fichiers statiques, six fichiers envoyés. **Après**, sur `cestecritla.fr` et sur
+  `www` : Entrée avant le script ne mène nulle part, aucune requête ne porte les mots, le champ
+  garde ce qui était tapé — dans trois navigateurs ; `form-action 'none'` et
+  `Strict-Transport-Security` sont servis ; 1 151 fichiers sur 1 154 identiques à `dist/` sur
+  chaque hôte (les trois écarts connus) ; les contrôles habituels tiennent. VÉRIFIÉ.
+- **Ce qui reste vrai** : du lancement (14/11, 11 h) à ce redéploiement, soit moins de six
+  heures, un visiteur pressé sur un réseau lent a pu envoyer ses mots de recherche à
+  l'hébergeur, dans une adresse. Combien : inconnu, le site ne mesure rien. Les mots ne sont
+  allés qu'à notre hébergeur ; la question de savoir si cela se déclare relève de l'éditeur
+  (`14-risques.md` R40 tient lieu de trace écrite).
+- **La suppression du Worker du chat ne peut viser que lui** : hors terminal, wrangler supprime
+  sans demander (lu dans son code : la confirmation retombe sur « oui »). La commande de
+  retrait compare donc d'abord le nom que la configuration donne à celui qu'elle attend
+  (`CHAT_WORKERS`) : une configuration qui nommerait le Worker du site ne supprime rien.

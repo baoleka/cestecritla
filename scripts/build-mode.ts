@@ -193,6 +193,28 @@ export function chatDeployArgs(
   ];
 }
 
+/** The only two Workers this script may ever delete: the chat's, on each target. */
+export const CHAT_WORKERS: Readonly<Record<DeployTarget, string>> = {
+  apex: 'cestecritla-chat',
+  preview: 'cestecritla-chat-preview',
+};
+
+/**
+ * The Worker the chat's configuration names on a target — as wrangler computes it: the name of
+ * the file, and the environment after it. Null when the file cannot be read.
+ */
+export function chatWorkerName(target: DeployTarget, root = '.'): string | null {
+  try {
+    const config: unknown = parseJsonc(readFileSync(join(root, CHAT_CONFIG), 'utf8'));
+    const name =
+      typeof config === 'object' && config !== null && 'name' in config ? config.name : null;
+    if (typeof name !== 'string') return null;
+    return target === 'preview' ? `${name}-preview` : name;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * The arguments of `wrangler delete` for the Worker of the chat on this target: the withdrawal
  * of sheet 12 of the runbook. The name comes from the configuration, never from a hand — the
@@ -207,7 +229,21 @@ export function chatWithdrawArgs(target: DeployTarget): string[] {
  * always may (the same rule as the holding page): nothing is asked but the editor's accord,
  * given that day, because deleting a Worker is his decision each time (CLAUDE.md).
  */
-export function chatWithdrawRefusal(accord: string | null, today: string): string | null {
+export function chatWithdrawRefusal(
+  accord: string | null,
+  today: string,
+  target: DeployTarget,
+  named: string | null,
+): string | null {
+  // Outside a terminal wrangler deletes without asking (read in 4.130.0: its confirmation
+  // falls back to « yes »). So the name is checked here, before anything is started: a
+  // configuration edited to name the site's own Worker deletes nothing.
+  if (named !== CHAT_WORKERS[target]) {
+    return (
+      `${CHAT_CONFIG} names ${named ?? 'no Worker'} for this target, not ` +
+      `${CHAT_WORKERS[target]}: nothing is deleted`
+    );
+  }
   return accord === today
     ? null
     : `deleting the Worker of the chat needs the editor's accord, given today: add --accord ${today}`;
