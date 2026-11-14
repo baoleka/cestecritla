@@ -62,7 +62,15 @@ const strings = {
   /* In the page from the first paint. Revealed by its script, the field pushed everything
      under it down a second after the page could be read (0.17 of layout shift, measured on
      13/11/2026: scripts/perf-probe.ts). Where scripts are off it would be a field that answers
-     nothing: a media query hides it there (base.css), and <noscript> says where the sommaire is. */
+     nothing: a media query hides it there (base.css), and <noscript> says where the sommaire is.
+
+     The field has NO NAME, on purpose. A named control is what a browser sends when a form is
+     submitted by itself — and this field is in the page before the script that answers Enter:
+     pressed a moment too early, or with that script lost on the way, Enter sent the words to
+     the server in the address (`/?q=…`), where they stayed (security review of 14/11/2026,
+     reproduced on the build in production). An unnamed control is never sent; the policy of
+     public/_headers (`form-action 'none'`) stops the submission itself; scripts/e2e.ts and
+     scripts/check-build.test.ts hold both. */
 }
 <form
   id="search"
@@ -74,7 +82,6 @@ const strings = {
   <label for="q">{asking ? t('chat.label') : t('search.label')}</label>
   <input
     id="q"
-    name="q"
     type="search"
     autocomplete="off"
     autocapitalize="none"

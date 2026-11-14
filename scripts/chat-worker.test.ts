@@ -25,10 +25,12 @@ import {
 } from '../src/lib/chat-contract.js';
 import { EXHAUSTED, type ModelRun } from '../src/worker/ask.js';
 import {
-  EXPLAIN_ROOM,
   answerChat,
   answerGists,
   type ChatDeps,
+  closedChat,
+  closedGists,
+  EXPLAIN_ROOM,
   type GistsDeps,
 } from '../src/worker/chat.js';
 import { MODELS, keepsNothing } from '../src/worker/models.js';
@@ -511,6 +513,10 @@ void test('what the routes of the chat do not contain: the reader of the book, a
     assert.match(code, /request\.method !== 'POST'\) return empty\(405\)/, route);
     assert.match(code, /request\.headers\.get\('origin'\) !== origin\) return empty\(403\)/, route);
     assert.match(code, new RegExp(`${parser}\\(await readBody\\(request\\)\\)`), route);
+    // A closed route reads nothing: the hour and the mode are asked before a body is opened.
+    const closedAt = code.indexOf(route === 'handleGists' ? 'closedGists(' : 'closedChat(');
+    assert.ok(closedAt > -1 && closedAt < code.indexOf('readBody(request)'), route);
+    assert.match(code, /if \(closed !== null\) return json\(closed\);/, route);
     // …each on its own count: reading sentences is not slowed by what the model answers.
     assert.match(code, new RegExp(`withinRate\\(request, env, '${lane}'\\)`), route);
   }
@@ -525,4 +531,31 @@ void test('what the routes of the chat do not contain: the reader of the book, a
   const bench = index.slice(index.indexOf('async function benchExplain'));
   const outside = index.replace(bench.slice(0, bench.indexOf('\n}\n')), '');
   assert.doesNotMatch(outside, /\bquestion\b/);
+});
+
+void test('a closed route answers before it is told anything: the hour and the mode, never the request', () => {
+  const open = { mode: 'chat', silence: { silent: false, reopen: null } } as const;
+  const model = MODELS['mistral-small-3.1'];
+  // Open: nothing is decided without the request.
+  assert.equal(closedGists(open), null);
+  assert.equal(closedChat({ ...open, model }), null);
+  // Where the site asks nothing — and, for a question, where no model was retained.
+  assert.deepEqual(closedGists({ ...open, mode: 'off' }), { kind: 'local' });
+  assert.deepEqual(closedChat({ ...open, mode: 'off', model }), { kind: 'quiet', why: 'none' });
+  assert.deepEqual(closedChat({ ...open, model: null }), { kind: 'quiet', why: 'none' });
+  // During a freeze, whatever the mode: the hour it ends when the calendar knows it.
+  const frozen = { silent: true, reopen: '2027-04-11T18:00:00.000Z' };
+  for (const mode of ['chat', 'off'] as const) {
+    assert.deepEqual(closedGists({ mode, silence: frozen }), {
+      kind: 'silence',
+      reopen: frozen.reopen,
+    });
+    assert.deepEqual(closedChat({ mode, silence: frozen, model }), {
+      kind: 'silence',
+      reopen: frozen.reopen,
+    });
+    const unknown = { silent: true, reopen: null };
+    assert.deepEqual(closedGists({ mode, silence: unknown }), { kind: 'local' });
+    assert.deepEqual(closedChat({ mode, silence: unknown, model }), { kind: 'quiet', why: 'none' });
+  }
 });

@@ -7,6 +7,12 @@
 # directive may appear in both — a header "style-src 'self'" would intersect with the meta
 # policy and block the inlined stylesheet.
 #
+# form-action is 'none': no form of this site is ever submitted by the browser itself. The two
+# fields are answered by scripts, the dialogs close by `method="dialog"` (which navigates
+# nowhere, so the directive does not concern it — tried in three engines on 14/11/2026). With
+# 'self', Enter pressed before the search script had loaded sent the typed words to the server
+# in the address; now the submission is stopped where it starts, and the fields have no name.
+#
 # HOW RULES COMBINE — read this before adding one. Every rule that matches a request applies, in
 # file order, and a header set by two of them is JOINED with a comma, not replaced (Cloudflare
 # docs, "Custom headers"). Measured on 12/11/2026 under `wrangler dev`, before this file was ever
@@ -17,8 +23,9 @@
 # "/*" stays first; scripts/headers.test.ts holds both points.
 
 /*
-  Content-Security-Policy: frame-ancestors 'none'; base-uri 'none'; form-action 'self'; upgrade-insecure-requests
+  Content-Security-Policy: frame-ancestors 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests
   Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=15552000
   X-Content-Type-Options: nosniff
   Cross-Origin-Opener-Policy: same-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()

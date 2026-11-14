@@ -78,11 +78,22 @@ export const EXPLAIN_ROOM = 100;
 
 const LOCAL: GistsResponse = { kind: 'local' };
 
-export async function answerGists(request: GistsRequest, deps: GistsDeps): Promise<GistsResponse> {
-  if (deps.silence.silent) {
-    return deps.silence.reopen === null ? LOCAL : { kind: 'silence', reopen: deps.silence.reopen };
+/**
+ * What `/api/gists` answers whatever it is sent: during a freeze, and where the site asks
+ * nothing. Null when the route is open — and only then is anything of a request read: the
+ * wiring asks this before it opens a body (src/worker/index.ts).
+ */
+export function closedGists(site: Pick<ChatSite, 'mode' | 'silence'>): GistsResponse | null {
+  if (site.silence.silent) {
+    return site.silence.reopen === null ? LOCAL : { kind: 'silence', reopen: site.silence.reopen };
   }
-  if (deps.mode !== 'chat' || request.corpus !== deps.corpusVersion) return LOCAL;
+  return site.mode === 'chat' ? null : LOCAL;
+}
+
+export async function answerGists(request: GistsRequest, deps: GistsDeps): Promise<GistsResponse> {
+  const closed = closedGists(deps);
+  if (closed !== null) return closed;
+  if (request.corpus !== deps.corpusVersion) return LOCAL;
   let gists: Gist[];
   try {
     const loaded = await loadGists(deps.db, request.ids, deps.corpusVersion);
@@ -122,11 +133,24 @@ export interface ChatDeps extends ChatSite {
 const QUIET: ChatResponse = { kind: 'quiet', why: 'none' };
 const SPENT: ChatResponse = { kind: 'quiet', why: 'spent' };
 
-export async function answerChat(request: ChatRequest, deps: ChatDeps): Promise<ChatResponse> {
-  // 1. Silence first: during a freeze nothing below even starts.
-  if (deps.silence.silent) {
-    return deps.silence.reopen === null ? QUIET : { kind: 'silence', reopen: deps.silence.reopen };
+/**
+ * What `/api/chat` answers whatever it is sent: during a freeze, where the site asks nothing,
+ * where no model was retained. Null when the route is open — and only then is a question read
+ * at all: the wiring asks this before it opens a body (src/worker/index.ts).
+ */
+export function closedChat(
+  site: Pick<ChatSite, 'mode' | 'silence' | 'model'>,
+): ChatResponse | null {
+  if (site.silence.silent) {
+    return site.silence.reopen === null ? QUIET : { kind: 'silence', reopen: site.silence.reopen };
   }
+  return site.mode === 'chat' && site.model !== null ? null : QUIET;
+}
+
+export async function answerChat(request: ChatRequest, deps: ChatDeps): Promise<ChatResponse> {
+  // 1. Silence first, then the mode: a closed route answers before anything below starts.
+  const closed = closedChat(deps);
+  if (closed !== null) return closed;
   // 2. The site asks, a model explains, the visitor agreed to the words this Worker knows, and
   // the page shows the book it knows.
   const { model } = deps;

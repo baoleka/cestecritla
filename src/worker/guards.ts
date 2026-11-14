@@ -45,10 +45,12 @@ export async function readBody(request: Request, maxBytes = MAX_BODY_BYTES): Pro
 }
 
 /**
- * Whom the rate limiter counts. An IPv4 address is one subscriber. An IPv6 subscriber holds a
- * whole /64 — eighteen billion billion addresses — and would ask each question from a new one:
- * it is the network that is counted, not the address. Anything that does not read as an address
- * is counted as itself.
+ * Whom the rate limiter counts. An IPv4 address is one subscriber. An IPv6 subscriber holds far
+ * more than an address — and would ask each question from a new one: it is the network that is
+ * counted. A home line is commonly handed a /56, that is 256 networks of /64: counted by /64,
+ * one box was 256 visitors (security review of 14/11/2026). A phone on a mobile network holds
+ * one /64, inside a /56 it shares with few. So the first 56 bits are the subscriber. Anything
+ * that does not read as an address is counted as itself.
  */
 export function rateSubject(ip: string): string {
   const address = ip.trim().toLowerCase();
@@ -68,8 +70,10 @@ export function rateSubject(ip: string): string {
   if (groups.length !== 8 || groups.some((group) => !/^[0-9a-f]{1,4}$/.test(group))) {
     return address;
   }
-  const network = groups.slice(0, 4).map((group) => group.replace(/^0+(?=.)/, ''));
-  return `${network.join(':')}::/64`;
+  // The first 56 bits: three groups, and the upper half of the fourth.
+  const upper = (Number.parseInt(groups[3] ?? '0', 16) & 0xff00).toString(16);
+  const network = [...groups.slice(0, 3).map((group) => group.replace(/^0+(?=.)/, '')), upper];
+  return `${network.join(':')}::/56`;
 }
 
 /**

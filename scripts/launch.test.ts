@@ -23,9 +23,12 @@ import {
   WORDS_PATH,
   artefactBlockers,
   canonicalHash,
+  STRINGS_PATH,
+  isChatPrivacyKey,
   launchBlockers,
   pendingReviews,
   previewChatBlockers,
+  privacyChatStringsHash,
   privacyStringsHash,
   turtleColours,
   turtleFingerprint,
@@ -172,6 +175,34 @@ void test('a fingerprint does not depend on the order of the keys, and follows t
     privacyStringsHash({ 'privacy.a': 'x' }),
     privacyStringsHash({ 'privacy.a': 'x.' }),
   );
+  // Two readings, two fingerprints: what only a page that asks shows is read apart, so that a
+  // word changed in the section of the chat does not keep production from being redeployed.
+  for (const key of ['privacy.chat.title', 'privacy.chat.rate', 'privacy.no_measure.ask']) {
+    assert.equal(isChatPrivacyKey(key), true, key);
+  }
+  for (const key of ['privacy.lead', 'privacy.transfer', 'privacy.asked', 'chat.consent.who']) {
+    assert.equal(isChatPrivacyKey(key), false, key);
+  }
+  const page = { 'privacy.lead': 'x', 'privacy.chat.title': 'y', 'privacy.no_account.ask': 'z' };
+  assert.equal(
+    privacyStringsHash(page),
+    privacyStringsHash({ ...page, 'privacy.chat.title': 'changed', 'privacy.no_account.ask': '' }),
+  );
+  assert.notEqual(privacyStringsHash(page), privacyStringsHash({ ...page, 'privacy.lead': 'x.' }));
+  assert.equal(
+    privacyChatStringsHash(page),
+    privacyChatStringsHash({ ...page, 'privacy.lead': 'changed', 'home.title': 'y' }),
+  );
+  for (const moved of [{ 'privacy.chat.title': 'y.' }, { 'privacy.no_account.ask': 'z.' }]) {
+    assert.notEqual(privacyChatStringsHash(page), privacyChatStringsHash({ ...page, ...moved }));
+  }
+  // The committed kit: every string of the privacy page falls on one side, none on both.
+  const committed = JSON.parse(readFileSync(STRINGS_PATH, 'utf8')) as Record<string, unknown>;
+  const privacy = Object.keys(committed).filter((key) => key.startsWith('privacy.'));
+  assert.ok(privacy.some(isChatPrivacyKey) && !privacy.every(isChatPrivacyKey));
+  for (const gone of ['privacy.policy.consent', 'privacy.policy.thread', 'privacy.policy.rate']) {
+    assert.equal(gone in committed, false, `${gone}: renamed into privacy.chat.*`);
+  }
 });
 
 /** A throwaway tree holding the files that validate themselves, so the rule runs without the repo. */
@@ -207,8 +238,13 @@ void test('the files that validate themselves: missing, in place, then edited af
   const words = [{ slot: 0, id: 'w000', word: 'mot', pin: { id: 'p1c1-s01-m01', sha256: 'x' } }];
   const pool = { sensitive_2025: ['c4-s01'], judged: { 'p6c1-s01': null } };
   const svg = '<svg xmlns="http://www.w3.org/2000/svg"/>';
+  const kit = { 'privacy.lead': 'x', 'privacy.chat.title': 'Quand tu demandes' };
   const complete = {
     [MANIFEST_PATH]: manifest,
+    [STRINGS_PATH]: kit,
+    [LAUNCH_PATH]: {
+      privacy_chat: { reviewed_on: '2026-12-02', sha256: privacyChatStringsHash(kit) },
+    },
     [ASK_PATH]: {
       mode: 'chat',
       bench: { sha256: 'beef', run_on: '2026-12-01' },
@@ -364,6 +400,19 @@ void test('the files that validate themselves: missing, in place, then edited af
   ] as const) {
     assert.match(asked({ ...chat, ...without }), said, JSON.stringify(without));
   }
+  // With the chat, production's privacy page has a section more: re-read apart, as it stands.
+  const section = (): string =>
+    artefactBlockers(ready)
+      .filter((line) => line.includes('privacy_chat'))
+      .join('\n');
+  writeFileSync(join(ready, ASK_PATH), JSON.stringify(chat));
+  assert.equal(section(), '');
+  writeFileSync(join(ready, STRINGS_PATH), JSON.stringify({ ...kit, 'privacy.chat.title': 'x' }));
+  assert.match(section(), /section « Quand tu demandes » .* is not re-read as it stands/);
+  // …and a site that asks nothing never waits for that reading.
+  writeFileSync(join(ready, ASK_PATH), JSON.stringify({ mode: 'off', decided_on: '2026-12-01' }));
+  assert.equal(section(), '');
+  writeFileSync(join(ready, STRINGS_PATH), JSON.stringify(kit));
   // The modes of the ladder of D16.4 are no modes of the site any more.
   for (const mode of ['answer', 'select', 'on']) {
     assert.match(asked({ ...chat, mode }), /mode must be "chat" or "off"/, mode);
@@ -399,9 +448,15 @@ void test('the preview host asks only once what comes before any question holds 
     deployment_rehearsed_on: '2026-12-01',
     preview_legal_on: '2026-12-02',
   };
+  const kit = { 'privacy.lead': 'x', 'privacy.chat.title': 'Quand tu demandes' };
+  const launch = {
+    privacy_page: { reviewed_on: '2026-12-01', sha256: 'page-as-read' },
+    privacy_chat: { reviewed_on: '2026-12-01', sha256: privacyChatStringsHash(kit) },
+  };
   const root = tree({
     [MANIFEST_PATH]: { meta: { corpus_version: 'decaf' } },
-    [LAUNCH_PATH]: { privacy_page: { reviewed_on: '2026-12-01', sha256: 'page-as-read' } },
+    [STRINGS_PATH]: kit,
+    [LAUNCH_PATH]: launch,
     [ASK_PATH]: ready,
   });
   const blockers = (ask: unknown, hash = 'page-as-read'): string => {
@@ -425,8 +480,19 @@ void test('the preview host asks only once what comes before any question holds 
   ] as const) {
     assert.match(blockers({ ...ready, ...without }), said, JSON.stringify(without));
   }
-  // The page the agreement sends its reader to is the one that was re-read, as it stands.
+  // The page the agreement sends its reader to is the one that was re-read, as it stands —
+  // and so is the section the chat adds to it, read apart.
   assert.match(blockers(ready, 'page-of-today'), /privacy page .* is not re-read as it stands/);
+  assert.doesNotMatch(blockers(ready), /Quand tu demandes/);
+  writeFileSync(
+    join(root, STRINGS_PATH),
+    JSON.stringify({ ...kit, 'privacy.chat.title': 'Quand tu poses une question' }),
+  );
+  assert.match(blockers(ready), /section « Quand tu demandes » .* is not re-read as it stands/);
+  writeFileSync(join(root, STRINGS_PATH), JSON.stringify(kit));
+  writeFileSync(join(root, LAUNCH_PATH), JSON.stringify({ ...launch, privacy_chat: undefined }));
+  assert.match(blockers(ready), /privacy_chat/);
+  writeFileSync(join(root, LAUNCH_PATH), JSON.stringify(launch));
   // Production asking opens the preview host too — under the same gates, not around them.
   assert.match(
     blockers({ ...ready, mode: 'chat', preview_mode: 'off', preview_legal_on: null }),

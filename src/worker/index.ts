@@ -59,7 +59,14 @@ import {
   type ModelRun,
 } from './ask.js';
 import { DEFAULT_HARD_STOP } from './budget-core.js';
-import { EXPLAIN_ROOM, answerChat, answerGists, explainedOutput } from './chat.js';
+import {
+  answerChat,
+  answerGists,
+  closedChat,
+  closedGists,
+  EXPLAIN_ROOM,
+  explainedOutput,
+} from './chat.js';
 import { clientKey, readBody, type RateLane } from './guards.js';
 import { keptTerms, loadMeasures } from './measures.js';
 import { MODELS, isModelKey, keepsNothing, type ModelKey } from './models.js';
@@ -237,14 +244,16 @@ async function handleGists(request: Request, env: Env, origin: string): Promise<
   if (request.method !== 'POST') return empty(405);
   // Same origin only: no CORS is sent, and a page of another site cannot read our sentences.
   if (request.headers.get('origin') !== origin) return empty(403);
+  // A closed route reads nothing: what it answers depends on the hour and on the mode, never
+  // on what it was sent — so the body is not even opened (security review of 14/11/2026).
+  const silence = silenceNow();
+  const config = chatConfigured(env);
+  const closed = closedGists({ mode: config.mode, silence });
+  if (closed !== null) return json(closed);
+  if (!(await withinRate(request, env, 'gists'))) return json(LOCAL_GISTS);
   const asked = parseGistsRequest(await readBody(request));
   if (asked === null) return empty(400);
 
-  const silence = silenceNow();
-  const config = chatConfigured(env);
-  if (!silence.silent && config.mode === 'chat' && !(await withinRate(request, env, 'gists'))) {
-    return json(LOCAL_GISTS);
-  }
   const budget = env.BUDGET.getByName('global');
   const answer = await answerGists(asked, {
     mode: config.mode,
@@ -261,14 +270,16 @@ async function handleChat(request: Request, env: Env, origin: string): Promise<R
   if (request.method !== 'POST') return empty(405);
   // Same origin only: a form on another site cannot spend our allowance, nor send a question.
   if (request.headers.get('origin') !== origin) return empty(403);
+  // A closed route reads nothing — least of all a question: during a freeze, where the site
+  // asks nothing, where no model was retained, the body is not even opened.
+  const silence = silenceNow();
+  const config = chatConfigured(env);
+  const closed = closedChat({ mode: config.mode, silence, model: config.model });
+  if (closed !== null) return json(closed);
+  if (!(await withinRate(request, env, 'chat'))) return json(QUIET);
   const asked = parseChatRequest(await readBody(request));
   if (asked === null) return empty(400);
 
-  const silence = silenceNow();
-  const config = chatConfigured(env);
-  if (!silence.silent && config.mode === 'chat' && !(await withinRate(request, env, 'chat'))) {
-    return json(QUIET);
-  }
   const budget = env.BUDGET.getByName('global');
   const model = config.model;
   const answer = await answerChat(asked, {

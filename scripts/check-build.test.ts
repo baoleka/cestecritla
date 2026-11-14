@@ -196,6 +196,36 @@ void test('a site that answers no question ships nothing of the sheet: not a scr
   }
 });
 
+void test('nothing typed can leave by a form: no field has a name, and no form is submitted natively', () => {
+  // A named control is what a browser sends when it submits a form by itself — in the address,
+  // for a form without a method. Both fields of the site are in the page before the script
+  // that answers Enter: unnamed, they are never sent (security review of 14/11/2026). Checked on
+  // every page that ships, and on the test build of the sheet.
+  for (const root of ['dist', 'dist-ask']) {
+    const pages = walk(root).filter((f) => f.endsWith('.html'));
+    if (pages.length === 0) continue;
+    for (const page of pages) {
+      const html = read(page);
+      assert.doesNotMatch(
+        html,
+        /<(?:input|textarea|select|button)\b[^>]*\sname=/i,
+        `${relative(root, page)}: a named control`,
+      );
+      // The only forms that submit themselves are the ones that close a dialog: they go nowhere.
+      for (const form of html.match(/<form\b[^>]*>/gi) ?? []) {
+        assert.doesNotMatch(form, /\saction=/i, `${relative(root, page)}: ${form}`);
+        if (/\smethod=/i.test(form)) {
+          assert.match(form, /\smethod="dialog"/i, `${relative(root, page)}: ${form}`);
+        }
+      }
+    }
+  }
+  // …and the host refuses any native submission, whatever a page holds.
+  const headers = read('public/_headers');
+  assert.match(headers, /^ {2}Content-Security-Policy: .*form-action 'none'/m);
+  assert.doesNotMatch(headers, /form-action 'self'/);
+});
+
 void test('the script of the sheet is small, and fetched at the first press — never announced before', () => {
   const sheet = walk('dist-ask/_astro').filter((f) => /\/chat\.[^/]+\.js$/.test(f));
   if (sheet.length === 0) {

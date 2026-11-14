@@ -607,44 +607,52 @@ void test('a request is read up to the size of a request of the page, and no fur
   );
 });
 
-void test('the rate limiter counts a subscriber: an IPv4 address, the /64 of an IPv6 one', async () => {
+void test('the rate limiter counts a subscriber: an IPv4 address, the /56 of an IPv6 one', async () => {
   assert.equal(rateSubject('203.0.113.7'), '203.0.113.7');
   // One subscriber, four spellings of four of its addresses.
-  const network = '2001:db8:abcd:12::/64';
+  const network = '2001:db8:abcd:1200::/56';
   for (const address of [
-    '2001:db8:abcd:12:1:2:3:4',
-    '2001:db8:abcd:12::9',
-    '2001:0DB8:ABCD:0012:ffff:ffff:ffff:ffff',
-    ' 2001:db8:abcd:12:0:0:0:1 ',
+    '2001:db8:abcd:1212:1:2:3:4',
+    '2001:db8:abcd:1212::9',
+    '2001:0DB8:ABCD:1212:ffff:ffff:ffff:ffff',
+    ' 2001:db8:abcd:1212:0:0:0:1 ',
+    // A home line is handed a /56 — 256 networks of /64: they are one box, counted once.
+    '2001:db8:abcd:1200::1',
+    '2001:db8:abcd:12ff:a:b:c:d',
   ]) {
     assert.equal(rateSubject(address), network, address);
   }
-  assert.notEqual(rateSubject('2001:db8:abcd:13::9'), network);
-  assert.equal(rateSubject('::1'), '0:0:0:0::/64');
-  assert.equal(rateSubject('2001:db8::'), '2001:db8:0:0::/64');
+  // The next /56 is someone else.
+  assert.notEqual(rateSubject('2001:db8:abcd:1300::9'), network);
+  assert.notEqual(rateSubject('2001:db8:abcd:11ff::9'), network);
+  assert.equal(rateSubject('2001:db8:abcd:12::9'), '2001:db8:abcd:0::/56');
+  assert.equal(rateSubject('::1'), '0:0:0:0::/56');
+  assert.equal(rateSubject('2001:db8::'), '2001:db8:0:0::/56');
   // An IPv4 address written the IPv6 way, and one carried in the last groups.
   assert.equal(rateSubject('::ffff:203.0.113.7'), '203.0.113.7');
-  assert.equal(rateSubject('64:ff9b::203.0.113.7'), '64:ff9b:0:0::/64');
+  assert.equal(rateSubject('64:ff9b::203.0.113.7'), '64:ff9b:0:0::/56');
   // What does not read as an address is counted as itself: one bucket, never none.
   for (const odd of ['unknown', '2001:db8::1::2', '2001:db8:zz::1', '1:2:3:4:5:6:7:8:9']) {
     assert.equal(rateSubject(odd), odd);
   }
 
   const salt = 'un-secret-de-test-assez-long';
-  const key = await clientKey('2001:db8:abcd:12:1:2:3:4', salt, '2026-11-13', 'chat');
+  const key = await clientKey('2001:db8:abcd:1212:1:2:3:4', salt, '2026-11-13', 'chat');
   assert.match(key, /^[0-9a-f]{32}$/);
-  assert.equal(await clientKey('2001:db8:abcd:12::9', salt, '2026-11-13', 'chat'), key, 'same /64');
-  assert.notEqual(await clientKey('2001:db8:abcd:13::9', salt, '2026-11-13', 'chat'), key);
-  assert.notEqual(
-    await clientKey('2001:db8:abcd:12::9', salt, '2026-11-14', 'chat'),
+  assert.equal(
+    await clientKey('2001:db8:abcd:12ff::9', salt, '2026-11-13', 'chat'),
     key,
-    'another day',
+    'same /56',
   );
+  assert.notEqual(await clientKey('2001:db8:abcd:1300::9', salt, '2026-11-13', 'chat'), key);
+  // The same subscriber from here on: only the day, the route or the secret changes.
+  const same = '2001:db8:abcd:1212::9';
+  assert.notEqual(await clientKey(same, salt, '2026-11-14', 'chat'), key, 'another day');
   // Each route is counted apart: the same visitor, the same day, another count.
   for (const lane of ['gists', 'bench'] as const) {
-    assert.notEqual(await clientKey('2001:db8:abcd:12::9', salt, '2026-11-13', lane), key, lane);
+    assert.notEqual(await clientKey(same, salt, '2026-11-13', lane), key, lane);
   }
-  assert.notEqual(await clientKey('2001:db8:abcd:12::9', `${salt}!`, '2026-11-13', 'chat'), key);
+  assert.notEqual(await clientKey(same, `${salt}!`, '2026-11-13', 'chat'), key);
 });
 
 void test('the bench is handed no copied text: a marker and a count instead', () => {

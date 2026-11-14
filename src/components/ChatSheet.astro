@@ -89,14 +89,19 @@ const config = {
     </p>
   </template>
 
+  {
+    /* No name on the field (see Search.astro): nothing typed here can leave by a form. And no
+       spell-check: a browser that checks spelling in its cloud would send a question to a
+       third party before anyone agreed to anything. */
+  }
   <form class="c-composer" id="chat-form">
     <label class="sr-only" for="chat-q">{t('chat.field.label')}</label>
     <input
       id="chat-q"
-      name="chat-q"
       type="text"
       autocomplete="off"
       autocapitalize="sentences"
+      spellcheck="false"
       enterkeyhint="send"
       maxlength="300"
       placeholder={t('chat.field.label')}

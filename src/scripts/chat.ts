@@ -509,8 +509,11 @@ if (
     redraw();
     focusBlock(turns.length - 1, '.c-ai');
   });
-  // Leaving the page empties the thread: coming back with the back button finds none.
+  // Leaving the page empties the thread: coming back with the back button finds none — and
+  // no agreement either. A browser may bring the page back as it left it, memory included;
+  // « asked again at each visit » (the privacy page) has to hold there too.
   window.addEventListener('pagehide', () => {
+    page.consent = 'unasked';
     empty();
     if (sheet.open) sheet.close();
   });

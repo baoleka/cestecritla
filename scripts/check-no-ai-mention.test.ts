@@ -43,6 +43,7 @@ import {
   builtAskMode,
   wranglerConfig,
 } from './build-mode.js';
+import { isChatPrivacyKey } from './launch.js';
 
 const strings = JSON.parse(readFileSync('design/strings.json', 'utf8')) as Record<string, unknown>;
 /** What the build in dist/ does with a question: the mode of the host it was made for. */
@@ -228,6 +229,38 @@ void test('the sheet, built for its tests, carries its notices and no page too m
       asOff.some((problem) => problem.startsWith(page)),
       `${page} was not seen`,
     );
+  }
+});
+
+void test('the privacy page shows what the chat adds exactly where the field asks — and all of it', () => {
+  // Two readings by the editor, dated apart (scripts/launch.ts): the page of « search only »,
+  // and what the chat adds. The split holds only if the first page shows none of the second.
+  const added = Object.entries(strings).filter(
+    (entry): entry is [string, string] =>
+      isChatPrivacyKey(entry[0]) && typeof entry[1] === 'string',
+  );
+  assert.ok(added.length >= 10, 'the kit names what the chat adds to the page');
+  // What a string prints, up to its first placeholder, with the apostrophes of the page.
+  const printed = (value: string): string => (value.split('{')[0] ?? '').replace(/'/g, '’').trim();
+  const page = (root: string): string | null => {
+    const file = join(root, 'confidentialite/index.html');
+    return existsSync(file) && existsSync(join(root, 'sommaire/index.html'))
+      ? readFileSync(file, 'utf8').replace(/&nbsp;/g, '\u00a0')
+      : null;
+  };
+  const quiet = askMode === 'off' ? page('dist') : null;
+  const asking = page('dist-ask');
+  if (quiet === null && asking === null) {
+    console.log('  (skipped: no build)');
+    return;
+  }
+  for (const [key, value] of added) {
+    const text = printed(value);
+    assert.ok(text.length >= 8, `${key}: too short to be told apart`);
+    if (quiet !== null)
+      assert.ok(!quiet.includes(text), `${key} is on the page of a site that asks nothing`);
+    if (asking !== null)
+      assert.ok(asking.includes(text), `${key} is not on the page of a site that asks`);
   }
 });
 

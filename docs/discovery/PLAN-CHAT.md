@@ -627,3 +627,57 @@ en arrière ; le navigateur d'Instagram ; un lecteur d'écran.
 - **Les portes qui jugent `dist/`** lisent désormais le mode de l'hôte pour lequel la build a
   été faite (`builtAskMode`), plus celui de la production.
 - **Rien n'est ouvert** : le fichier dit « off » pour les deux hôtes.
+
+### 14 novembre 2026 — la revue de sécurité du chat, et ce qu'elle a trouvé dans la production
+
+Une lecture indépendante (un agent de la session, en lecture seule, sans `private/`, sans
+réseau, avec des preuves exécutables) a rendu deux constats bloquants, un sérieux et huit
+mineurs. Chacun a été relu dans le code avant d'être retenu.
+
+- **Bloquant, et vrai de la production d'aujourd'hui — CORRIGÉ dans le dépôt.** Le champ de
+  recherche est dans la page avant le script qui répond à Entrée. Entrée appuyée une seconde
+  trop tôt — réseau lent — ou le script perdu en route, et le navigateur envoyait le formulaire
+  lui-même : `GET /?q=<les mots tapés>`, vers le serveur, dans l'adresse et dans l'historique.
+  Reproduit sur la build de la production (deux cas sur deux). Cela contredisait D16.25 et la
+  phrase de la page Confidentialité (« rien n'est envoyé »). **Trois gardes** : les deux champs
+  n'ont plus de nom — un champ sans nom n'est jamais envoyé — ; la politique du site interdit
+  tout envoi natif de formulaire (`form-action 'none'` : les fenêtres se ferment toujours,
+  essayé dans trois navigateurs) ; une porte de build refuse tout champ nommé, et un contrôle
+  de bout en bout appuie sur Entrée avant le script, dans trois navigateurs. **La production
+  porte encore le défaut** jusqu'à son redéploiement, que la relecture de la page
+  Confidentialité retient — d'où les deux relectures séparées, ci-dessous.
+- **Deux relectures au lieu d'une.** La porte de lancement relisait d'un bloc toutes les
+  chaînes `privacy.*` : un mot changé dans la section du chat bloquait la production. Elle
+  relit désormais à part la page de la recherche seule (`privacy_page`) et ce que le chat y
+  ajoute (`privacy_chat` : les familles `privacy.chat.*` et `privacy.*.ask`). Une porte de
+  build tient que la première page n'affiche rien de la seconde, et que la seconde est
+  affichée en entier là où le champ demande.
+- **Bloquant, pour le chat — OUVERT, une décision de l'éditeur.** Le contrôle d'une explication
+  laisse passer, avec un modèle docile, une attribution (« La FI défend… », « Le plan
+  prévoit… »), un avis, une consigne de vote, un nom de personne en minuscules : ses listes de
+  mots sont fermées, la langue ne l'est pas. Prouvé avec un faux modèle, pas avec le vrai. Et
+  un lien `/#q=…` remplit le champ : avec une température de 0, le même lien donnerait à tous
+  le même écran. La question est ce par quoi une consigne entre. **Proposition à lui
+  soumettre** : la question ne quitte plus le téléphone ; la page envoie seulement, avec les
+  numéros des mesures, les mots de nos propres phrases que la question emploie. L'IA ne peut
+  déjà expliquer que ces mots-là (§3 du plan) : on ne perd rien, et une consigne n'a plus par
+  où passer.
+- **Sérieux — À CORRIGER, à part** : la première explication d'un Worker qui se réveille
+  coûterait environ 65 ms de calcul, pour une limite de 10 — les motifs du contrôle se
+  compilent à leur premier usage (mesuré dans un `workerd` local, pas sur la plateforme).
+- **Mineurs, corrigés dans ce lot** : une route fermée n'ouvre plus le corps de ce qu'on lui
+  envoie (l'heure et le mode se décident avant) ; l'accord est remis à zéro quand on quitte la
+  page, même si le navigateur la rend telle quelle ; le correcteur d'orthographe est coupé dans
+  le champ de la feuille ; une phrase trop longue pour l'écran est refusée avant toute autre
+  règle ; une box IPv6 (un /56) compte pour un visiteur, plus pour 256 ; le site dit qu'il
+  n'existe qu'en HTTPS (`Strict-Transport-Security`, 180 jours, sans sous-domaines).
+- **Mineurs, laissés ouverts avec leur raison** : `wrangler.jsonc` nomme encore l'apex à son
+  premier niveau — un `wrangler deploy` nu y mettrait un Worker (la règle l'interdit, aucun
+  script ne le fait ; à défaire en renommant le fichier, un lot à part) ; la base que le Worker
+  du chat lira porte encore le texte du livre (son retrait est prévu, avec l'accord de
+  l'éditeur, avant l'ouverture) ; le nettoyage de la question (`cleanQuestion`) garde des
+  caractères qu'on ne voit pas — sans objet si la question ne part plus.
+- **Trouvé sain** : pas de CORS, réponses jamais mises en cache, corps plafonné, identifiants
+  vérifiés et liés, aucun journal, aucun tiers, rien d'écrit sur le téléphone, tout en
+  `textContent`, la clé du banc comparée en temps constant, aucune adresse ni chemin personnel
+  dans les fichiers suivis ni dans les builds.

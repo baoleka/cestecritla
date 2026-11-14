@@ -488,6 +488,42 @@ async function runEngine(
       (await page.goto(`${origin}/m/c12-s01-k01`))?.status() === 200,
     );
 
+    // --- 5 a. Enter before the search script has run: nothing typed leaves, nothing stays in
+    // the address. The field is in the page from the first paint, the script that answers
+    // Enter comes after it — on a slow network, seconds after; lost on the way, never. A named
+    // field in a form without a method went to the server as `/?q=…` (security review of
+    // 14/11/2026, reproduced on the build in production). Held here by a field without a name;
+    // on the host, the policy also stops the submission itself (public/_headers).
+    {
+      const early = await context.newPage();
+      const sent: string[] = [];
+      await early.route('**/*', (route) => {
+        const url = route.request().url();
+        if (!url.startsWith(origin)) return route.abort();
+        sent.push(url);
+        // The scripts never arrive: the worst case, and the one a test can hold still.
+        if (/\/_astro\/.*\.js$/.test(url)) return route.abort();
+        return route.continue();
+      });
+      await early.goto(`${origin}/`, { waitUntil: 'commit' });
+      await early.waitForSelector('#q');
+      await early.locator('#q').pressSequentially('zorglub montcuq', { delay: 10 });
+      await early.keyboard.press('Enter');
+      await early.waitForTimeout(800);
+      const carried = sent.filter((url) => /zorglub|montcuq/i.test(decodeURIComponent(url)));
+      check(
+        'Enter before the script: no request carries what was typed',
+        carried.length === 0,
+        carried.join(' '),
+      );
+      check(
+        'Enter before the script: nothing typed is in the address',
+        !/zorglub|montcuq|[?&]q=/i.test(early.url()),
+        early.url().replace(origin, ''),
+      );
+      await early.close();
+    }
+
     // --- 5 bis. while the site answers no question, nothing of « Demander » exists on the page
     const asking = builtAskMode();
     if (asking !== 'chat') {

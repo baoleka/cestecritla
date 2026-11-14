@@ -70,6 +70,8 @@ export interface LaunchFile extends DatedGestures {
   apex: 'holding' | 'app';
   /** The privacy page was re-read as built: the fingerprint is that of its strings on that day. */
   privacy_page: { reviewed_on: string | null; sha256: string | null };
+  /** The same for what the page adds where the field asks — read apart, dated apart. */
+  privacy_chat?: { reviewed_on: string | null; sha256: string | null };
   note_fr: string;
 }
 
@@ -137,11 +139,30 @@ export function launchBlockers(inputs: LaunchInputs): string[] {
 }
 
 /** Fingerprint of everything the privacy page can say: the `privacy.*` strings of the kit. */
+/**
+ * A string of the privacy page that only a site that asks ever shows: the section « Quand tu
+ * demandes » (`privacy.chat.*`) and the variants of a line for that mode (`privacy.*.ask`).
+ * The kit names them so that they can be told apart without a list (design/strings.json).
+ */
+export const isChatPrivacyKey = (key: string): boolean =>
+  key.startsWith('privacy.chat.') || /^privacy\..+\.ask$/.test(key);
+
+const hashOf = (strings: Record<string, unknown>, keep: (key: string) => boolean): string =>
+  canonicalHash(Object.fromEntries(Object.entries(strings).filter(([key]) => keep(key))));
+
+/**
+ * Fingerprint of what the privacy page of a site that asks nothing can show — the page
+ * production serves in « search only ». What the chat adds is read apart
+ * (`privacyChatStringsHash`): a word changed in that section must not keep production from
+ * being redeployed, least of all for a correction.
+ */
 export function privacyStringsHash(strings: Record<string, unknown>): string {
-  const own = Object.fromEntries(
-    Object.entries(strings).filter(([key]) => key.startsWith('privacy.')),
-  );
-  return canonicalHash(own);
+  return hashOf(strings, (key) => key.startsWith('privacy.') && !isChatPrivacyKey(key));
+}
+
+/** Fingerprint of what the privacy page adds where the field asks. */
+export function privacyChatStringsHash(strings: Record<string, unknown>): string {
+  return hashOf(strings, isChatPrivacyKey);
 }
 
 type Json = Record<string, unknown>;
@@ -204,6 +225,15 @@ function readObject(path: string): Json | null {
 
 const field = (object: unknown, key: string): unknown =>
   typeof object === 'object' && object !== null ? (object as Json)[key] : undefined;
+
+/** True when what the chat adds to the privacy page was re-read, and has not moved since. */
+function chatPrivacyRead(at: (path: string) => string): boolean {
+  const read = field(readObject(at(LAUNCH_PATH)), 'privacy_chat');
+  return (
+    isDate(field(read, 'reviewed_on')) &&
+    field(read, 'sha256') === privacyChatStringsHash(readObject(at(STRINGS_PATH)) ?? {})
+  );
+}
 
 /** How many measures the book has, as the manifest lists them: every item that is not prose. */
 function measureCount(path: string): number {
@@ -278,6 +308,13 @@ export function artefactBlockers(root = '.'): string[] {
     if (!isDate(ask.model_confirmed_on)) {
       out.push(
         `${ASK_PATH}: the editor has not confirmed the model the bench chose: model_confirmed_on`,
+      );
+    }
+    // The page the agreement sends its reader to: what the chat adds to it was re-read as it
+    // stands (the rest of the page is the launch's own gate, `privacy_page`).
+    if (!chatPrivacyRead(at)) {
+      out.push(
+        `${LAUNCH_PATH}: the section « Quand tu demandes » of the privacy page is not re-read as it stands: privacy_chat (lot C9)`,
       );
     }
     // The chat reaches the apex as a second Worker in front of the files: that deployment, and
@@ -401,6 +438,11 @@ export function previewChatBlockers(root = '.', privacyHash?: string): string[] 
   if (!isDate(field(privacy, 'reviewed_on')) || field(privacy, 'sha256') !== today) {
     out.push(
       `${LAUNCH_PATH}: the privacy page — where the agreement of the sheet sends its reader — is not re-read as it stands: privacy_page`,
+    );
+  }
+  if (!chatPrivacyRead(at)) {
+    out.push(
+      `${LAUNCH_PATH}: the section « Quand tu demandes » of the privacy page is not re-read as it stands: privacy_chat (lot C9)`,
     );
   }
   return out;

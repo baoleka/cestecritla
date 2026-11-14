@@ -38,6 +38,7 @@ import {
 } from './ask-contract.js';
 import {
   ECHO_WINDOW,
+  MAX_EXPLAIN_CHARS,
   MAX_EXPLAIN_SENTENCES,
   MAX_EXPLAIN_WORDS,
   MIN_EXPLAIN_WORDS,
@@ -971,6 +972,12 @@ function explainRefusals(
   page: Page,
   options: ExplainOptions,
 ): Refusal[] {
+  // Counted in characters first, as the page will count it: one token of four hundred letters
+  // is one word for the rule below — and two patterns take a time that grows with the square
+  // of a sentence. What is too long for the screen is read by no other rule.
+  if (raw.length > MAX_EXPLAIN_CHARS) {
+    return [{ rule: 'length', sentence: index, detail: `${String(raw.length)} characters` }];
+  }
   const own = ownRefusals(raw, index, { min: MIN_EXPLAIN_WORDS, max: MAX_EXPLAIN_WORDS });
   const out = own.out;
   const refuse = (rule: RuleId, detail: string): void => {
