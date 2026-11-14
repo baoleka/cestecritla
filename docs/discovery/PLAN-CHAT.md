@@ -504,3 +504,17 @@ en arrière ; le navigateur d'Instagram ; un lecteur d'écran.
 - **Ce que ça ne change pas** : la vitesse à laquelle un script peut lire les phrases relues —
   six envois de huit phrases par minute et par adresse, comme avant (R35). La page
   Confidentialité dit déjà « tes demandes sont comptées à la minute ».
+
+### 14 novembre 2026 — lot C8, première moitié : l'outil du banc des explications
+
+- **`scripts/bench-explain.ts`** existe, avec ses tests (`bench-explain.test.ts`, sept) : il fait
+  de chaque question du jeu d'essai ce que la page en fait, prend les phrases relues sur la
+  machine de l'éditeur, interroge le mode « explain » de `/api/bench`, garde ses lignes sous
+  `private/bench/` et n'imprime aucune phrase. Protocole, portes, ordre des tours et coût
+  attendu : `08-ia.md` §10.15, **écrit avant d'être joué**.
+- **Pas un appel n'a été fait.** `--plan` (aucun réseau) dit pourquoi : sur 170 questions, 22 ne
+  partiraient jamais (20 objections reconnues, 2 demandes de vote) et, avec les 18 phrases
+  écrites à cette heure — aucune encore lue —, 4 seulement auraient quelque chose à expliquer.
+  **Le banc attend les phrases** (lot C3), comme le plan le disait.
+- **Reste du lot C8** : jouer le banc (deux jours de quota, calculé), fixer les seuils en le
+  rejouant, les quarante fils lus par l'éditeur, le modèle confirmé.

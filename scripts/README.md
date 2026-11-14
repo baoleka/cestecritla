@@ -21,6 +21,7 @@ publie de quoi retrouver un passage et prouver une citation : `data/2026/` (voir
 | Mesure de la recherche | `npm run eval:2026` | index, questions, synonymes | — |
 | Phrases écrites d'avance (plan du 14/11/2026 : une par mesure, **lue par l'éditeur**) | `npm run gists -- --status` · `--write --budget <neurons>` (route du banc, **lire `neurons-log.md` avant**) · `--serve` (bureau de lecture, 127.0.0.1 derrière un jeton) · `--sql [--check]` | corpus privé, manifeste, route du banc | `private/gists/runs.jsonl`, `private/gists/verdicts.jsonl`, `private/ask/gists-<corpus>.sql` |
 | Dépôt des phrases relues (**avec accord, à chaque fois**) | `npx tsx scripts/seed-ask-2026.ts --remote <base> --gists --accord <jour>` ; interrupteur : `--switch open\|stopped --what gists` | le fichier ci-dessus | la base privée |
+| Banc des explications (lot C8 ; protocole : `08-ia.md` §10.15) | `npx tsx scripts/bench-explain.ts --plan [--unread]` (aucun réseau) · `--live --model <clé> --budget <neurons>` (route du banc, **lire `neurons-log.md` avant**) · `--report` | jeu d'essai, index de la page, `private/gists/`, route du banc | `private/bench/explain.jsonl` |
 | Veille | `npm run watch:source` (hors ligne ; `-- --live` = 5 requêtes) · `npm run recrawl:2026 -- --dry-run` | dernière collecte | — |
 
 Règles tenues par des tests : aucune sortie d'outil n'imprime de texte du programme (identifiants
