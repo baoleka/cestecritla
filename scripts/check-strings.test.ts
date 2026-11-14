@@ -473,6 +473,31 @@ void test('the turtle is named only in her own family, has no name, and is not t
   assert.equal(strings.get('turtle.button'), 'Ta tortue', 'the interface says "ta tortue"');
 });
 
+void test('the card « Garder » names the gesture that erases by the label of its button', () => {
+  // Written in clear, like every value a decision fixed ($meta.placeholders_rule_fr) — so this
+  // is what keeps the sentence and the button from drifting apart. None of the seven personas
+  // could say how to erase from the card (13-tests-humains.md §7, session of 14/11/2026).
+  const line = strings.get('turtle.keep.erase') ?? '';
+  const label = strings.get('turtle.erase') ?? '';
+  assert.notEqual(label, '');
+  assert.ok(line.includes(`«${NBSP}${label}${NBSP}»`), `turtle.keep.erase must quote "${label}"`);
+  assert.match(line, /touche ta tortue/, 'her sheet opens by touching her: the line says so');
+});
+
+void test('the share button names what it sends: a link (D16.17)', () => {
+  // Under « Rien n'est envoyé », a button « Envoyer le jeu » read to four personas out of seven
+  // as a contradiction. It only ever shares the bare address of the site.
+  assert.match(strings.get('game.share') ?? '', /\blien\b/);
+});
+
+void test('the home page says whose programme this is and whose site, in the words of the kit', () => {
+  // The first screen named neither to any of the seven personas (session of 14/11/2026).
+  const what = strings.get('home.what') ?? '';
+  assert.match(what, /La France insoumise/);
+  assert.match(what, /L'Avenir en commun, édition 2026/);
+  assert.match(what, /projet militant indépendant/);
+});
+
 void test('the public pseudonym is written in clear and is the same one everywhere (D0.15, D2.4)', () => {
   // v0.5: the author and the reviewer are one person under one public pseudonym, so the two
   // placeholders {author} and {reviewer} are gone and the name is part of the string. The kit must

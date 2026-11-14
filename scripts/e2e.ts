@@ -233,6 +233,37 @@ async function runEngine(
     // --- 2. a search
     await page.goto(`${origin}/`);
     check('the search form appears with JavaScript', await page.locator('#search').isVisible());
+
+    // The first screen says whose programme this is, and whose site: none of the seven personas
+    // could tell from it (13-tests-humains.md §7). Under the field — not a word more before it.
+    const inFirstScreen =
+      "(() => { const r = document.querySelector('p.what').getBoundingClientRect();" +
+      ' return r.top > 0 && r.bottom <= window.innerHeight && r.width > 0; })()';
+    const what = ((await page.locator('p.what').textContent()) ?? '').replace(/\s+/g, ' ').trim();
+    check(
+      'the first screen names the book, whose it is, and what this site is',
+      /L.Avenir en commun, édition 2026/.test(what) &&
+        /La France insoumise/.test(what) &&
+        /projet militant indépendant/.test(what) &&
+        (await page.evaluate<boolean>(inFirstScreen)),
+      what,
+    );
+    check(
+      '…after the field, never before it',
+      await page.evaluate<boolean>(
+        "document.querySelector('#q').getBoundingClientRect().bottom <= document.querySelector('p.what').getBoundingClientRect().top",
+      ),
+    );
+    {
+      const small = await browser.newContext({ viewport: { width: 320, height: 640 } });
+      const narrow = await small.newPage();
+      await narrow.goto(`${origin}/`);
+      check(
+        '…and it is still in the first screen at 320 × 640',
+        await narrow.evaluate<boolean>(inFirstScreen),
+      );
+      await small.close();
+    }
     check(
       'the field has no button: results follow the typing',
       (await page.locator('#search button').count()) === 0,
@@ -254,6 +285,22 @@ async function runEngine(
       'results arrive while typing, without Enter',
       found >= 1 && found <= 8,
       `${String(found)} results`,
+    );
+    // Where the links of a result lead, said in their lead: a persona could not tell whether
+    // « mesure 4 » stays here or goes to the official site (13-tests-humains.md §7).
+    const lead = ((await page.locator('#search-list .hits-lead').first().textContent()) ?? '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    check(
+      'the lead of the links of a result says they go to the official site',
+      /^C.est écrit là, sur le site officiel :$/.test(lead),
+      lead,
+    );
+    check(
+      'results come right under the field: the line about the site moves below them',
+      await page.evaluate<boolean>(
+        "document.querySelector('#search-list > li').getBoundingClientRect().top < document.querySelector('p.what').getBoundingClientRect().top",
+      ),
     );
     await until(page, "/trouvé/.test(document.querySelector('#search-status').textContent)");
     const status = (await page.locator('#search-status').textContent()) ?? '';

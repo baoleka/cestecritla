@@ -480,6 +480,10 @@ button.quiet {
   min-block-size: calc(var(--font-size-min) * var(--line-height-body));
   margin-block: var(--space-2);
 }
+/* Whose programme, whose site: one line under the field of the home page, at reading size. */
+.what {
+  margin-block: var(--space-2) 0;
+}
 /* The heading takes the focus after Enter: it shows it like any other target. */
 #search-results-title:focus-visible {
   outline-offset: 4px;

@@ -86,6 +86,7 @@ interface Config {
       otherwise: string;
       seen: string;
       safari: string;
+      erase: string;
       cta: string;
       decline: string;
       done: string;
@@ -419,6 +420,9 @@ function start(
         card.append(el('p', line));
       }
       if (onIos()) card.append(el('p', s.keep.safari));
+      // How to take it back, said before the gesture: none of the seven personas could say how
+      // to erase from this card — the button lives in her sheet (session of 14/11/2026).
+      card.append(el('p', s.keep.erase));
       const choice = el('p', undefined, 'g-actions');
       const answered = (said: string): void => {
         card.remove();
@@ -442,9 +446,9 @@ function start(
     }
     const actions = el('p', undefined, 'g-actions');
     actions.append(again);
-    // « Envoyer le jeu » (D16.17): the bare address of the site, and nothing else — no text, no
-    // word, no answer, nothing of the turtle. Where the phone has no share sheet the address
-    // is copied; where it can do neither, the button is not there.
+    // « Envoyer le lien du jeu » (D16.17): the bare address of the site, and nothing else — no
+    // text, no word, no answer, nothing of the turtle. Where the phone has no share sheet the
+    // address is copied; where it can do neither, the button is not there.
     const address = `${window.location.origin}/`;
     const canShare = typeof window.navigator.share === 'function';
     // The clipboard exists only on a secure origin: absent, the property is simply not there.

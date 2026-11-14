@@ -601,11 +601,18 @@ async function runEngine(
           const lines = (await card.locator('p:not(.g-actions)').allTextContents()).map(text);
           check(
             'the end of the round asks whether to keep, and says what keeping means first',
-            lines.length >= 4 &&
+            lines.length >= 5 &&
               lines[0] ===
                 'Garder, c’est écrire sur ce téléphone. Il retient alors les mots déjà vus, où en est le jeu et ta tortue.' &&
               lines[1] === 'Tes choix ne sont pas gardés. Rien n’est envoyé.',
             lines.join(' | '),
+          );
+          // Said before the gesture, not found afterwards: five personas out of seven answered
+          // that they could not erase, two that they did not know (session of 14/11/2026).
+          check(
+            'the card says how to erase everything, before anything is kept',
+            lines.at(-1) === 'Pour tout effacer ensuite : touche ta tortue, puis « Tout effacer ».',
+            lines.at(-1),
           );
           const weights: string[] = await card.locator('button').evaluateAll((buttons) =>
             buttons.map((b) => {
@@ -1224,7 +1231,9 @@ async function runEngine(
       await calm.close();
     }
 
-    // --- 8 bis. « Envoyer le jeu »: the bare address, and nothing else (D16.17)
+    // --- 8 bis. « Envoyer le lien du jeu »: the bare address, and nothing else (D16.17). The
+    // button names what it sends: under « Rien n’est envoyé », « Envoyer le jeu » read to four
+    // personas out of seven as a contradiction (session of 14/11/2026).
     {
       const sharing = await browser.newContext({ viewport: { width: 390, height: 844 } });
       await sharing.addInitScript(
@@ -1237,10 +1246,10 @@ async function runEngine(
         await view.getByRole('button', { name: 'Je ne sais pas' }).click();
         await view.getByRole('button', { name: 'Mot suivant' }).click();
       }
-      await view.getByRole('button', { name: 'Envoyer le jeu' }).click();
+      await view.getByRole('button', { name: 'Envoyer le lien du jeu' }).click();
       const shared: Record<string, unknown>[] = await view.evaluate('window.__shared');
       check(
-        '« Envoyer le jeu » shares the bare address of the site: no text, no word, no answer',
+        '« Envoyer le lien du jeu » shares the bare address of the site: no text, no word, no answer',
         shared.length === 1 && JSON.stringify(shared[0]) === JSON.stringify({ url: `${origin}/` }),
         JSON.stringify(shared),
       );
@@ -1258,7 +1267,7 @@ async function runEngine(
         await plain.getByRole('button', { name: 'Je ne sais pas' }).click();
         await plain.getByRole('button', { name: 'Mot suivant' }).click();
       }
-      await plain.getByRole('button', { name: 'Envoyer le jeu' }).click();
+      await plain.getByRole('button', { name: 'Envoyer le lien du jeu' }).click();
       await until(plain, "document.querySelector('#game-status').textContent !== ''");
       const copied: string[] = await plain.evaluate('window.__copied');
       check(

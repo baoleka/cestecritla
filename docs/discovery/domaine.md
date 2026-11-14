@@ -32,6 +32,8 @@ Quand Cloudflare affiche le statut **Active** (courriel « cestecritla.fr is now
   > **Audit de zone à élargir au-delà de Bot Fight Mode et NEL**, avant la v1 puis à chaque changement, **une capture datée par réglage** dans `docs/discovery/captures/` (liste obligatoire de `09-architecture.md` §10.2) : **Security Level** (un managed challenge sur `/m/<id>` un dimanche de scrutin est **indistinguable d'une panne** pour le visiteur), **Browser Integrity Check**, **Hotlink Protection**, **Always Online**, Bot Fight Mode.
 - Adresse de contact `contact@cestecritla.fr` via **Email Routing** (gratuit, D0.15 : aucune identité publiée) — activation au dashboard (Email → Email Routing → Enable), puis destination = ton adresse.
 
+  > **Fait le 14 novembre 2026 (P0.8, D16.35).** Le routage est activé (`wrangler email routing`, ou au tableau de bord : Compute & AI → Email Service → Email Routing) ; la règle « contact » transmet à **une boîte à part, sous le pseudonyme**, créée par l'éditeur — pas à sa boîte personnelle. **Le routage ne fait que recevoir** : Cloudflare ne garde ni ne montre aucun message (son journal dit qui a écrit et si c'est transmis, jamais le contenu), et une réponse part de la boîte où on l'écrit. **On ne répond donc jamais depuis une boîte personnelle** (D0.15). L'adresse de la boîte de destination ne s'écrit dans aucun fichier suivi ; elle se lit par `npx wrangler email routing rules list cestecritla.fr`. La règle attrape-tout reste désactivée.
+
 ## Coût
 
 Domaine : ≈ 5-8 € HT par an chez OVH (renouvellement à vérifier avant avril 2027). Zone, DNS, certificat, Worker, Email Routing : 0 €.

@@ -288,6 +288,26 @@ for (const root of ['dist', 'dist-ask']) {
     },
   );
 
+  void test(
+    `${root}: the sentence of the freeze names what this site has, and nothing else`,
+    { skip: !shows },
+    () => {
+      const home = readFileSync(join(root, 'index.html'), 'utf8');
+      const note = /<p[^>]*id="game-silence"[^>]*>([^<]*)/.exec(home)?.[1]?.trim() ?? '';
+      // The test build answers questions (simulated); the build of a site whose mode is "off"
+      // answers none — and a pause of « les questions » there names something nobody ever saw.
+      const asks =
+        root === 'dist-ask' ||
+        ['answer', 'select'].includes(
+          String(
+            (JSON.parse(readFileSync('data/2026/ask.json', 'utf8')) as { mode?: unknown }).mode,
+          ),
+        );
+      assert.equal(/questions/i.test(note), asks, note);
+      assert.match(note, /Le jeu et le partage sont en pause|le jeu et le partage sont en pause/);
+    },
+  );
+
   void test(`${root}: the game stays light`, { skip: !shows }, () => {
     const name = gameFile(root);
     assert.ok(name !== undefined);

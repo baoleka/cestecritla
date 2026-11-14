@@ -23,6 +23,23 @@ export interface AskSite {
 
 const OFF: AskSite = { mode: 'off', modelName: null };
 
+/**
+ * Whether this site answers questions at all — asked of the mode, not of the day. `askSite()`
+ * says "off" in the build served during a silence window; a sentence ABOUT that window needs to
+ * know what is paused, and must not name questions on a site that never had any (a persona,
+ * 14/11/2026: « Les questions ? Quelles questions ? J'en ai jamais vu. »).
+ */
+export function asksQuestions(): boolean {
+  const test = process.env['CEL_ASK_TEST'];
+  if (test === 'answer' || test === 'select') return true;
+  const file = JSON.parse(readFileSync('data/2026/ask.json', 'utf8')) as Record<string, unknown>;
+  return file['mode'] === 'answer' || file['mode'] === 'select';
+}
+
+/** The sentence that says what a silence window pauses, on this site. */
+export const pausedKey = (): 'silence.paused' | 'silence.paused.search' =>
+  asksQuestions() ? 'silence.paused' : 'silence.paused.search';
+
 export function askSite(): AskSite {
   // The build deployed before each electoral silence window (D16.16) answers no question,
   // whatever the mode: its pages carry no button, no notice and no script of « Demander ».

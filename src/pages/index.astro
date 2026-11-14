@@ -15,6 +15,7 @@
 import Base from '../layouts/Base.astro';
 import Chips from '../components/Chips.astro';
 import Search from '../components/Search.astro';
+import { pausedKey } from '../lib/ask-config.ts';
 import { silenceGuardHash, silenceGuardScript } from '../lib/silence-guard.ts';
 import { t } from '../lib/strings.ts';
 
@@ -35,11 +36,15 @@ if (guard !== null) Astro.csp.insertScriptHash(silenceGuardHash());
 <Base title={t('app.name')} description={t('home.tagline')} home>
   {guard !== null && <script is:inline slot="head" set:html={guard} />}
   <Search ask />
+  {/* Whose programme, and whose site: said on the first screen, under the field — none of the
+      seven personas could tell from it (session of 14/11/2026). Results, when there are some,
+      come between the field and this line: a keyboard leaves little room under a field. */}
+  <p class="what">{t('home.what')}</p>
   <Chips />
   {
     __CEL_SCRUTIN__ && (
       <p id="scrutin-note">
-        {t('silence.paused')} {t('silence.reason')}
+        {t(pausedKey())} {t('silence.reason')}
       </p>
     )
   }

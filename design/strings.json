@@ -2,7 +2,7 @@
   "$meta": {
     "name": "C'est écrit là — kit de chaînes d'interface",
     "version": "0.7.0",
-    "date": "2026-11-13",
+    "date": "2026-11-14",
     "supersedes": "0.6.0",
     "decisions": [
       "D0.1",
@@ -96,7 +96,8 @@
       "v0.5 — arbitrages utilisateur du 10 septembre 2026 (à consigner en D13.5 à D13.8 dans decisions.md), et clôture du contrat d'interpolation. Identité : le pseudonyme public est unique, « Baoleka », pour l'auteur comme pour le relecteur — about.who dit « Pseudonyme : Baoleka. » et le badge des cartes-concept dit « Rédigé par nous, relu par Baoleka ». Les deux placeholders {author} et {reviewer} disparaissent : la question que la v0.4 avait ouverte en les séparant est tranchée, et une valeur tranchée s'écrit. Nommage : legal.license.code porte l'URL réelle du dépôt renommé, https://github.com/baoleka/cestecritla. Sondages : {organisation} et {sponsor} deviennent {pollster} et {pollSponsor} sur statcard.legal.full et statcard.legal.no_sponsor. Ces deux chaînes portent les mentions légales d'un sondage cité par le livre (institut renseigné 47/48, commanditaire 3/48) et rien d'autre ; sous un nom générique, elles se lisaient comme l'organisation et le commanditaire de l'app, qui n'existent ni l'une ni l'autre. Les renommer supprime la lecture fausse sans effacer une mention légale que le gabarit des cartes statistiques exige. Reste un seul placeholder d'identité, {contactEmail} : il est résolu au build en contact@cestecritla.fr et reste un placeholder dans le fichier parce que la porte de dépôt refuse une adresse e-mail littérale dans un fichier suivi (H-CNF-17c). La règle clé par clé est écrite dans $meta.placeholders_rule_fr, et scripts/check-strings.test.ts la tient dans les deux sens : aucun placeholder utilisé non déclaré, aucun placeholder déclaré non utilisé. Aucune chaîne créée ni supprimée : 363 chaînes, inchangé.",
       "v0.6.0 (12/11/2026, D15) : édition 2026, régime « renvoi + courte citation ». Les chaînes d'attribution ne nomment plus la licence CC (le livre 2026 est tous droits réservés) ; nouvelles familles bridge.*, pointer.*, quote.* ; l'accueil, la recherche et la fiche de section disent où c'est écrit au lieu d'afficher le texte.",
       "v0.7.0 (13/11/2026, D16) : demander, chercher, jouer. chat.* relues pour une réponse rédigée par un modèle, sous portes : chat.label, chat.send (« Demander au programme »), chat.waiting, chat.liant.where pour la sélection seule, chat.reviewed.title pour une réponse écrite par une personne, chat.method_link. La mention d'IA ne nomme plus Mistral en clair : {model} vient de data/2026/ask.json, parce que le banc choisit (D16.3) ; trois mentions, toutes impersonnelles, toutes à 140 caractères au plus avec le nom le plus long : chat.ai_hint sous le champ avant le premier usage, chat.ai_mention sur une réponse écrite, chat.ai_mention.select sur une sélection. Nouvelles familles game.* (un mot, un lieu du livre : jamais « faux », ni score, ni niveau) et turtle.* (la seule qui nomme la tortue, toujours « ta tortue », sans nom : D16.20). Les chaînes d'absence sont retirées, et le test refuse désormais toute phrase qui dirait que le programme ne contient pas quelque chose. about.ai_*, privacy.policy.02 et silence.banner décrivent encore le chat de septembre : elles ne sont pas rendues et sont réécrites avec les pages qui les portent (lots I8, M2, N1).",
-      "v0.7.0, suite (13/11/2026, lot I8) : about.ai_line, about.ai_method et privacy.policy.02 réécrites pour une IA qui rédige, nommée par {model} ; variantes .select pour la sélection seule ; about.ai_limits dit ce que l'IA lit (les mesures trouvées, pas le livre) ; about.ai_reviewed, accuracy.ask.title, method.ask_title. privacy.policy.06 et privacy.turnstile parlent de « Demander », plus du « chat ». Aucune de ces chaînes n'est rendue quand data/2026/ask.json dit « off »."
+      "v0.7.0, suite (13/11/2026, lot I8) : about.ai_line, about.ai_method et privacy.policy.02 réécrites pour une IA qui rédige, nommée par {model} ; variantes .select pour la sélection seule ; about.ai_limits dit ce que l'IA lit (les mesures trouvées, pas le livre) ; about.ai_reviewed, accuracy.ask.title, method.ask_title. privacy.policy.06 et privacy.turnstile parlent de « Demander », plus du « chat ». Aucune de ces chaînes n'est rendue quand data/2026/ask.json dit « off ».",
+      "v0.7.0, suite (14/11/2026) : accuracy.quotes.locator.search et quote.first_words_label (D16.32 : les premiers mots qu'un lien porte se lisent à côté de lui dans une recherche). silence.paused.search : la phrase du gel ne nomme « les questions » que là où le site en pose (D16.33 : recherche seule). Session des sept personas (13-tests-humains.md §7) : home.what dit sous le champ de qui est le programme et qui fait le site ; turtle.keep.erase dit sur la carte « Garder » comment tout effacer, avant le geste ; game.share devient « Envoyer le lien du jeu », parce qu'il n'envoie que l'adresse."
     ],
     "status_fr": "v0.7 : les familles chat.*, game.* et turtle.* existent dans le kit avant leurs écrans ; elles sont relues à la construction de chacun (lots H, I, L, M), puis par l'éditeur sur l'aperçu. Les chaînes chat.* ne sont rendues que si data/2026/ask.json dit « answer » ou « select » (D16.4) ; easter.strawberry_milk attend la vérification de son origine et l'accord de l'éditeur (lot M3)."
   },
@@ -269,7 +270,7 @@
   "game.round.again": "Trois autres mots",
   "game.round.done": "Trois mots, trois endroits du livre.",
   "game.round.no_js": "La suite du jeu demande JavaScript. Le sommaire, lui, mène à chaque section.",
-  "game.share": "Envoyer le jeu",
+  "game.share": "Envoyer le lien du jeu",
   "game.title": "Où est-ce écrit ?",
   "home.counts": "{count} sections, {total} mesures, édition 2026.",
   "home.direct.cta_continue": "Reprendre ta lecture",
@@ -290,6 +291,7 @@
   "home.toc.description": "Le plan de L'Avenir en commun, édition 2026 : chaque section, avec son lien officiel.",
   "home.toc.lead": "Chaque titre mène à sa fiche, puis à la page officielle.",
   "home.toc.title": "Le sommaire",
+  "home.what": "Le programme : L'Avenir en commun, édition 2026, de La France insoumise. Le site : un projet militant indépendant.",
   "independence.about": "« C'est écrit là » est un projet militant indépendant. La campagne et le mouvement n'y participent pas ; le texte, lui, est le leur.",
   "independence.line": "Projet militant indépendant. Le texte du programme reste sur le site officiel.",
   "independence.unofficial": "Site non officiel.",
@@ -542,7 +544,7 @@
   "search.opening": "On ouvre l'index…",
   "search.placeholder": "Un mot, une objection, un sujet…",
   "search.result.section": "La fiche de la section",
-  "search.result.where": "C'est écrit là",
+  "search.result.where": "C'est écrit là, sur le site officiel",
   "search.results_count": "{count} passages trouvés",
   "search.results_count_one": "Un passage trouvé",
   "search.results_title": "Passages trouvés",
@@ -586,6 +588,7 @@
   "silence.chat.local": "Les questions reprennent à {reopenTime}.",
   "silence.daily": "Pendant le scrutin, la mesure du jour ne change pas. Elle repart {reopenTime}.",
   "silence.paused": "Les questions, le jeu et le partage sont en pause. La recherche et la lecture restent ouvertes.",
+  "silence.paused.search": "Le jeu et le partage sont en pause. La recherche et la lecture restent ouvertes.",
   "silence.reason": "C'est la règle du silence électoral, la même pour tout le monde.",
   "silence.reopen": "Tout revient à {reopenTime}.",
   "silence.share": "Veille et jour du vote, la campagne se tait : le partage reprend à {reopenTime}.",
@@ -610,6 +613,7 @@
   "turtle.keep.cta": "Garder ta tortue",
   "turtle.keep.decline": "Ne pas garder",
   "turtle.keep.done": "Elle est gardée sur ce téléphone.",
+  "turtle.keep.erase": "Pour tout effacer ensuite : touche ta tortue, puis « Tout effacer ».",
   "turtle.keep.not_kept": "Tes choix ne sont pas gardés. Rien n'est envoyé.",
   "turtle.keep.otherwise": "Sans ça, elle repart de zéro à la fermeture de l'onglet.",
   "turtle.keep.safari": "Sur iPhone, Safari peut tout effacer après sept jours sans visite.",

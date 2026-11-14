@@ -22,6 +22,7 @@
 import '../styles/game.css';
 import Turtle from './Turtle.astro';
 import { readFileSync } from 'node:fs';
+import { pausedKey } from '../lib/ask-config.ts';
 import { buildGame, gameSite } from '../lib/game-data.ts';
 import { ROUND, isLongWord, locate, otherParts } from '../lib/game-engine.ts';
 import { safeJson, t } from '../lib/strings.ts';
@@ -103,6 +104,7 @@ const config = {
       otherwise: t('turtle.keep.otherwise'),
       seen: t('turtle.keep.seen'),
       safari: t('turtle.keep.safari'),
+      erase: t('turtle.keep.erase'),
       cta: t('turtle.keep.cta'),
       decline: t('turtle.keep.decline'),
       done: t('turtle.keep.done'),
@@ -131,7 +133,7 @@ const config = {
   data-reason={t('silence.reason')}
   data-reopen={t('silence.reopen', { reopenTime: '{reopenTime}' })}
 >
-  {t('silence.paused')}
+  {t(pausedKey())}
   <span id="game-reopen"></span>
 </p>
 

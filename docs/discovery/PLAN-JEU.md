@@ -1803,3 +1803,112 @@ Deux réponses de l'éditeur après le premier tour : « Oui, mesure-la » pour 
 - **Deux nombres à la place d'une sortie retenue** : la route du banc rend maintenant la plus
   longue suite de mots recopiés et la part recopiée (`copyMeasure`) — toujours pas un mot.
 
+### La nuit du 13 au 14 novembre 2026 — « pas de questions », et les dates écrites sur le moment (D16.34)
+
+Vers 1 h 30, l'éditeur : « sauf si choix critique, j'aimerais quand je me lève demain que tout
+soit prêt, la prod déployée, donc pas de questions, applique tout ce que tu recommandes par
+défaut ». La session a répondu qu'elle ne daterait pas à sa place les gestes de lancement ; lui :
+« date sur le moment par défaut ». Ce qui en est fait, et sous quel statut :
+
+- **Appliqué par défaut** : le mode « recherche seule » (D16.33).
+- **Dates écrites sur son instruction, DÉCLARÉES — la session n'a vu aucun de ces gestes**
+  (`data/launch.json`, au 14 novembre 2026) : la déclaration LCEN à l'hébergeur
+  (`lcen_declared_on`) ; les deux textes de la charte (`charter_texts_read_on`) ; les trois
+  lectures juridiques (`legal_readings_done_on`) ; le nom du responsable de traitement
+  (`controller_decided_on` — par défaut, ce que la page dit déjà : « l'éditeur de
+  cestecritla.fr », joignable à l'adresse de contact) ; le tableau de bord
+  (`dashboard_checked_on` — la passerelle `aec` existe, VÉRIFIÉ : le banc est passé par elle ;
+  ses journaux et l'absence de moyen de paiement ne sont pas vus) ; les vrais téléphones
+  (`phones_tried_on`) ; `/confidentialite` relue (`privacy_page`, avec l'empreinte de ses
+  phrases du jour). **Les vingt textes éditoriaux passent à « relu » par Baoleka**
+  (`riposte.json`, `glossary.json`) : le site écrit désormais « Tous nos textes ont été relus
+  par Baoleka. » — c'est sa parole, pas un constat de la session.
+- **Une date n'est pas écrite : la boîte de contact** (`contact_mailbox_ready_on`). Ce n'est pas
+  un geste que la session n'a pas vu, c'est un fait qu'elle a vérifié faux : **`cestecritla.fr`
+  n'a aucun enregistrement MX ni TXT** (deux résolveurs, 14/11 à 1 h 40). `contact@cestecritla.fr`
+  — l'adresse des droits RGPD, du « un extrait pose problème ? » et des pages légales, écrite
+  sept fois sur quatre pages de la build (à propos, confidentialité, licence, mentions légales :
+  recompté le 14/11 à 2 h 50, le premier relevé disait « six ») — ne reçoit rien. Dit à l'éditeur dans la minute. **L'apex ne bascule pas tant qu'elle
+  ne reçoit rien, sauf mot contraire de sa part** : c'est le choix critique que sa consigne
+  réserve.
+- **Ce que ces dates ne font pas** : elles ne font pas le geste. Deux phrases du site reposent
+  sur des gestes que seul l'éditeur peut avoir faits — « Notre identité a été communiquée à
+  l'hébergeur, qui la détient » (le profil du compte Cloudflare) et l'adresse de contact. Elles
+  lui sont redites au réveil, en tête.
+
+### 14 novembre 2026, 2 h — la session des sept personas (lot O5), et ce qu'elle a fait corriger
+
+- **Jouée sur l'aperçu tel qu'il était servi** (build de D16.32), par sept agents — un par fiche
+  de `testeurs.md` —, sur quinze images : dix captures réelles à 390 × 844, deux de la build
+  « scrutin », trois composées. Ni le dépôt, ni `private/`, ni le dossier ne leur ont été
+  ouverts. Tout est consigné dans `13-tests-humains.md` §7 ; les sept copies et une planche de
+  nos écrans sont sous `captures/2026-11-14/session3/` (les images où paraît la campagne restent
+  sur la machine de l'éditeur). **Statut : HYPOTHÈSE (personas)**, D14.8, D14.11.
+- **Ce qui tient** : « officiel ? » non 7 sur 7 ; même personnage que la tortue de la campagne,
+  non 7 sur 7 ; le jeu ne dit « tort » à personne ; le mot est bien celui du livre ; rien n'est
+  cru envoyé ; les cinq états remis dans l'ordre par les sept ; elle se lit comme une aide,
+  jamais comme une note.
+- **Deux critères de correction déclenchés** — aucun des sept ne peut dire qui a fait le site ni,
+  pour quatre d'entre eux, de qui est « le programme » ; aucun ne sait effacer depuis la carte
+  « Garder » — **et cinq corrections faites dans la nuit**, toutes dans les mots de l'interface :
+  `home.what` sous le champ (« Le programme : L'Avenir en commun, édition 2026, de La France
+  insoumise. Le site : un projet militant indépendant. ») ; `turtle.keep.erase` sur la carte
+  « Garder » ; « Envoyer le lien du jeu » ; la phrase du gel sans « les questions »
+  (`silence.paused.search`) ; « C'est écrit là, sur le site officiel : » devant les liens d'un
+  résultat. Chacune a sa porte (`check-strings.test.ts`, `e2e.ts`, `e2e-game.ts`,
+  `game-page.test.ts`). **Aucune n'a été rejouée devant les personas** (H-MEC-11).
+- **Ce qui est laissé à l'éditeur** (§7.5) : en tête, **la ligne du lait-fraise** — reçue par
+  aucun des sept, seul drapeau « honte » du juge éliminatoire (H-MEC-12) ; puis le point
+  d'accent lu comme une notification, les couleurs (« sans la petite ligne j'aurais dit oui »),
+  les premiers mots qui n'aident qu'« un peu », le mot « onglet », le gel qui ne dit pas jusqu'à
+  quand dans la build « scrutin ».
+- **Une erreur de la session, corrigée avant d'écrire** : son premier relevé disait « sept sur
+  sept » pour « quelles questions ? » et pour la recherche comme chose gardée ; recomptées sur
+  les copies, c'est six sur sept dans les deux cas. Les nombres du §7 sont calculés depuis les
+  fichiers, pas recopiés.
+- `personas_session_on` est daté du 14 novembre dans `data/launch.json` : la session a eu lieu,
+  c'est un fait que la session a vu. **Il ne reste devant la bascule que la boîte de contact**
+  (voir l'entrée précédente) — et la décision.
+
+### 14 novembre 2026, 2 h 45 — l'aperçu sert les corrections ; le lancement est répété à blanc
+
+- **Aperçu redéployé** : `npm run build && npm run deploy:preview -- --bench` (version
+  `743a635e` du Worker `cestecritla-preview`). VÉRIFIÉ en ligne : 1 150 fichiers de `dist/` sur
+  1 154 servis à l'identique, empreinte pour empreinte — les quatre écarts sont connus
+  (`/404.html` redirige vers `/404`, `/robots.txt` est précédé du bloc de la zone, `_headers` et
+  `_redirects` ne se servent pas) ; les contrôles de l'hôte tiennent dans trois navigateurs ; les
+  cinq corrections de la session des personas se lisent sur l'hôte.
+- **Le lancement, répété à blanc.** Dans une copie jetable du dépôt (un arbre de travail détaché,
+  supprimé ensuite) où la boîte de contact était datée et où « apex » valait « app » :
+  `scripts/launch.ts` répond « nothing is missing » ; `npm run build` rend 1 134 pages ;
+  `scripts/deploy.ts apex --dry-run` appelle `wrangler deploy --config wrangler.static.jsonc` —
+  des fichiers, aucune liaison. Rien n'a été envoyé, et le vrai `data/launch.json` n'a pas
+  bougé. PROBABLE, pas VÉRIFIÉ : le téléversement et l'attache des deux domaines ne se répètent
+  pas à blanc.
+- **L'apex sert toujours la page d'attente.** Il manque un geste, et il est à l'éditeur : faire
+  recevoir `contact@cestecritla.fr` (le domaine n'a toujours aucun enregistrement MX à
+  2 h 32). Ensuite : dater `contact_mailbox_ready_on`, passer « apex » à « app »,
+  `npm run build && npm run deploy`.
+
+
+### 14 novembre 2026, 10 h 45 — la boîte de contact reçoit (P0.8), et l'éditeur dit de basculer
+
+- **Ce qui manquait est fait, avec lui.** À son réveil l'éditeur a demandé où se lit le courrier
+  de l'adresse de contact : nulle part, rien n'était configuré (routage désactivé, aucune
+  destination, aucun enregistrement MX). Cloudflare ne garde pas le courrier, il le fait
+  suivre. **Sa décision (D16.35) : vers une boîte à part, sous le pseudonyme**, qu'il a créée
+  lui-même — pas vers sa boîte personnelle, d'où une réponse partirait avec son nom (D0.15).
+  L'adresse de cette boîte n'est écrite dans aucun fichier suivi.
+- **Fait par la session sur son « Go ! »**, par `wrangler email routing` : la boîte déclarée
+  comme destination (il a cliqué le lien de vérification) ; le routage activé sur la zone — ce
+  qui a ajouté les enregistrements MX et SPF, VÉRIFIÉS depuis deux résolveurs — ; la règle
+  « contact » (destinataire exact → transmission à cette boîte). La règle attrape-tout reste
+  désactivée : toute autre adresse du domaine est refusée.
+- **L'essai** : un message écrit à l'adresse de contact depuis une autre boîte est arrivé dans
+  la boîte sous pseudonyme — **DÉCLARÉ par l'éditeur**, la session ne lit pas cette boîte.
+  `contact_mailbox_ready_on` est daté du 14 novembre.
+- **La consigne qui va avec** (`domaine.md`) : le routage ne fait que recevoir. On répond depuis
+  la boîte sous pseudonyme, jamais depuis une boîte personnelle ; la réponse part de l'adresse
+  de cette boîte, pas de l'adresse de contact.
+- **La bascule** : « Oui, bascule » — `"apex": "app"` dans `data/launch.json` ;
+  `scripts/launch.ts` répond « nothing is missing ».
