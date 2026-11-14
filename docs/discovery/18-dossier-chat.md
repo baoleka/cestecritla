@@ -144,13 +144,80 @@ déclenche quand rien de tapé ne quitte le téléphone.** Reste ce qu'elle dit 
 information [B4] : le responsable, les finalités, les droits, les destinataires, le transfert
 et sa garantie — la page Confidentialité les porte.
 
+### 4.5 La destination du système, écrite (annexe III, point 8 b ; art. 6 § 4)
+
+> Écrite le 14 novembre 2026 par la session, **à relire par l'éditeur** : c'est lui qui met le
+> système en service sous son nom, et c'est sa déclaration. Elle vaut pour le système tel que
+> le code le borne depuis D16.53 ; élargir ce que l'IA fait la rend caduque.
+
+**Le système.** Un modèle de langage hébergé par Cloudflare, que la route `/api/chat` du site
+appelle quand un visiteur appuie sur « Expliquer avec l'IA ».
+
+**À quoi il est destiné.** Expliquer, en une à trois phrases courtes, des **mots** — un terme
+technique, une notion d'un domaine peu familier — pris dans les phrases relues que la page
+affiche, à la personne qui le demande et à elle seule.
+
+**À quoi il n'est pas destiné, et ce qui l'en empêche.**
+
+| Il ne doit pas | Ce qui le tient |
+|---|---|
+| dire ce que le programme prévoit, ni rien lui attribuer | il ne reçoit jamais le texte du livre ; le contrôle écarte les phrases qui nomment le programme, une mesure, le mouvement ou une personne (`src/lib/ask-validate.ts`) ; une phrase refusée, et l'explication entière ne s'affiche pas |
+| convaincre, donner un avis, recommander un vote, un candidat ou un parti | la consigne qu'il reçoit ; le contrôle écarte avis, consignes de vote et négations ; « pour qui voter » est reconnu par la page, qui répond d'une phrase à nous sans rien demander (`src/lib/chat-local.ts`) |
+| s'adapter à la personne | il ne reçoit rien d'elle : ni sa question, ni un fil, ni un identifiant — seulement nos phrases, nos cartes et au plus trois mots de ces phrases (D16.53) |
+| parler pendant le silence électoral | le gel ferme les deux routes (`src/lib/silence.ts`, `src/worker/chat.ts`) |
+| passer pour une personne, ou pour la voix du programme | la mention au bouton et dans chaque bloc : « Elle explique des mots, pas le programme. » (§4.2) |
+
+**Ce que ces garde-fous valent.** Ce que le modèle reçoit est tenu par construction : le
+contrat n'a pas de champ pour une phrase, et le Worker refuse tout mot qui n'est pas des
+nôtres. Ce qu'il rend est tenu par un contrôle qui reste **une liste de mots et de formes** :
+il peut laisser passer un nom écrit sans majuscule ou une définition calmement fausse
+(`14-risques.md` R36). Le banc des explications et la lecture de l'éditeur sont les portes
+qui l'éprouvent avant toute ouverture (`PLAN-CHAT.md` §5).
+
+**Dans quelles conditions.** Un site non officiel, qui l'écrit dans le cadre de chaque écran
+et renvoie à la page officielle de chaque mesure ; gratuit, sans compte ; un quota du jour
+au-delà duquel la page continue sans l'IA. Ce que le site en dit au public : `/a-propos`
+(`about.ai_line`, `about.ai_method`, `about.ai_limits`) et la mention de chaque bloc.
+
+**Notre évaluation au regard du point 8 b.** Le projet de lignes directrices pose deux
+conditions, toutes deux nécessaires [A5 — un projet] :
+
+- *Des personnes directement exposées aux sorties* : oui — le visiteur lit l'explication.
+- *Une destination qui est d'influencer un scrutin ou un vote* : non, selon nous. Le système
+  est dirigé vers l'explication d'un vocabulaire, pas vers le choix de l'électeur ; qu'il
+  puisse y contribuer en passant ne suffit pas (« directed towards electoral influence, not
+  merely be incidentally capable of it » [A5]).
+- **Ce qui pèse en sens inverse**, dit sans fard : le site ne traite que d'un programme, celui
+  d'un candidat, et se dit lui-même « projet militant indépendant » ; le même projet compte
+  les tiers engagés (« advocacy groups ») parmi ceux qui peuvent vouloir influencer ; et
+  l'exemple qu'il met dehors est une information « politically neutral » [A5] — ce que le
+  site n'est pas par son objet. Une autorité pourrait juger la destination à l'échelle du
+  site, et non de la seule IA.
+- **Conclusion** : hors du point 8 b. PROBABLE, non tranché — la lecture s'appuie sur un
+  projet de lignes directrices, pas sur un texte arrêté.
+
+**Si la lecture contraire l'emportait.** Les obligations du haut risque ne s'appliquent aux
+systèmes de l'annexe III qu'à compter du 2 décembre 2027 [A2], après le scrutin. L'article 6
+§ 3 écarte du haut risque un système de l'annexe III qui ne présente pas de risque important,
+et le § 4 demande alors d'écrire cette évaluation avant la mise en service [A1] : c'est ce
+paragraphe. Le même § 4 renverrait à un enregistrement (art. 49 § 2) — **de mémoire, non relu
+à la source le 14 novembre** : à lire avant d'ouvrir. La sortie reste celle de tout le
+projet : l'interrupteur, puis le retrait du Worker du chat en une commande (répété le
+14 novembre, D16.54).
+
+**Quand la refaire.** Avant tout changement qui élargit ce que l'IA fait — lire une question,
+répondre sur le fond, résumer une mesure à la volée, comparer, garder un fil. Et avant le
+1er janvier 2027, avec la décision due sur l'IA en direct pendant la campagne
+(`PLAN-CHAT.md` §7).
+
 ## 5. Ce qui reste, et à qui
 
 | Quoi | À qui | État |
 |---|---|---|
 | Changer le code pour D16.53, puis relire ce dossier contre lui | la session | **fait le 14/11 au soir** |
 | L'étiquette des phrases relues nomme-t-elle l'IA ? (§4.2, § 4) | l'éditeur | à lui demander |
-| Écrire la destination du système (annexe III, 8 b) dans `a-propos` ou ici, avant la mise en service | la session, relu par l'éditeur | à faire |
+| Écrire la destination du système (annexe III, 8 b) dans `a-propos` ou ici, avant la mise en service | la session, relu par l'éditeur | **écrite le 14/11 (§4.5)** ; à relire par lui |
+| Lire à la source l'article 49 § 2 du règlement sur l'IA (enregistrement), dans sa version d'après le règlement (UE) 2026/1744 | la session ou l'éditeur | ouvert |
 | Captures du tableau de bord Cloudflare : journal de la passerelle « aec » coupé ; aucun moyen de paiement ; observabilité des Workers coupée. L'accès de la session ne permet pas de les lire (essayé le 14/11 : refusé) | l'éditeur | à faire |
 | La section « Quand tu demandes » de la page Confidentialité, récrite pour D16.53, relue | l'éditeur | après le code |
 | Lire à la source : la loi Informatique et Libertés (art. 45 n'a plus d'objet ici), les lignes directrices européennes sur l'analyse d'impact, la liste officielle du cadre UE–États-Unis | la session ou l'éditeur | ouvert |

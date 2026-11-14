@@ -426,7 +426,7 @@
   "privacy.chat.budget": "On compte ce que l'IA consomme en tout, heure par heure. C'est un nombre, sans rien sur toi.",
   "privacy.chat.choice": "L'IA n'explique que si tu appuies sur « Expliquer avec l'IA ». Ce choix vaut pour la page ouverte.",
   "privacy.chat.choice_title": "Ton choix",
-  "privacy.chat.gists": "Demander envoie les numéros des mesures trouvées, pas ta phrase. Notre serveur renvoie des phrases écrites d'avance, lues par l'éditeur.",
+  "privacy.chat.gists": "Demander envoie les numéros des mesures trouvées, pas ta phrase. Notre serveur renvoie des phrases écrites d'avance par une IA, lues par l'éditeur.",
   "privacy.chat.kept": "On n'enregistre rien de ces envois : ni journal, ni base, ni identifiant. Cloudflare écrit ne pas les conserver et ne pas s'en servir pour entraîner un modèle.",
   "privacy.chat.kept_title": "Ce qui est gardé",
   "privacy.chat.lead": "Deux sortes d'envoi, pas plus. Ta question n'en fait jamais partie.",
