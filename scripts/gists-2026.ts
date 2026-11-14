@@ -1624,8 +1624,11 @@ async function main(args: readonly string[]): Promise<number> {
         `${String(result.written)} newly written, ${result.neurons.toFixed(2)} neurons — ` +
         `${STOPS[result.reason].say}${about}`,
     );
-    // Every call to a model goes in the register of the allowance, this tool's like the bench's.
-    if (result.calls > 0 && existsSync(NEURONS_LOG)) {
+    // Every neuron spent goes in the register of the allowance, this tool's like the bench's.
+    // A session that was only told « spent », or only served from the cache, spent none: it
+    // adds no line — a loop that waits for the allowance would otherwise fill the register
+    // with zeros, one every half hour.
+    if (result.neurons > 0 && existsSync(NEURONS_LOG)) {
       const day = new Date().toISOString().slice(0, 10);
       appendFileSync(
         NEURONS_LOG,
