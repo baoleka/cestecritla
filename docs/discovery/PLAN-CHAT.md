@@ -955,3 +955,30 @@ Ce paragraphe amende les §1 à §4 du plan ; le code suit, dans une copie de tr
   phrases lues et déposées, le banc, le dossier légal daté par lui (`preview_legal_on` — les
   captures du tableau de bord sont son geste).
 
+### 14 novembre 2026, 21 h 30 — le mandat : la session lit, tranche et mène jusqu'à la production (D16.57)
+
+- **Les mots de l'éditeur** : « Lis les toi même, pousse jusqu en prod sans me demander quoi que
+  ce soit, fait ce que tu recommandes ». Trois choses : la lecture des phrases passe à la
+  session ; les accords « au moment de le faire » sont donnés d'avance pour ce chantier ; les
+  décisions ouvertes suivent la recommandation de la session, consignées une à une dans
+  `decisions.md`. Les contraintes non négociables ne bougent pas.
+- **Les 18 phrases des petits modèles, lues contre leurs mesures** (D16.58) : 7 infidèles —
+  une exception oubliée, un champ rétréci à un cas, un but ajouté —, 8 appauvries, 3
+  gardables. Les juges ne trient pas : l'un dit « fidèle » 14 fois sur 18, dont pour des
+  phrases infidèles ; l'autre dit « écart » presque à chaque fois. Lire, ici, c'est récrire.
+- **Donc la session écrit elle-même**, une phrase par mesure, sous le contrôle du site
+  (`controlGist`), puis relit tout une seconde fois. La boucle d'écriture par la route du banc
+  est arrêtée : le quota gratuit va au banc des explications, puis aux visiteurs.
+- **Une erreur de méthode, corrigée dans la minute** : la session a d'abord lancé des agents
+  d'un autre modèle pour écrire en parallèle. Le système de permissions en a refusé un — accès
+  au texte privé non autorisé : l'éditeur avait écrit « toi-même ». Les onze autres ont été
+  arrêtés avant d'avoir écrit une phrase ; aucun fichier d'eux ne reste (cherché : dépôt,
+  `private/`, dossiers temporaires). Ce que leurs journaux de session ont lu du texte y reste,
+  sur cette machine, comme dans celui de la session. **Règle retenue : seule la session lit
+  `private/`.**
+- **Ce que le site dira** (D16.59) : « Phrases écrites et vérifiées par une IA ». Plus aucune
+  page ne dit qu'une personne a lu chaque phrase.
+- **Ce que la session ne peut pas faire à la place de l'éditeur**, et qui sera dit tel quel :
+  essayer de vrais téléphones ; lire le tableau de bord Cloudflare (moyen de paiement, journal
+  de la passerelle).
+
