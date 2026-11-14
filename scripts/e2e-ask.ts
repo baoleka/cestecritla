@@ -869,6 +869,13 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         await until(view, "document.querySelector('#chat-thread .c-consent') !== null");
         await view.addScriptTag({ content: axe });
         const audit = async (): Promise<string[]> => {
+          // The sheet rises in 180 ms, from transparent: audited before it has landed, its
+          // text is judged at half its colour — a contrast failure that no reader ever sees,
+          // and that a slow machine reports two times in three (CI, 14/11/2026). What is
+          // judged is the sheet as it stands.
+          await view.evaluate(
+            'Promise.all(document.getAnimations().map((a) => a.finished.catch(() => undefined)))',
+          );
           const result: { violations: { id: string; impact: string | null }[] } =
             await view.evaluate('window.axe.run(document, { resultTypes: ["violations"] })');
           return result.violations

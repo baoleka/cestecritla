@@ -586,3 +586,17 @@ en arrière ; le navigateur d'Instagram ; un lecteur d'écran.
 - **Reste pour l'ouverture de l'aperçu (lot C11)** : le mode par hôte — ouvrir l'aperçu sans
   la production —, le secret du limiteur à poser sur le nouveau Worker (sans lui il se ferme :
   « local », « rien »), et les portes du §5.
+
+### 14 novembre 2026 — la CI : un audit qui jugeait la feuille pendant sa montée
+
+- **Le constat** : deux exécutions de la CI sur trois échouaient depuis le lot C6, sous
+  Chromium, sur « la feuille avec son accord passe l'audit d'accessibilité » — `color-contrast`.
+  La batterie locale ne l'a jamais vu.
+- **La cause, mesurée** (six essais sur six, en local) : quand l'accord paraît, la feuille est
+  encore dans sa montée de 180 ms, à une opacité de 0 à 0,42. L'audit jugeait un texte à demi
+  transparent, que personne ne lit ainsi ; en local, charger l'outil d'audit prenait assez de
+  temps pour que la montée soit finie. **Ce n'était pas un défaut de la page, mais du test.**
+- **Le correctif** : l'audit attend la fin des animations en cours avant de juger
+  (`scripts/e2e-ask.ts`). VÉRIFIÉ en local (111, 104 et 104 contrôles) ; la CI le dira.
+- **Ce que ça apprend** : une porte verte en local n'est pas une porte verte — la CI se lit
+  après chaque push, pas seulement la batterie.
