@@ -5,6 +5,17 @@
 > elle qui fait foi sur l'avancement. Le plan précédent, exécuté jusqu'au lancement, est
 > `PLAN-JEU.md`. **Tant que les portes du §5 ne sont pas passées, la production reste en
 > « recherche seule » (D16.33)** : rien de ce plan n'est servi à un visiteur.
+>
+> **Ce que des décisions prises après l'approbation ont changé — le texte ci-dessous est gardé
+> tel qu'approuvé, et se lit avec ces trois lignes :**
+> - **D16.53 (14/11 au soir) : la question ne quitte plus le téléphone.** Partout où ce plan
+>   écrit que « la question part après un accord » (§1 à §5), lire : la page n'envoie que des
+>   identifiants et, au plus, trois mots de nos propres phrases ; l'IA explique sur un bouton ;
+>   il n'y a plus d'accord, ni de ligne d'âge.
+> - **D16.56 (14/11 au soir)** : l'étiquette des phrases relues nomme l'IA — « Phrases écrites
+>   par une IA, relues par l'éditeur ».
+> - **Lot C10** : le chat de la production est le second Worker que le §4 donnait « à
+>   répéter » (`wrangler.chat.jsonc`) ; la répétition est jouée, c'est oui (D16.54).
 
 
 > **Ta demande du 14 novembre 2026, le site en ligne** : « un chatbot intégré auquel on peut poser
@@ -927,3 +938,20 @@ Ce paragraphe amende les §1 à §4 du plan ; le code suit, dans une copie de tr
   1 151 fichiers sur 1 154 identiques, trois navigateurs. VÉRIFIÉ.
 - L'outil de dépôt en base (`scripts/seed-ask-2026.ts`, `wrangler d1 execute`) ne passe pas
   par l'étape de build : la garde ne le concerne pas (essayé sur une base locale jetable).
+
+### 14 novembre 2026, 20 h — deux réponses de l'éditeur : la section relue, l'étiquette nomme l'IA
+
+- **D16.55 — « Relue, date-la »** : la section « Quand tu demandes » de la page
+  Confidentialité, récrite pour D16.53, est relue telle qu'elle est — le texte entier lui a été
+  montré, avec les deux lignes qui changent plus haut sur la page. `data/launch.json` porte la
+  date et l'empreinte (`privacy_chat`) ; l'empreinte de la page servie (`privacy_page`) n'a pas
+  bougé. Une des portes du chat est levée ; rien n'est servi par ce geste.
+- **D16.56 — « Oui, en une ligne »** : l'étiquette des phrases relues devient « Phrases
+  écrites par une IA, relues par l'éditeur ». Mesuré avant de la proposer, dans la build
+  d'essai : une ligne à 360 et 390 px de large, deux à 320 — exactement comme l'étiquette
+  qu'elle remplace ; la version avec « d'avance » passait sur deux lignes partout. Une porte
+  tient que l'étiquette nomme l'IA et l'éditeur, et qu'elle ne s'allonge pas.
+- **Ce qui reste à l'éditeur avant que l'aperçu réponde** (`previewChatBlockers`) : les
+  phrases lues et déposées, le banc, le dossier légal daté par lui (`preview_legal_on` — les
+  captures du tableau de bord sont son geste).
+

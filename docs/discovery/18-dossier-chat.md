@@ -109,8 +109,9 @@ références [C1]… renvoient à l'annexe.
   que « l'identité et les coordonnées » du responsable soient publiques [A3]. → **Les phrases
   écrites d'avance sont dans le champ.** Elles sont relues une à une par l'éditeur ; mais il
   signe d'un pseudonyme. **Le plus sûr est de le dire plutôt que de s'appuyer sur
-  l'exception** : l'étiquette des phrases relues devrait nommer l'IA (« Écrites d'avance par
-  une IA, relues par l'éditeur ») — à décider par l'éditeur.
+  l'exception** — **décidé par l'éditeur le 14 novembre au soir (D16.56)** : l'étiquette des
+  phrases relues nomme l'IA, « Phrases écrites par une IA, relues par l'éditeur », et une
+  porte la tient (`scripts/check-strings.test.ts`).
 - **Fournisseur ou déployeur ?** Est fournisseur qui « met en service sous son propre nom »,
   « à titre onéreux ou gratuit » ; l'exclusion de l'usage « purement personnel et non
   professionnel » ne couvre que les obligations des *déployeurs* (art. 2 § 10) [A1][A3].
@@ -215,11 +216,11 @@ répondre sur le fond, résumer une mesure à la volée, comparer, garder un fil
 | Quoi | À qui | État |
 |---|---|---|
 | Changer le code pour D16.53, puis relire ce dossier contre lui | la session | **fait le 14/11 au soir** |
-| L'étiquette des phrases relues nomme-t-elle l'IA ? (§4.2, § 4) | l'éditeur | à lui demander |
+| L'étiquette des phrases relues nomme-t-elle l'IA ? (§4.2, § 4) | l'éditeur | **oui, décidé le 14/11 au soir (D16.56)** |
 | Écrire la destination du système (annexe III, 8 b) dans `a-propos` ou ici, avant la mise en service | la session, relu par l'éditeur | **écrite le 14/11 (§4.5)** ; à relire par lui |
 | Lire à la source l'article 49 § 2 du règlement sur l'IA (enregistrement), dans sa version d'après le règlement (UE) 2026/1744 | la session ou l'éditeur | ouvert |
 | Captures du tableau de bord Cloudflare : journal de la passerelle « aec » coupé ; aucun moyen de paiement ; observabilité des Workers coupée. L'accès de la session ne permet pas de les lire (essayé le 14/11 : refusé) | l'éditeur | à faire |
-| La section « Quand tu demandes » de la page Confidentialité, récrite pour D16.53, relue | l'éditeur | après le code |
+| La section « Quand tu demandes » de la page Confidentialité, récrite pour D16.53, relue | l'éditeur | **relue le 14/11 au soir (D16.55)** ; datée dans `data/launch.json` (`privacy_chat`) |
 | Lire à la source : la loi Informatique et Libertés (art. 45 n'a plus d'objet ici), les lignes directrices européennes sur l'analyse d'impact, la liste officielle du cadre UE–États-Unis | la session ou l'éditeur | ouvert |
 | Dater ce dossier : `preview_legal_on` | l'éditeur | après tout le reste |
 

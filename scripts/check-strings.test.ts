@@ -369,6 +369,7 @@ const RUNTIME_AI_KEYS: Readonly<Record<string, string | null>> = {
   'chat.ai_badge': null,
   'chat.ai_hint': 'search.local_promise',
   'chat.ai_mention': null,
+  'chat.gists.badge': null,
   'chat.offer.accept': null,
   'chat.offer.notice': null,
   'chat.offer.title': null,
@@ -420,6 +421,19 @@ void test('no string names a runtime AI outside the declared list, and each has 
     if (AI_EXEMPT.has(fallback)) continue; // about.no_ai says there is none: that is its job.
     assert.ok(!AI_PATTERN.test(strings.get(fallback) ?? ''), `${fallback}: still names an AI`);
   }
+});
+
+/**
+ * The read sentences are written ahead by a model and read by the editor: their label says both
+ * (D16.56 — AI Act, art. 50 § 4: the exception for a text a person has reviewed asks for an
+ * identified editor, and ours signs with a pseudonym). Measured in three browsers' worth of
+ * phone widths on 14/11/2026: 48 characters hold on one line from 360 px, like the label before.
+ */
+void test('the label of the read sentences names the AI and the editor (D16.56)', () => {
+  const label = strings.get('chat.gists.badge') ?? '';
+  assert.match(label, /\bune IA\b/, 'it must say an AI wrote them');
+  assert.match(label, /\brelues par l['’]éditeur$/, 'and that the editor read them');
+  assert.ok(label.length <= 48, `${String(label.length)} characters: two lines on a phone`);
 });
 
 void test('no cta.* string hard-codes a year: an administrative date is computed at build (D9.9)', () => {
