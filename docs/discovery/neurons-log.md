@@ -1,6 +1,6 @@
 # Registre de consommation Workers AI (session de découverte)
 
-Budget session : ≤ 8 000 neurons (D0.7). Reset quotidien à 00:00 UTC. Tout appel LLM de la session passe par ce registre ; le reste en mocks.
+Budget session : ≤ 8 000 neurons (D0.7). Reset quotidien à 00:00 UTC — **selon la documentation ; la mesure du 14/11/2026 le contredit** (plus bas) : compter 10 000 par vingt-quatre heures glissantes. Tout appel LLM de la session passe par ce registre ; le reste en mocks.
 
 Source du chiffre « Neurons » : le champ `result.usage.neurons` renvoyé par l'API `ai/run` (VÉRIFIÉ le 7/9/2026 : 13 in + 4 out sur Mistral Small 3.1 = 0,6163 neurons = 13 × 31 876 / 10⁶ + 4 × 50 488 / 10⁶, exact). À recouper avec le dashboard une fois par jour.
 
@@ -51,7 +51,7 @@ Rappel : désactiver la collecte de logs AI Gateway (`cf-aig-collect-log: false`
 ## Novembre 2026 — la piste du modèle rouverte (D16.2, D16.3)
 
 Le budget de session de septembre (8 000 neurons, D0.7) est clos. Depuis D16.2 la règle est celle du
-quota gratuit du compte : **10 000 neurons par jour**, remise à zéro à 00:00 UTC, erreur 429 au-delà,
+quota gratuit du compte : **10 000 neurons par jour**, remise à zéro à 00:00 UTC (contredit le 14/11 : plus bas), erreur 429 au-delà,
 jamais de facture (aucun moyen de paiement). Un banc consomme ce même quota : il s'inscrit ici avant
 d'être lancé, et le cumul du jour se relit avant chaque nouvel appel.
 
@@ -139,4 +139,12 @@ de son cache (`cached: true`, rien de facturé), le contrôle la laisse passer, 
 appelés — sans réponse, le quota étant toujours épuisé (`verdict: null` en un dixième de
 seconde). Le compteur du Worker garde la réserve de ces appels restés sans réponse : il en est
 à 5 190 sur 8 500 pour la journée UTC, et repart à zéro à minuit UTC.
+
+**14 novembre 2026 — le compteur du Worker change (lot C1), 0 neuron.** Dans le code : le Worker ne
+compte plus par jour UTC mais sur vingt-quatre heures glissantes, par tranches d'une heure, et un
+refus « quota épuisé » de la plateforme ferme le modèle trente minutes (`src/worker/budget-core.ts`).
+Le plafond reste 8 500 (`NEURON_HARD_STOP`), sur ces vingt-quatre heures. **Une fois déployé**, le
+registre du Worker repart vide — il ne sait rien des 5 190 ci-dessus — et, pendant une fermeture,
+une sonde par `/api/bench` reçoit « spent » sans qu'aucun appel parte : sonder plus souvent que
+toutes les trente minutes n'apprend rien.
 

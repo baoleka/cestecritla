@@ -59,6 +59,25 @@ export interface ModelRun {
 export const EXHAUSTED = 'exhausted';
 export type Exhausted = typeof EXHAUSTED;
 
+/**
+ * The same refusal, when it reaches the Worker as an exception instead of a response. PROBABLE
+ * that it never does: asked for the raw response, the binding of the local runtime returns a
+ * 429 as it is (read in workerd on 14 November 2026). The platform is not the local runtime,
+ * and a refusal read as a call that broke is the fault this was written against — the model
+ * called again at every question, each call keeping a reservation for nothing. So the words of
+ * the error are read too; a deadline, or a model out of capacity, stays what it is.
+ */
+export function saysExhausted(error: unknown): boolean {
+  const text =
+    error instanceof Error
+      ? `${error.name} ${error.message}`
+      : typeof error === 'string'
+        ? error
+        : '';
+  if (/capacity temporarily exceeded|\b3040\b/i.test(text)) return false;
+  return /\b429\b|\b4006\b|\b3036\b|daily free allocation|too many requests/i.test(text);
+}
+
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;
 

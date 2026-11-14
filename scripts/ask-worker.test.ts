@@ -26,6 +26,7 @@ import {
   answerQuestion,
   benchOutput,
   readRun,
+  saysExhausted,
   type AskDeps,
   type ModelRun,
 } from '../src/worker/ask.js';
@@ -403,6 +404,36 @@ void test('what the platform returned: a run in either shape, a refusal on 429, 
   for (const body of ['<html>', '', [1, 2], 'null', { result: { usage: { neurons: 1 } } }]) {
     assert.equal(await readRun(reply(body)), null, JSON.stringify(body));
   }
+});
+
+void test('a refusal that comes as an exception is read by its words; a deadline stays a deadline', () => {
+  const used = 'you have used up your daily free allocation of 10,000 neurons';
+  for (const error of [
+    new Error(`4006: ${used}`),
+    new Error(`InferenceUpstreamError: ${used}`),
+    new Error('AiError: 3036: Account limited'),
+    new Error('Request failed with status 429'),
+    'Too Many Requests',
+  ]) {
+    assert.equal(saysExhausted(error), true, String(error));
+  }
+  for (const error of [
+    new DOMException('The operation timed out.', 'TimeoutError'),
+    new DOMException('The operation was aborted.', 'AbortError'),
+    new Error('3040: Capacity temporarily exceeded, please try again.'),
+    new Error('429: Capacity temporarily exceeded, please try again.'),
+    new Error('Network connection lost.'),
+    new Error('5007: No such model'),
+    null,
+    undefined,
+    { status: 429 },
+    42,
+  ]) {
+    assert.equal(saysExhausted(error), false, JSON.stringify(error));
+  }
+  // The Worker reads it where the call is made, and nowhere logs what the error said.
+  const index = readFileSync('src/worker/index.ts', 'utf8');
+  assert.match(index, /catch \(error\) \{[^}]*saysExhausted\(error\) \? EXHAUSTED : null/);
 });
 
 void test('nothing to say is "local"; a refused writing is three measures and not a word of why', async () => {

@@ -32,6 +32,7 @@ import {
   benchOutput,
   control,
   readRun,
+  saysExhausted,
   type Exhausted,
   type ModelRun,
 } from './ask.js';
@@ -119,8 +120,9 @@ async function runModel(
       gateway: { ...GATEWAY, skipCache },
     });
     return await readRun(response);
-  } catch {
-    return null;
+  } catch (error) {
+    // Cut at the deadline, or broken — unless the error itself says the allowance is used up.
+    return saysExhausted(error) ? EXHAUSTED : null;
   }
 }
 

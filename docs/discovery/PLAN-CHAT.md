@@ -286,3 +286,31 @@ en arrière ; le navigateur d'Instagram ; un lecteur d'écran.
   trois phrases inventées qui passent. H-IA-23 ouverte.
 - **À poser à l'éditeur au lot C5** : l'IA sur les dix-huit sections sensibles ; l'IA quand une
   objection est reconnue. Par défaut : non aux deux.
+
+### 14 novembre 2026 — lot C1 : le compteur glissant et le coupe-circuit
+
+- **Fait**, par un agent dans sa propre copie de travail, relu puis repris sur `main` : le
+  compteur de neurons ne connaît plus de jour UTC. Vingt-cinq tranches d'une heure (un neuron
+  pèse de 24 à 25 heures, jamais moins), une réserve rendue quand la plateforme refuse l'appel,
+  et un coupe-circuit de trente minutes sur le refus « quota épuisé » — le seul autre 429
+  documenté, un modèle hors capacité, reste un appel cassé. `src/worker/budget-core.ts`,
+  `budget.ts`, `ask.ts`, `index.ts` ; `scripts/budget.test.ts` (13 tests : l'arithmétique,
+  l'objet tel qu'il est écrit sur le SQLite de Node, le Worker devant un modèle qui répond 429).
+  L'objet a aussi tourné dans le moteur local, par-dessus le stockage de l'ancienne version :
+  son ancienne table et son alarme de minuit disparaissent au réveil.
+- **Ajouté à la relecture** : si le refus arrivait en exception plutôt qu'en réponse, ses mots
+  sont lus aussi (`saysExhausted`) — sans cela le Worker rappellerait la plateforme à chaque
+  question, ce contre quoi le lot est écrit.
+- **Le dossier corrigé** là où il disait « remise à zéro à minuit UTC » : `01-faits.md`,
+  `outillage.md`, `08-ia.md` (§10.7, §10.10 et deux renvois), `09-architecture.md` (ADR-6),
+  `14-risques.md` (R24, R31), `16-hypotheses.md` (H-PLA-14), `neurons-log.md`. Les documents de
+  septembre qui racontent leur propre jour restent tels quels. `quota.title` et `{resetTime}`
+  du kit de chaînes annoncent une heure de retour qui n'existe pas : à régler avec les chaînes
+  du lot C6.
+- **Pas encore en ligne.** L'aperçu garde l'ancien compteur jusqu'à son prochain déploiement
+  (`npm run deploy:preview -- --bench`). À ce moment le registre repart vide, et une sonde par
+  `/api/bench` pendant une fermeture reçoit « spent » sans appel : l'attente du quota par le
+  script local doit sonder moins souvent que toutes les trente minutes.
+- **Reste PROBABLE** : la forme du refus à travers le lien et la passerelle (lue dans le moteur
+  local seulement). **Reste vrai** : chaque Worker a son propre registre pour un seul quota de
+  compte — seul le coupe-circuit voit ce qui est dépensé ailleurs (à reprendre au lot C10).

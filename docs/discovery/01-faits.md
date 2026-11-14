@@ -33,7 +33,7 @@
 
 | Fait | Statut | Preuve |
 |---|---|---|
-| Workers AI : 10 000 neurons/jour, reset 00:00 UTC ; `usage.neurons` renvoyé par l'API, formule 31 876 / 50 488 par M tokens exacte pour Mistral Small 3.1 | VÉRIFIÉ | `neurons-log.md`, pricing lu le 7/9 |
+| Workers AI : 10 000 neurons gratuits ; `usage.neurons` renvoyé par l'API, formule 31 876 / 50 488 par M tokens exacte pour Mistral Small 3.1. ~~Reset à 00:00 UTC~~ : lu dans la documentation le 7/9, **contredit par la mesure du 14/11/2026** — le quota ne s'est pas remis à zéro à minuit UTC (`08-ia.md` §10.10). La fenêtre réelle n'est pas établie : le site compte sur 24 heures glissantes (lot C1, `src/worker/budget-core.ts`) | VÉRIFIÉ pour la formule et les 10 000 ; **HYPOTHÈSE** pour la fenêtre | `neurons-log.md`, pricing lu le 7/9 ; mesure des 13 et 14/11/2026 |
 | 7B v0.2 LoRA ≈ 550 neurons/M tokens (≈ 20× moins cher), bascule vers l'anglais dès 4 tokens | VÉRIFIÉ (mesure) / HYPOTHÈSE (qualité) | `neurons-log.md` |
 | AI Gateway : logs activés par défaut (prompt + réponse) ; `cf-aig-collect-log: false` ou Settings → Logs OFF | VÉRIFIÉ (doc) / à prouver par capture en T7 | `outillage.md` #8 |
 | Compte Cloudflare : Free, 0 zone, aucun moyen de paiement (déclaré), token wrangler sans scope billing/ai-gateway | VÉRIFIÉ (API) / DÉCLARÉ (paiement) | `outillage.md` #4-5 |
