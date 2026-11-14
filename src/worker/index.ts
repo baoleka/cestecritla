@@ -5,11 +5,12 @@
  * budget (D4.1, D7.1). This file is the wiring to the platform; the paths themselves are
  * src/worker/chat.ts and src/worker/ask.ts.
  *
- *   /api/gists   the sentences the editor read, for the measures a request names. No model.
- *   /api/chat    THE ONLY ROUTE THAT RECEIVES A SENTENCE A VISITOR TYPED (D16.46) — after
- *                their agreement, whose version the request must carry. A model whose host
- *                keeps nothing explains words of the read sentences; it is called directly,
- *                through no gateway and no cache, and it is never shown a text of the book.
+ *   /api/gists   the sentences written ahead, for the measures a request names. No model.
+ *   /api/chat    closed while data/2026/ask.json names no model (D16.60): it answers « quiet »
+ *                before it opens what it is sent. Where a model is named — one whose host keeps
+ *                nothing — it explains words of our sentences: it is sent identifiers and words
+ *                taken from those sentences, NEVER WHAT A VISITOR TYPED (D16.53), is called
+ *                directly, through no gateway and no cache, and is never shown the book.
  *
  * `/api/ask`, the route of the written answer of D16.4, is gone: the bench closed that mode
  * (D16.33), and a route that exists is a route a mistake in a file could open. Its contract and
@@ -33,7 +34,6 @@ import askConfig from '../../data/2026/ask.json';
 import glossary from '../../data/2026/glossary.json';
 import riposte from '../../data/2026/riposte.json';
 import { parseAskRequest } from '../lib/ask-contract.js';
-import { modeFor } from '../lib/ask-mode.js';
 import { validateExplanation } from '../lib/ask-validate.js';
 import {
   parseChatRequest,
@@ -62,10 +62,11 @@ import {
   closedGists,
   EXPLAIN_ROOM,
   explainedOutput,
+  siteFor,
 } from './chat.js';
 import { clientKey, readBody, type RateLane } from './guards.js';
 import { keptTerms, loadMeasures } from './measures.js';
-import { MODELS, isModelKey, keepsNothing, type ModelKey } from './models.js';
+import { MODELS, isModelKey, type ModelKey } from './models.js';
 import {
   estimateNeurons,
   explainRequest,
@@ -119,28 +120,11 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 const KNOWN = knownOf(glossary.entries, riposte.entries);
 
 /**
- * The chat as this Worker runs it: open only when data/2026/ask.json says "chat" for the host
- * this Worker serves (`ENVIRONMENT`: the preview host may ask before production does) AND
- * names a model whose host writes that it keeps nothing of a call (src/worker/models.ts) — a
- * question is never handed to another.
+ * The chat as this Worker runs it: what data/2026/ask.json says for the host this Worker
+ * serves — decided by a pure function, so that it is tested (src/worker/chat.ts, `siteFor`).
  */
-function chatConfigured(env: Env): {
-  mode: 'chat' | 'off';
-  model: ModelSpec | null;
-  minShared: number | undefined;
-} {
-  const config: Record<string, unknown> = askConfig;
-  const { model, min_shared: minShared } = config;
-  // The same rule as the pages (src/lib/ask-mode.ts): the preview host may ask before
-  // production does, never the other way. Anything but "preview" is production.
-  const mode = modeFor(config, env.ENVIRONMENT === 'preview' ? 'preview' : 'apex');
-  const reads = isModelKey(model) && keepsNothing(model) ? MODELS[model] : null;
-  return {
-    mode: mode === 'chat' && reads !== null ? 'chat' : 'off',
-    model: reads,
-    minShared: typeof minShared === 'number' ? minShared : undefined,
-  };
-}
+const chatConfigured = (env: Env): ReturnType<typeof siteFor> =>
+  siteFor(askConfig, env.ENVIRONMENT);
 
 /**
  * One call to the model of the chat, straight to Workers AI, with a deadline. No gateway: so no

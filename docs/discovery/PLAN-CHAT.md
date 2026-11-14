@@ -1092,3 +1092,31 @@ Ce que D16.60 annonçait à la place de l'IA en direct : les termes s'expliquent
 - **Ce que cette vérification n'est pas** : la lecture d'une personne ; une garantie
   (`14-risques.md` R42).
 
+### 15 novembre, 1 h — le dépôt des phrases, et un défaut trouvé la veille de l'ouverture
+
+- **Le dépôt** (accord donné d'avance par le mandat, D16.57) : `seed-ask-2026.ts --remote
+  cestecritla-ask --gists --accord 2026-11-14 --env preview` — la date est celle de l'horloge
+  UTC (23 h 46 le 14 ; 0 h 46 le 15 à Paris). La base avant : le texte du livre (1 069
+  propositions, réponses « arrêtées »), aucune table de phrases. Après, **vérifié par des
+  comptes et une empreinte, sans lire une phrase** : 1 069 lignes, 1 069 identifiants, toutes
+  épinglées à une proposition de la base, de 44 à 281 caractères ; l'empreinte du lot est celle
+  du fichier local ; interrupteur des phrases **« arrêté »** ; servi depuis l'Union (`EEUR`).
+- **Le défaut.** En lisant le Worker avant de l'ouvrir : `src/worker/index.ts` ne disait le
+  site « en mode chat » que si un modèle pouvait lire — écrit pour D16.53, jamais repris pour
+  D16.60. Sans modèle nommé, `/api/gists` aurait répondu « local » à tout le monde : des liens
+  seuls, pour toujours, sans un mot de panne — et aucune porte ne l'aurait dit, parce que ces
+  quelques lignes de câblage n'en avaient pas : les routes sont des fonctions pures, testées ;
+  le câblage, lui, n'était tenu que par une expression régulière sur sa source.
+- **Corrigé, et tenu deux fois.** La décision est une fonction pure (`siteFor`,
+  `src/worker/chat.ts`) avec son test : aucun modèle nommé — les phrases sont servies,
+  `/api/chat` reste fermée ; un modèle qui ne peut pas lire — tout reste fermé. Et **le
+  Worker lui-même tourne dans un test** (`scripts/worker-runtime.test.ts`) : empaqueté, lancé
+  dans le moteur local de Cloudflare avec une base de phrases inventées — interrupteur
+  arrêté puis ouvert, autre origine, autre méthode, champ en trop, autre livre, pas de secret
+  (fermé), septième envoi de la minute (fermé), hôte de production (rien). Remis à l'ancienne
+  logique, trois tests tombent : essayé.
+- **Ce que cela dit du reste** : le plan notait que la répétition du déploiement n'avait pas
+  exercé les liaisons du Worker du chat (« à voir au premier essai du chat ouvert ») ; elles le
+  sont maintenant en local — la base, le limiteur, le compteur —, et le seront en ligne à
+  l'ouverture de l'aperçu.
+

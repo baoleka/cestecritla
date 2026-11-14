@@ -48,8 +48,10 @@ import {
 } from '../lib/chat-contract.js';
 import { wordsShown } from '../lib/chat-words.js';
 import type { KnownCard } from '../lib/notions.js';
+import { modeFor } from '../lib/ask-mode.js';
 import { EXHAUSTED, type Exhausted, type ModelRun } from './ask.js';
 import { loadGists, type AskDb, type Gist } from './measures.js';
+import { MODELS, isModelKey, keepsNothing } from './models.js';
 import { estimateNeurons, explainRequest, type ModelSpec } from './prompt.js';
 
 /** What both routes need to know of the site and of the hour. */
@@ -62,6 +64,41 @@ export interface ChatSite {
   corpusVersion: string;
   silence: { silent: boolean; reopen: string | null };
   db: AskDb;
+}
+
+/**
+ * What a Worker does with the two routes, read from data/2026/ask.json and from the host it
+ * serves (`ENVIRONMENT`: the preview host may ask before production does, never the other way —
+ * anything but "preview" is production). The mode is the file's, for that host; the model
+ * governs `/api/chat` alone:
+ *
+ *   none named (D16.60)      the sentences written ahead are served, and no route calls a
+ *                            model — `closedChat` answers « quiet » to a null model;
+ *   one that may read        named in our catalogue, with a host that writes it keeps nothing
+ *                            of a call: it may explain words;
+ *   one that may not         unknown, or with a host that keeps something: both routes stay
+ *                            closed — a file that is wrong opens nothing.
+ *
+ * Learning note (15/11/2026): this lived in the wiring (index.ts), where no test runs, and it
+ * said « "chat" only if a model reads ». With no model named the sentences would never have
+ * been served — found by reading the file before the first opening, not by a gate. Hence a
+ * pure function, and its test.
+ */
+export function siteFor(
+  config: unknown,
+  environment: unknown,
+): Pick<ChatSite, 'mode' | 'model'> & { minShared: number | undefined } {
+  const file: Record<string, unknown> =
+    typeof config === 'object' && config !== null ? (config as Record<string, unknown>) : {};
+  const { model, min_shared: minShared } = file;
+  const mode = modeFor(file, environment === 'preview' ? 'preview' : 'apex');
+  const named = model !== null && model !== undefined;
+  const reads = isModelKey(model) && keepsNothing(model) ? MODELS[model] : null;
+  return {
+    mode: mode === 'chat' && (!named || reads !== null) ? 'chat' : 'off',
+    model: reads,
+    minShared: typeof minShared === 'number' ? minShared : undefined,
+  };
 }
 
 export interface GistsDeps extends ChatSite {

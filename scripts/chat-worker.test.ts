@@ -33,6 +33,7 @@ import {
   closedGists,
   EXPLAIN_ROOM,
   type GistsDeps,
+  siteFor,
 } from '../src/worker/chat.js';
 import { MODELS, keepsNothing } from '../src/worker/models.js';
 import {
@@ -518,6 +519,55 @@ void test('a model is asked only where its host keeps nothing', () => {
     (Object.keys(MODELS) as (keyof typeof MODELS)[]).filter((key) => keepsNothing(key)).sort(),
     ['gemma-4-26b', 'llama-3.3-70b', 'mistral-small-3.1'],
   );
+});
+
+void test('the Worker follows the file: sentences without a model, a model only where it may read (D16.60)', () => {
+  const file = { mode: 'off', preview_mode: 'chat', model: null, min_shared: 2 };
+  // No model named: the sentences are served on the host that asks — and no model anywhere.
+  assert.deepEqual(siteFor(file, 'preview'), { mode: 'chat', model: null, minShared: 2 });
+  assert.deepEqual(siteFor({ mode: 'chat' }, 'production'), {
+    mode: 'chat',
+    model: null,
+    minShared: undefined,
+  });
+  // …and what such a Worker does with the two routes: one opens, the other stays closed.
+  const open = { ...siteFor(file, 'preview'), silence: { silent: false, reopen: null } };
+  assert.equal(closedGists(open), null);
+  assert.deepEqual(closedChat(open), QUIET);
+  // The preview host may ask before production does, never the other way; anything that is
+  // not "preview" is production.
+  for (const environment of ['production', undefined, 'Preview', 'apex', '']) {
+    assert.equal(siteFor(file, environment).mode, 'off', String(environment));
+  }
+  assert.equal(siteFor({ mode: 'chat', preview_mode: 'off' }, 'preview').mode, 'chat');
+  // A model that may read — its host writes that it keeps nothing — explains.
+  const named = siteFor({ ...file, model: 'mistral-small-3.1' }, 'preview');
+  assert.equal(named.mode, 'chat');
+  assert.equal(named.model, MODELS['mistral-small-3.1']);
+  // A model that may not — unknown, or one whose host keeps something — closes both routes.
+  for (const model of ['gpt-oss-120b', 'no-such-model', 'constructor', 7, {}]) {
+    const refused = siteFor({ ...file, model }, 'preview');
+    assert.deepEqual([refused.mode, refused.model], ['off', null], JSON.stringify(model));
+  }
+  // A file that does not read, or says anything but "chat": nothing opens by accident.
+  for (const bad of [null, undefined, 'chat', [], { mode: 'on' }, { preview_mode: 'CHAT' }]) {
+    assert.equal(siteFor(bad, 'preview').mode, 'off', JSON.stringify(bad));
+  }
+  // The committed file, as each host reads it today — and the wiring asks nobody else.
+  const committed = JSON.parse(readFileSync('data/2026/ask.json', 'utf8')) as {
+    mode: string;
+    preview_mode: string;
+    model: unknown;
+  };
+  assert.equal(siteFor(committed, 'production').mode, committed.mode);
+  assert.equal(
+    siteFor(committed, 'preview').mode,
+    committed.mode === 'chat' || committed.preview_mode === 'chat' ? 'chat' : 'off',
+  );
+  assert.equal(siteFor(committed, 'preview').model, null, 'no model is named (D16.60)');
+  const wiring = readFileSync('src/worker/index.ts', 'utf8');
+  assert.match(wiring, /siteFor\(askConfig, env\.ENVIRONMENT\)/);
+  assert.doesNotMatch(wiring, /modeFor|keepsNothing/, 'the wiring decides nothing of the mode');
 });
 
 void test('what the routes of the chat do not contain: the reader of the book, a gateway, a log', () => {

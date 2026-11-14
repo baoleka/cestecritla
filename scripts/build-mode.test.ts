@@ -709,10 +709,14 @@ void test('the preview host may ask before production does, never the other way 
   const build = readFileSync('scripts/build.ts', 'utf8');
   assert.match(build, /CEL_HOST: host === 'preview' \? 'preview' : ''/);
   assert.match(build, /--host and --ask-test do not mix/);
-  // …and the Worker reads the same rule for the host it serves, by its own variable.
+  // …and the Worker reads the same rule for the host it serves, by its own variable — in a
+  // pure function the wiring calls and decides nothing around (scripts/chat-worker.test.ts
+  // holds what that function answers, a sheet without a model included).
   const worker = readFileSync('src/worker/index.ts', 'utf8');
-  assert.match(worker, /modeFor\(config, env\.ENVIRONMENT === 'preview' \? 'preview' : 'apex'\)/);
+  assert.match(worker, /siteFor\(askConfig, env\.ENVIRONMENT\)/);
   assert.equal((worker.match(/chatConfigured\(env\)/g) ?? []).length, 2);
+  const site = readFileSync('src/worker/chat.ts', 'utf8');
+  assert.match(site, /modeFor\(file, environment === 'preview' \? 'preview' : 'apex'\)/);
   assert.doesNotMatch(worker, /chatConfigured\(\)/);
   // The committed file opens nothing yet.
   assert.equal(readAskMode(undefined, 'preview'), 'off');
