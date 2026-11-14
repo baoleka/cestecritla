@@ -684,12 +684,12 @@ mineurs. Chacun a été relu dans le code avant d'être retenu.
 
 ### 14 novembre 2026 — la production redéployée avec le correctif du champ (D16.52)
 
-- **Avant** (constaté en ligne à 16 h 31 UTC, mots inventés, trois navigateurs) : Entrée avant
+- **Avant** (constaté en ligne vers 16 h 30 UTC, mots inventés, trois navigateurs) : Entrée avant
   le script → `/?q=…` dans l'adresse, une requête portant les mots.
 - **L'éditeur a relu la page Confidentialité** telle que la production la sert, ses deux
   passages neufs sous les yeux, et demandé le redéploiement. `privacy_page` porte l'empreinte
   du jour ; la porte de lancement ne trouve plus rien.
-- **Redéployé à 16 h 44 UTC** : `npm run build && npm run deploy`, commit `a7050d0`, version
+- **Redéployé vers 16 h 33 UTC** (le commit est de 16 h 32 min 29 s, le déploiement le suit) : `npm run build && npm run deploy`, commit `a7050d0`, version
   `53092a0f`, fichiers statiques, six fichiers envoyés. **Après**, sur `cestecritla.fr` et sur
   `www` : Entrée avant le script ne mène nulle part, aucune requête ne porte les mots, le champ
   garde ce qui était tapé — dans trois navigateurs ; `form-action 'none'` et
@@ -704,3 +704,31 @@ mineurs. Chacun a été relu dans le code avant d'être retenu.
   sans demander (lu dans son code : la confirmation retombe sur « oui »). La commande de
   retrait compare donc d'abord le nom que la configuration donne à celui qu'elle attend
   (`CHAT_WORKERS`) : une configuration qui nommerait le Worker du site ne supprime rien.
+
+### 14 novembre 2026 — lot C10, seconde moitié : la répétition est jouée, et c'est oui (D16.54)
+
+Jouée sur l'aperçu avec l'accord de l'éditeur, de 16 h 35 à 16 h 47 UTC, le chat fermé.
+
+| Étape | Ce qui a été fait | Ce qui a été vu |
+|---|---|---|
+| 1. Déployer | `npm run deploy:chat:preview -- --accord 2026-11-14` | Worker `cestecritla-chat-preview` créé (version `d46d7d3e`), démarrage en 20 ms, ses deux routes posées : `beta.cestecritla.fr/api/gists` et `/api/chat` |
+| 2. Sonder | 16 envois vers les deux adresses, 7 ailleurs (`/api/bench`, `/api/other`, `/api/gists/`, `/api/gists?x=1`) | mêmes réponses qu'avant (« local », « rien », 403 d'une autre origine, 405 d'un `GET`) ; les pages n'ont pas bougé (1 151 fichiers sur 1 154) |
+| 3. Qui a répondu | décompte de la plateforme, par Worker et par minute | **16 sur 16** chez un autre script que l'ancien, **7 sur 7** chez l'ancien ; seconde salve : 5 sur 5, et 2 sur 2 |
+| 4. Retirer | `npm run deploy:chat:preview -- --withdraw --accord 2026-11-14` | « Successfully deleted cestecritla-chat-preview » — hors terminal, wrangler ne demande rien, comme lu dans son code |
+| 5. Après | 12 envois, dont 11 vers les deux adresses | **12 sur 12** chez l'ancien Worker ; plus aucun envoi chez l'autre ; la liste des Workers du compte est celle d'avant ; pages identiques ; les contrôles des trois navigateurs tiennent |
+
+- **Le oui.** Sur cette zone et sur l'offre gratuite, un second Worker posé sur deux routes
+  exactes prend ces deux adresses au Worker qui tient l'hôte en domaine personnalisé, et lui
+  laisse tout le reste ; le retirer les lui rend à l'instant, par une commande. VÉRIFIÉ (les
+  décomptes ci-dessus). `deployment_rehearsed_on` est daté dans `data/2026/ask.json`.
+- **Deux choses apprises.** (1) Une route exacte ne prend pas une adresse suivie d'un `?…` :
+  `/api/gists?x=1` est allée à l'ancien Worker — la page n'en envoie jamais, et en production
+  une telle adresse tomberait sur le site, qui n'y répond rien. (2) La plateforme range sous
+  `__unknown__`, pendant dix minutes au moins, les appels d'un Worker qui vient d'être créé :
+  son nom n'a pas été lu dans le décompte ; ce qui est établi, c'est que ce n'était pas
+  l'ancien — dont le compte est exact — et que cela cesse à la suppression.
+- **Ce que la répétition n'a pas exercé** : les liaisons du nouveau Worker — la base, le
+  compteur, le limiteur, le modèle. Elles ont été acceptées au déploiement ; fermé, le Worker
+  répond avant d'y toucher. PROBABLE qu'elles marchent (le même script les emploie sur
+  l'aperçu) : à voir au premier essai du chat ouvert (lot C11), avec `RATE_SALT` posé.
+- **R27** ne concerne plus que l'aperçu : la production n'aura pas de classe à retirer.
