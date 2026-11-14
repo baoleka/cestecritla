@@ -163,6 +163,26 @@ export function chatDeployArgs(
   ];
 }
 
+/**
+ * The arguments of `wrangler delete` for the Worker of the chat on this target: the withdrawal
+ * of sheet 12 of the runbook. The name comes from the configuration, never from a hand — the
+ * one way to delete this Worker cannot name another.
+ */
+export function chatWithdrawArgs(target: DeployTarget): string[] {
+  return ['delete', '--config', CHAT_CONFIG, `--env=${target === 'preview' ? 'preview' : ''}`];
+}
+
+/**
+ * Why the Worker of the chat must not be taken away now — or null when it may. What closes
+ * always may (the same rule as the holding page): nothing is asked but the editor's accord,
+ * given that day, because deleting a Worker is his decision each time (CLAUDE.md).
+ */
+export function chatWithdrawRefusal(accord: string | null, today: string): string | null {
+  return accord === today
+    ? null
+    : `deleting the Worker of the chat needs the editor's accord, given today: add --accord ${today}`;
+}
+
 export interface ChatDeployContext {
   /** `--dry-run`: wrangler bundles and uploads nothing. */
   dryRun: boolean;
@@ -213,14 +233,17 @@ export function chatDeployRefusal(target: DeployTarget, context: ChatDeployConte
  * What `scripts/deploy.ts` hands on to wrangler: `--dry-run`, and `--outdir <dir>` for the
  * bundle of a dry run. Nothing else — `--config`, `--env`, `--name`, `--assets` or `--route`
  * would each undo a choice the guard has just made, and wrangler reads the last one it is given.
- * `--bench`, `--chat` and `--accord <day>` are the script's own and never reach wrangler.
+ * `--bench`, `--chat`, `--withdraw` and `--accord <day>` are the script's own and never reach
+ * wrangler.
  * Returns the arguments it refuses.
  */
 export function refusedArguments(given: readonly string[]): string[] {
   const refused: string[] = [];
   for (let i = 0; i < given.length; i += 1) {
     const arg = given[i] ?? '';
-    if (arg === '--bench' || arg === '--chat' || arg === '--dry-run') continue;
+    if (arg === '--bench' || arg === '--chat' || arg === '--withdraw' || arg === '--dry-run') {
+      continue;
+    }
     if (/^--outdir=.+/.test(arg) || /^--accord=\d{4}-\d{2}-\d{2}$/.test(arg)) continue;
     const value = given[i + 1] ?? '';
     if (arg === '--outdir' && value !== '' && !value.startsWith('-')) {

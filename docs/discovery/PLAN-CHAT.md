@@ -578,8 +578,10 @@ en arrière ; le navigateur d'Instagram ; un lecteur d'écran.
      (`workersInvocationsAdaptive`, lecture seule — la méthode est essayée : elle montre les
      sondes de 15 h 17 UTC sous `cestecritla-preview`) : les envois vers les deux adresses
      doivent apparaître sous le nouveau nom, ceux vers `/api/bench` sous l'ancien.
-  4. Le retrait : supprimer ce Worker, puis vérifier que les deux adresses reviennent à
-     l'ancien — et que rien d'autre n'a changé.
+  4. Le retrait : `npm run deploy:chat:preview -- --withdraw --accord <jour>` supprime ce
+     Worker — la commande tire son nom de la configuration, elle ne peut pas en nommer un
+     autre —, puis vérifier que les deux adresses reviennent à l'ancien, et que rien d'autre
+     n'a changé.
   5. Un oui ou un non écrit ici ; si oui, `deployment_rehearsed_on` est daté.
 - **Reste pour l'ouverture de l'aperçu (lot C11)** : le mode par hôte — ouvrir l'aperçu sans
   la production —, le secret du limiteur à poser sur le nouveau Worker (sans lui il se ferme :

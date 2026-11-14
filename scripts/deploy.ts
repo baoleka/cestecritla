@@ -8,6 +8,7 @@
  *   npm run deploy:chat:preview -- --accord <today>   the Worker of the chat alone, on its two
  *                                      addresses of the preview host (lot C10)
  *   npm run deploy:chat -- --accord <today>           the same in front of the apex (lot C12)
+ *   npm run deploy:chat:preview -- --withdraw --accord <today>   takes that Worker away again
  *   npx tsx scripts/deploy.ts apex --dry-run --outdir /tmp/x     what CI runs
  *
  * Why a script and not a habit. Read in wrangler 4.130.0 (`publishCustomDomains`): when a custom
@@ -28,6 +29,8 @@ import { buildGame, gameSite } from '../src/lib/game-data.js';
 import {
   chatDeployArgs,
   chatDeployRefusal,
+  chatWithdrawArgs,
+  chatWithdrawRefusal,
   citationPolicyValidated,
   deployRefusal,
   distProblems,
@@ -48,7 +51,8 @@ const [target, ...given] = process.argv.slice(2);
 if (target !== 'apex' && target !== 'preview') {
   console.error(
     'usage: tsx scripts/deploy.ts apex|preview [--bench] [--dry-run] [--outdir <dir>]\n' +
-      '       tsx scripts/deploy.ts apex|preview --chat --accord <YYYY-MM-DD> | --chat --dry-run',
+      '       tsx scripts/deploy.ts apex|preview --chat --accord <YYYY-MM-DD> | --chat --dry-run\n' +
+      '       tsx scripts/deploy.ts apex|preview --chat --withdraw --accord <YYYY-MM-DD>',
   );
   process.exit(2);
 }
@@ -57,7 +61,7 @@ if (target !== 'apex' && target !== 'preview') {
 const refused = refusedArguments(given);
 if (refused.length > 0) {
   console.error(
-    `deploy refused: ${refused.join(' ')} — only --bench, --chat, --accord <day>, --dry-run and --outdir`,
+    `deploy refused: ${refused.join(' ')} — only --bench, --chat, --withdraw, --accord <day>, --dry-run and --outdir`,
   );
   process.exit(2);
 }
@@ -72,10 +76,19 @@ const forWrangler = given.filter(
   (arg, i) =>
     arg !== '--bench' &&
     arg !== '--chat' &&
+    arg !== '--withdraw' &&
     arg !== '--accord' &&
     !arg.startsWith('--accord=') &&
     !(accordAt !== -1 && i === accordAt + 1),
 );
+
+if (given.includes('--withdraw') && !given.includes('--chat')) {
+  console.error(
+    'deploy refused: --withdraw takes away the Worker of the chat (--chat --withdraw); the ' +
+      'site itself is withdrawn with the holding build',
+  );
+  process.exit(2);
+}
 
 // The Worker of the chat alone (lot C10): no file goes with it, so dist/ is not looked at.
 if (given.includes('--chat')) {
@@ -83,10 +96,31 @@ if (given.includes('--chat')) {
     console.error('deploy refused: --chat and --bench name two different Workers');
     process.exit(2);
   }
+  const today = new Date().toISOString().slice(0, 10);
+  // Taking it away again: what closes always may, with the accord of the day. The name of the
+  // Worker comes from its configuration, and nothing else of the command line reaches wrangler.
+  if (given.includes('--withdraw')) {
+    if (forWrangler.length > 0) {
+      console.error(`deploy refused: --withdraw takes --accord <day> and nothing else`);
+      process.exit(2);
+    }
+    const kept = chatWithdrawRefusal(accord, today);
+    if (kept !== null) {
+      console.error(`withdrawal refused (${target}, the Worker of the chat): ${kept}`);
+      process.exit(1);
+    }
+    const withdrawArgs = chatWithdrawArgs(target);
+    console.log(`withdraw: the Worker of the chat ← ${target}`);
+    console.log(`          wrangler ${withdrawArgs.join(' ')}`);
+    const gone = spawnSync('npx', ['--no-install', 'wrangler', ...withdrawArgs], {
+      stdio: 'inherit',
+    });
+    process.exit(gone.status ?? 1);
+  }
   const refusal = chatDeployRefusal(target, {
     dryRun: forWrangler.includes('--dry-run'),
     accord,
-    today: new Date().toISOString().slice(0, 10),
+    today,
     workerProblems: workerProblems(),
     ask: readAskMode(),
     launchBlockers: launchBlockers(readLaunchInputs()),

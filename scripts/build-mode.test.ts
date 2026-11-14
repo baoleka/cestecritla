@@ -25,6 +25,8 @@ import {
   appRedirects,
   chatDeployArgs,
   chatDeployRefusal,
+  chatWithdrawArgs,
+  chatWithdrawRefusal,
   citationPolicyValidated,
   deployRefusal,
   distProblems,
@@ -522,6 +524,7 @@ void test('nothing reaches wrangler that could undo a choice of the guard', () =
   assert.match(deploy, /chatDeployArgs\(target, forWrangler\)/);
   assert.match(deploy, /const passthrough = forWrangler;/);
   assert.deepEqual(deploy.match(/'wrangler', \.\.\.\w+/g), [
+    "'wrangler', ...withdrawArgs",
     "'wrangler', ...chatArgs",
     "'wrangler', ...args",
   ]);
@@ -667,8 +670,36 @@ void test('the Worker of the chat is deployed by the script alone, with an accor
     String(chatDeployRefusal('apex', { ...ready, launchBlockers: ['not rehearsed'] })),
     /does not go to the apex yet — not rehearsed/,
   );
+  // Taking it away again is one command too, and names its Worker by the configuration alone:
+  // what closes always may — with the accord of the day, like any deletion of a Worker.
+  assert.deepEqual(chatWithdrawArgs('preview'), [
+    'delete',
+    '--config',
+    'wrangler.chat.jsonc',
+    '--env=preview',
+  ]);
+  assert.deepEqual(chatWithdrawArgs('apex'), [
+    'delete',
+    '--config',
+    'wrangler.chat.jsonc',
+    '--env=',
+  ]);
+  assert.equal(chatWithdrawRefusal('2026-11-20', '2026-11-20'), null);
+  for (const accord of [null, '2026-11-19']) {
+    assert.match(
+      String(chatWithdrawRefusal(accord, '2026-11-20')),
+      /deleting the Worker of the chat needs the editor's accord, given today/,
+    );
+  }
+  assert.deepEqual(refusedArguments(['--chat', '--withdraw', '--accord', '2026-11-20']), []);
   // The script looks at no build for it, and refuses to mix it with the bench.
   const deploy = readFileSync('scripts/deploy.ts', 'utf8');
+  // `wrangler delete` is reached by one path, which never names a Worker by hand…
+  assert.equal((deploy.match(/'delete'/g) ?? []).length, 0, 'the script spells no delete itself');
+  assert.match(deploy, /chatWithdrawRefusal\(accord, today\)/);
+  assert.match(deploy, /--withdraw takes --accord <day> and nothing else/);
+  // …and it means nothing without `--chat`: the site is withdrawn with the holding build.
+  assert.match(deploy, /given\.includes\('--withdraw'\) && !given\.includes\('--chat'\)/);
   const chatAt = deploy.indexOf("given.includes('--chat')");
   assert.ok(chatAt > -1 && chatAt < deploy.indexOf("existsSync('dist')"));
   assert.match(deploy, /--chat and --bench name two different Workers/);
