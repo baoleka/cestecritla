@@ -1,0 +1,1444 @@
+{
+  "meta": {
+    "title_fr": "Des mots expliqués — sigles et termes techniques",
+    "version": "1.0.0",
+    "written_on": "2026-11-15",
+    "written_by": "session",
+    "checked_by": "independent-model",
+    "read_by_a_person": false,
+    "note_fr": "Explications courtes des sigles et des termes techniques que la question ou les phrases de « Demander » emploient (D16.60, D16.62). Une IA les a écrites — la session —, à partir de connaissances générales, jamais du texte du livre ; un autre modèle, qui n'a lu que ce fichier, a vérifié les faits le 15/11/2026, et la session a repris ce qu'il relevait (88 entrées sur 257 : tout ce qu'il demandait de corriger avant de servir, et la plupart du reste). Aucune personne ne les a relues une à une : la feuille le dit, « Explications écrites et vérifiées par une IA ». Aucune ne dit ce que le programme prévoit, aucune ne donne un avis, aucune ne porte un montant en euros ni une règle qui change d'une année à l'autre quand une formule durable suffit. Un sigle — un mot écrit avec une majuscule après sa première lettre, ou avec un chiffre — est reconnu tel quel, à la casse près ; « anyCase » l'admet aussi en minuscules, quand elles ne peuvent rien vouloir dire d'autre. Les autres termes sont reconnus sans tenir compte de la casse, des accents ni du pluriel."
+  },
+  "entries": [
+    {
+      "id": "onu",
+      "term": "ONU",
+      "aliases": ["Nations unies"],
+      "anyCase": true,
+      "plain": "L'Organisation des Nations unies réunit presque tous les États du monde. Elle a été créée en 1945 pour maintenir la paix."
+    },
+    {
+      "id": "conseil-de-securite",
+      "term": "Conseil de sécurité",
+      "plain": "Le Conseil de sécurité est l'organe de l'ONU chargé de la paix. Il compte quinze États membres ; cinq y siègent en permanence, avec un droit de veto."
+    },
+    {
+      "id": "otan",
+      "term": "OTAN",
+      "anyCase": true,
+      "plain": "L'OTAN est une alliance militaire entre des pays d'Amérique du Nord et d'Europe. Son nom complet : Organisation du traité de l'Atlantique nord."
+    },
+    {
+      "id": "bce",
+      "term": "BCE",
+      "aliases": ["Banque centrale européenne"],
+      "anyCase": true,
+      "plain": "La Banque centrale européenne gère l'euro. Elle fixe ses taux directeurs, qui influencent les taux d'intérêt dans la zone euro."
+    },
+    {
+      "id": "omc",
+      "term": "OMC",
+      "anyCase": true,
+      "plain": "L'Organisation mondiale du commerce est le lieu où les États négocient les règles du commerce entre eux. Elle a aussi un système pour régler leurs différends."
+    },
+    {
+      "id": "oms",
+      "term": "OMS",
+      "anyCase": true,
+      "plain": "L'Organisation mondiale de la santé est l'agence des Nations unies chargée de la santé publique dans le monde."
+    },
+    {
+      "id": "oit",
+      "term": "OIT",
+      "anyCase": true,
+      "plain": "L'Organisation internationale du travail est une agence des Nations unies. Elle adopte des normes sur les droits au travail."
+    },
+    {
+      "id": "fmi",
+      "term": "FMI",
+      "anyCase": true,
+      "plain": "Le Fonds monétaire international prête de l'argent aux États en difficulté financière, sous conditions."
+    },
+    {
+      "id": "fao",
+      "term": "FAO",
+      "anyCase": true,
+      "plain": "La FAO est l'agence des Nations unies pour l'alimentation et l'agriculture."
+    },
+    {
+      "id": "cnuced",
+      "term": "CNUCED",
+      "anyCase": true,
+      "plain": "La CNUCED, aussi appelée ONU commerce et développement, est l'organe des Nations unies qui aide les pays en développement à tirer parti du commerce."
+    },
+    {
+      "id": "unesco",
+      "term": "Unesco",
+      "plain": "L'Unesco est l'agence des Nations unies pour l'éducation, la science et la culture."
+    },
+    {
+      "id": "unrwa",
+      "term": "UNRWA",
+      "anyCase": true,
+      "plain": "L'UNRWA est l'agence des Nations unies qui aide les réfugiés palestiniens : écoles, soins, aide d'urgence."
+    },
+    {
+      "id": "hcr",
+      "term": "HCR",
+      "plain": "Le HCR, Haut-Commissariat des Nations unies pour les réfugiés, protège et aide les réfugiés et les personnes déplacées."
+    },
+    {
+      "id": "aiea",
+      "term": "AIEA",
+      "anyCase": true,
+      "plain": "L'AIEA, Agence internationale de l'énergie atomique, aide à l'usage pacifique du nucléaire et contrôle qu'il ne sert pas à fabriquer des armes. Elle est liée aux Nations unies."
+    },
+    {
+      "id": "osce",
+      "term": "OSCE",
+      "anyCase": true,
+      "plain": "L'OSCE, Organisation pour la sécurité et la coopération en Europe, réunit des États d'Europe, d'Asie centrale et d'Amérique du Nord. Elle travaille à prévenir les conflits."
+    },
+    {
+      "id": "cpi",
+      "term": "CPI",
+      "aliases": ["Cour pénale internationale"],
+      "plain": "La Cour pénale internationale, à La Haye, juge des personnes accusées de génocide, de crimes contre l'humanité, de crimes de guerre ou de crime d'agression."
+    },
+    {
+      "id": "cij",
+      "term": "CIJ",
+      "aliases": ["Cour internationale de justice"],
+      "plain": "La Cour internationale de justice est le tribunal des Nations unies. Elle tranche les différends entre États."
+    },
+    {
+      "id": "omi",
+      "term": "OMI",
+      "plain": "L'Organisation maritime internationale est l'agence des Nations unies qui fixe les règles du transport par mer."
+    },
+    {
+      "id": "celac",
+      "term": "CELAC",
+      "plain": "La CELAC est une communauté qui réunit les États d'Amérique latine et des Caraïbes."
+    },
+    {
+      "id": "cdaa",
+      "term": "CDAA",
+      "plain": "La CDAA est la Communauté de développement de l'Afrique australe. Elle réunit des pays du sud de l'Afrique."
+    },
+    {
+      "id": "iora",
+      "term": "IORA",
+      "plain": "L'IORA est une association d'États riverains de l'océan Indien, qui coopèrent entre eux."
+    },
+    {
+      "id": "ue",
+      "term": "UE",
+      "anyCase": true,
+      "plain": "L'UE, Union européenne, réunit 27 États d'Europe. Ils partagent un marché, des règles communes et des institutions, comme le Parlement européen."
+    },
+    {
+      "id": "tian",
+      "term": "TIAN",
+      "anyCase": true,
+      "plain": "Le TIAN, traité sur l'interdiction des armes nucléaires, a été adopté à l'ONU en 2017. Il s'applique depuis 2021 aux États qui l'ont ratifié."
+    },
+    {
+      "id": "tfue",
+      "term": "TFUE",
+      "anyCase": true,
+      "plain": "Le TFUE est le traité sur le fonctionnement de l'Union européenne. C'est l'un des deux grands traités qui organisent l'Union."
+    },
+    {
+      "id": "pac",
+      "term": "PAC",
+      "aliases": ["politique agricole commune"],
+      "anyCase": true,
+      "plain": "La politique agricole commune, la PAC, est la politique de l'Union européenne pour l'agriculture : aides, règles des marchés, développement rural. PAC désigne aussi une pompe à chaleur."
+    },
+    {
+      "id": "rgpd",
+      "term": "RGPD",
+      "anyCase": true,
+      "plain": "Le RGPD est le règlement européen qui protège les données personnelles. Il s'applique depuis 2018."
+    },
+    {
+      "id": "gafam",
+      "term": "GAFAM",
+      "anyCase": true,
+      "plain": "GAFAM désigne cinq géants américains du numérique : Google, Apple, Facebook (Meta), Amazon et Microsoft."
+    },
+    {
+      "id": "cop",
+      "term": "COP",
+      "plain": "Une COP est une conférence où les États qui ont signé un traité se réunissent pour négocier, par exemple sur le climat."
+    },
+    {
+      "id": "mercosur",
+      "term": "Mercosur",
+      "plain": "Le Mercosur est une alliance commerciale de pays d'Amérique du Sud, dont le Brésil et l'Argentine."
+    },
+    {
+      "id": "semestre-europeen",
+      "term": "semestre européen",
+      "plain": "Le semestre européen est le calendrier annuel où l'Union européenne examine les budgets et les réformes de ses États membres."
+    },
+    {
+      "id": "travailleurs-detaches",
+      "term": "travailleurs détachés",
+      "aliases": ["travail détaché"],
+      "plain": "Un travailleur détaché est envoyé par son employeur travailler un temps dans un autre pays de l'Union européenne."
+    },
+    {
+      "id": "commandement-integre",
+      "term": "commandement intégré",
+      "plain": "Le commandement intégré est la structure militaire de l'OTAN : des états-majors communs où servent des militaires des pays membres. La France l'a quitté en 1966 et l'a rejoint en 2009."
+    },
+    {
+      "id": "accords-artemis",
+      "term": "accords Artemis",
+      "plain": "Les accords Artemis, lancés par les États-Unis en 2020, fixent des principes non contraignants pour explorer la Lune et l'espace. Plusieurs dizaines de pays les ont signés, dont la France."
+    },
+    {
+      "id": "traite-de-la-lune",
+      "term": "traité de la Lune",
+      "plain": "Le traité de la Lune, adopté à l'ONU en 1979, fait de la Lune et de ses ressources un patrimoine commun de l'humanité. Peu d'États l'ont ratifié."
+    },
+    {
+      "id": "galileo",
+      "term": "Galileo",
+      "plain": "Galileo est le système européen de positionnement par satellite, comparable au GPS américain."
+    },
+    {
+      "id": "starlink",
+      "term": "Starlink",
+      "plain": "Starlink est un réseau de satellites de l'entreprise américaine SpaceX. Il fournit un accès à Internet."
+    },
+    {
+      "id": "ric",
+      "term": "RIC",
+      "aliases": ["référendum d'initiative citoyenne"],
+      "anyCase": true,
+      "plain": "Le RIC, référendum d'initiative citoyenne, est un référendum que des citoyens peuvent déclencher en réunissant assez de signatures. La France n'en a pas ; la Suisse a un système proche."
+    },
+    {
+      "id": "referendum",
+      "term": "référendum",
+      "plain": "Un référendum est un vote où les citoyens répondent directement, par oui ou par non, à une question."
+    },
+    {
+      "id": "article-49-3",
+      "term": "49.3",
+      "aliases": ["49-3", "49 alinéa 3"],
+      "plain": "L'article 49.3 de la Constitution permet au gouvernement de faire adopter un texte sans vote des députés, sauf si une motion de censure est votée."
+    },
+    {
+      "id": "constituante",
+      "term": "Constituante",
+      "aliases": ["Assemblée constituante"],
+      "plain": "Une Assemblée constituante est une assemblée chargée d'écrire une nouvelle Constitution."
+    },
+    {
+      "id": "scrutin-proportionnel",
+      "term": "scrutin proportionnel",
+      "aliases": ["la proportionnelle", "représentation proportionnelle"],
+      "plain": "Au scrutin proportionnel, chaque liste reçoit des sièges selon sa part des voix."
+    },
+    {
+      "id": "abroger",
+      "term": "abroger",
+      "aliases": ["abrogation"],
+      "plain": "Abroger une loi, c'est la supprimer pour l'avenir."
+    },
+    {
+      "id": "moratoire",
+      "term": "moratoire",
+      "plain": "Un moratoire suspend une activité ou une décision pendant un temps donné."
+    },
+    {
+      "id": "amnistie",
+      "term": "amnistie",
+      "plain": "Une amnistie est une loi qui efface certaines infractions : on ne peut plus les poursuivre, et les condamnations déjà prononcées sont effacées."
+    },
+    {
+      "id": "laicite",
+      "term": "laïcité",
+      "plain": "La laïcité sépare les religions et l'État. L'État n'en favorise aucune, et chacun est libre de croire ou de ne pas croire."
+    },
+    {
+      "id": "concordat",
+      "term": "concordat",
+      "plain": "Un concordat est un accord entre un État et l'Église catholique. En Alsace-Moselle, il fait que l'État reconnaît certains cultes et paie leurs ministres."
+    },
+    {
+      "id": "pantouflage",
+      "term": "pantouflage",
+      "plain": "Le pantouflage, c'est quand un haut fonctionnaire quitte l'État pour travailler dans une entreprise privée."
+    },
+    {
+      "id": "conflit-d-interets",
+      "term": "conflits d'intérêts",
+      "aliases": ["conflit d'intérêts"],
+      "plain": "Il y a conflit d'intérêts quand un intérêt personnel peut influencer une décision prise au nom de tous."
+    },
+    {
+      "id": "lobbys",
+      "term": "lobbys",
+      "aliases": ["lobbies", "lobbyistes", "lobbying"],
+      "plain": "Un lobby est un groupe qui cherche à influencer les décisions publiques au profit de ses intérêts."
+    },
+    {
+      "id": "ineligible",
+      "term": "inéligible",
+      "aliases": ["inéligibles"],
+      "plain": "Une personne inéligible n'a pas le droit de se présenter à une élection."
+    },
+    {
+      "id": "intercommunalites",
+      "term": "intercommunalités",
+      "aliases": ["intercommunalité"],
+      "plain": "Une intercommunalité est un groupement de communes qui gèrent ensemble certains services."
+    },
+    {
+      "id": "dotation-globale-de-fonctionnement",
+      "term": "dotation globale de fonctionnement",
+      "aliases": ["DGF"],
+      "plain": "La dotation globale de fonctionnement est la principale somme que l'État verse chaque année aux collectivités."
+    },
+    {
+      "id": "droit-de-preemption",
+      "term": "droit de préemption",
+      "aliases": ["préemption"],
+      "plain": "Le droit de préemption permet à certains acheteurs désignés par la loi, souvent une commune, d'acheter en priorité un bien mis en vente."
+    },
+    {
+      "id": "requisition",
+      "term": "réquisition",
+      "aliases": ["réquisitionner"],
+      "plain": "Par une réquisition, l'autorité publique oblige une personne à lui laisser l'usage d'un bien ou à fournir un service, contre indemnité."
+    },
+    {
+      "id": "nationaliser",
+      "term": "nationaliser",
+      "aliases": ["nationalisation", "renationaliser"],
+      "plain": "Nationaliser une entreprise, c'est la faire passer sous la propriété de l'État."
+    },
+    {
+      "id": "privatisation",
+      "term": "privatisations",
+      "aliases": ["privatisation"],
+      "plain": "Une privatisation fait passer une entreprise publique à des propriétaires privés."
+    },
+    {
+      "id": "ppp",
+      "term": "PPP",
+      "aliases": ["partenariats public-privé"],
+      "plain": "Dans un partenariat public-privé, une entreprise construit et gère un équipement public. L'État ou une collectivité la paie pendant des années."
+    },
+    {
+      "id": "arcom",
+      "term": "Arcom",
+      "plain": "L'Arcom est l'autorité qui régule la télévision, la radio et les plateformes en ligne."
+    },
+    {
+      "id": "cnil",
+      "term": "CNIL",
+      "anyCase": true,
+      "plain": "La CNIL est l'autorité qui veille à la protection des données personnelles en France."
+    },
+    {
+      "id": "miviludes",
+      "term": "Miviludes",
+      "plain": "La Miviludes est la mission de l'État qui surveille les dérives sectaires."
+    },
+    {
+      "id": "defenseur-des-droits",
+      "term": "Défenseur des droits",
+      "plain": "Le Défenseur des droits est une autorité indépendante. On le saisit contre une administration, une discrimination, une atteinte aux droits d'un enfant ou un manquement des forces de l'ordre."
+    },
+    {
+      "id": "igpn",
+      "term": "IGPN",
+      "anyCase": true,
+      "plain": "L'IGPN est le service d'inspection de la police nationale. On l'appelle la police des polices."
+    },
+    {
+      "id": "iggn",
+      "term": "IGGN",
+      "anyCase": true,
+      "plain": "L'IGGN est le service d'inspection de la gendarmerie nationale."
+    },
+    {
+      "id": "bac-police",
+      "term": "BAC",
+      "plain": "Dans la police, les BAC, brigades anticriminalité, sont des équipes souvent en civil, chargées d'arrêter les auteurs de délits pris sur le fait."
+    },
+    {
+      "id": "brav-m",
+      "term": "BRAV-M",
+      "anyCase": true,
+      "plain": "Les BRAV-M, brigades de répression de l'action violente motorisées, sont des équipes de policiers à moto créées à Paris en 2019. Elles interviennent surtout lors de manifestations."
+    },
+    {
+      "id": "lbd",
+      "term": "LBD",
+      "anyCase": true,
+      "plain": "Un LBD, lanceur de balles de défense, est une arme des forces de l'ordre. Il tire à distance de gros projectiles en mousse dure ou en caoutchouc."
+    },
+    {
+      "id": "rio",
+      "term": "RIO",
+      "plain": "Le RIO est le numéro d'identification que policiers et gendarmes doivent porter sur leur uniforme."
+    },
+    {
+      "id": "pharos",
+      "term": "PHAROS",
+      "anyCase": true,
+      "plain": "PHAROS est la plateforme du ministère de l'Intérieur où l'on signale des contenus illicites vus sur Internet."
+    },
+    {
+      "id": "cra",
+      "term": "CRA",
+      "aliases": ["centres de rétention administrative"],
+      "plain": "Un centre de rétention administrative est un lieu fermé où sont retenus des étrangers avant un possible éloignement."
+    },
+    {
+      "id": "desescalade",
+      "term": "désescalade",
+      "plain": "La désescalade vise à faire baisser la tension, dans un conflit ou lors d'une manifestation, par le dialogue plutôt que par la force."
+    },
+    {
+      "id": "jures-populaires",
+      "term": "jurés populaires",
+      "plain": "Les jurés populaires sont des citoyens tirés au sort pour juger un crime aux côtés de juges professionnels."
+    },
+    {
+      "id": "cours-criminelles",
+      "term": "cours criminelles",
+      "plain": "Les cours criminelles départementales jugent certains crimes sans jurés tirés au sort. Elles existent dans tous les départements depuis 2023."
+    },
+    {
+      "id": "aide-juridictionnelle",
+      "term": "aide juridictionnelle",
+      "plain": "L'aide juridictionnelle paie tout ou partie des frais de justice des personnes aux revenus modestes."
+    },
+    {
+      "id": "amende-forfaitaire-delictuelle",
+      "term": "amendes forfaitaires délictuelles",
+      "plain": "Une amende forfaitaire délictuelle punit certains délits, comme l'usage de stupéfiants, par une amende fixe dressée par la police, sans procès, sauf si la personne la conteste."
+    },
+    {
+      "id": "regulation-carcerale",
+      "term": "régulation carcérale",
+      "plain": "La régulation carcérale est un mécanisme qui empêche qu'une prison compte plus de détenus que de places. Il avance par exemple la sortie de détenus en fin de peine."
+    },
+    {
+      "id": "verrou-de-bercy",
+      "term": "verrou de Bercy",
+      "plain": "Le verrou de Bercy désigne le pouvoir de l'administration fiscale de décider si une fraude est poursuivie en justice. Depuis 2018, les fraudes les plus graves sont transmises d'office au procureur."
+    },
+    {
+      "id": "convention-judiciaire-d-interet-public",
+      "term": "convention judiciaire d'intérêt public",
+      "aliases": ["CJIP"],
+      "plain": "Avec une convention judiciaire d'intérêt public, une entreprise poursuivie pour corruption, fraude fiscale ou atteinte à l'environnement paie une amende, sans procès ni condamnation."
+    },
+    {
+      "id": "testing",
+      "term": "testing",
+      "plain": "Un testing compare les réponses à des demandes presque identiques, pour un emploi ou un logement par exemple. Il sert à repérer une discrimination liée à l'origine, au sexe ou à l'adresse."
+    },
+    {
+      "id": "soumission-chimique",
+      "term": "soumission chimique",
+      "plain": "La soumission chimique consiste à droguer une personne à son insu, pour l'agresser ou la voler."
+    },
+    {
+      "id": "droit-du-sol",
+      "term": "droit du sol",
+      "plain": "Le droit du sol donne la nationalité d'un pays à une personne née sur son territoire, à certaines conditions."
+    },
+    {
+      "id": "ofpra",
+      "term": "Ofpra",
+      "plain": "L'Ofpra est l'office public qui examine les demandes d'asile."
+    },
+    {
+      "id": "demandeurs-d-asile",
+      "term": "demandeurs d'asile",
+      "aliases": ["droit d'asile"],
+      "plain": "Un demandeur d'asile demande à un pays de le protéger, parce qu'il est menacé dans le sien. Le droit d'asile est le droit de recevoir cette protection."
+    },
+    {
+      "id": "apatrides",
+      "term": "apatrides",
+      "plain": "Un apatride est une personne qu'aucun État ne reconnaît comme son ressortissant."
+    },
+    {
+      "id": "pays-d-origine-surs",
+      "term": "pays d'origine sûrs",
+      "plain": "Un pays d'origine sûr est un pays jugé sans risque de persécution. Les demandes d'asile de ses ressortissants sont examinées plus vite."
+    },
+    {
+      "id": "titre-de-sejour",
+      "term": "titre de séjour",
+      "aliases": ["carte de séjour"],
+      "plain": "Un titre de séjour est le document qui autorise un étranger à vivre en France."
+    },
+    {
+      "id": "smic",
+      "term": "SMIC",
+      "anyCase": true,
+      "plain": "Le SMIC est le salaire minimum légal en France."
+    },
+    {
+      "id": "rsa",
+      "term": "RSA",
+      "aliases": ["revenu de solidarité active"],
+      "anyCase": true,
+      "plain": "Le RSA, revenu de solidarité active, est versé sous conditions aux personnes qui ont peu ou pas de revenus."
+    },
+    {
+      "id": "ass",
+      "term": "ASS",
+      "plain": "L'ASS, allocation de solidarité spécifique, est versée sous conditions de ressources à des chômeurs qui n'ont plus droit à l'allocation chômage."
+    },
+    {
+      "id": "aah",
+      "term": "AAH",
+      "plain": "L'AAH est l'allocation aux adultes handicapés. Elle assure un revenu minimum aux personnes en situation de handicap."
+    },
+    {
+      "id": "apl",
+      "term": "APL",
+      "anyCase": true,
+      "plain": "Les APL, aides personnalisées au logement, réduisent le loyer de locataires aux revenus modestes."
+    },
+    {
+      "id": "asf",
+      "term": "ASF",
+      "plain": "L'ASF, allocation de soutien familial, est versée pour un enfant privé de l'aide d'un de ses parents ou des deux. Elle sert par exemple quand une pension alimentaire n'est pas payée."
+    },
+    {
+      "id": "minima-sociaux",
+      "term": "minima sociaux",
+      "plain": "Les minima sociaux sont les aides qui garantissent un revenu minimum, comme le RSA."
+    },
+    {
+      "id": "seuil-de-pauvrete",
+      "term": "seuil de pauvreté",
+      "plain": "Le seuil de pauvreté est le niveau de vie sous lequel une personne est comptée comme pauvre. En France, on retient le plus souvent 60 % du niveau de vie médian."
+    },
+    {
+      "id": "non-recours",
+      "term": "non-recours",
+      "plain": "Le non-recours, c'est quand une personne ne demande pas une aide à laquelle elle a droit."
+    },
+    {
+      "id": "cdd",
+      "term": "CDD",
+      "anyCase": true,
+      "plain": "Un CDD est un contrat de travail à durée déterminée : il a une date de fin."
+    },
+    {
+      "id": "cdi",
+      "term": "CDI",
+      "anyCase": true,
+      "plain": "Un CDI est un contrat de travail à durée indéterminée : il n'a pas de date de fin. Au collège et au lycée, le CDI est aussi le centre de documentation."
+    },
+    {
+      "id": "chsct",
+      "term": "CHSCT",
+      "anyCase": true,
+      "plain": "Les CHSCT étaient des comités chargés de la santé, de la sécurité et des conditions de travail. Dans les entreprises, des ordonnances de 2017 les ont fondus dans une autre instance, le CSE."
+    },
+    {
+      "id": "unedic",
+      "term": "Unédic",
+      "plain": "L'Unédic gère le financement et les règles de l'assurance chômage. Elle est dirigée par les syndicats et le patronat, dans un cadre fixé par l'État."
+    },
+    {
+      "id": "dumping-social",
+      "term": "dumping social",
+      "plain": "Le dumping social, c'est profiter de salaires plus bas ou de droits sociaux plus faibles, souvent dans un autre pays, pour produire moins cher que ses concurrents."
+    },
+    {
+      "id": "point-d-indice",
+      "term": "point d'indice",
+      "plain": "Le point d'indice est la valeur qui sert à calculer le salaire des fonctionnaires."
+    },
+    {
+      "id": "decote",
+      "term": "décote",
+      "plain": "Pour la retraite, la décote réduit la pension de qui part sans avoir cotisé assez longtemps. Pour l'impôt sur le revenu, la décote allège l'impôt des revenus modestes."
+    },
+    {
+      "id": "annuites",
+      "term": "annuités",
+      "plain": "Pour la retraite, les annuités sont les années de cotisation exigées pour une pension complète. Pour un emprunt, une annuité est la somme remboursée chaque année."
+    },
+    {
+      "id": "retraite-par-repartition",
+      "term": "retraite par répartition",
+      "aliases": ["système par répartition", "régime par répartition"],
+      "plain": "Dans un système de retraite par répartition, les cotisations des actifs paient les pensions des retraités d'aujourd'hui."
+    },
+    {
+      "id": "retraite-par-capitalisation",
+      "term": "retraite par capitalisation",
+      "aliases": ["système par capitalisation", "régime par capitalisation"],
+      "plain": "Dans un système de retraite par capitalisation, ce que chacun verse est placé, souvent en Bourse, puis lui est reversé sous forme de pension."
+    },
+    {
+      "id": "intermittents",
+      "term": "intermittents du spectacle",
+      "plain": "Les intermittents du spectacle sont des artistes et techniciens qui alternent emplois courts et chômage, avec un régime d'assurance chômage adapté."
+    },
+    {
+      "id": "csg",
+      "term": "CSG",
+      "anyCase": true,
+      "plain": "La CSG, contribution sociale généralisée, est un prélèvement sur presque tous les revenus. Elle finance la protection sociale."
+    },
+    {
+      "id": "cades",
+      "term": "Cades",
+      "plain": "La Cades est la caisse chargée de rembourser la dette de la Sécurité sociale."
+    },
+    {
+      "id": "t2a",
+      "term": "T2A",
+      "aliases": ["tarification à l'activité"],
+      "anyCase": true,
+      "plain": "La T2A, tarification à l'activité, finance une grande part du budget des hôpitaux selon le nombre et le type de soins qu'ils réalisent."
+    },
+    {
+      "id": "ondam",
+      "term": "ONDAM",
+      "anyCase": true,
+      "plain": "L'ONDAM, objectif national de dépenses d'assurance maladie, est le montant de dépenses de santé que le Parlement vote chaque année. Ce n'est pas un plafond strict."
+    },
+    {
+      "id": "ald",
+      "term": "ALD",
+      "plain": "Une ALD, affection de longue durée, est une maladie grave ou chronique. Ses soins sont mieux remboursés."
+    },
+    {
+      "id": "ame",
+      "term": "AME",
+      "aliases": ["aide médicale d'État"],
+      "plain": "L'aide médicale d'État prend en charge, sous conditions, les soins des étrangers en situation irrégulière qui vivent en France."
+    },
+    {
+      "id": "ehpad",
+      "term": "EHPAD",
+      "anyCase": true,
+      "plain": "Un EHPAD est une maison de retraite médicalisée, pour des personnes âgées qui ont besoin d'aide au quotidien."
+    },
+    {
+      "id": "pmi",
+      "term": "PMI",
+      "anyCase": true,
+      "plain": "La PMI, protection maternelle et infantile, suit gratuitement les femmes enceintes et les jeunes enfants. Accolé à PME, PMI désigne les petites et moyennes industries."
+    },
+    {
+      "id": "mdph",
+      "term": "MDPH",
+      "anyCase": true,
+      "plain": "La MDPH est la maison départementale des personnes handicapées. Elle ouvre les droits liés au handicap."
+    },
+    {
+      "id": "esat",
+      "term": "ESAT",
+      "anyCase": true,
+      "plain": "Un ESAT est un établissement où des personnes handicapées travaillent avec un accompagnement médico-social."
+    },
+    {
+      "id": "ivg",
+      "term": "IVG",
+      "aliases": ["interruption volontaire de grossesse"],
+      "anyCase": true,
+      "plain": "L'IVG est l'interruption volontaire de grossesse : l'avortement choisi par la femme."
+    },
+    {
+      "id": "pma",
+      "term": "PMA",
+      "aliases": ["procréation médicalement assistée"],
+      "anyCase": true,
+      "plain": "La PMA, procréation médicalement assistée, regroupe les techniques médicales qui aident à avoir un enfant."
+    },
+    {
+      "id": "gpa",
+      "term": "GPA",
+      "aliases": ["gestation pour autrui"],
+      "anyCase": true,
+      "plain": "Dans une GPA, gestation pour autrui, une femme porte un enfant pour d'autres personnes. Elle est interdite en France."
+    },
+    {
+      "id": "vih",
+      "term": "VIH",
+      "anyCase": true,
+      "plain": "Le VIH est le virus qui, sans traitement, peut provoquer le sida. Un traitement efficace permet de vivre avec et de ne pas le transmettre."
+    },
+    {
+      "id": "clause-de-conscience",
+      "term": "clause de conscience",
+      "plain": "La clause de conscience permet à un soignant de refuser un acte, comme une IVG, en orientant la personne vers un confrère. Les journalistes en ont une aussi, pour quitter un média qui change de ligne."
+    },
+    {
+      "id": "franchises-medicales",
+      "term": "franchises médicales",
+      "plain": "Les franchises médicales sont de petites sommes qui restent à la charge du patient sur les médicaments, certains actes et les transports."
+    },
+    {
+      "id": "depassements-d-honoraires",
+      "term": "dépassements d'honoraires",
+      "plain": "Un dépassement d'honoraires est la part du prix d'une consultation au-dessus du tarif de la Sécurité sociale."
+    },
+    {
+      "id": "jours-de-carence",
+      "term": "jours de carence",
+      "plain": "Les jours de carence sont les premiers jours d'un arrêt maladie, pour lesquels on n'est pas indemnisé, sauf si l'employeur les prend en charge."
+    },
+    {
+      "id": "reste-a-charge",
+      "term": "reste à charge",
+      "plain": "Le reste à charge est ce qu'une personne paie elle-même une fois déduits les remboursements ou les aides, pour des soins ou une maison de retraite par exemple."
+    },
+    {
+      "id": "deserts-medicaux",
+      "term": "déserts médicaux",
+      "plain": "Un désert médical est un territoire où il est difficile de trouver un médecin."
+    },
+    {
+      "id": "contention",
+      "term": "contention",
+      "plain": "En psychiatrie ou en maison de retraite, la contention consiste à attacher ou à immobiliser un patient."
+    },
+    {
+      "id": "licence-d-office",
+      "term": "licence d'office",
+      "plain": "La licence d'office permet à l'État, pour la santé publique, d'autoriser un tiers à exploiter un brevet sans l'accord de son titulaire, contre une indemnité. Elle vise surtout des médicaments."
+    },
+    {
+      "id": "biomedicaments",
+      "term": "biomédicaments",
+      "plain": "Un biomédicament est fabriqué à partir de cellules vivantes, et non par la seule chimie."
+    },
+    {
+      "id": "antibioresistance",
+      "term": "antibiorésistance",
+      "plain": "L'antibiorésistance, c'est quand des bactéries résistent aux antibiotiques."
+    },
+    {
+      "id": "zoonoses",
+      "term": "zoonoses",
+      "plain": "Une zoonose est une maladie qui passe de l'animal à l'être humain."
+    },
+    {
+      "id": "perturbateurs-endocriniens",
+      "term": "perturbateurs endocriniens",
+      "plain": "Un perturbateur endocrinien est une substance qui dérègle le système hormonal."
+    },
+    {
+      "id": "circ",
+      "term": "CIRC",
+      "plain": "Le CIRC, installé à Lyon, est l'agence de l'OMS spécialisée dans le cancer. Il classe des substances ou des expositions selon les preuves qu'elles peuvent causer un cancer."
+    },
+    {
+      "id": "nutri-score",
+      "term": "Nutri-Score",
+      "anyCase": true,
+      "plain": "Le Nutri-Score note un aliment de A à E selon sa qualité nutritionnelle."
+    },
+    {
+      "id": "ase",
+      "term": "ASE",
+      "plain": "L'ASE, aide sociale à l'enfance, protège les enfants en danger. Elle dépend des départements."
+    },
+    {
+      "id": "pjj",
+      "term": "PJJ",
+      "plain": "La PJJ, protection judiciaire de la jeunesse, suit les mineurs concernés par une décision de justice."
+    },
+    {
+      "id": "aesh",
+      "term": "AESH",
+      "anyCase": true,
+      "plain": "Les AESH, accompagnants d'élèves en situation de handicap, aident ces élèves en classe."
+    },
+    {
+      "id": "evars",
+      "term": "EVARS",
+      "anyCase": true,
+      "plain": "L'EVARS est l'éducation à la vie affective et relationnelle, et à la sexualité, donnée à l'école. En primaire, elle porte sur la vie affective et relationnelle ; la sexualité s'y ajoute au collège."
+    },
+    {
+      "id": "rep",
+      "term": "REP",
+      "plain": "À l'école, les REP sont les réseaux d'éducation prioritaire, qui reçoivent plus de moyens. Pour les déchets, la REP est la responsabilité élargie du producteur."
+    },
+    {
+      "id": "parcoursup",
+      "term": "Parcoursup",
+      "plain": "Parcoursup est la plateforme où les lycéens demandent une place dans l'enseignement supérieur."
+    },
+    {
+      "id": "bts",
+      "term": "BTS",
+      "anyCase": true,
+      "plain": "Le BTS, brevet de technicien supérieur, est un diplôme en deux ans après le bac."
+    },
+    {
+      "id": "but",
+      "term": "BUT",
+      "plain": "Le BUT, bachelor universitaire de technologie, est un diplôme en trois ans après le bac, préparé en IUT et tourné vers un métier."
+    },
+    {
+      "id": "cap",
+      "term": "CAP",
+      "plain": "Le CAP, certificat d'aptitude professionnelle, est un diplôme qui forme à un métier précis."
+    },
+    {
+      "id": "cfa",
+      "term": "CFA",
+      "anyCase": true,
+      "plain": "CFA a deux sens. Un CFA est un centre de formation d'apprentis. Le franc CFA est la monnaie de pays d'Afrique de l'Ouest et du centre ; sa valeur est fixée par rapport à l'euro."
+    },
+    {
+      "id": "greta",
+      "term": "Greta",
+      "plain": "Les Greta sont des groupements d'établissements publics qui forment des adultes."
+    },
+    {
+      "id": "lru",
+      "term": "LRU",
+      "plain": "La loi LRU, votée en 2007, a donné aux universités plus d'autonomie, notamment sur leur budget."
+    },
+    {
+      "id": "hceres",
+      "term": "Hcéres",
+      "plain": "Le Hcéres est l'autorité qui évalue les universités et les organismes de recherche."
+    },
+    {
+      "id": "crous",
+      "term": "Crous",
+      "plain": "Les Crous gèrent les restaurants universitaires, les logements étudiants et les bourses."
+    },
+    {
+      "id": "cvec",
+      "term": "CVEC",
+      "anyCase": true,
+      "plain": "La CVEC est une contribution que la plupart des étudiants paient chaque année pour financer la vie de campus."
+    },
+    {
+      "id": "staps",
+      "term": "STAPS",
+      "anyCase": true,
+      "plain": "STAPS est la filière universitaire des métiers du sport et de l'activité physique."
+    },
+    {
+      "id": "cnrs",
+      "term": "CNRS",
+      "anyCase": true,
+      "plain": "Le CNRS est le plus grand organisme public de recherche français."
+    },
+    {
+      "id": "inserm",
+      "term": "Inserm",
+      "plain": "L'Inserm est l'institut public de recherche médicale."
+    },
+    {
+      "id": "inrae",
+      "term": "INRAE",
+      "anyCase": true,
+      "plain": "L'INRAE est l'institut public de recherche sur l'agriculture, l'alimentation et l'environnement."
+    },
+    {
+      "id": "ird",
+      "term": "IRD",
+      "plain": "L'IRD, Institut de recherche pour le développement, est un institut public qui travaille avec des pays du Sud."
+    },
+    {
+      "id": "anr",
+      "term": "ANR",
+      "plain": "L'ANR, Agence nationale de la recherche, finance des projets de recherche choisis sur appels à projets."
+    },
+    {
+      "id": "cnl",
+      "term": "CNL",
+      "plain": "CNL a deux sens. Le Centre national du livre soutient auteurs, éditeurs, libraires et bibliothèques. La Confédération nationale du logement est une association de locataires."
+    },
+    {
+      "id": "mecenat",
+      "term": "mécénat",
+      "plain": "Le mécénat est le soutien, en argent ou en nature, d'une entreprise ou d'un particulier à une œuvre d'intérêt général. En France, il donne droit à une réduction d'impôt."
+    },
+    {
+      "id": "creolisation",
+      "term": "créolisation",
+      "plain": "La créolisation est le mélange de cultures et de langues d'où naissent des formes nouvelles. L'idée a été développée par l'écrivain martiniquais Édouard Glissant."
+    },
+    {
+      "id": "tva",
+      "term": "TVA",
+      "aliases": ["taxe sur la valeur ajoutée"],
+      "anyCase": true,
+      "plain": "La TVA, taxe sur la valeur ajoutée, est comprise dans le prix de presque tout ce qu'on achète."
+    },
+    {
+      "id": "pib",
+      "term": "PIB",
+      "aliases": ["produit intérieur brut"],
+      "anyCase": true,
+      "plain": "Le PIB, produit intérieur brut, est la richesse produite dans un pays en un an."
+    },
+    {
+      "id": "isf",
+      "term": "ISF",
+      "anyCase": true,
+      "plain": "L'ISF, impôt de solidarité sur la fortune, taxait chaque année les plus gros patrimoines. En 2018, il a été remplacé par l'IFI, qui ne porte que sur l'immobilier."
+    },
+    {
+      "id": "cvae",
+      "term": "CVAE",
+      "anyCase": true,
+      "plain": "La CVAE est un impôt des entreprises, calculé sur la richesse qu'elles produisent. Sa suppression par étapes a été décidée."
+    },
+    {
+      "id": "taxe-zucman",
+      "term": "taxe Zucman",
+      "plain": "La taxe Zucman est une proposition d'impôt minimum sur les très grandes fortunes. Elle porte le nom de l'économiste Gabriel Zucman."
+    },
+    {
+      "id": "exit-tax",
+      "term": "exit tax",
+      "plain": "L'exit tax est un impôt dû par un contribuable qui part vivre à l'étranger avec des actions qui ont pris de la valeur."
+    },
+    {
+      "id": "flat-tax",
+      "term": "flat tax",
+      "plain": "Une flat tax est un impôt à taux unique. En France, le mot désigne le prélèvement forfaitaire unique sur les revenus du capital, créé en 2018."
+    },
+    {
+      "id": "quotient-conjugal",
+      "term": "quotient conjugal",
+      "plain": "Avec le quotient conjugal, l'impôt d'un couple marié ou pacsé est calculé sur la moyenne de ses deux revenus."
+    },
+    {
+      "id": "niches-fiscales",
+      "term": "niches fiscales",
+      "aliases": ["niche fiscale"],
+      "plain": "Une niche fiscale est un avantage qui réduit l'impôt de certains contribuables."
+    },
+    {
+      "id": "evasion-fiscale",
+      "term": "évasion fiscale",
+      "plain": "L'évasion fiscale consiste à échapper à l'impôt en plaçant son argent ou ses bénéfices à l'étranger."
+    },
+    {
+      "id": "paradis-fiscaux",
+      "term": "paradis fiscaux",
+      "plain": "Un paradis fiscal est un pays où l'impôt est très faible et les comptes peu transparents."
+    },
+    {
+      "id": "taxe-fonciere",
+      "term": "taxe foncière",
+      "plain": "La taxe foncière est un impôt local payé par les propriétaires."
+    },
+    {
+      "id": "taxe-d-habitation",
+      "term": "taxe d'habitation",
+      "plain": "La taxe d'habitation est un impôt local sur le logement occupé. Depuis 2023, elle ne concerne plus les résidences principales ; elle reste due pour les résidences secondaires."
+    },
+    {
+      "id": "dividendes",
+      "term": "dividendes",
+      "plain": "Les dividendes sont la part des bénéfices qu'une entreprise verse à ses actionnaires."
+    },
+    {
+      "id": "stock-options",
+      "term": "stock-options",
+      "plain": "Une stock-option donne à un dirigeant ou à un salarié le droit d'acheter plus tard des actions de son entreprise, à un prix fixé d'avance."
+    },
+    {
+      "id": "lbo",
+      "term": "LBO",
+      "plain": "Un LBO est le rachat d'une entreprise financé surtout par de la dette. Cette dette est ensuite remboursée avec les bénéfices de l'entreprise rachetée."
+    },
+    {
+      "id": "oati",
+      "term": "OATi",
+      "plain": "Les OATi sont des emprunts de l'État dont la valeur suit l'inflation."
+    },
+    {
+      "id": "circuit-du-tresor",
+      "term": "circuit du Trésor",
+      "plain": "Le circuit du Trésor désigne le système d'après-guerre où l'État se finançait hors des marchés. Banques et organismes publics devaient lui confier une partie de leurs fonds."
+    },
+    {
+      "id": "caisse-de-defaisance",
+      "term": "caisse de défaisance",
+      "plain": "Une caisse de défaisance reprend des dettes pour en soulager ceux qui les portaient."
+    },
+    {
+      "id": "bpi",
+      "term": "BPI",
+      "plain": "La BPI, ou Bpifrance, est une banque publique qui finance les entreprises."
+    },
+    {
+      "id": "afd",
+      "term": "AFD",
+      "plain": "AFD a deux sens. L'Agence française de développement finance des projets dans des pays en développement et en Outre-mer. AFD désigne aussi une amende forfaitaire délictuelle."
+    },
+    {
+      "id": "aide-publique-au-developpement",
+      "term": "aide publique au développement",
+      "plain": "L'aide publique au développement est l'argent public que des pays riches consacrent à aider des pays pauvres."
+    },
+    {
+      "id": "dettes-odieuses",
+      "term": "dettes dites odieuses",
+      "aliases": ["dettes odieuses", "dette odieuse"],
+      "plain": "Selon une doctrine juridique débattue, une dette odieuse est une dette contractée par un régime contre l'intérêt de sa population. Ses défenseurs jugent qu'elle n'a pas à être remboursée."
+    },
+    {
+      "id": "pme",
+      "term": "PME",
+      "anyCase": true,
+      "plain": "Une PME est une petite ou moyenne entreprise : moins de 250 salariés."
+    },
+    {
+      "id": "tpe",
+      "term": "TPE",
+      "anyCase": true,
+      "plain": "Une TPE est une très petite entreprise : moins de 10 salariés."
+    },
+    {
+      "id": "ess",
+      "term": "ESS",
+      "aliases": ["économie sociale et solidaire"],
+      "plain": "L'économie sociale et solidaire réunit associations, coopératives, mutuelles et fondations. Leur but premier n'est pas le profit."
+    },
+    {
+      "id": "scop",
+      "term": "Scop",
+      "plain": "Une Scop est une entreprise coopérative. Ses salariés en sont les associés majoritaires."
+    },
+    {
+      "id": "scic",
+      "term": "SCIC",
+      "anyCase": true,
+      "plain": "Une SCIC est une coopérative qui associe salariés, usagers et partenaires autour d'un projet d'intérêt collectif."
+    },
+    {
+      "id": "cae",
+      "term": "CAE",
+      "plain": "CAE a deux sens. Une coopérative d'activités et d'emploi permet à des entrepreneurs d'être salariés d'une structure commune. Le Conseil d'analyse économique conseille le Premier ministre."
+    },
+    {
+      "id": "libre-echange",
+      "term": "libre-échange",
+      "plain": "Le libre-échange est le commerce entre pays sans droits de douane ni autres barrières. Un accord de libre-échange les réduit ou les supprime entre les pays qui le signent."
+    },
+    {
+      "id": "droits-de-douane",
+      "term": "droits de douane",
+      "plain": "Un droit de douane est une taxe payée à l'entrée d'un produit étranger dans un pays."
+    },
+    {
+      "id": "protectionnisme",
+      "term": "protectionnisme",
+      "plain": "Le protectionnisme protège la production d'un pays par des taxes ou des règles à l'importation."
+    },
+    {
+      "id": "clause-de-sauvegarde",
+      "term": "clause de sauvegarde",
+      "plain": "Une clause de sauvegarde permet à un État de suspendre un engagement commercial face à un danger grave. Exemples : un afflux d'importations qui menace un secteur, un risque sanitaire."
+    },
+    {
+      "id": "embargo",
+      "term": "embargo",
+      "plain": "Un embargo interdit, en tout ou en partie, de commercer avec un pays : par exemple de lui vendre des armes ou de lui acheter du pétrole."
+    },
+    {
+      "id": "biens-a-double-usage",
+      "term": "biens à double usage",
+      "plain": "Un bien à double usage est un bien civil qui peut aussi servir à un usage militaire."
+    },
+    {
+      "id": "coefficients-multiplicateurs",
+      "term": "coefficients multiplicateurs",
+      "plain": "Un coefficient multiplicateur limite l'écart entre le prix payé au producteur et le prix de vente en magasin."
+    },
+    {
+      "id": "prix-planchers",
+      "term": "prix planchers",
+      "plain": "Un prix plancher est un prix minimum fixé par une règle : on ne peut pas acheter un produit en dessous, par exemple à un agriculteur."
+    },
+    {
+      "id": "reduflation",
+      "term": "réduflation",
+      "aliases": ["shrinkflation"],
+      "plain": "La réduflation, c'est vendre moins de produit dans le même emballage, sans baisser le prix."
+    },
+    {
+      "id": "tarifs-reglementes",
+      "term": "tarifs réglementés",
+      "plain": "Un tarif réglementé est un prix fixé par les pouvoirs publics."
+    },
+    {
+      "id": "hlm",
+      "term": "HLM",
+      "anyCase": true,
+      "plain": "Un HLM, habitation à loyer modéré, est un logement social au loyer plafonné."
+    },
+    {
+      "id": "loi-sru",
+      "term": "SRU",
+      "plain": "La loi SRU, votée en 2000, oblige de nombreuses communes à compter une part minimale de logements sociaux."
+    },
+    {
+      "id": "anru",
+      "term": "ANRU",
+      "anyCase": true,
+      "plain": "L'ANRU est l'agence nationale qui finance la rénovation urbaine des quartiers."
+    },
+    {
+      "id": "loi-elan",
+      "term": "ELAN",
+      "plain": "La loi ELAN, votée en 2018, a modifié des règles du logement et de la construction."
+    },
+    {
+      "id": "encadrement-des-loyers",
+      "term": "encadrement des loyers",
+      "plain": "L'encadrement des loyers plafonne le loyer, ou sa hausse, dans certaines villes où les logements manquent, selon le quartier et le type de logement."
+    },
+    {
+      "id": "permis-de-louer",
+      "term": "permis de louer",
+      "plain": "Avec un permis de louer, un propriétaire doit obtenir une autorisation avant de mettre un logement en location."
+    },
+    {
+      "id": "logement-d-abord",
+      "term": "logement d'abord",
+      "plain": "Le logement d'abord consiste à donner un logement stable à une personne sans abri, avant de traiter ses autres difficultés."
+    },
+    {
+      "id": "organismes-de-foncier-solidaire",
+      "term": "organismes de foncier solidaire",
+      "plain": "Un organisme de foncier solidaire reste propriétaire du terrain et vend le logement seul, ce qui en baisse le prix."
+    },
+    {
+      "id": "passoires-thermiques",
+      "term": "passoires thermiques",
+      "aliases": ["passoires énergétiques"],
+      "plain": "Une passoire thermique est un logement très mal isolé, coûteux à chauffer."
+    },
+    {
+      "id": "precarite-energetique",
+      "term": "précarité énergétique",
+      "plain": "La précarité énergétique, c'est avoir du mal à payer l'énergie de son logement, ou à se chauffer."
+    },
+    {
+      "id": "zan",
+      "term": "ZAN",
+      "aliases": ["zéro artificialisation nette"],
+      "anyCase": true,
+      "plain": "Le ZAN, zéro artificialisation nette, est un objectif fixé par une loi de 2021 pour 2050. Il s'agit de ne plus construire sur des sols naturels ou agricoles sans en rendre autant à la nature."
+    },
+    {
+      "id": "zfe",
+      "term": "ZFE",
+      "aliases": ["zones à faibles émissions"],
+      "anyCase": true,
+      "plain": "Une ZFE, zone à faibles émissions, est une zone, souvent en ville, où la circulation des véhicules les plus polluants est limitée."
+    },
+    {
+      "id": "ges",
+      "term": "GES",
+      "aliases": ["gaz à effet de serre"],
+      "plain": "Les gaz à effet de serre retiennent la chaleur autour de la Terre. Le CO2 et le méthane en font partie."
+    },
+    {
+      "id": "pfas",
+      "term": "PFAS",
+      "aliases": ["polluants éternels"],
+      "anyCase": true,
+      "plain": "Les PFAS sont des substances chimiques très résistantes. On les appelle polluants éternels, car ils ne se dégradent presque pas."
+    },
+    {
+      "id": "ogm",
+      "term": "OGM",
+      "aliases": ["organismes génétiquement modifiés"],
+      "anyCase": true,
+      "plain": "Un OGM est un organisme dont on a modifié les gènes en laboratoire."
+    },
+    {
+      "id": "icpe",
+      "term": "ICPE",
+      "anyCase": true,
+      "plain": "Une ICPE est une installation, usine ou grand élevage par exemple, classée parce qu'elle peut polluer ou présenter un danger."
+    },
+    {
+      "id": "ademe",
+      "term": "ADEME",
+      "anyCase": true,
+      "plain": "L'ADEME est l'agence publique de la transition écologique."
+    },
+    {
+      "id": "onf",
+      "term": "ONF",
+      "anyCase": true,
+      "plain": "L'ONF, Office national des forêts, gère les forêts publiques."
+    },
+    {
+      "id": "inao",
+      "term": "INAO",
+      "anyCase": true,
+      "plain": "L'INAO est l'institut public qui gère les signes officiels de qualité, comme l'AOP et l'IGP."
+    },
+    {
+      "id": "aop",
+      "term": "AOP",
+      "anyCase": true,
+      "plain": "L'AOP, appellation d'origine protégée, garantit qu'un produit est fabriqué dans une zone précise, selon un savoir-faire reconnu."
+    },
+    {
+      "id": "igp",
+      "term": "IGP",
+      "anyCase": true,
+      "plain": "L'IGP, indication géographique protégée, lie un produit à un territoire où a lieu au moins une étape de sa fabrication."
+    },
+    {
+      "id": "epr2",
+      "term": "EPR2",
+      "aliases": ["EPR"],
+      "anyCase": true,
+      "plain": "L'EPR2 est un modèle de réacteur nucléaire français, version simplifiée de l'EPR. La France prévoit d'en construire plusieurs."
+    },
+    {
+      "id": "asn",
+      "term": "ASN",
+      "aliases": ["ASNR"],
+      "plain": "L'ASN était l'autorité de sûreté nucléaire. Le 1er janvier 2025, elle a fusionné avec l'IRSN dans une nouvelle autorité, l'ASNR."
+    },
+    {
+      "id": "irsn",
+      "term": "IRSN",
+      "anyCase": true,
+      "plain": "L'IRSN était l'institut public d'expertise sur les risques nucléaires. Le 1er janvier 2025, il a fusionné avec l'ASN dans une nouvelle autorité, l'ASNR."
+    },
+    {
+      "id": "cnes",
+      "term": "CNES",
+      "anyCase": true,
+      "plain": "Le CNES est l'agence spatiale française."
+    },
+    {
+      "id": "shom",
+      "term": "SHOM",
+      "anyCase": true,
+      "plain": "Le SHOM est le service public qui cartographie les mers et les fonds marins pour la France."
+    },
+    {
+      "id": "aires-marines-protegees",
+      "term": "aires marines protégées",
+      "aliases": ["AMP"],
+      "plain": "Une aire marine protégée, ou AMP, est une zone de mer où des règles protègent la nature. En santé, AMP désigne l'assistance médicale à la procréation, la PMA."
+    },
+    {
+      "id": "hydrolien",
+      "term": "hydrolien",
+      "aliases": ["hydrolienne"],
+      "plain": "L'hydrolien produit de l'électricité avec des turbines placées dans les courants marins, ou parfois dans les fleuves."
+    },
+    {
+      "id": "propulsion-velique",
+      "term": "propulsion vélique",
+      "plain": "La propulsion vélique fait avancer un navire grâce au vent, avec des voiles ou des ailes."
+    },
+    {
+      "id": "taxe-au-tonnage",
+      "term": "taxe au tonnage",
+      "plain": "Avec la taxe au tonnage, l'impôt d'un armateur est calculé sur la taille de ses navires, et non sur ses bénéfices."
+    },
+    {
+      "id": "pavillon",
+      "term": "pavillon français",
+      "plain": "Le pavillon d'un navire est le pays où il est immatriculé. Ce sont ses règles qui s'appliquent à bord."
+    },
+    {
+      "id": "plateau-continental",
+      "term": "plateau continental",
+      "plain": "Le plateau continental est le prolongement des terres d'un pays sous la mer. Ce pays y a des droits sur les ressources du sol et du sous-sol marins."
+    },
+    {
+      "id": "sargasses",
+      "term": "sargasses",
+      "plain": "Les sargasses sont des algues brunes qui s'échouent en masse sur les côtes, notamment aux Antilles."
+    },
+    {
+      "id": "orpaillage",
+      "term": "orpaillage",
+      "plain": "L'orpaillage est la recherche d'or dans les rivières et les sols."
+    },
+    {
+      "id": "chlordecone",
+      "term": "chlordécone",
+      "plain": "Le chlordécone est un insecticide utilisé aux Antilles dans les bananeraies jusqu'en 1993. Il pollue durablement les sols et l'eau."
+    },
+    {
+      "id": "glyphosate",
+      "term": "glyphosate",
+      "plain": "Le glyphosate est l'herbicide le plus utilisé au monde. Ses effets sur la santé font débat."
+    },
+    {
+      "id": "neonicotinoides",
+      "term": "néonicotinoïdes",
+      "plain": "Les néonicotinoïdes sont des insecticides qui agissent sur le système nerveux des insectes. Les agences sanitaires les jugent dangereux pour les abeilles."
+    },
+    {
+      "id": "cadmium",
+      "term": "cadmium",
+      "plain": "Le cadmium est un métal toxique, présent notamment dans certains engrais."
+    },
+    {
+      "id": "mega-bassines",
+      "term": "méga-bassines",
+      "aliases": ["mégabassines"],
+      "plain": "Une méga-bassine, ou réserve de substitution, est une grande réserve d'eau à ciel ouvert. Elle est remplie en hiver en pompant dans les nappes ou les rivières, pour irriguer en été."
+    },
+    {
+      "id": "coupes-rases",
+      "term": "coupes rases",
+      "plain": "Une coupe rase consiste à abattre en une fois tous les arbres d'une parcelle de forêt."
+    },
+    {
+      "id": "agroecologie",
+      "term": "agroécologique",
+      "aliases": ["agroécologiques", "agroécologie"],
+      "plain": "L'agroécologie est une façon de cultiver qui s'appuie sur la nature et réduit les produits chimiques."
+    },
+    {
+      "id": "circuits-courts",
+      "term": "circuits courts",
+      "plain": "Un circuit court est une vente avec, au plus, un intermédiaire entre le producteur et le consommateur."
+    },
+    {
+      "id": "obsolescence-programmee",
+      "term": "obsolescence programmée",
+      "plain": "L'obsolescence programmée, c'est réduire volontairement la durée de vie d'un produit pour qu'on le remplace plus vite. En France, c'est un délit depuis 2015."
+    },
+    {
+      "id": "ecoconception",
+      "term": "écoconception",
+      "plain": "L'écoconception consiste à concevoir un produit en réduisant son impact sur l'environnement."
+    },
+    {
+      "id": "low-tech",
+      "term": "low-tech",
+      "plain": "Le low-tech désigne des techniques simples, sobres et réparables."
+    },
+    {
+      "id": "pollueur-payeur",
+      "term": "pollueur-payeur",
+      "plain": "Selon le principe pollueur-payeur, celui qui pollue paie les dégâts et leur réparation."
+    },
+    {
+      "id": "ferroutage",
+      "term": "ferroutage",
+      "plain": "Le ferroutage consiste à transporter des camions sur des trains."
+    },
+    {
+      "id": "wagon-isole",
+      "term": "wagon isolé",
+      "plain": "Le wagon isolé est un service de fret où un client envoie un ou quelques wagons, et non un train entier."
+    },
+    {
+      "id": "leasing-social",
+      "term": "leasing social",
+      "plain": "Le leasing social est une location de voiture électrique à petit prix, aidée par l'État, pour des ménages modestes."
+    },
+    {
+      "id": "suv",
+      "term": "SUV",
+      "anyCase": true,
+      "plain": "Un SUV est une voiture haute et lourde, inspirée des tout-terrain."
+    },
+    {
+      "id": "logiciels-libres",
+      "term": "logiciels libres",
+      "aliases": ["logiciel libre"],
+      "plain": "Un logiciel libre peut être utilisé, étudié, modifié et partagé par tous."
+    },
+    {
+      "id": "interoperabilite",
+      "term": "interopérabilité",
+      "plain": "L'interopérabilité, c'est la capacité de logiciels ou de services différents à fonctionner ensemble."
+    },
+    {
+      "id": "cloud",
+      "term": "cloud",
+      "plain": "Le cloud désigne des serveurs distants où l'on stocke des données et fait tourner des logiciels, par Internet."
+    },
+    {
+      "id": "ia",
+      "term": "IA",
+      "aliases": ["intelligence artificielle"],
+      "anyCase": true,
+      "plain": "L'IA, intelligence artificielle, désigne des logiciels qui imitent des capacités humaines : comprendre un texte, reconnaître une image, écrire, décider."
+    },
+    {
+      "id": "centres-de-donnees",
+      "term": "centres de données",
+      "aliases": ["data centers"],
+      "plain": "Un centre de données est un bâtiment rempli de serveurs informatiques."
+    },
+    {
+      "id": "cryptographie-post-quantique",
+      "term": "cryptographie post-quantique",
+      "plain": "La cryptographie post-quantique regroupe des méthodes de chiffrement conçues pour résister aux futurs ordinateurs quantiques."
+    },
+    {
+      "id": "sala",
+      "term": "SALA",
+      "plain": "Les SALA sont des systèmes d'armes létales autonomes : des armes capables de choisir et de frapper une cible sans décision humaine."
+    },
+    {
+      "id": "conscription",
+      "term": "conscription",
+      "plain": "La conscription oblige toute une classe d'âge à faire un service militaire. En France, elle est suspendue depuis 1997."
+    },
+    {
+      "id": "orsec",
+      "term": "ORSEC",
+      "anyCase": true,
+      "plain": "ORSEC est le dispositif public qui organise les secours lors d'une catastrophe."
+    },
+    {
+      "id": "athos",
+      "term": "ATHOS",
+      "aliases": ["maisons Athos"],
+      "plain": "Les maisons ATHOS accueillent des militaires blessés psychiques, pour les aider à se reconstruire."
+    },
+    {
+      "id": "altermondialiste",
+      "term": "altermondialiste",
+      "aliases": ["altermondialistes"],
+      "plain": "Le mouvement altermondialiste critique la mondialisation telle qu'elle se fait et dit vouloir une autre mondialisation, plus sociale et plus écologique."
+    },
+    {
+      "id": "non-alignee",
+      "term": "non-alignée",
+      "aliases": ["non-aligné"],
+      "plain": "Un pays non-aligné refuse de se ranger dans le camp d'une grande puissance. Le Mouvement des non-alignés est né en 1961, pendant la guerre froide."
+    },
+    {
+      "id": "lgbti",
+      "term": "LGBTI",
+      "aliases": ["LGBT", "LGBTQ", "LGBTQI", "LGBTQIA"],
+      "anyCase": true,
+      "plain": "LGBTI désigne les personnes lesbiennes, gays, bisexuelles, trans et intersexes."
+    }
+  ]
+}

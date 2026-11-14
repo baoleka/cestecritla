@@ -1,9 +1,9 @@
 {
   "$meta": {
     "name": "C'est écrit là — kit de chaînes d'interface",
-    "version": "0.10.0",
-    "date": "2026-11-14",
-    "supersedes": "0.9.0",
+    "version": "0.11.0",
+    "date": "2026-11-15",
+    "supersedes": "0.10.0",
     "decisions": [
       "D0.1",
       "D0.22",
@@ -30,6 +30,7 @@
       "D16.53",
       "D16.59",
       "D16.60",
+      "D16.62",
       "D16.8",
       "D2.4",
       "D3.10",
@@ -114,7 +115,9 @@
       "v0.8.0, suite (14/11/2026, lot C9) : l'accord dit de qui est le modèle — « chez Cloudflare, une société américaine » — et de ne rien écrire non plus sur quelqu'un d'autre (chat.consent.who, chat.consent.self ; 11-conformite.md §6.2 sexies). La page Confidentialité gagne une section « Quand tu demandes », en trois listes — ce qui part, ce qui est gardé, ton accord : privacy.chat.title, .lead, .sent_title, .gists, .question, .purpose, .where, .kept_title, .kept, .budget, .consent_title, .basis, .withdraw, .age, .rights. privacy.chat.where ne promet pas l'Europe : Cloudflare fait tourner le modèle au plus près du visiteur et ne permet pas de choisir une région (documentation lue le 14/11/2026). privacy.policy.rate dit « tes demandes » : les deux gestes sont comptés. privacy.transfer et privacy.transfer_contract nomment, dans les deux modes, la garantie qui encadre les transferts vers Cloudflare (RGPD, art. 13 § 1 f) : le Data Privacy Framework, et à défaut les clauses contractuelles types de son contrat. privacy.policy.02 (la variante du mode « chat ») sort : la section le dit, et la deuxième ligne de la page est la même dans les deux modes. privacy.no_measure.ask remplace, quand le champ demande, « L'app ne mesure rien » : un compteur existe alors — ce que l'IA consomme en tout —, et la section le dit. privacy.controller nomme le pseudonyme, comme la ligne de l'accord qui renvoie à cette page (D16.50).",
       "v0.8.0, suite (14/11/2026, deux relectures au lieu d'une) : privacy.policy.consent, .thread et .rate deviennent privacy.chat.scope, .thread et .rate — mêmes mots, autre famille. Ce que seule une page qui demande affiche tient désormais dans deux familles reconnaissables, privacy.chat.* et privacy.*.ask : la porte de lancement relit à part la page de la recherche seule (privacy_page) et ce que le chat y ajoute (privacy_chat), pour qu'un mot changé dans la section du chat ne bloque plus un redéploiement de la production.",
       "v0.9.0 (14/11/2026, D16.53) : la question ne quitte plus le téléphone. La famille chat.consent.* (l'accord en sept lignes et ses deux boutons) disparaît ; chat.offer.title, .notice, .accept et .more la remplacent : une mention — « Ta question ne lui est pas envoyée : seulement les mots de ces phrases » — et un bouton, « Expliquer avec l'IA ». chat.ai.stop devient « Ne plus demander à l'IA ». chat.ai_hint, about.ai_line et about.ai_method ne parlent plus d'accord ni d'envoi de la question. La section de la page Confidentialité se récrit : privacy.chat.lead, .gists, .words, .model, .where, .kept, .choice_title, .choice, .withdraw, .rights ; sortent privacy.chat.question, .purpose, .basis, .scope, .age et .consent_title — il n'y a plus d'accord à fonder, ni d'âge à dire pour lui. privacy.no_account.ask, le chapeau de la page quand le champ demande, dit désormais le fait lui-même : « Ta question ne quitte jamais ton téléphone. »",
-      "v0.9.0, suite (14/11/2026 au soir, D16.56) : chat.gists.badge nomme l'IA — « Phrases écrites par une IA, relues par l'éditeur » (règlement sur l'IA, art. 50 § 4 : on ne s'appuie plus sur l'exception de la relecture, l'éditeur signe d'un pseudonyme) ; « d'avance » en sort pour tenir en une ligne. privacy.chat.gists dit de même « écrites d'avance par une IA, lues par l'éditeur »."
+      "v0.9.0, suite (14/11/2026 au soir, D16.56) : chat.gists.badge nomme l'IA — « Phrases écrites par une IA, relues par l'éditeur » (règlement sur l'IA, art. 50 § 4 : on ne s'appuie plus sur l'exception de la relecture, l'éditeur signe d'un pseudonyme) ; « d'avance » en sort pour tenir en une ligne. privacy.chat.gists dit de même « écrites d'avance par une IA, lues par l'éditeur ».",
+      "v0.10.0 (14/11/2026 dans la nuit, D16.59 et D16.60) : « Demander » ouvre sans IA en direct, et le site dit qui a écrit et vérifié ses phrases — une IA, pas une personne. chat.gists.badge devient « Phrases écrites et vérifiées par une IA » ; chat.hint est la mention de la page qui demande quand aucun modèle ne répond (chat.ai_hint reste celle de la variante avec modèle, fermée) ; entrent about.gists_line, about.gists_limits, about.gists_method, accuracy.review.sentences, privacy.chat.lead.gists, privacy.chat.kept.gists, privacy.chat.clear ; about.ai_line, about.ai_method, about.ai_limits et privacy.chat.gists ne disent plus « relues par l'éditeur ». Aucune chaîne ne dit qu'une personne a lu chaque phrase : scripts/check-strings.test.ts le tient contre data/2026/ask.json (gists.read_by).",
+      "v0.11.0 (15/11/2026, D16.62) : les mots expliqués. Sous les phrases, la feuille explique les sigles et les termes techniques que la question ou ces phrases emploient (data/2026/terms.json, src/lib/terms.ts) : chat.terms.asked_title (« Les mots de ta question », au-dessus des mesures quand la question demande ce qu'un mot veut dire : c'est ce qui est demandé), chat.terms.title (« Des mots expliqués », sous elles, pour les autres) et chat.terms.badge (« Explications écrites et vérifiées par une IA », même forme que l'étiquette des phrases). about.gists_terms, sur la page Méthode, dit d'où elles viennent — des connaissances générales, pas du livre —, qu'elles ne disent jamais ce que prévoit le programme et que personne ne les a relues une à une ; accuracy.review.terms le redit sur la page Exactitude, à côté de la ligne des phrases."
     ],
     "status_fr": "v0.8 : les familles chat.*, game.* et turtle.* existent dans le kit avant leurs écrans ; elles sont relues à la construction de chacun (lots H, I, L, M), puis par l'éditeur sur l'aperçu. Les chaînes chat.* ne sont rendues que si data/2026/ask.json dit « chat » (D16.4, D16.51) ; easter.strawberry_milk, confirmée par l'éditeur le 13 novembre, a été retirée par lui le 14 après la session des personas (D16.37)."
   },
@@ -128,6 +131,7 @@
   "about.gists_limits": "Une phrase peut être incomplète ou imprécise. Chacune mène à la page officielle : c'est elle qui fait foi.",
   "about.gists_line": "Quand tu demandes, des phrases écrites d'avance répondent : une par mesure. Une IA les a écrites, puis vérifiées contre le livre. Personne ne les a relues une à une.",
   "about.gists_method": "Chercher se fait sur ton téléphone. Quand tu demandes, la page envoie seulement les numéros des mesures trouvées. Notre serveur, chez Cloudflare, renvoie une phrase par mesure. Une IA a écrit chaque phrase d'avance, en lisant la mesure, puis l'a relue. Un contrôle automatique refuse une phrase qui recopie le livre ou ajoute un chiffre. Aucune personne n'a relu ces phrases une à une. Aucune IA ne répond en direct.",
+  "about.gists_terms": "Sous les phrases, des mots sont expliqués : sigles, termes techniques. Une IA a écrit ces explications d'avance, puis une autre les a vérifiées. Elles viennent de connaissances générales, pas du livre. Elles disent le sens d'un mot, jamais ce que prévoit le programme. Personne ne les a relues une à une.",
   "about.intro": "C'est écrit là sert à retrouver une mesure de L'Avenir en commun, édition 2026. L'app indique où elle est écrite et renvoie à la page officielle. Elle cite peu, et toujours avec son lien.",
   "about.method": "La méthode de chaque calcul est publiée sur la page Exactitude.",
   "about.no_ai": "Aucune IA ne répond ici : l'app cherche dans le texte, sur ton téléphone.",
@@ -159,6 +163,7 @@
   "accuracy.review.done": "Tous nos textes ont été relus par Baoleka.",
   "accuracy.review.pending": "{count} de nos textes attendent encore leur relecture.",
   "accuracy.review.sentences": "Les phrases de « Demander » sont à part. Une IA les a écrites et vérifiées. Personne ne les a relues une à une.",
+  "accuracy.review.terms": "Les explications de mots, sous ces phrases, sont à part aussi. Une IA les a écrites, une autre les a vérifiées.",
   "accuracy.review.title": "Nos propres textes",
   "accuracy.search.first": "Elle arrive en premier {count} fois.",
   "accuracy.search.miss": "Objectif manqué : toutes les sections attendues dans les trois premières. Résultat : {count} %, pour 90 visés.",
@@ -225,6 +230,9 @@
   "chat.reviewed.title": "Notre réponse, relue",
   "chat.searching": "On cherche dans le programme…",
   "chat.send": "Demander au programme",
+  "chat.terms.asked_title": "Les mots de ta question",
+  "chat.terms.badge": "Explications écrites et vérifiées par une IA",
+  "chat.terms.title": "Des mots expliqués",
   "chat.title": "Pose ta question",
   "common.back": "Retour",
   "common.close": "Fermer",

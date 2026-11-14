@@ -1048,3 +1048,47 @@ Ce paragraphe amende les §1 à §4 du plan ; le code suit, dans une copie de tr
   sans modèle ; les explications de termes écrites d'avance ; le dépôt ; l'aperçu ; les
   revues ; la production.
 
+### 15 novembre, nuit — les mots expliqués (D16.62)
+
+Ce que D16.60 annonçait à la place de l'IA en direct : les termes s'expliquent par des textes
+écrits d'avance.
+
+- **Le fichier** (`data/2026/terms.json`) : 259 sigles et termes techniques que nos phrases
+  emploient — de « T2A » à « licence d'office » —, chacun avec une à trois phrases courtes.
+  Des connaissances générales, jamais le livre : aucune explication ne dit ce que le programme
+  prévoit. MESURÉ contre nos phrases, en local : 368 des 1 069 en emploient au moins un.
+- **Écrites par la session, vérifiées par un autre modèle** qui n'a lu que ce fichier (ni
+  `private/`, ni le dépôt) et des pages publiques pour ce qui avait pu changer en 2025-2026 —
+  aucune requête vers le site du programme. Son rapport : 88 entrées à reprendre sur 257 —
+  1 fausse (à qui va la CVAE), 7 datées, 63 imprécises, 3 orientées (« méga-bassine » sans
+  « réserve de substitution », « bétonner », un mouvement décrit par ses propres mots),
+  14 ambiguës (PAC, CDI, REP, AMP, décote, annuités…). La session a repris tout ce qu'il
+  demandait de corriger avant de servir (46) et la plupart du reste : 100 textes changés,
+  2 ajoutés (« UE », « IA »). **Règle retenue** : ce qu'un mot veut dire, pas la règle de
+  l'année — les faits récents qu'il ne donnait que pour probables ne sont pas écrits.
+- **Trouvés sur le téléphone** (`src/lib/terms.ts`, pur) : un sigle se lit tel quel, à la casse
+  près (« CAP » n'est pas « cap ») — et aussi en minuscules là où elles ne peuvent rien
+  vouloir dire d'autre (« smic », « Ehpad ») ; un terme en toutes lettres se lit sans tenir
+  compte de la casse, des accents ni du pluriel ; une formulation prise dans une plus longue
+  appartient à la plus longue (« référendum d'initiative citoyenne »). Le fichier arrive en
+  entier avec la feuille (`/data/clair-<empreinte>.json`) : rien n'est envoyé pour trouver un
+  mot, et la question, lue ici aussi, ne va nulle part.
+- **Dans la feuille** : quatre mots au plus par réponse, chacun une ligne à toucher
+  (`<details>`), sous l'étiquette « Explications écrites et vérifiées par une IA ». Une
+  question qui demande ce qu'un mot veut dire (« c'est quoi », « ça veut dire », le mot seul)
+  l'obtient d'abord, ouvert, au-dessus des mesures — « Les mots de ta question » ; les autres
+  viennent sous les phrases, repliés — « Des mots expliqués » —, une fois les phrases toutes
+  là, pour que rien ne bouge sous les yeux. Ni gel, ni demande de vote n'en montrent.
+  Vu sur capture, clair et sombre, à 390 px.
+- **Une marque lisible par une machine** (`data-generated-by="ai"`) sur tout texte qu'une IA a
+  écrit : les explications, et désormais les phrases — plus seulement l'explication en direct.
+- **Portes** : `scripts/terms.test.ts` (l'appariement ; le fichier : aucune explication ne
+  nomme le programme, un parti, un vote ; les règles du contrôle d'une explication ; 200
+  caractères ; typographie du kit ; aucun terme n'est une de nos cartes) ; `scripts/e2e-sheet.ts`
+  §7, trois navigateurs (56, 50 et 50 vérifications) ; `check-strings` (l'étiquette, et ce que
+  les pages disent) ; `leak.test.ts` lit le fichier comme tout autre. Poids mesuré : 17 Ko
+  gzip dans les 114 Ko de données de la feuille (porte : 130) ; le script du chat, 6,7 Ko gzip
+  (porte : 12). Batterie complète au vert, 19 étapes.
+- **Ce que cette vérification n'est pas** : la lecture d'une personne ; une garantie
+  (`14-risques.md` R42).
+

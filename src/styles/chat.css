@@ -4,9 +4,11 @@
  *
  * Three voices, three looks, so that nobody takes one for another (D16.47):
  *   the book        its titles and its links, as everywhere on the site;
- *   read sentences  plain text behind a solid rule in the colour of the site — our words, read
- *                   by the editor: never the look of a quotation of the programme;
- *   the AI          a dashed rule and its label, « IA · model », written in the text itself.
+ *   our sentences   plain text behind a solid rule in the colour of the site — our words,
+ *                   written ahead, under a label that says by whom: never the look of a
+ *                   quotation of the programme;
+ *   what explains   a dashed rule: the words explained ahead, under their own label, and —
+ *                   where a model answers — the AI, « IA · model » written in the text itself.
  *
  * Only tokens of design/tokens.json are used; nothing here is loaded before the first press
  * of the button except this sheet, which is in the page from the first paint and closed.
@@ -135,10 +137,29 @@
   margin-block-start: var(--space-3);
 }
 
-/* The model's voice: a dashed rule, and its label in the text. */
-.c-block.c-ai {
+/* What explains a word and says nothing of the programme: a dashed rule. The model's voice,
+   where there is one, with its label in the text; and the words explained ahead. */
+.c-block.c-ai,
+.c-block.c-terms {
   border-inline-start-style: dashed;
   border-inline-start-color: var(--action);
+}
+/* One word, one line to press: its explanation opens under it. The marker is the browser's. */
+.c-term {
+  margin-block-start: var(--space-1);
+}
+.c-term summary {
+  min-block-size: var(--tap-comfortable);
+  padding-block: var(--space-2);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+.c-term summary:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.c-block .c-term p {
+  margin-block: 0 var(--space-2);
 }
 .c-ai-mark {
   font-weight: var(--font-weight-bold);

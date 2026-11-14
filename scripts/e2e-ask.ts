@@ -401,7 +401,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
     check(
       'no explanation is shown before the button is pressed',
-      (await count('[data-generated-by]')) === 0,
+      (await count('.c-ai [data-generated-by]')) === 0,
     );
 
     // --- 3 bis. not pressing is refusing: another question, and still nothing is asked
@@ -423,7 +423,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     await page.click(`${LAST} [data-offer="accept"]`);
     await until(
       page,
-      `document.querySelector(${JSON.stringify(`${LAST} [data-generated-by="ai"]`)}) !== null`,
+      `document.querySelector(${JSON.stringify(`${LAST} .c-ai [data-generated-by="ai"]`)}) !== null`,
     );
     check('pressed: one request goes to /api/chat', posted.chat.length === 1);
     const chatBody = JSON.parse(posted.chat[0] ?? '{}') as Record<string, unknown>;
@@ -464,9 +464,12 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       explained,
     );
     check(
-      'what a model wrote carries a mark a machine can read — and only that',
+      'what an AI wrote carries a mark a machine can read — the explanation, each sentence written ahead — and what a person wrote does not',
       (await count(`${LAST} .c-ai [data-generated-by="ai"]`)) === 1 &&
-        (await count('.c-gists [data-generated-by], .c-plain [data-generated-by]')) === 0,
+        (await count(`${LAST} .c-gists .c-row > p[data-generated-by="ai"]`)) ===
+          (await count(`${LAST} .c-gists .c-row > p:not(.sources)`)) &&
+        (await count(`${LAST} .c-gists .c-row > p[data-generated-by="ai"]`)) >= 1 &&
+        (await count('.c-plain [data-generated-by], .sources[data-generated-by]')) === 0,
     );
     check(
       'the mention says an AI wrote it, which, where — and what it does not say',
@@ -489,7 +492,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     await follow.filter({ hasText: 'Plus simple' }).click();
     await until(
       page,
-      `document.querySelectorAll(${JSON.stringify(`${LAST} [data-generated-by="ai"]`)}).length === 2`,
+      `document.querySelectorAll(${JSON.stringify(`${LAST} .c-ai [data-generated-by="ai"]`)}).length === 2`,
     );
     const followBody = JSON.parse(posted.chat[1] ?? '{}') as Record<string, unknown>;
     check(
@@ -529,12 +532,12 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       posted.gists.length === 4 &&
         posted.chat.length === 3 &&
         (await count(`${LAST} .c-offer`)) === 0 &&
-        (await count(`${LAST} [data-generated-by="ai"]`)) === 1,
+        (await count(`${LAST} .c-ai [data-generated-by="ai"]`)) === 1,
       `${String(posted.gists.length)} / ${String(posted.chat.length)}`,
     );
     check(
       'the first turn keeps what was explained',
-      (await count('#chat-thread .c-turn:first-child [data-generated-by="ai"]')) === 2,
+      (await count('#chat-thread .c-turn:first-child .c-ai [data-generated-by="ai"]')) === 2,
     );
 
     // --- 5. every other state is a normal one
@@ -636,7 +639,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       );
       check(
         '…and the model may still explain its words',
-        (await count(`${LAST} [data-generated-by="ai"]`)) === 1,
+        (await count(`${LAST} .c-ai [data-generated-by="ai"]`)) === 1,
       );
     }
     {
@@ -826,7 +829,10 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       await view.click('#ask');
       await until(view, "document.querySelector('#chat-thread .c-offer') !== null");
       await view.click('#chat-thread [data-offer="accept"]');
-      await until(view, "document.querySelector('#chat-thread [data-generated-by]') !== null");
+      await until(
+        view,
+        "document.querySelector('#chat-thread .c-ai [data-generated-by]') !== null",
+      );
       check(
         'ten minutes after arriving, a question is still answered and, on request, explained',
         posted.gists.length === (sent[0] ?? 0) + 1 && posted.chat.length === (sent[1] ?? 0) + 1,
@@ -888,7 +894,10 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
           asked.join(','),
         );
         await view.click('#chat-thread [data-offer="accept"]');
-        await until(view, "document.querySelector('#chat-thread [data-generated-by]') !== null");
+        await until(
+          view,
+          "document.querySelector('#chat-thread .c-ai [data-generated-by]') !== null",
+        );
         const answered = await audit();
         check(
           `the sheet with an explanation passes the accessibility audit at ${label}`,

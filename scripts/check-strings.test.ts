@@ -365,7 +365,9 @@ const RUNTIME_AI_KEYS: Readonly<Record<string, string | null>> = {
   'about.ai_reviewed': null,
   'about.gists_line': 'about.no_ai',
   'about.gists_method': 'about.no_ai',
+  'about.gists_terms': null,
   'accuracy.review.sentences': null,
+  'accuracy.review.terms': null,
   'chat.ai.start': null,
   'chat.ai.stop': null,
   'chat.ai.waiting': null,
@@ -377,6 +379,7 @@ const RUNTIME_AI_KEYS: Readonly<Record<string, string | null>> = {
   'chat.offer.accept': null,
   'chat.offer.notice': null,
   'chat.offer.title': null,
+  'chat.terms.badge': null,
   'offline.chat': 'offline.chat.local',
   'privacy.chat.budget': null,
   'privacy.chat.choice': null,
@@ -452,6 +455,34 @@ void test('the label of the sentences says an AI wrote and checked them (D16.59)
     'it names no model: none is called',
   );
   assert.ok(hint.length <= MAX_AI_NOTICE_CHARS, `${String(hint.length)} characters`);
+});
+
+/**
+ * The explained words follow the same rule (D16.62): general knowledge an AI wrote ahead and
+ * another checked, never re-read one by one by a person — the label says so in the form of the
+ * label of the sentences, and the page that says how it is made says where they come from.
+ */
+void test('the label of the explained words says an AI wrote and checked them, and its page says where they come from (D16.62)', () => {
+  const label = strings.get('chat.terms.badge') ?? '';
+  assert.equal(label, 'Explications écrites et vérifiées par une IA');
+  assert.ok(label.length <= 48, `${String(label.length)} characters: two lines on a phone`);
+  const terms = JSON.parse(readFileSync('data/2026/terms.json', 'utf8')) as {
+    meta: { read_by_a_person?: unknown; checked_by?: unknown };
+  };
+  // What the label and the pages say rests on what the file records of itself.
+  assert.equal(terms.meta.read_by_a_person, false);
+  assert.equal(terms.meta.checked_by, 'independent-model');
+  const method = strings.get('about.gists_terms') ?? '';
+  assert.match(
+    method,
+    /Une IA a écrit ces explications d['’]avance, puis une autre les a vérifiées/,
+  );
+  assert.match(method, /connaissances générales, pas du livre/);
+  assert.match(method, /jamais ce que prévoit le programme/);
+  assert.match(method, /Personne ne les a relues une à une/);
+  const accuracy = strings.get('accuracy.review.terms') ?? '';
+  assert.match(accuracy, /Une IA les a écrites, une autre les a vérifiées/);
+  assert.ok(!/relu(?:e|es|s)? par (?:l['’]éditeur|Baoleka|une personne)/.test(method + accuracy));
 });
 
 /**

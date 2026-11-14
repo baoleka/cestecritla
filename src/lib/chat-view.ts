@@ -9,6 +9,11 @@
  *                                     recognised on the phone, shown at once
  *   « Ce que prévoit le programme »   a row per measure: the sentence the editor read, or its
  *                                     link alone — the link is there before the sentence
+ *   the explained words               the acronyms and technical terms of the question and
+ *                                     of the sentences, each with a short text written ahead:
+ *                                     general knowledge, never a word about the programme —
+ *                                     above the measures when the question asks what a word
+ *                                     means, under them otherwise
  *   the explanation                   only where a read sentence is on the screen, only if the
  *                                     Worker says the model may be asked, only once the
  *                                     visitor pressed « Expliquer avec l'IA » — and never when
@@ -122,10 +127,28 @@ export interface AiView {
   follow: readonly FollowUp[];
 }
 
+/**
+ * Where the page looks for a word it has an explanation for (src/lib/terms.ts): the question —
+ * read on the phone, sent nowhere — and the sentences on the screen.
+ */
+export interface Wording {
+  question: string;
+  /**
+   * The sentences shown — null while the turn still searches or waits for them: the words of
+   * the question are explained at once, those of the sentences once they are all there.
+   */
+  sentences: string[] | null;
+}
+
 export interface TurnView {
   /** « En clair », or null when the question carries nothing a person wrote about. */
   plain: Recognised | null;
   measures: Measures;
+  /**
+   * What the explained words are looked for in — null where the turn shows one sentence of
+   * ours and nothing else: a freeze, a request for a vote.
+   */
+  wording: Wording | null;
   ai: AiView | null;
 }
 
@@ -230,15 +253,16 @@ export function withExplanation(
 /** What the sheet shows for a turn. `last` is true for the turn at the bottom of the thread. */
 export function viewOf(turn: Turn, page: PageState, last: boolean): TurnView {
   if (asksForVote(turn.question)) {
-    return { plain: null, measures: { kind: 'off_topic' }, ai: null };
+    return { plain: null, measures: { kind: 'off_topic' }, wording: null, ai: null };
   }
   if (turn.silence !== null) {
     const reopen = turn.silence === '' ? null : turn.silence;
-    return { plain: null, measures: { kind: 'silence', reopen }, ai: null };
+    return { plain: null, measures: { kind: 'silence', reopen }, wording: null, ai: null };
   }
   const { gists } = turn;
   if (gists !== undefined && gists !== null && gists !== 'pending' && gists.kind === 'silence') {
-    return { plain: null, measures: { kind: 'silence', reopen: gists.reopen }, ai: null };
+    const measures: Measures = { kind: 'silence', reopen: gists.reopen };
+    return { plain: null, measures, wording: null, ai: null };
   }
   const { objection, cards } = turn.recognised;
   const plain = objection !== null || cards.length > 0 ? turn.recognised : null;
@@ -250,6 +274,14 @@ export function viewOf(turn: Turn, page: PageState, last: boolean): TurnView {
       : rows.length === 0
         ? { kind: 'none' }
         : { kind: 'rows', rows, reading: gists === undefined || gists === 'pending' };
+
+  // The words of the sentences wait for the turn to hold what it will hold: all of its
+  // sentences, or none — a block that grew under the reader would move what they read.
+  const awaited = measures.kind === 'searching' || (measures.kind === 'rows' && measures.reading);
+  const wording: Wording = {
+    question: turn.question,
+    sentences: awaited ? null : rows.flatMap((row) => (row.gist === null ? [] : [row.gist])),
+  };
 
   // What was explained stays in the thread, whatever has changed since. What may still be
   // asked — the offer, a follow-up — depends on the page as it is now.
@@ -269,5 +301,5 @@ export function viewOf(turn: Turn, page: PageState, last: boolean): TurnView {
     offer || waiting || turn.explanations.length > 0 || follow.length > 0
       ? { offer, explanations: turn.explanations, waiting, follow }
       : null;
-  return { plain, measures, ai };
+  return { plain, measures, wording, ai };
 }

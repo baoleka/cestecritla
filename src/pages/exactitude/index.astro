@@ -140,9 +140,14 @@ const ENGINE_NAMES: Record<string, string> = {
     }
   </p>
   {
-    /* The sentences of « Demander » are not among the texts a person re-read (D16.59): where
-       the site shows them, the page says so in the very paragraph that speaks of re-reading. */
-    site.mode === 'chat' && <p>{t('accuracy.review.sentences')}</p>
+    /* The sentences of « Demander » are not among the texts a person re-read (D16.59), nor
+       are the explanations of words shown under them (D16.62): where the site shows them,
+       the page says so in the very paragraph that speaks of re-reading. */
+    site.mode === 'chat' && (
+      <p>
+        {t('accuracy.review.sentences')} {t('accuracy.review.terms')}
+      </p>
+    )
   }
 
   <h2>{t('accuracy.unverified.title')}</h2>

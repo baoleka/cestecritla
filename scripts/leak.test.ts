@@ -143,8 +143,13 @@ void test('structure: the words let out are the ones declared, and under the cei
   assert.deepEqual(ceilingViolations(exposure, quoted.size, policy), []);
 });
 
-/** Files of data/2026 whose long strings are our own words, reviewed as editorial content. */
-const EDITORIAL = new Set(['riposte.json', 'glossary.json', 'synonyms.json']);
+/**
+ * Files of data/2026 whose long strings are our own words: the editorial texts a person
+ * re-read, the synonyms — and the explained words (terms.json, D16.62): general knowledge an
+ * AI wrote, with nothing of the book in it. The content gate below reads them like any other
+ * file, where the private corpus is.
+ */
+const EDITORIAL = new Set(['riposte.json', 'glossary.json', 'synonyms.json', 'terms.json']);
 /** Keys allowed to hold more than eight words in the generated files. */
 const LONG_OK = new Set(['title', 'id_scheme', 'hash_rule', 'note_fr', 'attribution']);
 

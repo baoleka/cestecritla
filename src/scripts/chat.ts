@@ -9,8 +9,13 @@
  *   3. the page searches, as it does while one types, and shows the three measures it ranks
  *      best: their links first;
  *   4. the identifiers of those measures go to /api/gists — nothing typed — and the sentences
- *      the editor read come back, one per measure that has one;
- *   5. only then, only if the Worker says a model may be asked, only once the visitor pressed
+ *      written ahead come back, one per measure that has one;
+ *   5. the acronyms and technical terms that the question or these sentences use are found
+ *      on the phone, in a file fetched whole with the sheet, and shown with a short explanation
+ *      written ahead — general knowledge, labelled as written by an AI; nothing is sent. A
+ *      question that asks what a word means gets it first, open; the others come under the
+ *      measures, closed;
+ *   6. only then, only if the Worker says a model may be asked, only once the visitor pressed
  *      « Expliquer avec l'IA »: /api/chat is sent the measures whose sentence is on the screen
  *      and the words of those sentences that the question uses — NEVER THE QUESTION (D16.53) —
  *      and an explanation of those words comes back, or nothing, and nothing says so.
@@ -37,6 +42,7 @@ import {
   type Turn,
 } from '../lib/chat-view.ts';
 import { recognise } from '../lib/notions.ts';
+import { asksMeaning, explainedFor, type Explained } from '../lib/terms.ts';
 import { formatReopenTimeFr } from '../lib/silence.ts';
 import { enhanceOfficialLinks } from './deep-links.ts';
 import {
@@ -65,6 +71,9 @@ interface Config {
     card: string;
     gistsTitle: string;
     gistsBadge: string;
+    askedTitle: string;
+    termsTitle: string;
+    termsBadge: string;
     where: string;
     incipit: string;
     firstWords: string;
@@ -124,6 +133,11 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
   let epoch = 0;
   let found: Engine | null = null;
   let plain: ChatPlain | null = null;
+  /**
+   * The explained words a visitor opened or closed, by turn and by term: a turn is drawn again
+   * when the thread moves on, and it must come back as it was left. In memory, like the rest.
+   */
+  let toggled = new Map<string, boolean>();
   const page: PageState = {
     corpus: config.corpus,
     ai: 'offered',
@@ -165,12 +179,47 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
    * keep one spelling of apostrophes, the page shows typographic ones (src/lib/strings.ts).
    */
   const set = (text: string): string => text.replace(/'/g, '’');
+  /**
+   * A text an AI wrote ahead — a sentence of the base, an explanation of a word — with the
+   * mark a machine can read on it (AI Act, art. 50 § 2). What a person reads is the label of
+   * its block.
+   */
+  const written = (text: string): HTMLElement => {
+    const node = el('p', set(text));
+    node.dataset.generatedBy = 'ai';
+    return node;
+  };
   const block = (title: string, badge: string | null, className = ''): HTMLElement => {
     const node = el('section', undefined, `c-block ${className}`.trim());
     node.tabIndex = -1;
     node.append(el('h3', title));
     if (badge !== null) node.append(el('p', badge, 'c-badge ref'));
     return node;
+  };
+
+  /**
+   * A block of explained words: one line to press per word, its explanation under it. What the
+   * visitor opened or closed stays so when the turn is drawn again.
+   */
+  const words = (
+    title: string,
+    list: readonly Explained[],
+    index: number,
+    className: string,
+    open: boolean,
+  ): HTMLElement => {
+    const part = block(title, s.termsBadge, className);
+    for (const { entry } of list) {
+      const key = `${String(index)}:${entry.id}`;
+      const item = el('details', undefined, 'c-term');
+      item.open = toggled.get(key) ?? open;
+      item.append(el('summary', set(entry.term)), written(entry.plain));
+      item.addEventListener('toggle', () => {
+        toggled.set(key, item.open);
+      });
+      part.append(item);
+    }
+    return part;
   };
 
   const source = (id: string, withWords: boolean): HTMLElement | null => {
@@ -231,6 +280,20 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
       node.append(part);
     }
 
+    // The explained words: the acronyms and technical terms of the question and of the
+    // sentences on the screen. Found here, on the phone — nothing is sent to find a word.
+    const explained =
+      view.wording === null || plain === null
+        ? []
+        : explainedFor(view.wording.question, view.wording.sentences ?? [], plain.terms);
+    // A question that asks what a word means gets that word first, open: it is what was asked.
+    // It depends on the question alone, so it is there from the first paint and moves nothing.
+    const meaning = view.wording !== null && asksMeaning(view.wording.question);
+    const named = meaning ? explained.filter((e) => e.asked) : [];
+    if (named.length > 0) {
+      node.append(words(s.askedTitle, named, index, 'c-terms c-asked', true));
+    }
+
     const { measures } = view;
     switch (measures.kind) {
       case 'searching':
@@ -257,7 +320,7 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
         const part = block(s.gistsTitle, read ? s.gistsBadge : null, 'c-gists');
         for (const row of measures.rows) {
           const item = el('div', undefined, 'c-row');
-          if (row.gist !== null) item.append(el('p', set(row.gist)));
+          if (row.gist !== null) item.append(written(row.gist));
           const line = source(row.id, row.gist === null);
           if (line !== null) item.append(line);
           part.append(item);
@@ -266,6 +329,12 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
         break;
       }
     }
+
+    // The other words — of the question, of the sentences — under the measures, closed, once
+    // the sentences are all there: a block that grew would move what is being read.
+    const shown = view.wording?.sentences ?? null;
+    const others = shown === null ? [] : explained.filter((e) => !named.includes(e));
+    if (others.length > 0) node.append(words(s.termsTitle, others, index, 'c-terms', false));
 
     if (view.ai !== null && explains) {
       // While the AI is only offered, the block says what is offered; then, what it holds.
@@ -458,6 +527,7 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
   const empty = (): void => {
     epoch += 1;
     turns = [];
+    toggled = new Map();
     redraw();
   };
 

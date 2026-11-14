@@ -15,7 +15,9 @@
  *
  * Since D16.60 no model answers a visitor: `model` is null, and neither the offer, nor its two
  * small buttons, nor a word about a live AI is in the page. The sheet shows the sentences
- * written ahead, under a label that says who wrote and checked them — an AI (D16.59).
+ * written ahead, under a label that says who wrote and checked them — an AI (D16.59) — and,
+ * under them, the acronyms and technical terms they use, each with a short explanation written
+ * ahead too, under its own label (src/lib/terms.ts).
  *
  * Rendered only in a build whose field asks: in mode "off" this file is not even imported.
  */
@@ -46,6 +48,9 @@ const config = {
     card: t('chat.glossary_link', { term: '{term}' }),
     gistsTitle: t('chat.gists.title'),
     gistsBadge: t('chat.gists.badge'),
+    askedTitle: t('chat.terms.asked_title'),
+    termsTitle: t('chat.terms.title'),
+    termsBadge: t('chat.terms.badge'),
     where: t('search.result.where'),
     incipit: t('quote.incipit_label'),
     firstWords: t('quote.first_words_label'),

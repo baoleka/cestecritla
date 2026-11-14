@@ -24,9 +24,14 @@
  *   5. every other state is a normal one: the route closed, the Worker broken, another state
  *      of the book, electoral silence — none says a word of failure;
  *   6. a sentence of the base is text: markup in it creates no element;
- *   7. nothing is written on the phone, nothing in the address; the thread empties;
- *   8. the policy of the page names nobody but us; the sheet passes the accessibility audit
- *      at 390 and 320 px and does not overflow.
+ *   7. the explained words (D16.62): the acronyms and technical terms of the question and of
+ *      the sentences on the screen, found on the phone in a file fetched whole — nothing is
+ *      sent to find a word; each opens on a short text under a label that says an AI wrote and
+ *      checked it; what the question names is open; a freeze or a request for a vote shows
+ *      none; every text an AI wrote carries a mark a machine can read;
+ *   8. nothing is written on the phone, nothing in the address; the thread empties;
+ *   9. the policy of the page names nobody but us; the sheet passes the accessibility audit
+ *      at 390 and 320 px — an explained word open — and does not overflow.
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
@@ -44,7 +49,8 @@ const FAILURE = /erreur|panne|indisponible|désolé|malheureusement|réessa|erro
 const LIVE_AI =
   /Expliquer avec l’IA|Ne plus demander à l’IA|Demander aussi à l’IA|IA ·|Mistral|Llama|Gemma/;
 
-type Scenario = 'deux' | 'ia offerte' | 'local' | 'panne' | 'autre livre' | 'silence' | 'balise';
+type Scenario =
+  'deux' | 'ia offerte' | 'local' | 'panne' | 'autre livre' | 'silence' | 'balise' | 'mots';
 
 async function runEngine(name: string, origin: string, manifest: Manifest): Promise<Outcome> {
   const type = ENGINES[name];
@@ -74,6 +80,19 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         return { body: { kind: 'gists', corpus: 'ffffffffffffffff', gists: all, ai: false } };
       case 'silence':
         return { body: { kind: 'silence', reopen: '2027-04-18T18:00:00.000Z' } };
+      case 'mots':
+        // Invented sentences that use two terms of data/2026/terms.json, in this order.
+        return {
+          body: {
+            kind: 'gists',
+            corpus,
+            gists: all.map((gist) => ({
+              ...gist,
+              text: `Le programme prévoit un moratoire d'essai sur la T2A, pour ${gist.id}.`,
+            })),
+            ai: false,
+          },
+        };
       case 'balise':
         return {
           body: {
@@ -217,7 +236,9 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     await page.waitForTimeout(900);
     const carrying = (): string[] =>
       requested.filter((url) =>
-        /infirmi|retraite|zorglub|montcuq/i.test(decodeURIComponent(url.split('#')[0] ?? '')),
+        /infirmi|retraite|zorglub|montcuq|h[oô]pital|t2a|moratoire|smic/i.test(
+          decodeURIComponent(url.split('#')[0] ?? ''),
+        ),
       );
     check(
       'typing sends the words nowhere',
@@ -295,7 +316,6 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       'a Worker that says an AI is available changes nothing: no offer, no explanation',
       (await count('#chat-thread .c-ai')) === 0 &&
         (await count('#chat-thread [data-offer]')) === 0 &&
-        (await count('#chat-thread [data-generated-by]')) === 0 &&
         !LIVE_AI.test(offered) &&
         !/Une explication que personne ne doit voir/.test(offered),
       offered.slice(0, 200),
@@ -338,14 +358,162 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
     sim.gists = 'deux';
 
-    // --- 7. nothing is written on the phone; the thread empties
+    // --- 7. the explained words: found on the phone, written ahead, labelled
+    const TERMS = `${LAST} .c-terms:not(.c-asked)`;
+    const ASKED = `${LAST} .c-terms.c-asked`;
+    const termsShown = (scope: string): Promise<{ term: string; open: boolean }[]> =>
+      page.evaluate<{ term: string; open: boolean }[]>(
+        `Array.from(document.querySelectorAll(${JSON.stringify(`${scope} details`)})).map((d) => ({ term: d.querySelector('summary')?.textContent ?? '', open: d.open }))`,
+      );
+    /** True when, in the last turn, the first block stands before the second. */
+    const before = (first: string, second: string): Promise<boolean> =>
+      page.evaluate<boolean>(
+        `(() => { const turn = document.querySelector(${JSON.stringify(LAST)}); const a = turn?.querySelector(${JSON.stringify(first)}); const b = turn?.querySelector(${JSON.stringify(second)}); return !!a && !!b && (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0; })()`,
+      );
+    const plainFiles = (): string[] => requested.filter((url) => /\/data\/clair-/.test(url));
+    check(
+      'the file of explanations is fetched whole, once, by its name alone',
+      plainFiles().length === 1 && /\/data\/clair-[0-9a-f]{16}\.json$/.test(plainFiles()[0] ?? ''),
+      plainFiles().join(' '),
+    );
+    check(
+      'a turn whose question and sentences use no explained word shows no block of words',
+      (await count('#chat-thread .c-terms')) === 0,
+    );
+    sim.gists = 'mots';
+    const sentBefore = requested.length;
+    const withWords = await ask('et l’hôpital ?');
+    check(
+      'the words of the sentences come under their title, with who wrote and checked them: an AI',
+      (await text(`${TERMS} h3`)) === 'Des mots expliqués' &&
+        (await text(`${TERMS} .c-badge`)) === 'Explications écrites et vérifiées par une IA',
+      (await text(TERMS)).slice(0, 160),
+    );
+    const closed = await termsShown(TERMS);
+    check(
+      'each term of the sentences is there once, in the order they use them, closed',
+      JSON.stringify(closed) ===
+        JSON.stringify([
+          { term: 'moratoire', open: false },
+          { term: 'T2A', open: false },
+        ]) && (await count(ASKED)) === 0,
+      JSON.stringify(closed),
+    );
+    check(
+      'the words of the sentences stand under the sentences, never above them',
+      await before('.c-gists', '.c-terms:not(.c-asked)'),
+    );
+    check('no explained word says a word of failure', !FAILURE.test(withWords));
+    const asked = requested.length;
+    await page.click(`${TERMS} details:first-of-type summary`);
+    await until(
+      page,
+      `document.querySelector(${JSON.stringify(`${TERMS} details`)})?.open === true`,
+    );
+    const explanation = await text(`${TERMS} details:first-of-type p`);
+    check(
+      'pressing a word opens its explanation: a short text, general, with a mark a machine can read',
+      /^Un moratoire suspend/.test(explanation) &&
+        explanation.length <= 200 &&
+        !/programme/i.test(explanation) &&
+        (await count(`${TERMS} details:first-of-type p[data-generated-by="ai"]`)) === 1,
+      explanation,
+    );
+    await page.waitForTimeout(300);
+    check(
+      'opening a word sends nothing to anyone',
+      requested.length === asked && posted.chat.length === 0,
+      requested.slice(asked).join(' '),
+    );
+    check(
+      'finding the words sent nothing but the measures: one request for the whole turn',
+      requested.slice(sentBefore).length === 1 && /\/api\/gists$/.test(requested[sentBefore] ?? ''),
+      requested.slice(sentBefore).join(' '),
+    );
+    check(
+      'every sentence written ahead carries the mark a machine can read — and no link does',
+      (await count(`${LAST} .c-gists .c-row > p[data-generated-by="ai"]`)) ===
+        (await count(`${LAST} .c-gists .c-row > p:not(.sources)`)) &&
+        (await count(`${LAST} .c-gists .c-row > p[data-generated-by="ai"]`)) >= 1 &&
+        (await count(`${LAST} .sources[data-generated-by]`)) === 0,
+    );
+    // The question holds a term without asking what it means: the measures come first.
+    await ask('et la t2a à l’hôpital ?');
+    const held = await termsShown(TERMS);
+    check(
+      'a term the question merely holds comes first among the words, under the measures, closed',
+      JSON.stringify(held) ===
+        JSON.stringify([
+          { term: 'T2A', open: false },
+          { term: 'moratoire', open: false },
+        ]) &&
+        (await count(ASKED)) === 0 &&
+        (await before('.c-gists', '.c-terms:not(.c-asked)')),
+      JSON.stringify(held),
+    );
+    const kept = await termsShown('#chat-thread .c-turn:nth-last-child(2) .c-terms:not(.c-asked)');
+    check(
+      'a turn drawn again keeps the word its reader opened',
+      kept[0]?.term === 'moratoire' && kept[0].open && kept[1]?.open === false,
+      JSON.stringify(kept),
+    );
+    // The question asks what a word means: that word is what was asked — first, and open.
+    await ask('c’est quoi la t2a à l’hôpital ?');
+    const named = await termsShown(ASKED);
+    const rest = await termsShown(TERMS);
+    check(
+      'a word the question asks about stands above the measures, under its own title, open',
+      (await text(`${ASKED} h3`)) === 'Les mots de ta question' &&
+        (await text(`${ASKED} .c-badge`)) === 'Explications écrites et vérifiées par une IA' &&
+        JSON.stringify(named) === JSON.stringify([{ term: 'T2A', open: true }]) &&
+        (await before('.c-terms.c-asked', '.c-gists')),
+      JSON.stringify(named),
+    );
+    check(
+      '…and it is not explained twice: the other words stay under the measures, closed',
+      JSON.stringify(rest) === JSON.stringify([{ term: 'moratoire', open: false }]) &&
+        (await before('.c-gists', '.c-terms:not(.c-asked)')),
+      JSON.stringify(rest),
+    );
+    // No sentence on the screen: the question alone is read — still on the phone.
+    sim.gists = 'local';
+    await ask('c’est quoi un moratoire à l’hôpital ?');
+    const alone = await termsShown(ASKED);
+    check(
+      'the route closed: the links stand alone, and the word of the question is still explained',
+      (await count(`${LAST} .c-gists .c-row > p:not(.sources)`)) === 0 &&
+        JSON.stringify(alone) === JSON.stringify([{ term: 'moratoire', open: true }]) &&
+        (await count(TERMS)) === 0,
+      JSON.stringify(alone),
+    );
+    // One sentence of ours and nothing else: no word is explained under it.
+    sim.gists = 'silence';
+    await ask('c’est quoi la t2a à l’hôpital ?');
+    check(
+      'electoral silence: no word is explained',
+      (await count(`${LAST} .c-terms`)) === 0 && (await count(`${LAST} details`)) === 0,
+    );
+    sim.gists = 'mots';
+    const vote = await ask('pour qui voter avec le smic ?');
+    check(
+      'a request for a vote: one sentence of ours, and no word explained',
+      /Ici, on ne parle que du programme/.test(vote) && (await count(`${LAST} .c-terms`)) === 0,
+      vote.slice(0, 120),
+    );
+    sim.gists = 'deux';
+
+    // --- 8. nothing is written on the phone; the thread empties
     check(
       'nothing was written on the phone during the whole conversation',
       (await page.evaluate<string>(
         'JSON.stringify([Object.keys(localStorage), Object.keys(sessionStorage)])',
       )) === stored,
     );
-    check('nothing typed went into the address', !/retraite|verte/i.test(page.url()), page.url());
+    check(
+      'nothing typed went into the address',
+      !/retraite|verte|pital|t2a|moratoire|smic/i.test(page.url()),
+      page.url(),
+    );
     await page.click('#chat-clear');
     check(
       '« Effacer la conversation » empties the thread',
@@ -355,7 +523,9 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     check(
       'no request carried a word typed',
       carrying().length === 0 &&
-        posted.gists.every((body) => !/zorglub|montcuq|retraite|verte/i.test(body)),
+        posted.gists.every(
+          (body) => !/zorglub|montcuq|retraite|verte|pital|t2a|moratoire|smic/i.test(body),
+        ),
     );
     check(
       'nothing was asked of anyone but us',
@@ -363,7 +533,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       escaped.slice(0, 3).join(' '),
     );
 
-    // --- 8. the policy, and the accessibility of the open sheet
+    // --- 9. the policy, and the accessibility of the open sheet
     check(
       'nothing the page ships violates its policy',
       violations.length === 0,
@@ -386,9 +556,14 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
           view,
           "document.querySelector('#ask') && !document.querySelector('#ask').disabled",
         );
+        // Judged with everything it can hold: sentences, and an explained word, open.
+        sim.gists = 'mots';
         await view.fill('#q', 'et les retraites ?');
         await view.click('#ask');
         await until(view, "document.querySelector('#chat-thread .c-gists .c-row') !== null");
+        await until(view, "document.querySelector('#chat-thread .c-terms details') !== null");
+        await view.click('#chat-thread .c-terms details summary');
+        await until(view, "document.querySelector('#chat-thread .c-terms details').open");
         await view.addScriptTag({ content: axe });
         // The sheet rises in 180 ms, from transparent: it is judged as it stands (see e2e-ask).
         await view.evaluate(
@@ -401,7 +576,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
           .filter((v) => v.impact === 'serious' || v.impact === 'critical')
           .map((v) => v.id);
         check(
-          `the sheet with its sentences passes the accessibility audit at ${label}`,
+          `the sheet with its sentences and an explained word passes the accessibility audit at ${label}`,
           serious.length === 0,
           serious.join(','),
         );
@@ -412,6 +587,14 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
           `the sheet does not overflow at ${label}`,
           box.sw <= box.cw && box.sheet <= 0,
           `${String(box.sw)} > ${String(box.cw)} / ${String(box.sheet)}`,
+        );
+        const target: { height: number } = await view.evaluate(
+          "({ height: document.querySelector('#chat-thread .c-terms summary').getBoundingClientRect().height })",
+        );
+        check(
+          `a word to press is tall enough for a finger at ${label}`,
+          target.height >= 44,
+          String(target.height),
         );
         await audited.close();
       }

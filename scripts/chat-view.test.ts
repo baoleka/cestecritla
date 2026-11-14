@@ -53,9 +53,38 @@ void test('a turn starts by searching, and asks nothing of anyone', () => {
   assert.deepEqual(viewOf(turn, page(), true), {
     plain: null,
     measures: { kind: 'searching' },
+    wording: { question: QUESTION, sentences: null },
     ai: null,
   });
   assert.equal(nextStep(turn, page()), null);
+});
+
+void test('the words of the question are read at once, those of the sentences once they are all there', () => {
+  // Searching, then waiting for the sentences: the question alone can be read.
+  const waiting = { question: QUESTION, sentences: null };
+  assert.deepEqual(viewOf(newTurn(QUESTION, NOTHING, null), page(), true).wording, waiting);
+  assert.deepEqual(viewOf(searched(), page(), true).wording, waiting);
+  assert.deepEqual(viewOf({ ...searched(), gists: 'pending' }, page(), true).wording, waiting);
+  // Answered: the question, and the sentences shown — not one the page did not ask about.
+  const read = withGists(searched({ rows: [A, B] }), gists(false, A, C));
+  assert.deepEqual(viewOf(read, page(), true).wording, {
+    question: QUESTION,
+    sentences: [`Phrase relue de ${A}.`],
+  });
+  // No answer the page can use, or nothing found: no sentence — and that is known.
+  assert.deepEqual(viewOf(withGists(searched(), null), page(), true).wording, {
+    question: QUESTION,
+    sentences: [],
+  });
+  assert.deepEqual(viewOf(searched({ rows: [] }), page(), true).wording, {
+    question: QUESTION,
+    sentences: [],
+  });
+  // One sentence of ours and nothing else: a freeze, a request for a vote — no word explained.
+  assert.equal(viewOf(newTurn(QUESTION, NOTHING, ''), page(), true).wording, null);
+  assert.equal(viewOf(newTurn('pour qui voter ?', NOTHING, null), page(), true).wording, null);
+  const frozen = withGists(searched(), { kind: 'silence', reopen: '2027-04-11T18:00:00Z' });
+  assert.equal(viewOf(frozen, page(), true).wording, null);
 });
 
 void test('nothing found: one sentence, nothing sent — never « the programme does not speak of it »', () => {
@@ -266,6 +295,7 @@ void test('electoral silence: one sentence, nothing sent — said by the phone o
   assert.deepEqual(viewOf(frozen, page({ ai: 'on' }), true), {
     plain: null,
     measures: { kind: 'silence', reopen: '2027-04-11T18:00:00Z' },
+    wording: null,
     ai: null,
   });
   assert.equal(nextStep(frozen, page({ ai: 'on' })), null);
@@ -289,6 +319,7 @@ void test('whom to vote for: « Ici, on ne parle que du programme. » — no mea
   assert.deepEqual(viewOf(turn, page({ ai: 'on' }), true), {
     plain: null,
     measures: { kind: 'off_topic' },
+    wording: null,
     ai: null,
   });
   assert.equal(nextStep(turn, page({ ai: 'on' })), null);
