@@ -720,6 +720,11 @@ const ATTRIBUTION: readonly RegExp[] = [
   alone('insoumis(?:e|es)?'),
   alone('union populaire'),
   alone('LFI|AEC|M27', 'u'),
+  // The two words every attribution is made of. The read sentences on the page open on
+  // « Le programme prévoit… »: so the page is no licence for them — an explanation that could
+  // say « programme » because the page does would say what the programme provides.
+  alone('programmes?'),
+  alone('mesures?'),
   // An aim without an owner is read as the programme's: « L'objectif est de… ». (With its
   // owner written — « le but du quotient familial est de… » — it is a definition.)
   new RegExp(
@@ -729,12 +734,13 @@ const ATTRIBUTION: readonly RegExp[] = [
   ),
 ];
 /**
- * The nouns the book is spoken of with: « le programme prévoit », « cette mesure », « le texte ».
- * They are also words of everyday policy — « programmes scolaires », « proposition de loi ». One
- * is allowed only where a sentence on the page holds it with the same word after it.
+ * The other nouns the book is spoken of with: « le texte », « ce projet », « la proposition »,
+ * « le mouvement ». They are also words of everyday policy — « proposition de loi », « projet
+ * de loi », « partis politiques ». One is allowed only where a sentence on the page holds it
+ * with the same word after it.
  */
 const ATTRIBUTION_NOUN =
-  /(?<![\p{L}\p{N}])(?:programmes?|mesures?|propositions?|textes?|projets?|partis?|mouvements?|candidate?s?|militante?s?)(?![\p{L}\p{N}])/giu;
+  /(?<![\p{L}\p{N}])(?:propositions?|textes?|projets?|partis?|mouvements?|candidate?s?|militante?s?)(?![\p{L}\p{N}])/giu;
 
 /**
  * Politicians and parties an explanation of words never needs, whatever the page shows. The

@@ -351,3 +351,13 @@ en arrière ; le navigateur d'Instagram ; un lecteur d'écran.
   et du déploiement (C7), `/confidentialite` entière (C9). Le kit passe en 0.8.0 ; les pages
   « À propos », « Méthode », « Exactitude » et « Confidentialité » disent déjà ce que fait le
   mode « chat », pour qu'aucune build d'essai ne dise faux.
+
+### 14 novembre 2026 — le contrôle : « programme » et « mesure », toujours refusés
+
+- **Un trou trouvé en relisant l'invite des phrases écrites d'avance** : elles commencent par
+  « Le programme prévoit… ». La règle du lot C4 laissait à l'explication les noms de l'appareil
+  du livre « tels que la page les écrit » — donc « le programme prévoit », mot pour mot, dès
+  qu'une phrase relue était à l'écran : exactement ce que D16.47 interdit. Les deux mots sont
+  maintenant refusés dans une explication quoi que montre la page ; l'exception ne vaut plus
+  que pour « proposition », « texte », « projet », « parti », « mouvement », « candidat »,
+  « militant ». Un test le tient, sur une page qui écrit les deux mots.

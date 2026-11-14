@@ -154,23 +154,49 @@ void test('attribution: an explanation names neither the programme, nor the move
     'L’idée est d’ouvrir une bibliothèque de quartier dans chaque commune.',
     'Le projet est de rendre gratuits les transports scolaires.',
   );
-  // The nouns of the book's apparatus are words of everyday policy too: one is allowed only as
-  // the page holds it — the same word, with the same word after it.
-  const school: ExplainContext = {
-    question: 'c’est quoi les programmes scolaires ?',
-    shown: ['Les programmes scolaires font une place au jardinage dans chaque école.'],
+  // The other nouns of the book's apparatus are words of everyday policy too: one is allowed
+  // only as the page holds it — the same word, with the same word after it.
+  const law: ExplainContext = {
+    question: 'c’est quoi une proposition de loi ?',
+    shown: ['Une proposition de loi citoyenne ouvre un verger communal dans chaque commune.'],
   };
   assert.deepEqual(
-    rulesOn(school, 'Les programmes scolaires fixent le contenu des cours de chaque école.'),
+    rulesOn(law, 'Une proposition de loi est un écrit déposé par des élus ou des habitants.'),
     [],
   );
   for (const sentence of [
-    'Le programme scolaire fixe le contenu des cours de chaque école.',
-    'Les programmes scolaires sont fixés par le programme de chaque école.',
-    'Le jardinage a sa place dans les programmes.',
+    'La proposition ouvre un verger communal dans chaque commune.',
+    'Une proposition de loi est une proposition des élus de la commune.',
+    'Le projet ouvre un verger communal dans chaque commune.',
   ]) {
-    assert.ok(rulesOn(school, sentence).includes('attribution'), sentence);
+    assert.ok(rulesOn(law, sentence).includes('attribution'), sentence);
   }
+});
+
+void test('« programme » and « mesure » are never written, whatever the page says — and it says them', () => {
+  // The read sentences open on « Le programme prévoit… » (src/worker/prompt.ts): the words are
+  // on the page in every turn, with the very verb an attribution is made with.
+  const page: ExplainContext = {
+    question: 'c’est quoi un verger communal ?',
+    shown: [
+      'Le programme prévoit un verger communal planté avec les écoles de chaque commune.',
+      'La mesure garantit des programmes scolaires ouverts au jardinage.',
+    ],
+  };
+  for (const sentence of [
+    'Le programme prévoit un verger communal planté avec les écoles.',
+    'Le programme prévoit de planter des arbres fruitiers dans la commune.',
+    'La mesure garantit un verger communal à chaque commune.',
+    'Les programmes scolaires font une place au verger communal.',
+    'Un verger communal figure dans le programme de la commune.',
+  ]) {
+    assert.ok(rulesOn(page, sentence).includes('attribution'), sentence);
+  }
+  // What the page says of the verger can still be explained — without the two words.
+  assert.deepEqual(
+    rulesOn(page, 'Un verger communal est un terrain planté d’arbres fruitiers par la commune.'),
+    [],
+  );
 });
 
 void test('opener: each sentence stands alone — it opens on no word that points outside it', () => {
