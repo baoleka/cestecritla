@@ -244,22 +244,32 @@ void test('the two contracts keep their promises apart: `/api/ask` still has no 
 
 void test('until the routes and the sheet exist, nothing that runs can send or read a question', () => {
   // Lots C5 and C6 replace this test by the gates of PLAN-CHAT §8 — in the same commit that
-  // gives the contract its first user. Until then the contract is read by the control alone.
-  const users: string[] = [];
-  const walk = (dir: string): void => {
-    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+  // gives the contract its first user that RUNS: a script of the page, a component, a route of
+  // the Worker. Until then it is read by pure modules alone: the control, and what decides —
+  // without sending anything — what a gesture would send and what the sheet would show.
+  const users = (dir: string): string[] =>
+    readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
       const path = join(dir, entry.name);
-      if (entry.isDirectory()) walk(path);
-      else if (
+      if (entry.isDirectory()) return users(path);
+      const reads =
         /\.(?:ts|astro)$/.test(entry.name) &&
-        /chat-contract/.test(readFileSync(path, 'utf8'))
-      ) {
-        users.push(path);
-      }
-    }
-  };
-  walk('src');
-  assert.deepEqual(users, ['src/lib/ask-validate.ts']);
+        /chat-(?:contract|local|view)/.test(readFileSync(path, 'utf8'));
+      return reads ? [path] : [];
+    });
+  assert.deepEqual(users('src').sort(), [
+    'src/lib/ask-validate.ts',
+    'src/lib/chat-local.ts',
+    'src/lib/chat-view.ts',
+  ]);
+  // …and those modules send nothing themselves: no request, no storage, no address.
+  for (const file of [
+    'src/lib/chat-contract.ts',
+    'src/lib/chat-local.ts',
+    'src/lib/chat-view.ts',
+  ]) {
+    const code = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
+    assert.doesNotMatch(code, /fetch\(|XMLHttpRequest|sendBeacon|WebSocket|Storage|cookie/, file);
+  }
 });
 
 void test('the page reads the read sentences strictly, and carries no field it cannot name', () => {
