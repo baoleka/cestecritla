@@ -518,3 +518,17 @@ en arrière ; le navigateur d'Instagram ; un lecteur d'écran.
   **Le banc attend les phrases** (lot C3), comme le plan le disait.
 - **Reste du lot C8** : jouer le banc (deux jours de quota, calculé), fixer les seuils en le
   rejouant, les quarante fils lus par l'éditeur, le modèle confirmé.
+
+### 14 novembre 2026 — l'aperçu après le lot C9 et le correctif du compteur
+
+- **Redéployé à 15 h 17 UTC** (version `a42634b6`, la boucle d'écriture endormie) : `/api/ask`
+  404, `/api/gists` « local », `/api/chat` « rien », un champ `history` 400, une autre origine
+  403, `/api/bench` sans clé 404 ; `noindex` servi ; 1 151 fichiers sur 1 154 identiques à
+  `dist/` ; les contrôles des trois navigateurs tiennent. VÉRIFIÉ (sondes du jour).
+- **L'aperçu sert la page Confidentialité du lot C9**, dans sa forme « recherche seule » : le
+  paragraphe de la garantie du transfert et le pseudonyme dans la ligne du responsable y sont
+  lisibles — c'est la page que l'éditeur relit. La section « Quand tu demandes » n'existe que
+  dans la build d'essai (`dist-ask/`) tant que le mode est « off ».
+- **L'écriture des phrases** (lot C3) : deux séances de plus à 14 h 22 et 15 h 00 UTC — 18
+  phrases écrites sur les 43 mesures du chapitre d'essai, 521 neurons en tout ce jour. Le quota
+  revient par petites tranches (`neurons-log.md`).
