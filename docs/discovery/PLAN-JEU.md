@@ -1916,7 +1916,8 @@ défaut ». La session a répondu qu'elle ne daterait pas à sa place les gestes
 ### 14 novembre 2026, 11 h — la production est basculée (lot P, D16.36)
 
 - **`cestecritla.fr` et `www.cestecritla.fr` servent l'app**, en « recherche seule », à la place
-  de la page d'attente : `npm run build && npm run deploy` depuis le commit `c94cadf`
+  de la page d'attente : `npm run build && npm run deploy` depuis le commit `9dd7ef8` (son nom d'après la
+  réécriture de la branche ; c'était `c94cadf` au moment du déploiement, même arbre)
   (Worker `cestecritla`, fichiers statiques seuls, version `aed7d943`). Avant de déployer, toute
   la batterie de portes a été rejouée sur cette build : verte.
 - **VÉRIFIÉ en ligne, sur chacun des deux hôtes** : 1 150 fichiers de `dist/` sur 1 154 servis à
@@ -1934,4 +1935,28 @@ défaut ». La session a répondu qu'elle ne daterait pas à sa place les gestes
   privée et du Worker du banc.
 - **Le geste de retrait ne change pas** (D14.10) : `"apex": "holding"` dans `data/launch.json`,
   puis `npm run build:holding && npm run deploy`. Rien ne le bloque.
+
+### 14 novembre 2026, 11 h 30 — la branche réécrite et poussée (D16.29, R28 fermé)
+
+- **L'éditeur : « Oui, réécris et pousse ».** Le dépôt public que la page « Licence » nomme
+  portait encore l'app du 12 novembre, alors que le site servait celle du 14.
+- **52 commits locaux deviennent 8**, posés sur `origin/main`. Chaque nouveau commit reprend
+  **l'arbre d'un commit existant**, passé par les portes en son temps : aucun état n'est
+  inventé. Les lots G, H et I ont chacun le leur ; **les lots J à O n'en font qu'un** — c'est
+  l'écart avec « un commit par lot » : entre la première proposition de mots et la validation de
+  l'éditeur, tous les états intermédiaires portaient une liste qu'il n'a jamais validée
+  (« dimanche », « journaux », « sentiers », « villages », puis « crèches »). Viennent ensuite
+  la soirée du 13, le banc, la nuit avec le geste de lancement, et le constat de la mise en
+  production.
+- **VÉRIFIÉ avant de pousser** : l'arbre final est celui d'avant la réécriture, au fichier près ;
+  les huit commits portent l'identité publique de l'éditeur ; les deux seules versions de la
+  liste de mots présentes dans l'historique publié sont les neuf, puis les quarante-huit mots
+  validés ; les portes du dépôt et la porte anti-fuite sont vertes ; la CI du dépôt ne fait
+  que des déploiements à blanc.
+- **L'historique d'origine n'est pas détruit** : il reste sur la machine de l'éditeur, sous
+  `backup/avant-reecriture-2026-11-14`, et n'est poussé nulle part.
+- **Vu au passage, sans y toucher** : le dépôt public porte depuis le 10 septembre une capture
+  de page officielle (`captures/2026-09-10/source-404/livre.html`) où figure l'adresse d'une
+  personne du mouvement. Ce n'est pas ce push qui la publie ; la retirer de l'historique
+  public est une décision de l'éditeur.
 
