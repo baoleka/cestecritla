@@ -751,3 +751,48 @@ Jouée sur l'aperçu avec l'accord de l'éditeur, de 16 h 35 à 16 h 47 UTC, le 
 - **Cela vaut aussi pour l'écriture des phrases** : le contrôle d'une phrase écrite passe par
   les mêmes motifs, dans le même Worker — une part des appels perdus de la boucle d'écriture
   pouvait venir de là. HYPOTHÈSE, à regarder sur les prochaines séances.
+
+### 14 novembre 2026 — D16.53 : la question ne quitte plus le téléphone — la conception, avant le code
+
+**Décidé par l'éditeur** en réponse à la revue de sécurité (« Elle reste, IA sur un geste »).
+Ce paragraphe amende les §1 à §4 du plan ; le code suit, dans une copie de travail à part.
+
+- **Le raisonnement.** L'IA n'a le droit d'expliquer que des mots de nos phrases relues (§3).
+  La seule chose que la question lui apportait de légitime, c'est *lesquels*. Tout le reste —
+  la tournure, une consigne, un nom — est ce par quoi une explication peut être menée. Donc la
+  page calcule elle-même les mots de nos phrases que la question emploie, et n'envoie qu'eux.
+- **Ce qui part, désormais.** Chercher : rien. « Demander » : les numéros des mesures trouvées.
+  « Expliquer avec l'IA » : ces numéros, **au plus trois mots — pris dans nos propres
+  phrases —**, les identifiants de nos cartes reconnues, et la relance choisie. **Plus aucune
+  requête du site ne porte une phrase tapée** : D16.22 est rétablie sans exception, D16.46 est
+  remplacée pour ce qui part.
+- **Ce que le Worker vérifie.** Chaque mot reçu doit être un mot des phrases qu'il charge
+  lui-même pour ces numéros ; sinon il répond « rien » sans appeler le modèle. Ce qu'il donne
+  au modèle est fait de nos phrases, de nos cartes et de mots tels que nos phrases les
+  écrivent : quoi qu'un client envoie, rien d'autre ne peut l'atteindre.
+- **Ce que voit le visiteur.** Sous les phrases relues, une offre courte au lieu de l'accord
+  en sept lignes : « Une IA peut expliquer ces mots », une mention (« Ta question ne lui est
+  pas envoyée : seulement les mots de ces phrases »), **un bouton**. Ne pas appuyer, c'est
+  refuser. Le geste vaut pour la page ouverte ; « Ne plus demander à l'IA » l'arrête.
+- **Ce qui tombe.** L'accord explicite et sa version, la ligne « 15 ans ou plus », la mise en
+  garde « n'écris rien sur toi », la règle du contrôle sur l'écho de la question, les sigles
+  admis « parce que la question les porte ». **Ce qui reste** : le contrôle, tout ou rien — il
+  ne garde plus qu'un modèle qui se trompe, plus un visiteur qui le pousse — ; la mention IA
+  dans le texte (règlement sur l'IA, art. 50) ; le banc ; la lecture.
+- **Ce que ça change autour.** R34 (un accord sous pseudonyme) n'a plus d'objet pour ce
+  geste ; R36 (une explication qui trompe sous notre nom) perd sa voie d'attaque, pas son
+  existence. Le dossier légal se réduit : plus de texte libre traité, donc plus de données de
+  l'article 9 saisies par nous ; ce que la page envoie dit un intérêt, comme les numéros de
+  mesures le disaient déjà. La section « Quand tu demandes » de la page Confidentialité se
+  réécrit, et l'éditeur la relit (`privacy_chat`). Les réponses d'une explication ne dépendent
+  plus que de nos propres données : un cache redevient pensable, sans rien y mettre d'un
+  visiteur — à décider plus tard, pas dans ce lot.
+- **Ce qu'on perd, dit sans fard** : l'IA ne lit plus la tournure d'une question. « Plus
+  simple » et « Un exemple » restent des boutons ; « pourquoi », « est-ce réaliste » n'ont
+  jamais été de son ressort.
+
+### 14 novembre 2026 — l'aperçu après le correctif de calcul
+
+- **Redéployé à 16 h 59 UTC** (version `eb719531`) : démarrage du Worker mesuré par la
+  plateforme à 14 ms, préchauffage compris ; routes fermées comme avant ; 1 151 fichiers sur
+  1 154 identiques à `dist/` ; les contrôles des trois navigateurs tiennent. VÉRIFIÉ.
