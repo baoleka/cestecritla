@@ -159,6 +159,75 @@ export function gistRequest(
 }
 
 /**
+ * A judge (trial of 14 November 2026, D16.38): another model reads ONE sentence the control let
+ * through against the measure it is about. The sentence never comes in from outside — it was
+ * written a moment earlier, in the same invocation — and a label is all a judge gives: one that
+ * explained itself could recite the measure. A judge is a model too: its label sorts what the
+ * editor reads first, it proves nothing.
+ */
+export const JUDGE_VERDICTS = ['fidele', 'ajout', 'ecart'] as const;
+export type JudgeVerdict = (typeof JUDGE_VERDICTS)[number];
+
+export const SYSTEM_JUDGE = `Tu vérifies UNE PHRASE contre le texte d'UNE MESURE du programme « L'Avenir en commun », édition 2026.
+
+La PHRASE résume la MESURE : elle a le droit d'en laisser des détails de côté. Elle n'a pas le droit d'ajouter, ni de changer.
+
+Réponds par un seul objet JSON : {"verdict":"fidele"}, {"verdict":"ajout"} ou {"verdict":"ecart"}.
+- "ajout" : la PHRASE affirme quelque chose que la MESURE n'écrit pas — un effet, un but, un bénéficiaire, un moyen, un délai, un montant.
+- "ecart" : la PHRASE change ce que la MESURE écrit — un nombre, qui est concerné, une condition, le sens de la mesure — ou la rend plus large ou plus étroite qu'elle n'est.
+- "fidele" : tout ce que dit la PHRASE est écrit dans la MESURE, sans changement.
+
+Dans le doute entre deux réponses, ne choisis pas "fidele".`;
+
+/** A label is a dozen tokens: nothing more is paid for, and nothing more can be said. */
+export const MAX_JUDGE_TOKENS = 24;
+
+const MODEL_JUDGE_SCHEMA = {
+  type: 'object',
+  additionalProperties: false,
+  properties: { verdict: { type: 'string', enum: [...JUDGE_VERDICTS] } },
+  required: ['verdict'],
+} as const;
+
+/** The request to a judge: that measure, that sentence, and nothing else. */
+export function judgeRequest(
+  candidate: Candidate,
+  sentence: string,
+  model: ModelSpec,
+): Record<string, unknown> {
+  return {
+    messages: [
+      { role: 'system', content: SYSTEM_JUDGE },
+      {
+        role: 'user',
+        content: `MESURE :\n[${candidate.id}] ${candidate.text}\n\nPHRASE :\n${sentence}`,
+      },
+    ],
+    max_tokens: MAX_JUDGE_TOKENS,
+    temperature: 0,
+    response_format: { type: 'json_schema', json_schema: MODEL_JUDGE_SCHEMA },
+    ...model.options,
+  };
+}
+
+/** The label a judge gave — or null: an output that is not one of the three labels is no verdict. */
+export function readJudgement(output: unknown): JudgeVerdict | null {
+  let value: unknown = output;
+  if (typeof value === 'string') {
+    try {
+      value = JSON.parse(value);
+    } catch {
+      return null;
+    }
+  }
+  if (typeof value !== 'object' || value === null) return null;
+  const keys = Object.keys(value);
+  const verdict: unknown = (value as Record<string, unknown>)['verdict'];
+  if (keys.length !== 1 || typeof verdict !== 'string') return null;
+  return JUDGE_VERDICTS.find((known) => known === verdict) ?? null;
+}
+
+/**
  * What a request may cost at most, in neurons — reserved before the call. French text runs at
  * about 3.5 characters per token; 3 is used, so that the estimate errs on the dear side.
  */

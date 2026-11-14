@@ -2029,3 +2029,16 @@ questions, quatre réponses ; trois ne suivent pas ce que la session recommandai
   il ne s'est remis à zéro ni à minuit UTC ni dans les dix heures qui ont suivi. L'essai des
   phrases (D16.38) attend qu'il revienne.
 
+
+### 14 novembre 2026, 12 h 30 — l'essai des phrases : des juges sur la route du banc, une page de relecture pour l'éditeur (D16.38)
+
+- **Ce qui est construit, à 0 neuron** : la route du banc (aperçu seulement) fait relire par
+  d'autres modèles la phrase que le contrôle vient de laisser passer, et ne rend que des
+  étiquettes (`08-ia.md` §10.11). Aucune phrase n'entre dans le Worker ; la règle « aucune route
+  ne lit une phrase » tient, et sa porte aussi.
+- **Ce que la session ne fait pas** : lire le texte. La relecture qui compte est celle de
+  l'éditeur, sur une page locale qui met chaque phrase à côté de sa mesure
+  (`private/bench/relecture-phrases.html`, jamais suivie).
+- **L'essai lui-même attend le quota gratuit**, toujours épuisé à 10 h 49 UTC. Un script local
+  le reprend dès que les modèles répondent : 43 mesures, deux écrivains, chacun relu par les
+  deux autres ; au plus 3 700 neurons.

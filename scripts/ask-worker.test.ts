@@ -41,13 +41,18 @@ import {
 import { MODELS } from '../src/worker/models.js';
 import {
   GIST_VARIANTS,
+  JUDGE_VERDICTS,
   MAX_GIST_TOKENS,
+  MAX_JUDGE_TOKENS,
   SYSTEM_ANSWER,
+  SYSTEM_JUDGE,
   SYSTEM_SELECT,
   estimateNeurons,
   gistRequest,
   isGistVariant,
+  judgeRequest,
   modelRequest,
+  readJudgement,
   systemGist,
   userMessage,
 } from '../src/worker/prompt.js';
@@ -675,6 +680,67 @@ void test('a gist: one measure, one short sentence, in one of the ways the Worke
     MODELS['mistral-small-3.1'],
   );
   assert.ok(gist > 0 && gist < 40, String(gist));
+});
+
+void test('a judge: one measure, one sentence, a label out of three — and nothing it wrote leaves', () => {
+  const measure = { id: 'p1c1-s01-k01', text: INVENTED[0]?.text ?? '' };
+  const sentence = 'Le programme prévoit l’ouverture quotidienne des bibliothèques de quartier.';
+  const request = judgeRequest(measure, sentence, MODELS['gemma-4-26b']);
+  const [system, user] = request['messages'] as { role: string; content: string }[];
+  assert.equal(system?.content, SYSTEM_JUDGE);
+  // The judge is shown that measure and that sentence, and nothing else.
+  assert.equal(user?.content, `MESURE :\n[${measure.id}] ${measure.text}\n\nPHRASE :\n${sentence}`);
+  // It may leave details out, never add nor change — and doubt is not « fidèle ».
+  for (const rule of [/laisser des détails de côté/, /ni de changer/, /ne choisis pas "fidele"/]) {
+    assert.match(SYSTEM_JUDGE, rule);
+  }
+  assert.equal(request['max_tokens'], MAX_JUDGE_TOKENS);
+  const room: number = MAX_JUDGE_TOKENS;
+  assert.ok(room <= 32, 'a judge is given no room to recite a measure');
+  assert.equal(request['temperature'], 0);
+  assert.deepEqual([...JUDGE_VERDICTS], ['fidele', 'ajout', 'ecart']);
+
+  // A label is read from an object or from its JSON, and from nothing else.
+  for (const label of JUDGE_VERDICTS) {
+    assert.equal(readJudgement({ verdict: label }), label);
+    assert.equal(readJudgement(JSON.stringify({ verdict: label })), label);
+  }
+  for (const odd of [
+    null,
+    undefined,
+    '',
+    'fidele',
+    '{"verdict":"oui"}',
+    { verdict: 'FIDELE' },
+    { verdict: 'fidele', pourquoi: measure.text },
+    { verdict: ['fidele'] },
+    [{ verdict: 'fidele' }],
+    `La mesure dit : ${measure.text}`,
+  ]) {
+    assert.equal(readJudgement(odd), null, JSON.stringify(odd));
+  }
+
+  // In the Worker: a judge reads what the control let through, in a gist of one measure — the
+  // sentence is never taken from the body of a request — and its label is all that is kept.
+  const index = readFileSync('src/worker/index.ts', 'utf8').replace(
+    /\/\*[\s\S]*?\*\/|\/\/.*$/gm,
+    '',
+  );
+  assert.match(
+    index,
+    /gist !== null && verdict\.kind === 'answer' && verdict\.sentences\.length === 1/,
+  );
+  assert.match(index, /judgements\(env, single, passed\.text, judgeKeys\(body\['judges'\]\)/);
+  assert.doesNotMatch(index, /body\[['"](?:sentence|phrase|texte|text|gist)['"]\]/);
+  const judging = index.slice(
+    index.indexOf('async function judgements'),
+    index.indexOf('async function handleBench'),
+  );
+  assert.equal((judging.match(/run\.output/g) ?? []).length, 1);
+  assert.match(judging, /verdict: readJudgement\(run\.output\)/);
+  // Judges are models of our own list, three at most, each counted against the allowance.
+  assert.match(index, /listed\.filter\(isModelKey\)\)\]\.slice\(0, MAX_JUDGES\)/);
+  assert.match(judging, /budget\.reserve\(reserved, hardStop\(env\)\)/);
 });
 
 void test('what the Worker does not contain: a log, a write about a visitor, an outside service', () => {

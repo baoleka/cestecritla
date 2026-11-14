@@ -29,12 +29,15 @@ import { answerQuestion, benchOutput, control, type ModelRun } from './ask.js';
 import { DEFAULT_HARD_STOP } from './budget-core.js';
 import { clientKey, readBody } from './guards.js';
 import { keptTerms, loadMeasures } from './measures.js';
-import { MODELS, isModelKey } from './models.js';
+import { MODELS, isModelKey, type ModelKey } from './models.js';
 import {
   estimateNeurons,
   gistRequest,
   isGistVariant,
+  judgeRequest,
   modelRequest,
+  readJudgement,
+  type JudgeVerdict,
   type ModelSpec,
 } from './prompt.js';
 
@@ -199,6 +202,63 @@ async function keyMatches(given: unknown, expected: unknown): Promise<boolean> {
  * was shown leaves as a marker (`benchOutput`). And the route is counted by the same limiter
  * as the questions — 429 beyond it, which the bench waits out.
  */
+/** At most three judges, each a model of our own list, none twice. */
+const MAX_JUDGES = 3;
+function judgeKeys(value: unknown): ModelKey[] {
+  if (!Array.isArray(value)) return [];
+  const listed: unknown[] = value;
+  return [...new Set(listed.filter(isModelKey))].slice(0, MAX_JUDGES);
+}
+
+interface Judgement {
+  model: ModelKey;
+  /** The label, or null when the judge gave none we know — or did not answer. */
+  verdict: JudgeVerdict | null;
+  neurons: number | null;
+  cached: boolean;
+  ms: number;
+}
+
+/**
+ * Judges of a gist (trial, D16.38): each reads the sentence the control let through against the
+ * measure, here, in the invocation that wrote it. Labels leave; nothing a judge wrote does.
+ */
+async function judgements(
+  env: Env,
+  candidate: { id: string; text: string },
+  sentence: string,
+  keys: readonly ModelKey[],
+  skipCache: boolean,
+): Promise<Judgement[]> {
+  const budget = env.BUDGET.getByName('global');
+  const out: Judgement[] = [];
+  for (const key of keys) {
+    const model = MODELS[key];
+    const input = judgeRequest(candidate, sentence, model);
+    const reserved = estimateNeurons(input, model);
+    const silent: Judgement = { model: key, verdict: null, neurons: null, cached: false, ms: 0 };
+    if (!(await budget.reserve(reserved, hardStop(env)))) {
+      out.push(silent);
+      continue;
+    }
+    const called = Date.now();
+    const run = await runModel(env, model, input, skipCache);
+    if (run === null) {
+      out.push({ ...silent, ms: Date.now() - called });
+      continue;
+    }
+    await budget.settle(reserved, run.cached ? 0 : (run.neurons ?? reserved));
+    out.push({
+      model: key,
+      verdict: readJudgement(run.output),
+      neurons: run.neurons,
+      cached: run.cached,
+      ms: Date.now() - called,
+    });
+  }
+  return out;
+}
+
 async function handleBench(request: Request, env: Env): Promise<Response> {
   if (env.ENVIRONMENT !== 'preview' || request.method !== 'POST') return empty(404);
   const body = await readBody(request);
@@ -247,11 +307,23 @@ async function handleBench(request: Request, env: Env): Promise<Response> {
   if (run === null) return json({ ...base, ran: false, model_ms: modelMs, reserved });
   await budget.settle(reserved, run.cached ? 0 : (run.neurons ?? reserved));
   const overlap = typeof minOverlap === 'number' ? minOverlap : 0;
+  const verdict = control(written, run.output, loaded.candidates, overlap);
+  // The sentence a judge reads is the one the control just let through — it never comes from
+  // the body of a request — and only a gist of one measure is judged.
+  const passed =
+    gist !== null && verdict.kind === 'answer' && verdict.sentences.length === 1
+      ? verdict.sentences[0]
+      : undefined;
+  const judges =
+    passed !== undefined && single !== undefined
+      ? await judgements(env, single, passed.text, judgeKeys(body['judges']), skipCache === true)
+      : [];
   return json({
     ...base,
     ran: true,
     output: benchOutput(run.output, loaded.candidates),
-    verdict: control(written, run.output, loaded.candidates, overlap),
+    verdict,
+    judges,
     neurons: run.neurons,
     reserved,
     cached: run.cached,
