@@ -982,3 +982,69 @@ Ce paragraphe amende les §1 à §4 du plan ; le code suit, dans une copie de tr
   essayer de vrais téléphones ; lire le tableau de bord Cloudflare (moyen de paiement, journal
   de la passerelle).
 
+### 14 novembre 2026, 23 h — la seconde revue de sécurité : l'IA en direct n'ouvre pas (D16.60)
+
+- **Qui** : un agent d'un autre modèle, sans accès à `private/`, sans réseau, en lecture seule ;
+  ses essais (phrases inventées contre les vraies fonctions) sont gardés hors dépôt.
+- **Ce qui tient** : rien de tapé n'atteint le réseau — cinq requêtes en tout, aucune ne porte
+  un mot tapé ; rien dans le stockage ni dans l'adresse ; le Worker ne donne au modèle que nos
+  contenus ; une route fermée ne lit rien ; la garde de déploiement (R41) tient, CI comprise.
+- **Bloquant** : le contrôle d'une explication laisse passer les attributions les plus
+  courantes — le passif du verbe de nos phrases (« … est prévue pour tous les élèves »), un
+  autre nom pour le livre (« le plan », « la réforme »), le présent de loi (« … est la
+  nouvelle durée légale »). Or une explication est déterministe, l'invite et le contrôle sont
+  publics, et un lien pré-remplit la question : **quelqu'un peut rejouer notre appel chez lui,
+  garder la sortie fautive que notre contrôle laisse passer, et la faire apparaître chez nous,
+  étiquetée, en deux gestes.** Le banc et la lecture mesurent le taux naturel, pas cette
+  recherche-là. Une liste de mots ne se complète pas.
+- **Sérieux** : des avis passent (« une avancée sociale », « divise les économistes ») ; et
+  **le texte de la page Confidentialité relu en D16.55 était incomplet** — la demande à l'IA
+  porte aussi les identifiants de nos cartes reconnues dans la question, ce que ni l'offre ni
+  la page ne disaient. Erreur de la session ; la section est à récrire de toute façon.
+- **Décision (D16.60, sur le mandat D16.57)** : **« Demander » ouvre sans IA en direct.** Le
+  programme parle par les phrases écrites d'avance ; les termes s'expliquent par des
+  explications écrites d'avance elles aussi, vérifiées avant d'être servies. Plus de modèle à
+  l'exécution, donc plus de quota, plus de banc à attendre, plus de route `/api/chat` à
+  ouvrir : seuls des identifiants partent, vers `/api/gists`. Le code de l'IA en direct reste,
+  fermé (`model: null`), avec ce constat dans `14-risques.md` R36.
+- **Mineurs, corrigés ou consignés** : `isModelKey` acceptait les clés du prototype (corrigé) ;
+  noms en minuscules, « un an », futurs en -clure : consignés avec R36, sans objet tant que
+  l'IA est fermée ; `wrangler rollback --config …` rejoint `delete` dans ce que la garde de
+  déploiement ne couvre pas (R41).
+
+### 15 novembre 2026, nuit — les 1 069 phrases : écrites, relues, enregistrées (D16.61)
+
+- **Écrites par la session**, une par mesure, le texte sous les yeux, dans l'ordre du livre —
+  26 fichiers hors dépôt (`private/gists/session/`). MESURÉ : 1 069 lignes, 1 069 identifiants
+  distincts, aucun inconnu, aucun doublon ; **0 refus du contrôle du site, 0 « lien seul »**.
+- **Relues** : les parties 1 à 15 en entier contre le texte ; les parties 16 à 26 sur ce qu'un
+  audit signalait — un nombre ou un nom de la mesure que la phrase ne porte pas, une négation ou
+  une exception, des mots laissés de côté, un jugement du livre repris à notre compte. Une
+  cinquantaine de phrases reprises, presque toutes pour **rendre au livre ses jugements et ses
+  chiffres** (« qu'il juge », « selon lui », « ce qu'il nomme ») ; deux pour une portée trop
+  large.
+- **Enregistrées par un outil suivi** : `npm run gists -- --take private/gists/session` passe
+  chaque ligne par les portes du bureau de lecture (l'empreinte du texte de cette machine, le
+  contrôle du jour) et l'écrit comme verdict **de la session** — `writer` et `by` valent
+  `session`. Tout ou rien : une ligne refusée, rien n'est gardé. `--status` compte ces verdicts
+  à part (1 069 de la session, 0 de l'éditeur), et le dépôt dit qui a lu (`read by: session`).
+- **Le dépôt, vérifié en local, rien d'envoyé** (`npm run gists -- --sql --check`) : la porte
+  anti-fuite du dépôt a refusé quatre phrases qui contenaient, mot pour mot, une mesure de
+  quatre mots du livre (dont une qui n'était pas la leur) ; récrites, reprises par `--take`
+  (4 lignes ajoutées, 1 065 inchangées). Puis : 1 069 phrases épinglées, contrôle du jour
+  passé, aucune suite de mots du livre, 300 419 octets de SQL, interrupteur « arrêté ».
+- **Ce que cette lecture n'est pas** (dit tel quel sur le site, D16.59) : la lecture d'une
+  personne ; une lecture indépendante — la même session a écrit et relu ; une vérification
+  des faits que le livre avance.
+- **Limites consignées** (D16.61) : les 27 fragments de liste du chapitre Europe, dont la
+  phrase s'appuie sur le paragraphe d'introduction de leur section ; `p6c3-s07-m10`, dont le
+  texte porte dans la source une proposition qui se lit aussi sous `p6c2-s03-m05` (vérifié
+  dans la capture locale du 12 novembre : c'est la page, pas l'ingestion) ; les longues listes
+  d'exemples abrégées.
+- **Correctif** : `isModelKey` ne lit plus que les clés propres du catalogue (`Object.hasOwn`),
+  avec son test.
+- **Reste, dans l'ordre** : les chaînes et les pages de D16.59 et D16.60 (aucune mention d'une
+  IA en direct, aucune phrase « relue par l'éditeur ») ; les portes de lancement pour un mode
+  sans modèle ; les explications de termes écrites d'avance ; le dépôt ; l'aperçu ; les
+  revues ; la production.
+

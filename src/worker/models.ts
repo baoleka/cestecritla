@@ -61,8 +61,13 @@ export const MODELS = {
 
 export type ModelKey = keyof typeof MODELS;
 
+/**
+ * A key of the catalogue — its own keys only. `in` would also say yes to what every object
+ * inherits (« toString », « constructor »), and the entry read behind such a name is no model
+ * (security review of 14/11/2026).
+ */
 export const isModelKey = (value: unknown): value is ModelKey =>
-  typeof value === 'string' && value in MODELS;
+  typeof value === 'string' && Object.hasOwn(MODELS, value);
 
 /** True for a model that may read a visitor's question: its host writes that it keeps nothing. */
 export const keepsNothing = (key: ModelKey): boolean => MODELS[key].keeps === 'nothing';

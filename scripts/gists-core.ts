@@ -12,7 +12,12 @@
  *   verdicts.jsonl  the editor's verdicts — « read », with the sentence kept, or « link-only »;
  *                   the last line for a measure wins
  *
- * They hold sentences of ours, never the text of the book — and they stay private all the same:
+ * Since the editor's mandate of 14/11/2026 (D16.57, D16.58) the session that works for him — an
+AI — writes the sentences itself, against the text, and reads them itself. Its verdicts go in
+the same file and say so (`by`): a verdict of the session is never passed off as the editor's,
+and what the site says of the sentences is held to who read them (D16.59).
+
+They hold sentences of ours, never the text of the book — and they stay private all the same:
  * a sentence about each of the 1,069 measures is a paraphrase of a whole book whose rights are
  * reserved, and none of it leaves this machine before the editor has read it.
  *
@@ -156,19 +161,37 @@ export interface RunLine extends Pin {
 /** The writer of a sentence the editor wrote or corrected himself. */
 export const EDITOR = 'editor';
 
-/** One verdict of the editor. */
+/**
+ * The session that works for the editor on his machine: an AI. Under his mandate of 14/11/2026
+ * (D16.57, D16.58) it writes a sentence for each measure, with the text of the book before it,
+ * and reads each one again. `writer` of a sentence it wrote; `by` of a verdict it gave.
+ */
+export const SESSION = 'session';
+
+/** Who gave a verdict: the editor, or the session that works for him. */
+export type Reader = typeof EDITOR | typeof SESSION;
+
+/** One verdict — the editor's, or the session's when the line says so. */
 export interface VerdictLine extends Pin {
   id: string;
   /** `read`: this sentence is faithful, and kept. `link-only`: no sentence, the link alone. */
   verdict: 'read' | 'link-only';
-  /** Who wrote the sentence kept: a key of the models, or `editor` for a correction. */
+  /** Who wrote the sentence kept: a key of the models, `editor` or `session`. */
   writer: string | null;
   text: string | null;
   /** The day it was read, YYYY-MM-DD (UTC). */
   read_on: string;
   /** For a correction, the writer whose sentence was corrected. */
   from?: string;
+  /**
+   * Who read. Absent: the editor — every line the reading desk writes. `session`: the AI, and
+   * nobody else. The site may say « read by the editor » of no sentence that carries it.
+   */
+  by?: typeof SESSION;
 }
+
+/** Who gave this verdict. */
+export const readerOf = (line: VerdictLine): Reader => line.by ?? EDITOR;
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -243,13 +266,18 @@ export function parseRunLine(value: unknown): RunLine | null {
 export function parseVerdictLine(value: unknown): VerdictLine | null {
   if (!isRecord(value)) return null;
   const pin = readPin(value);
-  const { id, verdict, read_on: readOn, from } = value;
+  const { id, verdict, read_on: readOn, from, by } = value;
   const writer = value['writer'] ?? null;
   const text = value['text'] ?? null;
   if (pin === null || !isMeasureId(id)) return null;
   if (typeof readOn !== 'string' || !DAY.test(readOn)) return null;
   if (from !== undefined && !isName(from)) return null;
-  const origin = from === undefined ? {} : { from };
+  // One reader is named, and no other: a line that names anyone else is not a line of this file.
+  if (by !== undefined && by !== SESSION) return null;
+  const origin: { from?: string; by?: typeof SESSION } = {
+    ...(from === undefined ? {} : { from }),
+    ...(by === undefined ? {} : { by: SESSION }),
+  };
   if (verdict === 'link-only') {
     if (writer !== null || text !== null) return null;
     return { id, verdict, writer: null, text: null, read_on: readOn, ...pin, ...origin };
@@ -409,6 +437,20 @@ export interface Validated {
   waiting: number;
   /** Verdicts that name no measure of the book. */
   orphans: string[];
+  /** Of the verdicts that hold — sentences kept and links alone — those the session gave. */
+  bySession: number;
+}
+
+/**
+ * Who read what the base would receive: the editor, the session that works for him, or both —
+ * null when no verdict holds. data/2026/ask.json records it with the deposit (`gists.read_by`),
+ * and the label of the sentences is held to it (scripts/check-strings.test.ts).
+ */
+export function readBy(set: Validated): Reader | 'both' | null {
+  const held = set.rows.length + set.linkOnly;
+  if (held === 0) return null;
+  if (set.bySession === 0) return EDITOR;
+  return set.bySession === held ? SESSION : 'both';
 }
 
 /**
@@ -428,6 +470,7 @@ export function validated(
     refused: [],
     waiting: 0,
     orphans: [],
+    bySession: 0,
   };
   const known = new Set(measures.map((measure) => measure.id));
   out.orphans = [...verdicts.keys()].filter((id) => !known.has(id));
@@ -435,9 +478,12 @@ export function validated(
     const verdict = verdicts.get(measure.id);
     if (verdict === undefined) out.waiting += 1;
     else if (!pinned(verdict, measure)) out.stale.push(measure.id);
-    else if (verdict.verdict === 'link-only' || verdict.text === null) out.linkOnly += 1;
-    else if (!stands(verdict, measure, recheck)) out.refused.push(measure.id);
+    else if (verdict.verdict === 'link-only' || verdict.text === null) {
+      out.linkOnly += 1;
+      if (readerOf(verdict) === SESSION) out.bySession += 1;
+    } else if (!stands(verdict, measure, recheck)) out.refused.push(measure.id);
     else {
+      if (readerOf(verdict) === SESSION) out.bySession += 1;
       // The pin of the verdict itself, not today's: the deposit checks it once more.
       const { measure_sha256, lead_sha256 } = verdict;
       out.rows.push({

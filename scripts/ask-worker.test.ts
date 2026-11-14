@@ -33,7 +33,7 @@ import {
   loadMeasures,
   type AskDb,
 } from '../src/worker/measures.js';
-import { MODELS } from '../src/worker/models.js';
+import { isModelKey, MODELS } from '../src/worker/models.js';
 import {
   GIST_VARIANTS,
   JUDGE_VERDICTS,
@@ -890,4 +890,14 @@ void test('what the Worker does not contain: a log, a write about a visitor, an 
     assert.doesNotMatch(code, /\[['"]q['"]\]|\.q\b/, `${name} reads a field « q »`);
   }
   assert.doesNotMatch(index, /request\.(?:text|json|arrayBuffer|formData)\(/);
+});
+
+void test('a model key is a key of the catalogue itself — never a name every object inherits', () => {
+  assert.equal(isModelKey('mistral-small-3.1'), true);
+  // `in` said yes to these: the entry read behind them is no model (security review, 14/11/2026).
+  for (const inherited of ['toString', 'constructor', 'hasOwnProperty', '__proto__', 'valueOf']) {
+    assert.equal(isModelKey(inherited), false, inherited);
+  }
+  assert.equal(isModelKey(''), false);
+  assert.equal(isModelKey(null), false);
 });

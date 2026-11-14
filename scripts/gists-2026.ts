@@ -17,6 +17,11 @@
  *       lien seul », « Corriger ». A measure whose verdict no longer holds comes back on it.
  *       With `--unwritten`, the measures no writer could write: a sentence to write, or the
  *       link alone
+ *   npm run gists -- --take <private/…file or folder> [--dry-run]
+ *       the sentences the SESSION wrote and read itself (the editor's mandate of 14/11/2026,
+ *       D16.57 and D16.58): one line a measure, « id | sentence », or « id | LINK » for the link
+ *       alone. Each goes through the control and the pin of the reading desk, and is kept as a
+ *       verdict that says who read — the session, an AI, never the editor. All, or nothing
  *   npm run gists -- --sql [--check]
  *       the file of the deposit, built by the `--gists` logic of scripts/seed-ask-2026.ts —
  *       which alone sends it, with the editor's accord
@@ -36,9 +41,9 @@
  * the reading desk: a page served to this machine alone, behind a token, that nothing keeps.
  */
 import { randomBytes, timingSafeEqual } from 'node:crypto';
-import { appendFileSync, existsSync, readFileSync } from 'node:fs';
+import { appendFileSync, existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
-import { MAX_WORDS_PER_SENTENCE } from '../src/lib/ask-contract.js';
+import { MAX_WORDS_PER_SENTENCE, PROPOSITION_ID } from '../src/lib/ask-contract.js';
 import type { RuleId } from '../src/lib/ask-validate.js';
 import { MAX_GIST_CHARS } from '../src/lib/chat-contract.js';
 import { MODELS, isModelKey, type ModelKey } from '../src/worker/models.js';
@@ -48,7 +53,9 @@ import type { Manifest, PrivateCorpus } from './aec26-types.js';
 import { paced } from './bench-ask.js';
 import {
   EDITOR,
+  GISTS_DIR,
   RUNS_PATH,
+  SESSION,
   VERDICTS_PATH,
   appendLine,
   controlGist,
@@ -59,6 +66,7 @@ import {
   readMinOverlap,
   readRuns,
   readVerdicts,
+  readerOf,
   recheckWith,
   shownText,
   stands,
@@ -605,6 +613,8 @@ export interface Status {
   toWrite: number;
   read: number;
   linkOnly: number;
+  /** Of those verdicts, the ones the session gave — an AI, not the editor. */
+  bySession: number;
   /** Measures with no verdict that holds — and, of those, how many have a sentence to read. */
   waiting: number;
   readable: number;
@@ -641,6 +651,7 @@ export function statusOf(
     toWrite: 0,
     read: 0,
     linkOnly: 0,
+    bySession: 0,
     waiting: 0,
     readable: 0,
     again: 0,
@@ -661,6 +672,7 @@ export function statusOf(
     if (state.verdict !== null) {
       if (state.verdict.verdict === 'read') out.read += 1;
       else out.linkOnly += 1;
+      if (readerOf(state.verdict) === SESSION) out.bySession += 1;
       continue;
     }
     out.waiting += 1;
@@ -730,6 +742,12 @@ export function statusLines(
     `  verdicts   ${n(status.read)} read, ${n(status.linkOnly)} link only, ` +
       `${n(status.waiting)} waiting — ${n(status.readable)} of them with a sentence to read`,
   ];
+  if (status.bySession > 0) {
+    lines.push(
+      `  readers    ${n(status.bySession)} of these verdicts are the session's — an AI — and ` +
+        `${n(status.read + status.linkOnly - status.bySession)} the editor's`,
+    );
+  }
   if (status.again > 0) {
     lines.push(
       `  again      ${n(status.again)} of those waiting were ruled on, and the verdict no longer ` +
@@ -863,7 +881,13 @@ const shownTexts = (texts: ReadonlyMap<string, MeasureText>): Map<string, string
 
 /** Who wrote a sentence, as the page names them: a model by its name, the editor by his role. */
 const writerName = (key: string): string =>
-  isModelKey(key) ? MODELS[key].name : key === EDITOR ? 'l’éditeur' : key;
+  isModelKey(key)
+    ? MODELS[key].name
+    : key === EDITOR
+      ? 'l’éditeur'
+      : key === SESSION
+        ? 'la session (une IA)'
+        : key;
 
 /** True when the text on this machine is the one the manifest publishes the fingerprint of. */
 function isPublished(measure: Measure, shown: MeasureText | undefined): shown is MeasureText {
@@ -1496,6 +1520,119 @@ export function measureTexts(corpus: PrivateCorpus): Map<string, MeasureText> {
 
 class UsageError extends Error {}
 
+// ---------------------------------------------------------------------------------------------
+// The sentences of the session
+// ---------------------------------------------------------------------------------------------
+
+/** One line of a file of the session: a measure, and its sentence — null for the link alone. */
+export interface Taken {
+  id: string;
+  text: string | null;
+}
+
+/** The word that asks for the link alone, where a sentence would stand. */
+const LINK_ALONE = 'LINK';
+
+/**
+ * The lines of a file of the session: « id | sentence », or « id | LINK ». Empty lines are
+ * skipped; anything else is the number of the line that does not read — never the line itself.
+ */
+export function parseTaken(raw: string): Taken[] | { line: number } {
+  const out: Taken[] = [];
+  for (const [index, line] of raw.split('\n').entries()) {
+    if (line.trim() === '') continue;
+    const cut = line.indexOf(' | ');
+    const id = cut === -1 ? '' : line.slice(0, cut).trim();
+    const rest = cut === -1 ? '' : line.slice(cut + 3).trim();
+    if (id === '' || rest === '') return { line: index + 1 };
+    out.push({ id, text: rest === LINK_ALONE ? null : rest });
+  }
+  return out;
+}
+
+export interface TakeDeps {
+  /** The measures of the book, as the manifest publishes them. */
+  measures: readonly Measure[];
+  /** The text of this machine: what the session read. */
+  texts: ReadonlyMap<string, MeasureText>;
+  /** The verdict that stands today for each measure, whoever gave it. */
+  verdicts: ReadonlyMap<string, VerdictLine>;
+  minOverlap: number;
+  /** YYYY-MM-DD. */
+  today: string;
+}
+
+export interface TakeResult {
+  /** The verdicts to add — none as soon as one line is refused: all, or nothing. */
+  lines: VerdictLine[];
+  /** Lines the file of verdicts already holds as they are, read by the session. */
+  same: number;
+  /** A measure and the rule that refuses its line — a name, never a sentence. */
+  refused: { id: string; rule: string }[];
+}
+
+/**
+ * What the session wrote and read, turned into verdicts — through the very gates of the reading
+ * desk: the text of this machine must be the one the manifest publishes (the pin), and the
+ * sentence must pass the control of today. What changes is who signs: every line says `session`
+ * twice, as the writer and as the reader. A verdict of the editor on the same measure is
+ * replaced like any other — the file only grows, and its last line wins — so the tool says how
+ * many it is about to replace, and the caller decides.
+ */
+export function takeSession(taken: readonly Taken[], deps: TakeDeps): TakeResult {
+  const out: TakeResult = { lines: [], same: 0, refused: [] };
+  const byId = new Map(deps.measures.map((measure) => [measure.id, measure]));
+  const seen = new Set<string>();
+  for (const { id, text } of taken) {
+    const refuse = (rule: string): void => {
+      // An identifier of the book is printed; anything else in its place is not.
+      out.refused.push({ id: PROPOSITION_ID.test(id) ? id : '(not an identifier)', rule });
+    };
+    const measure = byId.get(id);
+    if (measure === undefined) {
+      refuse('id');
+      continue;
+    }
+    if (seen.has(id)) {
+      refuse('twice');
+      continue;
+    }
+    seen.add(id);
+    const shown = deps.texts.get(id);
+    if (!isPublished(measure, shown)) {
+      refuse('pin');
+      continue;
+    }
+    const base = { id, read_on: deps.today, ...pinOf(measure), by: SESSION } as const;
+    const held = deps.verdicts.get(id);
+    const mine = held !== undefined && readerOf(held) === SESSION && pinned(held, measure);
+    if (text === null) {
+      if (mine && held.verdict === 'link-only') out.same += 1;
+      else out.lines.push({ ...base, verdict: 'link-only', writer: null, text: null });
+      continue;
+    }
+    const checked = controlGist(id, text, shownText(shown.text, shown.lead), deps.minOverlap);
+    if (!checked.ok) {
+      refuse(checked.rule);
+      continue;
+    }
+    if (mine && held.verdict === 'read' && held.text === checked.text) out.same += 1;
+    else out.lines.push({ ...base, verdict: 'read', writer: SESSION, text: checked.text });
+  }
+  if (out.refused.length > 0) out.lines = [];
+  return out;
+}
+
+/** The files of the session under a path of private/: one file, or every .txt of a folder. */
+function takenFiles(path: string): string[] {
+  if (!existsSync(path)) throw new UsageError(`${path} is not on this machine`);
+  if (!statSync(path).isDirectory()) return [path];
+  return readdirSync(path)
+    .filter((name) => name.endsWith('.txt'))
+    .sort()
+    .map((name) => `${path}/${name}`);
+}
+
 function modelList(value: string | undefined, flag: string): ModelKey[] | undefined {
   if (value === undefined) return undefined;
   const keys = value.split(',').filter((key) => key !== '');
@@ -1640,6 +1777,65 @@ async function main(args: readonly string[]): Promise<number> {
     return result.code;
   }
 
+  if (has('--take')) {
+    const path = (value('--take') ?? '').replace(/\/+$/, '');
+    // What the session wrote is private until it is deposited, like every sentence here.
+    if (!path.startsWith('private/') || path.includes('..')) {
+      throw new UsageError('--take reads a file or a folder under private/');
+    }
+    if (!existsSync(PRIVATE_CORPUS_PATH)) {
+      console.error(`gists: ${PRIVATE_CORPUS_PATH} is not on this machine`);
+      return 1;
+    }
+    if (readPrivateCorpus().meta.corpus_version !== corpus) {
+      console.error('gists: the text on this machine is not at the corpus version of the manifest');
+      return 1;
+    }
+    const taken: Taken[] = [];
+    for (const file of takenFiles(path)) {
+      const read = parseTaken(readFileSync(file, 'utf8'));
+      if (!Array.isArray(read)) {
+        console.error(`gists: ${file}: line ${String(read.line)} is not « id | sentence »`);
+        return 1;
+      }
+      taken.push(...read);
+    }
+    const all = measuresOf(manifest);
+    const texts = measureTexts(readPrivateCorpus());
+    const minOverlap = readMinOverlap();
+    const standing = lastVerdicts(readVerdicts());
+    const result = takeSession(taken, {
+      measures: all,
+      texts,
+      verdicts: standing,
+      minOverlap,
+      today: new Date().toISOString().slice(0, 10),
+    });
+    for (const { id, rule } of result.refused) print(`  ✖ ${id}: ${rule}`);
+    if (result.refused.length > 0) {
+      print(`${String(result.refused.length)} line(s) refused: nothing was kept`);
+      return 1;
+    }
+    const replaced = result.lines.filter((line) => {
+      const held = standing.get(line.id);
+      return held !== undefined && readerOf(held) === EDITOR;
+    }).length;
+    const sentences = result.lines.filter((line) => line.verdict === 'read').length;
+    print(
+      `${String(taken.length)} line(s) of the session: ${String(sentences)} sentence(s) and ` +
+        `${String(result.lines.length - sentences)} link(s) alone to keep, ` +
+        `${String(result.same)} already kept as they are — read by the session, an AI`,
+    );
+    if (replaced > 0) print(`  ${String(replaced)} of them replace a verdict of the editor`);
+    if (has('--dry-run')) {
+      print('dry run: nothing was written');
+      return 0;
+    }
+    for (const line of result.lines) appendLine(VERDICTS_PATH, line);
+    print(`written: ${String(result.lines.length)} line(s) in ${GISTS_DIR}/verdicts.jsonl`);
+    return 0;
+  }
+
   if (has('--serve')) {
     if (!existsSync(PRIVATE_CORPUS_PATH)) {
       console.error(`gists: ${PRIVATE_CORPUS_PATH} is not on this machine`);
@@ -1683,7 +1879,7 @@ async function main(args: readonly string[]): Promise<number> {
     return 0;
   }
 
-  throw new UsageError('one of --status, --write, --serve, --sql');
+  throw new UsageError('one of --status, --write, --serve, --take, --sql');
 }
 
 if (process.argv[1] !== undefined && /gists-2026\.ts$/.test(process.argv[1])) {

@@ -38,10 +38,12 @@ import {
   measureLabel,
   measureTexts,
   nextAction,
+  parseTaken,
   readReply,
   startDesk,
   statusLines,
   statusOf,
+  takeSession,
   writeSession,
   type BenchAsk,
   type DeskDeps,
@@ -49,6 +51,8 @@ import {
   type WriteOptions,
 } from './gists-2026.js';
 import {
+  EDITOR,
+  SESSION,
   appendLine,
   controlGist,
   lastVerdicts,
@@ -57,9 +61,11 @@ import {
   parseVerdictLine,
   pinOf,
   pinned,
+  readBy,
   readMinOverlap,
   readRuns,
   readVerdicts,
+  readerOf,
   recheckWith,
   shownText,
   stands,
@@ -1127,6 +1133,7 @@ void test('where the work stands: what is written, judged, read — and the judg
       toWrite: 1,
       read: 2,
       linkOnly: 1,
+      bySession: 0,
       waiting: 3,
       readable: 2,
       again: 1,
@@ -2144,4 +2151,161 @@ void test('nothing the tool prints holds a word of a measure, nor a sentence', a
   // …while the page itself does hold the text: that is what it is for, and why it stays local.
   assert.equal(holdsBook(deskPage(deps)), TREES);
   assert.equal(measureLabel(measure(LIBRARY)), 'Mesure clé');
+});
+
+// ---------------------------------------------------------------------------------------------
+// The sentences of the session (D16.57, D16.58): its verdicts say who read, and nobody else
+// ---------------------------------------------------------------------------------------------
+
+/** What `--take` is given: the invented book, its text on this machine, no verdict yet. */
+const takeDeps = (verdicts: readonly VerdictLine[] = []): Parameters<typeof takeSession>[1] => ({
+  measures: MEASURES,
+  texts: measureTexts(PRIVATE),
+  verdicts: lastVerdicts(verdicts),
+  minOverlap: 0.5,
+  today: '2026-11-14',
+});
+
+void test('a file of the session reads as « id | sentence », or « id | LINK » for the link alone', () => {
+  const read = parseTaken(`${LIBRARY} | ${said(LIBRARY)}\n\n${BUSES} | LINK\n`);
+  assert.deepEqual(read, [
+    { id: LIBRARY, text: said(LIBRARY) },
+    { id: BUSES, text: null },
+  ]);
+  // A line that does not read gives its number, and nothing of what it holds.
+  assert.deepEqual(parseTaken(`${LIBRARY} | ${said(LIBRARY)}\nune ligne sans barre\n`), {
+    line: 2,
+  });
+  assert.deepEqual(parseTaken(`${LIBRARY} | \n`), { line: 1 });
+});
+
+void test('what the session wrote becomes verdicts that name the session twice — writer, and reader', () => {
+  const result = takeSession(
+    [
+      { id: LIBRARY, text: said(LIBRARY) },
+      { id: BOOKMOBILES, text: said(BOOKMOBILES) },
+      { id: ORCHARDS, text: null },
+    ],
+    takeDeps(),
+  );
+  assert.deepEqual(result.refused, []);
+  assert.equal(result.lines.length, 3);
+  for (const line of result.lines) {
+    assert.equal(line.by, SESSION);
+    assert.equal(readerOf(line), SESSION);
+    assert.equal(line.read_on, '2026-11-14');
+    assert.ok(pinned(line, measure(line.id)), `${line.id} is pinned to its measure`);
+    // Every line is one the file reads back, with its reader.
+    assert.deepEqual(parseVerdictLine(JSON.parse(JSON.stringify(line))), line);
+  }
+  const [library, bookmobiles, orchards] = result.lines;
+  assert.ok(library !== undefined);
+  assert.equal(library.writer, SESSION);
+  assert.equal(library.text, said(LIBRARY));
+  // A sub-measure carries the pin of the measure it details, like a verdict of the desk.
+  assert.equal(bookmobiles?.lead_sha256, measure(LENDING).sha256);
+  assert.deepEqual(
+    { verdict: orchards?.verdict, writer: orchards?.writer, text: orchards?.text },
+    { verdict: 'link-only', writer: null, text: null },
+  );
+});
+
+void test('one line the control refuses, and nothing of the file is kept', () => {
+  const result = takeSession(
+    [
+      { id: LIBRARY, text: said(LIBRARY) },
+      { id: BUSES, text: ASTRAY },
+      { id: 'p9c9-s99-m99', text: said(TREES) },
+      { id: LIBRARY, text: said(LIBRARY) },
+      { id: 'des mots à la place', text: said(TREES) },
+    ],
+    takeDeps(),
+  );
+  assert.deepEqual(result.lines, []);
+  // Names of rules and identifiers of the book — never a sentence, never what stood for an id.
+  assert.deepEqual(result.refused, [
+    { id: BUSES, rule: 'overlap' },
+    { id: 'p9c9-s99-m99', rule: 'id' },
+    { id: LIBRARY, rule: 'twice' },
+    { id: '(not an identifier)', rule: 'id' },
+  ]);
+});
+
+void test('a sentence is taken only against the text the manifest publishes the fingerprint of', () => {
+  const moved = corpusOf(
+    BOOK.map((item) => (item.id === TREES ? { ...item, text: `${item.text} et des haies` } : item)),
+  );
+  const result = takeSession([{ id: TREES, text: said(TREES) }], {
+    ...takeDeps(),
+    texts: measureTexts(moved),
+  });
+  assert.deepEqual(result, { lines: [], same: 0, refused: [{ id: TREES, rule: 'pin' }] });
+});
+
+void test('taking the same file twice writes nothing the second time', () => {
+  const taken = [
+    { id: LIBRARY, text: said(LIBRARY) },
+    { id: ORCHARDS, text: null },
+  ];
+  const first = takeSession(taken, takeDeps());
+  const again = takeSession(taken, takeDeps(first.lines));
+  assert.deepEqual({ lines: again.lines, same: again.same }, { lines: [], same: 2 });
+  // A verdict of the editor on the same measure is not « the same »: the session's replaces it,
+  // and the tool can count it before anything is written.
+  const over = takeSession(taken, takeDeps([verdict(LIBRARY, { text: said(LIBRARY) })]));
+  assert.equal(over.lines.length, 2);
+  assert.equal(readerOf(verdict(LIBRARY)), EDITOR);
+});
+
+void test('the file of verdicts names one reader besides the editor, and no other', () => {
+  const line = { ...verdict(LIBRARY), by: SESSION };
+  assert.equal(parseVerdictLine(line)?.by, SESSION);
+  assert.equal(parseVerdictLine({ ...line, by: 'editor' }), null);
+  assert.equal(parseVerdictLine({ ...line, by: 'gemma-4-26b' }), null);
+  assert.equal(parseVerdictLine({ ...line, by: 'un relecteur humain' }), null);
+  // A line of the reading desk has no reader written: it is the editor's.
+  assert.equal(parseVerdictLine(verdict(LIBRARY))?.by, undefined);
+});
+
+void test('what would enter the base says who read it: the editor, the session, or both', () => {
+  const mine = takeSession(
+    MEASURES.map(({ id }) => ({ id, text: id === ORCHARDS ? null : said(id) })),
+    takeDeps(),
+  ).lines;
+  const recheck = recheckWith(TEXTS, 0.5);
+  const all = validated(MEASURES, lastVerdicts(mine), recheck);
+  assert.equal(all.rows.length, MEASURES.length - 1);
+  assert.equal(all.bySession, MEASURES.length);
+  assert.equal(readBy(all), SESSION);
+  const his = validated(MEASURES, lastVerdicts(MEASURES.map(({ id }) => verdict(id))), recheck);
+  assert.equal(readBy(his), EDITOR);
+  // The editor reads one of them again on his desk: the last line wins, and it is his.
+  const mixed = validated(MEASURES, lastVerdicts([...mine, verdict(LIBRARY)]), recheck);
+  assert.equal(mixed.bySession, MEASURES.length - 1);
+  assert.equal(readBy(mixed), 'both');
+  assert.equal(readBy(validated(MEASURES, new Map(), recheck)), null);
+});
+
+void test('the status counts the verdicts of the session apart, and says what it is', () => {
+  const mine = takeSession(
+    [
+      { id: LIBRARY, text: said(LIBRARY) },
+      { id: BUSES, text: said(BUSES) },
+    ],
+    takeDeps(),
+  ).lines;
+  const verdicts = lastVerdicts([...mine, verdict(TREES)]);
+  const known = knowledge(MEASURES, [], verdicts, recheckWith(TEXTS, 0.5));
+  const status = statusOf(MEASURES, [], known);
+  assert.equal(status.read, 3);
+  assert.equal(status.bySession, 2);
+  const lines = statusLines(CORPUS, status, agreement(known));
+  assert.ok(
+    lines.some((line) =>
+      /2 of these verdicts are the session's — an AI — and 1 the editor's/.test(line),
+    ),
+    lines.join('\n'),
+  );
+  // No line of the status carries a sentence.
+  for (const line of lines) assert.equal(holdsBook(line), null, line);
 });

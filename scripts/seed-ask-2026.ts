@@ -39,6 +39,7 @@ import {
   lastVerdicts,
   measuresOf,
   pinned,
+  readBy,
   readMinOverlap,
   readVerdicts,
   recheckWith,
@@ -428,6 +429,15 @@ export function prepareGists(check: boolean): { code: number; file: string | nul
   }
   if (set.orphans.length > 0) {
     console.log(`  left out, ${String(set.orphans.length)} verdict(s) on no measure of the book`);
+  }
+  // Who read what is about to be deposited — data/2026/ask.json records it (`gists.read_by`),
+  // and the label of the sentences on the site is held to it (D16.59).
+  const reader = readBy(set);
+  if (reader !== null) {
+    console.log(
+      `  read by: ${reader} — ${String(set.bySession)} verdict(s) of the session (an AI), ` +
+        `${String(set.rows.length + set.linkOnly - set.bySession)} of the editor`,
+    );
   }
   const problems = gistProblems(set.rows, manifest, {
     minOverlap,
