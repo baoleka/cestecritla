@@ -1,8 +1,9 @@
 /**
  * The Worker of « Demander » (src/worker/, D16.7), without a network: the path of a request
- * with everything it needs handed in, the measures read on Node's SQLite, the prompt, the
- * allowance — and the promises the Worker makes by what it does NOT contain, the first of
- * which is the sentence a visitor typed (D16.22).
+ * with everything it needs handed in, the measures read on Node's SQLite, the prompt, what
+ * the path does with the allowance — and the promises the Worker makes by what it does NOT
+ * contain, the first of which is the sentence a visitor typed (D16.22). The allowance itself,
+ * its twenty-four hours and its breaker, is held by scripts/budget.test.ts.
  *
  * The base used here is INVENTED (libraries, fruit trees, school buses): no sentence of the
  * programme may stand in a tracked file, and none is needed to test a path.
@@ -20,15 +21,15 @@ import {
   type AskResponse,
 } from '../src/lib/ask-contract.js';
 import { askedOf } from '../src/lib/ask-local.js';
-import { answerQuestion, benchOutput, type AskDeps, type ModelRun } from '../src/worker/ask.js';
 import {
-  DEFAULT_HARD_STOP,
-  MAX_RESERVATION,
-  nextUtcMidnight,
-  reserve,
-  rollover,
-  settle,
-} from '../src/worker/budget-core.js';
+  EXHAUSTED,
+  answerQuestion,
+  benchOutput,
+  readRun,
+  type AskDeps,
+  type ModelRun,
+} from '../src/worker/ask.js';
+import { MAX_RESERVATION } from '../src/worker/budget-core.js';
 import { MAX_BODY_BYTES, clientKey, rateSubject, readBody } from '../src/worker/guards.js';
 import {
   MAX_CANDIDATES,
@@ -123,6 +124,8 @@ function harness(overrides: Partial<AskDeps> = {}, output: unknown = LIBRARY_ANS
   const calls = {
     reserve: [] as number[],
     settle: [] as [number, number][],
+    release: [] as number[],
+    close: 0,
     run: 0,
     prompt: '',
   };
@@ -139,6 +142,14 @@ function harness(overrides: Partial<AskDeps> = {}, output: unknown = LIBRARY_ANS
     },
     settle: (reserved, spent) => {
       calls.settle.push([reserved, spent]);
+      return Promise.resolve();
+    },
+    release: (reserved) => {
+      calls.release.push(reserved);
+      return Promise.resolve();
+    },
+    close: () => {
+      calls.close += 1;
       return Promise.resolve();
     },
     run: (request) => {
@@ -255,9 +266,10 @@ void test('"local" — never an error — whenever the model cannot or must not 
     ['the base was never switched on', { db: base({ ask: '' }) }, {}],
     ['the base holds another state of the book', { db: base({ version: 'bbbbbbbbbbbbbbbb' }) }, {}],
     ['the base knows none of the measures named', {}, { ids: ['p9c9-s09-m09'] }],
-    ['the allowance of the day is spent', { reserve: () => Promise.resolve(false) }, {}],
+    ['the allowance is spent, or closed', { reserve: () => Promise.resolve(false) }, {}],
     ['the model does not answer in time', { run: () => Promise.resolve(null) }, {}],
     ['the model call breaks', { run: () => Promise.reject(new Error('boom')) }, {}],
+    ['the platform refuses the call', { run: () => Promise.resolve(EXHAUSTED) }, {}],
   ];
   for (const [name, overrides, request] of cases) {
     const { deps } = harness(overrides);
@@ -303,6 +315,94 @@ void test('nothing is spent before it has to be: each refusal stops the path whe
   await answerQuestion(ASK, slow.deps);
   assert.equal(slow.calls.reserve.length, 1);
   assert.equal(slow.calls.settle.length, 0);
+});
+
+void test('a call the platform refuses was not billed: its reservation goes back, the model closes', async () => {
+  // HTTP 429, the allowance is used up (measured on 14 November 2026): nothing ran.
+  const refused = harness({ run: () => Promise.resolve(EXHAUSTED) });
+  assert.deepEqual(await answerQuestion(ASK, refused.deps), LOCAL);
+  assert.equal(refused.calls.reserve.length, 1);
+  // Given back whole — not settled at some cost — and the next questions will not even try.
+  assert.deepEqual(refused.calls.release, refused.calls.reserve);
+  assert.equal(refused.calls.close, 1);
+  assert.deepEqual(refused.calls.settle, []);
+
+  // A call that was cut at the deadline, or that broke: nobody knows what it cost. The
+  // reservation stays counted, and nothing says the model should be left alone.
+  const cut: AskDeps['run'][] = [
+    () => Promise.resolve(null),
+    () => Promise.reject(new DOMException('The operation timed out.', 'TimeoutError')),
+  ];
+  for (const run of cut) {
+    const { deps, calls } = harness({ run });
+    assert.deepEqual(await answerQuestion(ASK, deps), LOCAL);
+    assert.equal(calls.reserve.length, 1);
+    assert.deepEqual([calls.release, calls.close, calls.settle], [[], 0, []]);
+  }
+  // An answer, paid for or served from the cache, is settled: nothing is released, nothing closes.
+  const answered = harness();
+  await answerQuestion(ASK, answered.deps);
+  assert.deepEqual([answered.calls.release, answered.calls.close], [[], 0]);
+  assert.equal(answered.calls.settle.length, 1);
+});
+
+void test('what the platform returned: a run in either shape, a refusal on 429, nothing otherwise', async () => {
+  const reply = (body: unknown, status = 200, headers: Record<string, string> = {}): Response =>
+    new Response(typeof body === 'string' ? body : JSON.stringify(body), { status, headers });
+  // The two shapes of an answer, and what it cost — nothing, when the gateway had it stored.
+  assert.deepEqual(
+    await readRun(reply({ result: { response: LIBRARY_ANSWER, usage: { neurons: 12.5 } } })),
+    { output: LIBRARY_ANSWER, neurons: 12.5, cached: false },
+  );
+  assert.deepEqual(
+    await readRun(
+      reply({ choices: [{ message: { content: '{"ids":[]}' } }], usage: { neurons: 3 } }, 200, {
+        'cf-aig-cache-status': 'hit',
+      }),
+    ),
+    { output: '{"ids":[]}', neurons: 3, cached: true },
+  );
+  assert.deepEqual(await readRun(reply({ response: 'oui' })), {
+    output: 'oui',
+    neurons: null,
+    cached: false,
+  });
+
+  // The allowance is used up: 429 — under the code the documentation gives, under the one
+  // read on 14 November 2026, in either shape of an error. And a 429 nobody knows, or nobody
+  // can read, is the allowance too: better a model closed for nothing than called for nothing.
+  const used = 'you have used up your daily free allocation of 10,000 neurons';
+  for (const body of [
+    { success: false, errors: [{ code: 4006, message: used }] },
+    { success: false, errors: [{ code: 3036, message: used }], result: null },
+    { internalCode: 3036, description: used, name: 'AccountLimited' },
+    { success: false, error: [{ code: 2003, message: 'Rate limited' }] },
+    { errors: [] },
+    'Too Many Requests',
+    '',
+  ]) {
+    assert.equal(await readRun(reply(body, 429)), EXHAUSTED, JSON.stringify(body));
+  }
+  // The one 429 that says something else — a model out of capacity — is a call that broke:
+  // it closes nothing, and the next question tries again.
+  const busy = 'Capacity temporarily exceeded, please try again.';
+  for (const body of [
+    { success: false, errors: [{ code: 3040, message: busy }] },
+    { internalCode: 3040, description: busy, name: 'OutOfCapacity' },
+    { errors: [{ code: '3040' }] },
+    { success: false, error: [{ code: 7009, message: busy }] },
+  ]) {
+    assert.equal(await readRun(reply(body, 429)), null, JSON.stringify(body));
+  }
+
+  // No answer to read: another error, a body that is not JSON, an answer without an output.
+  for (const status of [400, 403, 408, 500, 503]) {
+    const error = { success: false, errors: [{ code: 3007, message: 'Timeout' }] };
+    assert.equal(await readRun(reply(error, status)), null, String(status));
+  }
+  for (const body of ['<html>', '', [1, 2], 'null', { result: { usage: { neurons: 1 } } }]) {
+    assert.equal(await readRun(reply(body)), null, JSON.stringify(body));
+  }
 });
 
 void test('nothing to say is "local"; a refused writing is three measures and not a word of why', async () => {
@@ -494,31 +594,6 @@ void test('the models: hosted by Cloudflare, nothing else, and Mistral among the
     assert.doesNotMatch(`${key} ${model.id} ${model.name}`, /grok|xai/i);
   }
   assert.ok('mistral-small-3.1' in MODELS, 'Mistral wins a tie: it must be a candidate');
-});
-
-void test('the allowance: reserved whole or not at all, back to zero at 00:00 UTC', () => {
-  const noon = Date.UTC(2026, 10, 13, 12);
-  let state = rollover(undefined, noon);
-  assert.deepEqual(state, { day: '2026-11-13', used: 0 });
-  const first = reserve(state, 60, noon);
-  assert.equal(first.allowed, true);
-  state = first.state;
-  // The stop is not crossed, even by a little.
-  const over = reserve({ day: '2026-11-13', used: DEFAULT_HARD_STOP - 10 }, 60, noon);
-  assert.equal(over.allowed, false);
-  assert.equal(over.state.used, DEFAULT_HARD_STOP - 10);
-  // A cached answer gives its reservation back; a dearer one than estimated is counted.
-  assert.equal(settle(state, 60, 0, noon).used, 0);
-  assert.equal(settle(state, 60, 75, noon).used, 75);
-  assert.equal(settle(state, 60, Number.NaN, noon).used, 60);
-  // Yesterday's counter is worth nothing today.
-  const tomorrow = nextUtcMidnight(noon) + 1;
-  assert.deepEqual(rollover(state, tomorrow), { day: '2026-11-14', used: 0 });
-  assert.equal(reserve({ day: '2026-11-13', used: DEFAULT_HARD_STOP }, 60, tomorrow).allowed, true);
-  // A reservation that is not a plausible cost is refused: a bound on a bug.
-  for (const amount of [0, -5, Number.NaN, Number.POSITIVE_INFINITY, MAX_RESERVATION + 1]) {
-    assert.equal(reserve(state, amount, noon).allowed, false, String(amount));
-  }
 });
 
 void test('a request is read up to the size of a request of the page, and no further', async () => {
@@ -774,11 +849,19 @@ void test('what the Worker does not contain: a log, a write about a visitor, an 
     }
   }
   const budget = sources.find(([name]) => name === 'budget.ts')?.[1] ?? '';
-  // …and that counter holds a day and a number: nothing about anyone.
+  // …and that counter holds hours with a number each, and one instant: nothing about anyone.
   assert.match(
     budget,
-    /CREATE TABLE IF NOT EXISTS budget \(\s*id INTEGER PRIMARY KEY CHECK \(id = 1\),\s*day TEXT NOT NULL,\s*used REAL NOT NULL\s*\)/,
+    /CREATE TABLE IF NOT EXISTS ledger \(\s*hour INTEGER PRIMARY KEY,\s*used REAL NOT NULL\s*\)/,
   );
+  assert.match(
+    budget,
+    /CREATE TABLE IF NOT EXISTS breaker \(\s*id INTEGER PRIMARY KEY CHECK \(id = 1\),\s*closed_until INTEGER NOT NULL\s*\)/,
+  );
+  // Two tables, and no third: no column exists that could hold anything else.
+  assert.equal((budget.match(/\bCREATE\b/g) ?? []).length, 2);
+  // Nothing happens at midnight any more: no alarm is set, and none is handled.
+  assert.doesNotMatch(budget, /setAlarm|\balarm\(\)/);
   const index = sources.find(([name]) => name === 'index.ts')?.[1] ?? '';
   assert.match(index, /collectLog: false/, 'the gateway must not log requests');
   assert.match(

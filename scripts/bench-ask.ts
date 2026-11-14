@@ -482,6 +482,8 @@ interface BenchAnswer {
   load_ms?: number;
   model_ms?: number;
   budget?: string;
+  /** Neurons the Worker counts over the last twenty-four hours. */
+  used?: number;
 }
 
 async function live(args: readonly string[]): Promise<void> {
@@ -562,7 +564,12 @@ async function live(args: readonly string[]): Promise<void> {
         throw new Error(`/api/bench answered ${String(response.status)} for ${item.id}`);
       const answer = (await response.json()) as BenchAnswer;
       if (answer.budget === 'spent') {
-        console.log('the allowance of the day is spent on the Worker: stopping');
+        // Either the Worker counts its stop over the last twenty-four hours, or the platform
+        // has just refused a call (429) and the model is closed for thirty minutes: `used`
+        // tells which — far under the stop, it was the platform.
+        console.log(
+          `the Worker says the allowance is spent (${String(answer.used ?? '?')} neurons counted over 24 hours): stopping`,
+        );
         break;
       }
       const ids = answer.ids ?? [];

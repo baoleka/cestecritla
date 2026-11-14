@@ -73,7 +73,8 @@
     // the "local" answer (scripts/build-mode.test.ts holds this to the manifest).
     "CORPUS_VERSION": "27ee6e713fe25e7e",
     "ENVIRONMENT": "production",
-    // Neurons a day the site allows itself, of the 10 000 the free plan gives (D7.4).
+    // Neurons the site allows itself over any twenty-four hours, of the 10 000 the free plan
+    // gives (D7.4) — hours that roll, not a UTC day: src/worker/budget-core.ts.
     "NEURON_HARD_STOP": "8500",
   },
 

@@ -6,8 +6,10 @@
  *   1. electoral silence          → "silence": questions are closed, the search stays
  *   2. another state of the book  → "local"
  *   3. the private base           → stopped, out of date, or none of the measures named: "local"
- *   4. the allowance of the day   → spent: "local"
- *   5. the model, six seconds     → slow or broken: "local"
+ *   4. the allowance              → spent over the last twenty-four hours, or closed since the
+ *                                   platform said it was used up: "local"
+ *   5. the model, six seconds     → slow or broken: "local"; refused for want of allowance:
+ *                                   "local" too, and the model is closed for a while
  *   6. the control                → the answer as written, three measures and no sentence, or
  *                                   "local" when the model had nothing to say of them
  *
@@ -48,6 +50,73 @@ export interface ModelRun {
   cached: boolean;
 }
 
+/**
+ * The platform refused the call for want of allowance: HTTP 429, « you have used up your daily
+ * free allocation of 10,000 neurons » (code 3036 in its documentation, 4006 as read on
+ * 14 November 2026). Nothing ran and nothing is billed — which is what tells it from a call
+ * that was cut or that broke, whose cost nobody knows.
+ */
+export const EXHAUSTED = 'exhausted';
+export type Exhausted = typeof EXHAUSTED;
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null;
+
+/**
+ * True when a refusal says the model is out of capacity — code 3040, « Capacity temporarily
+ * exceeded, please try again. » — in either of the shapes the platform gives an error.
+ */
+function outOfCapacity(body: unknown): boolean {
+  if (!isRecord(body)) return false;
+  const errors = body['errors'] ?? body['error'];
+  const listed: unknown = Array.isArray(errors) ? errors[0] : body;
+  const error = isRecord(listed) ? listed : {};
+  const code = error['code'] ?? error['internalCode'];
+  const text = error['message'] ?? error['description'];
+  return (
+    code === 3040 ||
+    code === '3040' ||
+    (typeof text === 'string' && /capacity temporarily exceeded/i.test(text))
+  );
+}
+
+/**
+ * What a call to the model came to, read from whichever shape the platform returned: a run;
+ * `EXHAUSTED` when the platform refused it for want of allowance; null when there is no answer
+ * to read.
+ *
+ * A 429 is the allowance, unless it says it is something else. The error of the allowance has
+ * already changed its code once and comes in two shapes, so it is not the one looked for. The
+ * other 429 Workers AI documents is: a model out of capacity, which is a call that broke like
+ * any other and is tried again at the next question. Every other 429 — a code nobody knows, a
+ * body nobody can read — is the allowance: closing the model for nothing costs thirty minutes
+ * of a page that shows what it found by itself; calling on for nothing is what this was
+ * written against.
+ */
+export async function readRun(response: Response): Promise<ModelRun | Exhausted | null> {
+  if (!response.ok && response.status !== 429) return null;
+  let body: unknown;
+  try {
+    body = await response.json();
+  } catch {
+    body = null;
+  }
+  if (response.status === 429) return outOfCapacity(body) ? null : EXHAUSTED;
+  if (!isRecord(body)) return null;
+  const inner = isRecord(body['result']) ? body['result'] : body;
+  const usage = isRecord(inner['usage']) ? inner['usage'] : {};
+  const neurons = typeof usage['neurons'] === 'number' ? usage['neurons'] : null;
+  let output: unknown = inner['response'];
+  if (output === undefined && Array.isArray(inner['choices'])) {
+    const first: unknown = inner['choices'][0];
+    const message = isRecord(first) && isRecord(first['message']) ? first['message'] : {};
+    output = message['content'];
+  }
+  if (output === undefined) return null;
+  const cached = (response.headers.get('cf-aig-cache-status') ?? '').toUpperCase() === 'HIT';
+  return { output, neurons, cached };
+}
+
 export interface AskDeps {
   mode: AskMode;
   /** The model that answers. Null only in mode "off", where no model is ever called. */
@@ -61,8 +130,15 @@ export interface AskDeps {
   db: AskDb;
   reserve: (neurons: number) => Promise<boolean>;
   settle: (reserved: number, spent: number) => Promise<void>;
-  /** Calls the model. Null when it did not answer in time, or not at all. */
-  run: (request: Record<string, unknown>) => Promise<ModelRun | null>;
+  /** Gives a reservation back whole: the call it was made for was refused, so never billed. */
+  release: (reserved: number) => Promise<void>;
+  /** Closes the model for a while: the platform has just said the allowance is used up. */
+  close: () => Promise<void>;
+  /**
+   * Calls the model. Null when it did not answer in time, or not at all; `EXHAUSTED` when the
+   * platform refused the call for want of allowance.
+   */
+  run: (request: Record<string, unknown>) => Promise<ModelRun | Exhausted | null>;
 }
 
 const LOCAL: AskResponse = { kind: 'local' };
@@ -134,19 +210,26 @@ export async function answerQuestion(request: AskRequest, deps: AskDeps): Promis
   }
   if (candidates.length === 0) return LOCAL;
 
-  // 4. The allowance of the day, reserved before it is spent.
+  // 4. The allowance, reserved before it is spent.
   const body = modelRequest(mode, candidates, keptTerms(request.terms, candidates), model);
   const reserved = estimateNeurons(body, model);
   if (!(await deps.reserve(reserved))) return LOCAL;
 
   // 5. The model. A call that failed may still have been billed: the reservation stays.
-  let run: ModelRun | null;
+  let run: ModelRun | Exhausted | null;
   try {
     run = await deps.run(body);
   } catch {
     run = null;
   }
   if (run === null) return LOCAL;
+  if (run === EXHAUSTED) {
+    // A call the platform refused was not billed: the reservation goes back. And the next
+    // questions do not even try, until the breaker reopens — the page shows what it found.
+    await deps.close();
+    await deps.release(reserved);
+    return LOCAL;
+  }
   await deps.settle(reserved, run.cached ? 0 : (run.neurons ?? reserved));
 
   // 6. The control. Whatever it decides is a page, never an error.

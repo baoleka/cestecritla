@@ -15,8 +15,9 @@
  * What never happens here: a log (no `console.*`, observability off, gateway logs off), a
  * write about a visitor, an answer that carries a word of the programme, a call to anything
  * outside Cloudflare — not even to a bot check: there is none (D16.23), the rate limiter and
- * the allowance of the day are the whole defence, and an emptied allowance closes the model
- * until midnight UTC and nothing else.
+ * the allowance are the whole defence, and an emptied allowance closes the model until it
+ * comes back — twenty-four hours that roll, not a midnight (budget-core.ts) — and nothing
+ * else.
  *
  * `/api/bench` exists on the preview Worker only, behind a key: it is how the bench measures
  * the candidates on the production path (PLAN-JEU §2.4). It answers 404 everywhere else.
@@ -25,7 +26,15 @@ import flags from '../../public/flags.json';
 import askConfig from '../../data/2026/ask.json';
 import { parseAskRequest, type AskMode, type AskResponse } from '../lib/ask-contract.js';
 import { effectiveDate, type SilenceOverride } from '../lib/silence.js';
-import { answerQuestion, benchOutput, control, type ModelRun } from './ask.js';
+import {
+  EXHAUSTED,
+  answerQuestion,
+  benchOutput,
+  control,
+  readRun,
+  type Exhausted,
+  type ModelRun,
+} from './ask.js';
 import { DEFAULT_HARD_STOP } from './budget-core.js';
 import { clientKey, readBody } from './guards.js';
 import { keptTerms, loadMeasures } from './measures.js';
@@ -88,37 +97,16 @@ function configured(): { mode: AskMode; model: ModelSpec | null; minOverlap: num
   };
 }
 
-/** The output of a model and what it cost, read from whichever shape the platform returned. */
-async function readRun(response: Response): Promise<ModelRun | null> {
-  if (!response.ok) return null;
-  let body: unknown;
-  try {
-    body = await response.json();
-  } catch {
-    return null;
-  }
-  if (!isRecord(body)) return null;
-  const inner = isRecord(body['result']) ? body['result'] : body;
-  const usage = isRecord(inner['usage']) ? inner['usage'] : {};
-  const neurons = typeof usage['neurons'] === 'number' ? usage['neurons'] : null;
-  let output: unknown = inner['response'];
-  if (output === undefined && Array.isArray(inner['choices'])) {
-    const first: unknown = inner['choices'][0];
-    const message = isRecord(first) && isRecord(first['message']) ? first['message'] : {};
-    output = message['content'];
-  }
-  if (output === undefined) return null;
-  const cached = (response.headers.get('cf-aig-cache-status') ?? '').toUpperCase() === 'HIT';
-  return { output, neurons, cached };
-}
-
-/** One call to a model, through the gateway, with a deadline. Null when it does not answer. */
+/**
+ * One call to a model, through the gateway, with a deadline. Null when it does not answer;
+ * `EXHAUSTED` when the platform refuses it for want of allowance (ask.ts, `readRun`).
+ */
 async function runModel(
   env: Env,
   model: ModelSpec,
   request: Record<string, unknown>,
   skipCache = false,
-): Promise<ModelRun | null> {
+): Promise<ModelRun | Exhausted | null> {
   // The catalogue moves faster than the published types of the binding: the identifier is a
   // string here, checked against our own list (src/worker/models.ts), not against theirs.
   const ai = env.AI as unknown as {
@@ -151,6 +139,17 @@ const hardStop = (env: Env): number => {
   return Number.isFinite(value) && value > 0 ? value : DEFAULT_HARD_STOP;
 };
 
+/**
+ * The platform has just refused a call of the bench for want of allowance. A refused call is
+ * not billed: its reservation goes back. And nothing will answer for a while: the model is
+ * closed, so that what comes next is answered « spent » without a call made for nothing.
+ */
+async function closeAndRelease(env: Env, reserved: number): Promise<void> {
+  const budget = env.BUDGET.getByName('global');
+  await budget.close();
+  await budget.release(reserved);
+}
+
 async function handleAsk(request: Request, env: Env, origin: string): Promise<Response> {
   if (request.method !== 'POST') return empty(405);
   // Same origin only: no CORS is sent, and a form on another site cannot spend our allowance.
@@ -173,6 +172,8 @@ async function handleAsk(request: Request, env: Env, origin: string): Promise<Re
     db: env.DB,
     reserve: (neurons) => budget.reserve(neurons, hardStop(env)),
     settle: (reserved, spent) => budget.settle(reserved, spent),
+    release: (reserved) => budget.release(reserved),
+    close: () => budget.close(),
     run: (body) => (model === null ? Promise.resolve(null) : runModel(env, model, body)),
   });
   return json(answer);
@@ -248,6 +249,12 @@ async function judgements(
     }
     const called = Date.now();
     const run = await runModel(env, model, input, skipCache);
+    if (run === EXHAUSTED) {
+      // As if it had not been asked — and the judges after it are not: the model is closed.
+      await closeAndRelease(env, reserved);
+      out.push(silent);
+      continue;
+    }
     if (run === null) {
       out.push({ ...silent, ms: Date.now() - called });
       continue;
@@ -303,12 +310,17 @@ async function handleBench(request: Request, env: Env): Promise<Response> {
       : modelRequest(written, loaded.candidates, keptTerms(asked.terms, loaded.candidates), model);
   const reserved = estimateNeurons(input, model);
   const budget = env.BUDGET.getByName('global');
-  if (!(await budget.reserve(reserved, hardStop(env)))) {
-    return json({ ...base, ran: false, budget: 'spent', used: await budget.used() });
-  }
+  /** No call, or a call the platform refused: the bench stops on this, and asks nothing more. */
+  const spent = async (): Promise<Response> =>
+    json({ ...base, ran: false, budget: 'spent', used: await budget.used() });
+  if (!(await budget.reserve(reserved, hardStop(env)))) return spent();
   const called = Date.now();
   const run = await runModel(env, model, input, skipCache === true);
   const modelMs = Date.now() - called;
+  if (run === EXHAUSTED) {
+    await closeAndRelease(env, reserved);
+    return spent();
+  }
   if (run === null) return json({ ...base, ran: false, model_ms: modelMs, reserved });
   await budget.settle(reserved, run.cached ? 0 : (run.neurons ?? reserved));
   const overlap = typeof minOverlap === 'number' ? minOverlap : 0;
