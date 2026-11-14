@@ -361,3 +361,32 @@ en arrière ; le navigateur d'Instagram ; un lecteur d'écran.
   maintenant refusés dans une explication quoi que montre la page ; l'exception ne vaut plus
   que pour « proposition », « texte », « projet », « parti », « mouvement », « candidat »,
   « militant ». Un test le tient, sur une page qui écrit les deux mots.
+
+### 14 novembre 2026 — lot C2 : la base des phrases et le bureau de lecture
+
+- **Fait**, par un agent dans sa propre copie, relu puis repris sur `main` : la table
+  `gists(id, text, measure_sha256, read_on)` et ses quatre clés de `meta`, dont un interrupteur
+  à part (`gists`) ; `loadGists(db, ids, corpus)` — rien n'est rendu si les phrases ne sont pas
+  ouvertes pour cet état-là du livre, tenu deux fois, par la requête et par l'état lu avec elle ;
+  le dépôt (`seed-ask-2026.ts --gists`, interrupteur écrit « arrêté » à chaque fois, accord du
+  jour exigé pour envoyer) ; et l'outil suivi `scripts/gists-2026.ts` (`npm run gists`) :
+  `--status`, `--write --budget`, `--serve` — le bureau de lecture —, `--sql`. 25 tests sur un
+  livre inventé, et `npm run e2e:gists` (le bureau dans trois moteurs).
+- **Le bureau de lecture** est une page servie à 127.0.0.1 seulement, derrière un jeton tiré à
+  chaque lancement, qui refuse tout autre hôte : le seul endroit où le texte du livre s'affiche
+  à côté de nos phrases. Trois choix par mesure — « Fidèle », « Corriger », « Aucune : lien
+  seul » —, au clavier comme à la souris, chaque choix enregistré aussitôt. **La session ne
+  l'ouvre pas** : la lecture est celle de l'éditeur.
+- **Ce qui s'écarte du plan, et pourquoi.** Un verdict ne tient que tant que sa mesure et le
+  contrôle tiennent : si l'empreinte a bougé, ou si le contrôle d'aujourd'hui refuse la phrase
+  gardée, la mesure sort du dépôt et revient sur le bureau — le reste se dépose quand même.
+  Une sous-mesure est épinglée aussi à la mesure sous laquelle on la lit. Ce qui bloque un
+  dépôt : un identifiant hors du manifeste, un doublon, la même phrase pour deux mesures, neuf
+  mots de suite du livre, une phrase que la page ne saurait pas afficher.
+- **Vérifié sur la machine de l'éditeur** (identifiants et nombres seulement) : `--check` de la
+  base — 1 069 propositions, chaque ligne à l'empreinte du manifeste ; `--status` — 1 069
+  mesures dont 107 clés, rien d'écrit encore dans le nouvel état ; `--sql --check` — un dépôt
+  vide se construit et se relit. **Pas encore vérifié** : une écriture réelle par la route du
+  banc (le quota), et le confort de lecture sur de vraies phrases.
+- **L'essai du chapitre p4c1** (D16.38) se poursuit désormais par cet outil : les phrases déjà
+  écrites dans la nuit reviennent du cache de la passerelle, sans neuron.
