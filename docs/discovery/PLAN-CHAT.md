@@ -796,3 +796,48 @@ Ce paragraphe amende les §1 à §4 du plan ; le code suit, dans une copie de tr
 - **Redéployé à 16 h 59 UTC** (version `eb719531`) : démarrage du Worker mesuré par la
   plateforme à 14 ms, préchauffage compris ; routes fermées comme avant ; 1 151 fichiers sur
   1 154 identiques à `dist/` ; les contrôles des trois navigateurs tiennent. VÉRIFIÉ.
+
+### 14 novembre 2026, 18 h 30 — où en est le chantier, écrit pour qui reprend
+
+- **Les sous-agents ont atteint la limite d'usage du compte** (remise à zéro annoncée le
+  17 novembre à 19 h, heure de Paris). Celui qui devait écrire le code de D16.53 s'est arrêté
+  quatre minutes après son départ : **rien n'a été écrit**, sa copie de travail a été
+  nettoyée. La session principale reprend ce code elle-même, sur une branche locale
+  (`d16-53`), fusionnée dans `main` quand la batterie est verte.
+- **Les lectures juridiques sont à l'abri** : `docs/discovery/18-dossier-chat.md` — le geste
+  depuis D16.53, le registre, une courte analyse d'impact, la lecture de quatre textes
+  (règlement 2024/900, règlement sur l'IA art. 50 et annexe III, deux corpus de la CNIL), et
+  en annexe les 180 citations vérifiées par script. H-CNF-11 passe à PROBABLE ; H-CNF-23 n'a
+  plus d'objet.
+- **Ce que ces lectures demandent de neuf** : (1) les phrases écrites d'avance sont des textes
+  générés et publiés sur un sujet d'intérêt public (art. 50 § 4) — le plus sûr est que leur
+  étiquette nomme l'IA, plutôt que de s'appuyer sur l'exception de la relecture sous
+  pseudonyme : **à demander à l'éditeur** ; (2) écrire, avant la mise en service, à quoi le
+  système est destiné (annexe III, 8 b) ; (3) la mention au bouton et dans chaque bloc de
+  l'IA est la forme que les lignes directrices décrivent.
+- **Le cahier du code de D16.53**, pour ne pas le refaire :
+  1. *Contrat* (`src/lib/chat-contract.ts`) : `ChatRequest = { corpus, ids (1 à 5), words
+     (0 à 3 termes au format de `tokenize()`, 2 à 40 caractères `a-z0-9`), cards (0 à 2
+     identifiants de cartes), follow? }` ; tout champ non nommé rend la requête illisible —
+     `question` et `consent` compris. Sortent : `question`, `consent`, `consentVersion`,
+     `ECHO_WINDOW`. `cleanQuestion` passe côté page (`src/lib/chat-local.ts`).
+  2. *Quels mots* : `askedWords(question, gists)` côté page (termes de la question qui sont
+     des termes des phrases affichées, dans l'ordre de la question, trois au plus, rendus tels
+     que la phrase les a) ; `wordsShown(words, gists)` côté Worker, dans un module partagé :
+     la forme écrite de chaque mot dans nos phrases, ou `null` si un seul mot n'y est pas.
+  3. *Worker* : `answerChat` charge les phrases, vérifie les mots et les cartes — sinon
+     « rien », sans appel du modèle ; plus de version d'accord ni d'objections dans ses
+     dépendances ; `explainRequest(mots, phrases, cartes, relance, modèle)` ; l'invite
+     demande d'expliquer d'abord `MOTS`. Le contrôle perd la question : contexte
+     `{ shown, asked? }`, règle `echo` retirée, sigles « de la question » retirés. Le mode
+     « explain » du banc reçoit des mots, plus une question. Le préchauffage suit.
+  4. *Page* : l'accord devient une offre — un titre, une mention, **un bouton**, le lien vers
+     `/confidentialite/#demander` ; état `offerte / en marche / arrêtée` ; « quitter la page »
+     remet à `offerte`. `src/lib/chat-consent.ts` disparaît.
+  5. *Chaînes* : famille `chat.offer.*` à la place de `chat.consent.*` ; `chat.ai_hint`,
+     `about.ai_*` et la section `privacy.chat.*` récrites (deux sortes d'envoi, aucune ne
+     porte la question ; plus de ligne sur l'accord ni sur l'âge).
+  6. *Portes* : aucune occurrence de l'identifiant `question` sous `src/worker/` ni dans un
+     contrat ; un mot hors de nos phrases → « rien » sans appel ; de bout en bout, aucun
+     corps de requête ne contient un mot tapé qui n'est pas dans les phrases affichées, et
+     `/api/chat` n'est jamais appelée avant le bouton.
