@@ -730,7 +730,12 @@ void test('a judge: one measure, one sentence, a label out of three — and noth
     index,
     /gist !== null && verdict\.kind === 'answer' && verdict\.sentences\.length === 1/,
   );
-  assert.match(index, /judgements\(env, single, passed\.text, judgeKeys\(body\['judges'\]\)/);
+  assert.match(
+    index,
+    /judgements\(\s*env,\s*single,\s*passed\.text,\s*judgeKeys\(body\['judges'\], key\)/,
+  );
+  // The writer is never one of its own judges.
+  assert.match(index, /\.filter\(\(judge\) => judge !== writer\)/);
   assert.doesNotMatch(index, /body\[['"](?:sentence|phrase|texte|text|gist)['"]\]/);
   const judging = index.slice(
     index.indexOf('async function judgements'),
@@ -739,7 +744,8 @@ void test('a judge: one measure, one sentence, a label out of three — and noth
   assert.equal((judging.match(/run\.output/g) ?? []).length, 1);
   assert.match(judging, /verdict: readJudgement\(run\.output\)/);
   // Judges are models of our own list, three at most, each counted against the allowance.
-  assert.match(index, /listed\.filter\(isModelKey\)\)\]\.slice\(0, MAX_JUDGES\)/);
+  assert.match(index, /new Set\(listed\.filter\(isModelKey\)\)/);
+  assert.match(index, /\.slice\(0, MAX_JUDGES\)/);
   assert.match(judging, /budget\.reserve\(reserved, hardStop\(env\)\)/);
 });
 

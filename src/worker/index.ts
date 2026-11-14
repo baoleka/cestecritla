@@ -202,12 +202,17 @@ async function keyMatches(given: unknown, expected: unknown): Promise<boolean> {
  * was shown leaves as a marker (`benchOutput`). And the route is counted by the same limiter
  * as the questions — 429 beyond it, which the bench waits out.
  */
-/** At most three judges, each a model of our own list, none twice. */
+/**
+ * At most three judges, each a model of our own list, none twice — and never the writer: a
+ * model reading its own sentence is not a second reader.
+ */
 const MAX_JUDGES = 3;
-function judgeKeys(value: unknown): ModelKey[] {
+function judgeKeys(value: unknown, writer: ModelKey): ModelKey[] {
   if (!Array.isArray(value)) return [];
   const listed: unknown[] = value;
-  return [...new Set(listed.filter(isModelKey))].slice(0, MAX_JUDGES);
+  return [...new Set(listed.filter(isModelKey))]
+    .filter((judge) => judge !== writer)
+    .slice(0, MAX_JUDGES);
 }
 
 interface Judgement {
@@ -316,7 +321,13 @@ async function handleBench(request: Request, env: Env): Promise<Response> {
       : undefined;
   const judges =
     passed !== undefined && single !== undefined
-      ? await judgements(env, single, passed.text, judgeKeys(body['judges']), skipCache === true)
+      ? await judgements(
+          env,
+          single,
+          passed.text,
+          judgeKeys(body['judges'], key),
+          skipCache === true,
+        )
       : [];
   return json({
     ...base,
