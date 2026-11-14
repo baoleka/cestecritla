@@ -441,6 +441,10 @@ en arrière ; le navigateur d'Instagram ; un lecteur d'écran.
   répondent « local » et « rien » ; un champ que le contrat ne nomme pas vaut 400 ; une autre
   origine, 403. Vérifié en ligne, avec les pages (1 151 fichiers sur 1 154 identiques à
   `dist/`, les trois écarts connus) et les 81 contrôles dans trois navigateurs.
+- **Redéployé après ce lot, à 14 h 47 UTC** (version `32f903ea`, la boucle d'écriture endormie) :
+  `/api/ask` répond **404** aux deux verbes ; `/api/gists` « local », `/api/chat` « rien », un
+  champ `history` 400, une autre origine 403, `GET` 405, `/api/bench` sans clé 404 ; `noindex`
+  toujours servi ; 1 151 fichiers sur 1 154 identiques à `dist/`. VÉRIFIÉ (sondes du jour).
 - **Reporté à C10 et C11, avec sa raison** : le mode par hôte (ouvrir l'aperçu sans la
   production). Tant qu'il n'existe pas, passer `ask.json` à « chat » ouvrirait la feuille dans
   la build de la production aussi — que le déploiement refuse, et que la porte de lancement
