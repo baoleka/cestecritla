@@ -1921,8 +1921,9 @@ défaut ». La session a répondu qu'elle ne daterait pas à sa place les gestes
 ### 14 novembre 2026, 11 h — la production est basculée (lot P, D16.36)
 
 - **`cestecritla.fr` et `www.cestecritla.fr` servent l'app**, en « recherche seule », à la place
-  de la page d'attente : `npm run build && npm run deploy` depuis le commit `9dd7ef8` (son nom d'après la
-  réécriture de la branche ; c'était `c94cadf` au moment du déploiement, même arbre)
+  de la page d'attente : `npm run build && npm run deploy` depuis le commit `7d1802d` (son nom d'après les
+  deux réécritures du 14 novembre ; c'était `c94cadf` au moment du déploiement — mêmes fichiers
+  servis)
   (Worker `cestecritla`, fichiers statiques seuls, version `aed7d943`). Avant de déployer, toute
   la batterie de portes a été rejouée sur cette build : verte.
 - **VÉRIFIÉ en ligne, sur chacun des deux hôtes** : 1 150 fichiers de `dist/` sur 1 154 servis à
@@ -1978,4 +1979,33 @@ questions, quatre réponses ; trois ne suivent pas ce que la session recommandai
 - **Le bloc de Cloudflare dans le `robots.txt` : « Le couper »** (D16.39).
 - **L'adresse d'un tiers dans une capture du dépôt public : « La purger de tout
   l'historique »** (D16.40).
+
+### 14 novembre 2026, 13 h — le lait-fraise retiré en production ; une adresse purgée de l'historique public (D16.37, D16.40)
+
+- **Sans lait-fraise, partout** : batterie verte, poussé, puis `npm run deploy` et
+  `npm run deploy:preview -- --bench`. VÉRIFIÉ sur les trois hôtes : 1 150 fichiers de `dist/`
+  sur 1 154 servis à l'identique (les quatre écarts connus), et plus aucune trace de la ligne.
+- **L'adresse** (D16.40). Tout l'historique publié a été lu, objet par objet : **une seule pièce**
+  portait une adresse du mouvement, la copie de la page d'entrée du livre 2025 gardée comme
+  preuve du constat D14.14 (`captures/2026-09-10/source-404/livre.html`), publique depuis le
+  10 septembre. Plutôt que d'en modifier le contenu — une preuve retouchée ne correspond plus à
+  son empreinte —, **la pièce sort du dépôt et de tout son historique**, comme les autres pages
+  de tiers en septembre (H-LAN-14) : elle reste sur la machine de l'éditeur, son empreinte
+  SHA-256 reste dans `observation.json` et entre au manifeste des pièces tierces.
+- **La réécriture** : 34 commits, dont 32 changent de nom (les deux premiers précèdent la
+  pièce). VÉRIFIÉ avant de pousser : chaque commit réécrit ne diffère de l'ancien que par ce
+  fichier ; messages, auteur, dates identiques ; plus aucun objet de l'historique ne porte une
+  adresse de ce domaine. **Les 34 commits sont signés** — les huit de la réécriture du matin ne
+  l'étaient pas, la session les avait créés sans signature : corrigé au passage.
+- **Les noms de commits cités dans le dossier sont repris** (17 mentions, 7 fichiers), dont le
+  repère de la porte anti-fuite (`scripts/leak.test.ts`), qui aurait cassé sur un clone neuf.
+- **Pourquoi la porte du dépôt ne l'avait pas vue** : tout `docs/discovery/` était exempté du
+  contrôle des adresses, parce que le dossier décrit la porte. Les captures ne le sont plus
+  (`check-repo.test.ts`) : seules restent admises les adresses de fonction que des bureaux
+  d'enregistrement publient dans deux fiches RDAP.
+- **Ce que la purge ne fait pas** : GitHub garde un temps les anciens commits accessibles à qui
+  en connaît l'empreinte ; les faire effacer se demande à son support, et c'est un geste de
+  l'éditeur. Deux sauvegardes locales (`backup/avant-reecriture-2026-11-14`,
+  `backup/avant-purge-2026-11-14`) portent encore l'ancien historique : **ne jamais les
+  pousser**.
 

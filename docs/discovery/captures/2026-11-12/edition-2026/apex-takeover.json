@@ -236,7 +236,7 @@
   "cache_headers": {
     "/fonts/PublicSans-Variable-latin.woff2": "public, max-age=31536000, immutable",
     "/flags.json": "no-cache",
-    "reading_fr": "une seule valeur par en-tête : le défaut de cumul corrigé au commit 2642ca5 est vérifié sur le réseau de production"
+    "reading_fr": "une seule valeur par en-tête : le défaut de cumul corrigé au commit 2bf6004 est vérifié sur le réseau de production"
   },
   "still_public_at_observation": {
     "proto.cestecritla.fr": 200,

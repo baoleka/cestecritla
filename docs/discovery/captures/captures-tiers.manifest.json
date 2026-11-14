@@ -2,12 +2,12 @@
   "meta": {
     "version": "1.1.0",
     "generated_at": "2026-09-10",
-    "decision": "H-LAN-14 (priorité 1), D14.9 ; D15.6 (pages de l’édition 2026 conservées sous private/)",
+    "decision": "H-LAN-14 (priorité 1), D14.9 ; D15.6 (pages de l’édition 2026 conservées sous private/) ; D16.40 (une capture portant une adresse, purgée de l’historique)",
     "purpose_fr": "Empreintes des pièces tierces sorties du dépôt public. Elles restent vérifiables sans être redistribuées : le dépôt ne republie ni le logo LFI, ni le wordmark M27, ni la tortue officielle, ni une photographie de personnes identifiables, ni l'adresse personnelle d'un tiers, ni le texte du programme sous une licence que le LICENSE racine ne couvre pas. Les fichiers eux-mêmes vivent hors du dépôt, dans docs/discovery/captures/assets-tiers/, non versionné. Depuis le 12/11/2026, les pages de l’édition 2026 (« tous droits réservés », D15.1) sont conservées sous private/captures/, ignoré par git : seules leurs empreintes figurent ici.",
     "verify_fr": "sha256sum <fichier> et comparer à l'empreinte ci-dessous",
-    "count": 14,
-    "total_bytes": 4361250,
-    "updated_at": "2026-11-12"
+    "count": 15,
+    "total_bytes": 4478977,
+    "updated_at": "2026-11-14"
   },
   "captures": [
     {
@@ -121,6 +121,14 @@
       "sha256": "e1f7ce4929a72849d342c47175aef6cca3edc2e9e9e61761f2fc3f493f6f5466",
       "captured_at": "2026-11-12",
       "why_removed_fr": "melenchon2027.fr, flux du type de contenu lfi_programme_2026 — contient le texte intégral de dix pages du livre-programme : jamais dans le dépôt"
+    },
+    {
+      "path": "private/captures/2026-09-10/source-404/livre.html",
+      "kind": "third-party-page",
+      "bytes": 117727,
+      "sha256": "5fad20eff3159b7c1f90209c0082376ad58312eef3029c58f365d4deb863e4e3",
+      "captured_at": "2026-09-10",
+      "why_removed_fr": "melenchon2027.fr, page d'entrée du livre 2025, gardée comme preuve du constat D14.14 — elle portait l'adresse d'une personne : retirée du dépôt et de tout son historique le 14/11/2026 (D16.40)"
     }
   ]
 }

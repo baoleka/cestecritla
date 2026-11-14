@@ -107,6 +107,39 @@ void test('no tracked file carries an e-mail address that is not meant to be pub
   assert.deepEqual(offenders, [], `unexpected addresses:\n${offenders.join('\n')}`);
 });
 
+/**
+ * Captures are third-party material, not prose about this gate: the exemption of the dossier
+ * does not cover them. On 14/11/2026 a capture of the official page was found to carry a
+ * person's address, public in this repository since 10 September — the test above could not see
+ * it, the whole of docs/discovery/ being exempt. The editor had it purged from the entire
+ * history (D16.40). The only addresses a capture may keep are the role addresses registrars
+ * publish in RDAP records; the name of a double-density picture (an at sign, then « 2x.png »)
+ * is a file name, not an address.
+ */
+const CAPTURES = 'docs/discovery/captures/';
+const CAPTURE_ROLE_ADDRESSES = [/^(afnic|domaine)@lws\.fr$/i, /^registrar-abuse@cloudflare\.com$/i];
+const IS_A_FILE_NAME = /\.(png|jpe?g|gif|webp|svg)$/i;
+
+void test('no capture carries the address of a person (D16.40)', () => {
+  const offenders: string[] = [];
+  for (const path of tracked()) {
+    if (!path.startsWith(CAPTURES) || !isText(path)) continue;
+    for (const hit of new Set(read(path).match(EMAIL) ?? [])) {
+      if (IS_A_FILE_NAME.test(hit)) continue;
+      if (ALLOWED_EMAILS.some((re) => re.test(hit))) continue;
+      if (CAPTURE_ROLE_ADDRESSES.some((re) => re.test(hit))) continue;
+      // Never print the address itself: naming the file is enough to find it.
+      offenders.push(`${path}: …@${hit.split('@')[1] ?? ''}`);
+    }
+  }
+  assert.deepEqual(offenders, [], `addresses in captures:\n${offenders.join('\n')}`);
+  assert.equal(
+    tracked().includes('docs/discovery/captures/2026-09-10/source-404/livre.html'),
+    false,
+    'the capture purged on 14/11/2026 is tracked again',
+  );
+});
+
 void test('the H-LAN-14 debt list is exact — no entry has silently become obsolete', () => {
   const stale: string[] = [];
   for (const path of KNOWN_DEBT_THIRD_PARTY_ADDRESS) {

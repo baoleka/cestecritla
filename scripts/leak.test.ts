@@ -204,7 +204,7 @@ const skip = existsSync(PRIVATE_CORPUS)
  * The last commit before the 2026 edition existed (10 September 2026; the book came out on
  * 5 November). Whatever the repository held then cannot have been copied from it.
  */
-const FREEZE = '16023da';
+const FREEZE = 'f403d86';
 
 const git = (...args: string[]): string =>
   execFileSync('git', args, { encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 });

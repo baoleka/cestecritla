@@ -6,7 +6,7 @@
     "status": "VÉRIFIÉ"
   },
   "apex_redeploy": {
-    "why_fr": "Le spike envoyait X-Robots-Tag: noindex ; la page d’attente du premier déploiement ne portait aucune consigne, ce qui ouvrait l’indexation avant J-3. Corrigé par une balise meta (commit d232479), redéployé avec l’accord de l’utilisateur.",
+    "why_fr": "Le spike envoyait X-Robots-Tag: noindex ; la page d’attente du premier déploiement ne portait aucune consigne, ce qui ouvrait l’indexation avant J-3. Corrigé par une balise meta (commit ad7312d), redéployé avec l’accord de l’utilisateur.",
     "version_id": "8d24a714-a0b6-4b1b-b6fe-c82e58518ab9",
     "cestecritla.fr": {
       "status": 200,

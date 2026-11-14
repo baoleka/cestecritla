@@ -12,7 +12,9 @@
     "status": "200",
     "bytes": 117727,
     "sha256": "5fad20eff3159b7c1f90209c0082376ad58312eef3029c58f365d4deb863e4e3",
-    "nav_links": 24
+    "nav_links": 24,
+    "file": "private/captures/2026-09-10/source-404/livre.html",
+    "not_tracked_fr": "Le corps de cette page n'est plus dans le dépôt, ni dans son historique, depuis le 14 novembre 2026 (D16.40) : il portait l'adresse d'une personne. Il reste sur la machine de l'éditeur ; son empreinte, ci-dessus, n'a pas changé."
   },
   "subpages": [
     {

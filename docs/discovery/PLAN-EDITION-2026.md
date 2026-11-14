@@ -20,7 +20,7 @@
 Le 5 novembre 2026, melenchon2027.fr a remplacé *L'Avenir en commun, édition 2025* par une nouvelle
 édition : **« L'Avenir en commun — Le programme de la Nouvelle France »** (6ᵉ édition, Éd. La Dispute,
 en librairie le 6 novembre). Ce n'est pas une actualisation : la structure, le texte **et la licence**
-changent. Le dépôt est figé depuis le 10 septembre (`16023da`) et la v1 du 10 novembre est passée.
+changent. Le dépôt est figé depuis le 10 septembre (`f403d86`) et la v1 du 10 novembre est passée.
 But de ce plan : remettre le projet dans un état vrai, puis sortir une v1 sur l'édition 2026 le
 **mardi 15 décembre 2026**, sans jamais reproduire le texte intégral.
 
@@ -189,7 +189,7 @@ Texte de la page d'attente, tel que construit (la dernière ligne, « Projet mil
 | B3 | **Repères de lien** : texte brut du DOM (la normalisation efface les espaces insécables), unicité prouvée sur toute la page, repli sur l'ancre | `scripts/locator.ts` | 1 069 repères uniques ou repliés ; encodage testé (tiret, virgule, apostrophe) |
 | B4 | **Publication** et curseurs | `scripts/publish-2026.ts` → `data/2026/manifest.json`, `quotes.json`, `NOTICE.md` ; `data/2026/exposure-policy.json` (modifié à la main) ; `data/2026/expected-invariants.json` | refuse d'écrire si la clause de licence a changé ; **rapport d'exposition soumis à l'utilisateur avant tout push** |
 | B5 | **Vérification par un vrai navigateur** : même extraction refaite dans le DOM de Chromium sur les pages en cache | `scripts/verify-2026.ts` (Playwright, pages servies en local, tout autre hôte coupé) | toutes les empreintes identiques ; chaque repère atterrit |
-| B6 | **Portes anti-fuite** | `scripts/leak-structure.test.ts` (CI, sans corpus), `scripts/leak-content.test.ts` (local : lignes ajoutées depuis `16023da`, `dist/`, messages de commit) | vertes ; témoin positif détecté |
+| B6 | **Portes anti-fuite** | `scripts/leak-structure.test.ts` (CI, sans corpus), `scripts/leak-content.test.ts` (local : lignes ajoutées depuis `f403d86`, `dist/`, messages de commit) | vertes ; témoin positif détecté |
 | B7 | **Table de correspondance** : les 1 033 items 2025, classes exact / typo / proche / retouché / faible / aucun ; projection publique réduite aux sections | `scripts/id-map.ts`, `scripts/atoms.ts` (extrait de `scripts/diff.ts:144-245`) → `private/id-map/`, `data/2026/id-map-2025.json` | histogrammes retrouvés (181 exacts ; flux 64 / 18 / 5 / 2) |
 | B8 | **Re-crawl et veille de la source**, sans extrait dans la PR | `scripts/recrawl-2026.ts`, `scripts/watch-source.ts`, `data/2026/watch.json` (sommaire, clause de licence, flux, compte officiel, robots, `Document-Policy`) | `npm run recrawl -- --dry-run` : aucun changement ; `watch-source` sort 0 |
 
@@ -330,7 +330,7 @@ téléphone ; un lien profond dans Chrome Android et Safari iOS ; un aperçu par
 
 Fait et vérifié :
 
-- **A1, A2, A5** — commit `2642ca5`. La page d'attente est en ligne sur `beta.cestecritla.fr`
+- **A1, A2, A5** — commit `2bf6004`. La page d'attente est en ligne sur `beta.cestecritla.fr`
   (`noindex`) : `/` 200, anciens préfixes en 302 vers `/`, `/og`, `/diag`, `/data/slim.json` et
   `/mentions-legales` en 404, `Cache-Control` à valeur unique. Build 2,3 s, déploiement 16,1 s.
   171 tests à ce commit (173 en fin de lot) ; accessibilité : 12 contrôles sur 2 pages × 6 conditions, 0 échec.
@@ -345,7 +345,7 @@ Fait et vérifié :
   porte `private/` dans `scripts/check-repo.test.ts` ; description du dépôt GitHub remplacée, avec
   l'accord de l'utilisateur.
 - **Poussé le 12/11/2026**, avec l'accord de l'utilisateur, qui a validé le texte de la page
-  d'attente : trois commits (`2642ca5`, `01544b3`, `5671c99`). CI verte sur les deux builds, dont
+  d'attente : trois commits (`2bf6004`, `da71396`, `e52475c`). CI verte sur les deux builds, dont
   les nouvelles étapes (build d'attente, tests rejoués dessus, déploiements à blanc, accessibilité).
 
 Non fait, et pourquoi :
@@ -444,7 +444,7 @@ Fait et vérifié :
 - **B6, portes anti-fuite** — `scripts/leak-scan.ts`, `leak.test.ts`. Structure (en CI, sans
   corpus) : aucun champ où loger une phrase, parts recalculées depuis le fichier, plafonds tenus.
   Contenu (en local) : aucune fenêtre de neuf mots consécutifs de l'édition 2026 dans ce qui a
-  changé depuis le gel `16023da`, ni dans `dist/`, ni dans les messages de commit ; 21 300 fenêtres,
+  changé depuis le gel `f403d86`, ni dans `dist/`, ni dans les messages de commit ; 21 300 fenêtres,
   951 éléments sur 1 219 couverts. **Limite dite** : l'édition 2026 reprend mot pour mot des phrases
   de l'édition 2025 et des livrets 2022 déjà présents dans `data/` ; la porte ne peut pas les
   distinguer de leurs jumelles et ne les compte pas.
@@ -479,7 +479,7 @@ Curseurs, mesurés : repères seulement pour les mesures clés et les citées �
 Non fait, et pourquoi :
 
 - **B1** (déplacer l'archive 2025 sous `data/2025/`) : écarté. La porte anti-fuite compare au gel
-  `16023da` ; déplacer 17 fichiers ferait passer leur contenu pour du texte nouveau, sans rien
+  `f403d86` ; déplacer 17 fichiers ferait passer leur contenu pour du texte nouveau, sans rien
   apporter au produit.
 - **Sonde 0** (ouvrir un lien profond sur de vrais téléphones) : geste de l'utilisateur. Les trois
   moteurs de bureau sont couverts par B5.
@@ -600,8 +600,8 @@ Dans l'ordre :
   `publish-2026.ts --check` et `index-2026.ts --check` : les fichiers publiés sont exactement ceux
   que produisent le corpus privé et la politique ; aucun fichier suivi sous `private/` ; aucun
   chemin absolu ni adresse dans les lignes ajoutées ni dans les messages de commit.
-- **Poussé** : onze commits, `22035d0..1837890` sur `origin/main`.
-- **CI verte sur `1837890`**, les deux jobs : portes (types, lint, build, tests, contraste,
+- **Poussé** : onze commits, `0a7550d..685c750` sur `origin/main`.
+- **CI verte sur `685c750`**, les deux jobs : portes (types, lint, build, tests, contraste,
   déploiements à blanc, build d'attente) et accessibilité (23 pages × 6 conditions, essais de bout
   en bout, relecture du site synthétique par un vrai navigateur).
 - **Aperçu déployé** : `beta.cestecritla.fr` sert l'app (Worker `cestecritla-preview`, fichiers
