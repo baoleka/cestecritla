@@ -148,3 +148,16 @@ registre du Worker repart vide — il ne sait rien des 5 190 ci-dessus — et, p
 une sonde par `/api/bench` reçoit « spent » sans qu'aucun appel parte : sonder plus souvent que
 toutes les trente minutes n'apprend rien.
 
+**14 novembre 2026, 13 h 47 UTC — le compteur glissant est en ligne sur l'aperçu, et le quota répond
+de nouveau : 21,89 neurons.** Déploiement de l'aperçu avec le lot C1 (`npm run deploy:preview --
+--bench`, version `fa41604e`), puis deux sondes par `/api/bench` sur une phrase déjà écrite dans la
+nuit (identifiants, nombres et étiquettes seulement). Première sonde : la phrase revient du cache
+de la passerelle (0 neuron) et **les deux juges répondent** — Mistral Small 3.1 en 555 ms
+(10,35 neurons), Llama 3.3 70B en 644 ms (11,54 neurons). Seconde sonde : tout revient du cache,
+0 neuron. Le registre du Worker, reparti vide au déploiement, dit **21,89 neurons sur vingt-quatre
+heures** après la première comme après la seconde : il compte ce qui est facturé et rien de ce
+qui vient du cache — VÉRIFIÉ en ligne. **Ce que cela apprend du quota** : épuisé à 0 h 36 UTC,
+encore refusé à 10 h 49 UTC, il répond à 13 h 47 UTC — entre treize et vingt-quatre heures après
+les premières dépenses de la veille ; la fenêtre exacte reste une HYPOTHÈSE, et ce qu'il rend
+à cette heure n'est pas connu. Le refus « quota épuisé » n'a pas été revu depuis le déploiement :
+la lecture du 429 par le Worker en ligne reste PROBABLE.

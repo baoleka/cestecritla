@@ -307,10 +307,12 @@ en arrière ; le navigateur d'Instagram ; un lecteur d'écran.
   septembre qui racontent leur propre jour restent tels quels. `quota.title` et `{resetTime}`
   du kit de chaînes annoncent une heure de retour qui n'existe pas : à régler avec les chaînes
   du lot C6.
-- **Pas encore en ligne.** L'aperçu garde l'ancien compteur jusqu'à son prochain déploiement
-  (`npm run deploy:preview -- --bench`). À ce moment le registre repart vide, et une sonde par
-  `/api/bench` pendant une fermeture reçoit « spent » sans appel : l'attente du quota par le
-  script local doit sonder moins souvent que toutes les trente minutes.
+- **En ligne sur l'aperçu depuis le 14 novembre, 13 h 47 UTC** (version `fa41604e`, pages
+  inchangées : 1 152 fichiers sur 1 155 identiques à `dist/`, les trois écarts connus). Le
+  registre est reparti vide et compte juste : 21,89 neurons après deux juges, rien pour ce qui
+  revient du cache (`neurons-log.md`). **Le quota gratuit répond de nouveau** depuis cette
+  heure-là au plus tard. Le script local qui attend le quota sonde la plateforme directement,
+  pas `/api/bench` : le coupe-circuit ne le gêne pas.
 - **Reste PROBABLE** : la forme du refus à travers le lien et la passerelle (lue dans le moteur
   local seulement). **Reste vrai** : chaque Worker a son propre registre pour un seul quota de
   compte — seul le coupe-circuit voit ce qui est dépensé ailleurs (à reprendre au lot C10).
