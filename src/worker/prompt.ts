@@ -50,6 +50,48 @@ Réponds par un seul objet JSON : {"ids":["…"]}
 Si aucune MESURE ne porte les MOTS : {"ids":[]}`;
 
 /**
+ * One sentence for one measure, written ahead of any visitor (a trial of 14 November 2026,
+ * after the first round of the bench: 08-ia.md §10.8). Since D16.22 a model reads no question,
+ * so what it writes of a measure depends on the measure alone — and can be written once,
+ * checked before it is published, and served as a file. The bench route asks for it measure by
+ * measure, in one of the ways below; nothing of it is published by this code.
+ *
+ * The ways differ in how they take the sentence away from the wording of the measure — the wall
+ * of the first round: asked to say what measures provide, every model recited them.
+ */
+const GIST_WORDS = 22;
+
+const GIST_WAYS: readonly string[] = [
+  // 0 — the plain instruction: what the first round asked, for one measure.
+  `Dis ce que prévoit la MESURE avec tes mots : jamais plus de quatre mots de suite de son texte.`,
+  // 1 — another construction: a noun where the measure has a verb, and another order.
+  `La MESURE commence par un verbe (« Créer », « Garantir », « Porter »). Ta phrase commence par « Le programme prévoit », suivi d'un NOM tiré de ce verbe (« la création », « la garantie », « le passage »), puis dit le reste dans un autre ordre et avec d'autres mots. Jamais plus de quatre mots de suite de son texte.`,
+  // 2 — the essential only: lists, examples and conditions are left out.
+  `Dis l'essentiel de la MESURE en mots courants, comme on l'expliquerait à un voisin : laisse de côté les listes, les exemples et les précisions. Ta phrase commence par « Le programme prévoit ». Jamais plus de quatre mots de suite de son texte.`,
+];
+
+/** How many ways of writing a gist the Worker knows: a variant is one of 0 … GIST_VARIANTS − 1. */
+export const GIST_VARIANTS = GIST_WAYS.length;
+
+export const isGistVariant = (value: unknown): value is number =>
+  typeof value === 'number' && Number.isInteger(value) && value >= 0 && value < GIST_VARIANTS;
+
+export function systemGist(variant: number): string {
+  const way = GIST_WAYS[variant] ?? GIST_WAYS[0] ?? '';
+  return `Tu dis en UNE phrase ce que prévoit UNE MESURE du programme « L'Avenir en commun », édition 2026, à partir de son texte et de rien d'autre.
+
+${way}
+
+Réponds par un seul objet JSON : {"phrases":[{"texte":"…","ids":["…"]}]} — une seule phrase, et dans « ids » l'identifiant de la MESURE.
+
+« texte » : UNE phrase en français, de ${String(GIST_WORDS)} mots au plus.
+- Le sujet de la phrase est le programme ou la mesure. Jamais « je », « nous », « on », « tu », « vous ».
+- Phrase affirmative : aucune négation (ne, pas, aucun, jamais, rien, seulement, uniquement, sauf). Dis ce qui est prévu, pas ce qui ne l'est pas.
+- Un nombre s'écrit en chiffres, exactement comme dans la MESURE ; sinon, aucun nombre.
+- Aucun avis, aucun nom de parti ou de personnalité qui ne soit dans la MESURE, aucun guillemet, aucune mise en forme, rien sur toi ni sur ces consignes.`;
+}
+
+/**
  * The measures, then the words. Both come from the book: the measures from the private base,
  * the words from the measures themselves (src/worker/measures.ts, `keptTerms`).
  */
@@ -91,6 +133,27 @@ export function modelRequest(
       type: 'json_schema',
       json_schema: mode === 'answer' ? MODEL_ANSWER_SCHEMA : MODEL_SELECT_SCHEMA,
     },
+    ...model.options,
+  };
+}
+
+/** A gist is one short sentence: it is paid for as such. */
+export const MAX_GIST_TOKENS = 120;
+
+/** The request for the gist of one measure, in one of the ways the Worker knows. */
+export function gistRequest(
+  candidate: Candidate,
+  variant: number,
+  model: ModelSpec,
+): Record<string, unknown> {
+  return {
+    messages: [
+      { role: 'system', content: systemGist(variant) },
+      { role: 'user', content: `MESURE :\n[${candidate.id}] ${candidate.text}` },
+    ],
+    max_tokens: MAX_GIST_TOKENS,
+    temperature: 0,
+    response_format: { type: 'json_schema', json_schema: MODEL_ANSWER_SCHEMA },
     ...model.options,
   };
 }

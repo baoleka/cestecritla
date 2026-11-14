@@ -12,11 +12,25 @@ import type { SearchEvalFile } from '../../scripts/eval-2026.ts';
 import type { VerificationFile } from '../../scripts/verify-2026.ts';
 import { cards, ripostes } from './editorial.ts';
 import { manifest, quotes } from './edition.ts';
+import { isLocatorDisplay, type LocatorDisplay } from './first-words.ts';
 import { gameSite, gameWords } from './game-data.ts';
 
 /** A published JSON file. The caller names the shape it expects: the cast is visible there. */
 function read(path: string): unknown {
   return JSON.parse(readFileSync(path, 'utf8'));
+}
+
+/**
+ * Where the words a link carries may also be read: the citation policy says it (D16.32). A
+ * value this build does not know is read as the prudent one — inside the links only.
+ */
+export function locatorDisplay(): LocatorDisplay {
+  const policy = read('data/2026/exposure-policy.json');
+  const value =
+    typeof policy === 'object' && policy !== null && 'locator_display' in policy
+      ? policy.locator_display
+      : undefined;
+  return isLocatorDisplay(value) ? value : 'href';
 }
 
 /** `0.1686` → `16,86`: a French percentage, without its sign. */

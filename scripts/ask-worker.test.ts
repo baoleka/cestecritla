@@ -40,10 +40,15 @@ import {
 } from '../src/worker/measures.js';
 import { MODELS } from '../src/worker/models.js';
 import {
+  GIST_VARIANTS,
+  MAX_GIST_TOKENS,
   SYSTEM_ANSWER,
   SYSTEM_SELECT,
   estimateNeurons,
+  gistRequest,
+  isGistVariant,
   modelRequest,
+  systemGist,
   userMessage,
 } from '../src/worker/prompt.js';
 import { LocalD1 } from './d1-local.js';
@@ -593,13 +598,22 @@ void test('the bench is handed no copied text: a marker and a count instead', ()
   assert.equal(benchOutput('Je ne peux pas répondre.', shown), 'Je ne peux pas répondre.');
 
   const recited = 'Ouvrir une bibliothèque de quartier sept jours sur sept dans chaque commune';
-  const marker = (sentences: number): unknown => ({ withheld: 'copy', sentences });
+  interface Marker {
+    withheld: string;
+    sentences: number;
+    longest: number;
+    share: number;
+  }
+  const marked = (output: unknown): Marker => benchOutput(output, shown) as Marker;
   const copied = { phrases: [{ texte: recited, ids: ['p1c1-s01-k01'] }], hors_programme: false };
-  assert.deepEqual(benchOutput(copied, shown), marker(1));
+  // The marker, the count of sentences — and by how much the rule was missed: the whole
+  // measure in a row here, and all of the sentence.
+  assert.deepEqual(marked(copied), { withheld: 'copy', sentences: 1, longest: 12, share: 1 });
   // Whatever shape the recitation takes — asked for by whoever holds the key, or not.
-  assert.deepEqual(benchOutput(JSON.stringify(copied), shown), marker(1));
-  assert.deepEqual(benchOutput(`Voici la mesure : ${recited}.`, shown), marker(0));
-  assert.deepEqual(benchOutput({ note: [recited.toUpperCase()] }, shown), marker(0));
+  assert.deepEqual(marked(JSON.stringify(copied)), marked(copied));
+  assert.equal(marked(`Voici la mesure : ${recited}.`).sentences, 0);
+  assert.equal(marked(`Voici la mesure : ${recited}.`).longest, 12);
+  assert.equal(marked({ note: [recited.toUpperCase()] }).withheld, 'copy');
   // In pieces: no run of six, most of the sentence in runs of four.
   const pieces = {
     phrases: [
@@ -611,10 +625,56 @@ void test('the bench is handed no copied text: a marker and a count instead', ()
     ],
     hors_programme: false,
   };
-  assert.deepEqual(benchOutput(pieces, shown), marker(1));
+  const inPieces = marked(pieces);
+  assert.equal(inPieces.withheld, 'copy');
+  assert.ok(inPieces.longest < 6 && inPieces.share > 0.5, JSON.stringify(inPieces));
+  // Numbers, and not a word: nothing a marker holds is text of what the model was shown.
   for (const output of [copied, JSON.stringify(copied), pieces]) {
-    assert.doesNotMatch(JSON.stringify(benchOutput(output, shown)), /biblioth/i);
+    const out = marked(output);
+    assert.deepEqual(Object.keys(out).sort(), ['longest', 'sentences', 'share', 'withheld']);
+    assert.doesNotMatch(JSON.stringify(out), /biblioth/i);
   }
+});
+
+void test('a gist: one measure, one short sentence, in one of the ways the Worker knows', () => {
+  const measure = { id: 'p1c1-s01-k01', text: INVENTED[0]?.text ?? '' };
+  assert.ok(GIST_VARIANTS >= 2);
+  const seen = new Set<string>();
+  for (let variant = 0; variant < GIST_VARIANTS; variant += 1) {
+    assert.ok(isGistVariant(variant));
+    const request = gistRequest(measure, variant, MODELS['mistral-small-3.1']);
+    const messages = request['messages'] as { role: string; content: string }[];
+    const [system, user] = messages;
+    // The model is shown that measure and nothing else — no word of a visitor, no other measure.
+    assert.equal(user?.content, `MESURE :\n[${measure.id}] ${measure.text}`);
+    const instruction = systemGist(variant);
+    assert.equal(system?.content, instruction);
+    // What the control will check is asked for: one sentence, the same schema, the same rules.
+    for (const rule of [
+      /UNE phrase/,
+      /aucune négation/,
+      /exactement comme dans la MESURE/,
+      /jamais plus de quatre mots de suite/i,
+    ]) {
+      assert.match(instruction, rule);
+    }
+    assert.equal(request['max_tokens'], MAX_GIST_TOKENS);
+    assert.equal(request['temperature'], 0);
+    seen.add(instruction);
+  }
+  assert.equal(seen.size, GIST_VARIANTS, 'each way is its own instruction');
+  // A sentence of twenty-two words is asked: under what the control allows.
+  const asked = Number(/de (\d+) mots au plus/.exec(systemGist(0))?.[1]);
+  assert.ok(asked > 0 && asked < MAX_WORDS_PER_SENTENCE);
+  // Not a way the Worker knows: refused before anything is read.
+  for (const odd of [-1, GIST_VARIANTS, 1.5, '1', null, undefined])
+    assert.equal(isGistVariant(odd), false);
+  // …and it costs less to reserve than an answer about two dozen measures.
+  const gist = estimateNeurons(
+    gistRequest(measure, 0, MODELS['mistral-small-3.1']),
+    MODELS['mistral-small-3.1'],
+  );
+  assert.ok(gist > 0 && gist < 40, String(gist));
 });
 
 void test('what the Worker does not contain: a log, a write about a visitor, an outside service', () => {
@@ -660,6 +720,11 @@ void test('what the Worker does not contain: a log, a write about a visitor, an 
   // What the model returned leaves the Worker through one door, and it is not the raw output.
   assert.match(index, /output: benchOutput\(run\.output, loaded\.candidates\)/);
   assert.doesNotMatch(index, /output: run\.output\b/, 'the bench must not return the raw output');
+  // A gist is asked of one measure, in a way the Worker knows — and the same door lets it out.
+  assert.match(
+    index,
+    /mode === 'gist' && \(gist === null \|\| asked\.ids\.length !== 1\)\) return empty\(400\)/,
+  );
   // Both routes are counted by the limiter, and neither reads a body by itself.
   const bench = index.slice(index.indexOf('async function handleBench'));
   assert.match(bench, /withinRate\(request, env\)\)\) return empty\(429\)/);

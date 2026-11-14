@@ -18,7 +18,16 @@
  */
 import type { SectionHit } from '../lib/search-core.ts';
 import { enhanceOfficialLinks } from './deep-links.ts';
-import { el, engineReady, findSections, loadEngine, measureLink, type Meta } from './engine.ts';
+import {
+  displayOf,
+  el,
+  engineReady,
+  findSections,
+  firstWords,
+  loadEngine,
+  measureLink,
+  type Meta,
+} from './engine.ts';
 
 interface Strings {
   opening: string;
@@ -28,6 +37,7 @@ interface Strings {
   noneHint: string;
   where: string;
   incipit: string;
+  firstWords: string;
   missing: string;
 }
 
@@ -48,6 +58,8 @@ const stringsNode = document.querySelector('#search-strings');
 
 if (form && input && status && results && heading && list && stringsNode) {
   const strings = JSON.parse(stringsNode.textContent) as Strings;
+  const display = displayOf(form);
+  const labels = { key: strings.incipit, other: strings.firstWords };
   /** Fetched once, on the first sign that someone is going to search (src/scripts/engine.ts). */
   const load = (): ReturnType<typeof loadEngine> =>
     loadEngine(form.dataset.index ?? '', form.dataset.meta ?? '');
@@ -65,24 +77,20 @@ if (form && input && status && results && heading && list && stringsNode) {
       page.href = `/s/${group.sectionId}/`;
       page.dataset.programme = 'title';
       name.append(page);
-      item.append(name, el('p', where, 'where'));
+      item.append(name, el('p', where, 'where'), el('p', `${strings.where} :`, 'hits-lead'));
 
-      const hits = el('p', `${strings.where} : `, 'hits');
-      group.items.forEach((id, position) => {
-        const entry = meta.items[id];
-        if (entry === undefined) return;
-        const incipit = entry[2];
-        if (incipit !== '') {
-          const first = el('p', `« ${incipit}… »`, 'incipit');
-          first.dataset.programme = 'incipit';
-          first.title = strings.incipit;
-          item.append(first);
-        }
+      // One measure per line: its link, and the first words the citation policy lets it show —
+      // the incipit of a key measure, the few words the link carries for any other (D16.32).
+      const hits = el('ul', undefined, 'hits');
+      for (const id of group.items) {
         const link = measureLink(meta, id);
-        if (link === null) return;
-        if (position > 0) hits.append(', ');
-        hits.append(link);
-      });
+        if (link === null) continue;
+        const row = el('li');
+        row.append(link);
+        const words = firstWords(meta, id, display, labels);
+        if (words !== null) row.append(' ', words);
+        hits.append(row);
+      }
       item.append(hits);
       list.append(item);
     }

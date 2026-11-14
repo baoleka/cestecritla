@@ -14,6 +14,7 @@ import { askSite } from '../../lib/ask-config.ts';
 import { manifest } from '../../lib/edition.ts';
 import {
   gameFacts,
+  locatorDisplay,
   pendingReviewCount,
   quoteFacts,
   searchFacts,
@@ -112,7 +113,13 @@ const ENGINE_NAMES: Record<string, string> = {
   <p>{t('accuracy.quotes.lead')}</p>
   <ul class="counts">
     <li>{t('accuracy.quotes.incipit', { count: cited.incipit })}</li>
-    <li>{t('accuracy.quotes.locator', { count: cited.locator })}</li>
+    <li>
+      {
+        locatorDisplay() === 'search'
+          ? t('accuracy.quotes.locator.search', { count: cited.locator })
+          : t('accuracy.quotes.locator', { count: cited.locator })
+      }
+    </li>
     <li>{t('accuracy.quotes.whole', { count: fr(cited.whole), total: cited.wholeShare })}</li>
     <li>{t('accuracy.quotes.total', { count: cited.total })}</li>
   </ul>

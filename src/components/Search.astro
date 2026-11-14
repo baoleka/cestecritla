@@ -27,6 +27,7 @@
 import { askSite } from '../lib/ask-config.ts';
 import { ripostes, prose } from '../lib/editorial.ts';
 import { manifest } from '../lib/edition.ts';
+import { locatorDisplay } from '../lib/facts.ts';
 import { safeJson, t } from '../lib/strings.ts';
 
 interface Props {
@@ -58,6 +59,8 @@ const askConfig = asking && {
     noneLead: t('search.no_results_hint'),
     silence: t('silence.chat.local', { reopenTime: '{reopenTime}' }),
     where: t('search.result.where'),
+    incipit: t('quote.incipit_label'),
+    firstWords: t('quote.first_words_label'),
     notice: t('chat.ai_mention', { model }),
     noticeSelect: t('chat.ai_mention.select', { model }),
     method: t('chat.method_link'),
@@ -71,6 +74,7 @@ const strings = {
   noneHint: t('search.no_results_hint'),
   where: t('search.result.where'),
   incipit: t('quote.incipit_label'),
+  firstWords: t('quote.first_words_label'),
   missing: `${t('error.data.title')} ${t('error.data.lead')}`,
 };
 ---
@@ -86,6 +90,7 @@ const strings = {
   role="search"
   data-index={`/data/index-${version}.json`}
   data-meta={`/data/meta-${version}.json`}
+  data-first-words={locatorDisplay()}
 >
   <label for="q">{asking ? t('chat.label') : t('search.label')}</label>
   <input

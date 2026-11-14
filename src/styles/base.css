@@ -497,14 +497,25 @@ button.quiet {
 .result h3 {
   margin-block: 0;
 }
-.result .incipit {
-  margin-block: var(--space-2);
-  padding-inline-start: var(--space-3);
-  border-inline-start: 4px solid var(--verbatim-rule);
-  font-family: var(--font-family-verbatim);
+/* « C'est écrit là : », then one measure per line — its link, and its first words (D16.32). */
+.result .hits-lead {
+  margin-block: var(--space-2) 0;
 }
 .result .hits {
-  margin-block: var(--space-2) 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* Words of the programme, in the face every verbatim is set in. They follow their link as text
+   does and wrap like it — a box of their own would jump under the link whenever it did not fit
+   beside it — and the browser adds no hyphen of its own to a word of the book. */
+.first-words {
+  font-family: var(--font-family-verbatim);
+  hyphens: manual;
+}
+.sources .first-words {
+  display: block;
+  margin-block-end: var(--space-2);
 }
 .result .hits a {
   display: inline-block;

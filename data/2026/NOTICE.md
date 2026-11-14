@@ -10,7 +10,7 @@ ses pages et admettent de courts extraits, avec l'auteur et un lien vers la page
 
 | Fichier | Contenu | Écrit par |
 |---|---|---|
-| `manifest.json` | Structure du livre, titres officiels, ancres, une empreinte SHA-256 par élément, les premiers mots de chaque mesure clé (« incipit »), et un court repère par proposition, utilisé seulement dans les liens | `scripts/publish-2026.ts` |
+| `manifest.json` | Structure du livre, titres officiels, ancres, une empreinte SHA-256 par élément, les premiers mots de chaque mesure clé (« incipit »), et un court repère par proposition : son lien le porte, et la page le montre à côté de ce lien dans un résultat de recherche — jamais sur une page servie (D16.32) | `scripts/publish-2026.ts` |
 | `quotes.json` | Les propositions citées en entier par une riposte ou une carte-concept, avec leur lien | `scripts/publish-2026.ts` |
 | `exposure-policy.json` | La politique de citation chiffrée : plafonds, longueur des repères, date de validation | à la main |
 | `expected-invariants.json` | La forme attendue du livre (comptes) ; un écart arrête l'ingestion | `scripts/ingest-2026.ts --write-expected` |
@@ -47,6 +47,11 @@ contient aucune phrase et ne permet pas d'en reconstituer une.
 `manifest.json` porte sa propre mesure (`meta.exposure`) : part des mots des propositions visibles
 comme incipit, portés par un repère de lien, ou cités en entier. La CI la recalcule à partir du
 fichier et refuse tout dépassement des plafonds (`scripts/leak.test.ts`).
+
+Où un repère se lit est un réglage de `exposure-policy.json` (`locator_display`, D16.32) :
+`href`, dans le lien seulement ; `search`, aussi à côté du lien dans un résultat de recherche et
+dans la sélection de « Demander ». Dans les deux cas ce sont les mêmes mots, déjà comptés : le
+réglage ne change pas ce qui sort, il change où on le lit.
 
 ## Les mots du jeu
 

@@ -30,6 +30,7 @@ import {
 } from '../lib/ask-contract.js';
 import {
   carriesCopy,
+  copyMeasure,
   refusals,
   validateAnswer,
   validateSelection,
@@ -94,15 +95,21 @@ export function control(
 /**
  * What `/api/bench` returns of an output: the output — unless the model copied what it was
  * shown. An answer of the Worker holds no more of the book than a page would, the bench's
- * included (D16.6): then a marker and a count leave, never the text. The bench counts the
- * marker under its gate "copied sequence"; nobody needs to read what it stands for.
+ * included (D16.6): then a marker and numbers leave, never the text — how many sentences, the
+ * longest run of copied words, the largest copied share. The bench counts the marker under its
+ * gate "copied sequence"; nobody needs to read what it stands for, and the numbers say by how
+ * much the instruction was missed.
  */
 export function benchOutput(output: unknown, candidates: readonly Candidate[]): unknown {
   const copied =
     carriesCopy(output, candidates) ||
     refusals(output, candidates, { minOverlap: 0 }).some((refusal) => refusal.rule === 'copy');
   if (!copied) return output;
-  return { withheld: 'copy', sentences: parseModelAnswer(output)?.phrases.length ?? 0 };
+  return {
+    withheld: 'copy',
+    sentences: parseModelAnswer(output)?.phrases.length ?? 0,
+    ...copyMeasure(output, candidates),
+  };
 }
 
 export async function answerQuestion(request: AskRequest, deps: AskDeps): Promise<AskResponse> {

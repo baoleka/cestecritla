@@ -26,6 +26,7 @@ import { existsSync, readFileSync, statSync } from 'node:fs';
 import { createServer, type Server } from 'node:http';
 import { extname, join, normalize, resolve } from 'node:path';
 import { chromium, firefox, webkit, type BrowserType, type Page } from 'playwright';
+import { firstWordsOf, isLocatorDisplay, quoted } from '../src/lib/first-words.js';
 import { gameSite } from '../src/lib/game-data.js';
 import { CRAWL_ROOT, type FetchLog } from './aec26-source.js';
 import type { Manifest } from './aec26-types.js';
@@ -247,8 +248,8 @@ async function runEngine(
     await page.waitForTimeout(400);
     check('one letter searches nothing', await page.locator('#search-results').isHidden());
     await page.locator('#q').pressSequentially('etraite à 60 ans', { delay: 40 });
-    await page.waitForSelector('#search-list li');
-    const found = await page.locator('#search-list li').count();
+    await page.waitForSelector('#search-list > li');
+    const found = await page.locator('#search-list > li').count();
     check(
       'results arrive while typing, without Enter',
       found >= 1 && found <= 8,
@@ -310,6 +311,56 @@ async function runEngine(
         `${String(withDirective)}/${String(marked)}`,
       );
     }
+
+    // --- 4 bis. the first words of a measure, next to its link (D16.32)
+    // What a result shows of the programme is what the public files hold for that very measure
+    // — the incipit of a key measure, the words its link carries for another — and only where
+    // the citation policy says so. Read here from the files, then compared with the page.
+    const policy = JSON.parse(readFileSync('data/2026/exposure-policy.json', 'utf8')) as {
+      locator_display?: unknown;
+    };
+    const display = isLocatorDisplay(policy.locator_display) ? policy.locator_display : 'href';
+    // A measure is told apart by its section and what its link carries: a locator is unique in
+    // its chapter's page, not in the book — and a few measures have none.
+    const allowed = new Map<string, Set<string>>();
+    const keyRows = new Set<string>();
+    for (const section of (JSON.parse(readFileSync('data/2026/manifest.json', 'utf8')) as Manifest)
+      .sections) {
+      for (const item of section.items) {
+        if (item.kind === 'paragraph') continue;
+        const row = `${section.url}|${item.locator ?? ''}`;
+        const words = firstWordsOf(['', item.locator ?? '', item.incipit ?? ''], display);
+        allowed.set(row, (allowed.get(row) ?? new Set()).add(words === '' ? '' : quoted(words)));
+        if (item.incipit !== undefined) keyRows.add(row);
+      }
+    }
+    const rows = await page.evaluate<
+      { row: string; fragment: string; words: string; kind: string; links: number }[]
+    >(
+      "Array.from(document.querySelectorAll('#search-list .hits li')).map((li) => { const a = li.querySelector('a'); const w = li.querySelector('.first-words'); const fragment = a?.dataset.fragment ?? ''; return { row: (a ? a.href.split(':~:')[0] : '') + '|' + fragment, fragment, words: w ? w.textContent : '', kind: w ? (w.dataset.programme ?? '') : '', links: li.querySelectorAll('a').length }; })",
+    );
+    const wrong = rows.filter(
+      (row) =>
+        row.links !== 1 ||
+        allowed.get(row.row)?.has(row.words) !== true ||
+        (row.words !== '' && row.kind !== 'incipit'),
+    );
+    check(
+      'next to each link, a result shows the first words the public files hold for that measure, marked as words of the programme',
+      rows.length > 0 && wrong.length === 0,
+      `${String(wrong.length)} of ${String(rows.length)} rows`,
+    );
+    const plain = rows.filter((row) => row.fragment !== '' && !keyRows.has(row.row));
+    check(
+      'the words a link carries are shown where the citation policy says, and only there',
+      (await page.evaluate<string>("document.querySelector('#search').dataset.firstWords")) ===
+        display &&
+        plain.length > 0 &&
+        (display === 'search'
+          ? plain.every((row) => row.words !== '')
+          : plain.every((row) => row.words === '')),
+      `${display}: ${String(plain.filter((row) => row.words !== '').length)} of ${String(plain.length)} rows show them`,
+    );
 
     // --- 3. hostile input
     await page.goto(

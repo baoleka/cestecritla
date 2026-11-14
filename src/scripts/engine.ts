@@ -18,6 +18,7 @@ import {
   type SectionHit,
   type SynonymGroup,
 } from '../lib/search-core.ts';
+import { firstWordsOf, isLocatorDisplay, quoted, type LocatorDisplay } from '../lib/first-words.ts';
 
 /** /data/meta-<version>.json — built from the public manifest (src/pages/data/[name].json.ts). */
 export interface Meta {
@@ -109,3 +110,33 @@ export function measureLink(meta: Meta, id: string, text?: string): HTMLAnchorEl
   if (fragment !== '') link.dataset.fragment = fragment;
   return link;
 }
+
+/** What the page says of the first words it shows: of a key measure, of any other. */
+export interface FirstWordsLabels {
+  key: string;
+  other: string;
+}
+
+/**
+ * The first words of a measure, ready to stand next to its link (D16.32) — marked as words of
+ * the programme, like every word of it a page shows. Null when there are none to show: the
+ * measure has neither incipit nor locator, or the citation policy keeps locators in the links.
+ */
+export function firstWords(
+  meta: Meta,
+  id: string,
+  display: LocatorDisplay,
+  labels: FirstWordsLabels,
+): HTMLElement | null {
+  const entry = meta.items[id];
+  const words = firstWordsOf(entry, display);
+  if (entry === undefined || words === '') return null;
+  const node = el('span', quoted(words), 'first-words');
+  node.dataset.programme = 'incipit';
+  node.title = entry[2] !== '' ? labels.key : labels.other;
+  return node;
+}
+
+/** What the form says the citation policy allows (`data-first-words`): prudent when unsaid. */
+export const displayOf = (form: HTMLElement): LocatorDisplay =>
+  isLocatorDisplay(form.dataset.firstWords) ? form.dataset.firstWords : 'href';

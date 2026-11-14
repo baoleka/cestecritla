@@ -30,7 +30,13 @@ import { DEFAULT_HARD_STOP } from './budget-core.js';
 import { clientKey, readBody } from './guards.js';
 import { keptTerms, loadMeasures } from './measures.js';
 import { MODELS, isModelKey } from './models.js';
-import { estimateNeurons, modelRequest, type ModelSpec } from './prompt.js';
+import {
+  estimateNeurons,
+  gistRequest,
+  isGistVariant,
+  modelRequest,
+  type ModelSpec,
+} from './prompt.js';
 
 export { NeuronBudget } from './budget.js';
 
@@ -198,15 +204,25 @@ async function handleBench(request: Request, env: Env): Promise<Response> {
   const body = await readBody(request);
   if (!isRecord(body) || !(await keyMatches(body['key'], env.BENCH_KEY))) return empty(404);
   if (!(await withinRate(request, env))) return empty(429);
-  const { model: key, mode, min_overlap: minOverlap, skip_cache: skipCache } = body;
+  const { model: key, mode, min_overlap: minOverlap, skip_cache: skipCache, variant } = body;
   const asked = parseAskRequest({
     corpus: env.CORPUS_VERSION,
     ids: body['ids'],
     terms: body['terms'],
   });
-  if (asked === null || !isModelKey(key) || (mode !== 'answer' && mode !== 'select')) {
+  if (
+    asked === null ||
+    !isModelKey(key) ||
+    (mode !== 'answer' && mode !== 'select' && mode !== 'gist')
+  ) {
     return empty(400);
   }
+  // A gist is one sentence about one measure, written one of the ways the Worker knows — a
+  // trial of what could be written ahead of any visitor (08-ia.md §10.8). Bench only.
+  const gist = mode === 'gist' && isGistVariant(variant) ? variant : null;
+  if (mode === 'gist' && (gist === null || asked.ids.length !== 1)) return empty(400);
+  /** What the control reads the output as: sentences, unless a selection was asked for. */
+  const written = mode === 'select' ? 'select' : 'answer';
   const model = MODELS[key];
   const started = Date.now();
   const loaded = await loadMeasures(env.DB, asked.ids);
@@ -215,12 +231,11 @@ async function handleBench(request: Request, env: Env): Promise<Response> {
   const base = { corpus: loaded.state.corpusVersion, ids, load_ms: loadedMs };
   if (loaded.candidates.length === 0) return json({ ...base, ran: false });
 
-  const input = modelRequest(
-    mode,
-    loaded.candidates,
-    keptTerms(asked.terms, loaded.candidates),
-    model,
-  );
+  const single = loaded.candidates[0];
+  const input =
+    gist !== null && single !== undefined
+      ? gistRequest(single, gist, model)
+      : modelRequest(written, loaded.candidates, keptTerms(asked.terms, loaded.candidates), model);
   const reserved = estimateNeurons(input, model);
   const budget = env.BUDGET.getByName('global');
   if (!(await budget.reserve(reserved, hardStop(env)))) {
@@ -236,7 +251,7 @@ async function handleBench(request: Request, env: Env): Promise<Response> {
     ...base,
     ran: true,
     output: benchOutput(run.output, loaded.candidates),
-    verdict: control(mode, run.output, loaded.candidates, overlap),
+    verdict: control(written, run.output, loaded.candidates, overlap),
     neurons: run.neurons,
     reserved,
     cached: run.cached,

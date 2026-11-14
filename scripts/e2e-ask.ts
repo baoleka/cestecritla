@@ -314,10 +314,10 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       page.url(),
     );
     // The field is still the search: results arrive while one types, under the button.
-    await page.waitForSelector('#search-list li');
+    await page.waitForSelector('#search-list > li');
     check(
       'the same field still searches while one types',
-      (await page.locator('#search-list li').count()) >= 1,
+      (await page.locator('#search-list > li').count()) >= 1,
     );
     await page.click('#ask');
     await until(page, "!document.querySelector('#answer').hidden");
@@ -368,6 +368,11 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
     const linkText = await text('#answer-body .sources a');
     check('a link names the section and the measure', linkText.includes(section.title), linkText);
+    // A sentence of the model already says what its measure provides: no first words under it.
+    check(
+      'a written answer shows no first words of a measure',
+      (await page.locator('#answer-body .first-words').count()) === 0,
+    );
     const notice = await text('#answer-notice');
     check(
       'the answer says an AI wrote it, which — and that it did not read the question',
@@ -399,6 +404,19 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       selected.title,
     );
     check('a selection made by the model still says so', selected.notice.includes(MODEL));
+    // Three links alone would say nothing of what each measure is: where the citation policy
+    // allows, each shows its first words — marked as words of the programme (D16.32).
+    const under = await page.evaluate<{ links: number; words: number; marked: number }>(
+      "(() => { const all = Array.from(document.querySelectorAll('#answer-body .sources .first-words')); return { links: document.querySelectorAll('#answer-body .sources a').length, words: all.length, marked: all.filter((w) => w.dataset.programme === 'incipit' && /^«\\s.+…\\s»$/.test(w.textContent)).length }; })()",
+    );
+    check(
+      'a selection shows the first words of its measures, as the citation policy allows',
+      (await page.evaluate<string>("document.querySelector('#search').dataset.firstWords")) ===
+        'search'
+        ? under.words >= 1 && under.words <= under.links && under.marked === under.words
+        : under.words === 0,
+      `${String(under.words)} of ${String(under.links)} links`,
+    );
     // Words the book does not write find nothing: the phone says so by itself, and sends nothing.
     const unsent = posted.length;
     const nothing = await ask('zorglub montcuq');
@@ -516,7 +534,10 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       await guard(view);
       await view.goto(`${origin}/`);
       await view.focus('#q');
-      await until(view, "document.querySelector('#ask') && !document.querySelector('#ask').disabled");
+      await until(
+        view,
+        "document.querySelector('#ask') && !document.querySelector('#ask').disabled",
+      );
       const sent = posted.length;
       scenario = 'answer';
       await view.clock.setFixedTime(new Date(Date.now() + 10 * 60 * 1000));

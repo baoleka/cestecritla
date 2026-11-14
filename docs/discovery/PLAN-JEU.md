@@ -5,9 +5,9 @@
 > **D16.1 à D16.21** dans `decisions.md`. Il s'adresse à l'utilisateur (« tu »). Son journal
 > d'exécution est en fin de fichier.
 >
-> **Le corps du plan est laissé tel qu'il a été approuvé ; dix décisions du soir même le
-> changent** (D16.22 à D16.31 ; journal, « Les décisions du 13 novembre au soir » et suivants).
-> À lire par-dessus le texte :
+> **Le corps du plan est laissé tel qu'il a été approuvé ; onze décisions le changent, dix du
+> soir même et une du lendemain** (D16.22 à D16.32 ; journal, « Les décisions du 13 novembre au
+> soir » et suivants). À lire par-dessus le texte :
 >
 > - **la phrase tapée ne quitte pas le téléphone** (D16.22) : partout où le plan écrit que « la
 >   question » part au Worker ou au modèle (§1.2 à §1.4, §2.1, §2.2, §2.7, §5), ce sont des
@@ -23,7 +23,10 @@
 > - **les phrases de §1.2 et §1.3 sont réécrites** (D16.30) : « Voici ce que prévoient les
 >   mesures trouvées : », et une mention qui dit que l'IA a lu les mesures, pas la question ;
 > - **la liste du jeu fait 48 mots, pas « autour de 90 »** (D16.31, contre §6 et le lot J3) :
->   c'est ce que les critères laissent passer, et des chapitres entiers n'ont aucun mot.
+>   c'est ce que les critères laissent passer, et des chapitres entiers n'ont aucun mot ;
+> - **à côté du lien d'une mesure trouvée, on lit ses premiers mots** (D16.32, là où §1.2 et
+>   §1.4 ne montraient que des liens) : dans la recherche et dans la sélection de « Demander »,
+>   jamais sur une page servie.
 >
 > Où en sont tes gestes : sous le titre de §9.1.
 
@@ -1666,3 +1669,137 @@ identiques à la build, les deux mêmes écarts expliqués (`/404.html`, `/robot
 du jeu porte 48 mots, l'ancien ne répond plus ; les 81 contrôles des trois navigateurs tiennent ;
 à 320 px, par le rendu du jeu lui-même, le mot de seize lettres est marqué long, à 28 px, sur
 une ligne, dans les trois moteurs. L'apex n'a pas bougé. Rien n'est poussé.
+
+### Lot I5, premier geste, dans la nuit du 13 au 14 novembre 2026 — la base privée existe, vide
+
+L'éditeur a vu l'aperçu (« Je suis satisfait ») ; à la question « qui crée la base ? », il a
+répondu « Crée-la ».
+
+- `wrangler d1 create cestecritla-ask --jurisdiction eu`, lancé hors du dépôt : la base est
+  créée le 2026-11-13 à 23:01 UTC, **vide** (0 table, VÉRIFIÉ par `wrangler d1 info`),
+  **juridiction « eu »** — ses données sont gardées et lues dans l'Union européenne seulement ;
+  Cloudflare l'a placée en Europe de l'Est (`EEUR`). La juridiction ne se change pas après
+  coup : c'est un choix de la session, prudent pour un texte qu'on n'a le droit de garder
+  nulle part ailleurs, et réversible seulement en supprimant la base.
+- Son identifiant est écrit aux deux endroits de `wrangler.jsonc` : `workerProblems()` ne
+  refuse plus le Worker, et le déploiement du banc se construit à blanc (30 Ko, liaisons :
+  budget, base, modèle, limite de débit, fichiers) — **à blanc seulement**.
+- **Rien d'autre** : aucun texte déposé, aucun Worker déployé, aucun secret posé, aucun neuron.
+  Le dépôt du texte et le premier déploiement du Worker se redemandent chacun à son moment.
+
+### D16.32, le 14 novembre 2026 — les premiers mots d'une mesure, à côté de son lien
+
+En regardant l'aperçu, l'éditeur a demandé : « Pourquoi que les premiers mots des mesures
+clés ? » La réponse tenait à D15.7 — un réglage de prudence, pas une limite : hors mesure clé,
+le visiteur lisait « mesure 3 » et devait cliquer pour savoir. Trois options lui ont été
+posées ; il a choisi **« Dans la recherche »**.
+
+- **Ce qui est montré** : à côté du lien de chaque mesure trouvée, les mots que ce lien porte
+  déjà pour atterrir sur la phrase — son repère, 4 à 8 mots — entre guillemets, coupés par
+  « … » ; pour une mesure clé, son incipit, comme avant. Dans un résultat de recherche et dans
+  la sélection de « Demander ». **Pas** sous une phrase écrite par le modèle, **pas** sur une
+  fiche de section, sur aucune page servie.
+- **Rien de plus ne sort** : ce sont les mots des fichiers publics. La part couverte reste
+  20,12 %, plafond 25 %, aucune mesure à plus de la moitié.
+- **Le réglage est une donnée** : `locator_display` dans `data/2026/exposure-policy.json` —
+  `search` aujourd'hui, `href` pour les remettre dans les liens. La page lit la politique
+  (`data-first-words`), le script lui obéit (`src/lib/first-words.ts`, `firstWords`).
+  `/exactitude` ne dit plus « jamais affichés » mais « montrés aussi dans une recherche ».
+- **Ce que le mot « premiers » vaut vraiment, dit à l'éditeur** : 971 repères sur 1 014 font
+  quatre mots. « Rénover le bâti scolaire… » dit quelque chose ; « Renforcer la place de… »
+  presque rien, et deux mesures de sections différentes peuvent commencer pareil. Aller à huit
+  mots partout ferait sortir des mots neufs et passerait le plafond : ce serait une autre
+  décision.
+- **Le rendu, corrigé à l'image** : les mots suivent leur lien comme du texte (une boîte à
+  part sautait sous le lien une fois sur deux) ; l'espace des guillemets ne se coupe pas (un
+  « » » finissait seul sur sa ligne) ; le navigateur n'ajoute aucun trait d'union à un mot du
+  livre ; un signe laissé en suspens par la coupe (un guillemet ouvrant, deux-points) n'est pas
+  montré, et pas un caractère n'est changé.
+- **Portes** : la règle, sur des repères inventés puis sur le manifeste public — ce qu'un
+  résultat peut montrer est toujours le début de ce que le lien porte (`first-words.test.ts`) ;
+  de bout en bout, chaque ligne d'un résultat est comparée aux fichiers publics pour sa propre
+  mesure, et marquée comme mot du programme ; la sélection en montre, une réponse écrite n'en
+  montre pas ; et, politique remise sur `href`, plus aucun repère ne se lit et la suite passe.
+- **Ce qui n'est pas prouvé** : que cela tienne dans les « courts extraits » que la source
+  admet — lecture prudente, pas un avis (R32, H-CNF-22).
+
+Portes, toutes vertes (batterie complète, code de sortie 0) : 392 tests (391 passent, 1 sauté,
+0 échoue) ; bout en bout, Chromium / Firefox / WebKit : l'app 39 / 36 / 36, « Demander »
+75 / 70 / 70, le jeu 113 / 104 / 104 ; accessibilité : 225 contrôles, 0 en échec. **Pas encore
+sur l'aperçu** : le déploiement se redemande.
+
+### Lot I5, suite, dans la nuit du 13 au 14 novembre 2026 — le texte déposé, le Worker du banc en ligne
+
+Quatre accords demandés, quatre donnés, chacun pour son geste : mettre les premiers mots sur
+l'aperçu, déposer le texte, tirer et poser les deux secrets, déployer le Worker.
+
+- **Le texte est dans la base privée** (D16.6 — c'est la première fois qu'il quitte la machine
+  de l'éditeur) : `seed-ask-2026.ts --remote cestecritla-ask --accord 2026-11-13 --env preview`,
+  la date étant celle de l'horloge UTC au moment de l'accord (23 h 2x le 13, minuit passé à
+  Paris). Vérifié par des comptes, sans lire une ligne : 1 069 mesures, 166 057 caractères,
+  5 520 de mesure mère, 111 sections — les mêmes nombres que le texte local ; description : la
+  version du livre du manifeste, 1 069 propositions, **réponses « arrêtées »** ; deux tables,
+  aucun index. Servi depuis l'Union européenne (`EEUR`).
+- **Les deux secrets** (`RATE_SALT`, `BENCH_KEY`) sont tirés au hasard sur cette machine, gardés
+  sous `private/bench/` (ignoré par git, lisibles par leur seul propriétaire) et envoyés par
+  l'entrée standard : ni affichés, ni passés en argument, ni écrits dans un fichier suivi.
+- **Premier déploiement d'un Worker** : `npm run deploy:preview -- --bench`, version
+  `a8e20b74-2744-426e-bd18-be89854869ac` — 30 Ko, démarrage 12 ms ; liaisons : compteur du
+  jour (Durable Object), base, modèle, limite de débit, fichiers. La page est la build de D16.32,
+  toujours sans « Demander ».
+- **VÉRIFIÉ sur l'hôte, à 0 neuron** : 1 150 fichiers sur 1 152 identiques à la build (les deux
+  écarts connus) ; `noindex` en place ; les 81 contrôles des trois navigateurs tiennent ; **les
+  premiers mots se lisent dans la recherche** (28 lignes sur 28, marquées, huit mots au plus,
+  aucune sur une fiche de section, aucun tiers) ; `/api/bench` répond 404 sans la clé et avec
+  une mauvaise ; avec la clé, sur une mesure que le livre n'a pas, il rend la version du livre lue
+  dans la base (56 ms) et **n'appelle aucun modèle** ; un modèle inconnu, ou une phrase à la
+  place d'un mot : 400. `/api/ask` refuse ce qui ne vient pas de la page (403, 405).
+- **Ce qui n'est pas fait** : aucun modèle n'a été appelé — le banc lui-même se redemande, avec
+  son budget, une fois la passerelle `aec` vérifiée au tableau de bord par l'éditeur (journaux
+  coupés ; la session ne peut pas la lire) ; la descente du Worker vers les fichiers statiques
+  (R27) se répète après le banc, pas avant.
+
+### Lot I5, premier tour du banc, nuit du 13 au 14 novembre 2026 — aucun modèle ne peut écrire
+
+Deux accords de l'éditeur : « Oui, les quatre modèles », et, pour la passerelle, « Lance, je
+vérifierai avant le lancement ». Un appel d'abord, au modèle le moins cher, pour éprouver le
+chemin entier — la passerelle `aec` répond —, puis le tour : 153 items, 5 962 neurons mesurés.
+
+- **Résultat, sur les portes automatiques seules** (`08-ia.md` §10.8, `eval/ask-results.md`) :
+  la page afficherait 4 réponses écrites sur 40 pour Gemma, 1 sur 33 pour Llama, **0 sur 40
+  pour Mistral et pour gpt-oss**. Le contrôle retient pour recopie 20 à 37 sorties ; gpt-oss ne
+  rend que du vide ; le p95 depuis le Worker va de 4,7 à 6,0 s, pour une porte à 3.
+- **Ce que le contrôle a fait est ce pour quoi il est là** : pas une phrase recopiée n'a quitté
+  le Worker, pas même vers le banc — c'est aussi pourquoi on ne sait pas de combien elles
+  recopient.
+- **Le compteur du jour s'est fermé tout seul** à 8 500, sept items avant la fin : il compte
+  aussi, par prudence, les 35 appels restés sans réponse. Rien n'a dépassé le quota gratuit.
+- **La suite est demandée à l'éditeur** : une consigne réécrite et un second tour, la sélection
+  seule, ou la recherche seule. Aucun juge n'a encore rien lu : il n'y a presque rien à juger.
+
+### Lot I5, la sélection seule mesurée, 14 novembre 2026 — elle ne bat pas la recherche
+
+Deux réponses de l'éditeur après le premier tour : « Oui, mesure-la » pour la sélection seule,
+« Oui, un essai sur un chapitre » pour des phrases écrites d'avance.
+
+- **La sélection seule** (`08-ia.md` §10.9) : Mistral, les 87 questions, 3 516 neurons. Sur 85
+  questions, le choix du modèle contient une mesure attendue 81 fois, celui de la page 82 fois ;
+  jamais mieux, une fois moins bien. Le temps passe (p95 1,9 s), l'utilité non. **Les deux
+  premiers barreaux de l'échelle de D16.4 sont fermés par la mesure.**
+- **Pourquoi** : depuis D16.22 le modèle en sait moins que la recherche — il ne lit pas la
+  question. C'est le prix écrit en R30, mesuré.
+
+### L'essai « une phrase par mesure », et le quota qui se ferme — 14 novembre 2026
+
+- **L'essai** (`08-ia.md` §10.10) : un mode `gist` sur la route du banc, trois consignes. Gemma,
+  25 mesures d'un chapitre : **16 ont une phrase que le contrôle laisse passer**, douze par la
+  consigne « l'essentiel en mots courants » ; aucune recopie ; ce qui refuse maintenant, c'est une
+  phrase trop loin des mots de sa mesure. 4,5 neurons l'appel. **Personne n'a vérifié que ces
+  phrases sont justes**, et rien n'est publié : c'est un choix de l'éditeur, hors du plan.
+- **Le quota gratuit s'est épuisé à 00 h 36 UTC** (`429`, code `4006`), après 10 086 neurons
+  mesurés depuis le 13 après-midi : il ne s'était pas remis à zéro à minuit UTC. Aucune facture.
+  Mistral n'a pas été essayé. Le compteur du Worker, calé sur minuit UTC, n'a rien vu venir :
+  noté pour le jour où un modèle répondrait à des visiteurs.
+- **Deux nombres à la place d'une sortie retenue** : la route du banc rend maintenant la plus
+  longue suite de mots recopiés et la part recopiée (`copyMeasure`) — toujours pas un mot.
+

@@ -91,7 +91,8 @@ function report(
   const lines = [
     `Edition 2026 — corpus ${corpus.meta.corpus_version}, crawl ${corpus.meta.crawl_stamp}`,
     `Policy: locators ${String(policy.locator_min_words)}–${String(policy.locator_max_words)} words, ` +
-      `scope "${policy.locator_scope}", at most ${String(policy.locator_max_item_share * 100)} % of an item; ` +
+      `scope "${policy.locator_scope}", read ${policy.locator_display === 'search' ? 'in links and next to them in a search result' : 'in links only'}, ` +
+      `at most ${String(policy.locator_max_item_share * 100)} % of an item; ` +
       `incipits ${String(policy.incipit_min_words)}–${String(policy.incipit_max_words)} words, key measures only`,
     `Validated by the editor: ${policy.validated_on ?? 'NOT YET — nothing derived from it may be pushed or deployed'}`,
     '',

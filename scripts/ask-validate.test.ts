@@ -33,6 +33,7 @@ import {
   PROVISIONAL_MAX_COPIED_SHARE,
   carriesCopy,
   copiedShare,
+  copyMeasure,
   copyTokens,
   overlap,
   refusals,
@@ -830,4 +831,28 @@ void test('a request names measures and words of the book: a sentence does not f
   // The field still bounds what the local search reads.
   assert.equal(MAX_QUESTION_CHARS, 300);
   assert.ok(ASKED_TERM.test('retraite') && !ASKED_TERM.test('ma retraite'));
+});
+
+void test('how much an output copies is two numbers: the longest run, the largest share', () => {
+  const shown = [
+    { id: 'p1c1-s01-k01', text: 'Ouvrir une bibliothèque de quartier dans chaque commune' },
+  ];
+  // Recited: the whole measure in a row, all of the sentence.
+  assert.deepEqual(
+    copyMeasure({ phrases: [{ texte: shown[0]?.text, ids: ['p1c1-s01-k01'] }] }, shown),
+    {
+      longest: 8,
+      share: 1,
+    },
+  );
+  // In our words: a few words shared, no run of four.
+  const ours = 'Le programme prévoit des bibliothèques proches de chacun, commune par commune.';
+  const measured = copyMeasure({ phrases: [{ texte: ours, ids: ['p1c1-s01-k01'] }] }, shown);
+  assert.ok(measured.longest <= 2 && measured.share === 0, JSON.stringify(measured));
+  // Accents, case and punctuation do not hide a run; a JSON written as text is read.
+  assert.equal(copyMeasure('OUVRIR UNE BIBLIOTHEQUE, de quartier !', shown).longest, 5);
+  assert.equal(copyMeasure(JSON.stringify({ note: shown[0]?.text }), shown).longest, 8);
+  // Nothing to compare: nothing copied.
+  assert.deepEqual(copyMeasure('', shown), { longest: 0, share: 0 });
+  assert.deepEqual(copyMeasure({ phrases: [] }, shown), { longest: 0, share: 0 });
 });

@@ -45,14 +45,16 @@
 
   "ai": { "binding": "AI" },
 
-  // The private base. `database_id` is written here when the editor creates it
-  // (`wrangler d1 create cestecritla-ask`): until then the zeros below refuse to deploy, which
-  // is the point — scripts/build-mode.test.ts reads this line.
+  // The private base, created with the editor's accord on 2026-11-13T23:01Z
+  // (`wrangler d1 create cestecritla-ask --jurisdiction eu`): its data is stored and read in
+  // the European Union only. Empty until the text is deposited, which is asked for separately
+  // (scripts/seed-ask-2026.ts --remote). An identifier of zeros here refuses to deploy —
+  // scripts/build-mode.test.ts reads this line; the same base serves both environments.
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "cestecritla-ask",
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "e6ac3803-eeba-40a5-ae3b-0d8203b4c6c4",
     },
   ],
 
@@ -102,7 +104,7 @@
         {
           "binding": "DB",
           "database_name": "cestecritla-ask",
-          "database_id": "00000000-0000-0000-0000-000000000000",
+          "database_id": "e6ac3803-eeba-40a5-ae3b-0d8203b4c6c4",
         },
       ],
       "durable_objects": {

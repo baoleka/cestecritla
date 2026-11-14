@@ -76,3 +76,54 @@ au centième près. **Quatrième candidat du banc : Llama 3.3 70B, pas Qwen 3.8*
 plus sur des questions d'une ligne, dépasse six secondes deux fois sur six, et rend une réponse vide.
 Latences mesurées depuis un portable, en REST : PROBABLE comme ordre de grandeur, HYPOTHÈSE pour le
 chemin de production (le banc se mesure depuis le Worker d'aperçu).
+
+**Dans la nuit du 13 au 14 novembre 2026** (lot I5) : la base privée est créée et remplie, le Worker
+du banc est déployé sur l'aperçu, ses deux secrets posés — **aucun appel à un modèle, 0 neuron**. Les
+vérifications de `/api/bench` se sont arrêtées avant le modèle (une mesure que le livre n'a pas : la
+base est lue, rien n'est appelé). Cumul du 13/11 (UTC) inchangé : **308,57 / 10 000**. Le compteur du
+Worker (`NEURON_HARD_STOP`) s'arrête à 8 500 par jour ; `scripts/bench-ask.ts --live` exige un
+`--budget` et inscrit sa ligne ici.
+| 2026-11-13 | banc « Demander » — Gemma 4 26B, mode answer | 1 items | 19.35 neurons |
+| 2026-11-13 | banc « Demander » — Gemma 4 26B, mode answer | 19 items | 290.05 neurons |
+| 2026-11-13 | banc « Demander » — Gemma 4 26B, mode answer | 8 items | 57.75 neurons |
+| 2026-11-13 | banc « Demander » — Gemma 4 26B, mode answer | 6 items | 68.30 neurons |
+| 2026-11-13 | banc « Demander » — Gemma 4 26B, mode answer | 3 items | 19.33 neurons |
+| 2026-11-13 | banc « Demander » — Gemma 4 26B, mode answer | 3 items | 33.71 neurons |
+| 2026-11-13 | banc « Demander » — Mistral Small 3.1, mode answer | 20 items | 1035.55 neurons |
+| 2026-11-13 | banc « Demander » — Mistral Small 3.1, mode answer | 8 items | 455.56 neurons |
+| 2026-11-13 | banc « Demander » — Mistral Small 3.1, mode answer | 6 items | 318.87 neurons |
+| 2026-11-13 | banc « Demander » — Mistral Small 3.1, mode answer | 3 items | 166.56 neurons |
+| 2026-11-13 | banc « Demander » — Mistral Small 3.1, mode answer | 3 items | 98.30 neurons |
+| 2026-11-13 | banc « Demander » — gpt-oss-120b, mode answer | 20 items | 898.68 neurons |
+| 2026-11-13 | banc « Demander » — gpt-oss-120b, mode answer | 8 items | 140.33 neurons |
+| 2026-11-13 | banc « Demander » — gpt-oss-120b, mode answer | 6 items | 338.63 neurons |
+| 2026-11-13 | banc « Demander » — gpt-oss-120b, mode answer | 3 items | 145.42 neurons |
+| 2026-11-13 | banc « Demander » — gpt-oss-120b, mode answer | 3 items | 65.38 neurons |
+| 2026-11-13 | banc « Demander » — Llama 3.3 70B, mode answer | 20 items | 1143.60 neurons |
+| 2026-11-13 | banc « Demander » — Llama 3.3 70B, mode answer | 8 items | 458.40 neurons |
+| 2026-11-13 | banc « Demander » — Llama 3.3 70B, mode answer | 5 items | 208.35 neurons |
+| 2026-11-13 | banc « Demander » — Llama 3.3 70B, mode answer | 0 items | 0.00 neurons |
+| 2026-11-13 | banc « Demander » — Llama 3.3 70B, mode answer | 0 items | 0.00 neurons |
+
+**Lecture du premier tour (nuit du 13 au 14 novembre, tout avant 00:00 UTC).** Mesuré par
+`usage.neurons` : Gemma 488,49 · Mistral 2 074,84 · gpt-oss 1 588,44 · Llama 1 810,35 —
+**5 962,12 neurons** pour 153 items, plus les 308,57 des essais d'accès : **6 270,69 mesurés le
+13/11 (UTC)**. Le compteur du Worker, lui, s'est fermé à 8 500 : il garde en réserve le coût estimé
+des 35 appels restés sans réponse en six secondes (Gemma 12, gpt-oss 16, Llama 7), qu'un appel coupé
+a PROBABLEMENT coûté quand même. Consommation réelle du jour : entre 6 271 et 8 930, sous le quota
+de 10 000. Les deux dernières lignes de Llama, à 0 item, sont ce refus. Résultats : `08-ia.md` §10.8,
+`eval/ask-results.md`.
+| 2026-11-14 | banc « Demander » — Mistral Small 3.1, mode select | 87 items | 3515.58 neurons |
+
+**14 novembre 2026 (UTC), après minuit.** Mesure de la sélection seule (ligne ci-dessus : 3 515,58) ;
+puis l'essai « une phrase par mesure » (`08-ia.md` §10.10), hors de `bench-ask.ts` : Gemma 4 26B,
+70 appels, **315,05 neurons**. **À 00 h 36 UTC le quota gratuit du compte s'est épuisé** — `429`,
+code `4006`, « you have used up your daily free allocation of 10,000 neurons » (lu sur l'API à
+00 h 50 par un appel neutre). Total mesuré à cet instant depuis le 13 après-midi : **10 086 neurons**
+(308,57 + 5 962,12 + 3 515,58 + 315,05, moins les derniers appels refusés). **Le quota ne s'était donc
+pas remis à zéro à 00:00 UTC** : les neurons d'avant et d'après minuit ont compté ensemble. Aucune
+facture (plan gratuit : une erreur). La règle écrite en tête de cette section — « remise à zéro à
+00:00 UTC » — est celle de la documentation ; ce qui est observé la contredit, ou la retarde. Tant
+que l'heure réelle de la remise à zéro n'est pas relevée, **compter 10 000 neurons par 24 heures
+glissantes**, pas par jour civil.
+

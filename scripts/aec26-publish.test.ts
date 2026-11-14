@@ -40,6 +40,7 @@ const POLICY: ExposurePolicy = {
   locator_max_words: 8,
   locator_max_item_share: 0.5,
   locator_scope: 'all',
+  locator_display: 'href',
   incipit_min_words: 4,
   incipit_max_words: 8,
   incipit_max_item_share: 0.5,

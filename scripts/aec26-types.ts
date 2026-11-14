@@ -295,6 +295,12 @@ export interface ExposurePolicy {
   locator_max_item_share: number;
   /** `all`: every proposition gets a locator. `key_and_quoted`: only those shown or quoted. */
   locator_scope: 'all' | 'key_and_quoted' | 'none';
+  /**
+   * Where the words a locator carries may be read (D16.32). `href`: inside the link only.
+   * `search`: also next to the link in a search result and in the selection of « Demander » —
+   * never on a page of ours (src/lib/first-words.ts).
+   */
+  locator_display: 'href' | 'search';
   /** Below this many words an incipit says nothing: the key measure gets none. */
   incipit_min_words: number;
   /** Most words of a key measure shown as its visible incipit. */

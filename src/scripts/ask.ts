@@ -32,7 +32,16 @@ import { viewOf, type AskView } from '../lib/ask-view.ts';
 import { formatReopenTimeFr, type effectiveDate } from '../lib/silence.ts';
 import { silenceReading } from './silence-now.ts';
 import { enhanceOfficialLinks } from './deep-links.ts';
-import { el, findForAsk, findSections, loadEngine, measureLink, type Engine } from './engine.ts';
+import {
+  displayOf,
+  el,
+  findForAsk,
+  findSections,
+  firstWords,
+  loadEngine,
+  measureLink,
+  type Engine,
+} from './engine.ts';
 
 interface Config {
   mode: 'answer' | 'select';
@@ -47,6 +56,8 @@ interface Config {
     noneLead: string;
     silence: string;
     where: string;
+    incipit: string;
+    firstWords: string;
     notice: string;
     noticeSelect: string;
     method: string;
@@ -72,6 +83,8 @@ const configNode = document.querySelector('#ask-config');
 if (form && input && button && again && status && answer && title && body && notice && configNode) {
   const config = JSON.parse(configNode.textContent) as Config;
   const { strings } = config;
+  const display = displayOf(form);
+  const labels = { key: strings.incipit, other: strings.firstWords };
 
   // --- electoral silence: decided here before anything is sent, and closed when in doubt.
   // The hour of our server is read once and then ages with this device's clock
@@ -87,7 +100,7 @@ if (form && input && button && again && status && answer && title && body && not
   const engine = (): Promise<Engine> =>
     loadEngine(form.dataset.index ?? '', form.dataset.meta ?? '');
 
-  const sources = (found: Engine, ids: readonly string[]): HTMLElement => {
+  const sources = (found: Engine, ids: readonly string[], withWords = false): HTMLElement => {
     // One link per line: on a phone two titles side by side would break in the middle of one.
     const line = el('p', `${strings.where} :`, 'sources');
     for (const id of ids) {
@@ -98,6 +111,10 @@ if (form && input && button && again && status && answer && title && body && not
       if (link === null) continue;
       link.dataset.programme = 'title';
       line.append(link);
+      // Under a link of the selection, the first words of its measure (D16.32). Not under a
+      // sentence the model wrote: that sentence already says what the measure provides.
+      const words = withWords ? firstWords(found.meta, id, display, labels) : null;
+      if (words !== null) line.append(words);
     }
     return line;
   };
@@ -131,7 +148,7 @@ if (form && input && button && again && status && answer && title && body && not
         aiNotice(strings.notice);
         break;
       case 'select':
-        say(strings.selectTitle, found === null ? null : sources(found, view.ids));
+        say(strings.selectTitle, found === null ? null : sources(found, view.ids, true));
         // The page's own choice involved no model: it says so by saying nothing of one.
         // What is shown decides the notice, not the mode: three links the model CHOSE are not
         // sentences it wrote, even on a site whose model also writes (AI Act, art. 50).

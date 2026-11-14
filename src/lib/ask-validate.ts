@@ -631,6 +631,52 @@ export function carriesCopy(raw: unknown, candidates: readonly Candidate[]): boo
   return windows(tokens, COPY_WINDOW).some((w) => six.has(w));
 }
 
+/** The longest run of words two texts share, in words. */
+function longestRun(a: readonly string[], b: readonly string[]): number {
+  let best = 0;
+  let previous = new Array<number>(b.length + 1).fill(0);
+  for (const word of a) {
+    const current = new Array<number>(b.length + 1).fill(0);
+    for (let j = 1; j <= b.length; j += 1) {
+      if (word !== b[j - 1]) continue;
+      const run = (previous[j - 1] ?? 0) + 1;
+      current[j] = run;
+      if (run > best) best = run;
+    }
+    previous = current;
+  }
+  return best;
+}
+
+/**
+ * How much of an output stands in what the model was shown — two numbers, for the bench: the
+ * longest run of words in a row, and the largest share of one of its texts standing in runs of
+ * four. Numbers may leave a Worker where the text they measure may not (src/worker/ask.ts,
+ * `benchOutput`): they say whether a model that copies misses the rule by a word or recites
+ * the measure — which is what one needs to know to write it a better instruction.
+ */
+export function copyMeasure(
+  raw: unknown,
+  candidates: readonly Candidate[],
+): { longest: number; share: number } {
+  const shown = candidates.map((candidate) => copyTokens(candidate.text));
+  const texts = textsIn(raw);
+  let longest = 0;
+  let share = 0;
+  for (const text of texts) {
+    const tokens = copyTokens(text);
+    for (const source of shown) longest = Math.max(longest, longestRun(tokens, source));
+    share = Math.max(
+      share,
+      copiedShare(
+        text,
+        candidates.map((candidate) => candidate.text),
+      ),
+    );
+  }
+  return { longest, share: Math.round(share * 100) / 100 };
+}
+
 /**
  * The control of a selection (mode "select"): the measures the model chose, among those it was
  * given, three at most. There is no sentence to refuse — only identifiers to check.
