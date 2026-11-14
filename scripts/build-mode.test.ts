@@ -9,7 +9,9 @@
  * Run: npx tsx --test scripts/build-mode.test.ts
  */
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { test } from 'node:test';
 import {
   APP_REDIRECT_PREFIXES,
@@ -160,7 +162,7 @@ void test('each build is deployed with its own configuration, to a named environ
     '--dry-run',
   ]);
   // The mode is data (D16.4): as soon as the site answers questions the Worker goes with it.
-  for (const ask of ['answer', 'select', 'bench'] as const) {
+  for (const ask of ['chat', 'bench'] as const) {
     assert.deepEqual(wranglerDeployArgs('preview', 'app', [], ask), [
       'deploy',
       '--config',
@@ -177,17 +179,23 @@ void test('each build is deployed with its own configuration, to a named environ
 void test('the mode read from the file is "off" unless it plainly says otherwise', () => {
   assert.equal(readAskMode('data/2026/does-not-exist.json'), 'off');
   const committed = JSON.parse(readFileSync('data/2026/ask.json', 'utf8')) as { mode: string };
-  assert.equal(
-    readAskMode(),
-    committed.mode === 'answer' || committed.mode === 'select' ? committed.mode : 'off',
-  );
+  assert.equal(readAskMode(), committed.mode === 'chat' ? 'chat' : 'off');
+  // The modes of the ladder of D16.4 open nothing any more: a file that still said one of them
+  // is a site that answers no question.
+  const old = join(mkdtempSync(join(tmpdir(), 'ask-')), 'ask.json');
+  for (const mode of ['answer', 'select', 'on', '']) {
+    writeFileSync(old, JSON.stringify({ mode }));
+    assert.equal(readAskMode(old), 'off', mode);
+  }
+  writeFileSync(old, JSON.stringify({ mode: 'chat' }));
+  assert.equal(readAskMode(old), 'chat');
 });
 
 void test('the Worker is deployed only when it is ready, and the bench only on the preview host', () => {
   const pages = ['index.html', 's/p1c1-s01/index.html'];
   const open: DeployContext = { ...VALIDATED, launchBlockers: [] };
   const unready = ['wrangler.jsonc (top level): the private base has no identifier yet (lot I3)'];
-  for (const ask of ['answer', 'select', 'bench'] as const) {
+  for (const ask of ['chat', 'bench'] as const) {
     assert.match(
       String(deployRefusal('preview', 'app', pages, { ...open, ask, workerProblems: unready })),
       /the Worker is not ready to be deployed — .*no identifier yet/,
@@ -209,13 +217,21 @@ void test('the Worker is deployed only when it is ready, and the bench only on t
     String(deployRefusal('apex', 'app', pages, { ...open, ask: 'bench' })),
     /bench runs on the preview host only/,
   );
+  // Neither does the chat, yet: its deployment there is a lot of the plan nobody has rehearsed
+  // — refused even as a dry run, and whatever else is ready.
+  for (const dryRun of [false, true]) {
+    assert.match(
+      String(deployRefusal('apex', 'app', pages, { ...open, ask: 'chat', dryRun })),
+      /chat is not deployed to the apex by this script yet.*lot C10/,
+    );
+  }
   // An app that answers no question does not care what the Worker lacks…
   assert.equal(deployRefusal('preview', 'app', pages, { ...open, workerProblems: unready }), null);
   // …and neither does the holding page, ever: it is also the withdrawal gesture.
   assert.equal(
     deployRefusal('apex', 'holding', [...HOLDING_PAGES], {
       ...open,
-      ask: 'answer',
+      ask: 'chat',
       workerProblems: unready,
     }),
     null,
@@ -490,7 +506,7 @@ void test('dist/ is read, whatever the marker says: no game without its list, no
     /sends questions/,
   );
   assert.deepEqual(
-    distProblems({ gameFiles: [], asks: true }, { gameFile: null, ask: 'answer' }),
+    distProblems({ gameFiles: [], asks: true }, { gameFile: null, ask: 'chat' }),
     [],
   );
 

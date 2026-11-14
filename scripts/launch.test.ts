@@ -187,7 +187,11 @@ function tree(files: Record<string, unknown>): string {
 
 void test('the files that validate themselves: missing, in place, then edited after validation', () => {
   const corpus = 'c0ffee';
-  const manifest = { meta: { corpus_version: corpus } };
+  // Two measures and a paragraph of prose: the book of this test has two verdicts to give.
+  const manifest = {
+    meta: { corpus_version: corpus },
+    sections: [{ items: [{ kind: 'key_measure' }, { kind: 'measure' }, { kind: 'paragraph' }] }],
+  };
 
   const empty = tree({ [MANIFEST_PATH]: manifest });
   const missing = artefactBlockers(empty);
@@ -204,10 +208,11 @@ void test('the files that validate themselves: missing, in place, then edited af
   const complete = {
     [MANIFEST_PATH]: manifest,
     [ASK_PATH]: {
-      mode: 'answer',
+      mode: 'chat',
       bench: { sha256: 'beef', run_on: '2026-12-01' },
       database: { corpus_version: corpus },
-      answers_read_on: '2026-12-02',
+      gists: { corpus_version: corpus, verdicts: 2, sha256: 'cafe', deposited_on: '2026-12-01' },
+      threads_read_on: '2026-12-02',
       model_confirmed_on: '2026-12-02',
     },
     [WORDS_PATH]: {
@@ -324,6 +329,40 @@ void test('the files that validate themselves: missing, in place, then edited af
   assert.match(artefactBlockers(ready).join('\n'), /"search only" is the editor's decision/);
   writeFileSync(join(ready, ASK_PATH), JSON.stringify({ mode: 'off', decided_on: '2026-12-01' }));
   assert.doesNotMatch(artefactBlockers(ready).join('\n'), /ask\.json/);
+
+  // The chat rests on what a file can carry of the gates of PLAN-CHAT §5: each one missing
+  // blocks, and is named. (The book of this test moved to « decaf » above.)
+  const chat = {
+    mode: 'chat',
+    bench: { sha256: 'beef', run_on: '2026-12-01' },
+    database: { corpus_version: 'decaf' },
+    gists: { corpus_version: 'decaf', verdicts: -1, sha256: 'cafe', deposited_on: '2026-12-01' },
+    threads_read_on: '2026-12-02',
+    model_confirmed_on: '2026-12-02',
+  };
+  const asked = (file: unknown): string => {
+    writeFileSync(join(ready, ASK_PATH), JSON.stringify(file));
+    return artefactBlockers(ready)
+      .filter((line) => line.includes('ask.json'))
+      .join('\n');
+  };
+  assert.equal(asked(chat), '');
+  for (const [without, said] of [
+    [{ bench: null }, /rests on no recorded bench of explanations/],
+    [{ database: { corpus_version: 'c0ffee' } }, /private database is not at the corpus version/],
+    [{ gists: null }, /read sentences are not deposited for this book/],
+    [{ gists: { ...chat.gists, corpus_version: 'c0ffee' } }, /not deposited for this book/],
+    [{ gists: { ...chat.gists, deposited_on: null } }, /not deposited for this book/],
+    [{ gists: { ...chat.gists, verdicts: 1068 } }, /not every measure has the editor's verdict/],
+    [{ threads_read_on: null }, /has not read the forty threads/],
+    [{ model_confirmed_on: 'soon' }, /has not confirmed the model/],
+  ] as const) {
+    assert.match(asked({ ...chat, ...without }), said, JSON.stringify(without));
+  }
+  // The modes of the ladder of D16.4 are no modes of the site any more.
+  for (const mode of ['answer', 'select', 'on']) {
+    assert.match(asked({ ...chat, mode }), /mode must be "chat" or "off"/, mode);
+  }
   writeFileSync(join(ready, ASK_PATH), '{ not json');
   assert.match(artefactBlockers(ready).join('\n'), /ask\.json is missing/);
   rmSync(ready, { recursive: true });

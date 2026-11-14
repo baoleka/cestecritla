@@ -10,9 +10,10 @@
  *                their agreement, whose version the request must carry. A model whose host
  *                keeps nothing explains words of the read sentences; it is called directly,
  *                through no gateway and no cache, and it is never shown a text of the book.
- *   /api/ask     the written answer of D16.4, which the bench closed (D16.33): it answers
- *                "local" while the mode is not one of its own, and it receives no sentence
- *                (D16.22) — identifiers of measures and words of the book.
+ *
+ * `/api/ask`, the route of the written answer of D16.4, is gone: the bench closed that mode
+ * (D16.33), and a route that exists is a route a mistake in a file could open. Its contract and
+ * its control remain, for the bench alone (src/lib/ask-contract.ts, ask-validate.ts).
  *
  * Everything else — every page, the search, the game — is a static file, served outside the
  * invocation counter. The site is designed to work with `/api/*` entirely down.
@@ -31,7 +32,7 @@ import flags from '../../public/flags.json';
 import askConfig from '../../data/2026/ask.json';
 import glossary from '../../data/2026/glossary.json';
 import riposte from '../../data/2026/riposte.json';
-import { parseAskRequest, type AskMode, type AskResponse } from '../lib/ask-contract.js';
+import { parseAskRequest } from '../lib/ask-contract.js';
 import { validateExplanation } from '../lib/ask-validate.js';
 import { consentOf } from '../lib/chat-consent.js';
 import {
@@ -49,7 +50,6 @@ import { knownOf, notionsIn } from '../lib/notions.js';
 import { effectiveDate, type SilenceOverride } from '../lib/silence.js';
 import {
   EXHAUSTED,
-  answerQuestion,
   benchOutput,
   control,
   readRun,
@@ -104,22 +104,9 @@ const OVERRIDE: SilenceOverride =
 const empty = (status: number): Response => new Response(null, { status, headers: HEADERS });
 const json = (body: unknown): Response =>
   new Response(JSON.stringify(body), { status: 200, headers: HEADERS });
-const LOCAL: AskResponse = { kind: 'local' };
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;
-
-/** The mode and the model the site runs with: data, decided by the bench (D16.4). */
-function configured(): { mode: AskMode; model: ModelSpec | null; minOverlap: number } {
-  const config: Record<string, unknown> = askConfig;
-  const { mode, model, min_overlap: minOverlap } = config;
-  const known = mode === 'answer' || mode === 'select' ? mode : 'off';
-  return {
-    mode: isModelKey(model) ? known : 'off',
-    model: isModelKey(model) ? MODELS[model] : null,
-    minOverlap: typeof minOverlap === 'number' ? minOverlap : 1,
-  };
-}
 
 /**
  * What a person wrote and re-read (data/2026/glossary.json, riposte.json), built into the
@@ -226,35 +213,6 @@ async function closeAndRelease(env: Env, reserved: number): Promise<void> {
   const budget = env.BUDGET.getByName('global');
   await budget.close();
   await budget.release(reserved);
-}
-
-async function handleAsk(request: Request, env: Env, origin: string): Promise<Response> {
-  if (request.method !== 'POST') return empty(405);
-  // Same origin only: no CORS is sent, and a form on another site cannot spend our allowance.
-  if (request.headers.get('origin') !== origin) return empty(403);
-  const asked = parseAskRequest(await readBody(request));
-  if (asked === null) return empty(400);
-
-  const now = new Date();
-  const state = effectiveDate(now, { serverDate: now, override: OVERRIDE });
-  const config = configured();
-  if (!state.silence && config.mode !== 'off' && !(await withinRate(request, env))) {
-    return json(LOCAL);
-  }
-  const budget = env.BUDGET.getByName('global');
-  const model = config.model;
-  const answer = await answerQuestion(asked, {
-    ...config,
-    corpusVersion: env.CORPUS_VERSION,
-    silence: { silent: state.silence, reopen: state.reopenUtc?.toISOString() ?? null },
-    db: env.DB,
-    reserve: (neurons) => budget.reserve(neurons, hardStop(env)),
-    settle: (reserved, spent) => budget.settle(reserved, spent),
-    release: (reserved) => budget.release(reserved),
-    close: () => budget.close(),
-    run: (body) => (model === null ? Promise.resolve(null) : runModel(env, model, body)),
-  });
-  return json(answer);
 }
 
 const LOCAL_GISTS: GistsResponse = { kind: 'local' };
@@ -577,14 +535,13 @@ export default {
     try {
       if (url.pathname === '/api/gists') return await handleGists(request, env, url.origin);
       if (url.pathname === '/api/chat') return await handleChat(request, env, url.origin);
-      if (url.pathname === '/api/ask') return await handleAsk(request, env, url.origin);
       if (url.pathname === '/api/bench') return await handleBench(request, env);
     } catch {
       // Whatever broke, the page has something to show: what it found by itself, and its read
       // sentences without an explanation.
       if (url.pathname === '/api/gists') return json(LOCAL_GISTS);
       if (url.pathname === '/api/chat') return json(QUIET);
-      return url.pathname === '/api/ask' ? json(LOCAL) : empty(500);
+      return empty(500);
     }
     return empty(404);
   },

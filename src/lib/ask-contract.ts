@@ -36,13 +36,6 @@ export const MAX_SELECTED = 3;
 /** Six words in a row taken from the book are a copy, not a sentence of ours (D16.5). */
 export const COPY_WINDOW = 6;
 
-/**
- * The ladder of D16.4, as data (data/2026/ask.json): a written answer if the bench passed its
- * eight gates, a selection if the model at least selects better than the search ranks, nothing
- * at all otherwise — and then no Worker, no model and no AI notice exist on the page.
- */
-export type AskMode = 'answer' | 'select' | 'off';
-
 /** `p4c7-s03-k01`, `p4c7-s03-m12`, `p4c7-s03-m12.s2`: a proposition of the 2026 edition. */
 export const PROPOSITION_ID = /^p\dc\d{1,2}-s\d{2}-[km]\d{2}(?:\.s\d{1,2})?$/;
 

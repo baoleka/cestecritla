@@ -304,11 +304,8 @@ for (const root of ['dist', 'dist-ask']) {
       // answers none — and a pause of « les questions » there names something nobody ever saw.
       const asks =
         root === 'dist-ask' ||
-        ['answer', 'select'].includes(
-          String(
-            (JSON.parse(readFileSync('data/2026/ask.json', 'utf8')) as { mode?: unknown }).mode,
-          ),
-        );
+        (JSON.parse(readFileSync('data/2026/ask.json', 'utf8')) as { mode?: unknown }).mode ===
+          'chat';
       assert.equal(/questions/i.test(note), asks, note);
       assert.match(note, /Le jeu et le partage sont en pause|le jeu et le partage sont en pause/);
     },

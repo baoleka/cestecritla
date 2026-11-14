@@ -11,7 +11,7 @@
  *
  * The two modes the ladder of D16.4 had — a written answer, a selection — are gone from the
  * site: the bench closed them (D16.33) and D16.47 gave the model another job. They remain
- * modes of the bench route of the Worker (src/lib/ask-contract.ts, `AskMode`).
+ * modes of the bench route of the Worker, and of nothing else (src/worker/index.ts).
  *
  * Learning note — the test override. The sheet must be tested before the gates of
  * PLAN-CHAT §5 allow it to exist, so a build can be asked to pretend: CEL_ASK_TEST=chat. It

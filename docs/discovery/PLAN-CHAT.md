@@ -422,3 +422,29 @@ en arrière ; le navigateur d'Instagram ; un lecteur d'écran.
   mode du banc ; chaque requête du chat passe une fois par son propre lecteur strict.
 - **Reste ouvert, pour C10 et C11** : le mode par hôte (ouvrir l'aperçu sans la production) ;
   le Worker pèse 137 Kio avec le kit et les deux fichiers éditoriaux (40 avant).
+
+### 14 novembre 2026 — lot C7 : l'ancienne route retirée, deux modes seulement
+
+- **`/api/ask` n'existe plus** dans le Worker, ni son chemin (`answerQuestion`), ni la lecture
+  des modes « answer » et « select » dans le câblage : un fichier qui dirait l'un des deux par
+  erreur n'ouvrirait rien. Restent, pour le banc seul, le contrat (`ask-contract.ts`), le
+  contrôle d'une réponse écrite et les modes de `/api/bench`. Neuf tests du chemin retiré
+  sortent ; ce qui restait vrai de la requête du banc — aucune phrase n'y entre — est tenu
+  autrement, avec la liste des routes que le Worker sert.
+- **Le déploiement et le lancement ne connaissent plus que « chat » ou « off »**
+  (`scripts/build-mode.ts`, `scripts/launch.ts`). Un chat sur l'apex est **refusé par le script
+  de déploiement**, même à blanc, tant que le lot C10 n'a pas écrit comment il s'y déploie.
+  « chat » repose, côté fichiers, sur : un banc des explications enregistré, la base à l'état
+  du manifeste, les phrases relues déposées pour ce livre avec **un verdict par mesure**
+  (`gists` de `data/2026/ask.json`), quarante fils lus (`threads_read_on`), le modèle confirmé.
+- **L'aperçu** sert les routes neuves depuis 14 h 37 UTC (version `4a2fd65e`) : fermées, elles
+  répondent « local » et « rien » ; un champ que le contrat ne nomme pas vaut 400 ; une autre
+  origine, 403. Vérifié en ligne, avec les pages (1 151 fichiers sur 1 154 identiques à
+  `dist/`, les trois écarts connus) et les 81 contrôles dans trois navigateurs.
+- **Reporté à C10 et C11, avec sa raison** : le mode par hôte (ouvrir l'aperçu sans la
+  production). Tant qu'il n'existe pas, passer `ask.json` à « chat » ouvrirait la feuille dans
+  la build de la production aussi — que le déploiement refuse, et que la porte de lancement
+  bloque.
+- **Conséquence du lot C6, à dire à l'éditeur** : les chaînes de `/confidentialite` ont changé,
+  donc la porte de lancement refuse tout redéploiement de la production jusqu'à ce qu'il ait
+  relu la page et redaté `privacy_page` — après le lot C9, qui la complète.

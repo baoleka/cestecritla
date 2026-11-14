@@ -36,8 +36,9 @@ export const BUILD_MARKER = 'build/last-build.json';
 export const STATIC_CONFIG = 'wrangler.static.jsonc';
 
 /**
- * The Worker of « Demander » (src/worker/, D16.7): `/api/ask`, the AI binding, the private
- * base, the daily allowance. Deployed with the app only when the site answers questions.
+ * The Worker of « Demander » (src/worker/, D16.7, D16.51): `/api/gists` and `/api/chat`, the AI
+ * binding, the private base, the allowance. Deployed with the app only when the site answers
+ * questions — and, for the bench, on the preview host.
  */
 export const WORKER_CONFIG = 'wrangler.jsonc';
 
@@ -48,7 +49,7 @@ export const ASK_PATH = 'data/2026/ask.json';
  * or "bench", the one case where the Worker goes out while the page still answers nothing
  * (`npm run deploy:preview -- --bench`: the bench measures the candidates on the preview host).
  */
-export type AskDeploy = 'off' | 'answer' | 'select' | 'bench';
+export type AskDeploy = 'off' | 'chat' | 'bench';
 
 /** The mode the committed file says. Anything unreadable is "off": no Worker by accident. */
 export function readAskMode(path: string = ASK_PATH): Exclude<AskDeploy, 'bench'> {
@@ -56,7 +57,7 @@ export function readAskMode(path: string = ASK_PATH): Exclude<AskDeploy, 'bench'
   try {
     const parsed: unknown = JSON.parse(readFileSync(path, 'utf8'));
     if (typeof parsed === 'object' && parsed !== null && 'mode' in parsed) {
-      if (parsed.mode === 'answer' || parsed.mode === 'select') return parsed.mode;
+      if (parsed.mode === 'chat') return 'chat';
     }
   } catch {
     return 'off';
@@ -378,6 +379,16 @@ export function deployRefusal(
   // to the preview host alone: the apex never runs a model nobody has chosen yet.
   if (mode === 'app' && context.ask === 'bench' && target !== 'preview') {
     return 'the bench runs on the preview host only: `npm run deploy:preview -- --bench`';
+  }
+  // The chat on the apex is a deployment nobody has rehearsed (PLAN-CHAT §4, lot C10): a second
+  // Worker on `/api/*` in front of static files, or one Worker — and then the way back to
+  // static files, never tried (R27). Until one of the two is written down as tried, this
+  // script does not put a chat there, dry run or not.
+  if (mode === 'app' && context.ask === 'chat' && target === 'apex') {
+    return (
+      'the chat is not deployed to the apex by this script yet: its deployment is lot C10 of ' +
+      "docs/discovery/PLAN-CHAT.md, and opening it is the editor's decision at the time (C12)"
+    );
   }
   if (
     mode === 'app' &&

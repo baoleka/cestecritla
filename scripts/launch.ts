@@ -203,6 +203,19 @@ function readObject(path: string): Json | null {
 const field = (object: unknown, key: string): unknown =>
   typeof object === 'object' && object !== null ? (object as Json)[key] : undefined;
 
+/** How many measures the book has, as the manifest lists them: every item that is not prose. */
+function measureCount(path: string): number {
+  const sections = field(readObject(path), 'sections');
+  if (!Array.isArray(sections)) return -1;
+  let count = 0;
+  for (const section of sections as unknown[]) {
+    const items = field(section, 'items');
+    if (!Array.isArray(items)) continue;
+    count += (items as unknown[]).filter((item) => field(item, 'kind') !== 'paragraph').length;
+  }
+  return count;
+}
+
 /**
  * What the files that carry their own validation still lack. Each line names the file and the
  * lot of the plan that produces it, so that the gate reads as a to-do list long before launch.
@@ -212,12 +225,12 @@ export function artefactBlockers(root = '.'): string[] {
   const out: string[] = [];
   const corpus = field(field(readObject(at(MANIFEST_PATH)), 'meta'), 'corpus_version');
 
-  // How a question is answered: written answer, selection only, or search only (D16.4).
+  // How a question is answered: the sheet of the chat, or search only (D16.4, D16.51).
   const ask = readObject(at(ASK_PATH));
   if (ask === null) {
     out.push(`how a question is answered is not decided: ${ASK_PATH} is missing (lot I6)`);
-  } else if (ask.mode !== 'answer' && ask.mode !== 'select' && ask.mode !== 'off') {
-    out.push(`${ASK_PATH}: mode must be "answer", "select" or "off"`);
+  } else if (ask.mode !== 'chat' && ask.mode !== 'off') {
+    out.push(`${ASK_PATH}: mode must be "chat" or "off"`);
   } else if (ask.mode === 'off') {
     // "Search only" is the last rung of the ladder, and a decision like the others: a file
     // that says "off" because no bench has run yet decides nothing, and must not pass for it.
@@ -227,16 +240,32 @@ export function artefactBlockers(root = '.'): string[] {
       );
     }
   } else {
+    // The gates of PLAN-CHAT §5 that a file can carry — each dated by the editor, or measured.
     if (typeof field(ask.bench, 'sha256') !== 'string' || !isDate(field(ask.bench, 'run_on'))) {
-      out.push(`${ASK_PATH}: the mode "${ask.mode}" rests on no recorded bench (lot I5)`);
+      out.push(`${ASK_PATH}: the mode "chat" rests on no recorded bench of explanations (lot C8)`);
     }
     if (field(ask.database, 'corpus_version') !== corpus) {
       out.push(
         `${ASK_PATH}: the private database is not at the corpus version of the manifest (lot I3)`,
       );
     }
-    if (!isDate(ask.answers_read_on)) {
-      out.push(`${ASK_PATH}: the editor has not read the sample of answers: answers_read_on`);
+    // Every measure has its verdict — a sentence the editor read, or its link alone — and the
+    // set that was deposited is the set that was read (scripts/seed-ask-2026.ts).
+    const gists = ask.gists;
+    if (
+      field(gists, 'corpus_version') !== corpus ||
+      typeof field(gists, 'sha256') !== 'string' ||
+      !isDate(field(gists, 'deposited_on'))
+    ) {
+      out.push(`${ASK_PATH}: the read sentences are not deposited for this book: gists (lot C3)`);
+    }
+    if (field(gists, 'verdicts') !== measureCount(at(MANIFEST_PATH))) {
+      out.push(
+        `${ASK_PATH}: not every measure has the editor's verdict — a sentence read, or its link alone: gists.verdicts (lot C3)`,
+      );
+    }
+    if (!isDate(ask.threads_read_on)) {
+      out.push(`${ASK_PATH}: the editor has not read the forty threads: threads_read_on (lot C8)`);
     }
     if (!isDate(ask.model_confirmed_on)) {
       out.push(

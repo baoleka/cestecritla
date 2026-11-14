@@ -174,10 +174,7 @@ void test('the built app speaks of an AI exactly where its mode says one is at w
     return;
   }
   if (!existsSync('dist/sommaire/index.html')) return; // a holding build: two pages, no AI
-  assert.deepEqual(
-    noticeProblems('dist', askMode === 'off' ? 'off' : 'chat', configuredModel()),
-    [],
-  );
+  assert.deepEqual(noticeProblems('dist', askMode, configuredModel()), []);
 });
 
 void test('the sheet, built for its tests, carries its notices and no page too many', () => {

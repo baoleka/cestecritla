@@ -490,14 +490,18 @@ async function runEngine(
     // --- 5 bis. while the site answers no question, nothing of « Demander » exists on the page
     const asking = (JSON.parse(readFileSync('data/2026/ask.json', 'utf8')) as { mode?: unknown })
       .mode;
-    if (asking !== 'answer' && asking !== 'select') {
+    if (asking !== 'chat') {
       await page.goto(`${origin}/`);
       await page.focus('#q');
       await page.waitForTimeout(300);
       check('mode "off": no button asks anything', (await page.locator('#ask').count()) === 0);
       check(
+        'mode "off": no sheet is in the page',
+        (await page.locator('#chat-sheet, #chat-config').count()) === 0,
+      );
+      check(
         'mode "off": the script of « Demander » is never fetched',
-        !requested.some((url) => /\/_astro\/ask\./.test(url)),
+        !requested.some((url) => /\/_astro\/(?:ask|chat)\./.test(url)),
       );
       check(
         'mode "off": the page says the search is local, and names no AI',

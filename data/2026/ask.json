@@ -8,7 +8,13 @@
     "name": "cestecritla-ask",
     "corpus_version": null
   },
-  "answers_read_on": null,
+  "gists": {
+    "corpus_version": null,
+    "verdicts": null,
+    "sha256": null,
+    "deposited_on": null
+  },
+  "threads_read_on": null,
   "model_confirmed_on": null,
-  "note_fr": "Comment la page répond à une question (D16.4, D16.45 à D16.51). « mode » : « chat » (le champ ouvre la feuille de « Demander » : des phrases écrites d'avance et lues par l'éditeur, puis, pour qui l'accepte, un modèle qui explique leurs mots) ou « off » (recherche seule : ni feuille, ni modèle, ni Worker, ni mention d'IA). La réponse écrite et la sélection par le modèle (« answer », « select ») ne sont plus des modes du site : le banc les a fermées (D16.33) ; elles restent des modes de la route du banc. « off » est une décision datée (« decided_on », D16.33). « chat » exigera les portes du §5 de docs/discovery/PLAN-CHAT.md — les 1 069 mesures lues, le banc des explications au seuil (« bench » : empreinte et date), le modèle confirmé par l'éditeur, quarante fils lus — et, tant que le lot C10 n'a pas appris au déploiement à sortir le Worker du chat, scripts/deploy.ts refuse une build qui ouvre la feuille. « model » est une clé de src/worker/models.ts ; « min_overlap » est le seuil de recouvrement du contrôle d'une réponse écrite, gardé pour le banc. Depuis D16.23 il n'y a pas de Turnstile, donc pas de clé de widget ici."
+  "note_fr": "Comment la page répond à une question (D16.4, D16.45 à D16.51). « mode » : « chat » (le champ ouvre la feuille de « Demander » : des phrases écrites d'avance et lues par l'éditeur, puis, pour qui l'accepte, un modèle qui explique leurs mots) ou « off » (recherche seule : ni feuille, ni modèle, ni Worker, ni mention d'IA). La réponse écrite et la sélection par le modèle (« answer », « select ») ne sont plus des modes du site : le banc les a fermées (D16.33) ; elles restent des modes de la route du banc. « off » est une décision datée (« decided_on », D16.33). « chat » exigera les portes du §5 de docs/discovery/PLAN-CHAT.md — les 1 069 mesures lues, le banc des explications au seuil (« bench » : empreinte et date), le modèle confirmé par l'éditeur (« model_confirmed_on »), quarante fils lus (« threads_read_on »), les phrases relues déposées pour cet état du livre et un verdict par mesure (« gists ») — et, tant que le lot C10 n'a pas appris au déploiement à sortir le Worker du chat, scripts/deploy.ts refuse une build qui ouvre la feuille. « model » est une clé de src/worker/models.ts ; « min_overlap » est le seuil de recouvrement du contrôle d'une réponse écrite, gardé pour le banc. Depuis D16.23 il n'y a pas de Turnstile, donc pas de clé de widget ici."
 }
