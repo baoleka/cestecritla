@@ -917,3 +917,13 @@ Ce paragraphe amende les §1 à §4 du plan ; le code suit, dans une copie de tr
 - **La page Confidentialité, section « Quand tu demandes »** : la ligne sur les phrases dit
   désormais qu'elles sont « écrites d'avance par une IA, lues par l'éditeur », comme la page
   À propos le dit déjà. L'étiquette de la feuille, elle, attend la décision de l'éditeur.
+- **Prouvé en vrai, pas seulement à blanc** : poussé (`bed412e`), puis l'aperçu redéployé à
+  18 h 27 UTC par `npm run deploy:preview -- --bench` avec la configuration gardée — la garde
+  laisse passer le script ; wrangler envoie « cestecritla-preview » sur `beta.cestecritla.fr`,
+  mêmes liaisons, aucun fichier de page changé (version `aeac89c0`). Lu chez Cloudflare
+  ensuite, sans rien écrire : la version précédente de ce Worker est bien celle de 18 h 01 ;
+  aucun Worker `cestecritla-not-deployed` n'existe ; **la dernière version du Worker de la
+  production est toujours celle de 16 h 32 UTC** (`53092a0f`). Routes fermées comme avant,
+  1 151 fichiers sur 1 154 identiques, trois navigateurs. VÉRIFIÉ.
+- L'outil de dépôt en base (`scripts/seed-ask-2026.ts`, `wrangler d1 execute`) ne passe pas
+  par l'étape de build : la garde ne le concerne pas (essayé sur une base locale jetable).
