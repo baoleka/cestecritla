@@ -559,3 +559,25 @@ void test('a closed route answers before it is told anything: the hour and the m
     assert.deepEqual(closedChat({ mode, silence: unknown, model }), { kind: 'quiet', why: 'none' });
   }
 });
+
+void test('the first explanation of a Worker that has just woken costs what the others cost', () => {
+  // Measured in a local workerd (security review of 14/11/2026): 13 ms before the model and
+  // 50 ms in the control at the first request, 1 ms each afterwards — for a limit of 10 ms.
+  // Two things hold it down, and this test holds both in place.
+  // 1. No pattern stands on the Unicode properties at the edge of a word: each such pattern
+  //    costs the engine about half a millisecond at its first use, and there were 120.
+  for (const file of ['src/lib/ask-validate.ts', 'src/lib/notions.ts']) {
+    const code = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
+    assert.doesNotMatch(code, /\(\?<?!\[\\{1,2}p\{/u, `${file}: an edge built on \\p{…}`);
+  }
+  // 2. The control and the notions run once while the Worker loads, on an invented sentence:
+  //    what is left to compile is paid there, where the allowance is larger.
+  //    It is done in the file of the chat's own path: the one place of the Worker, with the
+  //    prompt, where the word of a sentence to read may stand.
+  const path = readFileSync('src/worker/chat.ts', 'utf8');
+  const loaded = path.slice(0, path.indexOf('\nexport function closedGists'));
+  assert.match(loaded, /^validateExplanation\(/m, 'the control is not warmed while loading');
+  assert.match(loaded, /^notionsIn\(/m, 'the notions are not warmed while loading');
+  // …and what it is warmed on is ours: an invented sentence, never a word of the book.
+  assert.match(loaded, /Un verger communal est un terrain planté/);
+});

@@ -76,6 +76,21 @@ export interface GistsDeps extends ChatSite {
  */
 export const EXPLAIN_ROOM = 100;
 
+/**
+ * Paid while the Worker loads, not by the first visitor after it wakes. The patterns of the
+ * control and of the notions compile at their first use: measured in a local workerd, that
+ * first use cost 13 ms before the model and 50 ms in the control — for a limit of 10 ms a
+ * request on the free plan — then 1 ms each (security review of 14/11/2026; 3 ms and 10 ms once
+ * the patterns were spelled out, src/lib/ask-validate.ts). Loading has its own, larger
+ * allowance, so the first use happens here, on an invented sentence: a quiet site is mostly
+ * Workers that have just woken (scripts/chat-worker.test.ts holds this in place).
+ */
+validateExplanation(
+  { phrases: ['Un verger communal est un terrain planté d’arbres fruitiers.'] },
+  { question: 'un verger', shown: ['Un verger communal est planté près de chaque école.'] },
+);
+notionsIn('la 6e République et un verger', []);
+
 const LOCAL: GistsResponse = { kind: 'local' };
 
 /**

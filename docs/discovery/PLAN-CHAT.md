@@ -732,3 +732,22 @@ Jouée sur l'aperçu avec l'accord de l'éditeur, de 16 h 35 à 16 h 47 UTC, le 
   répond avant d'y toucher. PROBABLE qu'elles marchent (le même script les emploie sur
   l'aperçu) : à voir au premier essai du chat ouvert (lot C11), avec `RATE_SALT` posé.
 - **R27** ne concerne plus que l'aperçu : la production n'aura pas de classe à retirer.
+
+### 14 novembre 2026 — le calcul du premier appel (constat « sérieux » de la revue) : corrigé
+
+- **Le constat, reproduit** dans un `workerd` local : le premier appel d'un Worker qui se
+  réveille coûtait 13 ms avant le modèle et 50 ms dans le contrôle — pour une limite de 10 ms
+  par requête sur l'offre gratuite —, puis 1 ms et 1 ms. Un site calme est fait surtout de
+  Workers qui viennent de se réveiller : l'explication aurait pu être coupée après que le
+  modèle a été appelé et compté.
+- **La cause** : plus de cent vingt motifs du contrôle et des notions bâtis sur
+  `\p{L}\p{N}`, compilés à leur premier usage.
+- **Deux correctifs.** Les motifs épellent leurs lettres (le latin jusqu'à U+017F ; ce qui
+  n'en est pas était déjà refusé avant eux) : 3 ms et 10 ms. Et le contrôle tourne une fois
+  pendant le chargement du Worker, sur une phrase inventée : 1 ms et 1 ms dès le premier
+  appel. VÉRIFIÉ en local (trois démarrages à froid à chaque étape) ; un test tient les deux
+  en place. **HYPOTHÈSE sur la plateforme** tant que rien n'y est mesuré : à lire sur l'aperçu
+  avant d'ouvrir (`09-architecture.md` §8.3).
+- **Cela vaut aussi pour l'écriture des phrases** : le contrôle d'une phrase écrite passe par
+  les mêmes motifs, dans le même Worker — une part des appels perdus de la boucle d'écriture
+  pouvait venir de là. HYPOTHÈSE, à regarder sur les prochaines séances.

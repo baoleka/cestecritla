@@ -268,9 +268,26 @@ const multiplierOf = (word: string): string | null => MULTIPLIER.exec(word)?.[1]
 const literal = (text: string): string =>
   text.replace(/[.*+?^${}()|[\]\\]/g, (character) => `\\${character}`);
 
+/**
+ * The letters French is written with, and the digits — spelled out, not `\p{L}\p{N}`. A pattern
+ * built on the Unicode properties costs the engine about half a millisecond the first time it
+ * runs, and the control has more than a hundred: in a Worker that has just woken, the first
+ * explanation spent some fifty milliseconds of a limit of ten compiling them (measured in a
+ * local workerd by the security review of 14/11/2026, and again after this change:
+ * docs/discovery/09-architecture.md §8.3). The class is Latin as far as U+017F: « é », « œ »,
+ * « ÿ », and the letters of a neighbour's name. What it leaves out — another alphabet, a letter
+ * in another form — is refused before any of these rules reads a sentence (`FOREIGN_LETTER`,
+ * `otherForm`); and seeing an edge where there is none only ever makes a rule refuse more.
+ */
+const LETTERS = 'A-Za-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u017F';
+const WORD = `0-9${LETTERS}`;
+/** Not after a letter or a digit; not before one. */
+const EDGE_BEFORE = `(?<![${WORD}])`;
+const EDGE_AFTER = `(?![${WORD}])`;
+
 /** A word or an expression standing on its own: `\b` is useless next to an accented letter. */
 const alone = (source: string, flags = 'iu'): RegExp =>
-  new RegExp(`(?<![\\p{L}\\p{N}])(?:${source})(?![\\p{L}\\p{N}])`, flags);
+  new RegExp(`${EDGE_BEFORE}(?:${source})${EDGE_AFTER}`, flags);
 
 // ---------------------------------------------------------------------------------------------
 // The rules that read one sentence on its own
@@ -279,7 +296,7 @@ const alone = (source: string, flags = 'iu'): RegExp =>
 /** Denying or bounding: « ne … pas », « aucune mesure », « seulement », « nulle part ». */
 const NEGATION: readonly RegExp[] = [
   alone('ne'),
-  /(?<![\p{L}\p{N}])n'/iu,
+  new RegExp(`${EDGE_BEFORE}n'`, 'iu'),
   alone('pas'),
   alone('jamais'),
   alone('rien'),
@@ -317,8 +334,10 @@ const NEGATION_UNLESS_CITED: readonly RegExp[] = [
 ];
 
 /** A verdict on the question: the reader concludes, the page does not. */
-const VERDICT_OPENING =
-  /^(?:oui|non|effectivement|en effet|exactement|absolument|tout à fait|bien sûr|certes|vrai|faux|justement|pas du tout|au contraire|c'est (?:vrai|faux|exact|inexact|juste|le cas))(?![\p{L}\p{N}])/iu;
+const VERDICT_OPENING = new RegExp(
+  `^(?:oui|non|effectivement|en effet|exactement|absolument|tout à fait|bien sûr|certes|vrai|faux|justement|pas du tout|au contraire|c'est (?:vrai|faux|exact|inexact|juste|le cas))${EDGE_AFTER}`,
+  'iu',
+);
 const VERDICT_ANYWHERE: readonly RegExp[] = [
   alone("c'est (?:vrai|faux|exact|inexact)"),
   alone('est (?:vraie?|fausse|faux|exacte?|inexacte?)'),
@@ -350,7 +369,7 @@ const OPINION: readonly RegExp[] = [
 const PERSON: readonly RegExp[] = [
   alone('je|me|moi|mon|ma|mes|nous|notre|nos|on'),
   alone('tu|te|toi|ton|ta|tes|vous|votre|vos'),
-  /(?<![\p{L}\p{N}])[jmt]'/iu,
+  new RegExp(`${EDGE_BEFORE}[jmt]'`, 'iu'),
 ];
 
 const VOTE_ADVICE: readonly RegExp[] = [
@@ -380,7 +399,7 @@ const PARTY_NAMES: readonly RegExp[] = [
 ];
 
 const SELF_ALWAYS: readonly RegExp[] = [
-  /(?<![\p{L}\p{N}])en tant qu'/iu,
+  new RegExp(`${EDGE_BEFORE}en tant qu'`, 'iu'),
   alone('modèle de langage'),
   alone('chatbot'),
   alone('prompt'),
@@ -401,7 +420,7 @@ const SELF_UNLESS_CITED: readonly RegExp[] = [
 const ADDRESS: readonly RegExp[] = [
   /https?:/i,
   /www\./i,
-  /[a-z0-9-]+\.(?:fr|com|org|net|eu|io|gouv)(?![\p{L}\p{N}])/iu,
+  new RegExp(`[a-z0-9-]+\\.(?:fr|com|org|net|eu|io|gouv)${EDGE_AFTER}`, 'iu'),
   /@/,
 ];
 
@@ -729,8 +748,8 @@ const ATTRIBUTION: readonly RegExp[] = [
   // An aim without an owner is read as the programme's: « L'objectif est de… ». (With its
   // owner written — « le but du quotient familial est de… » — it is a definition.)
   new RegExp(
-    '(?<![\\p{L}\\p{N}])(?:objectif|but|idée|ambition|intention|volonté|projet|enjeu|principe) ' +
-      "(?:est|reste|consiste|était) (?:(?:de|à|que)(?![\\p{L}\\p{N}])|d'|qu')",
+    `${EDGE_BEFORE}(?:objectif|but|idée|ambition|intention|volonté|projet|enjeu|principe) ` +
+      `(?:est|reste|consiste|était) (?:(?:de|à|que)${EDGE_AFTER}|d'|qu')`,
     'iu',
   ),
 ];
@@ -740,8 +759,10 @@ const ATTRIBUTION: readonly RegExp[] = [
  * de loi », « partis politiques ». One is allowed only where a sentence on the page holds it
  * with the same word after it.
  */
-const ATTRIBUTION_NOUN =
-  /(?<![\p{L}\p{N}])(?:propositions?|textes?|projets?|partis?|mouvements?|candidate?s?|militante?s?)(?![\p{L}\p{N}])/giu;
+const ATTRIBUTION_NOUN = alone(
+  'propositions?|textes?|projets?|partis?|mouvements?|candidate?s?|militante?s?',
+  'giu',
+);
 
 /**
  * Politicians and parties an explanation of words never needs, whatever the page shows. The
@@ -769,7 +790,7 @@ const OPENER = new RegExp(
   '^(?:(?:ils?|elles?|ce|cet|cette|ces|cela|ceci|ça|celui|celle|ceux|celles|son|sa|ses|' +
     'leurs?|lui|eux|ainsi|donc|alors|aussi|ensuite|puis|enfin|bref|et|mais|or|car|' +
     'de plus|en outre|par ailleurs|autrement dit|par conséquent|en conséquence|pour cela|' +
-    "de ce fait|du coup|d'ailleurs|c'est pourquoi)(?![\\p{L}\\p{N}])|c')",
+    `de ce fait|du coup|d'ailleurs|c'est pourquoi)${EDGE_AFTER}|c')`,
   'iu',
 );
 
@@ -783,7 +804,7 @@ const FUTURE: readonly RegExp[] = [
   alone('(?:ser|aur|fer|ir|dir|pourr|devr|voudr|saur|verr)(?:a|ont|ait|aient)'),
   alone('faudr(?:a|ait)'),
   alone('va|vont'),
-  alone('\\p{L}{2,}(?:er|ir|dr|ttr|vr|rr|[iî]tr)(?:a|ont|ait|aient)'),
+  alone(`[${LETTERS}]{2,}(?:er|ir|dr|ttr|vr|rr|[iî]tr)(?:a|ont|ait|aient)`),
 ];
 
 /** A contrast, a concession, a doubt cast: what a definition does not need. */

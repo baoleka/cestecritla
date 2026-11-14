@@ -28,6 +28,15 @@ export interface NotionEntry {
 /** How many cards one question may open: more would bury the read sentences. */
 export const MAX_NOTIONS = 2;
 
+/**
+ * A letter or a digit as French writes them, spelled out: a pattern built on `\p{L}\p{N}` costs
+ * about half a millisecond the first time it runs, and this file had eleven of them on the
+ * path of every question (src/lib/ask-validate.ts says how it was measured).
+ */
+const WORD = '0-9A-Za-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u017F';
+const EDGE_BEFORE = `(?<![${WORD}])`;
+const EDGE_AFTER = `(?![${WORD}])`;
+
 /** « sixième », « deuxième »: the rank a card writes « 6e », « 2e ». */
 const ORDINAL_WORDS: readonly (readonly [RegExp, string])[] = (
   [
@@ -41,7 +50,7 @@ const ORDINAL_WORDS: readonly (readonly [RegExp, string])[] = (
     ['neuvi[eè]me', '9e'],
     ['dixi[eè]me', '10e'],
   ] as const
-).map(([word, rank]) => [new RegExp(`(?<![\\p{L}\\p{N}])${word}(?![\\p{L}\\p{N}])`, 'giu'), rank]);
+).map(([word, rank]) => [new RegExp(`${EDGE_BEFORE}${word}${EDGE_AFTER}`, 'giu'), rank]);
 
 const ROMAN: Readonly<Record<string, string>> = {
   II: '2',
@@ -55,9 +64,12 @@ const ROMAN: Readonly<Record<string, string>> = {
   X: '10',
 };
 /** In capitals only: « VIe » is a rank, « vie » is a word. */
-const ROMAN_RANK = /(?<![\p{L}\p{N}])(VIII|VII|VI|IV|IX|III|II|V|X)(?:e|ème|eme)(?![\p{L}\p{N}])/gu;
+const ROMAN_RANK = new RegExp(
+  `${EDGE_BEFORE}(VIII|VII|VI|IV|IX|III|II|V|X)(?:e|ème|eme)${EDGE_AFTER}`,
+  'gu',
+);
 /** « 6ème », « 6eme », « 6ième »: one spelling, « 6e ». */
-const DIGIT_RANK = /(?<![\p{L}\p{N}])(\d{1,2})(?:i?[eè]me|è|e)(?![\p{L}\p{N}])/giu;
+const DIGIT_RANK = new RegExp(`${EDGE_BEFORE}(\\d{1,2})(?:i?[eè]me|è|e)${EDGE_AFTER}`, 'giu');
 
 /** One spelling of a rank, however it was typed. Nothing else is touched. */
 export function foldRanks(text: string): string {
