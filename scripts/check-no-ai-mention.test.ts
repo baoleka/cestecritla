@@ -139,18 +139,41 @@ function noticeProblems(root: string, mode: 'off' | 'chat', model: string): stri
   if (!home.includes('Cloudflare')) problems.push('index.html does not say where the AI is hosted');
   // The page that says what is kept must say where a question goes, and what guards the gesture.
   const privacy = read('confidentialite/index.html');
+  // The agreement of the sheet links to the section: it has to be there to land on.
+  if (!/<h2 id="demander"/.test(readFileSync(join(root, 'confidentialite/index.html'), 'utf8'))) {
+    problems.push('confidentialite has no section the agreement of the sheet can link to');
+  }
   if (!/Demander envoie les numéros des mesures trouvées, pas ta phrase/.test(privacy)) {
     problems.push('confidentialite does not say what « Demander » sends');
   }
   if (!/Ta question ne part que si tu l’acceptes/.test(privacy)) {
     problems.push('confidentialite does not say that the question leaves only after an agreement');
   }
+  if (!privacy.includes(model)) problems.push('confidentialite does not name the model');
+  // Where the model runs is not ours to choose: the page promises no place it cannot hold.
+  if (!/sans garantie de rester en Europe/.test(privacy)) {
+    problems.push('confidentialite does not say that the model may run outside Europe');
+  }
+  if (/en Europe ou aux États-Unis/.test(privacy)) {
+    problems.push('confidentialite promises a place for the model that nothing guarantees');
+  }
   if (
-    !/On ne l’enregistre pas/.test(privacy) ||
+    !/On n’enregistre pas ta question/.test(privacy) ||
     !/rien n’est écrit sur ton téléphone/.test(privacy)
   ) {
     problems.push('confidentialite does not say what is kept of a question: nothing, anywhere');
   }
+  // « Nothing is kept », bare, would speak for the host too: each says what it keeps.
+  if (!/Cloudflare écrit ne pas la conserver/.test(privacy)) {
+    problems.push('confidentialite does not say what the host of the model writes it keeps');
+  }
+  if (!/C’est ton accord qui permet cet envoi/.test(privacy)) {
+    problems.push('confidentialite does not say what the sending rests on');
+  }
+  if (!/Ne plus envoyer à l’IA/.test(privacy) || !/Effacer la conversation/.test(privacy)) {
+    problems.push('confidentialite does not say how to stop, nor how to empty the thread');
+  }
+  if (!/15 ans ou plus/.test(privacy)) problems.push('confidentialite does not say the age');
   // The call of the chat goes through no cache: nothing is kept « thirty days » any more.
   if (/trente jours/.test(privacy)) problems.push('confidentialite still speaks of a cache');
   if (/Turnstile/.test(privacy)) problems.push('confidentialite names a bot check there is not');
@@ -202,6 +225,8 @@ void test('every string naming an absent component has a local fallback or is ex
     if (!MENTIONS_ABSENT_COMPONENT.test(value)) continue;
     // A v3-only surface (the chat itself) needs no fallback: it is simply not built.
     if (key.startsWith('chat.') || key.startsWith('about.ai_')) continue;
+    // …and so does the section of the privacy page that says what asking does.
+    if (key.startsWith('privacy.chat.')) continue;
     if (typeof strings[`${key}.local`] !== 'string') missing.push(key);
   }
   assert.deepEqual(

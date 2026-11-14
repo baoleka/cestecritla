@@ -373,7 +373,12 @@ const RUNTIME_AI_KEYS: Readonly<Record<string, string | null>> = {
   'chat.consent.title': null,
   'chat.consent.who': null,
   'offline.chat': 'offline.chat.local',
-  'privacy.policy.02': 'privacy.policy.02.local',
+  'privacy.chat.basis': null,
+  'privacy.chat.budget': null,
+  'privacy.chat.kept': null,
+  'privacy.chat.question': null,
+  'privacy.chat.where': null,
+  'privacy.chat.withdraw': null,
   'silence.chat': 'silence.chat.local',
 };
 const AI_EXEMPT = new Set(['about.no_ai', 'about.writing_method']);

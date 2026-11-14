@@ -508,6 +508,17 @@ Matrice de dégradation (ce que voit l'utilisateur) :
 | Navigateur (app) | progression, sections lues, préférences | `localStorage` first-party | jusqu'à effacement | écrit seulement après « Garder sur ce téléphone » ; `/confidentialite` liste et efface (§7.11 règle 6) | DÉCISION (D5.8) |
 | GitHub Actions (re-crawl) | journaux de build (URLs officielles, aucune donnée utilisateur) | GitHub | 90 j | — | VÉRIFIÉ |
 
+> **Mise à jour du 14 novembre 2026 — ce que le chat ajoute à cette carte** (`PLAN-CHAT.md`, lots C1, C5 et C9). Le tableau ci-dessus décrit le produit de septembre. Rien de ce qui suit n'est servi tant que `data/2026/ask.json` dit « off » ; c'est contre ces lignes que la section « Quand tu demandes » de `/confidentialite` est écrite.
+>
+> | Brique | Donnée | Lieu | Durée | Comment on l'éteint, ou on le déclare | Statut |
+> |---|---|---|---|---|---|
+> | `POST /api/gists` | des identifiants de mesures, la version du livre ; **aucune phrase** | mémoire du Worker | le temps de la requête | lecture seule de la base privée ; rien n'est écrit | VÉRIFIÉ (contrat, `chat-worker.test.ts`) |
+> | `POST /api/chat` | la question (300 caractères, une ligne), des identifiants, la relance choisie, la version de l'accord | mémoire du Worker, puis Workers AI en appel direct | le temps de la requête | ni passerelle, ni cache ; observabilité coupée ; aucun `console.*` ; refusée sans version d'accord | VÉRIFIÉ (code et tests) |
+> | Workers AI | la question et nos phrases relues — jamais le texte du livre, jamais l'adresse du visiteur | Cloudflare, « au plus près » du visiteur : **aucune région ne se choisit** (`11-conformite.md` §6.2 sexies) | « zéro rétention » écrite pour les trois modèles admis | seuls les modèles `keeps: 'nothing'` lisent une question (`src/worker/models.ts`) | VÉRIFIÉ (documentation, 14/11/2026) |
+> | DO `NeuronBudget` | vingt-cinq tranches horaires `{ heure, neurons }` et l'heure d'un coupe-circuit | DO SQLite | vingt-cinq heures glissantes | un nombre par heure, rien de rattachable ; déclaré (`privacy.chat.budget`) | VÉRIFIÉ (code, `budget.test.ts`) |
+> | Limiteur (les deux routes) | la moitié d'un HMAC du jour et de l'abonné, sous un secret du Worker | mémoire du serveur du colo | 60 s | déclaré (`privacy.policy.rate`) | VÉRIFIÉ (par construction) |
+> | La page | l'accord et le fil de la conversation | mémoire de la page | jusqu'à sa fermeture | jamais dans le stockage du téléphone (`e2e-ask.ts`) | VÉRIFIÉ (trois navigateurs) |
+
 **Politique de confidentialité en 10 lignes** (`/confidentialite`, à juger en T9 ; chaque ligne est vraie au vu du tableau) :
 
 1. Pas de compte, pas d'inscription, pas de cookie de suivi, aucune publicité (`privacy.no_account`).

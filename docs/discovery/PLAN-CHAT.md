@@ -452,3 +452,41 @@ en arrière ; le navigateur d'Instagram ; un lecteur d'écran.
 - **Conséquence du lot C6, à dire à l'éditeur** : les chaînes de `/confidentialite` ont changé,
   donc la porte de lancement refuse tout redéploiement de la production jusqu'à ce qu'il ait
   relu la page et redaté `privacy_page` — après le lot C9, qui la complète.
+
+### 14 novembre 2026 — lot C9 : la page Confidentialité, complète
+
+- **Une section « Quand tu demandes »** (`/confidentialite/#demander`, où mène le lien de
+  l'accord), dite seulement quand le champ demande, en trois listes : *ce qui part* (les numéros
+  des mesures au geste « Demander » ; la question après l'accord, à quoi elle sert, où le modèle
+  tourne), *ce qui est gardé* (rien de la question chez nous, l'engagement écrit de Cloudflare,
+  le fil en mémoire de page, le compteur de la minute, le compteur de ce que l'IA consomme en
+  tout) et *ton accord* (il fonde seul l'envoi, il vaut pour la page ouverte, les deux gestes
+  pour arrêter et pour vider, « 15 ans ou plus », rien de gardé qui désigne quelqu'un).
+- **Trois corrections de fond, chacune relue à la source ce jour-là** (`11-conformite.md` §6.2
+  sexies, tableau du lot C9) :
+  1. **Le lieu du modèle.** Le premier jet disait « en Europe ou aux États-Unis ». La
+     documentation dit que Workers AI calcule « au plus près » du visiteur et qu'aucune région
+     ne se choisit (*Regional Services* : ✘). La page écrit donc « au plus près de toi, sans
+     garantie de rester en Europe », et l'accord « chez Cloudflare, une société américaine ».
+     Une porte de build refuse le retour de la promesse.
+  2. **La garantie du transfert**, que la page ne nommait pas depuis septembre (article 13) :
+     le cadre UE–États-Unis sous lequel Cloudflare se dit certifié, et à défaut les clauses
+     types de son contrat, dont l'adresse publique est donnée. **Dans les deux modes** : c'est
+     vrai de l'hébergement aussi. Le cadre est attaqué devant la Cour : H-CNF-24.
+  3. **Deux gestes, pas un** : « Ne plus envoyer à l'IA » arrête l'envoi, « Effacer la
+     conversation » vide le fil. Le dossier les confondait.
+- **Deux retouches de cohérence** : quand le champ demande, « L'app ne mesure rien » devient
+  « Pas de compteur de visites, pas de mesure d'audience » — un compteur existe, et la section
+  le dit ; le responsable est écrit comme dans l'accord, pseudonyme compris (D16.50).
+- **Dans l'accord de la feuille** : « C'est {modèle}, chez Cloudflare, une société
+  américaine. » et « N'écris rien sur toi ni sur quelqu'un d'autre : santé, opinions, nom. »
+  La version de l'accord change avec ses mots : une page d'avant ne peut plus rien envoyer.
+- **Ce que la production servirait de neuf** (mode « off »), une fois relue : le paragraphe de
+  la garantie sous « Hébergeur », et le pseudonyme dans la ligne du responsable. Rien d'autre.
+- **À l'éditeur** : relire `/confidentialite` dans les deux modes, puis `privacy_page` est
+  redatée avec l'empreinte du jour. Jusque-là la porte de lancement refuse la production — le
+  retrait reste possible.
+- **Vu en écrivant ce lot, à corriger à part** : le compteur de la minute est commun aux deux
+  routes — six envois en tout. Une question vaut deux envois, chaque relance un de plus : la
+  troisième question d'une minute perdrait ses phrases relues, sans un mot. Les deux routes
+  doivent être comptées à part.

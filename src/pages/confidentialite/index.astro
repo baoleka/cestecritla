@@ -15,8 +15,18 @@
  * under a code computed from the address, one minute (the rate limiter). The call of the chat
  * goes through no cache. No third party guards the gesture: there is no bot check (D16.23).
  *
- * This is what the sheet needs to be true today. The whole page — the legal basis, the
- * register, the editor's reading and its date — is lot C9 of PLAN-CHAT.
+ * In that mode the page has a section of its own, « Quand tu demandes », which the agreement
+ * of the sheet links to — three lists: what leaves (the two gestures, what the question is
+ * for, where the model runs: the nearest place, with no promise of Europe), what is kept
+ * (nothing of the question; a counter of the minute, a counter of what the model spends) and
+ * the agreement (the sending rests on it alone, how to stop, the age, and that we hold nothing
+ * to show or erase).
+ *
+ * In both modes the page names what the transfers to the host rest on (GDPR art. 13 § 1 f):
+ * the framework Cloudflare is certified under, and failing it the clauses of its contract.
+ *
+ * The editor re-reads the page and dates it (data/launch.json, `privacy_page`): the launch
+ * gate refuses a page whose strings moved since.
  *
  * In a build that shows the game (D16.14), the page also says what the game writes on the
  * phone — the one thing the site ever writes anywhere — from the one map of those writings
@@ -32,6 +42,8 @@ const model = site.modelName ?? '';
 const promise = asking ? t('privacy.no_account.ask') : t('privacy.no_account');
 
 const CLOUDFLARE_POLICY = 'cloudflare.com/privacypolicy';
+// The contract the transfers rest on when the framework does not apply: public, read on 14/11/2026.
+const CLOUDFLARE_DPA = 'cloudflare.com/cloudflare-customer-dpa';
 // Imported only by a build of a site that shows the game (astro.config.ts) — the scrutin build
 // included: what was written before a freeze can still be erased during it.
 const GameStorage = __CEL_GAME_WRITES__
@@ -46,14 +58,49 @@ const GameStorage = __CEL_GAME_WRITES__
   <h2>{t('privacy.what_title')}</h2>
   <ul class="counts">
     <li>{t('privacy.policy.01')}</li>
-    <li>{asking ? t('privacy.policy.02', { model }) : t('privacy.policy.02.local')}</li>
-    {asking && <li id="demander">{t('privacy.policy.consent')}</li>}
-    {asking && <li>{t('privacy.policy.thread')}</li>}
-    {asking && <li>{t('privacy.policy.rate')}</li>}
-    <li>{t('privacy.no_measure')}</li>
+    <li>{t('privacy.policy.02.local')}</li>
+    {
+      /* Where the field asks, one counter exists — what the model spends, in all — and the
+         section below says so: « the app measures nothing » would be one word too many. */
+    }
+    <li>{asking ? t('privacy.no_measure.ask') : t('privacy.no_measure')}</li>
     <li>{t('privacy.policy.09')}</li>
     <li>{t('privacy.outbound')}</li>
   </ul>
+
+  {
+    /* « Demander » (D16.45 to D16.51): what leaves at each of its two gestures and where it
+       goes, what is kept of it, and what the sending rests on. Said only where the field
+       asks; the agreement of the sheet links here. */
+    asking && (
+      <>
+        <h2 id="demander">{t('privacy.chat.title')}</h2>
+        <p>{t('privacy.chat.lead')}</p>
+        <h3>{t('privacy.chat.sent_title')}</h3>
+        <ul class="counts" data-chat="sent">
+          <li>{t('privacy.chat.gists')}</li>
+          <li>{t('privacy.chat.question', { model })}</li>
+          <li>{t('privacy.chat.purpose')}</li>
+          <li>{t('privacy.chat.where')}</li>
+        </ul>
+        <h3>{t('privacy.chat.kept_title')}</h3>
+        <ul class="counts" data-chat="kept">
+          <li>{t('privacy.chat.kept')}</li>
+          <li>{t('privacy.policy.thread')}</li>
+          <li>{t('privacy.policy.rate')}</li>
+          <li>{t('privacy.chat.budget')}</li>
+        </ul>
+        <h3>{t('privacy.chat.consent_title')}</h3>
+        <ul class="counts" data-chat="consent">
+          <li>{t('privacy.chat.basis')}</li>
+          <li>{t('privacy.policy.consent')}</li>
+          <li>{t('privacy.chat.withdraw')}</li>
+          <li>{t('privacy.chat.age')}</li>
+          <li>{t('privacy.chat.rights')}</li>
+        </ul>
+      </>
+    )
+  }
 
   {GameStorage !== null && <GameStorage />}
 
@@ -71,6 +118,7 @@ const GameStorage = __CEL_GAME_WRITES__
 
   <h2>{t('legal.notice.host_label')}</h2>
   <p>{t('privacy.policy.07')}</p>
+  <p>{t('privacy.transfer')} {t('privacy.transfer_contract', { url: CLOUDFLARE_DPA })}</p>
   <p>{t('privacy.host_logs_nel')}</p>
   <p>{t('privacy.retention_host', { url: CLOUDFLARE_POLICY })}</p>
 
