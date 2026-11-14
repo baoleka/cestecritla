@@ -194,7 +194,7 @@ conditions, toutes deux nécessaires [A5 — un projet] :
   site n'est pas par son objet. Une autorité pourrait juger la destination à l'échelle du
   site, et non de la seule IA.
 - **Conclusion** : hors du point 8 b. PROBABLE, non tranché — la lecture s'appuie sur un
-  projet de lignes directrices, pas sur un texte arrêté.
+  projet de lignes directrices, pas sur un texte arrêté (`16-hypotheses.md` H-CNF-25).
 
 **Si la lecture contraire l'emportait.** Les obligations du haut risque ne s'appliquent aux
 systèmes de l'annexe III qu'à compter du 2 décembre 2027 [A2], après le scrutin. L'article 6
