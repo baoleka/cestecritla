@@ -11,6 +11,37 @@
 >
 > Il ne remplace pas `11-conformite.md` §6.2 sexies (écrit **avant** D16.53, quand la question
 > partait après un accord) ni `09-architecture.md` §6 (la carte des données).
+>
+> **Repris le 15 novembre 2026 pour D16.57 à D16.62** (§0) : la feuille ouvre **sans IA en
+> direct**, et **personne n'a relu les phrases une à une** — une IA les a écrites et vérifiées.
+> Ce que les sections 1 à 5 disent d'une IA qui explique vaut pour une variante **fermée**,
+> gardée dans le code ; ce qui change pour ce qui ouvre est dit dans chaque section, daté.
+
+## 0. Ce que le mandat du 14 novembre change à ce dossier (D16.57 à D16.62)
+
+L'éditeur a écrit le 14 novembre au soir : « Lis les toi même, pousse jusqu en prod sans me
+demander quoi que ce soit, fait ce que tu recommandes » (D16.57). Quatre conséquences pour ce
+dossier, chacune consignée dans `decisions.md` :
+
+1. **Qui a lu les phrases** (D16.58, D16.61) : la session — une IA —, avec le texte de chaque
+   mesure sous les yeux ; pas l'éditeur, pas une personne. Ce n'est ni une lecture
+   indépendante (la même session a écrit et relu), ni une vérification de ce que le livre
+   avance.
+2. **Ce que le site en dit** (D16.59) : « Phrases écrites et vérifiées par une IA », sur chaque
+   bloc ; « Personne ne les a relues une à une », sur les pages Exactitude et À propos. Une
+   porte refuse toute chaîne qui dirait qu'une personne les a lues tant que le dépôt ne le dit
+   pas (`data/2026/ask.json`, `gists.read_by`).
+3. **Aucune IA ne répond à un visiteur** (D16.60) : `model` vaut `null`, le bouton « Expliquer
+   avec l'IA » n'est pas dans la page, `/api/chat` répond « rien » sans rien ouvrir. Les mots
+   s'expliquent par 259 textes écrits d'avance (D16.62), trouvés sur le téléphone.
+4. **Qui date ce dossier** : la session, sur ce mandat (`preview_legal_on`) — **l'éditeur ne
+   l'a pas relu**. Ce qui lui revient encore est au §5, et rien de ce qui ne peut être fait
+   qu'à sa place n'est écrit comme fait.
+
+**Ce que cela déplace dans l'analyse**, dit sans fard : la relecture par une personne était
+la première réponse du plan au risque d'une phrase infidèle (R35, R38) et la condition de
+l'exception de l'article 50 § 4. Elle n'a pas eu lieu. Le site ne s'appuie donc sur aucune
+exception : il **dit** que ces textes viennent d'une IA, partout où il les montre (§4.2).
 
 ## 1. Le geste, depuis D16.53
 
@@ -22,6 +53,16 @@
 
 **La question tapée ne part jamais** (D16.53, qui rétablit D16.22 sans exception). Le Worker
 refuse tout mot qui n'est pas un mot des phrases qu'il charge lui-même.
+
+**Tel que la feuille ouvre (D16.60, D16.62)** — la troisième ligne ci-dessus n'existe pas : le
+bouton n'est pas dans la page, et une page sans lui ne demande rien à `/api/chat`, quoi que
+réponde un serveur (tenu dans trois navigateurs, `scripts/e2e-sheet.ts`).
+
+| Geste du visiteur | Ce qui part | Vers qui | Ce qui est gardé |
+|---|---|---|---|
+| Chercher | rien | — | rien |
+| « Demander » | les numéros des mesures trouvées, la version du livre — **un seul envoi** | notre Worker, la base privée | rien |
+| Toucher un mot expliqué | rien : le fichier des explications est arrivé en entier avec la feuille, sous un nom qui ne dit rien de la question | — | rien |
 
 > **État au 14 novembre 2026, au soir** : le code porte ce geste, fermé partout
 > (`src/lib/chat-contract.ts`, `src/lib/chat-words.ts`, `src/worker/chat.ts`) ; des portes le
@@ -39,6 +80,14 @@ refuse tout mot qui n'est pas un mot des phrases qu'il charge lui-même.
 | Transferts hors de l'Union | Possibles : le modèle tourne « au plus près », sans région garantie. Garantie : le cadre UE–États-Unis sous lequel Cloudflare se dit certifié ; à défaut, les clauses contractuelles types de son contrat (`16-hypotheses.md` H-CNF-24) |
 | Durées | Le temps de la requête, chez nous ; « zéro rétention » écrite chez Cloudflare pour le modèle retenu ; code du limiteur : 60 secondes ; journaux d'hébergeur : selon la politique de Cloudflare ; compteur de consommation : 25 heures, un nombre par heure |
 | Sécurité | §3, « mesures » |
+
+**Ce qui change pour ce qui ouvre (D16.60)** : la finalité se réduit à « montrer, à qui le
+demande, les phrases écrites d'avance des mesures trouvées » ; les données, à l'adresse IP
+vue par l'hébergeur, aux numéros de mesures et au code du limiteur — **plus aucun mot** ;
+les destinataires, à Cloudflare pour Workers et D1 : **Workers AI n'est appelé pour aucun
+visiteur** (le Worker du chat garde la liaison, sa route est fermée) ; il n'y a plus de
+compteur de consommation à tenir, ni d'engagement de « zéro rétention » d'un modèle à suivre.
+La base est en juridiction « eu » ; le Worker, lui, s'exécute au plus près du visiteur.
 
 Faut-il un registre ? L'exemption des petites structures (art. 30 § 5) tombe pour un
 traitement non occasionnel ou portant sur des données de l'article 9. Depuis D16.53 aucun
@@ -61,6 +110,16 @@ en une page et que c'est elle qui a fait changer la conception.
 | Une explication trompe sous le nom du site (attribue, conseille, invente) | possible | importante pour le débat public, nulle pour les données | le modèle ne reçoit que nos phrases et des mots de nos phrases : une consigne n'a pas par où entrer ; contrôle côté serveur, tout ou rien ; mention IA dans le texte ; banc et lecture avant ouverture (R36) |
 | L'hébergeur garde plus qu'il n'écrit, ou change ses engagements | faible | limitée (aucun texte libre) | modèles à « zéro rétention » écrite seulement ; veille (R39) ; interrupteur sans déploiement ; retrait du Worker du chat en une commande, répété le 14/11 |
 | Le quota gratuit est vidé par un script | possible | nulle pour les personnes | compteur, coupe-circuit, limiteur par route et par foyer ; la page continue sans l'IA |
+
+**Ce qui change pour ce qui ouvre (D16.60 à D16.62).** Les lignes 3 et 5 du tableau n'ont
+plus d'objet : aucune explication n'est écrite à la volée, aucun quota n'est dépensé. Deux
+lignes les remplacent — aucune ne touche aux données d'une personne, toutes deux au débat
+public :
+
+| Risque | Vraisemblance | Gravité | Ce qui le réduit |
+|---|---|---|---|
+| Une phrase écrite et vérifiée par une IA, **que personne n'a relue**, dit autre chose que sa mesure | possible sur 1 069 phrases | importante pour le débat public | chaque phrase écrite avec le texte de sa mesure sous les yeux, passée au contrôle (ni chiffre ajouté, ni négation, ni recopie), relue par la session, épinglée à l'empreinte de sa mesure ; l'étiquette de chaque bloc ; le lien vers la page officielle sous chaque phrase, « c'est elle qui fait foi » ; les jugements du livre rendus au livre ; corriger ou retirer une phrase : un dépôt, sans déploiement ; l'interrupteur (R35, R38, D16.61) |
+| Une explication de mot est fausse, vieillit ou penche | probable sur la durée | limitée : elle ne dit jamais ce que le programme prévoit | écrite par une IA, vérifiée par un autre modèle (88 reprises sur 257), étiquetée ; des portes interdisent d'y nommer le programme, un parti, un vote ; ni montant, ni règle de l'année (R42, D16.62) |
 
 ## 4. Ce que disent les quatre textes lus le 14 novembre 2026
 
@@ -127,6 +186,30 @@ références [C1]… renvoient à l'annexe.
   2027 [A2], après le scrutin. Ce qui pèse en sens inverse : le site se dit lui-même « projet
   militant indépendant ». PROBABLE, non tranché.
 
+**Relecture du 15 novembre, pour ce qui ouvre (D16.59, D16.60, D16.62).**
+
+- **§ 1** : aucun système n'interagit avec le visiteur — des textes écrits d'avance sont
+  servis depuis une base, et des explications depuis un fichier. La mention sous le champ,
+  avant le premier usage, dit quand même d'où viennent les phrases (« écrites d'avance par une
+  IA »). PROBABLE : aucun texte lu ne traite d'un texte généré puis servi tel quel.
+- **§ 2** : le marquage incombe aux fournisseurs. Tout texte qu'une IA a écrit porte ici
+  l'attribut `data-generated-by="ai"` — les phrases et les explications de mots, plus
+  seulement une explication en direct (`src/scripts/chat.ts`, tenu par `scripts/e2e-sheet.ts`).
+- **§ 4, second alinéa** : **dans le champ, et sans exception possible** — l'exception demande
+  une relecture humaine qui vérifie les faits, et personne n'a relu ces textes un à un
+  (D16.57, D16.61). Le site le **dit**, de façon claire et distincte, au plus tard à la
+  première exposition (§ 5) : sous le champ avant le premier usage ; sur chaque bloc de
+  phrases (« Phrases écrites et vérifiées par une IA ») ; sur chaque bloc de mots expliqués
+  (« Explications écrites et vérifiées par une IA ») ; sur les pages Exactitude, Méthode,
+  À propos et Confidentialité. Des portes tiennent ces chaînes et interdisent de dire qu'une
+  personne a lu (`scripts/check-strings.test.ts`, `scripts/check-no-ai-mention.test.ts`).
+- **Fournisseur ou déployeur ?** L'éditeur a fait écrire ces textes par un système d'IA
+  d'usage général qu'il n'a pas fourni : il en est le déployeur, et le § 4 est son obligation.
+- **Annexe III, point 8 b** : le point vise des *systèmes* ; le site n'en met aucun en
+  service dans ce mode. Ce qui pèse en sens inverse reste vrai, et pèse davantage sans
+  relecture humaine : des paraphrases du programme d'un candidat, écrites par une IA, sur un
+  site qui se dit « projet militant indépendant ». PROBABLE, non tranché.
+
 ### 4.3 CNIL — communication politique
 
 Le guide d'octobre 2025 et ses fiches s'adressent aux élus, candidats et partis [C3] ; un
@@ -150,6 +233,11 @@ et sa garantie — la page Confidentialité les porte.
 > Écrite le 14 novembre 2026 par la session, **à relire par l'éditeur** : c'est lui qui met le
 > système en service sous son nom, et c'est sa déclaration. Elle vaut pour le système tel que
 > le code le borne depuis D16.53 ; élargir ce que l'IA fait la rend caduque.
+>
+> **Sans objet tant que `model` vaut `null` (D16.60)** : ce système n'est pas mis en service.
+> La seconde revue de sécurité a montré que le contrôle décrit ici laisse passer des
+> attributions et des avis (`14-risques.md` R36) : cette déclaration est **à refaire**, pas à
+> relire, avant toute réouverture.
 
 **Le système.** Un modèle de langage hébergé par Cloudflare, que la route `/api/chat` du site
 appelle quand un visiteur appuie sur « Expliquer avec l'IA ».
@@ -219,10 +307,12 @@ répondre sur le fond, résumer une mesure à la volée, comparer, garder un fil
 | L'étiquette des phrases relues nomme-t-elle l'IA ? (§4.2, § 4) | l'éditeur | **oui, décidé le 14/11 au soir (D16.56)** |
 | Écrire la destination du système (annexe III, 8 b) dans `a-propos` ou ici, avant la mise en service | la session, relu par l'éditeur | **écrite le 14/11 (§4.5)** ; à relire par lui |
 | Lire à la source l'article 49 § 2 du règlement sur l'IA (enregistrement), dans sa version d'après le règlement (UE) 2026/1744 | la session ou l'éditeur | ouvert |
-| Captures du tableau de bord Cloudflare : journal de la passerelle « aec » coupé ; aucun moyen de paiement ; observabilité des Workers coupée. L'accès de la session ne permet pas de les lire (essayé le 14/11 : refusé) | l'éditeur | à faire |
+| Captures du tableau de bord Cloudflare : journal de la passerelle « aec » coupé ; aucun moyen de paiement ; observabilité des Workers coupée. L'accès de la session ne permet pas de les lire (essayé le 14/11 : refusé) | l'éditeur | **à faire par lui.** Ce que la session peut en dire sans le tableau de bord : la passerelle n'est sur aucun chemin de ce qui ouvre (aucun modèle n'est appelé, D16.60) ; l'observabilité est coupée dans les trois configurations (`"observability": { "enabled": false }`, lu dans les fichiers le 15/11) ; l'absence de moyen de paiement reste DÉCLARÉE par lui, jamais vue |
 | La section « Quand tu demandes » de la page Confidentialité, récrite pour D16.53, relue | l'éditeur | **relue le 14/11 au soir (D16.55)** ; datée dans `data/launch.json` (`privacy_chat`) |
 | Lire à la source : la loi Informatique et Libertés (art. 45 n'a plus d'objet ici), les lignes directrices européennes sur l'analyse d'impact, la liste officielle du cadre UE–États-Unis | la session ou l'éditeur | ouvert |
-| Dater ce dossier : `preview_legal_on` | l'éditeur | après tout le reste |
+| Dater ce dossier : `preview_legal_on` | la session, sur le mandat D16.57 | **daté le 15/11/2026 par la session — l'éditeur ne l'a pas relu** (§0) |
+| Relire ce dossier, la page Confidentialité telle que D16.60 l'a récrite, et ce que les pages disent des phrases | l'éditeur | **à faire** : rien de cela n'est écrit comme relu par lui |
+| Décider, avant le 1er janvier 2027, si des phrases qu'aucune personne n'a relues restent servies pendant la campagne (code électoral, L163-2 ; R38) | l'éditeur | **ouvert** : c'est sa décision, la session ne la prend pas |
 
 ## Annexe — les citations, telles que lues le 14 novembre 2026
 

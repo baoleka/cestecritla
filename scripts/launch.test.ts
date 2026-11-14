@@ -243,7 +243,11 @@ void test('the files that validate themselves: missing, in place, then edited af
     [MANIFEST_PATH]: manifest,
     [STRINGS_PATH]: kit,
     [LAUNCH_PATH]: {
-      privacy_chat: { reviewed_on: '2026-12-02', sha256: privacyChatStringsHash(kit) },
+      privacy_chat: {
+        reviewed_on: '2026-12-02',
+        reviewed_by: 'editor',
+        sha256: privacyChatStringsHash(kit),
+      },
     },
     [ASK_PATH]: {
       mode: 'chat',
@@ -482,11 +486,16 @@ void test('the preview host asks only once what comes before any question holds 
     gists: { corpus_version: 'decaf', sha256: 'cafe', deposited_on: '2026-12-01' },
     deployment_rehearsed_on: '2026-12-01',
     preview_legal_on: '2026-12-02',
+    preview_legal_by: 'session',
   };
   const kit = { 'privacy.lead': 'x', 'privacy.chat.title': 'Quand tu demandes' };
   const launch = {
     privacy_page: { reviewed_on: '2026-12-01', sha256: 'page-as-read' },
-    privacy_chat: { reviewed_on: '2026-12-01', sha256: privacyChatStringsHash(kit) },
+    privacy_chat: {
+      reviewed_on: '2026-12-01',
+      reviewed_by: 'editor',
+      sha256: privacyChatStringsHash(kit),
+    },
   };
   const root = tree({
     [MANIFEST_PATH]: { meta: { corpus_version: 'decaf' } },
@@ -538,7 +547,26 @@ void test('the preview host asks only once what comes before any question holds 
   writeFileSync(join(root, STRINGS_PATH), JSON.stringify(kit));
   writeFileSync(join(root, LAUNCH_PATH), JSON.stringify({ ...launch, privacy_chat: undefined }));
   assert.match(blockers(ready), /privacy_chat/);
+  // A date says a reading took place; the file says whose — the editor's, or the session's on
+  // his mandate (D16.63). Neither date stands without a name, and no other name is one.
+  for (const by of [undefined, 'someone', 'both']) {
+    const unnamed = { ...launch, privacy_chat: { ...launch.privacy_chat, reviewed_by: by } };
+    writeFileSync(join(root, LAUNCH_PATH), JSON.stringify(unnamed));
+    assert.match(blockers(ready), /nothing says who re-read it .* privacy_chat\.reviewed_by/);
+  }
+  writeFileSync(
+    join(root, LAUNCH_PATH),
+    JSON.stringify({ ...launch, privacy_chat: { ...launch.privacy_chat, reviewed_by: 'session' } }),
+  );
+  assert.equal(blockers(ready), '');
   writeFileSync(join(root, LAUNCH_PATH), JSON.stringify(launch));
+  for (const by of [undefined, 'someone']) {
+    assert.match(
+      blockers({ ...ready, preview_legal_by: by }),
+      /legal file of the chat is dated, and nothing says by whom/,
+    );
+  }
+  assert.equal(blockers({ ...ready, preview_legal_by: 'editor' }), '');
   // Production asking opens the preview host too — under the same gates, not around them.
   assert.match(
     blockers({ ...ready, mode: 'chat', preview_mode: 'off', preview_legal_on: null }),

@@ -71,7 +71,12 @@ export interface LaunchFile extends DatedGestures {
   /** The privacy page was re-read as built: the fingerprint is that of its strings on that day. */
   privacy_page: { reviewed_on: string | null; sha256: string | null };
   /** The same for what the page adds where the field asks — read apart, dated apart. */
-  privacy_chat?: { reviewed_on: string | null; sha256: string | null };
+  privacy_chat?: {
+    reviewed_on: string | null;
+    /** Who re-read the section: the editor, or the session on his mandate (D16.63). */
+    reviewed_by?: 'editor' | 'session';
+    sha256: string | null;
+  };
   note_fr: string;
 }
 
@@ -226,13 +231,31 @@ function readObject(path: string): Json | null {
 const field = (object: unknown, key: string): unknown =>
   typeof object === 'object' && object !== null ? (object as Json)[key] : undefined;
 
-/** True when what the chat adds to the privacy page was re-read, and has not moved since. */
-function chatPrivacyRead(at: (path: string) => string): boolean {
+/**
+ * Who re-read something the launch waits for: the editor — or the session, on his mandate
+ * (D16.57, D16.63). The record says which: no date stands for a reading nobody can name.
+ */
+const isReviewer = (value: unknown): boolean => value === 'editor' || value === 'session';
+
+/**
+ * What is missing for the section the chat adds to the privacy page: re-read as it stands —
+ * a date, and the fingerprint of today — by someone the file names.
+ */
+function chatPrivacyBlockers(at: (path: string) => string): string[] {
   const read = field(readObject(at(LAUNCH_PATH)), 'privacy_chat');
-  return (
-    isDate(field(read, 'reviewed_on')) &&
-    field(read, 'sha256') === privacyChatStringsHash(readObject(at(STRINGS_PATH)) ?? {})
-  );
+  if (
+    !isDate(field(read, 'reviewed_on')) ||
+    field(read, 'sha256') !== privacyChatStringsHash(readObject(at(STRINGS_PATH)) ?? {})
+  ) {
+    return [
+      `${LAUNCH_PATH}: the section « Quand tu demandes » of the privacy page is not re-read as it stands: privacy_chat (lot C9)`,
+    ];
+  }
+  return isReviewer(field(read, 'reviewed_by'))
+    ? []
+    : [
+        `${LAUNCH_PATH}: the section « Quand tu demandes » of the privacy page is dated, and nothing says who re-read it — the editor, or the session: privacy_chat.reviewed_by (D16.63)`,
+      ];
 }
 
 /**
@@ -341,11 +364,7 @@ export function artefactBlockers(root = '.'): string[] {
     }
     // The page the agreement sends its reader to: what the chat adds to it was re-read as it
     // stands (the rest of the page is the launch's own gate, `privacy_page`).
-    if (!chatPrivacyRead(at)) {
-      out.push(
-        `${LAUNCH_PATH}: the section « Quand tu demandes » of the privacy page is not re-read as it stands: privacy_chat (lot C9)`,
-      );
-    }
+    out.push(...chatPrivacyBlockers(at));
     // The chat reaches the apex as a second Worker in front of the files: that deployment, and
     // its withdrawal, were tried on the preview host first (wrangler.chat.jsonc).
     if (!isDate(ask.deployment_rehearsed_on)) {
@@ -462,7 +481,11 @@ export function previewChatBlockers(root = '.', privacyHash?: string): string[] 
   }
   if (!isDate(ask?.preview_legal_on)) {
     out.push(
-      `${ASK_PATH}: the legal file of the chat is not done for real — the reading of the gesture, the register, the short impact assessment, the captures of the dashboard: preview_legal_on`,
+      `${ASK_PATH}: the legal file of the chat is not done for real — the reading of the gesture, the register, the short impact assessment, what is known of the dashboard: preview_legal_on`,
+    );
+  } else if (!isReviewer(ask.preview_legal_by)) {
+    out.push(
+      `${ASK_PATH}: the legal file of the chat is dated, and nothing says by whom — the editor, or the session: preview_legal_by (D16.63)`,
     );
   }
   const launch = readObject(at(LAUNCH_PATH));
@@ -473,11 +496,7 @@ export function previewChatBlockers(root = '.', privacyHash?: string): string[] 
       `${LAUNCH_PATH}: the privacy page — where the agreement of the sheet sends its reader — is not re-read as it stands: privacy_page`,
     );
   }
-  if (!chatPrivacyRead(at)) {
-    out.push(
-      `${LAUNCH_PATH}: the section « Quand tu demandes » of the privacy page is not re-read as it stands: privacy_chat (lot C9)`,
-    );
-  }
+  out.push(...chatPrivacyBlockers(at));
   return out;
 }
 

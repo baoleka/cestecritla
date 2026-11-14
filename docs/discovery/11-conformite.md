@@ -413,6 +413,26 @@ La décision d'adéquation qui porte ce cadre tient toujours, et elle est attaqu
 
 **Ce que la page dit depuis le lot C9**, quand le champ demande — une section « Quand tu demandes » (`id="demander"`, où mène le lien de l'accord), en trois listes : *ce qui part* (les numéros des mesures au geste « Demander » ; la question après l'accord, à quoi elle sert, où le modèle tourne), *ce qui est gardé* (rien de la question, chez nous ; l'engagement écrit de Cloudflare ; le fil en mémoire de page ; le compteur de la minute sous un code tiré de l'adresse ; le compteur de ce que l'IA consomme en tout, heure par heure) et *ton accord* (il fonde seul l'envoi ; il vaut pour la page ouverte ; les deux gestes pour arrêter et pour vider ; « 15 ans ou plus » ; rien n'est gardé qui désigne quelqu'un). Dans ce mode, « L'app ne mesure rien » devient « Pas de compteur de visites, pas de mesure d'audience » : un compteur existe, et la page le dit. Dans les deux modes, la rubrique « Hébergeur » nomme la garantie du transfert, et le responsable est écrit comme dans l'accord, pseudonyme compris (D16.50). **L'éditeur relit la page et la date** (`privacy_page`) : la porte de lancement refuse une page dont les chaînes ont bougé.
 
+### 6.2 septies « Demander » tel qu'il ouvre : un envoi, aucune IA en direct — 15/11/2026 (D16.57 à D16.63)
+
+Ce qui vaut pour ce qui ouvre est dans `18-dossier-chat.md`, repris le 15 novembre (§0 à §5).
+En bref :
+
+- **Ce qui part** : au geste « Demander », les numéros des mesures trouvées et la version du
+  livre — un seul envoi, vers notre Worker et la base privée (juridiction « eu »). **Rien de
+  tapé** (D16.53) ; plus aucun mot non plus : le bouton « Expliquer avec l'IA » n'est pas dans
+  la page (D16.60). Les mots expliqués sont trouvés sur le téléphone, dans un fichier arrivé
+  en entier avec la feuille (D16.62).
+- **Article 9** : inchangé depuis D16.53 — aucun texte libre n'est traité.
+- **Article 13** : la section « Quand tu demandes » de la page Confidentialité, dans sa
+  variante sans modèle (`privacy.chat.lead.gists`, `.gists`, `.terms`, `.kept.gists`,
+  `.thread`, `.rate`, `.clear`, `.rights`). **Relue et datée par la session sur le mandat
+  D16.57, pas par l'éditeur** (D16.63 ; `data/launch.json`, `privacy_chat.reviewed_by`).
+- **Règlement sur l'IA, art. 50 § 4** : les phrases et les explications de mots sont des
+  textes générés, publiés pour informer ; personne ne les a relus un à un, donc aucune
+  exception : le site le dit partout où il les montre (D16.59, D16.62).
+- **Code électoral, L163-2** : voir §7, note du 15 novembre.
+
 ### 6.3 La politique en dix lignes — texte final
 
 Route `/confidentialite` (D5.10). Titre `privacy.title` = « Confidentialité », chapeau `privacy.lead` = « Dix lignes, toutes vraies, vérifiées contre la carte des données de l'app. » Chaque ligne est confrontée ligne à ligne au tableau §6 de `09-architecture.md`.
@@ -462,6 +482,16 @@ Chacune de ces neuf lignes est vérifiable dans la carte des journalisations : l
 | **L163-2** (en vigueur depuis le 1er janvier 2020) ouvre un référé de 48 h lorsque des allégations inexactes ou trompeuses de nature à altérer la sincérité du scrutin sont diffusées « de manière **délibérée, artificielle ou automatisée et massive** » par un service de communication au public en ligne, pendant les trois mois précédant le scrutin. Source : https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000039278631 | VÉRIFIÉ |
 
 **Ce que L163-2 impose en pratique, comme règle interne** : l'app ne doit jamais fabriquer de diffusion automatisée ou massive. Trois garde-fous existent déjà et deviennent des règles nommées — aucun envoi automatique (le partage est toujours un geste de la personne : `share.button`, `navigator.share`) ; aucun bot, aucune programmation de publication, aucun compte de réseau social piloté par l'app ; aucune amplification payante (§9). Le quatrième est la fidélité au texte : ce que l'app affiche est du verbatim vérifié par empreinte SHA-256 (D1.4, D1.7) — c'est la meilleure défense contre une allégation d'« information inexacte ».
+
+**Depuis le 15 novembre 2026 (D16.59 à D16.61) : le quatrième garde-fou ne couvre plus tout ce
+que le site affiche.** Les phrases de « Demander » sont des paraphrases, écrites et vérifiées
+par une IA, qu'aucune personne n'a relues une à une ; elles sont servies automatiquement, à
+qui demande. Ce qui les tient : chacune est épinglée à l'empreinte de sa mesure, passée à un
+contrôle (ni chiffre ajouté, ni négation, ni recopie), étiquetée pour ce qu'elle est et
+montrée avec le lien vers la page officielle ; un interrupteur les retire sans déploiement.
+Ce n'est pas la défense du verbatim prouvé par empreinte. La fenêtre de L163-2 s'ouvre le
+1er janvier 2027 : garder ou non ces phrases pendant la campagne est une décision de
+l'éditeur (`14-risques.md` R38), que la session ne prend pas.
 
 ## 8. Marques (INPI / TMview)
 
