@@ -8,10 +8,14 @@
  * shows is drawn by that script from what the pure modules decide (src/lib/chat-view.ts).
  *
  * What is written here, and not by the script: the frame — « Site non officiel. » stands in it,
- * as in the frame of every screen — and THE OFFER of an explanation by an AI (D16.53): a title,
- * one notice that says what the AI is sent — never the question —, one button, in a <template>
- * the script copies without touching a word. There is no agreement to give any more: nothing
- * a visitor types leaves the phone.
+ * as in the frame of every screen — and, WHERE A MODEL ANSWERS, the offer of an explanation by
+ * an AI (D16.53): a title, one notice that says what the AI is sent — never the question —,
+ * one button, in a <template> the script copies without touching a word. There is no agreement
+ * to give any more: nothing a visitor types leaves the phone.
+ *
+ * Since D16.60 no model answers a visitor: `model` is null, and neither the offer, nor its two
+ * small buttons, nor a word about a live AI is in the page. The sheet shows the sentences
+ * written ahead, under a label that says who wrote and checked them — an AI (D16.59).
  *
  * Rendered only in a build whose field asks: in mode "off" this file is not even imported.
  */
@@ -21,10 +25,13 @@ import { manifest } from '../lib/edition.ts';
 import { safeJson, t } from '../lib/strings.ts';
 
 interface Props {
-  /** The name of the model that explains, as data/2026/ask.json gives it. */
-  model: string;
+  /** The name of the model that explains, as data/2026/ask.json gives it — null: none does. */
+  model: string | null;
 }
 const { model } = Astro.props;
+/** The words of the explanation by an AI: said only where a model is named. */
+const ai = (key: Parameters<typeof t>[0]): string =>
+  model === null ? '' : t(key, { model });
 
 const config = {
   corpus: manifest().meta.corpus_version,
@@ -47,10 +54,10 @@ const config = {
     offTopic: t('refusal.off_topic'),
     silence: t('silence.chat.local', { reopenTime: '{reopenTime}' }),
     paused: t('silence.paused'),
-    aiTitle: t('chat.ai.title'),
-    aiMark: t('chat.ai_badge', { model }),
-    aiNote: t('chat.ai_mention', { model }),
-    aiWaiting: t('chat.ai.waiting'),
+    aiTitle: ai('chat.ai.title'),
+    aiMark: ai('chat.ai_badge'),
+    aiNote: ai('chat.ai_mention'),
+    aiWaiting: ai('chat.ai.waiting'),
     method: t('chat.method_link'),
     simpler: t('chat.follow.simpler'),
     example: t('chat.follow.example'),
@@ -78,13 +85,21 @@ const config = {
        one button. Not pressing it is the refusal: there is nothing to decline, because nothing
        typed would leave. The script copies it under the read sentences. */
   }
-  <template id="chat-offer" data-title={t('chat.offer.title')}>
-    <p>{t('chat.offer.notice', { model })}</p>
-    <p><a href="/confidentialite/#demander">{t('chat.offer.more')}</a></p>
-    <p class="c-actions">
-      <button type="button" class="quiet" data-offer="accept">{t('chat.offer.accept')}</button>
-    </p>
-  </template>
+  {
+    model !== null && (
+      <template id="chat-offer" data-title={t('chat.offer.title')}>
+        <p>{t('chat.offer.notice', { model })}</p>
+        <p>
+          <a href="/confidentialite/#demander">{t('chat.offer.more')}</a>
+        </p>
+        <p class="c-actions">
+          <button type="button" class="quiet" data-offer="accept">
+            {t('chat.offer.accept')}
+          </button>
+        </p>
+      </template>
+    )
+  }
 
   {
     /* No name on the field (see Search.astro): nothing typed here can leave by a form. And no
@@ -108,8 +123,18 @@ const config = {
   {/* Second gestures, kept small: the thread is what the sheet is for. */}
   <p class="c-foot">
     <button type="button" class="c-link" id="chat-clear">{t('chat.clear')}</button>
-    <button type="button" class="c-link" id="chat-ai-stop" hidden>{t('chat.ai.stop')}</button>
-    <button type="button" class="c-link" id="chat-ai-start" hidden>{t('chat.ai.start')}</button>
+    {
+      model !== null && (
+        <>
+          <button type="button" class="c-link" id="chat-ai-stop" hidden>
+            {t('chat.ai.stop')}
+          </button>
+          <button type="button" class="c-link" id="chat-ai-start" hidden>
+            {t('chat.ai.start')}
+          </button>
+        </>
+      )
+    }
   </p>
   <script type="application/json" id="chat-config" set:html={safeJson(config)} is:inline />
 </dialog>

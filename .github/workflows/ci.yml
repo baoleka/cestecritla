@@ -157,6 +157,11 @@ jobs:
       - name: End to end of the ask screen (test build, simulated Worker)
         run: npm run build:ask && npx tsx scripts/e2e-ask.ts --engines chromium
 
+      # The sheet as it opens (D16.59, D16.60): sentences written ahead, no live AI. Its own
+      # test build (dist-gists/), which the notices gate below reads too.
+      - name: End to end of the sheet without a live AI (test build, simulated Worker)
+        run: npm run build:gists && npx tsx scripts/e2e-sheet.ts --engines chromium
+
       # « Où est-ce écrit ? », on the same test build: the page as it will be once the list of
       # words is validated. Without script, then with it: a choice is never wrong, a round sends
       # nothing and writes nothing, the turtle changes at the end of a round only.

@@ -24,7 +24,8 @@ import { fr, frDate, t } from '../../lib/strings.ts';
 
 const meta = manifest().meta;
 const site = askSite();
-const model = site.modelName ?? '';
+/** The model that explains — null since D16.60: sentences written ahead, and no live AI. */
+const model = site.modelName;
 const search = searchFacts();
 const checked = verification();
 const cited = quoteFacts();
@@ -59,8 +60,8 @@ const ENGINE_NAMES: Record<string, string> = {
     site.mode === 'chat' && (
       <>
         <h2 id="reponse">{t('accuracy.ask.title')}</h2>
-        <p>{t('about.ai_line', { model })}</p>
-        <p>{t('about.ai_limits')}</p>
+        <p>{model === null ? t('about.gists_line') : t('about.ai_line', { model })}</p>
+        <p>{model === null ? t('about.gists_limits') : t('about.ai_limits')}</p>
         <p>
           {t('about.ai_reviewed')} <a href="/methodologie/">{t('accuracy.method_link')}</a>
         </p>
@@ -138,6 +139,11 @@ const ENGINE_NAMES: Record<string, string> = {
         : t('accuracy.review.pending', { count: fr(pending) })
     }
   </p>
+  {
+    /* The sentences of « Demander » are not among the texts a person re-read (D16.59): where
+       the site shows them, the page says so in the very paragraph that speaks of re-reading. */
+    site.mode === 'chat' && <p>{t('accuracy.review.sentences')}</p>
+  }
 
   <h2>{t('accuracy.unverified.title')}</h2>
   <p>{t('accuracy.unverified.lead')}</p>

@@ -107,20 +107,11 @@ const stop = sheet?.querySelector<HTMLButtonElement>('#chat-ai-stop') ?? null;
 const start = sheet?.querySelector<HTMLButtonElement>('#chat-ai-start') ?? null;
 const configNode = document.querySelector('#chat-config');
 
-if (
-  form &&
-  field &&
-  sheet &&
-  thread &&
-  scroller &&
-  composer &&
-  input &&
-  offerCard &&
-  clear &&
-  stop &&
-  start &&
-  configNode
-) {
+if (form && field && sheet && thread && scroller && composer && input && clear && configNode) {
+  // The offer of an explanation, and the two buttons that go with it, are in the page only
+  // where a model answers (src/components/ChatSheet.astro). Without them the sheet shows the
+  // sentences written ahead and what a person wrote — and asks nothing of any AI (D16.60).
+  const explains = offerCard !== null && stop !== null && start !== null;
   const config = JSON.parse(configNode.textContent) as Config;
   const s = config.strings;
   const display = displayOf(form);
@@ -276,7 +267,7 @@ if (
       }
     }
 
-    if (view.ai !== null) {
+    if (view.ai !== null && explains) {
       // While the AI is only offered, the block says what is offered; then, what it holds.
       const offered = view.ai.offer ? (offerCard.dataset.title ?? s.aiTitle) : s.aiTitle;
       const part = block(offered, null, 'c-ai');
@@ -332,6 +323,13 @@ if (
     return node;
   };
 
+  /** The two small buttons of the AI — « stop », « ask again » — follow what was chosen. */
+  const showChoice = (): void => {
+    if (!explains) return;
+    stop.hidden = page.ai !== 'on';
+    start.hidden = page.ai !== 'off';
+  };
+
   /** Draws one turn again in its place: the others keep their scroll and their focus. */
   const update = (index: number): void => {
     const node = draw(index);
@@ -346,8 +344,7 @@ if (
     turns.forEach((_, index) => {
       update(index);
     });
-    stop.hidden = page.ai !== 'on';
-    start.hidden = page.ai !== 'off';
+    showChoice();
   };
   const focusBlock = (index: number, selector: string): void => {
     (nodes[index]?.querySelector<HTMLElement>(selector) ?? scroller).focus();
@@ -402,7 +399,8 @@ if (
 
   const explain = async (index: number, follow: FollowUp | null): Promise<void> => {
     const turn = turns[index];
-    if (turn === undefined || turn.awaited !== undefined) return;
+    // A page without the offer asks nothing of an AI, whatever a server may answer (D16.60).
+    if (!explains || turn === undefined || turn.awaited !== undefined) return;
     // What leaves: the measures shown, the words of their sentences that the question uses,
     // the cards it names. The question itself is read here and goes nowhere (D16.53).
     const shown = shownIds(turn, page);
@@ -480,8 +478,7 @@ if (
   opening = (): void => {
     if (!sheet.open) sheet.showModal();
     fit();
-    stop.hidden = page.ai !== 'on';
-    start.hidden = page.ai !== 'off';
+    showChoice();
     // What was typed in the field of the page becomes the first question — once.
     const typed = cleanQuestion(field.value);
     if (typed !== null && turns.at(-1)?.question !== typed) {
@@ -501,18 +498,20 @@ if (
     empty();
     input.focus();
   });
-  stop.addEventListener('click', () => {
-    page.ai = 'off';
-    redraw();
-    start.focus();
-  });
-  // Asking for it again is the gesture itself: the AI is on, and the last turn is explained.
-  start.addEventListener('click', () => {
-    page.ai = 'on';
-    redraw();
-    advance(turns.length - 1);
-    focusBlock(turns.length - 1, '.c-ai');
-  });
+  if (explains) {
+    stop.addEventListener('click', () => {
+      page.ai = 'off';
+      redraw();
+      start.focus();
+    });
+    // Asking for it again is the gesture itself: the AI is on, and the last turn is explained.
+    start.addEventListener('click', () => {
+      page.ai = 'on';
+      redraw();
+      advance(turns.length - 1);
+      focusBlock(turns.length - 1, '.c-ai');
+    });
+  }
   // Leaving the page empties the thread: coming back with the back button finds none — and
   // the AI is only offered again. A browser may bring the page back as it left it, memory
   // included; what the privacy page says of a visit has to hold there too.

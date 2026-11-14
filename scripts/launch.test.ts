@@ -247,9 +247,16 @@ void test('the files that validate themselves: missing, in place, then edited af
     },
     [ASK_PATH]: {
       mode: 'chat',
+      model: 'mistral-small-3.1',
       bench: { sha256: 'beef', run_on: '2026-12-01' },
       database: { corpus_version: corpus },
-      gists: { corpus_version: corpus, verdicts: 2, sha256: 'cafe', deposited_on: '2026-12-01' },
+      gists: {
+        corpus_version: corpus,
+        verdicts: 2,
+        sha256: 'cafe',
+        deposited_on: '2026-12-01',
+        read_by: 'editor',
+      },
       threads_read_on: '2026-12-02',
       model_confirmed_on: '2026-12-02',
       deployment_rehearsed_on: '2026-12-01',
@@ -375,7 +382,14 @@ void test('the files that validate themselves: missing, in place, then edited af
     mode: 'chat',
     bench: { sha256: 'beef', run_on: '2026-12-01' },
     database: { corpus_version: 'decaf' },
-    gists: { corpus_version: 'decaf', verdicts: -1, sha256: 'cafe', deposited_on: '2026-12-01' },
+    model: 'mistral-small-3.1',
+    gists: {
+      corpus_version: 'decaf',
+      verdicts: -1,
+      sha256: 'cafe',
+      deposited_on: '2026-12-01',
+      read_by: 'editor',
+    },
     threads_read_on: '2026-12-02',
     model_confirmed_on: '2026-12-02',
     deployment_rehearsed_on: '2026-12-01',
@@ -393,12 +407,33 @@ void test('the files that validate themselves: missing, in place, then edited af
     [{ gists: null }, /read sentences are not deposited for this book/],
     [{ gists: { ...chat.gists, corpus_version: 'c0ffee' } }, /not deposited for this book/],
     [{ gists: { ...chat.gists, deposited_on: null } }, /not deposited for this book/],
-    [{ gists: { ...chat.gists, verdicts: 1068 } }, /not every measure has the editor's verdict/],
+    [{ gists: { ...chat.gists, verdicts: 1068 } }, /not every measure has its verdict/],
+    [{ gists: { ...chat.gists, read_by: undefined } }, /does not say who read the sentences/],
+    [{ gists: { ...chat.gists, read_by: 'a person' } }, /does not say who read the sentences/],
     [{ threads_read_on: null }, /has not read the forty threads/],
     [{ model_confirmed_on: 'soon' }, /has not confirmed the model/],
     [{ deployment_rehearsed_on: null }, /has not been rehearsed on the preview host/],
   ] as const) {
     assert.match(asked({ ...chat, ...without }), said, JSON.stringify(without));
+  }
+  // « Demander » without a live AI (D16.60): no model is named, so nothing that belongs to one
+  // is waited for — no bench, no threads, no confirmation, no text of the book in the base.
+  const sheet = {
+    mode: 'chat',
+    model: null,
+    gists: { ...chat.gists, read_by: 'session' },
+    deployment_rehearsed_on: '2026-12-01',
+  };
+  assert.equal(asked(sheet), '');
+  assert.equal(asked({ ...sheet, database: { corpus_version: 'c0ffee' }, bench: null }), '');
+  // …and everything that does not belong to a model still holds.
+  for (const [without, said] of [
+    [{ gists: null }, /read sentences are not deposited for this book/],
+    [{ gists: { ...sheet.gists, verdicts: 1068 } }, /not every measure has its verdict/],
+    [{ gists: { ...sheet.gists, read_by: null } }, /does not say who read the sentences/],
+    [{ deployment_rehearsed_on: null }, /has not been rehearsed on the preview host/],
+  ] as const) {
+    assert.match(asked({ ...sheet, ...without }), said, JSON.stringify(without));
   }
   // With the chat, production's privacy page has a section more: re-read apart, as it stands.
   const section = (): string =>
@@ -469,8 +504,8 @@ void test('the preview host asks only once what comes before any question holds 
   assert.equal(blockers({ mode: 'off' }), '');
   // Each gate missing is named — the model first: only one whose host keeps nothing reads.
   for (const [without, said] of [
-    [{ model: null }, /no model is named whose host writes that it keeps nothing/],
     [{ model: 'gpt-oss-120b' }, /keeps nothing of a call/],
+    [{ model: 'no-such-model' }, /no model is named whose host writes that it keeps nothing/],
     [{ bench: null }, /no bench of the explanations is recorded/],
     [{ gists: null }, /no read sentence is deposited for this book/],
     [{ gists: { ...ready.gists, corpus_version: 'c0ffee' } }, /deposited for this book/],
@@ -479,6 +514,17 @@ void test('the preview host asks only once what comes before any question holds 
     [{ preview_legal_on: 'bientôt' }, /legal file of the chat is not done for real/],
   ] as const) {
     assert.match(blockers({ ...ready, ...without }), said, JSON.stringify(without));
+  }
+  // The sheet without a live AI (D16.60) names no model: neither a model nor a bench is
+  // waited for — and every other gate of the preview host still is.
+  const sheet = { ...ready, model: null, bench: null };
+  assert.equal(blockers(sheet), '');
+  for (const [without, said] of [
+    [{ gists: null }, /no read sentence is deposited for this book/],
+    [{ deployment_rehearsed_on: null }, /deployment of the chat has not been rehearsed/],
+    [{ preview_legal_on: null }, /legal file of the chat is not done for real/],
+  ] as const) {
+    assert.match(blockers({ ...sheet, ...without }), said, JSON.stringify(without));
   }
   // The page the agreement sends its reader to is the one that was re-read, as it stands —
   // and so is the section the chat adds to it, read apart.

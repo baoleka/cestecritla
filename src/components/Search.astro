@@ -40,8 +40,9 @@ const { toc = false, ask = false } = Astro.props;
 
 const version = manifest().meta.corpus_version;
 const site = askSite();
-const asking = ask && site.mode === 'chat' && site.modelName !== null;
-const model = site.modelName ?? '';
+const asking = ask && site.mode === 'chat';
+/** The model that explains — null since D16.60: the sheet opens without a live AI. */
+const model = site.modelName;
 // Imported only by a build whose field asks (astro.config.ts): a condition the bundler can
 // fold removes the import itself — and with it the sheet's stylesheet and its script.
 const ChatSheet = __CEL_CHAT__ ? (await import('./ChatSheet.astro')).default : null;
@@ -100,8 +101,11 @@ const strings = {
           {t('chat.send')}
         </button>
         {/* The notice, before the first use (AI Act, art. 50): what searching does, what asking
-            does, and that an AI explains only with the visitor's agreement. */}
-        <p id="search-hint" class="ref">{t('chat.ai_hint', { model })}</p>
+            does — sentences an AI wrote ahead — and, where a model answers, that it explains
+            only when asked. */}
+        <p id="search-hint" class="ref">
+          {model === null ? t('chat.hint') : t('chat.ai_hint', { model })}
+        </p>
       </>
     ) : (
       <p id="search-hint" class="ref">

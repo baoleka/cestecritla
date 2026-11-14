@@ -235,6 +235,17 @@ function chatPrivacyRead(at: (path: string) => string): boolean {
   );
 }
 
+/**
+ * True when the file names a model that would explain: anything but null. Since D16.60 it
+ * names none — « Demander » opens on the sentences written ahead, and no AI answers a visitor.
+ */
+const namesModel = (ask: Record<string, unknown> | null): boolean =>
+  ask !== null && ask['model'] !== null && ask['model'] !== undefined;
+
+/** Who read the deposited sentences, as scripts/gists-core.ts (`readBy`) says it. */
+const isReader = (value: unknown): boolean =>
+  value === 'editor' || value === 'session' || value === 'both';
+
 /** How many measures the book has, as the manifest lists them: every item that is not prose. */
 function measureCount(path: string): number {
   const sections = field(readObject(path), 'sections');
@@ -278,17 +289,36 @@ export function artefactBlockers(root = '.'): string[] {
       );
     }
   } else {
-    // The gates of PLAN-CHAT §5 that a file can carry — each dated by the editor, or measured.
-    if (typeof field(ask.bench, 'sha256') !== 'string' || !isDate(field(ask.bench, 'run_on'))) {
-      out.push(`${ASK_PATH}: the mode "chat" rests on no recorded bench of explanations (lot C8)`);
+    // The gates of PLAN-CHAT §5 that a file can carry — each dated, or measured.
+    //
+    // Those of a model that explains hold only where one is named. Since D16.60 none is: the
+    // sheet opens on the sentences written ahead, `/api/chat` stays closed, and there is
+    // neither a bench of explanations to rest on, nor threads of a model to read, nor a model
+    // to confirm — nor a text of the book for a model to be handed.
+    if (namesModel(ask)) {
+      if (typeof field(ask.bench, 'sha256') !== 'string' || !isDate(field(ask.bench, 'run_on'))) {
+        out.push(
+          `${ASK_PATH}: the mode "chat" rests on no recorded bench of explanations (lot C8)`,
+        );
+      }
+      if (field(ask.database, 'corpus_version') !== corpus) {
+        out.push(
+          `${ASK_PATH}: the private database is not at the corpus version of the manifest (lot I3)`,
+        );
+      }
+      if (!isDate(ask.threads_read_on)) {
+        out.push(
+          `${ASK_PATH}: the editor has not read the forty threads: threads_read_on (lot C8)`,
+        );
+      }
+      if (!isDate(ask.model_confirmed_on)) {
+        out.push(
+          `${ASK_PATH}: the editor has not confirmed the model the bench chose: model_confirmed_on`,
+        );
+      }
     }
-    if (field(ask.database, 'corpus_version') !== corpus) {
-      out.push(
-        `${ASK_PATH}: the private database is not at the corpus version of the manifest (lot I3)`,
-      );
-    }
-    // Every measure has its verdict — a sentence the editor read, or its link alone — and the
-    // set that was deposited is the set that was read (scripts/seed-ask-2026.ts).
+    // Every measure has its verdict — a sentence read, or its link alone — and the set that
+    // was deposited is the set that was read (scripts/seed-ask-2026.ts).
     const gists = ask.gists;
     if (
       field(gists, 'corpus_version') !== corpus ||
@@ -299,15 +329,14 @@ export function artefactBlockers(root = '.'): string[] {
     }
     if (field(gists, 'verdicts') !== measureCount(at(MANIFEST_PATH))) {
       out.push(
-        `${ASK_PATH}: not every measure has the editor's verdict — a sentence read, or its link alone: gists.verdicts (lot C3)`,
+        `${ASK_PATH}: not every measure has its verdict — a sentence read, or its link alone: gists.verdicts (lot C3)`,
       );
     }
-    if (!isDate(ask.threads_read_on)) {
-      out.push(`${ASK_PATH}: the editor has not read the forty threads: threads_read_on (lot C8)`);
-    }
-    if (!isDate(ask.model_confirmed_on)) {
+    // Who read them is written with the deposit: what the site says of the sentences is held
+    // to it (D16.59, scripts/check-strings.test.ts).
+    if (!isReader(field(gists, 'read_by'))) {
       out.push(
-        `${ASK_PATH}: the editor has not confirmed the model the bench chose: model_confirmed_on`,
+        `${ASK_PATH}: the deposit does not say who read the sentences — the editor, the session, or both: gists.read_by (D16.59)`,
       );
     }
     // The page the agreement sends its reader to: what the chat adds to it was re-read as it
@@ -406,13 +435,17 @@ export function previewChatBlockers(root = '.', privacyHash?: string): string[] 
   if (modeFor(ask, 'preview') !== 'chat') return [];
   const out: string[] = [];
   const corpus = field(field(readObject(at(MANIFEST_PATH)), 'meta'), 'corpus_version');
-  if (!isModelKey(ask?.model) || !keepsNothing(ask.model)) {
-    out.push(
-      `${ASK_PATH}: no model is named whose host writes that it keeps nothing of a call: model`,
-    );
-  }
-  if (typeof field(ask?.bench, 'sha256') !== 'string' || !isDate(field(ask?.bench, 'run_on'))) {
-    out.push(`${ASK_PATH}: no bench of the explanations is recorded: bench (lot C8)`);
+  // A model that explains has gates of its own; a sheet without one (D16.60) has none of them
+  // to pass — and nothing of a visitor's question to hand to anyone.
+  if (namesModel(ask)) {
+    if (!isModelKey(ask?.model) || !keepsNothing(ask.model)) {
+      out.push(
+        `${ASK_PATH}: no model is named whose host writes that it keeps nothing of a call: model`,
+      );
+    }
+    if (typeof field(ask?.bench, 'sha256') !== 'string' || !isDate(field(ask?.bench, 'run_on'))) {
+      out.push(`${ASK_PATH}: no bench of the explanations is recorded: bench (lot C8)`);
+    }
   }
   const gists = ask?.gists;
   if (

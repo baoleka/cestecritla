@@ -111,11 +111,15 @@ const fast = process.argv.includes('--fast');
 const neutral = process.argv.includes('--neutral');
 /** The holding site (D15.4): astro.config.ts switches its source tree on CEL_BUILD. */
 const mode: BuildMode = process.argv.includes('--holding') ? 'holding' : 'app';
-/** The sheet of « Demander », for its tests: `--ask-test chat` builds into dist-ask/. */
+/**
+ * The sheet of « Demander », for its tests: `--ask-test chat` builds into dist-ask/ the sheet
+ * with a model that explains (closed since D16.60); `--ask-test gists` builds into dist-gists/
+ * the sheet as it opens — sentences written ahead, no live AI.
+ */
 const askTestAt = process.argv.indexOf('--ask-test');
 const askTest = askTestAt === -1 ? null : (process.argv[askTestAt + 1] ?? 'chat');
-if (askTest !== null && askTest !== 'chat') {
-  throw new Error('--ask-test takes "chat"');
+if (askTest !== null && askTest !== 'chat' && askTest !== 'gists') {
+  throw new Error('--ask-test takes "chat" or "gists"');
 }
 if (askTest !== null && mode !== 'app') throw new Error('--ask-test is a build of the app');
 /**
@@ -138,7 +142,15 @@ const host = hostAt === -1 ? 'apex' : (process.argv[hostAt + 1] ?? '');
 if (host !== 'apex' && host !== 'preview') throw new Error('--host takes "preview" or "apex"');
 if (host === 'preview' && mode !== 'app') throw new Error('--host is a build of the app');
 if (host === 'preview' && askTest !== null) throw new Error('--host and --ask-test do not mix');
-const outDir = askTest === null ? 'dist' : scrutin ? 'dist-scrutin' : 'dist-ask';
+if (scrutin && askTest === 'gists') throw new Error('--scrutin tests with --ask-test chat');
+const outDir =
+  askTest === null
+    ? 'dist'
+    : scrutin
+      ? 'dist-scrutin'
+      : askTest === 'gists'
+        ? 'dist-gists'
+        : 'dist-ask';
 
 function run(step: Step): number {
   for (const input of step.reads) {

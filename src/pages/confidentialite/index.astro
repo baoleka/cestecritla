@@ -35,7 +35,8 @@ import { t } from '../../lib/strings.ts';
 
 const site = askSite();
 const asking = site.mode !== 'off';
-const model = site.modelName ?? '';
+/** The model that explains — null since D16.60: one sending, of identifiers, and no AI. */
+const model = site.modelName;
 const promise = asking ? t('privacy.no_account.ask') : t('privacy.no_account');
 
 const CLOUDFLARE_POLICY = 'cloudflare.com/privacypolicy';
@@ -66,10 +67,37 @@ const GameStorage = __CEL_GAME_WRITES__
   </ul>
 
   {
-    /* « Demander » (D16.45 to D16.53): what leaves at each of its two gestures — never the
-       question — and where it goes, what is kept of it, and whose choice the AI is. Said only
-       where the field asks; the offer of the sheet links here. */
-    asking && (
+    /* « Demander » without a live AI (D16.60): ONE sending — the numbers of the measures
+       found, never the question —, what is kept of it (nothing), and how to empty the thread.
+       No model is named, because none is called. */
+    asking && model === null && (
+      <>
+        <h2 id="demander">{t('privacy.chat.title')}</h2>
+        <p>{t('privacy.chat.lead.gists')}</p>
+        <h3>{t('privacy.chat.sent_title')}</h3>
+        <ul class="counts" data-chat="sent">
+          <li>{t('privacy.chat.gists')}</li>
+        </ul>
+        <h3>{t('privacy.chat.kept_title')}</h3>
+        <ul class="counts" data-chat="kept">
+          <li>{t('privacy.chat.kept.gists')}</li>
+          <li>{t('privacy.chat.thread')}</li>
+          <li>{t('privacy.chat.rate')}</li>
+        </ul>
+        <h3>{t('privacy.chat.choice_title')}</h3>
+        <ul class="counts" data-chat="choice">
+          <li>{t('privacy.chat.clear')}</li>
+          <li>{t('privacy.chat.rights')}</li>
+        </ul>
+      </>
+    )
+  }
+  {
+    /* « Demander » with a model that explains (D16.45 to D16.53) — closed since D16.60, kept
+       for its tests: what leaves at each of its two gestures — never the question — and where
+       it goes, what is kept of it, and whose choice the AI is. The offer of the sheet links
+       here. */
+    asking && model !== null && (
       <>
         <h2 id="demander">{t('privacy.chat.title')}</h2>
         <p>{t('privacy.chat.lead')}</p>

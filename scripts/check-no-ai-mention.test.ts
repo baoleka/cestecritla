@@ -128,8 +128,97 @@ const PAGES_THAT_EXPLAIN = [
   'a-propos/index.html',
 ];
 
-/** Everything wrong with the AI notices of a build made for the given mode. */
-function noticeProblems(root: string, mode: 'off' | 'chat', model: string): string[] {
+/** A name of our catalogue of models, as a page would print it. */
+const ANY_MODEL = new RegExp(
+  Object.values(MODELS)
+    .map((spec) => spec.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    .join('|'),
+);
+
+/**
+ * Everything wrong with the notices of a build whose field asks WITHOUT a live AI (D16.60):
+ * sentences written ahead answer, an AI wrote and checked them — the pages say exactly that,
+ * and nothing of a model that would explain, of a button that would call it, of an editor who
+ * would have read each sentence (D16.59).
+ */
+function sheetProblems(root: string): string[] {
+  const problems: string[] = [];
+  const read = (page: string): string => appVoiceOnly(readFileSync(join(root, page), 'utf8'));
+  const home = read('index.html');
+  // Art. 50 § 4: a text an AI generated, published to inform, says so — before the first use.
+  if (!/Demander affiche des phrases écrites d’avance par une IA/.test(home)) {
+    problems.push('index.html does not say, before the first use, that an AI wrote the sentences');
+  }
+  if (
+    !/Phrases écrites et vérifiées par une IA/.test(readFileSync(join(root, 'index.html'), 'utf8'))
+  ) {
+    problems.push(
+      'index.html does not carry the label of the sentences: written and checked by an AI',
+    );
+  }
+  const raw = readFileSync(join(root, 'index.html'), 'utf8');
+  if (/id="chat-offer"|id="chat-ai-stop"|id="chat-ai-start"/.test(raw)) {
+    problems.push('index.html carries the offer of an AI that does not exist');
+  }
+  const privacy = read('confidentialite/index.html');
+  if (!/<h2 id="demander"/.test(readFileSync(join(root, 'confidentialite/index.html'), 'utf8'))) {
+    problems.push('confidentialite has no section about asking');
+  }
+  if (
+    !/Un seul envoi, pas plus/.test(privacy) ||
+    !/Demander envoie les numéros des mesures trouvées, pas ta phrase/.test(privacy) ||
+    !/Ta question ne quitte jamais ton téléphone/.test(privacy)
+  ) {
+    problems.push('confidentialite does not say what « Demander » sends, and that it is all');
+  }
+  if (
+    !/On n’enregistre rien de cet envoi/.test(privacy) ||
+    !/rien n’est écrit sur ton téléphone/.test(privacy)
+  ) {
+    problems.push('confidentialite does not say what is kept of what is sent: nothing, anywhere');
+  }
+  if (!/Effacer la conversation/.test(privacy)) {
+    problems.push('confidentialite does not say how to empty the thread');
+  }
+  for (const page of PAGES_THAT_EXPLAIN) {
+    const body = read(page);
+    // No model is called: none is named, none is offered, and none is said to explain.
+    if (ANY_MODEL.test(body)) problems.push(`${page} names a model, and none is called`);
+    if (/Expliquer avec l’IA|Ne plus demander à l’IA|explique sur demande|IA ·/.test(body)) {
+      problems.push(`${page} speaks of an AI that would answer live`);
+    }
+    if (/sans garantie de rester en Europe|ce que l’IA consomme/.test(body)) {
+      problems.push(`${page} describes the call of a model that is never made`);
+    }
+    // Who read: an AI. No page says a person read each sentence (D16.59).
+    if (/relues? par l’éditeur|lues par l’éditeur|phrases relues/.test(body)) {
+      problems.push(`${page} says a person read the sentences`);
+    }
+  }
+  for (const page of ['a-propos/index.html', 'exactitude/index.html', 'methodologie/index.html']) {
+    if (!/Une IA (les a écrites|a écrit chaque phrase)/.test(read(page))) {
+      problems.push(`${page} does not say who wrote the sentences`);
+    }
+  }
+  if (!/Personne ne les a relues une à une/.test(read('exactitude/index.html'))) {
+    problems.push('exactitude does not say that nobody re-read the sentences one by one');
+  }
+  if (!/Aucune IA ne répond en direct/.test(read('methodologie/index.html'))) {
+    problems.push('methodologie does not say that no AI answers live');
+  }
+  // « Aucune IA ne répond ici : l’app cherche… » is the sentence of a site that asks nothing.
+  const denial = String(strings['about.no_ai']).replace(/'/g, '’');
+  for (const page of PAGES_THAT_EXPLAIN) {
+    if (read(page).includes(denial)) problems.push(`${page} still says the app only searches`);
+  }
+  return problems;
+}
+
+/**
+ * Everything wrong with the AI notices of a build made for the given mode — `model` null: the
+ * field asks, and no model answers (D16.60).
+ */
+function noticeProblems(root: string, mode: 'off' | 'chat', model: string | null): string[] {
   const named = mentions(root);
   if (mode === 'off') {
     return [...named].map(([page, around]) => `${page} names an absent component: ${around}`);
@@ -138,11 +227,12 @@ function noticeProblems(root: string, mode: 'off' | 'chat', model: string): stri
   for (const [page, around] of named) {
     if (!PAGES_THAT_EXPLAIN.includes(page)) problems.push(`${page} has no reason to: ${around}`);
   }
+  if (model === null) return [...problems, ...sheetProblems(root)];
   const read = (page: string): string => appVoiceOnly(readFileSync(join(root, page), 'utf8'));
   // Art. 50: at the latest at the first interaction — so before it, on the page that asks.
   const home = read('index.html');
   if (
-    !/Demander donne des phrases relues\. Une IA \(/.test(home) ||
+    !/Demander donne des phrases brèves\. Une IA \(/.test(home) ||
     !/explique sur demande/.test(home)
   ) {
     problems.push(
@@ -218,10 +308,10 @@ function noticeProblems(root: string, mode: 'off' | 'chat', model: string): stri
   return problems;
 }
 
-/** The name the notices print for the model data/2026/ask.json names. */
-function configuredModel(): string {
+/** The name the notices print for the model data/2026/ask.json names — null: it names none. */
+function configuredModel(): string | null {
   const file = JSON.parse(readFileSync('data/2026/ask.json', 'utf8')) as { model?: unknown };
-  return isModelKey(file.model) ? MODELS[file.model].name : '';
+  return isModelKey(file.model) ? MODELS[file.model].name : null;
 }
 
 void test('the built app speaks of an AI exactly where its mode says one is at work', () => {
@@ -248,6 +338,26 @@ void test('the sheet, built for its tests, carries its notices and no page too m
       `${page} was not seen`,
     );
   }
+  // …and judged as the sheet without a live AI, the model they name and the offer are seen.
+  const asSheet = noticeProblems('dist-ask', 'chat', null);
+  assert.ok(asSheet.some((problem) => /names a model, and none is called/.test(problem)));
+  assert.ok(
+    asSheet.some((problem) => /carries the offer of an AI that does not exist/.test(problem)),
+  );
+});
+
+void test('the sheet as it opens — no live AI — says who wrote the sentences, and offers no model (D16.59, D16.60)', () => {
+  if (!existsSync('dist-gists/index.html')) {
+    console.log('  (skipped: no dist-gists/ — run `npm run build:gists` first)');
+    return;
+  }
+  assert.deepEqual(noticeProblems('dist-gists', 'chat', null), []);
+  // The same pages, judged as a site that asks nothing, are refused: they name an AI.
+  assert.ok(noticeProblems('dist-gists', 'off', '').length > 0);
+  // …and judged as the sheet with a model, they lack its notice, its offer and its name.
+  const asAi = noticeProblems('dist-gists', 'chat', MODELS['mistral-small-3.1'].name);
+  assert.ok(asAi.some((problem) => /does not name the model/.test(problem)));
+  assert.ok(asAi.some((problem) => /does not carry the offer/.test(problem)));
 });
 
 void test('the privacy page shows what the chat adds exactly where the field asks — and all of it', () => {
@@ -267,8 +377,11 @@ void test('the privacy page shows what the chat adds exactly where the field ask
       : null;
   };
   const quiet = askMode === 'off' ? page('dist') : null;
+  // Two pages of a site that asks: with a model that explains (closed since D16.60, built for
+  // its tests), and as the sheet opens — one sending, no model.
   const asking = page('dist-ask');
-  if (quiet === null && asking === null) {
+  const sheet = page('dist-gists');
+  if (quiet === null && asking === null && sheet === null) {
     console.log('  (skipped: no build)');
     return;
   }
@@ -277,10 +390,41 @@ void test('the privacy page shows what the chat adds exactly where the field ask
     assert.ok(text.length >= 8, `${key}: too short to be told apart`);
     if (quiet !== null)
       assert.ok(!quiet.includes(text), `${key} is on the page of a site that asks nothing`);
-    if (asking !== null)
-      assert.ok(asking.includes(text), `${key} is not on the page of a site that asks`);
+    const withModel = !SHEET_ONLY_PRIVACY.has(key);
+    const withoutModel = !MODEL_ONLY_PRIVACY.has(key);
+    if (asking !== null) {
+      assert.equal(
+        asking.includes(text),
+        withModel,
+        `${key} on the page of a site whose AI explains: expected ${String(withModel)}`,
+      );
+    }
+    if (sheet !== null) {
+      assert.equal(
+        sheet.includes(text),
+        withoutModel,
+        `${key} on the page of the sheet without a live AI: expected ${String(withoutModel)}`,
+      );
+    }
   }
 });
+
+/** What the privacy page says only where a model explains — and only where none does. */
+const MODEL_ONLY_PRIVACY = new Set([
+  'privacy.chat.lead',
+  'privacy.chat.words',
+  'privacy.chat.model',
+  'privacy.chat.where',
+  'privacy.chat.kept',
+  'privacy.chat.budget',
+  'privacy.chat.choice',
+  'privacy.chat.withdraw',
+]);
+const SHEET_ONLY_PRIVACY = new Set([
+  'privacy.chat.lead.gists',
+  'privacy.chat.kept.gists',
+  'privacy.chat.clear',
+]);
 
 void test('every string naming an absent component has a local fallback or is exempt', () => {
   const missing: string[] = [];
@@ -290,6 +434,8 @@ void test('every string naming an absent component has a local fallback or is ex
     if (!MENTIONS_ABSENT_COMPONENT.test(value)) continue;
     // A v3-only surface (the chat itself) needs no fallback: it is simply not built.
     if (key.startsWith('chat.') || key.startsWith('about.ai_')) continue;
+    // …like what the pages say of the sentences where the sheet opens without a live AI.
+    if (key.startsWith('about.gists_') || key === 'accuracy.review.sentences') continue;
     // …and so does the section of the privacy page that says what asking does.
     if (key.startsWith('privacy.chat.')) continue;
     if (typeof strings[`${key}.local`] !== 'string') missing.push(key);

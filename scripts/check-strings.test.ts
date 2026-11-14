@@ -363,6 +363,9 @@ const RUNTIME_AI_KEYS: Readonly<Record<string, string | null>> = {
   'about.ai_line': 'about.no_ai',
   'about.ai_method': 'about.no_ai',
   'about.ai_reviewed': null,
+  'about.gists_line': 'about.no_ai',
+  'about.gists_method': 'about.no_ai',
+  'accuracy.review.sentences': null,
   'chat.ai.start': null,
   'chat.ai.stop': null,
   'chat.ai.waiting': null,
@@ -370,6 +373,7 @@ const RUNTIME_AI_KEYS: Readonly<Record<string, string | null>> = {
   'chat.ai_hint': 'search.local_promise',
   'chat.ai_mention': null,
   'chat.gists.badge': null,
+  'chat.hint': 'search.local_promise',
   'chat.offer.accept': null,
   'chat.offer.notice': null,
   'chat.offer.title': null,
@@ -424,16 +428,62 @@ void test('no string names a runtime AI outside the declared list, and each has 
 });
 
 /**
- * The read sentences are written ahead by a model and read by the editor: their label says both
- * (D16.56 — AI Act, art. 50 § 4: the exception for a text a person has reviewed asks for an
- * identified editor, and ours signs with a pseudonym). Measured in three browsers' worth of
- * phone widths on 14/11/2026: 48 characters hold on one line from 360 px, like the label before.
+ * Who wrote the sentences, and who checked them: an AI, both times (D16.59 — it replaces the
+ * label of D16.56, « relues par l'éditeur », which stopped being true when the editor handed
+ * the reading to the session, D16.57). AI Act, art. 50 § 4: a generated text published to
+ * inform says that it is one. 48 characters hold on one line from 360 px (measured 14/11/2026).
  */
-void test('the label of the read sentences names the AI and the editor (D16.56)', () => {
+void test('the label of the sentences says an AI wrote and checked them (D16.59)', () => {
   const label = strings.get('chat.gists.badge') ?? '';
-  assert.match(label, /\bune IA\b/, 'it must say an AI wrote them');
-  assert.match(label, /\brelues par l['’]éditeur$/, 'and that the editor read them');
+  assert.match(
+    label,
+    /écrites et vérifiées par une IA$/,
+    'an AI wrote them, and an AI checked them',
+  );
   assert.ok(label.length <= 48, `${String(label.length)} characters: two lines on a phone`);
+  // The notice of the page that asks, where no model answers: it says an AI wrote them too —
+  // impersonally, like every notice (D3.12), and short enough to stand under the field.
+  const hint = strings.get('chat.hint') ?? '';
+  assert.match(hint, /écrites d['’]avance par une IA/);
+  assert.match(hint, /reste sur ce téléphone/);
+  assert.ok(!/\b(tu|toi|ta|tes|ton)\b/i.test(hint), 'the notice is impersonal');
+  assert.ok(
+    !hint.includes('{model}') && !/Cloudflare/.test(hint),
+    'it names no model: none is called',
+  );
+  assert.ok(hint.length <= MAX_AI_NOTICE_CHARS, `${String(hint.length)} characters`);
+});
+
+/**
+ * What the site may say of who READ the sentences is held to who did (D16.59): the deposit
+ * records it in data/2026/ask.json (`gists.read_by`, from the verdicts — scripts/gists-core.ts,
+ * `readBy`). Unless that line says the editor read every one of them, no string of the kit may
+ * say a person did.
+ */
+void test('no string says a person read the sentences unless the editor did (D16.59)', () => {
+  const ask = JSON.parse(readFileSync('data/2026/ask.json', 'utf8')) as {
+    gists?: { read_by?: unknown };
+  };
+  const reader = ask.gists?.read_by ?? null;
+  assert.ok(
+    reader === null || reader === 'editor' || reader === 'session' || reader === 'both',
+    'data/2026/ask.json: gists.read_by is "editor", "session", "both" or null',
+  );
+  if (reader === 'editor') return;
+  const CLAIMS =
+    /phrases? (?:re)?lues?\b|(?:re)?lues? par l['’]éditeur|(?:re)?lues? par (?:une personne|un humain|Baoleka)/i;
+  /** Strings about OTHER texts, which a person did re-read: the cards, the fifteen answers. */
+  const ABOUT_OUR_OWN_TEXTS = new Set([
+    'about.ai_reviewed',
+    'accuracy.review.done',
+    'chat.human_reviewed_badge',
+    'chat.reviewed.title',
+  ]);
+  for (const [key, value] of strings) {
+    if (ABOUT_OUR_OWN_TEXTS.has(key)) continue;
+    if (!/phrase/i.test(value)) continue;
+    assert.ok(!CLAIMS.test(value), `${key}: says the sentences were read by a person — "${value}"`);
+  }
 });
 
 void test('no cta.* string hard-codes a year: an administrative date is computed at build (D9.9)', () => {

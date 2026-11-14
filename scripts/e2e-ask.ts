@@ -235,7 +235,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
     check(
       'the notice says what asking gives, and that the AI explains only when asked',
-      /phrases relues/.test(hint) &&
+      /phrases brèves/.test(hint) &&
         /sur demande/.test(hint) &&
         /reste sur ce téléphone/.test(hint),
       hint,
@@ -331,7 +331,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     check(
       'the read sentences come under their title, with what they are',
       /Ce que prévoit le programme/.test(await text(`${LAST} .c-gists h3`)) &&
-        /écrites par une IA, relues par l’éditeur/.test(await text(`${LAST} .c-gists .c-badge`)),
+        /Phrases écrites et vérifiées par une IA/.test(await text(`${LAST} .c-gists .c-badge`)),
       await text(`${LAST} .c-gists`),
     );
     const shownRows = await page.evaluate<{ gist: string; href: string; words: number }[]>(
