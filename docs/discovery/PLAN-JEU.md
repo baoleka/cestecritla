@@ -2042,3 +2042,18 @@ questions, quatre réponses ; trois ne suivent pas ce que la session recommandai
 - **L'essai lui-même attend le quota gratuit**, toujours épuisé à 10 h 49 UTC. Un script local
   le reprend dès que les modèles répondent : 43 mesures, deux écrivains, chacun relu par les
   deux autres ; au plus 3 700 neurons.
+
+### 14 novembre 2026, 12 h 50 — le `robots.txt` est le nôtre, et rien d'autre (D16.39)
+
+- **Geste de l'éditeur**, au tableau de bord : « Bot Preference Sync » désactivé (Security →
+  Settings → Bot traffic → AI Crawler and Agent access policies). L'accès de wrangler ne permet
+  ni de lire ni de changer ce réglage : la session a donné le chemin, lu dans la documentation
+  du jour.
+- **VÉRIFIÉ à 11 h 48 UTC** sur `cestecritla.fr`, `www` et l'aperçu : `/robots.txt` fait 68
+  octets, identique à celui de `dist/` ; plus de bloc « Managed content », plus de ligne
+  « Content-Signal ». La comparaison de tous les fichiers donne maintenant 1 152 sur 1 155 à
+  l'identique sur chaque hôte ; les trois écarts qui restent sont `/404.html`, qui redirige vers
+  `/404`, et deux fichiers de configuration qui ne se servent pas.
+- **Ce que la décision change** : le site ne refuse plus les robots d'entraînement d'IA et
+  n'émet plus de réserve de droits ; les moteurs de recherche étaient déjà admis.
+
