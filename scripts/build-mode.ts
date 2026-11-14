@@ -20,7 +20,7 @@
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
-import { silenceWindows, type SilenceWindow } from '../src/lib/silence.js';
+import { SILENCE_APPROACH_MS, silenceWindows, type SilenceWindow } from '../src/lib/silence.js';
 import { parseJsonc } from './jsonc.js';
 
 export type BuildMode = 'app' | 'holding';
@@ -319,8 +319,8 @@ export function insideSilenceWindow(
   );
 }
 
-/** A day: what is deployed that close to a window is what the window will be served with. */
-export const SILENCE_APPROACH_MS = 24 * 60 * 60 * 1000;
+// One day, defined with the calendar: the page of a scrutin build reads the same number.
+export { SILENCE_APPROACH_MS };
 
 /**
  * Whether `now` is inside a silence window or less than a day before one. The deploy rule reads

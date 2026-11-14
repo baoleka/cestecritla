@@ -85,6 +85,7 @@ async function runEngine(
   data: GameData,
   manifest: Manifest,
   server: ServerState,
+  scrutin: { origin: string; state: ServerState } | null,
 ): Promise<Outcome> {
   const type = ENGINES[name];
   if (type === undefined) throw new Error(`unknown engine ${name}`);
@@ -1000,7 +1001,7 @@ async function runEngine(
       // What « Garder » would write, and who would see it: said before the gesture, here as
       // on the card — her sheet must not be a shorter way to the same writing.
       const BEFORE_KEEPING = [
-        'Rien n’est gardé après la fermeture de l’onglet.',
+        'Rien n’est gardé une fois cette page fermée.',
         'Garder, c’est écrire sur ce téléphone. Il retient alors les mots déjà vus, où en est le jeu et ta tortue.',
         'Tes choix ne sont pas gardés. Rien n’est envoyé.',
         'Qui ouvre le site dans ce navigateur la verra.',
@@ -1035,7 +1036,7 @@ async function runEngine(
           (JSON.parse(unkept.tab[STORAGE_KEY] ?? '{}') as { seen?: string[] }).seen?.length ===
             2 * ROUND &&
           text(await view.locator('#turtle-sheet-said').textContent()) ===
-            'Ce téléphone ne la garde plus. Elle reste dans cet onglet.' &&
+            'Ce téléphone ne la garde plus. Elle reste tant que cette page est ouverte.' &&
           JSON.stringify(await keptLines()) === JSON.stringify(BEFORE_KEEPING) &&
           (await release.count()) === 0 &&
           (await view.evaluate<boolean>("document.activeElement?.id === 'turtle-sheet-keep'")),
@@ -1499,6 +1500,43 @@ async function runEngine(
         await audited.close();
       }
     }
+
+    // --- the scrutin build says until when (D16.41): six personas out of seven read « en
+    // pause » and asked « jusqu'à quand ? ». From the eve of a window to its last minute, and
+    // never once it is over — the next one is two weeks away.
+    if (scrutin !== null) {
+      const noteAt = async (clock: Date, serverDate: Date): Promise<string> => {
+        scrutin.state.flags = { date: serverDate };
+        const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+        const view = await context.newPage();
+        await view.clock.setFixedTime(clock);
+        await view.goto(`${scrutin.origin}/`);
+        await view.waitForTimeout(800);
+        const said = text(await view.locator('#scrutin-note').textContent());
+        await context.close();
+        return said;
+      };
+      const HOUR = /Tout revient après dimanche 18 avril, 20 h\.$/;
+      const eve = new Date('2027-04-15T21:00:00Z');
+      const during = new Date('2027-04-17T10:00:00Z');
+      const over = new Date('2027-04-18T18:30:00Z');
+      let said = await noteAt(eve, eve);
+      check('the scrutin build says until when, from the eve of the window', HOUR.test(said), said);
+      said = await noteAt(during, during);
+      check('…and during the window', HOUR.test(said), said);
+      said = await noteAt(over, over);
+      check(
+        '…and announces no hour once the window is over',
+        /en pause/.test(said) && !/Tout revient/.test(said),
+        said,
+      );
+      said = await noteAt(during, new Date('2027-03-01T10:00:00Z'));
+      check(
+        '…nor on a clock our own server contradicts',
+        /en pause/.test(said) && !/Tout revient/.test(said),
+        said,
+      );
+    }
   } finally {
     await browser.close();
   }
@@ -1533,10 +1571,27 @@ async function main(): Promise<void> {
     }
     return false;
   });
+  // The scrutin build of the same test site, when it was built (npm run build:scrutin:test).
+  const scrutinState: ServerState = { failData: false, flags: null };
+  const scrutinServer = existsSync(join('dist-scrutin', 'index.html'))
+    ? await serve(resolve('dist-scrutin'), (req, res) => {
+        if (scrutinState.flags === null || !(req.url ?? '').startsWith('/flags.json')) return false;
+        res.writeHead(200, {
+          'content-type': 'application/json; charset=utf-8',
+          'cache-control': 'no-cache',
+          date: scrutinState.flags.date.toUTCString(),
+        });
+        res.end(JSON.stringify({ silence_override: scrutinState.flags.override ?? 'auto' }));
+        return true;
+      })
+    : null;
+  const scrutin =
+    scrutinServer === null ? null : { origin: scrutinServer.origin, state: scrutinState };
   try {
-    await report((engine) => runEngine(engine, origin, data, manifest, state));
+    await report((engine) => runEngine(engine, origin, data, manifest, state, scrutin));
   } finally {
     server.close();
+    scrutinServer?.server.close();
   }
 }
 

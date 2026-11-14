@@ -127,3 +127,9 @@ facture (plan gratuit : une erreur). La règle écrite en tête de cette section
 que l'heure réelle de la remise à zéro n'est pas relevée, **compter 10 000 neurons par 24 heures
 glissantes**, pas par jour civil.
 
+**14 novembre 2026, 10:49 UTC — sonde.** Un appel neutre par modèle (Gemma 4 26B, Mistral Small
+3.1), 8 tokens demandés : **429, code 4006 pour les deux, 0 neuron**. Dix heures après
+l'épuisement de 00 h 36 UTC, le quota n'est pas revenu : ni remise à zéro à minuit UTC, ni
+retour partiel. Cela reste compatible avec une fenêtre glissante de 24 heures (le gros de la
+consommation date du 13 entre 22 h 30 et 24 h UTC) ; à vérifier par une sonde après cette heure.
+

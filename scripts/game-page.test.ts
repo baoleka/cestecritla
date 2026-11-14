@@ -172,6 +172,12 @@ void test(
       'the scrutin note does not say what is paused',
     );
     assert.match(home, /id="search"/);
+    // Until when: a place for the hour, and the sentence the script will finish (D16.41). The
+    // sentence says « après »: on this build the game comes back with a redeploy.
+    assert.ok(
+      /id="scrutin-reopen"[^>]*data-reopen="Tout revient après \{reopenTime\}\."/.test(home),
+      'the scrutin note has no place for the hour it reopens',
+    );
     // What was written before the freeze can still be erased during it.
     const privacy = readFileSync('dist-scrutin/confidentialite/index.html', 'utf8');
     assert.match(privacy, /<button[^>]*id="erase-all"/);

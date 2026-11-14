@@ -1918,7 +1918,7 @@ défaut ». La session a répondu qu'elle ne daterait pas à sa place les gestes
 - **La bascule** : « Oui, bascule » — `"apex": "app"` dans `data/launch.json` ;
   `scripts/launch.ts` répond « nothing is missing ».
 
-### 14 novembre 2026, 11 h — la production est basculée (lot P, D16.36)
+### 14 novembre 2026, 10 h 55 — la production est basculée (lot P, D16.36)
 
 - **`cestecritla.fr` et `www.cestecritla.fr` servent l'app**, en « recherche seule », à la place
   de la page d'attente : `npm run build && npm run deploy` depuis le commit `7d1802d` (son nom d'après les
@@ -1942,7 +1942,7 @@ défaut ». La session a répondu qu'elle ne daterait pas à sa place les gestes
 - **Le geste de retrait ne change pas** (D14.10) : `"apex": "holding"` dans `data/launch.json`,
   puis `npm run build:holding && npm run deploy`. Rien ne le bloque.
 
-### 14 novembre 2026, 11 h 30 — la branche réécrite et poussée (D16.29, R28 fermé)
+### 14 novembre 2026, 11 h — la branche réécrite et poussée (D16.29, R28 fermé)
 
 - **L'éditeur : « Oui, réécris et pousse ».** Le dépôt public que la page « Licence » nomme
   portait encore l'app du 12 novembre, alors que le site servait celle du 14.
@@ -1966,7 +1966,7 @@ défaut ». La session a répondu qu'elle ne daterait pas à sa place les gestes
   personne du mouvement. Ce n'est pas ce push qui la publie ; la retirer de l'historique
   public est une décision de l'éditeur.
 
-### 14 novembre 2026, midi — quatre décisions de l'éditeur, posées en questions (D16.37 à D16.40)
+### 14 novembre 2026, 11 h 15 — quatre décisions de l'éditeur, posées en questions (D16.37 à D16.40)
 
 Le site en ligne, l'éditeur a demandé : « pose moi les questions pour que je décide ». Quatre
 questions, quatre réponses ; trois ne suivent pas ce que la session recommandait, et c'est noté.
@@ -1980,7 +1980,7 @@ questions, quatre réponses ; trois ne suivent pas ce que la session recommandai
 - **L'adresse d'un tiers dans une capture du dépôt public : « La purger de tout
   l'historique »** (D16.40).
 
-### 14 novembre 2026, 13 h — le lait-fraise retiré en production ; une adresse purgée de l'historique public (D16.37, D16.40)
+### 14 novembre 2026, 11 h 40 — le lait-fraise retiré en production ; une adresse purgée de l'historique public (D16.37, D16.40)
 
 - **Sans lait-fraise, partout** : batterie verte, poussé, puis `npm run deploy` et
   `npm run deploy:preview -- --bench`. VÉRIFIÉ sur les trois hôtes : 1 150 fichiers de `dist/`
@@ -2008,4 +2008,24 @@ questions, quatre réponses ; trois ne suivent pas ce que la session recommandai
   l'éditeur. Deux sauvegardes locales (`backup/avant-reecriture-2026-11-14`,
   `backup/avant-purge-2026-11-14`) portent encore l'ancien historique : **ne jamais les
   pousser**.
+
+### 14 novembre 2026, midi — trois choix de plus, issus de la session des personas (D16.41 à D16.43)
+
+- **La build « scrutin » dit jusqu'à quand** (D16.41). Sous « en pause » et sa raison, une
+  phrase que le navigateur termine : « Tout revient après dimanche 18 avril, 20 h. » — de la
+  veille d'une fenêtre (la build se déploie la veille) à sa dernière minute. Une fois la fenêtre
+  passée, plus d'heure : la suivante est à deux semaines, et l'annoncer serait faux. Rien non
+  plus sur une horloge que notre serveur contredit, ni sans script. « Après », pas « à » : sur
+  cette build, le jeu revient quand l'éditeur redéploie la build ordinaire. La règle est une
+  fonction pure du calendrier (`announcedReopen`, `src/lib/silence.ts`), essayée à ses neuf
+  bornes ; la page, dans trois moteurs, à quatre heures différentes.
+- **« Cette page », plus « l'onglet »** (D16.42) : trois phrases du jeu. La page
+  Confidentialité, qui décrit le stockage, garde le mot ; son empreinte ne bouge pas.
+- **Le point d'accent reste** (D16.43).
+- **Une erreur de la session, corrigée ici** : les heures des cinq titres de ce matin avaient
+  été écrites au jugé, jusqu'à deux heures trop tard. Elles sont reprises des horodatages de
+  git et des contrôles du dépôt.
+- **Le quota gratuit des modèles est toujours épuisé** à 10 h 49 UTC (même refus, code 4006) :
+  il ne s'est remis à zéro ni à minuit UTC ni dans les dix heures qui ont suivi. L'essai des
+  phrases (D16.38) attend qu'il revienne.
 

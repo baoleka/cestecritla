@@ -42,9 +42,16 @@ if (guard !== null) Astro.csp.insertScriptHash(silenceGuardHash());
   <p class="what">{t('home.what')}</p>
   <Chips />
   {
+    /* The scrutin build has no game to hide: it says what is paused and why — and, once its
+       script has read the hour, until when (D16.41: six personas out of seven asked). Without
+       script the hour is simply not said. */
     __CEL_SCRUTIN__ && (
       <p id="scrutin-note">
-        {t(pausedKey())} {t('silence.reason')}
+        {t(pausedKey())} {t('silence.reason')}{' '}
+        <span
+          id="scrutin-reopen"
+          data-reopen={t('silence.reopen.after', { reopenTime: '{reopenTime}' })}
+        />
       </p>
     )
   }

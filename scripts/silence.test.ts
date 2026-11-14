@@ -15,7 +15,9 @@ import {
   FROZEN_KEY_PREFIXES,
   MAX_CLOCK_DRIFT_MS,
   PRESIDENTIAL_2027,
+  SILENCE_APPROACH_MS,
   addDays,
+  announcedReopen,
   effectiveDate,
   formatReopenTimeFr,
   isFrozenKey,
@@ -298,4 +300,38 @@ void test('the registration deadline is computed, never written by hand (D9.9)',
   };
   assert.equal(registrationDeadline(moved), '2027-03-05');
   assert.equal(addDays(registrationDeadline(moved), 35 + 2), '2027-04-11');
+});
+
+void test('a page deployed for a window announces its end — from the eve, and never the next one (D16.41)', () => {
+  const [first, second] = silenceWindows();
+  assert.ok(first !== undefined && second !== undefined, 'the calendar has two rounds');
+  const minute = 60 * 1000;
+  const cases: readonly (readonly [string, Date, Date | null])[] = [
+    [
+      'two days before the first window',
+      new Date(first.startUtc.getTime() - 2 * SILENCE_APPROACH_MS),
+      null,
+    ],
+    [
+      'a minute before the eve begins',
+      new Date(first.startUtc.getTime() - SILENCE_APPROACH_MS - minute),
+      null,
+    ],
+    ['on the eve', new Date(first.startUtc.getTime() - SILENCE_APPROACH_MS), first.endUtc],
+    ['the minute the window opens', first.startUtc, first.endUtc],
+    ['the last minute of the window', new Date(first.endUtc.getTime() - minute), first.endUtc],
+    ['the minute it ends', first.endUtc, null],
+    ['between the two rounds', new Date(first.endUtc.getTime() + 3 * SILENCE_APPROACH_MS), null],
+    ['on the eve of the second', new Date(second.startUtc.getTime() - minute), second.endUtc],
+    ['after the last window', new Date(second.endUtc.getTime() + minute), null],
+  ];
+  for (const [label, now, expected] of cases) {
+    assert.equal(
+      announcedReopen(now)?.toISOString() ?? null,
+      expected?.toISOString() ?? null,
+      label,
+    );
+  }
+  // What the page writes with it: a day and an hour, in Paris.
+  assert.match(formatReopenTimeFr(first.endUtc), /^dimanche \d{1,2} \p{L}+, 20 h$/u);
 });

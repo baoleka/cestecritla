@@ -165,4 +165,8 @@ const strings = {
 <script>
   import '../scripts/search.ts';
   if (document.querySelector('#ask-config') !== null) void import('../scripts/ask.ts');
+  // The scrutin build's note (home page only): fetched the same way, for the same reason.
+  if (document.querySelector('#scrutin-reopen') !== null) {
+    void import('../scripts/scrutin-note.ts');
+  }
 </script>

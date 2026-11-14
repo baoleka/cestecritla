@@ -315,6 +315,26 @@ export function registrationDeadline(calendar: ElectionCalendar = PRESIDENTIAL_2
   return addDays(cursor, -35);
 }
 
+/** A day: what is deployed that close to a window is what the window will be served with. */
+export const SILENCE_APPROACH_MS = 24 * 60 * 60 * 1000;
+
+/**
+ * The hour a page deployed FOR a silence window may announce (D16.41): the end of the window
+ * `now` is in, or of the one that opens within a day — the "scrutin" build goes online on the
+ * eve. Null anywhere else: left online after its window, that build must not announce the end of
+ * the next one, two weeks away.
+ */
+export function announcedReopen(
+  now: Date,
+  windows: readonly SilenceWindow[] = silenceWindows(),
+  approachMs: number = SILENCE_APPROACH_MS,
+): Date | null {
+  const window = windows.find(
+    (w) => now.getTime() >= w.startUtc.getTime() - approachMs && now.getTime() < w.endUtc.getTime(),
+  );
+  return window?.endUtc ?? null;
+}
+
 /** Paris wall-clock rendering of an instant for the `{reopenTime}` placeholder: "dimanche 18 avril, 20 h". */
 export function formatReopenTimeFr(instant: Date): string {
   const formatter = new Intl.DateTimeFormat('fr-FR', {
