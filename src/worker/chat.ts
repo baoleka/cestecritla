@@ -13,18 +13,17 @@
  *                                   fewer than asked, or none — and `ai`: whether a model may
  *                                   be asked now
  *
- * `/api/chat` — THE ONLY PATH A QUESTION TAKES (D16.46). Every step that answers before the
- * model does so without the question having gone anywhere.
+ * `/api/chat` — which words to explain, never the question (D16.53). Every step that answers
+ * before the model does so without anything having gone anywhere.
  *
  *   1. electoral silence          → "silence"
  *   2. the mode, the model, the
- *      agreement, the book        → "quiet": the page was built with another agreement or
- *                                   another book — it shows its read sentences alone
- *   3. what a person wrote        → "quiet": an objection one of the fifteen answers is about
- *                                   never reaches a model — the page already said so; held
- *                                   here again
- *   4. the read sentences         → "quiet" when none of the measures named has one: with no
+ *      book                       → "quiet": the page was built for another book — it shows
+ *                                   its read sentences alone
+ *   3. the read sentences         → "quiet" when none of the measures named has one: with no
  *                                   sentence on the screen there is no word to explain
+ *   4. the words, the cards       → "quiet" when one word is not a word of those sentences, or
+ *                                   one card is not ours: such a request is not the page's
  *   5. the allowance              → "quiet / spent": used up over the last twenty-four hours,
  *                                   or closed since the platform said so
  *   6. the model                  → called WITHOUT the gateway: no cache, no log, a model whose
@@ -32,13 +31,13 @@
  *                                   want of allowance: "quiet / spent", and the model closes
  *   7. the control                → the explanation whole, or "quiet" (src/lib/ask-validate.ts)
  *
- * What the model reads: the read sentences of the measures named, the cards the question
- * names, and the question. Never a text of the book: this file does not even import the reader
- * of the measures. And nothing of a previous turn: there is none in the request.
+ * What the model reads: the read sentences of the measures named, the cards named, and the
+ * words to explain as those sentences write them. Never a text of the book: this file does not
+ * even import the reader of the measures. Never a word a visitor typed: the request has no
+ * field for one. And nothing of a previous turn: there is none in the request.
  *
- * Nothing is logged, on any path: a logged question is a kept question.
+ * Nothing is logged, on any path.
  */
-import { reviewedFor, type ReviewedEntry } from '../lib/ask-reviewed.js';
 import { PROVISIONAL_MIN_SHARED, validateExplanation } from '../lib/ask-validate.js';
 import {
   parseModelExplanation,
@@ -47,8 +46,8 @@ import {
   type GistsRequest,
   type GistsResponse,
 } from '../lib/chat-contract.js';
-import { asksForVote } from '../lib/chat-local.js';
-import { notionsIn, type KnownCard } from '../lib/notions.js';
+import { wordsShown } from '../lib/chat-words.js';
+import type { KnownCard } from '../lib/notions.js';
 import { EXHAUSTED, type Exhausted, type ModelRun } from './ask.js';
 import { loadGists, type AskDb, type Gist } from './measures.js';
 import { estimateNeurons, explainRequest, type ModelSpec } from './prompt.js';
@@ -78,18 +77,19 @@ export const EXPLAIN_ROOM = 100;
 
 /**
  * Paid while the Worker loads, not by the first visitor after it wakes. The patterns of the
- * control and of the notions compile at their first use: measured in a local workerd, that
+ * control and of the words compile at their first use: measured in a local workerd, that
  * first use cost 13 ms before the model and 50 ms in the control — for a limit of 10 ms a
  * request on the free plan — then 1 ms each (security review of 14/11/2026; 3 ms and 10 ms once
  * the patterns were spelled out, src/lib/ask-validate.ts). Loading has its own, larger
  * allowance, so the first use happens here, on an invented sentence: a quiet site is mostly
  * Workers that have just woken (scripts/chat-worker.test.ts holds this in place).
  */
+const WARM = ['Un verger communal est planté près de chaque école.'];
 validateExplanation(
   { phrases: ['Un verger communal est un terrain planté d’arbres fruitiers.'] },
-  { question: 'un verger', shown: ['Un verger communal est planté près de chaque école.'] },
+  { shown: WARM },
 );
-notionsIn('la 6e République et un verger', []);
+wordsShown(['verger'], WARM);
 
 const LOCAL: GistsResponse = { kind: 'local' };
 
@@ -130,10 +130,7 @@ export async function answerGists(request: GistsRequest, deps: GistsDeps): Promi
 }
 
 export interface ChatDeps extends ChatSite {
-  /** The version of the agreement this Worker was built with (src/lib/chat-contract.ts). */
-  consent: string;
-  /** What a person wrote: the objections never sent to a model, the cards handed to it. */
-  objections: readonly ReviewedEntry[];
+  /** The cards a person wrote and re-read: those a request may name. */
   cards: readonly KnownCard[];
   /** The threshold of the control, from data/2026/ask.json once the bench has fixed it. */
   minShared?: number | undefined;
@@ -166,17 +163,12 @@ export async function answerChat(request: ChatRequest, deps: ChatDeps): Promise<
   // 1. Silence first, then the mode: a closed route answers before anything below starts.
   const closed = closedChat(deps);
   if (closed !== null) return closed;
-  // 2. The site asks, a model explains, the visitor agreed to the words this Worker knows, and
-  // the page shows the book it knows.
+  // 2. The site asks, a model explains, and the page shows the book this Worker knows.
   const { model } = deps;
   if (deps.mode !== 'chat' || model === null) return QUIET;
-  if (request.consent !== deps.consent || request.corpus !== deps.corpusVersion) return QUIET;
+  if (request.corpus !== deps.corpusVersion) return QUIET;
 
-  // 3. What a person already answered, or what the sheet answers by itself: no model.
-  if (reviewedFor(request.question, deps.objections) !== null) return QUIET;
-  if (asksForVote(request.question)) return QUIET;
-
-  // 4. The read sentences of the measures named — what the visitor has under their eyes.
+  // 3. The read sentences of the measures named — what the visitor has under their eyes.
   let gists: Gist[];
   try {
     const loaded = await loadGists(deps.db, request.ids, deps.corpusVersion);
@@ -186,11 +178,20 @@ export async function answerChat(request: ChatRequest, deps: ChatDeps): Promise<
     return QUIET;
   }
   if (gists.length === 0) return QUIET;
-  const named = new Set(notionsIn(request.question, deps.cards));
-  const cards = deps.cards.filter((card) => named.has(card.id));
+
+  // 4. The words and the cards are checked against what is ours — nothing is taken on trust.
+  // A word that is not a word of these sentences, a card that is not one of ours: the request
+  // was not built by the page, and no model is called for it.
+  const words = wordsShown(
+    request.words,
+    gists.map((gist) => gist.text),
+  );
+  if (words === null) return QUIET;
+  const cards = request.cards.map((id) => deps.cards.find((card) => card.id === id));
+  if (!cards.every((card): card is KnownCard => card !== undefined)) return QUIET;
 
   // 5. The allowance, reserved before it is spent.
-  const body = explainRequest(request.question, gists, cards, request.follow ?? null, model);
+  const body = explainRequest(words, gists, cards, request.follow ?? null, model);
   const reserved = estimateNeurons(body, model);
   if (!(await deps.reserve(reserved))) return SPENT;
 
@@ -212,10 +213,7 @@ export async function answerChat(request: ChatRequest, deps: ChatDeps): Promise<
   // 7. The control: all of it, or none of it.
   const verdict = validateExplanation(
     run.output,
-    {
-      question: request.question,
-      shown: [...gists.map((gist) => gist.text), ...cards.map((card) => card.plain)],
-    },
+    { shown: [...gists.map((gist) => gist.text), ...cards.map((card) => card.plain)] },
     { minShared: deps.minShared ?? PROVISIONAL_MIN_SHARED },
   );
   return verdict.kind === 'explain'

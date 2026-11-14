@@ -8,16 +8,14 @@
  * shows is drawn by that script from what the pure modules decide (src/lib/chat-view.ts).
  *
  * What is written here, and not by the script: the frame — « Site non officiel. » stands in it,
- * as in the frame of every screen — and THE AGREEMENT. Its lines are rendered from the kit in
- * the order of `CONSENT_LINES` — the first is its title — into a <template> the script copies
- * without touching a word:
- * what the visitor reads is what the version of the agreement was computed on
- * (src/lib/chat-consent.ts), and a request that carries another version is not read (D16.46).
+ * as in the frame of every screen — and THE OFFER of an explanation by an AI (D16.53): a title,
+ * one notice that says what the AI is sent — never the question —, one button, in a <template>
+ * the script copies without touching a word. There is no agreement to give any more: nothing
+ * a visitor types leaves the phone.
  *
  * Rendered only in a build whose field asks: in mode "off" this file is not even imported.
  */
 import '../styles/chat.css';
-import { CONSENT_BUTTONS, CONSENT_LINES, consentOf } from '../lib/chat-consent.ts';
 import { chatPlain, recognisable } from '../lib/chat-data.ts';
 import { manifest } from '../lib/edition.ts';
 import { safeJson, t } from '../lib/strings.ts';
@@ -28,12 +26,8 @@ interface Props {
 }
 const { model } = Astro.props;
 
-const [title = '', ...lines] = CONSENT_LINES.map((key) => t(key, { model }));
-const [accept = '', decline = ''] = CONSENT_BUTTONS.map((key) => t(key, { model }));
-
 const config = {
   corpus: manifest().meta.corpus_version,
-  consent: consentOf(model),
   plain: `/data/clair-${chatPlain().fingerprint}.json`,
   ...recognisable(),
   strings: {
@@ -79,20 +73,23 @@ const config = {
     <div class="c-thread" id="chat-thread" role="log" aria-labelledby="chat-title"></div>
   </div>
 
-  {/* The agreement, word for word as its version was computed: the script copies it. */}
-  <template id="chat-consent" data-title={title}>
-    {lines.map((line) => <p data-consent-line>{line}</p>)}
-    <p><a href="/confidentialite/#demander">{t('chat.consent.more')}</a></p>
+  {
+    /* The offer (D16.53): what an AI can do here, what it is sent — never the question — and
+       one button. Not pressing it is the refusal: there is nothing to decline, because nothing
+       typed would leave. The script copies it under the read sentences. */
+  }
+  <template id="chat-offer" data-title={t('chat.offer.title')}>
+    <p>{t('chat.offer.notice', { model })}</p>
+    <p><a href="/confidentialite/#demander">{t('chat.offer.more')}</a></p>
     <p class="c-actions">
-      <button type="button" class="quiet" data-consent="accept">{accept}</button>
-      <button type="button" class="quiet" data-consent="decline">{decline}</button>
+      <button type="button" class="quiet" data-offer="accept">{t('chat.offer.accept')}</button>
     </p>
   </template>
 
   {
     /* No name on the field (see Search.astro): nothing typed here can leave by a form. And no
        spell-check: a browser that checks spelling in its cloud would send a question to a
-       third party before anyone agreed to anything. */
+       third party — when the site itself sends it to no one. */
   }
   <form class="c-composer" id="chat-form">
     <label class="sr-only" for="chat-q">{t('chat.field.label')}</label>

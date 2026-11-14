@@ -114,20 +114,53 @@ void test('before any model: an objection a person answered, a vote, nothing fou
     route: 'no_sentence',
     rows: ['p1c1-s01-m02'],
   });
-  // Sent: the sentences of the rows that have one, in the order of the rows.
+  // Asked: with the sentences of the rows that have one, in the order of the rows — and, in
+  // place of the question, the words of those sentences that it uses (none here: « verger »
+  // is in neither) and the cards it names.
   assert.deepEqual(plan('et le verger ?'), {
     route: 'ask',
     rows,
     gists: [sentences.get('p1c1-s01-m03'), sentences.get('p1c1-s01-m01')],
+    words: [],
+    cards: [],
   });
+  const worded = new Map<string, BenchGist>([
+    ['p1c1-s01-m01', { id: 'p1c1-s01-m01', text: 'Un verger communal est planté.', read: true }],
+  ]);
+  const cards = [{ id: 'regle-verte', term: 'règle verte', plain: 'Une règle.' }];
+  const asked = planOf(
+    { question: 'Zorglub veut savoir : le verger et la règle verte ?' },
+    ['p1c1-s01-m01'],
+    objections,
+    worded,
+    cards,
+  );
+  assert.deepEqual(asked, {
+    route: 'ask',
+    rows: ['p1c1-s01-m01'],
+    gists: [worded.get('p1c1-s01-m01')],
+    words: ['verger'],
+    cards: ['regle-verte'],
+  });
+  // Nothing of the question beyond words that are ours.
+  assert.ok(!JSON.stringify(asked).toLowerCase().includes('zorglub'));
 });
 
 void test('what a run would do is counted without asking anything: routes, groups, measures', () => {
   const gist = (id: string): BenchGist => ({ id, text: 'Une phrase.', read: true });
   const counted = countPlans([
-    { group: 'question', plan: { route: 'ask', rows: ['a', 'b'], gists: [gist('a'), gist('b')] } },
-    { group: 'question', plan: { route: 'ask', rows: ['b'], gists: [gist('b')] } },
-    { group: 'hostile', plan: { route: 'ask', rows: ['c'], gists: [gist('c')] } },
+    {
+      group: 'question',
+      plan: { route: 'ask', rows: ['a', 'b'], gists: [gist('a'), gist('b')], words: [], cards: [] },
+    },
+    {
+      group: 'question',
+      plan: { route: 'ask', rows: ['b'], gists: [gist('b')], words: [], cards: [] },
+    },
+    {
+      group: 'hostile',
+      plan: { route: 'ask', rows: ['c'], gists: [gist('c')], words: [], cards: [] },
+    },
     { group: 'objection', plan: { route: 'reviewed', slug: 'retraites' } },
     { group: 'hostile', plan: { route: 'vote' } },
     { group: 'absent', plan: { route: 'nothing_found' } },
@@ -331,6 +364,9 @@ void test('the tool prints no sentence, and sends a question only to the bench r
   assert.equal((code.match(/\bfetch\(/g) ?? []).length, 1);
   assert.match(code, /url\.protocol !== 'https:' && url\.hostname !== '127\.0\.0\.1'/);
   assert.match(code, /mode: 'explain'/);
+  // What it sends is what `/api/chat` is sent: words and cards — and no question (D16.53).
+  assert.match(code, /words: plan\.words,\s*cards: plan\.cards,/);
+  assert.doesNotMatch(code, /question: item\.question/);
   // The register of the allowance gets a line only when neurons were spent.
   assert.match(code, /if \(spent > 0 && existsSync\(NEURONS_LOG\)\)/);
 });

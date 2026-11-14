@@ -841,3 +841,31 @@ Ce paragraphe amende les §1 à §4 du plan ; le code suit, dans une copie de tr
      contrat ; un mot hors de nos phrases → « rien » sans appel ; de bout en bout, aucun
      corps de requête ne contient un mot tapé qui n'est pas dans les phrases affichées, et
      `/api/chat` n'est jamais appelée avant le bouton.
+
+### 14 novembre 2026, au soir — D16.53 : le code
+
+- **Ce qui est fait**, par la session elle-même, sur une branche locale puis fusionné : le
+  contrat (`ChatRequest = { corpus, ids, words, cards, follow? }` — une requête qui nomme
+  `question` ou `consent` est illisible), la règle des mots (`src/lib/chat-words.ts` côté
+  Worker, `askedWords` côté page), le chemin du Worker (un mot hors de nos phrases, une carte
+  qui n'est pas des nôtres : « rien », sans appel du modèle ni réservation), l'invite (elle
+  reçoit `MOTS`, plus de `QUESTION`), le contrôle (plus de question dans son contexte ; la
+  règle de l'écho et les sigles « de la question » sont retirés ; des mots chargés que la revue
+  avait vus passer — « génie », « arnaque », « racket »… — entrent dans la liste des avis), la
+  feuille (une offre : une mention, un bouton ; plus d'accord, de version, de ligne d'âge),
+  les chaînes (v0.9.0), la section « Quand tu demandes », le mode « explain » du banc et son
+  outil.
+- **Ce que les portes tiennent désormais** : aucun fichier du Worker, aucun contrat ne nomme
+  une question (noms du code, commentaires et consignes en français mis à part) ; ce que le
+  modèle reçoit ne contient rien de tapé — vérifié sur une question qui porte un mot inventé ;
+  de bout en bout, dans trois navigateurs : rien n'est demandé à l'IA avant le bouton, quel
+  que soit le nombre de questions, et aucun corps de requête ne contient un mot de la
+  question qui n'est pas dans les phrases affichées.
+- **Mesures** : 530 tests unitaires ; la feuille : 109, 102 et 102 contrôles ; lint et types
+  propres. L'offre tient en un écran de téléphone sous les trois phrases (capture du jour).
+- **Ce qui reste vrai et n'est pas réglé par ce lot** : un modèle peut se tromper tout seul —
+  le contrôle reste une liste de mots, la langue ne l'est pas : le banc et la lecture restent
+  les portes (lot C8). Les numéros de mesures et les mots envoyés disent un intérêt pour un
+  sujet, comme une page consultée (`18-dossier-chat.md` §2).
+- **À l'éditeur** : relire la section « Quand tu demandes » récrite (`privacy_chat`) ; dire si
+  l'étiquette des phrases relues doit nommer l'IA (`18-dossier-chat.md` §4.2).

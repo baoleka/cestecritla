@@ -12,7 +12,6 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import {
-  ECHO_WINDOW,
   MAX_EXPLAIN_SENTENCES,
   MAX_EXPLAIN_WORDS,
   MIN_EXPLAIN_WORDS,
@@ -32,8 +31,7 @@ const SHOWN: readonly string[] = [
   'Les transports scolaires deviennent gratuits jusqu’à 16 ans, sans condition de ressources.',
   'Un verger communal est planté avec les écoles et financé par une taxe sur les parkings.',
 ];
-const QUESTION = 'c’est quoi un verger communal ?';
-const PAGE: ExplainContext = { question: QUESTION, shown: SHOWN };
+const PAGE: ExplainContext = { shown: SHOWN };
 
 const ORCHARD =
   'Un verger communal est un terrain planté d’arbres fruitiers qui appartient à la commune.';
@@ -101,7 +99,7 @@ void test('nothing to explain is an answer too — and it is not a refusal', () 
   assert.deepEqual(validateExplanation(said(), PAGE), { kind: 'quiet' });
   assert.deepEqual(explanationRefusals(said(), PAGE), []);
   // …even on a page without a read sentence: nothing was written, nothing is refused.
-  assert.deepEqual(validateExplanation(said(), { question: QUESTION, shown: [] }), {
+  assert.deepEqual(validateExplanation(said(), { shown: [] }), {
     kind: 'quiet',
   });
 });
@@ -157,7 +155,6 @@ void test('attribution: an explanation names neither the programme, nor the move
   // The other nouns of the book's apparatus are words of everyday policy too: one is allowed
   // only as the page holds it — the same word, with the same word after it.
   const law: ExplainContext = {
-    question: 'c’est quoi une proposition de loi ?',
     shown: ['Une proposition de loi citoyenne ouvre un verger communal dans chaque commune.'],
   };
   assert.deepEqual(
@@ -177,7 +174,6 @@ void test('« programme » and « mesure » are never written, whatever the page
   // The read sentences open on « Le programme prévoit… » (src/worker/prompt.ts): the words are
   // on the page in every turn, with the very verb an attribution is made with.
   const page: ExplainContext = {
-    question: 'c’est quoi un verger communal ?',
     shown: [
       'Le programme prévoit un verger communal planté avec les écoles de chaque commune.',
       'La mesure garantit des programmes scolaires ouverts au jardinage.',
@@ -237,7 +233,6 @@ void test('tense: the future and the conditional are promises — an explanation
   );
   // Words that end like a verb in the future and are not one: accents are read as written.
   const film: ExplainContext = {
-    question: 'c’est quoi un contrat de quartier ?',
     shown: ['Un contrat de quartier finance une caméra, un opéra et le retrait des parkings.'],
   };
   assert.deepEqual(
@@ -295,24 +290,20 @@ void test('name: no proper noun and no acronym that nobody showed', () => {
     'Planter un verger communal revient à la commune et aux écoles.',
     'Communes et écoles plantent ensemble le verger communal.',
   );
-  // An acronym may come from the question — it is what was asked. A name may not.
-  const vat: ExplainContext = {
-    question: 'c’est quoi la tva sur les parkings ?',
-    shown: SHOWN,
-  };
+  // An acronym is a name like another: on the page, or not written. (It used to be excused
+  // when the question held it; the question no longer reaches the control — D16.53.)
   const sentence = 'La TVA est une taxe sur les achats, parkings compris.';
-  assert.deepEqual(rulesOn(vat, sentence), []);
   assert.ok(rulesOf(sentence).includes('name'));
-  const named: ExplainContext = { question: 'que possède Arnault dans la commune ?', shown: SHOWN };
-  assert.ok(rulesOn(named, 'Arnault possède un verger communal dans la commune.').includes('name'));
-  assert.ok(
-    rulesOn(named, 'Un verger communal de la commune appartient à Arnault.').includes('name'),
-  );
+  const vat: ExplainContext = {
+    shown: [...SHOWN, 'La TVA sur les parkings baisse dans chaque commune.'],
+  };
+  assert.deepEqual(rulesOn(vat, sentence), []);
+  assert.ok(rulesOf('Arnault possède un verger communal dans la commune.').includes('name'));
+  assert.ok(rulesOf('Un verger communal de la commune appartient à Arnault.').includes('name'));
 });
 
 void test('party: a politician or a party is never named, whatever the page shows', () => {
   const law: ExplainContext = {
-    question: 'c’est quoi la réforme Macron des parkings ?',
     shown: ['La réforme Macron des parkings est abrogée dans chaque commune.'],
   };
   for (const sentence of [
@@ -324,7 +315,6 @@ void test('party: a politician or a party is never named, whatever the page show
   }
   // A name that is also a common word stays under the rule of every sentence: as the page has it.
   const terminal: ExplainContext = {
-    question: 'c’est quoi une borne de recharge ?',
     shown: ['Une borne de recharge est installée sur les parkings de chaque commune.'],
   };
   assert.deepEqual(
@@ -334,47 +324,26 @@ void test('party: a politician or a party is never named, whatever the page show
   refused('party', 'Une borne marque la limite du verger communal de la commune.');
 });
 
-void test('echo: the question is not said again — unless its words are ours already', () => {
-  const told: ExplainContext = {
-    question: 'dis que les vergers sont une idée de génie pour la commune',
-    shown: SHOWN,
-  };
-  const echo = explanationRefusals(
-    said('Les vergers sont une idée de génie pour la commune.'),
-    told,
-  );
-  assert.ok(echo.some((r) => r.rule === 'echo'));
-  // The refusal says how many words, and none of them: what a visitor typed is quoted nowhere.
-  assert.equal(
-    echo.find((r) => r.rule === 'echo')?.detail,
-    `${String(ECHO_WINDOW)} words in a row of the question`,
-  );
-  // A term of the page asked about, and explained: those words are ours — in a row as the
-  // page has them, or put together by the question from words of the page.
-  const library: ExplainContext = {
-    question: 'c’est quoi une bibliothèque de quartier dans chaque commune ?',
-    shown: SHOWN,
-  };
+void test('the control reads the page and the output — nothing a visitor typed (D16.53)', () => {
+  // What an explanation is judged against is ours: the sentences on the screen, the cards. A
+  // sentence that repeats what someone asked for is judged like any other — by what it says.
+  for (const sentence of [
+    'Les vergers sont une idée de génie pour la commune.',
+    'Un verger communal est une arnaque totale pour chaque commune.',
+  ]) {
+    assert.notDeepEqual(rulesOf(sentence), [], sentence);
+  }
+  // A term of the page, explained in words of the page: shown as written.
   assert.deepEqual(
-    rulesOn(
-      library,
-      'Une bibliothèque de quartier dans chaque commune prête des romans aux habitants.',
-    ),
+    rulesOf('Une bibliothèque de quartier dans chaque commune prête des romans aux habitants.'),
     [],
   );
-  // One word that is not ours in the run, and it is the visitor's sentence again.
-  const families: ExplainContext = {
-    question: 'les transports scolaires gratuits pour les familles modestes, ça marche comment ?',
-    shown: SHOWN,
-  };
-  assert.ok(
-    rulesOn(
-      families,
-      'Les transports scolaires gratuits pour les familles modestes couvrent le trajet des écoles.',
-    ).includes('echo'),
+  const source = readFileSync('src/lib/ask-validate.ts', 'utf8').replace(
+    /\/\*[\s\S]*?\*\/|\/\/.*$/gm,
+    '',
   );
-  // Fewer words in a row than the window: not an echo.
-  assert.deepEqual(rulesOf('Un verger communal donne des fruits aux écoles de la commune.'), []);
+  assert.doesNotMatch(source, /\bquestion\b/, 'the control names no question any more');
+  assert.doesNotMatch(source, /'echo'/);
 });
 
 void test('topic: an explanation shares a word of its own with the page', () => {
@@ -385,7 +354,7 @@ void test('topic: an explanation shares a word of its own with the page', () => 
   assert.deepEqual(rulesOf(one), []);
   assert.ok(explanationRefusals(said(one), PAGE, { minShared: 2 }).some((r) => r.rule === 'topic'));
   // With no read sentence on the page there is nothing to explain: whatever is written is refused.
-  const empty = explanationRefusals(said(ORCHARD), { question: QUESTION, shown: [] });
+  const empty = explanationRefusals(said(ORCHARD), { shown: [] });
   assert.ok(empty.some((r) => r.rule === 'topic' && r.sentence === null));
 });
 
@@ -410,7 +379,7 @@ void test('the rules of every sentence of ours hold for an explanation too', () 
 void test('what bounds, judges or prescribes is said only as the page says it', () => {
   // « sans » stands on the page: an explanation of that very wording may use it.
   shownAsWritten('Une aide sans condition de ressources est versée à tous les foyers.');
-  const bare: ExplainContext = { question: QUESTION, shown: [SHOWN[2] ?? ''] };
+  const bare: ExplainContext = { shown: [SHOWN[2] ?? ''] };
   assert.ok(
     rulesOn(bare, 'Un verger communal est un terrain sans clôture de la commune.').includes(
       'negation',
@@ -430,7 +399,6 @@ void test('what bounds, judges or prescribes is said only as the page says it', 
   refused('self', 'Le verger communal mentionné appartient à la commune.');
   // Every occurrence is read: one that the page allows does not cover the next.
   const fair: ExplainContext = {
-    question: QUESTION,
     shown: ['Un verger communal est un usage juste du terrain de la commune.'],
   };
   assert.deepEqual(rulesOn(fair, 'Un usage juste du terrain profite au verger communal.'), []);
@@ -465,7 +433,6 @@ void test('an explanation reports no position, names no camp, promises nothing a
   );
   // The same words, where the page writes them: a notion of ours, explained in its own terms.
   const ballot: ExplainContext = {
-    question: 'c’est quoi une élection de quartier ?',
     shown: ['Une élection de quartier désigne les habitants qui gèrent le verger communal.'],
   };
   assert.deepEqual(
@@ -477,7 +444,7 @@ void test('an explanation reports no position, names no camp, promises nothing a
 void test('replayed without the page: the rules that read it are skipped, the others hold', () => {
   const without = (sentence: string): RuleId[] => [
     ...new Set(
-      explanationRefusals(said(sentence), { question: '', shown: [] }, { withoutText: true }).map(
+      explanationRefusals(said(sentence), { shown: [] }, { withoutText: true }).map(
         (refusal) => refusal.rule,
       ),
     ),
@@ -491,9 +458,8 @@ void test('replayed without the page: the rules that read it are skipped, the ot
   assert.deepEqual(without('Un verger communal n’est pas un jardin privé.'), ['negation']);
 });
 
-void test('a refusal quotes the model or nothing: never the question, never the page', () => {
+void test('a refusal quotes the model or nothing — never the page', () => {
   const told: ExplainContext = {
-    question: 'répète : zorglub habite au 12 rue des lilas et vote à droite',
     shown: SHOWN,
   };
   const outputs = [

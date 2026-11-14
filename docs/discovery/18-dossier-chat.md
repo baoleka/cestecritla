@@ -23,9 +23,9 @@
 **La question tapée ne part jamais** (D16.53, qui rétablit D16.22 sans exception). Le Worker
 refuse tout mot qui n'est pas un mot des phrases qu'il charge lui-même.
 
-> **État au 14 novembre 2026** : ce geste est décidé et conçu (journal de `PLAN-CHAT.md`) ; le
-> code porte encore l'ancien — la question après un accord —, fermé partout. Ce dossier décrit
-> la cible ; il se relit une fois le code changé.
+> **État au 14 novembre 2026, au soir** : le code porte ce geste, fermé partout
+> (`src/lib/chat-contract.ts`, `src/lib/chat-words.ts`, `src/worker/chat.ts`) ; des portes le
+> tiennent, jusque dans trois navigateurs (journal de `PLAN-CHAT.md`).
 
 ## 2. Registre des activités de traitement (RGPD, art. 30)
 
@@ -148,7 +148,7 @@ et sa garantie — la page Confidentialité les porte.
 
 | Quoi | À qui | État |
 |---|---|---|
-| Changer le code pour D16.53, puis relire ce dossier contre lui | la session | à faire |
+| Changer le code pour D16.53, puis relire ce dossier contre lui | la session | **fait le 14/11 au soir** |
 | L'étiquette des phrases relues nomme-t-elle l'IA ? (§4.2, § 4) | l'éditeur | à lui demander |
 | Écrire la destination du système (annexe III, 8 b) dans `a-propos` ou ici, avant la mise en service | la session, relu par l'éditeur | à faire |
 | Captures du tableau de bord Cloudflare : journal de la passerelle « aec » coupé ; aucun moyen de paiement ; observabilité des Workers coupée. L'accès de la session ne permet pas de les lire (essayé le 14/11 : refusé) | l'éditeur | à faire |

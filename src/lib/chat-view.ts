@@ -10,16 +10,16 @@
  *   « Ce que prévoit le programme »   a row per measure: the sentence the editor read, or its
  *                                     link alone — the link is there before the sentence
  *   the explanation                   only where a read sentence is on the screen, only if the
- *                                     Worker says the model may be asked, only after the
- *                                     agreement — and never when the question is an objection
- *                                     a person already answered
+ *                                     Worker says the model may be asked, only once the
+ *                                     visitor pressed « Expliquer avec l'IA » — and never when
+ *                                     the question is an objection a person already answered
  *
  * An answer the page cannot use — none at all, one built for another state of the book, a
  * sentence for a measure it did not ask about — is dropped without a word: the rows keep their
  * links, and the turn is whole without the rest.
  *
- * A turn lives in the memory of the page and nowhere else (D16.46): nothing here reads or
- * writes a storage.
+ * A turn lives in the memory of the page and nowhere else — the question with it, which is
+ * sent to no one (D16.53): nothing here reads or writes a storage.
  */
 import {
   FOLLOW_UPS,
@@ -30,8 +30,12 @@ import {
 import { asksForVote } from './chat-local.js';
 import type { Recognised } from './notions.js';
 
-/** What the visitor decided about the AI on this page: nothing yet, yes, or no. Never stored. */
-export type Consent = 'unasked' | 'given' | 'declined';
+/**
+ * Where the AI stands on this page: offered under the read sentences and not asked yet; on —
+ * the visitor pressed the button, and each turn is explained; or off — they stopped it. Never
+ * stored, and gone with the page.
+ */
+export type AiChoice = 'offered' | 'on' | 'off';
 
 /** One explanation of a turn: the first (`follow` null), or a follow-up. */
 export interface Explanation {
@@ -41,7 +45,7 @@ export interface Explanation {
 
 /** Everything the page knows of one turn. */
 export interface Turn {
-  /** The question as it is sent, and shown: `cleanQuestion` of what was typed. */
+  /** The question as it is shown: `cleanQuestion` of what was typed. It is sent nowhere. */
   question: string;
   /** What a person already wrote about it — decided on the phone, before anything is sent. */
   recognised: Recognised;
@@ -69,8 +73,8 @@ export interface Turn {
 export interface PageState {
   /** The state of the book this page was built from. */
   corpus: string;
-  consent: Consent;
-  /** The allowance is spent: no question is sent any more on this page, and nothing says why. */
+  ai: AiChoice;
+  /** The allowance is spent: no explanation is asked any more on this page, and nothing says why. */
   closed: boolean;
   /** True when the page can name this measure and link to it. */
   knows: (id: string) => boolean;
@@ -110,8 +114,8 @@ export type Measures =
 
 /** The third block, when there is something of it to show. */
 export interface AiView {
-  /** The agreement is asked here, in place of the explanation. */
-  consent: boolean;
+  /** The offer shows here, in place of the explanation: one notice, one button. */
+  offer: boolean;
   explanations: readonly Explanation[];
   waiting: boolean;
   /** The follow-ups that may still be asked for this turn. */
@@ -160,7 +164,7 @@ export function shownIds(turn: Turn, page: PageState): string[] {
 /**
  * True when the model may be asked about this turn: a read sentence is on the screen, the
  * Worker says the model answers now, the page is not closed — and the question is not an
- * objection a person already answered: that one never leaves the phone.
+ * objection a person already answered: our own answer is on the screen, and it is enough.
  */
 export function explainable(turn: Turn, page: PageState): boolean {
   if (page.closed || turn.recognised.objection !== null) return false;
@@ -169,7 +173,7 @@ export function explainable(turn: Turn, page: PageState): boolean {
 
 /**
  * What the page sends next for this turn without being asked again, if anything: the measures
- * once the search has found some; the question once the visitor has agreed.
+ * once the search has found some; the request for an explanation once the AI is on.
  */
 export function nextStep(turn: Turn, page: PageState): 'gists' | 'explain' | null {
   if (closedTurn(turn)) return null;
@@ -178,7 +182,7 @@ export function nextStep(turn: Turn, page: PageState): 'gists' | 'explain' | nul
   }
   const first =
     turn.explanations.length === 0 && turn.awaited === undefined && !turn.silent.includes(null);
-  return first && page.consent === 'given' && explainable(turn, page) ? 'explain' : null;
+  return first && page.ai === 'on' && explainable(turn, page) ? 'explain' : null;
 }
 
 /**
@@ -202,7 +206,7 @@ export function withGists(turn: Turn, response: GistsResponse | null): Turn {
 
 /**
  * The turn once `/api/chat` has answered, or has not. `closed` is true when the Worker says the
- * allowance is spent — or that questions are paused: the page then sends no other question.
+ * allowance is spent — or that questions are paused: the page then asks for no other.
  */
 export function withExplanation(
   turn: Turn,
@@ -248,14 +252,13 @@ export function viewOf(turn: Turn, page: PageState, last: boolean): TurnView {
         : { kind: 'rows', rows, reading: gists === undefined || gists === 'pending' };
 
   // What was explained stays in the thread, whatever has changed since. What may still be
-  // asked — the agreement, a follow-up — depends on the page as it is now.
+  // asked — the offer, a follow-up — depends on the page as it is now.
   const open = explainable(turn, page);
   const first = turn.explanations.some((explanation) => explanation.follow === null);
   const waiting = turn.awaited !== undefined;
-  const consent =
-    open && last && page.consent === 'unasked' && turn.explanations.length === 0 && !waiting;
+  const offer = open && last && page.ai === 'offered' && turn.explanations.length === 0 && !waiting;
   const follow =
-    open && first && !waiting && page.consent === 'given'
+    open && first && !waiting && page.ai === 'on'
       ? FOLLOW_UPS.filter(
           (kind) =>
             !turn.explanations.some((explanation) => explanation.follow === kind) &&
@@ -263,8 +266,8 @@ export function viewOf(turn: Turn, page: PageState, last: boolean): TurnView {
         )
       : [];
   const ai: AiView | null =
-    consent || waiting || turn.explanations.length > 0 || follow.length > 0
-      ? { consent, explanations: turn.explanations, waiting, follow }
+    offer || waiting || turn.explanations.length > 0 || follow.length > 0
+      ? { offer, explanations: turn.explanations, waiting, follow }
       : null;
   return { plain, measures, ai };
 }

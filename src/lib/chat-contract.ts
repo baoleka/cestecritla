@@ -1,35 +1,39 @@
 /**
- * The contract of the chat (D16.45 to D16.51, PLAN-CHAT §2 and §4) — what leaves the phone at
+ * The contract of the chat (D16.45 to D16.53, PLAN-CHAT §2 and §4) — what leaves the phone at
  * each of its two gestures, what the model is asked for, and what the Worker answers. One file,
  * four users: the Worker, the page, the bench and the tests. No DOM, no Node API, no Workers API.
  *
- * Two requests, two classes of privacy — and they never merge.
+ * **NO REQUEST OF THE SITE CARRIES A SENTENCE** (D16.53, which restores D16.22 without
+ * exception). What a visitor types never leaves the phone.
  *
  *   /api/gists   identifiers of measures, nothing else. It brings back the sentences the editor
- *                read, one per measure. No model runs, nothing typed leaves, no agreement is
- *                needed: it is what D16.22 already allowed.
- *   /api/chat    THE ONLY REQUEST OF THE SITE THAT CARRIES A SENTENCE (D16.46). It exists only
- *                after the visitor agreed, and `consent` says to which text they agreed: a
- *                request without it is not a request.
+ *                read, one per measure. No model runs.
+ *   /api/chat    the same identifiers, and — in place of the question — the words of OUR OWN
+ *                sentences that the question uses (src/lib/chat-words.ts), the identifiers of
+ *                our cards it names, and the follow-up chosen. Every field is a value the
+ *                Worker can check against what it holds; none is a text.
+ *
+ * It was otherwise for one day: on 14/11/2026 the question was to leave after an agreement
+ * (D16.46). A security review showed, the same day, that a question can carry an instruction
+ * the model follows and the control does not catch — and that the model had no use for the
+ * question beyond knowing WHICH words to explain. So the question stays, and a request that
+ * names one is unreadable.
  *
  * What the shapes below guarantee, whoever writes the request.
  *
- * **No free text returns to the model from one turn to the next.** A chat request has no field
- * for a history, for a previous answer or for a role: a follow-up is one of two words
- * (`FOLLOW_UPS`), and the Worker rebuilds everything else from the identifiers. So what the
- * model wrote can never become what the model reads, and a visitor's earlier words are sent
- * once or not at all. A field the contract does not name makes the whole request unreadable —
- * refused, not dropped: a page that sends more than it says it sends must fail loudly.
+ * **No free text reaches the model, from the visitor or from a previous turn.** A chat request
+ * has no field for a question, a history, a previous answer or a role: a follow-up is one of
+ * two words (`FOLLOW_UPS`), a word is a term of our sentences, and the Worker rebuilds
+ * everything else from the identifiers. A field the contract does not name makes the whole
+ * request unreadable — refused, not dropped: a page that sends more than it says it sends must
+ * fail loudly.
  *
  * **No word of the programme leaves the Worker.** `GistsResponse` carries sentences of ours,
  * read by the editor; `ChatResponse` carries sentences of the model, about words. Neither has a
  * field for a text of the book — titles and links are resolved in the browser, from files that
  * are already public.
- *
- * `src/lib/ask-contract.ts` keeps its own promise: it has no field for a sentence and never
- * will. This file is the one place where one exists.
  */
-import { MAX_QUESTION_CHARS, PROPOSITION_ID } from './ask-contract.js';
+import { PROPOSITION_ID } from './ask-contract.js';
 
 /** How many measures the page may ask the read sentences of: what a sheet shows, and a margin. */
 export const MAX_GIST_IDS = 8;
@@ -37,21 +41,15 @@ export const MAX_GIST_IDS = 8;
 export const MAX_CHAT_IDS = 5;
 /** A read sentence is one short sentence. This bounds the bytes; the editor's reading does the rest. */
 export const MAX_GIST_CHARS = 300;
-/** A question is a question: two characters at least, one line, what the field accepts at most. */
-export const MIN_QUESTION_CHARS = 2;
+/** How many words an explanation may be asked about, and how many of our cards may go with it. */
+export const MAX_CHAT_WORDS = 3;
+export const MAX_CHAT_CARDS = 2;
 /** An explanation is one to three sentences, each short, each standing on its own. */
 export const MAX_EXPLAIN_SENTENCES = 3;
 export const MIN_EXPLAIN_WORDS = 4;
 export const MAX_EXPLAIN_WORDS = 28;
 /** Generous: twenty-eight French words. The control counts the words; this bounds the bytes. */
 export const MAX_EXPLAIN_CHARS = 320;
-/**
- * Four words in a row of the question, standing in an explanation and in no sentence of ours:
- * the model is repeating what it was told to say (PLAN-CHAT §3). PROVISIONAL — fixed by
- * replaying the bench, like every threshold of the control.
- */
-export const ECHO_WINDOW = 4;
-
 /**
  * The two follow-ups, and all of them. A follow-up is a button, never a text: it asks for the
  * same explanation again — simpler, or with an example — from the read sentences, never from
@@ -62,8 +60,10 @@ export type FollowUp = (typeof FOLLOW_UPS)[number];
 
 const CORPUS_VERSION = /^[0-9a-f]{16}$/;
 const ISO_INSTANT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/;
-/** The version of the text a visitor agreed to: `consentVersion()` below, and nothing else. */
-const CONSENT = /^[0-9a-f]{16}$/;
+/** A word of one of our sentences, as the index writes it (src/lib/search-core.ts, `terms`). */
+const WORD = /^[a-z0-9]{2,40}$/;
+/** The identifier of one of our cards (data/2026/glossary.json). */
+const CARD_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -82,59 +82,18 @@ const idList = (value: unknown, max: number): string[] | null => {
   return ids;
 };
 
-// ---------------------------------------------------------------------------------------------
-// The agreement
-// ---------------------------------------------------------------------------------------------
-
-/** FNV-1a over UTF-16 units, 32 bits, from a chosen start: a label, not a secret. */
-function fnv1a(text: string, start: number): number {
-  let hash = start;
-  for (let i = 0; i < text.length; i += 1) {
-    hash ^= text.charCodeAt(i);
-    hash = Math.imul(hash, 0x01000193);
+/** A short list of values of one shape, each once. Null as soon as one is not. */
+const valueList = (value: unknown, shape: RegExp, max: number): string[] | null => {
+  if (!Array.isArray(value) || value.length > max) return null;
+  const out: string[] = [];
+  for (const item of value) {
+    if (typeof item !== 'string' || item.length > 40 || !shape.test(item) || out.includes(item)) {
+      return null;
+    }
+    out.push(item);
   }
-  return hash >>> 0;
-}
-
-/**
- * The version of an agreement: a label of the very words a visitor read before accepting — the
- * line, its two buttons, the name of the model, in the order given. Computed, never typed: a
- * word changed in the agreement changes the version, so a page that still shows the old text
- * cannot send a question to a Worker built with the new one. It is not a secret and proves
- * nothing about anyone: nothing of an agreement is kept, here or elsewhere (D16.46).
- */
-export function consentVersion(texts: readonly string[]): string {
-  const whole = texts.map((text) => text.normalize('NFC')).join('\u001f');
-  const hex = (n: number): string => n.toString(16).padStart(8, '0');
-  return hex(fnv1a(whole, 0x811c9dc5)) + hex(fnv1a(whole, 0x9e3779b9));
-}
-
-// ---------------------------------------------------------------------------------------------
-// The question
-// ---------------------------------------------------------------------------------------------
-
-const CONTROL = /\p{Cc}+/gu;
-/** Joiners, soft hyphens, marks that turn a line round: written, not seen — and not sent. */
-const FORMAT = /\p{Cf}+/gu;
-/** Every space there is — no-break, thin, line and paragraph separators included. */
-const SPACES = /\s+/gu;
-
-/**
- * A question as it is sent, and as the thread shows it: composed, on one line, without a
- * character nobody sees. `null` when what is left is not a question — too short, or longer than
- * the field accepts. Nothing visible is changed: what the visitor reads in the thread is what
- * left, letter for letter.
- */
-export function cleanQuestion(raw: string): string | null {
-  const text = raw
-    .normalize('NFC')
-    .replace(CONTROL, ' ')
-    .replace(FORMAT, '')
-    .replace(SPACES, ' ')
-    .trim();
-  if (text.length < MIN_QUESTION_CHARS || text.length > MAX_QUESTION_CHARS) return null;
-  return text;
-}
+  return out;
+};
 
 // ---------------------------------------------------------------------------------------------
 // /api/gists — identifiers out, read sentences back
@@ -170,7 +129,7 @@ export interface Gist {
  *             measure without a read sentence keeps its link alone, and that is a verdict of
  *             the editor, not a gap. `ai` says whether an explanation may be asked for now:
  *             false when the mode, the electoral silence, the allowance of the day or the stop
- *             flag say so — and then the question does not leave the phone at all.
+ *             flag say so — and then the page does not even offer one.
  *   silence   electoral silence: questions reopen at `reopen` (ISO 8601, UTC)
  *   local     nothing from the base this time — closed, or built for another state of the
  *             book. The page shows what its own search found, and says nothing of why.
@@ -226,23 +185,26 @@ export function parseGistsResponse(value: unknown): GistsResponse | null {
 }
 
 // ---------------------------------------------------------------------------------------------
-// /api/chat — the question, after the agreement
+// /api/chat — which words to explain, never the question
 // ---------------------------------------------------------------------------------------------
 
 /**
- * What the page sends when a visitor who agreed asks for an explanation, and all of it. There
- * is no history here and there never will be: see the head of this file.
+ * What the page sends when a visitor asks the AI to explain, and all of it. There is no
+ * question here, no history, and there never will be: see the head of this file.
  */
 export interface ChatRequest {
   corpus: string;
   /** The measures whose read sentences are on the screen, in the order shown. */
   ids: string[];
-  /** The question as written — `cleanQuestion` of what was typed, and exactly that. */
-  question: string;
+  /**
+   * The words of those sentences that the question uses — terms of OUR sentences, as the index
+   * writes them (`askedWords`, src/lib/chat-words.ts). Empty when it uses none.
+   */
+  words: string[];
+  /** The cards of ours the question names (`notionsIn`, src/lib/notions.ts). */
+  cards: string[];
   /** Absent for a first explanation. */
   follow?: FollowUp;
-  /** The version of the agreement the visitor accepted on this page (`consentVersion`). */
-  consent: string;
 }
 
 const isFollowUp = (value: unknown): value is FollowUp =>
@@ -250,21 +212,22 @@ const isFollowUp = (value: unknown): value is FollowUp =>
 
 /**
  * Reads a chat request in the Worker. `null` is a request the page never sends: a field the
- * contract does not name (a history, a prompt, a role), a question that is not already clean, a
- * follow-up that is not one of the two, no agreement. Whether `consent` is the version this
- * Worker was built with is for the Worker to say (src/worker): the shape cannot know it.
+ * contract does not name — a question, an agreement, a history, a prompt, a role —, a word
+ * that is not written as the index writes one, a card that is no identifier, a follow-up that
+ * is not one of the two. Whether each word is a word of the sentences named, and each card one
+ * of ours, is for the Worker to say (src/worker/chat.ts): the shape cannot know it.
  */
 export function parseChatRequest(value: unknown): ChatRequest | null {
   if (!isRecord(value)) return null;
-  if (!hasOnly(value, ['corpus', 'ids', 'question', 'follow', 'consent'])) return null;
-  const { corpus, question, follow, consent } = value;
+  if (!hasOnly(value, ['corpus', 'ids', 'words', 'cards', 'follow'])) return null;
+  const { corpus, follow } = value;
   if (typeof corpus !== 'string' || !CORPUS_VERSION.test(corpus)) return null;
   const ids = idList(value['ids'], MAX_CHAT_IDS);
-  if (ids === null) return null;
-  if (typeof question !== 'string' || cleanQuestion(question) !== question) return null;
-  if (typeof consent !== 'string' || !CONSENT.test(consent)) return null;
-  if (follow === undefined) return { corpus, ids, question, consent };
-  return isFollowUp(follow) ? { corpus, ids, question, follow, consent } : null;
+  const words = valueList(value['words'], WORD, MAX_CHAT_WORDS);
+  const cards = valueList(value['cards'], CARD_ID, MAX_CHAT_CARDS);
+  if (ids === null || words === null || cards === null) return null;
+  if (follow === undefined) return { corpus, ids, words, cards };
+  return isFollowUp(follow) ? { corpus, ids, words, cards, follow } : null;
 }
 
 /**
@@ -275,7 +238,7 @@ export function parseChatRequest(value: unknown): ChatRequest | null {
  *   explain   one to three sentences of the model, all through the control — about words of
  *             the read sentences, never about what the programme provides
  *   quiet     no explanation. `spent`: the allowance of the day is used up, or the model said
- *             so — the page stops sending questions for this visit. `none`: nothing to show
+ *             so — the page stops asking for this visit. `none`: nothing to show
  *             this time — the control refused a sentence, the model wrote nothing or too late.
  *   silence   electoral silence: questions reopen at `reopen`
  */

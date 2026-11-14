@@ -1,5 +1,5 @@
 /**
- * The sheet of « Demander » (PLAN-CHAT §1 and §2, D16.45 to D16.51) — fetched at the first
+ * The sheet of « Demander » (PLAN-CHAT §1 and §2, D16.45 to D16.53) — fetched at the first
  * press of the button, never with the page.
  *
  * What happens when a question is asked, in order:
@@ -10,9 +10,10 @@
  *      best: their links first;
  *   4. the identifiers of those measures go to /api/gists — nothing typed — and the sentences
  *      the editor read come back, one per measure that has one;
- *   5. only then, only if the Worker says a model may be asked, only for a visitor who agreed
- *      on this page: the question goes to /api/chat with the measures whose sentence is on the
- *      screen, and an explanation of their words comes back — or nothing, and nothing says so.
+ *   5. only then, only if the Worker says a model may be asked, only once the visitor pressed
+ *      « Expliquer avec l'IA »: /api/chat is sent the measures whose sentence is on the screen
+ *      and the words of those sentences that the question uses — NEVER THE QUESTION (D16.53) —
+ *      and an explanation of those words comes back, or nothing, and nothing says so.
  *
  * What is decided is decided by pure modules (src/lib/chat-local.ts, chat-view.ts); this file
  * sends, waits and draws. The thread lives in the memory of the page: nothing is written to a
@@ -21,14 +22,9 @@
  * Everything shown is built with `createElement` and `textContent`: a sentence of the model,
  * a sentence of the base, a question — all are text, never markup.
  */
-import {
-  cleanQuestion,
-  parseChatResponse,
-  parseGistsResponse,
-  type FollowUp,
-} from '../lib/chat-contract.ts';
+import { parseChatResponse, parseGistsResponse, type FollowUp } from '../lib/chat-contract.ts';
 import type { ChatPlain } from '../lib/chat-data.ts';
-import { chatRequestOf, gistsRequestOf, rowsOf } from '../lib/chat-local.ts';
+import { chatRequestOf, cleanQuestion, gistsRequestOf, rowsOf } from '../lib/chat-local.ts';
 import {
   newTurn,
   nextStep,
@@ -56,8 +52,6 @@ import { silenceReading } from './silence-now.ts';
 
 interface Config {
   corpus: string;
-  /** The version of the agreement as this page words it (src/lib/chat-contract.ts). */
-  consent: string;
   /** Where the texts of « En clair » are: our cards, our answers — a static file. */
   plain: string;
   objections: { slug: string; objection: string }[];
@@ -107,7 +101,7 @@ const thread = sheet?.querySelector<HTMLElement>('#chat-thread') ?? null;
 const scroller = sheet?.querySelector<HTMLElement>('#chat-scroll') ?? null;
 const composer = sheet?.querySelector<HTMLFormElement>('#chat-form') ?? null;
 const input = sheet?.querySelector<HTMLInputElement>('#chat-q') ?? null;
-const consentCard = sheet?.querySelector<HTMLTemplateElement>('#chat-consent') ?? null;
+const offerCard = sheet?.querySelector<HTMLTemplateElement>('#chat-offer') ?? null;
 const clear = sheet?.querySelector<HTMLButtonElement>('#chat-clear') ?? null;
 const stop = sheet?.querySelector<HTMLButtonElement>('#chat-ai-stop') ?? null;
 const start = sheet?.querySelector<HTMLButtonElement>('#chat-ai-start') ?? null;
@@ -121,7 +115,7 @@ if (
   scroller &&
   composer &&
   input &&
-  consentCard &&
+  offerCard &&
   clear &&
   stop &&
   start &&
@@ -141,7 +135,7 @@ if (
   let plain: ChatPlain | null = null;
   const page: PageState = {
     corpus: config.corpus,
-    consent: 'unasked',
+    ai: 'offered',
     closed: false,
     knows: (id) => found !== null && id in found.meta.items,
   };
@@ -283,8 +277,8 @@ if (
     }
 
     if (view.ai !== null) {
-      // While the agreement is asked, the block says what is offered; then, what it holds.
-      const offered = view.ai.consent ? (consentCard.dataset.title ?? s.aiTitle) : s.aiTitle;
+      // While the AI is only offered, the block says what is offered; then, what it holds.
+      const offered = view.ai.offer ? (offerCard.dataset.title ?? s.aiTitle) : s.aiTitle;
       const part = block(offered, null, 'c-ai');
       for (const explanation of view.ai.explanations) {
         // A mark a machine can read on what a model wrote (AI Act, art. 50 § 2), and the label
@@ -305,20 +299,17 @@ if (
         part.append(note);
       }
       if (view.ai.waiting) part.append(el('p', s.aiWaiting, 'ref'));
-      if (view.ai.consent) {
-        const card = consentCard.content.cloneNode(true) as DocumentFragment;
-        card.querySelector('[data-consent="accept"]')?.addEventListener('click', () => {
-          page.consent = 'given';
+      if (view.ai.offer) {
+        // One notice, one button: pressing it is the whole gesture, and not pressing it is
+        // the refusal. Nothing typed goes with it (D16.53) — the notice says so.
+        const card = offerCard.content.cloneNode(true) as DocumentFragment;
+        card.querySelector('[data-offer="accept"]')?.addEventListener('click', () => {
+          page.ai = 'on';
           redraw();
           advance(index);
           focusBlock(index, '.c-ai');
         });
-        card.querySelector('[data-consent="decline"]')?.addEventListener('click', () => {
-          page.consent = 'declined';
-          redraw();
-          input.focus();
-        });
-        part.classList.add('c-consent');
+        part.classList.add('c-offer');
         part.append(card);
       }
       if (view.ai.follow.length > 0) {
@@ -355,8 +346,8 @@ if (
     turns.forEach((_, index) => {
       update(index);
     });
-    stop.hidden = page.consent !== 'given';
-    start.hidden = page.consent !== 'declined';
+    stop.hidden = page.ai !== 'on';
+    start.hidden = page.ai !== 'off';
   };
   const focusBlock = (index: number, selector: string): void => {
     (nodes[index]?.querySelector<HTMLElement>(selector) ?? scroller).focus();
@@ -412,13 +403,24 @@ if (
   const explain = async (index: number, follow: FollowUp | null): Promise<void> => {
     const turn = turns[index];
     if (turn === undefined || turn.awaited !== undefined) return;
-    const request = chatRequestOf({
-      corpus: config.corpus,
-      question: turn.question,
-      shown: shownIds(turn, page),
-      consent: page.consent === 'given' ? config.consent : null,
-      follow: follow ?? undefined,
-    });
+    // What leaves: the measures shown, the words of their sentences that the question uses,
+    // the cards it names. The question itself is read here and goes nowhere (D16.53).
+    const shown = shownIds(turn, page);
+    const read = turn.gists;
+    const sentences =
+      read !== undefined && read !== null && read !== 'pending' && read.kind === 'gists'
+        ? read.gists.filter((gist) => shown.includes(gist.id))
+        : [];
+    const request =
+      page.ai === 'on'
+        ? chatRequestOf({
+            corpus: config.corpus,
+            question: turn.question,
+            shown: sentences,
+            cards: turn.recognised.cards,
+            follow: follow ?? undefined,
+          })
+        : null;
     if (request === null) return;
     const asked = epoch;
     turns[index] = { ...turn, awaited: follow };
@@ -478,8 +480,8 @@ if (
   opening = (): void => {
     if (!sheet.open) sheet.showModal();
     fit();
-    stop.hidden = page.consent !== 'given';
-    start.hidden = page.consent !== 'declined';
+    stop.hidden = page.ai !== 'on';
+    start.hidden = page.ai !== 'off';
     // What was typed in the field of the page becomes the first question — once.
     const typed = cleanQuestion(field.value);
     if (typed !== null && turns.at(-1)?.question !== typed) {
@@ -500,20 +502,22 @@ if (
     input.focus();
   });
   stop.addEventListener('click', () => {
-    page.consent = 'declined';
+    page.ai = 'off';
     redraw();
     start.focus();
   });
+  // Asking for it again is the gesture itself: the AI is on, and the last turn is explained.
   start.addEventListener('click', () => {
-    page.consent = 'unasked';
+    page.ai = 'on';
     redraw();
+    advance(turns.length - 1);
     focusBlock(turns.length - 1, '.c-ai');
   });
   // Leaving the page empties the thread: coming back with the back button finds none — and
-  // no agreement either. A browser may bring the page back as it left it, memory included;
-  // « asked again at each visit » (the privacy page) has to hold there too.
+  // the AI is only offered again. A browser may bring the page back as it left it, memory
+  // included; what the privacy page says of a visit has to hold there too.
   window.addEventListener('pagehide', () => {
-    page.consent = 'unasked';
+    page.ai = 'offered';
     empty();
     if (sheet.open) sheet.close();
   });

@@ -7,26 +7,23 @@
  * what the HOST sees, as any host does — and that a link to the official site leaves this one.
  *
  * Only what is true of this build is rendered (D16.4). While the site answers no question,
- * the search is local and that is the whole story. When it does (D16.45 to D16.51), the page
- * says what leaves at the gesture « Demander » — numbers of measures, not the sentence — that
- * the question itself leaves only after the visitor agreed, to whom, that neither we nor the
- * host of the model keep it, that the agreement and the conversation live in the open page
- * and nowhere else, and the one thing that is kept all the same, by Cloudflare: a counter
- * under a code computed from the address, one minute (the rate limiter). The call of the chat
- * goes through no cache. No third party guards the gesture: there is no bot check (D16.23).
- *
- * In that mode the page has a section of its own, « Quand tu demandes », which the agreement
- * of the sheet links to — three lists: what leaves (the two gestures, what the question is
- * for, where the model runs: the nearest place, with no promise of Europe), what is kept
- * (nothing of the question; a counter of the minute, a counter of what the model spends) and
- * the agreement (the sending rests on it alone, how to stop, the age, and that we hold nothing
- * to show or erase).
+ * the search is local and that is the whole story. When it does (D16.45 to D16.53), the page
+ * has a section of its own, « Quand tu demandes », which the offer of the sheet links to —
+ * three lists: what leaves (numbers of measures at « Demander »; at « Expliquer avec l'IA »,
+ * the words of our own sentences that the question uses — never the question —, to which
+ * model, and where it runs: the nearest place, with no promise of Europe), what is kept
+ * (nothing of it on our side, what the host of the model writes it keeps, the thread in the
+ * open page, a counter of the minute under a code computed from the address, a counter of what
+ * the model spends) and whose choice the AI is (a button; how to stop; that we hold nothing to
+ * show or erase). The call of the chat goes through no cache, and no third party guards the
+ * gesture: there is no bot check (D16.23).
  *
  * In both modes the page names what the transfers to the host rest on (GDPR art. 13 § 1 f):
  * the framework Cloudflare is certified under, and failing it the clauses of its contract.
  *
- * The editor re-reads the page and dates it (data/launch.json, `privacy_page`): the launch
- * gate refuses a page whose strings moved since.
+ * The editor re-reads the page and dates it, in two readings (data/launch.json): the page of
+ * « search only » (`privacy_page`) and what the chat adds (`privacy_chat`). The launch gate
+ * refuses a reading whose strings moved since.
  *
  * In a build that shows the game (D16.14), the page also says what the game writes on the
  * phone — the one thing the site ever writes anywhere — from the one map of those writings
@@ -69,9 +66,9 @@ const GameStorage = __CEL_GAME_WRITES__
   </ul>
 
   {
-    /* « Demander » (D16.45 to D16.51): what leaves at each of its two gestures and where it
-       goes, what is kept of it, and what the sending rests on. Said only where the field
-       asks; the agreement of the sheet links here. */
+    /* « Demander » (D16.45 to D16.53): what leaves at each of its two gestures — never the
+       question — and where it goes, what is kept of it, and whose choice the AI is. Said only
+       where the field asks; the offer of the sheet links here. */
     asking && (
       <>
         <h2 id="demander">{t('privacy.chat.title')}</h2>
@@ -79,8 +76,8 @@ const GameStorage = __CEL_GAME_WRITES__
         <h3>{t('privacy.chat.sent_title')}</h3>
         <ul class="counts" data-chat="sent">
           <li>{t('privacy.chat.gists')}</li>
-          <li>{t('privacy.chat.question', { model })}</li>
-          <li>{t('privacy.chat.purpose')}</li>
+          <li>{t('privacy.chat.words')}</li>
+          <li>{t('privacy.chat.model', { model })}</li>
           <li>{t('privacy.chat.where')}</li>
         </ul>
         <h3>{t('privacy.chat.kept_title')}</h3>
@@ -90,12 +87,10 @@ const GameStorage = __CEL_GAME_WRITES__
           <li>{t('privacy.chat.rate')}</li>
           <li>{t('privacy.chat.budget')}</li>
         </ul>
-        <h3>{t('privacy.chat.consent_title')}</h3>
-        <ul class="counts" data-chat="consent">
-          <li>{t('privacy.chat.basis')}</li>
-          <li>{t('privacy.chat.scope')}</li>
+        <h3>{t('privacy.chat.choice_title')}</h3>
+        <ul class="counts" data-chat="choice">
+          <li>{t('privacy.chat.choice')}</li>
           <li>{t('privacy.chat.withdraw')}</li>
-          <li>{t('privacy.chat.age')}</li>
           <li>{t('privacy.chat.rights')}</li>
         </ul>
       </>

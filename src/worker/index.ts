@@ -35,19 +35,15 @@ import riposte from '../../data/2026/riposte.json';
 import { parseAskRequest } from '../lib/ask-contract.js';
 import { modeFor } from '../lib/ask-mode.js';
 import { validateExplanation } from '../lib/ask-validate.js';
-import { consentOf } from '../lib/chat-consent.js';
 import {
-  FOLLOW_UPS,
-  MAX_CHAT_IDS,
-  cleanQuestion,
   parseChatRequest,
   parseGistsRequest,
   parseGistsResponse,
   type ChatResponse,
-  type FollowUp,
   type GistsResponse,
 } from '../lib/chat-contract.js';
-import { knownOf, notionsIn } from '../lib/notions.js';
+import { wordsShown } from '../lib/chat-words.js';
+import { knownOf } from '../lib/notions.js';
 import { effectiveDate, type SilenceOverride } from '../lib/silence.js';
 import {
   EXHAUSTED,
@@ -288,9 +284,6 @@ async function handleChat(request: Request, env: Env, origin: string): Promise<R
     corpusVersion: env.CORPUS_VERSION,
     silence,
     db: env.DB,
-    // The agreement this Worker knows: the kit it was built with, worded for its model.
-    consent: model === null ? '' : consentOf(model.name),
-    objections: KNOWN.objections,
     cards: KNOWN.cards,
     minShared: config.minShared,
     reserve: (neurons) => budget.reserve(neurons, hardStop(env)),
@@ -489,7 +482,7 @@ async function handleBench(request: Request, env: Env): Promise<Response> {
  * none — and only as sentences: whatever else an output carries stays here (`explainedOutput`).
  */
 async function benchExplain(body: Record<string, unknown>, env: Env): Promise<Response> {
-  const { model: key, question, follow, min_shared: minShared } = body;
+  const { model: key, follow, min_shared: minShared } = body;
   // Read as the page would read them: identifiers of the book, one line each, each once.
   const read = parseGistsResponse({
     kind: 'gists',
@@ -498,22 +491,35 @@ async function benchExplain(body: Record<string, unknown>, env: Env): Promise<Re
     ai: false,
   });
   const gists = read?.kind === 'gists' ? read.gists : [];
-  const asked = typeof question === 'string' ? cleanQuestion(question) : null;
-  const again: FollowUp | null | undefined =
-    follow === undefined ? null : FOLLOW_UPS.find((known) => known === follow);
+  // …and what is asked of them as `/api/chat` reads it: words and cards, never a sentence.
+  const asked = parseChatRequest({
+    corpus: env.CORPUS_VERSION,
+    ids: gists.map((gist) => gist.id),
+    words: body['words'] ?? [],
+    cards: body['cards'] ?? [],
+    ...(follow === undefined ? {} : { follow }),
+  });
+  const words =
+    asked === null
+      ? null
+      : wordsShown(
+          asked.words,
+          gists.map((gist) => gist.text),
+        );
+  const named = asked?.cards.map((id) => KNOWN.cards.find((card) => card.id === id)) ?? [];
   if (
     !isModelKey(key) ||
     asked === null ||
-    again === undefined ||
+    words === null ||
     gists.length === 0 ||
-    gists.length > MAX_CHAT_IDS
+    !named.every((card): card is (typeof KNOWN.cards)[number] => card !== undefined)
   ) {
     return empty(400);
   }
+  const again = asked.follow ?? null;
   const model = MODELS[key];
-  const named = new Set(notionsIn(asked, KNOWN.cards));
-  const cards = KNOWN.cards.filter((card) => named.has(card.id));
-  const input = explainRequest(asked, gists, cards, again, model);
+  const cards = named;
+  const input = explainRequest(words, gists, cards, again, model);
   const reserved = estimateNeurons(input, model);
   const budget = env.BUDGET.getByName('global');
   const base = { corpus: env.CORPUS_VERSION, ids: gists.map((gist) => gist.id) };
@@ -531,7 +537,7 @@ async function benchExplain(body: Record<string, unknown>, env: Env): Promise<Re
   await budget.settle(reserved, run.neurons ?? reserved);
   const verdict = validateExplanation(
     run.output,
-    { question: asked, shown: [...gists.map((g) => g.text), ...cards.map((c) => c.plain)] },
+    { shown: [...gists.map((g) => g.text), ...cards.map((c) => c.plain)] },
     typeof minShared === 'number' ? { minShared } : {},
   );
   return json({

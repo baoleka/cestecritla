@@ -150,13 +150,13 @@
   margin-block: var(--space-3) 0;
 }
 /* Two buttons of the same weight: neither answer to the agreement is the easy one. */
-.c-consent .c-actions button {
+.c-offer .c-actions button {
   flex: 1 1 14rem;
 }
-.c-consent p {
+.c-offer p {
   margin-block: var(--space-1) 0;
 }
-.c-consent .c-actions {
+.c-offer .c-actions {
   margin-block-start: var(--space-3);
 }
 

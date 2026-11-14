@@ -14,8 +14,9 @@
  * answered on the phone; the page's own search names three measures; the read sentences of
  * those measures are taken — here, from the editor's machine (private/gists/, the verdicts of
  * the reading desk; with `--unread`, also the sentences still waiting for his reading) — and
- * `/api/bench`, mode "explain", is asked with the question and those sentences: the same
- * instruction, the same direct call and the same control as `/api/chat`.
+ * `/api/bench`, mode "explain", is asked as `/api/chat` is: with those sentences, the words
+ * of them that the question uses and the cards it names — NEVER THE QUESTION (D16.53) — and
+ * with the same instruction, the same direct call and the same control.
  *
  * `--plan` asks nothing of anyone: it says what the bench would do with each question on this
  * machine today — how many a person already answered, how many would be sent, about how many
@@ -41,7 +42,8 @@ import { appendFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { reviewedFor, type ReviewedEntry } from '../src/lib/ask-reviewed.js';
 import { FOLLOW_UPS, MAX_CHAT_IDS, type FollowUp } from '../src/lib/chat-contract.js';
-import { asksForVote } from '../src/lib/chat-local.js';
+import { askedWords, asksForVote } from '../src/lib/chat-local.js';
+import { knownOf, notionsIn, type KnownCard } from '../src/lib/notions.js';
 import { MODELS, isModelKey } from '../src/worker/models.js';
 import type { Manifest } from './aec26-types.js';
 import { loadPage } from './ask-page.js';
@@ -116,23 +118,35 @@ export type Plan =
   | { route: 'nothing_found' }
   /** Measures found, and none of them has a sentence on this machine: nothing to explain. */
   | { route: 'no_sentence'; rows: string[] }
-  /** The question would be sent, with the sentences on the screen. */
-  | { route: 'ask'; rows: string[]; gists: BenchGist[] };
+  /**
+   * An explanation would be asked: with the sentences on the screen, the words of them that
+   * the question uses and the cards it names — as the page computes them, never the question.
+   */
+  | { route: 'ask'; rows: string[]; gists: BenchGist[]; words: string[]; cards: string[] };
 
 export function planOf(
   item: Pick<AskSetItem, 'question'>,
   rows: readonly string[],
   objections: readonly ReviewedEntry[],
   sentences: ReadonlyMap<string, BenchGist>,
+  cards: readonly KnownCard[] = [],
 ): Plan {
   const slug = reviewedFor(item.question, objections);
   if (slug !== null) return { route: 'reviewed', slug };
   if (asksForVote(item.question)) return { route: 'vote' };
   if (rows.length === 0) return { route: 'nothing_found' };
   const gists = rows.flatMap((id) => sentences.get(id) ?? []).slice(0, MAX_CHAT_IDS);
-  return gists.length === 0
-    ? { route: 'no_sentence', rows: [...rows] }
-    : { route: 'ask', rows: [...rows], gists };
+  if (gists.length === 0) return { route: 'no_sentence', rows: [...rows] };
+  return {
+    route: 'ask',
+    rows: [...rows],
+    gists,
+    words: askedWords(
+      item.question,
+      gists.map((gist) => gist.text),
+    ),
+    cards: notionsIn(item.question, cards),
+  };
 }
 
 /** One question of the set, as the bench left it. */
@@ -347,6 +361,7 @@ export function gateProblems(summary: Summary): string[] {
 function inputs(unread: boolean): {
   sentences: Map<string, BenchGist>;
   objections: ReviewedEntry[];
+  cards: KnownCard[];
   items: AskSetItem[];
   page: ReturnType<typeof loadPage>;
 } {
@@ -356,6 +371,15 @@ function inputs(unread: boolean): {
     objections: (
       JSON.parse(readFileSync('data/2026/riposte.json', 'utf8')) as { entries: ReviewedEntry[] }
     ).entries,
+    // The cards a person wrote and re-read: those the page recognises, and the Worker knows.
+    cards: knownOf(
+      (
+        JSON.parse(readFileSync('data/2026/glossary.json', 'utf8')) as {
+          entries: Parameters<typeof knownOf>[0];
+        }
+      ).entries,
+      [],
+    ).cards,
     items: loadAskSet().items,
     page: loadPage(),
   };
@@ -386,11 +410,11 @@ export function countPlans(plans: readonly { group: AskGroup; plan: Plan }[]): {
 }
 
 function plan(unread: boolean): number {
-  const { sentences, objections, items, page } = inputs(unread);
+  const { sentences, objections, cards, items, page } = inputs(unread);
   const counted = countPlans(
     items.map((item) => ({
       group: item.group,
-      plan: planOf(item, page(item.question).rows, objections, sentences),
+      plan: planOf(item, page(item.question).rows, objections, sentences, cards),
     })),
   );
   const { routes } = counted;
@@ -482,7 +506,7 @@ async function live(args: readonly string[]): Promise<number> {
     console.error('BENCH_URL must be an https address');
     return 2;
   }
-  const { sentences, objections, items, page } = inputs(args.includes('--unread'));
+  const { sentences, objections, cards, items, page } = inputs(args.includes('--unread'));
   const groups = new Set((value('--groups') ?? '').split(',').filter((g) => g !== ''));
   const limit = Number(value('--limit') ?? '0');
   const done = new Set(
@@ -511,7 +535,7 @@ async function live(args: readonly string[]): Promise<number> {
       console.log(`budget of ${String(budget)} neurons reached: stopping`);
       break;
     }
-    const plan = planOf(item, page(item.question).rows, objections, sentences);
+    const plan = planOf(item, page(item.question).rows, objections, sentences, cards);
     const base = { item: item.id, model, follow, run, route: plan.route };
     const quiet = { ran: false, kind: null, rule: null, sentences: null, neurons: 0, ms: null };
     let row: ExplainRow;
@@ -529,8 +553,10 @@ async function live(args: readonly string[]): Promise<number> {
               key,
               model,
               mode: 'explain',
-              question: item.question,
+              // What `/api/chat` is sent, and nothing a visitor would have typed.
               gists: plan.gists.map(({ id, text }) => ({ id, text })),
+              words: plan.words,
+              cards: plan.cards,
               ...(follow === null ? {} : { follow }),
             }),
             signal: AbortSignal.timeout(60_000),

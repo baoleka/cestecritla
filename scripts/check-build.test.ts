@@ -190,7 +190,7 @@ void test('a site that answers no question ships nothing of the sheet: not a scr
   for (const file of textFiles.filter((f) => /\.(?:html|js)$/.test(f))) {
     assert.doesNotMatch(
       read(file),
-      /api\/chat|api\/gists|chat-sheet|chat-config|c-consent/,
+      /api\/chat|api\/gists|chat-sheet|chat-config|chat-offer|c-offer/,
       `${relative('dist', file)} carries a piece of the sheet`,
     );
   }

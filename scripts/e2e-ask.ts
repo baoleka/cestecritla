@@ -18,11 +18,12 @@
  *      `corpus` and `ids` and nothing else — the measures the page's own search ranks best,
  *      exactly what scripts/ask-page.ts computes for the same question — and not a word typed;
  *   3. the read sentences are shown with their links; a measure without one keeps its link
- *      alone; the agreement stands in place of the explanation, and until it is accepted no
- *      request carries the question — refused, none ever does;
- *   4. accepted: `/api/chat` carries the question as shown, the measures whose sentence is on
- *      the screen, the version of the agreement — and nothing else, follow-ups included: no
- *      history. What the model wrote carries its label in the text and a mark a machine reads;
+ *      alone; the offer stands in place of the explanation — one notice, one button — and
+ *      until the button is pressed nothing is asked of the AI, however many questions follow;
+ *   4. pressed: `/api/chat` carries the measures whose sentence is on the screen, the words of
+ *      OUR sentences that the question uses, the cards it names — and nothing else, follow-ups
+ *      included: NO REQUEST EVER CARRIES THE QUESTION, nor a word of it that is not ours
+ *      (D16.53). What the model wrote carries its label in the text and a mark a machine reads;
  *   5. every other state is a normal one, and none says a word of failure: the model silent,
  *      the allowance spent (and then no question leaves any more), the Worker broken, another
  *      state of the book, nothing found, an objection a person answered (never sent), a card,
@@ -37,7 +38,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import type { Page, Route } from 'playwright';
-import { cleanQuestion, consentVersion } from '../src/lib/chat-contract.js';
+import { askedWords } from '../src/lib/chat-local.js';
 import type { Manifest } from './aec26-types.js';
 import { loadPage } from './ask-page.js';
 import { ENGINES, STILL, checker, lateLayoutShift, report, serve, until } from './e2e-kit.js';
@@ -78,10 +79,10 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
   /** The simulated Worker: what each route answers until the test says otherwise. */
   const sim: { gists: GistsScenario; chat: ChatScenario } = { gists: 'deux', chat: 'explique' };
   /** As the base holds it — a straight apostrophe — and as the page must show it. */
-  const stored = (id: string): string => `Phrase relue d'essai pour ${id}.`;
-  const sentence = (id: string): string => `Phrase relue d’essai pour ${id}.`;
+  const inBase = (id: string): string => `Phrase relue d'essai sur la retraite, pour ${id}.`;
+  const sentence = (id: string): string => `Phrase relue d’essai sur la retraite, pour ${id}.`;
   const gistsAnswer = (ids: readonly string[]): { status?: number; body: unknown } => {
-    const all = ids.map((id) => ({ id, text: stored(id) }));
+    const all = ids.map((id) => ({ id, text: inBase(id) }));
     switch (sim.gists) {
       case 'toutes':
         return { body: { kind: 'gists', corpus, gists: all, ai: true } };
@@ -233,8 +234,10 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       hint,
     );
     check(
-      'the notice says what asking gives, and that the AI explains only with an agreement',
-      /phrases relues/.test(hint) && /accord/.test(hint) && /reste sur ce téléphone/.test(hint),
+      'the notice says what asking gives, and that the AI explains only when asked',
+      /phrases relues/.test(hint) &&
+        /sur demande/.test(hint) &&
+        /reste sur ce téléphone/.test(hint),
       hint,
     );
     check(
@@ -313,10 +316,10 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       !/zorglub|montcuq|infirmi|retraite|moi/i.test(gistsBody),
       gistsBody.slice(0, 160),
     );
-    check('no request carries the question before the agreement', posted.chat.length === 0);
+    check('nothing is asked of the AI before the button is pressed', posted.chat.length === 0);
     check('nothing typed travels in an address either', carrying().length === 0);
 
-    // --- 3. the sheet: the frame, the thread, the read sentences, the agreement
+    // --- 3. the sheet: the frame, the thread, the read sentences, the offer
     check(
       'the sheet says « Site non officiel. » in its frame',
       /Site non officiel\./.test(await text('#chat-sheet .c-head')),
@@ -362,35 +365,33 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       'a field the contract does not name never reaches the page',
       !(await text('#chat-sheet')).includes('debug'),
     );
-    const agreement = await text(`${LAST} .c-consent`);
+    const offer = await text(`${LAST} .c-offer`);
     check(
-      'the agreement stands in place of the explanation: what leaves, who reads it, what is kept',
-      agreement.includes(MODEL) &&
-        /Cloudflare/.test(agreement) &&
-        /telle que tu l’as écrite/.test(agreement) &&
-        /On n’enregistre rien/.test(agreement),
-      agreement,
+      'the offer stands in place of the explanation: who would explain, and what it is sent',
+      /Une IA peut expliquer ces mots/.test(offer) &&
+        offer.includes(MODEL) &&
+        /Cloudflare/.test(offer) &&
+        /Ta question ne lui est pas envoyée/.test(offer) &&
+        /seulement les mots de ces phrases/.test(offer),
+      offer,
     );
     check(
-      '…what not to write, from what age, for how long, and who answers for it',
-      /rien sur toi/.test(agreement) &&
-        /15 ans/.test(agreement) &&
-        /quand tu veux/.test(agreement) &&
-        /Baoleka/.test(agreement) &&
-        /contact@cestecritla\.fr/.test(agreement),
-      agreement,
+      '…and nothing of an agreement to send a question: there is none to give',
+      !/J’accepte|15 ans|rien sur toi|telle que tu l’as écrite/.test(offer),
+      offer,
     );
-    const buttons = await page.evaluate<{ label: string; width: number; classes: string }[]>(
-      `Array.from(document.querySelectorAll(${JSON.stringify(`${LAST} .c-consent [data-consent]`)})).map((b) => ({ label: b.textContent.trim(), width: Math.round(b.getBoundingClientRect().width), classes: b.className }))`,
+    const buttons = await page.evaluate<string[]>(
+      `Array.from(document.querySelectorAll(${JSON.stringify(`${LAST} .c-offer button`)})).map((b) => b.textContent.trim())`,
     );
     check(
-      'two buttons of the same weight: neither answer is the easy one',
-      buttons.length === 2 &&
-        buttons[0]?.label === 'J’accepte que cette IA lise ma question' &&
-        buttons[1]?.label === 'Non, sans IA' &&
-        buttons[0].width === buttons[1].width &&
-        buttons[0].classes === buttons[1].classes,
+      'one button, and it says what it does',
+      buttons.length === 1 && buttons[0] === 'Expliquer avec l’IA',
       JSON.stringify(buttons),
+    );
+    check(
+      'the offer links to what leaves, and where',
+      (await page.locator(`${LAST} .c-offer a`).getAttribute('href')) ===
+        '/confidentialite/#demander',
     );
     check(
       'the focus is in the sheet',
@@ -399,63 +400,61 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       ),
     );
     check(
-      'no explanation is shown before the agreement',
+      'no explanation is shown before the button is pressed',
       (await count('[data-generated-by]')) === 0,
     );
 
-    // --- 3 bis. refused: nothing leaves, and the choice can be taken back
-    await page.click(`${LAST} [data-consent="decline"]`);
-    await page.waitForTimeout(300);
+    // --- 3 bis. not pressing is refusing: another question, and still nothing is asked
+    const waited = await ask('et les retraites');
     check(
-      'refused: the agreement is gone, and no question was sent',
-      (await count('.c-consent')) === 0 && posted.chat.length === 0,
+      'a second question without the button: its sentences, the offer under it — and no call',
+      waited.includes('et les retraites') &&
+        (await count('#chat-thread .c-offer')) === 1 &&
+        (await count(`${LAST} .c-offer`)) === 1 &&
+        posted.chat.length === 0,
+      String(posted.chat.length),
     );
-    check(
-      '…and « Demander aussi à l’IA » stays within reach',
-      await page.locator('#chat-ai-start').isVisible(),
-    );
-    await page.click('#chat-ai-start');
-    await until(page, `document.querySelector(${JSON.stringify(`${LAST} .c-consent`)}) !== null`);
-    check('…it brings the agreement back, and still sends nothing', posted.chat.length === 0);
+    await page.click('#chat-clear');
+    await page.fill('#chat-q', QUESTION);
+    await page.press('#chat-q', 'Enter');
+    await until(page, `document.querySelector(${JSON.stringify(`${LAST} .c-offer`)}) !== null`);
 
-    // --- 4. accepted: the question leaves, once, with what it needs and nothing else
-    // The version is recomputed here from the very words on the screen: the title of the
-    // agreement, its lines, its two buttons — what was read is what is vouched for.
-    const read = await page.evaluate<string[]>(
-      `(() => { const c = document.querySelector(${JSON.stringify(`${LAST} .c-consent`)}); return [c.querySelector('h3').textContent, ...Array.from(c.querySelectorAll('[data-consent-line]')).map((p) => p.textContent), ...Array.from(c.querySelectorAll('[data-consent]')).map((b) => b.textContent.trim())]; })()`,
-    );
-    const consent = consentVersion(read);
-    check(
-      'the agreement is a title, seven lines and two buttons',
-      read.length === 10,
-      String(read.length),
-    );
-    await page.click(`${LAST} [data-consent="accept"]`);
+    // --- 4. the button: an explanation is asked once — and the question is not in it
+    await page.click(`${LAST} [data-offer="accept"]`);
     await until(
       page,
       `document.querySelector(${JSON.stringify(`${LAST} [data-generated-by="ai"]`)}) !== null`,
     );
-    check('accepted: the question is sent once, to /api/chat', posted.chat.length === 1);
+    check('pressed: one request goes to /api/chat', posted.chat.length === 1);
     const chatBody = JSON.parse(posted.chat[0] ?? '{}') as Record<string, unknown>;
     check(
-      'the request is the question, its measures, the state of the book and the agreement — nothing else',
-      JSON.stringify(Object.keys(chatBody).sort()) === '["consent","corpus","ids","question"]',
+      'the request is measures, words, cards and the state of the book — nothing else',
+      JSON.stringify(Object.keys(chatBody).sort()) === '["cards","corpus","ids","words"]' &&
+        chatBody['corpus'] === corpus,
       JSON.stringify(Object.keys(chatBody)),
-    );
-    check(
-      'the question leaves as it is shown',
-      chatBody['question'] === cleanQuestion(QUESTION) && chatBody['corpus'] === corpus,
-      String(chatBody['question']),
     );
     check(
       'the measures named are those whose read sentence is on the screen',
       JSON.stringify(chatBody['ids']) === JSON.stringify(rows.slice(0, 2)),
       JSON.stringify(chatBody['ids']),
     );
+    // What the page computed is what the pure rule computes from the same sentences: the one
+    // word of the question that is a word of ours.
+    const expected = askedWords(
+      QUESTION,
+      rows.slice(0, 2).map((id) => inBase(id)),
+    );
     check(
-      'the agreement travels as the version of the words that were read',
-      chatBody['consent'] === consent && /^[0-9a-f]{16}$/.test(consent),
-      String(chatBody['consent']),
+      'the words sent are words of OUR sentences that the question uses — here, one',
+      expected.length === 1 && JSON.stringify(chatBody['words']) === JSON.stringify(expected),
+      JSON.stringify(chatBody['words']),
+    );
+    check(
+      'the question is not in the request: no field for it, and no word of it that is not ours',
+      !('question' in chatBody) &&
+        !/zorglub|montcuq|infirmi|\bmoi\b/i.test(posted.chat[0] ?? '') &&
+        !(posted.chat[0] ?? '').includes(QUESTION),
+      (posted.chat[0] ?? '').slice(0, 200),
     );
     const explained = await text(`${LAST} .c-ai`);
     check(
@@ -479,7 +478,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       (await page.locator(`${LAST} .c-ai .ref a`).getAttribute('href')) === '/exactitude/',
     );
     check(
-      '« Ne plus envoyer à l’IA » stays within reach once agreed',
+      '« Ne plus demander à l’IA » stays within reach once the AI is on',
       (await page.locator('#chat-ai-stop').isVisible()) &&
         !(await page.locator('#chat-ai-start').isVisible()),
     );
@@ -497,9 +496,9 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       'a follow-up sends the same request with one word more',
       posted.chat.length === 2 &&
         JSON.stringify(Object.keys(followBody).sort()) ===
-          '["consent","corpus","follow","ids","question"]' &&
+          '["cards","corpus","follow","ids","words"]' &&
         followBody['follow'] === 'simpler' &&
-        followBody['question'] === chatBody['question'] &&
+        JSON.stringify(followBody['words']) === JSON.stringify(chatBody['words']) &&
         JSON.stringify(followBody['ids']) === JSON.stringify(chatBody['ids']),
       JSON.stringify(followBody).slice(0, 200),
     );
@@ -519,17 +518,17 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       ),
     );
 
-    // --- 4 ter. the next question: agreed once for the page, sent without asking again
+    // --- 4 ter. the next question: the AI is on for the page, and explains without a new press
     const second = await ask('la retraite à soixante ans');
     check(
       'a second question gets its turn under the first',
       (await count('#chat-thread .c-turn')) === 2 && second.includes('la retraite à soixante ans'),
     );
     check(
-      '…its read sentences, then its explanation, without a second agreement',
-      posted.gists.length === 2 &&
+      '…its read sentences, then its explanation, without a second press',
+      posted.gists.length === 4 &&
         posted.chat.length === 3 &&
-        (await count(`${LAST} .c-consent`)) === 0 &&
+        (await count(`${LAST} .c-offer`)) === 0 &&
         (await count(`${LAST} [data-generated-by="ai"]`)) === 1,
       `${String(posted.gists.length)} / ${String(posted.chat.length)}`,
     );
@@ -617,7 +616,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         (await page.locator(`${LAST} .c-plain a`).getAttribute('href')) === `/r/${objection.slug}/`,
       );
       check(
-        '…the read sentences come all the same; the question is not sent, agreed or not',
+        '…the read sentences come all the same; nothing is asked of the AI, on or not',
         (await count(`${LAST} .c-gists .c-row`)) >= 1 &&
           (await count(`${LAST} .c-ai`)) === 0 &&
           posted.chat.length === before,
@@ -807,7 +806,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
     await context.close();
 
-    // --- 8 bis. ten minutes on the page: a question still gets its sentences and, once agreed,
+    // --- 8 bis. ten minutes on the page: a question still gets its sentences and, once asked,
     // its explanation. The hour of the server, read at arrival, ages with the device's clock —
     // it used not to, and five minutes after arriving every question stayed on the phone.
     {
@@ -825,11 +824,11 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       await view.clock.setFixedTime(new Date(Date.now() + 10 * 60 * 1000));
       await view.fill('#q', 'la retraite, dix minutes plus tard');
       await view.click('#ask');
-      await until(view, "document.querySelector('#chat-thread .c-consent') !== null");
-      await view.click('#chat-thread [data-consent="accept"]');
+      await until(view, "document.querySelector('#chat-thread .c-offer') !== null");
+      await view.click('#chat-thread [data-offer="accept"]');
       await until(view, "document.querySelector('#chat-thread [data-generated-by]') !== null");
       check(
-        'ten minutes after arriving, a question is still answered and, agreed, explained',
+        'ten minutes after arriving, a question is still answered and, on request, explained',
         posted.gists.length === (sent[0] ?? 0) + 1 && posted.chat.length === (sent[1] ?? 0) + 1,
       );
       await late.close();
@@ -846,7 +845,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     }
 
     // --- 8 quater. accessibility of the open sheet (Chromium: axe is injected, so the policy
-    // is bypassed), with the agreement, then with an explanation
+    // is bypassed), with the offer, then with an explanation
     if (name === 'chromium') {
       const axe = readFileSync('node_modules/axe-core/axe.min.js', 'utf8');
       for (const [label, width] of [
@@ -866,7 +865,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         );
         await view.fill('#q', 'c’est quoi la règle verte ?');
         await view.click('#ask');
-        await until(view, "document.querySelector('#chat-thread .c-consent') !== null");
+        await until(view, "document.querySelector('#chat-thread .c-offer') !== null");
         await view.addScriptTag({ content: axe });
         const audit = async (): Promise<string[]> => {
           // The sheet rises in 180 ms, from transparent: audited before it has landed, its
@@ -884,11 +883,11 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         };
         const asked = await audit();
         check(
-          `the sheet with its agreement passes the accessibility audit at ${label}`,
+          `the sheet with its offer passes the accessibility audit at ${label}`,
           asked.length === 0,
           asked.join(','),
         );
-        await view.click('#chat-thread [data-consent="accept"]');
+        await view.click('#chat-thread [data-offer="accept"]');
         await until(view, "document.querySelector('#chat-thread [data-generated-by]') !== null");
         const answered = await audit();
         check(

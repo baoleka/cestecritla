@@ -37,7 +37,6 @@ import {
   type ModelSentence,
 } from './ask-contract.js';
 import {
-  ECHO_WINDOW,
   MAX_EXPLAIN_CHARS,
   MAX_EXPLAIN_SENTENCES,
   MAX_EXPLAIN_WORDS,
@@ -94,8 +93,6 @@ export type RuleId =
   | 'contrast'
   /** A proper noun or an acronym nobody showed it — or a first word that is neither ours nor an article. */
   | 'name'
-  /** Words in a row taken from the question and from no sentence of ours. */
-  | 'echo'
   /** Shares no word with the sentences on the page: it explains something else. */
   | 'topic';
 
@@ -868,6 +865,14 @@ const UNLESS_SHOWN: readonly (readonly [RuleId, readonly string[]])[] = [
       'bénéfiques?|néfastes?|nuisibles?|souhaitables?',
       'absurdes?|scandaleu(?:x|se|ses)|catastrophiques?|désastreu(?:x|se|ses)',
       'formidables?|idéal(?:e|es)?|idéaux|parfait(?:e|es|s)?',
+      // …said with more heat. A model needs nobody's help to write these; each was found
+      // passing the control by the security review of 14/11/2026.
+      'génie|génial(?:e|es)?|géniaux|excellent(?:e|es|s)?|remarquables?',
+      'merveilleu(?:x|se|ses)|magnifiques?',
+      'arnaques?|rackets?|escroqueries?|scandales?|hontes?|honteu(?:x|se|ses)',
+      'mensong(?:e|es|er|ère|ères)|trompeu(?:r|rs|se|ses)',
+      'stupides?|idiot(?:e|es|s)?|ridicules?|aberrant(?:e|es|s)?|délirant(?:e|es|s)?|folie',
+      'étrangl(?:e|es|ent|er)|écras(?:e|es|ent|er)|matraqu(?:e|es|ent|er|ages?)',
       'chers?|chères?|coûteu(?:x|se|ses)',
       // how much, without a number
       'trop|beaucoup|énormément',
@@ -928,11 +933,9 @@ const FIRST_WORDS: ReadonlySet<string> = new Set(
   ),
 );
 
-/** What an explanation is read against: the question, and everything on the page that is ours. */
+/** What an explanation is read against: everything on the page that is ours — and nothing a visitor typed (D16.53). */
 export interface ExplainContext {
-  /** The question as sent. Read for the echo only, and never quoted in a refusal. */
-  question: string;
-  /** The read sentences shown for this question, then the texts of the cards recognised. */
+  /** The read sentences on the screen, then the texts of the cards the page recognised. */
   shown: readonly string[];
 }
 
@@ -961,8 +964,6 @@ interface Page {
   words: ReadonlySet<string>;
   /** Runs of two words: a noun of the book's apparatus with the word after it. */
   pairs: ReadonlySet<string>;
-  /** Runs of ECHO_WINDOW words: the question's words that are ours too. */
-  runs: ReadonlySet<string>;
   /** Its words as the index cuts them, for the subject. */
   terms: readonly string[];
 }
@@ -973,7 +974,6 @@ function pageOf(shown: readonly string[]): Page {
     texts: shown,
     words: new Set(tokens.flat()),
     pairs: new Set(tokens.flatMap((t) => windows(t, 2))),
-    runs: new Set(tokens.flatMap((t) => windows(t, ECHO_WINDOW))),
     terms: [...new Set(shown.flatMap((text) => terms(text)))],
   };
 }
@@ -989,7 +989,6 @@ const bare = (word: string): string =>
 function explainRefusals(
   raw: string,
   index: number,
-  question: readonly string[],
   page: Page,
   options: ExplainOptions,
 ): Refusal[] {
@@ -1046,7 +1045,6 @@ function explainRefusals(
   }
 
   // --- its names: any word written with a capital is a word of the page, or a common one
-  const asked = new Set(question);
   text.split(' ').forEach((word, position) => {
     const core = bare(word);
     if (!/^\p{Lu}/u.test(core)) return;
@@ -1058,22 +1056,11 @@ function explainRefusals(
     const known = (token: string): boolean =>
       page.words.has(token) ||
       page.terms.some((term) => sameWord(token, term)) ||
-      // An acronym may come from the question — « la TVA » is what was asked. A name may not.
-      (acronym ? asked.has(token) : COMMON_CAPITALS.has(token));
+      // An acronym is a name like another: it is on the page, or it is not written. (It used
+      // to be allowed when the question held it — the question no longer reaches this file.)
+      (!acronym && COMMON_CAPITALS.has(token));
     if (!whole.every(known) && !parts.every(known)) refuse('name', core);
   });
-
-  // --- the question said again: words in a row that are the visitor's and not ours. A run
-  // made of words of the page only is ours, in whatever order the question put them.
-  const tokens = copyTokens(text);
-  const askedRuns = new Set(windows(question, ECHO_WINDOW));
-  const echoed = windows(tokens, ECHO_WINDOW).some(
-    (run) =>
-      askedRuns.has(run) &&
-      !page.runs.has(run) &&
-      run.split(' ').some((token) => !page.words.has(token)),
-  );
-  if (echoed) refuse('echo', `${String(ECHO_WINDOW)} words in a row of the question`);
 
   // --- on the subject: a word of its own that the page holds too
   const shared = contentTerms(text).filter((term) =>
@@ -1112,9 +1099,8 @@ export function explanationRefusals(
     out.push({ rule: 'topic', sentence: null, detail: 'nothing on the page' });
   }
   const page = pageOf(context.shown);
-  const question = copyTokens(context.question);
   phrases.forEach((sentence, index) => {
-    out.push(...explainRefusals(sentence, index, question, page, options));
+    out.push(...explainRefusals(sentence, index, page, options));
   });
   return out;
 }

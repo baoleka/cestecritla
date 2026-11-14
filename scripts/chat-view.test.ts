@@ -30,7 +30,7 @@ const QUESTION = 'c’est quoi un verger communal ?';
 
 const page = (over: Partial<PageState> = {}): PageState => ({
   corpus: CORPUS,
-  consent: 'unasked',
+  ai: 'offered',
   closed: false,
   knows: (id) => [A, B, C].includes(id),
   ...over,
@@ -103,7 +103,7 @@ void test('an answer the page cannot use is dropped without a word: the rows kee
   const stray: GistsResponse = gists(true, 'p3c1-s07-m01');
   for (const response of [null, { kind: 'local' } as const, other, stray]) {
     const turn = withGists(searched(), response);
-    const view = viewOf(turn, page({ consent: 'given' }), true);
+    const view = viewOf(turn, page({ ai: 'on' }), true);
     assert.deepEqual(view.measures, {
       kind: 'rows',
       rows: [A, B, C].map((id) => ({ id, gist: null })),
@@ -112,46 +112,46 @@ void test('an answer the page cannot use is dropped without a word: the rows kee
     // No read sentence on the screen: nothing to explain, so the question does not leave.
     assert.equal(view.ai, null);
     assert.deepEqual(shownIds(turn, page()), []);
-    assert.equal(nextStep(turn, page({ consent: 'given' })), null);
+    assert.equal(nextStep(turn, page({ ai: 'on' })), null);
   }
 });
 
-void test('the agreement is asked in place of the explanation — once, on the last turn, and only when the model may answer', () => {
+void test('the AI is offered in place of the explanation — once, on the last turn, and only when the model may answer', () => {
   const turn = withGists(searched(), gists(true, A, B));
   assert.ok(explainable(turn, page()));
   assert.deepEqual(viewOf(turn, page(), true).ai, {
-    consent: true,
+    offer: true,
     explanations: [],
     waiting: false,
     follow: [],
   });
-  // Not agreed: nothing is sent, however long the page waits.
+  // Not asked for: nothing is sent, however long the page waits.
   assert.equal(nextStep(turn, page()), null);
   // An earlier turn does not ask again.
   assert.equal(viewOf(turn, page(), false).ai, null);
-  // The Worker says the model does not answer now: no agreement to ask, no question to send.
+  // The Worker says the model does not answer now: nothing to offer, nothing to send.
   const closed = withGists(searched(), gists(false, A, B));
   assert.equal(viewOf(closed, page(), true).ai, null);
-  assert.equal(nextStep(closed, page({ consent: 'given' })), null);
+  assert.equal(nextStep(closed, page({ ai: 'on' })), null);
 });
 
 void test('refused: the first two blocks, and the question never leaves', () => {
   const turn = withGists(searched(), gists(true, A, B));
-  const declined = page({ consent: 'declined' });
-  assert.equal(viewOf(turn, declined, true).ai, null);
-  assert.equal(nextStep(turn, declined), null);
-  assert.equal(viewOf(turn, declined, true).measures.kind, 'rows');
+  const stopped = page({ ai: 'off' });
+  assert.equal(viewOf(turn, stopped, true).ai, null);
+  assert.equal(nextStep(turn, stopped), null);
+  assert.equal(viewOf(turn, stopped, true).measures.kind, 'rows');
 });
 
-void test('agreed: the question is sent once, for the measures whose sentence is on the screen', () => {
-  const given = page({ consent: 'given' });
+void test('the AI is on: an explanation is asked once, for the measures whose sentence is on the screen', () => {
+  const on = page({ ai: 'on' });
   const turn = withGists(searched(), gists(true, A, C));
-  assert.equal(nextStep(turn, given), 'explain');
-  assert.deepEqual(shownIds(turn, given), [A, C]);
+  assert.equal(nextStep(turn, on), 'explain');
+  assert.deepEqual(shownIds(turn, on), [A, C]);
   const waiting = { ...turn, awaited: null };
-  assert.equal(nextStep(waiting, given), null);
-  assert.deepEqual(viewOf(waiting, given, true).ai, {
-    consent: false,
+  assert.equal(nextStep(waiting, on), null);
+  assert.deepEqual(viewOf(waiting, on, true).ai, {
+    offer: false,
     explanations: [],
     waiting: true,
     follow: [],
@@ -160,12 +160,12 @@ void test('agreed: the question is sent once, for the measures whose sentence is
     waiting,
     null,
     { kind: 'explain', corpus: CORPUS, sentences: ['Un verger est un terrain planté.'] },
-    given,
+    on,
   );
   assert.equal(answered.closed, false);
-  assert.equal(nextStep(answered.turn, given), null);
-  assert.deepEqual(viewOf(answered.turn, given, true).ai, {
-    consent: false,
+  assert.equal(nextStep(answered.turn, on), null);
+  assert.deepEqual(viewOf(answered.turn, on, true).ai, {
+    offer: false,
     explanations: [{ follow: null, sentences: ['Un verger est un terrain planté.'] }],
     waiting: false,
     follow: ['simpler', 'example'],
@@ -173,31 +173,31 @@ void test('agreed: the question is sent once, for the measures whose sentence is
 });
 
 void test('a follow-up is asked once; what it brings is added, and what was explained stays', () => {
-  const given = page({ consent: 'given' });
+  const on = page({ ai: 'on' });
   const first = { follow: null, sentences: ['Un verger est un terrain planté.'] };
   let turn: Turn = { ...withGists(searched(), gists(true, A)), explanations: [first] };
   turn = { ...turn, awaited: 'simpler' };
-  assert.deepEqual(viewOf(turn, given, true).ai?.follow, []);
+  assert.deepEqual(viewOf(turn, on, true).ai?.follow, []);
   turn = withExplanation(
     turn,
     'simpler',
     { kind: 'explain', corpus: CORPUS, sentences: ['Un verger, ce sont des arbres à fruits.'] },
-    given,
+    on,
   ).turn;
-  assert.deepEqual(viewOf(turn, given, true).ai?.follow, ['example']);
-  assert.equal(viewOf(turn, given, true).ai?.explanations.length, 2);
+  assert.deepEqual(viewOf(turn, on, true).ai?.follow, ['example']);
+  assert.equal(viewOf(turn, on, true).ai?.explanations.length, 2);
   // A follow-up that brings nothing is not offered again, and nothing says it failed.
-  turn = withExplanation({ ...turn, awaited: 'example' }, 'example', null, given).turn;
-  const view = viewOf(turn, given, true);
+  turn = withExplanation({ ...turn, awaited: 'example' }, 'example', null, on).turn;
+  const view = viewOf(turn, on, true);
   assert.deepEqual(view.ai?.follow, []);
   assert.equal(view.ai.explanations.length, 2);
   assert.equal(view.ai.waiting, false);
   // An earlier turn keeps its explanations, and its follow-ups while the page is open.
-  assert.equal(viewOf(turn, given, false).ai?.explanations.length, 2);
+  assert.equal(viewOf(turn, on, false).ai?.explanations.length, 2);
 });
 
 void test('no explanation this time: the turn is whole without it, and it is not asked again', () => {
-  const given = page({ consent: 'given' });
+  const on = page({ ai: 'on' });
   const asked = { ...withGists(searched(), gists(true, A)), awaited: null };
   const nothing: (ChatResponse | null)[] = [
     null,
@@ -205,24 +205,24 @@ void test('no explanation this time: the turn is whole without it, and it is not
     { kind: 'explain', corpus: 'ffffffffffffffff', sentences: ['Phrase d’un autre livre.'] },
   ];
   for (const response of nothing) {
-    const { turn, closed } = withExplanation(asked, null, response, given);
+    const { turn, closed } = withExplanation(asked, null, response, on);
     assert.equal(closed, false);
-    assert.equal(viewOf(turn, given, true).ai, null);
-    assert.equal(nextStep(turn, given), null);
-    assert.equal(viewOf(turn, given, true).measures.kind, 'rows');
+    assert.equal(viewOf(turn, on, true).ai, null);
+    assert.equal(nextStep(turn, on), null);
+    assert.equal(viewOf(turn, on, true).measures.kind, 'rows');
   }
 });
 
 void test('the allowance spent: the page stops sending questions, and says nothing of it', () => {
-  const given = page({ consent: 'given' });
+  const on = page({ ai: 'on' });
   const asked = { ...withGists(searched(), gists(true, A)), awaited: null };
   for (const response of [
     { kind: 'quiet', why: 'spent' } as const,
     { kind: 'silence', reopen: '2027-04-11T18:00:00Z' } as const,
   ]) {
-    const { turn, closed } = withExplanation(asked, null, response, given);
+    const { turn, closed } = withExplanation(asked, null, response, on);
     assert.equal(closed, true);
-    const shut = page({ consent: 'given', closed });
+    const shut = page({ ai: 'on', closed });
     assert.equal(viewOf(turn, shut, true).ai, null);
     // The next question still gets its read sentences — and is not sent to the model.
     const next = withGists(searched(), gists(true, A, B));
@@ -235,8 +235,8 @@ void test('the allowance spent: the page stops sending questions, and says nothi
     ...withGists(searched(), gists(true, A)),
     explanations: [{ follow: null, sentences: ['Un verger est un terrain planté.'] }],
   };
-  assert.deepEqual(viewOf(explained, page({ consent: 'given', closed: true }), false).ai, {
-    consent: false,
+  assert.deepEqual(viewOf(explained, page({ ai: 'on', closed: true }), false).ai, {
+    offer: false,
     explanations: explained.explanations,
     waiting: false,
     follow: [],
@@ -246,29 +246,29 @@ void test('the allowance spent: the page stops sending questions, and says nothi
 void test('« En clair »: what a person wrote comes first — and an objection never leaves the phone', () => {
   const card = { objection: null, cards: ['regle-verte'] };
   const withCard = withGists({ ...searched(), recognised: card }, gists(true, A));
-  const view = viewOf(withCard, page({ consent: 'given' }), true);
+  const view = viewOf(withCard, page({ ai: 'on' }), true);
   assert.deepEqual(view.plain, card);
   // A card does not close the model: its words are among those it may explain.
-  assert.equal(nextStep(withCard, page({ consent: 'given' })), 'explain');
+  assert.equal(nextStep(withCard, page({ ai: 'on' })), 'explain');
 
   const objection = { objection: 'retraites', cards: [] };
   const answered = withGists({ ...searched(), recognised: objection }, gists(true, A));
   assert.deepEqual(viewOf(answered, page(), true).plain, objection);
-  // The read sentences are shown; the question is not sent, agreed or not.
+  // The read sentences are shown; no explanation is asked, the AI on or not.
   assert.equal(viewOf(answered, page(), true).measures.kind, 'rows');
   assert.equal(viewOf(answered, page(), true).ai, null);
-  assert.equal(nextStep(answered, page({ consent: 'given' })), null);
-  assert.ok(!explainable(answered, page({ consent: 'given' })));
+  assert.equal(nextStep(answered, page({ ai: 'on' })), null);
+  assert.ok(!explainable(answered, page({ ai: 'on' })));
 });
 
 void test('electoral silence: one sentence, nothing sent — said by the phone or by the Worker', () => {
   const frozen = { ...searched(), silence: '2027-04-11T18:00:00Z' };
-  assert.deepEqual(viewOf(frozen, page({ consent: 'given' }), true), {
+  assert.deepEqual(viewOf(frozen, page({ ai: 'on' }), true), {
     plain: null,
     measures: { kind: 'silence', reopen: '2027-04-11T18:00:00Z' },
     ai: null,
   });
-  assert.equal(nextStep(frozen, page({ consent: 'given' })), null);
+  assert.equal(nextStep(frozen, page({ ai: 'on' })), null);
   // No hour the page can announce: the sentence says the pause, not the hour.
   assert.deepEqual(viewOf({ ...searched(), silence: '' }, page(), true).measures, {
     kind: 'silence',
@@ -276,45 +276,42 @@ void test('electoral silence: one sentence, nothing sent — said by the phone o
   });
   // The Worker knows the hour better than a phone whose clock is wrong.
   const told = withGists(searched(), { kind: 'silence', reopen: '2027-04-11T18:00:00Z' });
-  assert.deepEqual(viewOf(told, page({ consent: 'given' }), true).measures, {
+  assert.deepEqual(viewOf(told, page({ ai: 'on' }), true).measures, {
     kind: 'silence',
     reopen: '2027-04-11T18:00:00Z',
   });
-  assert.equal(nextStep(told, page({ consent: 'given' })), null);
+  assert.equal(nextStep(told, page({ ai: 'on' })), null);
   assert.deepEqual(shownIds(told, page()), []);
 });
 
 void test('whom to vote for: « Ici, on ne parle que du programme. » — no measure, nothing sent', () => {
   const turn: Turn = { ...searched(), question: 'Franchement je dois voter pour qui ?' };
-  assert.deepEqual(viewOf(turn, page({ consent: 'given' }), true), {
+  assert.deepEqual(viewOf(turn, page({ ai: 'on' }), true), {
     plain: null,
     measures: { kind: 'off_topic' },
     ai: null,
   });
-  assert.equal(nextStep(turn, page({ consent: 'given' })), null);
+  assert.equal(nextStep(turn, page({ ai: 'on' })), null);
   const read = withGists(turn, gists(true, A));
-  assert.equal(nextStep(read, page({ consent: 'given' })), null);
+  assert.equal(nextStep(read, page({ ai: 'on' })), null);
   assert.deepEqual(shownIds(read, page()), []);
 });
 
 void test('a turn is settled when it waits for nothing and owes nothing', () => {
-  const given = page({ consent: 'given' });
-  assert.equal(settled(newTurn(QUESTION, NOTHING, null), given), false);
-  assert.equal(settled(searched(), given), false);
-  assert.equal(settled({ ...searched(), gists: 'pending' }, given), false);
+  const on = page({ ai: 'on' });
+  assert.equal(settled(newTurn(QUESTION, NOTHING, null), on), false);
+  assert.equal(settled(searched(), on), false);
+  assert.equal(settled({ ...searched(), gists: 'pending' }, on), false);
   const read = withGists(searched(), gists(true, A));
   // Agreed: the explanation is due, then awaited, then there — or not, and that is whole too.
-  assert.equal(settled(read, given), false);
-  assert.equal(settled({ ...read, awaited: null }, given), false);
-  assert.equal(
-    settled(withExplanation({ ...read, awaited: null }, null, null, given).turn, given),
-    true,
-  );
-  // Not agreed: the turn waits for nobody but the visitor.
+  assert.equal(settled(read, on), false);
+  assert.equal(settled({ ...read, awaited: null }, on), false);
+  assert.equal(settled(withExplanation({ ...read, awaited: null }, null, null, on).turn, on), true);
+  // Not asked for: the turn waits for nobody but the visitor.
   assert.equal(settled(read, page()), true);
-  assert.equal(settled(searched({ rows: [] }), given), true);
-  assert.equal(settled({ ...searched(), silence: '' }, given), true);
-  assert.equal(settled(withGists(searched(), null), given), true);
+  assert.equal(settled(searched({ rows: [] }), on), true);
+  assert.equal(settled({ ...searched(), silence: '' }, on), true);
+  assert.equal(settled(withGists(searched(), null), on), true);
 });
 
 void test('a turn lives in memory: nothing here reads or writes a storage, an address or a cookie', () => {

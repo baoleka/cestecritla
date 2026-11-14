@@ -1,24 +1,56 @@
 /**
- * What leaves the phone at each gesture of the chat (PLAN-CHAT §2) — decided here, purely, from
- * what the page's own search found, so that the page and its tests cannot disagree on it.
+ * What leaves the phone at each gesture of the chat (PLAN-CHAT §2, D16.53) — decided here,
+ * purely, from what the page's own search found, so that the page and its tests cannot disagree
+ * on it.
  *
- *   while typing        nothing
- *   « Demander »        identifiers: the measures the sheet is about to show, and nothing else
- *   an explanation      the question, the measures whose read sentence is on the screen, the
- *                       follow-up chosen, the version of the agreement — after the agreement
+ *   while typing            nothing
+ *   « Demander »            identifiers: the measures the sheet is about to show
+ *   « Expliquer avec l'IA » those identifiers, the words of OUR read sentences that the
+ *                           question uses, the cards of ours it names, the follow-up chosen
+ *
+ * THE QUESTION ITSELF NEVER LEAVES. It is cleaned here for the page's own use — to be searched,
+ * and shown in the thread — and no request is ever built from it.
  *
  * These functions build requests; they send none. What they return goes through the strict
  * readers of the contract unchanged (scripts/chat-local.test.ts holds the two together).
  */
+import { MAX_QUESTION_CHARS } from './ask-contract.js';
 import {
+  MAX_CHAT_CARDS,
   MAX_CHAT_IDS,
   MAX_GIST_IDS,
-  cleanQuestion,
   type ChatRequest,
   type FollowUp,
   type GistsRequest,
 } from './chat-contract.js';
-import { tokenize } from './search-core.js';
+import { MAX_CHAT_WORDS, sentenceWords } from './chat-words.js';
+import { sameWord, terms, tokenize } from './search-core.js';
+
+/** A question is a question: two characters at least, one line, what the field accepts at most. */
+export const MIN_QUESTION_CHARS = 2;
+
+/** Joiners, soft hyphens, marks that turn a line round, and what Unicode says to ignore. */
+const UNSEEN = /[\p{Cc}\p{Cf}\p{Default_Ignorable_Code_Point}]+/gu;
+/** Every space there is — no-break, thin, line and paragraph separators included. */
+const SPACES = /\s+/gu;
+
+/**
+ * A question as the page keeps it — to search with, and to show in the thread: composed, on one
+ * line, without a character nobody sees. `null` when what is left is not a question — too
+ * short, or longer than the field accepts. It goes nowhere: no request has a field for it
+ * (src/lib/chat-contract.ts). What is not seen is taken out BEFORE the letters are composed,
+ * so that cleaning twice changes nothing (security review of 14/11/2026).
+ */
+export function cleanQuestion(raw: string): string | null {
+  const text = raw
+    .replace(/\p{Cc}+/gu, ' ')
+    .replace(UNSEEN, '')
+    .normalize('NFC')
+    .replace(SPACES, ' ')
+    .trim();
+  if (text.length < MIN_QUESTION_CHARS || text.length > MAX_QUESTION_CHARS) return null;
+  return text;
+}
 
 /** How many measures the sheet shows for a question: three sentences at most (PLAN-CHAT §1). */
 export const SHOWN_MEASURES = 3;
@@ -57,27 +89,51 @@ export function gistsRequestOf(corpus: string, rows: readonly string[]): GistsRe
   return ids.length === 0 ? null : { corpus, ids };
 }
 
+/**
+ * The words of our sentences that a question uses — what the page sends in place of the
+ * question: in the order the question names them, each once, `MAX_CHAT_WORDS` at most. Empty
+ * when it uses none: the model then explains the hardest words by itself.
+ */
+export function askedWords(question: string, shown: readonly string[]): string[] {
+  const words = sentenceWords(shown);
+  const out: string[] = [];
+  for (const asked of terms(question)) {
+    if (out.length === MAX_CHAT_WORDS) break;
+    const found = words.find((word) => sameWord(asked, word.term));
+    if (found !== undefined && !out.includes(found.term)) out.push(found.term);
+  }
+  return out;
+}
+
 export interface Asking {
   corpus: string;
-  /** What was typed. It is sent as `cleanQuestion` leaves it, and shown in the thread the same. */
+  /** What was typed. It is read here, to find which of our words it uses — and sent nowhere. */
   question: string;
-  /** The measures whose read sentence is on the screen, in the order shown. */
-  shown: readonly string[];
-  /** The version of the agreement accepted on this page; null when the visitor has not agreed. */
-  consent: string | null;
+  /** The read sentences on the screen, in the order shown. */
+  shown: readonly { id: string; text: string }[];
+  /** The cards of ours the question names, as the page recognised them. */
+  cards: readonly string[];
   follow?: FollowUp | undefined;
 }
 
 /**
- * What an explanation sends — or null, and then nothing leaves: no agreement, nothing that is
- * a question, no read sentence on the screen to explain a word of.
+ * What « Expliquer avec l'IA » sends — or null, and then nothing leaves: no read sentence on
+ * the screen to explain a word of. The question is not in it: only the words of our own
+ * sentences that it uses.
  */
 export function chatRequestOf(asking: Asking): ChatRequest | null {
-  if (asking.consent === null) return null;
-  const question = cleanQuestion(asking.question);
-  const ids = [...new Set(asking.shown)].slice(0, MAX_CHAT_IDS);
-  if (question === null || ids.length === 0) return null;
-  const request: ChatRequest = { corpus: asking.corpus, ids, question, consent: asking.consent };
+  const shown = asking.shown.slice(0, MAX_CHAT_IDS);
+  const ids = [...new Set(shown.map((gist) => gist.id))];
+  if (ids.length === 0) return null;
+  const request: ChatRequest = {
+    corpus: asking.corpus,
+    ids,
+    words: askedWords(
+      asking.question,
+      shown.map((gist) => gist.text),
+    ),
+    cards: [...new Set(asking.cards)].slice(0, MAX_CHAT_CARDS),
+  };
   return asking.follow === undefined ? request : { ...request, follow: asking.follow };
 }
 

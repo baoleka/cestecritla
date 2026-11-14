@@ -829,7 +829,6 @@ const RULES_FR: Readonly<Record<string, string>> = {
     tense: 'un futur ou un conditionnel',
     contrast: 'une opposition ou une concession',
     name: 'un nom propre que rien ne montre',
-    echo: 'des mots repris d’une question',
     topic: 'aucun mot des phrases affichées',
   } satisfies Record<RuleId, string>),
   // What the desk refuses by itself.

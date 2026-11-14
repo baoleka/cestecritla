@@ -352,6 +352,14 @@ Jamais écrit, nulle part : un choix, une réponse, une heure, un identifiant. C
 
 ### 6.2 sexies Le chat : la question part, après un accord — 14/11/2026 (D16.46, D16.50)
 
+> **Dépassé le soir même par D16.53 : la question ne quitte plus le téléphone.** Ce qui suit
+> décrit la conception du matin — une question envoyée après un accord explicite — et reste
+> ici pour le raisonnement et pour ses lectures. Ce qui vaut aujourd'hui est dans
+> `18-dossier-chat.md` : plus de texte libre traité, donc plus d'accord explicite, plus de
+> ligne d'âge ni de mise en garde ; une mention au bouton (règlement sur l'IA, art. 50) ; la
+> garantie du transfert, le lieu du modèle et les deux gestes pour arrêter et pour vider, eux,
+> n'ont pas changé.
+
 > Lecture des textes par la session et par une relecture hostile du même jour, **pas un avis juridique**. Ce qui est noté « de mémoire » n'a pas été relu à la source ce jour-là. Rien de ce qui suit n'est encore servi : la production reste en « recherche seule » (D16.33).
 
 **Ce qui change.** D16.22 respectait l'article 9 « sans avoir à demander un accord » : la phrase ne partait pas. Le 14 novembre l'éditeur a décidé qu'elle peut partir, **pour l'explication par une IA seulement, après un accord**. Trois gestes, trois régimes :
