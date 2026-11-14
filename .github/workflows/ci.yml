@@ -87,6 +87,16 @@ jobs:
       - name: Deploy dry run (bench → preview host)
         run: npx tsx scripts/deploy.ts preview --bench --dry-run --outdir /tmp/wdry-bench
 
+      # « Demander » reaches the apex as a Worker of its own, on two exact addresses in front
+      # of the static files (wrangler.chat.jsonc, PLAN-CHAT lot C10). It is bundled here in both
+      # environments, through the script that alone may deploy it: a dry run sends nothing and
+      # needs no accord.
+      - name: Deploy dry run (Worker of the chat → preview host)
+        run: npx tsx scripts/deploy.ts preview --chat --dry-run --outdir /tmp/wdry-chat-preview
+
+      - name: Deploy dry run (Worker of the chat → apex)
+        run: npx tsx scripts/deploy.ts apex --chat --dry-run --outdir /tmp/wdry-chat
+
       # The holding site (D15.4) is what the apex actually serves until launch day, and the
       # withdrawal gesture of runbook sheet 9. It is a second build of the same tree, so it goes
       # through the same dist-bound gates — and through scripts/deploy.ts, the only caller of

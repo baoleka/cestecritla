@@ -5,6 +5,9 @@
  *   npm run deploy                     the apex — holding build only, until launch day
  *   npm run deploy:preview             the preview host (noindex) — either build
  *   npm run deploy:preview -- --bench  the same, with the Worker, for the bench of the models
+ *   npm run deploy:chat:preview -- --accord <today>   the Worker of the chat alone, on its two
+ *                                      addresses of the preview host (lot C10)
+ *   npm run deploy:chat -- --accord <today>           the same in front of the apex (lot C12)
  *   npx tsx scripts/deploy.ts apex --dry-run --outdir /tmp/x     what CI runs
  *
  * Why a script and not a habit. Read in wrangler 4.130.0 (`publishCustomDomains`): when a custom
@@ -23,6 +26,8 @@ import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { buildGame, gameSite } from '../src/lib/game-data.js';
 import {
+  chatDeployArgs,
+  chatDeployRefusal,
   citationPolicyValidated,
   deployRefusal,
   distProblems,
@@ -41,19 +46,64 @@ import { launchBlockers, readLaunchInputs } from './launch.js';
 
 const [target, ...given] = process.argv.slice(2);
 if (target !== 'apex' && target !== 'preview') {
-  console.error('usage: tsx scripts/deploy.ts apex|preview [--bench] [--dry-run] [--outdir <dir>]');
+  console.error(
+    'usage: tsx scripts/deploy.ts apex|preview [--bench] [--dry-run] [--outdir <dir>]\n' +
+      '       tsx scripts/deploy.ts apex|preview --chat --accord <YYYY-MM-DD> | --chat --dry-run',
+  );
   process.exit(2);
 }
 // Nothing reaches wrangler that could undo a choice made here: a second `--env` or `--config`
 // is the bare `wrangler deploy` this script exists to prevent.
 const refused = refusedArguments(given);
 if (refused.length > 0) {
-  console.error(`deploy refused: ${refused.join(' ')} — only --bench, --dry-run and --outdir`);
+  console.error(
+    `deploy refused: ${refused.join(' ')} — only --bench, --chat, --accord <day>, --dry-run and --outdir`,
+  );
   process.exit(2);
+}
+
+// The script's own arguments never reach wrangler.
+const accordAt = given.indexOf('--accord');
+const accord =
+  accordAt !== -1
+    ? (given[accordAt + 1] ?? null)
+    : (given.find((arg) => arg.startsWith('--accord='))?.slice('--accord='.length) ?? null);
+const forWrangler = given.filter(
+  (arg, i) =>
+    arg !== '--bench' &&
+    arg !== '--chat' &&
+    arg !== '--accord' &&
+    !arg.startsWith('--accord=') &&
+    !(accordAt !== -1 && i === accordAt + 1),
+);
+
+// The Worker of the chat alone (lot C10): no file goes with it, so dist/ is not looked at.
+if (given.includes('--chat')) {
+  if (given.includes('--bench')) {
+    console.error('deploy refused: --chat and --bench name two different Workers');
+    process.exit(2);
+  }
+  const refusal = chatDeployRefusal(target, {
+    dryRun: forWrangler.includes('--dry-run'),
+    accord,
+    today: new Date().toISOString().slice(0, 10),
+    workerProblems: workerProblems(),
+    ask: readAskMode(),
+    launchBlockers: launchBlockers(readLaunchInputs()),
+  });
+  if (refusal !== null) {
+    console.error(`deploy refused (${target}, the Worker of the chat): ${refusal}`);
+    process.exit(1);
+  }
+  const chatArgs = chatDeployArgs(target, forWrangler);
+  console.log(`deploy: the Worker of the chat → ${target}`);
+  console.log(`        wrangler ${chatArgs.join(' ')}`);
+  const sent = spawnSync('npx', ['--no-install', 'wrangler', ...chatArgs], { stdio: 'inherit' });
+  process.exit(sent.status ?? 1);
 }
 // `--bench` is ours, not wrangler's: the Worker goes to the preview host while the page still
 // answers no question, so that the bench can measure the candidates on the production path.
-const passthrough = given.filter((arg) => arg !== '--bench');
+const passthrough = forWrangler;
 const ask: AskDeploy = given.includes('--bench') ? 'bench' : readAskMode();
 if (!existsSync('dist')) {
   console.error('deploy refused: no dist/ — build first');

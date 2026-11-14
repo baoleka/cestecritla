@@ -42,6 +42,15 @@ export const STATIC_CONFIG = 'wrangler.static.jsonc';
  */
 export const WORKER_CONFIG = 'wrangler.jsonc';
 
+/**
+ * « Demander » as a Worker of its own (PLAN-CHAT §4, lot C10): the same script on two exact
+ * addresses, in front of static files — a route wins over a custom domain on the same host.
+ * This is how the chat reaches the apex: the site stays files, and taking the Worker away
+ * leaves a site that never knew. `scripts/deploy.ts <target> --chat` deploys it, and nothing
+ * else does.
+ */
+export const CHAT_CONFIG = 'wrangler.chat.jsonc';
+
 export const ASK_PATH = 'data/2026/ask.json';
 
 /**
@@ -65,9 +74,17 @@ export function readAskMode(path: string = ASK_PATH): Exclude<AskDeploy, 'bench'
   return 'off';
 }
 
-/** The configuration a build is deployed with (the mode is data: D16.4). */
-export function wranglerConfig(mode: BuildMode, ask: AskDeploy = 'off'): string {
-  return mode === 'app' && ask !== 'off' ? WORKER_CONFIG : STATIC_CONFIG;
+/**
+ * The configuration a build is deployed with (the mode is data: D16.4). The apex is files,
+ * whatever the mode: its chat is another Worker, on its own two addresses (`CHAT_CONFIG`).
+ * The preview host takes the Worker with its files when the page asks — or for the bench.
+ */
+export function wranglerConfig(
+  mode: BuildMode,
+  ask: AskDeploy = 'off',
+  target: DeployTarget = 'preview',
+): string {
+  return mode === 'app' && ask !== 'off' && target === 'preview' ? WORKER_CONFIG : STATIC_CONFIG;
 }
 
 /** A base nobody has created yet: `wrangler d1 create` gives the real identifier. */
@@ -88,20 +105,23 @@ export function workerProblems(root = '.'): string[] {
   };
   const record = (value: unknown): Record<string, unknown> =>
     typeof value === 'object' && value !== null ? (value as Record<string, unknown>) : {};
-  const config = record(read(WORKER_CONFIG));
   const manifest = record(record(read('data/2026/manifest.json'))['meta'])['corpus_version'];
-  const environments: [string, Record<string, unknown>][] = [
-    ['top level', config],
-    ['env.preview', record(record(config['env'])['preview'])],
-  ];
-  for (const [name, env] of environments) {
-    const bases = Array.isArray(env['d1_databases']) ? env['d1_databases'] : [];
-    const id = record(bases[0])['database_id'];
-    if (typeof id !== 'string' || id === UNSET_DATABASE_ID) {
-      out.push(`${WORKER_CONFIG} (${name}): the private base has no identifier yet (lot I3)`);
-    }
-    if (record(env['vars'])['CORPUS_VERSION'] !== manifest) {
-      out.push(`${WORKER_CONFIG} (${name}): CORPUS_VERSION is not the corpus of the manifest`);
+  // Both files that carry the script: the Worker of the preview host, and the chat's own.
+  for (const file of [WORKER_CONFIG, CHAT_CONFIG]) {
+    const config = record(read(file));
+    const environments: [string, Record<string, unknown>][] = [
+      ['top level', config],
+      ['env.preview', record(record(config['env'])['preview'])],
+    ];
+    for (const [name, env] of environments) {
+      const bases = Array.isArray(env['d1_databases']) ? env['d1_databases'] : [];
+      const id = record(bases[0])['database_id'];
+      if (typeof id !== 'string' || id === UNSET_DATABASE_ID) {
+        out.push(`${file} (${name}): the private base has no identifier yet (lot I3)`);
+      }
+      if (record(env['vars'])['CORPUS_VERSION'] !== manifest) {
+        out.push(`${file} (${name}): CORPUS_VERSION is not the corpus of the manifest`);
+      }
     }
   }
   return out;
@@ -123,25 +143,91 @@ export function wranglerDeployArgs(
   return [
     'deploy',
     '--config',
-    wranglerConfig(mode, ask),
+    wranglerConfig(mode, ask, target),
     `--env=${target === 'preview' ? 'preview' : ''}`,
     ...passthrough,
   ];
+}
+
+/** The arguments of `wrangler deploy` for the Worker of the chat alone: no file goes with it. */
+export function chatDeployArgs(
+  target: DeployTarget,
+  passthrough: readonly string[] = [],
+): string[] {
+  return [
+    'deploy',
+    '--config',
+    CHAT_CONFIG,
+    `--env=${target === 'preview' ? 'preview' : ''}`,
+    ...passthrough,
+  ];
+}
+
+export interface ChatDeployContext {
+  /** `--dry-run`: wrangler bundles and uploads nothing. */
+  dryRun: boolean;
+  /** The day given with `--accord`, and today: sending a Worker is the editor's decision. */
+  accord: string | null;
+  today: string;
+  /** What the configuration still lacks (`workerProblems`). */
+  workerProblems: readonly string[];
+  /** The mode of data/2026/ask.json: what the site does with a question. */
+  ask: Exclude<AskDeploy, 'bench'>;
+  /** What still stands between the app and the apex (scripts/launch.ts). */
+  launchBlockers: readonly string[];
+}
+
+/**
+ * Why the Worker of the chat must not be deployed to this target — or null when it may.
+ *
+ * A dry run sends nothing and is never refused: CI bundles this Worker on every pull request.
+ * Anything else is the editor's decision at the time (CLAUDE.md: the first deployment of a
+ * Worker), so the command line carries the day it was given. The preview host is where this
+ * deployment is rehearsed and where the chat answers first; the apex takes it only when the
+ * site answers questions and every gate of the launch holds — the rehearsal among them.
+ */
+export function chatDeployRefusal(target: DeployTarget, context: ChatDeployContext): string | null {
+  if (context.dryRun) return null;
+  if (context.workerProblems.length > 0) {
+    return `the Worker is not ready to be deployed — ${context.workerProblems.join(' · ')}`;
+  }
+  if (target === 'apex' && context.ask !== 'chat') {
+    return (
+      `${ASK_PATH} says the site answers no question: a Worker that reads questions has no ` +
+      'place in front of the apex before the chat is opened (PLAN-CHAT, lot C12)'
+    );
+  }
+  if (target === 'apex' && context.launchBlockers.length > 0) {
+    return `the chat does not go to the apex yet — ${context.launchBlockers.join(' · ')}`;
+  }
+  if (context.accord !== context.today) {
+    return (
+      "deploying the Worker of the chat needs the editor's accord, given today: " +
+      `add --accord ${context.today}`
+    );
+  }
+  return null;
 }
 
 /**
  * What `scripts/deploy.ts` hands on to wrangler: `--dry-run`, and `--outdir <dir>` for the
  * bundle of a dry run. Nothing else — `--config`, `--env`, `--name`, `--assets` or `--route`
  * would each undo a choice the guard has just made, and wrangler reads the last one it is given.
+ * `--bench`, `--chat` and `--accord <day>` are the script's own and never reach wrangler.
  * Returns the arguments it refuses.
  */
 export function refusedArguments(given: readonly string[]): string[] {
   const refused: string[] = [];
   for (let i = 0; i < given.length; i += 1) {
     const arg = given[i] ?? '';
-    if (arg === '--bench' || arg === '--dry-run' || /^--outdir=.+/.test(arg)) continue;
+    if (arg === '--bench' || arg === '--chat' || arg === '--dry-run') continue;
+    if (/^--outdir=.+/.test(arg) || /^--accord=\d{4}-\d{2}-\d{2}$/.test(arg)) continue;
     const value = given[i + 1] ?? '';
     if (arg === '--outdir' && value !== '' && !value.startsWith('-')) {
+      i += 1;
+      continue;
+    }
+    if (arg === '--accord' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
       i += 1;
       continue;
     }
@@ -380,19 +466,14 @@ export function deployRefusal(
   if (mode === 'app' && context.ask === 'bench' && target !== 'preview') {
     return 'the bench runs on the preview host only: `npm run deploy:preview -- --bench`';
   }
-  // The chat on the apex is a deployment nobody has rehearsed (PLAN-CHAT §4, lot C10): a second
-  // Worker on `/api/*` in front of static files, or one Worker — and then the way back to
-  // static files, never tried (R27). Until one of the two is written down as tried, this
-  // script does not put a chat there, dry run or not.
-  if (mode === 'app' && context.ask === 'chat' && target === 'apex') {
-    return (
-      'the chat is not deployed to the apex by this script yet: its deployment is lot C10 of ' +
-      "docs/discovery/PLAN-CHAT.md, and opening it is the editor's decision at the time (C12)"
-    );
-  }
+  // A page that asks goes to the apex as files, like any other (lot C10): its chat is another
+  // Worker (`CHAT_CONFIG`, `chatDeployRefusal`). What keeps it from going there too early is
+  // the first rule above: with the mode "chat" the launch asks for every gate of PLAN-CHAT §5,
+  // the rehearsal of that deployment among them (scripts/launch.ts).
   if (
     mode === 'app' &&
     context.ask !== 'off' &&
+    target === 'preview' &&
     context.workerProblems.length > 0 &&
     !context.dryRun
   ) {

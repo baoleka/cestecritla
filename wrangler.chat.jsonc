@@ -1,0 +1,114 @@
+{
+  // "C'est écrit là" — « Demander », as a Worker of its own in front of static files
+  // (PLAN-CHAT §4, lot C10). scripts/deploy.ts picks this file (`--chat`), never choose by hand.
+  //
+  // Why a second Worker. The site is static files (wrangler.static.jsonc): no script, nothing
+  // that can refuse to deploy, and a withdrawal that is one command (D14.10). The chat must not
+  // change that. So it is not added to the Worker that serves the pages: it stands beside it,
+  // on two exact addresses, and a route wins over a custom domain on the same host (Cloudflare
+  // docs, « Routes … take precedence if configured on the same hostname », read on 14/11/2026).
+  // Take this Worker away and the two addresses answer 404 like any page that is not there —
+  // the site never knew.
+  //
+  // The same script as wrangler.jsonc (src/worker/index.ts), without the files: `/api/gists`
+  // and `/api/chat`, closed while data/2026/ask.json says "off"; `/api/bench` answers 404 here,
+  // its key is never set on this Worker.
+  //
+  // What it binds, and nothing else:
+  //   AI      Workers AI, called directly for the chat — no gateway, no cache, no log (D16.51)
+  //   DB      the private base, read by identifier: the read sentences, one by one (D16.49)
+  //   BUDGET  what the model spends over twenty-four hours, one Durable Object of its own
+  //   RATE    the rate limiter, on a key that says nothing of an address (D7.5)
+  // One secret, set in the editor's terminal with `wrangler secret put`, never written here:
+  // RATE_SALT.
+  //
+  // The allowance is the account's, and each Worker counts only what it spends itself: this
+  // one, the preview's, the bench. The platform's refusal is what they have in common — the
+  // Worker reads it, closes its model for half an hour and answers without it (budget-core.ts).
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "cestecritla-chat",
+  "main": "src/worker/index.ts",
+  "compatibility_date": "2026-09-09",
+
+  // Two exact addresses on each host, and no other: no wildcard, so nothing else under /api/
+  // ever reaches this script. A route needs the zone; the hosts stay custom domains of the
+  // Worker that serves the files (scripts/build-mode.test.ts holds both lists together).
+  "routes": [
+    { "pattern": "cestecritla.fr/api/gists", "zone_name": "cestecritla.fr" },
+    { "pattern": "cestecritla.fr/api/chat", "zone_name": "cestecritla.fr" },
+    { "pattern": "www.cestecritla.fr/api/gists", "zone_name": "cestecritla.fr" },
+    { "pattern": "www.cestecritla.fr/api/chat", "zone_name": "cestecritla.fr" },
+  ],
+  "workers_dev": false,
+  "preview_urls": false,
+
+  "ai": { "binding": "AI" },
+
+  // The same base as wrangler.jsonc: one copy at Cloudflare, read by three Workers at most.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "cestecritla-ask",
+      "database_id": "e6ac3803-eeba-40a5-ae3b-0d8203b4c6c4",
+    },
+  ],
+
+  "durable_objects": {
+    "bindings": [{ "name": "BUDGET", "class_name": "NeuronBudget" }],
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["NeuronBudget"] }],
+
+  // Six sendings a minute for one visitor, on each route apart (src/worker/guards.ts).
+  "ratelimits": [
+    { "name": "RATE", "namespace_id": "2028", "simple": { "limit": 6, "period": 60 } },
+  ],
+
+  "vars": {
+    "CORPUS_VERSION": "27ee6e713fe25e7e",
+    "ENVIRONMENT": "production",
+    "NEURON_HARD_STOP": "8500",
+  },
+
+  // No logs at all (D0.22, D7.8, ADR-10): this is the one Worker that reads a question.
+  "observability": { "enabled": false },
+
+  "minify": true,
+  "upload_source_maps": false,
+  "keep_vars": false,
+
+  // The preview host: where this deployment is rehearsed (lot C10) and where the chat answers
+  // first (lot C11). Deployed as the Worker "cestecritla-chat-preview".
+  //
+  // `routes` is an INHERITABLE key: without the block below this environment would inherit the
+  // apex addresses and take them on its first deploy. Bindings and `vars` are NOT inherited,
+  // so they are repeated; the base is the same one, the counter and the limiter are its own.
+  // `/api/bench` is not listed: on the preview it stays with the Worker that holds its key.
+  "env": {
+    "preview": {
+      "routes": [
+        { "pattern": "beta.cestecritla.fr/api/gists", "zone_name": "cestecritla.fr" },
+        { "pattern": "beta.cestecritla.fr/api/chat", "zone_name": "cestecritla.fr" },
+      ],
+      "observability": { "enabled": false },
+      "ai": { "binding": "AI" },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "cestecritla-ask",
+          "database_id": "e6ac3803-eeba-40a5-ae3b-0d8203b4c6c4",
+        },
+      ],
+      "durable_objects": {
+        "bindings": [{ "name": "BUDGET", "class_name": "NeuronBudget" }],
+      },
+      "ratelimits": [
+        { "name": "RATE", "namespace_id": "2029", "simple": { "limit": 6, "period": 60 } },
+      ],
+      "vars": {
+        "CORPUS_VERSION": "27ee6e713fe25e7e",
+        "ENVIRONMENT": "preview",
+        "NEURON_HARD_STOP": "8500",
+      },
+    },
+  },
+}

@@ -214,6 +214,7 @@ void test('the files that validate themselves: missing, in place, then edited af
       gists: { corpus_version: corpus, verdicts: 2, sha256: 'cafe', deposited_on: '2026-12-01' },
       threads_read_on: '2026-12-02',
       model_confirmed_on: '2026-12-02',
+      deployment_rehearsed_on: '2026-12-01',
     },
     [WORDS_PATH]: {
       meta: {
@@ -339,6 +340,7 @@ void test('the files that validate themselves: missing, in place, then edited af
     gists: { corpus_version: 'decaf', verdicts: -1, sha256: 'cafe', deposited_on: '2026-12-01' },
     threads_read_on: '2026-12-02',
     model_confirmed_on: '2026-12-02',
+    deployment_rehearsed_on: '2026-12-01',
   };
   const asked = (file: unknown): string => {
     writeFileSync(join(ready, ASK_PATH), JSON.stringify(file));
@@ -356,6 +358,7 @@ void test('the files that validate themselves: missing, in place, then edited af
     [{ gists: { ...chat.gists, verdicts: 1068 } }, /not every measure has the editor's verdict/],
     [{ threads_read_on: null }, /has not read the forty threads/],
     [{ model_confirmed_on: 'soon' }, /has not confirmed the model/],
+    [{ deployment_rehearsed_on: null }, /has not been rehearsed on the preview host/],
   ] as const) {
     assert.match(asked({ ...chat, ...without }), said, JSON.stringify(without));
   }

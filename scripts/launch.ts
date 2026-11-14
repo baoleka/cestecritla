@@ -272,6 +272,13 @@ export function artefactBlockers(root = '.'): string[] {
         `${ASK_PATH}: the editor has not confirmed the model the bench chose: model_confirmed_on`,
       );
     }
+    // The chat reaches the apex as a second Worker in front of the files: that deployment, and
+    // its withdrawal, were tried on the preview host first (wrangler.chat.jsonc).
+    if (!isDate(ask.deployment_rehearsed_on)) {
+      out.push(
+        `${ASK_PATH}: the deployment of the chat has not been rehearsed on the preview host: deployment_rehearsed_on (lot C10)`,
+      );
+    }
   }
 
   // The words of the game: a new kind of extract, validated with its measured share (D16.15).

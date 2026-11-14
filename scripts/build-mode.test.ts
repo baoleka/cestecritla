@@ -15,6 +15,7 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import {
   APP_REDIRECT_PREFIXES,
+  CHAT_CONFIG,
   HOLDING_PAGES,
   HOLDING_REDIRECT_PREFIXES,
   SILENCE_APPROACH_MS,
@@ -22,6 +23,8 @@ import {
   UNSET_DATABASE_ID,
   WORKER_CONFIG,
   appRedirects,
+  chatDeployArgs,
+  chatDeployRefusal,
   citationPolicyValidated,
   deployRefusal,
   distProblems,
@@ -35,6 +38,7 @@ import {
   workerProblems,
   wranglerConfig,
   wranglerDeployArgs,
+  type ChatDeployContext,
   type DeployContext,
 } from './build-mode.js';
 import { parseJsonc, stripJsoncComments } from './jsonc.js';
@@ -54,6 +58,7 @@ const VALIDATED: DeployContext = {
 interface Route {
   pattern: string;
   custom_domain?: boolean;
+  zone_name?: string;
 }
 interface Environment {
   routes?: Route[];
@@ -75,6 +80,7 @@ interface WranglerConfig extends Environment {
   workers_dev?: boolean;
   preview_urls?: boolean;
   assets?: { directory?: string; binding?: string; run_worker_first?: unknown };
+  migrations?: { tag?: string; new_sqlite_classes?: string[] }[];
   env?: Record<string, Environment>;
 }
 
@@ -87,6 +93,8 @@ const hosts = (routes: Route[] | undefined): string[] =>
 const app = read(WORKER_CONFIG);
 /** The static configuration: the holding page always, the app while it answers no question. */
 const holding = read(STATIC_CONFIG);
+/** « Demander » as a Worker of its own, in front of static files (lot C10). */
+const chat = read(CHAT_CONFIG);
 const APEX = ['cestecritla.fr', 'www.cestecritla.fr'];
 
 void test('the JSONC reader keeps a URL inside a string and drops a comment after it', () => {
@@ -174,6 +182,17 @@ void test('each build is deployed with its own configuration, to a named environ
   }
   assert.equal(wranglerConfig('app', 'off'), STATIC_CONFIG);
   assert.notEqual(STATIC_CONFIG, WORKER_CONFIG);
+  // The apex is files whatever the mode (lot C10): a page that asks goes there as files, and
+  // its chat is another Worker — never this one, and never the bench.
+  for (const ask of ['off', 'chat', 'bench'] as const) {
+    assert.equal(wranglerConfig('app', ask, 'apex'), STATIC_CONFIG, ask);
+    assert.deepEqual(wranglerDeployArgs('apex', 'app', [], ask), [
+      'deploy',
+      '--config',
+      'wrangler.static.jsonc',
+      '--env=',
+    ]);
+  }
 });
 
 void test('the mode read from the file is "off" unless it plainly says otherwise', () => {
@@ -217,14 +236,29 @@ void test('the Worker is deployed only when it is ready, and the bench only on t
     String(deployRefusal('apex', 'app', pages, { ...open, ask: 'bench' })),
     /bench runs on the preview host only/,
   );
-  // Neither does the chat, yet: its deployment there is a lot of the plan nobody has rehearsed
-  // — refused even as a dry run, and whatever else is ready.
+  // A page that asks goes to the apex as files (lot C10): what keeps it from going there too
+  // early is the launch — which, with the mode "chat", asks for every gate of the plan, the
+  // rehearsal of the chat's own deployment among them — dry run or not…
+  const waiting = ['data/2026/ask.json: the deployment of the chat has not been rehearsed'];
   for (const dryRun of [false, true]) {
     assert.match(
-      String(deployRefusal('apex', 'app', pages, { ...open, ask: 'chat', dryRun })),
-      /chat is not deployed to the apex by this script yet.*lot C10/,
+      String(
+        deployRefusal('apex', 'app', pages, {
+          ...open,
+          ask: 'chat',
+          dryRun,
+          launchBlockers: waiting,
+        }),
+      ),
+      /holding page until the launch is decided.*has not been rehearsed/,
     );
   }
+  // …and once nothing stands in the way, what the Worker's files lack is not its business:
+  // no script goes to the apex with the pages.
+  assert.equal(
+    deployRefusal('apex', 'app', pages, { ...open, ask: 'chat', workerProblems: unready }),
+    null,
+  );
   // An app that answers no question does not care what the Worker lacks…
   assert.equal(deployRefusal('preview', 'app', pages, { ...open, workerProblems: unready }), null);
   // …and neither does the holding page, ever: it is also the withdrawal gesture.
@@ -456,7 +490,14 @@ void test('nothing reaches wrangler that could undo a choice of the guard', () =
   assert.deepEqual(refusedArguments([]), []);
   assert.deepEqual(refusedArguments(['--bench', '--dry-run', '--outdir', 'build/worker']), []);
   assert.deepEqual(refusedArguments(['--dry-run', '--outdir=build/worker']), []);
+  // The script's own: the Worker of the chat, and the day of the accord it is deployed under.
+  assert.deepEqual(refusedArguments(['--chat', '--accord', '2026-11-14']), []);
+  assert.deepEqual(refusedArguments(['--chat', '--accord=2026-11-14', '--dry-run']), []);
   for (const args of [
+    ['--accord'],
+    ['--accord', 'yes'],
+    ['--accord=today'],
+    ['--chat', '--accord', '--env='],
     ['--env', 'production'],
     ['--env='],
     ['--config', 'wrangler.jsonc'],
@@ -477,6 +518,160 @@ void test('nothing reaches wrangler that could undo a choice of the guard', () =
   const refusedAt = deploy.indexOf('refusedArguments(given)');
   assert.ok(refusedAt > -1 && refusedAt < deploy.indexOf("existsSync('dist')"));
   assert.ok(refusedAt < deploy.indexOf('spawnSync('));
+  // …and what is its own never reaches wrangler: neither path hands on the raw arguments.
+  assert.match(deploy, /chatDeployArgs\(target, forWrangler\)/);
+  assert.match(deploy, /const passthrough = forWrangler;/);
+  assert.deepEqual(deploy.match(/'wrangler', \.\.\.\w+/g), [
+    "'wrangler', ...chatArgs",
+    "'wrangler', ...args",
+  ]);
+});
+
+void test('the chat is a Worker of its own: two exact addresses a host, no file, its own name (lot C10)', () => {
+  const preview = chat.env?.['preview'];
+  assert.ok(preview, `${CHAT_CONFIG} must declare env.preview`);
+  // Another Worker than the one that serves the pages: deploying it replaces nothing.
+  assert.notEqual(chat.name, app.name);
+  assert.equal(chat.name, 'cestecritla-chat');
+  assert.equal(chat.main, app.main, 'the same script as the Worker of the preview host');
+  assert.equal(chat.assets, undefined, 'no file goes with the chat');
+  // Routes, never custom domains: the hosts stay with the Worker that serves the files, and a
+  // route wins over a custom domain on the same host. Two exact paths, no wildcard: nothing
+  // else under /api/ reaches this script.
+  const paths = ['/api/chat', '/api/gists'];
+  assert.deepEqual(
+    hosts(chat.routes),
+    APEX.flatMap((host) => paths.map((path) => `${host}${path}`)).sort(),
+  );
+  assert.deepEqual(
+    hosts(preview.routes),
+    paths.map((path) => `beta.cestecritla.fr${path}`),
+  );
+  for (const route of [...(chat.routes ?? []), ...(preview.routes ?? [])]) {
+    assert.equal(route.custom_domain, undefined, route.pattern);
+    assert.equal(route.zone_name, 'cestecritla.fr', route.pattern);
+    assert.doesNotMatch(route.pattern, /\*/, route.pattern);
+  }
+  // `routes` is inherited: the preview environment names its own, and none is an apex address.
+  for (const pattern of hosts(preview.routes)) {
+    assert.ok(!APEX.some((host) => pattern.startsWith(`${host}/`)), pattern);
+  }
+  // The bench stays where its key is: this Worker is never given its address.
+  for (const pattern of [...hosts(chat.routes), ...hosts(preview.routes)]) {
+    assert.doesNotMatch(pattern, /bench/);
+  }
+  assert.equal(chat.workers_dev, false);
+  assert.equal(chat.preview_urls, false);
+});
+
+void test('the Worker of the chat binds what the other binds, keeps no log, and counts for itself', () => {
+  const preview = chat.env?.['preview'];
+  assert.ok(preview);
+  const environments: [string, Environment][] = [
+    ['top level', chat],
+    ['env.preview', preview],
+  ];
+  for (const [name, env] of environments) {
+    assert.equal(env.ai?.binding, 'AI', `${name}: the AI binding`);
+    assert.equal((env.d1_databases ?? [])[0]?.binding, 'DB', `${name}: the private base`);
+    assert.equal(
+      (env.durable_objects?.bindings ?? [])[0]?.name,
+      'BUDGET',
+      `${name}: the allowance`,
+    );
+    assert.equal((env.ratelimits ?? [])[0]?.name, 'RATE', `${name}: the rate limiter`);
+    assert.equal(env.observability?.enabled, false, `${name}: no logs`);
+    const absent: (keyof Environment)[] = [
+      'analytics_engine_datasets',
+      'kv_namespaces',
+      'triggers',
+      'tail_consumers',
+      'logpush',
+    ];
+    for (const key of absent) assert.equal(env[key], undefined, `${name}: ${key}`);
+  }
+  // One copy of the text at Cloudflare: the same base as the other Worker, in both environments.
+  assert.deepEqual(chat.d1_databases, app.d1_databases);
+  assert.deepEqual(preview.d1_databases, app.d1_databases);
+  // The same book, the same ceiling.
+  assert.equal(chat.vars?.['CORPUS_VERSION'], app.vars?.['CORPUS_VERSION']);
+  assert.equal(preview.vars?.['CORPUS_VERSION'], app.vars?.['CORPUS_VERSION']);
+  assert.equal(chat.vars?.['ENVIRONMENT'], 'production');
+  assert.equal(preview.vars?.['ENVIRONMENT'], 'preview');
+  // Its own counter — the class is created with this Worker — and four limiters, four names.
+  assert.deepEqual(chat.migrations, app.migrations);
+  const namespaces = [chat, preview, app, app.env?.['preview']].map(
+    (env) => (env?.ratelimits ?? [])[0]?.namespace_id,
+  );
+  assert.equal(new Set(namespaces).size, 4, namespaces.join(' '));
+  // Both files that carry the script are read by the rule that waits for the base.
+  assert.deepEqual(workerProblems(), []);
+});
+
+void test('the Worker of the chat is deployed by the script alone, with an accord given that day', () => {
+  assert.deepEqual(chatDeployArgs('preview', ['--dry-run']), [
+    'deploy',
+    '--config',
+    'wrangler.chat.jsonc',
+    '--env=preview',
+    '--dry-run',
+  ]);
+  assert.deepEqual(chatDeployArgs('apex'), ['deploy', '--config', 'wrangler.chat.jsonc', '--env=']);
+  const ready: ChatDeployContext = {
+    dryRun: false,
+    accord: '2026-11-20',
+    today: '2026-11-20',
+    workerProblems: [],
+    ask: 'chat',
+    launchBlockers: [],
+  };
+  for (const target of ['preview', 'apex'] as const) {
+    assert.equal(chatDeployRefusal(target, ready), null, target);
+    // Sending a Worker is the editor's decision at the time: no day, another day — nothing goes.
+    for (const accord of [null, '2026-11-19', 'oui']) {
+      assert.match(
+        String(chatDeployRefusal(target, { ...ready, accord })),
+        /needs the editor's accord, given today: add --accord 2026-11-20/,
+      );
+    }
+    assert.match(
+      String(chatDeployRefusal(target, { ...ready, workerProblems: ['no identifier yet'] })),
+      /not ready to be deployed — no identifier yet/,
+    );
+    // A dry run sends nothing: CI bundles this Worker whatever is still missing.
+    assert.equal(
+      chatDeployRefusal(target, {
+        ...ready,
+        dryRun: true,
+        accord: null,
+        ask: 'off',
+        workerProblems: ['no identifier yet'],
+        launchBlockers: ['the launch has not been decided'],
+      }),
+      null,
+    );
+  }
+  // The preview host is where it is rehearsed and where the chat answers first: the mode of
+  // the site and the gates of the launch do not hold it back there…
+  assert.equal(
+    chatDeployRefusal('preview', { ...ready, ask: 'off', launchBlockers: ['not rehearsed'] }),
+    null,
+  );
+  // …and they do in front of the apex: no Worker that reads questions before the chat opens,
+  // and none while a gate of the launch stands — an accord does not stand in for them.
+  assert.match(
+    String(chatDeployRefusal('apex', { ...ready, ask: 'off' })),
+    /says the site answers no question/,
+  );
+  assert.match(
+    String(chatDeployRefusal('apex', { ...ready, launchBlockers: ['not rehearsed'] })),
+    /does not go to the apex yet — not rehearsed/,
+  );
+  // The script looks at no build for it, and refuses to mix it with the bench.
+  const deploy = readFileSync('scripts/deploy.ts', 'utf8');
+  const chatAt = deploy.indexOf("given.includes('--chat')");
+  assert.ok(chatAt > -1 && chatAt < deploy.indexOf("existsSync('dist')"));
+  assert.match(deploy, /--chat and --bench name two different Workers/);
 });
 
 void test('dist/ is read, whatever the marker says: no game without its list, no question without its mode', () => {

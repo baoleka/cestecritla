@@ -532,3 +532,55 @@ en arrière ; le navigateur d'Instagram ; un lecteur d'écran.
 - **L'écriture des phrases** (lot C3) : deux séances de plus à 14 h 22 et 15 h 00 UTC — 18
   phrases écrites sur les 43 mesures du chapitre d'essai, 521 neurons en tout ce jour. Le quota
   revient par petites tranches (`neurons-log.md`).
+
+### 14 novembre 2026 — lot C10, première moitié : le chat est un Worker à part, prêt à être répété
+
+- **Le schéma retenu, écrit et construit à blanc** : la production reste des fichiers
+  statiques (`wrangler.static.jsonc`, Worker `cestecritla`) ; le chat est **un second Worker**,
+  `cestecritla-chat` (`wrangler.chat.jsonc`) — le même script, sans les fichiers, sur **deux
+  adresses exactes par hôte** : `/api/gists` et `/api/chat`. Aucun joker : rien d'autre sous
+  `/api/` ne l'atteint. Il a son compteur, son limiteur, la même base privée ; son journal est
+  coupé ; la clé du banc n'y est jamais posée, donc `/api/bench` y répond 404.
+- **Pourquoi ça doit marcher** — VÉRIFIÉ dans la documentation, pas encore sur ce compte :
+  « Routes … take precedence if configured on the same hostname » (Cloudflare, *Custom
+  Domains* et *Routes*, lu le 14/11/2026). Une route passe devant un domaine personnalisé du
+  même hôte : les deux adresses vont au chat, tout le reste au site. Retirer ce Worker rend
+  les deux adresses au site, qui y répond 404 comme pour toute page absente.
+- **Ce que ça règle** : R27 ne concerne plus la production. L'apex n'aura jamais de classe
+  Durable Object : son retrait (la page d'attente) reste un déploiement de fichiers, que rien
+  ne peut refuser. R27 reste vrai de l'aperçu, qui garde le Worker du banc.
+- **La règle de déploiement** (`scripts/build-mode.ts`, `chatDeployRefusal`, testée) :
+  `npm run deploy:chat:preview -- --accord <jour>` et `npm run deploy:chat -- --accord <jour>`,
+  et rien d'autre. Un essai à blanc n'envoie rien et passe toujours (la CI le joue dans les
+  deux environnements). Un vrai déploiement exige **l'accord du jour sur la ligne de
+  commande** ; devant l'apex il exige en plus que le site réponde aux questions (`ask.json`)
+  et que plus rien ne bloque le lancement — dont la répétition elle-même
+  (`deployment_rehearsed_on`, champ neuf de `data/2026/ask.json`, lu par `scripts/launch.ts`).
+  La page qui demande, elle, part vers l'apex en fichiers : `wranglerConfig` ne donne plus
+  jamais le Worker à l'apex.
+- **Un seul quota, plusieurs compteurs — décidé et écrit** : l'allocation gratuite est celle
+  du compte, et chaque Worker ne compte que ce qu'il dépense lui-même (le chat de la
+  production, celui de l'aperçu, le banc). Ce qu'ils ont en commun est le refus de la
+  plateforme : chacun le lit, ferme son modèle une demi-heure et répond sans lui. Aucune
+  facture n'est possible (aucun moyen de paiement) ; le risque est qu'un banc affame les
+  visiteurs. **Règle d'exploitation** : une fois le chat ouvert en production, tout banc et
+  toute écriture de phrases se lancent avec un budget court, la nuit. À savoir aussi : le
+  compte porte d'autres Workers que ceux de ce projet — les plafonds gratuits (requêtes,
+  neurons) sont ceux du compte entier.
+- **La répétition, à jouer sur l'aperçu avec l'accord de l'éditeur** (premier déploiement
+  d'un Worker, puis sa suppression) :
+  1. `npm run deploy:chat:preview -- --accord <jour>` : le Worker `cestecritla-chat-preview`
+     prend `beta.cestecritla.fr/api/gists` et `/api/chat`.
+  2. Les deux adresses répondent comme avant (« local », « rien » ; champ inconnu 400 ; autre
+     origine 403) ; `/api/bench` répond toujours par l'ancien Worker ; les pages n'ont pas
+     bougé (comparaison fichier par fichier).
+  3. **Qui a répondu** se lit dans le décompte de la plateforme, par Worker et par minute
+     (`workersInvocationsAdaptive`, lecture seule — la méthode est essayée : elle montre les
+     sondes de 15 h 17 UTC sous `cestecritla-preview`) : les envois vers les deux adresses
+     doivent apparaître sous le nouveau nom, ceux vers `/api/bench` sous l'ancien.
+  4. Le retrait : supprimer ce Worker, puis vérifier que les deux adresses reviennent à
+     l'ancien — et que rien d'autre n'a changé.
+  5. Un oui ou un non écrit ici ; si oui, `deployment_rehearsed_on` est daté.
+- **Reste pour l'ouverture de l'aperçu (lot C11)** : le mode par hôte — ouvrir l'aperçu sans
+  la production —, le secret du limiteur à poser sur le nouveau Worker (sans lui il se ferme :
+  « local », « rien »), et les portes du §5.

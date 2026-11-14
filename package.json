@@ -18,6 +18,8 @@
     "preview": "astro preview",
     "deploy": "tsx scripts/deploy.ts apex",
     "deploy:preview": "tsx scripts/deploy.ts preview",
+    "deploy:chat": "tsx scripts/deploy.ts apex --chat",
+    "deploy:chat:preview": "tsx scripts/deploy.ts preview --chat",
     "ingest": "tsx scripts/ingest.ts",
     "typecheck": "wrangler types >/dev/null && tsc --noEmit && tsc -p src/worker/tsconfig.json --noEmit && astro check --tsconfig tsconfig.app.json",
     "test": "tsx --test scripts/*.test.ts",
