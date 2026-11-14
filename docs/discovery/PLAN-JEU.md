@@ -2057,3 +2057,11 @@ questions, quatre réponses ; trois ne suivent pas ce que la session recommandai
 - **Ce que la décision change** : le site ne refuse plus les robots d'entraînement d'IA et
   n'émet plus de réserve de droits ; les moteurs de recherche étaient déjà admis.
 
+### 14 novembre 2026, 13 h — la purge s'arrête au dépôt visible (D16.44)
+
+- L'éditeur a demandé à quoi servirait le message au support de GitHub. Réponse vérifiée sur
+  place : dans l'historique actuel le fichier n'existe plus, mais GitHub répond encore à
+  l'adresse de l'ancien commit, fichier compris — et lui seul peut effacer ces objets.
+- **Sa décision : « j'en reste là ».** Aucune demande n'est envoyée ; le risque est consigné et
+  accepté (`14-risques.md` R33). Le message reste sur sa machine, prêt s'il change d'avis.
+
