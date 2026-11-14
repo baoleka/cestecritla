@@ -1912,3 +1912,26 @@ défaut ». La session a répondu qu'elle ne daterait pas à sa place les gestes
   de cette boîte, pas de l'adresse de contact.
 - **La bascule** : « Oui, bascule » — `"apex": "app"` dans `data/launch.json` ;
   `scripts/launch.ts` répond « nothing is missing ».
+
+### 14 novembre 2026, 11 h — la production est basculée (lot P, D16.36)
+
+- **`cestecritla.fr` et `www.cestecritla.fr` servent l'app**, en « recherche seule », à la place
+  de la page d'attente : `npm run build && npm run deploy` depuis le commit `c94cadf`
+  (Worker `cestecritla`, fichiers statiques seuls, version `aed7d943`). Avant de déployer, toute
+  la batterie de portes a été rejouée sur cette build : verte.
+- **VÉRIFIÉ en ligne, sur chacun des deux hôtes** : 1 150 fichiers de `dist/` sur 1 154 servis à
+  l'identique, empreinte pour empreinte (les quatre écarts sont ceux de l'aperçu : `/404.html`
+  redirige vers `/404`, `/robots.txt` est précédé du bloc de la zone, `_headers` et
+  `_redirects` ne se servent pas) ; 27 contrôles dans trois navigateurs, soit 81, tous tenus ;
+  aucun en-tête ni balise `noindex` ; l'adresse canonique est celle de l'apex ; `robots.txt`
+  ouvre le site et nomme le plan du site. Le site est donc indexable depuis cette heure.
+- **Ce que la production n'a pas** : ni Worker avec code, ni modèle, ni base. La base privée et
+  le Worker du banc restent sur l'aperçu, qui sert les mêmes pages.
+- **Ce qui reste derrière le lancement**, dans l'ordre : le premier push — le dépôt public que
+  la page « Licence » nomme porte encore l'app du 12 novembre (51 commits locaux, D16.29, R28) ;
+  les gestes datés sur instruction et non vus (D16.34) ; ce que la session des personas laisse
+  à trancher (`13-tests-humains.md` §7.5), la ligne du lait-fraise en tête ; le sort de la base
+  privée et du Worker du banc.
+- **Le geste de retrait ne change pas** (D14.10) : `"apex": "holding"` dans `data/launch.json`,
+  puis `npm run build:holding && npm run deploy`. Rien ne le bloque.
+
