@@ -19,9 +19,9 @@
  */
 import { readFileSync } from 'node:fs';
 import { MODELS, isModelKey } from '../worker/models.ts';
+import { modeFor, type AskHost, type SiteMode } from './ask-mode.ts';
 
-/** What the site does with a question: the sheet, or nothing. */
-export type SiteMode = 'chat' | 'off';
+export type { SiteMode };
 
 export interface AskSite {
   mode: SiteMode;
@@ -35,13 +35,20 @@ const fileMode = (): Record<string, unknown> =>
   JSON.parse(readFileSync('data/2026/ask.json', 'utf8')) as Record<string, unknown>;
 
 /**
+ * The host this build is made for (scripts/build.ts, `--host preview`): the preview host may
+ * ask while production still answers nothing (src/lib/ask-mode.ts). A build made without the
+ * flag is production's — the one that opens last.
+ */
+const buildHost = (): AskHost => (process.env['CEL_HOST'] === 'preview' ? 'preview' : 'apex');
+
+/**
  * Whether this site answers questions at all — asked of the mode, not of the day. `askSite()`
  * says "off" in the build served during a silence window; a sentence ABOUT that window needs to
  * know what is paused, and must not name questions on a site that never had any (a persona,
  * 14/11/2026: « Les questions ? Quelles questions ? J'en ai jamais vu. »).
  */
 export function asksQuestions(): boolean {
-  return process.env['CEL_ASK_TEST'] === 'chat' || fileMode()['mode'] === 'chat';
+  return process.env['CEL_ASK_TEST'] === 'chat' || modeFor(fileMode(), buildHost()) === 'chat';
 }
 
 /** The sentence that says what a silence window pauses, on this site. */
@@ -55,7 +62,9 @@ export function askSite(): AskSite {
   if (process.env['CEL_ASK_TEST'] === 'chat') {
     return { mode: 'chat', modelName: MODELS['mistral-small-3.1'].name };
   }
-  const { mode, model } = fileMode();
+  const file = fileMode();
+  const mode = modeFor(file, buildHost());
+  const { model } = file;
   if (mode !== 'chat') return OFF;
   // A mode that opens without a model to name is a broken file: the build stops rather than
   // ship a button that can only disappoint.

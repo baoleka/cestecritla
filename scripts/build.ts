@@ -127,6 +127,17 @@ if (askTest !== null && mode !== 'app') throw new Error('--ask-test is a build o
  */
 const scrutin = process.argv.includes('--scrutin');
 if (scrutin && mode !== 'app') throw new Error('--scrutin is a build of the app');
+/**
+ * The host the pages are built for (src/lib/ask-mode.ts): `--host preview` is the build of the
+ * preview host, which may ask a question while production still answers none. Without the
+ * flag the build is production's. The marker says which, and scripts/deploy.ts sends neither
+ * to the other host if they differ in what they do with a question.
+ */
+const hostAt = process.argv.indexOf('--host');
+const host = hostAt === -1 ? 'apex' : (process.argv[hostAt + 1] ?? '');
+if (host !== 'apex' && host !== 'preview') throw new Error('--host takes "preview" or "apex"');
+if (host === 'preview' && mode !== 'app') throw new Error('--host is a build of the app');
+if (host === 'preview' && askTest !== null) throw new Error('--host and --ask-test do not mix');
 const outDir = askTest === null ? 'dist' : scrutin ? 'dist-scrutin' : 'dist-ask';
 
 function run(step: Step): number {
@@ -179,6 +190,7 @@ execFileSync('npx', ['--no-install', 'astro', 'build', '--outDir', outDir], {
     // it stands, validated or not. It goes to dist-ask/, which nothing deploys.
     CEL_GAME_TEST: askTest === null ? '' : '1',
     CEL_SCRUTIN: scrutin ? '1' : '',
+    CEL_HOST: host === 'preview' ? 'preview' : '',
   },
 });
 console.log(`✓ astro build (${String(Date.now() - astroStarted)} ms)`);
@@ -200,7 +212,11 @@ if (askTest === null) {
   mkdirSync(resolve(root, 'build'), { recursive: true });
   writeFileSync(
     resolve(root, BUILD_MARKER),
-    `${JSON.stringify(scrutin ? { mode, scrutin: true } : { mode })}\n`,
+    `${JSON.stringify({
+      mode,
+      ...(scrutin ? { scrutin: true } : {}),
+      ...(host === 'preview' ? { host } : {}),
+    })}\n`,
   );
 }
 

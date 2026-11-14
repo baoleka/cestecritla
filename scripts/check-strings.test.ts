@@ -345,7 +345,8 @@ const WITHDRAWN_LIANT_KEYS: Readonly<Record<string, string>> = {
   'chat.liant.corrige': 'D16.5 — une réponse ne corrige pas la personne qui demande',
   'chat.liant.precise': 'D16.5 — une nuance est un jugement porté sur la question',
   'chat.liant.absent': 'D16.4 — remplacée par refusal.not_found.*, que la recherche affiche déjà',
-  'chat.liant.voici': 'D16.47 — le modèle ne dit plus ce que prévoient les mesures : les phrases relues le disent',
+  'chat.liant.voici':
+    'D16.47 — le modèle ne dit plus ce que prévoient les mesures : les phrases relues le disent',
   'chat.liant.where': 'D16.47 — la sélection par le modèle est retirée avec la réponse écrite',
 };
 

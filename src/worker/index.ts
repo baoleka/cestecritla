@@ -33,6 +33,7 @@ import askConfig from '../../data/2026/ask.json';
 import glossary from '../../data/2026/glossary.json';
 import riposte from '../../data/2026/riposte.json';
 import { parseAskRequest } from '../lib/ask-contract.js';
+import { modeFor } from '../lib/ask-mode.js';
 import { validateExplanation } from '../lib/ask-validate.js';
 import { consentOf } from '../lib/chat-consent.js';
 import {
@@ -115,17 +116,21 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 const KNOWN = knownOf(glossary.entries, riposte.entries);
 
 /**
- * The chat as this Worker runs it: open only when data/2026/ask.json says "chat" AND names a
- * model whose host writes that it keeps nothing of a call (src/worker/models.ts) — a question
- * is never handed to another.
+ * The chat as this Worker runs it: open only when data/2026/ask.json says "chat" for the host
+ * this Worker serves (`ENVIRONMENT`: the preview host may ask before production does) AND
+ * names a model whose host writes that it keeps nothing of a call (src/worker/models.ts) — a
+ * question is never handed to another.
  */
-function chatConfigured(): {
+function chatConfigured(env: Env): {
   mode: 'chat' | 'off';
   model: ModelSpec | null;
   minShared: number | undefined;
 } {
   const config: Record<string, unknown> = askConfig;
-  const { mode, model, min_shared: minShared } = config;
+  const { model, min_shared: minShared } = config;
+  // The same rule as the pages (src/lib/ask-mode.ts): the preview host may ask before
+  // production does, never the other way. Anything but "preview" is production.
+  const mode = modeFor(config, env.ENVIRONMENT === 'preview' ? 'preview' : 'apex');
   const reads = isModelKey(model) && keepsNothing(model) ? MODELS[model] : null;
   return {
     mode: mode === 'chat' && reads !== null ? 'chat' : 'off',
@@ -236,7 +241,7 @@ async function handleGists(request: Request, env: Env, origin: string): Promise<
   if (asked === null) return empty(400);
 
   const silence = silenceNow();
-  const config = chatConfigured();
+  const config = chatConfigured(env);
   if (!silence.silent && config.mode === 'chat' && !(await withinRate(request, env, 'gists'))) {
     return json(LOCAL_GISTS);
   }
@@ -260,7 +265,7 @@ async function handleChat(request: Request, env: Env, origin: string): Promise<R
   if (asked === null) return empty(400);
 
   const silence = silenceNow();
-  const config = chatConfigured();
+  const config = chatConfigured(env);
   if (!silence.silent && config.mode === 'chat' && !(await withinRate(request, env, 'chat'))) {
     return json(QUIET);
   }

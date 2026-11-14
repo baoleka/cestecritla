@@ -20,6 +20,7 @@
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import { modeFor } from '../src/lib/ask-mode.js';
 import { SILENCE_APPROACH_MS, silenceWindows, type SilenceWindow } from '../src/lib/silence.js';
 import { parseJsonc } from './jsonc.js';
 
@@ -60,18 +61,47 @@ export const ASK_PATH = 'data/2026/ask.json';
  */
 export type AskDeploy = 'off' | 'chat' | 'bench';
 
-/** The mode the committed file says. Anything unreadable is "off": no Worker by accident. */
-export function readAskMode(path: string = ASK_PATH): Exclude<AskDeploy, 'bench'> {
+/**
+ * The mode the committed file says for a host (src/lib/ask-mode.ts): production's unless the
+ * preview host is named — it may ask first. Anything unreadable is "off": no Worker by accident.
+ */
+export function readAskMode(
+  path: string = ASK_PATH,
+  target: DeployTarget = 'apex',
+): Exclude<AskDeploy, 'bench'> {
   if (!existsSync(path)) return 'off';
   try {
-    const parsed: unknown = JSON.parse(readFileSync(path, 'utf8'));
-    if (typeof parsed === 'object' && parsed !== null && 'mode' in parsed) {
-      if (parsed.mode === 'chat') return 'chat';
-    }
+    return modeFor(JSON.parse(readFileSync(path, 'utf8')) as unknown, target);
   } catch {
     return 'off';
   }
-  return 'off';
+}
+
+/**
+ * The host the build in dist/ was made for (`npm run build -- --host preview`). A build made
+ * before the marker said so is production's: the one that opens last.
+ */
+export function readBuildHost(marker: string = BUILD_MARKER): DeployTarget {
+  if (!existsSync(marker)) return 'apex';
+  try {
+    const parsed: unknown = JSON.parse(readFileSync(marker, 'utf8'));
+    return typeof parsed === 'object' &&
+      parsed !== null &&
+      'host' in parsed &&
+      parsed.host === 'preview'
+      ? 'preview'
+      : 'apex';
+  } catch {
+    return 'apex';
+  }
+}
+
+/** What the build sitting in dist/ does with a question: the mode of the host it was made for. */
+export function builtAskMode(
+  path: string = ASK_PATH,
+  marker: string = BUILD_MARKER,
+): Exclude<AskDeploy, 'bench'> {
+  return readAskMode(path, readBuildHost(marker));
 }
 
 /**
@@ -195,6 +225,11 @@ export interface ChatDeployContext {
   ask: Exclude<AskDeploy, 'bench'>;
   /** What still stands between the app and the apex (scripts/launch.ts). */
   launchBlockers: readonly string[];
+  /**
+   * What still stands between the preview host and its first question (`previewChatBlockers`):
+   * this Worker carries the mode of that host, so deploying it there is what opens the routes.
+   */
+  previewBlockers: readonly string[];
 }
 
 /**
@@ -219,6 +254,9 @@ export function chatDeployRefusal(target: DeployTarget, context: ChatDeployConte
   }
   if (target === 'apex' && context.launchBlockers.length > 0) {
     return `the chat does not go to the apex yet — ${context.launchBlockers.join(' · ')}`;
+  }
+  if (target === 'preview' && context.previewBlockers.length > 0) {
+    return `the preview host does not ask yet — ${context.previewBlockers.join(' · ')}`;
   }
   if (context.accord !== context.today) {
     return (
@@ -301,7 +339,7 @@ export function distProblems(
     out.push('dist/ shows a game built from another list of words');
   }
   if (dist.asks && (expected.ask === 'off' || expected.ask === 'bench')) {
-    out.push(`dist/ sends questions, and ${ASK_PATH} says the site answers none`);
+    out.push(`dist/ sends questions, and ${ASK_PATH} says this host answers none`);
   }
   return out;
 }
@@ -406,6 +444,11 @@ export interface DeployContext {
   ask: AskDeploy;
   /** What the Worker's configuration still lacks (`workerProblems`): empty when it is ready. */
   workerProblems: readonly string[];
+  /**
+   * What still stands between the preview host and its first question (scripts/launch.ts,
+   * `previewChatBlockers`): empty when it may ask — and when it does not ask at all.
+   */
+  previewBlockers: readonly string[];
   /** Where dist/ disagrees with the data it would go out under (`distProblems`). */
   distProblems: readonly string[];
 }
@@ -488,6 +531,17 @@ export function deployRefusal(
   // to the preview host alone: the apex never runs a model nobody has chosen yet.
   if (mode === 'app' && context.ask === 'bench' && target !== 'preview') {
     return 'the bench runs on the preview host only: `npm run deploy:preview -- --bench`';
+  }
+  // The preview host is public: before its pages ask, the gates that come before any question
+  // hold (scripts/launch.ts, `previewChatBlockers`). A dry run sends nothing.
+  if (
+    mode === 'app' &&
+    target === 'preview' &&
+    context.ask === 'chat' &&
+    context.previewBlockers.length > 0 &&
+    !context.dryRun
+  ) {
+    return `the preview host does not ask yet — ${context.previewBlockers.join(' · ')}`;
   }
   // A page that asks goes to the apex as files, like any other (lot C10): its chat is another
   // Worker (`CHAT_CONFIG`, `chatDeployRefusal`). What keeps it from going there too early is

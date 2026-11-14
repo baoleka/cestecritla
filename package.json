@@ -12,6 +12,7 @@
     "build": "tsx scripts/build.ts",
     "build:fast": "tsx scripts/build.ts --fast",
     "build:holding": "tsx scripts/build.ts --holding",
+    "build:preview": "tsx scripts/build.ts --host preview",
     "build:ask": "tsx scripts/build.ts --ask-test chat",
     "build:scrutin": "tsx scripts/build.ts --scrutin",
     "build:scrutin:test": "tsx scripts/build.ts --scrutin --ask-test chat",

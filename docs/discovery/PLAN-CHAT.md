@@ -600,3 +600,30 @@ en arrière ; le navigateur d'Instagram ; un lecteur d'écran.
   (`scripts/e2e-ask.ts`). VÉRIFIÉ en local (111, 104 et 104 contrôles) ; la CI le dira.
 - **Ce que ça apprend** : une porte verte en local n'est pas une porte verte — la CI se lit
   après chaque push, pas seulement la batterie.
+
+### 14 novembre 2026 — avant le lot C11 : l'aperçu peut demander avant la production
+
+- **Pourquoi maintenant.** Les quarante fils de l'éditeur (lot C8) se lisent sur l'aperçu : il
+  doit pouvoir répondre alors que la production reste en « recherche seule ». Avec un seul
+  mode, écrire « chat » dans `ask.json` aurait gelé la production — plus un seul redéploiement,
+  pas même une correction, jusqu'à la dernière porte du lancement.
+- **Une règle, trois lecteurs** (`src/lib/ask-mode.ts`, `modeFor`) : `mode` est celui de la
+  production ; `preview_mode` ouvre l'aperçu avant elle, **jamais l'inverse** — et quand la
+  production demande, l'aperçu demande aussi. Les pages la lisent à la build
+  (`npm run build:preview`, soit `--host preview` ; la marque de build dit pour quel hôte),
+  le Worker par sa variable `ENVIRONMENT`, le déploiement par sa cible.
+- **L'aperçu a ses propres portes** (`scripts/launch.ts`, `previewChatBlockers`) : il est
+  public, y répondre c'est déjà traiter. Avant qu'il demande : un modèle à « zéro rétention »,
+  un banc des explications enregistré, un dépôt de phrases relues pour ce livre, la répétition
+  du déploiement, la page Confidentialité relue telle qu'elle est, et **le dossier légal fait
+  pour de vrai** (`preview_legal_on`, champ neuf). Les portes de la production seule — chaque
+  mesure lue, quarante fils, le modèle confirmé — se mesurent justement là. Ces portes
+  retiennent les pages **et** le Worker du chat sur l'aperçu ; un essai à blanc passe toujours.
+- **Essayé de bout en bout dans une copie jetable** où l'aperçu était mis à « chat » : la build
+  faite pour l'aperçu porte la feuille, son script et la section « Quand tu demandes » ; celle
+  de la production n'en porte rien ; le déploiement refuse la première tant que ses portes ne
+  tiennent pas, et un faux `wrangler` tenait la place du vrai — rien n'a été envoyé. VÉRIFIÉ
+  (sorties du jour ; la copie est supprimée).
+- **Les portes qui jugent `dist/`** lisent désormais le mode de l'hôte pour lequel la build a
+  été faite (`builtAskMode`), plus celui de la production.
+- **Rien n'est ouvert** : le fichier dit « off » pour les deux hôtes.

@@ -30,6 +30,7 @@ import { firstWordsOf, isLocatorDisplay, quoted } from '../src/lib/first-words.j
 import { gameSite } from '../src/lib/game-data.js';
 import { CRAWL_ROOT, type FetchLog } from './aec26-source.js';
 import type { Manifest } from './aec26-types.js';
+import { builtAskMode } from './build-mode.js';
 import { STILL, lateLayoutShift } from './e2e-kit.js';
 
 const ENGINES: Record<string, BrowserType> = { chromium, firefox, webkit };
@@ -488,8 +489,7 @@ async function runEngine(
     );
 
     // --- 5 bis. while the site answers no question, nothing of « Demander » exists on the page
-    const asking = (JSON.parse(readFileSync('data/2026/ask.json', 'utf8')) as { mode?: unknown })
-      .mode;
+    const asking = builtAskMode();
     if (asking !== 'chat') {
       await page.goto(`${origin}/`);
       await page.focus('#q');

@@ -28,6 +28,8 @@ import { canonicalHash, listFingerprint } from '../src/lib/fingerprint.js';
 import { WORD_LINKS_PATH, highlightedWords, wordsFingerprint } from '../src/lib/word-links.js';
 import { LOCAL_CHECKS } from '../src/lib/game.js';
 import { citationPolicyValidated } from './build-mode.js';
+import { modeFor } from '../src/lib/ask-mode.js';
+import { isModelKey, keepsNothing } from '../src/worker/models.js';
 
 export { canonicalHash };
 
@@ -231,6 +233,12 @@ export function artefactBlockers(root = '.'): string[] {
     out.push(`how a question is answered is not decided: ${ASK_PATH} is missing (lot I6)`);
   } else if (ask.mode !== 'chat' && ask.mode !== 'off') {
     out.push(`${ASK_PATH}: mode must be "chat" or "off"`);
+  } else if (
+    ask.preview_mode !== undefined &&
+    ask.preview_mode !== 'chat' &&
+    ask.preview_mode !== 'off'
+  ) {
+    out.push(`${ASK_PATH}: preview_mode must be "chat" or "off"`);
   } else if (ask.mode === 'off') {
     // "Search only" is the last rung of the ladder, and a decision like the others: a file
     // that says "off" because no bench has run yet decides nothing, and must not pass for it.
@@ -342,6 +350,58 @@ export function artefactBlockers(root = '.'): string[] {
     } else if (turtle.same_character_sha256 !== drawing) {
       out.push(`${TURTLE_VALIDATION_PATH}: the drawing changed after "same character?" was asked`);
     }
+  }
+  return out;
+}
+
+/**
+ * Why the preview host may not ask yet — empty when it may, and when it does not ask at all.
+ *
+ * The preview host is public: `noindex`, but whoever has its address reads it, and answering a
+ * question there is already processing one (11-conformite.md §6.2 sexies). So the host that
+ * opens first has gates of its own — those of PLAN-CHAT §5 that come before anyone asks, as far
+ * as a file can carry them. The others (every measure read, forty threads, the model confirmed)
+ * are production's: they are measured on this very host.
+ */
+export function previewChatBlockers(root = '.', privacyHash?: string): string[] {
+  const at = (path: string): string => (root === '.' ? path : `${root}/${path}`);
+  const ask = readObject(at(ASK_PATH));
+  if (modeFor(ask, 'preview') !== 'chat') return [];
+  const out: string[] = [];
+  const corpus = field(field(readObject(at(MANIFEST_PATH)), 'meta'), 'corpus_version');
+  if (!isModelKey(ask?.model) || !keepsNothing(ask.model)) {
+    out.push(
+      `${ASK_PATH}: no model is named whose host writes that it keeps nothing of a call: model`,
+    );
+  }
+  if (typeof field(ask?.bench, 'sha256') !== 'string' || !isDate(field(ask?.bench, 'run_on'))) {
+    out.push(`${ASK_PATH}: no bench of the explanations is recorded: bench (lot C8)`);
+  }
+  const gists = ask?.gists;
+  if (
+    field(gists, 'corpus_version') !== corpus ||
+    typeof field(gists, 'sha256') !== 'string' ||
+    !isDate(field(gists, 'deposited_on'))
+  ) {
+    out.push(`${ASK_PATH}: no read sentence is deposited for this book: gists (lot C3)`);
+  }
+  if (!isDate(ask?.deployment_rehearsed_on)) {
+    out.push(
+      `${ASK_PATH}: the deployment of the chat has not been rehearsed: deployment_rehearsed_on (lot C10)`,
+    );
+  }
+  if (!isDate(ask?.preview_legal_on)) {
+    out.push(
+      `${ASK_PATH}: the legal file of the chat is not done for real — the reading of the gesture, the register, the short impact assessment, the captures of the dashboard: preview_legal_on`,
+    );
+  }
+  const launch = readObject(at(LAUNCH_PATH));
+  const privacy = field(launch, 'privacy_page');
+  const today = privacyHash ?? privacyStringsHash(readObject(at(STRINGS_PATH)) ?? {});
+  if (!isDate(field(privacy, 'reviewed_on')) || field(privacy, 'sha256') !== today) {
+    out.push(
+      `${LAUNCH_PATH}: the privacy page — where the agreement of the sheet sends its reader — is not re-read as it stands: privacy_page`,
+    );
   }
   return out;
 }

@@ -45,7 +45,7 @@ import {
   wranglerDeployArgs,
   type AskDeploy,
 } from './build-mode.js';
-import { launchBlockers, readLaunchInputs } from './launch.js';
+import { launchBlockers, previewChatBlockers, readLaunchInputs } from './launch.js';
 
 const [target, ...given] = process.argv.slice(2);
 if (target !== 'apex' && target !== 'preview') {
@@ -122,8 +122,9 @@ if (given.includes('--chat')) {
     accord,
     today,
     workerProblems: workerProblems(),
-    ask: readAskMode(),
+    ask: readAskMode(undefined, 'apex'),
     launchBlockers: launchBlockers(readLaunchInputs()),
+    previewBlockers: previewChatBlockers(),
   });
   if (refusal !== null) {
     console.error(`deploy refused (${target}, the Worker of the chat): ${refusal}`);
@@ -138,7 +139,10 @@ if (given.includes('--chat')) {
 // `--bench` is ours, not wrangler's: the Worker goes to the preview host while the page still
 // answers no question, so that the bench can measure the candidates on the production path.
 const passthrough = forWrangler;
-const ask: AskDeploy = given.includes('--bench') ? 'bench' : readAskMode();
+// What this host does with a question (src/lib/ask-mode.ts): the preview host may ask first.
+// With `--bench` the Worker goes out all the same — unless the pages of that host ask already.
+const hostAsk = readAskMode(undefined, target);
+const ask: AskDeploy = given.includes('--bench') && hostAsk === 'off' ? 'bench' : hostAsk;
 if (!existsSync('dist')) {
   console.error('deploy refused: no dist/ — build first');
   process.exit(1);
@@ -159,6 +163,7 @@ const refusal = deployRefusal(target, mode, pages, {
   scrutinBuild,
   ask,
   workerProblems: workerProblems(),
+  previewBlockers: previewChatBlockers(),
   distProblems: mode === 'app' ? distProblems(readDist('dist'), { gameFile, ask }) : [],
 });
 if (refusal !== null) {

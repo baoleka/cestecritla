@@ -36,13 +36,17 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { appVoiceOnly } from './app-voice.js';
 import { MODELS, isModelKey } from '../src/worker/models.js';
-import { STATIC_CONFIG, WORKER_CONFIG, readAskMode, wranglerConfig } from './build-mode.js';
+import {
+  CHAT_CONFIG,
+  STATIC_CONFIG,
+  WORKER_CONFIG,
+  builtAskMode,
+  wranglerConfig,
+} from './build-mode.js';
 
 const strings = JSON.parse(readFileSync('design/strings.json', 'utf8')) as Record<string, unknown>;
-/** What the site says it does with a question, and the configuration that mode deploys. */
-const askMode = readAskMode();
-const deployed = wranglerConfig('app', askMode);
-const wrangler = readFileSync(deployed, 'utf8');
+/** What the build in dist/ does with a question: the mode of the host it was made for. */
+const askMode = builtAskMode();
 
 /** A runtime AI, or a component that is not deployed while the mode is "off". */
 const MENTIONS_ABSENT_COMPONENT =
@@ -50,8 +54,9 @@ const MENTIONS_ABSENT_COMPONENT =
 
 const EXEMPT = new Set(['about.no_ai', 'about.writing_method']);
 
-/** The deployed configuration, not the sketch in 09-architecture.md §2. */
-const aiBindingDeployed = /"ai"\s*:/.test(wrangler.replace(/\/\/.*$/gm, ''));
+/** Whether a configuration binds a model — read in the file, not in the sketch of 09-architecture.md §2. */
+const bindsAi = (config: string): boolean =>
+  /"ai"\s*:/.test(readFileSync(config, 'utf8').replace(/\/\/.*$/gm, ''));
 
 const htmlFiles = (dir: string): string[] => {
   if (!existsSync(dir)) return [];
@@ -61,17 +66,26 @@ const htmlFiles = (dir: string): string[] => {
   });
 };
 
-void test('the configuration the mode deploys carries an AI exactly when the mode says so (D16.4)', () => {
-  // "off" deploys static files: no script, so no model can exist.
-  assert.equal(deployed, askMode === 'off' ? STATIC_CONFIG : WORKER_CONFIG);
-  assert.equal(aiBindingDeployed, askMode !== 'off', `${deployed}: the AI binding`);
+void test('a model is bound only where a script runs, and the pages of production never go out with one (D16.4, lot C10)', () => {
+  // Static files: no script, so no model can exist. That is what "off" deploys anywhere — and
+  // what the apex gets in every mode: its chat is a Worker of its own.
+  assert.equal(bindsAi(STATIC_CONFIG), false, `${STATIC_CONFIG}: the AI binding`);
+  assert.equal(wranglerConfig('app', 'off', 'preview'), STATIC_CONFIG);
+  for (const mode of ['off', 'chat', 'bench'] as const) {
+    assert.equal(wranglerConfig('app', mode, 'apex'), STATIC_CONFIG, mode);
+    // The holding page never runs anything, whatever the mode.
+    assert.equal(wranglerConfig('holding', mode, 'apex'), STATIC_CONFIG, mode);
+    assert.equal(wranglerConfig('holding', mode, 'preview'), STATIC_CONFIG, mode);
+  }
+  // A model exists in the two configurations that carry the script, and nowhere else.
+  for (const config of [WORKER_CONFIG, CHAT_CONFIG]) {
+    assert.equal(bindsAi(config), true, `${config}: the AI binding`);
+  }
   // No configuration carries a bot check, in any mode: there is none (D16.23).
-  for (const config of [STATIC_CONFIG, WORKER_CONFIG]) {
+  for (const config of [STATIC_CONFIG, WORKER_CONFIG, CHAT_CONFIG]) {
     const code = readFileSync(config, 'utf8').replace(/\/\/.*$/gm, '');
     assert.doesNotMatch(code, /turnstile/i, `${config}: Turnstile`);
   }
-  // The holding page never runs anything, whatever the mode.
-  assert.equal(wranglerConfig('holding', askMode), STATIC_CONFIG);
 });
 
 /**

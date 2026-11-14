@@ -14,6 +14,7 @@ import { gzipSync } from 'node:zlib';
 import { join, extname, relative } from 'node:path';
 import { test } from 'node:test';
 import { appVoiceOnly } from './app-voice.js';
+import { builtAskMode } from './build-mode.js';
 
 const walk = (dir: string): string[] => {
   if (!existsSync(dir)) return [];
@@ -177,10 +178,10 @@ void test('initial JS stays under the P2 budget of 100 KB gzip', () => {
 
 void test('a site that answers no question ships nothing of the sheet: not a script, not a text, not a word', () => {
   if (skip || !existsSync('dist/sommaire/index.html')) return; // no build, or the holding one
-  // dist/ is the build of the mode data/2026/ask.json says. While that mode is "off" the home
-  // page does not even import the sheet (astro.config.ts, `__CEL_CHAT__`).
-  const mode = (JSON.parse(read('data/2026/ask.json')) as { mode?: unknown }).mode;
-  if (mode === 'chat') return;
+  // dist/ is the build of the mode data/2026/ask.json says for the host it was made for
+  // (scripts/build-mode.ts, `builtAskMode`). While that mode is "off" the home page does not
+  // even import the sheet (astro.config.ts, `__CEL_CHAT__`).
+  if (builtAskMode() === 'chat') return;
   assert.deepEqual(
     files.filter((f) => /\/_astro\/chat\.|\/data\/clair-/.test(f)),
     [],

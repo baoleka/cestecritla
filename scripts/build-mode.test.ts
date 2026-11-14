@@ -23,6 +23,7 @@ import {
   UNSET_DATABASE_ID,
   WORKER_CONFIG,
   appRedirects,
+  builtAskMode,
   chatDeployArgs,
   chatDeployRefusal,
   chatWithdrawArgs,
@@ -34,6 +35,7 @@ import {
   insideSilenceWindow,
   nearSilenceWindow,
   readAskMode,
+  readBuildHost,
   readBuildScrutin,
   readDist,
   refusedArguments,
@@ -54,6 +56,7 @@ const VALIDATED: DeployContext = {
   scrutinBuild: false,
   ask: 'off',
   workerProblems: [],
+  previewBlockers: [],
   distProblems: [],
 };
 
@@ -530,6 +533,95 @@ void test('nothing reaches wrangler that could undo a choice of the guard', () =
   ]);
 });
 
+void test('the preview host may ask before production does, never the other way (lot C11)', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'host-'));
+  const file = join(dir, 'ask.json');
+  const says = (content: unknown): void => {
+    writeFileSync(file, JSON.stringify(content));
+  };
+  says({ mode: 'off', preview_mode: 'chat' });
+  assert.equal(readAskMode(file, 'preview'), 'chat');
+  assert.equal(readAskMode(file, 'apex'), 'off');
+  assert.equal(readAskMode(file), 'off', 'without a host, the mode is production’s');
+  // When production asks, the preview asks too: it is where production is tried.
+  says({ mode: 'chat', preview_mode: 'off' });
+  assert.equal(readAskMode(file, 'preview'), 'chat');
+  assert.equal(readAskMode(file, 'apex'), 'chat');
+  for (const odd of [{ mode: 'off', preview_mode: 'on' }, { preview_mode: 'chat ' }, [], null]) {
+    says(odd);
+    assert.equal(readAskMode(file, 'preview'), 'off', JSON.stringify(odd));
+  }
+  // The build says which host it was made for; a marker that says nothing is production's.
+  const marker = join(dir, 'last-build.json');
+  assert.equal(readBuildHost(marker), 'apex');
+  writeFileSync(marker, '{"mode":"app"}');
+  assert.equal(readBuildHost(marker), 'apex');
+  writeFileSync(marker, '{"mode":"app","host":"preview"}');
+  assert.equal(readBuildHost(marker), 'preview');
+  writeFileSync(marker, '{ not json');
+  assert.equal(readBuildHost(marker), 'apex');
+  // What a build in dist/ does with a question is the mode of the host it was made for.
+  says({ mode: 'off', preview_mode: 'chat' });
+  writeFileSync(marker, '{"mode":"app","host":"preview"}');
+  assert.equal(builtAskMode(file, marker), 'chat');
+  writeFileSync(marker, '{"mode":"app"}');
+  assert.equal(builtAskMode(file, marker), 'off');
+
+  // A build that asks, made for the preview host, never reaches the apex: the directory is
+  // read, and production's mode says the site answers none.
+  const pages = ['index.html', 's/p1c1-s01/index.html'];
+  const open: DeployContext = { ...VALIDATED, launchBlockers: [] };
+  const asks = distProblems({ gameFiles: [], asks: true }, { gameFile: null, ask: 'off' });
+  assert.match(
+    String(deployRefusal('apex', 'app', pages, { ...open, ask: 'off', distProblems: asks })),
+    /dist\/ sends questions, and data\/2026\/ask\.json says this host answers none/,
+  );
+  // On the preview host it goes out — once nothing stands before the first question.
+  assert.equal(deployRefusal('preview', 'app', pages, { ...open, ask: 'chat' }), null);
+  const before = ['data/2026/ask.json: the legal file of the chat is not done for real'];
+  assert.match(
+    String(
+      deployRefusal('preview', 'app', pages, { ...open, ask: 'chat', previewBlockers: before }),
+    ),
+    /the preview host does not ask yet — .*legal file of the chat/,
+  );
+  assert.equal(
+    deployRefusal('preview', 'app', pages, {
+      ...open,
+      ask: 'chat',
+      previewBlockers: before,
+      dryRun: true,
+    }),
+    null,
+  );
+  // The bench goes out whatever the preview host waits for: its pages do not ask.
+  assert.equal(
+    deployRefusal('preview', 'app', pages, { ...open, ask: 'bench', previewBlockers: before }),
+    null,
+  );
+  // The script asks the mode of the host it deploys to, and the gates of that host.
+  const deploy = readFileSync('scripts/deploy.ts', 'utf8');
+  assert.match(deploy, /const hostAsk = readAskMode\(undefined, target\);/);
+  assert.match(deploy, /given\.includes\('--bench'\) && hostAsk === 'off' \? 'bench' : hostAsk/);
+  assert.equal((deploy.match(/previewBlockers: previewChatBlockers\(\)/g) ?? []).length, 2);
+  // One rule, three readers: the pages are built for a host the build names — a variable set
+  // by the build script on every run, so that none left in a shell can open anything…
+  const pagesConfig = readFileSync('src/lib/ask-config.ts', 'utf8');
+  assert.equal((pagesConfig.match(/modeFor\(file(?:Mode\(\))?, buildHost\(\)\)/g) ?? []).length, 2);
+  assert.match(pagesConfig, /process\.env\['CEL_HOST'\] === 'preview' \? 'preview' : 'apex'/);
+  assert.doesNotMatch(pagesConfig, /\['mode'\] === 'chat'|\.mode === 'chat'/);
+  const build = readFileSync('scripts/build.ts', 'utf8');
+  assert.match(build, /CEL_HOST: host === 'preview' \? 'preview' : ''/);
+  assert.match(build, /--host and --ask-test do not mix/);
+  // …and the Worker reads the same rule for the host it serves, by its own variable.
+  const worker = readFileSync('src/worker/index.ts', 'utf8');
+  assert.match(worker, /modeFor\(config, env\.ENVIRONMENT === 'preview' \? 'preview' : 'apex'\)/);
+  assert.equal((worker.match(/chatConfigured\(env\)/g) ?? []).length, 2);
+  assert.doesNotMatch(worker, /chatConfigured\(\)/);
+  // The committed file opens nothing yet.
+  assert.equal(readAskMode(undefined, 'preview'), 'off');
+});
+
 void test('the chat is a Worker of its own: two exact addresses a host, no file, its own name (lot C10)', () => {
   const preview = chat.env?.['preview'];
   assert.ok(preview, `${CHAT_CONFIG} must declare env.preview`);
@@ -627,6 +719,7 @@ void test('the Worker of the chat is deployed by the script alone, with an accor
     workerProblems: [],
     ask: 'chat',
     launchBlockers: [],
+    previewBlockers: [],
   };
   for (const target of ['preview', 'apex'] as const) {
     assert.equal(chatDeployRefusal(target, ready), null, target);
@@ -692,6 +785,20 @@ void test('the Worker of the chat is deployed by the script alone, with an accor
     );
   }
   assert.deepEqual(refusedArguments(['--chat', '--withdraw', '--accord', '2026-11-20']), []);
+  // On the preview host this Worker carries that host's mode: deploying it is what opens the
+  // two addresses there. Whatever stands before the first question holds it back — an accord
+  // does not stand in for a gate, and a dry run still sends nothing.
+  const before = ['data/2026/ask.json: no bench of the explanations is recorded'];
+  assert.match(
+    String(chatDeployRefusal('preview', { ...ready, previewBlockers: before })),
+    /the preview host does not ask yet — .*no bench of the explanations/,
+  );
+  assert.equal(
+    chatDeployRefusal('preview', { ...ready, previewBlockers: before, dryRun: true }),
+    null,
+  );
+  // …and what holds the preview back is not the apex's business.
+  assert.equal(chatDeployRefusal('apex', { ...ready, previewBlockers: before }), null);
   // The script looks at no build for it, and refuses to mix it with the bench.
   const deploy = readFileSync('scripts/deploy.ts', 'utf8');
   // `wrangler delete` is reached by one path, which never names a Worker by hand…

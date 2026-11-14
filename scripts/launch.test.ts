@@ -25,6 +25,7 @@ import {
   canonicalHash,
   launchBlockers,
   pendingReviews,
+  previewChatBlockers,
   privacyStringsHash,
   turtleColours,
   turtleFingerprint,
@@ -66,6 +67,7 @@ const OPEN: DeployContext = {
   scrutinBuild: false,
   ask: 'off',
   workerProblems: [],
+  previewBlockers: [],
   distProblems: [],
 };
 
@@ -385,4 +387,57 @@ void test('the committed launch file is well formed', () => {
   assert.ok(sha256 === null || /^[0-9a-f]{64}$/.test(sha256));
   // An app at the apex with a text nobody re-read is exactly what D0.27 forbids.
   if (launch.apex === 'app') assert.deepEqual(pendingReviews(), []);
+});
+
+void test('the preview host asks only once what comes before any question holds (lot C11)', () => {
+  const ready = {
+    mode: 'off',
+    preview_mode: 'chat',
+    model: 'mistral-small-3.1',
+    bench: { sha256: 'beef', run_on: '2026-12-01' },
+    gists: { corpus_version: 'decaf', sha256: 'cafe', deposited_on: '2026-12-01' },
+    deployment_rehearsed_on: '2026-12-01',
+    preview_legal_on: '2026-12-02',
+  };
+  const root = tree({
+    [MANIFEST_PATH]: { meta: { corpus_version: 'decaf' } },
+    [LAUNCH_PATH]: { privacy_page: { reviewed_on: '2026-12-01', sha256: 'page-as-read' } },
+    [ASK_PATH]: ready,
+  });
+  const blockers = (ask: unknown, hash = 'page-as-read'): string => {
+    writeFileSync(join(root, ASK_PATH), JSON.stringify(ask));
+    return previewChatBlockers(root, hash).join('\n');
+  };
+  assert.equal(blockers(ready), '');
+  // A preview host that does not ask waits for nothing.
+  assert.equal(blockers({ ...ready, preview_mode: 'off', bench: null }), '');
+  assert.equal(blockers({ mode: 'off' }), '');
+  // Each gate missing is named — the model first: only one whose host keeps nothing reads.
+  for (const [without, said] of [
+    [{ model: null }, /no model is named whose host writes that it keeps nothing/],
+    [{ model: 'gpt-oss-120b' }, /keeps nothing of a call/],
+    [{ bench: null }, /no bench of the explanations is recorded/],
+    [{ gists: null }, /no read sentence is deposited for this book/],
+    [{ gists: { ...ready.gists, corpus_version: 'c0ffee' } }, /deposited for this book/],
+    [{ gists: { ...ready.gists, deposited_on: null } }, /deposited for this book/],
+    [{ deployment_rehearsed_on: null }, /deployment of the chat has not been rehearsed/],
+    [{ preview_legal_on: 'bientôt' }, /legal file of the chat is not done for real/],
+  ] as const) {
+    assert.match(blockers({ ...ready, ...without }), said, JSON.stringify(without));
+  }
+  // The page the agreement sends its reader to is the one that was re-read, as it stands.
+  assert.match(blockers(ready, 'page-of-today'), /privacy page .* is not re-read as it stands/);
+  // Production asking opens the preview host too — under the same gates, not around them.
+  assert.match(
+    blockers({ ...ready, mode: 'chat', preview_mode: 'off', preview_legal_on: null }),
+    /legal file of the chat/,
+  );
+  // What production alone waits for is not asked of the preview: it is measured there.
+  assert.doesNotMatch(blockers(ready), /forty threads|confirmed the model|every measure/);
+  // The file says one of two words for the preview host, or nothing.
+  writeFileSync(join(root, ASK_PATH), JSON.stringify({ ...ready, preview_mode: 'on' }));
+  assert.match(artefactBlockers(root).join('\n'), /preview_mode must be "chat" or "off"/);
+  rmSync(root, { recursive: true });
+  // The committed file opens nothing: nothing is waited for.
+  assert.deepEqual(previewChatBlockers(), []);
 });

@@ -28,7 +28,7 @@ import { wordFragment } from '../src/lib/word-links.js';
 import { ROUND, type GameData } from '../src/lib/game-engine.js';
 import { KEPT_FIELDS, STORAGE_KEY, TAB_FIELDS } from '../src/lib/game-state.js';
 import { STORAGE_MAP, STORAGE_STRINGS } from '../src/lib/storage-map.js';
-import { BUILD_MARKER } from './build-mode.js';
+import { BUILD_MARKER, builtAskMode } from './build-mode.js';
 
 /** Every HTML page of a build, as paths relative to its root. */
 function pages(root: string, dir = ''): string[] {
@@ -302,10 +302,7 @@ for (const root of ['dist', 'dist-ask']) {
       const note = /<p[^>]*id="game-silence"[^>]*>([^<]*)/.exec(home)?.[1]?.trim() ?? '';
       // The test build answers questions (simulated); the build of a site whose mode is "off"
       // answers none — and a pause of « les questions » there names something nobody ever saw.
-      const asks =
-        root === 'dist-ask' ||
-        (JSON.parse(readFileSync('data/2026/ask.json', 'utf8')) as { mode?: unknown }).mode ===
-          'chat';
+      const asks = root === 'dist-ask' || builtAskMode() === 'chat';
       assert.equal(/questions/i.test(note), asks, note);
       assert.match(note, /Le jeu et le partage sont en pause|le jeu et le partage sont en pause/);
     },
