@@ -62,8 +62,6 @@ export interface DatedGestures {
   personas_session_on: string | null;
   /** The four attackers of September went through every screen, and nothing blocking remains. */
   hostile_review_on: string | null;
-  /** The editor confirmed the "lait-fraise" line once shown where the reference comes from (D16.20). */
-  easter_confirmed_on: string | null;
 }
 
 export interface LaunchFile extends DatedGestures {
@@ -104,7 +102,6 @@ const DATED: readonly (readonly [keyof DatedGestures, string])[] = [
   ['phones_tried_on', 'the preview has not been tried on real phones'],
   ['personas_session_on', 'the persona session has not been played (D14.8)'],
   ['hostile_review_on', 'the hostile review of the screens is not recorded'],
-  ['easter_confirmed_on', 'the lait-fraise line is not confirmed by the editor (D16.20)'],
 ];
 
 /** Why the app may not replace the holding page yet — empty when it may. */

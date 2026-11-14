@@ -6,8 +6,8 @@
  *     unique in the raw text (JSON.parse would silently keep the last duplicate) and sorted;
  *   - every sentence has at most 15 words (a {placeholder} counts for one), except the keys
  *     listed in ALLOWLIST with a reason;
- *   - no emoji, except the two of the one lait-fraise key (D16.20); no "AEC Discover" (the
- *     working title, replaced by D10.2), no leftover {appName} placeholder;
+ *   - no emoji at all (the one exception, the lait-fraise key, was withdrawn: D16.37); no
+ *     "AEC Discover" (the working title, replaced by D10.2), no leftover {appName} placeholder;
  *   - the AI notices are at most 140 characters, impersonal, and name the model by {model} —
  *     the bench chooses it (D16.3) — and its host;
  *   - French typography: no-break space before : ; ! ? » % and after «, no U+202F (absent from
@@ -30,16 +30,6 @@ import { test } from 'node:test';
 const MAX_WORDS_PER_SENTENCE = 15;
 const MAX_AI_NOTICE_CHARS = 140;
 const NBSP = String.fromCodePoint(0xa0);
-
-/**
- * The one key that may carry emoji, and the only two it may carry (D16.20): the strawberry and
- * the glass of milk of the lait-fraise line. Written as code points so that no editor, shell or
- * tool decides which characters they are on the way here.
- */
-const EASTER_KEY = 'easter.strawberry_milk';
-const EASTER_EMOJI: readonly string[] = [0x1f353, 0x1f95b].map((code) =>
-  String.fromCodePoint(code),
-);
 
 /**
  * The three places where the page says an AI is at work (art. 50 of the AI Act): under the field
@@ -78,7 +68,7 @@ const BREAKDOWN_WORDS = [
   'réessa',
 ];
 const BREAKDOWN_SCOPE =
-  /^(degraded|silence|offline|quota|refusal|search|link|section|concept|play|q|riposte|chat|game|turtle|easter)\./;
+  /^(degraded|silence|offline|quota|refusal|search|link|section|concept|play|q|riposte|chat|game|turtle)\./;
 
 /**
  * A word at its start: `\b` is useless before an accented letter (JavaScript's word boundary
@@ -90,7 +80,7 @@ const startsWord = (stem: string): RegExp => new RegExp(`(?<![\\p{L}\\p{N}])${st
  * What a game says and this one must not (D16.10, D16.12): no reward, no rank, no verdict on the
  * reader — the reveal names a place, never an error — and no promise about the model.
  */
-const GAME_SCOPE = /^(game|turtle|chat|easter)\./;
+const GAME_SCOPE = /^(game|turtle|chat)\./;
 const GAME_BANNED: readonly [string, RegExp][] = [
   ['bravo', startsWord('bravo')],
   ['félicitations', startsWord('félicit')],
@@ -175,21 +165,16 @@ void test('every value is non-empty (except the declared exceptions) and carries
   for (const [key, value] of strings) {
     if (!EMPTY_ALLOWED.has(key)) assert.ok(value.trim().length > 0, `${key}: empty`);
     assert.equal(value, value.trim(), `${key}: leading or trailing space`);
+    // No exception any more: the one key that carried two emoji, the lait-fraise line, was
+    // withdrawn by the editor after the persona session (D16.37).
     const pictographs = value.match(/\p{Extended_Pictographic}/gu) ?? [];
-    if (key !== EASTER_KEY) {
-      assert.deepEqual(pictographs, [], `${key}: emoji`);
-      continue;
-    }
-    // The lait-fraise line: its two emoji or none at all, each once, and no third (D16.20).
-    for (const emoji of pictographs) {
-      assert.ok(EASTER_EMOJI.includes(emoji), `${key}: an emoji that is not one of its two`);
-    }
-    assert.equal(new Set(pictographs).size, pictographs.length, `${key}: an emoji twice`);
-    assert.ok(
-      pictographs.length === 0 || pictographs.length === EASTER_EMOJI.length,
-      `${key}: the strawberry and the glass of milk go together`,
-    );
+    assert.deepEqual(pictographs, [], `${key}: emoji`);
   }
+  assert.equal(
+    [...strings.keys()].some((key) => key.startsWith('easter.')),
+    false,
+    'the easter family is withdrawn (D16.37)',
+  );
 });
 
 void test('the working title and the {appName} placeholder are gone (D10.2)', () => {

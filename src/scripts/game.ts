@@ -77,8 +77,6 @@ interface Config {
     again: string;
     share: string;
     copied: string;
-    /** The lait-fraise line; empty while the editor has not confirmed it. */
-    easter: string;
     depth: Record<string, string>;
     keep: {
       what: string;
@@ -402,12 +400,6 @@ function start(
     panel.append(heading);
     const deeper = end.opened === null ? undefined : s.depth[String(end.opened)];
     if (deeper !== undefined) panel.append(el('p', deeper));
-    // Lait-fraise (D16.20): one line of text among the sentences of the end of a round, when
-    // she passes to her second, third or fourth state — three times at most in a whole game.
-    // Words and two emojis: never a drawing, and never against hers.
-    if (s.easter !== '' && end.passage && end.state >= 2) {
-      panel.append(el('p', s.easter, 'g-easter'));
-    }
     const again = button(s.again, '', () => {
       turtleFrames([{ ...look(), at: 0 }]);
       act(begin(draw(data, session.seen, last)));

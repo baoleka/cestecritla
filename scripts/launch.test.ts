@@ -43,7 +43,6 @@ const DATES: DatedGestures = {
   phones_tried_on: '2026-12-05',
   personas_session_on: '2026-12-06',
   hostile_review_on: '2026-12-06',
-  easter_confirmed_on: '2026-12-06',
 };
 
 const READY: LaunchInputs = {
@@ -90,7 +89,6 @@ void test('each missing condition blocks, and is named', () => {
     [{ launch: { phones_tried_on: null } }, /real phones: phones_tried_on/],
     [{ launch: { personas_session_on: null } }, /persona session .* personas_session_on/],
     [{ launch: { hostile_review_on: null } }, /hostile review .* hostile_review_on/],
-    [{ launch: { easter_confirmed_on: null } }, /lait-fraise .* easter_confirmed_on/],
     [
       { launch: { privacy_page: { reviewed_on: null, sha256: null } } },
       /privacy page has not been re-read/,

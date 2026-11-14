@@ -365,10 +365,6 @@ async function runEngine(
           a.getAttribute('stroke-dasharray'),
         ),
       }));
-    check(
-      'her first passage says nothing of lait-fraise',
-      (await page.locator('#game-live .g-easter').count()) === 0,
-    );
     const afterOne = await turtle();
     check(
       'she changes at the end of the round: her first arc, and the accent of a passage',
@@ -429,20 +425,20 @@ async function runEngine(
         !NEVER.test(voice),
         NEVER.exec(voice)?.[0],
       );
-      // Lait-fraise: one line of text at this passage, the two emojis in front — in the round's
-      // sentences, never in her box, and nothing in her drawing.
-      const easter = await page.evaluate<{ line: string; inHerBox: number; inDrawing: string }>(`({
-        line: document.querySelector('#game-live .g-easter')?.textContent ?? '',
-        inHerBox: document.querySelectorAll('#jeu .g-turtle .g-easter').length,
+      // A passage rewards nobody: the lait-fraise line was withdrawn (D16.37 — none of the seven
+      // personas received it well). No emoji in the sentences of the end of a round, no word of
+      // congratulation, and nothing written in her drawing.
+      const passage = await page.evaluate<{ text: string; inDrawing: string }>(`({
+        text: document.querySelector('#game-live .g-end')?.textContent ?? '',
         inDrawing: document.querySelector('#jeu .g-turtle svg').textContent.trim(),
       })`);
       check(
-        'at her second passage, lait-fraise is one line of text: two emojis, and never against her',
-        easter.line ===
-          `${String.fromCodePoint(0x1f353, 0x1f95b)} Lait-fraise. Pause bien méritée.` &&
-          easter.inHerBox === 0 &&
-          easter.inDrawing === '',
-        JSON.stringify(easter),
+        'at her second passage, the end of a round carries no emoji and congratulates nobody',
+        passage.text !== '' &&
+          !/\p{Extended_Pictographic}/u.test(passage.text) &&
+          !/lait|fraise|mérit/i.test(passage.text) &&
+          passage.inDrawing === '',
+        passage.text,
       );
       await page.waitForTimeout(1100);
       const afterDepth = await turtle();

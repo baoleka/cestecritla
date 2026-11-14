@@ -5,9 +5,9 @@
 > **D16.1 à D16.21** dans `decisions.md`. Il s'adresse à l'utilisateur (« tu »). Son journal
 > d'exécution est en fin de fichier.
 >
-> **Le corps du plan est laissé tel qu'il a été approuvé ; onze décisions le changent, dix du
-> soir même et une du lendemain** (D16.22 à D16.32 ; journal, « Les décisions du 13 novembre au
-> soir » et suivants). À lire par-dessus le texte :
+> **Le corps du plan est laissé tel qu'il a été approuvé ; les décisions prises ensuite le
+> changent** — dix le soir même, les autres le 14 novembre (D16.22 à D16.40 ; journal, « Les
+> décisions du 13 novembre au soir » et suivants). À lire par-dessus le texte :
 >
 > - **la phrase tapée ne quitte pas le téléphone** (D16.22) : partout où le plan écrit que « la
 >   question » part au Worker ou au modèle (§1.2 à §1.4, §2.1, §2.2, §2.7, §5), ce sont des
@@ -26,7 +26,12 @@
 >   c'est ce que les critères laissent passer, et des chapitres entiers n'ont aucun mot ;
 > - **à côté du lien d'une mesure trouvée, on lit ses premiers mots** (D16.32, là où §1.2 et
 >   §1.4 ne montraient que des liens) : dans la recherche et dans la sélection de « Demander »,
->   jamais sur une page servie.
+>   jamais sur une page servie ;
+> - **aucun modèle ne répond** (D16.33) : le banc a conclu, le site est sorti en « recherche
+>   seule » — tout ce que §1.3, §1.4 et §2 décrivent n'est pas dans la page ;
+> - **le lait-fraise est retiré** (D16.37, contre §4.6, le lot M3 et « lait-fraise confirmé » en
+>   §9.2) : aucune phrase de fin de manche ne félicite, le kit ne porte aucun emoji ;
+> - **le site est en production depuis le 14 novembre** (D16.36), et le dépôt est poussé.
 >
 > Où en sont tes gestes : sous le titre de §9.1.
 
@@ -1959,4 +1964,18 @@ défaut ». La session a répondu qu'elle ne daterait pas à sa place les gestes
   de page officielle (`captures/2026-09-10/source-404/livre.html`) où figure l'adresse d'une
   personne du mouvement. Ce n'est pas ce push qui la publie ; la retirer de l'historique
   public est une décision de l'éditeur.
+
+### 14 novembre 2026, midi — quatre décisions de l'éditeur, posées en questions (D16.37 à D16.40)
+
+Le site en ligne, l'éditeur a demandé : « pose moi les questions pour que je décide ». Quatre
+questions, quatre réponses ; trois ne suivent pas ce que la session recommandait, et c'est noté.
+
+- **Le lait-fraise : « La retirer »** (D16.37). Fait : la clé quitte le kit et la liste du gel,
+  la ligne quitte la page et son script, `easter_confirmed_on` quitte la porte de lancement ;
+  `e2e-game.ts` tient qu'un passage ne porte ni emoji ni félicitation.
+- **Les phrases écrites d'avance : « Poursuivre l'essai, sans publier »** (D16.38). La base
+  privée et le Worker du banc restent donc, le temps de l'essai.
+- **Le bloc de Cloudflare dans le `robots.txt` : « Le couper »** (D16.39).
+- **L'adresse d'un tiers dans une capture du dépôt public : « La purger de tout
+  l'historique »** (D16.40).
 

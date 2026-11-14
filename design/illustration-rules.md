@@ -175,7 +175,9 @@ Pour les trois : hauteur = 0,55 × largeur (posture basse, tenace), cou visible,
 8. **En silence électoral** (D0.24) elle reste (la lecture continue) mais **n'incite à aucun partage**.
 9. **Elle ne porte aucun symbole** (D3.3) et ne représente ni le mouvement ni le candidat : c'est la tortue de l'app, « projet militant indépendant » (D0.14).
 
-### 2.8 Easter egg lait-fraise (D0.12) — **à trancher par l'utilisateur (panel rouge T12, 10/9/2026)**
+### 2.8 Easter egg lait-fraise (D0.12) — **retiré le 14 novembre 2026 (D16.37)**
+
+> **L'éditeur a retiré la ligne le 14/11/2026**, après la session des sept personas (`docs/discovery/13-tests-humains.md` §7.5) : reçue par aucun des sept. Ce qui suit est gardé comme histoire ; plus aucune clé `easter.*` n'existe dans le kit, qui ne porte plus aucun emoji.
 
 > Trois raisons de le rouvrir, aucune de le supprimer d'autorité. (a) **L'origine de la référence n'a jamais été vérifiée** — ce fichier l'écrit lui-même : « HYPOTHÈSE ». (b) Il constitue **l'unique exception** à « aucun emoji », règle dure du prompt §9 et de `voice.md`, et `scripts/check-strings.test.ts` **rejette tout emoji** dans le kit : le toast « 🍓🥛 » ne peut pas passer la porte de CI telle qu'elle est écrite. (c) Un clin d'œil pour initiés, non vérifié, dans une app de campagne, est une capture hostile gratuite, et **aucune règle de gel L49 ne le couvre**. La chaîne `easter.strawberry_milk` a été **neutralisée** en v0.4 (elle ne dit plus « la tortue », que la ban list interdit) mais **conservée** : embarquer ou non l'easter egg est une décision de l'utilisateur, pas du panel.
 

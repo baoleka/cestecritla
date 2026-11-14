@@ -21,22 +21,13 @@
  */
 import '../styles/game.css';
 import Turtle from './Turtle.astro';
-import { readFileSync } from 'node:fs';
 import { pausedKey } from '../lib/ask-config.ts';
-import { buildGame, gameSite } from '../lib/game-data.ts';
+import { buildGame } from '../lib/game-data.ts';
 import { ROUND, isLongWord, locate, otherParts } from '../lib/game-engine.ts';
 import { safeJson, t } from '../lib/strings.ts';
 
 const { data, fingerprint } = buildGame();
 
-// The lait-fraise line (D16.20): a sentence of the end of a round, in words and two emojis —
-// never a drawing, never against the turtle. It waits for the editor, who was shown where the
-// reference comes from and must say yes (data/launch.json). A test build shows it, so that the
-// gates can hold it to its rules before anyone decides.
-const easterConfirmed =
-  (JSON.parse(readFileSync('data/launch.json', 'utf8')) as { easter_confirmed_on: string | null })
-    .easter_confirmed_on !== null;
-const easter = easterConfirmed || gameSite().test ? t('easter.strawberry_milk') : '';
 const round = data.words.slice(0, ROUND);
 
 /** `[1, 3, 5]` → « 1, 3 et 5 »: a list the way a sentence writes it. */
@@ -95,7 +86,6 @@ const config = {
     done: t('game.round.done'),
     again: t('game.round.again'),
     share: t('game.share'),
-    easter,
     copied: t('share.toast_copied'),
     depth: { 2: t('game.depth.chapter'), 3: t('game.depth.section') },
     keep: {

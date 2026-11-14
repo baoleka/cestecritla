@@ -264,7 +264,7 @@ void test('at the four bounds, no cta.* key is rendered (L49 2°, D9.19 extended
     assert.equal(isFrozenKey('section.next_in_book', state), false, 'reading stays open');
     assert.equal(isFrozenKey('share.button', state), true, 'sharing is frozen');
     // D16.16: questions, the game and its turtle keep silent; searching and erasing never do.
-    for (const key of ['chat.send', 'game.kicker', 'turtle.button', 'easter.strawberry_milk']) {
+    for (const key of ['chat.send', 'game.kicker', 'turtle.button']) {
       assert.ok(key in kit, `${key} left the kit`);
       assert.equal(isFrozenKey(key, state), true, `${key} must be frozen at ${bound}`);
     }
