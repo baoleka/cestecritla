@@ -350,6 +350,49 @@ Jamais écrit, nulle part : un choix, une réponse, une heure, un identifiant. C
 
 **Ce qui n'est plus ouvert.** Le cache de trente jours face à « gardée nulle part » : gardé (D16.24), et rangé sous une empreinte qui ne doit plus rien à la question. La base légale d'un envoi de la phrase : sans objet, elle n'est pas envoyée. L'exemption de consentement de Turnstile, tenue par analogie seulement (§19, E4) : sans objet, il n'y a plus de Turnstile.
 
+### 6.2 sexies Le chat : la question part, après un accord — 14/11/2026 (D16.46, D16.50)
+
+> Lecture des textes par la session et par une relecture hostile du même jour, **pas un avis juridique**. Ce qui est noté « de mémoire » n'a pas été relu à la source ce jour-là. Rien de ce qui suit n'est encore servi : la production reste en « recherche seule » (D16.33).
+
+**Ce qui change.** D16.22 respectait l'article 9 « sans avoir à demander un accord » : la phrase ne partait pas. Le 14 novembre l'éditeur a décidé qu'elle peut partir, **pour l'explication par une IA seulement, après un accord**. Trois gestes, trois régimes :
+
+| Geste | Ce qui part | Régime |
+|---|---|---|
+| Chercher | rien | inchangé |
+| « Demander » : les phrases relues | des identifiants de mesures | celui de D16.22 : aucune phrase, donc rien qui dise une opinion ; ni accord, ni mise en garde. PROBABLE |
+| L'explication par l'IA | la question, telle qu'écrite | **accord explicite** (RGPD, art. 6 § 1 a et art. 9 § 2 a) |
+
+**Ce que l'accord doit être pour valoir** (lignes directrices sur le consentement, de mémoire) — et ce que la feuille fait :
+
+1. Le bouton **énonce** l'accord : « J'accepte que cette IA lise ma question ». « Demander » seul serait un geste, pas une déclaration.
+2. Refuser est aussi visible et ne coûte rien : « Non, sans IA » laisse les phrases relues et les liens, qui étaient déjà à l'écran. **Rien n'est demandé avant d'avoir reçu.**
+3. La première couche dit qui est responsable, ce qui part, qui le lit, où, combien de temps, comment revenir en arrière.
+4. Rien d'autre n'est lié à cet accord.
+
+**Ce que la ligne dit** : la question part telle qu'elle est écrite ; une IA, nommée, la lit chez Cloudflare, en Europe ou aux États-Unis ; elle n'est pas enregistrée — c'est notre réglage, et l'engagement de Cloudflare ; ne rien y mettre sur soi ni sur quelqu'un d'autre (la CNIL demande cette mise en garde pour un agent conversationnel où des données sensibles sont prévisibles — page « chatbots », lue le 14/11) ; « 15 ans ou plus », en déclaration et jamais en question (majorité numérique en France, de mémoire) ; le responsable ; le lien vers `/confidentialite`.
+
+**Preuve et retrait, sans rien garder.** Chaque question porte la version de l'accord ; le Worker refuse celle qui n'en porte pas ; un test de bout en bout tient qu'aucune requête ne porte une question avant le geste. « Ne plus envoyer à l'IA » efface le drapeau et le fil — tous deux en mémoire de page, jamais dans le stockage du téléphone (article 82 : rien n'est écrit). Droits : il n'existe rien de rattaché à une personne à montrer ni à effacer (art. 11), et la page le dit.
+
+**Le responsable (D16.50).** La ligne nomme « l'éditeur de cestecritla.fr (Baoleka) » et l'adresse de contact. C'est le point où l'anonymat de la LCEN (art. 1-1, II) et le RGPD peuvent se contredire (§6.2 bis) : un accord informé suppose de savoir qui traite. **Risque R34, accepté par l'éditeur** ; sa sortie reste le retrait.
+
+**Ce que Cloudflare voit, couche par couche :**
+
+| Couche | Voit | Combien de temps |
+|---|---|---|
+| Réseau | adresse IP, navigateur, chemin, heure — pas le corps | selon sa politique, que la page ne fait que lier (lacune de l'article 13 ouverte depuis H-CNF-20) |
+| Notre Worker | l'adresse et la question ensemble, en mémoire | le temps de la requête ; aucun journal tant que l'observabilité reste coupée et qu'aucun `console.*` n'existe |
+| Le modèle (Workers AI) | la question, pas l'adresse du visiteur | « zéro rétention » pour les trois modèles admis ; pas d'entraînement ; sauf ce que la loi l'obligerait à garder (documentation du 16/10/2026) |
+| La passerelle AI Gateway | rien : **le chat ne passe pas par elle** — ni cache, ni journal | — |
+| Le limiteur | une empreinte du jour et de l'adresse | une minute |
+
+La page écrit donc « nous ne gardons rien » pour nous, et « Cloudflare s'engage à ne pas la conserver » pour Cloudflare — jamais « rien n'est gardé » tout court.
+
+**Règlement sur l'IA.** Mettre un agent conversationnel en service sous son nom, c'est être fournisseur au sens de l'article 50 § 1 et § 2, et déployeur au sens du § 4 (PROBABLE ; les lignes directrices de la Commission du 20/7/2026 ne sont pas lues). Conséquences : la mention nomme le modèle **avant** le premier message ; l'étiquette est **dans le texte** de chaque bloc écrit par l'IA, pas à côté — une capture recadrée perd un badge ; elle est dite au lecteur d'écran (§ 5). Les phrases écrites d'avance viennent aussi d'une IA : l'exception du § 4 tient à leur relecture humaine réelle (D16.49). L'annexe III, point 8 b (systèmes destinés à influencer un vote) : la finalité s'écrit sur `/exactitude` — trouver et expliquer, ni conseil, ni personnalisation — et la porte « aucun avis, aucune consigne de vote » la tient ; ses obligations ne s'appliquent qu'au 2/12/2027.
+
+**Code électoral.** L49 : les questions se taisent pendant le gel, comme aujourd'hui, et toute route neuve hérite de la garde. **L163-2** court du 1er janvier 2027 au scrutin (R38) : la décision de laisser l'IA en direct ouverte pendant cette période est à prendre avant. L52-1 : inchangé, 0 € ; un agent conversationnel est exactement ce qu'une campagne paie — la capture « aucun moyen de paiement » se garde.
+
+**Ce qui n'est pas fait, et doit l'être avant que l'aperçu réponde à une vraie question** (il est public : y répondre, c'est déjà traiter) : une courte analyse d'impact — données sensibles et technologie nouvelle en font deux critères, de mémoire ; une entrée au registre (art. 30) ; la lecture réelle du guide de la CNIL sur la communication politique et du règlement 2024/900 ; la garantie de transfert nommée dans `/confidentialite` ; les captures du tableau de bord (journal de la passerelle coupé, aucun moyen de paiement), toujours seulement déclarées ; la ligne d'accord jugée par les personas.
+
 ### 6.3 La politique en dix lignes — texte final
 
 Route `/confidentialite` (D5.10). Titre `privacy.title` = « Confidentialité », chapeau `privacy.lead` = « Dix lignes, toutes vraies, vérifiées contre la carte des données de l'app. » Chaque ligne est confrontée ligne à ligne au tableau §6 de `09-architecture.md`.

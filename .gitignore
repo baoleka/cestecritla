@@ -21,3 +21,6 @@ docs/discovery/captures/assets-tiers/
 private/
 # Written by `wrangler check startup`.
 *.cpuprofile
+
+# Working copies that agents create for themselves: never part of the site.
+.claude/worktrees/
