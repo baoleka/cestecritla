@@ -133,3 +133,10 @@ l'épuisement de 00 h 36 UTC, le quota n'est pas revenu : ni remise à zéro à 
 retour partiel. Cela reste compatible avec une fenêtre glissante de 24 heures (le gros de la
 consommation date du 13 entre 22 h 30 et 24 h UTC) ; à vérifier par une sonde après cette heure.
 
+**14 novembre 2026, vers 11 h 45 UTC — deux essais du câblage des juges, 0 neuron.** Une phrase
+déjà écrite dans la nuit est redemandée telle quelle à la route du banc : la passerelle la rend
+de son cache (`cached: true`, rien de facturé), le contrôle la laisse passer, et les juges sont
+appelés — sans réponse, le quota étant toujours épuisé (`verdict: null` en un dixième de
+seconde). Le compteur du Worker garde la réserve de ces appels restés sans réponse : il en est
+à 5 190 sur 8 500 pour la journée UTC, et repart à zéro à minuit UTC.
+
