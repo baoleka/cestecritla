@@ -263,3 +263,26 @@ en arrière ; le navigateur d'Instagram ; un lecteur d'écran.
   la page locale de relecture existe.
 - **Lot C0** (ce commit) : les décisions, les contraintes de `CLAUDE.md`, l'analyse du geste
   dans `11-conformite.md`, les risques R34 à R39, les hypothèses.
+
+### 14 novembre 2026 — lot C4 : le contrat, le contrôle, les notions
+
+- **Fait** : `src/lib/chat-contract.ts` (les deux requêtes et leurs réponses, la question
+  nettoyée, la version de l'accord, ce que le modèle rend), le contrôle d'une explication dans
+  `src/lib/ask-validate.ts` (les règles d'une phrase y sont désormais partagées avec la réponse
+  écrite ; les 26 tests d'origine passent sans retouche), `src/lib/notions.ts` (cartes et
+  objections reconnues dans une question). Trois fichiers de tests neufs, 36 tests :
+  `chat-contract.test.ts`, `chat-explain.test.ts`, `notions.test.ts`. **Rien n'est branché** :
+  une porte tient que seul le contrôle lit le contrat tant que les lots C5 et C6 ne sont pas
+  faits.
+- **Ce qui s'écarte du plan, et pourquoi.** Un champ que le contrat ne nomme pas rend la
+  requête illisible — **refusée, pas ignorée** (le brouillon disait « ignoré ») : une page qui
+  enverrait plus qu'elle ne dit doit échouer bruyamment. Le contrôle a reçu les règles que la
+  relecture hostile suggérait — chaque phrase tient seule (`opener`), au présent (`tense`),
+  sans concession (`contrast`), sans nom que la page n'écrit pas (`name`) — et trois listes
+  fermées de plus après un essai sur vingt-cinq phrases inventées : les dates sans nombre, les
+  positions rapportées et les camps, le vocabulaire de la campagne. La version de l'accord est
+  **calculée** sur le texte lu, pas tapée.
+- **Ce que le contrôle ne voit pas** est écrit dans le fichier et dans `08-ia.md` §10.13, avec
+  trois phrases inventées qui passent. H-IA-23 ouverte.
+- **À poser à l'éditeur au lot C5** : l'IA sur les dix-huit sections sensibles ; l'IA quand une
+  objection est reconnue. Par défaut : non aux deux.

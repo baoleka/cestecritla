@@ -15,6 +15,14 @@
  *
  * Every refusal names its rule and quotes only the model's own words or an identifier: never a
  * word of the candidates. The Worker logs none of it; the bench counts it.
+ *
+ * Since D16.47 the file holds a second control, further down: that of an EXPLANATION — what the
+ * model of the chat says of words, when it was shown no text of the book at all. The two share
+ * one definition of what a sentence of ours never says (a negation, a verdict, an opinion, a
+ * vote…) and of what it may say only as a text it rests on says it (a number, a name); each then
+ * has rules of its own. An answer is checked against the measures it cites; an explanation,
+ * against the read sentences on the page and the question — and it may attribute nothing to
+ * anyone.
  */
 import {
   COPY_WINDOW,
@@ -28,6 +36,13 @@ import {
   type Candidate,
   type ModelSentence,
 } from './ask-contract.js';
+import {
+  ECHO_WINDOW,
+  MAX_EXPLAIN_SENTENCES,
+  MAX_EXPLAIN_WORDS,
+  MIN_EXPLAIN_WORDS,
+  parseModelExplanation,
+} from './chat-contract.js';
 import { sameWord, terms, tokenize } from './search-core.js';
 
 export type RuleId =
@@ -66,7 +81,22 @@ export type RuleId =
   /** Markup, code, characters that are not seen, letters that are not those of French. */
   | 'markup'
   /** Shares too few of its words with the measures it cites. */
-  | 'overlap';
+  | 'overlap'
+  // --- the rules of an explanation only (D16.47)
+  /** Names the programme, the movement, or an aim nobody owns: an explanation attributes nothing. */
+  | 'attribution'
+  /** Opens on a word that points outside the sentence: « Il », « Cette », « Ainsi ». */
+  | 'opener'
+  /** The future, the conditional: an explanation says what a word means, not what will happen. */
+  | 'tense'
+  /** A contrast or a concession: « mais », « même si » — where a nuance of the model's comes in. */
+  | 'contrast'
+  /** A proper noun or an acronym nobody showed it — or a first word that is neither ours nor an article. */
+  | 'name'
+  /** Words in a row taken from the question and from no sentence of ours. */
+  | 'echo'
+  /** Shares no word with the sentences on the page: it explains something else. */
+  | 'topic';
 
 export interface Refusal {
   rule: RuleId;
@@ -445,44 +475,49 @@ function shownOf(candidates: readonly Candidate[]): Shown {
   };
 }
 
-/** Every rule one sentence breaks, in the order of the plan. */
-function sentenceRefusals(
-  sentence: ModelSentence,
-  index: number,
-  candidates: ReadonlyMap<string, string>,
-  shown: Shown,
-  options: ValidateOptions,
-): Refusal[] {
+/** How long a sentence may be, in words as a reader counts them. */
+interface Length {
+  min: number;
+  max: number;
+}
+
+/** What a sentence breaks by itself, and what the rules that read a text need to know of it. */
+interface Own {
+  /** The sentence in one spelling of spaces and apostrophes. */
+  text: string;
+  out: Refusal[];
+  /** True when it denies or bounds in so many words: the softer words are then not looked at. */
+  negation: boolean;
+  /** True when it gives voting advice: the word alone is then not looked at. */
+  advice: boolean;
+}
+
+/**
+ * The rules that read one sentence on its own, whatever it was shown: its shape, and what it
+ * must never say. The same for a written answer and for an explanation — one definition of
+ * what a negation, a verdict or an opinion is.
+ */
+function ownRefusals(raw: string, index: number, length: Length): Own {
   const out: Refusal[] = [];
   const refuse = (rule: RuleId, detail: string): void => {
     out.push({ rule, sentence: index, detail });
   };
-  const text = plain(sentence.texte);
-
-  // --- its measures
-  const ids = [...new Set(sentence.ids)];
-  if (ids.length === 0) refuse('anchor', 'no measure');
-  if (ids.length > MAX_IDS_PER_SENTENCE) refuse('anchor', `${String(ids.length)} measures`);
-  const unknown = ids.filter((id) => !candidates.has(id));
-  // An identifier that was not offered is quoted only if it looks like one: it could be anything.
-  for (const id of unknown) refuse('anchor', /^[a-z0-9.-]{1,24}$/.test(id) ? id : 'not an id');
-  const cited = ids.flatMap((id) => {
-    const held = candidates.get(id);
-    return held === undefined ? [] : [held];
-  });
+  const text = plain(raw);
 
   // --- its shape
   if (text === '') refuse('shape', 'empty sentence');
-  if (CONTROL.test(sentence.texte)) refuse('markup', 'control character');
-  if (FORMAT.test(sentence.texte)) refuse('markup', 'character that is not seen');
+  if (CONTROL.test(raw)) refuse('markup', 'control character');
+  if (FORMAT.test(raw)) refuse('markup', 'character that is not seen');
   if (LOOSE_MARK.test(text)) refuse('markup', 'accent without its letter');
   if (FOREIGN_LETTER.test(text)) refuse('markup', 'letter of another alphabet');
   else if (otherForm(text)) refuse('markup', 'letter in another form');
   const markup = MARKUP.exec(text);
   if (markup !== null) refuse('markup', markup[0]);
   if (/[.!?…]["»”]?\s+\p{Lu}/u.test(text)) refuse('several', 'more than one sentence');
-  const length = wordsOf(text).length;
-  if (length > MAX_WORDS_PER_SENTENCE) refuse('length', `${String(length)} words`);
+  const words = wordsOf(text).length;
+  if (words > length.max || (text !== '' && words < length.min)) {
+    refuse('length', `${String(words)} words`);
+  }
 
   // --- what it must not say
   const quote = QUOTES.exec(text);
@@ -504,48 +539,95 @@ function sentenceRefusals(
   if (ODD_FIGURE.test(text.replace(UNIT_EXPONENT, ''))) {
     refuse('number', 'figure not in plain digits');
   }
+  const advice = firstMatch(text, VOTE_ADVICE);
+  if (advice !== null) refuse('vote', advice);
+  return { text, out, negation: negation !== null, advice: advice !== null };
+}
 
-  // --- what it may say only with a measure that says it
-  const citedPlain = cited.map(plain);
+/**
+ * What a sentence may say only if a text it rests on says it — the measures it cites, for a
+ * written answer; the sentences on the page, for an explanation: a vote, a name, a word that
+ * bounds, a number. `held` are those texts.
+ */
+function heldRefusals(own: Own, index: number, held: readonly string[]): Refusal[] {
+  const out: Refusal[] = [];
+  const refuse = (rule: RuleId, detail: string): void => {
+    out.push({ rule, sentence: index, detail });
+  };
+  const { text } = own;
+  const heldPlain = held.map(plain);
   /** The very word found, not another one of the same list: « Macron » is not « Le Pen ». */
-  const unlessCited = (rule: RuleId, patterns: readonly RegExp[]): void => {
+  const unlessHeld = (rule: RuleId, patterns: readonly RegExp[]): void => {
     for (const pattern of patterns) {
       const found = pattern.exec(text);
       if (found === null) continue;
       const same = alone(literal(found[0]), pattern.flags);
-      if (!citedPlain.some((held) => same.test(held))) refuse(rule, found[0]);
+      if (!heldPlain.some((other) => same.test(other))) refuse(rule, found[0]);
     }
   };
-  const advice = firstMatch(text, VOTE_ADVICE);
-  if (advice !== null) refuse('vote', advice);
-  // Everything below reads the text of the measures: skipped where there is none to read.
-  if (options.withoutText === true) return out;
-  if (advice === null && VOTE_WORD.test(text) && !citedPlain.some((held) => VOTE_WORD.test(held))) {
+  if (!own.advice && VOTE_WORD.test(text) && !heldPlain.some((other) => VOTE_WORD.test(other))) {
     refuse('vote', VOTE_WORD.exec(text)?.[0] ?? 'vote');
   }
-  unlessCited('party', PARTY_NAMES);
-  unlessCited('self', SELF_UNLESS_CITED);
-  if (negation === null) unlessCited('negation', NEGATION_UNLESS_CITED);
+  unlessHeld('party', PARTY_NAMES);
+  unlessHeld('self', SELF_UNLESS_CITED);
+  if (!own.negation) unlessHeld('negation', NEGATION_UNLESS_CITED);
 
-  // --- its numbers: as written in a measure it cites, or not at all
-  const heldNumbers = new Set(cited.flatMap(numbersOf));
+  // --- its numbers: as written in a text it rests on, or not at all
+  const heldNumbers = new Set(held.flatMap(numbersOf));
   for (const number of numbersOf(text)) {
     if (!heldNumbers.has(number)) refuse('number', number);
   }
-  const heldWords = new Set(cited.flatMap((held) => tokenize(held)));
+  const heldWords = new Set(held.flatMap((other) => tokenize(other)));
   const heldMultipliers = new Set([...heldWords].flatMap((word) => multiplierOf(word) ?? []));
   for (const word of tokenize(text)) {
     if (NUMBER_WORDS.has(word) && !heldWords.has(word)) refuse('number', word);
     const multiplier = multiplierOf(word);
     if (multiplier !== null && !heldMultipliers.has(multiplier)) refuse('number', word);
   }
+  return out;
+}
+
+/** Every rule one sentence of a written answer breaks, in the order of the plan. */
+function sentenceRefusals(
+  sentence: ModelSentence,
+  index: number,
+  candidates: ReadonlyMap<string, string>,
+  shown: Shown,
+  options: ValidateOptions,
+): Refusal[] {
+  const out: Refusal[] = [];
+  const refuse = (rule: RuleId, detail: string): void => {
+    out.push({ rule, sentence: index, detail });
+  };
+
+  // --- its measures
+  const ids = [...new Set(sentence.ids)];
+  if (ids.length === 0) refuse('anchor', 'no measure');
+  if (ids.length > MAX_IDS_PER_SENTENCE) refuse('anchor', `${String(ids.length)} measures`);
+  const unknown = ids.filter((id) => !candidates.has(id));
+  // An identifier that was not offered is quoted only if it looks like one: it could be anything.
+  for (const id of unknown) refuse('anchor', /^[a-z0-9.-]{1,24}$/.test(id) ? id : 'not an id');
+  const cited = ids.flatMap((id) => {
+    const held = candidates.get(id);
+    return held === undefined ? [] : [held];
+  });
+
+  // --- its shape, and what it must not say
+  const own = ownRefusals(sentence.texte, index, { min: 0, max: MAX_WORDS_PER_SENTENCE });
+  out.push(...own.out);
+  const { text } = own;
+  // Everything below reads the text of the measures: skipped where there is none to read.
+  if (options.withoutText === true) return out;
+
+  // --- what it may say only with a measure that says it
+  out.push(...heldRefusals(own, index, cited));
 
   // --- copied: six words in a row of anything it was shown, or most of it in shorter runs
-  const own = copyTokens(text);
-  if (windows(own, COPY_WINDOW).some((w) => shown.six.has(w))) {
+  const tokens = copyTokens(text);
+  if (windows(tokens, COPY_WINDOW).some((w) => shown.six.has(w))) {
     refuse('copy', `${String(COPY_WINDOW)} words in a row`);
   } else {
-    const share = shareIn(own, shown.runs);
+    const share = shareIn(tokens, shown.runs);
     if (share > (options.maxCopiedShare ?? PROVISIONAL_MAX_COPIED_SHARE)) {
       refuse('copy', `${share.toFixed(2)} in runs of ${String(COPY_SHARE_WINDOW)}`);
     }
@@ -592,6 +674,437 @@ export function refusals(
     }
   }
   return out;
+}
+
+// ---------------------------------------------------------------------------------------------
+// The control of an explanation (D16.47, PLAN-CHAT §3)
+// ---------------------------------------------------------------------------------------------
+//
+// The third voice of the chat. The first two say what the programme provides: the book by its
+// titles and its links, the read sentences in our words, each one read by the editor. The model
+// of the moment says what WORDS mean — and nothing else. It never saw the book: it was handed
+// the read sentences on the page, our cards, and the question.
+//
+// So an explanation is refused as soon as one of its sentences
+//
+//   - names the programme, the movement, its people, or an aim nobody owns        attribution
+//   - opens on a word that points outside itself: « Il », « Cette », « Ainsi »     opener
+//   - speaks in the future or the conditional, or dates what it says              tense
+//   - turns on a contrast or a concession: « mais », « même si »                  contrast
+//   - names someone or something nobody showed it                                 name, party
+//   - holds a number the sentences on the page do not hold                        number
+//   - weighs, prescribes, or reports who thinks what                              opinion
+//   - repeats the question                                                        echo
+//   - shares no word with the sentences on the page                               topic
+//
+// and breaks any rule a sentence of ours ever had to keep: a negation, a verdict, an opinion,
+// a person, a vote, markup. One sentence refused, and the whole explanation is not shown: the
+// sheet already holds the two blocks that matter.
+//
+// What it cannot see, said plainly — as for a written answer: a definition that is affirmative,
+// in the present, on the subject, and wrong. And a sentence whose grammatical subject is a
+// word of the page while what it says is what the measure does, or who pays for it: « La
+// gratuité des cantines repose sur l'impôt. », « Les riches paient cette taxe. » No list of
+// words tells a definition from a claim: the lists below close the commonest doors — a time, a
+// camp, a weight, a promise — and reading closes the rest: the judges of the bench, then the
+// editor's forty threads (PLAN-CHAT §5).
+
+/**
+ * The names of the book and of the movement. An explanation never holds one: whatever follows
+ * would be said in their name.
+ */
+const ATTRIBUTION: readonly RegExp[] = [
+  alone('avenir en commun'),
+  alone('nouvelle france'),
+  alone('france insoumise'),
+  alone('insoumis(?:e|es)?'),
+  alone('union populaire'),
+  alone('LFI|AEC|M27', 'u'),
+  // An aim without an owner is read as the programme's: « L'objectif est de… ». (With its
+  // owner written — « le but du quotient familial est de… » — it is a definition.)
+  new RegExp(
+    '(?<![\\p{L}\\p{N}])(?:objectif|but|idée|ambition|intention|volonté|projet|enjeu|principe) ' +
+      "(?:est|reste|consiste|était) (?:(?:de|à|que)(?![\\p{L}\\p{N}])|d'|qu')",
+    'iu',
+  ),
+];
+/**
+ * The nouns the book is spoken of with: « le programme prévoit », « cette mesure », « le texte ».
+ * They are also words of everyday policy — « programmes scolaires », « proposition de loi ». One
+ * is allowed only where a sentence on the page holds it with the same word after it.
+ */
+const ATTRIBUTION_NOUN =
+  /(?<![\p{L}\p{N}])(?:programmes?|mesures?|propositions?|textes?|projets?|partis?|mouvements?|candidate?s?|militante?s?)(?![\p{L}\p{N}])/giu;
+
+/**
+ * Politicians and parties an explanation of words never needs, whatever the page shows. The
+ * names that are also common words — « borne », « renaissance » — stay under the rule of every
+ * sentence: allowed when a sentence on the page holds the very word.
+ */
+const PARTY_NEVER: readonly RegExp[] = [
+  alone(
+    'rassemblement national|front national|les républicains|parti socialiste|parti communiste|' +
+      'europe écologie|lutte ouvrière|nouveau front populaire',
+  ),
+  alone(
+    'macron|le pen|bardella|zemmour|attal|retailleau|darmanin|glucksmann|roussel|tondelier|' +
+      'hollande|sarkozy|ciotti|wauquiez|bayrou|lecornu|mélenchon',
+  ),
+  alone('RN|FN|LR|PS|PCF|EELV|NPA|UDI|NFP|LO|JLM|MLP', 'u'),
+];
+
+/**
+ * A sentence that opens on one of these leans on something outside it — the sentence before, the
+ * measure above, the question. Each sentence of an explanation stands alone: its subject is
+ * written in it.
+ */
+const OPENER = new RegExp(
+  '^(?:(?:ils?|elles?|ce|cet|cette|ces|cela|ceci|ça|celui|celle|ceux|celles|son|sa|ses|' +
+    'leurs?|lui|eux|ainsi|donc|alors|aussi|ensuite|puis|enfin|bref|et|mais|or|car|' +
+    'de plus|en outre|par ailleurs|autrement dit|par conséquent|en conséquence|pour cela|' +
+    "de ce fait|du coup|d'ailleurs|c'est pourquoi)(?![\\p{L}\\p{N}])|c')",
+  'iu',
+);
+
+/**
+ * The future and the conditional, as closely as a list of endings reads them: the auxiliaries
+ * and the modals by name, « va » and « vont », then the endings of the regular verbs. Accents
+ * are read as written — « opéra » and « caméra » are not verbs. A few imperfects end the same
+ * way (« retirait », « ouvrait »): an explanation is in the present, and loses nothing.
+ */
+const FUTURE: readonly RegExp[] = [
+  alone('(?:ser|aur|fer|ir|dir|pourr|devr|voudr|saur|verr)(?:a|ont|ait|aient)'),
+  alone('faudr(?:a|ait)'),
+  alone('va|vont'),
+  alone('\\p{L}{2,}(?:er|ir|dr|ttr|vr|rr|[iî]tr)(?:a|ont|ait|aient)'),
+];
+
+/** A contrast, a concession, a doubt cast: what a definition does not need. */
+const CONTRAST: readonly RegExp[] = [
+  alone('mais'),
+  alone('cependant'),
+  alone('toutefois'),
+  alone('pourtant'),
+  alone('néanmoins'),
+  alone('en revanche'),
+  alone('par contre'),
+  alone('au contraire'),
+  alone("à l'inverse"),
+  alone('à la différence'),
+  alone('alors que'),
+  alone('tandis que'),
+  alone('bien que'),
+  alone('même si'),
+  alone('quoique'),
+  alone('malgré'),
+  alone('au lieu'),
+  alone('plutôt'),
+  alone('en théorie'),
+  alone('officiellement'),
+  alone('soi-disant'),
+  alone('prétendument'),
+  alone('censée?s?'),
+];
+
+/** Pointing at the page, or at the conversation: the model speaking of what it was handed. */
+const POINTING: readonly RegExp[] = [
+  alone('ci-dessus'),
+  alone('ci-dessous'),
+  alone('précitée?s?'),
+  alone('mentionnée?s?'),
+  alone('évoquée?s?'),
+];
+
+/**
+ * Words that bound, judge, prescribe, take sides or date — and that a sentence of ours may hold
+ * for its own reasons (« sans condition de ressources », « un impôt plus juste », « le non-cumul
+ * des mandats »). Each is allowed where a sentence on the page uses the very word, and nowhere
+ * else: a definition has no need of them, and each is how a claim comes in.
+ */
+const UNLESS_SHOWN: readonly (readonly [RuleId, readonly string[]])[] = [
+  ['negation', ['non', 'sans', 'surtout', 'principalement', 'essentiellement']],
+  [
+    'opinion',
+    [
+      // what ought to be
+      'doit|doivent',
+      // what it is worth
+      'justes?|injustes?',
+      'nécessaires?|indispensables?|essentiel(?:le)?s?',
+      'utiles?|inutiles?|efficaces?|inefficaces?',
+      'dangereux|dangereuses?',
+      'ambitieux|ambitieuses?',
+      'réalistes?|irréalistes?|utopiques?',
+      'radical(?:e|es)?|radicaux|extrêmes?|excessi(?:f|fs|ve|ves)',
+      'meilleur(?:e|es|s)?|pires?|mieux',
+      'bénéfiques?|néfastes?|nuisibles?|souhaitables?',
+      'absurdes?|scandaleu(?:x|se|ses)|catastrophiques?|désastreu(?:x|se|ses)',
+      'formidables?|idéal(?:e|es)?|idéaux|parfait(?:e|es|s)?',
+      'chers?|chères?|coûteu(?:x|se|ses)',
+      // how much, without a number
+      'trop|beaucoup|énormément',
+      // who thinks what: an explanation reports no position and names no camp
+      "selon|d'après",
+      'détracteurs?|partisans?|opposants?|adversaires?',
+      'critiqu(?:e|es|ent|er|ée?s?)|dénonc(?:e|es|ent|er|ée?s?)',
+      'accus(?:e|es|ent|er|ée?s?|ations?)|reproch(?:e|es|ent|er|ée?s?)',
+      'contest(?:e|es|ent|er|ée?s?|ations?|ables?)|controvers(?:e|es|ée?s?)',
+      'polémiques?|débats?',
+      'refus(?:e|es|ent|er|ée?s?)?|rejet(?:s|te|tent|er|ée?s?)?|approuv(?:e|es|ent|er|ée?s?)',
+      '(?:la|de|à|extrême) (?:gauche|droite)',
+    ],
+  ],
+  [
+    'vote',
+    [
+      // the campaign: an election, a poll, a promise
+      'élections?|électeurs?|électrices?|électoral(?:e|es)?|électoraux',
+      'scrutins?|présidentielles?|législatives|sondages?|promesses?',
+    ],
+  ],
+  [
+    'tense',
+    [
+      // a date without a number: what is so « today » is a fact of the day, not a meaning
+      "actuel(?:le)?s?|actuellement|aujourd'hui|maintenant|désormais|déjà",
+      'récemment|bientôt|prochainement|demain|hier|longtemps',
+      "de nos jours|en ce moment|à l'avenir|l'an prochain|l'année prochaine",
+    ],
+  ],
+  ['self', ['questions?', 'phrases?', 'explications?']],
+];
+
+/**
+ * Capitals a French sentence writes without naming anyone in particular: the institutions
+ * every reader knows, by their head noun. A closed list — anything else that is written with a
+ * capital must stand in a sentence on the page.
+ */
+const COMMON_CAPITALS: ReadonlySet<string> = new Set(
+  listed(
+    `france francais francaise francaises etat etats europe europeen europeenne europeens
+     europeennes union republique parlement senat assemblee constitution securite conseil cour
+     code caisse banque tresor education commission`,
+  ),
+);
+
+/**
+ * What a sentence may open on without it being its subject: an article, a preposition, a
+ * quantifier. Any other first word is the subject, and must be a word of the page — so that a
+ * sentence cannot open on a name the visitor typed and say something of that person.
+ */
+const FIRST_WORDS: ReadonlySet<string> = new Set(
+  listed(
+    `le la les un une des du de a au aux en par pour dans sur sous avec sans chez chaque tout
+     toute tous toutes certains certaines plusieurs quand lorsque comme entre vers avant apres
+     pendant lors afin grace concretement generalement souvent parfois`,
+  ),
+);
+
+/** What an explanation is read against: the question, and everything on the page that is ours. */
+export interface ExplainContext {
+  /** The question as sent. Read for the echo only, and never quoted in a refusal. */
+  question: string;
+  /** The read sentences shown for this question, then the texts of the cards recognised. */
+  shown: readonly string[];
+}
+
+export interface ExplainOptions {
+  /** How many of its own words a sentence must share with the page; provisional default. */
+  minShared?: number;
+  /**
+   * Only the rules that need no sentence of the page: how the recorded outputs of the bench are
+   * replayed where the read sentences are not — they live in the private base and in no file.
+   * The other rules are then skipped, not passed.
+   */
+  withoutText?: boolean;
+}
+
+/**
+ * HYPOTHÈSE until the bench replay fixes it (PLAN-CHAT §6, lot C8). One word is little: it is
+ * what a definition shares with the sentence it explains — the word itself — and what a text
+ * about something else does not.
+ */
+export const PROVISIONAL_MIN_SHARED = 1;
+
+/** What the page holds, as the sets a sentence of the model is compared with. */
+interface Page {
+  texts: readonly string[];
+  /** Every word, folded as for the copy check. */
+  words: ReadonlySet<string>;
+  /** Runs of two words: a noun of the book's apparatus with the word after it. */
+  pairs: ReadonlySet<string>;
+  /** Runs of ECHO_WINDOW words: the question's words that are ours too. */
+  runs: ReadonlySet<string>;
+  /** Its words as the index cuts them, for the subject. */
+  terms: readonly string[];
+}
+
+function pageOf(shown: readonly string[]): Page {
+  const tokens = shown.map((text) => copyTokens(text));
+  return {
+    texts: shown,
+    words: new Set(tokens.flat()),
+    pairs: new Set(tokens.flatMap((t) => windows(t, 2))),
+    runs: new Set(tokens.flatMap((t) => windows(t, ECHO_WINDOW))),
+    terms: [...new Set(shown.flatMap((text) => terms(text)))],
+  };
+}
+
+/** A word with what clings to it taken off: an opening bracket, an elided article. */
+const bare = (word: string): string =>
+  word
+    .replace(/^[^\p{L}\p{N}]+/u, '')
+    .replace(/^(?:[cdjlmnst]|qu|jusqu|lorsqu|puisqu)'/iu, '')
+    .replace(/[^\p{L}\p{N}]+$/u, '');
+
+/** Every rule one sentence of an explanation breaks. */
+function explainRefusals(
+  raw: string,
+  index: number,
+  question: readonly string[],
+  page: Page,
+  options: ExplainOptions,
+): Refusal[] {
+  const own = ownRefusals(raw, index, { min: MIN_EXPLAIN_WORDS, max: MAX_EXPLAIN_WORDS });
+  const out = own.out;
+  const refuse = (rule: RuleId, detail: string): void => {
+    out.push({ rule, sentence: index, detail });
+  };
+  const { text } = own;
+
+  // --- who says it: nobody
+  const attribution = firstMatch(text, ATTRIBUTION);
+  if (attribution !== null) refuse('attribution', attribution);
+  const never = firstMatch(text, PARTY_NEVER);
+  if (never !== null) refuse('party', never);
+
+  // --- it stands alone, in the present, without a turn
+  const opener = OPENER.exec(text.replace(/^[^\p{L}\p{N}]+/u, ''));
+  if (opener !== null) refuse('opener', opener[0]);
+  const future = firstMatch(text, FUTURE);
+  if (future !== null) refuse('tense', future);
+  const contrast = firstMatch(text, CONTRAST);
+  if (contrast !== null) refuse('contrast', contrast);
+  const pointing = firstMatch(text, POINTING);
+  if (pointing !== null) refuse('self', pointing);
+
+  // Everything below reads the sentences of the page: skipped where there is none to read.
+  if (options.withoutText === true) return out;
+
+  // --- the nouns of the book's apparatus: only as the page holds them
+  for (const found of text.matchAll(ATTRIBUTION_NOUN)) {
+    const pair = copyTokens(text.slice(found.index)).slice(0, 2);
+    if (pair.length < 2 || !page.pairs.has(pair.join(' '))) refuse('attribution', found[0]);
+  }
+
+  // --- what it may say only with a sentence of the page that says it
+  const held = heldRefusals(own, index, page.texts);
+  out.push(...held.filter((refusal) => !(refusal.rule === 'party' && never !== null)));
+  // Every occurrence is looked at: one that the page allows does not cover the next.
+  const pagePlain = page.texts.map(plain);
+  for (const [rule, sources] of UNLESS_SHOWN) {
+    for (const source of sources) {
+      for (const found of text.matchAll(alone(source, 'giu'))) {
+        const same = alone(literal(found[0]));
+        if (!pagePlain.some((other) => same.test(other))) refuse(rule, found[0]);
+      }
+    }
+  }
+
+  // --- its names: any word written with a capital is a word of the page, or a common one
+  const asked = new Set(question);
+  text.split(' ').forEach((word, position) => {
+    const core = bare(word);
+    if (!/^\p{Lu}/u.test(core)) return;
+    const acronym = /^[\p{Lu}\p{N}]{2,}$/u.test(core);
+    // « États-Unis » is two words and one name: read whole, then part by part.
+    const whole = copyTokens(core);
+    const parts = core.split(/[^\p{L}\p{N}]+/u).flatMap((part) => copyTokens(part));
+    if (position === 0 && !acronym && whole.every((token) => FIRST_WORDS.has(token))) return;
+    const known = (token: string): boolean =>
+      page.words.has(token) ||
+      page.terms.some((term) => sameWord(token, term)) ||
+      // An acronym may come from the question — « la TVA » is what was asked. A name may not.
+      (acronym ? asked.has(token) : COMMON_CAPITALS.has(token));
+    if (!whole.every(known) && !parts.every(known)) refuse('name', core);
+  });
+
+  // --- the question said again: words in a row that are the visitor's and not ours. A run
+  // made of words of the page only is ours, in whatever order the question put them.
+  const tokens = copyTokens(text);
+  const askedRuns = new Set(windows(question, ECHO_WINDOW));
+  const echoed = windows(tokens, ECHO_WINDOW).some(
+    (run) =>
+      askedRuns.has(run) &&
+      !page.runs.has(run) &&
+      run.split(' ').some((token) => !page.words.has(token)),
+  );
+  if (echoed) refuse('echo', `${String(ECHO_WINDOW)} words in a row of the question`);
+
+  // --- on the subject: a word of its own that the page holds too
+  const shared = contentTerms(text).filter((term) =>
+    page.terms.some((other) => sameWord(term, other)),
+  ).length;
+  if (shared < (options.minShared ?? PROVISIONAL_MIN_SHARED)) {
+    refuse('topic', `${String(shared)} shared word(s)`);
+  }
+  return out;
+}
+
+/**
+ * Every rule an explanation breaks. Empty when it may be shown as written — or when the model
+ * wrote no sentence at all: there was no word to explain.
+ */
+export function explanationRefusals(
+  raw: unknown,
+  context: ExplainContext,
+  options: ExplainOptions = {},
+): Refusal[] {
+  const explanation = parseModelExplanation(raw);
+  if (explanation === null) {
+    return [{ rule: 'shape', sentence: null, detail: 'not the expected JSON' }];
+  }
+  const out: Refusal[] = [];
+  const { phrases } = explanation;
+  if (phrases.length > MAX_EXPLAIN_SENTENCES) {
+    out.push({ rule: 'count', sentence: null, detail: `${String(phrases.length)} sentences` });
+  }
+  const folded = phrases.map((sentence) => copyTokens(sentence).join(' '));
+  if (new Set(folded).size < folded.length) {
+    out.push({ rule: 'count', sentence: null, detail: 'the same sentence twice' });
+  }
+  // An explanation is about words of the page: with no sentence there, there is none to explain.
+  if (options.withoutText !== true && phrases.length > 0 && context.shown.length === 0) {
+    out.push({ rule: 'topic', sentence: null, detail: 'nothing on the page' });
+  }
+  const page = pageOf(context.shown);
+  const question = copyTokens(context.question);
+  phrases.forEach((sentence, index) => {
+    out.push(...explainRefusals(sentence, index, question, page, options));
+  });
+  return out;
+}
+
+/**
+ * What the sheet will show. `quiet` carries the reason the explanation was refused, for the
+ * bench; the Worker drops it — and no reason at all when the model had nothing to explain.
+ */
+export type ExplainVerdict =
+  { kind: 'explain'; sentences: string[] } | { kind: 'quiet'; refusal?: Refusal };
+
+/**
+ * The control of an explanation: all of it, or none of it. One sentence refused and the sheet
+ * shows no explanation — never the sentences that passed, which were written to go together.
+ */
+export function validateExplanation(
+  raw: unknown,
+  context: ExplainContext,
+  options: ExplainOptions = {},
+): ExplainVerdict {
+  const [first] = explanationRefusals(raw, context, options);
+  if (first !== undefined) return { kind: 'quiet', refusal: first };
+  const sentences = (parseModelExplanation(raw)?.phrases ?? []).map(plain);
+  return sentences.length === 0 ? { kind: 'quiet' } : { kind: 'explain', sentences };
 }
 
 /** Every piece of text an output holds, whatever its shape; a JSON written as text is read. */
