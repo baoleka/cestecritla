@@ -21,6 +21,7 @@ import {
   type AskResponse,
 } from '../src/lib/ask-contract.js';
 import { askedOf } from '../src/lib/ask-local.js';
+import { MAX_GIST_IDS, parseGistsResponse } from '../src/lib/chat-contract.js';
 import {
   EXHAUSTED,
   answerQuestion,
@@ -35,8 +36,10 @@ import { MAX_BODY_BYTES, clientKey, rateSubject, readBody } from '../src/worker/
 import {
   MAX_CANDIDATES,
   MAX_CONTEXT_CHARS,
+  MAX_GISTS,
   bounded,
   keptTerms,
+  loadGists,
   loadMeasures,
   type AskDb,
 } from '../src/worker/measures.js';
@@ -492,13 +495,153 @@ void test('the base is read by identifier: the order named, each measure once, n
     state: { corpusVersion: CORPUS, open: false },
     candidates: [],
   });
-  // The schema holds a table of measures and its description: no index, nothing to search in.
+  // The schema holds a table of measures, a table of sentences of ours and their description:
+  // no index, nothing to search in.
   const tables = base()
     .db.prepare("SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name")
     .all()
     .map((row) => String(row['name']));
-  assert.deepEqual(tables, ['meta', 'propositions']);
+  assert.deepEqual(tables, ['gists', 'meta', 'propositions']);
   assert.doesNotMatch(SCHEMA.replace(/^--.*$/gm, ''), /fts|MATCH/i);
+});
+
+/** Sentences of ours about the invented measures, as the editor would have kept them. */
+const GISTS: readonly (readonly [string, string])[] = [
+  [
+    'p1c1-s01-k01',
+    'Le programme prévoit une bibliothèque de quartier ouverte chaque jour dans toute commune.',
+  ],
+  ['p1c1-s01-m01', "Le programme prévoit des transports scolaires gratuits jusqu'à 16 ans."],
+  [
+    'p1c1-s01-m02.s1',
+    'Le programme prévoit des bibliobus dans les villages pour le prêt de livres.',
+  ],
+  [
+    'p1c1-s02-k01',
+    'Le programme prévoit de planter chaque année 300 arbres fruitiers près des chemins des communes.',
+  ],
+];
+
+/** The invented base with sentences in it. `gists: null`: their switch was never written. */
+function gistBase(
+  options: {
+    gists?: string | null;
+    corpus?: string;
+    ask?: string;
+    rows?: readonly (readonly [string, string])[];
+  } = {},
+): LocalD1 {
+  const db = base({ ask: options.ask ?? 'open' });
+  const insert = db.db.prepare(
+    'INSERT INTO gists (id, text, measure_sha256, read_on) VALUES (?, ?, ?, ?)',
+  );
+  for (const [id, text] of options.rows ?? GISTS) {
+    insert.run(id, text, 'a'.repeat(64), '2026-11-15');
+  }
+  const meta = db.db.prepare('INSERT INTO meta (key, value) VALUES (?, ?)');
+  if (options.gists !== null) meta.run('gists', options.gists ?? 'open');
+  meta.run('gists_corpus', options.corpus ?? CORPUS);
+  return db;
+}
+
+void test('the sentences written ahead are read by identifier: the order named, eight at most, one round trip', async () => {
+  const sentence = new Map(GISTS);
+  const asked = ['p1c1-s02-k01', 'p9c9-s09-m09', 'p1c1-s01-k01', 'p1c1-s02-m01', 'p1c1-s02-k01'];
+  const loaded = await loadGists(gistBase(), asked, CORPUS);
+  assert.deepEqual(loaded.state, { corpusVersion: CORPUS, open: true });
+  // The order of the request, each measure once — less what the base does not know, and less
+  // the measure that has no sentence: its link alone is a verdict, not a gap to fill.
+  assert.deepEqual(loaded.gists, [
+    { id: 'p1c1-s02-k01', text: sentence.get('p1c1-s02-k01') },
+    { id: 'p1c1-s01-k01', text: sentence.get('p1c1-s01-k01') },
+  ]);
+  // What comes out is a sentence of ours and its identifier: no fingerprint, no date — and not
+  // a word of the measure, which the same base holds.
+  for (const row of INVENTED) {
+    assert.ok(!JSON.stringify(loaded).includes(row.text.slice(0, 20)), row.id);
+  }
+  // …and it is what the page reads, strictly, as an answer: nothing to drop, nothing refused.
+  const answer = { kind: 'gists', corpus: CORPUS, gists: loaded.gists, ai: false };
+  assert.deepEqual(parseGistsResponse(JSON.parse(JSON.stringify(answer))), answer);
+  // As many identifiers are read as a request of the page may name, whatever a request names.
+  const many = Array.from(
+    { length: 12 },
+    (_, i) => [`p1c1-s03-m${String(i + 1).padStart(2, '0')}`, `Phrase ${String(i)}.`] as const,
+  );
+  const twelve = await loadGists(
+    gistBase({ rows: many }),
+    many.map(([id]) => id),
+    CORPUS,
+  );
+  assert.equal(MAX_GISTS, MAX_GIST_IDS);
+  assert.deepEqual(
+    twelve.gists.map((gist) => gist.id),
+    many.slice(0, MAX_GIST_IDS).map(([id]) => id),
+  );
+  // No measure named: the state is still read, and nothing else.
+  assert.deepEqual(await loadGists(gistBase(), [], CORPUS), {
+    state: { corpusVersion: CORPUS, open: true },
+    gists: [],
+  });
+  // One round trip to the base, whatever is named.
+  let read = 0;
+  const counting = gistBase();
+  const spy: AskDb = {
+    prepare: (sql) => counting.prepare(sql),
+    batch: (statements) => {
+      read += 1;
+      return counting.batch(statements);
+    },
+  };
+  await loadGists(spy, asked, CORPUS);
+  assert.equal(read, 1);
+});
+
+void test('no sentence leaves a base whose sentences are stopped, were never opened, or are of another book', async () => {
+  const ids = GISTS.map(([id]) => id);
+  const none = async (db: LocalD1, corpus = CORPUS): Promise<boolean> =>
+    (await loadGists(db, ids, corpus)).gists.length === 0;
+  assert.equal((await loadGists(gistBase(), ids, CORPUS)).gists.length, GISTS.length);
+
+  const stopped = await loadGists(gistBase({ gists: 'stopped' }), ids, CORPUS);
+  assert.deepEqual(stopped, { state: { corpusVersion: CORPUS, open: false }, gists: [] });
+  // Anything but an explicit « open » is closed: a base nobody switched on stays off.
+  assert.ok(await none(gistBase({ gists: null })), 'never switched on');
+  assert.ok(await none(gistBase({ gists: '' })), 'an empty switch');
+  assert.ok(await none(gistBase({ gists: 'OPEN' })), 'a switch that is not the word');
+  // Sentences read against another state of the book are sentences about another book —
+  // whether it is the base that moved, or the site that asks.
+  const other = await loadGists(gistBase({ corpus: 'bbbbbbbbbbbbbbbb' }), ids, CORPUS);
+  assert.deepEqual(other, { state: { corpusVersion: 'bbbbbbbbbbbbbbbb', open: true }, gists: [] });
+  assert.ok(await none(gistBase(), 'aaaaaaaaaaaaaaaa'), 'the caller serves another book');
+
+  // A switch of their own: stopping the written answers does not stop the sentences…
+  const answersOff = gistBase({ ask: 'stopped' });
+  assert.equal((await loadGists(answersOff, ids, CORPUS)).gists.length, GISTS.length);
+  assert.equal((await loadMeasures(answersOff, ids)).state.open, false);
+  // …and stopping the sentences leaves the answers as they were.
+  const sentencesOff = gistBase({ gists: 'stopped' });
+  assert.ok(await none(sentencesOff));
+  assert.equal((await loadMeasures(sentencesOff, ids)).state.open, true);
+
+  // The query itself hands nothing out of a stopped base: it is not the code after it that
+  // throws the rows away.
+  for (const db of [gistBase({ gists: 'stopped' }), gistBase({ corpus: 'bbbbbbbbbbbbbbbb' })]) {
+    let rows = -1;
+    const spy: AskDb = {
+      prepare: (sql) => db.prepare(sql),
+      batch: async (statements) => {
+        const results = await db.batch(statements);
+        rows = results[1]?.results.length ?? -1;
+        return results;
+      },
+    };
+    await loadGists(spy, ids, CORPUS);
+    assert.equal(rows, 0);
+  }
+  // Read, never written: the reader of the sentences is one SELECT, like the reader of the text.
+  const source = readFileSync('src/worker/measures.ts', 'utf8');
+  assert.match(source, /SELECT id, text FROM gists WHERE id IN/);
 });
 
 void test('a request is bounded: so many measures, so many characters, never fewer than three', async () => {

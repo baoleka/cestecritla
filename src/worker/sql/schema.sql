@@ -1,21 +1,31 @@
 -- The private base of « Demander » (D16.6): the text of the 2026 edition, where only the Worker
--- reads it. Cloudflare D1 (SQLite), free plan. Filled from the editor's machine by
--- scripts/seed-ask-2026.ts, with the editor's accord each time; emptied when the site is withdrawn.
+-- reads it — and, since the plan of 14 November 2026 (PLAN-CHAT §3), the sentences written
+-- ahead about it, one per measure, each read by the editor. Cloudflare D1 (SQLite), free plan.
+-- Filled from the editor's machine by scripts/seed-ask-2026.ts, with the editor's accord each
+-- time; emptied when the site is withdrawn.
 --
--- Nothing here is ever served: /api/ask answers with sentences of ours and identifiers
--- (src/lib/ask-contract.ts). And nothing a visitor does is ever written here: no question, no
--- answer, no date, no counter. The Worker only reads.
+-- The text of the book is never served: an answer of the Worker is sentences of ours and
+-- identifiers (src/lib/ask-contract.ts). The sentences of `gists` are ours, and they are what a
+-- route may hand out — once their own switch is open. And nothing a visitor does is ever
+-- written here: no question, no answer, no date, no counter. The Worker only reads.
 --
 -- Since D16.22 the Worker reads measures by their identifier and searches nothing: the page
 -- searches, on the phone, and names what it found. The full-text index this file used to
 -- declare is gone with the search — one derived copy of the text less at Cloudflare.
 
--- What the base is, and the one switch the editor keeps:
+-- What the base is, and the two switches the editor keeps. Each deposit owns its keys and
+-- touches no other: seeding the text leaves the sentences as they are, and the reverse.
 --   corpus_version  the state of the book it holds; the Worker answers "local" when it is not
 --                   the one the site was built from
 --   propositions    how many rows it should hold
 --   ask             'open' or 'stopped' — read at every request, so that written answers can
 --                   be cut within the minute, with no deployment (runbook: « arrêt »)
+--   gists           'open' or 'stopped' — the switch of the sentences written ahead, separate
+--                   from `ask`: either can be cut without the other
+--   gists_corpus    the state of the book those sentences were read against
+--   gists_count     how many rows `gists` should hold
+--   gists_sha256    the fingerprint of the set, so that what was deposited can be told from
+--                   what was read (scripts/seed-ask-2026.ts, `gistsFingerprint`)
 CREATE TABLE IF NOT EXISTS meta (
   key TEXT PRIMARY KEY,
   value TEXT NOT NULL
@@ -29,4 +39,13 @@ CREATE TABLE IF NOT EXISTS propositions (
   ord INTEGER NOT NULL,         -- reading order in the book
   text TEXT NOT NULL,           -- the proposition, word for word
   lead TEXT NOT NULL            -- for a sub-measure, the measure it details; '' otherwise
+) WITHOUT ROWID;
+
+-- One row per measure that has a sentence of ours the editor read and kept — never a word of
+-- the book. A measure with no row keeps its link alone: that is a verdict, not a gap.
+CREATE TABLE IF NOT EXISTS gists (
+  id TEXT PRIMARY KEY,          -- the measure the sentence is about
+  text TEXT NOT NULL,           -- one sentence, in our words, 300 characters at most
+  measure_sha256 TEXT NOT NULL, -- the fingerprint of the measure it was read against
+  read_on TEXT NOT NULL         -- the day the editor read it, YYYY-MM-DD
 ) WITHOUT ROWID;

@@ -8,6 +8,11 @@
  * measures read by identifier, one round trip, and the index it used to hold is gone — one
  * derived copy of the text less at Cloudflare.
  *
+ * The same base holds what may be handed out in place of a model's writing: the sentences
+ * written ahead, one per measure, each read by the editor (`loadGists`, at the end of this
+ * file). They are read the same way — by identifier, one round trip — under a switch of their
+ * own.
+ *
  * Typed against the two methods of D1 it uses, so that the same code runs on Node's SQLite in
  * the tests (scripts/d1-local.ts).
  */
@@ -31,9 +36,9 @@ const META_SQL = 'SELECT key, value FROM meta';
 
 /** What the base says of itself, read with every request. */
 export interface BaseState {
-  /** The state of the book it holds, or null when it holds none. */
+  /** The state of the book it holds — or its sentences were read against — or null. */
   corpusVersion: string | null;
-  /** False when the editor has stopped the answers (meta.ask = 'stopped'). */
+  /** False when the editor has stopped them (meta.ask, or meta.gists, = 'stopped'). */
   open: boolean;
 }
 
@@ -46,7 +51,11 @@ export interface Loaded {
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;
 
-function readState(rows: readonly unknown[]): BaseState {
+/**
+ * The state of one of the two things the base holds, each under its own keys: the text of the
+ * book (`corpus_version`, `ask`) and the sentences written ahead (`gists_corpus`, `gists`).
+ */
+function readState(rows: readonly unknown[], corpusKey: string, switchKey: string): BaseState {
   const meta = new Map<string, string>();
   for (const row of rows) {
     if (isRecord(row) && typeof row['key'] === 'string' && typeof row['value'] === 'string') {
@@ -54,7 +63,7 @@ function readState(rows: readonly unknown[]): BaseState {
     }
   }
   // Anything but an explicit 'open' is closed: a base that was never switched on stays off.
-  return { corpusVersion: meta.get('corpus_version') ?? null, open: meta.get('ask') === 'open' };
+  return { corpusVersion: meta.get(corpusKey) ?? null, open: meta.get(switchKey) === 'open' };
 }
 
 function readTexts(rows: readonly unknown[]): Map<string, string> {
@@ -99,9 +108,78 @@ export async function loadMeasures(db: AskDb, ids: readonly string[]): Promise<L
   }
   const [meta, rows] = await db.batch(statements);
   return {
-    state: readState(meta?.results ?? []),
+    state: readState(meta?.results ?? [], 'corpus_version', 'ask'),
     candidates: bounded(named, readTexts(rows?.results ?? [])),
   };
+}
+
+/**
+ * The sentences written ahead (PLAN-CHAT §3): one sentence of ours per measure, written by a
+ * model before any visitor came, read by the editor one by one, and kept in the base next to
+ * the fingerprint of the measure it was read against. Reading them calls no model and costs no
+ * neuron — and none of them is a word of the book.
+ */
+export interface Gist {
+  id: string;
+  text: string;
+}
+
+/**
+ * How many sentences one request may ask for: as many measures as a request of the page may
+ * name. The page's contract owns that number; a test holds this one to it until a route reads
+ * both (scripts/ask-worker.test.ts).
+ */
+export const MAX_GISTS = 8;
+
+export interface LoadedGists {
+  /** What the base says of its sentences: the book they were read against, and their switch. */
+  state: BaseState;
+  /** In the order the request named them. A measure with no sentence is simply not there. */
+  gists: Gist[];
+}
+
+/**
+ * The sentences of the measures named, by identifier and in one round trip — and none at all
+ * unless the editor opened them (`gists`, a switch of its own: stopping the written answers
+ * does not stop these, nor the reverse) for the very state of the book the caller serves.
+ *
+ * Both conditions are held twice: by the query, so that a stopped base hands no row out, and
+ * by the state read in the same batch, so that a query edited one day cannot open it alone.
+ */
+export async function loadGists(
+  db: AskDb,
+  ids: readonly string[],
+  corpusVersion: string,
+): Promise<LoadedGists> {
+  const named = ids.slice(0, MAX_GISTS);
+  const marks = named.map(() => '?').join(', ');
+  const statements = [db.prepare(META_SQL)];
+  if (named.length > 0) {
+    statements.push(
+      db
+        .prepare(
+          `SELECT id, text FROM gists WHERE id IN (${marks})` +
+            " AND (SELECT value FROM meta WHERE key = 'gists') = 'open'" +
+            " AND (SELECT value FROM meta WHERE key = 'gists_corpus') = ?",
+        )
+        .bind(...named, corpusVersion),
+    );
+  }
+  const [meta, rows] = await db.batch(statements);
+  const state = readState(meta?.results ?? [], 'gists_corpus', 'gists');
+  if (!state.open || state.corpusVersion !== corpusVersion) return { state, gists: [] };
+  const texts = new Map<string, string>();
+  for (const row of rows?.results ?? []) {
+    if (isRecord(row) && typeof row['id'] === 'string' && typeof row['text'] === 'string') {
+      texts.set(row['id'], row['text']);
+    }
+  }
+  const gists: Gist[] = [];
+  for (const id of named) {
+    const text = texts.get(id);
+    if (text !== undefined && !gists.some((gist) => gist.id === id)) gists.push({ id, text });
+  }
+  return { state, gists };
 }
 
 /**

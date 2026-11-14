@@ -36,7 +36,9 @@
     "e2e:ask": "tsx scripts/e2e-ask.ts",
     "e2e:game": "tsx scripts/e2e-game.ts",
     "index:2026": "tsx scripts/index-2026.ts",
-    "eval:2026": "tsx scripts/eval-2026.ts"
+    "eval:2026": "tsx scripts/eval-2026.ts",
+    "gists": "tsx scripts/gists-2026.ts",
+    "e2e:gists": "tsx scripts/e2e-gists.ts"
   },
   "license": "MIT",
   "devDependencies": {
