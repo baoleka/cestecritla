@@ -665,9 +665,12 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     const linksOnly = found !== null && !found.sentences && found.rows.length > 0;
     const searched: Turn = {
       ...turn,
-      // Our written answer stands when the question is the objection and nothing more.
+      // Our written answer stands when the question is the objection and nothing more; the
+      // card of a word, when nobody is named or charged next to it.
       recognised:
-        found?.reviewed === true ? turn.recognised : { ...turn.recognised, objection: null },
+        found?.reviewed === true
+          ? turn.recognised
+          : { objection: null, cards: found?.charged === true ? [] : turn.recognised.cards },
       refused: found?.refused === true,
       rows: found?.rows ?? [],
       linksOnly,

@@ -293,11 +293,13 @@ export function viewOf(turn: Turn, page: PageState, last: boolean): TurnView {
   if (asksAboutSite(turn.question)) {
     return { plain: null, measures: { kind: 'about' }, wording: null, ai: null };
   }
-  // Our written answer waits for the search: only then is it known that the question is the
-  // objection and nothing more (`measuresFor`) — a charge that rides along gets no « En
-  // clair », and none shows in the meantime.
-  const { cards } = turn.recognised;
-  const objection = turn.rows === null ? null : turn.recognised.objection;
+  // What we wrote ourselves — an answer to an objection, the card of a word — waits for the
+  // search: only then is it known that the question is the objection and nothing more, and
+  // that nobody is named or charged in it (`measuresFor`). A charge gets no « En clair », and
+  // none shows in the meantime.
+  const settled = turn.rows !== null;
+  const objection = settled ? turn.recognised.objection : null;
+  const cards = settled ? turn.recognised.cards : [];
   const plain = objection !== null || cards.length > 0 ? { objection, cards } : null;
 
   const rows = rowsOf(turn, page);

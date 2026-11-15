@@ -1493,7 +1493,8 @@ largeur, sosies grecs ou cyrilliques, dates écrites de toutes les façons : des
 
 **Ce qui a changé** (D16.72) : les expressions codées et « les X sont des Y » sont refusés comme
 une insulte ; une objection n'est reconnue que si la question est l'objection et rien de plus ; une
-date qui n'est celle d'aucune mesure ne montre rien.
+date qui n'est celle d'aucune mesure ne montre rien ; la fiche d'un mot ne s'affiche plus
+au-dessus d'une question qui met quelqu'un en cause.
 
 **Ce que je consigne sans l'arrondir** : la liste des expressions codées est **une liste de mots à
 refuser** — exactement ce que cette nuit a défait six fois. Je n'ai pas trouvé de règle de

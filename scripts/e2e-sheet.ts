@@ -763,6 +763,15 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         hate.slice(0, 200),
       );
     }
+    // The card of a word of ours does not stand above a charge either; alone, the word has it.
+    const carded = await ask('la règle verte et l’antisémitisme de Zorglub');
+    check(
+      'a word of ours next to a charge: no « En clair », no sentence',
+      (await count(`${LAST} .c-plain`)) === 0 &&
+        (await count(`${LAST} .c-gists [data-generated-by]`)) === 0 &&
+        (HOW.test(carded) || FOUND_NOTHING.test(carded)),
+      carded.slice(0, 220),
+    );
     check('none of those sent anything either', posted.gists.length === afterObjection);
 
     // --- 8. nothing is written on the phone; the thread empties

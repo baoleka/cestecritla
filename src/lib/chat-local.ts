@@ -849,6 +849,12 @@ export interface Found {
   reviewed?: true;
   /** True when the question is refused, like an insult: nothing is shown but that sentence. */
   refused?: true;
+  /**
+   * True when the rows are links and the question names, points at or charges somebody, or
+   * holds a sensitive subject: nothing of ours stands above it — neither an answer, nor the
+   * card of a word it happens to hold.
+   */
+  charged?: true;
 }
 
 /**
@@ -923,13 +929,15 @@ export function measuresFor(
   const shown = hits.filter((hit) => rows.includes(hit.id));
   // A date that is the date of no measure found the measures of another day: nothing.
   if (datesMissed(question, shown)) return { rows: [], sentences: false, example: null };
+  const pointing =
+    namesSomeone(question) ||
+    refersToSomeone(question) ||
+    putsOnTrial(question) ||
+    (lexicon !== null && pointsWithASign(question, lexicon));
   const plainly =
     rows.length > 0 &&
     lexicon !== null &&
-    !namesSomeone(question) &&
-    !refersToSomeone(question) &&
-    !putsOnTrial(question) &&
-    !pointsWithASign(question, lexicon) &&
+    !pointing &&
     strangersIn(
       question,
       hits,
@@ -994,7 +1002,9 @@ export function measuresFor(
     );
   };
   const example = typed.find(strict ? subject : plain) ?? null;
-  return { rows, sentences: false, example };
+  return pointing || strict
+    ? { rows, sentences: false, example, charged: true }
+    : { rows, sentences: false, example };
 }
 
 /**
