@@ -12,12 +12,29 @@
 import { STORAGE_KEY } from '../lib/game-state.ts';
 import { STORAGE_MAP } from '../lib/storage-map.ts';
 import { t, type StringKey } from '../lib/strings.ts';
+
+interface Props {
+  /**
+   * The map of a build whose mascot is of the second generation (src/lib/storage-map2.ts,
+   * D17.3): the same storages, the same key, and one field more — her colour. Left out, the
+   * map is the one that is online. The page that renders this component chooses.
+   */
+  map?:
+    | readonly {
+        storage: string;
+        lead: string;
+        fields: readonly { name: string; label: string }[];
+      }[]
+    | undefined;
+}
+
+const { map = STORAGE_MAP } = Astro.props;
 ---
 
 <h2 id="ce-que-le-jeu-ecrit">{t('privacy.game.title')}</h2>
 <p>{t('privacy.game.lead')}</p>
 {
-  STORAGE_MAP.map((entry) => (
+  map.map((entry) => (
     <>
       <p>
         {t(entry.lead as StringKey)} <span class="ref">({entry.storage})</span>

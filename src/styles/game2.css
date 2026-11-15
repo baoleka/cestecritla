@@ -1,0 +1,151 @@
+/*
+ * « Où est-ce écrit ? » with the mascot of the second generation (D17.9; lot C of
+ * docs/discovery/PLAN-TORTUE.md) — where she stands in the block, and what her sheet gains.
+ * Everything else of the game is src/styles/game.css, read as it is.
+ *
+ * She is ONE drawing in the block. The stylesheet moves her — beside the word while one plays,
+ * on a stage at the top of the panel when a round ends (`data-stage` on the block) — and
+ * nothing moves her in the document or draws her twice. Her size is hers to take from here
+ * (`--mascot-size`); how she looks and moves is src/styles/mascot2.css, which this file never
+ * reaches into.
+ *
+ * No colour of its own: roles only. The colour of a part of the book appears on her flamingo
+ * and nowhere else (D17.12) — a choice of colour is shown on a small flamingo, never on a disc.
+ */
+
+/* Beside the word: 96 px, 80 px in a window 320 px wide — and never more than a quarter of the
+   window, however large the reader's text. The word and its kicker run beside her; a word too
+   long for the room left simply starts under her. */
+.g-her {
+  float: inline-end;
+  margin-block: var(--space-3) var(--space-1);
+  margin-inline-start: var(--space-3);
+  --mascot-size: min(6rem, 25vw);
+}
+/* What is asked, and the card of the place, are never beside her: under her, whole. */
+.g-question,
+.g-place {
+  clear: both;
+}
+/* What will make her change, said beside her before a first word is found (D17.5). */
+.g-goal {
+  margin-block: var(--space-4) 0;
+}
+.g-goal + .g-kicker {
+  margin-block-start: var(--space-2);
+}
+/* Not yet: it keeps its room, and nobody can reach it — by eye, by key or by a screen reader. */
+.game [data-wait] {
+  visibility: hidden;
+}
+/* In the round of the HTML that sentence only keeps its room — the script will say it, in that
+   very place, and nothing will have moved. Where the browser says a script can run, it is
+   shown from the first paint: true there, and never said to who has no script. */
+@media (scripting: enabled) {
+  .g-static .g-goal[data-wait] {
+    visibility: visible;
+  }
+}
+
+/* The end of a round: she leaves the corner of the word for a stage, wide, at the top of the
+   panel — 240 px, so 150 px high, and never more than 70 % of the block. Nothing is modal: the
+   buttons under her stay alive while she changes. */
+.game[data-stage] .g-her {
+  float: none;
+  display: flex;
+  justify-content: center;
+  margin: var(--space-4) 0 var(--space-2);
+  --mascot-size: min(15rem, 62vw);
+}
+/* Under the stage: « Sa fiche » — and, in its very place while a passage plays, « Passer »:
+   two buttons that are never there together, laid on one another. « Choisir sa couleur » has
+   its room from the start of the round's end. So the row is the same before, during and after
+   a passage: nothing in it or under it ever jumps. */
+.g-her-with {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-block: 0 var(--space-3);
+}
+.g-swap {
+  display: inline-grid;
+}
+.g-swap > * {
+  grid-area: 1 / 1;
+  justify-content: center;
+}
+/* What is said of her when a round ends: what has just happened to her, then her goal. */
+.g-line {
+  margin-block: var(--space-2);
+}
+.g-line .g-passage {
+  font-weight: 700;
+}
+
+/* Her sheet: she is large in it — the size of the stage. */
+.t-sheet-her {
+  --mascot-size: min(15rem, 62vw);
+}
+.t-sheet-goal {
+  margin-block: var(--space-1) 0;
+  text-align: center;
+}
+/* « Son parcours »: the forms she has had, small, in the order she had them — never one to
+   come —, each with the sentence of its passage and the way to see it again. */
+.t-path {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.t-path li {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  --mascot-size: 4.5rem;
+}
+.t-path p {
+  margin: 0;
+}
+/* « Sa couleur »: seven choices, each a small flamingo in that colour and the name of the
+   colour. The one she has is said by the button itself (aria-pressed) and by its border. */
+.t-tints {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.game .t-tint {
+  inline-size: 100%;
+  justify-content: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  text-align: start;
+}
+/* The flamingo stands in the middle of her frame: seen through a window her own size, she fills
+   it (her frame is 96 by 60; standing she takes 44 by 53 of it, from 26 across and 5 down). */
+.t-swatch {
+  position: relative;
+  flex: none;
+  inline-size: 2.5rem;
+  block-size: 3.25rem;
+  overflow: hidden;
+}
+.t-swatch .mascot {
+  position: absolute;
+  top: -0.125rem;
+  left: -1.43rem;
+  --mascot-size: 5.33rem;
+}
+/* Twice the border, taken from the padding: the button keeps its size, and the mark holds where
+   a system forces its own colours (a border stays, a shadow does not). */
+.game .t-tint[aria-pressed='true'] {
+  border-width: 4px;
+  padding: calc(var(--space-1) - 2px) calc(var(--space-2) - 2px);
+}

@@ -41,6 +41,7 @@
     "e2e:ask": "tsx scripts/e2e-ask.ts",
     "e2e:sheet": "tsx scripts/e2e-sheet.ts",
     "e2e:game": "tsx scripts/e2e-game.ts",
+    "e2e:game2": "tsx scripts/e2e-game2.ts",
     "e2e:mascot2": "tsx scripts/mascot2-render.ts",
     "e2e:mascot2:motion": "tsx scripts/mascot2-motion.ts",
     "index:2026": "tsx scripts/index-2026.ts",

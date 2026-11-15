@@ -917,3 +917,128 @@ l'aperçu (autre adresse, autre stockage) : il est tenu par des tests, pas par u
   « Sa couleur aussi. » s'y ajoute ; ce que dit un lecteur d'écran quand on la touche est gardé
   tel que proposé. Les quatre chaînes sont dans le kit ; plus rien n'attend l'éditeur avant le
   lot C.
+
+### Lot C, au 15 novembre 2026 — le bloc du jeu, sur la build d'essai seulement (rien n'est servi ; aucune décision demandée)
+
+- **Ce qui existe.** Le jeu de la génération 2, entier, dans `dist-mascot2/` (`npm run
+  build:mascot2`, jamais déployée) : `src/components/Game2.astro` et `Mascot2.astro`,
+  `src/styles/game2.css`, `src/scripts/game2.ts` et `game-store2.ts`. Les règles du jeu sont
+  celles d'avant, lues dans les mêmes modules ; ce qui change, c'est elle. **Les fichiers de la
+  tortue en ligne ne sont pas touchés** : la page d'accueil choisit un bloc ou l'autre par une
+  constante que l'outil de build replie (`__CEL_MASCOT2__`), et la page Confidentialité sa carte
+  des écritures de la même façon. Deux fichiers de la génération 1 gagnent une ligne chacun pour
+  cela — `src/pages/index.astro`, `src/pages/confidentialite/index.astro` — et
+  `GameStorage.astro` accepte une carte en paramètre ; ce qu'ils produisent pour la production
+  n'a pas changé d'un octet (voir « Preuves »).
+- **Où elle est.** Un seul dessin dans le bloc, que la feuille de style déplace (un attribut sur
+  le bloc, `data-stage`) : à côté du mot pendant qu'on joue — 96 px, 80 px dans une fenêtre de
+  320 px, jamais plus d'un quart de la fenêtre —, et sur une scène en haut du panneau quand une
+  manche finit — 240 px, 150 px de haut, jamais plus de 70 % du bloc. Le mot et sa ligne
+  d'attribution courent à côté d'elle ; la question et la carte de l'endroit passent dessous,
+  entières. La scène est ramenée à l'écran si la page était descendue plus bas. Sa fiche a ses
+  copies à elle, comme avant.
+- **Ce qu'elle fait.** Cinq gestes obtiennent une réponse, aucun autre : un mot trouvé (son
+  petit bond, le même quel que soit le choix), un indice demandé (elle regarde les tuiles, puis
+  trois d'entre elles se marquent), la fin d'une manche (les trois trouvailles viennent à elle),
+  la toucher (sa fiche s'ouvre et elle y fait sa figure, en grand), « Revoir ». **Un passage se
+  joue une fois, à la fin de la manche qui le gagne, dans la page où le geste a été fait** — et
+  jamais au chargement, ni quand son état revient de l'onglet, du téléphone, d'un autre onglet
+  ou du cache du navigateur : elle est alors dessinée d'un coup. Sa phrase paraît quand le
+  passage a été vu, à la place qu'elle avait déjà — rien ne bouge sous la scène —, et la ligne
+  de statut la dit au même moment. On passe un passage par « Passer », un appui sur la scène,
+  Échap, ou n'importe quel bouton du jeu — dont l'appui atteint sa cible. En mouvement réduit,
+  rien ne démarre : ce qu'elle est devenue s'affiche d'un coup, avec sa phrase.
+- **Son but, en mots.** Avant le premier mot trouvé, à côté d'elle : « Elle change quand tu
+  trouves des mots. » À la fin de chaque manche, une ligne sous le titre : la phrase du passage,
+  puis son but — ou « À la prochaine manche, elle change. » quand c'est vrai. La porte rejoue
+  les seize manches et une dix-septième : chaque ligne est celle que les règles donnent, aucune
+  ne porte un nombre. Ses signes d'approche paraissent aux manches que ses arcs disent : ailes
+  entrouvertes aux manches 5 et 6, regard levé de 10 à 12, première étoile de 13 à 15.
+- **Sa fiche.** Sa figure ; ce qui la fera changer ; « Son parcours » — les formes qu'elle a
+  eues, en petit, dans l'ordre, chacune avec la phrase de son passage et « Revoir », jamais une
+  forme à venir ; « Sa couleur », dès qu'elle est un flamant : six couleurs par leur nom, puis
+  « Sans couleur ». Ce qui est trouvé, ce qui est gardé, « Tout effacer » : comme avant.
+- **Sa couleur.** Écrite dans l'onglet dès qu'on la choisit — un champ de plus, le dernier — et
+  sur le téléphone seulement s'il garde déjà, ou après « Garder ta tortue ». Jamais dans une
+  requête ni dans une adresse : la porte le tient. Dans deux onglets, le dernier geste gagne, et
+  l'autre onglet suit sans un mouvement. **Tant qu'aucune couleur n'est choisie, ce qui s'écrit
+  est, octet pour octet, ce que la génération 1 écrit** — vérifié dans un vrai navigateur, sur
+  la chaîne que la fonction en ligne rend du même jeu.
+- **Sept choix faits sans te les demander, parce qu'ils découlent de tes décisions — à te dire.**
+  (a) *Chaque couleur se montre sur un petit flamant*, pas sur une pastille : D17.12 veut une
+  couleur de partie sur le flamant et nulle part ailleurs, et une porte tient qu'aucun autre
+  élément du bloc ne porte une des six teintes. (b) *Sa figure se joue dans sa fiche*, en grand,
+  à l'ouverture : la fiche s'ouvre au toucher, sans attendre la fin d'une figure ; dans le bloc
+  elle ne bouge pas. (c) *« Passer » se tient à la place de « Sa fiche »* le temps d'un
+  passage : rien ne saute sous la scène, ni pendant ni après. (d) *« Choisir sa couleur » reste
+  proposé à chaque fin de manche tant qu'elle est un flamant sans couleur* — pas seulement
+  « juste après » : qui avait gardé une tortue de la génération 1 retrouve un flamant pâle sans
+  avoir vu le passage. « Sans couleur » est un choix : il fait disparaître le bouton. (e) *« Sa
+  couleur aussi. » ne se dit que lorsqu'elle en a une* : avant, le téléphone n'en garde pas.
+  (f) *Après « Revoir », la grande image garde la forme de ce passage* jusqu'au geste suivant ;
+  la toucher la remet telle qu'elle est aujourd'hui, et elle fait sa figure. (g) *Un passage
+  s'arrête sur sa forme finale, avec sa phrase, si l'onglet est quitté ou si le mouvement réduit
+  est demandé en cours de route* : au retour, ses minuteries l'auraient rejouée d'un bloc.
+- **La page ne bouge pas quand le script prend le bloc.** La phrase du début n'est pas dans la
+  manche sans script — sans script elle ne change pas, la page ne doit pas le dire —, mais sa
+  place y est : la phrase y est écrite et retenue (`data-wait`), montrée dès le premier
+  affichage là où le navigateur dit qu'un script peut tourner (`@media (scripting: enabled)`),
+  et dite par le script à cette même place. Mesuré sous Chromium, scripts retenus 400 ms :
+  0,0000 en haut de la page et 0,0003 sur le bloc, pour une première visite comme pour un flamant qui revient (porte : 0,02 ; la génération 1 mesure 0,0021 quand on arrive sur le bloc).
+  **Ce qui reste imparfait, écrit tel quel** : si le fichier du jeu ne peut pas être chargé, la
+  manche sans script continue, script présent — et la phrase « Elle change quand tu trouves des
+  mots. » reste affichée alors qu'elle ne changera pas. Un navigateur sans feuille de style la
+  lit aussi.
+- **Ce qu'une porte a trouvé, et qui est corrigé.** En mouvement réduit, l'indice lui faisait
+  tourner la tête d'un coup — une pose changée, sans mouvement, mais changée : « rien ne
+  démarre » veut qu'elle ne bouge pas du tout. Trouvé par la porte de bout en bout à son
+  premier passage.
+- **Les portes.** `scripts/game2-page.test.ts` lit les builds : **une build de la génération 1
+  ne porte pas un octet de la 2** — ni son nom, ni une classe de son dessin, ni un attribut que
+  son script écrit, ni une de ses phrases, ni son script — sur `dist/`, `dist-ask/`,
+  `dist-gists/` et `dist-scrutin/` ; et le même détecteur doit tout retrouver dans
+  `dist-mascot2/`, sans quoi il ne prouverait rien. Dans la build de la 2 : elle est dans le
+  bloc, une fois, dessinée depuis le fichier que tu as validé, forme pour forme, et sur aucune
+  autre page ; la page Confidentialité liste le champ de la couleur ; les poids tiennent.
+  `scripts/e2e-game2.ts` (`npm run e2e:game2`) joue le jeu dans trois moteurs : 232 vérifications sous Chromium, 197 sous Firefox, 197 sous WebKit, toutes bonnes.
+  Pour savoir qu'elle sait échouer, trois défauts ont été introduits exprès dans le script — un
+  bond qui dépendrait du choix, une phrase dite avant la fin du passage, la couleur écrite dans
+  l'adresse : trois échecs, ceux-là. La porte de la génération 1, `scripts/e2e-game.ts`, n'est
+  pas touchée et continue de tenir le jeu en ligne sur sa build. Les règles générales des
+  builds (politique de sécurité, aucun HTML inséré, aucun champ nommé, liens sortants) lisent
+  aussi `dist-mascot2/`. La CI joue la porte de la 2 sous Chromium, sans ses mesures de
+  machine (`--no-lab`).
+- **Mesures (15 novembre 2026, Chromium ; PROBABLE — un labo, pas un téléphone).** Script du
+  jeu : 8 790 octets gzip (plafond 10 240). Page d'accueil : 17 006 octets gzip (plafond
+  20 480, porte neuve ; 12 180 pour la génération 1). Données du jeu : inchangées. Fluidité,
+  processeur ralenti 4 fois, 390 × 844 à deux pixels pour un, **sur la page du jeu elle-même** :
+  pour chacun des quatre passages, 95 % des images en 16,8 ms au plus, 0 % au-delà de 20 ms, aucune au-delà de 50 ms (la passe du milieu de trois). Éclairs, filmés sur la page du jeu à vitesse réelle, la scène et ce qui change
+  autour d'elle, dans les deux thèmes : 0 éclair par seconde, de lumière comme de rouge ; au plus 8 645 px² changent de lumière deux fois dans la même seconde (seuil : 21 824) — une image toutes les 33 ms à la médiane ; la mesure fine, douze fois ralentie, reste celle de sa planche. Labo de la carte du budget
+  (`scripts/perf-probe.ts --root dist-mascot2`) : premier affichage 380 ms (budget 2 500), décalage 0,0002 (0,1), réponse à un geste 16 à 40 ms (200).
+- **Accessibilité.** Audit automatique sous les neuf conditions du site, sur sept écrans — la
+  question, la carte, la fin d'une manche pendant le passage puis après, la fin de la manche
+  qui en fait un flamant, sa fiche, sa fiche pendant un « Revoir » : aucune violation grave, rien
+  ne déborde, toutes les cibles font 44 px, chaque bouton a un nom. Au clavier : depuis la
+  phrase de la fin de manche, « Choisir sa couleur », « Sa fiche », puis elle ; Entrée ouvre sa
+  fiche ; Tab la parcourt dans l'ordre où elle se lit et n'en sort pas ; une couleur se donne à
+  la barre d'espace ; Échap rend le focus. Couleurs forcées par le système (émulées, Chromium) :
+  elle reste dessinée, son trait à 3:1 au moins du fond, et la couleur choisie se dit par sa
+  bordure.
+- **Preuves.** 647 tests (646 passent, 1 sauté depuis toujours), contraste, lint, types. Les portes de bout en bout de la génération 1, rejouées dans les trois moteurs sur leurs builds : les pages 44 / 41 / 41, « Demander » 109 / 102 / 102, **le jeu en ligne 117 / 108 / 108**, la feuille 102 / 96 / 96, l'audit d'accessibilité ; et celles de son dessin : 47 dans chacun des trois, son mouvement 132 / 109 / 109 — les nombres d'avant. **`npm run build` donne un `dist/` identique, octet pour octet, à
+  celui d'avant le chantier** (1 156 fichiers) ; de même la build de l'aperçu, `dist-ask/`,
+  et — comparées à celles du commit précédent, construites à part — `dist-gists/` et
+  `dist-scrutin/`.
+  L'empreinte de son dessin n'a pas bougé : la planche reste datée, la mesure de son mouvement
+  reste valable (`scripts/mascot2.test.ts`). La lecture des images et la mesure des éclairs,
+  dont deux portes ont maintenant besoin, sont passées telles quelles dans
+  `scripts/picture-kit.ts` ; la porte du mouvement, rejouée dans les trois moteurs, rend les
+  mêmes résultats.
+- **Non vérifié (HYPOTHÈSE), dit tel quel** : de vrais téléphones, le navigateur d'Instagram,
+  un vrai lecteur d'écran, une vraie personne photosensible ; la fluidité et les éclairs hors de
+  Chromium ; le retour depuis le cache du navigateur, simulé par son événement ; les couleurs
+  forcées, émulées dans un seul moteur ; que de vraies gens la remarquent enfin et aient envie
+  de la faire changer.
+- **Suite** : lot D — l'aperçu. Avant qu'il la serve : la ligne de la page Confidentialité, à
+  te montrer pour que tu la dates (ou que tu me dises de la dater comme relue par la session
+  seule) ; puis `preview_generation: 2`, la build de l'aperçu, son déploiement, sa vérification
+  en ligne, les relectures indépendantes et les personas.

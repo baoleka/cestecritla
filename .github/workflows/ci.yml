@@ -140,7 +140,7 @@ jobs:
 
   accessibility:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -181,11 +181,21 @@ jobs:
       - name: End to end of the game (test build)
         run: npx tsx scripts/e2e-game.ts --engines chromium
 
+      # The same game with the mascot of the second generation (D17.14), on her own test build
+      # — what her gates play before any host serves her: her four passages beat by beat,
+      # « Passer », less motion, her sheet, her colour, what is written and where. A shared
+      # runner is not a quiet machine: her frames and her flashes are measured on the editor's
+      # (`--no-lab`; `npm run e2e:game2`, three engines).
+      - name: End to end of the game, second generation of the mascot (test build)
+        run: npm run build:mascot2 && npx tsx scripts/e2e-game2.ts --engines chromium --no-lab
+
       # The gates that judge the notices, the security policy and the words of the game read
       # dist-ask/ when it is there: replayed now that it is, so that the half of each that needs
-      # the screen to exist is exercised too.
+      # the screen to exist is exercised too. The last one reads every build made above: not a
+      # byte of the second generation of the mascot in a build of the first, and her own test
+      # build as it must be.
       - name: Notices, policy and words of the test build
-        run: npm run build:scrutin:test && npx tsx --test scripts/check-no-ai-mention.test.ts scripts/check-build.test.ts scripts/game-page.test.ts
+        run: npm run build:scrutin:test && npx tsx --test scripts/check-no-ai-mention.test.ts scripts/check-build.test.ts scripts/game-page.test.ts scripts/game2-page.test.ts
 
       # The parser's second opinion (D15.6): the synthetic official site — 2026 markup around the
       # 2025 text — re-read by a real DOM, and a sample of deep links followed.

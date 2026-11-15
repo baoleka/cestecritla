@@ -1,0 +1,31 @@
+---
+/**
+ * The mascot, second generation, in a page (D17.1 to D17.25; docs/discovery/PLAN-TORTUE.md).
+ *
+ * The drawing is read from the very file the editor validated (design/mascot/v2/mascot.svg):
+ * the fingerprint her sheet is dated on is the fingerprint of what ships. This component writes
+ * nothing but attributes on it, and brings the two stylesheets that turn them into what is
+ * seen — hers, and the six tints the player may give her flamingo, which no other page of the
+ * site receives.
+ *
+ * She is decoration to assistive technology (aria-hidden in the file): whatever she does is
+ * said in words by the button that holds her and by the status line of the game.
+ *
+ * She lives in the game block only (D17.9): never near the question field, a result of the
+ * search, the sheet of « Demander », a section page, the preview card or the favicon.
+ *
+ * Imported by src/components/Game2.astro alone, which the home page imports only in a build of
+ * the second generation (`__CEL_MASCOT2__`): a build of the first carries not a byte of her.
+ */
+import { readFileSync } from 'node:fs';
+import '../styles/mascot2-tokens.css';
+import '../styles/mascot2.css';
+import { mascotMarkup } from '../lib/mascot2.ts';
+
+// As she is before a word is found: the turtle. The script gives her the look the game
+// remembers; without script she stays as she is here.
+const drawing = readFileSync('design/mascot/v2/mascot.svg', 'utf8').trim();
+const markup = mascotMarkup(drawing, { state: 0 });
+---
+
+<Fragment set:html={markup} />

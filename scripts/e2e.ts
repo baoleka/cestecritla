@@ -562,7 +562,7 @@ async function runEngine(
       await page.waitForTimeout(300);
       check(
         'words not validated: no game block, no word, no turtle',
-        (await page.locator('#jeu, [data-programme="word"], svg.turtle').count()) === 0,
+        (await page.locator('#jeu, [data-programme="word"], svg.turtle, svg.mascot').count()) === 0,
       );
       check(
         'words not validated: neither the game’s data nor its script is fetched',

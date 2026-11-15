@@ -108,11 +108,12 @@ void test('no request leaves the origin (P9, D0.22: zero third party)', () => {
 
 void test('a page opens no origin but ours — none, on any page, whether the site answers questions or not', () => {
   // The security policy of each page is the list of who may be asked for anything (P9, D7.6).
-  // Checked on what ships (dist/, in the mode data/2026/ask.json says) and on the test build
-  // of the ask screen when it is there (dist-ask/, built as if the mode were open).
+  // Checked on what ships (dist/, in the mode data/2026/ask.json says) and on the test builds
+  // when they are there: of the ask screen (dist-ask/, built as if the mode were open) and of
+  // the second generation of the mascot (dist-mascot2/, D17.14).
   // Until D16.23 the home page of a site that answers questions opened one: Turnstile's. There
   // is no bot check any more, and so no exception: the policy of every page names nobody.
-  for (const root of ['dist', 'dist-ask']) {
+  for (const root of ['dist', 'dist-ask', 'dist-mascot2']) {
     const pages = walk(root).filter((f) => f.endsWith('.html'));
     for (const file of pages) {
       const page = relative(root, file);
@@ -138,7 +139,7 @@ void test('no script we ship does what the policy of the pages forbids: a string
   // read: the sinks the directive guards appear in none of our scripts, inline ones included.
   const SINKS =
     /\.(?:innerHTML|outerHTML|srcdoc)\s*=(?!=)|\binsertAdjacentHTML\(|\bdocument\.write(?:ln)?\(|\bcreateContextualFragment\(|\bparseFromString\(|\bnew Function\(|(?<![\w.])eval\(|\bimportScripts\(|\bserviceWorker\.register\(|\bnew (?:Shared)?Worker\(|\bcreateElement\(\s*["'`]script["'`]\s*\)|\bset(?:Timeout|Interval)\(\s*["'`]/;
-  for (const root of ['dist', 'dist-ask']) {
+  for (const root of ['dist', 'dist-ask', 'dist-mascot2']) {
     for (const file of walk(root)) {
       if (file.endsWith('.js') || file.endsWith('.mjs')) {
         assert.doesNotMatch(read(file), SINKS, `${file}: a sink Trusted Types refuses`);
@@ -169,7 +170,7 @@ void test('no page says a person re-read our own texts unless their files say on
   assert.ok(states.length > 0);
   if (states.every((status) => status === 'reviewed')) return;
   const CLAIM = /relu(?:e|es|s)? par (?:Baoleka|l['’]éditeur|une personne|un humain)/i;
-  for (const root of ['dist', 'dist-ask']) {
+  for (const root of ['dist', 'dist-ask', 'dist-mascot2']) {
     for (const file of walk(root).filter((f) => f.endsWith('.html'))) {
       assert.doesNotMatch(read(file), CLAIM, `${file}: claims a re-reading by a person`);
     }
@@ -181,7 +182,7 @@ void test('a link that leaves the site does not say where the visitor comes from
   // — all of them go to the official site — carry `noreferrer`: that site is not told that
   // its visitor reads this one (security review of 15/11/2026). `noopener` stays with it: the
   // page that opens gets no handle on ours.
-  for (const root of ['dist', 'dist-ask', 'dist-gists']) {
+  for (const root of ['dist', 'dist-ask', 'dist-gists', 'dist-mascot2']) {
     for (const file of walk(root).filter((f) => f.endsWith('.html'))) {
       for (const [tag] of read(file).matchAll(/<a\b[^>]*\bhref="https?:\/\/[^"]*"[^>]*>/g)) {
         const href = /\bhref="([^"]*)"/.exec(tag)?.[1] ?? '';
@@ -245,7 +246,7 @@ void test('no script the phone loads holds a look-behind: Safari before 16.4 ref
   // the pattern is built — at the load of the script — and « Demander » then does nothing,
   // without a word. The Worker may write them (src/lib/ask-validate.ts); a page may not.
   let read = 0;
-  for (const root of ['dist', 'dist-ask', 'dist-gists', 'dist-scrutin']) {
+  for (const root of ['dist', 'dist-ask', 'dist-gists', 'dist-scrutin', 'dist-mascot2']) {
     for (const file of walk(root).filter((f) => /\.(?:js|mjs|html)$/.test(f))) {
       read += 1;
       assert.doesNotMatch(readFileSync(file, 'utf8'), /\(\?<[=!]/, `${file} holds a look-behind`);
@@ -279,7 +280,7 @@ void test('nothing typed can leave by a form: no field has a name, and no form i
   // for a form without a method. Both fields of the site are in the page before the script
   // that answers Enter: unnamed, they are never sent (security review of 14/11/2026). Checked on
   // every page that ships, and on the test build of the sheet.
-  for (const root of ['dist', 'dist-ask']) {
+  for (const root of ['dist', 'dist-ask', 'dist-mascot2']) {
     const pages = walk(root).filter((f) => f.endsWith('.html'));
     if (pages.length === 0) continue;
     for (const page of pages) {

@@ -1,0 +1,341 @@
+---
+/**
+ * « Où est-ce écrit ? » — the game block of the home page, with the mascot of the second
+ * generation (D17.1 to D17.25; docs/discovery/PLAN-TORTUE.md, lot C).
+ *
+ * The game is the game of src/components/Game.astro, rule for rule: one word of the programme,
+ * a question, the official titles as tiles, the card of the place. Never "wrong", never red, no
+ * timer, no score. Without JavaScript the first round is here, whole, played with links and
+ * `:target`. What changes is her:
+ *
+ *   - she is beside the word while one plays, and on a stage at the top of the panel when a
+ *     round ends — ONE drawing, moved by the stylesheet (an attribute on the block), never
+ *     moved in the document and never doubled (D17.9);
+ *   - at the end of the round that earns it, she passes to her next form, once, and the
+ *     passage can be skipped (D17.8); what will make her change is said in words, never in
+ *     numbers (D17.5);
+ *   - her sheet shows the forms she has had, replays a passage, and lets the player give her
+ *     flamingo one of six colours, or none (D17.3).
+ *
+ * Imported by the home page only in a build of the second generation (`__CEL_MASCOT2__`,
+ * data/mascot.json): the block says so itself (`data-mascot`), which is how the deploy guard
+ * tells such a build from its files (scripts/build-mode.ts).
+ *
+ * What a visitor reads here that is the book's: the word (`data-programme="word"`) and the
+ * official titles (`data-programme="title"`), whole, never cut. Everything else is ours, and
+ * every number shown is computed from the list — none is typed, and none is about her.
+ */
+import '../styles/game.css';
+import '../styles/game2.css';
+import Mascot2 from './Mascot2.astro';
+import { pausedKey } from '../lib/ask-config.ts';
+import { buildGame } from '../lib/game-data.ts';
+import { ROUND, isLongWord, locate, otherParts } from '../lib/game-engine.ts';
+import { safeJson, t } from '../lib/strings.ts';
+
+const { data, fingerprint } = buildGame();
+
+const round = data.words.slice(0, ROUND);
+
+/** `[1, 3, 5]` → « 1, 3 et 5 »: a list the way a sentence writes it. */
+const list = (numbers: readonly number[]): string =>
+  numbers.length < 2
+    ? numbers.join('')
+    : `${numbers.slice(0, -1).join(', ')} et ${String(numbers.at(-1))}`;
+
+const words = round.map((word, index) => {
+  const place = locate(data, word.section);
+  if (place === null) throw new Error(`game: ${word.id} is shown in no tile`);
+  const also = otherParts(data, word.id);
+  return {
+    ...word,
+    n: index + 1,
+    place,
+    also,
+    alsoLine:
+      also.length === 0
+        ? null
+        : also.length === 1
+          ? t('game.reveal.elsewhere_one', { n: also[0] ?? 0 })
+          : t('game.reveal.elsewhere', { parts: list(also) }),
+    // A count only when it says something: from three sections on (PLAN-JEU §4.1).
+    countLine:
+      word.places.length >= 3 ? t('game.reveal.count', { count: word.places.length }) : null,
+    next: index + 1 < round.length ? `#m${String(index + 2)}` : '#fin',
+  };
+});
+
+const reveal = (ask: 'part' | 'chapter' | 'section') => ({
+  yes: ask === 'part' ? t('game.reveal.yes', { n: '{n}' }) : ask === 'chapter' ? t('game.reveal.chapter.yes', { n: '{n}' }) : t('game.reveal.section.yes'),
+  also: ask === 'part' ? t('game.reveal.also', { n: '{n}' }) : ask === 'chapter' ? t('game.reveal.chapter.also', { n: '{n}' }) : t('game.reveal.section.also'),
+  neutral: ask === 'part' ? t('game.reveal.neutral', { n: '{n}' }) : ask === 'chapter' ? t('game.reveal.chapter.neutral', { n: '{n}' }) : t('game.reveal.section.neutral'),
+});
+
+const config = {
+  data: `/data/jeu-${fingerprint}.json`,
+  strings: {
+    kicker: t('game.kicker'),
+    ask: {
+      part: t('game.question.part'),
+      chapter: t('game.question.chapter'),
+      section: t('game.question.section'),
+    },
+    reveal: { part: reveal('part'), chapter: reveal('chapter'), section: reveal('section') },
+    dontKnow: t('game.dont_know'),
+    hint: t('game.hint.cta'),
+    hintMark: t('game.hint.mark'),
+    hintSaid: t('turtle.hint.said', { parts: '{parts}' }),
+    also: t('game.reveal.elsewhere', { parts: '{parts}' }),
+    alsoOne: t('game.reveal.elsewhere_one', { n: '{n}' }),
+    count: t('game.reveal.count', { count: '{count}' }),
+    cta: t('game.reveal.cta'),
+    next: t('game.next_word'),
+    done: t('game.round.done'),
+    again: t('game.round.again'),
+    share: t('game.share'),
+    copied: t('share.toast_copied'),
+    depth: { 2: t('game.depth.chapter'), 3: t('game.depth.section') },
+    keep: {
+      what: t('turtle.keep.what'),
+      tint: t('turtle.keep.tint'),
+      notKept: t('turtle.keep.not_kept'),
+      otherwise: t('turtle.keep.otherwise'),
+      seen: t('turtle.keep.seen'),
+      safari: t('turtle.keep.safari'),
+      erase: t('turtle.keep.erase'),
+      cta: t('turtle.keep.cta'),
+      decline: t('turtle.keep.decline'),
+      done: t('turtle.keep.done'),
+    },
+    sheet: {
+      name: t('turtle.button'),
+      none: t('turtle.sheet.none'),
+      onPhone: t('turtle.sheet.on_phone'),
+      onPhoneTint: t('turtle.sheet.on_phone_tint'),
+      tabOnly: t('turtle.sheet.tab_only'),
+      released: t('turtle.released'),
+      erased: t('turtle.erased'),
+      replay: t('turtle.sheet.replay'),
+      skip: t('turtle.skip'),
+    },
+    // Her goal, in words (D17.5): the sentence the game says is picked by src/lib/game-goal.ts.
+    goal: {
+      start: t('turtle.goal.start'),
+      parts: t('turtle.goal.parts'),
+      chapters: t('turtle.goal.chapters'),
+      words: t('turtle.goal.words'),
+      done: t('turtle.goal.done'),
+      next: t('turtle.goal.next'),
+      next_again: t('turtle.goal.next_again'),
+    },
+    // What happened to her, passage by passage — said when the passage has been seen (D17.6).
+    passage: {
+      1: t('turtle.passage.1'),
+      2: t('turtle.passage.2'),
+      3: t('turtle.passage.3'),
+      4: t('turtle.passage.4'),
+    },
+    // What she does when touched, by her form (D17.25): what a screen reader says of it.
+    figure: {
+      0: t('turtle.raises_head'),
+      1: t('turtle.figure.surf'),
+      2: t('turtle.figure.wings'),
+      3: t('turtle.figure.wings'),
+      4: t('turtle.figure.sky'),
+    },
+    // The colour of her flamingo, by its name and never by a part of the book (D17.23).
+    tints: {
+      1: t('turtle.tint.1'),
+      2: t('turtle.tint.2'),
+      3: t('turtle.tint.3'),
+      4: t('turtle.tint.4'),
+      5: t('turtle.tint.5'),
+      6: t('turtle.tint.6'),
+      7: t('turtle.tint.none'),
+    },
+  },
+};
+---
+
+{
+  /* Electoral silence (D16.16): the block below is not shown at all, and this sentence says
+     what is paused. Shown by the attribute the guard in the <head> sets before the first paint,
+     and by the script once it has read the hour of our server. */
+}
+<p
+  class="g-silence"
+  id="game-silence"
+  data-reason={t('silence.reason')}
+  data-reopen={t('silence.reopen', { reopenTime: '{reopenTime}' })}
+>
+  {t(pausedKey())}
+  <span id="game-reopen"></span>
+</p>
+
+<section class="game" id="jeu" aria-labelledby="game-title" data-mascot="2">
+  <h2 id="game-title">{t('game.title')}</h2>
+  {
+    /* Her, once, whatever the screen: beside the word, then on the stage — the stylesheet moves
+       her (`data-stage` on the block), the document never does. */
+  }
+  <div class="g-her" id="game-her"><Mascot2 /></div>
+  {
+    /* Under the stage, at the end of a round, and only with script: the way to her sheet (none
+       of the personas guessed that she can be touched) — in whose place the way past a passage
+       stands while one plays — and, once she is a flamingo that has no colour yet, the way to
+       give her one. */
+  }
+  <p class="g-her-with" id="game-her-with" hidden>
+    <span class="g-swap">
+      <button type="button" class="g-quiet" id="game-sheet-link" aria-haspopup="dialog">
+        {t('turtle.sheet.link')}
+      </button>
+      <button type="button" class="g-quiet" id="game-skip" data-wait>{t('turtle.skip')}</button>
+    </span>
+    <button type="button" class="g-quiet" id="game-tint-link" aria-haspopup="dialog" hidden>
+      {t('turtle.tint.choose')}
+    </button>
+  </p>
+
+  <div class="g-static" id="game-static">
+    {
+      /* Position anchors, before everything they command: `:target ~ …` reads forwards only. */
+      words.map((word) => (
+        <>
+          {word.n > 1 && <span class={`g-at g-w${String(word.n)}`} id={`m${String(word.n)}`} />}
+          <span class={`g-at g-r g-w${String(word.n)}`} id={`m${String(word.n)}-0`} />
+          {data.parts.map((part) => (
+            <span
+              class:list={[
+                'g-at',
+                'g-r',
+                `g-w${String(word.n)}`,
+                part.number === word.place.part.number && 'g-here',
+                word.also.includes(part.number) && 'g-there',
+              ]}
+              id={`m${String(word.n)}-${String(part.number)}`}
+            />
+          ))}
+        </>
+      ))
+    }
+    <span class="g-at g-over" id="fin"></span>
+
+    {
+      words.map((word) => (
+        <div class={`g-word g-word-${String(word.n)}`}>
+          {/* The room of what is said of her before a first word is found — so that nothing
+              moves when the script takes the block. Shown from the first paint only where
+              the browser says a script can run (src/styles/game2.css): without script she
+              does not change, and the page must not say that she will. */}
+          <p class="g-goal" data-wait>{t('turtle.goal.start')}</p>
+          <p class="g-kicker">{t('game.kicker')}</p>
+          <p
+            class="g-the-word"
+            data-programme="word"
+            data-long={isLongWord(word.word) ? '' : undefined}
+          >
+            {word.word}
+          </p>
+          <div class="g-question">
+            <h3 class="g-ask">{t('game.question.part')}</h3>
+            <p class="g-with">
+              <a class="g-quiet" href={`#m${String(word.n)}-0`}>
+                {t('game.dont_know')}
+              </a>
+            </p>
+            <ul class="g-tiles">
+              {data.parts.map((part) => (
+                <li>
+                  <a class="g-tile" href={`#m${String(word.n)}-${String(part.number)}`}>
+                    <span data-programme="title">{part.title}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="g-place">
+            <h3 class="g-yes">{t('game.reveal.yes', { n: word.place.part.number })}</h3>
+            <h3 class="g-also">{t('game.reveal.also', { n: word.place.part.number })}</h3>
+            <h3 class="g-neutral">{t('game.reveal.neutral', { n: word.place.part.number })}</h3>
+            <ul class="g-where">
+              <li data-programme="title">{word.place.part.title}</li>
+              <li data-programme="title">{word.place.chapter.title}</li>
+              <li data-programme="title">{word.place.section.title}</li>
+            </ul>
+            {word.alsoLine !== null && <p>{word.alsoLine}</p>}
+            {word.countLine !== null && <p>{word.countLine}</p>}
+            <p class="g-actions">
+              <a
+                class="cta"
+                href={word.url}
+                rel="noopener noreferrer"
+                data-fragment={word.fragment === '' ? undefined : word.fragment}
+              >
+                {t('game.reveal.cta')}
+              </a>
+              <a class="g-quiet" href={word.next}>
+                {t('game.next_word')}
+              </a>
+            </p>
+          </div>
+        </div>
+      ))
+    }
+    <div class="g-end">
+      <h3>{t('game.round.done')}</h3>
+      <p>
+        <a href="/sommaire/">{t('game.round.no_js')}</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="g-live" id="game-live" hidden></div>
+  <p class="sr-only" id="game-status" role="status"></p>
+
+  {
+    /* Her sheet (D16.13, D17.8, D17.3): opened by touching her or by « Sa fiche », so only ever
+       by the script. Inside she is large and can be touched again; one reads what will make her
+       change, sees the forms she has had — never one to come — and can see a passage again;
+       gives her flamingo a colour; reads what she has found, what is kept, and the gesture that
+       erases everything. */
+  }
+  <dialog class="t-sheet" id="turtle-sheet" aria-labelledby="turtle-sheet-title">
+    <h3 id="turtle-sheet-title">{t('turtle.button')}</h3>
+    <div class="t-sheet-her" id="turtle-sheet-her"></div>
+    <p class="t-sheet-said" id="turtle-sheet-said" role="status"></p>
+    <p class="t-sheet-goal" id="turtle-sheet-goal"></p>
+    <h4>{t('turtle.sheet.path')}</h4>
+    <ol class="t-path" id="turtle-sheet-path"></ol>
+    <div id="turtle-sheet-tint" role="group" aria-labelledby="turtle-sheet-tint-title" hidden>
+      <h4 id="turtle-sheet-tint-title">{t('turtle.tint.title')}</h4>
+      <p>{t('turtle.tint.lead')}</p>
+      <ul class="t-tints" id="turtle-sheet-tints"></ul>
+    </div>
+    <h4>{t('turtle.sheet.found')}</h4>
+    <div id="turtle-sheet-found"></div>
+    <h4>{t('turtle.sheet.kept')}</h4>
+    <div id="turtle-sheet-kept"></div>
+    <p class="g-actions">
+      <button type="button" class="g-quiet" id="turtle-sheet-keep" hidden>
+        {t('turtle.keep.cta')}
+      </button>
+      <button type="button" class="g-quiet" id="turtle-sheet-release" hidden>
+        {t('turtle.release')}
+      </button>
+      <button type="button" class="g-quiet" id="turtle-sheet-erase">{t('turtle.erase')}</button>
+    </p>
+    <p><a href="/confidentialite/#ce-que-le-jeu-ecrit">{t('turtle.sheet.privacy')}</a></p>
+    <form method="dialog">
+      <button class="g-quiet">{t('common.close')}</button>
+    </form>
+    {/* Her sheet lists words of the programme: it carries the label itself, so that no capture
+        of it alone can be shown without it. */}
+    <p class="unofficial">{t('independence.unofficial')}</p>
+  </dialog>
+  <script type="application/json" id="game-config" set:html={safeJson(config)} is:inline />
+</section>
+
+<script>
+  import '../scripts/game2.ts';
+</script>

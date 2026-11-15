@@ -1,0 +1,3101 @@
+/**
+ * End-to-end checks of « Où est-ce écrit ? » with the mascot of the second generation (lot C of
+ * docs/discovery/PLAN-TORTUE.md; D17.1 to D17.25), in three browser engines, on her test build
+ * (dist-mascot2/, which nothing deploys).
+ *
+ *   npm run build:mascot2 && npx tsx scripts/e2e-game2.ts          Chromium, Firefox, WebKit
+ *   npx tsx scripts/e2e-game2.ts --engines chromium
+ *   npx tsx scripts/e2e-game2.ts --engines chromium --no-lab     on a machine that is not at rest
+ *
+ * The game is the game of the first generation, and scripts/e2e-game.ts goes on holding that
+ * one on its own build, untouched. This file holds the same rules on the script that replaces
+ * it, and everything that is new:
+ *
+ *   1. without JavaScript the first round is whole and playable, she is there once, as the
+ *      turtle, and nothing is offered that only a script can answer;
+ *   2. the script takes the block over without moving the focus or the page, with ONE request,
+ *      and nothing of her moves at arrival;
+ *   3. a choice is never wrong, and her small move for a word found is the same whatever was
+ *      chosen; what will make her change is said beside her before a first word is found;
+ *   4. the end of a round: she takes the stage, the three finds come to her, and — the round
+ *      that earns it — she passes to her next form, beat by beat as the choreography says,
+ *      once, ending on the still look, with its sentence said when it has been seen;
+ *   5. a passage is skipped by « Passer », by a touch on the stage, by Escape, by any button of
+ *      the game — whose press reaches its target; with less motion asked nothing starts;
+ *      nothing is played at load, from the tab, the phone, another tab or the browser's cache;
+ *   6. her goal is said in words at the end of every round, never a number, never a judgement;
+ *   7. the tab remembers from the first reveal, the phone only after « Garder ta tortue »; what
+ *      is written never depends on a choice, and without a colour it is byte for byte what the
+ *      first generation writes; what the first generation wrote reads back as it was;
+ *   8. her sheet: her figure, the forms she has had and never one to come, « Revoir », her
+ *      colour — six by their name, or none —, which is on her flamingo and nowhere else, in no
+ *      request and no address; on the phone only once it keeps; the last gesture wins;
+ *   9. where she stands and how large, at the widths of real phones;
+ *  10. electoral silence, as before — and a freeze that starts during a passage stops it;
+ *  11. the screens of the game pass the accessibility audit under the nine conditions every
+ *      page is audited under;
+ *  12. in Chromium: the page does not move once painted; every passage keeps its frames with
+ *      the processor slowed four times, on the page of the game itself; and, filmed there in
+ *      both themes, none of them flashes.
+ */
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import type { Browser, BrowserContext, Page } from 'playwright';
+import {
+  ROUND,
+  depthOf,
+  draw,
+  endOfRound,
+  locate,
+  otherParts,
+  type GameData,
+  type RoundEnd,
+  type Standing,
+} from '../src/lib/game-engine.js';
+import { lineAtRoundEnd, nextRoundChangesHer } from '../src/lib/game-goal.js';
+import { KEPT_FIELDS, TAB_FIELDS, serialiseTab } from '../src/lib/game-state.js';
+import { KEPT_FIELDS2, STORAGE_KEY, TAB_FIELDS2 } from '../src/lib/game-state2.js';
+import {
+  PASSAGES,
+  PULSE_HOLD_MS,
+  TRICK_HOLD_MS,
+  evolution,
+  evolutionLasts,
+  lookOf,
+  passageTo,
+  type MascotLook,
+  type MascotTint,
+  type Passage,
+  type TurtleState,
+} from '../src/lib/mascot2.js';
+import { storageMap } from '../src/lib/storage-map2.js';
+import { arcAttributes } from '../src/lib/turtle.js';
+import type { Manifest } from './aec26-types.js';
+import { CONDITIONS, rootFontScript } from './a11y-conditions.js';
+import {
+  ENGINES,
+  STILL,
+  checker,
+  lateLayoutShift,
+  report,
+  serve,
+  until,
+  type Outcome,
+} from './e2e-kit.js';
+import { FLASH_AREA_PX, LINE_MIN, contrastRatio } from './mascot2-kit.js';
+import { flashesOf, readPng, withinFlashRule, type Picture } from './picture-kit.js';
+
+const ROOT = 'dist-mascot2';
+
+/** What the local server is told to do for a check: fail the game's data, or set its own hour. */
+interface ServerState {
+  failData: boolean;
+  /** `/flags.json` as served: the hour in its `Date` header, and the override. Null: the file. */
+  flags: { date: Date; override?: string } | null;
+}
+/** What the game's own voice never says (titles of the book are not ours, and are left out). */
+const NEVER =
+  /\b(?:faux|fausse|perdu|perdue|raté|ratée|erreur|mauvais|mauvaise|bravo|félicitations?|score|niveau|classement|points?)\b|%|\d\s*(?:\/|sur)\s*\d/i;
+
+/** The text of the block that is ours: the word and the official titles removed. */
+const OWN_VOICE = `(() => {
+  const copy = document.querySelector('#jeu').cloneNode(true);
+  for (const node of copy.querySelectorAll('[data-programme], script, [hidden]')) node.remove();
+  return copy.textContent.replace(/\\s+/g, ' ').trim();
+})()`;
+
+/** Everything the two storages of the page hold, key by key: what a test reads of a phone. */
+const stores = `(() => {
+  const dump = (area) => Object.fromEntries(Object.keys(area).map((k) => [k, area.getItem(k)]));
+  return { tab: dump(sessionStorage), phone: dump(localStorage) };
+})()`;
+interface Stores {
+  tab: Record<string, string>;
+  phone: Record<string, string>;
+}
+
+/** Her drawing in the block — the one — and the large copy of her sheet. */
+const HER = '#game-her svg.mascot';
+const LARGE = '#turtle-sheet-her svg.mascot';
+
+/** What is written on a drawing of her, read from the page. */
+interface Written {
+  state: string | null;
+  pose: string | null;
+  tint: string | null;
+  sign: string | null;
+  passage: boolean;
+  phase: string | null;
+  live: boolean;
+  /** For each of her three arcs, every copy of it: `dasharray|dashoffset`. */
+  arcs: string[][];
+}
+const written = (selector: string): string => `(() => {
+  const svg = document.querySelector(${JSON.stringify(selector)});
+  if (svg === null) return null;
+  return {
+    state: svg.getAttribute('data-state'),
+    pose: svg.getAttribute('data-pose'),
+    tint: svg.getAttribute('data-tint'),
+    sign: svg.getAttribute('data-sign'),
+    passage: svg.hasAttribute('data-passage'),
+    phase: svg.getAttribute('data-phase'),
+    live: svg.hasAttribute('data-live'),
+    arcs: [1, 2, 3].map((n) =>
+      [...svg.querySelectorAll('.m-arc-' + String(n))].map(
+        (arc) => arc.getAttribute('stroke-dasharray') + '|' + arc.getAttribute('stroke-dashoffset'),
+      ),
+    ),
+  };
+})()`;
+
+/** Whether what is written on a drawing is this look, at rest in time: no beat under way. */
+function isLook(seen: Written | null, look: MascotLook): boolean {
+  if (seen === null) return false;
+  const arcs = look.arcs.map((steps) => {
+    const { dasharray, dashoffset } = arcAttributes(steps);
+    return `${dasharray}|${dashoffset}`;
+  });
+  return (
+    seen.state === String(look.state) &&
+    seen.pose === look.pose &&
+    seen.tint === String(look.tint) &&
+    seen.sign === String(look.sign) &&
+    seen.passage === look.passage &&
+    seen.phase === null &&
+    seen.arcs.every(
+      (copies, index) => copies.length === 3 && copies.every((a) => a === arcs[index]),
+    )
+  );
+}
+
+/**
+ * Installed in a page: a log of everything written on a drawing of her — one line each time a
+ * script writes on it — and a way to press a button of the game and start the clock at once.
+ */
+const WATCH = `(() => {
+  window.__watch = (selector) => {
+    const svg = document.querySelector(selector);
+    const seen = { log: [], t0: performance.now(), most: 0 };
+    new MutationObserver(() => {
+      seen.most = Math.max(seen.most, document.getAnimations().length);
+      seen.log.push([
+        Math.round(performance.now() - seen.t0),
+        svg.getAttribute('data-phase') ?? '',
+        svg.getAttribute('data-state'),
+        svg.getAttribute('data-pose'),
+        svg.hasAttribute('data-passage') ? 1 : 0,
+        svg.getAttribute('data-tint'),
+      ]);
+    }).observe(svg, { attributes: true });
+    return seen;
+  };
+  window.__press = (name, scope) => {
+    const button = [...document.querySelectorAll((scope ?? '#jeu') + ' button')].find(
+      (b) => b.textContent.trim() === name && b.getClientRects().length > 0,
+    );
+    for (const seen of Object.values(window.__seen ?? {})) {
+      seen.log.length = 0;
+      seen.most = 0;
+      seen.t0 = performance.now();
+    }
+    button.click();
+  };
+  // Every frame for a while, timed and nothing else: what a measure must not slow.
+  window.__frames = (forMs) =>
+    new Promise((done) => {
+      const deltas = [];
+      const start = performance.now();
+      let last = start;
+      const tick = (now) => {
+        deltas.push(now - last);
+        last = now;
+        if (now - start < forMs) requestAnimationFrame(tick);
+        else done(deltas);
+      };
+      requestAnimationFrame(tick);
+    });
+  window.__seen = {};
+})()`;
+/** One line of the log: when, the beat, her state, her pose, the accent, her colour. */
+type Logged = [number, string, string | null, string | null, number, string | null];
+
+/**
+ * `--no-lab`: the machine is not at rest — a shared runner of the CI. What only a quiet machine
+ * can measure is then left to the editor's (her frames with the processor slowed, the film of
+ * her flashes), and a timer is forgiven for being late. Every rule is held all the same.
+ */
+const LAB = !process.argv.includes('--no-lab');
+/**
+ * `--only visit,sheet`: some sections of the gate, to work on one. Never the gate: a run asked
+ * for in part says so, and does not end as a success.
+ */
+const onlyAt = process.argv.indexOf('--only');
+const ONLY = onlyAt === -1 ? null : (process.argv[onlyAt + 1] ?? '').split(',');
+/** How late a timer of a browser may give her a beat, and how early (it never does). */
+const LATE_MS = LAB ? 150 : 500;
+const EARLY_MS = 5;
+/** After a gesture, and after the end of a round that earns a passage: nothing moves any more. */
+const ALONE_MS = 2100;
+const ALONE_AFTER_PASSAGE_MS = 5000;
+
+/** The game after a number of whole rounds, played in the order of the list. */
+function after(data: GameData, rounds: number): { standing: Standing; seen: string[] } {
+  let standing: Standing = { depth: 1, state: 0, arcs: [0, 0, 0] };
+  const seen: string[] = [];
+  for (let round = 0; round < rounds; round += 1) {
+    // The draw is the game's: the order of the list, and on from there once all is found.
+    for (const id of draw(data, seen, seen.at(-1) ?? null)) if (!seen.includes(id)) seen.push(id);
+    const end = endOfRound(data, standing, seen);
+    standing = { depth: end.depth, state: end.state, arcs: end.arcs };
+  }
+  return { standing, seen };
+}
+
+/** What the end of a round is, for the game and for her: computed, never typed. */
+interface Ending {
+  before: Standing;
+  end: RoundEnd;
+  /** The last card of the round is on screen: one press ends it. */
+  stored: string;
+  /** The sentences said of her under the title, in order. */
+  said: string[];
+  passage: Passage | null;
+}
+function ending(
+  data: GameData,
+  kit: Readonly<Record<string, string>>,
+  round: number,
+  more: { tint?: MascotTint; declined?: boolean } = {},
+): Ending {
+  const { standing: before, seen: seenBefore } = after(data, round - 1);
+  const words = draw(data, seenBefore, seenBefore.at(-1) ?? null);
+  const seen = [...seenBefore, ...words.filter((id) => !seenBefore.includes(id))];
+  const end = endOfRound(data, before, seen);
+  const line = lineAtRoundEnd(end, nextRoundChangesHer(data, end, seen, words.at(-1) ?? null));
+  const said = [
+    ...(line.passage === null ? [] : [kit[`turtle.passage.${String(line.passage)}`] ?? '']),
+    ...(line.goal === null ? [] : [kit[`turtle.goal.${line.goal}`] ?? '']),
+  ];
+  const stored = {
+    corpus: data.corpus,
+    seen,
+    depth: before.depth,
+    turtle: before.state,
+    arcs: before.arcs,
+    round: { words, at: words.length - 1, shown: true },
+    declined: more.declined ?? true,
+    ...(more.tint === undefined || more.tint === 0 ? {} : { tint: more.tint }),
+  };
+  return {
+    before,
+    end,
+    stored: JSON.stringify(stored),
+    said,
+    passage: end.passage && end.state === before.state + 1 ? passageTo(end.state) : null,
+  };
+}
+
+/** The game at the start of a round, as a tab holds it: nothing under way. */
+function resting(data: GameData, rounds: number, tint: MascotTint = 0): string {
+  const { standing, seen } = after(data, rounds);
+  return JSON.stringify({
+    corpus: data.corpus,
+    seen,
+    depth: standing.depth,
+    turtle: standing.state,
+    arcs: standing.arcs,
+    round: null,
+    declined: true,
+    ...(tint === 0 ? {} : { tint }),
+  });
+}
+
+/**
+ * Writes a game in the tab before the page reads it — once: a reload finds what was played.
+ * (Only on a page of ours: the empty page a tab opens on has no storage of the site.)
+ */
+const seedTab = (stored: string): string =>
+  `if (location.protocol.startsWith('http') && window.name !== 'seeded') { window.name = 'seeded'; sessionStorage.setItem('${STORAGE_KEY}', ${JSON.stringify(stored)}); }`;
+
+/** Text as a reader sees it: every kind of space folded into one plain space. */
+const text = (value: string | null): string => (value ?? '').replace(/\s+/g, ' ').trim();
+/** A sentence of the kit as a page shows it. */
+const shown = (sentence: string): string => text(sentence.replace(/'/g, '’'));
+
+async function runEngine(
+  name: string,
+  origin: string,
+  data: GameData,
+  manifest: Manifest,
+  server: ServerState,
+): Promise<Outcome> {
+  const type = ENGINES[name];
+  if (type === undefined) throw new Error(`unknown engine ${name}`);
+  const { out, check } = checker(name);
+  const browser = await type.launch();
+  const kit = JSON.parse(readFileSync('design/strings.json', 'utf8')) as Record<string, string>;
+  const says = (key: string): string => shown(kit[key] ?? `(no ${key})`);
+  const first = data.words.slice(0, ROUND);
+  const partTitles = manifest.parts
+    .slice()
+    .sort((a, b) => a.order - b.order)
+    .map((p) => p.title);
+  const sectionUrl = (id: string): string => manifest.sections.find((s) => s.id === id)?.url ?? '';
+  const visibleHeadings = async (page: Page): Promise<string[]> =>
+    (await page.locator('#jeu h3:visible').allTextContents()).map(text);
+  const phone = { viewport: { width: 390, height: 844 } };
+
+  /** What any visit of this run broke: an error of ours, or our own security policy. */
+  const breaches: string[] = [];
+  const watched = new WeakSet<Page>();
+  /** A page on the game, the script in charge of the block, her log started. */
+  const arrive = async (view: Page, path = '/'): Promise<void> => {
+    if (!watched.has(view)) {
+      watched.add(view);
+      view.on('pageerror', (e) => breaches.push(String(e)));
+      view.on('console', (m) => {
+        if (
+          /Content Security Policy|Trusted ?Types|Refused to/i.test(m.text()) &&
+          !/duplicate/i.test(m.text())
+        ) {
+          breaches.push(m.text());
+        }
+      });
+    }
+    await view.goto(`${origin}${path}`);
+    await until(view, "!document.querySelector('#game-live').hidden");
+    await view.evaluate(WATCH);
+    await view.evaluate(`window.__seen.her = window.__watch(${JSON.stringify(HER)})`);
+  };
+  /** A visitor whose tab already holds a game. */
+  const visitor = async (
+    stored: string | null,
+    options: Parameters<Browser['newContext']>[0] = phone,
+  ): Promise<{ context: BrowserContext; view: Page }> => {
+    const context = await browser.newContext(options);
+    if (stored !== null) await context.addInitScript(seedTab(stored));
+    const view = await context.newPage();
+    await arrive(view);
+    return { context, view };
+  };
+  const press = (view: Page, label: string, scope?: string): Promise<void> =>
+    view.evaluate(
+      `window.__press(${JSON.stringify(label)}${scope === undefined ? '' : `, ${JSON.stringify(scope)}`})`,
+    );
+  const her = (view: Page, selector = HER): Promise<Written | null> =>
+    view.evaluate<Written | null>(written(selector));
+  const logOf = (view: Page, which = 'her'): Promise<Logged[]> =>
+    view.evaluate<Logged[]>(`window.__seen[${JSON.stringify(which)}].log`);
+  const moving = (view: Page): Promise<number> =>
+    view.evaluate<number>('document.getAnimations().length');
+  const playRound = async (view: Page): Promise<void> => {
+    for (let i = 0; i < ROUND; i += 1) {
+      await view.getByRole('button', { name: 'Je ne sais pas' }).click();
+      await view.getByRole('button', { name: 'Mot suivant' }).click();
+    }
+  };
+  /** What is visible of the row under the stage, of the line about her, of the stage itself. */
+  interface Staged {
+    stage: boolean;
+    width: number;
+    height: number;
+    block: number;
+    skip: boolean;
+    sheet: boolean;
+    tint: boolean;
+    line: string;
+    lineSeen: boolean;
+    status: string;
+    again: number;
+  }
+  const staged = (view: Page): Promise<Staged> =>
+    view.evaluate<Staged>(`(() => {
+      const seen = (node) =>
+        node !== null && node.getClientRects().length > 0 && getComputedStyle(node).visibility === 'visible';
+      const box = document.querySelector('${HER}').getBoundingClientRect();
+      const line = document.querySelector('#game-live .g-line');
+      const again = [...document.querySelectorAll('#game-live button')].find(
+        (b) => b.textContent.trim() === 'Trois autres mots',
+      );
+      return {
+        stage: document.querySelector('#jeu').hasAttribute('data-stage'),
+        width: box.width,
+        height: box.height,
+        block: document.querySelector('#jeu').getBoundingClientRect().width,
+        skip: seen(document.querySelector('#game-skip')),
+        sheet: seen(document.querySelector('#game-sheet-link')),
+        tint: seen(document.querySelector('#game-tint-link')),
+        line: line === null ? '' : line.textContent.replace(/\\s+/g, ' ').trim(),
+        lineSeen: seen(line),
+        status: document.querySelector('#game-status').textContent.replace(/\\s+/g, ' ').trim(),
+        again: again === undefined ? -1 : Math.round(again.getBoundingClientRect().top + scrollY),
+      };
+    })()`);
+
+  /** The beats a log holds, in the order they were given to her. */
+  const beats = (log: readonly Logged[]): string[] =>
+    log.map((line) => line[1]).filter((phase, index, all) => phase !== all[index - 1]);
+  /** Every frame was given to her when the choreography says: never early, and hardly late. */
+  const onTime = (
+    log: readonly Logged[],
+    frames: readonly { at: number; phase: string | null }[],
+  ): boolean =>
+    frames.every((frame) => {
+      const line = log.find(
+        (entry) => entry[1] === (frame.phase ?? '') && entry[0] >= frame.at - EARLY_MS,
+      );
+      return line !== undefined && line[0] <= frame.at + LATE_MS;
+    });
+  const sheetOpen = (view: Page): Promise<boolean> =>
+    view.locator('#turtle-sheet').evaluate((dialog) => (dialog as HTMLDialogElement).open);
+  const wordShown = async (view: Page): Promise<string> =>
+    text(await view.locator('#game-live [data-programme="word"]').textContent());
+  /** The round whose end makes each passage, on the list as it is. */
+  const total = Math.ceil(data.words.length / ROUND);
+  const passageRound = new Map<Passage, number>();
+  for (let round = 1; round <= total; round += 1) {
+    const { passage } = ending(data, kit, round);
+    if (passage !== null && !passageRound.has(passage)) passageRound.set(passage, round);
+  }
+  /** How many whole rounds give her each state. */
+  const roundsFor = (state: TurtleState): number =>
+    Array.from({ length: total + 1 }, (_, rounds) => rounds).find(
+      (rounds) => after(data, rounds).standing.state === state,
+    ) ?? 0;
+
+  // --- 4 bis. her four passages, each from a tab that is one press from the end of its round
+  async function runPassages(): Promise<void> {
+    check(
+      'the list makes her pass four times, one state at a time',
+      PASSAGES.every((passage) => passageRound.has(passage)),
+      JSON.stringify([...passageRound]),
+    );
+    for (const passage of PASSAGES) {
+      const round = passageRound.get(passage);
+      if (round === undefined) continue;
+      // A flamingo has the colour it was given: her passages are played in it.
+      const tint: MascotTint = passage === '23' || passage === '34' ? 3 : 0;
+      const at = ending(data, kit, round, { tint });
+      const from = { state: at.before.state, arcs: at.before.arcs, tint };
+      const to = { state: at.end.state, arcs: at.end.arcs, tint };
+      const frames = evolution(from, to);
+      const { context, view } = await visitor(at.stored);
+      check(
+        `${passage}: before the round ends she is as she was, and nothing has been played`,
+        isLook(await her(view), lookOf(from)) &&
+          (await logOf(view)).length === 0 &&
+          (await moving(view)) === 0,
+        JSON.stringify(await her(view)),
+      );
+      await press(view, 'Mot suivant');
+      await view.waitForTimeout(evolutionLasts(passage) + LATE_MS + 100);
+      const log = await logOf(view);
+      check(
+        `${passage}: played beat by beat as the choreography says — ${String(evolutionLasts(passage))} ms —, never early`,
+        JSON.stringify(beats(log)) === JSON.stringify(frames.map((f) => f.phase ?? '')) &&
+          onTime(log, frames) &&
+          evolutionLasts(passage) === (frames.at(-1)?.at ?? 0),
+        JSON.stringify(log.map((line) => [line[0], line[1]])),
+      );
+      const most = await view.evaluate<number>('window.__seen.her.most');
+      check(`${passage}: she moved while she passed`, most > 0, String(most));
+      const became = await her(view);
+      check(
+        `${passage}: she ends as the still look draws her, with the accent of a passage, and nothing moves`,
+        isLook(became, lookOf({ ...to, passage: true })) && (await moving(view)) === 0,
+        JSON.stringify(became),
+      );
+      const end = await staged(view);
+      check(
+        `${passage}: its sentence is said when it has been seen — « ${at.said[0] ?? ''} »`,
+        end.lineSeen &&
+          end.line === at.said.map(shown).join(' ') &&
+          end.status === end.line &&
+          at.said[0] === kit[`turtle.passage.${String(at.end.state)}`] &&
+          !end.skip &&
+          end.sheet,
+        JSON.stringify(end),
+      );
+      await view.waitForTimeout(ALONE_AFTER_PASSAGE_MS - evolutionLasts(passage) - LATE_MS - 100);
+      check(`${passage}: nothing of her moves 5 s after the gesture`, (await moving(view)) === 0);
+      // Left and found again in the same tab: what she became, at once. The round is over.
+      await arrive(view);
+      const again = await staged(view);
+      check(
+        `${passage}: found again in the tab, she is what she became — at rest, beside the word, and nothing is played`,
+        isLook(await her(view), lookOf(to)) &&
+          (await logOf(view)).length === 0 &&
+          (await moving(view)) === 0 &&
+          !again.stage,
+        JSON.stringify(await her(view)),
+      );
+      await context.close();
+    }
+  }
+
+  // --- 5. skipping a passage; less motion; nothing played that was not earned here, now
+  async function runSkipping(): Promise<void> {
+    const at = ending(data, kit, passageRound.get('12') ?? 2);
+    const became = lookOf({ state: at.end.state, arcs: at.end.arcs, passage: true });
+    const ways: [string, (view: Page) => Promise<void>][] = [
+      ['Escape', (view) => view.keyboard.press('Escape')],
+      ['a touch on the stage', (view) => view.locator('#game-her button').click()],
+    ];
+    for (const [label, skip] of ways) {
+      const { context, view } = await visitor(at.stored);
+      await press(view, 'Mot suivant');
+      await view.waitForTimeout(900);
+      const mid = await her(view);
+      await skip(view);
+      const end = await staged(view);
+      check(
+        `${label} skips her passage: she is what she became, at once, with her sentence`,
+        mid?.phase != null &&
+          isLook(await her(view), became) &&
+          (await moving(view)) === 0 &&
+          end.lineSeen &&
+          end.status === end.line &&
+          end.line === at.said.map(shown).join(' ') &&
+          !end.skip,
+        `${String(mid?.phase)} ${JSON.stringify(end)}`,
+      );
+      check(`${label}: her sheet has not opened`, !(await sheetOpen(view)));
+      await context.close();
+    }
+    // Any button of the game: its press reaches its target, and she is where the game is.
+    {
+      const { context, view } = await visitor(at.stored);
+      await press(view, 'Mot suivant');
+      await view.waitForTimeout(900);
+      await view.getByRole('button', { name: 'Trois autres mots' }).click();
+      const next = await staged(view);
+      check(
+        'a press during her passage reaches its target: the next round starts, and she is what she became, at rest',
+        (await wordShown(view)) === data.words[(passageRound.get('12') ?? 2) * ROUND]?.word &&
+          isLook(await her(view), lookOf({ state: at.end.state, arcs: at.end.arcs })) &&
+          !next.stage,
+        JSON.stringify(await her(view)),
+      );
+      await view.waitForTimeout(ALONE_MS);
+      check('…and nothing of her moves 2.1 s after it', (await moving(view)) === 0);
+      await context.close();
+    }
+    // The tab is left while she passes, or less motion is asked for meanwhile: her passage ends
+    // there, on what she became — nothing is left to be played in a burst, or against a wish.
+    for (const [label, leave] of [
+      [
+        'the tab is left',
+        (view: Page) =>
+          view.evaluate(
+            "(() => { Object.defineProperty(document, 'visibilityState', { value: 'hidden', configurable: true }); document.dispatchEvent(new Event('visibilitychange')); })()",
+          ),
+      ],
+      ['less motion is asked for', (view: Page) => view.emulateMedia({ reducedMotion: 'reduce' })],
+    ] as const) {
+      const { context, view } = await visitor(at.stored);
+      await press(view, 'Mot suivant');
+      await view.waitForTimeout(900);
+      const mid = await her(view);
+      await leave(view);
+      await view.waitForTimeout(100);
+      const end = await staged(view);
+      const stopped = await her(view);
+      await view.waitForTimeout(evolutionLasts('12'));
+      check(
+        `${label} while she passes: her passage ends there, on what she became, with its sentence — and nothing follows`,
+        mid?.phase != null &&
+          isLook(stopped, became) &&
+          isLook(await her(view), became) &&
+          end.lineSeen &&
+          !end.skip &&
+          (await moving(view)) === 0,
+        `${String(mid?.phase)} ${JSON.stringify(stopped)}`,
+      );
+      await context.close();
+    }
+    // « Garder ta tortue », pressed while she passes: the gesture is done, on what she became.
+    {
+      const asked = ending(data, kit, passageRound.get('12') ?? 2, { declined: false });
+      const { context, view } = await visitor(asked.stored);
+      await press(view, 'Mot suivant');
+      await view.waitForTimeout(600);
+      await view.getByRole('button', { name: 'Garder ta tortue' }).click();
+      const held: Stores = await view.evaluate(stores);
+      const onPhone = JSON.parse(held.phone[STORAGE_KEY] ?? '{}') as { turtle?: number };
+      check(
+        '« Garder ta tortue », pressed while she passes, keeps what she became',
+        onPhone.turtle === asked.end.state &&
+          isLook(await her(view), became) &&
+          text(await view.locator('#game-status').textContent()) ===
+            'Elle est gardée sur ce téléphone.',
+        held.phone[STORAGE_KEY],
+      );
+      await context.close();
+    }
+    // Less motion asked: nothing starts. What she became is information, and is shown.
+    {
+      const { context, view } = await visitor(at.stored, { ...phone, reducedMotion: 'reduce' });
+      await press(view, 'Mot suivant');
+      const end = await staged(view);
+      const log = await logOf(view);
+      check(
+        'less motion: what she became shows at once, with its sentence, and no beat is played',
+        isLook(await her(view), became) &&
+          log.length > 0 &&
+          log.every((line) => line[1] === '') &&
+          (await moving(view)) === 0 &&
+          end.stage &&
+          end.lineSeen &&
+          end.line === at.said.map(shown).join(' ') &&
+          end.status === end.line,
+        JSON.stringify(log),
+      );
+      check(
+        'less motion: « Passer » is never there, « Sa fiche » and « Choisir sa couleur » are',
+        !end.skip && end.sheet && end.tint,
+        JSON.stringify(end),
+      );
+      const duration = await view.evaluate<string>(
+        `getComputedStyle(document.querySelector('${HER} .m-bird')).transitionDuration`,
+      );
+      check('less motion: no transition at all on her', /^0s/.test(duration), duration);
+      await context.close();
+    }
+    // The phone keeps a flamingo — written by the first generation: no colour. A tab opens.
+    {
+      const rounds = (passageRound.get('23') ?? 7) - 1;
+      const held = after(data, rounds);
+      const string = JSON.stringify({
+        seen: held.seen,
+        depth: held.standing.depth,
+        turtle: held.standing.state,
+        arcs: held.standing.arcs,
+      });
+      const context = await browser.newContext(phone);
+      const setup = await context.newPage();
+      await setup.goto(`${origin}/404.html`);
+      await setup.evaluate(`localStorage.setItem('${STORAGE_KEY}', ${JSON.stringify(string)})`);
+      await setup.close();
+      const tab = await context.newPage();
+      await arrive(tab);
+      check(
+        'a turtle kept by the first generation comes back as a pale flamingo: at once, at rest, nothing played, nothing lost',
+        held.standing.state === 2 &&
+          isLook(await her(tab), lookOf({ state: 2, arcs: held.standing.arcs })) &&
+          (await logOf(tab)).length === 0 &&
+          (await moving(tab)) === 0 &&
+          (await wordShown(tab)) === data.words[rounds * ROUND]?.word,
+        JSON.stringify(await her(tab)),
+      );
+      const untouched: Stores = await tab.evaluate(stores);
+      check(
+        '…and arriving wrote nothing: the phone holds the very string it held',
+        untouched.phone[STORAGE_KEY] === string && Object.keys(untouched.tab).length === 0,
+        JSON.stringify(untouched),
+      );
+      // Another tab earns her next passage: this one follows, and plays nothing.
+      const second = await context.newPage();
+      await arrive(second);
+      await playRound(second);
+      await until(tab, `document.querySelector('${HER}').getAttribute('data-state') === '3'`);
+      const flown = after(data, rounds + 1).standing;
+      const followed = await logOf(tab);
+      check(
+        'another tab earns her passage: this one follows at once — no beat is played here, nothing moves',
+        followed.length > 0 &&
+          followed.every((line) => line[1] === '') &&
+          isLook(await her(tab), lookOf({ state: 3, arcs: flown.arcs })) &&
+          (await moving(tab)) === 0,
+        JSON.stringify(followed),
+      );
+      check(
+        '…while the tab that earned it plays it',
+        (await logOf(second)).some((line) => line[1].startsWith('23-')),
+      );
+      // The browser's own cache gives the page back as it was left: what is kept is read again.
+      await second.waitForTimeout(evolutionLasts('23') + LATE_MS);
+      await tab.evaluate('window.__seen.her.log.length = 0');
+      await tab.evaluate(
+        "window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true }))",
+      );
+      check(
+        'a page that comes back from the browser’s own cache plays nothing',
+        (await logOf(tab)).every((line) => line[1] === '') &&
+          isLook(await her(tab), lookOf({ state: 3, arcs: flown.arcs })) &&
+          (await moving(tab)) === 0,
+        JSON.stringify(await logOf(tab)),
+      );
+      await context.close();
+    }
+  }
+
+  // --- 6. what is said of her at the end of every round of the game, and the signs she shows
+  async function runLines(): Promise<void> {
+    const wrong: string[] = [];
+    const lines: string[] = [];
+    const signs: string[] = [];
+    // Every round of the list, and one more: the game goes on once everything is found.
+    for (let round = 1; round <= total + 1; round += 1) {
+      const tint: MascotTint = after(data, round - 1).standing.state >= 2 ? 3 : 0;
+      const at = ending(data, kit, round, { tint });
+      const { context, view } = await visitor(at.stored, { ...phone, reducedMotion: 'reduce' });
+      await press(view, 'Mot suivant');
+      const end = await staged(view);
+      const expected = at.said.map(shown).join(' ');
+      if (end.line !== expected || at.said.length < 1 || at.said.length > 2) {
+        wrong.push(`round ${String(round)}: « ${end.line} » for « ${expected} »`);
+      }
+      const look = lookOf({
+        state: at.end.state,
+        arcs: at.end.arcs,
+        tint,
+        passage: at.end.passage,
+      });
+      if (!isLook(await her(view), look)) wrong.push(`round ${String(round)}: her look`);
+      // « À la prochaine manche, elle change » is true: the round after this one is a passage.
+      const announces = end.line.includes(says('turtle.goal.next').replace(/\.$/, ''));
+      const next = ending(data, kit, round + 1);
+      if (announces !== next.end.passage) wrong.push(`round ${String(round)}: « la prochaine »`);
+      // A sentence about a passage is said at that passage, and at no other round.
+      const passed = [1, 2, 3, 4].filter((n) =>
+        end.line.includes(says(`turtle.passage.${String(n)}`)),
+      );
+      if (JSON.stringify(passed) !== JSON.stringify(at.end.passage ? [at.end.state] : [])) {
+        wrong.push(`round ${String(round)}: passages ${passed.join(',')}`);
+      }
+      if (look.sign !== 0) signs.push(`${String(round)}:${String(look.sign)}`);
+      lines.push(end.line);
+      await context.close();
+    }
+    check(
+      'at the end of every round, one line about her — her passage, then her goal — as the rules say, and the look they give her',
+      wrong.length === 0 && lines.length === total + 1,
+      wrong.join(' | '),
+    );
+    check(
+      'what is said of her is never a number, a count, a judgement or a word about the player',
+      lines.every(
+        (line) =>
+          line !== '' && !/\d/.test(line) && !NEVER.test(line) && !/\b(?:tu as|bien)\b/i.test(line),
+      ),
+      lines.find((line) => /\d/.test(line) || NEVER.test(line)),
+    );
+    check(
+      'once everything is found the game goes on, and says so of her in four words',
+      lines.at(-1) === says('turtle.goal.done'),
+      lines.at(-1),
+    );
+    // Her signs that a change is near (D17.5): an attitude, at the rounds her arcs say.
+    check(
+      'she shows a sign that a change is near at some rounds — and it is never a quantity',
+      signs.length > 0 && signs.every((sign) => /^\d+:[12]$/.test(sign)),
+      signs.join(' '),
+    );
+    console.log(`  ${name}: signs at rounds ${signs.join(' ')}`);
+  }
+
+  // --- 7. what the game remembers: the tab from the first reveal, the phone only after « Garder »
+  async function runMemory(): Promise<void> {
+    const word = first[0];
+    const place = word === undefined ? null : locate(data, word.section);
+    if (word === undefined || place === null) throw new Error('the first word has no place');
+    const other = data.parts.map((p) => p.number).find((n) => n !== place.part.number) ?? 0;
+
+    // Two visitors, two different choices for the same word: what is written is the same
+    // string — a choice has nowhere to go.
+    const inTab: string[] = [];
+    for (const tile of [place.part.number, other]) {
+      const context = await browser.newContext(phone);
+      const view = await context.newPage();
+      await arrive(view);
+      const before: Stores = await view.evaluate(stores);
+      if (tile === place.part.number) {
+        check(
+          'nothing is written before a first word has been shown',
+          Object.keys(before.tab).length === 0 && Object.keys(before.phone).length === 0,
+          JSON.stringify(before),
+        );
+      }
+      await view.locator(`#game-live .g-tile[data-tile="${String(tile)}"]`).click();
+      const afterIt: Stores = await view.evaluate(stores);
+      inTab.push(afterIt.tab[STORAGE_KEY] ?? '');
+      if (tile === place.part.number) {
+        const state = JSON.parse(afterIt.tab[STORAGE_KEY] ?? '{}') as Record<string, unknown>;
+        check(
+          'from the first reveal the tab holds one key, with the fields of the first generation and no other: she has no colour',
+          JSON.stringify(Object.keys(afterIt.tab)) === JSON.stringify([STORAGE_KEY]) &&
+            JSON.stringify(Object.keys(state)) === JSON.stringify([...TAB_FIELDS]) &&
+            JSON.stringify(state['seen']) === JSON.stringify([word.id]),
+          afterIt.tab[STORAGE_KEY],
+        );
+        // Byte for byte what the first generation writes of the same game: a step back to it
+        // loses nothing (src/lib/game-state2.ts).
+        const asFirst = serialiseTab({
+          corpus: data.corpus,
+          seen: [word.id],
+          depth: 1,
+          turtle: 0,
+          arcs: [0, 0, 0],
+          round: { words: first.map((w) => w.id), at: 0, shown: true },
+          declined: false,
+        });
+        check(
+          '…and it is, byte for byte, the string the first generation writes of the same game',
+          afterIt.tab[STORAGE_KEY] === asFirst,
+          afterIt.tab[STORAGE_KEY],
+        );
+        check('…and the phone holds nothing', Object.keys(afterIt.phone).length === 0);
+        // The tab is left and found again: the same word, its card, and no word about a choice.
+        await arrive(view);
+        check(
+          'a round left in the tab is found again at its card, which says nothing of a choice',
+          (await wordShown(view)) === word.word &&
+            text(await view.locator('#game-live .g-place h3').textContent()) ===
+              `C’est écrit dans la partie ${String(place.part.number)}.`,
+          text(await view.locator('#game-live').textContent()),
+        );
+        check(
+          'coming back does not take the focus, and nothing of her moves',
+          (await view.evaluate<boolean>('document.activeElement === document.body')) &&
+            (await logOf(view)).length === 0 &&
+            (await moving(view)) === 0,
+        );
+        // « Ne pas garder »
+        await view.getByRole('button', { name: 'Mot suivant' }).click();
+        for (let i = 1; i < ROUND; i += 1) {
+          await view.getByRole('button', { name: 'Je ne sais pas' }).click();
+          await view.getByRole('button', { name: 'Mot suivant' }).click();
+        }
+        const card = view.locator('#game-live .g-keep');
+        const lines = (await card.locator('p:not(.g-actions)').allTextContents()).map(text);
+        check(
+          'the end of the round asks whether to keep, and says first what keeping means — her colour too',
+          lines.length >= 5 &&
+            lines[0] === `${says('turtle.keep.what')} ${says('turtle.keep.tint')}` &&
+            lines[1] === 'Tes choix ne sont pas gardés. Rien n’est envoyé.',
+          lines.join(' | '),
+        );
+        check(
+          'the card says how to erase everything, before anything is kept',
+          lines.at(-1) === 'Pour tout effacer ensuite : touche ta tortue, puis « Tout effacer ».',
+          lines.at(-1),
+        );
+        const weights: string[] = await card.locator('button').evaluateAll((buttons) =>
+          buttons.map((b) => {
+            const style = getComputedStyle(b);
+            return [
+              style.backgroundColor,
+              style.borderTopColor,
+              style.fontWeight,
+              style.color,
+            ].join(' ');
+          }),
+        );
+        check(
+          'the two gestures weigh the same',
+          weights.length === 2 && weights[0] === weights[1],
+          weights.join(' / '),
+        );
+        await view.getByRole('button', { name: 'Ne pas garder' }).click();
+        const declined: Stores = await view.evaluate(stores);
+        check(
+          '« Ne pas garder »: the card leaves, the phone stays empty, the focus goes on',
+          (await card.count()) === 0 &&
+            Object.keys(declined.phone).length === 0 &&
+            (JSON.parse(declined.tab[STORAGE_KEY] ?? '{}') as { declined?: boolean }).declined ===
+              true &&
+            (await view.evaluate<boolean>(
+              "document.activeElement?.textContent.trim() === 'Trois autres mots'",
+            )),
+        );
+        await view.getByRole('button', { name: 'Trois autres mots' }).click();
+        await playRound(view);
+        check('…and the question is not asked again in this tab', (await card.count()) === 0);
+      }
+      await context.close();
+    }
+    check(
+      'what is written does not depend on what was chosen',
+      inTab.length === 2 && inTab[0] !== '' && inTab[0] === inTab[1],
+    );
+
+    // « Garder ta tortue », then another tab of the same phone.
+    const pocket = await browser.newContext(phone);
+    const tab = await pocket.newPage();
+    await arrive(tab);
+    await playRound(tab);
+    await tab.getByRole('button', { name: 'Garder ta tortue' }).click();
+    const held: Stores = await tab.evaluate(stores);
+    const onPhone = JSON.parse(held.phone[STORAGE_KEY] ?? '{}') as Record<string, unknown>;
+    check(
+      '« Garder ta tortue »: the phone holds one key, with the fields of the first generation and no other',
+      JSON.stringify(Object.keys(held.phone)) === JSON.stringify([STORAGE_KEY]) &&
+        JSON.stringify(Object.keys(onPhone)) === JSON.stringify([...KEPT_FIELDS]) &&
+        JSON.stringify(onPhone['seen']) === JSON.stringify(first.map((w) => w.id)),
+      held.phone[STORAGE_KEY],
+    );
+    check(
+      '…and it is said, once',
+      text(await tab.locator('#game-status').textContent()) === 'Elle est gardée sur ce téléphone.',
+      text(await tab.locator('#game-status').textContent()),
+    );
+    const second = await pocket.newPage();
+    await arrive(second);
+    const one = after(data, 1).standing;
+    check(
+      'another tab of the same phone goes on from what was kept, without a movement',
+      (await wordShown(second)) === data.words[ROUND]?.word &&
+        isLook(await her(second), lookOf({ state: one.state, arcs: one.arcs })) &&
+        (await moving(second)) === 0,
+      JSON.stringify(await her(second)),
+    );
+    // The second tab finds three more words: the phone follows, and so does the first tab.
+    await tab.waitForTimeout(evolutionLasts('01') + LATE_MS);
+    await tab.evaluate('window.__seen.her.log.length = 0');
+    await playRound(second);
+    await until(
+      tab,
+      `JSON.parse(localStorage.getItem('${STORAGE_KEY}')).seen.length === ${String(2 * ROUND)}`,
+    );
+    const two = after(data, 2).standing;
+    await until(
+      tab,
+      `document.querySelector('${HER}').getAttribute('data-state') === '${String(two.state)}'`,
+    );
+    check(
+      'what one tab finds, the other sees on her — at once, and no beat is played there',
+      isLook(await her(tab), lookOf({ state: two.state, arcs: two.arcs })) &&
+        (await logOf(tab)).every((line) => line[1] === ''),
+      JSON.stringify(await her(tab)),
+    );
+    await second.waitForTimeout(evolutionLasts('12') + LATE_MS);
+
+    // One tab stops keeping: the phone forgets, and the other tab is not emptied for it.
+    await second.getByRole('button', { name: 'Ta tortue', exact: true }).click();
+    const secondSheet = second.locator('#turtle-sheet');
+    await secondSheet.getByRole('button', { name: 'Ne plus garder sur ce téléphone' }).click();
+    await tab.waitForTimeout(300);
+    const released: Stores = await second.evaluate(stores);
+    const beside: Stores = await tab.evaluate(stores);
+    check(
+      'one tab stops keeping: the phone is empty, and neither tab loses its game',
+      Object.keys(released.phone).length === 0 &&
+        released.tab[STORAGE_KEY] !== undefined &&
+        beside.tab[STORAGE_KEY] !== undefined &&
+        isLook(await her(tab), lookOf({ state: two.state, arcs: two.arcs })),
+      JSON.stringify({ phone: released.phone, beside: Object.keys(beside.tab) }),
+    );
+    // She is given a colour, then kept again: the phone holds it, and the other tab wears it.
+    await secondSheet.getByRole('button', { name: 'Jaune', exact: true }).click();
+    const unkept: Stores = await second.evaluate(stores);
+    check(
+      'a colour given while nothing is kept is in the tab, and not on the phone',
+      (JSON.parse(unkept.tab[STORAGE_KEY] ?? '{}') as { tint?: number }).tint === 4 &&
+        Object.keys(unkept.phone).length === 0,
+      JSON.stringify(unkept.phone),
+    );
+    await tab.evaluate('window.__seen.her.log.length = 0');
+    await secondSheet.getByRole('button', { name: 'Garder ta tortue' }).click();
+    await second.keyboard.press('Escape');
+    await until(tab, `document.querySelector('${HER}').getAttribute('data-tint') === '4'`);
+    const all: Stores = await second.evaluate(stores);
+    const named = (storage: string): string[] =>
+      storageMap(2)
+        .find((entry) => entry.storage === storage)
+        ?.fields.map((f) => f.name) ?? [];
+    const really = (value: string | undefined): string[] =>
+      Object.keys(JSON.parse(value ?? '{}') as object);
+    check(
+      '« Garder ta tortue » with a colour: the phone holds the declared fields and no other, her colour last',
+      JSON.stringify(really(all.phone[STORAGE_KEY])) === JSON.stringify([...KEPT_FIELDS2]) &&
+        JSON.stringify(really(all.tab[STORAGE_KEY])) === JSON.stringify([...TAB_FIELDS2]),
+      JSON.stringify(all),
+    );
+    check(
+      'nothing is in a storage that the map of writings does not name',
+      Object.keys(all.tab).every((k) => k === STORAGE_KEY) &&
+        Object.keys(all.phone).every((k) => k === STORAGE_KEY) &&
+        really(all.tab[STORAGE_KEY]).every((f) => named('sessionStorage').includes(f)) &&
+        really(all.phone[STORAGE_KEY]).every((f) => named('localStorage').includes(f)),
+      JSON.stringify(all),
+    );
+    check(
+      'the other tab wears the colour she was given elsewhere — at once, and nothing is played',
+      isLook(await her(tab), lookOf({ state: two.state, arcs: two.arcs, tint: 4 })) &&
+        (await logOf(tab)).every((line) => line[1] === '') &&
+        (await moving(tab)) === 0,
+      JSON.stringify(await her(tab)),
+    );
+    // The last gesture wins: the first tab gives her another colour, the second follows.
+    await tab.getByRole('button', { name: 'Ta tortue', exact: true }).click();
+    await tab.locator('#turtle-sheet').getByRole('button', { name: 'Rouge', exact: true }).click();
+    await tab.keyboard.press('Escape');
+    await until(second, `document.querySelector('${HER}').getAttribute('data-tint') === '5'`);
+    const last: Stores = await second.evaluate(stores);
+    check(
+      'her colour is the last one given, in whatever tab: the phone and both tabs agree',
+      (JSON.parse(last.phone[STORAGE_KEY] ?? '{}') as { tint?: number }).tint === 5 &&
+        (await her(tab))?.tint === '5' &&
+        (await her(second))?.tint === '5',
+      last.phone[STORAGE_KEY],
+    );
+    // A round ends in the tab that did not choose: what it writes keeps the last colour.
+    await second.getByRole('button', { name: 'Trois autres mots' }).click();
+    await playRound(second);
+    const written3: Stores = await second.evaluate(stores);
+    check(
+      'a round that ends does not take her colour back',
+      (JSON.parse(written3.phone[STORAGE_KEY] ?? '{}') as { tint?: number }).tint === 5 &&
+        (JSON.parse(written3.tab[STORAGE_KEY] ?? '{}') as { tint?: number }).tint === 5,
+      written3.phone[STORAGE_KEY],
+    );
+
+    // The privacy page names everything that is really there, and erases it.
+    const privacy = await pocket.newPage();
+    await privacy.goto(`${origin}/confidentialite/`);
+    const listed = await privacy
+      .locator('ul[data-storage] li')
+      .evaluateAll((items) =>
+        items.map(
+          (li) =>
+            `${li.parentElement?.getAttribute('data-storage') ?? ''}:${li.getAttribute('data-field') ?? ''}`,
+        ),
+      );
+    check(
+      'the privacy page lists every field of both storages — her colour among them, in words',
+      JSON.stringify(listed) ===
+        JSON.stringify(
+          storageMap(2).flatMap((entry) => entry.fields.map((f) => `${entry.storage}:${f.name}`)),
+        ) &&
+        ((await privacy.locator('main').textContent()) ?? '').includes(STORAGE_KEY) &&
+        (await privacy.locator('ul[data-storage] li[data-field="tint"]').allTextContents()).every(
+          (line) => text(line) === says('privacy.game.field.tint'),
+        ) &&
+        (await privacy.locator('svg.mascot').count()) === 0,
+      listed.join(','),
+    );
+    await privacy.getByRole('button', { name: 'Tout effacer' }).click();
+    const erased: Stores = await privacy.evaluate(stores);
+    check(
+      '« Tout effacer »: the phone is empty, and it is said',
+      Object.keys(erased.phone).length === 0 &&
+        text(await privacy.locator('#erase-status').textContent()) === 'Tout est effacé.',
+      JSON.stringify(erased.phone),
+    );
+    await until(tab, `document.querySelector('${HER}').getAttribute('data-state') === '0'`);
+    const forgotten: Stores = await tab.evaluate(stores);
+    check(
+      '…and a tab still open forgets too: the first word, the turtle she started as, no colour, nothing written',
+      (await wordShown(tab)) === first[0]?.word &&
+        Object.keys(forgotten.tab).length === 0 &&
+        isLook(await her(tab), lookOf({ state: 0 })) &&
+        (await moving(tab)) === 0,
+      JSON.stringify(forgotten.tab),
+    );
+    await pocket.close();
+
+    // A link is something anyone can send. « /#fin » shows no word: followed, it writes
+    // nothing and moves nothing. « /#m2-3 » shows one card: that word is found, and no other.
+    const linked = await browser.newContext(phone);
+    const landing = await linked.newPage();
+    await arrive(landing, '/#fin');
+    const fromEnd: Stores = await landing.evaluate(stores);
+    check(
+      'a link to the end of a round writes nothing and moves nothing',
+      Object.keys(fromEnd.tab).length === 0 &&
+        (await wordShown(landing)) === first[0]?.word &&
+        isLook(await her(landing), lookOf({ state: 0 })) &&
+        !(await staged(landing)).stage &&
+        !landing.url().includes('#'),
+      JSON.stringify(fromEnd.tab),
+    );
+    // Away and back: a change of fragment alone would not load the page again.
+    await landing.goto('about:blank');
+    await arrive(landing, '/#m2-3');
+    const fromCard: Stores = await landing.evaluate(stores);
+    check(
+      'a link to a card shows that card and writes nothing: arriving is not a gesture',
+      Object.keys(fromCard.tab).length === 0 &&
+        Object.keys(fromCard.phone).length === 0 &&
+        (await wordShown(landing)) === first[1]?.word &&
+        (await landing.locator('#game-live .g-place').count()) === 1 &&
+        (await her(landing))?.pose === 'rest' &&
+        !landing.url().includes('#'),
+      `${JSON.stringify(fromCard)} ${landing.url()}`,
+    );
+    await landing.getByRole('button', { name: 'Mot suivant' }).click();
+    const afterCard: Stores = await landing.evaluate(stores);
+    const played = JSON.parse(afterCard.tab[STORAGE_KEY] ?? '{}') as {
+      seen?: string[];
+      round?: { words?: string[]; at?: number };
+    };
+    check(
+      '…the first gesture finds the word of that card, at the head of a round of three',
+      JSON.stringify(played.seen) === JSON.stringify([first[1]?.id]) &&
+        played.round?.words?.length === ROUND &&
+        played.round.words[0] === first[1]?.id &&
+        played.round.at === 1 &&
+        Object.keys(afterCard.phone).length === 0,
+      afterCard.tab[STORAGE_KEY],
+    );
+    for (let i = 1; i < ROUND; i += 1) {
+      await landing.getByRole('button', { name: 'Je ne sais pas' }).click();
+      await landing.getByRole('button', { name: 'Mot suivant' }).click();
+    }
+    check(
+      '…and the round it opened ends on three words',
+      text(await landing.locator('#game-live .g-end h3').textContent()) ===
+        'Trois mots, trois endroits du livre.',
+      text(await landing.locator('#game-live .g-end h3').textContent()),
+    );
+    // « Tout effacer » on the privacy page reaches a tab that kept nothing on the phone too.
+    const elsewhere = await linked.newPage();
+    await elsewhere.goto(`${origin}/confidentialite/`);
+    await elsewhere.getByRole('button', { name: 'Tout effacer' }).click();
+    await until(landing, `sessionStorage.getItem('${STORAGE_KEY}') === null`);
+    const emptied = await staged(landing);
+    check(
+      '« Tout effacer » elsewhere empties a tab that had kept nothing on the phone — and stops her passage there',
+      (await wordShown(landing)) === first[0]?.word &&
+        !emptied.stage &&
+        isLook(await her(landing), lookOf({ state: 0 })),
+      JSON.stringify(await her(landing)),
+    );
+    await linked.close();
+
+    // A browser that refuses to store anything: the game is played all the same.
+    const refusing = await browser.newContext(phone);
+    await refusing.addInitScript(
+      "Storage.prototype.setItem = function () { throw new DOMException('refused', 'QuotaExceededError'); };",
+    );
+    const strict = await refusing.newPage();
+    const broken: string[] = [];
+    strict.on('pageerror', (e) => broken.push(String(e)));
+    await arrive(strict);
+    await playRound(strict);
+    await strict.getByRole('button', { name: 'Garder ta tortue' }).click();
+    await strict.getByRole('button', { name: 'Trois autres mots' }).click();
+    check(
+      'a storage that refuses is not an error: the round is played, the next one starts',
+      broken.length === 0 && (await wordShown(strict)) === data.words[ROUND]?.word,
+      broken.join(' | '),
+    );
+    await refusing.close();
+  }
+
+  // --- 8. her sheet: her figure, the forms she has had, « Revoir », her colour
+  async function runSheet(): Promise<void> {
+    const FIGURES = [
+      'turtle.raises_head',
+      'turtle.figure.surf',
+      'turtle.figure.wings',
+      'turtle.figure.wings',
+      'turtle.figure.sky',
+    ];
+    const GOALS = ['start', 'parts', 'chapters', 'words', 'done'];
+    /** What her sheet shows, read once. */
+    interface Sheet {
+      open: boolean;
+      said: string;
+      goal: string;
+      width: number;
+      path: { state: string | null; said: string; again: string; described: boolean }[];
+      hidden: boolean;
+      tints: { name: string; pressed: string | null; tint: string | null }[];
+      label: boolean;
+    }
+    const sheetOf = (view: Page): Promise<Sheet> =>
+      view.evaluate<Sheet>(`(() => {
+        const sheet = document.querySelector('#turtle-sheet');
+        const flat = (node) => (node?.textContent ?? '').replace(/\\s+/g, ' ').trim();
+        const label = [...sheet.querySelectorAll('.unofficial')].some((node) => flat(node) === 'Site non officiel.');
+        return {
+          open: sheet.open,
+          said: flat(sheet.querySelector('#turtle-sheet-said')),
+          goal: flat(sheet.querySelector('#turtle-sheet-goal')),
+          width: sheet.querySelector('${LARGE}')?.getBoundingClientRect().width ?? 0,
+          path: [...sheet.querySelectorAll('#turtle-sheet-path > li')].map((item) => {
+            const again = item.querySelector('button');
+            const about = item.querySelector('p');
+            return {
+              state: item.querySelector('svg.mascot')?.getAttribute('data-state') ?? null,
+              said: flat(about),
+              again: flat(again),
+              described: again === null || (about !== null && again.getAttribute('aria-describedby') === about.id),
+            };
+          }),
+          hidden: sheet.querySelector('#turtle-sheet-tint').hidden,
+          tints: [...sheet.querySelectorAll('#turtle-sheet-tints button')].map((choice) => ({
+            name: flat(choice),
+            pressed: choice.getAttribute('aria-pressed'),
+            tint: choice.querySelector('svg.mascot')?.getAttribute('data-tint') ?? null,
+          })),
+          label,
+        };
+      })()`);
+
+    // Touched, in each of her five forms: her sheet opens, and she does her figure in it.
+    const wrong: string[] = [];
+    for (const state of [0, 1, 2, 3, 4] as const) {
+      const rounds = roundsFor(state);
+      const tint: MascotTint = state >= 2 ? 5 : 0;
+      const standing = after(data, rounds).standing;
+      const { context, view } = await visitor(rounds === 0 ? null : resting(data, rounds, tint));
+      const as = lookOf({ state, arcs: standing.arcs, tint });
+      if (standing.state !== state) wrong.push(`${String(state)}: no round gives her this state`);
+      await view.getByRole('button', { name: 'Ta tortue', exact: true }).click();
+      const sheet = await sheetOf(view);
+      const large = await her(view, LARGE);
+      if (!sheet.open) wrong.push(`${String(state)}: her sheet did not open`);
+      if (large?.pose !== 'trick' || large.state !== String(state) || large.tint !== String(tint)) {
+        wrong.push(`${String(state)}: no figure (${JSON.stringify(large)})`);
+      }
+      if (sheet.said !== says(FIGURES[state] ?? ''))
+        wrong.push(`${String(state)}: « ${sheet.said} »`);
+      if (!isLook(await her(view), as)) wrong.push(`${String(state)}: she moved in the block`);
+      if (Math.abs(sheet.width - 240) > 1)
+        wrong.push(`${String(state)}: ${String(sheet.width)} px`);
+      if (sheet.goal !== says(`turtle.goal.${GOALS[state] ?? ''}`)) {
+        wrong.push(`${String(state)}: goal « ${sheet.goal} »`);
+      }
+      // « Son parcours »: the forms she has had, in order — never one to come.
+      const expected = Array.from({ length: state + 1 }, (_, form) => ({
+        state: String(form),
+        said: form === 0 ? '' : says(`turtle.passage.${String(form)}`),
+        again: form === 0 ? '' : 'Revoir',
+        described: true,
+      }));
+      if (JSON.stringify(sheet.path) !== JSON.stringify(expected)) {
+        wrong.push(`${String(state)}: path ${JSON.stringify(sheet.path)}`);
+      }
+      // « Sa couleur »: hers to give once she is a flamingo, and not before.
+      if (sheet.hidden !== state < 2 || sheet.tints.length !== (state < 2 ? 0 : 7)) {
+        wrong.push(
+          `${String(state)}: colours ${String(sheet.hidden)} ${String(sheet.tints.length)}`,
+        );
+      }
+      if (!sheet.label) wrong.push(`${String(state)}: « Site non officiel. » is not in her sheet`);
+      await view.waitForTimeout(TRICK_HOLD_MS[state] + LATE_MS);
+      if (!isLook(await her(view, LARGE), as)) wrong.push(`${String(state)}: figure not ended`);
+      await view.waitForTimeout(ALONE_MS - TRICK_HOLD_MS[state] - LATE_MS);
+      if ((await moving(view)) !== 0) wrong.push(`${String(state)}: still moving after 2.1 s`);
+      // She can be touched again, in her sheet.
+      await view
+        .locator('#turtle-sheet')
+        .getByRole('button', { name: 'Ta tortue', exact: true })
+        .click();
+      if ((await her(view, LARGE))?.pose !== 'trick') wrong.push(`${String(state)}: second touch`);
+      await context.close();
+    }
+    check(
+      'touched, in each of her five forms: her sheet opens, she does her figure in it — large, 240 px —, and it is said; in the block she does not move',
+      wrong.filter((line) => !/path|colours|goal|officiel/.test(line)).length === 0,
+      wrong.join(' | '),
+    );
+    check(
+      'her sheet shows the forms she has had, in order, each with its sentence and « Revoir » — never a form to come',
+      wrong.filter((line) => /path/.test(line)).length === 0,
+      wrong.filter((line) => /path/.test(line)).join(' | '),
+    );
+    check(
+      'her sheet says what will make her change, offers her colour only once she is a flamingo, and carries « Site non officiel. »',
+      wrong.filter((line) => /colours|goal|officiel/.test(line)).length === 0,
+      wrong.filter((line) => /colours|goal|officiel/.test(line)).join(' | '),
+    );
+
+    // A flamingo, at the end of the round that made her one: « Sa fiche », « Revoir », her colour.
+    const at = ending(data, kit, passageRound.get('12') ?? 2);
+    const { context, view } = await visitor(at.stored);
+    const asked: { url: string; body: string }[] = [];
+    view.on('request', (r) => asked.push({ url: r.url(), body: r.postData() ?? '' }));
+    const address = view.url();
+    await press(view, 'Mot suivant');
+    await view.waitForTimeout(evolutionLasts('12') + LATE_MS + 100);
+    await view.getByRole('button', { name: 'Sa fiche' }).click();
+    let sheet = await sheetOf(view);
+    const now = { state: at.end.state, arcs: at.end.arcs, tint: 0 as MascotTint };
+    check(
+      '« Sa fiche », under the stage, opens her sheet — and she does no figure nobody asked for',
+      sheet.open &&
+        sheet.said === '' &&
+        isLook(await her(view, LARGE), lookOf(now)) &&
+        (await moving(view)) === 0,
+      JSON.stringify(await her(view, LARGE)),
+    );
+    check(
+      'at the end of a round her sheet says what the round’s end says of her goal',
+      sheet.goal === says(`turtle.goal.${at.said.length > 1 ? 'next' : 'chapters'}`),
+      sheet.goal,
+    );
+    // « Revoir »: her first passage, on the large copy; the same button is « Passer » meanwhile.
+    await view.evaluate(`window.__seen.large = window.__watch(${JSON.stringify(LARGE)})`);
+    const again = view.locator('#turtle-sheet-path button');
+    await again.nth(0).click();
+    await view.waitForTimeout(700);
+    const midway = await her(view, LARGE);
+    check(
+      '« Revoir » plays a passage she has made, on the large copy — and the button is « Passer » meanwhile',
+      midway?.phase?.startsWith('01-') === true &&
+        text(await again.nth(0).textContent()) === 'Passer' &&
+        (await moving(view)) > 0 &&
+        isLook(await her(view), lookOf({ ...now, passage: true })),
+      JSON.stringify(midway),
+    );
+    await view.waitForTimeout(evolutionLasts('01') - 700 + LATE_MS + 100);
+    const replayed = await logOf(view, 'large');
+    const frames01 = evolution(
+      { state: 0, arcs: lookOf({ state: 0 }).arcs, tint: 0 },
+      { state: 1, arcs: lookOf({ state: 1 }).arcs, tint: 0 },
+    );
+    sheet = await sheetOf(view);
+    check(
+      '…beat by beat, as it was played when she earned it; then its sentence, and « Revoir » again',
+      JSON.stringify(beats(replayed).filter((beat, index) => index > 0 || beat !== '')) ===
+        JSON.stringify(frames01.map((f) => f.phase ?? '')) &&
+        isLook(await her(view, LARGE), lookOf({ state: 1, passage: true })) &&
+        sheet.said === says('turtle.passage.1') &&
+        text(await again.nth(0).textContent()) === 'Revoir' &&
+        (await moving(view)) === 0,
+      JSON.stringify(replayed.map((line) => [line[0], line[1]])),
+    );
+    // Touched after a passage seen again: she is as she is now, and does her figure.
+    await view
+      .locator('#turtle-sheet')
+      .getByRole('button', { name: 'Ta tortue', exact: true })
+      .click();
+    const backNow = await her(view, LARGE);
+    check(
+      'touched after a passage seen again, she is as she is now — and does her figure',
+      backNow?.state === String(now.state) && backNow.pose === 'trick' && backNow.phase === null,
+      JSON.stringify(backNow),
+    );
+    await view.waitForTimeout(TRICK_HOLD_MS[2] + LATE_MS);
+    // « Passer », on the very button: the end of that passage at once.
+    await again.nth(1).click();
+    await view.waitForTimeout(600);
+    await again.nth(1).click();
+    sheet = await sheetOf(view);
+    check(
+      '« Passer » ends a passage seen again at once: its last look, its sentence, nothing moving',
+      isLook(await her(view, LARGE), lookOf({ state: 2, passage: true })) &&
+        sheet.said === says('turtle.passage.2') &&
+        text(await again.nth(1).textContent()) === 'Revoir' &&
+        (await moving(view)) === 0,
+      JSON.stringify(await her(view, LARGE)),
+    );
+    // Another « Revoir » while one plays: the first gives way.
+    await again.nth(0).click();
+    await view.waitForTimeout(400);
+    await again.nth(1).click();
+    await view.waitForTimeout(300);
+    const swapped = await her(view, LARGE);
+    check(
+      'another « Revoir » while one plays: the first gives way, the second plays',
+      text(await again.nth(0).textContent()) === 'Revoir' &&
+        text(await again.nth(1).textContent()) === 'Passer' &&
+        swapped?.phase?.startsWith('12-') === true,
+      JSON.stringify(swapped),
+    );
+    // A touch on her while a passage is seen again is « Passer », and no figure.
+    await view
+      .locator('#turtle-sheet')
+      .getByRole('button', { name: 'Ta tortue', exact: true })
+      .click();
+    check(
+      'a touch on her while a passage is seen again ends it, and is no figure',
+      isLook(await her(view, LARGE), lookOf({ state: 2, passage: true })) &&
+        text(await again.nth(1).textContent()) === 'Revoir',
+      JSON.stringify(await her(view, LARGE)),
+    );
+    // Escape closes her sheet whatever is playing in it; the focus goes back where it was.
+    await again.nth(0).click();
+    await view.waitForTimeout(300);
+    await view.keyboard.press('Escape');
+    await view.waitForTimeout(200);
+    check(
+      'Escape closes her sheet while a passage is seen again: nothing goes on moving, the focus is back on « Sa fiche »',
+      !(await sheetOpen(view)) &&
+        (await moving(view)) === 0 &&
+        (await view.evaluate<boolean>("document.activeElement?.id === 'game-sheet-link'")),
+    );
+
+    // « Choisir sa couleur » opens her sheet on her colours.
+    await view.getByRole('button', { name: 'Choisir sa couleur' }).click();
+    sheet = await sheetOf(view);
+    const NAMES = ['Bleu ciel', 'Orange', 'Vert', 'Jaune', 'Rouge', 'Violet', 'Sans couleur'];
+    check(
+      '« Choisir sa couleur » opens her sheet on her colours: six by their name, then « Sans couleur » — none chosen, each shown on a small flamingo',
+      sheet.open &&
+        JSON.stringify(sheet.tints.map((choice) => choice.name)) === JSON.stringify(NAMES) &&
+        sheet.tints.every(
+          (choice, index) => choice.pressed === 'false' && choice.tint === String(index + 1),
+        ) &&
+        (await view.evaluate<boolean>(
+          "document.activeElement === document.querySelector('#turtle-sheet-tints button')",
+        )) &&
+        text(await view.locator('#turtle-sheet-tint p').textContent()) === says('turtle.tint.lead'),
+      JSON.stringify(sheet.tints),
+    );
+    check(
+      'no colour is named by a part of the book, and none carries a number',
+      sheet.tints.every((choice) => !/partie|\d/i.test(choice.name)),
+    );
+    await view.locator('#turtle-sheet').getByRole('button', { name: 'Vert', exact: true }).click();
+    sheet = await sheetOf(view);
+    const green: Stores = await view.evaluate(stores);
+    const inTab = JSON.parse(green.tab[STORAGE_KEY] ?? '{}') as Record<string, unknown>;
+    check(
+      'a colour chosen: she wears it at once — in the block, in her sheet, on the form of her path — and the button says so',
+      (await her(view))?.tint === '3' &&
+        (await her(view, LARGE))?.tint === '3' &&
+        (await view
+          .locator('#turtle-sheet-path svg.mascot')
+          .evaluateAll((all) => all.every((svg) => svg.getAttribute('data-tint') === '3'))) &&
+        JSON.stringify(sheet.tints.map((choice) => choice.pressed)) ===
+          JSON.stringify(['false', 'false', 'true', 'false', 'false', 'false', 'false']) &&
+        (await view.evaluate<boolean>(
+          "document.activeElement?.getAttribute('aria-pressed') === 'true'",
+        )),
+      JSON.stringify(sheet.tints),
+    );
+    check(
+      '…it is written in the tab, one field more and the last; nothing is on the phone, which was not asked to keep',
+      JSON.stringify(Object.keys(inTab)) === JSON.stringify([...TAB_FIELDS2]) &&
+        inTab['tint'] === 3 &&
+        Object.keys(green.phone).length === 0,
+      green.tab[STORAGE_KEY],
+    );
+    check(
+      '…and it goes nowhere: no request, nothing in the address',
+      asked.every((r) => !/tint|couleur|colou?r/i.test(r.url + r.body)) &&
+        asked.filter((r) => !r.url.includes('/flags.json')).length === 0 &&
+        view.url() === address,
+      asked.map((r) => r.url).join(','),
+    );
+    // Her colour is on her flamingo, and nowhere else (D17.12).
+    const painted = await view.evaluate<{
+      body: string;
+      tints: string[];
+      strays: string[];
+      pale: string;
+    }>(`(() => {
+      const probe = document.createElement('span');
+      document.body.append(probe);
+      const resolved = (name) => {
+        probe.style.color = 'var(' + name + ')';
+        return getComputedStyle(probe).color;
+      };
+      const tints = [1, 2, 3, 4, 5, 6].map((n) => resolved('--mascot-tint-' + String(n)));
+      const pale = resolved('--turtle-eye');
+      probe.remove();
+      const strays = [];
+      for (const node of document.querySelectorAll('#jeu *')) {
+        if (node.closest('svg.mascot') !== null) continue;
+        const style = getComputedStyle(node);
+        for (const colour of [style.backgroundColor, style.borderTopColor, style.color, style.outlineColor]) {
+          if (tints.includes(colour)) strays.push(node.tagName + '.' + node.className + ' ' + colour);
+        }
+      }
+      return {
+        body: getComputedStyle(document.querySelector('${HER} .m-body')).fill,
+        tints,
+        strays,
+        pale,
+      };
+    })()`);
+    check(
+      'her colour is on her flamingo, and on nothing else of the block',
+      painted.body === painted.tints[2] &&
+        painted.strays.length === 0 &&
+        painted.pale !== painted.body,
+      JSON.stringify(painted),
+    );
+    await view.locator('#turtle-sheet').getByRole('button', { name: 'Sans couleur' }).click();
+    const none = await view.evaluate<string>(
+      `getComputedStyle(document.querySelector('${HER} .m-body')).fill`,
+    );
+    check(
+      '« Sans couleur » is a choice too: she is pale again, and the game remembers that it was chosen',
+      none === painted.pale &&
+        (
+          JSON.parse((await view.evaluate<Stores>(stores)).tab[STORAGE_KEY] ?? '{}') as {
+            tint?: number;
+          }
+        ).tint === 7 &&
+        (await sheetOf(view)).tints.at(-1)?.pressed === 'true',
+      none,
+    );
+    await view
+      .locator('#turtle-sheet')
+      .getByRole('button', { name: 'Orange', exact: true })
+      .click();
+    // What is kept, said before the gesture and after it — her colour named where it is kept.
+    const keptLines = async (): Promise<string[]> =>
+      (await view.locator('#turtle-sheet-kept p').allTextContents()).map(text);
+    const BEFORE_KEEPING = [
+      'Rien n’est gardé une fois cette page fermée.',
+      `${says('turtle.keep.what')} ${says('turtle.keep.tint')}`,
+      'Tes choix ne sont pas gardés. Rien n’est envoyé.',
+      'Qui ouvre le site dans ce navigateur la verra.',
+    ];
+    const release = view
+      .locator('#turtle-sheet')
+      .getByRole('button', { name: 'Ne plus garder sur ce téléphone' });
+    check(
+      'her sheet says what is kept — nothing on the phone yet — and what « Garder » would write, her colour included',
+      JSON.stringify(await keptLines()) === JSON.stringify(BEFORE_KEEPING) &&
+        (await release.count()) === 0,
+      (await keptLines()).join(' | '),
+    );
+    await view.locator('#turtle-sheet').getByRole('button', { name: 'Garder ta tortue' }).click();
+    const kept: Stores = await view.evaluate(stores);
+    check(
+      '« Garder ta tortue » in her sheet: the phone holds her colour with the rest, and the sheet says so',
+      (JSON.parse(kept.phone[STORAGE_KEY] ?? '{}') as { tint?: number }).tint === 2 &&
+        JSON.stringify(await keptLines()) ===
+          JSON.stringify([
+            `${says('turtle.sheet.on_phone')} ${says('turtle.sheet.on_phone_tint')}`,
+          ]) &&
+        (await view.evaluate<boolean>("document.activeElement?.id === 'turtle-sheet-release'")),
+      (await keptLines()).join(' | '),
+    );
+    await release.click();
+    const unkept: Stores = await view.evaluate(stores);
+    check(
+      '« Ne plus garder sur ce téléphone »: the phone is empty, the game and her colour stay in the tab',
+      Object.keys(unkept.phone).length === 0 &&
+        (JSON.parse(unkept.tab[STORAGE_KEY] ?? '{}') as { tint?: number }).tint === 2 &&
+        text(await view.locator('#turtle-sheet-said').textContent()) ===
+          'Ce téléphone ne la garde plus. Elle reste tant que cette page est ouverte.' &&
+        JSON.stringify(await keptLines()) === JSON.stringify(BEFORE_KEEPING) &&
+        (await view.evaluate<boolean>("document.activeElement?.id === 'turtle-sheet-keep'")),
+      JSON.stringify(unkept.phone),
+    );
+    const found = (
+      await view.locator('#turtle-sheet-found [data-programme="word"]').allTextContents()
+    ).map(text);
+    check(
+      'her sheet lists the words she has found, and no total',
+      JSON.stringify(found) ===
+        JSON.stringify(
+          data.words.slice(0, (passageRound.get('12') ?? 2) * ROUND).map((w) => w.word),
+        ) && !/\d/.test(text(await view.locator('#turtle-sheet-found').textContent())),
+      found.join(','),
+    );
+    await view.locator('#turtle-sheet').getByRole('button', { name: 'Tout effacer' }).click();
+    const wiped: { tab: number; phone: number } = await view.evaluate(
+      '({ tab: sessionStorage.length, phone: localStorage.length })',
+    );
+    sheet = await sheetOf(view);
+    check(
+      '« Tout effacer » in her sheet: nothing left anywhere — the turtle she started as, no colour, no path, the first word again',
+      wiped.tab === 0 &&
+        wiped.phone === 0 &&
+        sheet.said === 'Tout est effacé.' &&
+        text(await view.locator('#turtle-sheet-found').textContent()) ===
+          'Elle n’a pas encore vu de mot.' &&
+        isLook(await her(view), lookOf({ state: 0 })) &&
+        isLook(await her(view, LARGE), lookOf({ state: 0 })) &&
+        sheet.path.length === 1 &&
+        sheet.hidden &&
+        (await wordShown(view)) === first[0]?.word &&
+        !(await staged(view)).stage,
+      JSON.stringify(wiped),
+    );
+    await context.close();
+
+    // The third depth: what she found, in the order of the book, each with its way there.
+    {
+      const flying = await visitor(
+        JSON.stringify({
+          corpus: data.corpus,
+          seen: data.words.map((w) => w.id).reverse(),
+          depth: 3,
+          turtle: 3,
+          arcs: [6, 6, 4],
+          round: null,
+          declined: true,
+        }),
+      );
+      await flying.view.getByRole('button', { name: 'Ta tortue', exact: true }).click();
+      const listed: string[][] = await flying.view
+        .locator('#turtle-sheet-found li')
+        .evaluateAll((items) =>
+          items.map((li) => [
+            li.querySelector('[data-programme="word"]')?.textContent ?? '',
+            li.querySelector('a')?.getAttribute('href') ?? '',
+            li.querySelector('a [data-programme="title"]')?.textContent ?? '',
+          ]),
+        );
+      const order = new Map<string, number>();
+      for (const part of data.parts) {
+        for (const chapter of part.chapters) {
+          for (const section of chapter.sections) order.set(section.id, order.size);
+        }
+      }
+      const expected = [...data.words]
+        .sort((a, b) => (order.get(a.section) ?? 0) - (order.get(b.section) ?? 0))
+        .map((w) => [w.word, sectionUrl(w.section), locate(data, w.section)?.section.title ?? '']);
+      check(
+        'at the third depth her sheet lists where each word is written, in the order of the book',
+        listed.length === expected.length &&
+          listed.every((row, i) => {
+            const [word = '', href = '', title = ''] = row;
+            const [wantWord = '', wantUrl = '-', wantTitle = ''] = expected[i] ?? [];
+            return word === wantWord && href.startsWith(wantUrl) && text(title) === wantTitle;
+          }),
+        listed.map((l) => l[0]).join(','),
+      );
+      await flying.context.close();
+    }
+
+    // Less motion asked: her sheet opens, and nothing starts.
+    {
+      const calm = await visitor(resting(data, passageRound.get('12') ?? 2), {
+        ...phone,
+        reducedMotion: 'reduce',
+      });
+      const still = calm.view;
+      const as = lookOf({ state: 2, arcs: after(data, passageRound.get('12') ?? 2).standing.arcs });
+      await still.getByRole('button', { name: 'Un indice' }).click();
+      const hinted = {
+        marks: await still.locator('#game-live .g-mark').count(),
+        said: text(await still.locator('#game-status').textContent()),
+        pose: (await her(still))?.pose,
+      };
+      check(
+        'less motion: the hint marks its tiles at once and is said, and she does not move',
+        hinted.marks === 3 && hinted.said.startsWith('Elle regarde') && hinted.pose === 'rest',
+        JSON.stringify(hinted),
+      );
+      await still.getByRole('button', { name: 'Ta tortue', exact: true }).click();
+      const calmSheet = await sheetOf(still);
+      await still
+        .locator('#turtle-sheet')
+        .getByRole('button', { name: 'Ta tortue', exact: true })
+        .click();
+      check(
+        'less motion: her sheet opens, no figure starts, and no movement is announced',
+        calmSheet.open &&
+          calmSheet.said === '' &&
+          isLook(await her(still, LARGE), as) &&
+          isLook(await her(still), as) &&
+          (await sheetOf(still)).said === '' &&
+          (await moving(still)) === 0,
+        JSON.stringify(calmSheet),
+      );
+      check(
+        'less motion: her path shows her forms and their sentences, and « Revoir » is not offered',
+        calmSheet.path.length === 3 &&
+          calmSheet.path.every((form) => form.again === '') &&
+          calmSheet.path[2]?.said === says('turtle.passage.2'),
+        JSON.stringify(calmSheet.path),
+      );
+      await still
+        .locator('#turtle-sheet')
+        .getByRole('button', { name: 'Violet', exact: true })
+        .click();
+      check(
+        'less motion: her colour can be chosen all the same',
+        (await her(still))?.tint === '6' && (await moving(still)) === 0,
+      );
+      await still.keyboard.press('Escape');
+      await playRound(still);
+      check(
+        'less motion: a word found and a round that ends move nothing',
+        (await logOf(still)).every((line) => line[1] === '' && line[3] !== 'pulse') &&
+          (await moving(still)) === 0,
+        JSON.stringify(await logOf(still)),
+      );
+      await calm.context.close();
+    }
+  }
+
+  // --- the data cannot be had: the round of the HTML goes on
+  async function runWithoutData(): Promise<void> {
+    server.failData = true;
+    const offline = await browser.newContext(phone);
+    const view = await offline.newPage();
+    await view.goto(`${origin}/`);
+    await view.waitForTimeout(500);
+    await view.locator('.g-word-1 .g-tile').first().click();
+    check(
+      'without its data the game is still the round of the HTML, and she is the turtle she arrived as',
+      (await view.locator('#game-live').isHidden()) &&
+        (await view.locator('.g-word-1 .g-place').isVisible()) &&
+        (await view.locator(HER).getAttribute('data-state')) === '0' &&
+        (await view.locator('#jeu button:visible').count()) === 0,
+    );
+    await offline.close();
+    server.failData = false;
+  }
+
+  // --- « Envoyer le lien du jeu »: the bare address, and nothing else (D16.17, D17.10)
+  async function runShare(): Promise<void> {
+    // A flamingo with a colour: nothing of her is in what is sent.
+    const stored = resting(data, passageRound.get('12') ?? 2, 4);
+    const sharing = await browser.newContext(phone);
+    await sharing.addInitScript(
+      'window.__shared = []; navigator.share = (data) => { window.__shared.push(data); return Promise.resolve(); };',
+    );
+    await sharing.addInitScript(seedTab(stored));
+    const view = await sharing.newPage();
+    await arrive(view);
+    await playRound(view);
+    await view.getByRole('button', { name: 'Envoyer le lien du jeu' }).click();
+    const shared: Record<string, unknown>[] = await view.evaluate('window.__shared');
+    check(
+      '« Envoyer le lien du jeu » shares the bare address of the site: no text, no word, no answer, nothing of her — not her colour',
+      shared.length === 1 && JSON.stringify(shared[0]) === JSON.stringify({ url: `${origin}/` }),
+      JSON.stringify(shared),
+    );
+    await sharing.close();
+
+    // No share sheet: the address is copied, and it is said.
+    const copying = await browser.newContext(phone);
+    await copying.addInitScript(
+      "window.__copied = []; Object.defineProperty(navigator, 'share', { value: undefined, configurable: true }); Object.defineProperty(navigator, 'clipboard', { value: { writeText: (text) => { window.__copied.push(text); return Promise.resolve(); } }, configurable: true });",
+    );
+    const plain = await copying.newPage();
+    await arrive(plain);
+    await playRound(plain);
+    await plain.getByRole('button', { name: 'Envoyer le lien du jeu' }).click();
+    await until(plain, "document.querySelector('#game-status').textContent === 'Lien copié.'");
+    const copied: string[] = await plain.evaluate('window.__copied');
+    check(
+      'without a share sheet the address is copied, and it is said',
+      JSON.stringify(copied) === JSON.stringify([`${origin}/`]),
+      JSON.stringify(copied),
+    );
+    await copying.close();
+  }
+
+  // --- the keyboard: from the end of a round to her, into her sheet, and back
+  async function runKeyboard(): Promise<void> {
+    const at = ending(data, kit, passageRound.get('12') ?? 2);
+    const { context, view } = await visitor(at.stored);
+    const focused = (): Promise<string> =>
+      view.evaluate<string>(`(() => {
+        const node = document.activeElement;
+        if (node === null || node === document.body) return '';
+        return node.id || node.getAttribute('aria-label') || node.textContent.replace(/\\s+/g, ' ').trim();
+      })()`);
+    const inSheet = (): Promise<boolean> =>
+      view.evaluate<boolean>("document.activeElement?.closest('#turtle-sheet') !== null");
+    // The round is ended with a key, her passage skipped with another.
+    await view.locator('#game-live button').filter({ hasText: 'Mot suivant' }).focus();
+    await view.keyboard.press('Enter');
+    await view.waitForTimeout(400);
+    await view.keyboard.press('Escape');
+    // From the sentence of the round's end, backwards: what is under the stage, then her.
+    const back = [await focused()];
+    for (let step = 0; step < 3; step += 1) {
+      await view.keyboard.press('Shift+Tab');
+      back.push(await focused());
+    }
+    check(
+      'with a keyboard, from the sentence of the round’s end and backwards: « Choisir sa couleur », « Sa fiche », then her',
+      JSON.stringify(back) ===
+        JSON.stringify([
+          'Trois mots, trois endroits du livre.',
+          'game-tint-link',
+          'game-sheet-link',
+          'Ta tortue',
+        ]),
+      back.join(' → '),
+    );
+    await view.keyboard.press('Enter');
+    check(
+      'Enter on her opens her sheet, the focus goes into it, and she does her figure',
+      (await sheetOpen(view)) && (await inSheet()) && (await her(view, LARGE))?.pose === 'trick',
+      await focused(),
+    );
+    // Tab goes through her sheet in the order it reads, and stays in it.
+    const stops: string[] = [];
+    let stayed = true;
+    for (let step = 0; step < 13; step += 1) {
+      await view.keyboard.press('Tab');
+      stops.push(await focused());
+      stayed &&= await inSheet();
+    }
+    check(
+      'Tab goes through her sheet in the order it reads — « Revoir », her colours, what is kept, the way out — and stays in it',
+      stayed &&
+        JSON.stringify(stops) ===
+          JSON.stringify([
+            'Revoir',
+            'Revoir',
+            'Bleu ciel',
+            'Orange',
+            'Vert',
+            'Jaune',
+            'Rouge',
+            'Violet',
+            'Sans couleur',
+            'turtle-sheet-keep',
+            'turtle-sheet-erase',
+            'Tout le détail, page Confidentialité',
+            'Fermer',
+          ]),
+      stops.join(' → '),
+    );
+    // A colour is given with a key, and the focus stays on it.
+    for (let step = 0; step < 7; step += 1) await view.keyboard.press('Shift+Tab');
+    const on = await focused();
+    await view.keyboard.press('Space');
+    check(
+      'a colour is given with a key, and the focus stays on it',
+      on === 'Jaune' &&
+        (await her(view))?.tint === '4' &&
+        (await view.evaluate<boolean>(
+          "document.activeElement?.getAttribute('aria-pressed') === 'true'",
+        )),
+      on,
+    );
+    await view.keyboard.press('Escape');
+    check(
+      'Escape closes her sheet, and the focus goes back to her',
+      !(await sheetOpen(view)) && (await focused()) === 'Ta tortue',
+      await focused(),
+    );
+    await context.close();
+  }
+
+  // --- 9. where she stands and how large, at the widths of real phones
+  async function runSizes(): Promise<void> {
+    const SCREENS: [number, number][] = [
+      [320, 568],
+      [360, 740],
+      [390, 844],
+      [430, 932],
+      [844, 390],
+    ];
+    interface Placed {
+      her: { top: number; bottom: number; left: number; right: number; width: number };
+      tile: number;
+      header: number;
+      height: number;
+      overflow: boolean;
+      block: { left: number; right: number; width: number };
+    }
+    const placed = (view: Page): Promise<Placed> =>
+      view.evaluate<Placed>(`(() => {
+        const box = document.querySelector('${HER}').getBoundingClientRect();
+        const tile = document.querySelector('#game-live .g-tile');
+        const block = document.querySelector('#jeu').getBoundingClientRect();
+        return {
+          her: { top: box.top, bottom: box.bottom, left: box.left, right: box.right, width: box.width },
+          tile: tile === null ? 0 : tile.getBoundingClientRect().bottom,
+          header: document.querySelector('header.site').getBoundingClientRect().bottom,
+          height: innerHeight,
+          overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+          block: { left: block.left, right: block.right, width: block.width },
+        };
+      })()`);
+    const wrong: string[] = [];
+    const sizes: string[] = [];
+    for (const [width, height] of SCREENS) {
+      const screen = `${String(width)} × ${String(height)}`;
+      // One press from the end of the round that makes her a flamingo: she surfs, her widest form.
+      const at = ending(data, kit, passageRound.get('12') ?? 2);
+      const { context, view } = await visitor(at.stored, { viewport: { width, height } });
+      // The question of the next word would be the same screen: the card is left for it.
+      await view.evaluate(
+        `sessionStorage.setItem('${STORAGE_KEY}', ${JSON.stringify(resting(data, 1))})`,
+      );
+      await arrive(view);
+      // The first tile at the very bottom of the window: she is still on screen, whole.
+      await view.evaluate(
+        "document.querySelector('#game-live .g-tile').scrollIntoView({ block: 'end' })",
+      );
+      const asking = await placed(view);
+      const beside = Math.min(96, 0.25 * width);
+      if (Math.abs(asking.her.width - beside) > 1) {
+        wrong.push(`${screen}: ${asking.her.width.toFixed(1)} px beside the word`);
+      }
+      if (asking.her.top < asking.header - 0.5 || asking.her.bottom > asking.height + 0.5) {
+        wrong.push(`${screen}: she is off screen when the first tile is on it`);
+      }
+      if (
+        asking.her.left < asking.block.left - 0.5 ||
+        asking.her.right > asking.block.right + 0.5
+      ) {
+        wrong.push(`${screen}: she leaves the block`);
+      }
+      if (asking.overflow) wrong.push(`${screen}: the question overflows`);
+      // The end of a round: the stage — brought into view, whole, under the header.
+      await view.evaluate(`sessionStorage.setItem('${STORAGE_KEY}', ${JSON.stringify(at.stored)})`);
+      await arrive(view);
+      await view.evaluate(
+        "[...document.querySelectorAll('#game-live button')].find((b) => b.textContent.trim() === 'Mot suivant').scrollIntoView({ block: 'end' })",
+      );
+      await view.getByRole('button', { name: 'Mot suivant' }).click();
+      await view.waitForTimeout(300);
+      const ended = await placed(view);
+      const stage = Math.min(240, 0.62 * width);
+      if (Math.abs(ended.her.width - stage) > 1) {
+        wrong.push(`${screen}: ${ended.her.width.toFixed(1)} px on the stage`);
+      }
+      if (ended.her.width > 0.7 * ended.block.width + 0.5)
+        wrong.push(`${screen}: over 70 % of the block`);
+      if (ended.her.bottom - ended.her.top > 150.5) wrong.push(`${screen}: the stage is too high`);
+      if (ended.her.top < ended.header - 0.5 || ended.her.bottom > ended.height + 0.5) {
+        wrong.push(`${screen}: the stage is not whole on screen when the round ends`);
+      }
+      if (ended.overflow) wrong.push(`${screen}: the end of the round overflows`);
+      // Her sheet: as large as the stage, and nothing wider than its window.
+      await view.keyboard.press('Escape');
+      await view.getByRole('button', { name: 'Sa fiche' }).click();
+      const inSheet = await view.evaluate<{ large: number; wide: boolean; fits: boolean }>(`(() => {
+        const sheet = document.querySelector('#turtle-sheet');
+        const box = sheet.getBoundingClientRect();
+        return {
+          large: sheet.querySelector('${LARGE}').getBoundingClientRect().width,
+          wide: sheet.scrollWidth > sheet.clientWidth + 1,
+          fits: box.left >= 0 && box.right <= innerWidth && box.top >= 0 && box.bottom <= innerHeight,
+        };
+      })()`);
+      if (Math.abs(inSheet.large - stage) > 1)
+        wrong.push(`${screen}: ${String(inSheet.large)} px in her sheet`);
+      if (inSheet.wide || !inSheet.fits) wrong.push(`${screen}: her sheet does not fit its window`);
+      sizes.push(`${screen}: ${asking.her.width.toFixed(0)} / ${ended.her.width.toFixed(0)} px`);
+      await context.close();
+    }
+    check(
+      'at the widths of real phones: 96 px beside the word (80 at 320), 240 px on the stage and in her sheet, never more than 70 % of the block, 150 px high at most',
+      wrong.filter((line) => /px|70 %|too high/.test(line)).length === 0,
+      wrong.join(' | '),
+    );
+    check(
+      '…she is on screen, whole, when the first tile is; the stage is whole on screen when a round ends; nothing overflows',
+      wrong.filter((line) => !/px|70 %|too high/.test(line)).length === 0,
+      wrong.join(' | '),
+    );
+    console.log(`  ${name}: ${sizes.join(' · ')}`);
+
+    // The longest words of the list, at the narrowest width the gates hold: each stands whole
+    // on one line — beside her when there is room, under her when there is not.
+    const longest = [...data.words].sort((a, b) => b.word.length - a.word.length).slice(0, 3);
+    const cut: string[] = [];
+    for (const long of longest) {
+      const narrow = await visitor(
+        JSON.stringify({
+          corpus: data.corpus,
+          seen: data.words.map((w) => w.id).filter((id) => id !== long.id),
+          depth: 3,
+          turtle: 3,
+          arcs: [6, 6, 4],
+          round: null,
+          declined: true,
+        }),
+        { viewport: { width: 320, height: 640 } },
+      );
+      const word = narrow.view.locator('#game-live .g-the-word');
+      const fit = await word.evaluate((node) => {
+        const lines = Math.round(
+          node.getBoundingClientRect().height / parseFloat(getComputedStyle(node).lineHeight),
+        );
+        const mascot = document.querySelector('#game-her svg.mascot')?.getBoundingClientRect();
+        const box = node.getBoundingClientRect();
+        const range = document.createRange();
+        range.selectNodeContents(node);
+        const ink = range.getBoundingClientRect();
+        // The letters and her never share a place.
+        const over =
+          mascot !== undefined &&
+          ink.right > mascot.left &&
+          ink.left < mascot.right &&
+          ink.bottom > mascot.top + 1 &&
+          ink.top < mascot.bottom - 1;
+        return { lines, over, wide: box.right > innerWidth };
+      });
+      if (text(await word.textContent()) !== long.word || fit.lines !== 1 || fit.over || fit.wide) {
+        cut.push(`${long.id}: ${JSON.stringify(fit)}`);
+      }
+      await narrow.context.close();
+    }
+    check(
+      'at 320 px the three longest words of the list each stand whole on one line, and never under her drawing',
+      cut.length === 0,
+      cut.join(', '),
+    );
+  }
+
+  // --- 10. electoral silence (D16.16): the game is not shown, and no gesture of it does anything
+  async function runSilence(): Promise<void> {
+    const inside = new Date('2027-04-17T10:00:00Z');
+    const outside = new Date('2026-11-20T10:00:00Z');
+    const state = (view: Page): Promise<{ attr: boolean; game: boolean; note: string }> =>
+      view.evaluate(`({
+        attr: document.documentElement.hasAttribute('data-silence'),
+        game: document.querySelector('#jeu').getClientRects().length > 0,
+        note: document.querySelector('#game-silence').getClientRects().length > 0
+          ? document.querySelector('#game-silence').textContent.replace(/\\s+/g, ' ').trim()
+          : '',
+      })`);
+    const visit = async (
+      clock: Date,
+      flags: { date: Date; override?: string },
+      prepare?: (context: BrowserContext, view: Page) => Promise<void>,
+    ): Promise<{ view: Page; asked: string[]; close: () => Promise<void> }> => {
+      server.flags = flags;
+      const context = await browser.newContext(phone);
+      const view = await context.newPage();
+      const asked: string[] = [];
+      view.on('request', (r) => asked.push(r.url()));
+      await view.clock.setFixedTime(clock);
+      await prepare?.(context, view);
+      await view.goto(`${origin}/`);
+      await view.waitForTimeout(500);
+      return { view, asked, close: () => context.close() };
+    };
+
+    // In a window, by the device's clock and by ours.
+    let seen = await visit(inside, { date: inside });
+    let now = await state(seen.view);
+    check(
+      'in a silence window the game is not shown, and one sentence says what is paused',
+      now.attr &&
+        !now.game &&
+        now.note.startsWith('Les questions, le jeu et le partage sont en pause.') &&
+        now.note.includes('C’est la règle du silence électoral') &&
+        /Tout revient à .*20/.test(now.note),
+      JSON.stringify(now),
+    );
+    check(
+      '…nothing of the game is fetched, no word of it is on screen, and she is not shown',
+      !seen.asked.some((url) => url.includes('/data/jeu-')) &&
+        (await seen.view.locator('[data-programme="word"]:visible').count()) === 0 &&
+        (await seen.view.locator('svg.mascot:visible').count()) === 0,
+    );
+    await seen.view.fill('#q', 'retraite');
+    await until(seen.view, "document.querySelectorAll('#search-list > li').length > 0");
+    check('…and the search stays open', true);
+    await seen.close();
+
+    // The few lines of the <head> hide it by themselves: the game's own script never arrives.
+    seen = await visit(inside, { date: inside }, async (_context, view) => {
+      await view.route('**/_astro/Game2.*', (route) => route.abort());
+    });
+    now = await state(seen.view);
+    check(
+      'the guard in the <head> hides the game before any script of ours runs',
+      now.attr && !now.game,
+      JSON.stringify(now),
+    );
+    await seen.close();
+
+    // A clock that disagrees with ours is not believed — whichever of the two is in a window.
+    seen = await visit(inside, { date: outside });
+    now = await state(seen.view);
+    check(
+      'device in a window, server outside: closed when in doubt, and no hour is announced',
+      now.attr && !now.game && !/Tout revient/.test(now.note),
+      JSON.stringify(now),
+    );
+    await seen.close();
+    seen = await visit(outside, { date: inside });
+    now = await state(seen.view);
+    check(
+      'server in a window, device outside: closed when in doubt',
+      now.attr && !now.game,
+      JSON.stringify(now),
+    );
+    await seen.close();
+
+    // The switch: outside any election, one field of our own file closes the game.
+    seen = await visit(outside, { date: outside, override: 'on' });
+    now = await state(seen.view);
+    check(
+      'the override closes the game outside any window, with no hour to announce',
+      now.attr && !now.game && now.note !== '' && !/Tout revient/.test(now.note),
+      JSON.stringify(now),
+    );
+    await seen.close();
+
+    // Outside a window, with a clock that agrees: the game is there.
+    seen = await visit(outside, { date: outside });
+    now = await state(seen.view);
+    check(
+      'outside a window the game is shown, and the sentence is not',
+      !now.attr && now.game && now.note === '',
+      JSON.stringify(now),
+    );
+    await seen.close();
+
+    // A freeze that starts while the page is open, and ends while it still is.
+    const eve = new Date('2027-04-15T21:00:00Z');
+    seen = await visit(eve, { date: eve });
+    await until(seen.view, "!document.querySelector('#game-live').hidden");
+    await seen.view.getByRole('button', { name: 'Je ne sais pas' }).click();
+    const midnight = new Date('2027-04-15T22:10:00Z');
+    await seen.view.clock.setFixedTime(midnight);
+    await seen.view.getByRole('button', { name: 'Mot suivant' }).click();
+    now = await state(seen.view);
+    check(
+      'a freeze that starts during a round: the next gesture does nothing, the game leaves',
+      now.attr && !now.game && now.note !== '',
+      JSON.stringify(now),
+    );
+    check(
+      '…and what she had found is still in the tab',
+      await seen.view.evaluate<boolean>(`sessionStorage.getItem('${STORAGE_KEY}') !== null`),
+    );
+    const afterIt = new Date('2027-04-18T18:30:00Z');
+    server.flags = { date: afterIt };
+    await seen.view.clock.setFixedTime(afterIt);
+    await seen.view.evaluate("document.dispatchEvent(new Event('visibilitychange'))");
+    await until(seen.view, "!document.documentElement.hasAttribute('data-silence')");
+    now = await state(seen.view);
+    check(
+      'when the window ends and the tab is looked at again, the game is back',
+      !now.attr && now.game,
+      JSON.stringify(now),
+    );
+    await seen.close();
+
+    // A freeze that starts while she passes: everything of hers stops, on what she became.
+    const at = ending(data, kit, passageRound.get('12') ?? 2);
+    seen = await visit(eve, { date: eve }, async (context) => {
+      await context.addInitScript(seedTab(at.stored));
+    });
+    await until(seen.view, "!document.querySelector('#game-live').hidden");
+    await seen.view.evaluate(WATCH);
+    await seen.view.evaluate(`window.__seen.her = window.__watch(${JSON.stringify(HER)})`);
+    await press(seen.view, 'Mot suivant');
+    await seen.view.waitForTimeout(700);
+    const passing = await her(seen.view);
+    server.flags = { date: midnight };
+    await seen.view.clock.setFixedTime(midnight);
+    await seen.view.evaluate("document.dispatchEvent(new Event('visibilitychange'))");
+    await seen.view.waitForTimeout(300);
+    now = await state(seen.view);
+    const stopped = await her(seen.view);
+    await seen.view.waitForTimeout(evolutionLasts('12'));
+    check(
+      'a freeze that starts while she passes: the game leaves, and her passage stops there — on what she became, with nothing left to play',
+      passing?.phase != null &&
+        now.attr &&
+        !now.game &&
+        isLook(stopped, lookOf({ state: at.end.state, arcs: at.end.arcs, passage: true })) &&
+        isLook(
+          await her(seen.view),
+          lookOf({ state: at.end.state, arcs: at.end.arcs, passage: true }),
+        ) &&
+        (await moving(seen.view)) === 0,
+      `${String(passing?.phase)} ${JSON.stringify(stopped)}`,
+    );
+    server.flags = { date: afterIt };
+    await seen.view.clock.setFixedTime(afterIt);
+    await seen.view.evaluate("document.dispatchEvent(new Event('visibilitychange'))");
+    await until(seen.view, "!document.documentElement.hasAttribute('data-silence')");
+    const backAgain = await staged(seen.view);
+    check(
+      '…and when the game is back, what happened to her is said, and « Passer » is gone',
+      backAgain.lineSeen && backAgain.line === at.said.map(shown).join(' ') && !backAgain.skip,
+      JSON.stringify(backAgain),
+    );
+    await seen.close();
+    server.flags = null;
+  }
+
+  // --- 11. accessibility of the screens, under the nine conditions every page is audited under
+  // (Chromium: axe is injected, so the policy is bypassed)
+  async function runAudit(): Promise<void> {
+    const axe = readFileSync('node_modules/axe-core/axe.min.js', 'utf8');
+    const at = ending(data, kit, passageRound.get('12') ?? 2, { declined: false });
+    for (const condition of CONDITIONS) {
+      const failures: string[] = [];
+      const percent = condition.rootFontPercent ?? 100;
+      const audit = async (view: Page, label: string): Promise<void> => {
+        const result: { violations: { id: string; impact: string | null }[] } = await view.evaluate(
+          'window.axe.run(document.querySelector("#jeu"), { resultTypes: ["violations"] })',
+        );
+        const serious = result.violations.filter(
+          (v) => v.impact === 'serious' || v.impact === 'critical',
+        );
+        if (serious.length > 0) failures.push(`${label}: ${serious.map((v) => v.id).join(',')}`);
+        const box: { sw: number; cw: number; small: string[]; cut: number; named: number } =
+          await view.evaluate(`({
+          sw: document.documentElement.scrollWidth,
+          cw: document.documentElement.clientWidth,
+          // Every target one can press: 44 px high at least.
+          small: [...document.querySelectorAll('#jeu button, #game-live a')].filter((n) => n.getClientRects().length > 0 && getComputedStyle(n).visibility === 'visible' && (document.querySelector('#turtle-sheet').open ? n.closest('#turtle-sheet') !== null : n.closest('#turtle-sheet') === null) && n.getBoundingClientRect().height < 44).map((n) => (n.textContent.trim() || n.getAttribute('aria-label')) + ' ' + n.getBoundingClientRect().height.toFixed(0)),
+          // A title is never cut: nothing of the game hides what overflows it.
+          cut: [...document.querySelectorAll('#game-live [data-programme], #turtle-sheet[open] [data-programme]')].filter((n) => n.scrollWidth > n.clientWidth + 1 && getComputedStyle(n).overflow !== 'visible').length,
+          // Every button says what it is, in words.
+          named: [...document.querySelectorAll('#jeu button')].filter((n) => n.getClientRects().length > 0 && getComputedStyle(n).visibility === 'visible' && (n.textContent.trim() || n.getAttribute('aria-label') || '') === '').length,
+        })`);
+        if (box.sw > box.cw)
+          failures.push(`${label}: overflows (${String(box.sw)} > ${String(box.cw)})`);
+        if (box.small.length > 0) failures.push(`${label}: under 44 px — ${box.small.join(', ')}`);
+        if (box.cut > 0) failures.push(`${label}: ${String(box.cut)} title(s) cut`);
+        if (box.named > 0) failures.push(`${label}: ${String(box.named)} button(s) without a name`);
+      };
+      const open = async (
+        stored: string | null,
+      ): Promise<{ context: BrowserContext; view: Page }> => {
+        const context = await browser.newContext({ ...condition.options, bypassCSP: true });
+        if (percent !== 100) await context.addInitScript(rootFontScript(percent));
+        if (stored !== null) await context.addInitScript(seedTab(stored));
+        const view = await context.newPage();
+        await view.goto(`${origin}/`);
+        // In a small window the block is more than a screen away: the script takes it over
+        // when the reader gets near, not before.
+        await view.locator('#jeu').scrollIntoViewIfNeeded();
+        await until(view, "!document.querySelector('#game-live').hidden");
+        await view.addScriptTag({ content: axe });
+        return { context, view };
+      };
+      // A first visit: the question, the card, then the end of the round — while she passes
+      // (where a passage is played at all), and once she has.
+      const fresh = await open(null);
+      await audit(fresh.view, 'the question');
+      await fresh.view.locator('#game-live .g-tile').first().click();
+      await audit(fresh.view, 'the card of the place');
+      for (let i = 0; i < ROUND; i += 1) {
+        if (i > 0) await fresh.view.getByRole('button', { name: 'Je ne sais pas' }).click();
+        await fresh.view.getByRole('button', { name: 'Mot suivant' }).click();
+      }
+      await fresh.view.waitForTimeout(600);
+      await audit(fresh.view, 'the end of a round, while she passes');
+      await fresh.view.waitForTimeout(evolutionLasts('01'));
+      await audit(fresh.view, 'the end of a round, once she has passed');
+      await fresh.context.close();
+      // A flamingo: the end of her round with « Choisir sa couleur », her sheet, « Revoir ».
+      const later = await open(at.stored);
+      await later.view.getByRole('button', { name: 'Mot suivant' }).click();
+      await later.view.waitForTimeout(300);
+      await later.view.keyboard.press('Escape');
+      await audit(later.view, 'the end of the round that makes her a flamingo');
+      await later.view.getByRole('button', { name: 'Choisir sa couleur' }).click();
+      await later.view
+        .locator('#turtle-sheet')
+        .getByRole('button', { name: 'Jaune', exact: true })
+        .click();
+      await audit(later.view, 'her sheet');
+      const again = later.view.locator('#turtle-sheet-path button');
+      if ((await again.count()) > 0) {
+        await again.first().click();
+        await later.view.waitForTimeout(500);
+        await audit(later.view, 'her sheet, while a passage is seen again');
+      }
+      await later.context.close();
+      check(
+        `the screens of the game pass the audit, fit, keep their targets and name their buttons: ${condition.label}`,
+        failures.length === 0,
+        failures.join(' | '),
+      );
+    }
+  }
+
+  // --- 11 bis. a system that forces its own colours (Chromium): she is still drawn, the page's
+  // theme follows the system's, and the colour she has is still told from the others.
+  async function runForcedColours(): Promise<void> {
+    for (const scheme of ['light', 'dark'] as const) {
+      const forced = await visitor(resting(data, passageRound.get('12') ?? 2, 3), {
+        ...phone,
+        forcedColors: 'active',
+        colorScheme: scheme,
+      });
+      const picture = readPng(await forced.view.locator(HER).screenshot());
+      // The colours of her picture, by how much of it each takes: the ground is the first; her
+      // line is whatever stands out most from it among those that are more than a speck.
+      const counts = new Map<string, number>();
+      for (let pixel = 0; pixel < picture.width * picture.height; pixel += 1) {
+        const at = pixel * picture.channels;
+        const hex = `#${[0, 1, 2].map((c) => (picture.data[at + c] ?? 0).toString(16).padStart(2, '0')).join('')}`;
+        counts.set(hex, (counts.get(hex) ?? 0) + 1);
+      }
+      const ranked = [...counts].sort((a, b) => b[1] - a[1]);
+      const ground = ranked[0]?.[0] ?? '#000000';
+      const stands = Math.max(
+        ...ranked.filter(([, count]) => count >= 40).map(([hex]) => contrastRatio(hex, ground)),
+      );
+      await forced.view.getByRole('button', { name: 'Ta tortue', exact: true }).click();
+      const borders = await forced.view
+        .locator('#turtle-sheet-tints button')
+        .evaluateAll((all) =>
+          all.map((choice) => [
+            choice.getAttribute('aria-pressed') ?? '',
+            getComputedStyle(choice).borderTopWidth,
+          ]),
+        );
+      const widths = (chosen: boolean): number[] =>
+        borders
+          .filter(([state]) => (state === 'true') === chosen)
+          .map(([, width]) => parseFloat(width ?? '0'));
+      const pressed = widths(true);
+      const others = widths(false);
+      check(
+        `forced colours, ${scheme}: she is still drawn — her line stands out from the ground by 3:1 at least —, and the colour she has is told by its border`,
+        stands >= LINE_MIN &&
+          pressed.length === 1 &&
+          others.length === 6 &&
+          others.every((width) => width < (pressed[0] ?? 0)),
+        `${stands.toFixed(2)}:1 on ${ground}; borders ${JSON.stringify(borders)}`,
+      );
+      await forced.context.close();
+    }
+  }
+
+  // --- 12. Chromium only: the page does not move; her frames; no flash, on the page itself
+  async function runMeasures(): Promise<void> {
+    // The page does not move once painted, whoever arrives and wherever: a first visit, a
+    // flamingo that comes back, at the top of the page or on the block itself.
+    const flamingo = seedTab(resting(data, passageRound.get('12') ?? 2, 3));
+    const shifts: string[] = [];
+    for (const [label, path, also] of [
+      ['a first visit', '/', ''],
+      ['a first visit, on the block', '/#jeu', ''],
+      ['a flamingo comes back', '/', flamingo],
+      ['a flamingo comes back, on the block', '/#jeu', flamingo],
+    ] as const) {
+      const shift = await lateLayoutShift(browser, `${origin}${path}`, also);
+      shifts.push(`${label} ${shift.toFixed(4)}`);
+      check(`the page does not move once painted — ${label}`, shift < STILL, shift.toFixed(4));
+    }
+    console.log(`  ${name}: layout shift — ${shifts.join(' · ')}`);
+    if (!LAB) {
+      console.log(`  ${name}: her frames and her flashes are not measured here (--no-lab)`);
+      return;
+    }
+
+    // Frames, the processor slowed four times, on the page of the game: a phone's screen, two
+    // pixels for one. Each passage three times, the middle run kept: a machine that does
+    // something else for a moment is not her.
+    for (const passage of PASSAGES) {
+      const round = passageRound.get(passage);
+      if (round === undefined) continue;
+      const at = ending(data, kit, round, { tint: passage === '23' || passage === '34' ? 3 : 0 });
+      const lasts = evolutionLasts(passage);
+      const runs: { p95: number; over20: number; over50: number; count: number }[] = [];
+      for (let run = 0; run < 3; run += 1) {
+        const slowed = await visitor(at.stored, {
+          viewport: { width: 390, height: 844 },
+          deviceScaleFactor: 2,
+          isMobile: true,
+          hasTouch: true,
+        });
+        const session = await slowed.context.newCDPSession(slowed.view);
+        await session.send('Emulation.setCPUThrottlingRate', { rate: 4 });
+        const all = await slowed.view.evaluate<number[]>(
+          `(() => { window.__press('Mot suivant'); return window.__frames(${String(lasts)}); })()`,
+        );
+        // The first frame is the gesture itself — the panel of the round's end drawn —, not her.
+        const deltas = all.slice(1).sort((a, b) => a - b);
+        runs.push({
+          count: deltas.length,
+          p95: Math.round((deltas[Math.floor(deltas.length * 0.95)] ?? 0) * 10) / 10,
+          over20:
+            Math.round((1000 * deltas.filter((d) => d > 20).length) / Math.max(1, deltas.length)) /
+            10,
+          over50: deltas.filter((d) => d > 50).length,
+        });
+        await slowed.context.close();
+      }
+      const frames = runs.sort((a, b) => a.over50 - b.over50 || a.over20 - b.over20)[1];
+      if (frames === undefined) continue;
+      check(
+        `${passage}, in the game: no frame over 50 ms and at most 5 % over 20 ms, processor slowed four times`,
+        frames.over50 === 0 && frames.over20 <= 5,
+        `p95 ${String(frames.p95)} ms, ${String(frames.over20)} % over 20 ms, ${String(frames.over50)} over 50 ms, ${String(frames.count)} frames`,
+      );
+      console.log(
+        `  ${name}: ${passage} frames — p95 ${String(frames.p95)} ms, ${String(frames.over20)} % > 20 ms, ${String(frames.over50)} > 50 ms (${String(frames.count)} frames)`,
+      );
+    }
+
+    // Flashes (WCAG 2.3.1), filmed on the page of the game, at its own speed, in both themes:
+    // the stage and everything that changes with it — the row under it, the line said of her.
+    // (Her sheet films each passage twelve times slower, so that no frame is missed:
+    // scripts/mascot2-motion.ts. This film is of the page around her.)
+    for (const theme of ['light', 'dark'] as const) {
+      for (const passage of PASSAGES) {
+        const round = passageRound.get(passage);
+        if (round === undefined) continue;
+        const at = ending(data, kit, round, { tint: passage === '23' || passage === '34' ? 3 : 0 });
+        const studio = await visitor(at.stored, { ...phone, colorScheme: theme });
+        // Where the end of the round will be: the block, from its title down.
+        await studio.view.evaluate(
+          "document.querySelector('#jeu').scrollIntoView({ block: 'start' })",
+        );
+        const block = await studio.view.locator('#jeu').boundingBox();
+        if (block === null) throw new Error('the block has no box');
+        const clip = {
+          x: Math.floor(block.x),
+          y: Math.max(0, Math.floor(block.y)),
+          width: Math.ceil(block.width),
+          height: Math.min(420, 844 - Math.max(0, Math.floor(block.y))),
+        };
+        const shots: Buffer[] = [];
+        const times: number[] = [];
+        await press(studio.view, 'Mot suivant');
+        const started = Date.now();
+        while (Date.now() - started < evolutionLasts(passage) + 500) {
+          times.push(Date.now() - started);
+          shots.push(await studio.view.screenshot({ clip }));
+        }
+        const film: Picture[] = shots.map((shot) => readPng(shot));
+        const gaps = times.slice(1).map((t, index) => t - (times[index] ?? 0));
+        const sorted = [...gaps].sort((a, b) => a - b);
+        const median = sorted[Math.floor(sorted.length / 2)] ?? 0;
+        const flashes = flashesOf(film, times);
+        check(
+          `${passage}, ${theme}, filmed in the game: no flash — none of light, none of red, and no area that could make one changes back and forth`,
+          withinFlashRule(flashes) &&
+            flashes.flashes_per_second === 0 &&
+            flashes.red_flashes_per_second === 0 &&
+            flashes.area_px < FLASH_AREA_PX &&
+            flashes.scene_pairs === 0,
+          JSON.stringify(flashes),
+        );
+        check(
+          `${passage}, ${theme}: the film kept up — a frame every 100 ms at least, at the median`,
+          median <= 100 && film.length >= 20,
+          `${String(film.length)} frames, median gap ${String(median)} ms`,
+        );
+        console.log(
+          `  ${name}: ${passage} ${theme} — ${String(film.length)} frames (median gap ${String(median)} ms); ${String(flashes.flashes_per_second)} flashes/s, ${String(flashes.area_px)} px² back and forth, red ${String(flashes.red_flashes_per_second)}/s on ${String(flashes.red_area_px)} px²`,
+        );
+        await studio.context.close();
+      }
+    }
+  }
+
+  // --- 1 to 4. a first visit: without script, then with it — a round, its end, her passage
+  async function runVisit(): Promise<void> {
+    // --- 1. without JavaScript
+    {
+      const context = await browser.newContext({ ...phone, javaScriptEnabled: false });
+      const page = await context.newPage();
+      await page.goto(`${origin}/`);
+      check(
+        'without script, the game is on the page, below the field',
+        (await page.locator('#jeu').count()) === 1,
+      );
+      const words = (
+        await page.locator('#game-static [data-programme="word"]').allTextContents()
+      ).map(text);
+      check(
+        'the first round is in the HTML: the first three words of the list',
+        JSON.stringify(words) === JSON.stringify(first.map((w) => w.word)),
+        words.join(','),
+      );
+      check(
+        'one question shows at a time',
+        JSON.stringify(await visibleHeadings(page)) ===
+          JSON.stringify(['Dans quelle partie est-il écrit ?']),
+        (await visibleHeadings(page)).join(' | '),
+      );
+      const tiles = (await page.locator('.g-word-1 .g-tile').allTextContents()).map(text);
+      check(
+        'the six tiles are the six official titles, whole',
+        JSON.stringify(tiles) === JSON.stringify(partTitles),
+        tiles.join(' | '),
+      );
+      const hrefs = await page
+        .locator('#game-static a[href^="#"]')
+        .evaluateAll((links) => links.map((a) => a.getAttribute('href') ?? ''));
+      check(
+        'an anchor says a position, never a word or an answer',
+        hrefs.length > 0 && hrefs.every((h) => /^#(?:m[1-3](?:-[0-6])?|fin)$/.test(h)),
+        hrefs.filter((h) => !/^#(?:m[1-3](?:-[0-6])?|fin)$/.test(h)).join(','),
+      );
+      // She is there, once, as the turtle — and nothing that only a script can answer is.
+      const without = await page.evaluate<{
+        drawings: number;
+        state: string | null;
+        buttons: number;
+        row: boolean;
+        goal: string[];
+        dialog: boolean;
+      }>(`({
+        drawings: document.querySelectorAll('#jeu svg.mascot').length,
+        state: document.querySelector('${HER}')?.getAttribute('data-state') ?? null,
+        buttons: [...document.querySelectorAll('#jeu button')].filter((b) => b.getClientRects().length > 0 && getComputedStyle(b).visibility === 'visible').length,
+        row: document.querySelector('#game-her-with').getClientRects().length > 0,
+        goal: [...document.querySelectorAll('#game-static .g-goal')].map((p) => getComputedStyle(p).visibility),
+        dialog: document.querySelector('#turtle-sheet').open,
+      })`);
+      check(
+        'without script she is there, once, as the turtle, and no button is offered',
+        without.drawings === 1 &&
+          without.state === '0' &&
+          without.buttons === 0 &&
+          !without.row &&
+          !without.dialog,
+        JSON.stringify(without),
+      );
+      check(
+        'without script, the sentence that says she changes keeps its room and is not shown',
+        without.goal.length === ROUND && without.goal.every((v) => v === 'hidden'),
+        without.goal.join(','),
+      );
+
+      // Every tile of the first word leads to its card, and the card never judges.
+      const word = first[0];
+      const place = word === undefined ? null : locate(data, word.section);
+      if (word === undefined || place === null) throw new Error('the first word has no place');
+      const also = otherParts(data, word.id);
+      let cards = 0;
+      for (let tile = 0; tile <= 6; tile += 1) {
+        await page.goto(`${origin}/#m1-${String(tile)}`);
+        const [heading = ''] = await visibleHeadings(page);
+        const n = String(place.part.number);
+        const expected =
+          tile === place.part.number
+            ? `Oui. C’est écrit dans la partie ${n}.`
+            : also.includes(tile)
+              ? `Oui, là aussi. Le jeu te montre la partie ${n}.`
+              : `C’est écrit dans la partie ${n}.`;
+        if (heading === expected && (await visibleHeadings(page)).length === 1) cards += 1;
+      }
+      check(
+        'every tile, and « Je ne sais pas », leads to the card of the place',
+        cards === 7,
+        String(cards),
+      );
+      await page.goto(`${origin}/#m1-${String(place.part.number)}`);
+      const where = (await page.locator('.g-word-1 .g-where li').allTextContents()).map(text);
+      check(
+        'the card names the part, the chapter and the section by their official titles',
+        JSON.stringify(where) ===
+          JSON.stringify([place.part.title, place.chapter.title, place.section.title]),
+        where.join(' | '),
+      );
+      const cta = page.locator('.g-word-1 .g-place a.cta');
+      check(
+        '« C’est écrit là » leads to the section in the official book',
+        (await cta.getAttribute('href')) === sectionUrl(word.section) &&
+          (await cta.getAttribute('rel')) === 'noopener noreferrer',
+        (await cta.getAttribute('href')) ?? '',
+      );
+      // The card is under her, whole: never beside her.
+      const beside = await page.evaluate<{ card: number; her: number }>(`({
+        card: document.querySelector('.g-word-1 .g-place').getBoundingClientRect().top,
+        her: document.querySelector('${HER}').getBoundingClientRect().bottom,
+      })`);
+      check(
+        'the card of the place is under her, never beside her',
+        beside.card >= beside.her,
+        JSON.stringify(beside),
+      );
+      // The whole round, link by link.
+      await page.locator('.g-word-1 .g-place a.g-quiet').click();
+      const second = text(await page.locator('[data-programme="word"]:visible').textContent());
+      await page.locator('.g-word-2 .g-with a').click();
+      await page.locator('.g-word-2 .g-place a.g-quiet').click();
+      await page.locator('.g-word-3 .g-tile').first().click();
+      await page.locator('.g-word-3 .g-place a.g-quiet').click();
+      check(
+        'the round is played to its end with links alone',
+        second === first[1]?.word &&
+          JSON.stringify(await visibleHeadings(page)) ===
+            JSON.stringify(['Trois mots, trois endroits du livre.']) &&
+          (await page.locator('.g-end a[href="/sommaire/"]').isVisible()),
+        (await visibleHeadings(page)).join(' | '),
+      );
+      check(
+        'without script she has not changed at the end of the round, and nothing says she has',
+        (await page.locator(HER).getAttribute('data-state')) === '0' &&
+          !(await page.evaluate<boolean>(
+            "document.querySelector('#jeu').hasAttribute('data-stage')",
+          )),
+      );
+      const voice: string = await page.evaluate(OWN_VOICE);
+      check(
+        'without script, the game’s voice never judges nor counts',
+        !NEVER.test(voice),
+        NEVER.exec(voice)?.[0],
+      );
+      const box: { sw: number; cw: number } = await page.evaluate(
+        '({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth })',
+      );
+      check('without script, nothing overflows at 390 px', box.sw <= box.cw, String(box.sw));
+      await context.close();
+    }
+
+    // --- 2. the script takes the block over
+    const context = await browser.newContext(phone);
+    const page = await context.newPage();
+    const requests: { url: string; method: string; body: string }[] = [];
+    const violations: string[] = [];
+    page.on('request', (r) =>
+      requests.push({ url: r.url(), method: r.method(), body: r.postData() ?? '' }),
+    );
+    page.on('console', (m) => {
+      if (/Content Security Policy|Refused to/i.test(m.text()) && !/duplicate/i.test(m.text())) {
+        violations.push(m.text());
+      }
+    });
+    page.on('pageerror', (e) => violations.push(String(e)));
+    await arrive(page);
+    const outside = requests.filter((r) => !r.url.startsWith(origin));
+    const game = requests.filter((r) => r.url.includes('/data/jeu-'));
+    check(
+      'nothing is asked of anyone but us',
+      outside.length === 0,
+      outside.map((r) => r.url).join(','),
+    );
+    check(
+      'the game asks for one static file, whose address says nothing',
+      game.length === 1 &&
+        game[0]?.method === 'GET' &&
+        /\/data\/jeu-[0-9a-f]{16}\.json$/.test(game[0].url),
+      game.map((r) => r.url).join(','),
+    );
+    check(
+      'the script arrives without taking the focus',
+      await page.evaluate<boolean>('document.activeElement === document.body'),
+    );
+    check(
+      'the round of the HTML has given way to the script’s',
+      (await page.locator('#game-static').isHidden()) &&
+        text(await page.locator('#game-live [data-programme="word"]').textContent()) ===
+          first[0]?.word,
+    );
+    const arrived = await her(page);
+    check(
+      'she arrives as the turtle, at rest, live — and nothing of her moves',
+      isLook(arrived, lookOf({ state: 0 })) && arrived?.live === true && (await moving(page)) === 0,
+      JSON.stringify(arrived),
+    );
+    check(
+      'what will make her change is said beside her before a first word is found',
+      text(await page.locator('#game-live .g-goal').textContent()) === says('turtle.goal.start') &&
+        (await page.locator('#game-live .g-goal').isVisible()) &&
+        (await page.locator('#game-her-with').isHidden()),
+      text(await page.locator('#game-live .g-goal').textContent()),
+    );
+    check(
+      'she is a button, by her name, and says it opens something',
+      (await page.getByRole('button', { name: 'Ta tortue', exact: true }).count()) === 1 &&
+        (await page
+          .getByRole('button', { name: 'Ta tortue', exact: true })
+          .getAttribute('aria-haspopup')) === 'dialog',
+    );
+
+    // --- 3. a round: the right tile, another one, not knowing
+    const seenBefore = requests.length;
+    const playWord = async (index: number, how: 'here' | 'other' | 'unknown'): Promise<string> => {
+      const word = first[index];
+      const place = word === undefined ? null : locate(data, word.section);
+      if (word === undefined || place === null) throw new Error(`no word at ${String(index)}`);
+      const right = String(place.part.number);
+      const taken = new Set([place.part.number, ...otherParts(data, word.id)]);
+      const other = String(data.parts.map((p) => p.number).find((n) => !taken.has(n)) ?? 0);
+      await page.evaluate('window.__seen.her.log.length = 0');
+      if (how === 'unknown') await page.getByRole('button', { name: 'Je ne sais pas' }).click();
+      else
+        await page
+          .locator(`#game-live .g-tile[data-tile="${how === 'here' ? right : other}"]`)
+          .click();
+      return right;
+    };
+    /** What a word found writes on her, without its times: her move, then as she was. */
+    const moves: string[] = [];
+    const moved = async (): Promise<void> => {
+      await page.waitForTimeout(PULSE_HOLD_MS + LATE_MS);
+      moves.push(JSON.stringify((await logOf(page)).map((line) => line.slice(1))));
+    };
+    let right = await playWord(0, 'here');
+    check(
+      'the right tile: « Oui. », and where',
+      text(await page.locator('#game-live .g-place h3').textContent()) ===
+        `Oui. C’est écrit dans la partie ${right}.`,
+      text(await page.locator('#game-live .g-place h3').textContent()),
+    );
+    check(
+      'the focus goes to the sentence of the card',
+      await page.evaluate<boolean>(
+        "document.activeElement === document.querySelector('#game-live .g-place h3')",
+      ),
+    );
+    const pulsing = await her(page);
+    check(
+      'a word found: she makes her small move, at once',
+      pulsing?.pose === 'pulse' && pulsing.state === '0' && (await moving(page)) > 0,
+      JSON.stringify(pulsing),
+    );
+    await moved();
+    check(
+      '…and is as she was 340 ms later',
+      isLook(await her(page), lookOf({ state: 0 })),
+      JSON.stringify(await her(page)),
+    );
+    const firstPlace = locate(data, first[0]?.section ?? '');
+    const places = (await page.locator('#game-live .g-where li').allTextContents()).map(text);
+    check(
+      'the card names the place by its three official titles',
+      JSON.stringify(places) ===
+        JSON.stringify([
+          firstPlace?.part.title,
+          firstPlace?.chapter.title,
+          firstPlace?.section.title,
+        ]),
+      places.join(' | '),
+    );
+    const href = (await page.locator('#game-live a.cta').getAttribute('href')) ?? '';
+    check(
+      '« C’est écrit là » leads to the measure in the official book',
+      href.startsWith(sectionUrl(first[0]?.section ?? '-')) &&
+        (await page.locator('#game-live a.cta').getAttribute('rel')) === 'noopener noreferrer',
+      href,
+    );
+    const fragment = (await page.locator('#game-live a.cta').getAttribute('data-fragment')) ?? '';
+    check(
+      '…with the directive of its measure, and of the word where it was seen lit',
+      fragment === first[0]?.fragment &&
+        /^text=[^&]+(?:&text=[^&]+)?$/.test(fragment) &&
+        (href.endsWith(`:~:${fragment}`) || !href.includes(':~:')),
+      `${fragment} | ${href.split('#')[1] ?? ''}`,
+    );
+    check(
+      'the sentence that says she changes is beside her on the card too',
+      text(await page.locator('#game-live .g-goal').textContent()) === says('turtle.goal.start'),
+    );
+    await page.getByRole('button', { name: 'Mot suivant' }).click();
+    check(
+      'the next word, and the focus on its question',
+      text(await page.locator('#game-live [data-programme="word"]').textContent()) ===
+        first[1]?.word &&
+        (await page.evaluate<boolean>(
+          "document.activeElement === document.querySelector('#game-live .g-ask')",
+        )),
+    );
+    right = await playWord(1, 'other');
+    check(
+      'another tile: where the word is written, and nothing about the choice',
+      text(await page.locator('#game-live .g-place h3').textContent()) ===
+        `C’est écrit dans la partie ${right}.`,
+      text(await page.locator('#game-live .g-place h3').textContent()),
+    );
+    await moved();
+    let voice: string = await page.evaluate(OWN_VOICE);
+    check('the card never judges nor counts', !NEVER.test(voice), NEVER.exec(voice)?.[0]);
+    await page.getByRole('button', { name: 'Mot suivant' }).click();
+    await playWord(2, 'unknown');
+    await moved();
+    check(
+      'her move for a word found is the same whatever was chosen: the right tile, another, none',
+      moves.length === 3 &&
+        moves[0] !== '[]' &&
+        moves[0] === moves[1] &&
+        moves[1] === moves[2] &&
+        (moves[0] ?? '').includes('"pulse"'),
+      moves.join(' / '),
+    );
+    await page.waitForTimeout(ALONE_MS - PULSE_HOLD_MS - LATE_MS);
+    check('nothing of her moves 2.1 s after a gesture', (await moving(page)) === 0);
+
+    // --- 4. the end of a round: the stage, the finds, her first passage
+    const one = ending(data, kit, 1);
+    const frames01 = evolution(
+      { state: 0, arcs: [0, 0, 0], tint: 0 },
+      { state: one.end.state, arcs: one.end.arcs, tint: 0 },
+    );
+    await press(page, 'Mot suivant');
+    check(
+      'the end of the round says what was done, and takes the focus',
+      text(await page.locator('#game-live .g-end h3').textContent()) ===
+        'Trois mots, trois endroits du livre.' &&
+        (await page.evaluate<boolean>(
+          "document.activeElement === document.querySelector('#game-live .g-end h3')",
+        )),
+    );
+    await page.waitForTimeout(700);
+    const during = await staged(page);
+    check(
+      'at the end of a round she takes the stage: 240 px wide, 150 px high at most, never more than 70 % of the block',
+      during.stage &&
+        Math.abs(during.width - 240) <= 1 &&
+        during.height <= 150.5 &&
+        during.width <= 0.7 * during.block,
+      JSON.stringify(during),
+    );
+    check(
+      'while she passes: « Passer » is there, « Sa fiche » is not, and what is said of her waits — in its room',
+      during.skip &&
+        !during.sheet &&
+        !during.lineSeen &&
+        during.line !== '' &&
+        during.status === '',
+      JSON.stringify(during),
+    );
+    check('…and she is moving', (await moving(page)) > 0);
+    await page.waitForTimeout(evolutionLasts('01') - 700 + LATE_MS + 100);
+    const played = await logOf(page);
+    check(
+      'her passage is played beat by beat, as the choreography says, and never early',
+      JSON.stringify(beats(played)) === JSON.stringify(frames01.map((f) => f.phase ?? '')) &&
+        onTime(played, frames01),
+      JSON.stringify(played.map((line) => [line[0], line[1]])),
+    );
+    const afterOne = await her(page);
+    check(
+      'she ends as the still look draws her: surfing, her first arc, the accent of a passage',
+      isLook(afterOne, lookOf({ state: 1, arcs: one.end.arcs, passage: true })) &&
+        one.end.state === 1,
+      JSON.stringify(afterOne),
+    );
+    const ended = await staged(page);
+    check(
+      'what happened to her is said when it has been seen, with her goal — to the eye and to a screen reader',
+      ended.lineSeen &&
+        ended.line === one.said.map(shown).join(' ') &&
+        ended.status === ended.line &&
+        one.said.length === 2 &&
+        one.said[0] === kit['turtle.passage.1'] &&
+        one.said[1] === kit['turtle.goal.next_again'],
+      JSON.stringify(ended),
+    );
+    check(
+      '« Passer » has left, « Sa fiche » is in its place, and nothing under the stage has moved',
+      !ended.skip && ended.sheet && ended.again === during.again && ended.again > 0,
+      JSON.stringify({ during: during.again, ended: ended.again }),
+    );
+    check(
+      'nothing of her moves once her passage has ended',
+      (await moving(page)) === 0,
+      String(await moving(page)),
+    );
+    check(
+      'a round sent nothing',
+      requests.length === seenBefore,
+      requests
+        .slice(seenBefore)
+        .map((r) => r.url)
+        .join(','),
+    );
+    const kept: number = await page.evaluate('localStorage.length');
+    check('nothing is kept on the phone that was not asked for', kept === 0, String(kept));
+    voice = await page.evaluate(OWN_VOICE);
+    check(
+      'the end of a round never judges, counts nor congratulates, and carries no emoji',
+      !NEVER.test(voice) && !/\p{Extended_Pictographic}/u.test(voice) && !/mérit/i.test(voice),
+      NEVER.exec(voice)?.[0] ?? voice,
+    );
+    await page.waitForTimeout(ALONE_AFTER_PASSAGE_MS - evolutionLasts('01') - LATE_MS - 100);
+    check('nothing of her moves 5 s after the end of a round', (await moving(page)) === 0);
+    await page.getByRole('button', { name: 'Trois autres mots' }).click();
+    const back = await staged(page);
+    check(
+      'the next round: the next three words, she is back beside the word, the accent is gone',
+      text(await page.locator('#game-live [data-programme="word"]').textContent()) ===
+        data.words[3]?.word &&
+        !back.stage &&
+        Math.abs(back.width - 96) <= 1 &&
+        isLook(await her(page), lookOf({ state: 1, arcs: one.end.arcs })) &&
+        (await page.locator('#game-her-with').isHidden()) &&
+        (await page.locator('#game-live .g-goal').count()) === 0,
+      JSON.stringify(back),
+    );
+
+    // The depth: with every part that has a word found, the chapter is asked — and she changes.
+    const deepAfter = [1, 2, 3].find(
+      (rounds) =>
+        depthOf(
+          data,
+          data.words.slice(0, rounds * ROUND).map((w) => w.id),
+        ) >= 2,
+    );
+    if (deepAfter === undefined) {
+      check('the list reaches every part that has a word within three rounds', false);
+    } else {
+      for (let round = 1; round < deepAfter; round += 1) {
+        await playRound(page);
+        if (round + 1 < deepAfter)
+          await page.getByRole('button', { name: 'Trois autres mots' }).click();
+      }
+      voice = await page.evaluate(OWN_VOICE);
+      check(
+        'a word found in every part that has one: the game says it now asks the chapter',
+        voice.includes('Maintenant, le jeu demande aussi le chapitre.'),
+        voice,
+      );
+      // « Passer »: the form she takes, at once, and its sentence.
+      await page.waitForTimeout(500);
+      await page.getByRole('button', { name: 'Passer' }).click();
+      const two = ending(data, kit, deepAfter);
+      const skipped = await her(page);
+      const afterSkip = await staged(page);
+      check(
+        '« Passer »: she is what she became, at once — a flamingo —, and nothing moves',
+        isLook(skipped, lookOf({ state: 2, arcs: two.end.arcs, passage: true })) &&
+          two.end.state === 2 &&
+          (await moving(page)) === 0,
+        JSON.stringify(skipped),
+      );
+      check(
+        '…her sentence is said, « Passer » has left, and the focus is on the sentence of the screen',
+        afterSkip.lineSeen &&
+          afterSkip.line === two.said.map(shown).join(' ') &&
+          afterSkip.status === afterSkip.line &&
+          !afterSkip.skip &&
+          afterSkip.sheet &&
+          (await page.evaluate<boolean>(
+            "document.activeElement === document.querySelector('#game-live .g-end h3')",
+          )),
+        JSON.stringify(afterSkip),
+      );
+      check(
+        'once she is a flamingo with no colour, « Choisir sa couleur » is offered under the stage',
+        afterSkip.tint,
+      );
+      const inDrawing = await page.evaluate<string>(
+        `document.querySelector('${HER}').textContent.trim()`,
+      );
+      check('nothing is written in her drawing', inDrawing === '', inDrawing);
+      await page.getByRole('button', { name: 'Trois autres mots' }).click();
+      const word = data.words[deepAfter * ROUND];
+      const place = word === undefined ? null : locate(data, word.section);
+      if (word === undefined || place === null) throw new Error('no word after the depth opened');
+      // The hint comes from her: she looks at the tiles, then three of them say « par ici ».
+      await page.getByRole('button', { name: 'Un indice' }).click();
+      const looking = await her(page);
+      const before = await page.locator('#game-live .g-mark').count();
+      await until(page, "document.querySelectorAll('#game-live .g-mark').length === 3", 2000);
+      const marked = await page
+        .locator('#game-live .g-tile:has(.g-mark)')
+        .evaluateAll((tiles) => tiles.map((t) => (t as HTMLElement).dataset['tile'] ?? ''));
+      check(
+        'the hint: she looks at the tiles first, then three of them are marked — the right one among them, none ruled out',
+        looking?.pose === 'look' &&
+          before === 0 &&
+          JSON.stringify(marked) === JSON.stringify(word.hint.map(String)) &&
+          marked.includes(String(place.part.number)) &&
+          (await page.locator('#game-live .g-tile').count()) === data.parts.length,
+        `${String(looking?.pose)} ${String(before)} ${marked.join(',')}`,
+      );
+      check(
+        'the hint is said in words, once',
+        text(await page.locator('#game-status').textContent()).startsWith(
+          'Elle regarde du côté des parties',
+        ) && (await page.getByRole('button', { name: 'Un indice' }).count()) === 0,
+        text(await page.locator('#game-status').textContent()),
+      );
+      await page.locator(`#game-live .g-tile[data-tile="${String(place.part.number)}"]`).click();
+      const chapters = (await page.locator('#game-live .g-tile').allTextContents()).map(text);
+      check(
+        'after the part, the chapters of that part, by their official titles — and she looks up again',
+        text(await page.locator('#game-live .g-ask').textContent()) === 'Dans quel chapitre ?' &&
+          text(await page.locator('#game-live .g-said').textContent()) ===
+            `Oui. C’est écrit dans la partie ${String(place.part.number)}.` &&
+          JSON.stringify(chapters) === JSON.stringify(place.part.chapters.map((c) => c.title)) &&
+          (await her(page))?.pose === 'rest',
+        chapters.join(' | '),
+      );
+      await page.locator(`#game-live .g-tile[data-tile="${place.chapter.id}"]`).click();
+      check(
+        'the right chapter: « Oui. », and its number',
+        text(await page.locator('#game-live .g-place h3').textContent()) ===
+          `Oui. C’est écrit dans le chapitre ${String(place.chapter.number)}.`,
+        text(await page.locator('#game-live .g-place h3').textContent()),
+      );
+    }
+
+    // The colour of the game's gestures.
+    const colours: { action: string; used: string[] } = await page.evaluate(`(() => {
+      const probe = document.createElement('span');
+      probe.style.color = 'var(--action)';
+      document.body.append(probe);
+      const action = getComputedStyle(probe).color;
+      probe.remove();
+      const used = [...document.querySelectorAll('#jeu a, #jeu button')].map((n) => getComputedStyle(n).backgroundColor);
+      return { action, used };
+    })()`);
+    check(
+      'no gesture of the game is in the colour of action',
+      colours.used.length > 0 && !colours.used.includes(colours.action),
+      colours.action,
+    );
+    check(
+      'nothing we ship breaks our own security policy',
+      violations.length === 0,
+      violations.join(' | '),
+    );
+    await context.close();
+  }
+
+  /** The sections of this gate, by the name `--only` knows them by. */
+  const sections: [string, () => Promise<void>][] = [
+    ['visit', runVisit],
+    ['offline', runWithoutData],
+    ['passages', runPassages],
+    ['skipping', runSkipping],
+    ['lines', runLines],
+    ['memory', runMemory],
+    ['sheet', runSheet],
+    ['share', runShare],
+    ['keyboard', runKeyboard],
+    ['sizes', runSizes],
+    ['silence', runSilence],
+    ...(name === 'chromium'
+      ? ([
+          ['audit', runAudit],
+          ['forced', runForcedColours],
+          ['measures', runMeasures],
+        ] as [string, () => Promise<void>][])
+      : []),
+  ];
+  try {
+    for (const [section, run] of sections) {
+      if (ONLY === null || ONLY.includes(section)) await run();
+    }
+    check(
+      'in every visit of this run — her passages, her sheet, her colours — nothing of ours threw, and nothing broke our own security policy',
+      breaches.length === 0,
+      [...new Set(breaches)].join(' | '),
+    );
+  } finally {
+    await browser.close();
+  }
+  return out;
+}
+
+async function main(): Promise<void> {
+  const name = existsSync(join(ROOT, 'data'))
+    ? readdirSync(join(ROOT, 'data')).find((f) => f.startsWith('jeu-'))
+    : undefined;
+  if (name === undefined || !existsSync(join(ROOT, 'index.html'))) {
+    console.error(`e2e-game2: no game in ${ROOT}/ — run \`npm run build:mascot2\` first`);
+    process.exit(1);
+  }
+  if (!readFileSync(join(ROOT, 'index.html'), 'utf8').includes('data-mascot="2"')) {
+    console.error(`e2e-game2: ${ROOT}/ is not a build of the second generation`);
+    process.exit(1);
+  }
+  const data = JSON.parse(readFileSync(join(ROOT, 'data', name), 'utf8')) as GameData;
+  const manifest = JSON.parse(readFileSync('data/2026/manifest.json', 'utf8')) as Manifest;
+  const state: ServerState = { failData: false, flags: null };
+  const { server, origin } = await serve(resolve(ROOT), (req, res) => {
+    const url = req.url ?? '';
+    if (state.failData && url.includes('/data/jeu-')) {
+      res.writeHead(503).end();
+      return true;
+    }
+    if (state.flags !== null && url.startsWith('/flags.json')) {
+      res.writeHead(200, {
+        'content-type': 'application/json; charset=utf-8',
+        'cache-control': 'no-cache',
+        date: state.flags.date.toUTCString(),
+      });
+      res.end(JSON.stringify({ silence_override: state.flags.override ?? 'auto' }));
+      return true;
+    }
+    return false;
+  });
+  try {
+    await report((engine) => runEngine(engine, origin, data, manifest, state));
+  } finally {
+    server.close();
+  }
+  if (ONLY !== null) {
+    console.log(`PARTIAL RUN (--only ${ONLY.join(',')}): this is not the gate`);
+    process.exitCode = process.exitCode === 1 ? 1 : 2;
+  }
+}
+
+await main();

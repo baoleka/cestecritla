@@ -880,6 +880,7 @@ void test('a validation is a date bound to what was looked at — or it is not t
 });
 
 /** The modules of the second generation: hers, and those of the game that remembers her colour. */
+/** Her own files: her modules, and the block of the game built around them (lot C). */
 const SECOND_GENERATION = [
   'src/lib/mascot2.ts',
   'src/styles/mascot2.css',
@@ -887,30 +888,77 @@ const SECOND_GENERATION = [
   'src/lib/game-state2.ts',
   'src/lib/game-goal.ts',
   'src/lib/storage-map2.ts',
+  'src/components/Mascot2.astro',
+  'src/components/Game2.astro',
+  'src/styles/game2.css',
+  'src/scripts/game2.ts',
+  'src/scripts/game-store2.ts',
 ];
+/**
+ * The two pages that choose her — and what each may import of hers, behind `__CEL_MASCOT2__`,
+ * a constant the bundler folds: a build of the first generation drops the import itself.
+ */
+const CHOOSES_HER: Readonly<Record<string, string>> = {
+  'src/pages/index.astro': '../components/Game2.astro',
+  'src/pages/confidentialite/index.astro': '../../lib/storage-map2.ts',
+};
 
-void test('nothing that is served knows her yet: no page, component or script imports her', () => {
+void test('what is served knows her through two pages only, each behind a constant the build folds', () => {
   const tracked = execFileSync('git', ['ls-files', 'src'], { encoding: 'utf8' })
     .split('\n')
     .filter((path) => /\.(?:astro|ts|css)$/.test(path));
   for (const path of SECOND_GENERATION) assert.ok(tracked.includes(path), `${path} is not tracked`);
-  // An import of one of her modules or of her stylesheet, or a read of her drawing.
-  const knowsHer =
-    /from\s+['"][^'"]*\/(?:mascot2|game-state2|game-goal|storage-map2)(?:\.[a-z]+)?['"]|['"][^'"]*mascot2(?:-tokens)?\.css['"]|mascot\/v2\//;
+  // An import of one of her files — module, component, script or stylesheet —, static or not,
+  // or a read of her drawing.
+  const HERS =
+    /['"][^'"]*\/(?:mascot2|game-state2|game-goal|storage-map2|game2|game-store2|Game2|Mascot2)(?:\.[a-z]+)?['"]|['"][^'"]*(?:mascot2(?:-tokens)?|game2)\.css['"]|mascot\/v2\//g;
+  /** The code of a file: what is said of her in a comment imports nothing. */
+  const code = (source: string): string =>
+    source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
   for (const path of tracked) {
     if (SECOND_GENERATION.includes(path)) continue;
-    assert.ok(!knowsHer.test(readFileSync(path, 'utf8')), `${path} imports her`);
+    const source = code(readFileSync(path, 'utf8'));
+    const hers = source.match(HERS) ?? [];
+    const allowed = CHOOSES_HER[path];
+    if (allowed === undefined) {
+      assert.deepEqual(hers, [], `${path} imports her`);
+      continue;
+    }
+    // One import of hers, and one only; never a static one; and it follows the constant.
+    assert.deepEqual(hers, [`'${allowed}'`], `${path}: what it imports of hers`);
+    assert.ok(
+      source.includes(`__CEL_MASCOT2__\n    ? (await import('${allowed}'))`),
+      `${path}: her import does not follow __CEL_MASCOT2__`,
+    );
+    assert.doesNotMatch(source, /^import\s[^;]*(?:2\.astro|2\.ts|2\.css)['"]/m, `${path}: static`);
   }
-  // …and her own modules read the first generation's without changing a line of them: these
+  // …and her own files read the first generation's without changing a line of them: these
   // imports are all there is between the two.
   const MAY_IMPORT = new Set([
     ...['./game-engine.js', './game-state.js', './storage-map.js', './turtle.js'],
     ...['./mascot-mode.js', './mascot2.js', './game-state2.js'],
+    // The script of her block: the rules, her memory, what the page already has.
+    ...['./deep-links.ts', './engine.ts', './game-store2.ts', './silence-now.ts'],
+    ...['../lib/game-engine.ts', '../lib/game-goal.ts', '../lib/game-state2.ts'],
+    ...['../lib/mascot2.ts', '../lib/silence.ts'],
   ]);
   for (const path of SECOND_GENERATION.filter((p) => p.endsWith('.ts'))) {
     const source = readFileSync(path, 'utf8');
     for (const [, from] of source.matchAll(/from\s+['"]([^'"]+)['"]/g)) {
       assert.ok(MAY_IMPORT.has(from ?? ''), `${path} imports ${from ?? ''}`);
     }
+  }
+  // The files of the turtle that is online are read by hers and never import hers back: the
+  // loop above has checked each of them (docs/discovery/PLAN-TORTUE.md §11.1).
+  for (const frozen of [
+    'src/components/Game.astro',
+    'src/components/Turtle.astro',
+    'src/scripts/game.ts',
+    'src/scripts/game-store.ts',
+    'src/lib/turtle.ts',
+    'src/lib/game-state.ts',
+    'src/styles/turtle.css',
+  ]) {
+    assert.ok(tracked.includes(frozen), `${frozen} is gone`);
   }
 });

@@ -47,6 +47,13 @@ const CLOUDFLARE_DPA = 'cloudflare.com/cloudflare-customer-dpa';
 const GameStorage = __CEL_GAME_WRITES__
   ? (await import('../../components/GameStorage.astro')).default
   : null;
+// A build whose mascot is of the second generation (data/mascot.json, D17.14) writes one field
+// more — the colour the player gave her (D17.3) — and the page lists it, from that build's own
+// map. A constant the bundler folds: a build of the first generation does not import the map.
+const storage =
+  __CEL_GAME_WRITES__ && __CEL_MASCOT2__
+    ? (await import('../../lib/storage-map2.ts')).storageMap(2)
+    : undefined;
 ---
 
 <Base title={`${t('privacy.title')} — ${t('app.name')}`} description={promise}>
@@ -129,7 +136,7 @@ const GameStorage = __CEL_GAME_WRITES__
     )
   }
 
-  {GameStorage !== null && <GameStorage />}
+  {GameStorage !== null && <GameStorage map={storage} />}
 
   <h2>{t('privacy.never.title')}</h2>
   <ul class="counts">
