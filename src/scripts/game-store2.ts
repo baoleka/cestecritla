@@ -33,6 +33,7 @@ import {
   type Kept2,
   type TabState2,
 } from '../lib/game-state2.ts';
+import type { MascotTint } from '../lib/mascot2.ts';
 
 type Where = 'tab' | 'phone';
 
@@ -78,6 +79,8 @@ export interface GameStore2 {
   tint(state: TabState2): void;
   /** The phone was asked to keep. */
   kept(): boolean;
+  /** The colour the phone holds of her: 0 when it holds none, or keeps nothing. */
+  phoneTint(): MascotTint;
   /** « Garder ta tortue ». */
   keep(state: TabState2): void;
   /** « Ne plus garder sur ce téléphone »: the phone forgets, the tab goes on until it closes. */
@@ -123,6 +126,7 @@ export function gameStore2(data: GameData): GameStore2 {
       if (kept()) write('phone', serialiseKept2(ontoPhone(keptPart2(state), onPhone())));
     },
     kept,
+    phoneTint: () => onPhone().tint,
     keep: (state) => {
       write('phone', serialiseKept2(ontoPhone(keptPart2(state), onPhone())));
     },

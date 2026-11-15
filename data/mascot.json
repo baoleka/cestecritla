@@ -1,6 +1,6 @@
 {
   "generation": 1,
-  "preview_generation": 1,
+  "preview_generation": 2,
   "decided_on": null,
   "decided_by": null,
   "note_fr": "Quelle mascotte chaque hôte sert (D17.14, docs/discovery/PLAN-TORTUE.md §11). « generation » est celle de la production — cestecritla.fr et www : 1, la tortue validée le 13 novembre 2026 (design/mascot/tortue.svg) ; 2, celle qui surfe, devient un flamant, s'envole puis vole sous une tortue d'étoiles (design/mascot/v2/). « preview_generation » ouvre l'hôte d'aperçu avant la production, jamais l'inverse (src/lib/mascot-mode.ts) : quand la production est à 2, l'aperçu l'est aussi. Tout ce qui est illisible ou absent vaut 1. PASSER LA PRODUCTION À 2 EST LA DÉCISION DE L'ÉDITEUR : « decided_on » porte le jour de son mot et « decided_by » vaut « editor » — une session n'écrit jamais « editor » sans un mot daté de lui (CLAUDE.md). Avant ce jour-là, scripts/launch.ts exige que la planche de la génération 2 soit datée sur le dessin tel qu'il est (design/mascot/v2/validation.json) et que la question « même personnage ? » ait été posée sur ce dessin ; sans cela `npm run deploy` refuse, et les portes le disent dès le commit. REVENIR EN ARRIÈRE : remettre « generation » à 1, puis `npm run build && npm run deploy` — l'état de chacun est gardé, un téléphone qui enregistre sous la génération 1 y perd seulement la couleur choisie. Les builds d'essai ne lisent pas ce fichier (`--mascot 2`, scripts/build.ts)."

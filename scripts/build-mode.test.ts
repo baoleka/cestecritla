@@ -1077,8 +1077,11 @@ void test('a build of the second mascot goes only where data/mascot.json gives i
   writeFileSync(join(built, 'confidentialite', 'index.html'), `<li ${MASCOT2_MARKS.privacy}></li>`);
   assert.equal(readDist(built).mascot, 2);
   rmSync(built, { recursive: true });
-  // What is built and served today shows the first.
-  if (existsSync('dist/index.html')) assert.equal(readDist('dist').mascot, 1);
+  // What is built shows the generation the file gives the host it was built for — the first for
+  // production; the second for the preview host since the editor opened it to her (D17.26).
+  if (existsSync('dist/index.html')) {
+    assert.equal(readDist('dist').mascot, readMascot(undefined, readBuildHost()));
+  }
 });
 
 void test('a build is a scrutin build only when its marker says so', () => {

@@ -260,6 +260,10 @@ const EARLY_MS = 5;
 const HANDOVER_MS = 500;
 /** A sentence carried past a passage is said this long after the new screen is up. */
 const SAY_LATER_MS = 150;
+/** Her drawings swap their form or colour at most once this long, at a press. */
+const SWAP_GAP_MS = 350;
+/** How long she looks at the tiles before a hint marks them. */
+const LOOKS_FOR_MS = 240;
 /** After a gesture, and after the end of a round that earns a passage: nothing moves any more. */
 const ALONE_MS = 2100;
 const ALONE_AFTER_PASSAGE_MS = 5000;
@@ -1410,11 +1414,13 @@ async function runEngine(
         (await moving(view)) === 0,
       JSON.stringify(await her(view, LARGE)),
     );
-    // Another « Revoir » while one plays: the first gives way.
+    // Another « Revoir » while one plays: the first gives way. (Each press here comes after the
+    // gap her drawings keep between two swaps at a press: one closer would be refused.)
+    await view.waitForTimeout(SWAP_GAP_MS);
     await again.nth(0).click();
-    await view.waitForTimeout(400);
+    await view.waitForTimeout(SWAP_GAP_MS + 50);
     await again.nth(1).click();
-    await view.waitForTimeout(300);
+    await view.waitForTimeout(SWAP_GAP_MS + 50);
     const swapped = await her(view, LARGE);
     check(
       'another « Revoir » while one plays: the first gives way, the second plays',
@@ -1435,6 +1441,7 @@ async function runEngine(
       JSON.stringify(await her(view, LARGE)),
     );
     // Escape closes her sheet whatever is playing in it; the focus goes back where it was.
+    await view.waitForTimeout(SWAP_GAP_MS);
     await again.nth(0).click();
     await view.waitForTimeout(300);
     await view.keyboard.press('Escape');
@@ -1539,6 +1546,8 @@ async function runEngine(
       JSON.stringify(painted),
     );
     await view.locator('#turtle-sheet').getByRole('button', { name: 'Sans couleur' }).click();
+    // A colour chosen within the gap of the one before is worn when the gap is over.
+    await view.waitForTimeout(SWAP_GAP_MS + 50);
     const none = await view.evaluate<string>(
       `getComputedStyle(document.querySelector('${HER} .m-body')).fill`,
     );
@@ -1789,13 +1798,20 @@ async function runEngine(
     const plain = await copying.newPage();
     await arrive(plain);
     await playRound(plain);
+    // Pressed while her first passage plays: the press cuts it short, and what happened to her
+    // is said with the copy (found by the review of the code).
     await plain.getByRole('button', { name: 'Envoyer le lien du jeu' }).click();
-    await until(plain, "document.querySelector('#game-status').textContent === 'Lien copié.'");
+    await until(
+      plain,
+      "document.querySelector('#game-status').textContent.endsWith('Lien copié.')",
+    );
     const copied: string[] = await plain.evaluate('window.__copied');
+    const said = text(await plain.locator('#game-status').textContent());
     check(
-      'without a share sheet the address is copied, and it is said',
-      JSON.stringify(copied) === JSON.stringify([`${origin}/`]),
-      JSON.stringify(copied),
+      'without a share sheet the address is copied, and it is said — after what happened to her',
+      JSON.stringify(copied) === JSON.stringify([`${origin}/`]) &&
+        said === [...ending(data, kit, 1).said.map(shown), 'Lien copié.'].join(' '),
+      `${JSON.stringify(copied)} ${said}`,
     );
     await copying.close();
   }
@@ -2180,6 +2196,134 @@ async function runEngine(
         `${atPart.join(' / ')} || ${atChapter.join(' / ')}`,
       );
       await context.close();
+    }
+
+    // What the review of the code found (15/11/2026), held from now on.
+    // Her large copy swaps at most once every 350 ms, whatever is pressed in turn: « Revoir »
+    // and a touch on her, ten times a second for two seconds.
+    {
+      const { context, view } = await visitor(resting(data, passageRound.get('34') ?? 16, 3));
+      await view.getByRole('button', { name: 'Ta tortue', exact: true }).click();
+      await view.waitForTimeout(TRICK_HOLD_MS[4] + LATE_MS);
+      await view.evaluate(`window.__seen.large = window.__watch(${JSON.stringify(LARGE)})`);
+      const again = view.locator('#turtle-sheet-path button').last();
+      const touch = view.locator('#turtle-sheet-her button');
+      for (let i = 0; i < 20; i += 1) {
+        await (i % 2 === 0 ? again : touch).dispatchEvent('click');
+        await view.waitForTimeout(100);
+      }
+      const log = await logOf(view, 'large');
+      const swaps = log
+        .filter((line, index) => index > 0 && line[2] !== log[index - 1]?.[2])
+        .map((line) => line[0]);
+      const worst = Math.max(
+        0,
+        ...swaps.map((at) => swaps.filter((t) => t >= at && t < at + 1000).length),
+      );
+      check(
+        '« Revoir » and a touch on her in turn, ten a second: her large copy swaps its form three times a second at most',
+        worst <= 3,
+        `${String(worst)} swaps in the worst second`,
+      );
+      await context.close();
+    }
+    // « Envoyer le lien du jeu » pressed while she passes, where the address is copied: what
+    // happened to her is said with « Lien copié. », not wiped by it.
+    {
+      const at = ending(data, kit, passageRound.get('12') ?? 2);
+      const copying = await browser.newContext(phone);
+      await copying.addInitScript(
+        "Object.defineProperty(navigator, 'share', { value: undefined, configurable: true }); Object.defineProperty(navigator, 'clipboard', { value: { writeText: () => Promise.resolve() }, configurable: true });",
+      );
+      await copying.addInitScript(seedTab(at.stored));
+      const view = await copying.newPage();
+      await arrive(view);
+      await press(view, 'Mot suivant');
+      await view.waitForTimeout(900);
+      await view.getByRole('button', { name: 'Envoyer le lien du jeu' }).click();
+      await until(
+        view,
+        "document.querySelector('#game-status').textContent.includes('Lien copié.')",
+      );
+      const said = text(await view.locator('#game-status').textContent());
+      check(
+        '« Envoyer le lien du jeu » pressed while she passes: what happened to her is said with « Lien copié. »',
+        said === [...at.said.map(shown), 'Lien copié.'].join(' '),
+        said,
+      );
+      await copying.close();
+    }
+    // Her sheet says the phone keeps her colour only when the phone holds it: a colour given in
+    // one tab while nothing was kept, then « Garder » in another tab that has none.
+    {
+      const pocket = await browser.newContext(phone);
+      await pocket.addInitScript(seedTab(resting(data, passageRound.get('12') ?? 2)));
+      const one = await pocket.newPage();
+      await arrive(one);
+      await one.getByRole('button', { name: 'Ta tortue', exact: true }).click();
+      await one.locator('#turtle-sheet').getByRole('button', { name: 'Bleu ciel' }).click();
+      const two = await pocket.newPage();
+      await arrive(two);
+      await two.getByRole('button', { name: 'Ta tortue', exact: true }).click();
+      await two.locator('#turtle-sheet').getByRole('button', { name: 'Garder ta tortue' }).click();
+      await until(one, "document.querySelector('#turtle-sheet-release').hidden === false");
+      const held: Stores = await one.evaluate(stores);
+      const lines = (await one.locator('#turtle-sheet-kept p').allTextContents()).map(text);
+      const phoneTint = (JSON.parse(held.phone[STORAGE_KEY] ?? '{}') as { tint?: number }).tint;
+      check(
+        'her sheet names her colour as kept only when the phone holds it',
+        phoneTint === undefined &&
+          JSON.stringify(lines) === JSON.stringify([says('turtle.sheet.on_phone')]),
+        `${String(phoneTint)} | ${lines.join(' | ')}`,
+      );
+      await pocket.close();
+    }
+    // A hint asked for in one tab while another tab of the phone finds a word: the tiles are
+    // marked all the same.
+    {
+      const pocket = await browser.newContext(phone);
+      await pocket.addInitScript(seedTab(resting(data, passageRound.get('12') ?? 2)));
+      const one = await pocket.newPage();
+      await arrive(one);
+      await one.getByRole('button', { name: 'Ta tortue', exact: true }).click();
+      await one.locator('#turtle-sheet').getByRole('button', { name: 'Garder ta tortue' }).click();
+      await one.keyboard.press('Escape');
+      const two = await pocket.newPage();
+      await arrive(two);
+      await one.getByRole('button', { name: 'Un indice' }).click();
+      await two.getByRole('button', { name: 'Je ne sais pas' }).click();
+      await one.waitForTimeout(LOOKS_FOR_MS + LATE_MS + 300);
+      check(
+        'a hint asked in one tab while another tab finds a word: three tiles are marked all the same',
+        (await one.locator('#game-live .g-mark').count()) === 3,
+        String(await one.locator('#game-live .g-mark').count()),
+      );
+      await pocket.close();
+    }
+    // The end of a round left on screen keeps the sentence of the passage it played when
+    // another tab finds a word without changing her: nothing changes there without a gesture.
+    {
+      const at = ending(data, kit, 1, { declined: false });
+      const pocket = await browser.newContext(phone);
+      // The first tab only: the second arrives on what the phone keeps.
+      const one = await pocket.newPage();
+      await one.addInitScript(seedTab(at.stored));
+      await arrive(one);
+      await press(one, 'Mot suivant');
+      await one.waitForTimeout(evolutionLasts('01') + LATE_MS);
+      await one.getByRole('button', { name: 'Garder ta tortue' }).click();
+      const before = text(await one.locator('#game-live .g-line').textContent());
+      const two = await pocket.newPage();
+      await arrive(two);
+      await two.getByRole('button', { name: 'Je ne sais pas' }).click();
+      await one.waitForTimeout(500);
+      const after1 = text(await one.locator('#game-live .g-line').textContent());
+      check(
+        'another tab finds a word without changing her: the line at the end of the round stays as it was',
+        before === at.said.map(shown).join(' ') && after1 === before,
+        `${before} → ${after1}`,
+      );
+      await pocket.close();
     }
 
     // Someone already in the round of the HTML, by the keyboard, when the script takes it over:

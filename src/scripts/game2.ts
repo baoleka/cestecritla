@@ -350,6 +350,8 @@ function start(parts: Block, config: Config, data: GameData): void {
   let saying = 0;
   /** When « Passer » last gave its place to « Sa fiche » under a finger, or the passage ended. */
   let handedOver = -Infinity;
+  /** Her state when the end of the round on screen was drawn: what its line speaks of. */
+  let endState: TurtleState | null = null;
 
   /** The session as the tab writes it: the round under way, never what was chosen in it. */
   const memory = (): TabState2 => ({
@@ -389,10 +391,12 @@ function start(parts: Block, config: Config, data: GameData): void {
     if (evolving) her.skip();
     her.settle(look());
     tintLink.hidden = !pale();
-    // The end of a round left on screen while another tab played on: what is said of her is
-    // what she is now — a passage she made there was not seen here, and is not said.
+    // The end of a round left on screen while another tab made her pass on: what is said of
+    // her is what she is now — that passage was not seen here, and is not said. Short of a new
+    // form, the line stays as it was: nothing on screen changes without a gesture here.
     const line = live.querySelector('.g-line');
-    if (session.play.screen.kind === 'end' && line !== null) {
+    if (session.play.screen.kind === 'end' && line !== null && session.state !== endState) {
+      endState = session.state;
       const last = session.play.words.at(-1) ?? null;
       const next = nextRoundChangesHer(data, session, session.seen, last);
       line.replaceChildren(el('span', s.goal[next ? 'next' : GOAL_OF_STATE[session.state]]));
@@ -558,8 +562,10 @@ function start(parts: Block, config: Config, data: GameData): void {
           mark();
           return;
         }
-        const looking = still({ pose: 'look' });
-        her.play([looking, { ...looking, at: LOOKS_FOR_MS }], mark);
+        her.play([still({ pose: 'look' })]);
+        // The tiles are marked once she has turned her head — on a timer of their own: nothing
+        // done to her meanwhile (another tab that writes, and she is drawn again) loses the hint.
+        window.setTimeout(mark, LOOKS_FOR_MS);
       });
       gestures.append(hint);
     }
@@ -622,6 +628,7 @@ function start(parts: Block, config: Config, data: GameData): void {
     session.depth = end.depth;
     session.state = end.state;
     session.arcs = end.arcs;
+    endState = end.state;
     const last = session.play.words.at(-1) ?? null;
 
     const panel = el('div', undefined, 'g-end');
@@ -688,10 +695,12 @@ function start(parts: Block, config: Config, data: GameData): void {
         button(s.share, 'g-quiet', () => {
           // Sharing is one of the three things a freeze silences: checked at the gesture.
           if (frozen()) return;
+          // A passage this very press cut short: what happened to her is said with the copy.
+          const before = carried;
           const sent = canShare
             ? window.navigator.share({ url: address })
             : window.navigator.clipboard.writeText(address).then(() => {
-                status.textContent = s.copied;
+                status.textContent = [before, s.copied].filter((text) => text !== '').join(' ');
               });
           // Dismissed, or refused by the browser: nothing happened, nothing is said.
           sent.catch(() => undefined);
@@ -766,6 +775,19 @@ function start(parts: Block, config: Config, data: GameData): void {
   /** The large copy of her in the sheet; and the « Revoir » whose passage is being played. */
   let large: Stage | null = null;
   let replaying: HTMLButtonElement | null = null;
+  /** When her drawings last swapped at a press — « Revoir », « Passer », a touch, a colour. */
+  let swappedAt = -Infinity;
+  let tinting = 0;
+  /**
+   * One swap of her whole form or colour every SWAP_GAP_MS at most, whatever the presses that
+   * ask for it: true — and the time is taken — when one may be made now.
+   */
+  function maySwap(): boolean {
+    const now = performance.now();
+    if (now - swappedAt < SWAP_GAP_MS) return false;
+    swappedAt = now;
+    return true;
+  }
 
   /** Where a section stands in the book, among the tiles: the order her finds are listed in. */
   const position = new Map<string, number>();
@@ -796,6 +818,7 @@ function start(parts: Block, config: Config, data: GameData): void {
       return;
     }
     const touch = button('', 'g-press', () => {
+      if (!maySwap()) return;
       // While a passage is seen again, a touch is « Passer ».
       if (replaying !== null) stage.skip();
       else figure();
@@ -814,16 +837,11 @@ function start(parts: Block, config: Config, data: GameData): void {
       : GOAL_OF_STATE[session.state];
   }
 
-  /** When her large copy last swapped its whole form at a press of « Revoir » or « Passer ». */
-  let swappedAt = -Infinity;
-
   /** « Revoir »: a passage she has made, on the large copy — and « Passer », on the same button. */
   function replay(to: TurtleState, control: HTMLButtonElement): void {
     const stage = large;
     if (stage === null || to === 0) return;
-    const now = performance.now();
-    if (now - swappedAt < SWAP_GAP_MS) return;
-    swappedAt = now;
+    if (!maySwap()) return;
     const mine = replaying === control;
     if (replaying !== null) stage.skip();
     if (mine) return;
@@ -882,17 +900,26 @@ function start(parts: Block, config: Config, data: GameData): void {
     if (frozen()) return;
     session.tint = tint;
     store.tint(memory());
-    her.settle(look());
-    if (replaying !== null) large?.skip();
-    large?.settle(look());
     for (const choice of sheetTints.querySelectorAll('button')) {
       choice.setAttribute('aria-pressed', String(choice.dataset.tint === String(tint)));
     }
-    for (const copy of sheetPath.querySelectorAll('.mascot')) {
-      copy.setAttribute('data-tint', String(tint));
-    }
     tintLink.hidden = true;
     fillKept();
+    // Her drawings take it at most once every SWAP_GAP_MS: colours chosen faster than that are
+    // kept as chosen, and she wears the last one when the gap is over — never a flash.
+    const wear = (): void => {
+      swappedAt = performance.now();
+      her.settle(look());
+      if (replaying !== null) large?.skip();
+      large?.settle(look());
+      for (const copy of sheetPath.querySelectorAll('.mascot')) {
+        copy.setAttribute('data-tint', String(session.tint));
+      }
+    };
+    window.clearTimeout(tinting);
+    const wait = swappedAt + SWAP_GAP_MS - performance.now();
+    if (wait <= 0) wear();
+    else tinting = window.setTimeout(wear, wait);
   }
   function fillTints(): void {
     parts.sheetTint.hidden = session.state < 2;
@@ -964,8 +991,11 @@ function start(parts: Block, config: Config, data: GameData): void {
    */
   function fillKept(): void {
     const kept = store.kept();
-    // « Sans couleur » is a choice the phone keeps, and not a colour she has.
-    const coloured = session.tint >= 1 && session.tint <= 6;
+    // Her colour is named as kept when the phone holds one — read there, not in this tab: a
+    // colour given while nothing was kept stays in the tab until its next gesture. « Sans
+    // couleur » is a choice the phone keeps, and not a colour she has.
+    const held = store.phoneTint();
+    const coloured = held >= 1 && held <= 6;
     const lines = kept
       ? [coloured ? `${s.sheet.onPhone} ${s.sheet.onPhoneTint}` : s.sheet.onPhone]
       : [
