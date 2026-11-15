@@ -28,7 +28,7 @@ import { wordFragment } from '../src/lib/word-links.js';
 import { ROUND, type GameData } from '../src/lib/game-engine.js';
 import { KEPT_FIELDS, STORAGE_KEY, TAB_FIELDS } from '../src/lib/game-state.js';
 import { STORAGE_MAP, STORAGE_STRINGS } from '../src/lib/storage-map.js';
-import { BUILD_MARKER, builtAskMode } from './build-mode.js';
+import { BUILD_MARKER, builtAskMode, readDist } from './build-mode.js';
 
 /** Every HTML page of a build, as paths relative to its root. */
 function pages(root: string, dir = ''): string[] {
@@ -46,6 +46,19 @@ const gameFile = (root: string): string | undefined =>
   existsSync(join(root, 'data'))
     ? readdirSync(join(root, 'data')).find((name) => name.startsWith('jeu-'))
     : undefined;
+
+/**
+ * Her drawing and her script, as a build of each generation of the mascot names them (D17.14):
+ * dist/ shows the second where data/mascot.json gives it to the host the build was made for —
+ * the preview first. What is hers alone in such a build is held by scripts/game2-page.test.ts.
+ */
+const mascotOf = (root: string): { drawing: string; script: string } =>
+  readDist(root).mascot === 2
+    ? { drawing: 'class="mascot"', script: 'Game2.' }
+    : { drawing: 'class="turtle"', script: 'Game.' };
+/** Either of them: what a build without the game must not carry. */
+const ANY_MASCOT = /class="(?:turtle|mascot)"/;
+const ANY_GAME_SCRIPT = /^Game2?\./;
 
 const manifestWords = (
   JSON.parse(readFileSync('data/2026/manifest.json', 'utf8')) as {
@@ -109,7 +122,7 @@ void test(
     for (const page of pages('dist')) {
       const html = readFileSync(join('dist', page), 'utf8');
       assert.deepEqual(marked(html), [], `${page}: a word of the game`);
-      assert.ok(!html.includes('class="turtle"'), `${page}: the turtle`);
+      assert.ok(!ANY_MASCOT.test(html), `${page}: the turtle`);
       assert.ok(!html.includes('id="jeu"'), `${page}: the game block`);
       // Not even its styles: a page that does not show the game does not import it.
       assert.ok(!/\.g-tile|\.t-shell/.test(html), `${page}: the game’s stylesheet`);
@@ -122,7 +135,7 @@ void test(
       );
     }
     assert.ok(
-      !readdirSync('dist/_astro').some((name) => name.startsWith('Game.')),
+      !readdirSync('dist/_astro').some((name) => ANY_GAME_SCRIPT.test(name)),
       'the script of the game is shipped',
     );
   },
@@ -153,7 +166,7 @@ void test(
     for (const page of pages('dist-scrutin')) {
       const html = readFileSync(join('dist-scrutin', page), 'utf8');
       assert.deepEqual(marked(html), [], `${page}: a word of the game`);
-      assert.ok(!html.includes('class="turtle"'), `${page}: the turtle`);
+      assert.ok(!ANY_MASCOT.test(html), `${page}: the turtle`);
       assert.ok(
         !/id="(?:jeu|ask|answer|turnstile)"/.test(html),
         `${page}: the game or « Demander »`,
@@ -161,7 +174,7 @@ void test(
       assert.ok(!html.includes('challenges.cloudflare.com'), `${page}: opens a third-party origin`);
     }
     assert.ok(
-      !readdirSync('dist-scrutin/_astro').some((name) => name.startsWith('Game.')),
+      !readdirSync('dist-scrutin/_astro').some((name) => ANY_GAME_SCRIPT.test(name)),
       'the script of the game is shipped',
     );
     const home = readFileSync('dist-scrutin/index.html', 'utf8');
@@ -205,11 +218,11 @@ for (const root of ['dist', 'dist-ask']) {
         if (page === 'index.html') {
           assert.deepEqual(marked(html), first);
           // She lives in the game block, once, and the block comes after the field.
-          assert.equal((html.match(/class="turtle"/g) ?? []).length, 1);
+          assert.equal(html.split(mascotOf(root).drawing).length - 1, 1);
           assert.ok(html.indexOf('id="jeu"') > html.indexOf('id="search"'));
         } else {
           assert.deepEqual(marked(html), [], `${page}: a word of the game`);
-          assert.ok(!html.includes('class="turtle"'), `${page}: the turtle`);
+          assert.ok(!ANY_MASCOT.test(html), `${page}: the turtle`);
         }
       }
 
@@ -315,7 +328,9 @@ for (const root of ['dist', 'dist-ask']) {
     // Measured 13/11/2026: 3.8 KB with nine words, most of it the titles of the tiles; 7 KB with
     // the whole list of 48 (D16.31).
     assert.ok(data <= 12 * 1024, `the game’s data: ${String(data)} B gzip`);
-    const script = readdirSync(join(root, '_astro')).find((f) => f.startsWith('Game.'));
+    const script = readdirSync(join(root, '_astro')).find((f) =>
+      f.startsWith(mascotOf(root).script),
+    );
     assert.ok(script !== undefined, 'the script of the game is missing');
     const js = gzipSync(readFileSync(join(root, '_astro', script)), { level: 9 }).byteLength;
     assert.ok(js <= 10 * 1024, `the game’s script: ${String(js)} B gzip`);

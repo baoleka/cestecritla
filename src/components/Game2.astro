@@ -98,7 +98,8 @@ const config = {
     keep: {
       what: t('turtle.keep.what'),
       tint: t('turtle.keep.tint'),
-      notKept: t('turtle.keep.not_kept'),
+      // « Tes réponses », not « Tes choix »: her colour is a choice, and it is kept (D17.30).
+      notKept: t('turtle.keep.not_kept.tint'),
       otherwise: t('turtle.keep.otherwise'),
       seen: t('turtle.keep.seen'),
       safari: t('turtle.keep.safari'),
@@ -301,15 +302,17 @@ const config = {
        erases everything. */
   }
   <dialog class="t-sheet" id="turtle-sheet" aria-labelledby="turtle-sheet-title">
-    <h3 id="turtle-sheet-title">{t('turtle.button')}</h3>
+    <h3 id="turtle-sheet-title" tabindex="-1">{t('turtle.button')}</h3>
     <div class="t-sheet-her" id="turtle-sheet-her"></div>
     <p class="t-sheet-said" id="turtle-sheet-said" role="status"></p>
     <p class="t-sheet-goal" id="turtle-sheet-goal"></p>
-    <h4>{t('turtle.sheet.path')}</h4>
-    <ol class="t-path" id="turtle-sheet-path"></ol>
+    {/* « Son parcours » is there once she has made a passage: before, there is nothing to tell. */}
+    <div id="turtle-sheet-way" hidden>
+      <h4>{t('turtle.sheet.path')}</h4>
+      <ol class="t-path" id="turtle-sheet-path"></ol>
+    </div>
     <div id="turtle-sheet-tint" role="group" aria-labelledby="turtle-sheet-tint-title" hidden>
       <h4 id="turtle-sheet-tint-title">{t('turtle.tint.title')}</h4>
-      <p>{t('turtle.tint.lead')}</p>
       <ul class="t-tints" id="turtle-sheet-tints"></ul>
     </div>
     <h4>{t('turtle.sheet.found')}</h4>
@@ -329,8 +332,9 @@ const config = {
     <form method="dialog">
       <button class="g-quiet">{t('common.close')}</button>
     </form>
-    {/* Her sheet lists words of the programme: it carries the label itself, so that no capture
-        of it alone can be shown without it. */}
+    {/* Her sheet lists words of the programme: it carries the label itself — held to its lower
+        edge (src/styles/game2.css), so that no capture of it alone can be shown without it,
+        however far it is scrolled. */}
     <p class="unofficial">{t('independence.unofficial')}</p>
   </dialog>
   <script type="application/json" id="game-config" set:html={safeJson(config)} is:inline />

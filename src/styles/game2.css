@@ -27,6 +27,17 @@
 .g-place {
   clear: both;
 }
+/* The word of the programme is never cut (D16.15). The page breaks a long word, with a hyphen
+   or anywhere, rather than let it leave its line — and beside her the line is short: eight words
+   of the list were cut at 390 px, twenty at 320 (found by an independent reading, 15/11/2026).
+   So the word is a box of its own width: where the room she leaves is too narrow for it, the
+   whole box goes under her; it breaks only where it is wider than the block itself. */
+.g-the-word {
+  display: flow-root;
+  inline-size: max-content;
+  max-inline-size: 100%;
+  hyphens: manual;
+}
 /* What will make her change, said beside her before a first word is found (D17.5). */
 .g-goal {
   margin-block: var(--space-4) 0;
@@ -83,8 +94,20 @@
 .g-line .g-passage {
   font-weight: 700;
 }
+/* Our own sentences are short, and are never cut with a hyphen: « de-venue un flamant »,
+   « touche ta tor-tue », « JavaS-cript » beside her. Titles of the book are not ours: left as
+   the page sets them. */
+.game p,
+.game h3,
+.game h4 {
+  hyphens: manual;
+}
 
-/* Her sheet: she is large in it — the size of the stage. */
+/* Her sheet: she is large in it — the size of the stage. What has the focus is never under
+   the label held to its lower edge (below). */
+.t-sheet {
+  scroll-padding-block-end: 4rem;
+}
 .t-sheet-her {
   --mascot-size: min(15rem, 62vw);
 }
@@ -101,12 +124,24 @@
   padding: 0;
   list-style: none;
 }
+/* Her form, then the sentence of its passage with « Revoir » under it — beside her where there
+   is room for ten letters' widths, under her where there is not. With the button beside it, the
+   sentence had no room at all at 150 % text: one letter a line (found on 15/11/2026). */
 .t-path li {
-  display: grid;
-  grid-template-columns: 4.5rem minmax(0, 1fr) auto;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-3);
-  --mascot-size: 4.5rem;
+  gap: var(--space-1) var(--space-3);
+  --mascot-size: min(4.5rem, 20vw);
+}
+.t-path .mascot {
+  flex: none;
+}
+.t-path-text {
+  display: grid;
+  flex: 1 1 10rem;
+  justify-items: start;
+  gap: var(--space-1);
 }
 .t-path p {
   margin: 0;
@@ -115,7 +150,8 @@
    colour. The one she has is said by the button itself (aria-pressed) and by its border. */
 .t-tints {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Two columns where two fit, one where they do not: a name is never cut letter by letter. */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
   gap: var(--space-2);
   margin: 0;
   padding: 0;
@@ -148,4 +184,18 @@
 .game .t-tint[aria-pressed='true'] {
   border-width: 4px;
   padding: calc(var(--space-1) - 2px) calc(var(--space-2) - 2px);
+  /* …and a ground of its own, faint: the border alone was a thin sign of the one that is hers. */
+  background: color-mix(in srgb, var(--brand) 12%, var(--bg));
+}
+
+/* « Site non officiel. » is in the frame of her sheet wherever the sheet is scrolled: it holds
+   to its lower edge, on the page's own ground. (At its end, under everything, it was out of
+   the window as soon as she had a path and colours: found on 15/11/2026.) */
+.t-sheet .unofficial {
+  position: sticky;
+  inset-block-end: calc(-1 * var(--space-4));
+  margin: var(--space-3) calc(-1 * var(--space-4)) calc(-1 * var(--space-4));
+  padding: var(--space-2) var(--space-4);
+  border-block-start: 2px solid var(--brand);
+  background: var(--bg);
 }

@@ -1042,3 +1042,102 @@ l'aperçu (autre adresse, autre stockage) : il est tenu par des tests, pas par u
   te montrer pour que tu la dates (ou que tu me dises de la dater comme relue par la session
   seule) ; puis `preview_generation: 2`, la build de l'aperçu, son déploiement, sa vérification
   en ligne, les relectures indépendantes et les personas.
+
+### 15 novembre 2026 — le jeu montré à l'éditeur ; quatre réponses avant l'aperçu (D17.26 à D17.29)
+
+- **Montré** : une planche de douze captures du jeu de la génération 2, écran par écran (à côté
+  du mot, la scène, « Passer », sa phrase, sa fiche, sa couleur, l'envol, le ciel, le thème
+  sombre, 320 px), et une vidéo de 71 secondes du jeu tel qu'on y joue — deux manches et leurs
+  passages, le choix de couleur, « Revoir », puis l'envol et la tortue dans le ciel. La CI est
+  verte sur le commit du lot C (`04aec53`), la nouvelle porte du jeu comprise.
+- **D17.26 — la ligne de la page Confidentialité est datée.** « la couleur que tu lui as
+  choisie », lue par lui dans la question même : « Je viens de la lire : date-la ».
+  `data/launch.json` porte la date du 15 novembre, « editor » et l'empreinte de la ligne. C'est
+  ce que la porte demandait à tout hôte qui sert la génération 2, l'aperçu compris.
+- **D17.27 — une sixième question sur la page Exactitude**, là où la génération 2 est servie :
+  « Les animations du personnage du jeu gênent-elles quelqu'un, sur un vrai téléphone ? ». Dans
+  le kit (`accuracy.unverified.06`), rendue derrière la constante de build ; la porte des builds
+  la compte parmi ses phrases : une build de la génération 1 ne la porte pas.
+- **D17.28 — touchée, sa fiche s'ouvre tout de suite et sa figure se joue dedans**, en grand :
+  ce qui était construit. Le §4 du plan disait « une figure, puis sa fiche s'ouvre ».
+- **D17.29 — « Choisir sa couleur » revient à chaque fin de manche tant qu'aucun choix n'est
+  fait** ; « Sans couleur » est un choix. D17.23 disait « juste après qu'elle est devenue un
+  flamant ».
+- Les cinq autres choix du lot C — la couleur montrée sur un petit flamant, « Passer » à la
+  place de « Sa fiche » le temps d'un passage, « Sa couleur aussi. » seulement quand elle en a
+  une, la forme gardée après « Revoir », le passage arrêté si l'onglet est quitté — lui ont été
+  dits ; ils découlent de D17.12, D17.8 et D17.25 et ne lui ont pas été posés en questions.
+
+### 15 novembre 2026 (nuit) — trois relectures indépendantes du jeu ; ce qu'elles ont trouvé, corrigé, et quatre réponses de l'éditeur (D17.30 à D17.33)
+
+- **Les relectures.** Sur la build d'essai du lot C, trois agents lancés depuis le dépôt (ils
+  connaissent le projet : ce ne sont pas des lecteurs neufs, R49), en lecture seule, jamais dans
+  `private/` : un « chasseur de captures » hostile, une relecture d'accessibilité, une relecture
+  du code et de la vie privée. La troisième s'est arrêtée en route sur une limite d'usage du
+  modèle ; elle a été relancée sur le code corrigé — ses conclusions sont à l'entrée suivante.
+- **Ce qu'elles ont trouvé, et qui est corrigé** — dans les fichiers de la génération 2
+  seulement ; la tortue en ligne n'est pas touchée :
+  1. *Le mot du programme était coupé à côté d'elle*, après un geste : 8 mots coupés à 390 px,
+     20 à 320 (« biblio-thèques », « carbu-rant ») ; la porte ne mesurait que l'écran d'arrivée.
+     Le mot est maintenant une boîte de sa propre largeur, qui passe sous elle quand la place
+     à côté manque.
+  2. *« Site non officiel. » sortait du cadre de sa fiche* dès qu'elle avait un parcours et des
+     couleurs. Il est tenu au bord bas de la fiche, où qu'on la fasse défiler.
+  3. *Une touche tenue sur « Revoir » la faisait clignoter* : au-dessus du seuil de WCAG 2.3.1
+     sur un écran d'ordinateur à 125–200 % de texte. Tenue sur « Garder ta tortue », elle
+     gardait et oubliait tour à tour. Une touche tenue n'appuie plus qu'une fois dans tout le
+     bloc, et « Revoir »/« Passer » ne changent sa forme qu'une fois par 350 ms au plus.
+  4. *Le focus tombait sur la page* quand sa fiche se fermait après que le bouton qui l'avait
+     ouverte eut disparu (une couleur choisie ; « Tout effacer »). Il revient sur elle.
+  5. *Un passage coupé par un bouton qui dessine l'écran suivant* : sa phrase était effacée une
+     à deux millisecondes après avoir été écrite, et qui utilise un lecteur d'écran n'apprenait
+     jamais qu'elle était devenue un flamant. Elle est dite sur l'écran suivant, ou avant « Elle
+     est gardée sur ce téléphone. ».
+  6. *Sa fiche était illisible à 150–200 % de texte* : une lettre par ligne. La phrase de son
+     parcours passe sous sa forme quand la place manque, et les couleurs se rangent sur une
+     colonne.
+  7. *La question prenait le focus sans son mot.* Elle est maintenant nommée avec lui — et au
+     chapitre, avec la partie qui vient d'être dite. Le jeu en ligne a le même défaut ; il n'est
+     pas touché.
+  8. *Mineurs* :
+     - « Sa couleur aussi. » était dit pour « Sans couleur » ;
+     - « Son parcours » était un titre sur une liste vide, à l'état 0 ;
+     - « Un indice » laissait le focus sur la page ;
+     - un focus déjà dans la manche du HTML était perdu quand le script la reprenait ;
+     - « Revoir » poussait le bouton pressé hors de la vue, dans une fenêtre basse ;
+     - à 200 % de texte, la scène était cachée sous l'en-tête ;
+     - en mouvement réduit, son grand dessin était un bouton qui ne faisait rien : c'est un
+       dessin, et le focus commence au titre de la fiche ;
+     - un appui destiné à « Passer » ouvrait sa fiche ;
+     - la ligne de fin de manche restait périmée quand un autre onglet jouait ;
+     - nos phrases étaient coupées en fin de ligne (« de-venue », « JavaS-cript »).
+  9. *Trouvés par les nouveaux contrôles eux-mêmes* :
+     - sur une page laissée en haut, « Passer » restait sous le bord de l'écran à la fin d'une
+       manche (WebKit) : la scène et sa rangée sont maintenant ramenées ensemble ;
+     - presser « Passer » envoyait le focus sur le titre plus bas, et la page défilait sous le
+       doigt : il va sur « Sa fiche », à sa place exacte ;
+     - avec le titre de sa fiche rendu focalisable, deux moteurs sur trois y mettaient le focus
+       à l'ouverture : où il commence est maintenant dit par le script.
+- **La preuve que les contrôles savent échouer.** La section neuve de la porte (`--only readings`)
+  rejouée contre la build d'avant les corrections : 14 vérifications sur 15 y échouent ; toutes
+  passent après, dans les trois moteurs. Deux d'entre elles avaient d'abord passé par chance —
+  la parité du nombre d'appuis, une fiche ouverte par le mauvais bouton — et ont été resserrées.
+- **Ses textes, quatre questions.** Une planche des quatre phrases, en place, a été montrée à
+  l'éditeur avant ses réponses :
+  - **D17.30** : « Tes réponses ne sont pas gardées. Rien n'est envoyé. » et « Tes réponses dans
+    le jeu. » remplacent « Tes choix… » là où la génération 2 est servie ; la page
+    Confidentialité est redatée à son nom avec ces lignes ;
+  - **D17.31** : « Une couleur par partie du livre. » est retirée ;
+  - **D17.32** : les phrases de sa figure restent affichées (le dossier les disait « jamais
+    affichées », à tort) ;
+  - **D17.33** : les noms des couleurs tiennent.
+- **Laissé tel quel, dit tel quel.**
+  - La lecture politique du chasseur de captures — sa fiche à l'état 4 sous « Ta tortue » ; la
+    seconde où la scène n'est que de l'eau (D17.18). Faible, HYPOTHÈSE d'un lecteur informé.
+  - « Elle a tout trouvé. » au-dessus de « Trois autres mots » : le jeu continue, c'est décidé.
+  - **En ligne aujourd'hui, dans la génération 1, des défauts de même famille.** « Site non
+    officiel. » sort du cadre de sa fiche à 320–360 px et aux états 3 et 4. Une touche tenue sur
+    « Garder ta tortue » garde et oublie tour à tour. La question prend le focus sans son mot.
+    Ses fichiers sont gelés jusqu'au lot E, et le passage à la génération 2 les corrige : c'est
+    à l'éditeur de dire s'il en veut une correction avant.
+- **Preuves.** 647 tests (646 passent, 1 sauté depuis toujours), contraste, lint, types. La porte du jeu de la génération 2, dans les trois moteurs : 247 vérifications sous Chromium, 212 sous Firefox, 212 sous WebKit, toutes bonnes ; mesures inchangées — aucun éclair dans les deux thèmes, aucune image au-delà de 50 ms processeur ralenti quatre fois. **`npm run build` reste identique, octet pour octet** (1 156 fichiers), de même `dist-ask/`, `dist-gists/` et `dist-scrutin/`. Script du jeu 9 336 octets gzip (plafond 10 240), page d'accueil 17 134 (plafond 20 480). La porte peut maintenant jouer une autre build (`--root dist`) et un hôte en ligne (`--origin https://…`) : c'est ce que le lot D fera de l'aperçu.

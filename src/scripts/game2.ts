@@ -158,9 +158,11 @@ interface Block {
   sheetLink: HTMLButtonElement;
   tintLink: HTMLButtonElement;
   sheet: HTMLDialogElement;
+  sheetTitle: HTMLElement;
   sheetHer: HTMLElement;
   sheetSaid: HTMLElement;
   sheetGoal: HTMLElement;
+  sheetWay: HTMLElement;
   sheetPath: HTMLElement;
   sheetTint: HTMLElement;
   sheetTints: HTMLElement;
@@ -175,6 +177,16 @@ interface Block {
 const TINTS = [1, 2, 3, 4, 5, 6, 7] as const;
 /** How long she looks at the tiles before they are marked: the time her head takes to turn. */
 const LOOKS_FOR_MS = 240;
+/**
+ * At most one swap of her whole form every this long at a press of « Revoir » or « Passer »,
+ * however fast the presses come: a finger, or a key held down, never makes her flash (WCAG
+ * 2.3.1). Found by an independent reading, 15/11/2026: a key held on « Revoir » did.
+ */
+const SWAP_GAP_MS = 350;
+/** After « Passer » gives its place back to « Sa fiche », a second tap is not a press of it. */
+const HANDOVER_MS = 500;
+/** A sentence said after the focus has moved is said a little later, so that both are heard. */
+const SAY_LATER_MS = 150;
 
 /** Safari on iPhone and iPad forgets what a site wrote after seven days without a visit. */
 const onIos = (): boolean =>
@@ -329,6 +341,15 @@ function start(parts: Block, config: Config, data: GameData): void {
   let evolving = false;
   /** The script has drawn its first screen: the block is its own from then on. */
   let taken = false;
+  /**
+   * A passage cut short by a press that goes on to draw another screen: its sentence, to be said
+   * there — the new screen would otherwise clear it before anyone heard it.
+   */
+  let carried = '';
+  let carrying = false;
+  let saying = 0;
+  /** When « Passer » last gave its place to « Sa fiche » under a finger, or the passage ended. */
+  let handedOver = -Infinity;
 
   /** The session as the tab writes it: the round under way, never what was chosen in it. */
   const memory = (): TabState2 => ({
@@ -368,6 +389,14 @@ function start(parts: Block, config: Config, data: GameData): void {
     if (evolving) her.skip();
     her.settle(look());
     tintLink.hidden = !pale();
+    // The end of a round left on screen while another tab played on: what is said of her is
+    // what she is now — a passage she made there was not seen here, and is not said.
+    const line = live.querySelector('.g-line');
+    if (session.play.screen.kind === 'end' && line !== null) {
+      const last = session.play.words.at(-1) ?? null;
+      const next = nextRoundChangesHer(data, session, session.seen, last);
+      line.replaceChildren(el('span', s.goal[next ? 'next' : GOAL_OF_STATE[session.state]]));
+    }
     if (sheet.open) fillSheet();
   }
 
@@ -401,8 +430,33 @@ function start(parts: Block, config: Config, data: GameData): void {
   function show(panel: HTMLElement, heading: HTMLElement, focus: boolean): void {
     heading.tabIndex = -1;
     live.replaceChildren(panel);
+    window.clearTimeout(saying);
     status.textContent = '';
     if (focus) heading.focus();
+    // A passage cut short by the press that drew this screen: what happened to her is said
+    // here, once the focus has been heard.
+    if (carried !== '') {
+      const said = carried;
+      carried = '';
+      saying = window.setTimeout(() => {
+        status.textContent = said;
+      }, SAY_LATER_MS);
+    }
+  }
+
+  /**
+   * Brings a part of the block into view, from the top of `first` to the bottom of `last` — under
+   * the site's header, which at a large text size is taller than the room the page keeps for it
+   * (`scroll-padding`, src/styles/base.css). Where both cannot show, the top wins.
+   */
+  function intoView(first: Element, last: Element = first): void {
+    const header = document.querySelector('header.site')?.getBoundingClientRect().bottom ?? 0;
+    const top = first.getBoundingClientRect().top;
+    const bottom = last.getBoundingClientRect().bottom;
+    let by = 0;
+    if (bottom > window.innerHeight) by = bottom - window.innerHeight;
+    if (top - by < header) by = top - header;
+    if (by !== 0) window.scrollBy(0, by);
   }
 
   function act(next: Play): void {
@@ -442,7 +496,9 @@ function start(parts: Block, config: Config, data: GameData): void {
       if (goal === null) line.setAttribute('data-wait', '');
       panel.append(line);
     }
-    panel.append(el('p', s.kicker, 'g-kicker'), theWord(word));
+    const shown = theWord(word);
+    shown.id = 'game-the-word';
+    panel.append(el('p', s.kicker, 'g-kicker'), shown);
     return panel;
   }
 
@@ -450,9 +506,20 @@ function start(parts: Block, config: Config, data: GameData): void {
     if (session.play.screen.kind !== 'ask') return;
     const { ask, said } = session.play.screen;
     const panel = wordPanel(word);
-    if (said !== null) panel.append(el('p', sentence(wordId, said.ask, said.verdict), 'g-said'));
+    if (said !== null) {
+      const told = el('p', sentence(wordId, said.ask, said.verdict), 'g-said');
+      told.id = 'game-the-said';
+      panel.append(told);
+    }
 
     const heading = el('h3', s.ask[ask], 'g-ask');
+    // The focus lands on the question; the word is above it — and, at the chapter or the
+    // section, where the part was said to be. Who hears the question hears them with it.
+    heading.id = 'game-the-ask';
+    heading.setAttribute(
+      'aria-labelledby',
+      ['game-the-word', ...(said === null ? [] : ['game-the-said']), 'game-the-ask'].join(' '),
+    );
     const gestures = el('p', undefined, 'g-with');
     gestures.append(
       button(s.dontKnow, 'g-quiet', () => {
@@ -476,6 +543,8 @@ function start(parts: Block, config: Config, data: GameData): void {
     const hinted = hintFor(data, wordId, session.depth, ask);
     if (hinted.length > 0) {
       const hint = button(s.hint, 'g-quiet', () => {
+        // The button leaves: a focus left on it goes to the question it was a help for.
+        if (document.activeElement === hint) heading.focus();
         hint.remove();
         status.textContent = fill(s.hintSaid, { parts: list(hinted) });
         const mark = (): void => {
@@ -585,7 +654,9 @@ function start(parts: Block, config: Config, data: GameData): void {
       const choice = el('p', undefined, 'g-actions');
       const answered = (said: string): void => {
         card.remove();
-        status.textContent = said;
+        // A passage cut short by this very press: what happened to her is said first.
+        status.textContent = [carried, said].filter((text) => text !== '').join(' ');
+        carried = '';
         again.focus();
       };
       choice.append(
@@ -651,19 +722,26 @@ function start(parts: Block, config: Config, data: GameData): void {
     her.play(frames, () => {
       if (evolving) {
         evolving = false;
+        handedOver = performance.now();
         about.removeAttribute('data-wait');
         tintLink.removeAttribute('data-wait');
         parts.sheetLink.removeAttribute('data-wait');
-        // « Passer » leaves: a focus left on it goes back to the sentence of this screen.
+        // « Passer » leaves: a focus left on it goes to « Sa fiche », which takes its very place —
+        // not to the title further down, whose focus would scroll the page under the finger.
         const held = document.activeElement === parts.skip;
         parts.skip.setAttribute('data-wait', '');
-        if (held) heading.focus();
+        if (held) parts.sheetLink.focus();
       }
       // To who cannot see it, a passage is its sentence — said when it can be seen.
-      if (passed !== '') status.textContent = goal === '' ? passed : `${passed} ${goal}`;
+      if (passed !== '') {
+        const said = goal === '' ? passed : `${passed} ${goal}`;
+        status.textContent = said;
+        if (carrying) carried = said;
+      }
     });
-    // She is at the top of the panel: brought into view if the page was scrolled past her.
-    herBox.scrollIntoView({ block: 'nearest' });
+    // She is at the top of the panel, « Passer » under her: both brought into view, whichever
+    // way the page was scrolled — a page left at its top kept « Passer » under the fold.
+    intoView(herBox, herWith);
   }
 
   /** Draws the screen the game is on, and says which: a question, a card, the end of a round. */
@@ -711,6 +789,12 @@ function start(parts: Block, config: Config, data: GameData): void {
     const copy = copyOf(look());
     const stage = stageOf(copy);
     large = stage;
+    sheetSaid.textContent = '';
+    // Less motion asked: she does no figure — and a button that would do nothing is not offered.
+    if (lessMotion()) {
+      sheetHer.replaceChildren(copy);
+      return;
+    }
     const touch = button('', 'g-press', () => {
       // While a passage is seen again, a touch is « Passer ».
       if (replaying !== null) stage.skip();
@@ -719,7 +803,6 @@ function start(parts: Block, config: Config, data: GameData): void {
     touch.setAttribute('aria-label', s.sheet.name);
     touch.append(copy);
     sheetHer.replaceChildren(touch);
-    sheetSaid.textContent = '';
   }
 
   /** What will make her change — or, at the end of a round, that the next one will. */
@@ -731,10 +814,16 @@ function start(parts: Block, config: Config, data: GameData): void {
       : GOAL_OF_STATE[session.state];
   }
 
+  /** When her large copy last swapped its whole form at a press of « Revoir » or « Passer ». */
+  let swappedAt = -Infinity;
+
   /** « Revoir »: a passage she has made, on the large copy — and « Passer », on the same button. */
   function replay(to: TurtleState, control: HTMLButtonElement): void {
     const stage = large;
     if (stage === null || to === 0) return;
+    const now = performance.now();
+    if (now - swappedAt < SWAP_GAP_MS) return;
+    swappedAt = now;
     const mine = replaying === control;
     if (replaying !== null) stage.skip();
     if (mine) return;
@@ -749,6 +838,8 @@ function start(parts: Block, config: Config, data: GameData): void {
       replaying = null;
       control.textContent = s.sheet.replay;
       sheetSaid.textContent = s.passage[String(to)] ?? '';
+      // The focus is on the button that was pressed: back in view, if her image pushed it out.
+      if (document.activeElement === control) control.scrollIntoView({ block: 'nearest' });
     });
   }
 
@@ -757,6 +848,7 @@ function start(parts: Block, config: Config, data: GameData): void {
    * come. Each passage has its sentence and, unless less motion was asked, « Revoir ».
    */
   function fillPath(): void {
+    parts.sheetWay.hidden = session.state === 0;
     const items: HTMLElement[] = [];
     for (const state of [0, 1, 2, 3, 4] as const) {
       if (state > session.state) break;
@@ -767,16 +859,18 @@ function start(parts: Block, config: Config, data: GameData): void {
         // The turtle she started as: a drawing and no sentence — nothing there to be read.
         item.setAttribute('aria-hidden', 'true');
       } else {
+        const text = el('div', undefined, 't-path-text');
         const about = el('p', said);
         about.id = `turtle-path-${String(state)}`;
-        item.append(about);
+        text.append(about);
         if (!lessMotion()) {
           const again = button(s.sheet.replay, 'g-quiet', () => {
             replay(state, again);
           });
           again.setAttribute('aria-describedby', about.id);
-          item.append(again);
+          text.append(again);
         }
+        item.append(text);
       }
       items.push(item);
     }
@@ -870,8 +964,10 @@ function start(parts: Block, config: Config, data: GameData): void {
    */
   function fillKept(): void {
     const kept = store.kept();
+    // « Sans couleur » is a choice the phone keeps, and not a colour she has.
+    const coloured = session.tint >= 1 && session.tint <= 6;
     const lines = kept
-      ? [session.tint === 0 ? s.sheet.onPhone : `${s.sheet.onPhone} ${s.sheet.onPhoneTint}`]
+      ? [coloured ? `${s.sheet.onPhone} ${s.sheet.onPhoneTint}` : s.sheet.onPhone]
       : [
           s.sheet.tabOnly,
           `${s.keep.what} ${s.keep.tint}`,
@@ -899,11 +995,19 @@ function start(parts: Block, config: Config, data: GameData): void {
     if (frozen()) return;
     fillSheet();
     sheet.showModal();
+    // Where the focus starts is said here, for every engine — left to them, they differ (the
+    // title, focusable for less motion, was taken by two of three): on her colours when they
+    // were asked for; on her, who answers a touch; on the title where she is only a drawing.
     if (toTint) sheetTints.querySelector('button')?.focus();
+    else if (lessMotion()) parts.sheetTitle.focus();
+    else sheetHer.querySelector('button')?.focus();
     if (touched) figure();
   }
 
   const press = button('', 'g-press', () => {
+    // A second tap meant for the stage, just after the passage it skipped or saw end, opens
+    // nothing.
+    if (performance.now() - handedOver < HANDOVER_MS) return;
     openSheet(true);
   });
   press.setAttribute('aria-label', s.sheet.name);
@@ -911,6 +1015,8 @@ function start(parts: Block, config: Config, data: GameData): void {
   drawing.replaceWith(press);
   press.append(drawing);
   parts.sheetLink.addEventListener('click', () => {
+    // A tap meant for « Passer », landing on what has just taken its place, opens nothing.
+    if (performance.now() - handedOver < HANDOVER_MS) return;
     openSheet(false);
   });
   tintLink.addEventListener('click', () => {
@@ -924,14 +1030,37 @@ function start(parts: Block, config: Config, data: GameData): void {
     (event) => {
       if (!evolving || !(event.target instanceof Element)) return;
       if (event.target.closest('button, a') === null) return;
+      const onStage = event.target.closest('#game-her, #game-skip') !== null;
+      // Pressed elsewhere, the press goes on to draw what it draws: what happened to her is
+      // carried there, to be said once that screen is up.
+      carrying = !onStage;
       her.skip();
-      if (event.target.closest('#game-her, #game-skip') !== null) event.stopPropagation();
+      carrying = false;
+      if (onStage) event.stopPropagation();
+      else handedOver = -Infinity;
     },
     true,
   );
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && evolving) her.skip();
+  // Whatever the press went on to do, nothing is carried past it.
+  block.addEventListener('click', () => {
+    carried = '';
   });
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || !evolving) return;
+    her.skip();
+    // No finger was aimed at « Passer »: what takes its place answers at once.
+    handedOver = -Infinity;
+  });
+  // A key held down presses once. Its repeats would press again and again — « Revoir » and
+  // « Passer » in turn, « Garder » and its undoing in turn, the next round, and the next:
+  // refused in the whole block, her sheet included, before anything hears them.
+  block.addEventListener(
+    'keydown',
+    (event) => {
+      if (event.repeat && (event.key === 'Enter' || event.key === ' ')) event.preventDefault();
+    },
+    true,
+  );
   // Whatever is being played ends at once, on what it leads to and with its sentence, when it
   // can no longer be watched or was no longer asked for: a freeze that starts, a tab that is
   // left (its timers would give her the rest in one burst on the way back), less motion asked
@@ -950,6 +1079,10 @@ function start(parts: Block, config: Config, data: GameData): void {
     large?.stop();
     large = null;
     replaying = null;
+    // The button that opened her sheet may be gone — « Choisir sa couleur » once she has one,
+    // « Sa fiche » once everything is erased: the focus goes back to her, not to the page.
+    const at = document.activeElement;
+    if (at === null || at === document.body || sheet.contains(at)) press.focus();
   });
   sheetKeep.addEventListener('click', () => {
     if (frozen()) return;
@@ -1002,10 +1135,14 @@ function start(parts: Block, config: Config, data: GameData): void {
     }
   }
 
+  // Someone already in the round of the HTML, by the keyboard: the focus follows them into the
+  // script's — it is their round that goes on, not the script that arrives.
+  const inRound = fixed.contains(document.activeElement);
   fixed.hidden = true;
   live.hidden = false;
   render(false);
   taken = true;
+  if (inRound) live.querySelector<HTMLElement>('h3')?.focus();
   // The look she arrives with is drawn at once: from then on what she does is a movement.
   her.settle(look());
   // Nothing is written here: arriving — by a link, in a new tab — is not a gesture of the game.
@@ -1056,9 +1193,11 @@ function blockParts(): Block | null {
     sheetLink: document.querySelector<HTMLButtonElement>('#game-sheet-link'),
     tintLink: document.querySelector<HTMLButtonElement>('#game-tint-link'),
     sheet: document.querySelector<HTMLDialogElement>('#turtle-sheet'),
+    sheetTitle: document.querySelector<HTMLElement>('#turtle-sheet-title'),
     sheetHer: document.querySelector<HTMLElement>('#turtle-sheet-her'),
     sheetSaid: document.querySelector<HTMLElement>('#turtle-sheet-said'),
     sheetGoal: document.querySelector<HTMLElement>('#turtle-sheet-goal'),
+    sheetWay: document.querySelector<HTMLElement>('#turtle-sheet-way'),
     sheetPath: document.querySelector<HTMLElement>('#turtle-sheet-path'),
     sheetTint: document.querySelector<HTMLElement>('#turtle-sheet-tint'),
     sheetTints: document.querySelector<HTMLElement>('#turtle-sheet-tints'),

@@ -12,7 +12,8 @@
  *     and dist/ whenever data/mascot.json gives the host it was built for the first generation:
  *     not her name, not a class of her drawing, not an attribute her script writes, not a
  *     sentence that is hers, not her script;
- *   - dist-mascot2/ (`npm run build:mascot2`, never deployed): she is in the game block, once,
+ *   - dist-mascot2/ (`npm run build:mascot2`, never deployed) and dist/ when it was built for
+ *     a host that is given the second generation: she is in the game block, once,
  *     drawn from the very file the editor validated, and nowhere else on the site; the turtle
  *     of the first generation is not there; the privacy page lists the one field she adds;
  *     and everything stays within the ceilings of D17.13.
@@ -32,8 +33,6 @@ import { mascotMarkup } from '../src/lib/mascot2.js';
 import { storageMap, storageStrings } from '../src/lib/storage-map2.js';
 import { MASCOT2_MARKS, readBuildHost, readBuildMode, readDist, readMascot } from './build-mode.js';
 import { MASCOT2_SVG_PATH } from './mascot2-kit.js';
-
-const SECOND = 'dist-mascot2';
 
 const walk = (dir: string): string[] => {
   if (!existsSync(dir)) return [];
@@ -58,7 +57,7 @@ const flat = (html: string): string => html.replace(/&#39;/g, '’').replace(/\s
 
 /** The keys of the kit that only the second generation says. */
 const HERS =
-  /^(?:turtle\.(?:goal|passage|tint|figure)\.|turtle\.(?:skip|keep\.tint)$|turtle\.sheet\.(?:link|path|replay|on_phone_tint)$|privacy\.game\.field\.tint$)/;
+  /^(?:turtle\.(?:goal|passage|tint|figure)\.|turtle\.(?:skip|keep\.tint|keep\.not_kept\.tint)$|turtle\.sheet\.(?:link|path|replay|on_phone_tint)$|privacy\.(?:game\.field|never\.05)\.tint$|accuracy\.unverified\.06$)/;
 const hers = Object.keys(kit).filter((key) => HERS.test(key));
 
 /**
@@ -105,9 +104,15 @@ void test('the kit knows which sentences are hers, and they can be told from any
   const families = (prefix: string): number => hers.filter((key) => key.startsWith(prefix)).length;
   assert.equal(families('turtle.goal.'), 7);
   assert.equal(families('turtle.passage.'), 4);
-  assert.equal(families('turtle.tint.'), 10);
+  // Seven choices — six colours and « Sans couleur » — and the button and title that lead to
+  // them; no sentence ties a colour to a part of the book any more (D17.31).
+  assert.equal(families('turtle.tint.'), 9);
   assert.equal(families('turtle.figure.'), 3);
-  assert.equal(hers.length, 7 + 4 + 10 + 3 + 2 + 4 + 1);
+  // …and what is said of her outside the game: her colour on the privacy page, and the one
+  // question about her movement that real people have not answered (D17.27).
+  // turtle.skip, turtle.keep.tint, turtle.keep.not_kept.tint; four of her sheet; her two lines
+  // of the privacy page; the one question of /exactitude.
+  assert.equal(hers.length, 7 + 4 + 9 + 3 + 3 + 4 + 2 + 1);
   // The sentences looked for in a build of the first generation: enough of them, and none that
   // another key of the kit also says — it could not be told apart.
   assert.ok(sentences.length >= 15, `${String(sentences.length)} sentences of hers to look for`);
@@ -153,40 +158,63 @@ void test('a build of the first generation carries nothing of the second: not a 
   console.log(`  read: ${roots.join(', ')}`);
 });
 
-const built = existsSync(join(SECOND, 'index.html'));
-const skipped = { skip: !built };
-
-void test('the test build of the second generation is told from its files', skipped, () => {
-  assert.equal(readDist(SECOND).mascot, 2);
-  const home = readFileSync(join(SECOND, 'index.html'), 'utf8');
-  assert.ok(home.includes(MASCOT2_MARKS.home), 'the game block does not say its generation');
-  const privacy = readFileSync(join(SECOND, 'confidentialite/index.html'), 'utf8');
-  assert.ok(privacy.includes(MASCOT2_MARKS.privacy), 'the privacy page does not list her colour');
-  // …and what the test above looks for in a build of the first generation is what a build of
-  // hers really holds: a detector that finds nothing here would find nothing anywhere.
-  const all = walk(SECOND)
-    .filter(isText)
-    .map((file) => readFileSync(file, 'utf8'));
-  for (const trace of TRACES) {
-    assert.ok(
-      all.some((text) => trace.test(text)),
-      `${String(trace)} is in no file of her build`,
-    );
+/**
+ * The builds of the second generation that are there: her test build, and dist/ when it was
+ * built for a host data/mascot.json gives her to — the preview first (lot D), production on
+ * the editor's word (lot E). Each is held to the same rules.
+ */
+function secondGenerationBuilds(): string[] {
+  const roots = existsSync(join('dist-mascot2', 'index.html')) ? ['dist-mascot2'] : [];
+  if (
+    existsSync('dist/index.html') &&
+    readBuildMode() === 'app' &&
+    readMascot(undefined, readBuildHost()) === 2
+  ) {
+    roots.push('dist');
   }
-  const pages = all.map(flat);
-  for (const sentence of sentences) {
-    assert.ok(
-      pages.some((text) => text.includes(sentence.text)),
-      `${sentence.key} is in no file of her build`,
-    );
-  }
-  assert.ok(walk(SECOND).some((file) => /Game2/.test(file)));
-});
+  return roots;
+}
 
-void test(
-  'she is in the game block, once, as the editor validated her — and nowhere else',
-  skipped,
-  () => {
+const seconds = secondGenerationBuilds();
+if (seconds.length === 0) {
+  void test(
+    'a build of the second generation',
+    { skip: 'none is built: npm run build:mascot2' },
+    () => {
+      // Nothing to read.
+    },
+  );
+}
+
+for (const SECOND of seconds) {
+  void test(`${SECOND}: the test build of the second generation is told from its files`, () => {
+    assert.equal(readDist(SECOND).mascot, 2);
+    const home = readFileSync(join(SECOND, 'index.html'), 'utf8');
+    assert.ok(home.includes(MASCOT2_MARKS.home), 'the game block does not say its generation');
+    const privacy = readFileSync(join(SECOND, 'confidentialite/index.html'), 'utf8');
+    assert.ok(privacy.includes(MASCOT2_MARKS.privacy), 'the privacy page does not list her colour');
+    // …and what the test above looks for in a build of the first generation is what a build of
+    // hers really holds: a detector that finds nothing here would find nothing anywhere.
+    const all = walk(SECOND)
+      .filter(isText)
+      .map((file) => readFileSync(file, 'utf8'));
+    for (const trace of TRACES) {
+      assert.ok(
+        all.some((text) => trace.test(text)),
+        `${String(trace)} is in no file of her build`,
+      );
+    }
+    const pages = all.map(flat);
+    for (const sentence of sentences) {
+      assert.ok(
+        pages.some((text) => text.includes(sentence.text)),
+        `${sentence.key} is in no file of her build`,
+      );
+    }
+    assert.ok(walk(SECOND).some((file) => /Game2/.test(file)));
+  });
+
+  void test(`${SECOND}: she is in the game block, once, as the editor validated her — and nowhere else`, () => {
     const home = readFileSync(join(SECOND, 'index.html'), 'utf8');
     const drawings = [...home.matchAll(/<svg\b[^>]*\bclass="mascot"[\s\S]*?<\/svg>/g)].map(
       (match) => match[0],
@@ -221,13 +249,9 @@ void test(
     const scripts = readdirSync(join(SECOND, '_astro'));
     assert.ok(!scripts.some((file) => file.startsWith('Game.')), 'the script of the first is here');
     assert.equal(scripts.filter((file) => file.startsWith('Game2.')).length, 1);
-  },
-);
+  });
 
-void test(
-  'her block is whole without script, and offers nothing a script must answer',
-  skipped,
-  () => {
+  void test(`${SECOND}: her block is whole without script, and offers nothing a script must answer`, () => {
     const { data, fingerprint } = buildGame();
     const home = readFileSync(join(SECOND, 'index.html'), 'utf8');
     // The same game: the same published file, the same first round in the HTML.
@@ -271,13 +295,9 @@ void test(
     assert.ok(sheet.includes('Site non officiel.'), 'her sheet has lost « Site non officiel. »');
     // No number is typed in what is said of her: her goal is in words (D17.5).
     for (const key of hers) assert.doesNotMatch(said(key), /\d/, `${key} holds a number`);
-  },
-);
+  });
 
-void test(
-  'the privacy page lists what her build writes: the same key, one field more',
-  skipped,
-  () => {
+  void test(`${SECOND}: the privacy page lists what her build writes: the same key, one field more`, () => {
     const fields = (storage: string): string[] =>
       storageMap(2)
         .find((entry) => entry.storage === storage)
@@ -302,21 +322,21 @@ void test(
     );
     assert.ok(privacy.includes(STORAGE_KEY), 'confidentialite does not name the key');
     assert.match(html, /<button[^>]*id="erase-all"/);
-  },
-);
+  });
 
-void test('her build stays within the ceilings of D17.13', skipped, () => {
-  const scripts = readdirSync(join(SECOND, '_astro')).filter((file) => file.startsWith('Game2.'));
-  const script = gzip(readFileSync(join(SECOND, '_astro', scripts[0] ?? '')));
-  // The script of the game: the ceiling of the first generation, unchanged (10 KB).
-  assert.ok(script <= 10 * 1024, `the game’s script: ${String(script)} B gzip`);
-  // The home page, her drawing and her two stylesheets in it: a new ceiling (20 KB).
-  const home = gzip(readFileSync(join(SECOND, 'index.html')));
-  assert.ok(home <= 20 * 1024, `the home page: ${String(home)} B gzip`);
-  const name = readdirSync(join(SECOND, 'data')).find((file) => file.startsWith('jeu-'));
-  const data = gzip(readFileSync(join(SECOND, 'data', name ?? '')));
-  assert.ok(data <= 12 * 1024, `the game’s data: ${String(data)} B gzip`);
-  console.log(
-    `  ${SECOND}: script ${String(script)} B, home page ${String(home)} B, data ${String(data)} B (gzip)`,
-  );
-});
+  void test(`${SECOND}: her build stays within the ceilings of D17.13`, () => {
+    const scripts = readdirSync(join(SECOND, '_astro')).filter((file) => file.startsWith('Game2.'));
+    const script = gzip(readFileSync(join(SECOND, '_astro', scripts[0] ?? '')));
+    // The script of the game: the ceiling of the first generation, unchanged (10 KB).
+    assert.ok(script <= 10 * 1024, `the game’s script: ${String(script)} B gzip`);
+    // The home page, her drawing and her two stylesheets in it: a new ceiling (20 KB).
+    const home = gzip(readFileSync(join(SECOND, 'index.html')));
+    assert.ok(home <= 20 * 1024, `the home page: ${String(home)} B gzip`);
+    const name = readdirSync(join(SECOND, 'data')).find((file) => file.startsWith('jeu-'));
+    const data = gzip(readFileSync(join(SECOND, 'data', name ?? '')));
+    assert.ok(data <= 12 * 1024, `the game’s data: ${String(data)} B gzip`);
+    console.log(
+      `  ${SECOND}: script ${String(script)} B, home page ${String(home)} B, data ${String(data)} B (gzip)`,
+    );
+  });
+}

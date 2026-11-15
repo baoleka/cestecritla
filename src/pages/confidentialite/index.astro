@@ -144,7 +144,13 @@ const storage =
     <li>{asking ? t('privacy.never.02.ask') : t('privacy.never.02')}</li>
     <li>{t('privacy.never.03')}</li>
     <li>{t('privacy.never.04')}</li>
-    {GameStorage !== null && <li>{t('privacy.never.05')}</li>}
+    {
+      /* Where the mascot of the second generation is served, the colour the player gives her is
+         kept — a choice: what is never kept is said « Tes réponses » (D17.30). */
+      GameStorage !== null && (
+        <li>{t(__CEL_MASCOT2__ ? 'privacy.never.05.tint' : 'privacy.never.05')}</li>
+      )
+    }
     <li>{t('privacy.never.06')}</li>
     <li>{t('privacy.never.09')}</li>
   </ul>
