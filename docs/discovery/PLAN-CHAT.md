@@ -1120,3 +1120,38 @@ Ce que D16.60 annonçait à la place de l'IA en direct : les termes s'expliquent
   sont maintenant en local — la base, le limiteur, le compteur —, et le seront en ligne à
   l'ouverture de l'aperçu.
 
+### 15 novembre, 1 h 15 — l'aperçu demande ; la seconde moitié des phrases relue en entier
+
+- **L'aperçu est ouvert** (lot C11), depuis le commit `a3cbbb0` : `npm run build:preview`, puis
+  `npm run deploy:preview -- --bench` (Worker `cestecritla-preview`, version `0ea0cfff`) ;
+  puis le Worker du chat devant lui, sur ses deux adresses, comme la production l'aura
+  (`npm run deploy:chat:preview -- --accord 2026-11-15`, Worker `cestecritla-chat-preview`,
+  version `ae4fa331`), son secret posé depuis un fichier privé (un secret propre à ce Worker,
+  tiré au hasard, jamais affiché) ; enfin l'interrupteur des phrases ouvert dans la base.
+- **Vérifié en ligne, à chaque étape** (sonde locale, trois navigateurs et appels directs) :
+  base arrêtée — les liens seuls, « local », rien qui ressemble à une panne ; Worker du chat
+  devant, toujours arrêtée — pareil ; interrupteur ouvert — **trois phrases pour trois mesures**,
+  celles de la base au caractère près, sous leur étiquette, chacune avec son lien officiel ;
+  un seul envoi, `corpus` et `ids`, rien de tapé ; `/api/chat` répond « rien » à tout, y
+  compris à une question ; autre origine, pas d'origine : 403 ; `GET` : 405 ; champ en trop :
+  400 ; autre livre : « local » ; rien d'écrit sur le téléphone ; aucune violation de la
+  politique de la page. **Qui a répondu**, lu dans le décompte de la plateforme : les envois
+  d'avant le second Worker sous `cestecritla-preview`, ceux d'après sous un autre script (la
+  plateforme le range sous `__unknown__` pendant ses premières minutes, comme à la répétition).
+- **Un écart vu à l'écran, corrigé** : le livre écrit « tarification à l'acte (T2A) », notre
+  phrase le rend tel quel, notre explication disait « tarification à l'activité » — le nom
+  officiel. L'explication dit maintenant les deux. Les cent phrases qui développent un sigle
+  ont été comparées à son explication : aucun autre écart.
+- **La seconde moitié des phrases relue en entier contre le texte** (parties 16 à 26, 423
+  phrases — D16.61 ne les donnait que pour relues sur signalement) : **aucune phrase fausse** ;
+  trois clarifiées, parce qu'elles pouvaient se lire de travers — « des entreprises,
+  administrations et services publics » (seules les entreprises publiques sont visées), une
+  interdiction « aux lobbyistes du Parlement », un remboursement « avant dix ans de service ».
+  Récrites, repassées au contrôle, reprises par `--take` (3 lignes ajoutées). **Les 1 069
+  phrases ont donc toutes été relues contre le livre** — par la session, pas par une personne :
+  ce que D16.61 dit de cette lecture tient.
+- **Un outil pour retirer le texte du livre de la base** (`seed-ask-2026.ts --withdraw-text`,
+  testé) : plus rien ne le lit là-bas depuis que les phrases sont écrites.
+- **Trois relectures indépendantes lancées sur l'aperçu** (un autre modèle, sans `private/`,
+  sans requête vers le site du programme) : hostile, personas, sécurité.
+

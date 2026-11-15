@@ -19,6 +19,10 @@
  *   npx tsx scripts/seed-ask-2026.ts --remote <database> --switch open|stopped [--what ask|gists] [--env preview]
  *       opens or stops the answers — or, with `--what gists`, the sentences written ahead —
  *       with no deployment (runbook: « arrêt »)
+ *   npx tsx scripts/seed-ask-2026.ts --remote <database> --withdraw-text --accord <YYYY-MM-DD> [--env preview]
+ *       takes the text of the book OUT of the base, and leaves the sentences as they are:
+ *       once they are written nothing reads the text there any more (PLAN-CHAT §7). The text
+ *       stays on this machine; depositing it again is the first command above.
  *
  * Sending anything is the editor's decision, each time (CLAUDE.md): `--accord` must carry
  * today's date, so that the command line itself says when the accord was given. Without it
@@ -193,6 +197,20 @@ export function baseProblems(db: LocalD1, manifest: Manifest): string[] {
     problems.push('the base is not at the corpus version of the manifest');
   }
   return problems;
+}
+
+/**
+ * Takes the text of the book out of a base — its description first, so that a Worker that
+ * still asked for a measure finds no corpus version and answers "local"; then its rows, and
+ * the index of before D16.22 wherever one is left. The table stays, empty: the schema is the
+ * Worker's, and a deposit fills it again. Not a row, not a key of the sentences is touched.
+ */
+export function textWithdrawalSql(): string {
+  return [
+    `DELETE FROM meta WHERE key IN (${keyList(TEXT_KEYS)});`,
+    'DROP TABLE IF EXISTS propositions_fts;',
+    'DELETE FROM propositions;',
+  ].join('\n');
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -521,6 +539,20 @@ function main(): void {
       return;
     }
     process.exitCode = wrangler(remote, env, ['--command', command]);
+    return;
+  }
+
+  if (args.includes('--withdraw-text')) {
+    if (remote === undefined) {
+      console.error('usage: --remote <database> --withdraw-text --accord <YYYY-MM-DD>');
+      process.exitCode = 2;
+      return;
+    }
+    mkdirSync(SEED_DIR, { recursive: true });
+    const file = `${SEED_DIR}/withdraw-text.sql`;
+    writeFileSync(file, `${textWithdrawalSql()}\n`);
+    console.log('withdrawal of the text: its rows and its keys — the sentences are left alone');
+    process.exitCode = send(file, 'the withdrawal of the text', remote, env, value('--accord'));
     return;
   }
 

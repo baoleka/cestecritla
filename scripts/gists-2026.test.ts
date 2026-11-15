@@ -19,7 +19,7 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { MAX_GIST_CHARS, MAX_GIST_IDS, parseGistsResponse } from '../src/lib/chat-contract.js';
 import { benchOutput, control } from '../src/worker/ask.js';
-import { loadGists } from '../src/worker/measures.js';
+import { loadGists, loadMeasures } from '../src/worker/measures.js';
 import { MODELS, type ModelKey } from '../src/worker/models.js';
 import { GIST_VARIANTS, type JudgeVerdict } from '../src/worker/prompt.js';
 import { sha256 } from './aec-common.js';
@@ -112,6 +112,7 @@ import {
   seedSql,
   shownTexts,
   switchSql,
+  textWithdrawalSql,
 } from './seed-ask-2026.js';
 
 // ---------------------------------------------------------------------------------------------
@@ -2117,6 +2118,44 @@ void test('each deposit owns its rows and its keys: the text does not erase the 
     assert.doesNotMatch(deposit, /DELETE FROM meta;/);
     assert.match(deposit, /DELETE FROM meta WHERE key IN \('[a-z0-9_]+'(?:, '[a-z0-9_]+')+\);/);
   }
+});
+
+void test('the text is taken out of a base: its rows and its keys go — the sentences stay, and are still served', async () => {
+  const db = new LocalD1();
+  db.exec(seedSql(PRIVATE, SCHEMA, 'stopped'));
+  db.exec(switchSql('open') ?? '');
+  db.exec(gistsSql(ROWS, CORPUS, SCHEMA));
+  db.exec(switchSql('open', 'gists') ?? '');
+  assert.deepEqual([countOf(db, 'propositions'), countOf(db, 'gists')], [6, 4]);
+  const before = await loadGists(db, [ROWS[0]?.id ?? '', ROWS[1]?.id ?? ''], CORPUS);
+  assert.equal(before.gists.length, 2);
+
+  db.exec(textWithdrawalSql());
+  // Nothing of the book is left, nor anything that described it…
+  assert.deepEqual([countOf(db, 'propositions'), countOf(db, 'gists')], [0, 4]);
+  assert.deepEqual(metaOf(db), {
+    gists: 'open',
+    gists_corpus: CORPUS,
+    gists_count: '4',
+    gists_sha256: gistsFingerprint(ROWS),
+  });
+  // …a Worker that asked for a measure would read none, and say "local"…
+  const measures = await loadMeasures(db, [ROWS[0]?.id ?? '']);
+  assert.equal(measures.state.open, false);
+  assert.equal(measures.state.corpusVersion, null);
+  assert.deepEqual(measures.candidates, []);
+  // …and the sentences are served exactly as before.
+  assert.deepEqual(await loadGists(db, [ROWS[0]?.id ?? '', ROWS[1]?.id ?? ''], CORPUS), before);
+  // Done twice, it changes nothing; and the text can be deposited again on top.
+  db.exec(textWithdrawalSql());
+  assert.deepEqual([countOf(db, 'propositions'), countOf(db, 'gists')], [0, 4]);
+  db.exec(seedSql(PRIVATE, SCHEMA, 'stopped'));
+  assert.deepEqual([countOf(db, 'propositions'), countOf(db, 'gists')], [6, 4]);
+  assert.deepEqual(baseProblems(db, MANIFEST), []);
+  // What it deletes is named: its own keys, never the whole description, never the sentences.
+  const sql = textWithdrawalSql();
+  assert.doesNotMatch(sql, /DELETE FROM meta;|gists/);
+  assert.match(sql, /DELETE FROM meta WHERE key IN \('corpus_version', 'propositions', 'ask'\);/);
 });
 
 void test('nothing the tool prints holds a word of a measure, nor a sentence', async () => {

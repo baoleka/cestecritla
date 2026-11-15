@@ -1,7 +1,7 @@
 {
   "meta": {
     "title_fr": "Des mots expliqués — sigles et termes techniques",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "written_on": "2026-11-15",
     "written_by": "session",
     "checked_by": "independent-model",
@@ -609,7 +609,7 @@
       "term": "T2A",
       "aliases": ["tarification à l'activité"],
       "anyCase": true,
-      "plain": "La T2A, tarification à l'activité, finance une grande part du budget des hôpitaux selon le nombre et le type de soins qu'ils réalisent."
+      "plain": "La T2A, tarification à l'activité, finance une grande part du budget des hôpitaux selon le nombre et le type de soins qu'ils réalisent. On dit aussi tarification à l'acte."
     },
     {
       "id": "ondam",
