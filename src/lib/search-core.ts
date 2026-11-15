@@ -286,7 +286,7 @@ const FILLERS: ReadonlySet<string> = new Set(
    nouveaux nouvelles tout tous toute toutes rien chose choses truc trucs reponse reponses
    question questions avis an ans annee annees jour jours fin debut paye payes payee payees
    payer ecrit ecrire officiel officielle sorte sortes facon cote vie site sites combien
-   coute coutent couter coutera couterait humain humains finance financer`
+   coute coutent couter coutera couterait soutient soutiennent soutenu importe`
     .split(/\s+/)
     .filter((word) => word !== ''),
 );

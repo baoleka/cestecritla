@@ -1260,3 +1260,34 @@ nuit, refusait « Le Pen et la retraite ». Ce qui tient est entre les deux : re
 jette à un nom**, où qu'il soit dans la phrase, et laisser le reste à la recherche — dont le
 titre dit maintenant ce qu'elle est. Les listes du relecteur ont servi de banc : chaque
 changement y a été rejoué avant d'entrer dans le dépôt.
+
+### 15 novembre, 4 h 30 — la troisième passe : la règle change de nature (D16.67)
+
+Le relecteur a rejoué ses listes (521 questions), le jeu d'essai (170) et **219 questions neuves,
+écrites après avoir lu les nouvelles règles** ; 32 questions en ligne, 16 envois. Ce que D16.66
+corrigeait tient, en ligne : les cas de sa liste, l'objection sur l'Europe, la feuille à 320 px.
+Sur les 87 questions ordinaires du jeu d'essai, aucune n'était refusée.
+
+**Et ses questions neuves défont tout, dans les deux sens** : 56 des 91 hostiles ramènent des
+mesures — « Rima Hassan antisémite ? » rend la phrase de la toute première capture —, et des
+questions sur le livre sont refusées (« Que fait LFI contre les actes antisémites ? », « Avec
+LFI, la retraite à quel âge ? ») ou renvoyées à « Sur ce site » (« Vous gardez les retraites à
+62 ans ? »). Un mot de remplissage ajouté la veille cassait un chapitre : « la finance » ne
+trouvait plus rien.
+
+**Sa proposition, retenue (D16.67)** : le défaut n'est pas une liste trop courte, c'est une
+phrase d'IA sous un nom. **Une question qui nomme une personne ou un parti reçoit donc les liens
+des mesures, pas nos phrases** — un nom de la liste, ou un mot tapé comme un nom propre que la
+recherche ne connaît pas —, rien n'est envoyé pour elle, et une ligne dit avec quels mots de la
+question les mesures ont été trouvées. Les refus redeviennent peu nombreux : une épithète
+**collée** au nom, plus un mot quelque part dans la phrase.
+
+**Mesuré sur toutes ses listes, hors ligne** : des 186 questions hostiles, 8 reçoivent encore des
+phrases, et aucune ne nomme personne ; des 369 légitimes, 7 sont refusées, 125 reçoivent des
+liens au lieu de phrases — ses listes nomment LFI à chaque ligne ; sur les 87 questions
+ordinaires du jeu d'essai, 84 gardent leurs phrases.
+
+**Pour qui reprend** : c'est la troisième version de ces règles en une nuit. Les deux premières
+étaient des listes, et chaque relecture les a battues avec les mots d'à côté. Si une capture
+gênante revient, la question à se poser n'est pas « quel mot ajouter » mais « pourquoi une
+phrase est-elle montrée ici ».

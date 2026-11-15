@@ -27,10 +27,13 @@ import {
   MIN_SHARE_OF_BEST,
   asksAboutSite,
   asksOffTopic,
-  rowsFor,
+  foundWith,
+  measuresFor,
+  namesSomeone,
+  strangersIn,
   rowsOf,
 } from '../src/lib/chat-local.js';
-import { fillerOnly, lookAlikeOnly } from '../src/lib/search-core.js';
+import { fillerOnly, lookAlikeOnly, terms } from '../src/lib/search-core.js';
 import {
   MAX_CHAT_WORDS as WORDS_OF_THE_RULE,
   sentenceWords,
@@ -215,23 +218,127 @@ void test('a measure found only by a word that says nothing of a subject is no a
 void test('a recognised objection shows the measures its written answer rests on', () => {
   const all = (): boolean => true;
   const hits = [
-    { id: A, score: 10 },
-    { id: B, score: 9 },
+    { id: A, score: 10, by: terms('retraite') },
+    { id: B, score: 9, by: terms('retraite') },
   ];
-  // No objection recognised: what the search ranks best.
-  assert.deepEqual(rowsFor([], hits, all), [A, B]);
-  // An objection: its measures, in its order, three at most, each once — whatever was found.
-  assert.deepEqual(rowsFor([C, D, C, A, B], hits, all), [C, D, A]);
-  assert.deepEqual(rowsFor([C], [], all), [C]);
+  // No objection recognised: what the search ranks best, with our sentences.
+  assert.deepEqual(measuresFor('la retraite', [], hits, all), {
+    rows: [A, B],
+    sentences: true,
+    named: false,
+    with: null,
+  });
+  // An objection: its measures, in its order, three at most, each once — whatever was found,
+  // whoever its wording names: the answer is ours, and its measures were chosen with it.
+  const objection = 'La 6e République, c’est Mélenchon président à vie';
+  assert.deepEqual(measuresFor(objection, [C, D, C, A, B], hits, all), {
+    rows: [C, D, A],
+    sentences: true,
+    named: false,
+    with: null,
+  });
+  assert.deepEqual(measuresFor('x', [C], [], all).rows, [C]);
   // A measure this state of the book does not know is left out; none is known: the search.
+  assert.deepEqual(measuresFor('la retraite', [C, D], hits, (id) => id !== C).rows, [D]);
+  assert.deepEqual(measuresFor('la retraite', [C], hits, (id) => id !== C).rows, [A, B]);
+});
+
+void test('a question that names someone gets links, never our sentences — whatever it says of them', () => {
+  const all = (): boolean => true;
+  const school = [{ id: A, score: 10, by: terms('école') }];
+  // A politician or a party of the list: the measures the words find, as links, and a line.
+  for (const question of [
+    'Mélenchon et l’école',
+    'que propose LFI pour l’école ?',
+    'Le Pen et l’école',
+    'l’école selon le RN',
+    'Mélanchon école',
+  ]) {
+    const shown = measuresFor(question, [], school, all);
+    assert.deepEqual([shown.rows, shown.sentences, shown.named], [[A], false, true], question);
+    assert.deepEqual(shown.with, ['école'], question);
+    assert.ok(namesSomeone(question), question);
+  }
+  // A name that only labels a law is the law's: sentences, as for any question.
+  const reform = [{ id: A, score: 10, by: terms('réforme Macron retraites') }];
+  for (const question of [
+    'abroger la réforme Macron des retraites',
+    'la loi immigration de Darmanin',
+    'la circulaire Retailleau',
+  ]) {
+    assert.equal(namesSomeone(question), false, question);
+  }
+  assert.equal(measuresFor('la réforme Macron des retraites', [], reform, all).sentences, true);
+  // A word typed like a name that found nothing: a person nobody listed. Links, and no line
+  // about « a person or a party » — it may be a place.
+  const charge = [{ id: B, score: 10, by: terms('antisémite') }];
+  for (const question of [
+    'Rima Hassan antisémite ?',
+    'Obono antisémite',
+    'Et Delogu, antisémite ?',
+  ]) {
+    const shown = measuresFor(question, [], charge, all);
+    assert.deepEqual([shown.sentences, shown.named], [false, false], question);
+    assert.deepEqual(shown.with, ['antisémite'], question);
+  }
+  assert.deepEqual(strangersIn('Rima Hassan antisémite ?', charge), ['Rima', 'Hassan']);
+  // The capital of a first word is every sentence's: it counts only in a short question.
   assert.deepEqual(
-    rowsFor([C, D], hits, (id) => id !== C),
-    [D],
+    strangersIn('Zorglub veut quoi pour les actes antisémites du pays ?', charge),
+    [],
   );
+  // …and so is the capital of a sentence inside the question; an acronym is not a person.
   assert.deepEqual(
-    rowsFor([C], hits, (id) => id !== C),
-    [A, B],
+    strangersIn('Les actes antisémites, c’est écrit où ? Zorglub-moi ça.', charge),
+    [],
   );
+  assert.deepEqual(strangersIn('antisémite comme en URSS ?', charge), []);
+  assert.deepEqual(strangersIn('antisémite, dit Zorglub', charge), ['Zorglub']);
+  // A word the files give a synonym for found its measures by another word: not a stranger.
+  assert.deepEqual(
+    strangersIn('la Sécu antisémite', charge, (word) => word === 'Sécu'),
+    [],
+  );
+  // No capital, no list: the sentences are shown — with the words that found them.
+  const lower = measuresFor('obono antisémite', [], charge, all);
+  assert.deepEqual([lower.sentences, lower.with], [true, ['antisémite']]);
+  // Nothing found: nothing to say of it.
+  assert.deepEqual(measuresFor('Mélenchon zorglub', [], [], all), {
+    rows: [],
+    sentences: false,
+    named: false,
+    with: null,
+  });
+});
+
+void test('the words that found the measures are told only when other words found none of them', () => {
+  const hits = [
+    { id: A, score: 10, by: terms('retraite 60') },
+    { id: B, score: 9, by: terms('retraite') },
+    { id: C, score: 1, by: terms('zorglub') },
+  ];
+  // Every word led to what is shown: nothing to add.
+  assert.equal(foundWith('la retraite à 60 ans', hits, [A, B]), null);
+  assert.equal(foundWith('retraite', hits, [A, B]), null);
+  // One word found none of the rows shown: the ones that did are told, as typed, in order.
+  assert.deepEqual(foundWith('La Retraite à 60 ans et le zorglub', hits, [A, B]), [
+    'Retraite',
+    '60',
+  ]);
+  assert.deepEqual(foundWith('retraite, Retraite et zorglub', hits, [A, B]), ['retraite']);
+  assert.deepEqual(foundWith('zorglub et retraites', hits, [B]), ['retraites']);
+  // A filler word neither counts as left out, nor is told as having found anything.
+  const loose = [{ id: A, score: 10, by: terms('parle retraite') }];
+  assert.equal(foundWith('ça parle de retraite ?', loose, [A]), null);
+  assert.deepEqual(foundWith('ça parle de retraite, zorglub ?', loose, [A]), ['retraite']);
+  // A measure that came by a synonym: nothing sure can be said of which word found it.
+  const synonym = [
+    { id: A, score: 10, by: [], viaSynonym: true },
+    { id: B, score: 9, by: terms('retraite') },
+  ];
+  assert.equal(foundWith('zorglub retraite', synonym, [A, B]), null);
+  // Nothing shown: nothing told.
+  assert.equal(foundWith('zorglub', hits, []), null);
 });
 
 void test('an insult, a judgement asked about a person or a party: one sentence of ours, like a request for a vote', () => {
@@ -351,6 +458,87 @@ void test('a charge needs no verb to be refused — and a name, a position, a sw
   ]) {
     assert.ok(!asksOffTopic(question), question);
   }
+});
+
+void test('what a third review found, both ways: questions about the book refused, charges in other words let through', () => {
+  const verdict = (question: string): string =>
+    asksForVote(question)
+      ? 'vote'
+      : asksOffTopic(question)
+        ? 'refused'
+        : asksAboutSite(question)
+          ? 'site'
+          : 'search';
+  // Questions about the programme that a list of words refused — or handed to « Sur ce site ».
+  for (const question of [
+    'Que fait LFI contre les actes antisémites ?',
+    'Que propose Mélenchon contre les élus corrompus ?',
+    'LFI et la lutte contre les néo-nazis',
+    'LFI veut annuler la dette des dictateurs africains ?',
+    'LFI veut-elle l’amnistie des militants condamnés ?',
+    'Que propose LFI pour raccourcir les procès ?',
+    'Avec LFI, fini les loyers de fou ?',
+    'Avec LFI, la retraite à quel âge ?',
+    'Mélenchon est-il vraiment pour la retraite à 60 ans ?',
+    'LFI est-elle prête à sortir de l’euro ?',
+    'Les insoumis sont-ils écologistes ?',
+    'Mélenchon va passer la retraite à 60 ans ?',
+    'Pourquoi faire voter les étrangers ?',
+    'Pourquoi voter à 16 ans ?',
+    'Est-ce qu’on va voter pour la 6e République ?',
+    'Le vote LFI sur la loi immigration',
+    'Mélenchon va-t-il rétablir l’ISF supprimé par Macron ?',
+    'Mélenchon veut-il abroger la loi immigration de Darmanin ?',
+    'Mélenchon et Trump : les droits de douane',
+    'Vous gardez les retraites à 62 ans ?',
+    'On garde les APL ?',
+    'Vous vendez les aéroports ?',
+    'Où vont nos données de santé ?',
+    'Mes données seront-elles vendues aux GAFAM ?',
+    'Que prévoit le programme pour sauver ce site industriel ?',
+    'Un humain derrière les guichets ?',
+    'Un algorithme qui vérifie les chômeurs ?',
+    'Quelqu’un répond au téléphone à la CAF ?',
+  ]) {
+    assert.equal(verdict(question), 'search', question);
+  }
+  // What is still refused outright: an epithet NEXT to a name, what is nobody's programme.
+  for (const question of [
+    'Méluche dictateur',
+    'Mélencon antisémite',
+    'les mélenchonistes sont antisémites',
+    'la secte mélenchoniste',
+    'LFI violente',
+    'Mélenchon sexiste',
+    'Mélenchon malade ?',
+    'Mélenchon va mourir ?',
+    'Mélenchon fraude fiscale',
+    'Mélenchon a des comptes en Suisse ?',
+    'Le patrimoine de Mélenchon ?',
+    'LFI soutient les casseurs ?',
+    'Mélenchon hait les juifs ?',
+    'Mélenchon Staline',
+    'Programme de fous',
+  ]) {
+    assert.equal(verdict(question), 'refused', question);
+  }
+  // The site, asked in the second person.
+  for (const question of [
+    'Tu utilises quelle IA ?',
+    'C’est Claude qui répond ?',
+    'Quel est ton nom ?',
+    'Comment tu t’appelles ?',
+    'Qui t’a créé ?',
+    'Tu sers à quoi ?',
+    'Pourquoi tu ne réponds pas ?',
+    'C’est sourcé ?',
+    'Le site appartient à qui ?',
+  ]) {
+    assert.equal(verdict(question), 'site', question);
+  }
+  // « La finance » is a chapter of the book, not a small word (a regression of one evening).
+  assert.equal(fillerOnly(terms('la finance')), false);
+  assert.equal(fillerOnly(terms('un humain')), false);
 });
 
 void test('a question about the site itself is told from a question about the programme', () => {

@@ -19,6 +19,7 @@ import {
   type SynonymGroup,
   fillerOnly,
   lookAlikeOnly,
+  terms,
 } from '../lib/search-core.ts';
 import { firstWordsOf, isLocatorDisplay, quoted, type LocatorDisplay } from '../lib/first-words.ts';
 
@@ -78,6 +79,9 @@ export function findSections(engine: Engine, question: string, max: number): Sec
  */
 export function findRanked(engine: Engine, question: string): Ranked[] {
   const query = buildQuery(question, expand(question, engine.meta.synonyms));
+  // The words of the question as the index cuts them: what a measure was found BY is told
+  // apart from what a synonym of theirs found (src/lib/chat-local.ts, `foundWith`).
+  const asked = new Set(terms(question));
   return engine.index
     .search(query as Parameters<typeof engine.index.search>[0], searchOptions())
     .map((r) => ({
@@ -85,7 +89,14 @@ export function findRanked(engine: Engine, question: string): Ranked[] {
       score: r.score,
       near: lookAlikeOnly(r.terms, r.queryTerms),
       weak: fillerOnly(r.queryTerms),
+      by: r.queryTerms.filter((term) => asked.has(term)),
+      viaSynonym: r.queryTerms.some((term) => !asked.has(term)),
     }));
+}
+
+/** True when the files of the search give this word another word that means the same. */
+export function hasSynonym(engine: Engine, word: string): boolean {
+  return expand(word, engine.meta.synonyms) !== '';
 }
 
 /** An element holding text — never markup: what a visitor typed is not parsed as HTML. */

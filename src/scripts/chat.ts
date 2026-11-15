@@ -29,7 +29,7 @@
  */
 import { parseChatResponse, parseGistsResponse, type FollowUp } from '../lib/chat-contract.ts';
 import type { ChatPlain } from '../lib/chat-data.ts';
-import { chatRequestOf, cleanQuestion, gistsRequestOf, rowsFor } from '../lib/chat-local.ts';
+import { chatRequestOf, cleanQuestion, gistsRequestOf, measuresFor } from '../lib/chat-local.ts';
 import {
   newTurn,
   nextStep,
@@ -50,6 +50,7 @@ import {
   el,
   findRanked,
   firstWords,
+  hasSynonym,
   loadEngine,
   measureLink,
   type Engine,
@@ -77,6 +78,8 @@ interface Config {
     termsBadge: string;
     where: string;
     gistsWhere: string;
+    named: string;
+    foundWith: string;
     incipit: string;
     firstWords: string;
     noneTitle: string;
@@ -98,6 +101,9 @@ interface Config {
     example: string;
   };
 }
+
+/** A no-break space, as French sets it inside its quotation marks. */
+const NBSP = String.fromCodePoint(0xa0);
 
 /** How long the page waits for the read sentences, and for an explanation. */
 const GISTS_TIMEOUT_MS = 4_000;
@@ -365,6 +371,15 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
       case 'rows': {
         const read = measures.rows.some((row) => row.gist !== null);
         const part = block(s.gistsTitle, read ? s.gistsBadge : null, 'c-gists', s.method);
+        // A question that names someone gets links: the line says so, and how to get sentences.
+        if (turn.named === true) part.append(el('p', s.named, 'ref c-how'));
+        // What the result is about, when some words of the question found none of it: a search
+        // by words, said as such — never a word about what the book holds or does not.
+        const led = turn.foundWith ?? [];
+        if (led.length > 0) {
+          const list = led.map((word) => `«${NBSP}${word}${NBSP}»`).join(', ');
+          part.append(el('p', `${s.foundWith} ${list}.`, 'ref c-how'));
+        }
         for (const row of measures.rows) {
           const item = el('div', undefined, 'c-row');
           if (row.gist !== null) item.append(written(row.gist));
@@ -623,11 +638,23 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     const turn = turns[index];
     if (asked !== epoch || turn === undefined) return;
     // A recognised objection shows the measures its written answer rests on; any other
-    // question, what the search ranks best.
+    // question, what the search ranks best — as links only when it names someone.
     const supports =
       config.objections.find((entry) => entry.slug === turn.recognised.objection)?.supports ?? [];
-    const rows = loaded === null ? [] : rowsFor(supports, findRanked(loaded, question), page.knows);
-    turns[index] = { ...turn, rows };
+    const found =
+      loaded === null
+        ? null
+        : measuresFor(question, supports, findRanked(loaded, question), page.knows, (word) =>
+            hasSynonym(loaded, word),
+          );
+    const searched: Turn = {
+      ...turn,
+      rows: found?.rows ?? [],
+      named: found?.named ?? false,
+      foundWith: found?.with ?? null,
+    };
+    // Links only: the turn is whole as it is, and nothing is asked of the base.
+    turns[index] = found !== null && !found.sentences ? withGists(searched, null) : searched;
     update(index);
     advance(index);
   };

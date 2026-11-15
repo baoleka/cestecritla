@@ -609,11 +609,38 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       machine.slice(0, 160),
     );
     check('none of those sent anything', posted.gists.length === beforeCharges);
+    // A question that names someone is a search like any other — shown as LINKS: no sentence
+    // of ours stands under a name, whatever the question says of it (third review).
+    const beforeNamed = posted.gists.length;
     const position = await ask('Mélenchon est pour le RIC ?');
     check(
-      'a position asked of the candidate of the book is a question about the book',
+      'a position asked of the candidate of the book is searched, not refused',
       (await count(`${LAST} .c-gists`)) === 1 && !/Ici, on ne parle que/.test(position),
       position.slice(0, 160),
+    );
+    check(
+      '…and shown as links: no sentence, no label of an AI, one line that says why and how to get sentences',
+      (await count(`${LAST} .c-gists .c-row`)) >= 1 &&
+        (await count(`${LAST} .c-gists [data-generated-by]`)) === 0 &&
+        (await count(`${LAST} .c-gists .c-badge`)) === 0 &&
+        /Ta question nomme une personne ou un parti\s: voici des liens\. Pour des phrases, demande le sujet seul\./.test(
+          position,
+        ) &&
+        /Trouvées avec «\sRIC\s»\./.test(position),
+      position.slice(0, 300),
+    );
+    const stranger = await ask('Rima Hassan antisémite ?');
+    check(
+      'a name nobody listed, typed like a name: links too, with the word that found them — and no word about a person',
+      (await count(`${LAST} .c-gists .c-row`)) >= 1 &&
+        (await count(`${LAST} .c-gists [data-generated-by]`)) === 0 &&
+        /Trouvées avec «\santisémite\s»\./.test(stranger) &&
+        !/nomme une personne/.test(stranger),
+      stranger.slice(0, 300),
+    );
+    check(
+      'neither sent anything: a question that names someone asks nothing of the base',
+      posted.gists.length === beforeNamed,
     );
     // A recognised objection: the measures our written answer rests on, not what its words find.
     const sentSoFar = posted.gists.length;

@@ -16,7 +16,7 @@ import { readFileSync } from 'node:fs';
 import MiniSearch from 'minisearch';
 import { MAX_SELECTED } from '../src/lib/ask-contract.js';
 import { askedOf, type Asked } from '../src/lib/ask-local.js';
-import { rowsOf } from '../src/lib/chat-local.js';
+import { measuresFor, rowsOf, type Found } from '../src/lib/chat-local.js';
 import {
   INDEX_OPTIONS,
   buildQuery,
@@ -25,6 +25,7 @@ import {
   groupBySection,
   lookAlikeOnly,
   searchOptions,
+  terms,
   type SearchDoc,
   type SynonymGroup,
 } from '../src/lib/search-core.js';
@@ -33,6 +34,11 @@ import type { Manifest } from './aec26-types.js';
 export interface PageAsk {
   /** The measures the sheet shows, best first. Empty: nothing is sent, « rien trouvé ». */
   rows: string[];
+  /**
+   * How the sheet shows them when no objection of ours is recognised: with our sentences, or
+   * as links — a question that names someone —, and the words that found them.
+   */
+  shown: Found;
   /** What the bench sends for a written answer. */
   asked: Asked;
   /** What the page shows by itself when no model answers: one measure per best section. */
@@ -55,6 +61,7 @@ export function loadPage(): (question: string) => PageAsk {
   );
   return (question) => {
     const query = buildQuery(question, expand(question, groups));
+    const typed = new Set(terms(question));
     const hits = index
       .search(query as Parameters<typeof index.search>[0], searchOptions())
       .map((r) => ({
@@ -63,10 +70,19 @@ export function loadPage(): (question: string) => PageAsk {
         terms: r.terms,
         near: lookAlikeOnly(r.terms, r.queryTerms),
         weak: fillerOnly(r.queryTerms),
+        by: r.queryTerms.filter((term) => typed.has(term)),
+        viaSynonym: r.queryTerms.some((term) => !typed.has(term)),
       }));
     const known = new Set(order);
     return {
       rows: rowsOf(hits, (id) => known.has(id)),
+      shown: measuresFor(
+        question,
+        [],
+        hits,
+        (id) => known.has(id),
+        (word) => expand(word, groups) !== '',
+      ),
       asked: askedOf(hits, order),
       own: groupBySection(hits)
         .slice(0, MAX_SELECTED)

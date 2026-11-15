@@ -62,6 +62,13 @@ export interface Turn {
   /** The measures the search found, best first; `null` while it searches. */
   rows: readonly string[] | null;
   /**
+   * True when the question names a politician or a party: its measures are shown as links,
+   * no sentence of ours is asked for, and one line says so (src/lib/chat-local.ts, `measuresFor`).
+   */
+  named?: boolean;
+  /** The words of the question that found the measures shown, when others found none of them. */
+  foundWith?: readonly string[] | null;
+  /**
    * `/api/gists`: `undefined` not asked, `'pending'` asked, `null` no answer the page can use,
    * or the answer.
    */
