@@ -1375,7 +1375,7 @@ async function runEngine(
     check(
       '« Revoir » plays a passage she has made, on the large copy — and the button is « Passer » meanwhile',
       midway?.phase?.startsWith('01-') === true &&
-        text(await again.nth(0).textContent()) === 'Passer' &&
+        text(await again.nth(0).textContent()) === says('turtle.skip') &&
         (await moving(view)) > 0 &&
         isLook(await her(view), lookOf({ ...now, passage: true })),
       JSON.stringify(midway),
@@ -1433,7 +1433,7 @@ async function runEngine(
     check(
       'another « Revoir » while one plays: the first gives way, the second plays',
       text(await again.nth(0).textContent()) === 'Revoir' &&
-        text(await again.nth(1).textContent()) === 'Passer' &&
+        text(await again.nth(1).textContent()) === says('turtle.skip') &&
         swapped?.phase?.startsWith('12-') === true,
       JSON.stringify(swapped),
     );
@@ -2035,7 +2035,7 @@ async function runEngine(
       ).length;
       check(
         'a key held on « Revoir » presses it once: the passage plays, and her form is not swapped back and forth',
-        text(await again.textContent()) === 'Passer' && swaps <= 1,
+        text(await again.textContent()) === says('turtle.skip') && swaps <= 1,
         `${text(await again.textContent())}, ${String(swaps)} swap(s)`,
       );
       await view.waitForTimeout(evolutionLasts('12') + LATE_MS);
@@ -3441,7 +3441,7 @@ async function runEngine(
       );
       // « Passer »: the form she takes, at once, and its sentence.
       await page.waitForTimeout(500);
-      await page.getByRole('button', { name: 'Passer' }).click();
+      await page.getByRole('button', { name: says('turtle.skip') }).click();
       const two = ending(data, kit, deepAfter);
       const skipped = await her(page);
       const afterSkip = await staged(page);

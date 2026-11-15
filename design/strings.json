@@ -40,6 +40,8 @@
       "D17.30",
       "D17.31",
       "D17.32",
+      "D17.34",
+      "D17.35",
       "D17.5",
       "D2.4",
       "D3.10",
@@ -131,7 +133,8 @@
       "v0.13.0 (15/11/2026, D17.23, décision de l'éditeur) : les textes de la refonte de la tortue entrent dans le kit avant leurs écrans, sous des clés neuves — aucune chaîne de la tortue en ligne n'est touchée, et aucune page ne les rend tant que la génération 2 n'est pas servie (data/mascot.json). Le but, en mots et jamais en nombres : turtle.goal.start, .parts, .chapters, .words, .done, .next et .next_again — une seule à la fois, et « À la prochaine manche, elle change. » seulement quand c'est vrai (src/lib/game-goal.ts). Les quatre passages : turtle.passage.1 à .4 ; elle s'appelle « ta tortue » sous toutes ses formes (D17.2). Sa couleur : turtle.tint.choose, .title, .lead, .none et turtle.tint.1 à .6 — les six choix portent le nom de la couleur, pas celui de la partie : rien à l'écran ne dit quelle partie on préfère. Petits mots : turtle.skip, turtle.sheet.link, .path, .replay. Ce qui est gardé : privacy.game.field.tint (« la couleur que tu lui as choisie », le seul champ de plus, D17.3) et turtle.keep.tint, la phrase qui s'ajoute à la carte « Garder ta tortue ». La porte de lancement lit privacy.game.field.tint à part (privacy_mascot) : elle ne bloque un hôte que le jour où il sert la génération 2.",
       "v0.13.0, suite (15/11/2026, D17.25) : turtle.sheet.on_phone_tint — « Sa couleur aussi. » — s'ajoute, dans sa fiche, à la phrase en ligne turtle.sheet.on_phone, qui n'est pas touchée : la phrase d'un seul tenant validée d'abord comptait seize mots, un de trop pour la règle du kit. turtle.figure.surf, .wings et .sky sont ce qu'un lecteur d'écran dit quand on la touche, selon sa forme ; pour la tortue du départ c'est turtle.raises_head, déjà en ligne. Elles ne sont jamais affichées.",
       "v0.13.0, suite (15/11/2026, D17.27, décision de l'éditeur) : accuracy.unverified.06 — « Les animations du personnage du jeu gênent-elles quelqu'un, sur un vrai téléphone ? » — s'ajoute aux questions que de vraies personnes n'ont pas encore vérifiées : le mouvement de la génération 2 n'a été mesuré qu'en labo. Elle n'est rendue que là où la génération 2 est servie (data/mascot.json) ; les cinq autres ne sont pas touchées.",
-      "v0.13.0, suite (15/11/2026, D17.30 à D17.32, décisions de l'éditeur après les relectures indépendantes du jeu de la génération 2) : turtle.keep.not_kept.tint — « Tes réponses ne sont pas gardées. Rien n'est envoyé. » — et privacy.never.05.tint — « Tes réponses dans le jeu. » — remplacent, là où la génération 2 est servie, « Tes choix ne sont pas gardés. » et « Tes choix dans le jeu. », fausses à la lettre dès qu'une couleur est choisie : la couleur est un choix, et elle est gardée ; les deux phrases de la tortue en ligne ne sont pas touchées. turtle.tint.lead — « Une couleur par partie du livre. » — est retirée : elle reliait une couleur à une partie du livre, ce que les noms de couleur voulaient éviter (D17.23). Correction de l'entrée précédente : turtle.figure.surf, .wings et .sky ne sont pas « jamais affichées » — elles s'affichent sous elle dans sa fiche quand on la touche, comme turtle.raises_head en ligne, et un lecteur d'écran les entend ; l'éditeur les garde affichées (D17.32)."
+      "v0.13.0, suite (15/11/2026, D17.30 à D17.32, décisions de l'éditeur après les relectures indépendantes du jeu de la génération 2) : turtle.keep.not_kept.tint — « Tes réponses ne sont pas gardées. Rien n'est envoyé. » — et privacy.never.05.tint — « Tes réponses dans le jeu. » — remplacent, là où la génération 2 est servie, « Tes choix ne sont pas gardés. » et « Tes choix dans le jeu. », fausses à la lettre dès qu'une couleur est choisie : la couleur est un choix, et elle est gardée ; les deux phrases de la tortue en ligne ne sont pas touchées. turtle.tint.lead — « Une couleur par partie du livre. » — est retirée : elle reliait une couleur à une partie du livre, ce que les noms de couleur voulaient éviter (D17.23). Correction de l'entrée précédente : turtle.figure.surf, .wings et .sky ne sont pas « jamais affichées » — elles s'affichent sous elle dans sa fiche quand on la touche, comme turtle.raises_head en ligne, et un lecteur d'écran les entend ; l'éditeur les garde affichées (D17.32).",
+      "v0.13.0, suite (15/11/2026, D17.34 et D17.35, décisions de l'éditeur après la session des personas sur l'aperçu) : turtle.goal.start devient « Ta tortue change quand tu trouves des mots. » — « elle » arrivait avant qu'on sache que c'était la tortue (quatre personas sur sept) ; turtle.skip devient « Passer l'animation » — « Passer » ne disait pas ce qu'il passe (quatre sur sept). Les deux ne sont rendues que par la génération 2."
     ],
     "status_fr": "v0.8 : les familles chat.*, game.* et turtle.* existent dans le kit avant leurs écrans ; elles sont relues à la construction de chacun (lots H, I, L, M), puis par l'éditeur sur l'aperçu. Les chaînes chat.* ne sont rendues que si data/2026/ask.json dit « chat » (D16.4, D16.51) ; easter.strawberry_milk, confirmée par l'éditeur le 13 novembre, a été retirée par lui le 14 après la session des personas (D16.37)."
   },
@@ -708,7 +711,7 @@
   "turtle.goal.next": "À la prochaine manche, elle change.",
   "turtle.goal.next_again": "À la prochaine manche, elle change encore.",
   "turtle.goal.parts": "Elle changera encore quand tu auras trouvé un mot dans chaque partie.",
-  "turtle.goal.start": "Elle change quand tu trouves des mots.",
+  "turtle.goal.start": "Ta tortue change quand tu trouves des mots.",
   "turtle.goal.words": "Elle changera une dernière fois quand tu auras trouvé tous les mots.",
   "turtle.hint.said": "Elle regarde du côté des parties {parts}.",
   "turtle.keep.cta": "Garder ta tortue",
@@ -739,7 +742,7 @@
   "turtle.sheet.privacy": "Tout le détail, page Confidentialité",
   "turtle.sheet.replay": "Revoir",
   "turtle.sheet.tab_only": "Rien n'est gardé une fois cette page fermée.",
-  "turtle.skip": "Passer",
+  "turtle.skip": "Passer l'animation",
   "turtle.tint.1": "Bleu ciel",
   "turtle.tint.2": "Orange",
   "turtle.tint.3": "Vert",

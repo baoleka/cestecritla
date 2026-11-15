@@ -28,6 +28,7 @@ import {
   DEPLOY_GUARD,
   HOLDING_PAGES,
   MASCOT2_MARKS,
+  MASCOT_PATH,
   HOLDING_REDIRECT_PREFIXES,
   SILENCE_APPROACH_MS,
   STATIC_CONFIG,
@@ -62,6 +63,7 @@ import {
   type DistContent,
 } from './build-mode.js';
 import { parseJsonc, stripJsoncComments } from './jsonc.js';
+import { generationFor } from '../src/lib/mascot-mode.js';
 
 /** The editor has dated the citation policy, and this is a real deployment. */
 const VALIDATED: DeployContext = {
@@ -1061,8 +1063,12 @@ void test('a build of the second mascot goes only where data/mascot.json gives i
   assert.deepEqual(said('[2]'), [1, 1]);
   assert.equal(readMascot(join(dir, 'missing.json'), 'preview'), 1);
   rmSync(dir, { recursive: true });
-  // The committed file: production serves the turtle validated on 13 November 2026.
-  assert.equal(readMascot(undefined, 'apex'), 1);
+  // The committed file, read for production: the same answer as the rule gives it — the second
+  // generation since the editor said so (D17.36; scripts/mascot-mode.test.ts holds his word).
+  assert.equal(
+    readMascot(undefined, 'apex'),
+    generationFor(JSON.parse(readFileSync(MASCOT_PATH, 'utf8')) as unknown, 'apex'),
+  );
 
   // The directory, read: the two marks of a second-generation build, and nothing else.
   const built = mkdtempSync(join(tmpdir(), 'cel-dist-'));
