@@ -1,0 +1,319 @@
+/*
+ * The mascot, second generation (D17.1 to D17.15; docs/discovery/PLAN-TORTUE.md) — how the one
+ * drawing of design/mascot/v2/mascot.svg becomes five states: a turtle, the same turtle surfing,
+ * a flamingo standing, the flamingo in flight, and the flamingo flying under a turtle of stars.
+ * She is « ta tortue » in all of them (D17.2).
+ *
+ * IN PREPARATION: nothing imports this file but the validation sheet. The turtle that is online
+ * is src/styles/turtle.css, and is not touched.
+ *
+ * The file of the drawing carries geometry and class names only. Everything seen comes from
+ * here, by roles of colour: the five roles of the turtle (line, shell, arc, eye, accent) and the
+ * colour the player chose for the flamingo (`--m-tint`, D17.3 — pale until chosen). The evening
+ * sky is the colour of her shell, its stars the colour of her line: no role of its own.
+ * Flat: no gradient, no shadow, no filter.
+ *
+ * What a script writes on her, and nothing else: data-state (0 to 4), data-pose, data-tint
+ * (0 to 7), data-sign (0 to 2), data-passage, and how far each arc has grown (two attributes on
+ * each arc — nothing here may set a dash on an arc, or it would win over them).
+ *
+ * Every part that moves has ONE transform, set whole from custom properties: the state says
+ * where a part is, the pose says how it is turned.
+ */
+.mascot {
+  display: block;
+  inline-size: var(--mascot-size, 6rem);
+  block-size: auto;
+  aspect-ratio: 96 / 60;
+  overflow: visible;
+  --m-tint: var(--turtle-eye);
+}
+/* The colour of a part of the book, on the flamingo and on nothing else (D17.12).
+   0: none chosen yet, 7: « sans couleur » chosen on purpose — both leave her pale. */
+.mascot[data-tint='1'] {
+  --m-tint: var(--mascot-tint-1);
+}
+.mascot[data-tint='2'] {
+  --m-tint: var(--mascot-tint-2);
+}
+.mascot[data-tint='3'] {
+  --m-tint: var(--mascot-tint-3);
+}
+.mascot[data-tint='4'] {
+  --m-tint: var(--mascot-tint-4);
+}
+.mascot[data-tint='5'] {
+  --m-tint: var(--mascot-tint-5);
+}
+.mascot[data-tint='6'] {
+  --m-tint: var(--mascot-tint-6);
+}
+
+/* --- colour, by role ----------------------------------------------------------------------- */
+.mascot .m-line {
+  fill: var(--turtle-line);
+}
+.mascot .m-shell {
+  fill: var(--turtle-shell);
+  stroke: var(--turtle-line);
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+}
+/* The wave: a flat body in the colour of her shell, and one line along its back, its curl and
+   its face — never along its foot: it lies on nothing. */
+.mascot .m-swell {
+  fill: var(--turtle-shell);
+}
+.mascot .m-crest {
+  fill: none;
+  stroke: var(--turtle-line);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* Continuous arcs, never dashes or cells: an arc shows what has grown of it, and nothing of
+   what has not. They are on her shell, then on her wing: the same three, the same steps. */
+.mascot .m-arc {
+  fill: none;
+  stroke: var(--turtle-arc);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+.mascot .m-wing .m-arc {
+  stroke-width: 1.6;
+}
+.mascot .m-arc[stroke-dasharray^='0 '] {
+  visibility: hidden;
+}
+.mascot .m-eye,
+.mascot .m-plank {
+  fill: var(--turtle-eye);
+}
+.mascot .m-plank {
+  stroke: var(--turtle-line);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+/* The flamingo: body, wings and head in the chosen colour, outlined like the shell — a pale
+   body on a pale page would have no edge at all. */
+.mascot .m-body,
+.mascot .m-feather,
+.mascot .m-far,
+.mascot .m-crown {
+  fill: var(--m-tint);
+  stroke: var(--turtle-line);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+/* Her neck is one line, drawn twice: wide in the colour of the line, narrow in her own. One
+   line, so that it can be written (docs/discovery/PLAN-TORTUE.md §5). */
+.mascot .m-neck {
+  fill: none;
+  stroke: var(--turtle-line);
+  stroke-width: 5.4;
+  stroke-linecap: round;
+}
+.mascot .m-neck-in {
+  fill: none;
+  stroke: var(--m-tint);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+.mascot .m-beak {
+  fill: var(--turtle-eye);
+  stroke: var(--turtle-line);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+}
+.mascot .m-leg,
+.mascot .m-leg-fold,
+.mascot .m-legs-fly {
+  fill: none;
+  stroke: var(--turtle-line);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* The water is a line: it measures nothing, and is never a bar (D17.12). */
+.mascot .m-water,
+.mascot .m-ring {
+  fill: none;
+  stroke: var(--turtle-arc);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+/* Her reflection and the evening sky: flat, in the colour of her shell. */
+.mascot .m-mirror,
+.mascot .m-dusk {
+  fill: var(--turtle-shell);
+}
+.mascot .m-star {
+  fill: var(--turtle-line);
+}
+.mascot .m-lines {
+  fill: none;
+  stroke: var(--turtle-line);
+  stroke-width: 0.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* The one accent, and only at a passage (D17.6): a drop of foam, a ring on the water, a star. */
+.mascot .m-dot {
+  fill: var(--turtle-accent);
+}
+
+/* --- what is there, state by state ---------------------------------------------------------- */
+.mascot .m-sky,
+.mascot .m-swell,
+.mascot .m-crest,
+.mascot .m-ring,
+.mascot .m-water,
+.mascot .m-mirror,
+.mascot .m-board,
+.mascot .m-bird,
+.mascot .m-dot,
+.mascot .m-far,
+.mascot .m-legs-fly,
+.mascot .m-neck-f {
+  opacity: 0;
+}
+.mascot[data-state='1'] .m-swell,
+.mascot[data-state='1'] .m-crest,
+.mascot[data-state='1'] .m-board,
+.mascot[data-state='2'] .m-bird,
+.mascot[data-state='2'] .m-ring,
+.mascot[data-state='3'] .m-bird,
+.mascot[data-state='3'] .m-water,
+.mascot[data-state='3'] .m-mirror,
+.mascot[data-state='4'] .m-bird,
+.mascot[data-state='4'] .m-water,
+.mascot[data-state='4'] .m-mirror,
+.mascot[data-state='4'] .m-sky {
+  opacity: 1;
+}
+.mascot[data-state='2'] .m-turtle,
+.mascot[data-state='3'] .m-turtle,
+.mascot[data-state='4'] .m-turtle {
+  opacity: 0;
+}
+/* In flight: the long neck, the legs behind, the second wing. */
+.mascot[data-state='3'] .m-far,
+.mascot[data-state='3'] .m-legs-fly,
+.mascot[data-state='3'] .m-neck-f,
+.mascot[data-state='4'] .m-far,
+.mascot[data-state='4'] .m-legs-fly,
+.mascot[data-state='4'] .m-neck-f {
+  opacity: 1;
+}
+.mascot[data-state='3'] .m-leg,
+.mascot[data-state='3'] .m-leg-fold,
+.mascot[data-state='3'] .m-neck-s,
+.mascot[data-state='4'] .m-leg,
+.mascot[data-state='4'] .m-leg-fold,
+.mascot[data-state='4'] .m-neck-s {
+  opacity: 0;
+}
+
+/* --- the turtle: on the ground, then on her board ------------------------------------------- */
+.mascot .m-turtle {
+  transform-box: view-box;
+  transform-origin: 46px 56px;
+  transform: translate(var(--m-tx, 0px), var(--m-ty, 0px)) rotate(var(--m-tr, 0deg))
+    scale(var(--m-ts, 0.84));
+}
+.mascot[data-state='1'] {
+  --m-tx: 20px;
+  --m-ty: -12.4px;
+  --m-tr: 7.4deg;
+  --m-ts: 0.58;
+}
+.mascot .m-head {
+  transform-box: view-box;
+  transform-origin: 71.75px 39.75px;
+  transform: rotate(var(--m-turn, 0deg));
+}
+/* She raises her head when touched; she looks down at the tiles when asked for a hint. */
+.mascot[data-pose='up'] {
+  --m-turn: -16deg;
+}
+.mascot[data-pose='look'] {
+  --m-turn: 13deg;
+}
+
+/* --- the flamingo: standing, then in flight -------------------------------------------------- */
+.mascot .m-bird {
+  transform-box: view-box;
+  transform-origin: 46px 30px;
+  transform: translate(var(--m-bx, 0px), var(--m-by, 0px)) scale(var(--m-bs, 1));
+}
+.mascot .m-body {
+  transform-box: view-box;
+  transform-origin: 44px 31px;
+  transform: rotate(var(--m-lean, 0deg));
+}
+/* Her wing is the shell she had: the same dome, the same three arcs. Folded along her flank;
+   in flight it turns about the shoulder and lengthens. */
+.mascot .m-wing,
+.mascot .m-far {
+  transform-box: view-box;
+  transform-origin: 55.2px 32px;
+  transform: rotate(var(--m-lift, -12deg)) scale(var(--m-span, 1), var(--m-depth, 1));
+}
+.mascot .m-far {
+  transform: rotate(var(--m-lift-far, 72deg)) scale(1.15, 1.1);
+}
+.mascot .m-face {
+  transform-box: view-box;
+  transform-origin: 59.5px 9.5px;
+  transform: translate(var(--m-fx, 0px), var(--m-fy, 0px)) rotate(var(--m-nod, 0deg));
+}
+.mascot[data-state='3'],
+.mascot[data-state='4'] {
+  --m-lean: 9deg;
+  --m-by: 2px;
+  --m-lift: 48deg;
+  --m-span: 1.35;
+  --m-depth: 1.25;
+  --m-fx: 19.1px;
+  --m-fy: 15.8px;
+}
+/* Under her constellation she flies lower, and a little further. */
+.mascot[data-state='4'] {
+  --m-bx: 10px;
+  --m-by: 9px;
+  --m-bs: 0.85;
+}
+.mascot[data-state='2'][data-pose='look'],
+.mascot[data-state='3'][data-pose='look'],
+.mascot[data-state='4'][data-pose='look'] {
+  --m-nod: 22deg;
+}
+/* Signs that a change is near — attitudes, never a quantity (D17.5): her wings come ajar; she
+   looks up; a first star. */
+.mascot[data-state='2'][data-sign='1'] {
+  --m-lift: 8deg;
+}
+.mascot[data-state='3'][data-sign='1'],
+.mascot[data-state='3'][data-sign='2'] {
+  --m-nod: -14deg;
+}
+.mascot[data-state='3'][data-sign='2'] .m-sky {
+  opacity: 1;
+}
+.mascot[data-state='3'][data-sign='2'] .m-sky > :not(:nth-child(6)) {
+  opacity: 0;
+}
+/* A passage: the accent, on one detail of the scene, until the next gesture — drops of foam,
+   the ring on the water, her reflection, a star. */
+.mascot[data-passage][data-state='1'] .m-dot {
+  opacity: 1;
+}
+.mascot[data-passage][data-state='2'] .m-ring {
+  stroke: var(--turtle-accent);
+}
+.mascot[data-passage][data-state='3'] .m-mirror {
+  fill: var(--turtle-accent);
+}
+.mascot[data-passage][data-state='4'] .m-star:last-child {
+  fill: var(--turtle-accent);
+}

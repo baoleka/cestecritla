@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="mascot" data-state="0" data-pose="rest" data-tint="0" data-sign="0" focusable="false" aria-hidden="true">
+  <g class="m-sky">
+    <path class="m-dusk" d="M8 9C12 2 30 1 48 2.5C64 3.5 84 5 88 12C91 19 80 26 64 27C48 28 30 31 18 27.5C8 24.5 4 16 8 9Z"/>
+    <path class="m-lines" pathLength="1" d="M9 18.5 12.5 17 16 11.5 23.5 8 31 11.5 34.5 17 40.5 14.5M34.5 17H12.5M17.5 22.6 17 17M30.5 22.6 30 17M17 16.9 19.8 13 23.5 11.4 27.2 13 30 16.9"/>
+    <circle class="m-star" cx="9" cy="18.5" r="1.2"/>
+    <circle class="m-star" cx="12.5" cy="17" r="1.4"/>
+    <circle class="m-star" cx="16" cy="11.5" r="1.3"/>
+    <circle class="m-star" cx="23.5" cy="8" r="1.6"/>
+    <circle class="m-star" cx="31" cy="11.5" r="1.3"/>
+    <circle class="m-star" cx="34.5" cy="17" r="1.4"/>
+    <circle class="m-star" cx="30.5" cy="22.6" r="1.2"/>
+    <circle class="m-star" cx="17.5" cy="22.6" r="1.2"/>
+    <circle class="m-star" cx="40.5" cy="14.5" r="1.6"/>
+  </g>
+  <g class="m-sea">
+    <path class="m-swell" d="M3 56C7 40 10 18 23 13C32.5 9.6 40 16.5 37.4 24.4C36 28.4 31 28.8 29.6 25.6C32 22.8 30 19.6 26.4 20C18.6 21 17 36 30 44C45 53 72 54 94 53.5C70 58.5 30 59.5 3 56Z"/>
+    <path class="m-crest" pathLength="1" d="M3 56C7 40 10 18 23 13C32.5 9.6 40 16.5 37.4 24.4C36 28.4 31 28.8 29.6 25.6C32 22.8 30 19.6 26.4 20C18.6 21 17 36 30 44C45 53 72 54 94 53.5"/>
+    <path class="m-ring" d="M38 56.2a8 1.7 0 1 0 16 0a8 1.7 0 1 0-16 0"/>
+    <path class="m-water" d="M5 54.6C14 53 20 56.2 30 54.7S48 53.2 60 54.8S80 56 91 54.2"/>
+    <path class="m-mirror" d="M40 57.7C47 56.7 57 56.7 64 57.7C57 58.7 47 58.7 40 57.7Z"/>
+  </g>
+  <g class="m-turtle">
+    <path class="m-tail m-line" d="M14.5 37.2 8 33.4a1.8 1.8 0 0 0-1.9 3l7 5.6Z"/>
+    <path class="m-shell" d="M15 37a28 25 0 0 1 56 0Z"/>
+    <path class="m-arc m-arc-1" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M22 37.2a21 19 0 0 1 42 0"/>
+    <path class="m-arc m-arc-2" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M29 37.2a14 12.6 0 0 1 28 0"/>
+    <path class="m-arc m-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M36 37.2a7 6.2 0 0 1 14 0"/>
+    <rect class="m-belly m-line" x="12" y="35.5" width="64" height="8.5" rx="4.25"/>
+    <path class="m-foot m-line" d="M20 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <path class="m-foot m-line" d="M53 42h12.5l-1.8 11.6a2.6 2.6 0 0 1-2.6 2.2h-3.7a2.6 2.6 0 0 1-2.6-2.2Z"/>
+    <g class="m-head">
+      <path class="m-skull m-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
+      <circle class="m-eye" cx="83.25" cy="28.15" r="1.4"/>
+    </g>
+  </g>
+  <g class="m-board">
+    <path class="m-plank" d="M40.5 40.4C55 41 74 43.6 90.5 47.6C73 51.4 55 49.4 41 44.2C38.6 43.2 38.4 40.6 40.5 40.4Z"/>
+    <path class="m-fin m-line" d="M46.5 46.2l-1.6 4.8 6.2-3Z"/>
+  </g>
+  <g class="m-bird">
+    <path class="m-far" d="M55.2 32C54 24 44.5 20.6 37 24.4C33.6 26.2 31.4 29.6 30.2 33.4C37 34.4 46.4 34.4 55.2 32Z"/>
+    <path class="m-legs-fly" d="M35 31.6C28 32.8 20 33.6 11 33.4"/>
+    <path class="m-leg-fold" d="M42 38.4 38.2 46.4 45.2 47.8"/>
+    <path class="m-leg" d="M46 38.4V55.6h4.8"/>
+    <path class="m-body" d="M26.5 36.5C30 29 37 22 47 22.5C54.5 23 59 27.5 57.5 32C56 37 49 39.6 41 39.2C35 39 30 38.5 26.5 36.5Z"/>
+    <path class="m-neck m-neck-s" pathLength="1" d="M54.5 28C62.5 25.5 63 19 57.5 16.5C52.5 14.2 54 8.2 60 8.6"/>
+    <path class="m-neck-in m-neck-s" pathLength="1" d="M54.5 28C62.5 25.5 63 19 57.5 16.5C52.5 14.2 54 8.2 60 8.6"/>
+    <path class="m-neck m-neck-f" pathLength="1" d="M54.5 28.5C62 28 70 26.2 78.5 25"/>
+    <path class="m-neck-in m-neck-f" pathLength="1" d="M54.5 28.5C62 28 70 26.2 78.5 25"/>
+    <g class="m-wing">
+      <path class="m-feather" d="M55.2 32C54 24 44.5 20.6 37 24.4C33.6 26.2 31.4 29.6 30.2 33.4C37 34.4 46.4 34.4 55.2 32Z"/>
+      <path class="m-arc m-arc-1" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M34.4 31.6C37 26.4 45.4 23.4 52.4 30.2"/>
+      <path class="m-arc m-arc-2" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M37.6 32C40 28 46 26.2 50.2 30.9"/>
+      <path class="m-arc m-arc-3" pathLength="6" stroke-dasharray="0 6" stroke-dashoffset="-3" d="M41.8 32.2C43.4 30.2 46.2 29.6 48 31.6"/>
+    </g>
+    <g class="m-face">
+      <path class="m-beak" d="M64.3 7.2C67.6 7.4 70.2 9.6 70 12.4C69.8 14.4 69.2 15.4 68.6 15.6C68.4 13.6 67.2 11.9 64.6 11.2Z"/>
+      <path class="m-tip m-line" d="M70 12.2C69.8 14.4 69.2 15.4 68.6 15.6C68.5 14.4 68.1 13.3 67.3 12.4Z"/>
+      <circle class="m-crown" cx="61.5" cy="8.6" r="3.4"/>
+      <circle class="m-pupil m-line" cx="62.5" cy="7.9" r="0.8"/>
+    </g>
+  </g>
+  <g class="m-dots">
+    <circle class="m-dot m-dot-1" cx="42" cy="12" r="1.5"/>
+    <circle class="m-dot m-dot-2" cx="46" cy="18.5" r="1.2"/>
+    <circle class="m-dot m-dot-3" cx="44" cy="25" r="1"/>
+  </g>
+</svg>

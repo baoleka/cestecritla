@@ -550,3 +550,68 @@ l'aperçu (autre adresse, autre stockage) : il est tenu par des tests, pas par u
   (§11.1), dont un qui existait déjà : rien n'empêche une build de l'aperçu de partir sur la
   production.
 - Aucun fichier de l'app n'est touché : la production et l'aperçu servent ce qu'ils servaient.
+
+### Lot A1, au 15 novembre 2026 (soir) — la planche, en images fixes
+
+- **Le dessin existe** : `design/mascot/v2/mascot.svg`, un seul fichier écrit à la main pour les
+  cinq états, géométrie et noms de classe seulement — 48 formes. `src/styles/mascot2.css` en
+  fait les états, les poses, les signes et l'accent de passage ; `src/lib/mascot2.ts` dit ce
+  qu'un script a le droit d'écrire sur elle (état, pose, couleur, signe, passage, ses arcs) et
+  rien d'autre. **L'état 0 est la tortue en ligne, au chiffre près** : ses dix formes sont
+  reprises telles quelles (une porte le tient) ; seul le point d'accent de sa carapace n'y est
+  plus (D17.6).
+- **Ce que le dessin a tranché, à valider sur la planche** :
+  - *l'aile du flamant porte ses trois arcs* — les mêmes traits continus, les mêmes six pas ; les
+    arcs existent donc deux fois dans le fichier (carapace, aile) et se lisent toujours dans le
+    même champ ;
+  - *la constellation est faite d'étoiles et de traits fins*, pas du contour de la tortue : en
+    contour plein dans un disque sombre elle se lisait comme un logo — or un persona avait déjà
+    dit « la tortue de la campagne, passée en logo ». **Écart à la lettre de D17.15** (« ses
+    trois arcs dans la carapace ») : la carapace du ciel a une seule ligne intérieure, ses trois
+    arcs restent sur son aile ;
+  - *le ciel du soir prend la couleur de sa carapace, les étoiles celle de son trait* : aucun rôle
+    de couleur neuf pour l'état 4, et le flamant peut passer devant le ciel sans y disparaître ;
+  - *la vague est un aplat et une ligne* — la ligne suit son dos, sa volute et sa face, jamais son
+    pied : elle n'est posée sur rien ;
+  - *le flamant debout naît pâle* (corps de la couleur de la page, cerné), et son cou est une
+    ligne tracée deux fois, pour pouvoir s'écrire au lot A2.
+- **Les couleurs — ce que la mesure dit, avant ton choix** (`design/mascot/v2/palette.json`,
+  « chosen » : null) :
+  - *les six familles du site officiel, dans des valeurs mesurées* : les douze teintes passent —
+    notre trait posé dessus fait de 4,76:1 à 11,62:1, aucune dans une zone refusée. La teinte
+    claire de la partie 5 (le corail officiel, `#F9A89E`) passe **de peu** à côté de la zone
+    « rose » (chroma 0,098 pour un seuil à 0,10, teinte 27° pour une zone qui s'arrête à 15°) :
+    à l'œil c'est un rose saumon. C'est à toi de dire si « ni rose » le laisse passer ;
+  - *les six vives de la charte* : **elles ne peuvent pas se porter**. En clair, le trait violet
+    disparaît sur le vif violet (1,65:1) et sur le vif rouge (2,92:1) ; en sombre, le trait crème
+    disparaît sur le vif jaune (1,53:1) et sur le vif rose (2,98:1) ; et le vif rose est dans la
+    zone refusée. La planche les montre telles quelles, avec leurs mesures ;
+  - *un jeu neutre* de six teintes, pour le cas où la charte serait retirée : il passe, et
+    n'emprunte ni à la charte ni au site officiel.
+- **Écart au plan** : les teintes ne sont pas encore des rôles des deux jeux de tokens — elles
+  vivent dans `palette.json` tant que la palette n'est pas choisie. Aucun fichier existant n'est
+  donc touché par ce lot (un script de plus dans `package.json` mis à part) ; la séparation des
+  couleurs dans une feuille à part vient avec le lot B, et l'empreinte du dessin est écrite pour
+  ne pas bouger ce jour-là.
+- **Mesuré — VÉRIFIÉ** : le dessin 1 538 o gzip (plafond 3 072), sa feuille 2 695 o sans le
+  mouvement (plafond 6 144), les deux 4 233 o (plafond 9 216 ; 6 144 pour la tortue en ligne) ;
+  formes visibles par état : 10, 14, 14, 15 et 26 (plafonds 18 et 30). **Les plafonds de D17.13
+  tiennent** ; le mouvement du lot A2 dispose de 3,4 Ko dans la feuille.
+- **Vu par trois navigateurs** (`npm run e2e:mascot2` : Chromium, Firefox, WebKit ; 47 contrôles
+  chacun, 0 échec) : dans chaque état, chaque pose, chaque signe et à un passage, ce qui se voit
+  est ce que la planche compte, forme pour forme, et rien ne sort de son cadre. La planche
+  dessine les 143 figures qu'elle annonce. **Ce que ce contrôle a trouvé** : à l'état 3, la
+  première étoile comptait comme une forme de l'état lui-même ; elle est un signe, comptée à
+  part.
+- **La planche** : `design/mascot/v2/planche.html` (56 Ko, générée par
+  `scripts/mascot2-sheet.ts`, jamais retouchée à la main ; elle tient le dessin une seule fois
+  et le recopie dans chaque figure) — les deux écrans du jeu en maquette, les cinq états à 240,
+  96 et 80 px, clair et sombre, les deux palettes avec leurs mesures, les arcs, les signes, les
+  poses, l'accent, les silhouettes en noir, le jeu neutre, les poids, neuf contraintes en
+  oui / non. `scripts/mascot2.test.ts` : quinze portes (ce que le fichier peut contenir, ce que
+  la feuille peut faire, ce que les couleurs doivent mesurer, la planche égale au dessin du jour,
+  une validation liée à une empreinte, et **rien de ce qui est servi ne l'importe**).
+- **La production n'a pas bougé** : après `npm run build`, les 1 156 fichiers de `dist/` sont
+  identiques, octet pour octet, à ceux d'avant ce lot. 617 tests passent.
+- **À l'éditeur** : regarder la planche, dire si le dessin tient (« ni enfantine, ni moche »),
+  choisir la palette. Rien n'est daté.

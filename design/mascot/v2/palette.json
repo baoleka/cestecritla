@@ -1,0 +1,23 @@
+{
+  "note_fr": "Les couleurs que le joueur peut donner à son flamant (D17.3) : six, une par partie du livre, en clair et en sombre. LA PALETTE N'EST PAS DÉCIDÉE (D17.4) : « chosen » vaut null tant que l'éditeur n'a pas tranché sur la planche (design/mascot/v2/planche.html) entre les deux jeux de « palettes ». « official » : les six familles que le site officiel donne à ses parties (lues le 15/11/2026 dans la feuille commune de ses pages de partie), dans des valeurs mesurées contre notre trait — ses teintes claires en thème clair, ses teintes foncées en thème sombre ; pour la partie 6, notre Violet 200 et notre Violet remplacent son lilas, qui tombe dans la zone lavande que notre porte refuse. « charter » : les six vives de la charte, telles quelles ; elles n'ont pas de variante sombre. « neutral » : six teintes du jeu de couleurs neutre (D14.12), qui ne reprend ni la charte ni le site officiel. Chaque valeur est mesurée par scripts/mascot2.test.ts : le trait sur la teinte (3:1 au moins), et les trois zones refusées (lavande, prune, rose). Quand la palette est choisie, ses valeurs deviennent des rôles « mascot-tint-N » des deux jeux de tokens, dans une feuille à part (docs/discovery/PLAN-TORTUE.md §11.1).",
+  "chosen": null,
+  "palettes": {
+    "official": {
+      "label_fr": "Les six familles du site officiel, dans des valeurs mesurées",
+      "families_fr": ["bleu ciel", "orange", "vert", "jaune", "rouge", "violet"],
+      "light": ["#3AADEE", "#FFB87A", "#7AECB6", "#FFE566", "#F9A89E", "#E5CBFF"],
+      "dark": ["#004880", "#B04E00", "#186842", "#6B5100", "#8F120A", "#4C0297"]
+    },
+    "charter": {
+      "label_fr": "Les six vives de la charte",
+      "families_fr": ["vif bleu", "vif rose", "vif vert", "vif jaune", "vif rouge", "vif violet"],
+      "light": ["#3885F4", "#ED5FB1", "#2E9959", "#F9C900", "#F91616", "#7B13D6"],
+      "dark": ["#3885F4", "#ED5FB1", "#2E9959", "#F9C900", "#F91616", "#7B13D6"]
+    }
+  },
+  "neutral": {
+    "label_fr": "Jeu de couleurs neutre",
+    "light": ["#A9C9EC", "#F0C79B", "#A6DBBE", "#EADF96", "#EDB4A6", "#C8CDD9"],
+    "dark": ["#1C3F6E", "#6B4420", "#17573A", "#57501A", "#6E2E24", "#3B4254"]
+  }
+}

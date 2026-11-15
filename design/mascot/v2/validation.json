@@ -1,0 +1,8 @@
+{
+  "validated_on": null,
+  "drawing_sha256": null,
+  "same_character_asked_on": null,
+  "same_character_sha256": null,
+  "same_character_answers": null,
+  "note_fr": "La deuxième génération de la mascotte (D17.1 à D17.15) : ta tortue surfe, devient un flamant, s'envole, puis vole sous une tortue d'étoiles. RIEN ICI N'EST VALIDÉ, ET RIEN N'EST EN LIGNE : la tortue servie est celle de design/mascot/validation.json. validated_on : le jour où l'éditeur a validé la planche design/mascot/v2/planche.html ; drawing_sha256 : l'empreinte de ce qu'il a regardé — le dessin (mascot.svg), sa feuille de style (src/styles/mascot2.css) et ses couleurs (les cinq rôles de la tortue dans les deux jeux de tokens, et la palette qu'il a choisie dans palette.json). same_character_asked_on et same_character_sha256 : le jour où la question « même personnage ? » a été posée à des lecteurs neufs, images officielles à côté, et le dessin sur lequel elle l'a été ; same_character_answers compte leurs réponses ; ce sont des lecteurs joués par des agents, leur réponse reste une hypothèse (D14.11). Une retouche du dessin, de sa feuille de style ou de ses couleurs fait tomber les deux. La validation se pose, une fois la palette choisie, par : npx tsx scripts/mascot2-sheet.ts --validated AAAA-MM-JJ."
+}
