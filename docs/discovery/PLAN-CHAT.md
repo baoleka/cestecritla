@@ -1694,3 +1694,61 @@ seule, à 11 h 16 (10 h 16 UTC) :
 aller-retour d'un lien `http://` part encore en clair avant la redirection ; HSTS le supprime
 après une première visite sûre. La garde du Worker reste : si le réglage était un jour coupé,
 aucune requête en clair ne serait lue.
+
+### 15 novembre, 11 h 30 à 12 h 30 — l'éditeur tranche (D16.77 à D16.81), tout est redéployé
+
+Le mandat consommé, l'éditeur a demandé qu'on lui pose les questions dues (« pose moi les
+questions pour chaque décision »). Avant de répondre il a demandé où lire les phrases : sur le
+site, trois par question ; et, pour les 1 069, sur une page locale construite pour lui
+(`private/gists/lecture-phrases.html`, par `private/tmp/reading-page.mts` : chaque phrase à côté
+du texte de sa mesure — hors dépôt, elle montre le livre). **Une erreur de la session en la
+construisant** : son script recontrôlait une sous-mesure sans la mesure qu'elle détaille et
+comptait trois phrases « refusées » ; l'outil du dépôt, lui, lit les deux
+(`npm run gists -- --sql --check` : 1 069 phrases tenues) — corrigé avant de lui donner la page.
+**Le bureau de lecture ne lui présenterait rien en l'état** (les 1 069 verdicts sont ceux de la
+session) : la page sert à lire, elle n'enregistre aucun verdict.
+
+| Question | Sa réponse | Décision |
+|---|---|---|
+| Les 1 069 phrases restent-elles en ligne, avec ce que R35 mesure ? | « Oui, les 1 069 » | D16.77 |
+| La campagne, à partir du 1er janvier 2027 ? (recommandé : arrêt, sauf lecture) | « Elles restent telles quelles » | D16.78 |
+| La mention « relu par Baoleka » ? (recommandé : les lire) | « Change la mention » | D16.79 |
+| Les quatre suggestions de la revue de sécurité ? | la liaison du modèle, Trusted Types (déconseillé avant de vrais téléphones), l'en-tête des 405 ; pas le champ de recherche | D16.80 |
+| Relire la section Confidentialité du chat et le dossier légal ? | « Rien pour l'instant » | D16.81 |
+| Essayer sur de vrais téléphones, un lecteur d'écran ? | « je veux rien vérifier, fais les vérifs toi meme » | D16.81 |
+| La liste des expressions codées ? | « Je te préviens au besoin » | D16.81 |
+
+**Ce qui a changé dans le dépôt** (commit `e6e1622`) : `campaign` porte sa décision, et un test
+exige qu'un fichier qui dit « editor » trouve cette décision dans `decisions.md`, à sa date ; nos
+vingt textes ont trois états et sont « accepted » — plus aucune page ne nomme un relecteur
+(deux portes) ; le Worker des phrases ne lie plus de modèle (deux tests, dans les deux sens) ;
+les pages portent `require-trusted-types-for 'script'` et `trusted-types 'none'` (une porte lit
+`dist/` : aucun script servi n'emploie ce qu'elles interdisent) ; un 405 dit `Allow: POST`.
+Batterie complète verte (19 étapes), CI verte, `scripts/launch.ts` : « nothing is missing ».
+
+**Trusted Types, mesuré** : les trois moteurs des essais l'appliquent (Chromium 153, Firefox 155,
+WebKit 26.6 — une chaîne donnée à `innerHTML` y lève une erreur, et aucune politique ne peut y
+être créée) ; toute la batterie y passe, et la sonde en ligne aussi. VÉRIFIÉ dans la
+documentation le 15/11 : Chrome 83, Safari 26 et Firefox 148 l'appliquent, les plus anciens
+l'ignorent. Ce qui n'est pas essayé : un vrai téléphone, et ce qu'une application injecte dans
+sa vue web.
+
+| Quand (UTC) | Geste | Constaté |
+|---|---|---|
+| 11 h 12 | `npm run build:preview && npm run deploy:preview -- --bench` | `cestecritla-preview`, version `afd3e307` |
+| 11 h 13 | `npm run deploy:chat:preview -- --accord 2026-11-15` | `cestecritla-chat-preview`, version `599bd05d` : DB, BUDGET, RATE — plus de modèle |
+| 11 h 14 | sonde de la feuille sur l'aperçu, trois navigateurs | toutes bonnes ; les pages disent « Préparé avec une IA… », 405 et `Allow: POST` |
+| 11 h 18 | `npm run deploy:chat -- --accord 2026-11-15` | `cestecritla-chat`, version `fc1834a7`, sans modèle ; sonde directe toute bonne : des phrases (le secret a tenu), `/api/chat` « rien » |
+| 11 h 18 | `npm run build && npm run deploy` | `cestecritla`, version `3ab92163` |
+| 11 h 19 à 11 h 28 | sonde de la feuille sur `cestecritla.fr`, puis `www` | 257 vérifications chacune, toutes bonnes |
+| 11 h 29 | fichiers servis contre `dist/`, les deux hôtes | 1 153 sur 1 156 identiques, les trois écarts connus ; plus aucun « relu par » ; pages toujours indexables |
+
+**Une erreur de ce journal et de `CLAUDE.md`, corrigée** : ils disaient que, sur l'aperçu, le
+Worker des pages « répond lui-même » à `/api/gists`. Depuis la répétition du 14 novembre, puis
+ses redéploiements, c'est `cestecritla-chat-preview` qui tient ces deux adresses (une route
+passe devant le domaine) ; le Worker des pages ne garde que `/api/bench`, et répondrait aux
+deux autres si l'autre était retiré.
+
+**Ce qui n'est pas fait** : vider le champ de recherche au départ de la page (écarté par lui) ;
+de vrais téléphones, un vrai lecteur d'écran (il ne les essaiera pas ; la session ne le peut
+pas) ; la relecture, par lui, de la section Confidentialité du chat et du dossier légal.

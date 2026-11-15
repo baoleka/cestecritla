@@ -55,9 +55,10 @@ en clair vers HTTPS (« Always Use HTTPS », activé par l'éditeur, effet véri
 téléphone**, sans rien envoyer, les questions sur une personne ou un parti, et répond aux
 questions sur le site par les lignes de ses propres pages : aucune mesure n'est plus montrée
 en réponse à « X est-il… ? ». (4) **La campagne** : à défaut d'une décision écrite de
-l'éditeur, les phrases cessent d'être servies le 1er janvier 2027 à 0 h, heure de Paris
-(D16.65) — la dernière ligne du §5 n'est plus « ouverte sans rien derrière » : son silence a
-maintenant un effet, le plus prudent.
+l'éditeur, les phrases auraient cessé d'être servies le 1er janvier 2027 à 0 h, heure de Paris
+(D16.65). **Il a décidé le 15 novembre 2026 : elles restent servies pendant la campagne,
+telles quelles (D16.78)** — la session recommandait l'arrêt, sauf lecture par une personne ;
+`14-risques.md` R38 dit ce que ce choix laisse entier et ce qui le borne.
 
 **Le texte du livre n'est plus chez Cloudflare** (15 novembre, 1 h 31 UTC, avant toute
 ouverture en production) : la base `cestecritla-ask` ne tient plus que nos phrases — une par
@@ -334,9 +335,9 @@ répondre sur le fond, résumer une mesure à la volée, comparer, garder un fil
 | Lire à la source : la loi Informatique et Libertés (art. 45 n'a plus d'objet ici), les lignes directrices européennes sur l'analyse d'impact, la liste officielle du cadre UE–États-Unis | la session ou l'éditeur | ouvert |
 | Dater ce dossier : `preview_legal_on` | la session, sur le mandat D16.57 | **daté le 15/11/2026 par la session — l'éditeur ne l'a pas relu** (§0) |
 | Relire ce dossier, la page Confidentialité telle que D16.60 l'a récrite, et ce que les pages disent des phrases | l'éditeur | **à faire** : rien de cela n'est écrit comme relu par lui |
-| Décider, avant le 1er janvier 2027, si des phrases qu'aucune personne n'a relues restent servies pendant la campagne (code électoral, L163-2 ; R38) | l'éditeur | **ouvert** : c'est sa décision, la session ne la prend pas. **Depuis le 15/11 (D16.65), ne rien décider a un effet** : le Worker cesse de servir les phrases ce jour-là à 0 h ; pour continuer, `data/2026/ask.json` → `campaign` (trois champs), puis un déploiement |
+| Décider, avant le 1er janvier 2027, si des phrases qu'aucune personne n'a relues restent servies pendant la campagne (code électoral, L163-2 ; R38) | l'éditeur | **décidé par lui le 15/11/2026 (D16.78) : elles restent servies, telles quelles.** `data/2026/ask.json` → `campaign` porte sa décision, datée ; les Workers ont été redéployés le jour même. Revenir à l'arrêt : remettre les trois champs à null, puis redéployer |
 | Activer « Always Use HTTPS » sur la zone (tableau de bord Cloudflare → SSL/TLS → Edge Certificates) : le site répond en HTTP clair depuis son lancement (R43, revue de sécurité du 15/11) | l'éditeur | **fait par lui le 15/11/2026** (déclaré) — effet vérifié en ligne à 11 h 16 : 301 vers HTTPS sur l'apex, `www` et l'aperçu |
-| Lire pour de vrai les vingt textes que le site dit « relus par Baoleka », ou faire écrire autre chose sur les pages Exactitude et À propos (R44, relecture hostile du 15/11) | l'éditeur | **à faire par lui** : la feuille, elle, n'affirme plus rien d'une relecture |
+| Lire pour de vrai les vingt textes que le site dit « relus par Baoleka », ou faire écrire autre chose sur les pages Exactitude et À propos (R44, relecture hostile du 15/11) | l'éditeur | **tranché par lui le 15/11/2026 (D16.79) : il ne les lit pas, et le site le dit.** Les vingt textes sont « accepted » ; chaque page écrit « Préparé avec une IA. Mesures citées et chiffres vérifiés contre le livre. », la page Exactitude « Personne ne les a relus un à un. ». Règlement sur l'IA, art. 50 § 4 : pour ces textes non plus on ne s'appuie sur l'exception de la relecture — la page dit l'IA |
 
 ## Annexe — les citations, telles que lues le 14 novembre 2026
 
