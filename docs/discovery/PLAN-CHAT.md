@@ -1601,3 +1601,29 @@ que réduire les refus — la négation, la question tapée sans son point, le c
 un refus ne peut échouer que vers des liens », écrit-il.
 
 **Une courte passe en ligne**, sur ses onze questions, dit si c'est oui.
+
+*Aperçu redéployé à 9 h 21 (8 h 21 UTC), commit `0874b0f`, Worker `cestecritla-preview` version
+`6759f9a9` ; sonde en ligne, 257 vérifications dans trois navigateurs : tout bon ; CI verte.*
+
+### 15 novembre, 9 h 30 — la douzième passe : « oui » (D16.76)
+
+Le relecteur : 24 questions en ligne, 51 sondes neuves et quatorze jeux antérieurs rejoués hors
+ligne (environ 690 questions), 4 envois.
+
+> « Oui, j'ouvrirais la production. Selon la règle de mon neuvième rapport, rien n'est bloquant :
+> sur 24 questions en ligne, aucune question légitime n'a été refusée et aucune phrase d'IA n'est
+> apparue sous une question qui met quelqu'un en cause. Tout ce que j'avais vérifié comme corrigé
+> aux passes précédentes tient encore. Ce qui reste est le résidu d'une recherche par mots. »
+
+Bloquant : aucun. Sérieux : aucun. Mineur : des liens vers le terrorisme là où le racisme
+servirait mieux ; des lignes absurdes et sans danger. Coût accepté : des liens à la place de
+phrases autour des mots de peuples, des pays, des sujets sensibles qui ne sont pas demandés seuls
+— « sur mes jeux visant ces bords, des liens sont l'issue la plus fréquente ; sur les jeux
+ordinaires, 69 à 82 % gardent leurs phrases ».
+
+**Ce que son oui ne couvre pas, et il le dit** : ce que les revues ont laissé à l'éditeur — le
+site répond en HTTP clair (R43), les mentions de relecture (R44), les nombres de R35, la décision
+de campagne (D16.65).
+
+**La porte du plan — zéro bloquante — est tenue à la douzième passe, après onze « non ».** Sur le
+mandat du 14 novembre, la production ouvre (D16.76). Le déroulé suit.

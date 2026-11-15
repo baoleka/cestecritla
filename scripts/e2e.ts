@@ -265,10 +265,19 @@ async function runEngine(
       );
       await small.close();
     }
-    check(
-      'the field has no button: results follow the typing',
-      (await page.locator('#search button').count()) === 0,
-    );
+    // The field has no button of its own: results follow the typing. Where the site asks
+    // (data/2026/ask.json), one button stands next to it — « Demander » — and typing still
+    // searches by itself: what that button opens is held by `npm run e2e:sheet`.
+    const buttons = await page.locator('#search button').count();
+    if (builtAskMode() === 'chat') {
+      check(
+        'the field has one button, « Demander »: results still follow the typing',
+        buttons === 1 && (await page.locator('#search #ask').count()) === 1,
+        String(buttons),
+      );
+    } else {
+      check('the field has no button: results follow the typing', buttons === 0, String(buttons));
+    }
     // Every sentence the status line is given while the words are typed, in order.
     await page.evaluate(
       'window.__said = []; new MutationObserver(() => {' +
