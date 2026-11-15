@@ -1,0 +1,57 @@
+{
+  "persona": "N1",
+  "answers": {
+    "T1": {
+      "a": "Je dirais pas officiel, c'est écrit en petit sous le titre : « Site non officiel ». Mais les boutons, « Fonder la 6e République », « bifurcation écologique », ça sent la politique. L'Avenir en commun, ça me dit vaguement un truc, genre le programme d'un parti. Donc c'est pas le parti, mais c'est sur un truc de parti.",
+      "b": "Une tortue. Je sais pas à quoi elle sert. Une mascotte, de la déco.",
+      "c": "Je comprends que la tortue change si je trouve des mots. Mais « elle », j'ai dû deviner que c'était la tortue. Et « trouver des mots », je vois pas où on les trouve. Envie d'essayer : bof."
+    },
+    "T2": {
+      "a": "Rien de tout ça. Ça me dit juste « c'est écrit dans la partie 1 ». Pas de bravo, pas de raté. Je sais pas si j'avais bon. Par contre « wagon », c'est les transports en commun, ok ça, ça me parle."
+    },
+    "T3": {
+      "a": "La tortue fait du surf sur une vague. Sur la 2e image il y a des petits points rouges en plus, et c'est écrit « Elle prend la vague ». Je pense que c'est parce que j'ai fait mes trois mots.",
+      "b": "Non. Pas de points, pas de score, pas de bravo. Juste « Trois mots, trois endroits du livre ». Du coup je sais pas si j'ai bien joué ou pas.",
+      "c": "Je pense que ça passe l'animation. Mais ça pourrait aussi passer la manche, je suis pas sûr.",
+      "d": "Que la tortue va encore se transformer. Peut-être. Par contre le gros texte en dessous, « Garder, c'est écrire sur ce téléphone… », c'est un pavé, je l'aurais pas lu. Et ça me fait un peu flipper, je me demande ce qu'il retient sur moi."
+    },
+    "T4": {
+      "a": "Sur la 05, c'est encore la tortue sur la vague, en petit dans le coin. Sur la 06, c'est un flamant rose. Le texte dit que c'est la même. On voit encore un bout de carapace sur son dos, donc ouais, c'est elle.",
+      "b": "Hein, pourquoi un flamant ? Ça n'a aucun sens, mais ça m'a fait rire."
+    },
+    "T5": {
+      "a": "C'est la fiche de la tortue : à quoi elle ressemble, ce qu'elle est devenue, étape par étape. « Revoir », ça doit relancer la petite animation de chaque étape.",
+      "b": "Cette phrase, je la vois pas sur l'écran. Si ça veut dire que chaque couleur va avec une partie du livre, j'avais pas capté, c'est écrit nulle part.",
+      "c": "Ouais, vite fait : Rouge, parce que sur le bouton il est rose, et un flamant c'est rose. Par contre, ça fait bizarre de pas avoir de « Rose » pour un flamant rose.",
+      "d": "Non. Pour moi c'est la couleur d'un oiseau. Maintenant que tu le dis, rouge et vert ça fait penser à des partis. Mais moi j'y aurais pas pensé tout seul."
+    },
+    "T6": {
+      "a": "B, D, E, A, C"
+    },
+    "T7": {
+      "a": "La tortue surfe, la vague monte et la cache. Après une tête sort de l'eau, et c'est le flamant debout, avec un rond rouge sous la patte à la fin.",
+      "b": "La première fois ça va, c'est marrant. Après je la passe direct. Quatre secondes à chaque fois, c'est trop."
+    },
+    "T8": {
+      "a": "Sur la 10, le flamant s'envole au-dessus de l'eau, en jaune. Sur la 11, c'est pareil, il vole, mais avec un nuage violet derrière et un dessin en points reliés.",
+      "b": "Oui, une fois qu'on me le dit : en haut à droite, dans le nuage violet. C'est une tortue en points reliés, comme des étoiles. Sans la phrase, j'aurais cru que c'était une maison ou un truc bizarre."
+    },
+    "T9": {
+      "a": "Ça garde la tortue, les mots que j'ai déjà eus et où j'en suis dans le jeu. C'est gardé sur mon téléphone, pas ailleurs. Enfin, c'est ce qu'ils disent.",
+      "b": "Oui, la couleur aussi, c'est écrit. Qui peut la voir : quelqu'un qui ouvre le site sur mon tel, dans le même navigateur. Envoyé : non, c'est écrit « Rien n'est envoyé ». Je les crois à moitié. Et sur la fiche, ça dit d'abord « Rien n'est gardé une fois cette page fermée », puis juste après « Garder, c'est… ». Du coup c'est gardé ou pas ? J'ai pas compris."
+    },
+    "T10": {
+      "a": "Tortue chelou. Enfantin : oui, un peu. Moche : non, c'est plutôt mignon.",
+      "b": "Peut-être. Je veux bien voir ce qu'elle devient après le flamant. Mais je connais pas ce livre, donc je répondrais « je sais pas » tout le temps. Et comme le jeu me dit jamais si j'ai bon, j'ai pas de défi. En vrai je pense que je m'arrête vers le flamant.",
+      "c": "À mon cousin, vu que c'est lui qui me l'a envoyé, avec un « ma tortue est devenue un flamant mdr ». À personne d'autre.",
+      "d": "Les listes de chapitres avec des titres de prof : « bifurcation », « Mettre le spatial au service de l'intérêt général humain »… Le pavé « Garder ». Et en bas de la dernière page, « Projet militant » : là je me dis qu'on veut me vendre un parti.",
+      "e": "Ce qui me gêne : je sais jamais si j'ai bon, et les titres des parties, j'y comprends rien. Ce que je garde : la tortue qui se transforme, et le coup de « wagon », qui te dit direct qu'il y a un truc sur les transports. Ça, ça me concerne."
+    },
+    "T11": {
+      "a": "Rien sur ce site ou ce projet au-delà de ce message et des treize images. Mais mon contexte contenait d'autres choses : un fichier d'instructions global de l'utilisateur (CLAUDE.md) avec des préférences de développement générales (Plan Mode, commits conventionnels, TypeScript strict, Prettier/ESLint, « projet français, code en anglais »), l'adresse e-mail du compte, les infos d'environnement habituelles (système, date, modèle), des consignes sur un système de mémoire persistante (vide pour moi) et le chemin du dossier de travail (…/scratchpad/lotd/personas/blind/N1). Aucun de ces éléments ne décrit le site, son contenu ou ses objectifs."
+    }
+  },
+  "seconds_total_estimated": 150,
+  "reader_model": "opus",
+  "launched_fr": "Lancé à l'aveugle hors du dépôt (claude -p, outil Read seul, sans session gardée), le 15/11/2026 vers 23 h ; sa fiche de eval/personas.json, treize images de l'aperçu, la feuille de questions."
+}

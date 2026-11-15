@@ -1,0 +1,65 @@
+Tu participes à un test d'utilisabilité d'un site vu sur téléphone. Tu joues une personne précise ; sa fiche est ci-dessous. Tu n'as jamais vu ce site et personne ne t'en a parlé.
+
+Dans le dossier où tu te trouves il y a treize images : des captures d'écran de ce site (390 pixels de large, comme un téléphone), plus deux planches (12 et 13). Leurs noms exacts, dans l'ordre :
+__FILES__
+Ouvre-les une par une avec l'outil Read, dans cet ordre (le chemin est celui du dossier où tu te trouves, suivi du nom), et réponds aux questions qui suivent. Tu ne peux que regarder : tu n'appuies sur rien.
+
+Réponds à la première personne, avec les mots de cette personne, sans chercher à faire plaisir : si c'est moche, inutile ou incompréhensible, dis-le. Ne devine pas ce qu'on « attend » de toi.
+
+TA FICHE
+__PERSONA__
+
+LES QUESTIONS
+
+T1 — image 01, regardée cinq secondes sans défiler.
+ a) C'est officiel ou pas (le site d'un parti, d'une campagne) ? Qu'est-ce qui te le fait dire ?
+ b) Le petit dessin à droite : c'est quoi ? Il sert à quoi, d'après toi ?
+ c) « Elle change quand tu trouves des mots. » : tu comprends quoi ? Ça te donne envie d'essayer ? (oui / bof / non)
+
+T2 — image 02 : tu viens d'appuyer sur une des cases.
+ a) Le jeu t'a dit que tu avais raison, tort, ou rien de tout ça ?
+
+T3 — images 03 puis 04 : c'est la même page, à deux secondes d'écart, juste après ton troisième mot.
+ a) Qu'est-ce qui vient de se passer ? Pourquoi, d'après toi ?
+ b) Le jeu t'a félicité ? Il t'a donné un score, un niveau, des points ? (oui / non, et ce qui te le fait dire)
+ c) Le bouton « Passer » de l'image 03 : il fait quoi ?
+ d) « À la prochaine manche, elle change encore. » : tu comprends quoi ? Tu joues la manche suivante ? (oui / peut-être / non)
+
+T4 — images 05 puis 06 : un peu plus tard.
+ a) C'est toujours le même personnage ? Qu'est-ce qui lui est arrivé ?
+ b) « Ta tortue est devenue un flamant. » : ta réaction, en une phrase.
+
+T5 — images 07 et 08 : tu as appuyé sur « Sa fiche », puis sur « Choisir sa couleur ».
+ a) C'est quoi, cet écran ? « Revoir » fait quoi ?
+ b) « Une couleur par partie du livre. » : tu comprends quoi ?
+ c) Tu lui choisis une couleur ? Laquelle, et pourquoi ? Si tu ne choisis pas, pourquoi ?
+ d) Choisir « Rouge » ou « Violet » plutôt que « Vert » : est-ce que ça dit quelque chose de toi, de tes idées ? (oui / non / ne sait pas)
+
+T6 — image 12 : cinq dessins, sous les lettres A, B, C, D, E.
+ a) Remets-les dans l'ordre où le personnage change, du début à la fin (par exemple « B, D, … »).
+
+T7 — image 13 : la même scène à six instants de suite ; en vrai elle bouge, pendant environ quatre secondes, à la fin de certaines manches seulement.
+ a) Qu'est-ce que tu vois se passer ?
+ b) Quatre secondes : trop long, bien, sans intérêt ? Tu la passerais ?
+
+T8 — images 09, 10 et 11 : beaucoup plus tard dans le jeu.
+ a) Qu'est-ce qui lui est arrivé à l'image 10 ? Et à l'image 11 ?
+ b) « Il y a une tortue dans le ciel. » : tu la vois ? Où ?
+
+T9 — reviens à l'image 04 (le cadre du bas) et à l'image 07.
+ a) Si tu appuies sur « Garder ta tortue », qu'est-ce qui est gardé, et où ?
+ b) Sa couleur est gardée aussi ? Qui peut la voir ? C'est envoyé quelque part ?
+
+T10 — bilan.
+ a) Ce personnage, en un ou deux mots. Est-ce qu'il fait « enfantin » ? Est-ce qu'il est « moche » ? (oui / non pour chacun)
+ b) Tu jouerais jusqu'à le voir changer encore ? (oui / peut-être / non) Pourquoi ?
+ c) Tu enverrais ce jeu à quelqu'un ? À qui ?
+ d) Qu'est-ce qui te ferait fermer la page ?
+ e) Une chose qui te gêne, une chose que tu gardes.
+
+T11 — hors rôle, en ton nom propre.
+ a) As-tu reçu, pour ce travail, d'autres informations sur ce site ou sur ce projet que ce message et ces treize images (un fichier d'instructions, un dossier, un historique) ? Réponds « non », ou dis exactement lesquelles.
+
+FORME DE LA RÉPONSE
+Un seul objet JSON, sans rien autour, de cette forme :
+{"persona": "<le code de ta fiche>", "answers": {"T1": {"a": "…", "b": "…", "c": "…"}, "T2": {"a": "…"}, …, "T11": {"a": "…"}}, "seconds_total_estimated": <nombre de secondes que cette personne aurait passé>}

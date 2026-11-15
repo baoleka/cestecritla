@@ -1195,3 +1195,34 @@ l'aperçu (autre adresse, autre stockage) : il est tenu par des tests, pas par u
   passe en ligne, ce Firefox-là est lancé en ignorant cet en-tête ; rien de ce que fait le jeu
   n'en dépend. Qu'un vrai Firefox ouvre bien nos pages en plusieurs onglets reste une HYPOTHÈSE :
   personne ne l'a essayé à la main.
+
+### 15 novembre 2026 (nuit) — les sept personas, à l'aveugle, sur l'aperçu
+
+- **Jouée sur l'aperçu tel qu'il est servi**, avec treize images prises en ligne. Les sept
+  personas de `eval/personas.json` ont été lancés hors du dépôt : ils ne connaissaient que leur
+  fiche, les images et les questions. Le détail, les copies et la planche sont dans
+  `13-tests-humains.md` §8 et `captures/2026-11-15/session4/`. **HYPOTHÈSE (personas).**
+- **Ce qui tient :**
+  - les sept la voient changer, dans le bon ordre (BDEAC), et la reconnaissent pour le même
+    personnage ;
+  - aucun ne se sent noté, jugé ni félicité ;
+  - aucun ne trouve le site officiel ;
+  - personne ne la trouve moche ;
+  - six sur sept comprennent juste ce que garde le téléphone, couleur comprise ;
+  - le critère éliminatoire, l'avis du militant sceptique (D0.32), ne se déclenche pas.
+- **Ce qui pèse, dit tel quel :**
+  - **cinq sur sept la disent enfantine**, dont trois « un peu ». Le dessin seul, à l'aveugle au
+    lot A2, ne l'était pas : c'est l'idée d'une tortue qui devient flamant qui est jugée ;
+  - une militante pressée (M1) ferme la page au flamant et ne l'enverrait jamais, par peur de la
+    capture ;
+  - l'envie de la faire changer reste un « peut-être » pour six sur sept ;
+  - un passage est trop long pour quatre, tous le passeraient dès la deuxième fois ;
+  - une couleur se lit politique pour un persona (R46), et « Rouge » se choisit parce qu'il sort
+    rose.
+- **Ce que la session propose à l'éditeur :**
+  - « Elle change quand tu trouves des mots. » ne nomme pas la tortue, quatre sur sept l'ont
+    relevé ;
+  - « Passer » ne dit pas ce qu'il passe ;
+  - la carte « Garder » est un pavé : c'était déjà une idée hors de ce plan, à sa demande.
+- **Suite :** le rapport à l'éditeur, captures comprises, et ses questions — la phrase du début,
+  puis la production (lot E).

@@ -1,0 +1,59 @@
+{
+  "persona": "M4",
+  "answers": {
+    "T1": {
+      "a": "Ça ne fait pas site de parti. Il y a écrit « Site non officiel » sous le titre, en petit, mais je le vois. Le titre « C'est écrit là » en violet foncé sur fond crème est lisible. Ça fait projet militant bricolé, sérieux dans le ton. « Un mot de L'Avenir en commun, édition 2026 » me dit de quel programme il s'agit. Le « Sommaire » en rouge souligné ressemble à un lien, ça me convient.",
+      "b": "C'est une tortue violette, petite, à droite. Je pense que c'est la mascotte du jeu. Je ne vois pas à quoi elle sert. Elle est toute petite, à peu près 40 pixels, je la distingue à peine avec ma vue.",
+      "c": "Je comprends que la tortue va se transformer quand je trouve des mots. Mais « elle » arrive avant qu'on ait dit de qui on parle, ce qui est maladroit, puisque je ne sais pas encore que c'est la tortue. C'est un gadget. Moi je viens pour le texte exact du programme. Réponse : bof.",
+      "_note": "Les cases sont grandes, le texte est bien noir sur crème, ça va."
+    },
+    "T2": {
+      "a": "Le jeu ne m'a ni dit que j'avais raison, ni dit que j'avais tort. Il m'affiche « C'est écrit dans la partie 1 », puis la partie, le chapitre et la phrase. Ça me va, c'est factuel. Je ne sais pas si c'était la bonne réponse, vu que je n'ai pas de « bravo » ni de « raté ». Le bouton « C'est écrit là » est un peu ambigu. Je ne vois pas où il m'emmène, sans doute vers le texte du programme. « Mot suivant » est clair. Les boutons sont corrects, mais je préférerais qu'ils soient plus gros.",
+      "_note": "Texte en 16 px à peu près, je lis, mais c'est juste."
+    },
+    "T3": {
+      "a": "La tortue est passée sur une vague, sur une planche de surf, avec des petits points rouges. Je suppose que c'est parce que j'ai trouvé trois mots : « Trois mots, trois endroits du livre ». Un genre de récompense. Entre les deux images, le dessin a bougé tout seul. Ça, c'est ma ligne rouge : les animations qui partent sans que j'aie demandé.",
+      "b": "Non. Pas de score, pas de niveau, pas de points. Il dit seulement « Elle prend la vague. » C'est une phrase sur la tortue, pas sur moi. Je ne me sens pas félicité, et franchement je m'en passe très bien.",
+      "c": "Je pense qu'il saute l'animation. Mais je n'en suis pas certain, parce que le mot est sec : « Passer » quoi ? Le mot suivant ? Le jeu ? Et il disparaît ensuite, remplacé par « Sa fiche ». Le bouton est de taille correcte.",
+      "d": "Je comprends que la tortue va encore se transformer au prochain palier. Je jouerais peut-être, par curiosité, mais surtout pour retrouver des passages du texte. Peut-être. Je regrette aussi le gros cadre « Garder, c'est écrire sur ce téléphone » : trop de texte d'un coup, et il est coupé en bas de l'écran, je ne vois pas son bouton."
+    },
+    "T4": {
+      "a": "Oui et non. C'est la tortue, mais elle est plus petite, en haut à droite, sur sa vague. À l'image 06 elle n'est plus du tout une tortue : c'est un flamant, un oiseau avec un pied rouge. Elle s'est transformée.",
+      "b": "Ah, un flamant, pourquoi pas, mais je ne vois pas le rapport avec le programme."
+    },
+    "T5": {
+      "a": "C'est une fiche du personnage : son dessin, son parcours avec la tortue, puis la vague, puis le flamant, ses couleurs, la liste des mots trouvés (wagon, cantine, mairies, carburant, braille, îles) et ce qui est gardé. « Revoir » rejoue sans doute la petite scène de la transformation. Je n'appuierais pas, vu que ça bouge tout seul. Cet écran est une fenêtre qui recouvre la page, sur fond gris. Les petites lignes en bas, « Site non officiel », prennent de la place pour rien sur un petit écran.",
+      "b": "Je comprends qu'il y a six parties dans le programme, donc six couleurs, mais je n'en suis pas sûr. Ça ne tombe pas juste : j'en compte 6 plus « Sans couleur ». Sur l'image, ça pourrait aussi bien être une couleur par partie que six couleurs au choix, rien n'est clair. Je ne vois pas le lien avec le livre.",
+      "c": "Non, je ne choisis pas. Je ne vois pas l'intérêt, ça ne m'apporte pas le texte exact. Si j'avais à choisir, je prendrais « Sans couleur » ou le bleu, pour le contraste. Le jaune, lui, sur fond crème, il est faible.",
+      "d": "Non, je ne crois pas. « Rouge » ou « Violet » pour un flamant, ça ne dit rien de moi. Mais comme c'est un programme politique et que rouge, c'est tout de même une couleur de gauche, on pourrait y voir un message. Je ne sais pas. Je préférerais que ce soit clair : si c'est juste décoratif, qu'ils le disent."
+    },
+    "T6": {
+      "a": "B, D, E, A, C."
+    },
+    "T7": {
+      "a": "Je vois la tortue sur sa vague, puis la vague qui monte et qui cache tout. Ensuite une tête qui sort, puis un flamant debout, et à la fin une tache rouge sous son pied. Une transformation de la tortue en flamant, cachée derrière la vague.",
+      "b": "Quatre secondes, c'est trop long pour moi, et sans intérêt. Je la passerais, si je trouve le bouton. Et ça bouge sans que je l'aie demandé, ce qui est une de mes lignes rouges. Si on peut la couper dans les réglages, tant mieux. Sinon ça m'agace."
+    },
+    "T8": {
+      "a": "À l'image 10, le flamant s'est envolé : il vole au-dessus d'une ligne d'eau, ailes jaunes. À l'image 11, une grande forme violet clair est apparue derrière lui avec un dessin en pointillés au-dessus : une tortue faite d'étoiles, comme une constellation.",
+      "b": "Oui, je la vois, en haut à droite de l'image, dans la tache violette. Dessinée avec des points reliés par des traits, avec un point rouge au bout de la tête. Elle est fine, avec ma vue, il faut chercher. Je comprends à la phrase, pas au dessin."
+    },
+    "T9": {
+      "a": "Ce qui est gardé : les mots déjà vus, où j'en suis dans le jeu et la tortue (ou le flamant). C'est écrit sur ce téléphone, dans ce navigateur. Je l'ai lu dans le cadre : « Garder, c'est écrire sur ce téléphone ». Ça ne part nulle part ailleurs. Ça me convient : pas de compte.",
+      "b": "Oui, sa couleur est gardée, si on lui en a donné une. Celui qui ouvre le site dans ce navigateur la verra, donc pas les autres, seulement quelqu'un qui prend mon téléphone. Rien n'est envoyé : c'est écrit. « Tes réponses ne sont pas gardées », ça aussi c'est dit. Pour tout effacer, il faut toucher la tortue puis « Tout effacer », ce qui est un peu caché, je le note."
+    },
+    "T10": {
+      "a": "Une mascotte : tortue, puis flamant. Enfantin : oui, un peu. Moche : non, le trait violet est net et les dessins sont propres. C'est plutôt joli.",
+      "b": "Peut-être. Pas pour voir le personnage changer, ça m'est égal. Je continuerais si le jeu me fait relire des passages précis du programme pour mes réponses au café. Ça, ça m'est utile. Le reste, non.",
+      "c": "Je l'enverrais peut-être à un camarade du groupe d'action, ceux qui lisent le programme, mais pas à tout le monde. Je vois qu'il y a un bouton « Envoyer le lien du jeu », ce qui est pratique pour WhatsApp, pas besoin de compte.",
+      "d": "Une animation qui part toute seule et dure longtemps, qui m'oblige à attendre. Ou si on me demandait de créer un compte. Ou du texte gris clair. Pour l'instant le texte est assez foncé, je n'ai pas de reproche de contraste, hormis les liens rouges du pied de page, qui sont corrects.",
+      "e": "Ce qui me gêne : les petits dessins, trop petits pour moi, et le gros cadre « Garder » qui déborde en bas avec son bouton coupé. Ce que je garde : « Site non officiel » en toutes lettres, « Rien n'est envoyé », et les liens du bas, « Exactitude », « Méthode », « Licence et sources », parce que je vérifie les sources."
+    },
+    "T11": {
+      "a": "Non. À part ce message et les treize images, je n'ai reçu aucune information sur ce site ou ce projet. Un fichier de préférences générales de l'utilisateur (style de code, façon de communiquer) était affiché dans mon contexte, mais il ne parle pas de ce site."
+    }
+  },
+  "seconds_total_estimated": 420,
+  "reader_model": "sonnet",
+  "launched_fr": "Lancé à l'aveugle hors du dépôt (claude -p, outil Read seul, sans session gardée), le 15/11/2026 vers 23 h ; sa fiche de eval/personas.json, treize images de l'aperçu, la feuille de questions."
+}

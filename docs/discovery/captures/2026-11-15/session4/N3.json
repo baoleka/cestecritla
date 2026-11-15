@@ -1,0 +1,57 @@
+{
+  "persona": "N3",
+  "answers": {
+    "T1": {
+      "a": "Pas officiel. Il y a écrit « Site non officiel » en haut, juste sous le titre. Et tout en bas de la page, ça dit « projet militant indépendant ».",
+      "b": "C'est une tortue, c'est la mascotte, je pense. Elle a pas l'air de servir à grand-chose, à part être la tortue qui change.",
+      "c": "Je comprends que la tortue évolue quand je trouve des mots. Ça me donne bof, c'est encore du texte, et je vois pas trop la surprise pour l'instant."
+    },
+    "T2": {
+      "a": "Raison. Ça écrit « C'est écrit dans la partie 1 », donc c'est bon."
+    },
+    "T3": {
+      "a": "J'ai trouvé trois mots, donc il y a une étape qui se termine et la tortue passe à une autre forme. Je pense que c'est la règle : trois mots, on avance.",
+      "b": "Non, pas de félicitations, pas de score, pas de niveau, pas de points. Juste la tortue qui surfe sur une vague.",
+      "c": "Je pense que ça saute l'écran et passe à la suite. Il y a pas écrit à quoi ça sert, donc je devine.",
+      "d": "Je comprends que la tortue va encore changer à la manche d'après. Je joue la suivante peut-être, si ça se lance vite."
+    },
+    "T4": {
+      "a": "Oui, c'est la même tortue, elle est juste devenue un flamant. Le nouveau mot c'est « carburant ». En petit, en haut à droite, elle est restée sur la vague.",
+      "b": "Une tortue qui devient flamant, c'est random, mais ok pas mal."
+    },
+    "T5": {
+      "a": "C'est la fiche de ma tortue : sa forme actuelle, son parcours et sa couleur. « Revoir » je pense que ça remontre l'ancienne forme, la vague ou le flamant.",
+      "b": "Je pige pas bien. Chaque partie du livre a sa couleur ? Ou la couleur change quand on avance ? C'est flou.",
+      "c": "Je choisis le premier, Bleu ciel, parce que c'est le premier. J'ai pas réfléchi plus que ça, c'est pas un choix qui me parle.",
+      "d": "Non, ça me dit rien de moi. C'est juste une couleur, je sais pas."
+    },
+    "T6": {
+      "a": "B, D, E, A, C. Au début la tortue, puis elle prend la vague, puis elle devient flamant, puis elle s'envole, puis elle a une tortue dans le ciel."
+    },
+    "T7": {
+      "a": "La vague s'aplatit, un oiseau sort de l'eau, puis il devient un flamant qui se tient debout sur son pied rouge. Il y a une histoire, mais ça va vite.",
+      "b": "Quatre secondes c'est trop long. Je la passerais. Si ça se répète sans arrêt, c'est sans intérêt pour moi."
+    },
+    "T8": {
+      "a": "À l'image 10 elle s'envole : elle devient un oiseau qui vole au-dessus de l'eau. À l'image 11 elle est toujours en vol, et il y a une forme dessinée dans le ciel.",
+      "b": "Oui, je la vois. Elle est en haut à droite, dans la tache violette. Ce sont des points reliés qui font une carapace de tortue. Pas mal, mais ça reste discret."
+    },
+    "T9": {
+      "a": "Ce qui est gardé : les mots que j'ai trouvés, où j'en suis dans le jeu, et ma tortue. Ça reste dans ce téléphone, dans ce navigateur, c'est écrit en bas du cadre.",
+      "b": "Oui, la couleur aussi. Personne la voit. Rien n'est envoyé, c'est écrit dans le cadre."
+    },
+    "T10": {
+      "a": "Une tortue qui change, un peu bizarre. Enfantin : oui. Moche : non.",
+      "b": "Peut-être. Je vois pas trop l'intérêt de la voir changer encore, mais si c'est vite, ok.",
+      "c": "Peut-être à un pote, si c'est un défi entre potes, avec un score ou un chiffre. Sinon non.",
+      "d": "Les gros blocs de texte, et si ça charge lentement ou s'il faut installer quelque chose. Ça je ferme direct.",
+      "e": "Ce qui me gêne : les pavés de texte, c'est trop long. Ce que je garde : la tortue qui change, c'est sympa."
+    },
+    "T11": {
+      "a": "Non. Rien d'autre que ce message et les treize images."
+    }
+  },
+  "seconds_total_estimated": 150,
+  "reader_model": "haiku",
+  "launched_fr": "Lancé à l'aveugle hors du dépôt (claude -p, outil Read seul, sans session gardée), le 15/11/2026 vers 23 h ; sa fiche de eval/personas.json, treize images de l'aperçu, la feuille de questions."
+}

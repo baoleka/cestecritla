@@ -1054,3 +1054,67 @@ Ce sont des décisions qu'il a prises, des règles du régime de citation, ou de
 - **Les corrections du §7.4 n'ont pas été rejouées** devant les personas ; une nouvelle session pourrait dire si la ligne d'identité suffit, ou si elle fait « site de campagne » (N2, au gel : « ça confirme que c'est un site de campagne, puisqu'il doit se taire »).
 - **L'ordre des images a compté** : c'est l'en-tête de la campagne (T12) qui a appris à N3 de quel programme il s'agissait ; les réponses des tâches suivantes en dépendent.
 - **Tout reste une HYPOTHÈSE (personas)** (D14.8) : les questions de jugement sont publiées non vérifiées sur `/exactitude` (D14.11), et le §4 garde sa place pour des personnes.
+
+## 8. Session 4 (15 novembre 2026, nuit, par personas-agents, lancés à l'aveugle) — ta tortue, génération 2, sur l'aperçu
+
+> **Ce qui a été joué.** Le jeu de la génération 2 tel que l'aperçu le sert depuis le 15 novembre au soir (`beta.cestecritla.fr`, commit `29c1616` ; lot D de `PLAN-TORTUE.md`). Treize images prises sur l'aperçu à 390 × 844 :
+> - onze captures du jeu (`01` à `11`) ;
+> - ses cinq formes, en désordre sous des lettres (`12`) ;
+> - un passage montré en six instants (`13`) : un persona ne voit pas bouger.
+>
+> **Sept personas, à l'aveugle** (R49). Chacun est lancé hors du dépôt, dans un dossier vide, par `claude -p --tools Read --no-session-persistence --strict-mcp-config`. Il ne reçoit que sa fiche de `eval/personas.json`, les images et la feuille de questions (`captures/2026-11-15/session4/questions.txt`) : ni le dépôt, ni le dossier, ni `private/`. Lecteurs : Opus pour M1, M3 et N1 ; Sonnet pour M2, M4 et N2 ; Haiku pour N3.
+>
+> **Ce qu'ils disent avoir reçu (T11) : rien sur le site, pour les sept.** Trois signalent :
+> - les préférences générales de l'utilisateur, qui ne parlent pas du site ;
+> - l'adresse du compte, qu'ils ne recopient pas ;
+> - le chemin du dossier de travail. Il laissait deviner « un projet aec » et « un test de personas en aveugle » : à rendre neutre la prochaine fois.
+>
+> Un premier lancement n'a rien donné : avec le seul outil de lecture, ils ne pouvaient pas lister le dossier, et aucun n'a inventé de réponse. Le second leur donnait les noms des fichiers. Les copies sont archivées telles que rendues (`captures/2026-11-15/session4/<persona>.json`), avec la planche des images (`planche.png`).
+>
+> **Statut : HYPOTHÈSE (personas)** (D14.8) : des modèles, sur des images fixes.
+
+### 8.1 Ce que les sept ont répondu
+
+| Tâche | Réponse | Sur 7 |
+|---|---|---|
+| T1 | le site est officiel | non : 7 (« Site non officiel » lu par les sept) |
+| T1 | le dessin, c'est quoi | une mascotte : 7, dont 3 qui y voient « où j'en suis » (M1, M2, N2) |
+| T1 | « Elle change quand tu trouves des mots. » | compris : 7 ; mais **« elle » arrive avant qu'on sache que c'est la tortue** : 4 (M1, M2, M4, N1) ; « trouver des mots, où ? » : 2 (N1, N2) ; envie d'essayer : non 2 (M1, M4), bof 4, un peu 1 (M2) |
+| T2 | le jeu a dit « tort » | non : 7 (N3 a lu « raison », sa tuile étant la bonne) |
+| T3 | félicité, un score, un niveau, des points | non : 7 |
+| T3 | « Passer » | saute l'animation : 7 ; **pas sûrs qu'il ne saute rien d'autre** : 4 (M1, M4, N1, N2) |
+| T3 | « À la prochaine manche, elle change encore. » : rejouer | oui 1 (M3) · peut-être 5 · non 1 (M1) |
+| T4 | le même personnage, devenu flamant | oui : 7 (la carapace devenue l'aile, vue par 4) |
+| T4 | « Ta tortue est devenue un flamant. » | ça les amuse : 3 (M3 « j'adore », N1 « ça m'a fait rire », N2 « mignon ») · absurde mais accepté : 3 · **rejet : 1** (M1 : « un jeu pour la maternelle, je ferme ») |
+| T5 | choisir une couleur | oui 3 (M3 et N1 : « Rouge », parce qu'il « sort presque rose » ; N3 : la première) · non 4 |
+| T5 | une couleur dit quelque chose de soi | **oui 1** (M1 : « vert c'est EELV, rouge les cocos, violet nos couleurs, jaune les gilets jaunes ») · ne sait pas 2 (M2, N2) · non 4 |
+| T6 | l'ordre des cinq formes | BDEAC : 7 — l'ordre juste |
+| T7 | un passage de quatre secondes | trop long 4 · acceptable une fois 2 · bien 1 (M3) ; tous le passeraient dès la deuxième fois |
+| T8 | « Il y a une tortue dans le ciel. » : la voir | oui : 7, une fois la phrase lue ; sans elle, « une maison » (N1), « un petit robot » (M3) ; fine à voir pour M4 |
+| T9 | sa couleur : gardée, vue par qui, envoyée | juste : 6 ; N3 croit que personne ne la voit |
+| T10 | enfantin · moche | **enfantin : oui 2 (M1, N3), un peu 3 (M4, N1, N2), non 2 (M2, M3)** · moche : non 7 (« le dessin est propre », « soigné ») |
+| T10 | jouer jusqu'à la voir changer encore | peut-être 6 · non 1 (M1) |
+| T10 | l'envoyer | non 1 (M1 : une capture « les insoumis apprennent leur programme avec une tortue qui devient flamant ») · oui 1 (M3 : au groupe des militants, et l'animation en story) · peut-être 4 · avec un score seulement 1 (N3) |
+| T10 | ce qui ferait fermer | la carte « Garder », un pavé : 4 (M1, M3, N1, N3) · les longs titres de chapitre : 2 · une animation qu'on n'a pas demandée : 1 (M4) · ne pas savoir qui est derrière : 1 (N2) |
+
+Durées estimées par les agents pour tout le parcours, en secondes : M1 20 (elle s'arrête au flamant), M2 300, M3 140, M4 420, N1 150, N2 240, N3 150. Ce ne sont pas des mesures.
+
+### 8.2 Ce que la session dit, et ce qu'elle ne déclenche pas
+
+- **Le critère éliminatoire de toujours ne se déclenche pas.** Il porte sur ce que dit le militant sceptique (D0.32, `design/illustration-rules.md` §4), et M2 répond : « Enfantin : non, pas vraiment, le trait est sobre. Moche : non, c'est même soigné. » Personne ne la trouve moche. Mais **cinq sur sept la disent enfantine**, trois « un peu ». Le dessin seul, montré à l'aveugle au lot A2, avait reçu cinq « ni l'un ni l'autre » : dans le jeu, c'est l'idée — une tortue qui devient flamant — plus que le trait qui est jugée.
+- **Ce qu'elle visait est atteint, en partie.**
+  - Les sept voient qu'elle change, dans le bon ordre, et que c'est le même personnage.
+  - Aucun ne se sent noté ni félicité.
+  - L'envie de la faire changer reste un « peut-être » pour six sur sept ; une militante pressée (M1) ferme la page au flamant.
+- **À l'éditeur, sans y toucher :**
+  - « Elle change quand tu trouves des mots. » nommerait la tortue (4 sur 7) ;
+  - « Passer » ne dit pas ce qu'il passe (4 sur 7) ;
+  - la carte « Garder » est un pavé (4 sur 7) — c'était déjà une idée hors de ce plan, à sa demande ;
+  - un passage est « trop long » pour quatre (D17.8 : 4,5 s au plus, passable) ;
+  - « Rouge » se lit rose et se choisit pour cela (D17.33), et une couleur se lit politique pour un militant sur quatre (R46).
+
+### 8.3 Limites propres à cette session
+
+- Des modèles, pas des personnes, sur des images fixes. Rien n'a été touché ni vu bouger : le passage n'est connu que par six instants.
+- Le chemin du dossier de travail trahissait un test : à rendre neutre la prochaine fois.
+- La question T5 citait « Une couleur par partie du livre. », que D17.31 venait de retirer de l'écran. Trois personas l'ont dit, et leurs réponses portent sur ce qu'ils voyaient.
