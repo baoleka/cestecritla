@@ -1674,3 +1674,23 @@ pas. Le mandat étant consommé, **aucune n'est faite : elles reviennent à l'é
 | Retirer la liaison `ai` du Worker des phrases tant que `model` vaut `null` (moindre privilège : rien ne l'atteint aujourd'hui) | non fait | `wrangler.chat.jsonc`, les portes qui tiennent ses liaisons, un déploiement du Worker — avec l'accord du jour |
 | Une réponse 405 sans en-tête `Allow` | non fait | cosmétique |
 | Au retour arrière, un navigateur peut rendre la page telle qu'elle était quittée : la conversation est vidée (`pagehide`), **le champ de recherche de l'accueil ne l'est pas** — ce qui y était tapé peut s'y relire, sur le même téléphone. Vrai de la recherche seule depuis le 14 novembre ; non reproduit sous Chromium, pas essayé sur un iPhone | non fait | vider le champ au départ de la page ; à essayer sur un vrai Safari |
+
+### 15 novembre, 11 h 20 — « Always Use HTTPS » activé par l'éditeur : R43 fermé
+
+Premier mot de l'éditeur depuis le mandat : il demande où activer le réglage, l'active dans le
+tableau de bord (SSL/TLS → Edge Certificates ; documentation de Cloudflare relue ce jour), et
+demande de vérifier. Le geste est DÉCLARÉ par lui ; son effet est VÉRIFIÉ d'ici, en lecture
+seule, à 11 h 16 (10 h 16 UTC) :
+
+| Demandé en `http://` | Réponse |
+|---|---|
+| `/` sur `cestecritla.fr`, `www`, `beta` | 301 vers la même adresse en `https://`, sur les trois |
+| une adresse profonde avec une requête (`/sommaire/?x=1`) | 301, adresse et requête gardées |
+| `POST /api/gists` | 301 — la zone répond avant le Worker, qui refusait déjà (403) |
+| les trois hôtes en `https://` | 200 ; en-tête HSTS de 180 jours |
+| sonde directe des deux routes de la production | toutes bonnes ; des phrases pour des identifiants, `/api/chat` « rien » |
+
+**R43 est fermé** (`14-risques.md`). Ce que le réglage ne ferme pas y est écrit : le premier
+aller-retour d'un lien `http://` part encore en clair avant la redirection ; HSTS le supprime
+après une première visite sûre. La garde du Worker reste : si le réglage était un jour coupé,
+aucune requête en clair ne serait lue.
