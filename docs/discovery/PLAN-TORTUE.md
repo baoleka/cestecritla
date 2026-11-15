@@ -838,3 +838,28 @@ l'aperçu (autre adresse, autre stockage) : il est tenu par des tests, pas par u
   gens. Les lecteurs à l'aveugle sont des modèles, trois à cinq par question, sur des images
   fixes.
 - **Reste à lui demander** : ses textes ; puis s'il date la planche.
+
+### 15 novembre 2026 — ses textes (D17.23), et la planche datée (D17.24) : le lot A2 est clos
+
+- **Les textes**, le document sous les yeux, en un dialogue de quatre questions : « Oui, telles
+  quelles » pour les sept phrases du but et pour les quatre phrases des passages ; « Le nom de la
+  couleur » pour les six choix (« Bleu ciel », « Orange », « Vert », « Jaune », « Rouge »,
+  « Violet » — le plus neutre : rien à l'écran ne dit quelle partie on préfère) ; « Oui, tels
+  quels » pour les petits mots et pour ce qui est gardé. Ils sont consignés mot pour mot à
+  D17.23, d'où le lot C les prendra, sous des clés neuves. **Non demandé à part** : ce que dit un
+  lecteur d'écran quand on la touche — à lui remontrer avec le jeu. **À lui remontrer au lot D** :
+  la ligne de la page Confidentialité, pour qu'il la date.
+- **La planche est datée du 15 novembre sur son mot** (« Oui, date-la ») :
+  `design/mascot/v2/validation.json`, liée à l'empreinte du dessin retenu, de sa feuille, de ses
+  couleurs et de ses temps. La planche dit maintenant « Sa phrase », plus « la phrase proposée ».
+  **Cela ne bascule rien** : `data/mascot.json` est à 1 pour les deux hôtes. Pour la production
+  il faudra encore son mot daté (lot E) ; la porte de lancement y lira la planche datée et la
+  question « même personnage ? » posée sur ce dessin — posée, à l'aveugle, avec la réponse qu'on
+  sait (D17.22).
+- **Ce que le lot C devra savoir** : la feuille du dessin est à 201 octets de son plafond ; la
+  moindre retouche du dessin, de sa feuille ou de ses temps fait tomber la date de la planche et
+  périme la mesure du mouvement — les tests le disent, et l'éditeur doit alors revoir ce qui a
+  changé.
+- **Suite** : lot B — les règles pures et la mémoire (le champ de la couleur, la carte des
+  écritures par génération, la ligne de Confidentialité sous sa propre empreinte, les teintes en
+  rôles dans une feuille à part). Il ne touche ni au dessin ni à ce qui est servi.

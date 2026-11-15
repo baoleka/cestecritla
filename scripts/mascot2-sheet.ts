@@ -242,7 +242,7 @@ const AFTER: Readonly<Record<Passage, Standing>> = {
   '34': { state: 4, arcs: [6, 6, 6], tint: 3 },
 };
 
-/** The four evolutions in words: a title, the sentence proposed for it, and beat by beat. */
+/** The four evolutions in words: a title, the sentence the editor kept for it (D17.23), and beat by beat. */
 const PASSAGE_FR: Readonly<
   Record<Passage, { title: string; says: string; beats: Record<string, string> }>
 > = {
@@ -441,7 +441,7 @@ export function sheet(): string {
           : `<b>${thousands(frame.at)} ms</b> · ${String(beat.lasts)} ms<br>${words.beats[beat.name] ?? ''}`;
       return `<figure>${her(118, frame, frame.phase)}<figcaption>${caption}</figcaption></figure>`;
     });
-    return `<div class="evo"><h3>${words.title} · ${thousands(evolutionLasts(passage))} ms</h3><p class="says">La phrase proposée pour ce passage : « ${words.says} »</p><div class="row"><div class="scene" style="${light}">${played(passage, 240, first, frames)}</div><div class="scene" style="${dark}">${played(passage, 240, first, frames)}</div><p class="keys"><button type="button" data-play="${passage}">Jouer</button> <button type="button" data-skip="${passage}">Passer</button> <button type="button" data-back="${passage}">Revenir au début</button></p></div><p class="note strip-note">Temps par temps — son état posé à la fin de chaque temps :</p><div class="row strip">${strip.join('')}</div></div>`;
+    return `<div class="evo"><h3>${words.title} · ${thousands(evolutionLasts(passage))} ms</h3><p class="says">Sa phrase, à la fin de ce passage : « ${words.says} »</p><div class="row"><div class="scene" style="${light}">${played(passage, 240, first, frames)}</div><div class="scene" style="${dark}">${played(passage, 240, first, frames)}</div><p class="keys"><button type="button" data-play="${passage}">Jouer</button> <button type="button" data-skip="${passage}">Passer</button> <button type="button" data-back="${passage}">Revenir au début</button></p></div><p class="note strip-note">Temps par temps — son état posé à la fin de chaque temps :</p><div class="row strip">${strip.join('')}</div></div>`;
   });
 
   const HELD: Readonly<Record<TurtleState, ArcProgress>> = {
@@ -582,7 +582,7 @@ export function sheet(): string {
   const neutralDark = colours(neutral, 'dark', palette.neutral.dark);
 
   const body = [
-    `<section style="${light}"><h2>Ses quatre évolutions, à vitesse réelle</h2><p class="note">Chacune se joue une fois, quand on vient de la gagner, sur la scène de fin de manche (240 px) — jamais au chargement d’une page, jamais quand son état revient du téléphone. Rien ici ne bouge avant qu’on appuie sur « Jouer ». « Passer » pose la forme finale aussitôt, comme le feront dans le jeu le bouton, un appui sur la scène, la touche Échap ou n’importe quel bouton du jeu. Les deux scènes — fond clair, fond sombre — jouent ensemble. Les phrases sont des propositions : elles se décident après le mouvement.</p><p class="controls"><label><input type="checkbox" id="less"> Mouvement réduit (ce que voit qui l’a demandé à son téléphone : la forme finale, d’un coup)</label><label><input type="checkbox" id="slowly"> Au ralenti, ${String(SLOW)} fois plus lent (pour regarder de près ; le jeu ne ralentit jamais)</label></p>${evolutions.join('')}</section>`,
+    `<section style="${light}"><h2>Ses quatre évolutions, à vitesse réelle</h2><p class="note">Chacune se joue une fois, quand on vient de la gagner, sur la scène de fin de manche (240 px) — jamais au chargement d’une page, jamais quand son état revient du téléphone. Rien ici ne bouge avant qu’on appuie sur « Jouer ». « Passer » pose la forme finale aussitôt, comme le feront dans le jeu le bouton, un appui sur la scène, la touche Échap ou n’importe quel bouton du jeu. Les deux scènes — fond clair, fond sombre — jouent ensemble. Les phrases sont celles que l’éditeur a retenues le 15 novembre 2026 (D17.23).</p><p class="controls"><label><input type="checkbox" id="less"> Mouvement réduit (ce que voit qui l’a demandé à son téléphone : la forme finale, d’un coup)</label><label><input type="checkbox" id="slowly"> Au ralenti, ${String(SLOW)} fois plus lent (pour regarder de près ; le jeu ne ralentit jamais)</label></p>${evolutions.join('')}</section>`,
     row(
       'Ses figures : on la touche',
       light,
