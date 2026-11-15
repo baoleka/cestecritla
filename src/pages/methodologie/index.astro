@@ -37,7 +37,7 @@ const requests = 1 + counts.parts + counts.chapters + 5;
   {
     site.mode === 'chat' && (
       <>
-        <h2>{t('method.ask_title')}</h2>
+        <h2 id="demander">{t('method.ask_title')}</h2>
         <p>{model === null ? t('about.gists_method') : t('about.ai_method', { model })}</p>
         <p>{model === null ? t('about.gists_limits') : t('about.ai_limits')}</p>
         <p>{t('about.gists_terms')}</p>

@@ -231,7 +231,9 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     check('before any gesture nothing is asked of anyone but us', escaped.length === 0);
 
     // --- 2. typing sends nothing; the gesture sends identifiers — not the sentence
-    const QUESTION = 'et les retraites des infirmières, moi zorglub de montcuq';
+    // Three measures stand close enough to the best one for this question (src/lib/chat-local.ts,
+    // `MIN_SHARE_OF_BEST`), and none of its words is one the sheet explains.
+    const QUESTION = 'et l’hôpital, moi zorglub de montcuq';
     await page.locator('#q').pressSequentially(QUESTION, { delay: 20 });
     await page.waitForTimeout(900);
     const carrying = (): string[] =>
@@ -246,7 +248,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
     check(
       'typing leaves nothing in the address',
-      !page.url().includes('#') && !/retraite/i.test(page.url()),
+      !page.url().includes('#') && !/pital|zorglub/i.test(page.url()),
       page.url(),
     );
     await page.click('#ask');
@@ -268,7 +270,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
     check(
       'the sentence typed is not in it, nor a word of it',
-      !/zorglub|montcuq|infirmi|retraite|moi/i.test(gistsBody),
+      !/zorglub|montcuq|pital|moi/i.test(gistsBody),
       gistsBody.slice(0, 160),
     );
 
@@ -279,9 +281,15 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
     check(
       'the sentences come under their title, with who wrote and checked them: an AI',
-      /Ce que prévoit le programme/.test(await text(`${LAST} .c-gists h3`)) &&
-        /Phrases écrites et vérifiées par une IA/.test(await text(`${LAST} .c-gists .c-badge`)),
+      /Mesures trouvées/.test(await text(`${LAST} .c-gists h3`)) &&
+        /^Phrases écrites et vérifiées par une IA/.test(await text(`${LAST} .c-gists .c-badge`)),
       await text(`${LAST} .c-gists`),
+    );
+    check(
+      'next to the label, one link says how the sentences are made',
+      (await page
+        .locator(`${LAST} .c-gists .c-badge a[href="/methodologie/#demander"]`)
+        .textContent()) === 'Comment c’est fabriqué',
     );
     check(
       'the label claims no reading by a person',
@@ -457,6 +465,40 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       kept[0]?.term === 'moratoire' && kept[0].open && kept[1]?.open === false,
       JSON.stringify(kept),
     );
+    // A turn is put in the thread once, then brought up to date where it stands. It used to be
+    // put in three times as it settled, and the turn before it once more: a screen reader that
+    // follows the log would have been told as many times (personas, 15/11/2026).
+    await page.evaluate(
+      `(() => { window.__turnsAdded = 0; new MutationObserver((records) => { for (const record of records) for (const node of record.addedNodes) if (node.nodeName === 'ARTICLE') window.__turnsAdded += 1; }).observe(document.querySelector('#chat-thread'), { childList: true }); })()`,
+    );
+    await ask('et les lits de l’hôpital ?');
+    const added = await page.evaluate<number>('window.__turnsAdded');
+    check(
+      'a question puts one turn in the thread, once — no turn is taken out and put in again',
+      added === 1,
+      String(added),
+    );
+    const titled = await page.evaluate<boolean>(
+      `(() => { const scroll = document.querySelector('#chat-scroll'); const turns = Array.from(document.querySelectorAll('#chat-thread .c-turn')); const names = turns.map((turn) => turn.getAttribute('aria-labelledby')); return scroll.getAttribute('role') === 'group' && scroll.getAttribute('aria-label') === 'Conversation' && turns.length > 1 && turns.every((turn, at) => !!names[at] && turn.querySelector('.c-question')?.id === names[at]) && new Set(names).size === turns.length; })()`,
+    );
+    check('what scrolls has a name, and each turn is named after its own question', titled);
+    const links = await page.evaluate<{ target: string; rel: string; says: string | null }[]>(
+      `Array.from(document.querySelectorAll('#chat-thread a')).map((a) => ({ target: a.target, rel: a.rel, says: a.getAttribute('aria-describedby') }))`,
+    );
+    check(
+      'every link of the sheet opens beside the conversation, says so, and tells the other site nothing',
+      links.length >= 3 &&
+        links.every(
+          (link) =>
+            link.target === '_blank' &&
+            link.rel === 'noopener noreferrer' &&
+            link.says === 'chat-new-tab',
+        ) &&
+        (await page.evaluate<string>(
+          "document.querySelector('#chat-new-tab')?.textContent ?? ''",
+        )) === 'Ouvre un nouvel onglet.',
+      JSON.stringify(links.slice(0, 2)),
+    );
     // The question asks what a word means: that word is what was asked — first, and open.
     await ask('c’est quoi la t2a à l’hôpital ?');
     const named = await termsShown(ASKED);
@@ -502,6 +544,41 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
     sim.gists = 'deux';
 
+    // --- 7 bis. a question about the site: the site answers for itself, and sends nothing
+    const beforeAbout = [posted.gists.length, requested.length];
+    const about = await ask('Qui a écrit ces réponses ?');
+    check(
+      'a question about the site gets what the site says of itself: who makes it, who wrote the sentences',
+      (await text(`${LAST} .c-about h3`)) === 'Sur ce site' &&
+        /projet militant indépendant/.test(about) &&
+        /Une IA les a écrites, puis vérifiées elle-même contre le livre\. Personne ne les a relues une à une\./.test(
+          about,
+        ) &&
+        /aucune IA ne répond en direct/.test(about),
+      about.slice(0, 300),
+    );
+    check(
+      '…with where to read more, and no measure next to it',
+      (await page.locator(`${LAST} .c-about a[href="/a-propos/"]`).count()) === 1 &&
+        (await page.locator(`${LAST} .c-about a[href="/methodologie/#demander"]`).count()) === 1 &&
+        (await count(`${LAST} .c-gists`)) === 0 &&
+        (await count(`${LAST} .c-terms`)) === 0,
+    );
+    check(
+      '…and nothing was sent for it',
+      posted.gists.length === beforeAbout[0] && requested.length === beforeAbout[1],
+      requested.slice(beforeAbout[1]).join(' '),
+    );
+    check('a question about the site says no word of failure', !FAILURE.test(about));
+    const paid = await ask('Vous êtes payés par la France insoumise ?');
+    check(
+      'the question a hostile visitor tries first gets the same answer — not a measure that shares a word',
+      (await count(`${LAST} .c-about`)) === 1 &&
+        (await count(`${LAST} .c-gists`)) === 0 &&
+        /hors des équipes de campagne/.test(paid),
+      paid.slice(0, 200),
+    );
+
     // --- 8. nothing is written on the phone; the thread empties
     check(
       'nothing was written on the phone during the whole conversation',
@@ -516,8 +593,11 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
     await page.click('#chat-clear');
     check(
-      '« Effacer la conversation » empties the thread',
-      (await count('#chat-thread .c-turn')) === 0,
+      '« Effacer la conversation » empties the thread — and says so to who cannot see it empty',
+      (await count('#chat-thread .c-turn')) === 0 &&
+        (await page.evaluate<string>(
+          "(() => { const s = document.querySelector('#chat-status'); return s?.getAttribute('role') === 'status' ? s.textContent : ''; })()",
+        )) === 'Conversation effacée.',
     );
     check('no request ever went to /api/chat', posted.chat.length === 0, posted.chat.join(' | '));
     check(

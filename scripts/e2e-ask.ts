@@ -79,8 +79,8 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
   /** The simulated Worker: what each route answers until the test says otherwise. */
   const sim: { gists: GistsScenario; chat: ChatScenario } = { gists: 'deux', chat: 'explique' };
   /** As the base holds it — a straight apostrophe — and as the page must show it. */
-  const inBase = (id: string): string => `Phrase relue d'essai sur la retraite, pour ${id}.`;
-  const sentence = (id: string): string => `Phrase relue d’essai sur la retraite, pour ${id}.`;
+  const inBase = (id: string): string => `Phrase relue d'essai sur l'hôpital, pour ${id}.`;
+  const sentence = (id: string): string => `Phrase relue d’essai sur l’hôpital, pour ${id}.`;
   const gistsAnswer = (ids: readonly string[]): { status?: number; body: unknown } => {
     const all = ids.map((id) => ({ id, text: inBase(id) }));
     switch (sim.gists) {
@@ -267,12 +267,13 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     // --- 2. typing sends nothing; the gesture sends identifiers — not the sentence
     // « zorglub » and « montcuq » are words no programme writes: what a visitor says of
     // themselves has nothing to leave the phone as, until they agree to send the question.
-    const QUESTION = 'et les retraites des infirmières, moi zorglub de montcuq';
+    // Three measures stand close enough to the best one for this question (`MIN_SHARE_OF_BEST`).
+    const QUESTION = 'et l’hôpital, moi zorglub de montcuq';
     await page.locator('#q').pressSequentially(QUESTION, { delay: 20 });
     await page.waitForTimeout(900);
     const carrying = (): string[] =>
       requested.filter((url) =>
-        /infirmi|retraite|zorglub|montcuq/i.test(decodeURIComponent(url.split('#')[0] ?? '')),
+        /infirmi|h[oô]pital|zorglub|montcuq/i.test(decodeURIComponent(url.split('#')[0] ?? '')),
       );
     check(
       'typing sends the words nowhere',
@@ -280,7 +281,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
     check(
       'typing leaves nothing in the address',
-      !page.url().includes('#') && !/retraite/i.test(page.url()),
+      !page.url().includes('#') && !/pital/i.test(page.url()),
       page.url(),
     );
     await page.waitForSelector('#search-list > li');
@@ -313,7 +314,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
     check(
       'the sentence typed is not in it, nor a word of it',
-      !/zorglub|montcuq|infirmi|retraite|moi/i.test(gistsBody),
+      !/zorglub|montcuq|infirmi|pital|moi/i.test(gistsBody),
       gistsBody.slice(0, 160),
     );
     check('nothing is asked of the AI before the button is pressed', posted.chat.length === 0);
@@ -330,7 +331,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
     check(
       'the read sentences come under their title, with what they are',
-      /Ce que prévoit le programme/.test(await text(`${LAST} .c-gists h3`)) &&
+      /Mesures trouvées/.test(await text(`${LAST} .c-gists h3`)) &&
         /Phrases écrites et vérifiées par une IA/.test(await text(`${LAST} .c-gists .c-badge`)),
       await text(`${LAST} .c-gists`),
     );
@@ -405,10 +406,10 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
 
     // --- 3 bis. not pressing is refusing: another question, and still nothing is asked
-    const waited = await ask('et les retraites');
+    const waited = await ask('et l’hôpital');
     check(
       'a second question without the button: its sentences, the offer under it — and no call',
-      waited.includes('et les retraites') &&
+      waited.includes('et l’hôpital') &&
         (await count('#chat-thread .c-offer')) === 1 &&
         (await count(`${LAST} .c-offer`)) === 1 &&
         posted.chat.length === 0,
@@ -522,10 +523,10 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
 
     // --- 4 ter. the next question: the AI is on for the page, and explains without a new press
-    const second = await ask('la retraite à soixante ans');
+    const second = await ask('l’hôpital à soixante ans');
     check(
       'a second question gets its turn under the first',
-      (await count('#chat-thread .c-turn')) === 2 && second.includes('la retraite à soixante ans'),
+      (await count('#chat-thread .c-turn')) === 2 && second.includes('l’hôpital à soixante ans'),
     );
     check(
       '…its read sentences, then its explanation, without a second press',
@@ -548,7 +549,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       ['the explanation is for another state of the book', 'autre livre'],
     ] as const) {
       sim.chat = as;
-      const turn = await ask('la retraite à soixante ans');
+      const turn = await ask('l’hôpital à soixante ans');
       check(
         `${label}: the read sentences stand alone`,
         (await count(`${LAST} .c-gists .c-row`)) >= 1 && (await count(`${LAST} .c-ai`)) === 0,
@@ -564,7 +565,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     ] as const) {
       sim.gists = as;
       const before = posted.chat.length;
-      const turn = await ask('la retraite à soixante ans');
+      const turn = await ask('l’hôpital à soixante ans');
       const links = await count(`${LAST} .c-gists .sources a`);
       check(
         `${label}: the measures keep their links, at most three`,
@@ -582,7 +583,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     sim.gists = 'fermée';
     {
       const before = posted.chat.length;
-      await ask('la retraite à soixante ans');
+      await ask('l’hôpital à soixante ans');
       check(
         'the model does not answer now: the read sentences are shown, the question stays',
         (await count(`${LAST} .c-gists .c-row > p:not(.sources)`)) === 3 &&
@@ -592,7 +593,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     }
     sim.gists = 'silence';
     {
-      const silent = await ask('la retraite un jour de scrutin');
+      const silent = await ask('l’hôpital un jour de scrutin');
       check(
         'silence: the sheet says when questions reopen, and nothing else',
         /Les questions reprennent/.test(silent) &&
@@ -611,7 +612,9 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       const plain = await text(`${LAST} .c-plain`);
       check(
         'an objection we answered is recognised on the phone, and answered « en clair »',
-        /En clair/.test(plain) && /Relu par un humain/.test(plain) && plain.length > 120,
+        /En clair/.test(plain) &&
+          /Réponse du site, préparée avec une IA/.test(plain) &&
+          plain.length > 120,
         plain.slice(0, 160),
       );
       check(
@@ -630,7 +633,9 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       const plain = await text(`${LAST} .c-plain`);
       check(
         'a notion we wrote a card for is explained by the card first',
-        /En clair/.test(plain) && /Relu par un humain/.test(plain) && /Voir la carte/.test(plain),
+        /En clair/.test(plain) &&
+          /Réponse du site, préparée avec une IA/.test(plain) &&
+          /Voir la carte/.test(plain),
         plain.slice(0, 200),
       );
       check(
@@ -673,7 +678,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     sim.gists = 'balise';
     sim.chat = 'balise';
     {
-      const hostile = await ask('la retraite à soixante ans');
+      const hostile = await ask('l’hôpital à soixante ans');
       const injected = await count(
         '#chat-sheet img, #chat-sheet script:not(#chat-config), #chat-sheet [onerror]',
       );
@@ -689,7 +694,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     // --- 5 bis. the allowance spent: this question gets no explanation, the next is not sent
     sim.chat = 'épuisé';
     {
-      const spent = await ask('la retraite à soixante ans');
+      const spent = await ask('l’hôpital à soixante ans');
       check(
         'the allowance spent: no explanation, no word of it',
         (await count(`${LAST} .c-ai`)) === 0 &&
@@ -825,7 +830,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       sim.gists = 'toutes';
       sim.chat = 'explique';
       await view.clock.setFixedTime(new Date(Date.now() + 10 * 60 * 1000));
-      await view.fill('#q', 'la retraite, dix minutes plus tard');
+      await view.fill('#q', 'l’hôpital, dix minutes plus tard');
       await view.click('#ask');
       await until(view, "document.querySelector('#chat-thread .c-offer') !== null");
       await view.click('#chat-thread [data-offer="accept"]');

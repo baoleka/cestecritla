@@ -121,10 +121,11 @@ const KNOWN = knownOf(glossary.entries, riposte.entries);
 
 /**
  * The chat as this Worker runs it: what data/2026/ask.json says for the host this Worker
- * serves — decided by a pure function, so that it is tested (src/worker/chat.ts, `siteFor`).
+ * serves, at this hour — decided by a pure function, so that it is tested (src/worker/chat.ts,
+ * `siteFor`).
  */
 const chatConfigured = (env: Env): ReturnType<typeof siteFor> =>
-  siteFor(askConfig, env.ENVIRONMENT);
+  siteFor(askConfig, env.ENVIRONMENT, new Date());
 
 /**
  * One call to the model of the chat, straight to Workers AI, with a deadline. No gateway: so no
@@ -541,6 +542,12 @@ async function benchExplain(body: Record<string, unknown>, env: Env): Promise<Re
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
+    // In the clear, nothing is read and nothing is answered: what a request names — measures,
+    // so a subject — could be read on the way. The pages upgrade their own requests, so an
+    // honest page never comes here by plain HTTP; the zone should refuse it before us
+    // (« Always Use HTTPS »), and where it does not, the Worker does (security review of
+    // 15/11/2026). Before the method, the origin and the body: none of them is looked at.
+    if (url.protocol !== 'https:') return empty(403);
     try {
       if (url.pathname === '/api/gists') return await handleGists(request, env, url.origin);
       if (url.pathname === '/api/chat') return await handleChat(request, env, url.origin);

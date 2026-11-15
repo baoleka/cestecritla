@@ -129,7 +129,7 @@ export interface Gist {
  * name. The page's contract owns that number; a test holds this one to it until a route reads
  * both (scripts/ask-worker.test.ts).
  */
-export const MAX_GISTS = 8;
+export const MAX_GISTS = 3;
 
 export interface LoadedGists {
   /** What the base says of its sentences: the book they were read against, and their switch. */

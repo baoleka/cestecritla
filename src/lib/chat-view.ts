@@ -32,7 +32,7 @@ import {
   type FollowUp,
   type GistsResponse,
 } from './chat-contract.js';
-import { asksForVote } from './chat-local.js';
+import { asksAboutSite, asksForVote, asksOffTopic } from './chat-local.js';
 import type { Recognised } from './notions.js';
 
 /**
@@ -110,6 +110,8 @@ export type Measures =
   | { kind: 'searching' }
   /** « Ici, on ne parle que du programme. » */
   | { kind: 'off_topic' }
+  /** A question about the site itself: what the site says of itself, and no measure. */
+  | { kind: 'about' }
   /** Electoral silence; `reopen` null when no hour can be announced. */
   | { kind: 'silence'; reopen: string | null }
   /** « Rien trouvé avec ces mots. » — never "the programme does not speak of it". */
@@ -159,14 +161,21 @@ function usable(turn: Turn, page: PageState): Extract<GistsResponse, { kind: 'gi
   return gists.kind === 'gists' && gists.corpus === page.corpus ? gists : null;
 }
 
-/** True when the turn shows nothing but one sentence of ours: a freeze, a request for a vote. */
+/** A request for a vote, an insult, a judgement asked about a person: « Ici, on ne parle que du programme. » */
+const refused = (question: string): boolean => asksForVote(question) || asksOffTopic(question);
+
+/**
+ * True when the turn shows nothing but words of ours: a freeze, a refusal, a question about
+ * the site itself. Nothing is sent for such a turn.
+ */
 const closedTurn = (turn: Turn): boolean =>
   turn.silence !== null ||
   (turn.gists !== undefined &&
     turn.gists !== null &&
     turn.gists !== 'pending' &&
     turn.gists.kind === 'silence') ||
-  asksForVote(turn.question);
+  refused(turn.question) ||
+  asksAboutSite(turn.question);
 
 /** The rows of a turn: each measure the page can name, with its read sentence when it has one. */
 function rowsOf(turn: Turn, page: PageState): Row[] {
@@ -252,7 +261,7 @@ export function withExplanation(
 
 /** What the sheet shows for a turn. `last` is true for the turn at the bottom of the thread. */
 export function viewOf(turn: Turn, page: PageState, last: boolean): TurnView {
-  if (asksForVote(turn.question)) {
+  if (refused(turn.question)) {
     return { plain: null, measures: { kind: 'off_topic' }, wording: null, ai: null };
   }
   if (turn.silence !== null) {
@@ -263,6 +272,11 @@ export function viewOf(turn: Turn, page: PageState, last: boolean): TurnView {
   if (gists !== undefined && gists !== null && gists !== 'pending' && gists.kind === 'silence') {
     const measures: Measures = { kind: 'silence', reopen: gists.reopen };
     return { plain: null, measures, wording: null, ai: null };
+  }
+  // A question about the site: the site answers for itself, and shows no measure — the search
+  // would find one for any word in common (« payés » brought paid leave).
+  if (asksAboutSite(turn.question)) {
+    return { plain: null, measures: { kind: 'about' }, wording: null, ai: null };
   }
   const { objection, cards } = turn.recognised;
   const plain = objection !== null || cards.length > 0 ? turn.recognised : null;

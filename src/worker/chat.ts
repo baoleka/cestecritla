@@ -83,10 +83,14 @@ export interface ChatSite {
  * said « "chat" only if a model reads ». With no model named the sentences would never have
  * been served — found by reading the file before the first opening, not by a gate. Hence a
  * pure function, and its test.
+ *
+ * And the hour (`now`): from the first day of the campaign months nothing is served that the
+ * editor did not decide to serve — see `campaignAllows`.
  */
 export function siteFor(
   config: unknown,
   environment: unknown,
+  now: Date,
 ): Pick<ChatSite, 'mode' | 'model'> & { minShared: number | undefined } {
   const file: Record<string, unknown> =
     typeof config === 'object' && config !== null ? (config as Record<string, unknown>) : {};
@@ -94,11 +98,48 @@ export function siteFor(
   const mode = modeFor(file, environment === 'preview' ? 'preview' : 'apex');
   const named = model !== null && model !== undefined;
   const reads = isModelKey(model) && keepsNothing(model) ? MODELS[model] : null;
+  const open = mode === 'chat' && (!named || reads !== null) && campaignAllows(file, now);
   return {
-    mode: mode === 'chat' && (!named || reads !== null) ? 'chat' : 'off',
+    mode: open ? 'chat' : 'off',
     model: reads,
     minShared: typeof minShared === 'number' ? minShared : undefined,
   };
+}
+
+/**
+ * The first hour of the three months before the vote: 1 January 2027, 0 h in Paris.
+ *
+ * From the first day of the third month before the month of a general election, the electoral
+ * code (art. L163-2) lets a judge stop within forty-eight hours « inaccurate or misleading
+ * allegations » about a fact that could alter the vote, when they are spread « in a deliberate,
+ * artificial or automated, and massive way ». The first round is in April 2027.
+ */
+export const CAMPAIGN_FROM = '2026-12-31T23:00:00.000Z';
+
+/**
+ * True when the sentences may be served at this hour, as far as the campaign goes (D16.65).
+ *
+ * Our sentences say what the programme provides, an AI wrote them, and no person read them one
+ * by one (D16.59). Before the campaign months they are served. From their first hour they are
+ * served only if the EDITOR decided so, in writing and with a date — data/2026/ask.json,
+ * `campaign: { serve: true, decided_on, decided_by: "editor" }`. His silence is the cautious
+ * answer, and it needs nobody at the keyboard on New Year's Eve: the Worker answers « local »,
+ * the page keeps its links and what a person wrote. The plan left him this decision « before
+ * 1 January 2027 » (PLAN-CHAT §7); the session, which was told to ask him nothing (D16.57),
+ * wrote the default — it cannot write his decision.
+ */
+export function campaignAllows(config: unknown, now: Date): boolean {
+  if (now.getTime() < Date.parse(CAMPAIGN_FROM)) return true;
+  const file = typeof config === 'object' && config !== null ? config : {};
+  const decision: unknown = (file as Record<string, unknown>)['campaign'];
+  if (typeof decision !== 'object' || decision === null) return false;
+  const { serve, decided_on: on, decided_by: by } = decision as Record<string, unknown>;
+  return serve === true && by === 'editor' && typeof on === 'string' && isDay(on);
+}
+
+/** A day as the files of the project write it — and one that exists. */
+function isDay(value: string): boolean {
+  return /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(Date.parse(`${value}T00:00:00Z`));
 }
 
 export interface GistsDeps extends ChatSite {

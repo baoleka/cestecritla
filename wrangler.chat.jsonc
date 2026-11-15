@@ -7,8 +7,11 @@
   // change that. So it is not added to the Worker that serves the pages: it stands beside it,
   // on two exact addresses, and a route wins over a custom domain on the same host (Cloudflare
   // docs, « Routes … take precedence if configured on the same hostname », read on 14/11/2026).
-  // Take this Worker away and the two addresses answer 404 like any page that is not there —
-  // the site never knew.
+  // Take this Worker away and, on the apex, the two addresses answer like any page that is not
+  // there — the site never knew. NOT on the preview host: there the Worker that serves the
+  // pages runs the same script and answers `/api/gists` itself (wrangler.jsonc). What closes
+  // the sentences on every host at once is the switch of the base
+  // (`seed-ask-2026.ts --switch stopped --what gists`) — security review of 15/11/2026.
   //
   // The same script as wrangler.jsonc (src/worker/index.ts), without the files: `/api/gists`
   // and `/api/chat`, closed while data/2026/ask.json says "off"; `/api/bench` answers 404 here,

@@ -40,8 +40,10 @@
 .c-sheet[open] {
   display: flex;
 }
+/* The page behind is dimmed, in both themes: mixed from the colour of the text it was a light
+   wash over a dark page, and the sheet no longer stood out of it. */
 .c-sheet::backdrop {
-  background: color-mix(in srgb, var(--text) 55%, transparent);
+  background: color-mix(in srgb, var(--color-charbon) 60%, transparent);
 }
 @media (prefers-reduced-motion: no-preference) {
   .c-sheet[open] {
@@ -181,16 +183,22 @@
   margin-block-start: var(--space-3);
 }
 
+/* The field and its button share a line while the field keeps room for a few words; with large
+   text the button goes under it, and the field keeps the whole line (it had shrunk to two
+   letters at 200 %). */
 .c-composer {
   position: relative;
   display: flex;
+  flex-wrap: wrap;
   gap: var(--space-2);
   margin: 0;
   padding: var(--space-3) var(--space-4) var(--space-2);
   border-block-start: 1px solid var(--shadow-3d);
 }
 .c-composer input {
-  flex: 1 1 auto;
+  /* On one line the field takes the room and the button its own width; once the button has
+     gone under, each fills its line. */
+  flex: 999 1 8rem;
   min-inline-size: 0;
   min-block-size: var(--tap-comfortable);
   padding-inline: var(--space-3);
@@ -201,7 +209,7 @@
   font: inherit;
 }
 .c-composer button {
-  flex: 0 0 auto;
+  flex: 1 0 auto;
   white-space: nowrap;
 }
 .c-foot {

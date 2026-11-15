@@ -1155,3 +1155,56 @@ Ce que D16.60 annonçait à la place de l'IA en direct : les termes s'expliquent
 - **Trois relectures indépendantes lancées sur l'aperçu** (un autre modèle, sans `private/`,
   sans requête vers le site du programme) : hostile, personas, sécurité.
 
+
+### 15 novembre, 2 h 30 — les trois relectures : ce qu'elles ont trouvé, ce qui a changé (D16.64, D16.65)
+
+Trois agents d'un autre modèle, chacun sur l'aperçu ouvert, aucun n'ouvrant `private/` ni le site
+du programme. Leurs rapports sont dans le bac à sable de la session, hors dépôt ; leurs envois
+vers l'aperçu : 48, 41 et 43.
+
+- **Relecture hostile — « pas ce soir tel quel », trois bloquantes.** (B1) La feuille répondait à
+  tout sous « Ce que prévoit le programme » : une question sur une personne recevait une mesure
+  comme réponse, un mot de remplissage (« nouvelle », « vie ») suffisait à faire venir une
+  mesure sans rapport. (B2) Le site dit que ses vingt textes ont été relus par une personne, et
+  ce dépôt écrit que ces relectures ont été datées par défaut. (B3) « vérifiées » et « C'est
+  écrit là » sous une phrase d'IA cautionnaient plus que ce qui avait été fait.
+- **Personas (six, 41 questions) — « pas ce soir, mais proche ».** Une insulte, « vous êtes payés
+  par… ? », « t'es une IA ? » recevaient des mesures absurdes ; « T2A » défini de deux façons
+  sur un écran ; un tour mis trois fois dans le fil (un lecteur d'écran l'aurait redit) ; « elle
+  disparaît quand tu la fermes » faux à côté du bouton « Fermer » ; le champ réduit à deux
+  lettres à 200 %.
+- **Sécurité — « acceptable, à trois conditions ».** Les deux routes tiennent : rien d'autre que
+  nos phrases n'est jamais sorti, ni en ligne ni contre le vrai paquet dans son moteur. Mais
+  **le site répond en HTTP clair depuis son lancement** (R43 : un réglage de la zone, que
+  l'accès de wrangler ne permet pas) ; le limiteur de la plateforme ne tient pas « six par
+  minute » (sept envois en 37 secondes, aucun refusé) ; le texte du livre est encore dans la
+  base que le Worker de la production lierait.
+
+**Ce qui a changé** (D16.64 dit tout, avec les mesures) : le bloc s'appelle « Mesures trouvées » ;
+deux refus de plus sur le téléphone (hors sujet, questions sur le site — celles-ci reçoivent les
+lignes de nos propres pages) ; trois règles de pertinence ; plus aucune étiquette de la feuille
+ne parle d'une personne qui aurait relu ; trois mesures par requête au plus ; le Worker refuse le
+HTTP clair ; tout lien sortant porte `noreferrer` ; les liens de la feuille s'ouvrent à côté ; un
+tour est mis une fois dans le fil et mis à jour sur place ; ce qui défile a un nom ; le champ
+tient à 200 %.
+
+**Les phrases, relues une troisième fois pour ce que la relecture hostile signalait.** Sur ses
+quatorze phrases : la liste d'aliments, le service militaire volontaire, « l'évacuation » de Gaza
+et le Golan, le référendum pour la Kanaky-Nouvelle-Calédonie, le vote sur les frontières en
+Ukraine sont **dans le livre, tels quels** ; les 65 % n'y ont pas non plus de date de référence.
+Deux remarques étaient justes et en cachaient d'autres : **une mesure d'une section « Outre-mer »
+se lisait, seule, d'une mesure nationale**. Les 1 069 phrases ont été relues pour cela, section
+par section : **20 réécrites pour porter dans la phrase la portée que seul le titre donnait**
+(Outre-mer 10, handicap 3, petites entreprises 2, cinq autres), 8 pour une attribution ou une
+tournure. Contrôle : 1 069 sur 1 069. Redéposées à 1 h 16 UTC, interrupteur rouvert, deux d'entre
+elles relues en ligne au caractère près.
+
+**Le défaut de la campagne (D16.65).** Le plan laissait à l'éditeur, « avant le 1er janvier
+2027 », de dire si des phrases restent servies pendant les trois mois que vise l'article L163-2.
+Le mandat interdit de lui poser la question. La session a écrit ce qui se passe s'il ne dit
+rien : ce jour-là à 0 h, heure de Paris, le Worker cesse de les servir, sans déploiement.
+
+**Ce que la session n'a pas fait, et pourquoi** : le réglage « Always Use HTTPS » (hors de sa
+portée : R43) ; lire les vingt textes à la place de l'éditeur (R44) ; un lien vers nos réponses
+pour une objection reformulée (mesuré, insuffisant tel quel : D16.64) ; un vrai lecteur d'écran,
+de vrais téléphones.

@@ -272,6 +272,40 @@ void test('the allowance spent: the page stops sending questions, and says nothi
   });
 });
 
+void test('an insult or a judgement asked about a person: one sentence of ours, nothing sent', () => {
+  for (const question of ['Mélenchon est-il antisémite ?', 't’es nul connard']) {
+    const turn: Turn = { ...searched(), question };
+    assert.deepEqual(viewOf(turn, page({ ai: 'on' }), true), {
+      plain: null,
+      measures: { kind: 'off_topic' },
+      wording: null,
+      ai: null,
+    });
+    assert.equal(nextStep(turn, page({ ai: 'on' })), null, question);
+    assert.ok(settled(turn, page()), question);
+  }
+});
+
+void test('a question about the site: the site answers for itself — no measure, nothing sent', () => {
+  const turn: Turn = { ...searched(), question: 'Qui a écrit ces réponses ?' };
+  assert.deepEqual(viewOf(turn, page({ ai: 'on' }), true), {
+    plain: null,
+    measures: { kind: 'about' },
+    wording: null,
+    ai: null,
+  });
+  // The search found measures — any word in common does — and none of them is asked for.
+  assert.equal(nextStep(turn, page({ ai: 'on' })), null);
+  assert.ok(settled(turn, page()));
+  assert.deepEqual(shownIds(turn, page()), []);
+  // A card the question would have named is not shown either: this is not about the book.
+  const card = { ...turn, recognised: { objection: null, cards: ['regle-verte'] } };
+  assert.equal(viewOf(card, page(), true).plain, null);
+  // During electoral silence the sheet says one thing, to every question.
+  const frozen = { ...turn, silence: '2027-04-11T18:00:00Z' };
+  assert.equal(viewOf(frozen, page(), true).measures.kind, 'silence');
+});
+
 void test('« En clair »: what a person wrote comes first — and an objection never leaves the phone', () => {
   const card = { objection: null, cards: ['regle-verte'] };
   const withCard = withGists({ ...searched(), recognised: card }, gists(true, A));

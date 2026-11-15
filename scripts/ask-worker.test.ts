@@ -394,10 +394,11 @@ void test('the sentences written ahead are read by identifier: the order named, 
 });
 
 void test('no sentence leaves a base whose sentences are stopped, were never opened, or are of another book', async () => {
-  const ids = GISTS.map(([id]) => id);
+  // As many as one request may name (three since 15/11/2026): each of them has a sentence.
+  const ids = GISTS.slice(0, MAX_GISTS).map(([id]) => id);
   const none = async (db: LocalD1, corpus = CORPUS): Promise<boolean> =>
     (await loadGists(db, ids, corpus)).gists.length === 0;
-  assert.equal((await loadGists(gistBase(), ids, CORPUS)).gists.length, GISTS.length);
+  assert.equal((await loadGists(gistBase(), ids, CORPUS)).gists.length, ids.length);
 
   const stopped = await loadGists(gistBase({ gists: 'stopped' }), ids, CORPUS);
   assert.deepEqual(stopped, { state: { corpusVersion: CORPUS, open: false }, gists: [] });
@@ -413,7 +414,7 @@ void test('no sentence leaves a base whose sentences are stopped, were never ope
 
   // A switch of their own: stopping the written answers does not stop the sentences…
   const answersOff = gistBase({ ask: 'stopped' });
-  assert.equal((await loadGists(answersOff, ids, CORPUS)).gists.length, GISTS.length);
+  assert.equal((await loadGists(answersOff, ids, CORPUS)).gists.length, ids.length);
   assert.equal((await loadMeasures(answersOff, ids)).state.open, false);
   // …and stopping the sentences leaves the answers as they were.
   const sentencesOff = gistBase({ gists: 'stopped' });

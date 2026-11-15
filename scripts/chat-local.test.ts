@@ -24,8 +24,12 @@ import {
   chatRequestOf,
   cleanQuestion,
   gistsRequestOf,
+  MIN_SHARE_OF_BEST,
+  asksAboutSite,
+  asksOffTopic,
   rowsOf,
 } from '../src/lib/chat-local.js';
+import { fillerOnly, lookAlikeOnly } from '../src/lib/search-core.js';
 import {
   MAX_CHAT_WORDS as WORDS_OF_THE_RULE,
   sentenceWords,
@@ -77,11 +81,224 @@ void test('the sheet shows the three measures the search ranks best: best first,
     ),
     [A, B],
   );
+  // The best one is the best one the page can name: the others are held to it.
   assert.deepEqual(
     rowsOf(hits, (id) => id !== A),
     [B, C, D],
   );
   assert.deepEqual(rowsOf([], all), []);
+});
+
+void test('a measure far behind the best one is not shown: one word in common says nothing of what was asked', () => {
+  assert.equal(MIN_SHARE_OF_BEST, 0.4);
+  // « permis de conduire »: two measures about it, and a third one for « conduire » alone.
+  const driving = [
+    { id: A, score: 33.76 },
+    { id: B, score: 33.46 },
+    { id: C, score: 8.05 },
+  ];
+  assert.deepEqual(rowsOf(driving, all), [A, B]);
+  // The share itself is kept; just under is not — and nothing after it is looked at.
+  assert.deepEqual(
+    rowsOf(
+      [
+        { id: A, score: 10 },
+        { id: B, score: 4 },
+        { id: C, score: 3.99 },
+        { id: D, score: 3.99 },
+      ],
+      all,
+    ),
+    [A, B],
+  );
+  // A question on the end of life: the best row is beside the point, the right one is at
+  // 0.47 of it — a stricter share would have kept the wrong one alone (eval q021).
+  assert.deepEqual(
+    rowsOf(
+      [
+        { id: A, score: 93.45 },
+        { id: B, score: 43.72 },
+        { id: C, score: 37.56 },
+      ],
+      all,
+    ),
+    [A, B, C],
+  );
+  // One measure found is one row, whatever its score: the rule compares, it does not judge.
+  assert.deepEqual(rowsOf([{ id: A, score: 0.01 }], all), [A]);
+  assert.deepEqual(
+    rowsOf(
+      [
+        { id: A, score: 0 },
+        { id: B, score: 0 },
+      ],
+      all,
+    ),
+    [A, B],
+  );
+});
+
+void test('a word that only looks like the question’s is no reason to show a measure — unless nothing else was found', () => {
+  // What the index gives: the words of the measure that matched, the words asked.
+  assert.ok(lookAlikeOnly(['tension'], ['pension']));
+  assert.ok(lookAlikeOnly(['version'], ['reversion']));
+  assert.ok(!lookAlikeOnly(['pension'], ['pension']));
+  // A word that starts like the one asked, or the reverse, is that word: a plural, a stem.
+  assert.ok(!lookAlikeOnly(['officiell'], ['officiel']));
+  assert.ok(!lookAlikeOnly(['permi', 'conduite'], ['permi', 'conduire']));
+  assert.ok(!lookAlikeOnly(['tension', 'retraite'], ['pension', 'retraite']));
+  assert.ok(lookAlikeOnly([], ['pension']));
+  // « pension de réversion »: two measures on pensions, then a power line (« tension »).
+  const pension = [
+    { id: A, score: 8.52, near: false },
+    { id: B, score: 8.34, near: false },
+    { id: C, score: 4.0, near: true },
+    { id: D, score: 3.79, near: true },
+  ];
+  assert.deepEqual(rowsOf(pension, all), [A, B]);
+  // A look-alike ranked first does not hide what was found as written after it — and is
+  // itself kept: it came before anything better was known.
+  assert.deepEqual(
+    rowsOf(
+      [
+        { id: A, score: 9, near: true },
+        { id: B, score: 8, near: false },
+        { id: C, score: 7, near: true },
+      ],
+      all,
+    ),
+    [A, B],
+  );
+  // A typo: nothing matches as written, the look-alikes are all there is — and are shown.
+  assert.deepEqual(
+    rowsOf(
+      [
+        { id: A, score: 9, near: true },
+        { id: B, score: 8, near: true },
+      ],
+      all,
+    ),
+    [A, B],
+  );
+});
+
+void test('a measure found only by a word that says nothing of a subject is no answer', () => {
+  // What the index gives for a result: the words of the question that led to it.
+  assert.ok(fillerOnly(['parle']));
+  assert.ok(fillerOnly(['paye']));
+  assert.ok(fillerOnly(['nouvelle']));
+  assert.ok(fillerOnly(['fin', 'vie']));
+  assert.ok(fillerOnly(['60', 'ans']));
+  assert.ok(!fillerOnly(['pension']));
+  assert.ok(!fillerOnly(['vie', 'chere']));
+  assert.ok(!fillerOnly(['conge', 'paye']));
+  assert.ok(!fillerOnly(['journal', 'officiel']));
+  assert.ok(!fillerOnly([]), 'no word at all is no reason to drop a result');
+  // Such a measure is never a row — not even alone, not even first.
+  assert.deepEqual(rowsOf([{ id: A, score: 3, weak: true }], all), []);
+  assert.deepEqual(
+    rowsOf(
+      [
+        { id: A, score: 9, weak: true },
+        { id: B, score: 3 },
+        { id: C, score: 2, weak: true },
+        { id: D, score: 2 },
+      ],
+      all,
+    ),
+    // …and it is not the best one the others are held to.
+    [B, D],
+  );
+});
+
+void test('an insult, a judgement asked about a person or a party: one sentence of ours, like a request for a vote', () => {
+  for (const question of [
+    'Mélenchon est-il antisémite ?',
+    'Mélenchon c’est un dictateur ?',
+    'est-ce que Macron est fou',
+    'LFI est antisémite ?',
+    'Le RN est-il d’extrême droite ?',
+    'les insoumis sont des islamo-gauchistes',
+    'Que pense le programme du RN ?',
+    'tu penses quoi de Mélenchon',
+    'dis-moi franchement ce que tu penses de Mélenchon',
+    'Bardella a-t-il raison ?',
+    't’es nul connard',
+    'vous êtes vraiment nuls',
+    'ta gueule',
+    'programme de merde',
+  ]) {
+    assert.ok(asksOffTopic(question), question);
+  }
+  // A name is not a judgement: these are questions about what is written.
+  for (const question of [
+    'la réforme Macron des retraites',
+    'la réforme Macron est-elle abrogée ?',
+    'Mélenchon veut-il sortir de l’Europe ?',
+    'abroger la loi Kasbarian',
+    'la circulaire Retailleau',
+    'le SMIC est-il augmenté ?',
+    'l’hôpital est en crise',
+    'les cons',
+    'une mesure nulle part ailleurs',
+    'les salauds de pauvres, comme disait l’autre',
+    'la gueule de bois',
+  ]) {
+    assert.equal(
+      asksOffTopic(question),
+      question === 'les salauds de pauvres, comme disait l’autre',
+      question,
+    );
+  }
+});
+
+void test('a question about the site itself is told from a question about the programme', () => {
+  for (const question of [
+    'Qui a écrit ces réponses ?',
+    'qui a fait ce site',
+    'qui a vérifié les phrases ?',
+    'Qui a écrit le programme ?',
+    'Vous êtes payés par la France insoumise ?',
+    "t'es payé par qui",
+    'tu roules pour qui ?',
+    'vous travaillez pour LFI ?',
+    "Est-ce que c'est le vrai programme de Mélenchon ?",
+    "c'est officiel ?",
+    "est-ce que c'est officiel",
+    "c'est le site officiel ?",
+    'ce site est officiel ?',
+    'ce site est-il fiable',
+    "t'es une ia ?",
+    'tu es un robot',
+    'Êtes-vous une vraie personne ?',
+    'je parle à ChatGPT ?',
+    'Qui êtes-vous ?',
+    "t'es qui toi",
+    "c'est qui derrière ?",
+    'qui est derrière ce site',
+    'comment ça marche ?',
+    'comment fonctionne ce site',
+  ]) {
+    assert.ok(asksAboutSite(question), question);
+  }
+  // Questions about the programme that share their words — these keep their measures.
+  for (const question of [
+    'le RSA sera payé par qui ?',
+    'les congés payés',
+    'qui a fait la réforme des retraites ?',
+    'comment ça marche la retraite par répartition ?',
+    "c'est quoi une IA générative ?",
+    "que prévoit le programme sur l'IA ?",
+    'les robots et le travail',
+    "c'est quoi la position officielle sur le nucléaire",
+    'le journal officiel',
+    'qui paiera la retraite à 60 ans',
+    'officiers de police',
+    'pour qui voter',
+    'retraite',
+  ]) {
+    assert.ok(!asksAboutSite(question), question);
+  }
 });
 
 void test('« Demander » sends the measures about to be shown, and that is all of it', () => {

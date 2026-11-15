@@ -52,11 +52,19 @@ const config = {
     termsTitle: t('chat.terms.title'),
     termsBadge: t('chat.terms.badge'),
     where: t('search.result.where'),
+    gistsWhere: t('chat.gists.where'),
     incipit: t('quote.incipit_label'),
     firstWords: t('quote.first_words_label'),
     noneTitle: t('refusal.not_found.title'),
     noneLead: t('search.no_results_hint'),
     offTopic: t('refusal.off_topic'),
+    // What the sheet answers to a question about the site itself: the lines of its own pages.
+    aboutTitle: t('chat.about.title'),
+    aboutLines:
+      model === null
+        ? [t('independence.about'), t('about.who'), t('about.gists_line'), t('chat.about.live')]
+        : [t('independence.about'), t('about.who'), t('about.ai_line', { model })],
+    aboutLink: t('nav.about'),
     silence: t('silence.chat.local', { reopenTime: '{reopenTime}' }),
     paused: t('silence.paused'),
     aiTitle: ai('chat.ai.title'),
@@ -64,6 +72,7 @@ const config = {
     aiNote: ai('chat.ai_mention'),
     aiWaiting: ai('chat.ai.waiting'),
     method: t('chat.method_link'),
+    cleared: t('chat.cleared'),
     simpler: t('chat.follow.simpler'),
     example: t('chat.follow.example'),
   },
@@ -79,11 +88,23 @@ const config = {
     </form>
   </div>
 
-  {/* What scrolls: a line that says where the conversation lives, then the thread. */}
-  <div class="c-scroll" id="chat-scroll" tabindex="-1">
+  {
+    /* What scrolls: a line that says where the conversation lives, then the thread. It takes
+       the focus when the sheet opens on a question, and so it has a name. */
+  }
+  <div
+    class="c-scroll"
+    id="chat-scroll"
+    tabindex="-1"
+    role="group"
+    aria-label={t('chat.thread.label')}
+  >
     <p class="c-intro ref">{t('chat.memory')}</p>
     <div class="c-thread" id="chat-thread" role="log" aria-labelledby="chat-title"></div>
   </div>
+  {/* Said by the script when the conversation is emptied; and what every link of a turn does. */}
+  <p class="sr-only" id="chat-status" role="status"></p>
+  <p id="chat-new-tab" hidden>{t('chat.link.new_tab')}</p>
 
   {
     /* The offer (D16.53): what an AI can do here, what it is sent — never the question — and

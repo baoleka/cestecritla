@@ -179,7 +179,7 @@ async function runEngine(
       check(
         '« C’est écrit là » leads to the section in the official book',
         (await cta.getAttribute('href')) === sectionUrl(word.section) &&
-          (await cta.getAttribute('rel')) === 'noopener',
+          (await cta.getAttribute('rel')) === 'noopener noreferrer',
         (await cta.getAttribute('href')) ?? '',
       );
       check(
@@ -306,7 +306,7 @@ async function runEngine(
     check(
       '« C’est écrit là » leads to the measure in the official book',
       href.startsWith(sectionUrl(first[0]?.section ?? '-')) &&
-        (await page.locator('#game-live a.cta').getAttribute('rel')) === 'noopener',
+        (await page.locator('#game-live a.cta').getAttribute('rel')) === 'noopener noreferrer',
       href,
     );
     // The start of the measure first — it is where the page scrolls — then, where three

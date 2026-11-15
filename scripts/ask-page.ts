@@ -21,7 +21,9 @@ import {
   INDEX_OPTIONS,
   buildQuery,
   expand,
+  fillerOnly,
   groupBySection,
+  lookAlikeOnly,
   searchOptions,
   type SearchDoc,
   type SynonymGroup,
@@ -55,7 +57,13 @@ export function loadPage(): (question: string) => PageAsk {
     const query = buildQuery(question, expand(question, groups));
     const hits = index
       .search(query as Parameters<typeof index.search>[0], searchOptions())
-      .map((r) => ({ id: String(r.id), score: r.score, terms: r.terms }));
+      .map((r) => ({
+        id: String(r.id),
+        score: r.score,
+        terms: r.terms,
+        near: lookAlikeOnly(r.terms, r.queryTerms),
+        weak: fillerOnly(r.queryTerms),
+      }));
     const known = new Set(order);
     return {
       rows: rowsOf(hits, (id) => known.has(id)),

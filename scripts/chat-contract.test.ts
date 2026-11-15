@@ -51,7 +51,9 @@ void test('/api/gists names measures and nothing else: a sentence does not fit i
     corpus: CORPUS,
     ids: [A, B, C],
   });
-  assert.equal(parseGistsRequest({ corpus: CORPUS, ids: many(MAX_GIST_IDS) })?.ids.length, 8);
+  // As many as a sheet shows, and not one more (security review of 15/11/2026).
+  assert.equal(MAX_GIST_IDS, 3);
+  assert.equal(parseGistsRequest({ corpus: CORPUS, ids: many(MAX_GIST_IDS) })?.ids.length, 3);
   // A field the contract does not name makes the request unreadable — refused, not dropped: a
   // page that sends more than it says it sends must fail loudly.
   for (const extra of [

@@ -1,7 +1,7 @@
 /**
- * The Worker as it runs — bundled as wrangler bundles it, started in the local Workers runtime
- * (workerd, through miniflare), with a local base that holds INVENTED sentences. Nothing is
- * deployed, nothing is sent to anyone, no model exists here.
+ * The Worker as it runs — its source bundled into one module, started in the local Workers
+ * runtime (workerd, through miniflare), with a local base that holds INVENTED sentences.
+ * Nothing is deployed, nothing is sent to anyone, no model exists here.
  *
  * Why this file exists (15/11/2026). Every path of the two routes is a pure function with its
  * test (scripts/chat-worker.test.ts) — and the few lines that wire them to the platform had
@@ -15,7 +15,18 @@
  *   - the guards as the platform sees them: another origin, another method, a field too many,
  *     another book, a base that is stopped, a Worker without its secret, a visitor who asks
  *     faster than anyone reads;
- *   - the Worker built from the committed file does, on each host, what that file says.
+ *   - the Worker built from the committed file does, on each host, what that file says;
+ *   - by plain HTTP nothing is read; the text of the book, were it still in the base, reaches
+ *     no answer; a closed route does not open what it is sent (security review of 15/11/2026).
+ *
+ * What this file does NOT prove, so that nobody reads more into it:
+ *   - the bytes deployed: the bundle here is esbuild's with the options below, wrangler's has
+ *     its own — the same source, not the same file;
+ *   - the limiter of the platform: miniflare counts exactly, Cloudflare's binding is
+ *     « permissive, eventually consistent », one count per location (its documentation). Six a
+ *     minute is an order of size there, never a wall — and it protects the allowance, not the
+ *     sentences, which can all be asked for in minutes (14-risques.md, R35);
+ *   - what the zone does before the Worker (plain HTTP turned into https, the routes).
  *
  * esbuild and miniflare are not asked for by name in package.json: they come with astro and
  * with wrangler, at the versions the lockfile pins — the runtime here is the one `wrangler`
@@ -31,6 +42,8 @@ import { build } from 'esbuild';
 import { Miniflare, convertV4MiniflareOptions } from 'miniflare';
 import { siteFor } from '../src/worker/chat.js';
 import type { Manifest } from './aec26-types.js';
+import { CHAT_CONFIG } from './build-mode.js';
+import { parseJsonc } from './jsonc.js';
 import { gistsSql, switchSql } from './seed-ask-2026.js';
 
 const ORIGIN = 'https://beta.cestecritla.fr';
@@ -49,6 +62,26 @@ const ROWS = manifest.sections
   }));
 const IDS = ROWS.map((row) => row.id);
 const committed = JSON.parse(readFileSync('data/2026/ask.json', 'utf8')) as Record<string, unknown>;
+
+/** What the Worker of the chat binds, read from its own file — not copied here. */
+interface Bindings {
+  d1_databases: { binding: string }[];
+  durable_objects: { bindings: { name: string; class_name: string }[] };
+  ratelimits: { name: string; simple: { limit: number; period: 10 | 60 } }[];
+  vars: Record<string, string>;
+}
+const declared = parseJsonc(readFileSync(CHAT_CONFIG, 'utf8')) as Bindings & {
+  env: { preview: Bindings };
+};
+/** The one binding of a kind the file declares — the file is wrong, and this test with it, without one. */
+function only<T>(list: readonly T[], what: string): T {
+  const [first] = list;
+  if (first === undefined || list.length !== 1) throw new Error(`${CHAT_CONFIG}: one ${what}`);
+  return first;
+}
+const base = only(declared.d1_databases, 'base');
+const object = only(declared.durable_objects.bindings, 'Durable Object');
+const limiter = only(declared.ratelimits, 'limiter');
 
 /** The Worker as one module, with the file of the mode replaced by the one a test wants. */
 async function bundle(ask: Record<string, unknown>): Promise<string> {
@@ -86,12 +119,13 @@ interface Started {
   post: (
     path: string,
     body: unknown,
-    init?: { origin?: string; method?: string },
-  ) => Promise<{ status: number; body: unknown; headers: Headers }>;
+    /** `base`: the scheme and host asked; `raw`: a body sent as it is, not as JSON of `body`. */
+    init?: { origin?: string; method?: string; base?: string; raw?: string },
+  ) => Promise<{ status: number; body: unknown; text: string; headers: Headers }>;
   sql: (statement: string) => Promise<void>;
 }
 
-/** One Worker in the local runtime: its bindings as wrangler.chat.jsonc names them, no AI. */
+/** One Worker in the local runtime: the bindings wrangler.chat.jsonc declares, without the AI. */
 async function start(
   code: string,
   environment: string,
@@ -101,19 +135,20 @@ async function start(
     convertV4MiniflareOptions({
       modules: [{ type: 'ESModule', path: 'index.mjs', contents: code }],
       compatibilityDate: '2026-09-09',
-      d1Databases: { DB: `base-${String(running.length)}` },
-      durableObjects: { BUDGET: { className: 'NeuronBudget', useSQLite: true } },
-      ratelimits: { RATE: { namespace_id: '2026', simple: { limit: 6, period: 60 } } },
+      d1Databases: { [base.binding]: `base-${String(running.length)}` },
+      durableObjects: { [object.name]: { className: object.class_name, useSQLite: true } },
+      // A namespace of this test: counts are per instance here, and exact — not on the platform.
+      ratelimits: { [limiter.name]: { namespace_id: '2026', simple: limiter.simple } },
       bindings: {
+        ...declared.vars,
         CORPUS_VERSION: CORPUS,
         ENVIRONMENT: environment,
-        NEURON_HARD_STOP: '8500',
         ...(options.salt === undefined ? {} : { RATE_SALT: options.salt }),
       },
     }),
   );
   running.push(instance);
-  const db = await instance.getD1Database('DB');
+  const db = await instance.getD1Database(base.binding);
   const sql = async (statement: string): Promise<void> => {
     await db.prepare(statement).run();
   };
@@ -126,15 +161,16 @@ async function start(
     }
   }
   const post: Started['post'] = async (path, body, init = {}) => {
-    const response = await instance.dispatchFetch(`${ORIGIN}${path}`, {
+    const response = await instance.dispatchFetch(`${init.base ?? ORIGIN}${path}`, {
       method: init.method ?? 'POST',
       headers: { origin: init.origin ?? ORIGIN, 'content-type': 'application/json' },
-      ...(init.method === 'GET' ? {} : { body: JSON.stringify(body) }),
+      ...(init.method === 'GET' ? {} : { body: init.raw ?? JSON.stringify(body) }),
     });
     const text = await response.text();
     return {
       status: response.status,
       body: text === '' ? null : (JSON.parse(text) as unknown),
+      text,
       headers: response.headers as unknown as Headers,
     };
   };
@@ -145,7 +181,32 @@ const SALT = 'a-salt-for-a-test-of-thirty-two-chars';
 const OPEN = switchSql('open', 'gists') ?? '';
 const STOPPED = switchSql('stopped', 'gists') ?? '';
 const LOCAL = { kind: 'local' };
-const sheet = { ...committed, mode: 'off', preview_mode: 'chat', model: null };
+/**
+ * The file of a test: the preview host asks, no model is named. The decision about the campaign
+ * months is INVENTED here, so that what this file proves does not change on 1 January 2027 —
+ * the Worker in workerd reads the real clock. The rule of that day is held, with its hours, in
+ * scripts/chat-worker.test.ts.
+ */
+const sheet = {
+  ...committed,
+  mode: 'off',
+  preview_mode: 'chat',
+  model: null,
+  campaign: { serve: true, decided_on: '2026-11-15', decided_by: 'editor' },
+};
+const QUIET = { kind: 'quiet', why: 'none' };
+
+void test('the two environments of the chat Worker bind the same things under the same names', () => {
+  // This file starts the Worker with the names of the top level: the preview must not differ.
+  const names = (b: Bindings): unknown => ({
+    base: b.d1_databases.map((d) => d.binding),
+    object: b.durable_objects.bindings,
+    limiter: b.ratelimits.map((r) => ({ name: r.name, simple: r.simple })),
+    stop: b.vars.NEURON_HARD_STOP,
+  });
+  assert.deepEqual(names(declared.env.preview), names(declared));
+  assert.deepEqual(limiter.simple, { limit: 6, period: 60 });
+});
 
 void test('a sheet without a model: the Worker serves the sentences, and calls nobody (D16.60)', async () => {
   const worker = await start(await bundle(sheet), 'preview', { salt: SALT });
@@ -170,12 +231,11 @@ void test('a sheet without a model: the Worker serves the sentences, and calls n
   assert.equal(answer.headers.get('x-robots-tag'), 'noindex');
   assert.equal(answer.headers.get('access-control-allow-origin'), null, 'no CORS is sent');
   // The other route is closed whatever it is sent: a well-formed request gets « quiet ».
-  const quiet = { kind: 'quiet', why: 'none' };
   assert.deepEqual(
     (await worker.post('/api/chat', { corpus: CORPUS, ids: [IDS[0]], words: ['phrase'] })).body,
-    quiet,
+    QUIET,
   );
-  assert.deepEqual((await worker.post('/api/chat', { question: 'pour qui voter ?' })).body, quiet);
+  assert.deepEqual((await worker.post('/api/chat', { question: 'pour qui voter ?' })).body, QUIET);
   // Stopped again by one statement, with no deployment: the page keeps its links.
   await worker.sql(STOPPED);
   assert.deepEqual((await worker.post('/api/gists', asked)).body, LOCAL);
@@ -244,7 +304,7 @@ void test('the Worker built from the committed file does, on each host, what tha
     const worker = await start(code, environment, { salt: SALT });
     await worker.sql(OPEN);
     const answer = (await worker.post('/api/gists', asked)).body as { kind: string; ai?: boolean };
-    const says = siteFor(committed, environment);
+    const says = siteFor(committed, environment, new Date());
     assert.equal(answer.kind, says.mode === 'chat' ? 'gists' : 'local', environment);
     // No model is named in the committed file (D16.60): where sentences are served, no AI is.
     if (answer.kind === 'gists') assert.equal(answer.ai, false, environment);
@@ -254,4 +314,91 @@ void test('the Worker built from the committed file does, on each host, what tha
       environment,
     );
   }
+});
+
+void test('in the clear, nothing is read: a request by plain HTTP is refused before anything else', async () => {
+  const worker = await start(await bundle(sheet), 'preview', { salt: SALT });
+  await worker.sql(OPEN);
+  const asked = { corpus: CORPUS, ids: [IDS[0]] };
+  // A page loaded in the clear would send its own origin — the very one of the address asked:
+  // the check of the origin alone lets it through (seen live on 15/11/2026, a 400 by HTTP).
+  const plain = ORIGIN.replace('https://', 'http://');
+  for (const path of ['/api/gists', '/api/chat', '/api/bench', '/api/nothing']) {
+    const answer = await worker.post(path, asked, { base: plain, origin: plain });
+    assert.equal(answer.status, 403, path);
+    assert.equal(answer.text, '', path);
+  }
+  // The same request, by https, is answered: the refusal above was of the scheme alone.
+  const answer = (await worker.post('/api/gists', asked)).body as { kind: string };
+  assert.equal(answer.kind, 'gists');
+});
+
+void test('the text of the book reaches no answer — even left in the base, with the old switch open', async () => {
+  const worker = await start(await bundle(sheet), 'preview', { salt: SALT });
+  // The base as it stood while it still held the book (the text is withdrawn before production
+  // opens, `seed-ask-2026.ts --withdraw-text`; this holds if it were not): the table of the
+  // text filled — here with a marker, never a word of the book — and the switch of the written
+  // answers, a route that no longer exists, left open.
+  const SENTINEL = 'SENTINEL-zorglub-de-montcuq';
+  await worker.sql(
+    'INSERT INTO propositions (id, section_id, kind, ord, text, lead) ' +
+      `VALUES ('${String(IDS[0])}', 'p1c1-s01', 'measure', 1, '${SENTINEL}', '${SENTINEL}')`,
+  );
+  await worker.sql(
+    "INSERT INTO meta (key, value) VALUES ('ask', 'open') " +
+      "ON CONFLICT(key) DO UPDATE SET value = 'open'",
+  );
+  await worker.sql(OPEN);
+  const one = { corpus: CORPUS, ids: [IDS[0]] };
+  const tries: [string, unknown, { method?: string }?][] = [
+    ['/api/gists', one],
+    ['/api/gists', { corpus: CORPUS, ids: IDS.slice(0, 3) }],
+    ['/api/chat', { ...one, words: ['phrase'] }],
+    ['/api/bench', one],
+    ['/api/bench', { ...one, key: 'k'.repeat(40), mode: 'explain' }],
+    ['/api/ask', one],
+    ['/api/gists', null, { method: 'GET' }],
+  ];
+  const seen: string[] = [];
+  for (const [path, body, init] of tries) {
+    const answer = await worker.post(path, body, init);
+    seen.push(answer.text);
+    answer.headers.forEach((value, name) => seen.push(`${name}: ${value}`));
+  }
+  assert.ok(seen.join('\n').length > 200, 'the answers were read');
+  assert.ok(!seen.join('\n').includes('SENTINEL'), 'a word of the table of the text was served');
+  // What the first request got is the sentence of ours, and nothing else.
+  assert.match(seen[0] ?? '', /phrase d'essai/);
+  // The key of the bench was never set on this Worker: its route does not exist for anyone.
+  assert.equal((await worker.post('/api/bench', one)).status, 404);
+});
+
+void test('a closed route opens nothing it is sent; an open one refuses what a page never sends', async () => {
+  const worker = await start(await bundle(sheet), 'preview', { salt: SALT });
+  await worker.sql(OPEN);
+  // /api/chat is closed — no model is named. Were its body opened, these would be refused as
+  // malformed (400): « quiet » says nothing was read, not even a question.
+  for (const raw of ['{"corpus": not json', 'x'.repeat(50_000), '']) {
+    const answer = await worker.post('/api/chat', null, { raw });
+    assert.equal(answer.status, 200);
+    assert.deepEqual(answer.body, QUIET);
+  }
+  // /api/gists is open: it reads — and refuses what is malformed, what is longer than a request
+  // can be, and more measures than a page ever names (three: src/lib/chat-contract.ts).
+  const one = { corpus: CORPUS, ids: [IDS[0]] };
+  assert.equal((await worker.post('/api/gists', null, { raw: '{"corpus": not json' })).status, 400);
+  const long = JSON.stringify({ ...one, pad: 'x'.repeat(7_000) });
+  assert.equal((await worker.post('/api/gists', null, { raw: long })).status, 400);
+  assert.equal(
+    (await worker.post('/api/gists', { corpus: CORPUS, ids: IDS.slice(0, 4) })).status,
+    400,
+  );
+  assert.equal(
+    (
+      (await worker.post('/api/gists', { corpus: CORPUS, ids: IDS.slice(0, 3) })).body as {
+        gists: unknown[];
+      }
+    ).gists.length,
+    3,
+  );
 });

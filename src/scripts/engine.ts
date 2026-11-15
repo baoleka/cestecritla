@@ -17,6 +17,8 @@ import {
   type SearchDoc,
   type SectionHit,
   type SynonymGroup,
+  fillerOnly,
+  lookAlikeOnly,
 } from '../lib/search-core.ts';
 import { firstWordsOf, isLocatorDisplay, quoted, type LocatorDisplay } from '../lib/first-words.ts';
 
@@ -78,7 +80,12 @@ export function findRanked(engine: Engine, question: string): Ranked[] {
   const query = buildQuery(question, expand(question, engine.meta.synonyms));
   return engine.index
     .search(query as Parameters<typeof engine.index.search>[0], searchOptions())
-    .map((r) => ({ id: String(r.id), score: r.score }));
+    .map((r) => ({
+      id: String(r.id),
+      score: r.score,
+      near: lookAlikeOnly(r.terms, r.queryTerms),
+      weak: fillerOnly(r.queryTerms),
+    }));
 }
 
 /** An element holding text — never markup: what a visitor typed is not parsed as HTML. */
@@ -97,6 +104,9 @@ export function el<K extends keyof HTMLElementTagNameMap>(
  * The link of a measure into the official page: the section anchor, with the text directive
  * next to it for the browsers that can land on the sentence (src/scripts/deep-links.ts).
  * Null when the identifier is not one this state of the book knows.
+ *
+ * `noreferrer`: the official site is not told that its visitor comes from this one — like
+ * every link of the site that leaves it (scripts/check-build.test.ts).
  */
 export function measureLink(meta: Meta, id: string, text?: string): HTMLAnchorElement | null {
   const entry = meta.items[id];
@@ -105,7 +115,7 @@ export function measureLink(meta: Meta, id: string, text?: string): HTMLAnchorEl
   const [label, fragment] = entry;
   const link = el('a', text ?? label.toLowerCase());
   link.href = section[2];
-  link.rel = 'noopener';
+  link.rel = 'noopener noreferrer';
   if (fragment !== '') link.dataset.fragment = fragment;
   return link;
 }

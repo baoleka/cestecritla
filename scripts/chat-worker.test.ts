@@ -33,6 +33,8 @@ import {
   closedGists,
   EXPLAIN_ROOM,
   type GistsDeps,
+  CAMPAIGN_FROM,
+  campaignAllows,
   siteFor,
 } from '../src/worker/chat.js';
 import { MODELS, keepsNothing } from '../src/worker/models.js';
@@ -521,37 +523,40 @@ void test('a model is asked only where its host keeps nothing', () => {
   );
 });
 
+/** An hour before the campaign months: what the file says is what the Worker does. */
+const BEFORE = new Date('2026-11-15T12:00:00Z');
+
 void test('the Worker follows the file: sentences without a model, a model only where it may read (D16.60)', () => {
   const file = { mode: 'off', preview_mode: 'chat', model: null, min_shared: 2 };
   // No model named: the sentences are served on the host that asks — and no model anywhere.
-  assert.deepEqual(siteFor(file, 'preview'), { mode: 'chat', model: null, minShared: 2 });
-  assert.deepEqual(siteFor({ mode: 'chat' }, 'production'), {
+  assert.deepEqual(siteFor(file, 'preview', BEFORE), { mode: 'chat', model: null, minShared: 2 });
+  assert.deepEqual(siteFor({ mode: 'chat' }, 'production', BEFORE), {
     mode: 'chat',
     model: null,
     minShared: undefined,
   });
   // …and what such a Worker does with the two routes: one opens, the other stays closed.
-  const open = { ...siteFor(file, 'preview'), silence: { silent: false, reopen: null } };
+  const open = { ...siteFor(file, 'preview', BEFORE), silence: { silent: false, reopen: null } };
   assert.equal(closedGists(open), null);
   assert.deepEqual(closedChat(open), QUIET);
   // The preview host may ask before production does, never the other way; anything that is
   // not "preview" is production.
   for (const environment of ['production', undefined, 'Preview', 'apex', '']) {
-    assert.equal(siteFor(file, environment).mode, 'off', String(environment));
+    assert.equal(siteFor(file, environment, BEFORE).mode, 'off', String(environment));
   }
-  assert.equal(siteFor({ mode: 'chat', preview_mode: 'off' }, 'preview').mode, 'chat');
+  assert.equal(siteFor({ mode: 'chat', preview_mode: 'off' }, 'preview', BEFORE).mode, 'chat');
   // A model that may read — its host writes that it keeps nothing — explains.
-  const named = siteFor({ ...file, model: 'mistral-small-3.1' }, 'preview');
+  const named = siteFor({ ...file, model: 'mistral-small-3.1' }, 'preview', BEFORE);
   assert.equal(named.mode, 'chat');
   assert.equal(named.model, MODELS['mistral-small-3.1']);
   // A model that may not — unknown, or one whose host keeps something — closes both routes.
   for (const model of ['gpt-oss-120b', 'no-such-model', 'constructor', 7, {}]) {
-    const refused = siteFor({ ...file, model }, 'preview');
+    const refused = siteFor({ ...file, model }, 'preview', BEFORE);
     assert.deepEqual([refused.mode, refused.model], ['off', null], JSON.stringify(model));
   }
   // A file that does not read, or says anything but "chat": nothing opens by accident.
   for (const bad of [null, undefined, 'chat', [], { mode: 'on' }, { preview_mode: 'CHAT' }]) {
-    assert.equal(siteFor(bad, 'preview').mode, 'off', JSON.stringify(bad));
+    assert.equal(siteFor(bad, 'preview', BEFORE).mode, 'off', JSON.stringify(bad));
   }
   // The committed file, as each host reads it today — and the wiring asks nobody else.
   const committed = JSON.parse(readFileSync('data/2026/ask.json', 'utf8')) as {
@@ -559,15 +564,65 @@ void test('the Worker follows the file: sentences without a model, a model only 
     preview_mode: string;
     model: unknown;
   };
-  assert.equal(siteFor(committed, 'production').mode, committed.mode);
+  assert.equal(siteFor(committed, 'production', BEFORE).mode, committed.mode);
   assert.equal(
-    siteFor(committed, 'preview').mode,
+    siteFor(committed, 'preview', BEFORE).mode,
     committed.mode === 'chat' || committed.preview_mode === 'chat' ? 'chat' : 'off',
   );
-  assert.equal(siteFor(committed, 'preview').model, null, 'no model is named (D16.60)');
+  assert.equal(siteFor(committed, 'preview', BEFORE).model, null, 'no model is named (D16.60)');
   const wiring = readFileSync('src/worker/index.ts', 'utf8');
-  assert.match(wiring, /siteFor\(askConfig, env\.ENVIRONMENT\)/);
+  assert.match(wiring, /siteFor\(askConfig, env\.ENVIRONMENT, new Date\(\)\)/);
   assert.doesNotMatch(wiring, /modeFor|keepsNothing/, 'the wiring decides nothing of the mode');
+});
+
+void test('from 1 January 2027 the sentences are served only if the editor decided it, in writing (D16.65)', () => {
+  const file = { mode: 'chat', preview_mode: 'chat', model: null };
+  const lastHour = new Date('2026-12-31T22:59:59Z');
+  const firstHour = new Date(CAMPAIGN_FROM);
+  // 1 January 2027, 0 h in Paris — the first day of the third month before the month of the vote.
+  assert.equal(CAMPAIGN_FROM, '2026-12-31T23:00:00.000Z');
+  for (const host of ['preview', 'production']) {
+    assert.equal(siteFor(file, host, lastHour).mode, 'chat', host);
+    // His silence is the cautious answer: nothing is served, on any host, with no deployment.
+    assert.equal(siteFor(file, host, firstHour).mode, 'off', host);
+    assert.equal(siteFor(file, host, new Date('2027-04-10T08:00:00Z')).mode, 'off', host);
+  }
+  // …and a Worker in that state answers as any closed one does: « local », nothing read.
+  const closed = {
+    ...siteFor(file, 'preview', firstHour),
+    silence: { silent: false, reopen: null },
+  };
+  assert.deepEqual(closedGists(closed), { kind: 'local' });
+  // Only a decision of the editor, dated, that says « serve » opens them again.
+  const decided = { serve: true, decided_on: '2026-12-20', decided_by: 'editor' };
+  assert.equal(siteFor({ ...file, campaign: decided }, 'production', firstHour).mode, 'chat');
+  assert.ok(campaignAllows({ campaign: decided }, firstHour));
+  for (const campaign of [
+    null,
+    undefined,
+    'serve',
+    {},
+    { ...decided, serve: false },
+    { ...decided, serve: 'true' },
+    // The session wrote the default; it cannot write his decision (D16.57 gives it no such word).
+    { ...decided, decided_by: 'session' },
+    { ...decided, decided_by: undefined },
+    { ...decided, decided_on: null },
+    { ...decided, decided_on: 'bientôt' },
+    { ...decided, decided_on: '2026-13-45' },
+  ]) {
+    assert.equal(campaignAllows({ campaign }, firstHour), false, JSON.stringify(campaign));
+    // Before the campaign months the question is not even asked.
+    assert.equal(campaignAllows({ campaign }, lastHour), true, JSON.stringify(campaign));
+  }
+  // The committed file carries the question, and no answer the session would have invented.
+  const committed = JSON.parse(readFileSync('data/2026/ask.json', 'utf8')) as {
+    campaign?: { serve: unknown; decided_on: unknown; decided_by: unknown };
+  };
+  assert.ok(committed.campaign !== undefined, 'data/2026/ask.json: campaign');
+  if (committed.campaign.decided_by !== 'editor') {
+    assert.equal(campaignAllows(committed, firstHour), false);
+  }
 });
 
 void test('what the routes of the chat do not contain: the reader of the book, a gateway, a log', () => {

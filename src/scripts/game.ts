@@ -371,7 +371,7 @@ function start(
     }
     const there = el('a', s.cta, 'cta');
     there.href = entry.url;
-    there.rel = 'noopener';
+    there.rel = 'noopener noreferrer';
     if (entry.fragment !== '') there.dataset.fragment = entry.fragment;
     const actions = el('p', undefined, 'g-actions');
     actions.append(
@@ -536,7 +536,7 @@ function start(
         if (place !== null) {
           const there = el('a');
           there.href = entry.url;
-          there.rel = 'noopener';
+          there.rel = 'noopener noreferrer';
           if (entry.fragment !== '') there.dataset.fragment = entry.fragment;
           there.append(titled('span', place.section.title));
           item.append(' — ', there);

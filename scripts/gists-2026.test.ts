@@ -1945,8 +1945,8 @@ void test('what may not enter the base: another measure, another wording, a sent
     }
   }
   // What passes here is read by the page as the Worker will hand it out: all of it, as it is.
-  assert.ok(ROWS.length <= MAX_GIST_IDS);
-  const handed = ROWS.map(({ id, text }) => ({ id, text }));
+  const handed = ROWS.slice(0, MAX_GIST_IDS).map(({ id, text }) => ({ id, text }));
+  assert.equal(handed.length, MAX_GIST_IDS);
   assert.deepEqual(
     parseGistsResponse({ kind: 'gists', corpus: CORPUS, gists: handed, ai: false }),
     { kind: 'gists', corpus: CORPUS, gists: handed, ai: false },

@@ -128,6 +128,21 @@ void test('a page opens no origin but ours — none, on any page, whether the si
   }
 });
 
+void test('a link that leaves the site does not say where the visitor comes from', () => {
+  // The header of the pages sends our origin with a link to another site. The links that leave
+  // — all of them go to the official site — carry `noreferrer`: that site is not told that
+  // its visitor reads this one (security review of 15/11/2026). `noopener` stays with it: the
+  // page that opens gets no handle on ours.
+  for (const root of ['dist', 'dist-ask', 'dist-gists']) {
+    for (const file of walk(root).filter((f) => f.endsWith('.html'))) {
+      for (const [tag] of read(file).matchAll(/<a\b[^>]*\bhref="https?:\/\/[^"]*"[^>]*>/g)) {
+        const href = /\bhref="([^"]*)"/.exec(tag)?.[1] ?? '';
+        assert.match(tag, /\brel="noopener noreferrer"/, `${file}: ${href}`);
+      }
+    }
+  }
+});
+
 void test('`hidden` hides, whatever display a rule gives the element', () => {
   if (skip) return;
   // Every button of the site is an inline-flex: without this rule the browser's own

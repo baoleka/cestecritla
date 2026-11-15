@@ -140,56 +140,103 @@ function spansOf(entry: TermEntry, text: string, foldedText: string): Span[] {
 const within = (span: Span, other: Span): boolean =>
   other.at <= span.at && span.end <= other.end && other.end - other.at > span.end - span.at;
 
+/** A term found in a text: where it first stands there, and where that wording ends. */
+interface Located {
+  entry: TermEntry;
+  at: number;
+  end: number;
+}
+
+/**
+ * The terms one text uses, each once, with the first place where a wording of its own stands
+ * — a wording inside a longer wording of another entry is that entry's.
+ */
+function locate(raw: string, entries: readonly TermEntry[]): Located[] {
+  const text = raw.normalize('NFC');
+  const lower = folded(text);
+  const hits = entries
+    .map((entry) => ({ entry, spans: spansOf(entry, text, lower) }))
+    .filter((hit) => hit.spans.length > 0);
+  const found: Located[] = [];
+  for (const hit of hits) {
+    const own = hit.spans
+      .filter(
+        (span) =>
+          !hits.some(
+            (other) => other !== hit && other.spans.some((longer) => within(span, longer)),
+          ),
+      )
+      .sort((a, b) => a.at - b.at);
+    const first = own[0];
+    if (first !== undefined) found.push({ entry: hit.entry, at: first.at, end: first.end });
+  }
+  return found.sort((a, b) => a.at - b.at);
+}
+
 /**
  * The terms a set of texts uses, in the order they first appear — `max` at most, each once.
- * The texts are read in the order given: what the question names comes before what the
- * sentences use, when the question is handed in first.
+ * The texts are read in the order given.
  */
 export function termsIn(
   texts: readonly string[],
   entries: readonly TermEntry[],
   max: number = MAX_TERMS,
 ): TermEntry[] {
-  const found: { entry: TermEntry; at: number }[] = [];
-  const seen = new Set<string>();
-  let offset = 0;
-  for (const raw of texts) {
-    const text = raw.normalize('NFC');
-    const lower = folded(text);
-    const hits = entries
-      .map((entry) => ({ entry, spans: spansOf(entry, text, lower) }))
-      .filter((hit) => hit.spans.length > 0);
-    for (const hit of hits) {
-      if (seen.has(hit.entry.id)) continue;
-      // What stands inside a longer wording of another entry is that entry's.
-      const own = hit.spans.filter(
-        (span) =>
-          !hits.some(
-            (other) => other !== hit && other.spans.some((longer) => within(span, longer)),
-          ),
-      );
-      if (own.length === 0) continue;
-      seen.add(hit.entry.id);
-      found.push({ entry: hit.entry, at: offset + Math.min(...own.map((span) => span.at)) });
+  const found: TermEntry[] = [];
+  for (const text of texts) {
+    for (const { entry } of locate(text, entries)) {
+      if (!found.includes(entry)) found.push(entry);
     }
-    offset += text.length + 1;
   }
-  return found
-    .sort((a, b) => a.at - b.at)
-    .slice(0, Math.max(0, max))
-    .map(({ entry }) => entry);
-}
-
-/** A term the sheet explains, and whether the question itself names it. */
-export interface Explained {
-  entry: TermEntry;
-  /** True when the visitor wrote the term. */
-  asked: boolean;
+  return found.slice(0, Math.max(0, max));
 }
 
 /**
- * What the sheet explains under a turn: the terms the question names first, then those of the
- * sentences on the screen.
+ * Ways of asking what a word means, read in a folded question — as people type them on a phone:
+ * « c'est quoi », « c koi », « ça veut dire quoi », « définition », « késako ».
+ */
+const MEANING =
+  /c ?'? ?est (?:quoi|koi)|(?:^|[^a-z])c ?(?:quoi|koi)(?![a-z])|ckoi|k[e]?[sz]a[ck]o|que[sz]a[ck]o|qu ?'? ?est[- ]ce qu|veut dire|signifi|definition|expli(?:que|cation)|compren(?:ds?|d) (?:pas|rien)/;
+
+/** True when a question asks, in so many words, what a word means. */
+export function asksMeaning(question: string): boolean {
+  return MEANING.test(folded(question).trim());
+}
+
+/** What may stand around a term when the term is the whole question: an article, a mark. */
+const BEFORE_A_TERM = /^[^a-z0-9]*(?:(?:le|la|les|un|une|des|du|de|au|aux) +|[ld] ?' ?)?/;
+const AFTER_A_TERM = /[^a-z0-9]*$/;
+
+/** True when the question is the term and nothing else: « T2A », « le smic ? », « L'ONDAM ». */
+function isWholeQuestion(question: string, found: Located): boolean {
+  const lower = folded(question.normalize('NFC'));
+  const from = BEFORE_A_TERM.exec(lower)?.[0].length ?? 0;
+  const to = lower.length - (AFTER_A_TERM.exec(lower)?.[0].length ?? 0);
+  return found.at <= from && found.end >= to;
+}
+
+/** A term the sheet explains, and where. */
+export interface Explained {
+  entry: TermEntry;
+  /**
+   * True when the explanation is what was asked for — the question asks what the word means,
+   * or is the word alone: it is shown first, open. False: the word is one the sentences on
+   * the screen use, and its explanation waits under them, closed.
+   */
+  top: boolean;
+}
+
+/**
+ * What the sheet explains for a turn — `max` terms at most.
+ *
+ *   first, open   the terms of the question, when it asks what a word means (« c'est quoi la
+ *                 T2A ? ») or is the word itself (« T2A »);
+ *   then, closed  the terms the sentences on the screen use — those the question holds too
+ *                 come first among them.
+ *
+ * A term the question merely holds, and that no sentence on the screen uses, is NOT explained:
+ * a word of a question has the sense its writer gave it, and « la réforme du BAC » is not about
+ * a police brigade. On the screen, a term has the sense of the sentence next to it.
  */
 export function explainedFor(
   question: string,
@@ -197,25 +244,23 @@ export function explainedFor(
   entries: readonly TermEntry[],
   max: number = MAX_TERMS,
 ): Explained[] {
-  const asked = new Set(termsIn([question], entries, max).map((entry) => entry.id));
-  return termsIn([question, ...sentences], entries, max).map((entry) => ({
-    entry,
-    asked: asked.has(entry.id),
-  }));
-}
-
-/** Ways of asking what a word means, read in a folded question: « c'est quoi », « définition ». */
-const MEANING =
-  /c ?'? ?est quoi|c quoi|kesako|quesaco|qu ?'? ?est[- ]ce qu|veut dire|signifi|definition|expli(?:que|cation)|compren(?:ds?|d) (?:pas|rien)/;
-
-/**
- * True when a question asks what a word means, or is little more than the word itself — the
- * explanation of that word is then what was asked, and the sheet shows it first, open. Any
- * other question that happens to hold a term gets its measures first.
- */
-export function asksMeaning(question: string): boolean {
-  const plain = folded(question).trim();
-  return MEANING.test(plain) || plain.split(/ +/).filter((word) => /\w/.test(word)).length <= 3;
+  const named = locate(question, entries);
+  const meaning = asksMeaning(question);
+  const top = named.filter((found) => meaning || isWholeQuestion(question, found));
+  const first = top.map((found) => found.entry);
+  const used = termsIn(sentences, entries, entries.length).filter(
+    (entry) => !first.includes(entry),
+  );
+  // Among the words of the sentences, those the question holds too come first.
+  const held = named.map((found) => found.entry);
+  const below = [
+    ...used.filter((entry) => held.includes(entry)),
+    ...used.filter((entry) => !held.includes(entry)),
+  ];
+  return [
+    ...first.map((entry) => ({ entry, top: true })),
+    ...below.map((entry) => ({ entry, top: false })),
+  ].slice(0, Math.max(0, max));
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>

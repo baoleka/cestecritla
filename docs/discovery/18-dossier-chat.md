@@ -43,6 +43,21 @@ la première réponse du plan au risque d'une phrase infidèle (R35, R38) et la 
 l'exception de l'article 50 § 4. Elle n'a pas eu lieu. Le site ne s'appuie donc sur aucune
 exception : il **dit** que ces textes viennent d'une IA, partout où il les montre (§4.2).
 
+**Ajout du 15 novembre, après trois relectures indépendantes de l'aperçu (D16.64, D16.65).**
+Quatre choses touchent ce dossier. (1) **Ce que les numéros envoyés révèlent** est maintenant
+dit sur la page publique, pas seulement au registre (§2) : « Ces numéros disent de quel sujet
+parle ta question, comme une page ouverte le dit. » — la section a été relue telle qu'elle
+sort de la build et redatée par la session (`data/launch.json`, `privacy_chat`). (2) **Une
+requête nomme trois mesures au plus**, et le Worker **refuse toute requête en HTTP clair**
+avant d'en lire quoi que ce soit ; le site, lui, répond encore en clair à qui le demande ainsi
+(`14-risques.md` R43 : un réglage de la zone, à l'éditeur). (3) **La feuille refuse sur le
+téléphone**, sans rien envoyer, les questions sur une personne ou un parti, et répond aux
+questions sur le site par les lignes de ses propres pages : aucune mesure n'est plus montrée
+en réponse à « X est-il… ? ». (4) **La campagne** : à défaut d'une décision écrite de
+l'éditeur, les phrases cessent d'être servies le 1er janvier 2027 à 0 h, heure de Paris
+(D16.65) — la dernière ligne du §5 n'est plus « ouverte sans rien derrière » : son silence a
+maintenant un effet, le plus prudent.
+
 ## 1. Le geste, depuis D16.53
 
 | Geste du visiteur | Ce qui part | Vers qui | Ce qui est gardé |
@@ -312,7 +327,9 @@ répondre sur le fond, résumer une mesure à la volée, comparer, garder un fil
 | Lire à la source : la loi Informatique et Libertés (art. 45 n'a plus d'objet ici), les lignes directrices européennes sur l'analyse d'impact, la liste officielle du cadre UE–États-Unis | la session ou l'éditeur | ouvert |
 | Dater ce dossier : `preview_legal_on` | la session, sur le mandat D16.57 | **daté le 15/11/2026 par la session — l'éditeur ne l'a pas relu** (§0) |
 | Relire ce dossier, la page Confidentialité telle que D16.60 l'a récrite, et ce que les pages disent des phrases | l'éditeur | **à faire** : rien de cela n'est écrit comme relu par lui |
-| Décider, avant le 1er janvier 2027, si des phrases qu'aucune personne n'a relues restent servies pendant la campagne (code électoral, L163-2 ; R38) | l'éditeur | **ouvert** : c'est sa décision, la session ne la prend pas |
+| Décider, avant le 1er janvier 2027, si des phrases qu'aucune personne n'a relues restent servies pendant la campagne (code électoral, L163-2 ; R38) | l'éditeur | **ouvert** : c'est sa décision, la session ne la prend pas. **Depuis le 15/11 (D16.65), ne rien décider a un effet** : le Worker cesse de servir les phrases ce jour-là à 0 h ; pour continuer, `data/2026/ask.json` → `campaign` (trois champs), puis un déploiement |
+| Activer « Always Use HTTPS » sur la zone (tableau de bord Cloudflare → SSL/TLS → Edge Certificates) : le site répond en HTTP clair depuis son lancement (R43, revue de sécurité du 15/11) | l'éditeur | **à faire par lui** — l'accès de la session ne le permet pas ; une minute, gratuit |
+| Lire pour de vrai les vingt textes que le site dit « relus par Baoleka », ou faire écrire autre chose sur les pages Exactitude et À propos (R44, relecture hostile du 15/11) | l'éditeur | **à faire par lui** : la feuille, elle, n'affirme plus rien d'une relecture |
 
 ## Annexe — les citations, telles que lues le 14 novembre 2026
 

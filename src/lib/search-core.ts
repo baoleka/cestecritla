@@ -255,3 +255,46 @@ export function groupBySection(hits: readonly Hit[], maxItems = 4): SectionHit[]
   }
   return [...bySection.values()].sort((a, b) => b.score - a.score);
 }
+
+/**
+ * True when none of the words a measure was found by is a word of the question, nor starts
+ * like one: the search matched a neighbour in spelling, and nothing else. `found` and `asked`
+ * are what the index gives for a result: the words of the measure that matched, and the words
+ * of the question that led to them — both cut as the index cuts them.
+ */
+export function lookAlikeOnly(found: readonly string[], asked: readonly string[]): boolean {
+  return !found.some((term) =>
+    asked.some((word) => term === word || term.startsWith(word) || word.startsWith(term)),
+  );
+}
+
+/**
+ * Words of a question that say nothing of a subject by themselves — its verbs (« le programme
+ * PARLE-t-il de… », « ils VEULENT… »), a judgement, a quantity — as the index cuts them.
+ *
+ * A list, and it shows: a list of words is never complete. It only has to take away the rows
+ * that the personas of 15/11/2026 photographed: « Vous êtes payés par… ? » answered by paid
+ * leave, « le programme parle-t-il des chats ? » by a measure on parliament. A word missing
+ * here costs a row that is beside the point; a word too many costs « rien trouvé » to a
+ * question made of that word alone — which is why « monde » or « France » are not in it.
+ */
+const FILLERS: ReadonlySet<string> = new Set(
+  `parle parler parlent dit dire disent veut veulent vouloir veux voulez pense penser pensent
+   propose proposer proposent prevoit prevoir prevoient fait faire font va vont aller peut
+   peuvent pouvoir doit doivent devoir faut vrai vraie vraiment faux fausse nul nulle nuls
+   nulles bien mal bon bonne mauvais mauvaise grand grande petit petite nouveau nouvelle
+   nouveaux nouvelles tout tous toute toutes rien chose choses truc trucs reponse reponses
+   question questions avis an ans annee annees jour jours fin debut paye payes payee payees
+   payer ecrit ecrire officiel officielle sorte sortes facon cote vie`
+    .split(/\s+/)
+    .filter((word) => word !== ''),
+);
+
+/**
+ * True when a measure was found only by such words, or by a bare number: it is in the results
+ * of the search as one types — and is no answer to a question. `asked` is what the index gives
+ * for a result: the words of the question that led to it.
+ */
+export function fillerOnly(asked: readonly string[]): boolean {
+  return asked.length > 0 && asked.every((word) => FILLERS.has(word) || /^\d+$/.test(word));
+}

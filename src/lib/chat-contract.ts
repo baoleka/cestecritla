@@ -35,8 +35,14 @@
  */
 import { PROPOSITION_ID } from './ask-contract.js';
 
-/** How many measures the page may ask the read sentences of: what a sheet shows, and a margin. */
-export const MAX_GIST_IDS = 8;
+/**
+ * How many measures one request may ask the sentences of: what a sheet shows (`SHOWN_MEASURES`,
+ * src/lib/chat-local.ts) and not one more. It was eight, « and a margin »: the page never used
+ * the margin, and whoever copies the sentences by script did — a third as many requests for the
+ * whole set (security review of 15/11/2026). The limiter does not protect the sentences
+ * (`14-risques.md` R35); this only makes copying them cost what reading them costs.
+ */
+export const MAX_GIST_IDS = 3;
 /** How many measures an explanation may rest on: the three shown, and the two that follow. */
 export const MAX_CHAT_IDS = 5;
 /** A read sentence is one short sentence. This bounds the bytes; the editor's reading does the rest. */

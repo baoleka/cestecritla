@@ -7,17 +7,22 @@
  * CC BY-NC-SA and survives as a dated archive in the repository, which the app no longer shows.
  */
 import Base from '../../layouts/Base.astro';
+import { askSite } from '../../lib/ask-config.ts';
 import { LEGAL_URL } from '../../lib/edition.ts';
 import { t } from '../../lib/strings.ts';
+
+/** Where the field asks, sentences of ours say each measure: the page says they are no extracts. */
+const asking = askSite().mode === 'chat';
 ---
 
 <Base title={`${t('legal.license')} — ${t('app.name')}`} description={t('legal.license.text')}>
   <h1>{t('legal.license')}</h1>
   <p class="lead">{t('legal.license.text')}</p>
   <p>{t('legal.license.quote_rule')}</p>
-  <p><a href={LEGAL_URL} rel="noopener">{t('legal.license.source_link')}</a></p>
+  <p><a href={LEGAL_URL} rel="noopener noreferrer">{t('legal.license.source_link')}</a></p>
   <p>{t('attribution.unmodified')} {t('attribution.warranty')}</p>
   <p>{t('legal.license.derived')}</p>
+  {asking && <p>{t('legal.license.sentences')}</p>}
   <p>{t('legal.license.archive')}</p>
   <p>{t('legal.license.code')}</p>
   <p>{t('legal.license.fonts')}</p>

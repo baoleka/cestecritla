@@ -37,7 +37,7 @@ const { kind, text, href, fragment, sectionTitle, id } = Astro.props;
   </blockquote>
   <figcaption class="ref">
     {t('quote.attribution')} «&nbsp;{sectionTitle}&nbsp;».
-    <a href={href} data-fragment={fragment} rel="noopener"
+    <a href={href} data-fragment={fragment} rel="noopener noreferrer"
       >{kind === 'incipit' ? t('quote.continue') : t('quote.open')}</a
     >
   </figcaption>

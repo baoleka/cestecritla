@@ -1,12 +1,12 @@
 {
   "meta": {
     "title_fr": "Des mots expliqués — sigles et termes techniques",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "written_on": "2026-11-15",
     "written_by": "session",
     "checked_by": "independent-model",
     "read_by_a_person": false,
-    "note_fr": "Explications courtes des sigles et des termes techniques que la question ou les phrases de « Demander » emploient (D16.60, D16.62). Une IA les a écrites — la session —, à partir de connaissances générales, jamais du texte du livre ; un autre modèle, qui n'a lu que ce fichier, a vérifié les faits le 15/11/2026, et la session a repris ce qu'il relevait (88 entrées sur 257 : tout ce qu'il demandait de corriger avant de servir, et la plupart du reste). Aucune personne ne les a relues une à une : la feuille le dit, « Explications écrites et vérifiées par une IA ». Aucune ne dit ce que le programme prévoit, aucune ne donne un avis, aucune ne porte un montant en euros ni une règle qui change d'une année à l'autre quand une formule durable suffit. Un sigle — un mot écrit avec une majuscule après sa première lettre, ou avec un chiffre — est reconnu tel quel, à la casse près ; « anyCase » l'admet aussi en minuscules, quand elles ne peuvent rien vouloir dire d'autre. Les autres termes sont reconnus sans tenir compte de la casse, des accents ni du pluriel."
+    "note_fr": "Explications courtes des sigles et des termes techniques que la question ou les phrases de « Demander » emploient (D16.60, D16.62). Une IA les a écrites — la session —, à partir de connaissances générales, jamais du texte du livre ; un autre modèle, qui n'a lu que ce fichier, en a vérifié les faits le 15/11/2026 (257 entrées, 88 à reprendre), et la session a repris ce qu'il relevait : tout ce qu'il demandait de corriger avant de servir, et la plupart du reste. Deux entrées (« UE », « IA ») et les retouches faites après les relectures du 15/11 sont passées par une seconde vérification du même relecteur. Aucune personne ne les a relues une à une : la feuille le dit, « Explications écrites et vérifiées par une IA ». Aucune ne dit ce que le programme prévoit, aucune ne donne un avis, aucune ne porte un montant en euros ni une règle qui change d'une année à l'autre quand une formule durable suffit. Un sigle — un mot écrit avec une majuscule après sa première lettre, ou avec un chiffre — est reconnu tel quel, à la casse près ; « anyCase » l'admet aussi en minuscules, quand elles ne peuvent rien vouloir dire d'autre. Les autres termes sont reconnus sans tenir compte de la casse, des accents ni du pluriel."
   },
   "entries": [
     {
@@ -267,7 +267,7 @@
     {
       "id": "concordat",
       "term": "concordat",
-      "plain": "Un concordat est un accord entre un État et l'Église catholique. En Alsace-Moselle, il fait que l'État reconnaît certains cultes et paie leurs ministres."
+      "plain": "Un concordat est un accord entre un État et l'Église catholique. En Alsace-Moselle, le régime né du concordat de 1801 reconnaît quatre cultes, dont l'État paie les ministres."
     },
     {
       "id": "pantouflage",
@@ -370,7 +370,7 @@
     {
       "id": "bac-police",
       "term": "BAC",
-      "plain": "Dans la police, les BAC, brigades anticriminalité, sont des équipes souvent en civil, chargées d'arrêter les auteurs de délits pris sur le fait."
+      "plain": "BAC a deux sens. Dans la police, les BAC sont les brigades anticriminalité : des équipes souvent en civil. Le bac est aussi le baccalauréat, le diplôme de fin de lycée."
     },
     {
       "id": "brav-m",
@@ -429,7 +429,7 @@
     {
       "id": "regulation-carcerale",
       "term": "régulation carcérale",
-      "plain": "La régulation carcérale est un mécanisme qui empêche qu'une prison compte plus de détenus que de places. Il avance par exemple la sortie de détenus en fin de peine."
+      "plain": "La régulation carcérale désigne tout mécanisme qui empêche une prison de compter plus de détenus que de places. Exemple : avancer la sortie de détenus en fin de peine."
     },
     {
       "id": "verrou-de-bercy",
@@ -609,7 +609,7 @@
       "term": "T2A",
       "aliases": ["tarification à l'activité"],
       "anyCase": true,
-      "plain": "La T2A, tarification à l'activité, finance une grande part du budget des hôpitaux selon le nombre et le type de soins qu'ils réalisent. On dit aussi tarification à l'acte."
+      "plain": "La T2A, tarification à l'activité, finance une grande part du budget des hôpitaux selon les soins réalisés. On parle aussi de tarification à l'acte, mais elle paie surtout des séjours."
     },
     {
       "id": "ondam",
@@ -806,8 +806,9 @@
     },
     {
       "id": "greta",
-      "term": "Greta",
-      "plain": "Les Greta sont des groupements d'établissements publics qui forment des adultes."
+      "term": "les Greta",
+      "plain": "Les Greta sont des groupements d'établissements publics qui forment des adultes.",
+      "aliases": ["des Greta", "aux Greta", "un Greta", "GRETA"]
     },
     {
       "id": "lru",
@@ -1214,7 +1215,7 @@
       "term": "EPR2",
       "aliases": ["EPR"],
       "anyCase": true,
-      "plain": "L'EPR2 est un modèle de réacteur nucléaire français, version simplifiée de l'EPR. La France prévoit d'en construire plusieurs."
+      "plain": "L'EPR2 est un modèle de réacteur nucléaire français, version simplifiée de l'EPR. L'État a annoncé la construction de plusieurs d'entre eux."
     },
     {
       "id": "asn",
@@ -1407,7 +1408,7 @@
     {
       "id": "conscription",
       "term": "conscription",
-      "plain": "La conscription oblige toute une classe d'âge à faire un service militaire. En France, elle est suspendue depuis 1997."
+      "plain": "La conscription est l'obligation, pour toute une classe d'âge, de faire un service, en général militaire. En France, le service militaire obligatoire est suspendu depuis 1997."
     },
     {
       "id": "orsec",

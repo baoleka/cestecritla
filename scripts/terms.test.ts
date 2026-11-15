@@ -123,10 +123,12 @@ void test('a question that asks what a word means is told from one that merely h
     'une explication sur le smic',
     'je comprends pas la t2a',
     'kesako le smic',
-    // Little more than the word itself.
-    'T2A',
-    'le smic ?',
-    'la t2a hôpital',
+    'késako un moratoire',
+    'c koi le smic',
+    'c koi la t2a a l hopital',
+    "c'est koi le smic",
+    'ckoi la t2a',
+    'C QUOI LE SMIC',
   ]) {
     assert.ok(asksMeaning(question), question);
   }
@@ -135,40 +137,72 @@ void test('a question that asks what a word means is told from one that merely h
     'que prévoit le programme pour le smic',
     'un moratoire sur les fermetures de lits',
     'le smic sera augmenté de combien',
+    'le smic à quoi sert il aujourd hui',
+    'avec quoi financer le smic plus haut',
+    'augmenter le smic',
+    'T2A',
   ]) {
     assert.ok(!asksMeaning(question), question);
   }
 });
 
-void test('what the question names comes first, and is told apart from the words of the sentences', () => {
+void test('on top, open: only what was asked for — a meaning, or the word alone', () => {
   const sentences = [
     'Le programme prévoit un moratoire.',
     'Le programme prévoit de sortir de la T2A.',
   ];
+  const shown = (question: string, texts: readonly string[] = sentences): [string, boolean][] =>
+    explainedFor(question, texts, ALL).map(({ entry, top }) => [entry.id, top]);
+  // The question asks what a word means: that word first, then the other words of the sentences.
+  assert.deepEqual(shown('c’est quoi la t2a ?'), [
+    ['t2a', true],
+    ['moratoire', false],
+  ]);
+  // The word alone — with its article, with a mark — is the same question.
+  for (const question of ['T2A', 'la t2a ?', 'La T2A', 'L’T2A', 'smic', 'le SMIC ?', 'du smic']) {
+    assert.equal(shown(question, [])[0]?.[1], true, question);
+  }
+  assert.deepEqual(shown('licence d’office', []), [['licence', true]]);
+  // A question that merely holds a term gets its measures first: the term waits under them —
+  // first among the words of the sentences, since the question holds it too.
+  assert.deepEqual(shown('et la t2a à l’hôpital ?'), [
+    ['t2a', false],
+    ['moratoire', false],
+  ]);
   assert.deepEqual(
-    explainedFor('c’est quoi la t2a ?', sentences, ALL).map(({ entry, asked }) => [
-      entry.id,
-      asked,
-    ]),
-    [
-      ['t2a', true],
-      ['moratoire', false],
-    ],
+    shown('augmenter le smic', ['Le programme prévoit de porter le SMIC plus haut.']),
+    [['smic', false]],
   );
-  // A question that names nothing: the terms of the sentences, closed.
-  assert.deepEqual(
-    explainedFor('et l’hôpital ?', sentences, ALL).map(({ entry, asked }) => [entry.id, asked]),
-    [
-      ['moratoire', false],
-      ['t2a', false],
-    ],
-  );
-  // No sentence on the screen: the question alone.
-  assert.deepEqual(
-    explainedFor('le smic', [], ALL).map(({ entry, asked }) => [entry.id, asked]),
-    [['smic', true]],
-  );
-  assert.deepEqual(explainedFor('bonjour', [], ALL), []);
+  // A question that names nothing: the terms of the sentences, in their order.
+  assert.deepEqual(shown('et l’hôpital ?'), [
+    ['moratoire', false],
+    ['t2a', false],
+  ]);
+});
+
+void test('a term the question merely holds, and that no sentence on the screen uses, is not explained', () => {
+  const shown = (question: string, texts: readonly string[]): string[] =>
+    explainedFor(question, texts, ALL).map(({ entry }) => entry.id);
+  // « la réforme du CAP » may not be about the diploma this file explains: on the screen, a
+  // term has the sense of the sentence next to it — and here no sentence uses it.
+  assert.deepEqual(shown('la réforme du CAP et du SMIC', ['Le programme prévoit un moratoire.']), [
+    'moratoire',
+  ]);
+  assert.deepEqual(shown('supprimer le CAP', []), []);
+  assert.deepEqual(shown('bonjour', []), []);
+  // Asked for by name, it is explained whatever the screen shows.
+  assert.deepEqual(shown('c’est quoi le CAP ?', ['Le programme prévoit un moratoire.']), [
+    'cap',
+    'moratoire',
+  ]);
+  // Four at most, what was asked for first.
+  const many = ['Le SMIC, la T2A, un moratoire, un CAP, une licence d’office.'];
+  assert.deepEqual(shown('c’est quoi un conflit d’intérêts ?', many), [
+    'conflits',
+    'smic',
+    't2a',
+    'moratoire',
+  ]);
 });
 
 void test('a file that is not the expected one is refused, with what does not read', () => {

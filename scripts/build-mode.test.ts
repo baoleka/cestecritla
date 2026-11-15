@@ -713,7 +713,7 @@ void test('the preview host may ask before production does, never the other way 
   // pure function the wiring calls and decides nothing around (scripts/chat-worker.test.ts
   // holds what that function answers, a sheet without a model included).
   const worker = readFileSync('src/worker/index.ts', 'utf8');
-  assert.match(worker, /siteFor\(askConfig, env\.ENVIRONMENT\)/);
+  assert.match(worker, /siteFor\(askConfig, env\.ENVIRONMENT, new Date\(\)\)/);
   assert.equal((worker.match(/chatConfigured\(env\)/g) ?? []).length, 2);
   const site = readFileSync('src/worker/chat.ts', 'utf8');
   assert.match(site, /modeFor\(file, environment === 'preview' \? 'preview' : 'apex'\)/);

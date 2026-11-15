@@ -104,7 +104,7 @@ const jsonLd = section && {
         <h2 id="pointer-title">{t('pointer.title')}</h2>
         <p>{t('pointer.lead')}</p>
         <p>
-          <a class="cta" href={section.url} rel="noopener">{t('pointer.cta')}</a>
+          <a class="cta" href={section.url} rel="noopener noreferrer">{t('pointer.cta')}</a>
         </p>
       </section>
 
@@ -138,7 +138,7 @@ const jsonLd = section && {
                 <a
                   href={section.url}
                   data-fragment={item.locator ?? null}
-                  rel="noopener"
+                  rel="noopener noreferrer"
                   aria-label={n === null ? null : name}
                 >
                   {n ?? name}

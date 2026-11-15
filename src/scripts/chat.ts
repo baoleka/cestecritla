@@ -42,7 +42,7 @@ import {
   type Turn,
 } from '../lib/chat-view.ts';
 import { recognise } from '../lib/notions.ts';
-import { asksMeaning, explainedFor, type Explained } from '../lib/terms.ts';
+import { explainedFor, type Explained } from '../lib/terms.ts';
 import { formatReopenTimeFr } from '../lib/silence.ts';
 import { enhanceOfficialLinks } from './deep-links.ts';
 import {
@@ -75,11 +75,15 @@ interface Config {
     termsTitle: string;
     termsBadge: string;
     where: string;
+    gistsWhere: string;
     incipit: string;
     firstWords: string;
     noneTitle: string;
     noneLead: string;
     offTopic: string;
+    aboutTitle: string;
+    aboutLines: string[];
+    aboutLink: string;
     silence: string;
     paused: string;
     aiTitle: string;
@@ -87,6 +91,7 @@ interface Config {
     aiNote: string;
     aiWaiting: string;
     method: string;
+    cleared: string;
     simpler: string;
     example: string;
   };
@@ -112,6 +117,7 @@ const composer = sheet?.querySelector<HTMLFormElement>('#chat-form') ?? null;
 const input = sheet?.querySelector<HTMLInputElement>('#chat-q') ?? null;
 const offerCard = sheet?.querySelector<HTMLTemplateElement>('#chat-offer') ?? null;
 const clear = sheet?.querySelector<HTMLButtonElement>('#chat-clear') ?? null;
+const status = sheet?.querySelector<HTMLElement>('#chat-status') ?? null;
 const stop = sheet?.querySelector<HTMLButtonElement>('#chat-ai-stop') ?? null;
 const start = sheet?.querySelector<HTMLButtonElement>('#chat-ai-start') ?? null;
 const configNode = document.querySelector('#chat-config');
@@ -138,6 +144,8 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
    * when the thread moves on, and it must come back as it was left. In memory, like the rest.
    */
   let toggled = new Map<string, boolean>();
+  /** What was last taken from the field of the page, so that it is asked once. */
+  let taken: string | null = null;
   const page: PageState = {
     corpus: config.corpus,
     ai: 'offered',
@@ -189,11 +197,26 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     node.dataset.generatedBy = 'ai';
     return node;
   };
-  const block = (title: string, badge: string | null, className = ''): HTMLElement => {
+  const block = (
+    title: string,
+    badge: string | null,
+    className = '',
+    how: string | null = null,
+  ): HTMLElement => {
     const node = el('section', undefined, `c-block ${className}`.trim());
     node.tabIndex = -1;
     node.append(el('h3', title));
-    if (badge !== null) node.append(el('p', badge, 'c-badge ref'));
+    if (badge !== null) {
+      const label = el('p', badge, 'c-badge ref');
+      // Who wrote and who checked is said in the label; how, one tap away (a persona asked:
+      // « vérifiées par qui, contre quoi ? »).
+      if (how !== null) {
+        const link = el('a', how);
+        link.href = '/methodologie/#demander';
+        label.append(' — ', link);
+      }
+      node.append(label);
+    }
     return node;
   };
 
@@ -230,7 +253,9 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     const link = measureLink(found.meta, id, `${section[0]}, ${label.toLowerCase()}`);
     if (link === null) return null;
     link.dataset.programme = 'title';
-    const line = el('p', `${s.where} :`, 'sources');
+    // Under a sentence of ours the link is said to be the MEASURE: « c'est écrit là » would be
+    // read of the sentence above it, which is written nowhere but here (hostile review).
+    const line = el('p', `${withWords ? s.where : s.gistsWhere} :`, 'sources');
     line.append(link);
     // Under a link that stands alone, the first words its measure allows (D16.32). Not under a
     // read sentence: that sentence already says what the measure provides.
@@ -252,6 +277,10 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     node.setAttribute('aria-busy', String(!settled(turn, page)));
     const asked = el('p', undefined, 'c-question');
     asked.append(el('span', `${s.question} : `, 'sr-only'), turn.question);
+    // Each turn is named after its question: the same titles come back turn after turn, and who
+    // moves from one to the other without seeing them is told whose answer this is.
+    asked.id = `chat-turn-${String(index)}`;
+    node.setAttribute('aria-labelledby', asked.id);
     node.append(asked);
 
     if (view.plain !== null) {
@@ -288,8 +317,7 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
         : explainedFor(view.wording.question, view.wording.sentences ?? [], plain.terms);
     // A question that asks what a word means gets that word first, open: it is what was asked.
     // It depends on the question alone, so it is there from the first paint and moves nothing.
-    const meaning = view.wording !== null && asksMeaning(view.wording.question);
-    const named = meaning ? explained.filter((e) => e.asked) : [];
+    const named = explained.filter((e) => e.top);
     if (named.length > 0) {
       node.append(words(s.askedTitle, named, index, 'c-terms c-asked', true));
     }
@@ -302,6 +330,20 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
       case 'off_topic':
         node.append(el('p', s.offTopic));
         break;
+      case 'about': {
+        // What the site says of itself, in its own words — the same as on its pages.
+        const part = block(s.aboutTitle, null, 'c-about');
+        for (const line of s.aboutLines) part.append(el('p', line));
+        const more = el('p');
+        const about = el('a', s.aboutLink);
+        about.href = '/a-propos/';
+        const how = el('a', s.method);
+        how.href = '/methodologie/#demander';
+        more.append(about, ' · ', how);
+        part.append(more);
+        node.append(part);
+        break;
+      }
       case 'silence':
         node.append(
           el(
@@ -317,7 +359,7 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
         break;
       case 'rows': {
         const read = measures.rows.some((row) => row.gist !== null);
-        const part = block(s.gistsTitle, read ? s.gistsBadge : null, 'c-gists');
+        const part = block(s.gistsTitle, read ? s.gistsBadge : null, 'c-gists', s.method);
         for (const row of measures.rows) {
           const item = el('div', undefined, 'c-row');
           if (row.gist !== null) item.append(written(row.gist));
@@ -333,7 +375,7 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     // The other words — of the question, of the sentences — under the measures, closed, once
     // the sentences are all there: a block that grew would move what is being read.
     const shown = view.wording?.sentences ?? null;
-    const others = shown === null ? [] : explained.filter((e) => !named.includes(e));
+    const others = shown === null ? [] : explained.filter((e) => !e.top);
     if (others.length > 0) node.append(words(s.termsTitle, others, index, 'c-terms', false));
 
     if (view.ai !== null && explains) {
@@ -388,6 +430,14 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
       }
       node.append(part);
     }
+    // A link of the sheet opens beside the conversation, never in its place: the thread lives
+    // in the memory of this page, and a link followed in the same tab would end it. Said to
+    // who cannot see a tab open, by a description every link shares (ChatSheet.astro).
+    for (const link of node.querySelectorAll('a')) {
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.setAttribute('aria-describedby', 'chat-new-tab');
+    }
     enhanceOfficialLinks(node);
     return node;
   };
@@ -399,13 +449,52 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     start.hidden = page.ai !== 'off';
   };
 
+  /**
+   * Brings what is drawn to its new drawing without taking it out of the thread. What did not
+   * change stays where it is: a screen reader that follows the log is told once — a turn used
+   * to be put in three times as it settled, and the turn before it once more —, a word left
+   * open stays open, a focus stays where it was. Inside a block the same holds one level down:
+   * a sentence that arrives under a title does not bring the title again.
+   */
+  const patch = (old: Element, fresh: Element): void => {
+    for (const name of old.getAttributeNames()) {
+      if (name !== 'style' && !fresh.hasAttribute(name)) old.removeAttribute(name);
+    }
+    for (const name of fresh.getAttributeNames()) {
+      // A style is set through its properties: the policy of the page refuses the attribute.
+      if (name === 'style') continue;
+      const value = fresh.getAttribute(name) ?? '';
+      if (old.getAttribute(name) !== value) old.setAttribute(name, value);
+    }
+    const before = [...old.childNodes];
+    const after = [...fresh.childNodes];
+    after.forEach((node, at) => {
+      const current = before[at];
+      if (current === undefined) old.append(node);
+      else if (current.isEqualNode(node)) return;
+      else if (
+        current instanceof HTMLElement &&
+        node instanceof HTMLElement &&
+        node.classList.contains('c-block') &&
+        current.tagName === node.tagName &&
+        current.className === node.className
+      )
+        patch(current, node);
+      else current.replaceWith(node);
+    });
+    for (const gone of before.slice(after.length)) gone.remove();
+  };
   /** Draws one turn again in its place: the others keep their scroll and their focus. */
   const update = (index: number): void => {
     const node = draw(index);
     const old = nodes[index];
-    if (old === undefined) thread.append(node);
-    else old.replaceWith(node);
-    nodes[index] = node;
+    if (old === undefined) {
+      thread.append(node);
+      nodes[index] = node;
+      return;
+    }
+    patch(old, node);
+    old.style.minBlockSize = node.style.minBlockSize;
   };
   const redraw = (): void => {
     nodes = [];
@@ -517,6 +606,7 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     await flagsRead;
     if (asked !== epoch) return;
     const index = turns.length;
+    if (status !== null) status.textContent = '';
     turns.push(newTurn(question, recognise(question, config), frozen()));
     // The turn above is no longer the last one: its agreement, if it showed one, moves down.
     if (index > 0) update(index - 1);
@@ -537,6 +627,7 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     epoch += 1;
     turns = [];
     toggled = new Map();
+    taken = null;
     redraw();
   };
 
@@ -558,9 +649,11 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     if (!sheet.open) sheet.showModal();
     fit();
     showChoice();
-    // What was typed in the field of the page becomes the first question — once.
+    // What was typed in the field of the page becomes a question — once: closing the sheet
+    // and opening it again, the same words still in the field, asks nothing a second time.
     const typed = cleanQuestion(field.value);
-    if (typed !== null && turns.at(-1)?.question !== typed) {
+    if (typed !== null && typed !== taken) {
+      taken = typed;
       void ask(typed);
       scroller.focus();
     } else {
@@ -572,9 +665,17 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     const typed = input.value;
     input.value = '';
     void ask(typed);
+    // On a touch screen the keyboard hides the answer for as long as the field holds the
+    // focus: the focus goes to the conversation, as it does when the sheet opens on a question.
+    // With a real keyboard the field keeps it: the next question is typed at once.
+    if (cleanQuestion(typed) !== null && window.matchMedia('(pointer: coarse)').matches) {
+      scroller.focus();
+    }
   });
   clear.addEventListener('click', () => {
     empty();
+    // Said to who cannot see the thread empty: the log has nothing left to announce.
+    if (status !== null) status.textContent = s.cleared;
     input.focus();
   });
   if (explains) {
