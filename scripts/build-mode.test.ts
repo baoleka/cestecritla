@@ -51,6 +51,7 @@ import {
   nearSilenceWindow,
   readAskMode,
   readBuildHost,
+  readBuildMode,
   readBuildScrutin,
   readMascot,
   readDist,
@@ -1085,7 +1086,8 @@ void test('a build of the second mascot goes only where data/mascot.json gives i
   rmSync(built, { recursive: true });
   // What is built shows the generation the file gives the host it was built for — the first for
   // production; the second for the preview host since the editor opened it to her (D17.26).
-  if (existsSync('dist/index.html')) {
+  // (A build of the app: the holding page has no game, and so no generation to show.)
+  if (existsSync('dist/index.html') && readBuildMode() === 'app') {
     assert.equal(readDist('dist').mascot, readMascot(undefined, readBuildHost()));
   }
 });
