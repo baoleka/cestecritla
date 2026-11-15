@@ -1627,3 +1627,29 @@ de campagne (D16.65).
 
 **La porte du plan — zéro bloquante — est tenue à la douzième passe, après onze « non ».** Sur le
 mandat du 14 novembre, la production ouvre (D16.76). Le déroulé suit.
+
+### 15 novembre, 9 h 50 à 10 h 10 — lot C12 : la production ouvre
+
+Tout par les commandes gardées, dans l'ordre du plan ; heures UTC entre parenthèses.
+
+| Quand | Geste | Constaté |
+|---|---|---|
+| 9 h 46 (8 h 46) | `data/2026/ask.json` : « mode » : « chat », daté, « decided_by » : « session » ; la ligne de `build-mode.test.ts` qui dit quels hôtes demandent ; `e2e.ts` (un bouton à côté du champ) | `scripts/launch.ts` : « nothing is missing » ; batterie complète verte (19 étapes) ; commit `551df09`, poussé ; CI verte à 9 h 52 |
+| 9 h 53 (8 h 53) | `npm run deploy:chat -- --accord 2026-11-15` | Worker `cestecritla-chat`, version `5c034963`, quatre routes : `/api/gists` et `/api/chat` sur l'apex et sur `www`. Sans son secret : « local » (sonde directe, tout bon) |
+| 9 h 53 (8 h 53) | `wrangler secret put RATE_SALT --config wrangler.chat.jsonc`, depuis `private/chat/` | sonde directe des deux hôtes : des phrases pour des identifiants ; `/api/chat` « rien » ; autre origine, absence d'origine, GET, champ de trop, quatre identifiants : refusés ; HTTP clair : refusé |
+| 9 h 55 (8 h 55) | `npm run build && npm run deploy` | Worker `cestecritla`, version `9a2a2010`, 1 140 fichiers, « questions : chat » |
+| 10 h (9 h) | sonde de la feuille sur `cestecritla.fr`, trois navigateurs | 257 vérifications, toutes bonnes |
+| 10 h 04 (9 h 04) | la même sur `www.cestecritla.fr` | 257 vérifications, toutes bonnes |
+| 10 h 05 (9 h 05) | l'interrupteur : `seed-ask-2026.ts --switch stopped --what gists` | une requête valide reçoit « local » ; la page garde ses liens, sans mot de panne (Chromium, 78 vérifications) |
+| 10 h 08 (9 h 08) | `--switch open` | des phrases de nouveau ; base : 1 069 phrases, empreinte de `ask.json`, aucune ligne du texte du livre |
+| 10 h 10 | fichiers servis contre `dist/`, les deux hôtes | 1 153 sur 1 156 identiques ; les trois écarts connus (`404.html` redirigé, `_headers`, `_redirects`) ; aucun `noindex` sur les pages |
+
+**Un écart de la sonde, pas du site** : interrupteur arrêté, une requête de quatre identifiants
+reçoit 400 — elle est refusée avant que l'interrupteur soit lu — là où la sonde attendait « local »
+(ce qu'une route sans secret répond). Une requête valide reçoit bien « local ».
+
+**Ce qui n'a pas été fait, et que le plan demandait** : quatre vrais téléphones dont le navigateur
+d'Instagram, un vrai lecteur d'écran, les captures du tableau de bord, la lecture des phrases par
+une personne. **Ce qui reste à l'éditeur** : « Always Use HTTPS » (R43), les mentions de relecture
+(R44), les nombres de R35, la décision de campagne avant le 1er janvier 2027 (D16.65) — `CLAUDE.md`
+en tient la liste. **Le mandat du 14 novembre est consommé.**
