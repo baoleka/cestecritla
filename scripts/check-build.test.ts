@@ -276,9 +276,10 @@ void test('the script of the sheet is small, and fetched at the first press — 
   // weighs 1.6 KB, and it is the one that closes what five lists of words did not. So: 16 KB,
   // said plainly (D16.70) — the script is fetched at the first press, never with the page; the
   // lists of words are data, fetched with the texts of the sheet, and only the ways of reading
-  // a question are code. It stays a ceiling, and a quarter of a KB is left under it: the
+  // a question are code. It stays a ceiling, and less than 0.2 KB is left under it: the
   // titles, the faces and the small words of people left the code for the data on 15/11
-  // (D16.72), which paid for the rules of that pass; the next rule comes in the same way.
+  // (D16.72, D16.73), which paid for the rules of those passes; the next rule comes in the
+  // same way.
   const budget = 16 * 1024;
   assert.ok(gz <= budget, `the sheet's script: ${String(gz)} B gzip > ${String(budget)} B`);
   console.log(`  sheet script: ${String(gz)} B gzip of ${String(budget)} B`);

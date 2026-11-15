@@ -42,7 +42,7 @@ import {
   type WordLists,
 } from '../src/lib/chat-local.js';
 import { wordLists } from '../src/lib/word-lists.js';
-import { fillerOnly, lookAlikeOnly, terms } from '../src/lib/search-core.js';
+import { fillerOnly, lookAlikeOnly, spelled, stem, terms } from '../src/lib/search-core.js';
 import {
   MAX_CHAT_WORDS as WORDS_OF_THE_RULE,
   sentenceWords,
@@ -737,27 +737,22 @@ void test('a date has to be the date of a measure shown (seventh review)', () =>
   }
 });
 
-void test('hate in words of the book is refused like an insult: a coded phrase, a people said to be what one throws at it (eighth review)', () => {
+void test('a hateful statement and nothing else is refused; whoever reports one, or asks about it, is not (eighth and ninth reviews)', () => {
   const real = lexiconOf(wordLists(), () => []);
+  // The bare statement: a people at its head, « sont des… » or a verb of crime, what is thrown.
   for (const question of [
-    'la finance apatride',
-    'les banques et la finance apatride',
-    'les Français de papier',
-    'le grand remplacement',
-    'l’immigration de remplacement',
-    'que dit le programme du grand remplacement ?',
-    'la préférence nationale',
-    'la France aux Français',
-    'le lobby juif',
-    'remigration',
     'les musulmans sont des terroristes',
     'les arabes sont des voleurs',
     'l’islam est une religion violente',
     'les immigrés sont des délinquants',
     'les immigrés sont tous des délinquants',
-    'les roms sont souvent des voleurs',
+    'tous les roms sont des voleurs',
+    'la plupart des immigrés sont des délinquants',
+    'les roms volent',
     'les migrants violent nos femmes',
     'les homosexuels sont des pédophiles',
+    'les trans sont des malades',
+    'les migrants nous envahissent',
   ]) {
     assert.ok(hateful(question, real), question);
     assert.deepEqual(
@@ -766,9 +761,26 @@ void test('hate in words of the book is refused like an insult: a coded phrase, 
       question,
     );
   }
-  // The same words as the subject of a measure, a noun with its adjective, a people as the
-  // one who suffers: questions about the book.
+  // Reported, asked, answered to: a refusal would turn away the person it was thrown at.
   for (const question of [
+    'les musulmans sont-ils des terroristes ?',
+    'est-ce que les immigrés sont des délinquants ?',
+    'mon oncle dit que les musulmans sont tous des terroristes, que répondre ?',
+    'un prof a dit que les arabes sont des voleurs',
+    'on m’a dit que les immigrés volent nos emplois',
+    'au marché on m’a dit que les immigrés volent nos emplois, je réponds quoi ?',
+    'les immigrés volent-ils nos emplois ?',
+    'pourquoi dit-on que les roms sont des voleurs',
+    // A coded phrase, a slur: a list never refuses.
+    'la finance apatride',
+    'le grand remplacement',
+    'c’est quoi le grand remplacement ?',
+    'que dit le programme sur la préférence nationale ?',
+    'je me suis fait traiter de sale juif',
+    'on traite mon fils de pédé au collège',
+    'les collabos pendant la guerre',
+    // The same words as the subject of a measure, a noun with its adjective, a people as the
+    // one who suffers: questions about the book.
     'contre le terrorisme islamiste',
     'contre les agressions islamophobes',
     'la dette des dictateurs africains',
@@ -778,14 +790,70 @@ void test('hate in words of the book is refused like an insult: a coded phrase, 
     'l’expulsion des étrangers délinquants',
     'les étrangers sont-ils concernés par le droit de vote ?',
     'l’islam est-il compatible avec la laïcité ?',
+    'les immigrés sont une richesse',
+    'les réfugiés sont des victimes',
     'les apatrides',
     'la finance',
-    'le remplacement des enseignants absents',
-    'la préférence locale dans les marchés publics',
-    'les sans-papiers',
   ]) {
     assert.equal(hateful(question, real), false, question);
   }
+});
+
+void test('a coded phrase, a slur: the measures of the subject to ask in its place, as links — a list never refuses, never brings a sentence (ninth review)', () => {
+  const all = (): boolean => true;
+  const real = lexiconOf(wordLists(), () => []);
+  const RACISM = [{ id: C, score: 5, by: ['racisme'] }];
+  const search = (subject: string): Ranked[] => (subject === 'racisme' ? RACISM : []);
+  const own = [{ id: A, score: 9, by: terms('traiter travail') }];
+  // Said, or reported by whom it was thrown at: the same answer.
+  for (const question of [
+    'on m’a traité de bougnoule au travail',
+    'les bougnoules',
+    'le racisme anti-blanc existe-t-il ?',
+  ]) {
+    assert.deepEqual(
+      measuresFor(question, [], own, all, real, null, search),
+      { rows: [C], sentences: false, example: 'racisme', charged: true },
+      question,
+    );
+  }
+  // Each family has a subject one may ask; a phrase with none keeps the links of its own words.
+  for (const [question, subject] of [
+    ['la finance apatride', 'antisémitisme'],
+    ['je me suis fait traiter de sale juif', 'antisémitisme'],
+    ['que dit le programme sur la préférence nationale ?', 'immigration'],
+    ['c’est quoi le grand remplacement ?', 'immigration'],
+    ['on traite mon fils de pédé au collège', 'homophobie'],
+  ] as const) {
+    assert.equal(real.trope(spelled(question).map(stem).join(' ')), subject, question);
+  }
+  assert.equal(real.trope(spelled('les collabos pendant la guerre').map(stem).join(' ')), '');
+  const none = measuresFor('les collabos au travail', [], own, all, real, null, search);
+  assert.deepEqual([none.rows, none.sentences, none.charged], [[A], false, true]);
+  // What people also say without hate is in no list.
+  for (const question of [
+    'l’immigration est une chance pour la France',
+    'faire de l’école une priorité nationale',
+    'quand on est chez nous',
+    'le remplacement des enseignants absents',
+    'les collaborateurs parlementaires',
+    'la mondialisation',
+    'les sans-papiers',
+  ]) {
+    assert.equal(real.trope(spelled(question).map(stem).join(' ')), null, question);
+  }
+  // A people or a country, and what one says of it to charge it: links, whatever measure
+  // holds the words together.
+  const HELD = [{ id: A, score: 9, by: terms('israël contrôle france trans personnel') }];
+  for (const question of [
+    'Israël contrôle la France',
+    'on dit que les migrants nous envahissent',
+    'les trans sont-ils des malades ?',
+  ]) {
+    const told = measuresFor(question, [], HELD, all, real, null, search);
+    assert.deepEqual([told.sentences, told.charged], [false, true], question);
+  }
+  assert.equal(measuresFor('le contrôle des prix', [], HELD, all, NOTHING).sentences, false);
 });
 
 void test('on the index of the book: what the sixth and seventh reviews typed gets no sentence, and a subject asked alone keeps its sentences', () => {
@@ -922,9 +990,48 @@ void test('on the index of the book: what the sixth and seventh reviews typed ge
   for (const question of ['le 7 octobre', 'massacre du 7 octobre']) {
     assert.deepEqual(page(question).shown.rows, [], question);
   }
-  // Refused, with the files of the sheet: the sentence an insult gets.
-  for (const question of ['la finance apatride', 'les musulmans sont des terroristes']) {
-    assert.equal(page(question).shown.refused, true, question);
+  // A hateful statement and nothing else is refused; a coded phrase gets the measures of the
+  // subject to ask in its place, as links.
+  assert.equal(page('les musulmans sont des terroristes').shown.refused, true);
+  for (const [question, subject] of [
+    ['la finance apatride', 'antisémitisme'],
+    ['je me suis fait traiter de sale juif', 'antisémitisme'],
+    ['on m’a traité de sale arabe', 'racisme'],
+    ['que dit le programme sur la préférence nationale ?', 'immigration'],
+  ] as const) {
+    const { shown } = page(question);
+    assert.deepEqual([shown.refused, shown.sentences, shown.example], [undefined, false, subject]);
+    assert.deepEqual(shown.rows, page(subject).shown.rows, question);
+    assert.ok(shown.rows.length > 0, question);
+    // …and that subject, asked alone, gets its sentences.
+    assert.equal(page(subject).shown.sentences, true, subject);
+  }
+  // None of the questions a ninth review wrote about slurs and slogans is refused, and none
+  // gets a sentence: links, or nothing found.
+  for (const question of [
+    'c’est quoi le grand remplacement ?',
+    'le racisme anti-blanc existe-t-il ?',
+    'mon voisin me parle de remigration',
+    'on me traite d’islamo-gauchiste parce que je vote LFI',
+    'on m’a traité de bougnoule au travail',
+    'on traite mon fils de pédé au collège',
+    'un prof a dit que les arabes sont des voleurs',
+    'mon patron dit que les noirs sont paresseux',
+    'au marché on m’a dit que les immigrés volent nos emplois, je réponds quoi ?',
+    'les musulmans sont-ils des terroristes ?',
+    'est-ce que les immigrés sont des délinquants ?',
+    'l’immigration zéro c’est possible ?',
+    'que dit le programme contre le complot juif et l’antisémitisme ?',
+    'le mot racaille est-il raciste ?',
+    'les collabos pendant la guerre',
+  ]) {
+    assert.equal(asksOffTopic(question) || asksForVote(question), false, `${question}: refused`);
+    const { shown } = page(question);
+    assert.deepEqual([shown.refused, shown.sentences], [undefined, false], question);
+  }
+  // A people or a country with what one says of it to charge it: links.
+  for (const question of ['Israël contrôle la France', 'les trans sont-ils des malades ?']) {
+    assert.equal(page(question).shown.sentences, false, question);
   }
 });
 

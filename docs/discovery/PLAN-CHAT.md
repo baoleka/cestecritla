@@ -1508,3 +1508,43 @@ mots de personnes) sont devenues des données ; 16 131 octets sur 16 384.
 
 **Une neuvième passe** dit si la porte du plan est tenue. Le relecteur a prévenu : elle trouvera
 surtout des expressions que la liste n'a pas.
+
+*Aperçu redéployé à 8 h 06 (7 h 06 UTC), commit `96e7c1b`, Worker `cestecritla-preview` version
+`00c72db2` ; sonde en ligne, 221 vérifications dans trois navigateurs : tout bon ; CI verte.*
+
+### 15 novembre, 8 h 35 — la neuvième passe : j'avais fait refuser des victimes (D16.73)
+
+Le relecteur : 126 questions fraîches, 30 questions légitimes sur des insultes et des slogans, 20
+questions en ligne, 5 envois.
+
+**Sa réponse à la question que je lui posais** — une expression codée que la liste n'a pas est-elle
+bloquante ? « Du résidu, à ajouter quand on la trouve, comme une orthographe inconnue — à condition
+que le défaut soit sûr : des liens ou rien, jamais nos phrases ni notre voix. À ces conditions la
+porte peut être tenue. »
+
+**Et ce qu'il a trouvé à la place** : les refus de D16.72. **« Je me suis fait traiter de sale
+juif » recevait « Ici, on ne parle que du programme… »**, en ligne. Avec lui : « on m'a traité de
+sale arabe », « au marché on m'a dit que les immigrés volent nos emplois, je réponds quoi ? »,
+« que dit le programme sur la préférence nationale ? » — 28 questions légitimes sur 30. Il l'écrit :
+« une liste d'expressions à refuser ne distingue pas qui dit de qui rapporte ; le refus est notre
+propre voix qui renvoie la personne qui demandait ».
+
+**C'est une faute de ma part, et pas une finesse** : la règle était écrite dans ce dépôt depuis la
+veille — une liste qu'on allonge sans risque est une liste dont l'oubli ne coûte que des liens — et
+j'ai bâti deux listes qui refusaient, parce que la passe précédente demandait un refus et que je
+ne l'ai pas confronté à ma propre règle.
+
+**Ce qui a changé** (D16.73) : **une liste ne refuse plus rien**. Une expression codée, une injure
+reçoivent les mesures du sujet qu'on peut demander à leur place — le racisme, l'antisémitisme,
+l'immigration, l'homophobie —, en liens, et ce sujet en exemple. N'est refusé que **l'énoncé
+haineux nu** : un peuple en tête, « sont des… », pas de point d'interrogation ; rapporté ou
+demandé, il reçoit des liens. Un peuple ou un pays avec ce qu'on en dit pour l'accuser (« Israël
+contrôle la France », que rien de structurel ne voyait : une seule mesure tient les trois mots) :
+des liens.
+
+**Mesuré** : ses 30 questions légitimes, plus aucune refusée ; ses 60 questions ordinaires de
+cette passe, 0 refusée (5 avant), 25 avec leurs phrases et 30 en liens — le coût est là, et il le
+dit : « une perte de qualité, pas une erreur ».
+
+**Dernière passe de la nuit.** Si elle dit oui, la production ouvre (lot C12). Si elle dit non,
+l'aperçu reste ouvert, la production reste en recherche seule, et le compte rendu le dit tel quel.

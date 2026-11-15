@@ -64,27 +64,29 @@ export function loadPage(): (question: string) => PageAsk {
   const order = manifest.sections.flatMap((section) =>
     section.items.filter((item) => item.kind !== 'paragraph').map((item) => item.id),
   );
-  return (asked) => {
+  // What the search finds for a question, as the sheet reads it.
+  const find = (asked: string) => {
     // Letters typed apart are one word, for the search as for the rules (`spelled`).
     const question = spelled(asked).join(' ');
     const query = buildQuery(question, expand(question, groups));
     const typed = new Set(terms(question));
-    const hits = index
-      .search(query as Parameters<typeof index.search>[0], searchOptions())
-      .map((r) => ({
-        id: String(r.id),
-        score: r.score,
-        terms: r.terms,
-        near: lookAlikeOnly(r.terms, r.queryTerms),
-        weak: fillerOnly(r.queryTerms),
-        by: r.queryTerms.filter((term) => typed.has(term) && asWritten(term, r.terms)),
-        via: r.queryTerms.filter((term) => asWritten(term, r.terms)),
-        on: r.terms.filter((found) => [...typed].some((term) => asWritten(term, [found]))),
-      }));
+    return index.search(query as Parameters<typeof index.search>[0], searchOptions()).map((r) => ({
+      id: String(r.id),
+      score: r.score,
+      terms: r.terms,
+      near: lookAlikeOnly(r.terms, r.queryTerms),
+      weak: fillerOnly(r.queryTerms),
+      by: r.queryTerms.filter((term) => typed.has(term) && asWritten(term, r.terms)),
+      via: r.queryTerms.filter((term) => asWritten(term, r.terms)),
+      on: r.terms.filter((found) => [...typed].some((term) => asWritten(term, [found]))),
+    }));
+  };
+  return (asked) => {
+    const hits = find(asked);
     const known = new Set(order);
     return {
       rows: rowsOf(hits, (id) => known.has(id)),
-      shown: measuresFor(asked, [], hits, (id) => known.has(id), lexicon),
+      shown: measuresFor(asked, [], hits, (id) => known.has(id), lexicon, null, find),
       asked: askedOf(hits, order),
       own: groupBySection(hits)
         .slice(0, MAX_SELECTED)

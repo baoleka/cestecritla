@@ -259,8 +259,12 @@ const VOTE_ADVICE: readonly RegExp[] = [
   /\b(?:meilleure?|pire) (?:candidate?|presidente?)\b/,
 ];
 
-/** « Si je vote X, mes impôts baissent ? »: a condition, and a question about the programme. */
-const IF_I_VOTE = /\bsi (?:je|on|tu|nous|vous|les gens) (?:[a-z]+ )?vot(?:e|es|ons|ez|ent)\b/;
+/**
+ * « Si je vote X, mes impôts baissent ? »: a condition, and a question about the programme. And
+ * « on me traite de… parce que je vote X » says how one votes: it asks nobody whom to vote for.
+ */
+const IF_I_VOTE =
+  /\b(?:si|parce que|car|puisque|comme|vu que|quand) (?:je|on|tu|nous|vous|les gens) (?:[a-z]+ )?vot(?:e|es|ons|ez|ent)\b/;
 
 /** True when the question asks for voting advice or a forecast: it is answered on the phone. */
 export function asksForVote(question: string): boolean {
@@ -538,12 +542,28 @@ export interface Lexicon {
   pointed: RegExp;
   /** The asker's own people — « mon patron », « ma voisine »: nobody's target (`own`). */
   mine: RegExp;
+  /** « Son parti », « ses amis », « votre candidat » — not « leur programme » (`ours`). */
+  theirs: RegExp;
+  /**
+   * A name that is a verb of every other question — « Trouvé » —, taken for the person where
+   * nothing makes it the verb: « trouvé et la drogue », not « on trouve de la drogue »
+   * (`verbal`: what stands before the verb).
+   */
+  nameOrVerb: RegExp;
   /** A face of every day: what the asker feels, the one kind of sign that is no target. */
   feeling: (sign: string) => boolean;
   /** People named by their religion, their origin, whom they love (`peoples`). */
   kin: (term: string) => boolean;
-  /** True when the question, cut to its stems, holds a coded phrase (`tropes`). */
-  trope: (stems: string) => boolean;
+  /**
+   * The subject to ask in place of a coded phrase or a slur the question, cut to its stems,
+   * holds (`tropes`): « racisme », « antisémitisme »… — `''` when there is none to give,
+   * `null` when the question holds no such phrase.
+   */
+  trope: (stems: string) => string | null;
+  /** What one says of a people or a country to charge it: « contrôle », « envahit ». */
+  said: (term: string) => boolean;
+  /** What a bare hateful statement says of a people, beyond the epithets: « volent ». */
+  crime: (word: string) => boolean;
 }
 
 /** The lists, as the file of the sheet holds them (src/lib/word-lists.ts). */
@@ -563,12 +583,18 @@ export interface WordLists {
   somebody: readonly string[];
   pointed: readonly string[];
   own: readonly string[];
+  ours: readonly string[];
+  verbal: readonly string[];
   /** The faces of every day, one after the other. */
   feelings: string;
   /** data/2026/sensitive.json, `peoples` — stems, « * » as above. */
   peoples: readonly string[];
-  /** data/2026/sensitive.json, `tropes` — each phrase folded and cut to its stems. */
-  tropes: readonly string[];
+  /** data/2026/sensitive.json, `tropes` — each phrase cut to its stems, with its subject. */
+  tropes: readonly (readonly [string, string])[];
+  /** data/2026/sensitive.json, `predicates` — stems, « * » as above. */
+  predicates: readonly string[];
+  /** data/2026/sensitive.json, `crimes` — words as the index folds them. */
+  crimes: readonly string[];
 }
 
 /** Before a title, what makes it anybody's: « un député », « plus de président ». */
@@ -597,18 +623,19 @@ export function lexiconOf(lists: WordLists, alias: (typed: string) => readonly s
     somebody: (word) => lists.somebody.includes(word),
     pointed: new RegExp(`\\b(?:ce|cet|cette|ces) (?:${lists.pointed.join('|')})\\b`),
     mine: new RegExp(`\\b(?:mon|ma|mes) (?:${lists.own.join('|')})\\b`, 'g'),
+    theirs: new RegExp(
+      `\\b(?:son|sa|ses|leurs?|votre|vos|ton|ta|tes) (?!(?:${lists.ours.join('|')})\\b)`,
+    ),
+    nameOrVerb: new RegExp(`(?:^|\\b(?!(?:${lists.verbal.join('|')}) )[a-z0-9]+ )trouve\\b`),
     feeling: (sign) => lists.feelings.includes(sign),
     kin: among(lists.peoples),
-    trope: (stems) => lists.tropes.some((phrase) => ` ${stems} `.includes(` ${phrase} `)),
+    trope: (stems) =>
+      lists.tropes.find(([phrase]) => ` ${stems} `.includes(` ${phrase} `))?.[1] ?? null,
+    said: among(lists.predicates),
+    crime: (word) => lists.crimes.includes(word),
   };
 }
 
-/**
- * A name that is a verb of every other question — « Trouvé » —, taken for the person where
- * nothing makes it the verb: « trouvé et la drogue », not « on trouve de la drogue partout ».
- */
-const NAME_OR_VERB =
-  /(?:^|\b(?!(?:je|j|tu|on|il|elle|nous|vous|ils|elles|ai|as|a|avons|avez|ont|qui|se|s|y|en|ne|n|me|m|te|t|l|le|la|les|bien|deja|pas|jamais|toujours|ca|c|est|ete|avoir|etre|comment|ou) )[a-z0-9]+ )trouve\b/;
 /** What asks what the book says, after « ils », « vous », « tu »: the way a question is put here. */
 const ASKING =
   '(?:propos(?:e|es|ent|ez)|prevoi(?:t|ent|s)|prevoyez|di(?:t|s|sent|tes)|parl(?:e|es|ent|ez)|pens(?:e|es|ent|ez)|veu(?:t|x|lent)|voulez|compt(?:e|es|ent|ez)|sai[st]|savez|(?:fai(?:t|s|tes)|font) (?:quoi|comment|quelque chose|que|qu|rien)|(?:a|as|ont|avez) (?:prevu|quoi|quel|quelle|quels|quelles|un plan|des mesures|une mesure|quelque chose)|existe(?:nt)?)';
@@ -618,10 +645,6 @@ const ASKS = new RegExp(
 );
 /** Somebody pointed at without a name: « lui », « eux », « celui qui… », « ils » and « vous ». */
 const POINTS = /\b(?:ils?|elles?|vous|tu|lui|eux|celui|celle|ceux|celles)\b/;
-/** « son parti », « ses amis », « votre candidat » — not « leur programme », « ses mesures ». */
-const THEIRS =
-  /\b(?:son|sa|ses|leurs?|votre|vos|ton|ta|tes) (?!(?:programme|livre|mesures?|propositions?|plans?|positions?|projets?|solutions?|idees?|reponses?|avis|promesses?|engagements?|politiques?|objectifs?|chiffrages?|priorites?)\b)/;
-
 /** Whom one works for: no word of the book, and the asker's own (« mon chef me harcèle »). */
 const OWN_BOSS = /^(?:patron|patronne|chef|cheffe|boss)$/;
 /** True when the question, or what it found, holds what `is` says — a sensitive subject. */
@@ -674,12 +697,14 @@ export function aloneIn(
   lexicon: Lexicon,
 ): Alone {
   const folded = fold(question).replace(lexicon.mine, ' ');
-  const title = (lexicon.role.exec(folded) ?? NAME_OR_VERB.exec(folded))?.[0];
+  const title = (lexicon.role.exec(folded) ?? lexicon.nameOrVerb.exec(folded))?.[0];
   if (title !== undefined) return { beside: title.trim().split(' ').pop() ?? '' };
   // « Ils proposent quoi… », « vous avez prévu quoi… », « est-ce qu'il y a… » ask the book:
   // neither their pronoun points at anyone, nor their verb is a word of the subject.
   const asking = folded.replace(ASKS, ' ');
-  const pointed = (POINTS.exec(asking) ?? THEIRS.exec(folded) ?? lexicon.pointed.exec(folded))?.[0];
+  const pointed = (POINTS.exec(asking) ??
+    lexicon.theirs.exec(folded) ??
+    lexicon.pointed.exec(folded))?.[0];
   if (pointed !== undefined) return { beside: pointed.trim() };
   const words = asking.split(' ').filter((word) => word !== '');
   const somebody = words.find((word) => lexicon.somebody(word));
@@ -775,39 +800,43 @@ export function pointsWithASign(question: string, lexicon: Lexicon): boolean {
 
 const EPITHET_WORD = new RegExp(`^${EPITHET}$`);
 const GLUE_WORD = new RegExp(`^${GLUE}$`);
-/** What a people is said to do, when the sentence is a charge: « … violent nos femmes ». */
-const CRIME_VERB = /^(?:violent|volent|tuent|agressent|egorgent|envahissent|pillent|remplacent)$/;
+/** What may stand before the people of a bare statement: « tous les… », « la plupart des… ». */
+const ALL_OF =
+  /^(?:les|le|la|l|des|de|d|tous|toutes|tout|ces|plupart|majorite|beaucoup|trop|mais|et)$/;
 
 /**
- * True when the question is hate put in words of the book — refused like an insult, once the
- * files of the sheet say what is what (eighth review of 15/11/2026):
- *   - a coded phrase (« la finance apatride », « le grand remplacement », « les Français de
- *     papier »): the list of them is data, and it is the one list of wordings to refuse of
- *     this file — known ones are covered, a new one will pass (data/2026/sensitive.json);
- *   - a people said to be what one throws at it: « les X sont des Y », « l'islam est une
- *     religion violente », « les X violent… ». Not the same words as the subject of a
- *     measure (« les musulmans sont victimes d'actes racistes »), and not a noun with its
- *     adjective (« l'expulsion des étrangers délinquants » is a question about the book).
+ * True when the question is a hateful statement and nothing else — a people at its head,
+ * « sont (tous) des… » or a verb of crime, what is thrown, one more word at most, and no
+ * question mark: « les X sont des Y », « l'islam est une religion violente », « les X
+ * volent ». It is refused like an insult, once the files of the sheet say what is what.
+ *
+ * NARROW ON PURPOSE (ninth review of 15/11/2026). The first version refused whoever REPORTED
+ * such a sentence — « je me suis fait traiter de… », « mon oncle dit que…, que répondre ? »,
+ * « les X sont-ils des Y ? » — and a refusal is our own voice turning away the person it was
+ * thrown at. Anything that is not the bare statement gets links: a question, a sentence
+ * somebody else said, the same words as the subject of a measure (« les musulmans sont
+ * victimes d'actes racistes »), a noun with its adjective (« l'expulsion des étrangers
+ * délinquants »). And a list never refuses: a coded phrase, a slur get the measures of the
+ * subject one may ask in their place, as links (`measuresFor`).
  */
 export function hateful(question: string, lexicon: Lexicon): boolean {
-  if (lexicon.trope(wordsOf(question).map(stem).join(' '))) return true;
-  const words = fold(question).replace(AS_SUBJECT, ' ').split(' ');
-  return words.some((word, at) => {
-    if (!lexicon.kin(stem(word))) return false;
-    const next = words.slice(at + 1, at + 9);
-    if (CRIME_VERB.test(next[0] ?? '') || CRIME_VERB.test(next[1] ?? '')) return true;
-    const said = next.findIndex((other) =>
-      /^(?:est|sont|etait|etaient|serait|seraient)$/.test(other),
-    );
-    if (said < 0 || said > 3) return false;
-    // After « sont »: small words, one word of its own at most, then what is thrown.
-    let free = 0;
-    for (const other of next.slice(said + 1)) {
-      if (EPITHET_WORD.test(other)) return true;
-      if (!GLUE_WORD.test(other) && (free += 1) > 1) return false;
-    }
-    return false;
-  });
+  if (question.includes('?')) return false;
+  const words = fold(question)
+    .replace(AS_SUBJECT, ' ')
+    .split(' ')
+    .filter((word) => word !== '');
+  const at = words.findIndex((word) => lexicon.kin(stem(word)));
+  if (at < 0 || !words.slice(0, at).every((word) => ALL_OF.test(word))) return false;
+  const after = words.slice(at + 1);
+  const thrown = (word: string): boolean => EPITHET_WORD.test(word) || lexicon.crime(word);
+  const rest = after.filter((word) => !GLUE_WORD.test(word) && processTerm(word) !== null);
+  return (
+    rest.some(thrown) &&
+    rest.filter((word) => !thrown(word)).length <= 1 &&
+    (after.some((word) => /^(?:est|sont|etait|etaient|serait|seraient)$/.test(word)) ||
+      lexicon.crime(after[0] ?? '') ||
+      lexicon.crime(after[1] ?? ''))
+  );
 }
 
 /**
@@ -908,10 +937,20 @@ export function measuresFor(
   knows: (id: string) => boolean,
   lexicon: Lexicon | null,
   objection: string | null = null,
+  search: ((subject: string) => readonly Ranked[]) | null = null,
 ): Found {
-  // Hate in words of the book is refused before anything is looked for.
+  // A hateful statement and nothing else is refused before anything is looked for.
   if (lexicon !== null && hateful(question, lexicon)) {
     return { rows: [], sentences: false, example: null, refused: true };
+  }
+  // A coded phrase, a slur — said, or reported by whom it was thrown at: the measures of the
+  // subject one may ask in its place, as links, and that subject as the example. A list never
+  // refuses, and never brings a sentence.
+  const words = wordsOf(question);
+  const instead = lexicon?.trope(words.map(stem).join(' ')) ?? null;
+  if (instead !== null && instead !== '' && search !== null) {
+    const about = rowsOf(search(instead), knows);
+    return { rows: about, sentences: false, example: instead, charged: true };
   }
   // Our written answer and the measures it rests on, when the question is the objection and
   // nothing more — a charge that rides along would stand above them, and above our own
@@ -929,7 +968,16 @@ export function measuresFor(
   const shown = hits.filter((hit) => rows.includes(hit.id));
   // A date that is the date of no measure found the measures of another day: nothing.
   if (datesMissed(question, shown)) return { rows: [], sentences: false, example: null };
+  // A people or a country, and what one says of it to charge it: « X contrôle… », « les X
+  // nous envahissent » are made of words of the book.
+  const peoples = lexicon !== null && words.some((word) => lexicon.kin(stem(word)));
+  const told =
+    lexicon !== null &&
+    (peoples || words.some((word) => lexicon.soft(stem(word)))) &&
+    words.some((word) => lexicon.said(stem(word)));
   const pointing =
+    instead !== null ||
+    told ||
     namesSomeone(question) ||
     refersToSomeone(question) ||
     putsOnTrial(question) ||
@@ -976,9 +1024,7 @@ export function measuresFor(
   const typed = all.filter((word) => word.length >= 3 && !NUMBER.test(word) && !putsOnTrial(word));
   // A sensitive subject, a people, or anything thrown at somebody: only a subject one may
   // suggest — « les migrants violent nos femmes » gave « femmes » (eighth review).
-  const strict =
-    putsOnTrial(question) ||
-    all.some((word) => marked(termOf(word)) || lexicon?.kin(termOf(word)) === true);
+  const strict = putsOnTrial(question) || all.some((word) => marked(termOf(word)));
   const subject = (word: string): boolean => {
     const term = termOf(word);
     return (
@@ -1001,7 +1047,8 @@ export function measuresFor(
       lexicon?.role.test(fold(word)) !== true
     );
   };
-  const example = typed.find(strict ? subject : plain) ?? null;
+  // Next to a people, no word of the question is a subject to suggest.
+  const example = peoples ? null : (typed.find(strict ? subject : plain) ?? null);
   return pointing || strict
     ? { rows, sentences: false, example, charged: true }
     : { rows, sentences: false, example };

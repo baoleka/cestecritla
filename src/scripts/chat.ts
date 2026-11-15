@@ -661,6 +661,7 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
             page.knows,
             plain === null ? null : lexiconOf(plain.words, (word) => aliasesOf(loaded, word)),
             reviewed?.objection ?? null,
+            (subject) => findRanked(loaded, subject),
           );
     const linksOnly = found !== null && !found.sentences && found.rows.length > 0;
     const searched: Turn = {

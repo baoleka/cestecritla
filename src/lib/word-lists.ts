@@ -9,7 +9,8 @@
  *                             countries one lends allegiances to, a fortune (`soft`) —,
  *                             as stems; the words one points at somebody with (`pointing`),
  *                             the faces of every day (`feelings`), the peoples a hateful
- *                             sentence is thrown at (`peoples`), the coded phrases (`tropes`).
+ *                             sentence is thrown at (`peoples`), what it says of them
+ *                             (`predicates`, `crimes`), the coded phrases (`tropes`).
  *
  * What they are for: src/lib/chat-local.ts, `measuresFor`.
  */
@@ -27,10 +28,19 @@ export function wordLists(): WordLists {
     groups: Record<string, string[]>;
     soft: Record<string, string[]>;
     suggested: string[];
-    pointing: { roles: string[]; somebody: string[]; pointed: string[]; own: string[] };
+    pointing: {
+      roles: string[];
+      somebody: string[];
+      pointed: string[];
+      own: string[];
+      ours: string[];
+      verbal: string[];
+    };
     feelings: number[];
     peoples: string[];
-    tropes: string[];
+    tropes: Record<string, string[]>;
+    predicates: string[];
+    crimes: string[];
   };
   return {
     neutral: cut(ordinary.words),
@@ -41,7 +51,14 @@ export function wordLists(): WordLists {
     ...sensitive.pointing,
     feelings: sensitive.feelings.map((code) => String.fromCodePoint(code)).join(''),
     peoples: [...sensitive.peoples].sort(),
-    // A coded phrase as the rules read a question: folded, each word cut to its stem.
-    tropes: [...new Set(sensitive.tropes.map((phrase) => spelled(phrase).map(stem).join(' ')))],
+    // A coded phrase as the rules read a question — folded, each word cut to its stem —, with
+    // the subject to ask in its place.
+    tropes: Object.entries(sensitive.tropes).flatMap(([subject, phrases]) =>
+      [...new Set(phrases.map((phrase) => spelled(phrase).map(stem).join(' ')))].map(
+        (phrase): [string, string] => [phrase, subject],
+      ),
+    ),
+    predicates: [...sensitive.predicates].sort(),
+    crimes: [...sensitive.crimes].sort(),
   };
 }
