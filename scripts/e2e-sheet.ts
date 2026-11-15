@@ -675,6 +675,8 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       'celui qui a dit la République c’est moi et l’antisémitisme',
       'eux et la fraude fiscale',
       'les Roms et la délinquance',
+      // Letters typed apart are a name all the same (seventh review).
+      'L.F.I. antisémitisme',
     ]) {
       const beside = await ask(question);
       check(
@@ -682,10 +684,19 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         (await count(`${LAST} .c-gists [data-generated-by]`)) === 0 &&
           (await count(`${LAST} .c-gists .c-badge`)) === 0 &&
           HOW.test(beside) &&
-          /Par exemple «\s(?:antisémitisme|fraude|délinquance|Roms)\s»\./.test(beside),
+          /Par exemple «\s(?:antisémitisme|fraude|délinquance)\s»\./.test(beside),
         beside.slice(0, 260),
       );
     }
+    // A date that is not the date of a measure found one by its month alone (seventh review):
+    // links, and no word of it given as an example.
+    const otherDay = await ask('le 7 octobre');
+    check(
+      '« le 7 octobre »: no sentence on another day of October stands under it',
+      (await count(`${LAST} .c-gists [data-generated-by]`)) === 0 &&
+        (FOUND_NOTHING.test(otherDay) || (HOW.test(otherDay) && !/Par exemple/.test(otherDay))),
+      otherDay.slice(0, 220),
+    );
     check(
       'none of these sent anything: a question shown as links asks nothing of the base',
       posted.gists.length === beforeNamed,
@@ -720,6 +731,21 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         rests.length >= 2 &&
         JSON.stringify(objected.ids) === JSON.stringify(rests.slice(0, 3)),
       `${JSON.stringify(objected.ids)} / ${JSON.stringify(rests)}`,
+    );
+    // …with our sentences when the question is the objection and nothing more: a charge that
+    // rides along keeps our written answer and its measures, as links — and sends nothing.
+    const afterObjection = posted.gists.length;
+    const ridden = await ask(
+      'Ils veulent sortir de l’UE et de l’euro, comme l’antisémitisme de Zorglub',
+    );
+    check(
+      'an objection that carries a charge along: our answer, its measures as links, nothing sent',
+      (await count(`${LAST} .c-plain`)) === 1 &&
+        (await count(`${LAST} .c-gists .c-row`)) >= 2 &&
+        (await count(`${LAST} .c-gists [data-generated-by]`)) === 0 &&
+        HOW.test(ridden) &&
+        posted.gists.length === afterObjection,
+      ridden.slice(0, 260),
     );
 
     // --- 8. nothing is written on the phone; the thread empties

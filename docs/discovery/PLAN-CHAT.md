@@ -1414,3 +1414,57 @@ relevé une seconde fois, à 16, et la porte le dit dans ces mots.
 **Une septième passe**, sur des questions qu'aucun de nous deux n'a vues, dit si la porte du plan
 — zéro bloquante — est tenue. Sinon : l'aperçu reste ouvert, la production reste en recherche
 seule, et c'est ce qui sera dit à l'éditeur.
+
+*Aperçu redéployé à 6 h 29 (5 h 29 UTC), commit `0a0788d`, Worker `cestecritla-preview` version
+`8776ce14` ; sonde en ligne dans trois navigateurs : tout bon ; CI verte.*
+
+### 15 novembre, 7 h 25 — la septième passe : plus personne à désigner, restent les ruses d'écriture (D16.71)
+
+Le relecteur : 145 questions fraîches écrites avant de lire le code, 77 sondes ciblées, 31 dates,
+20 questions en ligne, 12 envois — rendu en huit minutes. **Sa première phrase** : « je n'ouvrirais
+pas ce soir, mais oui après deux petites corrections ».
+
+**Ce qui tient, pour la première fois** : « la règle change la nature du problème : dans mon jeu
+frais, toutes les façons de nommer, de décrire ou de grouper des gens que je n'avais pas essayées
+reçoivent des liens » — descriptions, hypothèses, rumeurs, mots-dièse, lettres cyrilliques,
+verbes qui accusent, et, essayés pour la première fois, les groupes (« les juifs et la
+finance », « les musulmans et le terrorisme », « les Roms et les vols »). De ses 70 sondes
+fraîches, 6 recevaient une phrase, dont deux seulement à tort.
+
+**Les deux bloquantes, toutes deux de l'écriture** :
+
+- **« L.F.I. antisémitisme »** rendait la première capture, mot pour mot : les lettres, coupées
+  aux points, étaient trois mots d'une lettre que tout ignore. Pareil pour « J.L.M. », « R.N. »,
+  « l f i ».
+- **« Le 7 octobre »** rendait la phrase sur le massacre du 17 octobre 1961 — la recherche laisse
+  tomber le nombre qu'elle ne trouve pas, et le mois suffisait. Il l'écrit : « c'est la capture la
+  plus dommageable qui reste ».
+
+**Le point sérieux** : l'exemple de la ligne des liens. Sous « les Roms et les vols », la page
+proposait « Par exemple « roms ». » ; ailleurs un verbe (« soit »), ou la faute de frappe renvoyée.
+
+**Ce qui a changé** (D16.71) : les lettres écrites à part sont recollées, pour les règles et —
+c'est un gain — pour la recherche (« R.S.A. » ne trouvait rien) ; avec un mois dans la question,
+tout nombre doit être écrit dans une mesure montrée ; l'exemple n'est plus qu'un sujet qu'on peut
+suggérer, écrit dans le livre tel qu'il a été tapé, ou rien. **Et ce que j'ai trouvé en essayant
+la suite avant lui** : un signe qui n'est pas un mot. « ✡ finance » est fait d'un seul mot du
+livre ; la recherche ne lit pas le signe ; nos phrases sur la finance s'affichaient dessous. Tout
+signe hors d'une courte liste de visages retient désormais les phrases. Pareil pour une lettre
+d'une autre écriture (« 卐 » est une lettre pour Unicode) et pour « ＬＦＩ » en lettres pleine
+largeur, que l'index laissait tomber : elles sont lues pour ce qu'elles sont.
+
+**Mesuré** : ses 70 sondes, 3 phrases — celles qu'il accepte ; ses 75 questions ordinaires, 68 avec
+leurs phrases (52 en ligne avant : la liste des mots neutres a été allongée avec les siens, le
+chiffre est optimiste). Ma troisième paire de listes, jouée une fois : 62 sondes sur 66 sans
+phrase, puis 65 ; 34 questions légitimes sur 60 avec phrases, puis 54 — treize étaient des sigles à
+points que la recherche n'avait jamais lus.
+
+**Un autre chemin vers nos phrases, que personne n'avait regardé** : l'objection reconnue. Elle
+l'est dès que la question tient ses mots — donc aussi « La retraite à 60 ans, c'est infinançable,
+comme l'antisémitisme de X » : notre réponse écrite, ses mesures, nos phrases, sous une accusation.
+Les mesures ne gardent maintenant leurs phrases que si la question est l'objection et rien de plus.
+
+**Le script de la feuille pèse 15,7 Ko sur les 16 du plafond relevé il y a une heure** : la
+prochaine règle n'entre que si des listes de mots en sortent.
+
+**Une huitième passe** dit si les deux bloquantes sont fermées et s'il en reste.

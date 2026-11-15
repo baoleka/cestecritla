@@ -1,9 +1,9 @@
 {
   "meta": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "written_on": "2026-11-15",
     "written_by": "session",
-    "note_fr": "Les sujets sensibles : ce qui devient une accusation dès que quelqu'un se tient à côté. DEUX LISTES. « groups » : une haine, un délit, une violence, une drogue, une emprise, une religion ou une origine, un régime, un scandale, un jugement porté sur quelqu'un — quand une question en tient un, la feuille de « Demander » ne montre nos phrases que si le sujet est demandé seul : rien n'y désigne personne, des mesures tiennent le sujet entier — ce sont elles qu'on montre —, et chaque autre mot de sens est écrit dans une des mesures montrées (D16.70, src/lib/chat-local.ts, `aloneIn`). « soft » : des pays et des territoires sur lesquels on prête des allégeances, la fortune d'une personne — une accusation seulement quand quelqu'un est désigné : là, rien ne doit désigner personne et chaque mot doit être écrit dans une mesure montrée ; deux de ces sujets peuvent se côtoyer. Des racines telles que l'index les coupe (sans accent, sans pluriel) ; « * » : tout mot qui commence ainsi. LISTE FERMÉE PAR CONSTRUCTION : la session a lu, le 15 novembre 2026, les 3 741 racines de l'index du livre (`vocabulary`) et les groupes de synonymes, et en a tiré ce qui est sensible ; un mot que l'index ne connaît pas retient déjà nos phrases par lui-même. Une porte refuse un index dont le vocabulaire a changé sans que cette lecture soit refaite (scripts/chat-local.test.ts). Une racine de trop ne coûte que des liens.",
+    "note_fr": "Les sujets sensibles : ce qui devient une accusation dès que quelqu'un se tient à côté. DEUX LISTES. « groups » : une haine, un délit, une violence, une drogue, une emprise, une religion ou une origine, un régime, un scandale, un jugement porté sur quelqu'un — quand une question en tient un, la feuille de « Demander » ne montre nos phrases que si le sujet est demandé seul : rien n'y désigne personne, des mesures tiennent le sujet entier — ce sont elles qu'on montre —, et chaque autre mot de sens est écrit dans une des mesures montrées (D16.70, src/lib/chat-local.ts, `aloneIn`). « soft » : des pays et des territoires sur lesquels on prête des allégeances, la fortune d'une personne — une accusation seulement quand quelqu'un est désigné : là, rien ne doit désigner personne et chaque mot doit être écrit dans une mesure montrée ; deux de ces sujets peuvent se côtoyer. Des racines telles que l'index les coupe (sans accent, sans pluriel) ; « * » : tout mot qui commence ainsi. LISTE FERMÉE PAR CONSTRUCTION : la session a lu, le 15 novembre 2026, les 3 741 racines de l'index du livre (`vocabulary`) et les groupes de synonymes, et en a tiré ce qui est sensible ; un mot que l'index ne connaît pas retient déjà nos phrases par lui-même. Une porte refuse un index dont le vocabulaire a changé sans que cette lecture soit refaite (scripts/chat-local.test.ts). Une racine de trop ne coûte que des liens. « suggested » : les groupes dont un mot peut être donné en exemple sous des liens (« Par exemple « fraude ». ») — jamais une religion ou une origine, jamais un jugement (septième passe du relecteur, D16.71).",
     "vocabulary": {
       "source": "data/2026/search-index.json",
       "terms": 3741,
@@ -11,6 +11,12 @@
       "read_on": "2026-11-15"
     }
   },
+  "suggested": [
+    "hatreds",
+    "crimes_and_courts",
+    "violence",
+    "drugs"
+  ],
   "groups": {
     "hatreds": [
       "antisemit*",

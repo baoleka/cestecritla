@@ -65,6 +65,34 @@ export function tokenize(text: string): string[] {
     .filter((token) => token.length > 0);
 }
 
+/** Letters with a dot or a hyphen between them: « l.f.i. », « j.-l.m », « r-n ». */
+const DOTTED = /(^|[^a-z0-9])((?:[a-z][.\-_·]+)+[a-z]\.?)(?![a-z0-9])/g;
+/** Letters with anything else between them: « l f i », « l. f. i. », « "l" "f" "i" ». */
+const APART = /(^|[^a-z0-9])((?:[a-z][^a-z0-9]+)+[a-z]\.?)(?![a-z0-9])/g;
+
+/**
+ * The words of a question, with letters typed apart put back together: « R.S.A. », « l f i »,
+ * « J.-L. M. », « m e l e n c h o n ». Cut as usual they are so many one-letter words, which
+ * say nothing: the search found nothing for « R.S.A. », and the sheet did not see a name in
+ * « L.F.I. » (seventh review of 15/11/2026, src/lib/chat-local.ts). Dotted letters first,
+ * so that the « à » which follows an acronym stays a word (« le S.M.I.C. à combien ? »); and
+ * the small words of a sentence stay as they are: « y a-t-il… », « il y a ».
+ *
+ * Letters written in another form of themselves — full-width, in a circle, in mathematical
+ * bold — are read as the letters they are: the index would drop them, and a name with them.
+ */
+export function spelled(text: string): string[] {
+  const join = (_run: string, before: string, letters: string): string => {
+    const word = letters.replace(/[^a-z]/g, '');
+    return /^[yat]+$/.test(word) ? `${before}${letters}` : `${before}${word}`;
+  };
+  return normalize(text.normalize('NFKC'))
+    .replace(DOTTED, join)
+    .replace(APART, join)
+    .split(/[^a-z0-9]+/)
+    .filter((token) => token.length > 0);
+}
+
 /** Light French stemming: plural, feminine "ée", "eaux" → "eau", "aux" → "al", "-ement" / "-ent". */
 export function stem(term: string): string {
   let t = term;

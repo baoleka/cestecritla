@@ -34,6 +34,7 @@ import {
   strangersIn,
   rowsOf,
   aloneIn,
+  pointsWithASign,
   lexiconOf,
   type Lexicon,
   type Ranked,
@@ -69,7 +70,8 @@ const all = (): boolean => true;
 const knowing = (
   lists: Partial<WordLists> = {},
   alias: (typed: string) => readonly string[] = () => [],
-): Lexicon => lexiconOf({ neutral: [], people: [], sensitive: [], soft: [], ...lists }, alias);
+): Lexicon =>
+  lexiconOf({ neutral: [], people: [], sensitive: [], soft: [], askable: [], ...lists }, alias);
 /** No list at all: every word is judged by what the search found. */
 const NOTHING = knowing();
 
@@ -247,11 +249,40 @@ void test('a recognised objection shows the measures its written answer rests on
   // An objection: its measures, in its order, three at most, each once — whatever was found,
   // whoever its wording names: the answer is ours, and its measures were chosen with it.
   const objection = 'La 6e République, c’est Mélenchon président à vie';
-  assert.deepEqual(measuresFor(objection, [C, D, C, A, B], hits, all, NOTHING), {
+  const supports = [C, D, C, A, B];
+  assert.deepEqual(measuresFor(objection, supports, hits, all, NOTHING, objection), {
     rows: [C, D, A],
     sentences: true,
     example: null,
   });
+  // …as long as the question is the objection and nothing more. A charge that rides along —
+  // a name, an epithet, a sensitive subject, a word nobody knows, a sign — keeps the measures
+  // and withholds the sentences; « mon père dit que… » carries nothing.
+  const everyday = knowing({
+    neutral: terms('comme dit'),
+    people: terms('père'),
+    sensitive: ['antisemit*'],
+  });
+  const withSentences = (question: string, lexicon: Lexicon | null = everyday): boolean =>
+    measuresFor(question, supports, hits, all, lexicon, objection).sentences;
+  assert.equal(withSentences(`Mon père dit que ${objection}`), true);
+  assert.equal(withSentences('la 6e république c mélenchon président à vie ?'), true);
+  for (const rider of [
+    ', cet antisémite',
+    ', comme l’antisémitisme',
+    ', dit Zorglub',
+    ', comme Macron',
+    ` ${String.fromCodePoint(0x1f437)}`,
+  ]) {
+    assert.equal(withSentences(`${objection}${rider}`), false, rider);
+    assert.deepEqual(
+      measuresFor(`${objection}${rider}`, supports, hits, all, everyday, objection).rows,
+      [C, D, A],
+    );
+  }
+  // No wording to compare with, no file of the sheet: links.
+  assert.equal(measuresFor(objection, supports, hits, all, everyday).sentences, false);
+  assert.equal(withSentences(objection, null), false);
   assert.deepEqual(measuresFor('x', [C], [], all, NOTHING).rows, [C]);
   // A measure this state of the book does not know is left out; none is known: the search.
   assert.deepEqual(measuresFor('la retraite', [C, D], hits, (id) => id !== C, NOTHING).rows, [D]);
@@ -460,6 +491,7 @@ void test('a sensitive subject gets our sentences only when it is asked alone (s
     people: terms('fille fils femme Amazon Russie'),
     sensitive: ['antisemit*', 'fraud*', 'rom', 'delinqu*', 'harcel*'],
     soft: ['russ*'],
+    askable: ['antisemit*', 'fraud*', 'delinqu*', 'harcel*'],
   });
   const asked = (question: string, hits: Ranked[]): boolean =>
     measuresFor(question, [], hits, all, lexicon).sentences;
@@ -494,6 +526,10 @@ void test('a sensitive subject gets our sentences only when it is asked alone (s
     'ses amis et l’antisémitisme',
     'ce monsieur et l’antisémitisme',
     'cette dame et l’antisémitisme',
+    'cette personne et l’antisémitisme',
+    'ces gens-là et l’antisémitisme',
+    `${String.fromCodePoint(0x2721)} et l’antisémitisme`,
+    `${String.fromCodePoint(0x1f1f5, 0x1f1f8)} antisémitisme`,
     'sa femme et l’antisémitisme',
     'son fils et l’antisémitisme',
     'Amazon et l’antisémitisme',
@@ -550,10 +586,136 @@ void test('a sensitive subject gets our sentences only when it is asked alone (s
   assert.deepEqual(aloneIn('ce parti et l’antisémitisme', [AGAINST], all, lexicon), {
     beside: 'parti',
   });
+  // …and only a subject one may suggest, written in the book as it was typed: never an
+  // origin, never a typo echoed back, never a verb (seventh review).
+  assert.equal(measuresFor('ce parti et les Roms', [], [ROMA], all, lexicon).example, null);
+  assert.equal(
+    measuresFor('les Roms et la fraude', [], [FRAUD, ROMA], all, lexicon).example,
+    'fraude',
+  );
+  assert.equal(measuresFor('Amazon antisemtisme', [], [TYPO], all, lexicon).example, null);
+  assert.equal(measuresFor('vous fraudez', [], [FRAUD], all, lexicon).example, null);
+  // A year next to a sensitive subject is a word of it: the measure has to hold it. A
+  // quantity is not: « 80 milliards de fraude fiscale ».
+  assert.equal(asked('la fraude en 2017', [FRAUD]), false);
+  assert.equal(asked('la fraude en 2017', [{ ...FRAUD, by: terms('fraude 2017') }]), true);
+  assert.equal(asked('80 % de fraude fiscale', [FRAUD]), true);
 });
 
-void test('on the index of the book: what a sixth review typed gets links, and a subject asked alone keeps its sentences', () => {
+void test('a sign that is no word — a flag, a religious sign, an animal — is a target: links', () => {
+  const all = (): boolean => true;
+  const hits = [{ id: A, score: 10, by: terms('finance police retraite') }];
+  const sign = (...codes: number[]): string => String.fromCodePoint(...codes);
+  for (const question of [
+    `${sign(0x2721)} finance`,
+    `${sign(0x2721, 0xfe0f)} finance`,
+    `${sign(0x1f437)} police`,
+    `${sign(0x1f1f5, 0x1f1f8)} finance`,
+    `la finance ${sign(0x262a)}`,
+    `la police ${sign(0x1f921)}`,
+    // A letter of another writing is no word of the book either: a swastika is, for Unicode,
+    // a letter; a name in Cyrillic or in Hebrew is a name.
+    `${sign(0x5350)} finance`,
+    `${sign(0x041c)}élenchon finance`,
+    `${sign(0x05d9, 0x05d4, 0x05d5, 0x05d3, 0x05d9)} finance`,
+  ]) {
+    assert.ok(pointsWithASign(question), question);
+    assert.equal(measuresFor(question, [], hits, all, NOTHING).sentences, false, question);
+  }
+  // What the asker feels is nobody's target; a sum, a percentage are no sign.
+  for (const question of [
+    `la retraite ${sign(0x1f44d)}`,
+    `${sign(0x1f600)} la retraite`,
+    `la retraite ${sign(0x1f64f)} ${sign(0x2764, 0xfe0f)}`,
+    'la retraite à 1 700 € ?',
+    'la retraite + la finance = ?',
+    '100 % retraite',
+    'ça coûte combien, la retraite ? Et où est la finance ?',
+  ]) {
+    assert.equal(pointsWithASign(question), false, question);
+    assert.equal(measuresFor(question, [], hits, all, NOTHING).sentences, true, question);
+  } // The letters of French are letters of French.
+  assert.equal(pointsWithASign('Où est l’œuvre de Noël, à Besançon, ça coûte combien ?'), false);
+});
+
+void test('letters typed apart are one word: a name hidden in dots or spaces is a name (seventh review)', () => {
+  for (const question of [
+    'L.F.I. antisémitisme',
+    'l f i antisémitisme',
+    'L F I et la fraude',
+    'J.L.M. fraude',
+    'j.l.m antisémitisme',
+    'm e l e n c h o n antisémitisme',
+    'R.N. et le racisme',
+    'F.N. racisme',
+    'P.S. et la corruption',
+    'L.F.I. et la Russie',
+    // …and in another form of the same letters: full-width, mathematical bold.
+    `${String.fromCodePoint(0xff2c, 0xff26, 0xff29)} antisémitisme`,
+    `${String.fromCodePoint(0x1d40b, 0x1d405, 0x1d408)} antisémitisme`,
+  ]) {
+    assert.ok(namesSomeone(question), question);
+  }
+  assert.ok(asksOffTopic('L.F.I. antisémite ?'));
+  assert.ok(asksOffTopic('M é l e n c h o n est-il antisémite ?'));
+  assert.ok(asksForVote('je vote L.F.I. ?'));
+  // Initials nobody listed are a word the search never saw.
+  assert.deepEqual(strangersIn('M.L.P. fraude', [{ id: A, score: 1, by: terms('fraude') }]), [
+    'mlp',
+  ]);
+  // The small words of a question are not initials.
+  for (const question of [
+    'y a-t-il des mesures pour la retraite ?',
+    'il y a quoi sur la retraite ?',
+    'on m’a dit que la retraite a changé',
+    'c koi la retraite, g pas compris',
+  ]) {
+    assert.equal(namesSomeone(question), false, question);
+    assert.deepEqual(
+      strangersIn(question, [{ id: A, score: 1, by: terms('retraite mesures') }], (_typed, term) =>
+        ['koi', 'compri', 'change'].includes(term),
+      ),
+      [],
+      question,
+    );
+  }
+  assert.ok(asksAboutSite('c’est une I.A. ?'));
+});
+
+void test('a date has to be the date of a measure shown (seventh review)', () => {
+  const all = (): boolean => true;
+  // An invented measure on a day of 1961; another on work.
+  const DAY = { id: A, score: 10, by: terms('massacre 17 octobre 1961') };
+  const lexicon = knowing({ neutral: terms('octobre novembre mai sept dix apres') });
+  const shown = (question: string, hits: Ranked[] = [DAY]): boolean =>
+    measuresFor(question, [], hits, all, lexicon).sentences;
+  // The date of the measure, a month alone: the measure.
+  assert.equal(shown('le 17 octobre 1961'), true);
+  assert.equal(shown('le massacre du 17 octobre'), true);
+  assert.equal(shown('octobre'), true);
+  // Another day of the same month found the measure by its month: links.
+  for (const question of [
+    'le 7 octobre',
+    '7-Octobre',
+    'après le 7 octobre',
+    'le massacre du 7 octobre',
+    'le sept octobre',
+    'le dix-sept octobre',
+    'octobre 2023',
+    'le 7 octobre 2023',
+    'le 7 du mois d’octobre',
+    'le sept du mois d’octobre',
+  ]) {
+    const found = measuresFor(question, [], [DAY], all, lexicon);
+    assert.deepEqual([found.rows, found.sentences], [[A], false], question);
+  }
+});
+
+void test('on the index of the book: what the sixth and seventh reviews typed gets no sentence, and a subject asked alone keeps its sentences', () => {
   const page = loadPage();
+  /** No sentence of ours under it: refused, nothing found, or links. */
+  const withheld = (question: string): boolean =>
+    asksOffTopic(question) || asksForVote(question) || !page(question).shown.sentences;
   const sentences = (question: string): boolean => {
     assert.equal(asksOffTopic(question) || asksForVote(question), false, `${question}: refused`);
     const { shown } = page(question);
@@ -588,13 +750,42 @@ void test('on the index of the book: what a sixth review typed gets links, and a
     'le secrétaire national et la fraude',
     'celui qui veut la retraite à 60 ans et la fraude fiscale',
     'les Roms et la délinquance',
+    'les juifs et la finance',
+    'les musulmans et le terrorisme',
     'Ils soutiennent le terrorisme',
     'ils font du trafic de drogue',
     'trouvé et la drogue',
     'celui qui aime la Russie',
     'La République c’est moi !',
+    // The seventh: letters typed apart, and a date that is not the date of the measure.
+    'L.F.I. antisémitisme',
+    'l f i antisémitisme',
+    'L F I et la fraude',
+    'P.S. et la corruption',
+    'R.N. et le racisme',
+    'F.N. racisme',
+    'J.L.M. fraude',
+    'j.l.m antisémitisme',
+    'M.L.P. fraude',
+    'L.F.I. et la Russie',
+    'l.f.i. drogue',
+    'm e l e n c h o n antisémitisme',
+    'le 7 octobre',
+    'massacre du 7 octobre',
+    '7-Octobre',
+    'après le 7 octobre',
+    'le sept octobre',
+    'le sept du mois d’octobre',
+    'le 13 novembre',
+    `${String.fromCodePoint(0x2721)} finance`,
+    `${String.fromCodePoint(0x1f437)} police`,
+    '« l » « f » « i » antisémitisme',
+    'R N et le racisme',
+    'J.-L. M. et la fraude',
+    `${String.fromCodePoint(0xff2c, 0xff26, 0xff29)} antisémitisme`,
+    `${String.fromCodePoint(0x5350)} finance`,
   ]) {
-    assert.equal(sentences(question), false, question);
+    assert.ok(withheld(question), question);
   }
   for (const question of [
     'antisémitisme',
@@ -603,6 +794,8 @@ void test('on the index of the book: what a sixth review typed gets links, and a
     'fraude fiscale',
     'comment lutter contre la fraude fiscale ?',
     'corruption',
+    'corruption des élus',
+    'fraude fiscale des riches',
     'violences faites aux femmes',
     'violences conjugales',
     'racisme dans la police',
@@ -613,14 +806,33 @@ void test('on the index of the book: what a sixth review typed gets links, and a
     'cannabis',
     'prison',
     'ils proposent quoi contre la fraude fiscale ?',
+    'y a-t-il des mesures contre le racisme ?',
+    'quelles mesures contre le racisme s’il vous plaît ?',
     'reconnaître la Palestine',
     'Ukraine OTAN',
+    'le 17 octobre 1961',
     'la retraite a 60ans',
     'la retraite à 60 ans',
     'le smic',
+    // Letters typed apart are one word for the search too.
+    'R.S.A.',
+    'le R.I.C.',
+    'S.M.I.C. à combien ?',
+    '80 milliards de fraude fiscale',
+    '10 ans d’inéligibilité',
+    '3018 harcèlement',
   ]) {
     assert.equal(sentences(question), true, question);
   }
+  // The line under the links never suggests an origin, a verb or a word as it was mistyped.
+  for (const question of [
+    'les roms et les vols',
+    'vous fraudez le fisc',
+    'candidat antisemitsme',
+  ]) {
+    assert.equal(page(question).shown.example, null, question);
+  }
+  assert.equal(page('candidat antisémitisme').shown.example, 'antisémitisme');
 });
 
 void test('the ordinary words: words of every day and names of places — never a politician, never a title, never a charge', () => {

@@ -24,11 +24,13 @@ export function wordLists(): WordLists {
   const sensitive = read('data/2026/sensitive.json') as {
     groups: Record<string, string[]>;
     soft: Record<string, string[]>;
+    suggested: string[];
   };
   return {
     neutral: cut(ordinary.words),
     people: cut(ordinary.people),
     sensitive: Object.values(sensitive.groups).flat().sort(),
     soft: Object.values(sensitive.soft).flat().sort(),
+    askable: sensitive.suggested.flatMap((group) => sensitive.groups[group] ?? []).sort(),
   };
 }

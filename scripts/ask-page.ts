@@ -26,6 +26,7 @@ import {
   groupBySection,
   lookAlikeOnly,
   searchOptions,
+  spelled,
   terms,
   type SearchDoc,
   type SynonymGroup,
@@ -63,7 +64,9 @@ export function loadPage(): (question: string) => PageAsk {
   const order = manifest.sections.flatMap((section) =>
     section.items.filter((item) => item.kind !== 'paragraph').map((item) => item.id),
   );
-  return (question) => {
+  return (asked) => {
+    // Letters typed apart are one word, for the search as for the rules (`spelled`).
+    const question = spelled(asked).join(' ');
     const query = buildQuery(question, expand(question, groups));
     const typed = new Set(terms(question));
     const hits = index
@@ -81,7 +84,7 @@ export function loadPage(): (question: string) => PageAsk {
     const known = new Set(order);
     return {
       rows: rowsOf(hits, (id) => known.has(id)),
-      shown: measuresFor(question, [], hits, (id) => known.has(id), lexicon),
+      shown: measuresFor(asked, [], hits, (id) => known.has(id), lexicon),
       asked: askedOf(hits, order),
       own: groupBySection(hits)
         .slice(0, MAX_SELECTED)

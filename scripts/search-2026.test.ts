@@ -14,6 +14,7 @@ import {
   groupBySection,
   processTerm,
   sectionOf,
+  spelled,
   terms,
   tokenize,
 } from '../src/lib/search-core.js';
@@ -50,6 +51,37 @@ void test('a soft hyphen never splits a word (the 2026 text has fifteen)', () =>
   assert.deepEqual(terms(`Les salaires augmen${soft}tent`), terms('Les salaires augmentent'));
   assert.equal(processTerm('les'), null);
   assert.equal(processTerm('salaires'), 'salaire');
+});
+
+void test('letters typed apart are one word, and the small words of a sentence stay words', () => {
+  for (const [typed, read] of [
+    ['R.S.A.', 'rsa'],
+    ['le R.I.C.', 'le ric'],
+    ['S.M.I.C. à combien ?', 'smic a combien'],
+    ['T.V.A. à 0', 'tva a 0'],
+    ['L.F.I. et la retraite', 'lfi et la retraite'],
+    ['l f i', 'lfi'],
+    ['L. F. I.', 'lfi'],
+    ['l-f-i', 'lfi'],
+    ['« l » « f » « i »', 'lfi'],
+    ['R N et la retraite', 'rn et la retraite'],
+    ['m e l e n c h o n', 'melenchon'],
+    // Full-width letters are the letters.
+    [String.fromCodePoint(0xff32, 0xff33, 0xff21), 'rsa'],
+    // …and what is not initials is left alone.
+    ['y a-t-il une mesure ?', 'y a t il une mesure'],
+    ['il y a quoi ?', 'il y a quoi'],
+    ['qu’a-t-on prévu ?', 'a t on prevu'],
+    ['c koi, g pas compris', 'c koi g pas compris'],
+    ['la retraite à 60 ans', 'la retraite a 60 ans'],
+    ['le 49.3', 'le 49 3'],
+  ] as const) {
+    assert.equal(spelled(typed).join(' '), read, typed);
+  }
+  // A question without such letters is cut exactly as the index cuts it.
+  for (const typed of ['Les loyers à Lyon, c’est quoi le plan ?', 'l’hôpital et les 32 heures']) {
+    assert.deepEqual(spelled(typed), tokenize(typed), typed);
+  }
 });
 
 void test('synonyms: a phrase of a group brings the others, and only then', () => {

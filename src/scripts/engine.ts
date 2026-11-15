@@ -20,6 +20,7 @@ import {
   asWritten,
   fillerOnly,
   lookAlikeOnly,
+  spelled,
   terms,
 } from '../lib/search-core.ts';
 import { firstWordsOf, isLocatorDisplay, quoted, type LocatorDisplay } from '../lib/first-words.ts';
@@ -78,13 +79,15 @@ export function findSections(engine: Engine, question: string, max: number): Sec
  * The measures a question finds, best first, each with its score — what the sheet of
  * « Demander » chooses its rows from (src/lib/chat-local.ts). The same search as while typing.
  */
-export function findRanked(engine: Engine, question: string): Ranked[] {
+export function findRanked(engine: Engine, asked: string): Ranked[] {
+  // Letters typed apart are one word: « R.S.A. » is searched as « rsa ».
+  const question = spelled(asked).join(' ');
   const query = buildQuery(question, expand(question, engine.meta.synonyms));
   // The words of the question as the index cuts them: a word that found no measure AS WRITTEN
   // is one the book does not hold — a name, often (src/lib/chat-local.ts, `strangersIn`). A
   // look-alike does not count: « françois » finds « français », « martin » finds « matin ».
   const typed = terms(question);
-  const asked = new Set(typed);
+  const written = new Set(typed);
   return engine.index
     .search(query as Parameters<typeof engine.index.search>[0], searchOptions())
     .map((r) => ({
@@ -92,7 +95,7 @@ export function findRanked(engine: Engine, question: string): Ranked[] {
       score: r.score,
       near: lookAlikeOnly(r.terms, r.queryTerms),
       weak: fillerOnly(r.queryTerms),
-      by: r.queryTerms.filter((term) => asked.has(term) && asWritten(term, r.terms)),
+      by: r.queryTerms.filter((term) => written.has(term) && asWritten(term, r.terms)),
       via: r.queryTerms.filter((term) => asWritten(term, r.terms)),
       on: r.terms.filter((found) => typed.some((term) => asWritten(term, [found]))),
     }));

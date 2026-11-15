@@ -647,8 +647,8 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     if (asked !== epoch || turn === undefined) return;
     // A recognised objection shows the measures its written answer rests on; any other
     // question, what the search ranks best — as links only when it names someone.
-    const supports =
-      config.objections.find((entry) => entry.slug === turn.recognised.objection)?.supports ?? [];
+    const reviewed = config.objections.find((entry) => entry.slug === turn.recognised.objection);
+    const supports = reviewed?.supports ?? [];
     // What the sheet knows of words came with its texts: the ordinary words a question is
     // made of, the sensitive subjects. Without them nothing says which is which: links.
     const found =
@@ -660,6 +660,7 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
             findRanked(loaded, question),
             page.knows,
             plain === null ? null : lexiconOf(plain.words, (word) => aliasesOf(loaded, word)),
+            reviewed?.objection ?? null,
           );
     const linksOnly = found !== null && !found.sentences && found.rows.length > 0;
     const searched: Turn = {

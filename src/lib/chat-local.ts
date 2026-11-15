@@ -24,7 +24,15 @@ import {
   type GistsRequest,
 } from './chat-contract.js';
 import { MAX_CHAT_WORDS, sentenceWords } from './chat-words.js';
-import { fillerOnly, processTerm, sameWord, stem, terms, tokenize } from './search-core.js';
+import {
+  fillerOnly,
+  processTerm,
+  sameWord,
+  spelled,
+  stem,
+  terms,
+  tokenize,
+} from './search-core.js';
 
 /** A question is a question: two characters at least, one line, what the field accepts at most. */
 export const MIN_QUESTION_CHARS = 2;
@@ -212,6 +220,14 @@ const PERSON = `(?:${PERSON_OWN}|${PERSON_OTHER})`;
 const NAMED = `(?:${PERSON}|${PARTY_OWN}|${PARTY_OTHER})`;
 
 /**
+ * The words of a question as the rules read them: as the index folds them, and with letters
+ * typed apart put back together (`spelled`, src/lib/search-core.ts) — a name written « L.F.I. »
+ * or « m e l e n c h o n » is a name.
+ */
+const wordsOf = spelled;
+const fold = (question: string): string => wordsOf(question).join(' ');
+
+/**
  * Asking whom to vote for, or who will win: the one kind of question the sheet answers by
  * itself with « Ici, on ne parle que du programme. » — no measure shown, nothing sent, whatever
  * the search would have found for the word « vote ». Narrow on purpose: « le droit de vote à
@@ -248,7 +264,7 @@ const IF_I_VOTE = /\bsi (?:je|on|tu|nous|vous|les gens) (?:[a-z]+ )?vot(?:e|es|o
 
 /** True when the question asks for voting advice or a forecast: it is answered on the phone. */
 export function asksForVote(question: string): boolean {
-  const folded = tokenize(question).join(' ');
+  const folded = fold(question);
   return !IF_I_VOTE.test(folded) && VOTE_ADVICE.some((pattern) => pattern.test(folded));
 }
 
@@ -371,7 +387,7 @@ const BETWEEN = new Set([
 
 /** True when the question is an insult, or puts a person or a party on trial. */
 export function asksOffTopic(question: string): boolean {
-  const folded = tokenize(question).join(' ');
+  const folded = fold(question);
   if (INSULT.some((pattern) => pattern.test(folded))) return true;
   if (!ANY_NAMED.test(folded)) return false;
   if ([...CHARGED, ...PERSONAL, ...JUDGED].some((pattern) => pattern.test(folded))) return true;
@@ -397,7 +413,7 @@ export function asksOffTopic(question: string): boolean {
  * `measuresFor`.
  */
 export function namesSomeone(question: string): boolean {
-  const folded = tokenize(question).join(' ').replace(LABEL, '$1');
+  const folded = fold(question).replace(LABEL, '$1');
   return ANY_NAMED.test(folded) || BARE_NAME.test(folded);
 }
 
@@ -432,7 +448,7 @@ const SOMEONE: readonly RegExp[] = [
 
 /** True when the question points at one person by a title or a nickname. */
 export function refersToSomeone(question: string): boolean {
-  const folded = tokenize(question).join(' ');
+  const folded = fold(question);
   return SOMEONE.some((pattern) => pattern.test(folded));
 }
 
@@ -452,7 +468,7 @@ const ANY_EPITHET = new RegExp(`\\b${EPITHET}\\b`);
  * subject of a measure (« les actes antisémites »). Such a question gets links.
  */
 export function putsOnTrial(question: string): boolean {
-  return ANY_EPITHET.test(tokenize(question).join(' ').replace(AS_SUBJECT, ' '));
+  return ANY_EPITHET.test(fold(question).replace(AS_SUBJECT, ' '));
 }
 
 /** A number, and how one is written with its unit: « 60 », « 32h », « 6eme », « 60ans », « 1700€ ». */
@@ -474,13 +490,17 @@ export function strangersIn(
   known: (typed: string, term: string) => boolean = () => false,
 ): string[] {
   const found = new Set(hits.flatMap((hit) => hit.by ?? []));
-  return [...question.matchAll(/[\p{L}\p{N}]+/gu)]
-    .map((match) => match[0])
-    .filter((typed) => {
+  // As `spelled` reads it: a letter in another form of itself is the letter.
+  const read = question.normalize('NFKC');
+  // Letters typed apart make one word, which the search never saw: « M.L.P. », « l f i ».
+  const apart = wordsOf(read).filter((word) => !tokenize(read).includes(word));
+  return [...[...read.matchAll(/[\p{L}\p{N}]+/gu)].map((match) => match[0]), ...apart].filter(
+    (typed) => {
       const term = processTerm(tokenize(typed)[0] ?? '');
       if (term === null || NUMBER.test(typed) || typed.length < 3) return false;
       return !found.has(term) && !fillerOnly([term]) && !known(typed, term);
-    });
+    },
+  );
 }
 
 /**
@@ -505,6 +525,11 @@ export interface Lexicon {
    * somebody is pointed at (« celui qui… et la Russie », « le patrimoine du candidat »).
    */
   soft: (term: string) => boolean;
+  /**
+   * A sensitive subject the line under the links may give as the example to ask alone:
+   * « antisémitisme », « fraude » — never a religion or an origin, never a judgment.
+   */
+  askable: (term: string) => boolean;
 }
 
 /** The lists, as the file of the sheet holds them (src/lib/word-lists.ts). */
@@ -517,6 +542,8 @@ export interface WordLists {
   sensitive: readonly string[];
   /** data/2026/sensitive.json, `soft` — the same way. */
   soft: readonly string[];
+  /** The stems of the groups data/2026/sensitive.json says may be given as an example. */
+  askable: readonly string[];
 }
 
 /** The lexicon these lists make, with the synonyms of the search. */
@@ -536,6 +563,7 @@ export function lexiconOf(lists: WordLists, alias: (typed: string) => readonly s
     alias,
     sensitive: among(lists.sensitive),
     soft: among(lists.soft),
+    askable: among(lists.askable),
   };
 }
 
@@ -562,7 +590,7 @@ const SOMEBODY =
 const ASKING =
   '(?:propos(?:e|es|ent|ez)|prevoi(?:t|ent|s)|prevoyez|di(?:t|s|sent|tes)|parl(?:e|es|ent|ez)|pens(?:e|es|ent|ez)|veu(?:t|x|lent)|voulez|compt(?:e|es|ent|ez)|sai[st]|savez|(?:fai(?:t|s|tes)|font) (?:quoi|comment|quelque chose|que|qu|rien)|(?:a|as|ont|avez) (?:prevu|quoi|quel|quelle|quels|quelles|un plan|des mesures|une mesure|quelque chose)|existe(?:nt)?)';
 const ASKS = new RegExp(
-  `\\b(?:ils?|elles?|vous|tu) (?:(?:ne|n|y|en|nous|me|m) ){0,2}${ASKING}\\b|\\b(?:${ASKING}|(?:que|qu) (?:font|fait|faites|fais)) (?:t )?(?:ils?|elles?|vous|tu)\\b|\\b(?:il y a|y a t il|il faut|faut il|il faudra|il faudrait|s il (?:vous|te) plait|en est il|est il (?:possible|prevu|vrai|question)|il est (?:possible|prevu|vrai|question)|existe t il|pouvez vous|peux tu)\\b`,
+  `\\b(?:ils?|elles?|vous|tu) (?:(?:ne|n|y|en|nous|me|m) ){0,2}${ASKING}\\b|\\b(?:${ASKING}|(?:que|qu) (?:font|fait|faites|fais)) (?:t )?(?:ils?|elles?|vous|tu)\\b|\\b(?:il y a|y a t il|il faut|faut il|il faudra|il faudrait|il (?:vous|te) plait|en est il|est il (?:possible|prevu|vrai|question)|il est (?:possible|prevu|vrai|question)|existe t il|pouvez vous|peux tu)\\b`,
   'g',
 );
 /** Somebody pointed at without a name: « lui », « eux », « celui qui… », « ils » and « vous ». */
@@ -571,6 +599,11 @@ const POINTS = /\b(?:ils?|elles?|vous|tu|lui|eux|celui|celle|ceux|celles)\b/;
 const THEIRS =
   /\b(?:son|sa|ses|leurs?|votre|vos|ton|ta|tes) (?!(?:programme|livre|mesures?|propositions?|plans?|positions?|projets?|solutions?|idees?|reponses?|avis|promesses?|engagements?|politiques?|objectifs?|chiffrages?|priorites?)\b)/;
 
+/** Whom one works for: no word of the book, and the asker's own (« mon chef me harcèle »). */
+const OWN_BOSS = /^(?:patron|patronne|chef|cheffe|boss)$/;
+/** « Cette personne », « ces gens-là »: somebody, pointed at with a finger. */
+const THAT_ONE =
+  /\b(?:ce|cet|cette|ces) (?:personnes?|hommes?|femmes?|individus?|gens|types?|gars|mecs?|jeunes?|dames?|messieurs)\b/;
 /** The asker's own people — « mon patron », « ma voisine » — are nobody's target. */
 const MINE =
   /\b(?:mon|ma|mes) (?:patron|patronne|chef|cheffe|boss|ex|formation|entourage|groupe|collegues?|voisine?s?|copain|copine|potes?|amie?s?|oncle|tante|cousine?s?)\b/g;
@@ -578,8 +611,7 @@ const MINE =
 /** True when the question, or what it found, holds what `is` says — a sensitive subject. */
 function holds(question: string, shown: readonly Ranked[], is: (term: string) => boolean): boolean {
   return (
-    tokenize(question).some((word) => is(stem(word))) ||
-    shown.some((hit) => (hit.on ?? []).some(is))
+    wordsOf(question).some((word) => is(stem(word))) || shown.some((hit) => (hit.on ?? []).some(is))
   );
 }
 
@@ -595,7 +627,8 @@ export type Alone = { rows: string[] } | { beside: string };
  *
  * Alone means three things.
  *   - Nothing points at anyone: no title, no party word, no « lui », « ils », « celui qui… »,
- *     no « son », « leur », « votre », nobody of the small words (« ce monsieur »).
+ *     no « son », « leur », « votre », nobody of the small words (« ce monsieur », « cette
+ *     personne »).
  *   - Measures hold the subject — every sensitive word of the question, in one measure:
  *     « violences faites aux femmes » is one subject of the book; « les Roms et la
  *     délinquance » is two, and a sentence under them would marry them. THOSE measures are the
@@ -624,20 +657,22 @@ export function aloneIn(
   knows: (id: string) => boolean,
   lexicon: Lexicon,
 ): Alone {
-  const folded = tokenize(question).join(' ').replace(MINE, ' ');
+  const folded = fold(question).replace(MINE, ' ');
   const title = (BARE_TITLE.exec(folded) ?? NAME_OR_VERB.exec(folded))?.[0];
   if (title !== undefined) return { beside: title.trim().split(' ').pop() ?? '' };
   // « Ils proposent quoi… », « vous avez prévu quoi… », « est-ce qu'il y a… » ask the book:
   // neither their pronoun points at anyone, nor their verb is a word of the subject.
   const asking = folded.replace(ASKS, ' ');
-  const pointed = POINTS.exec(asking)?.[0] ?? THEIRS.exec(folded)?.[0];
+  const pointed = (POINTS.exec(asking) ?? THEIRS.exec(folded) ?? THAT_ONE.exec(folded))?.[0];
   if (pointed !== undefined) return { beside: pointed.trim() };
   const words = asking.split(' ').filter((word) => word !== '');
   const somebody = words.find((word) => SOMEBODY.test(word));
   if (somebody !== undefined) return { beside: somebody };
   const core = words.filter((word, at) => {
     const term = processTerm(word);
-    if (term === null || NUMBER.test(word)) return false;
+    if (term === null) return false;
+    // A year is a word of the subject: « la fraude de 2012 », « les comptes de 2017 ».
+    if (NUMBER.test(word)) return /^(?:19|20)\d\d$/.test(word);
     if (lexicon.sensitive(term) || lexicon.soft(term)) return true;
     if (fillerOnly([term]) || lexicon.neutral(term)) return false;
     return !(lexicon.people(term) && /^(?:mon|ma|mes)$/.test(words[at - 1] ?? ''));
@@ -683,6 +718,78 @@ export function aloneIn(
   return lacking === undefined ? { rows } : { beside: lacking };
 }
 
+const MONTH =
+  /^(?:janvier|fevrier|mars|avril|mai|juin|juillet|aout|septembre|octobre|novembre|decembre)$/;
+/** What makes a date with a month: a figure, or a number in words. */
+const COUNTED =
+  /^(?:\d+(?:er|e)?|premier|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|treize|quatorze|quinze|seize|vingt|trente)$/;
+
+/**
+ * True when the question holds a date — a number next to a month — that no measure shown
+ * holds. The search drops what it does not find, and a day is a number like another: « le 7
+ * octobre » found, by its month alone, the measure on 17 October 1961 — and a sentence on a
+ * massacre of 1961 under the date of another is the worst screenshot there is (seventh review
+ * of 15/11/2026). « Le 17 octobre 1961 » is the date of that measure, and keeps its sentence.
+ */
+function datesMissed(question: string, shown: readonly Ranked[]): boolean {
+  const words = tokenize(question);
+  const held = new Set(shown.flatMap((hit) => hit.by ?? []));
+  // With a month in the question every number is part of a date, in figures or in words:
+  // « le 7 du mois d'octobre », « le sept octobre ».
+  const beside = words.some((word) => MONTH.test(word))
+    ? words.filter((word) => COUNTED.test(word))
+    : [];
+  return beside.some((counted) => !held.has(stem(counted)));
+}
+
+/** Faces and gestures of every day: what the asker feels, nobody's target. */
+const FEELINGS = new Set(
+  [
+    0x1f44d, 0x1f44c, 0x1f64f, 0x2764, 0x1f642, 0x1f600, 0x1f603, 0x1f604, 0x1f601, 0x1f60a,
+    0x1f609, 0x1f605, 0x1f602, 0x1f923, 0x1f622, 0x1f62d, 0x1f621, 0x1f620, 0x1f914, 0x1f62e,
+    0x1f631, 0x1f614, 0x1f61e, 0x1f615, 0x1f644, 0x2753, 0x2757, 0x2705,
+  ].map((code) => String.fromCodePoint(code)),
+);
+
+/**
+ * True when the question holds a sign that is no word — a flag, a religious sign, an animal —
+ * or a letter of another writing: the search reads neither, and each is a target all the
+ * same. « ✡ finance » is made of one word of the book; so is « 卐 finance », whose sign is,
+ * for Unicode, a letter. A few faces of every day are let through; anything else gets links.
+ */
+export function pointsWithASign(question: string): boolean {
+  const read = question.normalize('NFKC');
+  return (
+    [...read.matchAll(/\p{So}/gu)].some((sign) => !FEELINGS.has(sign[0])) ||
+    [...read.matchAll(/\p{L}/gu)].some((letter) => !/\p{Script=Latin}/u.test(letter[0]))
+  );
+}
+
+/**
+ * True when a question recognised as one of our objections holds something more than the
+ * objection and the words of every day: « La retraite à 60 ans c'est infinançable, comme
+ * l'antisémitisme de X » is recognised — it holds the objection whole — and carries a charge
+ * our sentences must not stand under. « Mon père dit que… » carries none.
+ */
+function ridesAlong(question: string, objection: string, lexicon: Lexicon): boolean {
+  const own = terms(objection);
+  return (
+    pointsWithASign(question) ||
+    wordsOf(question).some((word) => {
+      const term = processTerm(word);
+      if (term === null || NUMBER.test(word)) return false;
+      if (own.some((other) => sameWord(other, term))) return false;
+      if (lexicon.sensitive(term) || lexicon.soft(term)) return true;
+      return !(
+        fillerOnly([term]) ||
+        lexicon.neutral(term) ||
+        lexicon.people(term) ||
+        OWN_BOSS.test(term)
+      );
+    })
+  );
+}
+
 /** What a turn shows of the measures: which ones, and with or without our sentences. */
 export interface Found {
   rows: string[];
@@ -700,7 +807,7 @@ export interface Found {
  *
  * A question recognised as one of our fifteen objections gets the measures our written answer
  * rests on (data/2026/riposte.json, `supports`) — the answer and its measures then say one
- * thing. The words of an objection find anything: « Ils veulent sortir de l'UE et de l'euro »
+ * thing; with our sentences when it is the objection and nothing more (`ridesAlong`). The words of an objection find anything: « Ils veulent sortir de l'UE et de l'euro »
  * found, first, a measure on an agreement with Israel (second review of 15/11/2026).
  *
  * Any other question gets what the search ranks best — WITH OUR SENTENCES ONLY WHEN EVERY
@@ -724,7 +831,7 @@ export interface Found {
  *     hold a word that did not; « que prévoit le programme contre l'antisémitisme ? » and
  *     « violences faites aux femmes » do not.
  *
- * Five things withhold the sentences, each for what the others cannot see:
+ * Seven things withhold the sentences, each for what the others cannot see:
  *   - a word the search does not know (`strangersIn`) — any name nobody listed;
  *   - a politician or a party of the list (`namesSomeone`) — names the book itself holds
  *     (« Macron »), parties, nicknames, a few names that are also words (« Marine »);
@@ -732,7 +839,9 @@ export interface Found {
  *     candidat » names nobody and points at somebody;
  *   - an epithet thrown at someone (`putsOnTrial`) — « leur chef est antisémite » is made of
  *     words of the book;
- *   - a sensitive subject that is not asked alone (`aloneIn`).
+ *   - a sensitive subject that is not asked alone (`aloneIn`);
+ *   - a sign that is no word — a flag, a religious sign (`pointsWithASign`);
+ *   - a date that is not the date of a measure shown (`datesMissed`).
  *
  * Without the files of the sheet (`lexicon` null: they did not load) nothing says what is
  * sensitive: links.
@@ -743,9 +852,16 @@ export function measuresFor(
   hits: readonly Ranked[],
   knows: (id: string) => boolean,
   lexicon: Lexicon | null,
+  objection: string | null = null,
 ): Found {
   const chosen = [...new Set(supports)].filter(knows).slice(0, SHOWN_MEASURES);
-  if (chosen.length > 0) return { rows: chosen, sentences: true, example: null };
+  if (chosen.length > 0) {
+    // With our sentences when the question is the objection and nothing more: a charge that
+    // rides along would stand above them. No wording given, no file loaded: links.
+    const sentences =
+      lexicon !== null && objection !== null && !ridesAlong(question, objection, lexicon);
+    return { rows: chosen, sentences, example: null };
+  }
   const rows = rowsOf(hits, knows);
   const shown = hits.filter((hit) => rows.includes(hit.id));
   const plainly =
@@ -754,53 +870,67 @@ export function measuresFor(
     !namesSomeone(question) &&
     !refersToSomeone(question) &&
     !putsOnTrial(question) &&
+    !pointsWithASign(question) &&
     strangersIn(
       question,
       hits,
       (typed, term) =>
-        lexicon.neutral(term) || lexicon.people(term) || lexicon.alias(typed).length > 0,
+        lexicon.neutral(term) ||
+        lexicon.people(term) ||
+        OWN_BOSS.test(term) ||
+        lexicon.alias(typed).length > 0,
     ).length === 0;
   if (plainly) {
     const alone = holds(question, shown, (term) => lexicon.sensitive(term) || lexicon.soft(term))
       ? aloneIn(question, hits, knows, lexicon)
       : { rows };
-    if ('rows' in alone) return { rows: alone.rows, sentences: true, example: null };
+    if (
+      'rows' in alone &&
+      !datesMissed(
+        question,
+        hits.filter((hit) => alone.rows.includes(hit.id)),
+      )
+    ) {
+      return { rows: alone.rows, sentences: true, example: null };
+    }
   }
   if (rows.length === 0) return { rows, sentences: false, example: null };
-  // A word that found measures and is nothing but a subject: asked alone, it gets what this
-  // question does not. The sensitive subject first — it is what the question is about, and
-  // « prison » found its measures under another word —, then a word of the measures shown
-  // that is no mere « contre » or « plan ».
-  const found = new Set(hits.flatMap((hit) => hit.by ?? []));
-  const through = new Set(hits.flatMap((hit) => hit.via ?? []));
-  const led = new Set(shown.flatMap((hit) => hit.by ?? []));
+  // An example to ask alone: a word of the question that is nothing but a subject, written
+  // in the book exactly as it was typed — a typo, a verb, a look-alike is not echoed back.
+  // In a question that holds a sensitive subject, only a subject one may suggest: under
+  // « les Roms et les vols » the line gives none (seventh review). No good example: none.
   const termOf = (typed: string): string => stem(tokenize(typed)[0] ?? '');
+  const through = new Set(hits.flatMap((hit) => hit.via ?? []));
+  const written = (term: string, among: readonly Ranked[]): boolean =>
+    among.some((hit) => (hit.on ?? hit.by ?? []).includes(term));
   const marked = (term: string): boolean =>
     lexicon !== null && (lexicon.sensitive(term) || lexicon.soft(term));
-  const subjects = [...question.matchAll(/[\p{L}\p{N}]+/gu)]
+  const typed = [...question.matchAll(/[\p{L}\p{N}]+/gu)]
     .map((match) => match[0])
-    .filter((typed) => {
-      const term = processTerm(tokenize(typed)[0] ?? '');
-      if (term === null || typed.length < 3 || fillerOnly([term])) return false;
-      const written =
-        found.has(term) ||
-        (marked(term) &&
-          lexicon?.alias(typed).some((alias) => marked(alias) && through.has(alias)) === true);
-      return (
-        written &&
-        !namesSomeone(typed) &&
-        !refersToSomeone(typed) &&
-        !refersToSomeone(`le ${typed}`) &&
-        !putsOnTrial(typed) &&
-        !BARE_TITLE.test(tokenize(typed).join(' '))
-      );
-    });
-  const example =
-    subjects.find((typed) => lexicon?.sensitive(termOf(typed)) === true) ??
-    subjects.find((typed) => lexicon?.soft(termOf(typed)) === true) ??
-    subjects.find((typed) => led.has(termOf(typed)) && lexicon?.neutral(termOf(typed)) !== true) ??
-    subjects.find((typed) => led.has(termOf(typed))) ??
-    null;
+    .filter((word) => word.length >= 3 && !NUMBER.test(word) && !putsOnTrial(word));
+  const subject = (word: string): boolean => {
+    const term = termOf(word);
+    return (
+      lexicon?.askable(term) === true &&
+      (written(term, hits) ||
+        lexicon.alias(word).some((alias) => marked(alias) && through.has(alias)))
+    );
+  };
+  const plain = (word: string): boolean => {
+    const term = processTerm(tokenize(word)[0] ?? '');
+    return (
+      term !== null &&
+      !fillerOnly([term]) &&
+      written(term, shown) &&
+      lexicon?.neutral(term) !== true &&
+      lexicon?.people(term) !== true &&
+      !namesSomeone(word) &&
+      !refersToSomeone(word) &&
+      !refersToSomeone(`le ${word}`) &&
+      !BARE_TITLE.test(fold(word))
+    );
+  };
+  const example = typed.find(typed.some((word) => marked(termOf(word))) ? subject : plain) ?? null;
   return { rows, sentences: false, example };
 }
 
@@ -938,7 +1068,7 @@ const SHORT_ABOUT: readonly RegExp[] = [
  * site says of itself — and with no measure next to it.
  */
 export function asksAboutSite(question: string): boolean {
-  const tokens = tokenize(question);
+  const tokens = wordsOf(question);
   const folded = tokens.join(' ');
   if (ABOUT_SITE.some((pattern) => pattern.test(folded))) return true;
   return tokens.length <= SHORT_QUESTION && SHORT_ABOUT.some((pattern) => pattern.test(folded));
