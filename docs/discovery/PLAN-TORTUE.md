@@ -1226,3 +1226,31 @@ l'aperçu (autre adresse, autre stockage) : il est tenu par des tests, pas par u
   - la carte « Garder » est un pavé : c'était déjà une idée hors de ce plan, à sa demande.
 - **Suite :** le rapport à l'éditeur, captures comprises, et ses questions — la phrase du début,
   puis la production (lot E).
+
+### 15 novembre 2026 (nuit) — le rapport, trois réponses de l'éditeur, et la production (lot E, D17.34 à D17.36)
+
+- **Le rapport.** La planche des treize images montrées aux personas lui a été envoyée.
+  L'état de l'aperçu et la session lui ont été donnés dans la question même, chiffres compris :
+  ce qui tient, et ce qui pèse — cinq personas sur sept la disent enfantine, une militante pressée
+  fermerait la page au flamant, l'envie de la faire changer reste un « peut-être » pour six.
+- **Ses réponses :**
+  - **D17.34** : « Ta tortue change quand tu trouves des mots. » ;
+  - **D17.35** : « Passer l'animation » ;
+  - **D17.36 : « Oui, bascule »**, écrit dans `data/mascot.json` sur ce mot daté
+    (`generation: 2`, `decided_on: 2026-11-15`, `decided_by: editor`).
+- **Avant le déploiement, sur la build exacte de la production** (`npm run build`, génération 2) :
+  la porte de lancement ne refuse rien ; 652 tests ; la porte du jeu dans les trois moteurs (252, 217 et 217 vérifications) ; la porte du site (44, 41 et 41) ; l'audit d'accessibilité (225 contrôles, aucun échec) ; aucun éclair, aucune image au-delà de 50 ms processeur ralenti quatre fois.
+- **Déployé le 15 novembre à 23 h 27 (22 h 27 UTC)** — `npm run deploy`, commit `085a1bd`,
+  version `2644c40b` — **et vérifié en ligne** :
+  - sur `cestecritla.fr` et `www`, 1 153 fichiers sur 1 156 sont identiques à la build, avec les
+    trois écarts connus ;
+  - pas de `noindex`, et l'accueil sert la génération 2 ;
+  - la porte du jeu, jouée contre la production en ligne dans les trois moteurs : 203
+    vérifications sous Chromium, Firefox et WebKit, toutes bonnes ;
+  - l'aperçu a été redéployé à 23 h 37 (22 h 37 UTC) avec les deux nouveaux textes : version
+    `f366887a`, 1 153 fichiers sur 1 156 identiques ;
+  - le Worker des phrases (`cestecritla-chat`) n'a pas été touché.
+- **Retour arrière** : `generation` à 1 dans `data/mascot.json`, puis `npm run build && npm run
+  deploy`. L'état de chacun est gardé ; un téléphone y perd seulement la couleur choisie. La
+  génération 1, ses fichiers et ses portes restent dans le dépôt jusqu'au ménage (lot F), sur
+  son mot.
