@@ -129,7 +129,11 @@
       "LGBTI",
       "changement de sexe à l’état civil",
       "thérapies de conversion",
-      "homophobie"
+      "homophobie",
+      "LGBTIphobie",
+      "LGBTphobie",
+      "LGBTphobies",
+      "transphobie"
     ],
     [
       "Est-ce que le programme parle de la fin de vie ?",
@@ -217,7 +221,11 @@
       "32 heures",
       "35 heures",
       "temps de travail",
-      "sixième semaine de congés payés"
+      "sixième semaine de congés payés",
+      "32h",
+      "35h",
+      "32 h",
+      "35 h"
     ],
     [
       "Ils proposent quoi sur l'ISF ?",
@@ -667,6 +675,14 @@
       "collectiviser",
       "collectivisation",
       "pôle public"
+    ],
+    [
+      "lobby",
+      "lobbies",
+      "lobbys",
+      "lobbying",
+      "lobbyistes",
+      "groupes de pression"
     ]
   ]
 }

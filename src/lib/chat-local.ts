@@ -24,7 +24,7 @@ import {
   type GistsRequest,
 } from './chat-contract.js';
 import { MAX_CHAT_WORDS, sentenceWords } from './chat-words.js';
-import { fillerOnly, processTerm, sameWord, terms, tokenize } from './search-core.js';
+import { fillerOnly, processTerm, sameWord, stem, terms, tokenize } from './search-core.js';
 
 /** A question is a question: two characters at least, one line, what the field accepts at most. */
 export const MIN_QUESTION_CHARS = 2;
@@ -91,6 +91,13 @@ export interface Ranked {
   weak?: boolean;
   /** The words of the question, as the index cuts them, that found this measure. */
   by?: readonly string[];
+  /** The same, with the words the search added to the question — its synonyms. */
+  via?: readonly string[];
+  /**
+   * The words of the measure that the question itself wrote — not those its synonyms found:
+   * what the measure is about, as far as the words typed go.
+   */
+  on?: readonly string[];
 }
 
 /**
@@ -188,14 +195,19 @@ export function chatRequestOf(asking: Asking): ChatRequest | null {
  * here only if it is hardly anything else: « borne », « renaissance », « les écologistes »
  * are also words of the book (« une borne de recharge »), and a rule that took them for a
  * person refused questions about the programme (second review of 15/11/2026).
+ *
+ * Every person the index of the book holds is here — « la loi Kasbarian », « la taxe Zucman »
+ * (read on 15/11/2026, with the whole vocabulary: data/2026/sensitive.json): a name the book
+ * writes is a word the search knows, and nothing else would see it. The law that carries the
+ * name stays the law's (`LABEL`).
  */
 const PERSON_OWN = '(?:(?:jean luc )?mel[ae]n(?:ch|c|sh)i?on[a-z]*|meluche|jlm)';
 const PARTY_OWN =
   '(?:la france insoumise|france insoumise|lfi|les insoumis|les insoumises|insoumis|insoumise|insoumises)';
 const PERSON_OTHER =
-  '(?:macron|marine le pen|le pen|lepen|bardella|zemmour|retailleau|attal|darmanin|hollande|sarkozy|glucksmann|ruffin|roussel|tondelier|faure|bompard|panot|autain|ciotti|wauquiez|bayrou|barnier|lecornu|trump|poutine|netanyahou|netanyahu)';
+  '(?:macron(?:ie|istes?|iens?|iennes?)?|marine le pen|le pen|lepen|bardella|zemmour|retailleau|attal|darmanin|hollande|sarkozy|glucksmann|ruffin|roussel|tondelier|faure|bompard|panot|autain|ciotti|wauquiez|bayrou|barnier|lecornu|trump|poutine|netanyahou|netanyahu|bollore|kasbarian|el khomri|khomri|penicaud|fioraso|cazeneuve|zucman|carle)';
 const PARTY_OTHER =
-  '(?:le rassemblement national|rassemblement national|rn|le parti socialiste|parti socialiste|ps|lr|eelv|pcf|nfp|nupes|modem)';
+  '(?:le rassemblement national|rassemblement national|rn|fn|front national|le parti socialiste|parti socialiste|ps|lr|les republicains|eelv|pcf|parti communiste|nfp|(?:le )?nouveau front populaire|front populaire|nupes|modem|reconquete|lrem|ump|udi|npa|lutte ouvriere|les verts)';
 const PERSON = `(?:${PERSON_OWN}|${PERSON_OTHER})`;
 const NAMED = `(?:${PERSON}|${PARTY_OWN}|${PARTY_OTHER})`;
 
@@ -277,13 +289,17 @@ const INSULT: readonly RegExp[] = [
 ];
 /** What is thrown at a person or a party — the epithet, not the subject (« antisémitisme »). */
 const EPITHET =
-  '(?:antisemites?|racistes?|islamophobes?|islamo ?gauchistes?|islamistes?|dictateurs?|fachos?|fascistes?|nazis?|neo ?nazis?|extremistes?|populistes?|complotistes?|menteurs?|menteuse|voleurs?|corrompus?|corrompue|traitres?|poutinistes?|pro ?russes?|pro ?iran|pro ?hamas|chavistes?|communistes?|staliniens?|gourou|secte|sectaires?|terroristes?|wokistes?|woke|gauchistes?|fou|folle|dingue|cingle|violente?s?|sexistes?|misogynes?|homophobes?|transphobes?|pedophiles?|violeurs?|escrocs?|voyous?|delinquants?|dealers?|fraudeurs?|hypocrites?|demagogues?|demago|manipulateurs?|incompetente?s?|ridicules?|haineux|haineuse|dangereux|dangereuse|autoritaires?|coleriques?|communautaristes?|antisionistes?|complices?|anti ?france|ultra ?gauche|staline|hitler|mussolini|robespierre|lenine|khmers? rouges?|rouge brun|corruption|mensonges?|delire|delirant|laxistes?|vendus?|laches?|tricheurs?)';
+  '(?:antisemites?|racistes?|islamophobes?|islamo ?gauchistes?|islamistes?|dictateurs?|fachos?|fascistes?|nazis?|neo ?nazis?|extremistes?|populistes?|complotistes?|menteurs?|menteuse|voleurs?|corrompus?|corrompue|traitres?|poutinistes?|pro ?russes?|pro ?iran|pro ?hamas|chavistes?|communistes?|staliniens?|gourou|secte|sectaires?|terroristes?|wokistes?|woke|gauchistes?|fou|folle|dingue|cingle|violente?s?|sexistes?|misogynes?|homophobes?|transphobes?|pedophiles?|violeurs?|escrocs?|voyous?|delinquants?|dealers?|fraudeurs?|hypocrites?|demagogues?|demago|manipulateurs?|incompetente?s?|ridicules?|haineux|haineuse|dangereux|dangereuse|autoritaires?|coleriques?|communautaristes?|antisionistes?|complices?|anti ?france|ultra ?gauche|staline|hitler|mussolini|robespierre|lenine|khmers? rouges?|rouge brun|delirant|laxistes?|vendus?|laches?|tricheurs?)';
+/** A subject thrown as a charge — next to a name only: alone, « corruption » is a subject of the book. */
+const CHARGE_NOUN = '(?:corruption|mensonges?|delire)';
 /** Between a name and what is thrown at it: « est », « un », « des » — never a word of its own. */
 const GLUE =
   '(?:est|sont|etait|serait|c|un|une|des|le|la|les|l|tres|trop|vraiment|si|aussi|plutot|encore|toujours|donc|qu|que|il|elle|ils|elles|bien|tous|toutes|comme|vrai|vraie|gros|sale|grand|pur|tellement|completement|totalement|devenu|devenue|parait|semble|a|ont|ete)';
 const CHARGED: readonly RegExp[] = [
-  new RegExp(`\\b${NAMED}(?: ${GLUE}){0,4} ${EPITHET}\\b`),
-  new RegExp(`\\b${EPITHET} (?:de |d |du |des )?(?:la |le |les |l )?${NAMED}\\b`),
+  new RegExp(`\\b${NAMED}(?: ${GLUE}){0,4} (?:${EPITHET}|${CHARGE_NOUN})\\b`),
+  new RegExp(
+    `\\b(?:${EPITHET}|${CHARGE_NOUN}) (?:de |d |du |des )?(?:la |le |les |l )?${NAMED}\\b`,
+  ),
 ];
 /** What is asked of a person and is nobody's programme: money, health, the courts, bad company. */
 const PERSONAL: readonly RegExp[] = [
@@ -401,11 +417,17 @@ const BARE_NAME =
  * (« papy », « le boss »). A charge needs no more to find its target, and it needs no epithet
  * either: « l'antisémitisme du candidat » is made of two words of the book (fifth review of
  * 15/11/2026). The plural and the indefinite stay subjects of the book: « les députés », « un
- * président », « des maires ».
+ * président », « des maires », « combien gagne un député ? », « plus de président ? ».
+ *
+ * A title of politics needs no article either: « candidat antisémitisme », « l'ancien
+ * ministre », « député salaire » are how one types into a search box (sixth review). And one
+ * sentence is his alone. « Mon patron », « ma cheffe » are the asker's own, and no politician.
  */
 const SOMEONE: readonly RegExp[] = [
-  /\b(?:le|la|l|leur|ce|cet|cette|son|sa|notre|votre|mon|ma|du|au) (?:(?:grand|grande|vieux|vieille|petit|petite|premier|premiere|cher|chere|fameux|soi disant) )?(?:candidate?|chef|cheffe|leader|tribun|gourou|patron|patronne|presidente?|ministre|maire|deputee?|senateur|senatrice|porte parole|elue?|dirigeante?|fondateur|fondatrice|eurodeputee?|secretaire generale?|type|mec|gars|bonhomme|vieux|vieille|boss)\b/,
+  /\b(?:le|la|l|leur|ce|cet|cette|son|sa|notre|votre|du|au) (?:(?:grand|grande|vieux|vieille|petit|petite|premier|premiere|cher|chere|fameux|soi disant) )?(?:chef|cheffe|patron|patronne|elue?|dirigeante?|fondateur|fondatrice|secretaire generale?|type|mec|gars|bonhomme|vieux|vieille|boss)\b/,
+  /(?:^|\b(?!(?:un|une|chaque|tout|toute|aucun|aucune|quel|quelle|de|d|sans|comme|par|ni) )[a-z0-9]+ )(?:candidate?|presidente?|ministre|maire|deputee?|senateur|senatrice|eurodeputee?|leader|tribun|gourou|porte parole)\b/,
   /\b(?:papy|papi|pepe|mec|boss)\b/,
+  /\brepublique (?:c )?est moi\b/,
 ];
 
 /** True when the question points at one person by a title or a nickname. */
@@ -433,8 +455,8 @@ export function putsOnTrial(question: string): boolean {
   return ANY_EPITHET.test(tokenize(question).join(' ').replace(AS_SUBJECT, ' '));
 }
 
-/** A number, and how one is written with its unit: « 60 », « 32h », « 6eme », « 1700€ ». */
-const NUMBER = /^\d+(?:h|e|er|ere|eme|ème|k|m|%|€)?$/;
+/** A number, and how one is written with its unit: « 60 », « 32h », « 6eme », « 60ans », « 1700€ ». */
+const NUMBER = /^\d+(?:h|e|er|ere|eme|ème|k|m|ans?|%|€)?$/;
 
 /**
  * The words of a question that the search does not know: they found no measure at all, and
@@ -461,6 +483,206 @@ export function strangersIn(
     });
 }
 
+/**
+ * What the files of the sheet know of words — data, fetched with its texts
+ * (src/lib/chat-data.ts): data/2026/ordinary.json, data/2026/sensitive.json, and the synonyms
+ * of the search.
+ */
+export interface Lexicon {
+  /** A neutral word — « virer », « demain », « Lyon »: it vouches for itself in any question. */
+  neutral: (term: string) => boolean;
+  /**
+   * People and proper names that are no politician — « fille », « voisins », « Amazon »: they
+   * vouch for themselves in an ordinary question, never next to a sensitive subject.
+   */
+  people: (term: string) => boolean;
+  /** The other words the search reads this one as — its synonyms —, as the index cuts them. */
+  alias: (typed: string) => readonly string[];
+  /** A term of a sensitive subject: a charge, as soon as someone stands next to it. */
+  sensitive: (term: string) => boolean;
+  /**
+   * A softer subject — a country one lends allegiances to, a fortune: a charge only when
+   * somebody is pointed at (« celui qui… et la Russie », « le patrimoine du candidat »).
+   */
+  soft: (term: string) => boolean;
+}
+
+/** The lists, as the file of the sheet holds them (src/lib/word-lists.ts). */
+export interface WordLists {
+  /** data/2026/ordinary.json, `words` — as the index cuts them. */
+  neutral: readonly string[];
+  /** data/2026/ordinary.json, `people` — as the index cuts them. */
+  people: readonly string[];
+  /** data/2026/sensitive.json, `groups` — stems; « * » at the end: every word that starts so. */
+  sensitive: readonly string[];
+  /** data/2026/sensitive.json, `soft` — the same way. */
+  soft: readonly string[];
+}
+
+/** The lexicon these lists make, with the synonyms of the search. */
+export function lexiconOf(lists: WordLists, alias: (typed: string) => readonly string[]): Lexicon {
+  const neutral = new Set(lists.neutral);
+  const people = new Set(lists.people);
+  const among = (entries: readonly string[]): ((term: string) => boolean) => {
+    const whole = new Set(entries.filter((entry) => !entry.endsWith('*')));
+    const starts = entries
+      .filter((entry) => entry.endsWith('*'))
+      .map((entry) => entry.slice(0, -1));
+    return (term) => whole.has(term) || starts.some((start) => term.startsWith(start));
+  };
+  return {
+    neutral: (term) => neutral.has(term),
+    people: (term) => people.has(term),
+    alias,
+    sensitive: among(lists.sensitive),
+    soft: among(lists.soft),
+  };
+}
+
+/**
+ * A title, a role, a party — in the singular, with or without its article: « candidat
+ * antisémitisme » is how a charge is typed into a search box, and « ce parti », « l'auteur du
+ * programme » can only be one party and one person here (sixth review of 15/11/2026). Read
+ * only next to a sensitive subject: « élection du maire » and « financement d'un parti » stay
+ * questions about the book. The plural and the indefinite are subjects of the book: « la
+ * corruption des élus », « que risque un patron qui fraude ? ».
+ */
+const BARE_TITLE =
+  /(?:^|\b(?!(?:un|une|chaque|tout|toute|aucun|aucune|quel|quelle|de|d|sans|comme|par|ni) )[a-z0-9]+ )(?:candidate?|chef|cheffe|leader|tribun|gourou|patron|patronne|presidente?|ministre|maire|deputee?|senateur|senatrice|porte parole|elue?|dirigeante?|fondateur|fondatrice|eurodeputee?|secretaire|coordinateur|coordinatrice|responsable|auteur|autrice|parlementaire|militante?|opposante?|representante?|conseiller|conseillere|adjointe?|collaborateur|collaboratrice|assistante?|tresorier|tresoriere|parti|mouvement|organisation|formation|camp|clan|groupe|entourage|type|mec|gars|bonhomme|boss|papy|papi|pepe)\b/;
+/**
+ * A name that is a verb of every other question — « Trouvé » —, taken for the person where
+ * nothing makes it the verb: « trouvé et la drogue », not « on trouve de la drogue partout ».
+ */
+const NAME_OR_VERB =
+  /(?:^|\b(?!(?:je|j|tu|on|il|elle|nous|vous|ils|elles|ai|as|a|avons|avez|ont|qui|se|s|y|en|ne|n|me|m|te|t|l|le|la|les|bien|deja|pas|jamais|toujours|ca|c|est|ete|avoir|etre|comment|ou) )[a-z0-9]+ )trouve\b/;
+/** People the search drops as small words (search-core.ts, `STOPWORDS`) — and who are somebody. */
+const SOMEBODY =
+  /^(?:dame|madame|monsieur|oncle|tante|cousine?|voisine?|collegue|copain|copine|pote|mec|gars|type|amie?)$/;
+/** What asks what the book says, after « ils », « vous », « tu »: the way a question is put here. */
+const ASKING =
+  '(?:propos(?:e|es|ent|ez)|prevoi(?:t|ent|s)|prevoyez|di(?:t|s|sent|tes)|parl(?:e|es|ent|ez)|pens(?:e|es|ent|ez)|veu(?:t|x|lent)|voulez|compt(?:e|es|ent|ez)|sai[st]|savez|(?:fai(?:t|s|tes)|font) (?:quoi|comment|quelque chose|que|qu|rien)|(?:a|as|ont|avez) (?:prevu|quoi|quel|quelle|quels|quelles|un plan|des mesures|une mesure|quelque chose)|existe(?:nt)?)';
+const ASKS = new RegExp(
+  `\\b(?:ils?|elles?|vous|tu) (?:(?:ne|n|y|en|nous|me|m) ){0,2}${ASKING}\\b|\\b(?:${ASKING}|(?:que|qu) (?:font|fait|faites|fais)) (?:t )?(?:ils?|elles?|vous|tu)\\b|\\b(?:il y a|y a t il|il faut|faut il|il faudra|il faudrait|s il (?:vous|te) plait|en est il|est il (?:possible|prevu|vrai|question)|il est (?:possible|prevu|vrai|question)|existe t il|pouvez vous|peux tu)\\b`,
+  'g',
+);
+/** Somebody pointed at without a name: « lui », « eux », « celui qui… », « ils » and « vous ». */
+const POINTS = /\b(?:ils?|elles?|vous|tu|lui|eux|celui|celle|ceux|celles)\b/;
+/** « son parti », « ses amis », « votre candidat » — not « leur programme », « ses mesures ». */
+const THEIRS =
+  /\b(?:son|sa|ses|leurs?|votre|vos|ton|ta|tes) (?!(?:programme|livre|mesures?|propositions?|plans?|positions?|projets?|solutions?|idees?|reponses?|avis|promesses?|engagements?|politiques?|objectifs?|chiffrages?|priorites?)\b)/;
+
+/** The asker's own people — « mon patron », « ma voisine » — are nobody's target. */
+const MINE =
+  /\b(?:mon|ma|mes) (?:patron|patronne|chef|cheffe|boss|ex|formation|entourage|groupe|collegues?|voisine?s?|copain|copine|potes?|amie?s?|oncle|tante|cousine?s?)\b/g;
+
+/** True when the question, or what it found, holds what `is` says — a sensitive subject. */
+function holds(question: string, shown: readonly Ranked[], is: (term: string) => boolean): boolean {
+  return (
+    tokenize(question).some((word) => is(stem(word))) ||
+    shown.some((hit) => (hit.on ?? []).some(is))
+  );
+}
+
+/**
+ * How a question that holds a sensitive subject is answered: with the measures that hold the
+ * subject (`rows`), or with links — and `beside` is the word, or the way of pointing at
+ * somebody, that keeps the subject from being asked alone.
+ */
+export type Alone = { rows: string[] } | { beside: string };
+
+/**
+ * A sensitive subject asked ALONE, or not.
+ *
+ * Alone means three things.
+ *   - Nothing points at anyone: no title, no party word, no « lui », « ils », « celui qui… »,
+ *     no « son », « leur », « votre », nobody of the small words (« ce monsieur »).
+ *   - Measures hold the subject — every sensitive word of the question, in one measure:
+ *     « violences faites aux femmes » is one subject of the book; « les Roms et la
+ *     délinquance » is two, and a sentence under them would marry them. THOSE measures are the
+ *     ones shown: « harcèlement au travail » gets the measures on harassment, not the three
+ *     best on work.
+ *   - Every other word of sense is written in one of the measures shown — the measures that
+ *     hold most of them come first. A target cannot give that: « les entreprises et
+ *     l'antisémitisme », « sa femme et la fraude ».
+ * The words that ask (« que prévoit le programme contre… »), the neutral words of the list
+ * (« travail », « Lyon », « interdire ») and the asker's own people (« mon patron », « ma
+ * fille ») stand outside the count; a sensitive word never does.
+ *
+ * Why so much is asked: the ways of pointing at someone are a list that never closes —
+ * « candidat », « ce parti », « l'ancien ministre », « celui qui a dit… », « sa femme »,
+ * « lui ». What is asked of each word is what a target cannot give.
+ *
+ * A softer subject — a country, a fortune (« Ukraine OTAN », « taxer les milliardaires »,
+ * « comme en URSS ? ») — is a charge only when somebody is pointed at: nothing may point, and
+ * nobody but the asker's own people may stand in the question; the measures are then the
+ * ones the search ranks best. « Celui qui… et la Russie », « son parti et le Qatar », « sa
+ * femme et sa fortune » get links; a slogan that names nobody does not.
+ */
+export function aloneIn(
+  question: string,
+  hits: readonly Ranked[],
+  knows: (id: string) => boolean,
+  lexicon: Lexicon,
+): Alone {
+  const folded = tokenize(question).join(' ').replace(MINE, ' ');
+  const title = (BARE_TITLE.exec(folded) ?? NAME_OR_VERB.exec(folded))?.[0];
+  if (title !== undefined) return { beside: title.trim().split(' ').pop() ?? '' };
+  // « Ils proposent quoi… », « vous avez prévu quoi… », « est-ce qu'il y a… » ask the book:
+  // neither their pronoun points at anyone, nor their verb is a word of the subject.
+  const asking = folded.replace(ASKS, ' ');
+  const pointed = POINTS.exec(asking)?.[0] ?? THEIRS.exec(folded)?.[0];
+  if (pointed !== undefined) return { beside: pointed.trim() };
+  const words = asking.split(' ').filter((word) => word !== '');
+  const somebody = words.find((word) => SOMEBODY.test(word));
+  if (somebody !== undefined) return { beside: somebody };
+  const core = words.filter((word, at) => {
+    const term = processTerm(word);
+    if (term === null || NUMBER.test(word)) return false;
+    if (lexicon.sensitive(term) || lexicon.soft(term)) return true;
+    if (fillerOnly([term]) || lexicon.neutral(term)) return false;
+    return !(lexicon.people(term) && /^(?:mon|ma|mes)$/.test(words[at - 1] ?? ''));
+  });
+  const marked = (term: string): boolean => lexicon.sensitive(term) || lexicon.soft(term);
+  const hard = core.filter((word) => lexicon.sensitive(stem(word)));
+  // A measure holds a word that led to it as written — or, for the subject itself, through a
+  // synonym that is the same kind of subject: « prison » is « détention » in the book, and
+  // « Russie » is written « russe ». Not through any synonym: the words a group adds
+  // (« publique », « droit ») are in every measure.
+  const has = (hit: Ranked, word: string): boolean =>
+    (hit.by ?? []).includes(stem(word)) ||
+    (marked(stem(word)) &&
+      lexicon.alias(word).some((alias) => marked(alias) && (hit.via ?? []).includes(alias)));
+  if (hard.length === 0) {
+    // A softer subject and no other: what the search ranks best — once nothing points at
+    // anyone, and nobody but the asker's own people stands in the question.
+    const somebodyElse = core.find(
+      (word) => !lexicon.soft(stem(word)) && lexicon.people(stem(word)),
+    );
+    return somebodyElse === undefined ? { rows: rowsOf(hits, knows) } : { beside: somebodyElse };
+  }
+  // The measures of the subject: all of it in one measure.
+  const about = hits.filter((hit) => hard.every((word) => has(hit, word)));
+  if (about.length === 0) {
+    // No measure holds it whole: the word the best one lacks.
+    const lacking = hits
+      .map((hit) => hard.filter((word) => !has(hit, word)))
+      .sort((one, other) => one.length - other.length)[0];
+    return { beside: lacking?.[0] ?? hard[0] ?? '' };
+  }
+  // Among them, the measures that hold most of the other words come first.
+  const others = core.filter((word) => !hard.includes(word));
+  const rows = rowsOf(
+    about.map((hit) => ({
+      ...hit,
+      score: hit.score * (1 + others.filter((word) => has(hit, word)).length),
+    })),
+    knows,
+  );
+  const shown = about.filter((hit) => rows.includes(hit.id));
+  const lacking = others.find((word) => !shown.some((hit) => has(hit, word)));
+  return lacking === undefined ? { rows } : { beside: lacking };
+}
+
 /** What a turn shows of the measures: which ones, and with or without our sentences. */
 export interface Found {
   rows: string[];
@@ -482,56 +704,104 @@ export interface Found {
  * found, first, a measure on an agreement with Israel (second review of 15/11/2026).
  *
  * Any other question gets what the search ranks best — WITH OUR SENTENCES ONLY WHEN EVERY
- * WORD OF IT IS A WORD THE SEARCH KNOWS, and nothing in it names or charges anyone. Otherwise
- * the measures are shown as links: nothing is asked of the base, no sentence of ours is shown.
+ * WORD OF IT IS A WORD THE SEARCH KNOWS, nothing in it names or charges anyone, AND A
+ * SENSITIVE SUBJECT, IF IT HOLDS ONE, IS ASKED ALONE. Otherwise the measures are shown as
+ * links: nothing is asked of the base, no sentence of ours is shown.
  *
- * Why (four reviews in one night, 15/11/2026). A sentence that says « le programme prévoit… »
+ * Why (six reviews in one night, 15/11/2026). A sentence that says « le programme prévoit… »
  * under « obono antisémite » reads as the site answering for a person: it is the screenshot
  * each review took, in other words each time. Lists of words to refuse were beaten by the
  * next wording, and refused questions about the book. A list of names was beaten by a name
- * that was not on it; a rule on capitals, by a phone's small letters. What cannot be beaten
- * that way is the reverse: a name nobody listed is, by construction, a word the book does not
- * hold. So is « proprios », and the cost is known and measured (D16.68): a question with a
- * word of its own gets links — which is what the search of the page already gives.
+ * that was not on it; a rule on capitals, by a phone's small letters; a list of titles, by a
+ * title without its article and by « celui qui a dit… ». What cannot be beaten that way is
+ * the reverse, twice:
+ *   - a name nobody listed is, by construction, a word the book does not hold — so is
+ *     « proprios », and the cost is known and measured (D16.68): links;
+ *   - a charge needs a subject to throw, and the subjects one can throw are a CLOSED list —
+ *     drawn from the whole vocabulary of the index, not guessed (data/2026/sensitive.json).
+ *     Next to one of them, every other word has to have led to the very measures shown
+ *     (`aloneIn`, D16.70): « candidat antisémitisme » and « ce parti et la fraude »
+ *     hold a word that did not; « que prévoit le programme contre l'antisémitisme ? » and
+ *     « violences faites aux femmes » do not.
  *
- * Four things withhold the sentences, each for what the others cannot see:
+ * Five things withhold the sentences, each for what the others cannot see:
  *   - a word the search does not know (`strangersIn`) — any name nobody listed;
  *   - a politician or a party of the list (`namesSomeone`) — names the book itself holds
  *     (« Macron »), parties, nicknames, a few names that are also words (« Marine »);
- *   - a title or a nickname that points at one person (`refersToSomeone`) — « l'antisémitisme
- *     du candidat » names nobody and charges somebody;
+ *   - a title or a nickname that points at one person (`refersToSomeone`) — « la retraite du
+ *     candidat » names nobody and points at somebody;
  *   - an epithet thrown at someone (`putsOnTrial`) — « leur chef est antisémite » is made of
- *     words of the book.
+ *     words of the book;
+ *   - a sensitive subject that is not asked alone (`aloneIn`).
+ *
+ * Without the files of the sheet (`lexicon` null: they did not load) nothing says what is
+ * sensitive: links.
  */
 export function measuresFor(
   question: string,
   supports: readonly string[],
   hits: readonly Ranked[],
   knows: (id: string) => boolean,
-  known: (typed: string, term: string) => boolean = () => false,
+  lexicon: Lexicon | null,
 ): Found {
   const chosen = [...new Set(supports)].filter(knows).slice(0, SHOWN_MEASURES);
   if (chosen.length > 0) return { rows: chosen, sentences: true, example: null };
   const rows = rowsOf(hits, knows);
-  const sentences =
+  const shown = hits.filter((hit) => rows.includes(hit.id));
+  const plainly =
     rows.length > 0 &&
+    lexicon !== null &&
     !namesSomeone(question) &&
     !refersToSomeone(question) &&
     !putsOnTrial(question) &&
-    strangersIn(question, hits, known).length === 0;
-  if (sentences || rows.length === 0) return { rows, sentences, example: null };
-  // A word that found the measures shown and is nothing but a subject: asked alone, it gets
-  // what this question does not.
-  const led = new Set(hits.filter((hit) => rows.includes(hit.id)).flatMap((hit) => hit.by ?? []));
+    strangersIn(
+      question,
+      hits,
+      (typed, term) =>
+        lexicon.neutral(term) || lexicon.people(term) || lexicon.alias(typed).length > 0,
+    ).length === 0;
+  if (plainly) {
+    const alone = holds(question, shown, (term) => lexicon.sensitive(term) || lexicon.soft(term))
+      ? aloneIn(question, hits, knows, lexicon)
+      : { rows };
+    if ('rows' in alone) return { rows: alone.rows, sentences: true, example: null };
+  }
+  if (rows.length === 0) return { rows, sentences: false, example: null };
+  // A word that found measures and is nothing but a subject: asked alone, it gets what this
+  // question does not. The sensitive subject first — it is what the question is about, and
+  // « prison » found its measures under another word —, then a word of the measures shown
+  // that is no mere « contre » or « plan ».
+  const found = new Set(hits.flatMap((hit) => hit.by ?? []));
+  const through = new Set(hits.flatMap((hit) => hit.via ?? []));
+  const led = new Set(shown.flatMap((hit) => hit.by ?? []));
+  const termOf = (typed: string): string => stem(tokenize(typed)[0] ?? '');
+  const marked = (term: string): boolean =>
+    lexicon !== null && (lexicon.sensitive(term) || lexicon.soft(term));
+  const subjects = [...question.matchAll(/[\p{L}\p{N}]+/gu)]
+    .map((match) => match[0])
+    .filter((typed) => {
+      const term = processTerm(tokenize(typed)[0] ?? '');
+      if (term === null || typed.length < 3 || fillerOnly([term])) return false;
+      const written =
+        found.has(term) ||
+        (marked(term) &&
+          lexicon?.alias(typed).some((alias) => marked(alias) && through.has(alias)) === true);
+      return (
+        written &&
+        !namesSomeone(typed) &&
+        !refersToSomeone(typed) &&
+        !refersToSomeone(`le ${typed}`) &&
+        !putsOnTrial(typed) &&
+        !BARE_TITLE.test(tokenize(typed).join(' '))
+      );
+    });
   const example =
-    [...question.matchAll(/[\p{L}\p{N}]+/gu)]
-      .map((match) => match[0])
-      .find((typed) => {
-        const term = processTerm(tokenize(typed)[0] ?? '');
-        if (term === null || typed.length < 3 || !led.has(term) || fillerOnly([term])) return false;
-        return !namesSomeone(typed) && !refersToSomeone(`le ${typed}`) && !putsOnTrial(typed);
-      }) ?? null;
-  return { rows, sentences, example };
+    subjects.find((typed) => lexicon?.sensitive(termOf(typed)) === true) ??
+    subjects.find((typed) => lexicon?.soft(termOf(typed)) === true) ??
+    subjects.find((typed) => led.has(termOf(typed)) && lexicon?.neutral(termOf(typed)) !== true) ??
+    subjects.find((typed) => led.has(termOf(typed))) ??
+    null;
+  return { rows, sentences: false, example };
 }
 
 /**

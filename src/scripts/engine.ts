@@ -83,7 +83,8 @@ export function findRanked(engine: Engine, question: string): Ranked[] {
   // The words of the question as the index cuts them: a word that found no measure AS WRITTEN
   // is one the book does not hold — a name, often (src/lib/chat-local.ts, `strangersIn`). A
   // look-alike does not count: « françois » finds « français », « martin » finds « matin ».
-  const asked = new Set(terms(question));
+  const typed = terms(question);
+  const asked = new Set(typed);
   return engine.index
     .search(query as Parameters<typeof engine.index.search>[0], searchOptions())
     .map((r) => ({
@@ -92,12 +93,14 @@ export function findRanked(engine: Engine, question: string): Ranked[] {
       near: lookAlikeOnly(r.terms, r.queryTerms),
       weak: fillerOnly(r.queryTerms),
       by: r.queryTerms.filter((term) => asked.has(term) && asWritten(term, r.terms)),
+      via: r.queryTerms.filter((term) => asWritten(term, r.terms)),
+      on: r.terms.filter((found) => typed.some((term) => asWritten(term, [found]))),
     }));
 }
 
-/** True when the files of the search give this word another word that means the same. */
-export function hasSynonym(engine: Engine, word: string): boolean {
-  return expand(word, engine.meta.synonyms) !== '';
+/** The other words the search reads this one as — its synonyms —, as the index cuts them. */
+export function aliasesOf(engine: Engine, word: string): string[] {
+  return terms(expand(word, engine.meta.synonyms));
 }
 
 /** An element holding text — never markup: what a visitor typed is not parsed as HTML. */

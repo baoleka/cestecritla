@@ -1229,7 +1229,7 @@ de vrais téléphones.
 - **Une seconde relecture indépendante lancée sur l'aperçu corrigé** (un autre modèle, sans
   `private/`) : chercher ce qui passe encore, et ce que les refus refusent à tort.
 
-### 15 novembre, 3 h 30 — la seconde relecture : encore « pas ce soir », et pourquoi (D16.66)
+### 15 novembre, 3 h 10 — la seconde relecture : encore « pas ce soir », et pourquoi (D16.66)
 
 Le même genre d'agent, sur l'aperçu redéployé : 44 questions en ligne, 36 envois, et 521
 questions passées hors ligne dans les fonctions du dépôt. **Ce qu'il confirme corrigé** : le fil
@@ -1261,7 +1261,7 @@ jette à un nom**, où qu'il soit dans la phrase, et laisser le reste à la rech
 titre dit maintenant ce qu'elle est. Les listes du relecteur ont servi de banc : chaque
 changement y a été rejoué avant d'entrer dans le dépôt.
 
-### 15 novembre, 4 h 30 — la troisième passe : la règle change de nature (D16.67)
+### 15 novembre, 3 h 55 — la troisième passe : la règle change de nature (D16.67)
 
 Le relecteur a rejoué ses listes (521 questions), le jeu d'essai (170) et **219 questions neuves,
 écrites après avoir lu les nouvelles règles** ; 32 questions en ligne, 16 envois. Ce que D16.66
@@ -1292,7 +1292,7 @@ ordinaires du jeu d'essai, 84 gardent leurs phrases.
 gênante revient, la question à se poser n'est pas « quel mot ajouter » mais « pourquoi une
 phrase est-elle montrée ici ».
 
-### 15 novembre, 5 h 30 — la quatrième passe : des phrases seulement quand chaque mot est connu (D16.68)
+### 15 novembre, 4 h 30 — la quatrième passe : des phrases seulement quand chaque mot est connu (D16.68)
 
 Le relecteur a écrit 186 questions **avant** de lire les règles, puis 99 sondes ciblées ; 28
 questions en ligne, 15 envois. **Ce qui tient** : tout nom de la liste, surnom ou faute comprise,
@@ -1326,7 +1326,7 @@ question a été « quels mots refuser » ; chaque liste se contournait par le m
 s'élargissait en refusant des questions sur le livre. La seule liste qui s'allonge sans risque
 est celle de ce qu'on **permet** : ce qu'elle oublie coûte des liens.
 
-### 15 novembre, 6 h 30 — la cinquième passe : les titres, les surnoms, et ma propre liste (D16.69)
+### 15 novembre, 5 h 10 — la cinquième passe : les titres, les surnoms, et ma propre liste (D16.69)
 
 Le relecteur : 141 questions fraîches, 185 sondes ciblées, 22 questions en ligne, 14 envois.
 **Ce qui tient, pour la première fois** : « les noms inconnus et les épithètes reçoivent des liens
@@ -1354,3 +1354,63 @@ questions « de téléphone » 75 sur 80 — chiffres optimistes, dits comme tel
 **Le relecteur avait écrit** : « avec la règle des mots de personne, le nettoyage de la liste et
 les noms qui sont des mots, oui — j'ouvrirais ; resterait ce que toute recherche rend ». Une
 sixième passe, sur des questions neuves, vérifie que c'est le cas avant toute ouverture.
+
+### 15 novembre, 6 h 20 — la sixième passe : ce qu'on jette, pas sur qui (D16.70)
+
+*Les heures des quatre entrées qui précèdent étaient écrites de mémoire et dérivaient d'une heure :
+elles sont corrigées d'après l'heure des commits (3 h 11, 3 h 54, 4 h 29, 5 h 11, heure de Paris).*
+
+Le relecteur : 114 questions fraîches, 86 sondes ciblées, 23 questions en ligne, 13 envois.
+**Ce qui tient** : tous les cas de sa cinquième passe reçoivent des liens, en ligne, sans rien
+envoyer ; rien de corrigé n'a régressé (le fil, les liens, 320 px à 200 %, le contrat).
+
+**Ce qui restait, et qu'il juge bloquant** : « candidat antisémitisme » — un titre sans article,
+comme on tape dans un champ de recherche — rendait la première capture, mot pour mot. « Ce parti
+et l'antisémitisme », « l'auteur du programme… », « celui qui a dit la République c'est moi… »,
+« l'ancien ministre et la fraude fiscale » aussi : onze façons de désigner quelqu'un, trouvées en
+moins d'une heure, qu'aucune liste ne tenait. **Sa conclusion est la leçon de la nuit, retournée
+contre ma dernière règle** : « tant que les règles listent des façons de désigner quelqu'un, une
+septième passe en trouvera d'autres, parce que cette liste ne se ferme jamais ». Et sa
+proposition : **changer de prise — ce qu'on jette, pas sur qui.** Les sujets dont on fait une
+accusation se comptent ; à côté de l'un d'eux, on demande à chaque autre mot ce qu'une cible ne
+peut pas donner.
+
+**Ce qui a changé** (D16.70), au-delà de ce qu'il demandait sur quatre points :
+
+- **La liste des sujets sensibles est tirée du livre, pas devinée.** J'ai lu les 3 741 racines de
+  l'index public — c'est tout ce que la recherche connaît — et les groupes de synonymes, et j'en ai
+  tiré 219 racines sensibles et 26 « douces » (pays, fortune). Un mot que l'index ne connaît pas
+  retient déjà les phrases : la liste n'a rien à deviner. Une porte refuse un index qui aurait
+  changé sans que cette lecture soit refaite.
+- **« Demandé seul » est plus dur que sa version** : il demandait que chaque autre mot ait mené à
+  une des mesures montrées ; mes propres sondes ont montré que « les Roms et la délinquance »
+  passait ainsi — chaque mot avait « sa » mesure. Il faut qu'**une même mesure tienne tous les mots
+  sensibles**, et ce sont ces mesures-là qu'on montre.
+- **La réponse y gagne** : « harcèlement au travail » montrait trois mesures sur le travail et
+  aucune sur le harcèlement ; il montre maintenant celles du sujet.
+- **Les pronoms et les possessifs**, qu'il rangeait dans le résidu acceptable : « ils soutiennent
+  le terrorisme », « eux et l'antisémitisme », « son parti », « vos amis » reçoivent des liens ;
+  « ils proposent quoi contre… », « leur programme contre… » gardent leurs phrases.
+- **Ma liste de mots permis, encore** : elle tenait « juifs », « musulmans », « islam » — « les
+  juifs contrôlent les médias » aurait reçu la mesure sur la concentration des médias. Ils en
+  sortent ; la liste est coupée en deux, et les mots de gens ne valent plus à côté d'un sujet
+  sensible.
+
+**Deux erreurs faites en route, et rattrapées par la mesure** : un groupe de synonymes ajouté pour
+« insécurité » faisait « tenir » la délinquance à n'importe quelle mesure qui disait « publique »
+(retiré, et un synonyme ne compte plus que s'il est lui-même du sujet) ; une simplification faisait
+répondre par des liens à « Ukraine » seul (les pays étaient rangés parmi les gens).
+
+**Mesuré** (hors ligne, D16.70) : ses 147 sondes de cette passe, plus aucune phrase. Sur deux
+listes que j'ai écrites avant de les jouer : 66 sondes hostiles sur 70 sans phrase au premier
+passage (les quatre autres : des slogans qui ne désignent personne) ; **49 questions légitimes sur
+80 avec leurs phrases** — le coût, dit sans l'arrondir : une question longue sur un sujet sensible
+reçoit souvent des liens et le sujet en exemple. Le jeu d'essai garde 80 questions ordinaires sur
+87 (83 avant).
+
+**Le script de la feuille pèse 15 Ko** : le plafond « relevé une fois » à 14 Ko la veille est
+relevé une seconde fois, à 16, et la porte le dit dans ces mots.
+
+**Une septième passe**, sur des questions qu'aucun de nous deux n'a vues, dit si la porte du plan
+— zéro bloquante — est tenue. Sinon : l'aperçu reste ouvert, la production reste en recherche
+seule, et c'est ce qui sera dit à l'éditeur.

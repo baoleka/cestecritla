@@ -266,13 +266,17 @@ void test('the script of the sheet is small, and fetched at the first press — 
   const [script = ''] = sheet;
   const gz = gzipSync(readFileSync(script), { level: 9 }).byteLength;
   // PLAN-CHAT §8 said 12 KB at most, and on 14/11/2026 the script weighed a third of it. On
-  // 15/11 it weighs 13 KB: what the phone decides by itself grew — which questions are
+  // 15/11 it weighs 15 KB: what the phone decides by itself grew — which questions are
   // refused, which are about the site, which name someone and get links (D16.64 to D16.67),
-  // which words are explained. None of it can move to a server: the question never leaves the
-  // phone (D16.53), so the phone is where it is read. The ceiling is raised once, to 14 KB,
-  // with that reason — the script is fetched at the first press, never with the page — and it
-  // stays a ceiling: a rule added is a rule that has to be worth its bytes.
-  const budget = 14 * 1024;
+  // which words are explained, and when a sensitive subject is asked alone (D16.70). None of
+  // it can move to a server: the question never leaves the phone (D16.53), so the phone is
+  // where it is read. The ceiling was raised to 14 KB that night « once », and that word did
+  // not hold: the rule a sixth review asked for weighs 1.6 KB, and it is the one that closes
+  // what five lists of words did not. So: 16 KB, said plainly (D16.70) — the script is fetched
+  // at the first press, never with the page; the lists of words are data, fetched with the
+  // texts of the sheet, and only the ways of reading a question are code. It stays a ceiling:
+  // a rule added is a rule that has to be worth its bytes.
+  const budget = 16 * 1024;
   assert.ok(gz <= budget, `the sheet's script: ${String(gz)} B gzip > ${String(budget)} B`);
   console.log(`  sheet script: ${String(gz)} B gzip of ${String(budget)} B`);
   // No page names it: neither as a script, nor as a preload. The search's script imports it

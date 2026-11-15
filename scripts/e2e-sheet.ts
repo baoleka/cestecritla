@@ -665,9 +665,40 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       (await count(`${LAST} .c-gists [data-generated-by]`)) === 0 && HOW.test(charged),
       charged.slice(0, 200),
     );
+    // A sensitive subject with anything that can be its target — a title without its article,
+    // a party pointed at, a description, a pronoun, two subjects no measure holds together
+    // (sixth review): links, and the subject itself as the example to ask alone.
+    for (const question of [
+      'candidat antisémitisme',
+      'ce parti et l’antisémitisme',
+      'l’auteur du programme et l’antisémitisme',
+      'celui qui a dit la République c’est moi et l’antisémitisme',
+      'eux et la fraude fiscale',
+      'les Roms et la délinquance',
+    ]) {
+      const beside = await ask(question);
+      check(
+        `« ${question} »: links — a sensitive subject is not asked alone`,
+        (await count(`${LAST} .c-gists [data-generated-by]`)) === 0 &&
+          (await count(`${LAST} .c-gists .c-badge`)) === 0 &&
+          HOW.test(beside) &&
+          /Par exemple «\s(?:antisémitisme|fraude|délinquance|Roms)\s»\./.test(beside),
+        beside.slice(0, 260),
+      );
+    }
     check(
       'none of these sent anything: a question shown as links asks nothing of the base',
       posted.gists.length === beforeNamed,
+    );
+    // …and the same subject asked alone is a question about the book: its measures are named
+    // to the base, like any other.
+    const byItself = await ask('que prévoit le programme contre l’antisémitisme ?');
+    check(
+      'a sensitive subject asked alone is a question about the book: its measures are asked for',
+      (await count(`${LAST} .c-gists .c-row`)) >= 1 &&
+        !HOW.test(byItself) &&
+        posted.gists.length === beforeNamed + 1,
+      byItself.slice(0, 200),
     );
     check(
       'in the sheet a link is said to be the measure — « C’est écrit là » is the search’s, and never stands under a charge',

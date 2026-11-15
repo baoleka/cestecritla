@@ -16,7 +16,7 @@ import { readFileSync } from 'node:fs';
 import MiniSearch from 'minisearch';
 import { MAX_SELECTED } from '../src/lib/ask-contract.js';
 import { askedOf, type Asked } from '../src/lib/ask-local.js';
-import { measuresFor, rowsOf, type Found } from '../src/lib/chat-local.js';
+import { lexiconOf, measuresFor, rowsOf, type Found } from '../src/lib/chat-local.js';
 import {
   INDEX_OPTIONS,
   asWritten,
@@ -30,6 +30,7 @@ import {
   type SearchDoc,
   type SynonymGroup,
 } from '../src/lib/search-core.js';
+import { wordLists } from '../src/lib/word-lists.js';
 import type { Manifest } from './aec26-types.js';
 
 export interface PageAsk {
@@ -55,10 +56,8 @@ export function loadPage(): (question: string) => PageAsk {
     INDEX_OPTIONS,
   );
   const groups = (json('data/2026/synonyms.json') as { groups: SynonymGroup[] }).groups;
-  // The ordinary words a question is made of, as the index cuts them (src/lib/chat-data.ts).
-  const ordinary = new Set(
-    (json('data/2026/ordinary.json') as { words: string[] }).words.flatMap((word) => terms(word)),
-  );
+  // What the sheet knows of words, as its own file gives it (src/lib/chat-data.ts).
+  const lexicon = lexiconOf(wordLists(), (word) => terms(expand(word, groups)));
   // The order of the book, as the titles file of the page lists it: propositions only.
   const manifest = json('data/2026/manifest.json') as Manifest;
   const order = manifest.sections.flatMap((section) =>
@@ -76,17 +75,13 @@ export function loadPage(): (question: string) => PageAsk {
         near: lookAlikeOnly(r.terms, r.queryTerms),
         weak: fillerOnly(r.queryTerms),
         by: r.queryTerms.filter((term) => typed.has(term) && asWritten(term, r.terms)),
+        via: r.queryTerms.filter((term) => asWritten(term, r.terms)),
+        on: r.terms.filter((found) => [...typed].some((term) => asWritten(term, [found]))),
       }));
     const known = new Set(order);
     return {
       rows: rowsOf(hits, (id) => known.has(id)),
-      shown: measuresFor(
-        question,
-        [],
-        hits,
-        (id) => known.has(id),
-        (word, term) => expand(word, groups) !== '' || ordinary.has(term),
-      ),
+      shown: measuresFor(question, [], hits, (id) => known.has(id), lexicon),
       asked: askedOf(hits, order),
       own: groupBySection(hits)
         .slice(0, MAX_SELECTED)

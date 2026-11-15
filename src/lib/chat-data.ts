@@ -13,8 +13,9 @@ import type { ReviewedEntry } from './ask-reviewed.ts';
 import { cards, prose, ripostes } from './editorial.ts';
 import { canonicalHash } from './fingerprint.ts';
 import { knownOf, notionsIn, type NotionEntry } from './notions.ts';
-import { terms } from './search-core.ts';
 import { parseTerms, type TermEntry } from './terms.ts';
+import type { WordLists } from './chat-local.ts';
+import { wordLists } from './word-lists.ts';
 
 /** A key measure, a measure or a sub-measure — not a paragraph of the book. */
 const MEASURE = /-[km]\d{2}(?:\.s\d{1,2})?$/;
@@ -26,11 +27,12 @@ export interface ChatPlain {
   /** The explained words: found on the phone in what is on the screen (src/lib/terms.ts). */
   terms: TermEntry[];
   /**
-   * The ordinary words a question is made of, as the index cuts them (data/2026/ordinary.json):
-   * a word the search does not know and that is not one of these withholds our sentences
-   * (src/lib/chat-local.ts, `strangersIn`).
+   * What the sheet knows of words (src/lib/word-lists.ts): the ordinary words a question is
+   * made of, and the sensitive subjects — a word the search does not know and that is not one
+   * of the first withholds our sentences, and so does one of the second that is not asked
+   * alone (src/lib/chat-local.ts, `measuresFor`).
    */
-  ordinary: string[];
+  words: WordLists;
 }
 
 /**
@@ -52,15 +54,13 @@ export function explainedTerms(): TermEntry[] {
 
 export function chatPlain(): { data: ChatPlain; fingerprint: string } {
   const known = knownOf(cards(), ripostes());
-  const data: ChatPlain = { cards: {}, objections: {}, terms: [], ordinary: [] };
+  const data: ChatPlain = { cards: {}, objections: {}, terms: [], words: wordLists() };
   for (const card of known.cards) data.cards[card.id] = { plain: prose(card.plain) };
   for (const entry of known.objections) {
     data.objections[entry.slug] = { answer: prose(entry.answer) };
   }
   // The term and its other wordings stay as typed: they are what the phone looks for.
   data.terms = explainedTerms().map((entry) => ({ ...entry, plain: prose(entry.plain) }));
-  const listed = JSON.parse(readFileSync('data/2026/ordinary.json', 'utf8')) as { words: string[] };
-  data.ordinary = [...new Set(listed.words.flatMap((word) => terms(word)))].sort();
   return { data, fingerprint: canonicalHash(data).slice(0, 16) };
 }
 

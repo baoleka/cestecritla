@@ -29,7 +29,13 @@
  */
 import { parseChatResponse, parseGistsResponse, type FollowUp } from '../lib/chat-contract.ts';
 import type { ChatPlain } from '../lib/chat-data.ts';
-import { chatRequestOf, cleanQuestion, gistsRequestOf, measuresFor } from '../lib/chat-local.ts';
+import {
+  chatRequestOf,
+  cleanQuestion,
+  gistsRequestOf,
+  lexiconOf,
+  measuresFor,
+} from '../lib/chat-local.ts';
 import {
   newTurn,
   nextStep,
@@ -50,7 +56,7 @@ import {
   el,
   findRanked,
   firstWords,
-  hasSynonym,
+  aliasesOf,
   loadEngine,
   measureLink,
   type Engine,
@@ -643,9 +649,8 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     // question, what the search ranks best — as links only when it names someone.
     const supports =
       config.objections.find((entry) => entry.slug === turn.recognised.objection)?.supports ?? [];
-    // The ordinary words a question is made of came with the texts of the sheet; without
-    // them every word the book does not hold is a stranger, and more turns get links.
-    const ordinary = new Set(plain?.ordinary ?? []);
+    // What the sheet knows of words came with its texts: the ordinary words a question is
+    // made of, the sensitive subjects. Without them nothing says which is which: links.
     const found =
       loaded === null
         ? null
@@ -654,7 +659,7 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
             supports,
             findRanked(loaded, question),
             page.knows,
-            (word, term) => ordinary.has(term) || hasSynonym(loaded, word),
+            plain === null ? null : lexiconOf(plain.words, (word) => aliasesOf(loaded, word)),
           );
     const linksOnly = found !== null && !found.sentences && found.rows.length > 0;
     const searched: Turn = {
