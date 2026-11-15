@@ -1579,3 +1579,25 @@ qu'il a demandé qu'on ne lui rende pas. La règle que je me donne à la place t
 au compte : je continue tant qu'une passe ne trouve de bloquant que dans ce que la passe d'avant a
 ajouté ; je m'arrête si elle en trouve dans ce qui tient depuis plusieurs passes. **La production
 n'ouvre que sur un « oui ».**
+
+*Aperçu redéployé à 9 h (7 h 59 UTC), commit `c057d6c`, Worker `cestecritla-preview` version
+`9bf1d1f8` ; sonde en ligne, 242 vérifications dans trois navigateurs : tout bon ; CI verte.*
+
+### 15 novembre, 9 h 20 — la onzième passe : une comparaison (D16.75)
+
+Le relecteur : 77 questions fraîches, 20 en ligne, 4 envois. « Non. » Et, sur la règle que je
+m'étais donnée : « c'est le cas où vous continuez, pas celui où vous arrêtez. La classe bloquante
+est dans `hateful`, réécrite à chacun des trois derniers commits. Tout ce qui tient depuis la
+septième passe a tenu encore : aucune phrase d'IA sous une mise en cause, ni noms ni sigles, les
+dates, les expressions codées, le passager d'une objection. »
+
+**Ce qu'il a trouvé** : sept phrases refusées à tort, toutes de la même forme — ce qu'on a fait à
+un peuple, pris pour ce qu'on en dit. « Les migrants sont traités comme des animaux. » « Les juifs
+étaient considérés comme inférieurs. » La règle laissait un mot de sens entre « sont » et le
+dernier mot ; il n'en faut aucun.
+
+**Ce qui a changé** (D16.75) : sa comparaison, et trois resserrements de ma part qui ne peuvent
+que réduire les refus — la négation, la question tapée sans son point, le conditionnel. « Resserrer
+un refus ne peut échouer que vers des liens », écrit-il.
+
+**Une courte passe en ligne**, sur ses onze questions, dit si c'est oui.

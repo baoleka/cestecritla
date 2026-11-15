@@ -35,6 +35,7 @@ export function wordLists(): WordLists {
       own: string[];
       ours: string[];
       verbal: string[];
+      asking: string;
     };
     feelings: number[];
     peoples: string[];

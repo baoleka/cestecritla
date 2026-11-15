@@ -507,7 +507,8 @@
       "etre",
       "comment",
       "ou"
-    ]
+    ],
+    "asking": "(?:propos(?:e|es|ent|ez)|prevoi(?:t|ent|s)|prevoyez|di(?:t|s|sent|tes)|parl(?:e|es|ent|ez)|pens(?:e|es|ent|ez)|veu(?:t|x|lent)|voulez|compt(?:e|es|ent|ez)|sai[st]|savez|(?:fai(?:t|s|tes)|font) (?:quoi|comment|quelque chose|que|qu|rien)|(?:a|as|ont|avez) (?:prevu|quoi|quel|quelle|quels|quelles|un plan|des mesures|une mesure|quelque chose)|existe(?:nt)?)"
   },
   "feelings": [
     128077,

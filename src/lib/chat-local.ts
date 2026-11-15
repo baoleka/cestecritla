@@ -545,6 +545,12 @@ export interface Lexicon {
   /** « Son parti », « ses amis », « votre candidat » — not « leur programme » (`ours`). */
   theirs: RegExp;
   /**
+   * What asks the book, with its « ils », its « vous », its « tu » — « ils proposent quoi… »,
+   * « est-ce qu'il y a… », « vous avez prévu quoi… » (`asking`): the way a question is put
+   * here, and no way of pointing at anybody.
+   */
+  asks: RegExp;
+  /**
    * A name that is a verb of every other question — « Trouvé » —, taken for the person where
    * nothing makes it the verb: « trouvé et la drogue », not « on trouve de la drogue »
    * (`verbal`: what stands before the verb).
@@ -587,6 +593,8 @@ export interface WordLists {
   own: readonly string[];
   ours: readonly string[];
   verbal: readonly string[];
+  /** The verbs that ask what the book says, as one alternation of a pattern. */
+  asking: string;
   /** The faces of every day, one after the other. */
   feelings: string;
   /** data/2026/sensitive.json, `peoples` — stems, « * » as above. */
@@ -629,6 +637,10 @@ export function lexiconOf(lists: WordLists, alias: (typed: string) => readonly s
     theirs: new RegExp(
       `\\b(?:son|sa|ses|leurs?|votre|vos|ton|ta|tes) (?!(?:${lists.ours.join('|')})\\b)`,
     ),
+    asks: new RegExp(
+      `\\b(?:ils?|elles?|vous|tu) (?:(?:ne|n|y|en|nous|me|m) ){0,2}${lists.asking}\\b|\\b(?:${lists.asking}|(?:que|qu) (?:font|fait|faites|fais)) (?:t )?(?:ils?|elles?|vous|tu)\\b|\\b(?:il y a|y a t il|il faut|faut il|il faudra|il faudrait|il (?:vous|te) plait|en est il|est il (?:possible|prevu|vrai|question)|il est (?:possible|prevu|vrai|question)|existe t il|pouvez vous|peux tu)\\b`,
+      'g',
+    ),
     nameOrVerb: new RegExp(`(?:^|\\b(?!(?:${lists.verbal.join('|')}) )[a-z0-9]+ )trouve\\b`),
     feeling: (sign) => lists.feelings.includes(sign),
     kin: among(lists.peoples),
@@ -640,13 +652,6 @@ export function lexiconOf(lists: WordLists, alias: (typed: string) => readonly s
   };
 }
 
-/** What asks what the book says, after « ils », « vous », « tu »: the way a question is put here. */
-const ASKING =
-  '(?:propos(?:e|es|ent|ez)|prevoi(?:t|ent|s)|prevoyez|di(?:t|s|sent|tes)|parl(?:e|es|ent|ez)|pens(?:e|es|ent|ez)|veu(?:t|x|lent)|voulez|compt(?:e|es|ent|ez)|sai[st]|savez|(?:fai(?:t|s|tes)|font) (?:quoi|comment|quelque chose|que|qu|rien)|(?:a|as|ont|avez) (?:prevu|quoi|quel|quelle|quels|quelles|un plan|des mesures|une mesure|quelque chose)|existe(?:nt)?)';
-const ASKS = new RegExp(
-  `\\b(?:ils?|elles?|vous|tu) (?:(?:ne|n|y|en|nous|me|m) ){0,2}${ASKING}\\b|\\b(?:${ASKING}|(?:que|qu) (?:font|fait|faites|fais)) (?:t )?(?:ils?|elles?|vous|tu)\\b|\\b(?:il y a|y a t il|il faut|faut il|il faudra|il faudrait|il (?:vous|te) plait|en est il|est il (?:possible|prevu|vrai|question)|il est (?:possible|prevu|vrai|question)|existe t il|pouvez vous|peux tu)\\b`,
-  'g',
-);
 /** Somebody pointed at without a name: « lui », « eux », « celui qui… », « ils » and « vous ». */
 const POINTS = /\b(?:ils?|elles?|vous|tu|lui|eux|celui|celle|ceux|celles)\b/;
 /** Whom one works for: no word of the book, and the asker's own (« mon chef me harcèle »). */
@@ -705,7 +710,7 @@ export function aloneIn(
   if (title !== undefined) return { beside: title.trim().split(' ').pop() ?? '' };
   // « Ils proposent quoi… », « vous avez prévu quoi… », « est-ce qu'il y a… » ask the book:
   // neither their pronoun points at anyone, nor their verb is a word of the subject.
-  const asking = folded.replace(ASKS, ' ');
+  const asking = folded.replace(lexicon.asks, ' ');
   const pointed = (POINTS.exec(asking) ??
     lexicon.theirs.exec(folded) ??
     lexicon.pointed.exec(folded))?.[0];
@@ -813,15 +818,17 @@ const ALL_OF =
  * once the files of the sheet say what is what. The statement is the WHOLE question:
  *   - a people at its head (« les… », « tous les… », « la plupart des… »);
  *   - then « sont (tous) des… » and, as its last word, what is thrown — an epithet, an insult
- *     —, with one word of its own at most in between (« l'islam est une religion violente »);
- *     or, as its last word, a verb of crime (« les X volent »);
- *   - no comma, no colon, no quotation mark, no question mark, nothing after.
+ *     —, with nothing but small words in between; or, as its last word, a verb of crime
+ *     (« les X volent »);
+ *   - no comma, no colon, no quotation mark, no question mark, no negation, nothing after.
  *
  * NARROW ON PURPOSE (ninth and tenth reviews of 15/11/2026). The first versions refused
  * whoever REPORTED such a sentence or answered it — « je me suis fait traiter de… », « mon
  * oncle dit que…, que répondre ? », « les X sont-ils des Y ? », « les X sont des Y, c'est
- * faux » — and took an adjective for a charge: « les étrangers malades » is the name of a
- * residence permit. A refusal is our own voice turning away the person who asked. Anything
+ * faux » — took an adjective for a charge (« les étrangers malades » is the name of a
+ * residence permit), and what was done to a people for what is said of it (« les migrants
+ * sont traités comme des animaux », eleventh review). A refusal is our own voice turning away
+ * the person who asked. Anything
  * that is not the bare statement gets links; and a list never refuses: a coded phrase, a slur
  * get the measures of the subject one may ask in their place, as links (`measuresFor`).
  */
@@ -831,18 +838,25 @@ export function hateful(question: string, lexicon: Lexicon): boolean {
     .replace(AS_SUBJECT, ' ')
     .split(' ')
     .filter((word) => word !== '');
+  // Said to be false is not said: « les X ne sont pas des Y ».
+  if (words.some((word) => /^(?:ne|n|pas|jamais|non|aucun|aucune|ni)$/.test(word))) return false;
   const at = words.findIndex((word) => lexicon.kin(stem(word)));
   if (at < 0 || !words.slice(0, at).every((word) => ALL_OF.test(word))) return false;
   const after = words.slice(at + 1);
   const last = after[after.length - 1] ?? '';
   const small = (word: string): boolean => GLUE_WORD.test(word) || processTerm(word) === null;
   if (lexicon.crime(last)) return after.slice(0, -1).every(small);
-  const said = after.findIndex((word) => /^(?:est|sont|etait|etaient|serait|seraient)$/.test(word));
+  // « Sont », not « seraient » — what is reported in the conditional is reported —, and not
+  // « sont-ils » typed without its question mark.
+  const said = after.findIndex((word) => /^(?:est|sont|etait|etaient)$/.test(word));
   return (
     said >= 0 &&
+    !/^(?:ils?|elles?|on|ce)$/.test(after[said + 1] ?? '') &&
     (EPITHET_WORD.test(last) || lexicon.insult(last)) &&
     after.slice(0, said).every(small) &&
-    after.slice(said + 1, -1).filter((word) => !small(word)).length <= 1
+    // Nothing of its own between « sont » and what is thrown: « sont traités comme des
+    // animaux », « étaient considérés comme inférieurs » are what was done to a people.
+    after.slice(said + 1, -1).every(small)
   );
 }
 
