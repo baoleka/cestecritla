@@ -255,3 +255,31 @@ export function refused(hex: string): string[] {
       within(l, range.l) && within(c, range.c) && (within(h, range.h) || within(h + 360, range.h)),
   ).map((range) => range.name_fr);
 }
+
+// ---------------------------------------------------------------------------------------------
+// What a browser is asked, by both of her gates
+// ---------------------------------------------------------------------------------------------
+
+/**
+ * In a page: how far a shape reaches out of a frame, in CSS px — negative while it is inside.
+ * The box a browser gives for a turned shape is the box of its box, wider than what is drawn:
+ * a shape that seems to leave is measured again, point by point along its outline, with half
+ * its stroke. Text of a function `(shape, frame) => number`, to be pasted in what is evaluated.
+ */
+export const REACH_IN_PAGE = `(shape, frame) => {
+    const out = (box) =>
+      Math.max(frame.left - box.left, box.right - frame.right, frame.top - box.top, box.bottom - frame.bottom);
+    const rough = out(shape.getBoundingClientRect());
+    if (rough <= 0 || typeof shape.getTotalLength !== 'function') return rough;
+    const matrix = shape.getScreenCTM();
+    const half = (parseFloat(getComputedStyle(shape).strokeWidth) || 0) / 2;
+    const scale = Math.sqrt(Math.abs(matrix.a * matrix.d - matrix.b * matrix.c));
+    const stroke = getComputedStyle(shape).stroke === 'none' ? 0 : half * scale;
+    const length = shape.getTotalLength();
+    let far = -Infinity;
+    for (let i = 0; i <= 48; i += 1) {
+      const at = shape.getPointAtLength((length * i) / 48).matrixTransform(matrix);
+      far = Math.max(far, out({ left: at.x - stroke, right: at.x + stroke, top: at.y - stroke, bottom: at.y + stroke }));
+    }
+    return Math.min(rough, far);
+  }`;

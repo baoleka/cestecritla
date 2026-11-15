@@ -26,7 +26,12 @@ import {
   type LookOptions,
   type TurtleState,
 } from '../src/lib/mascot2.js';
-import { MASCOT2_CSS_PATH, MASCOT2_SHEET_PATH, MASCOT2_SVG_PATH } from './mascot2-kit.js';
+import {
+  MASCOT2_CSS_PATH,
+  MASCOT2_SHEET_PATH,
+  MASCOT2_SVG_PATH,
+  REACH_IN_PAGE,
+} from './mascot2-kit.js';
 
 const STATES: readonly TurtleState[] = [0, 1, 2, 3, 4];
 const args = process.argv.slice(2);
@@ -74,6 +79,7 @@ interface Seen {
 
 /** What a figure shows, read in the page: opacity through its ancestors, visibility, extent. */
 const SEEN = `(id) => {
+  const reach = ${REACH_IN_PAGE};
   const figure = document.getElementById(id);
   const frame = figure.querySelector('svg').getBoundingClientRect();
   const shapes = [];
@@ -89,7 +95,7 @@ const SEEN = `(id) => {
     // with no height is not seen.
     if (box.width === 0 || box.height === 0) continue;
     shapes.push(shape.classList[0]);
-    spill = Math.max(spill, frame.left - box.left, box.right - frame.right, frame.top - box.top, box.bottom - frame.bottom);
+    spill = Math.max(spill, reach(shape, frame));
   }
   return { shapes, spill: Math.max(0, spill) };
 }`;

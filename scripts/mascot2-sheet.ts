@@ -469,12 +469,13 @@ export function sheet(): string {
     'sa constellation se récrit',
   ];
   const PULSE_FR = [
-    'elle hoche la tête',
-    'elle hoche la tête, sur sa vague',
-    'elle plonge la tête',
-    'un battement d’ailes',
-    'une étoile bat, une fois',
+    'un petit bond, et elle hoche la tête',
+    'un petit bond sur sa vague',
+    'un petit bond, et elle plonge la tête',
+    'un petit bond, et un battement d’ailes',
+    'un petit bond, et une étoile bat, une fois',
   ];
+
   const tricks = STATES.map((state) =>
     gesture(
       `trick-${String(state)}`,

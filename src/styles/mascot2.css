@@ -106,6 +106,7 @@
    body on a pale page would have no edge at all. */
 .mascot .m-body,
 .mascot .m-feather,
+.mascot .m-quill,
 .mascot .m-far,
 .mascot .m-crown {
   fill: var(--m-tint);
@@ -163,7 +164,7 @@
 .mascot .m-lines {
   fill: none;
   stroke: var(--turtle-line);
-  stroke-width: 0.8;
+  stroke-width: 1.1;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
@@ -191,6 +192,7 @@
 .mascot .m-bird,
 .mascot .m-dot,
 .mascot .m-far,
+.mascot .m-open,
 .mascot .m-legs-fly,
 .mascot .m-neck-f {
   opacity: 0;
@@ -216,6 +218,9 @@
   opacity: 0;
 }
 /* In flight: the long neck, the legs behind, the second wing. */
+.mascot[data-state='3'] .m-open,
+.mascot[data-state='4'] .m-open,
+.mascot[data-phase='23-wings'] .m-open,
 .mascot[data-state='3'] .m-far,
 .mascot[data-state='3'] .m-legs-fly,
 .mascot[data-state='3'] .m-neck-f,
@@ -224,6 +229,9 @@
 .mascot[data-state='4'] .m-neck-f {
   opacity: 1;
 }
+.mascot[data-state='3'] .m-fold,
+.mascot[data-state='4'] .m-fold,
+.mascot[data-phase='23-wings'] .m-fold,
 .mascot[data-state='3'] .m-leg,
 .mascot[data-state='3'] .m-leg-fold,
 .mascot[data-state='3'] .m-neck-s,
@@ -283,20 +291,21 @@
 .mascot .m-body {
   transform-box: view-box;
   transform-origin: 44px 31px;
-  transform: rotate(var(--m-lean, 0deg));
+  transform: rotate(var(--m-lean, 0deg)) scale(1, var(--m-slim, 1));
 }
-/* Her wing is the shell she had: its three arcs are on it. Folded along her flank; in flight it
-   turns about the shoulder and lengthens. The second wing is the same shape, further round. */
+/* Her folded wing is the shell she had: its three arcs are on it. In flight she has another,
+   long and feathered, raised behind her, with the same three arcs along it — the two are in one
+   group, which turns about her shoulder, and pass into one another as it lifts. Her second wing
+   is that same long shape, further round: the two make a V, and nobody takes a V for a sail. */
 .mascot .m-wing,
 .mascot .m-far {
   transform-box: view-box;
   transform-origin: 55.2px 32px;
-  transform: rotate(var(--m-lift, -12deg)) scale(var(--m-span, 1), var(--m-depth, 1));
+  transform: rotate(var(--m-lift, -12deg)) scale(var(--m-span, 1));
 }
 .mascot .m-far {
-  --m-lift: 72deg;
-  --m-span: 1.15;
-  --m-depth: 1.1;
+  --m-lift: 80deg;
+  --m-span: 0.72;
   --m-down: 44deg;
 }
 .mascot .m-face {
@@ -310,19 +319,20 @@
 }
 .mascot[data-state='3'],
 .mascot[data-state='4'] {
-  --m-by: 2px;
-  --m-lean: 9deg;
+  --m-by: -2px;
+  --m-bs: 0.9;
+  --m-lean: 6deg;
   --m-lift: 48deg;
-  --m-span: 1.35;
-  --m-depth: 1.25;
+  --m-slim: 0.86;
   --m-fx: 19.1px;
   --m-fy: 15.8px;
 }
-/* Under her constellation she flies lower, and a little further. */
+/* In flight she is a little smaller and higher: air under her. Under her constellation she
+   flies lower, and her wings leave it the sky above her neck. */
 .mascot[data-state='4'] {
-  --m-bx: 10px;
-  --m-by: 9px;
-  --m-bs: 0.85;
+  --m-bx: -1px;
+  --m-by: 13px;
+  --m-bs: 0.82;
 }
 .mascot[data-state='2'][data-pose='look'],
 .mascot[data-state='3'][data-pose='look'],
@@ -485,10 +495,9 @@
 .mascot[data-phase='23-wings'] .m-leg-fold {
   opacity: 0;
 }
-.mascot[data-phase='23-wings'] {
+/* (With her state, so that it wins over the sign she may be showing: wings ajar.) */
+.mascot[data-state='2'][data-phase='23-wings'] {
   --m-lift: 48deg;
-  --m-span: 1.35;
-  --m-depth: 1.25;
 }
 .mascot[data-phase='23-wings'] .m-far {
   opacity: 1;
@@ -543,6 +552,8 @@
       transform var(--duration-reveal) var(--easing-standard),
       opacity var(--duration-slow) var(--easing-enter);
   }
+  .mascot[data-live] .m-fold,
+  .mascot[data-live] .m-open,
   .mascot[data-live] .m-ring,
   .mascot[data-live] .m-water,
   .mascot[data-live] .m-mirror,
@@ -593,6 +604,9 @@
       transform var(--duration-slow) var(--easing-exit),
       opacity var(--duration-base) var(--easing-exit) var(--duration-fast);
   }
+  .mascot[data-live][data-phase='23-wings'] .m-open {
+    transition-delay: var(--duration-fast);
+  }
   /* Her head comes last, at the end of her neck. */
   .mascot[data-live][data-phase='12-neck'] .m-face {
     transition-delay: var(--duration-slow);
@@ -640,6 +654,13 @@
   .mascot[data-live][data-state='4'][data-pose='trick'] .m-lines {
     animation: m-write var(--m-trick) var(--easing-standard);
   }
+  /* A word found: a small hop of the whole of her, and the move of her head, wing or star. */
+  .mascot[data-live][data-pose='pulse'] .m-turtle {
+    animation: m-jump var(--duration-slow) var(--easing-standard);
+  }
+  .mascot[data-live][data-pose='pulse'] .m-bird {
+    animation: m-hop var(--duration-slow) var(--easing-standard);
+  }
   .mascot[data-live][data-pose='pulse'] .m-head {
     animation: m-nod var(--duration-slow) var(--easing-standard);
   }
@@ -651,8 +672,13 @@
   }
   @keyframes m-jump {
     50% {
-      transform: translate(var(--m-tx), calc(var(--m-ty) - 4px)) rotate(var(--m-tr))
-        scale(var(--m-ts));
+      transform: translate(var(--m-tx, 0px), calc(var(--m-ty, 0px) - 4px)) rotate(var(--m-tr, 0deg))
+        scale(var(--m-ts, 0.84));
+    }
+  }
+  @keyframes m-hop {
+    50% {
+      transform: translate(var(--m-bx, 0px), calc(var(--m-by, 0px) - 3px)) scale(var(--m-bs, 1));
     }
   }
   /* Three steps forward, from where she stepped back to. */
@@ -704,7 +730,7 @@
   }
   @keyframes m-beat {
     50% {
-      transform: rotate(var(--m-down, 14deg)) scale(var(--m-span, 1), var(--m-depth, 1));
+      transform: rotate(var(--m-down, 14deg)) scale(var(--m-span, 1));
     }
   }
   @keyframes m-carve {

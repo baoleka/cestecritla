@@ -10,8 +10,9 @@
  *   1  the turtle, surfing             4  the flamingo flying under a turtle of stars
  *   2  the flamingo, standing
  *
- * Her three arcs follow her: on her shell, then on her wing — the same continuous strokes, the
- * same six steps, the same field in what the game remembers (src/lib/turtle.ts).
+ * Her three arcs follow her: on her shell, then on her wing, folded and in flight — the same
+ * continuous strokes, the same six steps, the same field in what the game remembers
+ * (src/lib/turtle.ts).
  *
  * What a script may write on the drawing is exactly what `MascotLook` holds, and nothing else.
  */
@@ -103,8 +104,8 @@ export function lookOf(options: LookOptions): MascotLook {
 
 /**
  * The drawing with a look written in — as markup, for a page built without script and for the
- * sheet. Nothing but attributes changes: the paths are the file's. She has her three arcs twice
- * (on the shell, on the wing): both sets are written.
+ * sheet. Nothing but attributes changes: the paths are the file's. She has her three arcs three
+ * times (on her shell, on her folded wing, on the wing she flies with): every set is written.
  */
 export function mascotMarkup(svg: string, options: LookOptions): string {
   const look = lookOf(options);
@@ -376,12 +377,12 @@ export const SHAPES_SEEN: Readonly<Record<TurtleState, readonly string[]>> = {
   ],
   3: [
     ...['m-water', 'm-mirror', 'm-far', 'm-legs-fly', 'm-body', 'm-neck', 'm-neck-in'],
-    ...['m-feather', 'm-arc', 'm-arc', 'm-arc', 'm-beak', 'm-tip', 'm-crown', 'm-pupil'],
+    ...['m-quill', 'm-arc', 'm-arc', 'm-arc', 'm-beak', 'm-tip', 'm-crown', 'm-pupil'],
   ],
   4: [
     ...['m-dusk', 'm-lines', ...Array.from({ length: 9 }, () => 'm-star')],
     ...['m-water', 'm-mirror', 'm-far', 'm-legs-fly', 'm-body', 'm-neck', 'm-neck-in'],
-    ...['m-feather', 'm-arc', 'm-arc', 'm-arc', 'm-beak', 'm-tip', 'm-crown', 'm-pupil'],
+    ...['m-quill', 'm-arc', 'm-arc', 'm-arc', 'm-beak', 'm-tip', 'm-crown', 'm-pupil'],
   ],
 };
 

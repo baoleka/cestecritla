@@ -673,12 +673,12 @@ l'aperçu (autre adresse, autre stockage) : il est tenu par des tests, pas par u
   tomber une date posée aujourd'hui.
 - Les lots 0, A1 et 1 sont poussés sur `origin main` : le dessin est validé par l'éditeur.
 
-### Lot A2, au 15 novembre 2026 — la planche, en mouvement (à l'éditeur de regarder ; rien n'est daté)
+### Lot A2, au 15 novembre 2026 — la planche, en mouvement (telle que montrée à l'éditeur ; la suite est à l'entrée d'après)
 
 - **Ce qui existe.** Les quatre évolutions, une figure par état (on la touche), un petit mouvement
   par état (un mot trouvé) et la fin de manche sans passage (les trois trouvailles viennent à
   elle, son arc grandit) se jouent sur la planche `design/mascot/v2/planche.html`, à vitesse
-  réelle, sur un bouton et jamais avant : 22 scènes jouables, 168 figures fixes. « Passer » pose
+  réelle, sur un bouton et jamais avant : 22 scènes jouables, 146 figures fixes. « Passer » pose
   la forme finale ; une case joue le mouvement réduit ; une autre ralentit tout quatre fois, pour
   regarder de près. Sous chaque évolution, son storyboard : l'état posé à la fin de chaque temps.
   Les images fixes du lot A1 suivent.
@@ -774,3 +774,67 @@ l'aperçu (autre adresse, autre stockage) : il est tenu par des tests, pas par u
   mouvements ce que j'y lis — les lecteurs neufs n'ont vu que des images fixes.
 - **À l'éditeur** : dire si chaque évolution tient ; ce qu'il veut faire des deux remarques sur le
   dessin (le flamant en vol, la constellation) ; puis les textes. La planche ne se date qu'après.
+
+### 15 novembre 2026 — l'éditeur a regardé le mouvement (D17.18 à D17.22) ; les lectures à l'aveugle
+
+- **Ses réponses, en quatre dialogues de questions.** (1) Les quatre évolutions : « Elle tient »
+  trois fois, et pour 1 → 2 « Elle tient, l'eau comprise » — la règle « sans éclair » s'écrit
+  désormais *aucune surface ne paraît et ne disparaît dans la même seconde* (D17.18). (2) Les
+  remarques des lecteurs : « Redessine le vol, montre-moi », « Rends-la plus lisible, montre-moi »,
+  « Le geste du mot plus marqué ». (3) L'ancien et le nouveau côte à côte : « Le nouveau » (deux
+  ailes en lame), « La nouvelle, plus grande » (D17.20), « Oui, comme ça » pour le petit bond
+  (D17.21). (4) Les lectures à l'aveugle sous les yeux : « La variante » pour le vol (D17.19, sa
+  forme finale) et, pour « même personnage ? », « Rien au dessin, tout par écrit » (D17.22).
+- **Un défaut trouvé dans l'envol qu'il avait vu.** Pendant « ses ailes s'ouvrent », l'aile proche
+  restait seulement entrouverte : le signe « ailes entrouvertes » l'emportait, à égalité de
+  poids, sur le temps de l'évolution. La règle de ce temps nomme maintenant son état. Dit à
+  l'éditeur avec la vidéo corrigée.
+- **Ce qui a changé dans le dessin.** L'aile du vol est une forme à elle (`m-open`, `m-quill`),
+  dans le même groupe que l'aile repliée : longue, aux bords en plumes, ses trois arcs le long ;
+  la seconde aile est la même forme, plus en avant — un V. En vol elle est un peu plus petite et
+  plus haut au-dessus de l'eau. La constellation est plus grande d'un tiers, traits plus épais,
+  au-dessus de son cou ; sous elle le flamant vole plus bas. 53 formes (plafond 72), 1 803 octets
+  gzip ; la feuille 5 943 octets (plafond 6 144 : **il en reste 201**, à savoir avant le lot C) ;
+  les deux 7 746 (plafond 9 216). Formes visibles par état : 10, 14, 14, 15, 26, inchangées.
+- **Mesuré de nouveau sur ce dessin** (`design/mascot/v2/motion.json`) : Chromium 132 contrôles,
+  Firefox 109, WebKit 109, tous bons ; dernier mouvement à 2 965, 3 071, 3 464 et 4 342 ms au
+  pire ; une figure 810 ms, un mot trouvé 328 ms, une fin de manche 528 ms ; zéro éclair par
+  seconde, 8 548 px² au plus changent de lumière deux fois dans la même seconde (seuil 21 824),
+  rouge saturé 5 px² ; aucune image au-delà de 20 ms, processeur ralenti 4 fois ; rien ne sort
+  du cadre de plus de 0,5 px. **La mesure de ce qui sort du cadre suit maintenant le vrai contour
+  des formes** : la boîte qu'un navigateur donne pour une forme tournée est la boîte de sa boîte,
+  et annonçait 4 px de sortie là où l'aile en sortait de moins d'un.
+- **Les « lecteurs neufs » ne l'étaient pas (R49).** Un sous-agent lancé depuis le dépôt reçoit
+  d'office `CLAUDE.md` : il sait ce qu'est la tortue et ce qu'on espère de sa réponse. Deux
+  lecteurs du second tour l'ont signalé d'eux-mêmes. Les deux tours du 15 novembre (quatre
+  « non », un « ne sait pas », deux fois) ne comptent donc pas — ni, pour la même raison, le
+  « trois non sur trois » du 13 novembre sur la tortue en ligne, ni les sept « non » des personas.
+  **Une lecture à l'aveugle se lance hors du dépôt** (`claude -p` depuis un dossier qui ne
+  contient que l'image, outil de lecture seul) : essayé, le lecteur dit n'avoir reçu que des
+  préférences générales de travail. C'est écrit dans `CLAUDE.md`.
+- **« Même personnage ? », à l'aveugle** (cinq lecteurs par question, deux Haiku, deux Sonnet, un
+  Opus ; tortues officielles à côté ; aucune source nommée ; chacun dit n'avoir rien reçu du
+  projet) — **HYPOTHÈSE** : le dessin retenu, **deux « oui », trois « ne sait pas », aucun
+  « non »** (une version intermédiaire : un, un, trois) ; **la tortue en ligne, deux « oui »,
+  trois « ne sait pas », aucun « non »**. La raison donnée : « deux tortues violettes ». « Faits
+  par les mêmes gens ? » : quinze « ne sait pas ». « Un parti, une campagne ? » : aucun « oui ».
+  R23 passe de « possible » à « probable ». `/exactitude` range déjà la question parmi les non
+  vérifiées : rien de faux n'est publié. **L'éditeur, informé, ne change rien au dessin** (D17.22).
+- **Le vol, à l'aveugle** (trois lecteurs par carte). Montré seul, chaque dessin essayé est lu
+  comme un oiseau en vol au-dessus de l'eau (quinze sur quinze). Dans la suite des cinq formes,
+  c'est celle sur laquelle on hésite le plus, et ce pour quoi on la prend décide : l'éventail du
+  lot A1, un coquillage ou un poisson ; les ailes en lame, **un bateau à voile** (trois sur
+  trois, et trois autres lecteurs parlent d'une voile) ; les ailes en V aux bords en plumes, un
+  poisson volant, un avion, un insecte — des choses qui volent. C'est ce qui a fait proposer la
+  variante, et l'éditeur l'a prise.
+- **La constellation, à l'aveugle.** Seule, personne n'y voit une tortue, grande ou petite ; avec
+  la tortue du début à côté, un lecteur sur trois. Essayée avec ses trois arcs en courbes, comme
+  sur sa carapace : les six lecteurs parlent d'un arc-en-ciel — écartée. La version de
+  D17.20 tient ; c'est la phrase du passage qui la fera lire.
+- **Preuves** : 629 tests (628 passent, 1 sauté depuis toujours), contraste, lint, types ;
+  `e2e:mascot2` 47 contrôles dans chaque moteur ; **`npm run build` donne les mêmes 1 156
+  fichiers, octet pour octet, qu'avant le chantier.**
+- **Non vérifié, dit tel quel** : de vrais téléphones ; une personne photosensible ; de vraies
+  gens. Les lecteurs à l'aveugle sont des modèles, trois à cinq par question, sur des images
+  fixes.
+- **Reste à lui demander** : ses textes ; puis s'il date la planche.

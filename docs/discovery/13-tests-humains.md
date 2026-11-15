@@ -818,7 +818,7 @@ La session se joue sur l'aperçu, quand le jeu y paraît (D14.8 : par les person
 | 4 | Regarder la carte du lieu d'un mot | « Qui dit ce mot : le site, ou le livre ? » | « le site » : les guillemets et la ligne de source ne suffisent pas |
 | 5 | Fin de manche, carte « Garder ta tortue » | « Qu'est-ce qui est gardé, et où ? Qui peut le voir ? » | on croit que c'est envoyé, ou on ne sait pas l'effacer |
 | 6 | Les cinq états de la tortue à 72 px, dans le désordre | « Remets-les dans l'ordre » | l'ordre n'est pas retrouvé |
-| 7 | La tortue du jeu, puis celle de la campagne, côte à côte | « C'est le même personnage ? » — posée **avant** de nommer le site officiel | « la même » (posée le 13/11 à trois lecteurs neufs : trois « non ») |
+| 7 | La tortue du jeu, puis celle de la campagne, côte à côte | « C'est le même personnage ? » — posée **avant** de nommer le site officiel | « la même » (posée le 13/11 à trois lecteurs neufs : trois « non » — **des lecteurs lancés depuis le dépôt, à qui ses instructions avaient été données ; reposée à l'aveugle le 15/11 à cinq lecteurs lancés hors du dépôt : deux « oui », trois « ne sait pas », aucun « non »**, `14-risques.md` R23 et R49, D17.22) |
 | 8 | La toucher ; demander un indice | « Elle a fait quoi ? Ça t'a aidé, ou ça t'a jugé ? » | elle est lue comme une récompense ou une note |
 | 9 | Le point d'accent à un passage | « Ce point rouge, il veut dire quoi ? » | « que j'ai eu bon » |
 | 10 | Pendant un gel simulé | « Pourquoi le jeu n'est plus là ? Qu'est-ce qui marche encore ? » | la phrase de pause n'est pas comprise |
@@ -852,7 +852,7 @@ Les numéros de tâche sont ceux du §6 (T0, T11 et T12 s'y ajoutent : l'arrivé
 |---|---|---|---|
 | T0 | le site est officiel | non : 7 | non déclenché |
 | T0 | qui a fait le site | « pas écrit » : 7 — chacun suppose (« un militant », « des sympathisants », « des gens qui font de la politique ») | **déclenché** : le premier écran ne dit ni de qui est le programme, ni qui fait le site |
-| T7 | même personnage | non : 7 | non déclenché |
+| T7 | même personnage | non : 7 — **des personas lancés depuis le dépôt, à qui ses instructions avaient été données (R49) ; à l'aveugle, le 15/11 : deux oui, trois ne sait pas, aucun non** | non déclenché le 14/11 ; **à relire à cette lumière** (`14-risques.md` R23, D17.22) |
 | T7 | faits par les mêmes gens | non : 3 (M1, M2, M3) · ne sait pas : 4 (M4, N1, N2, N3) | — (question ajoutée) |
 | T12 | même équipe | non : 6 (M1, M2, M3, M4, N1, N3) · ne sait pas : 1 (N2) | non déclenché — mais les sept disent « mêmes couleurs » |
 | T2 | la recherche a été envoyée | non : 6 (M1, M2, M3, M4, N1, N3) · ne sait pas : 1 (N2) | non déclenché |

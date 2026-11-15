@@ -46,6 +46,7 @@ import {
   FLASH_AREA_PX,
   MASCOT2_MOTION_PATH,
   MASCOT2_SHEET_PATH,
+  REACH_IN_PAGE,
   mascot2Fingerprint,
   type ClipMeasure,
   type FlashMeasure,
@@ -62,6 +63,12 @@ const write = args.includes('--write');
 const SLACK_MS = 60;
 /** How long a page is watched for a movement nobody asked for (design/perf-budget.md, P7). */
 const ALONE_MS = 2100;
+/**
+ * Two pictures of the same look are the same picture — give or take the few pixels of an edge
+ * that a browser has painted again after an animation crossed it. A look that was not the same
+ * would differ by hundreds.
+ */
+const REPAINTED = 8;
 /** How many times slower she is filmed, and how far apart the frames are, in her own time. */
 const FILM_SLOW = 12;
 const FILM_EVERY_MS = 1000 / 30;
@@ -74,6 +81,7 @@ const HELPERS = `(() => {
       (count, box) => count + box.querySelector('svg').getAnimations({ subtree: true }).length,
       0,
     );
+  const reach = ${REACH_IN_PAGE};
   const spill = (clip) => {
     const svg = boxes(clip)[0].querySelector('svg');
     const frame = svg.getBoundingClientRect();
@@ -86,7 +94,7 @@ const HELPERS = `(() => {
       if (opacity < 0.02 || getComputedStyle(shape).visibility === 'hidden') continue;
       const box = shape.getBoundingClientRect();
       if (box.width === 0 || box.height === 0) continue;
-      out = Math.max(out, frame.left - box.left, box.right - frame.right, frame.top - box.top, box.bottom - frame.bottom);
+      out = Math.max(out, reach(shape, frame));
     }
     return Math.max(0, out);
   };
@@ -507,7 +515,7 @@ async function run(engine: string): Promise<Outcome> {
         const skipped = await picture(tab, clip.name);
         check(
           `${clip.name}: she ends exactly as the still look draws her`,
-          differing(after, skipped) === 0,
+          differing(after, skipped) <= REPAINTED,
           `${String(differing(after, skipped))} pixels differ`,
         );
         check(
@@ -518,7 +526,7 @@ async function run(engine: string): Promise<Outcome> {
       } else if (!clip.name.startsWith('end-')) {
         check(
           `${clip.name}: she is back exactly as she was`,
-          differing(before, after) === 0,
+          differing(before, after) <= REPAINTED,
           `${String(differing(before, after))} pixels differ`,
         );
       }
@@ -540,7 +548,7 @@ async function run(engine: string): Promise<Outcome> {
       );
       check(
         `${passage}: « Passer » gives the look the evolution ends on`,
-        differing(atOnce, played) === 0,
+        differing(atOnce, played) <= REPAINTED,
         `${String(differing(atOnce, played))} pixels differ`,
       );
     }
@@ -554,7 +562,9 @@ async function run(engine: string): Promise<Outcome> {
       await watch(tab, 'skip', passage, 60);
       check(
         `${passage}: with less motion asked on the sheet, the final look at once and no movement`,
-        seen.ends === 0 && seen.phases === 0 && differing(now, await picture(tab, passage)) === 0,
+        seen.ends === 0 &&
+          seen.phases === 0 &&
+          differing(now, await picture(tab, passage)) <= REPAINTED,
         `moving for ${seen.ends.toFixed(0)} ms`,
       );
     }

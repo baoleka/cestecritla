@@ -173,10 +173,10 @@ void test('state 0 is the turtle that is online: the same shapes, to the last nu
   for (const shape of kept) assert.ok(hers.has(geometry(shape)), `missing: ${geometry(shape)}`);
 });
 
-void test('her three arcs are there twice — on the shell, on the wing — and written as not grown', () => {
+void test('her three arcs are there three times — shell, folded wing, wing in flight — written as not grown', () => {
   for (const n of [1, 2, 3]) {
     const arcs = shapes.filter((shape) => shape.classes.includes(`m-arc-${String(n)}`));
-    assert.equal(arcs.length, 2, `arc ${String(n)}`);
+    assert.equal(arcs.length, 3, `arc ${String(n)}`);
     for (const arc of arcs) {
       assert.equal(arc.attributes['pathLength'], '6');
       assert.equal(arc.attributes['stroke-dasharray'], '0 6');
@@ -369,9 +369,9 @@ void test('her look, written: attributes only, on both sets of arcs, and the pat
     assert.equal(geometry(out), geometry(svg), `state ${String(state)}`);
     assert.match(out, new RegExp(`data-state="${String(state)}"`));
     assert.match(out, /data-passage="" data-pose="look" data-tint="4"/);
-    assert.equal(out.match(/stroke-dasharray="6 6" stroke-dashoffset="0"/g)?.length, 2);
-    assert.equal(out.match(/stroke-dasharray="4 6" stroke-dashoffset="-1"/g)?.length, 2);
-    assert.equal(out.match(/stroke-dasharray="2 6" stroke-dashoffset="-2"/g)?.length, 2);
+    assert.equal(out.match(/stroke-dasharray="6 6" stroke-dashoffset="0"/g)?.length, 3);
+    assert.equal(out.match(/stroke-dasharray="4 6" stroke-dashoffset="-1"/g)?.length, 3);
+    assert.equal(out.match(/stroke-dasharray="2 6" stroke-dashoffset="-2"/g)?.length, 3);
   }
   assert.doesNotMatch(mascotMarkup(svg, { state: 1 }), /data-passage/);
 
