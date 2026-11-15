@@ -786,6 +786,8 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     }
     for (const question of [
       'mon oncle dit que les musulmans sont tous des terroristes, que répondre ?',
+      'les musulmans sont des terroristes, c’est faux',
+      'les migrants malades et l’AME',
       'Avec eux, c’est l’immigration sans limite, les musulmans sont des terroristes',
     ]) {
       const reported = await ask(question);

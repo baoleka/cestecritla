@@ -1,9 +1,9 @@
 {
   "meta": {
-    "version": "2.0.0",
+    "version": "2.1.0",
     "written_on": "2026-11-15",
     "written_by": "session",
-    "note_fr": "Les sujets sensibles : ce qui devient une accusation dès que quelqu'un se tient à côté. DEUX LISTES. « groups » : une haine, un délit, une violence, une drogue, une emprise, une religion ou une origine, un régime, un scandale, un jugement porté sur quelqu'un — quand une question en tient un, la feuille de « Demander » ne montre nos phrases que si le sujet est demandé seul : rien n'y désigne personne, des mesures tiennent le sujet entier — ce sont elles qu'on montre —, et chaque autre mot de sens est écrit dans une des mesures montrées (D16.70, src/lib/chat-local.ts, `aloneIn`). « soft » : des pays et des territoires sur lesquels on prête des allégeances, la fortune d'une personne — une accusation seulement quand quelqu'un est désigné : là, rien ne doit désigner personne et chaque mot doit être écrit dans une mesure montrée ; deux de ces sujets peuvent se côtoyer. Des racines telles que l'index les coupe (sans accent, sans pluriel) ; « * » : tout mot qui commence ainsi. LISTE FERMÉE PAR CONSTRUCTION : la session a lu, le 15 novembre 2026, les 3 741 racines de l'index du livre (`vocabulary`) et les groupes de synonymes, et en a tiré ce qui est sensible ; un mot que l'index ne connaît pas retient déjà nos phrases par lui-même. Une porte refuse un index dont le vocabulaire a changé sans que cette lecture soit refaite (scripts/chat-local.test.ts). Une racine de trop ne coûte que des liens. « suggested » : les groupes dont un mot peut être donné en exemple sous des liens (« Par exemple « fraude ». ») — jamais une religion ou une origine, jamais un jugement (septième passe du relecteur, D16.71). « pointing » : les mots par lesquels on désigne quelqu'un à côté d'un sujet sensible — rôles et mots de parti au singulier (`roles`), personnes que la recherche laisse tomber comme petits mots (`somebody`), noms qui suivent « ce », « cette » (`pointed`), proches de celui qui demande après « mon », « ma », « mes » (`own`) ; `feelings` : les visages de tous les jours, seuls signes qui ne retiennent pas nos phrases. « peoples » : des gens désignés par leur religion, leur origine, leur orientation — « les X sont des… » suivi d'une épithète est refusé comme une insulte. « tropes » : des expressions codées et des injures, rangées sous le sujet qu'on peut demander à leur place (« racisme », « antisémitisme », « immigration », « homophobie ») — DEPUIS LA v2.0 ELLES NE REFUSENT PLUS RIEN : une question qui en tient une reçoit les mesures de ce sujet, en liens, et ce sujet en exemple ; qui s'est fait traiter de « sale juif » n'est pas renvoyé (neuvième passe, D16.73). Une liste qui ne fait que rétrograder en liens peut être large : un mot de trop coûte des liens, jamais une capture ni un refus. « predicates » : ce qu'on dit d'un peuple ou d'un pays pour l'accuser (« contrôle », « envahit », « malades ») — à côté d'un mot de `peoples` ou d'un pays, des liens. « crimes » : ce qu'un énoncé haineux nu dit d'un peuple, outre les épithètes du code — des verbes (« les X volent ») et des injures (« des malades », « des parasites »). SEUL CET ÉNONCÉ NU EST REFUSÉ : un peuple en tête, « sont des… » ou un de ces verbes, un mot de plus au plus, et pas de point d'interrogation.",
+    "note_fr": "Les sujets sensibles : ce qui devient une accusation dès que quelqu'un se tient à côté. DEUX LISTES. « groups » : une haine, un délit, une violence, une drogue, une emprise, une religion ou une origine, un régime, un scandale, un jugement porté sur quelqu'un — quand une question en tient un, la feuille de « Demander » ne montre nos phrases que si le sujet est demandé seul : rien n'y désigne personne, des mesures tiennent le sujet entier — ce sont elles qu'on montre —, et chaque autre mot de sens est écrit dans une des mesures montrées (D16.70, src/lib/chat-local.ts, `aloneIn`). « soft » : des pays et des territoires sur lesquels on prête des allégeances, la fortune d'une personne — une accusation seulement quand quelqu'un est désigné : là, rien ne doit désigner personne et chaque mot doit être écrit dans une mesure montrée ; deux de ces sujets peuvent se côtoyer. Des racines telles que l'index les coupe (sans accent, sans pluriel) ; « * » : tout mot qui commence ainsi. LISTE FERMÉE PAR CONSTRUCTION : la session a lu, le 15 novembre 2026, les 3 741 racines de l'index du livre (`vocabulary`) et les groupes de synonymes, et en a tiré ce qui est sensible ; un mot que l'index ne connaît pas retient déjà nos phrases par lui-même. Une porte refuse un index dont le vocabulaire a changé sans que cette lecture soit refaite (scripts/chat-local.test.ts). Une racine de trop ne coûte que des liens. « suggested » : les groupes dont un mot peut être donné en exemple sous des liens (« Par exemple « fraude ». ») — jamais une religion ou une origine, jamais un jugement (septième passe du relecteur, D16.71). « pointing » : les mots par lesquels on désigne quelqu'un à côté d'un sujet sensible — rôles et mots de parti au singulier (`roles`), personnes que la recherche laisse tomber comme petits mots (`somebody`), noms qui suivent « ce », « cette » (`pointed`), proches de celui qui demande après « mon », « ma », « mes » (`own`) ; `feelings` : les visages de tous les jours, seuls signes qui ne retiennent pas nos phrases. « peoples » : des gens désignés par leur religion, leur origine, leur orientation — « les X sont des… » suivi d'une épithète est refusé comme une insulte. « tropes » : des expressions codées et des injures, rangées sous le sujet qu'on peut demander à leur place (« racisme », « antisémitisme », « immigration », « homophobie ») — DEPUIS LA v2.0 ELLES NE REFUSENT PLUS RIEN : une question qui en tient une reçoit les mesures de ce sujet, en liens, et ce sujet en exemple ; qui s'est fait traiter de « sale juif » n'est pas renvoyé (neuvième passe, D16.73). Une liste qui ne fait que rétrograder en liens peut être large : un mot de trop coûte des liens, jamais une capture ni un refus. « predicates » : ce qu'on dit d'un peuple ou d'un pays pour l'accuser (« contrôle », « envahit », « malades ») — à côté d'un mot de `peoples` ou d'un pays, des liens. « crimes » : les verbes conjugués d'un énoncé haineux nu (« les X volent ») ; « insults » : ce qu'il dit d'un peuple après « sont », outre les épithètes du code (« des parasites ») — NI L'UNE NI L'AUTRE NE TIENT UN MOT QUI A UN SENS MÉDICAL, JURIDIQUE OU SOCIAL (« malades », « assistés » y étaient : « les étrangers malades » est le nom d'un titre de séjour, et la question était refusée — dixième passe, D16.74). SEUL L'ÉNONCÉ NU EST REFUSÉ, ET IL EST TOUTE LA QUESTION : un peuple en tête, « sont (tous) des… » puis ce qu'on lui jette en dernier mot, ou un de ces verbes en dernier mot ; ni virgule, ni deux-points, ni guillemets, ni point d'interrogation.",
     "vocabulary": {
       "source": "data/2026/search-index.json",
       "terms": 3741,
@@ -641,7 +641,8 @@
       "islamo-collabo",
       "islamo-collabos",
       "anti-france",
-      "antifrance"
+      "antifrance",
+      "péril jaune"
     ],
     "immigration": [
       "grand remplacement",
@@ -690,7 +691,8 @@
       "collabo",
       "collabos",
       "boche",
-      "boches"
+      "boches",
+      "cinquième colonne"
     ]
   },
   "predicates": [
@@ -713,7 +715,9 @@
     "puent",
     "pue",
     "sale",
-    "malad*"
+    "malad*",
+    "mort*",
+    "noy*"
   ],
   "crimes": [
     "violent",
@@ -723,9 +727,9 @@
     "egorgent",
     "envahissent",
     "pillent",
-    "remplacent",
-    "malade",
-    "malades",
+    "remplacent"
+  ],
+  "insults": [
     "degenere",
     "degeneres",
     "parasite",
@@ -735,8 +739,6 @@
     "faineants",
     "sale",
     "sales",
-    "assiste",
-    "assistes",
     "profiteur",
     "profiteurs",
     "envahisseur",

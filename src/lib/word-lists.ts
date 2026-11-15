@@ -41,6 +41,7 @@ export function wordLists(): WordLists {
     tropes: Record<string, string[]>;
     predicates: string[];
     crimes: string[];
+    insults: string[];
   };
   return {
     neutral: cut(ordinary.words),
@@ -60,5 +61,6 @@ export function wordLists(): WordLists {
     ),
     predicates: [...sensitive.predicates].sort(),
     crimes: [...sensitive.crimes].sort(),
+    insults: [...sensitive.insults].sort(),
   };
 }

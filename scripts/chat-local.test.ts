@@ -737,22 +737,31 @@ void test('a date has to be the date of a measure shown (seventh review)', () =>
   }
 });
 
-void test('a hateful statement and nothing else is refused; whoever reports one, or asks about it, is not (eighth and ninth reviews)', () => {
+void test('a hateful statement that is the whole question is refused; whoever reports one, answers one, or asks about it, is not (eighth to tenth reviews)', () => {
   const real = lexiconOf(wordLists(), () => []);
-  // The bare statement: a people at its head, « sont des… » or a verb of crime, what is thrown.
+  // The bare statement: a people at its head, « sont des… » and what is thrown as its last
+  // word, or a verb of crime as its last word.
   for (const question of [
     'les musulmans sont des terroristes',
     'les arabes sont des voleurs',
+    'Les noirs sont des voleurs',
     'l’islam est une religion violente',
     'les immigrés sont des délinquants',
     'les immigrés sont tous des délinquants',
     'tous les roms sont des voleurs',
+    'tous les arabes sont des dealers',
+    'ces musulmans sont des terroristes',
+    'beaucoup de musulmans sont des terroristes',
     'la plupart des immigrés sont des délinquants',
+    'les musulmans sont presque tous des terroristes',
+    'les immigrés sont des délinquants et des violeurs',
+    'les africains sont paresseux',
+    'les Turcs sont des barbares',
     'les roms volent',
-    'les migrants violent nos femmes',
-    'les homosexuels sont des pédophiles',
-    'les trans sont des malades',
+    'les immigrés violent',
+    'les migrants tuent',
     'les migrants nous envahissent',
+    'les homosexuels sont des pédophiles',
   ]) {
     assert.ok(hateful(question, real), question);
     assert.deepEqual(
@@ -761,7 +770,7 @@ void test('a hateful statement and nothing else is refused; whoever reports one,
       question,
     );
   }
-  // Reported, asked, answered to: a refusal would turn away the person it was thrown at.
+  // Reported, asked, answered to, quoted: a refusal would turn away the person who asks.
   for (const question of [
     'les musulmans sont-ils des terroristes ?',
     'est-ce que les immigrés sont des délinquants ?',
@@ -771,6 +780,31 @@ void test('a hateful statement and nothing else is refused; whoever reports one,
     'au marché on m’a dit que les immigrés volent nos emplois, je réponds quoi ?',
     'les immigrés volent-ils nos emplois ?',
     'pourquoi dit-on que les roms sont des voleurs',
+    'les musulmans sont des terroristes, c’est faux',
+    '« les musulmans sont des terroristes » : comment répondre',
+    'les noirs sont violents : un cliché',
+    'les immigrés sont des délinquants, non',
+    'les immigrés sont des délinquants non',
+    'les juifs sont des voleurs : antisémitisme',
+    'les musulmans sont des terroristes en puissance',
+    // An adjective with a medical, a legal, a social meaning is no charge — and a people as
+    // the one something is done to is a question about the book.
+    'les migrants malades',
+    'les migrants malades et l’AME',
+    'les étrangers malades',
+    'les réfugiés malades du cancer',
+    'les homosexuels malades du sida',
+    'les étrangers assistés d’un avocat',
+    'les migrants assistés par les associations',
+    'les réfugiés assistés',
+    'les migrants sauvés en mer',
+    'les migrants morts en mer',
+    'les migrants tués en Méditerranée',
+    'les migrants volés par les passeurs',
+    'les musulmans agressés',
+    'les juifs victimes',
+    'les migrants violents',
+    'les migrants sales',
     // A coded phrase, a slur: a list never refuses.
     'la finance apatride',
     'le grand remplacement',
@@ -779,8 +813,7 @@ void test('a hateful statement and nothing else is refused; whoever reports one,
     'je me suis fait traiter de sale juif',
     'on traite mon fils de pédé au collège',
     'les collabos pendant la guerre',
-    // The same words as the subject of a measure, a noun with its adjective, a people as the
-    // one who suffers: questions about the book.
+    // The same words as the subject of a measure, a noun with its adjective.
     'contre le terrorisme islamiste',
     'contre les agressions islamophobes',
     'la dette des dictateurs africains',
@@ -796,6 +829,14 @@ void test('a hateful statement and nothing else is refused; whoever reports one,
     'la finance',
   ]) {
     assert.equal(hateful(question, real), false, question);
+  }
+  // No word of the lists a refusal reads has a medical, a legal or a social meaning.
+  const file = JSON.parse(readFileSync('data/2026/sensitive.json', 'utf8')) as {
+    crimes: string[];
+    insults: string[];
+  };
+  for (const word of ['malade', 'malades', 'assiste', 'assistes', 'mort', 'morts', 'mineur']) {
+    assert.ok(![...file.crimes, ...file.insults].includes(word), word);
   }
 });
 
@@ -849,6 +890,10 @@ void test('a coded phrase, a slur: the measures of the subject to ask in its pla
     'Israël contrôle la France',
     'on dit que les migrants nous envahissent',
     'les trans sont-ils des malades ?',
+    'les trans sont des malades',
+    'les migrants morts en mer',
+    'les migrants sauvages',
+    'les migrants inférieurs',
   ]) {
     const told = measuresFor(question, [], HELD, all, real, null, search);
     assert.deepEqual([told.sentences, told.charged], [false, true], question);

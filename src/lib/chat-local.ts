@@ -562,8 +562,10 @@ export interface Lexicon {
   trope: (stems: string) => string | null;
   /** What one says of a people or a country to charge it: « contrôle », « envahit ». */
   said: (term: string) => boolean;
-  /** What a bare hateful statement says of a people, beyond the epithets: « volent ». */
+  /** The verb of a bare hateful statement: « les X volent ». */
   crime: (word: string) => boolean;
+  /** What such a statement says of a people after « sont », beyond the epithets. */
+  insult: (word: string) => boolean;
 }
 
 /** The lists, as the file of the sheet holds them (src/lib/word-lists.ts). */
@@ -593,8 +595,9 @@ export interface WordLists {
   tropes: readonly (readonly [string, string])[];
   /** data/2026/sensitive.json, `predicates` — stems, « * » as above. */
   predicates: readonly string[];
-  /** data/2026/sensitive.json, `crimes` — words as the index folds them. */
+  /** data/2026/sensitive.json, `crimes` and `insults` — words as the index folds them. */
   crimes: readonly string[];
+  insults: readonly string[];
 }
 
 /** Before a title, what makes it anybody's: « un député », « plus de président ». */
@@ -633,6 +636,7 @@ export function lexiconOf(lists: WordLists, alias: (typed: string) => readonly s
       lists.tropes.find(([phrase]) => ` ${stems} `.includes(` ${phrase} `))?.[1] ?? null,
     said: among(lists.predicates),
     crime: (word) => lists.crimes.includes(word),
+    insult: (word) => lists.insults.includes(word),
   };
 }
 
@@ -805,22 +809,24 @@ const ALL_OF =
   /^(?:les|le|la|l|des|de|d|tous|toutes|tout|ces|plupart|majorite|beaucoup|trop|mais|et)$/;
 
 /**
- * True when the question is a hateful statement and nothing else — a people at its head,
- * « sont (tous) des… » or a verb of crime, what is thrown, one more word at most, and no
- * question mark: « les X sont des Y », « l'islam est une religion violente », « les X
- * volent ». It is refused like an insult, once the files of the sheet say what is what.
+ * True when the question is a hateful statement and nothing else — refused like an insult,
+ * once the files of the sheet say what is what. The statement is the WHOLE question:
+ *   - a people at its head (« les… », « tous les… », « la plupart des… »);
+ *   - then « sont (tous) des… » and, as its last word, what is thrown — an epithet, an insult
+ *     —, with one word of its own at most in between (« l'islam est une religion violente »);
+ *     or, as its last word, a verb of crime (« les X volent »);
+ *   - no comma, no colon, no quotation mark, no question mark, nothing after.
  *
- * NARROW ON PURPOSE (ninth review of 15/11/2026). The first version refused whoever REPORTED
- * such a sentence — « je me suis fait traiter de… », « mon oncle dit que…, que répondre ? »,
- * « les X sont-ils des Y ? » — and a refusal is our own voice turning away the person it was
- * thrown at. Anything that is not the bare statement gets links: a question, a sentence
- * somebody else said, the same words as the subject of a measure (« les musulmans sont
- * victimes d'actes racistes »), a noun with its adjective (« l'expulsion des étrangers
- * délinquants »). And a list never refuses: a coded phrase, a slur get the measures of the
- * subject one may ask in their place, as links (`measuresFor`).
+ * NARROW ON PURPOSE (ninth and tenth reviews of 15/11/2026). The first versions refused
+ * whoever REPORTED such a sentence or answered it — « je me suis fait traiter de… », « mon
+ * oncle dit que…, que répondre ? », « les X sont-ils des Y ? », « les X sont des Y, c'est
+ * faux » — and took an adjective for a charge: « les étrangers malades » is the name of a
+ * residence permit. A refusal is our own voice turning away the person who asked. Anything
+ * that is not the bare statement gets links; and a list never refuses: a coded phrase, a slur
+ * get the measures of the subject one may ask in their place, as links (`measuresFor`).
  */
 export function hateful(question: string, lexicon: Lexicon): boolean {
-  if (question.includes('?')) return false;
+  if (/[?,:;«»"“”()]/.test(question)) return false;
   const words = fold(question)
     .replace(AS_SUBJECT, ' ')
     .split(' ')
@@ -828,14 +834,15 @@ export function hateful(question: string, lexicon: Lexicon): boolean {
   const at = words.findIndex((word) => lexicon.kin(stem(word)));
   if (at < 0 || !words.slice(0, at).every((word) => ALL_OF.test(word))) return false;
   const after = words.slice(at + 1);
-  const thrown = (word: string): boolean => EPITHET_WORD.test(word) || lexicon.crime(word);
-  const rest = after.filter((word) => !GLUE_WORD.test(word) && processTerm(word) !== null);
+  const last = after[after.length - 1] ?? '';
+  const small = (word: string): boolean => GLUE_WORD.test(word) || processTerm(word) === null;
+  if (lexicon.crime(last)) return after.slice(0, -1).every(small);
+  const said = after.findIndex((word) => /^(?:est|sont|etait|etaient|serait|seraient)$/.test(word));
   return (
-    rest.some(thrown) &&
-    rest.filter((word) => !thrown(word)).length <= 1 &&
-    (after.some((word) => /^(?:est|sont|etait|etaient|serait|seraient)$/.test(word)) ||
-      lexicon.crime(after[0] ?? '') ||
-      lexicon.crime(after[1] ?? ''))
+    said >= 0 &&
+    (EPITHET_WORD.test(last) || lexicon.insult(last)) &&
+    after.slice(0, said).every(small) &&
+    after.slice(said + 1, -1).filter((word) => !small(word)).length <= 1
   );
 }
 
@@ -974,7 +981,7 @@ export function measuresFor(
   const told =
     lexicon !== null &&
     (peoples || words.some((word) => lexicon.soft(stem(word)))) &&
-    words.some((word) => lexicon.said(stem(word)));
+    words.some((word) => lexicon.said(stem(word)) || lexicon.insult(word));
   const pointing =
     instead !== null ||
     told ||
@@ -1048,7 +1055,8 @@ export function measuresFor(
     );
   };
   // Next to a people, no word of the question is a subject to suggest.
-  const example = peoples ? null : (typed.find(strict ? subject : plain) ?? null);
+  const example =
+    peoples || instead !== null ? null : (typed.find(strict ? subject : plain) ?? null);
   return pointing || strict
     ? { rows, sentences: false, example, charged: true }
     : { rows, sentences: false, example };

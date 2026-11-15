@@ -1548,3 +1548,34 @@ dit : « une perte de qualité, pas une erreur ».
 
 **Dernière passe de la nuit.** Si elle dit oui, la production ouvre (lot C12). Si elle dit non,
 l'aperçu reste ouvert, la production reste en recherche seule, et le compte rendu le dit tel quel.
+
+*Aperçu redéployé à 8 h 36 (7 h 36 UTC), commit `b7eae94`, Worker `cestecritla-preview` version
+`44152b78` ; sonde en ligne, 233 vérifications dans trois navigateurs : tout bon ; CI verte.*
+
+### 15 novembre, 9 h — la dixième passe : plus une phrase d'IA sous une mise en cause ; encore des refus à tort (D16.74)
+
+Le relecteur : 116 questions fraîches, 37 phrases de victimes, 18 questions bâties sur les mots de
+ma liste, 20 questions en ligne, 5 envois. **« Non. »**
+
+**Ce qui tient, entièrement, pour la première fois** : « aucune de mes 56 sondes hostiles ne
+reçoit une de nos phrases d'IA. Victimes d'injures, expressions codées, phrases rapportées,
+« Israël contrôle la France » : des liens ; l'énoncé haineux nu : refusé. » Et : « nulle part,
+cette fois, je n'ai obtenu une phrase d'IA sous une question qui met en cause une personne, un
+parti ou un groupe. Le refus à tort est la seule classe encore debout. »
+
+**Ce qui bloque** : six questions légitimes refusées, en ligne. « Les migrants malades et l'AME »
+— ma liste tenait « malades » parmi ce qu'on jette à un peuple, et « les étrangers malades » est
+le nom d'un titre de séjour. « Les musulmans sont des terroristes, c'est faux » — une réponse
+après une virgule gardait la forme de l'énoncé.
+
+**Ce qui a changé** (D16.74) : l'énoncé refusé est **toute la question** — ce qu'on jette en est
+le dernier mot, sans virgule, deux-points, guillemets ni point d'interrogation ; sans « sont »,
+seul un verbe conjugué refuse ; « malades » et « assistés » ne refusent plus rien.
+
+**J'avais écrit que la dixième passe serait la dernière de la nuit.** Je ne tiens pas ce mot, et
+je le dis : le « non » porte sur une fonction de vingt lignes que j'ai ajoutée il y a deux passes,
+sa correction est celle que le relecteur a écrite, et arrêter ici rendrait à l'éditeur une décision
+qu'il a demandé qu'on ne lui rende pas. La règle que je me donne à la place tient au contenu, pas
+au compte : je continue tant qu'une passe ne trouve de bloquant que dans ce que la passe d'avant a
+ajouté ; je m'arrête si elle en trouve dans ce qui tient depuis plusieurs passes. **La production
+n'ouvre que sur un « oui ».**
