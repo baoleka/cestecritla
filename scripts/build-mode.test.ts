@@ -718,8 +718,11 @@ void test('the preview host may ask before production does, never the other way 
   const site = readFileSync('src/worker/chat.ts', 'utf8');
   assert.match(site, /modeFor\(file, environment === 'preview' \? 'preview' : 'apex'\)/);
   assert.doesNotMatch(worker, /chatConfigured\(\)/);
-  // The committed file opens nothing yet.
-  assert.equal(readAskMode(undefined, 'preview'), 'off');
+  // The committed file: the preview host asks since 15 November 2026 (lot C11) — and
+  // production does not yet: opening it is the last gesture of the plan (lot C12), and the
+  // day it is made this line changes with it, on purpose.
+  assert.equal(readAskMode(undefined, 'preview'), 'chat');
+  assert.equal(readAskMode(undefined, 'apex'), 'off');
 });
 
 void test('the chat is a Worker of its own: two exact addresses a host, no file, its own name (lot C10)', () => {

@@ -1,6 +1,6 @@
 {
   "mode": "off",
-  "preview_mode": "off",
+  "preview_mode": "chat",
   "decided_on": "2026-11-14",
   "model": null,
   "min_overlap": 0.5,
@@ -10,15 +10,16 @@
     "corpus_version": null
   },
   "gists": {
-    "corpus_version": null,
-    "verdicts": null,
-    "sha256": null,
-    "deposited_on": null,
-    "read_by": null
+    "corpus_version": "27ee6e713fe25e7e",
+    "verdicts": 1069,
+    "sha256": "7e4ba01c7f408ddfeb81e4b0bc28379a10cf061b279ca2f7f58bff9f5c3bb949",
+    "deposited_on": "2026-11-14",
+    "read_by": "session"
   },
   "threads_read_on": null,
   "model_confirmed_on": null,
   "deployment_rehearsed_on": "2026-11-14",
-  "preview_legal_on": null,
-  "note_fr": "Comment la page répond à une question (D16.4, D16.45 à D16.60). « mode » : « chat » (le champ ouvre la feuille de « Demander » : une phrase écrite d'avance par mesure trouvée) ou « off » (recherche seule : ni feuille, ni Worker, ni mention d'IA). « off » est une décision datée (« decided_on », D16.33). « model » : null depuis D16.60 — AUCUNE IA NE RÉPOND À UN VISITEUR : la feuille ne propose pas d'explication, `/api/chat` reste fermée, aucune page ne nomme un modèle. Une clé de src/worker/models.ts rouvrirait la variante où un modèle explique les mots des phrases ; elle reste dans le code, fermée et testée, et ses portes à elle reviendraient avec : le banc des explications au seuil (« bench » : empreinte et date), le texte en base à la version du livre (« database »), quarante fils lus (« threads_read_on »), le modèle confirmé (« model_confirmed_on »). Dans les deux cas, « chat » exige : les phrases déposées pour cet état du livre et un verdict par mesure (« gists » : version, nombre, empreinte, date) ; QUI LES A LUES (« gists.read_by » : « editor », « session » — l'IA qui travaille pour l'éditeur, D16.57 — ou « both » ; l'outil du dépôt le dit, et ce que le site écrit des phrases y est tenu, D16.59) ; la section « Quand tu demandes » de la page Confidentialité relue telle qu'elle est (data/launch.json, « privacy_chat ») ; et la répétition, sur l'hôte d'aperçu, du déploiement qui met le Worker des phrases devant les fichiers de la production (« deployment_rehearsed_on », lot C10 : wrangler.chat.jsonc, sur deux adresses exactes ; `scripts/deploy.ts <cible> --chat --accord <jour>` le déploie, et rien d'autre). « preview_mode » ouvre l'hôte d'aperçu avant la production, jamais l'inverse (src/lib/ask-mode.ts) ; avant qu'il dise « chat » : un dépôt de phrases, la répétition du déploiement, la page Confidentialité relue et le dossier légal (« preview_legal_on » — 11-conformite.md §6.2 sexies, 18-dossier-chat.md) : scripts/launch.ts, previewChatBlockers. « min_overlap » est le seuil de recouvrement du contrôle d'une phrase. Depuis D16.23 il n'y a pas de Turnstile, donc pas de clé de widget ici."
+  "preview_legal_on": "2026-11-15",
+  "preview_legal_by": "session",
+  "note_fr": "Comment la page répond à une question (D16.4, D16.45 à D16.60). « mode » : « chat » (le champ ouvre la feuille de « Demander » : une phrase écrite d'avance par mesure trouvée) ou « off » (recherche seule : ni feuille, ni Worker, ni mention d'IA). « off » est une décision datée (« decided_on », D16.33). « model » : null depuis D16.60 — AUCUNE IA NE RÉPOND À UN VISITEUR : la feuille ne propose pas d'explication, `/api/chat` reste fermée, aucune page ne nomme un modèle. Une clé de src/worker/models.ts rouvrirait la variante où un modèle explique les mots des phrases ; elle reste dans le code, fermée et testée, et ses portes à elle reviendraient avec : le banc des explications au seuil (« bench » : empreinte et date), le texte en base à la version du livre (« database »), quarante fils lus (« threads_read_on »), le modèle confirmé (« model_confirmed_on »). Dans les deux cas, « chat » exige : les phrases déposées pour cet état du livre et un verdict par mesure (« gists » : version, nombre, empreinte, date) ; QUI LES A LUES (« gists.read_by » : « editor », « session » — l'IA qui travaille pour l'éditeur, D16.57 — ou « both » ; l'outil du dépôt le dit, et ce que le site écrit des phrases y est tenu, D16.59) ; la section « Quand tu demandes » de la page Confidentialité relue telle qu'elle est (data/launch.json, « privacy_chat ») ; et la répétition, sur l'hôte d'aperçu, du déploiement qui met le Worker des phrases devant les fichiers de la production (« deployment_rehearsed_on », lot C10 : wrangler.chat.jsonc, sur deux adresses exactes ; `scripts/deploy.ts <cible> --chat --accord <jour>` le déploie, et rien d'autre). « preview_mode » ouvre l'hôte d'aperçu avant la production, jamais l'inverse (src/lib/ask-mode.ts) ; avant qu'il dise « chat » : un dépôt de phrases, la répétition du déploiement, la page Confidentialité relue et le dossier légal (« preview_legal_on » — 11-conformite.md §6.2 sexies, 18-dossier-chat.md) : scripts/launch.ts, previewChatBlockers. « preview_legal_by » dit QUI a daté le dossier légal : « editor », ou « session » sur le mandat du 14 novembre (D16.57, D16.63) — depuis le 15 novembre, la session : l'éditeur ne l'a pas relu, et les captures du tableau de bord que le plan demandait ne sont pas faites (18-dossier-chat.md §0 et §5 disent ce qu'on en sait sans elles). « gists.deposited_on » est le jour UTC du dépôt (le 14 novembre à 23 h 46 UTC, 0 h 46 le 15 à Paris). « min_overlap » est le seuil de recouvrement du contrôle d'une phrase. Depuis D16.23 il n'y a pas de Turnstile, donc pas de clé de widget ici."
 }
