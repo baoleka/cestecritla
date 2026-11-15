@@ -732,21 +732,38 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         JSON.stringify(objected.ids) === JSON.stringify(rests.slice(0, 3)),
       `${JSON.stringify(objected.ids)} / ${JSON.stringify(rests)}`,
     );
-    // …with our sentences when the question is the objection and nothing more: a charge that
-    // rides along keeps our written answer and its measures, as links — and sends nothing.
+    // …when the question is the objection and nothing more. With a charge that rides along it
+    // is a question like another: neither our written answer nor a sentence — and nothing sent.
     const afterObjection = posted.gists.length;
     const ridden = await ask(
       'Ils veulent sortir de l’UE et de l’euro, comme l’antisémitisme de Zorglub',
     );
     check(
-      'an objection that carries a charge along: our answer, its measures as links, nothing sent',
-      (await count(`${LAST} .c-plain`)) === 1 &&
-        (await count(`${LAST} .c-gists .c-row`)) >= 2 &&
+      'an objection that carries a charge along: no « En clair », no sentence, nothing sent',
+      (await count(`${LAST} .c-plain`)) === 0 &&
         (await count(`${LAST} .c-gists [data-generated-by]`)) === 0 &&
-        HOW.test(ridden) &&
+        (HOW.test(ridden) || FOUND_NOTHING.test(ridden)) &&
         posted.gists.length === afterObjection,
       ridden.slice(0, 260),
     );
+    // Hate in words of the book — a coded phrase, a people said to be what one throws at it —
+    // is refused like an insult, once the files of the sheet say what it is (eighth review).
+    for (const question of [
+      'la finance apatride',
+      'les Français de papier',
+      'les musulmans sont des terroristes',
+      'Avec eux, c’est l’immigration sans limite, les musulmans sont des terroristes',
+    ]) {
+      const hate = await ask(question);
+      check(
+        `« ${question} »: the sentence an insult gets, no measure, no answer of ours`,
+        /Ici, on ne parle que du programme/.test(hate) &&
+          (await count(`${LAST} .c-gists`)) === 0 &&
+          (await count(`${LAST} .c-plain`)) === 0,
+        hate.slice(0, 200),
+      );
+    }
+    check('none of those sent anything either', posted.gists.length === afterObjection);
 
     // --- 8. nothing is written on the phone; the thread empties
     check(

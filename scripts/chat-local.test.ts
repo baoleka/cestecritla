@@ -34,6 +34,7 @@ import {
   strangersIn,
   rowsOf,
   aloneIn,
+  hateful,
   pointsWithASign,
   lexiconOf,
   type Lexicon,
@@ -71,7 +72,22 @@ const knowing = (
   lists: Partial<WordLists> = {},
   alias: (typed: string) => readonly string[] = () => [],
 ): Lexicon =>
-  lexiconOf({ neutral: [], people: [], sensitive: [], soft: [], askable: [], ...lists }, alias);
+  lexiconOf(
+    {
+      // The words one points at somebody with are those of the real file; the rest is the
+      // test's own.
+      ...wordLists(),
+      neutral: [],
+      people: [],
+      sensitive: [],
+      soft: [],
+      askable: [],
+      peoples: [],
+      tropes: [],
+      ...lists,
+    },
+    alias,
+  );
 /** No list at all: every word is judged by what the search found. */
 const NOTHING = knowing();
 
@@ -254,10 +270,12 @@ void test('a recognised objection shows the measures its written answer rests on
     rows: [C, D, A],
     sentences: true,
     example: null,
+    reviewed: true,
   });
-  // …as long as the question is the objection and nothing more. A charge that rides along —
-  // a name, an epithet, a sensitive subject, a word nobody knows, a sign — keeps the measures
-  // and withholds the sentences; « mon père dit que… » carries nothing.
+  // …as long as the question is the objection and nothing more. With a charge that rides
+  // along — a name, an epithet, a sensitive subject, a word nobody knows, a sign — it is a
+  // question like another: neither our written answer nor its measures (eighth review);
+  // « mon père dit que… » carries nothing.
   const everyday = knowing({
     neutral: terms('comme dit'),
     people: terms('père'),
@@ -274,19 +292,22 @@ void test('a recognised objection shows the measures its written answer rests on
     ', comme Macron',
     ` ${String.fromCodePoint(0x1f437)}`,
   ]) {
-    assert.equal(withSentences(`${objection}${rider}`), false, rider);
-    assert.deepEqual(
-      measuresFor(`${objection}${rider}`, supports, hits, all, everyday, objection).rows,
-      [C, D, A],
-    );
+    const ridden = measuresFor(`${objection}${rider}`, supports, hits, all, everyday, objection);
+    assert.deepEqual([ridden.rows, ridden.sentences, ridden.reviewed], [[A, B], false, undefined]);
   }
   // No wording to compare with, no file of the sheet: links.
   assert.equal(measuresFor(objection, supports, hits, all, everyday).sentences, false);
   assert.equal(withSentences(objection, null), false);
-  assert.deepEqual(measuresFor('x', [C], [], all, NOTHING).rows, [C]);
+  assert.deepEqual(measuresFor('x', [C], [], all, NOTHING, 'x').rows, [C]);
   // A measure this state of the book does not know is left out; none is known: the search.
-  assert.deepEqual(measuresFor('la retraite', [C, D], hits, (id) => id !== C, NOTHING).rows, [D]);
-  assert.deepEqual(measuresFor('la retraite', [C], hits, (id) => id !== C, NOTHING).rows, [A, B]);
+  const some = (id: string): boolean => id !== C;
+  assert.deepEqual(measuresFor('la retraite', [C, D], hits, some, NOTHING, 'la retraite').rows, [
+    D,
+  ]);
+  assert.deepEqual(measuresFor('la retraite', [C], hits, some, NOTHING, 'la retraite').rows, [
+    A,
+    B,
+  ]);
   // The files of the sheet did not load: nothing says which word is sensitive — links.
   assert.deepEqual(measuresFor('la retraite', [], hits, all, null), {
     rows: [A, B],
@@ -619,7 +640,7 @@ void test('a sign that is no word — a flag, a religious sign, an animal — is
     `${sign(0x041c)}élenchon finance`,
     `${sign(0x05d9, 0x05d4, 0x05d5, 0x05d3, 0x05d9)} finance`,
   ]) {
-    assert.ok(pointsWithASign(question), question);
+    assert.ok(pointsWithASign(question, NOTHING), question);
     assert.equal(measuresFor(question, [], hits, all, NOTHING).sentences, false, question);
   }
   // What the asker feels is nobody's target; a sum, a percentage are no sign.
@@ -632,10 +653,13 @@ void test('a sign that is no word — a flag, a religious sign, an animal — is
     '100 % retraite',
     'ça coûte combien, la retraite ? Et où est la finance ?',
   ]) {
-    assert.equal(pointsWithASign(question), false, question);
+    assert.equal(pointsWithASign(question, NOTHING), false, question);
     assert.equal(measuresFor(question, [], hits, all, NOTHING).sentences, true, question);
   } // The letters of French are letters of French.
-  assert.equal(pointsWithASign('Où est l’œuvre de Noël, à Besançon, ça coûte combien ?'), false);
+  assert.equal(
+    pointsWithASign('Où est l’œuvre de Noël, à Besançon, ça coûte combien ?', NOTHING),
+    false,
+  );
 });
 
 void test('letters typed apart are one word: a name hidden in dots or spaces is a name (seventh review)', () => {
@@ -706,8 +730,61 @@ void test('a date has to be the date of a measure shown (seventh review)', () =>
     'le 7 du mois d’octobre',
     'le sept du mois d’octobre',
   ]) {
+    // …and nothing is shown at all: the first words of the measure of another day, under
+    // this date, would read as if the book spoke of it (eighth review).
     const found = measuresFor(question, [], [DAY], all, lexicon);
-    assert.deepEqual([found.rows, found.sentences], [[A], false], question);
+    assert.deepEqual([found.rows, found.sentences], [[], false], question);
+  }
+});
+
+void test('hate in words of the book is refused like an insult: a coded phrase, a people said to be what one throws at it (eighth review)', () => {
+  const real = lexiconOf(wordLists(), () => []);
+  for (const question of [
+    'la finance apatride',
+    'les banques et la finance apatride',
+    'les Français de papier',
+    'le grand remplacement',
+    'l’immigration de remplacement',
+    'que dit le programme du grand remplacement ?',
+    'la préférence nationale',
+    'la France aux Français',
+    'le lobby juif',
+    'remigration',
+    'les musulmans sont des terroristes',
+    'les arabes sont des voleurs',
+    'l’islam est une religion violente',
+    'les immigrés sont des délinquants',
+    'les immigrés sont tous des délinquants',
+    'les roms sont souvent des voleurs',
+    'les migrants violent nos femmes',
+    'les homosexuels sont des pédophiles',
+  ]) {
+    assert.ok(hateful(question, real), question);
+    assert.deepEqual(
+      measuresFor(question, [], [{ id: A, score: 1, by: terms('finance') }], () => true, real),
+      { rows: [], sentences: false, example: null, refused: true },
+      question,
+    );
+  }
+  // The same words as the subject of a measure, a noun with its adjective, a people as the
+  // one who suffers: questions about the book.
+  for (const question of [
+    'contre le terrorisme islamiste',
+    'contre les agressions islamophobes',
+    'la dette des dictateurs africains',
+    'les musulmans sont victimes d’actes racistes',
+    'les migrants sont victimes de passeurs violents',
+    'la répression violente des migrants',
+    'l’expulsion des étrangers délinquants',
+    'les étrangers sont-ils concernés par le droit de vote ?',
+    'l’islam est-il compatible avec la laïcité ?',
+    'les apatrides',
+    'la finance',
+    'le remplacement des enseignants absents',
+    'la préférence locale dans les marchés publics',
+    'les sans-papiers',
+  ]) {
+    assert.equal(hateful(question, real), false, question);
   }
 });
 
@@ -784,6 +861,14 @@ void test('on the index of the book: what the sixth and seventh reviews typed ge
     'J.-L. M. et la fraude',
     `${String.fromCodePoint(0xff2c, 0xff26, 0xff29)} antisémitisme`,
     `${String.fromCodePoint(0x5350)} finance`,
+    // The eighth: coded phrases, a people put on trial.
+    'la finance apatride',
+    'les Français de papier',
+    'l’immigration de remplacement',
+    'le grand remplacement',
+    'la préférence nationale',
+    'les musulmans sont des terroristes',
+    'les migrants violent nos femmes',
   ]) {
     assert.ok(withheld(question), question);
   }
@@ -833,6 +918,14 @@ void test('on the index of the book: what the sixth and seventh reviews typed ge
     assert.equal(page(question).shown.example, null, question);
   }
   assert.equal(page('candidat antisémitisme').shown.example, 'antisémitisme');
+  // A date that is the date of no measure shows nothing — not the measure of another day.
+  for (const question of ['le 7 octobre', 'massacre du 7 octobre']) {
+    assert.deepEqual(page(question).shown.rows, [], question);
+  }
+  // Refused, with the files of the sheet: the sentence an insult gets.
+  for (const question of ['la finance apatride', 'les musulmans sont des terroristes']) {
+    assert.equal(page(question).shown.refused, true, question);
+  }
 });
 
 void test('the ordinary words: words of every day and names of places — never a politician, never a title, never a charge', () => {

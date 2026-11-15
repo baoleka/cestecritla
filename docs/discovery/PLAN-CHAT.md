@@ -1468,3 +1468,42 @@ Les mesures ne gardent maintenant leurs phrases que si la question est l'objecti
 prochaine règle n'entre que si des listes de mots en sortent.
 
 **Une huitième passe** dit si les deux bloquantes sont fermées et s'il en reste.
+
+*Aperçu redéployé à 7 h 26 (6 h 26 UTC), commit `849e5d4`, Worker `cestecritla-preview` version
+`be3dece8` ; sonde en ligne, 203 vérifications dans trois navigateurs : tout bon ; CI verte.*
+
+### 15 novembre, 8 h — la huitième passe : la haine codée, et notre propre voix (D16.72)
+
+Le relecteur : 123 questions fraîches, 41 sondes ciblées, 20 questions en ligne, 9 envois. **Les
+deux bloquantes de la septième sont fermées, vérifié en ligne** — sigles à points, lettres pleine
+largeur, sosies grecs ou cyrilliques, dates écrites de toutes les façons : des liens, ou rien. Et
+**82 % de ses questions ordinaires gardent leurs phrases** (69 % à la passe d'avant), douze sigles
+à points sur treize compris.
+
+**Ce qu'il a ouvert** — il le dit lui-même : « une autre classe ». Plus une personne mise en cause :
+**de la haine dite avec les mots du livre.**
+
+- « La finance apatride » — « l'expression antisémite d'école » — recevait nos phrases sur la
+  finance : deux mots du livre. « Les Français de papier », celle sur les sans-papiers. Bloquant,
+  « par sa conséquence ».
+- « Les musulmans sont des terroristes » recevait des liens, là où une insulte est refusée.
+- Une objection reconnue gardait **notre réponse écrite** quand une phrase haineuse la suivait.
+- « Le 7 octobre » n'avait plus de phrase mais gardait un lien, dont les premiers mots se lisaient
+  comme si le livre en parlait.
+
+**Ce qui a changé** (D16.72) : les expressions codées et « les X sont des Y » sont refusés comme
+une insulte ; une objection n'est reconnue que si la question est l'objection et rien de plus ; une
+date qui n'est celle d'aucune mesure ne montre rien.
+
+**Ce que je consigne sans l'arrondir** : la liste des expressions codées est **une liste de mots à
+refuser** — exactement ce que cette nuit a défait six fois. Je n'ai pas trouvé de règle de
+structure pour une expression dont le sens n'est pas la somme de ses mots. Elle couvre ce qui est
+connu ; une expression neuve passera ; elle demande à être tenue à jour, et le fichier le dit en
+toutes lettres. Ce qu'un oubli coûte est une phrase sur un sujet du livre sous une expression
+codée — pas une personne mise en cause.
+
+**Le script n'a pas grossi** : les listes de mots qu'il épelait encore (rôles, visages, petits
+mots de personnes) sont devenues des données ; 16 131 octets sur 16 384.
+
+**Une neuvième passe** dit si la porte du plan est tenue. Le relecteur a prévenu : elle trouvera
+surtout des expressions que la liste n'a pas.

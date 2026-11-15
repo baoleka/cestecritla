@@ -7,13 +7,15 @@
  *                             are no politician — both as the index cuts them;
  *   data/2026/sensitive.json  the sensitive subjects (`groups`) and the softer ones — the
  *                             countries one lends allegiances to, a fortune (`soft`) —,
- *                             as stems.
+ *                             as stems; the words one points at somebody with (`pointing`),
+ *                             the faces of every day (`feelings`), the peoples a hateful
+ *                             sentence is thrown at (`peoples`), the coded phrases (`tropes`).
  *
  * What they are for: src/lib/chat-local.ts, `measuresFor`.
  */
 import { readFileSync } from 'node:fs';
 import type { WordLists } from './chat-local.js';
-import { terms } from './search-core.js';
+import { spelled, stem, terms } from './search-core.js';
 
 const read = (path: string): unknown => JSON.parse(readFileSync(path, 'utf8'));
 const cut = (list: readonly string[]): string[] =>
@@ -25,6 +27,10 @@ export function wordLists(): WordLists {
     groups: Record<string, string[]>;
     soft: Record<string, string[]>;
     suggested: string[];
+    pointing: { roles: string[]; somebody: string[]; pointed: string[]; own: string[] };
+    feelings: number[];
+    peoples: string[];
+    tropes: string[];
   };
   return {
     neutral: cut(ordinary.words),
@@ -32,5 +38,10 @@ export function wordLists(): WordLists {
     sensitive: Object.values(sensitive.groups).flat().sort(),
     soft: Object.values(sensitive.soft).flat().sort(),
     askable: sensitive.suggested.flatMap((group) => sensitive.groups[group] ?? []).sort(),
+    ...sensitive.pointing,
+    feelings: sensitive.feelings.map((code) => String.fromCodePoint(code)).join(''),
+    peoples: [...sensitive.peoples].sort(),
+    // A coded phrase as the rules read a question: folded, each word cut to its stem.
+    tropes: [...new Set(sensitive.tropes.map((phrase) => spelled(phrase).map(stem).join(' ')))],
   };
 }

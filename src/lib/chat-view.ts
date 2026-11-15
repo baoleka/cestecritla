@@ -70,6 +70,12 @@ export interface Turn {
   /** With links only: a word of the question that, asked alone, gets sentences — or null. */
   example?: string | null;
   /**
+   * True when the question is refused once the files of the sheet say what it is — a coded
+   * phrase, a people put on trial (src/lib/chat-local.ts, `hateful`): the one sentence an
+   * insult gets, and nothing else.
+   */
+  refused?: boolean;
+  /**
    * `/api/gists`: `undefined` not asked, `'pending'` asked, `null` no answer the page can use,
    * or the answer.
    */
@@ -183,6 +189,7 @@ const closedTurn = (turn: Turn): boolean =>
     turn.gists !== 'pending' &&
     turn.gists.kind === 'silence') ||
   refused(turn.question) ||
+  turn.refused === true ||
   asksAboutSite(turn.question);
 
 /** The rows of a turn: each measure the page can name, with its read sentence when it has one. */
@@ -269,7 +276,7 @@ export function withExplanation(
 
 /** What the sheet shows for a turn. `last` is true for the turn at the bottom of the thread. */
 export function viewOf(turn: Turn, page: PageState, last: boolean): TurnView {
-  if (refused(turn.question)) {
+  if (refused(turn.question) || turn.refused === true) {
     return { plain: null, measures: { kind: 'off_topic' }, wording: null, ai: null };
   }
   if (turn.silence !== null) {
@@ -286,8 +293,12 @@ export function viewOf(turn: Turn, page: PageState, last: boolean): TurnView {
   if (asksAboutSite(turn.question)) {
     return { plain: null, measures: { kind: 'about' }, wording: null, ai: null };
   }
-  const { objection, cards } = turn.recognised;
-  const plain = objection !== null || cards.length > 0 ? turn.recognised : null;
+  // Our written answer waits for the search: only then is it known that the question is the
+  // objection and nothing more (`measuresFor`) — a charge that rides along gets no « En
+  // clair », and none shows in the meantime.
+  const { cards } = turn.recognised;
+  const objection = turn.rows === null ? null : turn.recognised.objection;
+  const plain = objection !== null || cards.length > 0 ? { objection, cards } : null;
 
   const rows = rowsOf(turn, page);
   const measures: Measures =

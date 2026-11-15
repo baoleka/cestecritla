@@ -665,6 +665,10 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     const linksOnly = found !== null && !found.sentences && found.rows.length > 0;
     const searched: Turn = {
       ...turn,
+      // Our written answer stands when the question is the objection and nothing more.
+      recognised:
+        found?.reviewed === true ? turn.recognised : { ...turn.recognised, objection: null },
+      refused: found?.refused === true,
       rows: found?.rows ?? [],
       linksOnly,
       example: found?.example ?? null,
