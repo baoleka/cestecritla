@@ -9,13 +9,15 @@
  */
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
-import { TOKEN_SETS, turtleColours } from './launch.js';
 
 export const MASCOT2_SVG_PATH = 'design/mascot/v2/mascot.svg';
 export const MASCOT2_CSS_PATH = 'src/styles/mascot2.css';
 export const MASCOT2_PALETTE_PATH = 'design/mascot/v2/palette.json';
 export const MASCOT2_VALIDATION_PATH = 'design/mascot/v2/validation.json';
 export const MASCOT2_SHEET_PATH = 'design/mascot/v2/planche.html';
+
+/** The two token sets she is drawn in: the main one, and the neutral one that stands ready. */
+export const MASCOT2_TOKEN_SETS = ['design/tokens.json', 'design/tokens.neutral.json'] as const;
 
 /** Six colours, one per part of the book, in the order of the book. */
 export type Tints = readonly [string, string, string, string, string, string];
@@ -42,6 +44,34 @@ export function readPalette(root = '.'): PaletteFile {
   return JSON.parse(readFileSync(at(root, MASCOT2_PALETTE_PATH), 'utf8')) as PaletteFile;
 }
 
+interface TokenFile {
+  color?: Record<string, { $value?: string } | undefined>;
+  'color-role'?: Record<string, Record<string, unknown> | undefined>;
+}
+
+/**
+ * The five roles she shares with the turtle, in every theme of both token sets, resolved to
+ * their values — the very lines scripts/launch.ts reads for the turtle (`turtleColours`; a test
+ * holds the two equal). Read here and not imported from there: the launch gate reads this
+ * module, and must not be read by it.
+ */
+function sharedRoles(root: string): string[] {
+  const out: string[] = [];
+  for (const path of MASCOT2_TOKEN_SETS) {
+    if (!existsSync(at(root, path))) continue;
+    const tokens = JSON.parse(readFileSync(at(root, path), 'utf8')) as TokenFile;
+    for (const [theme, roles] of Object.entries(tokens['color-role'] ?? {})) {
+      for (const [role, raw] of Object.entries(roles ?? {})) {
+        if (!role.startsWith('turtle-') || typeof raw !== 'string') continue;
+        const name = /^\{color\.([a-z0-9-]+)\}$/.exec(raw)?.[1];
+        const value = name === undefined ? raw : (tokens.color?.[name]?.$value ?? raw);
+        out.push(`${path} ${theme} ${role} ${value}`);
+      }
+    }
+  }
+  return out;
+}
+
 /**
  * The colours she is drawn in, one line each — `design/tokens.json light mascot-tint-1 #3AADEE`.
  * The five roles she shares with the turtle come from the token sets; her tints from the
@@ -51,7 +81,7 @@ export function readPalette(root = '.'): PaletteFile {
  */
 export function mascot2Colours(root = '.'): string[] {
   const palette = readPalette(root);
-  const out = [...turtleColours(root)];
+  const out = sharedRoles(root);
   const lines = (path: string, set: PaletteSet, prefix = ''): void => {
     for (const theme of ['light', 'dark'] as const) {
       set[theme].forEach((value, index) => {
@@ -61,7 +91,7 @@ export function mascot2Colours(root = '.'): string[] {
       });
     }
   };
-  const [main, neutral] = TOKEN_SETS;
+  const [main, neutral] = MASCOT2_TOKEN_SETS;
   const chosen = palette.chosen === null ? undefined : palette.palettes[palette.chosen];
   if (chosen !== undefined) lines(main, chosen);
   else {

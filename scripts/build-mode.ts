@@ -21,6 +21,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { modeFor } from '../src/lib/ask-mode.js';
+import { generationFor, type MascotGeneration } from '../src/lib/mascot-mode.js';
 import { SILENCE_APPROACH_MS, silenceWindows, type SilenceWindow } from '../src/lib/silence.js';
 import { parseJsonc } from './jsonc.js';
 
@@ -53,6 +54,9 @@ export const WORKER_CONFIG = 'wrangler.jsonc';
 export const CHAT_CONFIG = 'wrangler.chat.jsonc';
 
 export const ASK_PATH = 'data/2026/ask.json';
+
+/** Which mascot each host serves (D17.14; src/lib/mascot-mode.ts). */
+export const MASCOT_PATH = 'data/mascot.json';
 
 /**
  * The guard every wrangler configuration of this repository runs as its « build » step
@@ -112,6 +116,22 @@ export function readBuildHost(marker: string = BUILD_MARKER): DeployTarget {
       : 'apex';
   } catch {
     return 'apex';
+  }
+}
+
+/**
+ * The generation of the mascot the committed file gives a host (src/lib/mascot-mode.ts):
+ * production's unless the preview host is named — it may be ahead. Anything unreadable is 1.
+ */
+export function readMascot(
+  path: string = MASCOT_PATH,
+  target: DeployTarget = 'apex',
+): MascotGeneration {
+  if (!existsSync(path)) return 1;
+  try {
+    return generationFor(JSON.parse(readFileSync(path, 'utf8')) as unknown, target);
+  } catch {
+    return 1;
   }
 }
 
@@ -352,24 +372,41 @@ export function refusedArguments(given: readonly string[]): string[] {
   return refused;
 }
 
+/**
+ * How a build of the second generation of the mascot is told from its files (D17.14): its game
+ * block says so on the home page, and its privacy page lists the one field only she writes — the
+ * second mark is there for the build served during a silence window, which has no game block
+ * and still says what a phone may hold.
+ */
+export const MASCOT2_MARKS = {
+  home: 'data-mascot="2"',
+  privacy: 'data-field="tint"',
+} as const;
+
 /** What a build directory shows of the game and of the questions, read from its files. */
 export interface DistContent {
   /** The published files of the game: `data/jeu-<fingerprint>.json`. */
   gameFiles: string[];
   /** The home page carries the sheet that sends a question (`id="chat-config"`). */
   asks: boolean;
+  /** The generation of the mascot its pages show. */
+  mascot: MascotGeneration;
 }
 
 export function readDist(dir = 'dist'): DistContent {
   const data = join(dir, 'data');
   const home = join(dir, 'index.html');
+  const privacy = join(dir, 'confidentialite', 'index.html');
+  const holds = (path: string, mark: string): boolean =>
+    existsSync(path) && readFileSync(path, 'utf8').includes(mark);
   return {
     gameFiles: existsSync(data)
       ? readdirSync(data)
           .filter((name) => /^jeu-.*\.json$/.test(name))
           .sort()
       : [],
-    asks: existsSync(home) && readFileSync(home, 'utf8').includes('id="chat-config"'),
+    asks: holds(home, 'id="chat-config"'),
+    mascot: holds(home, MASCOT2_MARKS.home) || holds(privacy, MASCOT2_MARKS.privacy) ? 2 : 1,
   };
 }
 
@@ -379,12 +416,18 @@ export function readDist(dir = 'dist'): DistContent {
  * test build copied over it, an `astro build` run by hand with a test variable, a build older
  * than the list of words. So the directory itself is read:
  *   - it shows the game only if the editor validated the list as it stands, and from that list;
- *   - it sends questions only if data/2026/ask.json says the site answers them.
+ *   - it sends questions only if data/2026/ask.json says the site answers them;
+ *   - it shows the second generation of the mascot only if data/mascot.json gives it to the
+ *     host it goes to. One way only: an older build may go to a host that is ahead — it shows
+ *     less than that host may — never the reverse. Nothing else stops `npm run build:preview`
+ *     followed by `npm run deploy`: the marker names a host, and no rule read it (found on
+ *     15/11/2026 while planning D17.14; harmless until the two hosts differed).
  * `gameFile` is the file a build of today would publish — null while the list is not ready.
+ * `mascot` is the generation the target host is given; left out, it is the first.
  */
 export function distProblems(
   dist: DistContent,
-  expected: { gameFile: string | null; ask: AskDeploy },
+  expected: { gameFile: string | null; ask: AskDeploy; mascot?: MascotGeneration },
 ): string[] {
   const out: string[] = [];
   const stray = dist.gameFiles.filter((name) => name !== expected.gameFile);
@@ -395,6 +438,11 @@ export function distProblems(
   }
   if (dist.asks && (expected.ask === 'off' || expected.ask === 'bench')) {
     out.push(`dist/ sends questions, and ${ASK_PATH} says this host answers none`);
+  }
+  if (dist.mascot > (expected.mascot ?? 1)) {
+    out.push(
+      `dist/ shows the second generation of the mascot, and ${MASCOT_PATH} gives this host the first`,
+    );
   }
   return out;
 }

@@ -15,6 +15,7 @@
     "build:preview": "tsx scripts/build.ts --host preview",
     "build:ask": "tsx scripts/build.ts --ask-test chat",
     "build:gists": "tsx scripts/build.ts --ask-test gists",
+    "build:mascot2": "tsx scripts/build.ts --ask-test chat --mascot 2",
     "build:scrutin": "tsx scripts/build.ts --scrutin",
     "build:scrutin:test": "tsx scripts/build.ts --scrutin --ask-test chat",
     "preview": "astro preview",

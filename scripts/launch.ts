@@ -27,8 +27,10 @@ import { existsSync, readFileSync } from 'node:fs';
 import { canonicalHash, listFingerprint } from '../src/lib/fingerprint.js';
 import { WORD_LINKS_PATH, highlightedWords, wordsFingerprint } from '../src/lib/word-links.js';
 import { LOCAL_CHECKS } from '../src/lib/game.js';
-import { citationPolicyValidated } from './build-mode.js';
+import { MASCOT_PATH, citationPolicyValidated } from './build-mode.js';
 import { modeFor } from '../src/lib/ask-mode.js';
+import { generationFor, type MascotHost } from '../src/lib/mascot-mode.js';
+import { MASCOT2_VALIDATION_PATH, mascot2Fingerprint } from './mascot2-kit.js';
 import { isModelKey, keepsNothing } from '../src/worker/models.js';
 
 export { canonicalHash };
@@ -416,12 +418,35 @@ export function artefactBlockers(root = '.'): string[] {
     }
   }
 
-  // The turtle: validated on a sheet, and bound to the drawing it was validated on (D16.11).
-  const turtle = readObject(at(TURTLE_VALIDATION_PATH));
-  const drawing = turtleFingerprint(root);
-  if (turtle === null || drawing === null) {
-    out.push(`the turtle is not drawn or not validated: ${TURTLE_VALIDATION_PATH} (lot K3)`);
-  } else {
+  // The mascot production serves: validated on a sheet, bound to the drawing it was validated on.
+  out.push(...mascotBlockers(root, 'apex'));
+  return out;
+}
+
+/**
+ * What the mascot a host is given still lacks (D16.11, D17.14) — empty when it may be served.
+ *
+ * Two generations live side by side (docs/discovery/PLAN-TORTUE.md §11); data/mascot.json says
+ * which one a host serves, and each has its own sheet, its own fingerprint and its own record:
+ * the one that applies is the one of the generation that host is given. So production stays
+ * deployable on the turtle's record while the second generation is drawn, redrawn and tried —
+ * and cannot be switched to her before she is validated: a file that says 2 with no dated sheet,
+ * no question asked of that drawing, or no word of the editor, blocks here.
+ *
+ * The preview host is where she is tried: nothing of that validation is asked of it.
+ */
+export function mascotBlockers(root = '.', host: MascotHost = 'apex'): string[] {
+  const at = (path: string): string => (root === '.' ? path : `${root}/${path}`);
+  const out: string[] = [];
+  const mascot = readObject(at(MASCOT_PATH));
+  if (generationFor(mascot, host) === 1) {
+    // The turtle: validated on a sheet, and bound to the drawing it was validated on (D16.11).
+    const turtle = readObject(at(TURTLE_VALIDATION_PATH));
+    const drawing = turtleFingerprint(root);
+    if (turtle === null || drawing === null) {
+      out.push(`the turtle is not drawn or not validated: ${TURTLE_VALIDATION_PATH} (lot K3)`);
+      return out;
+    }
     if (!isDate(turtle.validated_on)) {
       out.push(`${TURTLE_VALIDATION_PATH}: the sheet is not dated by the editor: validated_on`);
     } else if (turtle.drawing_sha256 !== drawing) {
@@ -435,6 +460,42 @@ export function artefactBlockers(root = '.'): string[] {
     } else if (turtle.same_character_sha256 !== drawing) {
       out.push(`${TURTLE_VALIDATION_PATH}: the drawing changed after "same character?" was asked`);
     }
+    return out;
+  }
+  // Ahead of production, on the preview host alone: the place where a drawing is looked at.
+  if (host === 'preview' && generationFor(mascot, 'apex') === 1) return out;
+
+  // The second generation, in production: the same two dates, on her own drawing — and the
+  // editor's word, because serving her is his decision and nobody else's.
+  let drawing: string | null = null;
+  try {
+    drawing = mascot2Fingerprint(root);
+  } catch {
+    // A palette that cannot be read is a drawing that cannot be fingerprinted: not validated.
+  }
+  const record = readObject(at(MASCOT2_VALIDATION_PATH));
+  if (record === null || drawing === null) {
+    out.push(
+      `the second-generation mascot is not drawn or not validated: ${MASCOT2_VALIDATION_PATH} (lot A2)`,
+    );
+  } else {
+    if (!isDate(record.validated_on)) {
+      out.push(`${MASCOT2_VALIDATION_PATH}: the sheet is not dated by the editor: validated_on`);
+    } else if (record.drawing_sha256 !== drawing) {
+      out.push(`${MASCOT2_VALIDATION_PATH}: the drawing changed after the sheet was validated`);
+    }
+    if (!isDate(record.same_character_asked_on)) {
+      out.push(
+        `${MASCOT2_VALIDATION_PATH}: "same character?" has not been asked: same_character_asked_on`,
+      );
+    } else if (record.same_character_sha256 !== drawing) {
+      out.push(`${MASCOT2_VALIDATION_PATH}: the drawing changed after "same character?" was asked`);
+    }
+  }
+  if (!isDate(field(mascot, 'decided_on')) || field(mascot, 'decided_by') !== 'editor') {
+    out.push(
+      `${MASCOT_PATH}: serving the second generation in production is the editor's decision, dated: decided_on, decided_by (D17.14)`,
+    );
   }
   return out;
 }

@@ -13,3 +13,10 @@ declare const __CEL_SCRUTIN__: boolean;
 
 /** True in a build whose field opens the sheet of « Demander » (data/2026/ask.json: "chat"). */
 declare const __CEL_CHAT__: boolean;
+
+/**
+ * True in a build that shows the second generation of the mascot (data/mascot.json, D17.14):
+ * the preview host first, production on the editor's word. False everywhere else — and a page
+ * built with false does not even import her.
+ */
+declare const __CEL_MASCOT2__: boolean;

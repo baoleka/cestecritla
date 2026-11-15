@@ -29,7 +29,7 @@ import {
   tintOf,
   type TurtleState,
 } from '../src/lib/mascot2.js';
-import { TOKEN_SETS, TURTLE_SVG_PATH } from './launch.js';
+import { TOKEN_SETS, TURTLE_SVG_PATH, turtleColours } from './launch.js';
 import {
   LINE_MIN,
   MASCOT2_CSS_PATH,
@@ -409,7 +409,10 @@ void test('a validation is a date bound to what was looked at — or it is not t
   // Her colours, as the fingerprint reads them: the five roles she shares with the turtle, in
   // both sets and both themes, and her tints.
   const colours = mascot2Colours();
-  assert.equal(colours.filter((line) => / turtle-/.test(line)).length, 20);
+  const shared = colours.filter((line) => / turtle-/.test(line));
+  assert.equal(shared.length, 20);
+  // …read exactly as the launch gate reads them for the turtle: one place, two readers.
+  assert.deepEqual(shared, turtleColours());
   assert.ok(colours.some((line) => line.includes(' mascot-tint-6 ')));
   assert.ok(MASCOT2_PALETTE_PATH.length > 0);
 });
@@ -419,7 +422,10 @@ void test('nothing that is served knows her yet: no page, component or script im
     .split('\n')
     .filter((path) => /\.(?:astro|ts|css)$/.test(path))
     .filter((path) => !['src/lib/mascot2.ts', 'src/styles/mascot2.css'].includes(path));
+  // An import of her module or of her stylesheet, or a read of her drawing.
+  const knowsHer =
+    /from\s+['"][^'"]*\/mascot2(?:\.[a-z]+)?['"]|['"][^'"]*mascot2\.css['"]|mascot\/v2\//;
   for (const path of tracked) {
-    assert.doesNotMatch(readFileSync(path, 'utf8'), /mascot2|mascot\/v2/, path);
+    assert.ok(!knowsHer.test(readFileSync(path, 'utf8')), `${path} imports her`);
   }
 });

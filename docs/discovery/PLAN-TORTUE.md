@@ -615,3 +615,43 @@ l'aperçu (autre adresse, autre stockage) : il est tenu par des tests, pas par u
   identiques, octet pour octet, à ceux d'avant ce lot. 617 tests passent.
 - **À l'éditeur** : regarder la planche, dire si le dessin tient (« ni enfantine, ni moche »),
   choisir la palette. Rien n'est daté.
+
+### Lot 1, au 15 novembre 2026 (soir) — l'interrupteur, inerte
+
+- **`data/mascot.json`** dit quelle mascotte chaque hôte sert : « generation » pour la production,
+  « preview_generation » pour l'aperçu — tous deux à 1, « decided_by » à null. La règle
+  (`src/lib/mascot-mode.ts`) va dans un seul sens, comme celle des questions : l'aperçu peut être
+  en avance, la production jamais ; tout ce qui est illisible vaut 1, et rien ne lève d'erreur
+  (le retrait du site ne doit jamais attendre que ce fichier soit bien formé).
+- **La build lit le fichier pour son hôte** (`src/lib/mascot-config.ts`, constante
+  `__CEL_MASCOT2__` dans `astro.config.ts`) ; **une build d'essai ne le lit pas** :
+  `npm run build:mascot2` écrit `dist-mascot2/` avec la génération 2 quoi que dise le fichier.
+  Basculer la production, ou revenir en arrière, sera donc une ligne de données qui laisse toutes
+  les builds d'essai — et toutes les portes qui en lisent une — exactement comme elles étaient.
+- **Le piège qui existait déjà est fermé.** Rien n'empêchait `npm run build:preview` suivi de
+  `npm run deploy` : le marqueur de build nomme un hôte, et aucune règle ne le lisait (sans effet
+  jusqu'ici, les deux hôtes étant dans le même mode). Le garde lit maintenant le dossier lui-même
+  (`readDist`, `distProblems`) : une build qui montre la génération 2 — son bloc de jeu le dit
+  sur l'accueil, sa page Confidentialité par le champ qu'elle seule écrit — ne part que vers un
+  hôte à qui le fichier la donne. **Essayé pour de bon** : une build marquée à la main est
+  refusée sur les deux hôtes, en simulation comme en vrai (« dist/ shows the second generation
+  of the mascot, and data/mascot.json gives this host the first »). Dans l'autre sens rien n'est
+  refusé : une build plus ancienne montre moins que ce que son hôte peut montrer.
+- **La porte de lancement lit la validation de la génération que l'hôte reçoit**
+  (`mascotBlockers`, `scripts/launch.ts`). À 1 : la planche de la tortue, comme avant, mot pour
+  mot. À 2 en production : la planche de la génération 2 datée sur le dessin tel qu'il est, la
+  question « même personnage ? » posée sur ce dessin, et le mot daté de l'éditeur
+  (« decided_by » : « editor ») — une session ne peut pas l'écrire à sa place, et un test le
+  tient sur le fichier suivi. L'aperçu, lui, est l'endroit où un dessin se regarde : rien de
+  cette validation ne lui est demandé (la ligne de la page Confidentialité viendra avec le champ
+  qu'elle décrit, au lot B).
+- **Écart au plan de la lecture indépendante** : `src/lib/ask-config.ts` n'est pas touché. La
+  configuration de la mascotte lit elle-même la variable d'hôte : deux lignes de plus, un fichier
+  en ligne de moins à modifier.
+- **Les portes d'intégration construisent aussi la build de l'aperçu**, la jugent par les mêmes
+  tests et la passent par le script de déploiement, à blanc — ce que rien ne faisait.
+- **Preuves** : `npm run build` donne les mêmes 1 156 fichiers, octet pour octet, qu'avant le
+  chantier ; `npm run build:preview` aussi (les deux hôtes sont au même point) ; `dist-ask/` est
+  inchangé, et `dist-mascot2/` lui est identique tant qu'aucune page ne connaît la génération 2.
+  622 tests ; le site 44 contrôles et le jeu 117, sous Chromium ; les déploiements à blanc de la
+  production et de l'aperçu passent.

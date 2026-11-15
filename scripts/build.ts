@@ -20,6 +20,9 @@
  *                          the ask screen is tested before any bench allows it to ship; it is
  *                          never what scripts/deploy.ts deploys, and it leaves dist/ and its
  *                          marker untouched.
+ *   npm run build:mascot2  the same TEST build with the second generation of the mascot
+ *                          (D17.14), into dist-mascot2/: what her gates play before the editor
+ *                          has validated anything. Never deployed either.
  *
  * The build is deterministic: no timestamp, no random seed, no network. Two runs in a row
  * produce byte-identical output.
@@ -143,6 +146,22 @@ if (host !== 'apex' && host !== 'preview') throw new Error('--host takes "previe
 if (host === 'preview' && mode !== 'app') throw new Error('--host is a build of the app');
 if (host === 'preview' && askTest !== null) throw new Error('--host and --ask-test do not mix');
 if (scrutin && askTest === 'gists') throw new Error('--scrutin tests with --ask-test chat');
+/**
+ * The generation of the mascot a TEST build shows (src/lib/mascot-config.ts): `--mascot 2` is
+ * the second one, into dist-mascot2/. A build that is deployed never takes this flag: what a
+ * host serves is data (data/mascot.json), read for the host the build is made for.
+ */
+const mascotAt = process.argv.indexOf('--mascot');
+const mascotTest = mascotAt === -1 ? null : (process.argv[mascotAt + 1] ?? '');
+if (mascotTest !== null && mascotTest !== '1' && mascotTest !== '2') {
+  throw new Error('--mascot takes "1" or "2"');
+}
+if (mascotTest !== null && askTest === null) {
+  throw new Error('--mascot is for a test build: with --ask-test (a host reads data/mascot.json)');
+}
+if (mascotTest === '2' && (askTest !== 'chat' || scrutin)) {
+  throw new Error('--mascot 2 tests with --ask-test chat, and not with --scrutin');
+}
 const outDir =
   askTest === null
     ? 'dist'
@@ -150,7 +169,9 @@ const outDir =
       ? 'dist-scrutin'
       : askTest === 'gists'
         ? 'dist-gists'
-        : 'dist-ask';
+        : mascotTest === '2'
+          ? 'dist-mascot2'
+          : 'dist-ask';
 
 function run(step: Step): number {
   for (const input of step.reads) {
@@ -203,6 +224,8 @@ execFileSync('npx', ['--no-install', 'astro', 'build', '--outDir', outDir], {
     CEL_GAME_TEST: askTest === null ? '' : '1',
     CEL_SCRUTIN: scrutin ? '1' : '',
     CEL_HOST: host === 'preview' ? 'preview' : '',
+    // Never inherited either: only a test build may be told which mascot to show.
+    CEL_MASCOT_TEST: mascotTest ?? '',
   },
 });
 console.log(`✓ astro build (${String(Date.now() - astroStarted)} ms)`);
@@ -236,7 +259,7 @@ const total = Date.now() - t0;
 const label = scrutin
   ? `build:scrutin${askTest === null ? '' : ' (test)'}`
   : askTest !== null
-    ? `build:ask (${askTest})`
+    ? `build:ask (${askTest}${mascotTest === '2' ? ', mascot 2' : ''})`
     : mode === 'holding'
       ? 'build:holding'
       : fast

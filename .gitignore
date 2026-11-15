@@ -11,6 +11,7 @@ dist/
 dist-ask/
 dist-gists/
 dist-scrutin/
+dist-mascot2/
 .astro/
 public/fonts/
 worker-configuration.d.ts

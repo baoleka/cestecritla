@@ -109,6 +109,19 @@ jobs:
       - name: Deploy dry run (Worker of the chat → apex)
         run: npx tsx scripts/deploy.ts apex --chat --dry-run --outdir /tmp/wdry-chat
 
+      # The preview host may be ahead of production — it asked questions first, and it shows
+      # the second generation of the mascot first (data/mascot.json, D17.14). So its build is
+      # made here too, judged by the same dist-bound gates, and sent as a dry run through the
+      # one script that deploys: a build made for the preview host must be accepted there.
+      - name: Build (preview host)
+        run: npm run build:preview
+
+      - name: Tests (on the build of the preview host)
+        run: npm test
+
+      - name: Deploy dry run (the build of the preview host → preview host)
+        run: npx tsx scripts/deploy.ts preview --dry-run --outdir /tmp/wdry-preview
+
       # The holding site (D15.4) is what the apex actually serves until launch day, and the
       # withdrawal gesture of runbook sheet 9. It is a second build of the same tree, so it goes
       # through the same dist-bound gates — and through scripts/deploy.ts, the only caller of
