@@ -863,3 +863,53 @@ l'aperçu (autre adresse, autre stockage) : il est tenu par des tests, pas par u
 - **Suite** : lot B — les règles pures et la mémoire (le champ de la couleur, la carte des
   écritures par génération, la ligne de Confidentialité sous sa propre empreinte, les teintes en
   rôles dans une feuille à part). Il ne touche ni au dessin ni à ce qui est servi.
+
+### Lot B, au 15 novembre 2026 — les règles et la mémoire (rien n'est servi ; aucune décision demandée)
+
+- **Sa couleur, dans ce que le jeu retient** (`src/lib/game-state2.ts`, qui lit le module en
+  ligne sans en changer une ligne) : un seul champ de plus, `tint`, sous la même clé et dans les
+  deux mêmes stockages. Trois propriétés tenues par des tests : ce que la génération 1 a écrit se
+  relit tel quel ; **tant qu'aucune couleur n'est choisie, ce qui s'écrit est, octet pour octet,
+  ce que la génération 1 écrit** (le champ n'existe que le jour où il y a une couleur à garder) ;
+  après un retour arrière, la génération 1 relit ce que la 2 a écrit et n'y perd que la couleur.
+  Une couleur abîmée vaut « aucune », jamais une erreur. Rien ne recule : la progression se fond
+  comme avant (le plus de chaque), sur quatre cents couples d'états tirés d'une graine fixe.
+- **« Le dernier geste gagne », sans jamais garder une heure.** Deux façons de joindre deux
+  mémoires, nommées pour ce qu'elles sont : `fromPhone` (une page qui s'ouvre, une manche qui
+  finit : la couleur du téléphone l'emporte, car tout geste de couleur, dans n'importe quel
+  onglet, y a été écrit) et `ontoPhone` (« Garder ta tortue », une couleur qu'on vient de
+  choisir : celle de cet onglet l'emporte). « Sans couleur » est un choix et gagne comme un autre.
+- **Le but, en mots** (`src/lib/game-goal.ts`) : « la prochaine manche la fait changer » se
+  calcule en rejouant le tirage — le même pour tous — et ne lit aucun choix. Sur la liste suivie,
+  un test rejoue le jeu entier : **elle change à la fin des manches 1, 2, 7 et 16, et la phrase
+  « À la prochaine manche, elle change » est dite exactement avant celles-là**, jamais ailleurs.
+  Le module rend le nom d'une phrase, pas la phrase : les mots sont ceux de D17.23.
+- **Les textes de D17.23 sont dans le kit** (`design/strings.json`, v0.13.0), sous des clés
+  neuves : 27 chaînes, passées par toutes les portes du kit. **Une ne l'est pas** : « Ce
+  téléphone garde les mots déjà vus, où en est le jeu, ta tortue, sa couleur. » compte seize
+  mots, et la règle du kit en veut quinze au plus — le document envoyé à l'éditeur disait
+  « quinze au plus » à tort. **À lui redemander avant le lot C**, avec une version qui tient.
+- **La carte des écritures par génération** (`src/lib/storage-map2.ts`) : la carte en ligne,
+  inchangée, et la même avec le champ de la couleur ; la page Confidentialité lira l'une ou
+  l'autre selon ce que son hôte sert (lot C).
+- **La ligne de Confidentialité a sa propre empreinte** (`privacy_mascot` dans
+  `data/launch.json`, `scripts/launch.ts`) : « la couleur que tu lui as choisie » ne compte plus
+  dans l'empreinte de la page que la production sert — qui n'a pas bougé — et se relit à part.
+  **Elle est demandée à tout hôte qui sert la génération 2, l'aperçu compris** : c'est la seule
+  chose demandée à l'aperçu, parce qu'elle parle de ce qui s'écrit sur le téléphone d'un
+  visiteur. Sans date, sans nom de relecteur ou sur une ligne changée depuis, la porte refuse.
+- **Ses six teintes sont des rôles des deux jeux de couleurs**, dans un bloc à part
+  (`mascot-role`) et **une feuille à part**, générée (`src/styles/mascot2-tokens.css`) : la
+  feuille de toutes les pages, `tokens.css`, n'a pas changé d'un octet. Un test tient que ces
+  rôles sont la palette choisie par l'éditeur, et que la feuille suivie est celle que le script
+  donne. L'empreinte du dessin n'a pas bougé : la planche reste datée.
+- **Rien de servi ne connaît la génération 2** : la porte qui le tient nomme maintenant ses six
+  modules, et vérifie aussi le sens inverse — ils ne lisent de la génération 1 que cinq modules,
+  sans les modifier. (`storage-map.ts`, en ligne, n'est donc pas touché : la carte neuve vit à
+  côté.)
+- **Laissé tel quel** : le bloc `part-color` des tokens (2025, quatre parties), que plus rien ne
+  lit — son retrait attend le ménage (lot F).
+- **Preuves** : 640 tests (639 passent, 1 sauté depuis toujours), contraste, lint, types.
+  **Trois builds identiques, octet pour octet, à leurs références d'avant le chantier** : la
+  production (1 156 fichiers), l'aperçu (1 156), la build d'essai `dist-ask/` (1 156).
+- **Suite** : lot C — le bloc du jeu, sur la build d'essai `dist-mascot2/` seulement.

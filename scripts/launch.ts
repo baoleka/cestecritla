@@ -79,6 +79,15 @@ export interface LaunchFile extends DatedGestures {
     reviewed_by?: 'editor' | 'session';
     sha256: string | null;
   };
+  /**
+   * The same for the one line the second-generation mascot adds — the colour the player gave
+   * her (D17.3). Read apart, dated apart, and asked only of a host that serves her.
+   */
+  privacy_mascot?: {
+    reviewed_on: string | null;
+    reviewed_by?: 'editor' | 'session' | null;
+    sha256: string | null;
+  };
   note_fr: string;
 }
 
@@ -154,6 +163,13 @@ export function launchBlockers(inputs: LaunchInputs): string[] {
 export const isChatPrivacyKey = (key: string): boolean =>
   key.startsWith('privacy.chat.') || /^privacy\..+\.ask$/.test(key);
 
+/**
+ * A string of the privacy page that only a site serving the second-generation mascot shows:
+ * what the phone keeps of the colour given to her (`privacy.*.tint`, D17.3). Named so that it
+ * can be told apart without a list, like the chat's.
+ */
+export const isMascotPrivacyKey = (key: string): boolean => /^privacy\..+\.tint$/.test(key);
+
 const hashOf = (strings: Record<string, unknown>, keep: (key: string) => boolean): string =>
   canonicalHash(Object.fromEntries(Object.entries(strings).filter(([key]) => keep(key))));
 
@@ -164,12 +180,24 @@ const hashOf = (strings: Record<string, unknown>, keep: (key: string) => boolean
  * being redeployed, least of all for a correction.
  */
 export function privacyStringsHash(strings: Record<string, unknown>): string {
-  return hashOf(strings, (key) => key.startsWith('privacy.') && !isChatPrivacyKey(key));
+  return hashOf(
+    strings,
+    (key) => key.startsWith('privacy.') && !isChatPrivacyKey(key) && !isMascotPrivacyKey(key),
+  );
 }
 
 /** Fingerprint of what the privacy page adds where the field asks. */
 export function privacyChatStringsHash(strings: Record<string, unknown>): string {
   return hashOf(strings, isChatPrivacyKey);
+}
+
+/**
+ * Fingerprint of what the privacy page adds where the second-generation mascot is served. Read
+ * apart for the same reason as the chat's: a line that production does not show yet must not
+ * keep production from being redeployed (docs/discovery/PLAN-TORTUE.md §11.1).
+ */
+export function privacyMascotStringsHash(strings: Record<string, unknown>): string {
+  return hashOf(strings, isMascotPrivacyKey);
 }
 
 type Json = Record<string, unknown>;
@@ -257,6 +285,29 @@ function chatPrivacyBlockers(at: (path: string) => string): string[] {
     ? []
     : [
         `${LAUNCH_PATH}: the section « Quand tu demandes » of the privacy page is dated, and nothing says who re-read it — the editor, or the session: privacy_chat.reviewed_by (D16.63)`,
+      ];
+}
+
+/**
+ * What is missing for the line the second-generation mascot adds to the privacy page: re-read
+ * as it stands — a date and today's fingerprint — by someone the file names. Asked of every
+ * host that serves her, the preview first: it is the one validation a preview needs, because
+ * the line is about what is written on a visitor's phone.
+ */
+function mascotPrivacyBlockers(at: (path: string) => string): string[] {
+  const read = field(readObject(at(LAUNCH_PATH)), 'privacy_mascot');
+  if (
+    !isDate(field(read, 'reviewed_on')) ||
+    field(read, 'sha256') !== privacyMascotStringsHash(readObject(at(STRINGS_PATH)) ?? {})
+  ) {
+    return [
+      `${LAUNCH_PATH}: the line of the privacy page about the colour given to the mascot is not re-read as it stands: privacy_mascot (D17.3)`,
+    ];
+  }
+  return isReviewer(field(read, 'reviewed_by'))
+    ? []
+    : [
+        `${LAUNCH_PATH}: the line of the privacy page about the colour given to the mascot is dated, and nothing says who re-read it — the editor, or the session on his word: privacy_mascot.reviewed_by`,
       ];
 }
 
@@ -462,6 +513,9 @@ export function mascotBlockers(root = '.', host: MascotHost = 'apex'): string[] 
     }
     return out;
   }
+  // She writes one field more on a phone: wherever she is served, the page says so in words
+  // somebody re-read.
+  out.push(...mascotPrivacyBlockers(at));
   // Ahead of production, on the preview host alone: the place where a drawing is looked at.
   if (host === 'preview' && generationFor(mascot, 'apex') === 1) return out;
 

@@ -51,6 +51,12 @@ import {
   type Standing,
   type TurtleState,
 } from '../src/lib/mascot2.js';
+import {
+  MASCOT_TOKENS_CSS_PATH,
+  TOKENS_CSS_PATH,
+  buildMascotTokensCss,
+  buildTokensCss,
+} from './build-tokens.js';
 import { TOKEN_SETS, TURTLE_SVG_PATH, turtleColours } from './launch.js';
 import {
   FLASHES_PER_SECOND_MAX,
@@ -324,6 +330,45 @@ void test('her colours: the palette she wears passes — our line on every tint,
   palette.neutral.light.forEach((tint, index) => {
     assert.notEqual(tint, palette.neutral.dark[index]);
   });
+});
+
+void test('her tints are roles of the two token sets, in a stylesheet of their own', () => {
+  const palette = readPalette();
+  assert.ok(palette.chosen !== null);
+  const [main, neutral] = TOKEN_SETS;
+  interface Roles {
+    'mascot-role'?: Record<string, Record<string, string> | string | undefined>;
+  }
+  const names = [1, 2, 3, 4, 5, 6].map((n) => `mascot-tint-${String(n)}`);
+  for (const [path, set] of [
+    [main, palette.palettes[palette.chosen]],
+    [neutral, palette.neutral],
+  ] as const) {
+    assert.ok(set !== undefined);
+    const tokens = JSON.parse(readFileSync(path, 'utf8')) as Roles;
+    const roles = tokens['mascot-role'];
+    assert.ok(roles !== undefined, `${path} declares no mascot-role`);
+    // The palette the editor chose is what she wears: the same values, in the order of the book.
+    for (const theme of ['light', 'dark'] as const) {
+      const declared: Record<string, string> | string | undefined = roles[theme];
+      assert.ok(typeof declared === 'object');
+      assert.deepEqual(Object.keys(declared), names, `${path} ${theme}`);
+      assert.deepEqual(Object.values(declared), [...set[theme]], `${path} ${theme}`);
+    }
+    // The stylesheet of every page is built from the other roles, and knows nothing of these.
+    assert.ok(!buildTokensCss(tokens as never).includes('mascot'), `${path}: tokens.css names her`);
+    const hers = buildMascotTokensCss(tokens as never);
+    for (const name of names) assert.equal(hers.split(`--${name}:`).length - 1, 3, name);
+    assert.equal(hers.match(/--[a-z0-9-]+:/g)?.length, 18, 'six tints, in three places each');
+  }
+  // What is committed is what the script gives — for the main set, the one that is built.
+  const tokens = JSON.parse(readFileSync(main, 'utf8')) as never;
+  assert.equal(readFileSync(MASCOT_TOKENS_CSS_PATH, 'utf8'), buildMascotTokensCss(tokens));
+  assert.equal(readFileSync(TOKENS_CSS_PATH, 'utf8'), buildTokensCss(tokens));
+  assert.ok(!readFileSync(TOKENS_CSS_PATH, 'utf8').includes('mascot'));
+  // Every tint her stylesheet asks for is one that sheet defines, and the reverse.
+  const asked = new Set([...css.matchAll(/var\(--(mascot-tint-\d)\)/g)].map((m) => m[1] ?? ''));
+  assert.deepEqual([...asked].sort(), names);
 });
 
 void test('what the sheet says of the charter’s vives is what the measure says', () => {
@@ -834,15 +879,38 @@ void test('a validation is a date bound to what was looked at — or it is not t
   assert.ok(MASCOT2_PALETTE_PATH.length > 0);
 });
 
+/** The modules of the second generation: hers, and those of the game that remembers her colour. */
+const SECOND_GENERATION = [
+  'src/lib/mascot2.ts',
+  'src/styles/mascot2.css',
+  'src/styles/mascot2-tokens.css',
+  'src/lib/game-state2.ts',
+  'src/lib/game-goal.ts',
+  'src/lib/storage-map2.ts',
+];
+
 void test('nothing that is served knows her yet: no page, component or script imports her', () => {
   const tracked = execFileSync('git', ['ls-files', 'src'], { encoding: 'utf8' })
     .split('\n')
-    .filter((path) => /\.(?:astro|ts|css)$/.test(path))
-    .filter((path) => !['src/lib/mascot2.ts', 'src/styles/mascot2.css'].includes(path));
-  // An import of her module or of her stylesheet, or a read of her drawing.
+    .filter((path) => /\.(?:astro|ts|css)$/.test(path));
+  for (const path of SECOND_GENERATION) assert.ok(tracked.includes(path), `${path} is not tracked`);
+  // An import of one of her modules or of her stylesheet, or a read of her drawing.
   const knowsHer =
-    /from\s+['"][^'"]*\/mascot2(?:\.[a-z]+)?['"]|['"][^'"]*mascot2\.css['"]|mascot\/v2\//;
+    /from\s+['"][^'"]*\/(?:mascot2|game-state2|game-goal|storage-map2)(?:\.[a-z]+)?['"]|['"][^'"]*mascot2(?:-tokens)?\.css['"]|mascot\/v2\//;
   for (const path of tracked) {
+    if (SECOND_GENERATION.includes(path)) continue;
     assert.ok(!knowsHer.test(readFileSync(path, 'utf8')), `${path} imports her`);
+  }
+  // …and her own modules read the first generation's without changing a line of them: these
+  // imports are all there is between the two.
+  const MAY_IMPORT = new Set([
+    ...['./game-engine.js', './game-state.js', './storage-map.js', './turtle.js'],
+    ...['./mascot-mode.js', './mascot2.js', './game-state2.js'],
+  ]);
+  for (const path of SECOND_GENERATION.filter((p) => p.endsWith('.ts'))) {
+    const source = readFileSync(path, 'utf8');
+    for (const [, from] of source.matchAll(/from\s+['"]([^'"]+)['"]/g)) {
+      assert.ok(MAY_IMPORT.has(from ?? ''), `${path} imports ${from ?? ''}`);
+    }
   }
 });

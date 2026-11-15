@@ -181,6 +181,44 @@ export function buildTokensCss(tokens: { [k: string]: Json }): string {
   return out.join('\n');
 }
 
+/**
+ * The colours the player may give the second-generation mascot (D17.3, D17.16), as a stylesheet
+ * of their own: `mascot-role` in the token file, six tints in light and in dark. It follows the
+ * themes exactly as tokens.css does, and is imported by her alone — so that the stylesheet of
+ * every page does not carry a byte of them while she is not served
+ * (docs/discovery/PLAN-TORTUE.md §11.1). Empty for a token file that declares none.
+ */
+export function buildMascotTokensCss(tokens: { [k: string]: Json }): string {
+  const roles = obj(tokens, 'mascot-role');
+  const block = (theme: 'light' | 'dark'): string[] =>
+    Object.entries(obj(roles, theme)).flatMap(([role, value]) =>
+      !isMeta(role) && typeof value === 'string' ? [decl(role, resolveRefs(value, tokens))] : [],
+    );
+  const [light, dark] = [block('light'), block('dark')];
+  if (light.length === 0 && dark.length === 0) return '';
+  return [
+    '/* GENERATED from design/tokens.json (mascot-role) by scripts/build-tokens.ts — do not edit. */',
+    ':root {',
+    ...light,
+    '}',
+    '',
+    '@media (prefers-color-scheme: dark) {',
+    '  :root:not([data-theme="light"]) {',
+    ...dark.map((line) => `  ${line}`),
+    '  }',
+    '}',
+    '',
+    ':root[data-theme="dark"] {',
+    ...dark,
+    '}',
+    '',
+  ].join('\n');
+}
+
+/** Where the two stylesheets go. */
+export const TOKENS_CSS_PATH = 'src/styles/tokens.css';
+export const MASCOT_TOKENS_CSS_PATH = 'src/styles/mascot2-tokens.css';
+
 const isMain = process.argv[1]?.endsWith('build-tokens.ts') ?? false;
 if (isMain) {
   const root = process.cwd();
@@ -194,7 +232,9 @@ if (isMain) {
   };
   const css = buildTokensCss(tokens);
   mkdirSync(resolve(root, 'src/styles'), { recursive: true });
-  writeFileSync(resolve(root, 'src/styles/tokens.css'), css);
+  writeFileSync(resolve(root, TOKENS_CSS_PATH), css);
+  // Her tints, apart: the same themes, another file.
+  writeFileSync(resolve(root, MASCOT_TOKENS_CSS_PATH), buildMascotTokensCss(tokens));
   console.log(
     `tokens.css: ${String(css.split('\n').length)} lines, ${String(Buffer.byteLength(css))} B` +
       (neutral ? ' — NEUTRAL SET (rebrand light, D0.17)' : ''),

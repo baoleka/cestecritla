@@ -1,0 +1,29 @@
+/* GENERATED from design/tokens.json (mascot-role) by scripts/build-tokens.ts — do not edit. */
+:root {
+  --mascot-tint-1: #3AADEE;
+  --mascot-tint-2: #FFB87A;
+  --mascot-tint-3: #7AECB6;
+  --mascot-tint-4: #FFE566;
+  --mascot-tint-5: #F9A89E;
+  --mascot-tint-6: #E5CBFF;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --mascot-tint-1: #004880;
+    --mascot-tint-2: #B04E00;
+    --mascot-tint-3: #186842;
+    --mascot-tint-4: #6B5100;
+    --mascot-tint-5: #8F120A;
+    --mascot-tint-6: #4C0297;
+  }
+}
+
+:root[data-theme="dark"] {
+  --mascot-tint-1: #004880;
+  --mascot-tint-2: #B04E00;
+  --mascot-tint-3: #186842;
+  --mascot-tint-4: #6B5100;
+  --mascot-tint-5: #8F120A;
+  --mascot-tint-6: #4C0297;
+}

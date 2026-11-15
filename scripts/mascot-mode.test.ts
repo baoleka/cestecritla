@@ -17,11 +17,14 @@ import { generationFor } from '../src/lib/mascot-mode.js';
 import { MASCOT_PATH } from './build-mode.js';
 import {
   LAUNCH_PATH,
+  STRINGS_PATH,
   TOKEN_SETS,
   TURTLE_CSS_PATH,
   TURTLE_SVG_PATH,
   TURTLE_VALIDATION_PATH,
   mascotBlockers,
+  privacyMascotStringsHash,
+  privacyStringsHash,
   turtleFingerprint,
 } from './launch.js';
 import {
@@ -161,7 +164,10 @@ void test('the launch gate reads the validation of the generation a host is give
       dark: ['#AAAAAB', '#BBBBBC', '#CCCCCD', '#DDDDDE', '#EEEEEF', '#FFFFFE'],
     },
   };
+  // The kit of a site: a page of privacy, and the one line she adds to it.
+  const kit = { 'privacy.lead': 'Rien ne part.', 'privacy.game.field.tint': 'sa couleur' };
   const root = tree({
+    [STRINGS_PATH]: kit,
     [TURTLE_SVG_PATH]: '<svg xmlns="http://www.w3.org/2000/svg"/>',
     [TURTLE_CSS_PATH]: '.turtle { display: block; }',
     [MASCOT2_SVG_PATH]: '<svg xmlns="http://www.w3.org/2000/svg" class="mascot"/>',
@@ -187,11 +193,37 @@ void test('the launch gate reads the validation of the generation a host is give
   assert.equal(blockers('apex'), '');
   assert.equal(blockers('preview'), '');
 
-  // The preview host ahead: production still stands on the turtle's record, and nothing of the
-  // second generation's validation is asked of the host where she is tried.
+  // The preview host ahead: production still stands on the turtle's record. Of the host where
+  // she is tried, one thing is asked and one only — not her sheet, not the editor's decision:
+  // the line of the privacy page about what she writes on a phone, re-read as it stands.
   write(MASCOT_PATH, { generation: 1, preview_generation: 2, decided_on: null, decided_by: null });
   assert.equal(blockers('apex'), '');
+  assert.match(
+    blockers('preview'),
+    /^data\/launch\.json: the line of the privacy page about the colour given to the mascot is not re-read as it stands: privacy_mascot \(D17\.3\)$/,
+  );
+  const reread = (more: Record<string, unknown> = {}): void => {
+    write(LAUNCH_PATH, {
+      privacy_mascot: {
+        reviewed_on: '2026-12-02',
+        reviewed_by: 'session',
+        sha256: privacyMascotStringsHash(kit),
+        ...more,
+      },
+    });
+  };
+  reread();
   assert.equal(blockers('preview'), '');
+  // A date nobody signs is not a reading; a line changed since is not the line that was read.
+  reread({ reviewed_by: null });
+  assert.match(blockers('preview'), /nothing says who re-read it .* privacy_mascot\.reviewed_by$/);
+  reread({ sha256: privacyMascotStringsHash({ ...kit, 'privacy.game.field.tint': 'sa teinte' }) });
+  assert.match(blockers('preview'), /not re-read as it stands: privacy_mascot/);
+  reread();
+  assert.equal(blockers('preview'), '');
+  // That line is read apart: it is not in the fingerprint of the page production serves today.
+  assert.equal(privacyStringsHash(kit), privacyStringsHash({ 'privacy.lead': 'Rien ne part.' }));
+  assert.notEqual(privacyMascotStringsHash(kit), privacyMascotStringsHash({}));
   // …and the turtle's own record still counts there: retouch her, and production is held.
   writeFileSync(join(root, TURTLE_CSS_PATH), '.turtle { display: inline; }');
   assert.match(blockers('apex'), /tortue|turtle|drawing changed after the sheet was validated/);
@@ -225,6 +257,14 @@ void test('the launch gate reads the validation of the generation a host is give
   write(MASCOT_PATH, { generation: 2, decided_on: '2026-12-04', decided_by: 'editor' });
   assert.equal(blockers('apex'), '');
   assert.equal(blockers('preview'), '');
+  // …and production is held by the line too, like the preview before it.
+  reread({ reviewed_on: null });
+  assert.match(
+    blockers('apex'),
+    /^data\/launch\.json: the line of the privacy page .* privacy_mascot/,
+  );
+  reread();
+  assert.equal(blockers('apex'), '');
 
   // A retouch of her drawing, of her stylesheet or of her colours un-validates her.
   writeFileSync(join(root, MASCOT2_CSS_PATH), '.mascot { display: inline; }');

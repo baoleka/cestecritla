@@ -49,7 +49,7 @@ const STEPS: readonly Step[] = [
     name: 'tokens',
     script: 'scripts/build-tokens.ts',
     reads: ['design/tokens.json'],
-    writes: ['src/styles/tokens.css'],
+    writes: ['src/styles/tokens.css', 'src/styles/mascot2-tokens.css'],
   },
   {
     name: 'fonts',

@@ -134,5 +134,24 @@
       "turtle-eye": "{color.encre}",
       "turtle-accent": "{color.foret-claire}"
     }
+  },
+  "mascot-role": {
+    "$description": "Les couleurs du flamant dans le jeu neutre (D14.12, D17.3) : six teintes qui ne reprennent ni la charte ni le site officiel, mêmes rôles que design/tokens.json, émises dans la même feuille à part (src/styles/mascot2-tokens.css). Valeurs : design/mascot/v2/palette.json (« neutral »).",
+    "light": {
+      "mascot-tint-1": "#A9C9EC",
+      "mascot-tint-2": "#F0C79B",
+      "mascot-tint-3": "#A6DBBE",
+      "mascot-tint-4": "#EADF96",
+      "mascot-tint-5": "#EDB4A6",
+      "mascot-tint-6": "#C8CDD9"
+    },
+    "dark": {
+      "mascot-tint-1": "#1C3F6E",
+      "mascot-tint-2": "#6B4420",
+      "mascot-tint-3": "#17573A",
+      "mascot-tint-4": "#57501A",
+      "mascot-tint-5": "#6E2E24",
+      "mascot-tint-6": "#3B4254"
+    }
   }
 }
