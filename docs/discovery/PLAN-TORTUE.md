@@ -655,3 +655,20 @@ l'aperçu (autre adresse, autre stockage) : il est tenu par des tests, pas par u
   inchangé, et `dist-mascot2/` lui est identique tant qu'aucune page ne connaît la génération 2.
   622 tests ; le site 44 contrôles et le jeu 117, sous Chromium ; les déploiements à blanc de la
   production et de l'aperçu passent.
+
+### 15 novembre 2026 (soir) — l'éditeur a regardé la planche en images fixes (D17.16, D17.17)
+
+- Trois questions posées en dialogue, trois réponses : **« Il tient, on passe au mouvement »**
+  (le dessin) ; **« Les six familles officielles »** (la palette — l'option disait que le corail
+  de la partie 5 passe la porte « ni rose » de peu et se lit comme un rose saumon) ;
+  **« Étoiles et traits, comme dessiné »** (la constellation, qui s'écarte de la lettre de
+  D17.15).
+- `design/mascot/v2/palette.json` : « chosen » : « official ». La planche ne montre plus que la
+  palette retenue, avec ses mesures, et dit en une phrase pourquoi les vives de la charte ont été
+  écartées.
+- Le quatrième emprunt à la campagne est écrit dans `design/identity-decision.md` §5.2 (d),
+  marqué « pas en ligne » : `/a-propos` ne le dira que le jour où la génération 2 est servie.
+- **Rien n'est daté** (`design/mascot/v2/validation.json` reste à null) : la validation se pose
+  sur la planche en mouvement, parce que le mouvement retouche la feuille de style et ferait
+  tomber une date posée aujourd'hui.
+- Les lots 0, A1 et 1 sont poussés sur `origin main` : le dessin est validé par l'éditeur.

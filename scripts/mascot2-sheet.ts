@@ -208,7 +208,9 @@ export function sheet(): string {
     ([0, 1, 2, 3, 4, 5, 6] as const).map((tint) =>
       figure(tint === 0 ? 'pâle' : `partie ${String(tint)}`, size, { state, tint }),
     );
-  const palettes = names.map((name) => {
+  // Before the editor has chosen, every candidate is shown; after, his palette alone.
+  const compared = palette.chosen === null ? names : [palette.chosen];
+  const palettes = compared.map((name) => {
     const set = palette.palettes[name];
     if (set === undefined) return '';
     const lightSet = colours(main, 'light', set.light);
@@ -254,7 +256,7 @@ export function sheet(): string {
     row('À 96 px (à côté du mot), puis à 80 px (petits écrans)', light, [...five(96), ...five(80)]),
     row('Sur fond sombre', dark, five(240)),
     row('', dark, [...five(96), ...five(80)]),
-    `<section style="${light}"><h2>Sa couleur : deux palettes à départager</h2><p class="note">Le flamant naît pâle ; le joueur lui donne une couleur parmi six, une par partie du livre, ou la laisse pâle. Chaque valeur est mesurée : notre trait posé sur la teinte doit faire ${String(LINE_MIN)}:1 au moins, et aucune teinte ne tombe dans le mauve, le prune ou le rose que le dessin refuse. La tortue, elle, garde ses violets.</p></section>`,
+    `<section style="${light}"><h2>${palette.chosen === null ? 'Sa couleur : deux palettes à départager' : 'Sa couleur : la palette retenue'}</h2><p class="note">Le flamant naît pâle ; le joueur lui donne une couleur parmi six, une par partie du livre, ou la laisse pâle. Chaque valeur est mesurée : notre trait posé sur la teinte doit faire ${String(LINE_MIN)}:1 au moins, et aucune teinte ne tombe dans le mauve, le prune ou le rose que le dessin refuse. La tortue, elle, garde ses violets.${palette.chosen === null ? '' : ' Les six vives de la charte ont été écartées : notre trait disparaît sur trois d’entre elles, en clair comme en sombre, et le vif rose est dans la zone refusée.'}</p></section>`,
     ...palettes,
     row(
       'Ses arcs la suivent : sur la carapace, puis sur l’aile',
