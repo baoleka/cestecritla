@@ -285,7 +285,8 @@ const FILLERS: ReadonlySet<string> = new Set(
    nulles bien mal bon bonne mauvais mauvaise grand grande petit petite nouveau nouvelle
    nouveaux nouvelles tout tous toute toutes rien chose choses truc trucs reponse reponses
    question questions avis an ans annee annees jour jours fin debut paye payes payee payees
-   payer ecrit ecrire officiel officielle sorte sortes facon cote vie`
+   payer ecrit ecrire officiel officielle sorte sortes facon cote vie site sites combien
+   coute coutent couter coutera couterait humain humains finance financer`
     .split(/\s+/)
     .filter((word) => word !== ''),
 );

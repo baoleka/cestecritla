@@ -26,7 +26,11 @@
   max-block-size: none;
   margin: 0 auto;
   padding: 0;
-  overflow: hidden;
+  /* What scrolls is the thread (.c-scroll). The sheet itself scrolls only where its frame
+     alone is taller than the screen — 320 px wide with text at 200 % —, so that « Effacer la
+     conversation » is never cut off under the edge (second review of 15/11/2026). */
+  overflow: hidden auto;
+  overscroll-behavior: contain;
   border: 0;
   border-block-start: 2px solid var(--brand);
   border-radius: var(--radius-m) var(--radius-m) 0 0;
@@ -87,7 +91,8 @@
 .c-scroll {
   position: relative;
   flex: 1 1 auto;
-  min-block-size: 0;
+  /* A few lines of the thread stay in view whatever the frame takes. */
+  min-block-size: 4rem;
   padding: var(--space-3) var(--space-4);
   overflow-y: auto;
   overscroll-behavior: contain;

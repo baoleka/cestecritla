@@ -70,6 +70,21 @@ void test('an acronym a visitor types in small letters is found by the wording t
   assert.deepEqual(ids(termsIn(['c quoi le cap'], ALL)), []);
 });
 
+void test('typed all in capitals, a word says nothing of being an acronym', () => {
+  // « QUEL CAP POUR LA FRANCE ? » asks about a heading, not about the diploma (second review).
+  assert.deepEqual(ids(termsIn(['QUEL CAP POUR LA FRANCE ?'], ALL)), []);
+  assert.deepEqual(ids(termsIn(['C’EST QUOI LE CAP ?'], ALL)), []);
+  assert.deepEqual(explainedFor('C’EST QUOI LE CAP ?', [], ALL), []);
+  // What the file lets be found in any case is still found…
+  assert.deepEqual(ids(termsIn(['C’EST QUOI LE SMIC ?'], ALL)), ['smic']);
+  assert.deepEqual(ids(termsIn(['ET LA T2A À L’HÔPITAL'], ALL)), ['t2a']);
+  // …a word alone is read as written: that is how one asks about an acronym…
+  assert.deepEqual(ids(termsIn(['CAP'], ALL)), ['cap']);
+  assert.deepEqual(ids(termsIn(['CAP ?'], ALL)), ['cap']);
+  // …and a sentence that holds one acronym among small letters is not typed in capitals.
+  assert.deepEqual(ids(termsIn(['Un CAP en deux ans.'], ALL)), ['cap']);
+});
+
 void test('a term in plain letters is found whatever the case, the accents, the apostrophe and the plural', () => {
   for (const text of [
     'Un moratoire sur les fermetures.',

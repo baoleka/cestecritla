@@ -27,6 +27,7 @@ import {
   MIN_SHARE_OF_BEST,
   asksAboutSite,
   asksOffTopic,
+  rowsFor,
   rowsOf,
 } from '../src/lib/chat-local.js';
 import { fillerOnly, lookAlikeOnly } from '../src/lib/search-core.js';
@@ -211,6 +212,28 @@ void test('a measure found only by a word that says nothing of a subject is no a
   );
 });
 
+void test('a recognised objection shows the measures its written answer rests on', () => {
+  const all = (): boolean => true;
+  const hits = [
+    { id: A, score: 10 },
+    { id: B, score: 9 },
+  ];
+  // No objection recognised: what the search ranks best.
+  assert.deepEqual(rowsFor([], hits, all), [A, B]);
+  // An objection: its measures, in its order, three at most, each once — whatever was found.
+  assert.deepEqual(rowsFor([C, D, C, A, B], hits, all), [C, D, A]);
+  assert.deepEqual(rowsFor([C], [], all), [C]);
+  // A measure this state of the book does not know is left out; none is known: the search.
+  assert.deepEqual(
+    rowsFor([C, D], hits, (id) => id !== C),
+    [D],
+  );
+  assert.deepEqual(
+    rowsFor([C], hits, (id) => id !== C),
+    [A, B],
+  );
+});
+
 void test('an insult, a judgement asked about a person or a party: one sentence of ours, like a request for a vote', () => {
   for (const question of [
     'Mélenchon est-il antisémite ?',
@@ -249,6 +272,84 @@ void test('an insult, a judgement asked about a person or a party: one sentence 
       question === 'les salauds de pauvres, comme disait l’autre',
       question,
     );
+  }
+});
+
+void test('a charge needs no verb to be refused — and a name, a position, a swear word refuse nothing (second review)', () => {
+  // What the first rules let through for want of « est-il »: each brought a measure.
+  for (const question of [
+    'Mélenchon antisémite ?',
+    'melenchon antisemite',
+    'MELENCHON EST IL ANTISEMITE',
+    'Pourquoi Mélenchon est antisémite ?',
+    'Il paraît que Mélenchon est antisémite',
+    'LFI antisémite ?',
+    'Mélanchon est un dictateur',
+    'Mélenchon = dictateur ?',
+    'Mélenchon pro-russe ?',
+    'LFI soutient le Hamas',
+    'Mélenchon islamo-gauchiste ?',
+    'Mélenchon menteur',
+    'Mélenchon corrompu ?',
+    'RN fasciste',
+    'Zemmour raciste',
+    'Ton avis sur Bardella ?',
+    'Ton avis sur Mélenchon',
+    'Bardella ou Mélenchon ?',
+    'Mélenchon vs Le Pen',
+    'Mélenchon meilleur que Macron ?',
+    'Mélenchon aime Poutine ?',
+    'Mélenchon et Poutine',
+    'Mélenchon a 75 ans',
+    'Mélenchon est trop vieux',
+    'perquisition Mélenchon',
+    'Mélenchon et l’affaire des assistants parlementaires',
+    'Macron démission',
+    'putain de site',
+    'bande de gauchistes',
+    'bande de clowns',
+    'sale gauchiste',
+    'vous êtes des escrocs',
+    'c’est nul à chier',
+  ]) {
+    assert.ok(asksOffTopic(question), question);
+  }
+  // What they refused, and is a question about the book — or a search like any other.
+  for (const question of [
+    // a position asked of the candidate or the movement of the book
+    'Mélenchon est pour le RIC ?',
+    'Mélenchon est-il pour l’euthanasie ?',
+    'Mélenchon est d’accord avec le RIC ?',
+    'Mélenchon est favorable au cannabis ?',
+    'La France insoumise est-elle pour la VIe République ?',
+    'les insoumis sont contre la corrida ?',
+    'Si Mélenchon est élu, le SMIC augmente ?',
+    // a name next to a subject
+    'Mélenchon et l’école',
+    'Le Pen et la retraite',
+    'Macron retraites 64 ans',
+    'Netanyahou mandat d’arrêt CPI',
+    'Mélenchon veut la retraite à 60 ans',
+    'LFI veut combattre le racisme',
+    'Mélenchon dit quoi sur l’antisémitisme ?',
+    'LFI et l’antisémitisme',
+    // two names, one of which only labels a law; or the book itself is asked
+    'Mélenchon veut-il abroger la réforme Macron ?',
+    'Macron est contre le RIC, et le programme ?',
+    'ce que dit le programme sur Macron',
+    'Que dire du RN dans le programme ?',
+    // words that are also names, swear words that insult nobody
+    'la borne de recharge est-elle gratuite ?',
+    'la renaissance industrielle est-elle prévue ?',
+    'Les écologistes sont d’accord ?',
+    'PS est-ce que le programme parle des retraites',
+    'c’est la merde pour payer mon loyer',
+    'j’en ai marre, le smic c’est de la merde',
+    'un salaire de merde',
+    'la bande de Gaza',
+    'les dictatures et la dette odieuse',
+  ]) {
+    assert.ok(!asksOffTopic(question), question);
   }
 });
 
@@ -296,6 +397,74 @@ void test('a question about the site itself is told from a question about the pr
     'officiers de police',
     'pour qui voter',
     'retraite',
+  ]) {
+    assert.ok(!asksAboutSite(question), question);
+  }
+});
+
+void test('the site is asked about in many more words than « qui a écrit » (second review)', () => {
+  for (const question of [
+    // « ce site », wherever it stands
+    'Qui finance ce site ?',
+    'C’est quoi ce site ?',
+    'c’est officiel ce site ?',
+    'Comment ça marche ce site ?',
+    'Ce site est partisan ?',
+    'ce site pue',
+    'C’EST QUOI LE BUT DE CE SITE ?',
+    // who answers, who re-read
+    'c’est une ia ?',
+    'Est-ce une IA ?',
+    'C’est une IA qui répond ?',
+    'Il y a une IA derrière ?',
+    'Les réponses sont écrites par une IA ?',
+    'Un humain a relu ?',
+    'Un humain a vérifié ces phrases ?',
+    'Quelqu’un a relu ces phrases ?',
+    'Qui a relu ?',
+    'Qui vérifie ?',
+    'Qui se cache derrière ?',
+    'D’où viennent ces réponses ?',
+    'Vos sources ?',
+    // whose side, whose money
+    'Qui vous paie ?',
+    'Combien vous êtes payés ?',
+    'Vous êtes militants ?',
+    'Êtes-vous insoumis ?',
+    'Vous êtes neutres ?',
+    // official, reliable, free
+    'C’est le programme officiel ?',
+    'Est-ce le programme officiel ?',
+    'c officiel ?',
+    'C’est le programme de qui ?',
+    'C’est fiable ?',
+    'C’est gratuit ?',
+    'Qui a rédigé l’Avenir en commun ?',
+    // what is kept
+    'Vous gardez mes données ?',
+    'Vous enregistrez mes questions ?',
+    'Mes questions sont enregistrées ?',
+    'Où vont mes données ?',
+  ]) {
+    assert.ok(asksAboutSite(question), question);
+  }
+  // The same words, asked of the programme: these keep their measures.
+  for (const question of [
+    'Est-ce un vrai programme de rupture ?',
+    'Un vrai programme écologique ?',
+    'le vrai programme de la gauche',
+    'faut-il signaler qu’une IA a écrit un texte ?',
+    'le programme protège-t-il mes données ?',
+    'protéger mes données personnelles',
+    'c’est quoi ce truc de planification ?',
+    'c’est fiable le nucléaire ?',
+    'est-ce que c’est gratuit la cantine ?',
+    'les sources d’énergie',
+    'le site de Bure',
+    'qui vérifie les comptes des entreprises ?',
+    'qui a écrit la Constitution ?',
+    'Le programme est-il financé ?',
+    'Combien coûte le programme ?',
   ]) {
     assert.ok(!asksAboutSite(question), question);
   }
@@ -474,8 +643,23 @@ void test('asking whom to vote for is answered on the phone; a question about vo
     'C’est quoi le référendum d’initiative citoyenne ?',
     'Et les retraites ?',
     '',
+    // the book has a measure on polls: asking about it is a question (second review)
+    'interdire les sondages avant l’élection',
+    'les sondages politiques seront-ils encadrés ?',
   ]) {
     assert.ok(!asksForVote(question), question);
+  }
+  // A vote, a forecast or a ranking asked with a name (second review of 15/11/2026).
+  for (const question of [
+    'je vote Mélenchon ?',
+    'Pourquoi voter LFI ?',
+    'Pourquoi voter Mélenchon ?',
+    'Qui est le meilleur candidat ?',
+    'Mélenchon va gagner ?',
+    'Mélenchon a combien dans les sondages ?',
+    'sondage présidentielle',
+  ]) {
+    assert.ok(asksForVote(question), question);
   }
 });
 

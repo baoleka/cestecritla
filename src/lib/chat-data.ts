@@ -15,6 +15,9 @@ import { canonicalHash } from './fingerprint.ts';
 import { knownOf, notionsIn, type NotionEntry } from './notions.ts';
 import { parseTerms, type TermEntry } from './terms.ts';
 
+/** A key measure, a measure or a sub-measure — not a paragraph of the book. */
+const MEASURE = /-[km]\d{2}(?:\.s\d{1,2})?$/;
+
 /** `/data/clair-<fingerprint>.json`: the long texts, by the identifier the phone recognised. */
 export interface ChatPlain {
   cards: Record<string, { plain: string }>;
@@ -57,12 +60,21 @@ export function chatPlain(): { data: ChatPlain; fingerprint: string } {
  * objections — and nothing longer. The Worker recognises with the same function, from the same
  * two files (src/lib/notions.ts, `knownOf`).
  */
-export function recognisable(): { objections: ReviewedEntry[]; cards: NotionEntry[] } {
-  const known = knownOf(cards(), ripostes());
+export function recognisable(): {
+  objections: (ReviewedEntry & { supports: string[] })[];
+  cards: NotionEntry[];
+} {
+  const written = ripostes();
+  const known = knownOf(cards(), written);
   return {
     objections: known.objections.map(({ slug, objection }) => ({
       slug,
       objection: prose(objection),
+      // The measures the answer rests on, in its order — a paragraph of the book has no
+      // sentence of ours, and is left to the page of the answer.
+      supports: (written.find((entry) => entry.slug === slug)?.supports ?? [])
+        .map((support) => support.id)
+        .filter((id) => MEASURE.test(id)),
     })),
     cards: known.cards.map(({ id, term }) => ({ id, term })),
   };

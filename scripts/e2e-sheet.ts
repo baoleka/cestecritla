@@ -561,6 +561,8 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       '…with where to read more, and no measure next to it',
       (await page.locator(`${LAST} .c-about a[href="/a-propos/"]`).count()) === 1 &&
         (await page.locator(`${LAST} .c-about a[href="/methodologie/#demander"]`).count()) === 1 &&
+        (await page.locator(`${LAST} .c-about a[href="/confidentialite/#demander"]`).count()) ===
+          1 &&
         (await count(`${LAST} .c-gists`)) === 0 &&
         (await count(`${LAST} .c-terms`)) === 0,
     );
@@ -577,6 +579,55 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         (await count(`${LAST} .c-gists`)) === 0 &&
         /hors des équipes de campagne/.test(paid),
       paid.slice(0, 200),
+    );
+
+    // --- 7 ter. what the second review photographed (15/11/2026): a charge with no verb, a
+    // vote asked with a name, the site asked about in other words — and a position, which is
+    // a question about the book
+    const beforeCharges = posted.gists.length;
+    for (const charge of ['Mélenchon antisémite ?', 'Mélanchon est un dictateur']) {
+      const refused = await ask(charge);
+      check(
+        `« ${charge} » gets no measure`,
+        /Ici, on ne parle que du programme/.test(refused) &&
+          (await count(`${LAST} .c-gists`)) === 0,
+        refused.slice(0, 120),
+      );
+    }
+    const why = await ask('Pourquoi voter Mélenchon ?');
+    check(
+      'a vote asked with a name is a vote asked',
+      /Ici, on ne parle que du programme/.test(why) && (await count(`${LAST} .c-gists`)) === 0,
+      why.slice(0, 120),
+    );
+    const machine = await ask('c’est une ia ?');
+    check(
+      '« c’est une ia ? » is answered by the site: no AI answers live',
+      (await count(`${LAST} .c-about`)) === 1 &&
+        (await count(`${LAST} .c-gists`)) === 0 &&
+        /aucune IA ne répond en direct/.test(machine),
+      machine.slice(0, 160),
+    );
+    check('none of those sent anything', posted.gists.length === beforeCharges);
+    const position = await ask('Mélenchon est pour le RIC ?');
+    check(
+      'a position asked of the candidate of the book is a question about the book',
+      (await count(`${LAST} .c-gists`)) === 1 && !/Ici, on ne parle que/.test(position),
+      position.slice(0, 160),
+    );
+    // A recognised objection: the measures our written answer rests on, not what its words find.
+    const sentSoFar = posted.gists.length;
+    await ask('Ils veulent sortir de l’UE et de l’euro');
+    const objected = JSON.parse(posted.gists[sentSoFar] ?? '{}') as { ids?: string[] };
+    const rests = await page.evaluate<string[]>(
+      "JSON.parse(document.querySelector('#chat-config').textContent).objections.find((o) => o.slug === 'europe').supports",
+    );
+    check(
+      'a recognised objection shows « En clair », then the measures its answer rests on',
+      (await count(`${LAST} .c-plain`)) === 1 &&
+        rests.length >= 2 &&
+        JSON.stringify(objected.ids) === JSON.stringify(rests.slice(0, 3)),
+      `${JSON.stringify(objected.ids)} / ${JSON.stringify(rests)}`,
     );
 
     // --- 8. nothing is written on the phone; the thread empties

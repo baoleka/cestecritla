@@ -121,12 +121,25 @@ interface Span {
   end: number;
 }
 
+/**
+ * A text typed all in capitals: there a word in capitals says nothing of being an acronym —
+ * « C'EST QUOI LE BUT ? » asks about a goal, not about the diploma (second review of
+ * 15/11/2026). One word alone is still read as written: « BAC » is how one asks about it.
+ */
+const shouted = (text: string): boolean =>
+  text === text.toUpperCase() && (text.match(/[A-ZÀ-ÖØ-Þ]{2,}/g) ?? []).length >= 2;
+/** An acronym made of letters alone — « CAP », « BUT » — is what capitals make of any word. */
+const LETTERS_ALONE = /^[A-Za-zÀ-ÖØ-öø-ÿ]+$/;
+
 /** Every place where one of the wordings of an entry stands in a text. */
-function spansOf(entry: TermEntry, text: string, foldedText: string): Span[] {
+function spansOf(entry: TermEntry, text: string, foldedText: string, loud: boolean): Span[] {
   const spans: Span[] = [];
   for (const wording of [entry.term, ...(entry.aliases ?? [])]) {
     if (wording.trim() === '') continue;
     const { pattern, asWritten } = readingOf(wording, entry.anyCase === true);
+    // In capitals throughout, a word of letters alone is found only where any case finds it:
+    // « T2A » and « 49.3 » are still themselves.
+    if (asWritten && loud && LETTERS_ALONE.test(wording)) continue;
     for (const found of (asWritten ? text : foldedText).matchAll(pattern)) {
       // The first group is what stands before the word: the word starts after it.
       const at = found.index + (found[1] ?? '').length;
@@ -154,8 +167,9 @@ interface Located {
 function locate(raw: string, entries: readonly TermEntry[]): Located[] {
   const text = raw.normalize('NFC');
   const lower = folded(text);
+  const loud = shouted(text);
   const hits = entries
-    .map((entry) => ({ entry, spans: spansOf(entry, text, lower) }))
+    .map((entry) => ({ entry, spans: spansOf(entry, text, lower, loud) }))
     .filter((hit) => hit.spans.length > 0);
   const found: Located[] = [];
   for (const hit of hits) {

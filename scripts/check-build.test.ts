@@ -280,6 +280,31 @@ void test('the script of the sheet is small, and fetched at the first press — 
   assert.match(importers[0] ?? '', /Search\.astro/);
 });
 
+void test('the sheet is told, for each of our fifteen answers, the measures it rests on', () => {
+  // A recognised objection shows these measures, not what its words find (src/lib/chat-local.ts,
+  // `rowsFor`). Read in the test build of the sheet, where the configuration is in the page.
+  const home = 'dist-gists/index.html';
+  if (!existsSync(home)) return;
+  const island = /<script type="application\/json" id="chat-config">([^<]*)<\/script>/.exec(
+    read(home),
+  )?.[1];
+  assert.ok(island !== undefined, 'the configuration of the sheet is not in the page');
+  const config = JSON.parse(island) as { objections: { slug: string; supports: string[] }[] };
+  const manifest = JSON.parse(read('data/2026/manifest.json')) as {
+    sections: { items: { id: string; kind: string }[] }[];
+  };
+  const measures = new Set(
+    manifest.sections.flatMap((section) =>
+      section.items.filter((item) => item.kind !== 'paragraph').map((item) => item.id),
+    ),
+  );
+  assert.equal(config.objections.length, 15);
+  for (const { slug, supports } of config.objections) {
+    assert.ok(supports.length >= 2, `${slug}: ${String(supports.length)} measure(s)`);
+    for (const id of supports) assert.ok(measures.has(id), `${slug}: ${id} is not a measure`);
+  }
+});
+
 void test('fonts delivered stay under the P8 budget of 75 KB', () => {
   if (skip) return;
   const fonts = files.filter((f) => f.endsWith('.woff2') || f.endsWith('.woff'));

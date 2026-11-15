@@ -58,6 +58,12 @@ l'éditeur, les phrases cessent d'être servies le 1er janvier 2027 à 0 h, heur
 (D16.65) — la dernière ligne du §5 n'est plus « ouverte sans rien derrière » : son silence a
 maintenant un effet, le plus prudent.
 
+**Le texte du livre n'est plus chez Cloudflare** (15 novembre, 1 h 31 UTC, avant toute
+ouverture en production) : la base `cestecritla-ask` ne tient plus que nos phrases — une par
+mesure, des textes à nous. Ce que le registre (§2) et l'analyse d'impact (§3) disent d'un texte
+tiers déposé chez un sous-traitant vaut pour la période du 13 au 15 novembre ; l'historique de
+la base le garde restaurable sept jours (offre gratuite, documentation lue le 15 novembre).
+
 ## 1. Le geste, depuis D16.53
 
 | Geste du visiteur | Ce qui part | Vers qui | Ce qui est gardé |

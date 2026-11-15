@@ -1208,3 +1208,55 @@ rien : ce jour-là à 0 h, heure de Paris, le Worker cesse de les servir, sans d
 portée : R43) ; lire les vingt textes à la place de l'éditeur (R44) ; un lien vers nos réponses
 pour une objection reformulée (mesuré, insuffisant tel quel : D16.64) ; un vrai lecteur d'écran,
 de vrais téléphones.
+
+### 15 novembre, 2 h 40 — l'aperçu redéployé, le texte du livre retiré de la base
+
+- **Poussé** : `60d5a87`, CI verte (5 min 53). **L'aperçu redéployé** depuis ce commit vers 2 h 30
+  (1 h 30 UTC) : `cestecritla-preview` version `de4bb166`, `cestecritla-chat-preview` version
+  `02452368`. **Vérifié en ligne dans trois navigateurs** (sonde locale, 27 contrôles par moteur
+  et 12 appels directs, tous passés) : le bloc « Mesures trouvées » et son étiquette ; la phrase
+  de la T2A telle que redéposée ; une question sur une personne, une insulte, une question sur
+  le site — aucune mesure, aucun envoi ; une mesure d'une section « Outre-mer » le dit dans sa
+  phrase ; un tour mis une seule fois dans le fil ; quatre mesures nommées : 400 ; HTTP clair
+  sur `/api/gists` : 403, corps vide. **La page d'accueil répond toujours 200 en HTTP clair**
+  (R43 : le réglage de la zone).
+- **Le texte du livre retiré de la base distante à 2 h 31** (1 h 31 UTC ; `--withdraw-text`,
+  accord donné d'avance par le mandat) : 1 072 écritures, la table du texte à 0 ligne, ses clés supprimées ; les 1 069
+  phrases intactes, interrupteur ouvert, une phrase redemandée en ligne après le retrait. La
+  route du banc répond 404 sans sa clé — elle n'aurait de toute façon plus rien à lire.
+  VÉRIFIÉ dans la documentation : l'historique d'une base D1 gratuite se restaure sur sept
+  jours.
+- **Une seconde relecture indépendante lancée sur l'aperçu corrigé** (un autre modèle, sans
+  `private/`) : chercher ce qui passe encore, et ce que les refus refusent à tort.
+
+### 15 novembre, 3 h 30 — la seconde relecture : encore « pas ce soir », et pourquoi (D16.66)
+
+Le même genre d'agent, sur l'aperçu redéployé : 44 questions en ligne, 36 envois, et 521
+questions passées hors ligne dans les fonctions du dépôt. **Ce qu'il confirme corrigé** : le fil
+pour un lecteur d'écran (un tour mis une fois, jamais retiré, sur 44 questions), les 113 liens de
+la feuille, le HTTP clair refusé par le Worker, trois mesures par requête, les phrases d'Outre-mer,
+la T2A, les étiquettes — aucune ne parle d'une personne —, aucune chaîne qui dise un sujet absent.
+
+**Ce qu'il trouve, et qui est juste** :
+
+- **Bloquant — les refus tenaient à un verbe.** « Mélenchon antisémite ? » ramenait la même
+  mesure que la capture d'origine ; « Mélanchon est un dictateur », la dette des dictatures ;
+  « Pourquoi voter Mélenchon ? », une loi d'amnistie. 56 de ses 95 questions hostiles allaient à
+  la recherche, 40 en ramenaient des mesures.
+- **Sérieux — des questions sur le livre étaient refusées** : « Mélenchon est pour le RIC ? »,
+  « c'est la merde pour payer mon loyer », « la borne de recharge est-elle gratuite ? » — 38 de
+  ses 179 questions légitimes, comptées dans ses listes.
+- **Sérieux — le site interrogé autrement** : « c'est une ia ? » recevait des mesures sur l'IA,
+  « Qui finance ce site ? », « Mettre au pas la finance ».
+- **Sérieux — une objection reconnue gardait les mesures de la recherche** : sous notre réponse
+  sur l'Europe, d'abord une mesure sur un accord avec Israël.
+- **R44 disait deux phrases, il y en a quatre** ; à 320 px en texte à 200 %, la dernière ligne de
+  la feuille était coupée.
+
+**Ce qui a changé** est en D16.66. La leçon de méthode, pour qui reprend : la première règle
+était une liste de tournures permises d'être refusées (« un nom, puis être ») ; la seconde
+relecture l'a défaite en ôtant un mot. Une règle « tout nom est refusé sauf… », essayée dans la
+nuit, refusait « Le Pen et la retraite ». Ce qui tient est entre les deux : refuser **ce qu'on
+jette à un nom**, où qu'il soit dans la phrase, et laisser le reste à la recherche — dont le
+titre dit maintenant ce qu'elle est. Les listes du relecteur ont servi de banc : chaque
+changement y a été rejoué avant d'entrer dans le dépôt.

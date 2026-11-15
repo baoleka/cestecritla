@@ -29,7 +29,7 @@
  */
 import { parseChatResponse, parseGistsResponse, type FollowUp } from '../lib/chat-contract.ts';
 import type { ChatPlain } from '../lib/chat-data.ts';
-import { chatRequestOf, cleanQuestion, gistsRequestOf, rowsOf } from '../lib/chat-local.ts';
+import { chatRequestOf, cleanQuestion, gistsRequestOf, rowsFor } from '../lib/chat-local.ts';
 import {
   newTurn,
   nextStep,
@@ -60,7 +60,8 @@ interface Config {
   corpus: string;
   /** Where the texts of « En clair » are: our cards, our answers — a static file. */
   plain: string;
-  objections: { slug: string; objection: string }[];
+  /** Our fifteen answers: what each is recognised by, and the measures it rests on. */
+  objections: { slug: string; objection: string; supports: string[] }[];
   cards: { id: string; term: string }[];
   strings: {
     question: string;
@@ -84,6 +85,7 @@ interface Config {
     aboutTitle: string;
     aboutLines: string[];
     aboutLink: string;
+    privacyLink: string;
     silence: string;
     paused: string;
     aiTitle: string;
@@ -339,7 +341,10 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
         about.href = '/a-propos/';
         const how = el('a', s.method);
         how.href = '/methodologie/#demander';
-        more.append(about, ' · ', how);
+        // « Vous gardez mes données ? » is asked of the site too: the page that says so.
+        const kept = el('a', s.privacyLink);
+        kept.href = '/confidentialite/#demander';
+        more.append(about, ' · ', how, ' · ', kept);
         part.append(more);
         node.append(part);
         break;
@@ -617,7 +622,11 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     const [loaded] = await Promise.all([engine(), texts()]);
     const turn = turns[index];
     if (asked !== epoch || turn === undefined) return;
-    const rows = loaded === null ? [] : rowsOf(findRanked(loaded, question), page.knows);
+    // A recognised objection shows the measures its written answer rests on; any other
+    // question, what the search ranks best.
+    const supports =
+      config.objections.find((entry) => entry.slug === turn.recognised.objection)?.supports ?? [];
+    const rows = loaded === null ? [] : rowsFor(supports, findRanked(loaded, question), page.knows);
     turns[index] = { ...turn, rows };
     update(index);
     advance(index);
