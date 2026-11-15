@@ -420,13 +420,22 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
   };
 
   // --- sending: each function sends one request, and only what the pure modules built
+  /** A deadline for a request. `AbortSignal.timeout` came with Safari 16: older ones get the same by hand. */
+  const deadline = (ms: number): AbortSignal => {
+    if ('timeout' in AbortSignal) return AbortSignal.timeout(ms);
+    const controller = new AbortController();
+    setTimeout(() => {
+      controller.abort();
+    }, ms);
+    return controller.signal;
+  };
   const post = async (path: string, body: unknown, timeout: number): Promise<unknown> => {
     try {
       const response = await fetch(path, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(body),
-        signal: AbortSignal.timeout(timeout),
+        signal: deadline(timeout),
         credentials: 'omit',
         referrerPolicy: 'no-referrer',
       });

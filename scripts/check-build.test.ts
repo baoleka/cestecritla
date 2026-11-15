@@ -176,6 +176,21 @@ void test('initial JS stays under the P2 budget of 100 KB gzip', () => {
   console.log(`  JS gzip: ${String(total)} B of ${String(budget)} B (${String(js.length)} files)`);
 });
 
+void test('no script the phone loads holds a look-behind: Safari before 16.4 refuses the pattern, and the script with it', () => {
+  // Found on 15/11/2026, before the sheet opened anywhere: three modules of the sheet wrote
+  // `(?<!…)` to find the start of a word. A browser that does not know the syntax throws when
+  // the pattern is built — at the load of the script — and « Demander » then does nothing,
+  // without a word. The Worker may write them (src/lib/ask-validate.ts); a page may not.
+  let read = 0;
+  for (const root of ['dist', 'dist-ask', 'dist-gists', 'dist-scrutin']) {
+    for (const file of walk(root).filter((f) => /\.(?:js|mjs|html)$/.test(f))) {
+      read += 1;
+      assert.doesNotMatch(readFileSync(file, 'utf8'), /\(\?<[=!]/, `${file} holds a look-behind`);
+    }
+  }
+  if (read === 0) console.log('  (skipped: no build)');
+});
+
 void test('a site that answers no question ships nothing of the sheet: not a script, not a text, not a word', () => {
   if (skip || !existsSync('dist/sommaire/index.html')) return; // no build, or the holding one
   // dist/ is the build of the mode data/2026/ask.json says for the host it was made for

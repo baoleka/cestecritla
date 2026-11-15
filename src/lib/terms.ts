@@ -41,7 +41,12 @@ export const MAX_TERMS = 4;
 
 /** A letter or a digit as French writes them (see src/lib/notions.ts for why it is spelled out). */
 const WORD = '0-9A-Za-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u017F';
-const EDGE_BEFORE = `(?<![${WORD}])`;
+/**
+ * The start of a word, without a look-behind — Safari refused them until 16.4, and a pattern
+ * it refuses takes the script of the sheet down (src/lib/notions.ts). What stands before the
+ * word is captured instead, and a place found is counted after it.
+ */
+const EDGE_BEFORE = `(^|[^${WORD}])`;
 const EDGE_AFTER = `(?![${WORD}])`;
 
 const escaped = (text: string): string => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -123,7 +128,9 @@ function spansOf(entry: TermEntry, text: string, foldedText: string): Span[] {
     if (wording.trim() === '') continue;
     const { pattern, asWritten } = readingOf(wording, entry.anyCase === true);
     for (const found of (asWritten ? text : foldedText).matchAll(pattern)) {
-      spans.push({ at: found.index, end: found.index + found[0].length });
+      // The first group is what stands before the word: the word starts after it.
+      const at = found.index + (found[1] ?? '').length;
+      spans.push({ at, end: found.index + found[0].length });
     }
   }
   return spans;

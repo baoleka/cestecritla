@@ -36,7 +36,13 @@ export interface ShownWord {
  * properties cost a Worker that has just woken.
  */
 const LETTERS = '0-9A-Za-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u017F';
-const WORD = new RegExp(`(?<![${LETTERS}])[${LETTERS}]+(?![${LETTERS}'\\u2019])`, 'gu');
+/**
+ * No look-behind is needed, and none is written — Safari refused them until 16.4, and the page
+ * loads this file: a run of letters is matched greedily from where it starts, and the search
+ * for the next one resumes after it. When a run is refused — an elided article, followed by
+ * its apostrophe — every piece of it is refused too: it ends on that apostrophe, or on a letter.
+ */
+const WORD = new RegExp(`[${LETTERS}]+(?![${LETTERS}'\\u2019])`, 'gu');
 
 /**
  * The words of our sentences that can be explained: each once, in the order written, with the

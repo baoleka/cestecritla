@@ -34,7 +34,13 @@ export const MAX_NOTIONS = 2;
  * path of every question (src/lib/ask-validate.ts says how it was measured).
  */
 const WORD = '0-9A-Za-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u017F';
-const EDGE_BEFORE = `(?<![${WORD}])`;
+/**
+ * The start of a word, WITHOUT a look-behind: Safari refused `(?<!…)` until 16.4 (March 2023),
+ * and a pattern it refuses takes the whole script of the sheet down with it — « Demander »
+ * then does nothing, without a word (found on 15/11/2026, before the sheet opened anywhere).
+ * So what stands before the word is captured, and every replacement puts it back (`$1`).
+ */
+const EDGE_BEFORE = `(^|[^${WORD}])`;
 const EDGE_AFTER = `(?![${WORD}])`;
 
 /** « sixième », « deuxième »: the rank a card writes « 6e », « 2e ». */
@@ -75,9 +81,12 @@ const DIGIT_RANK = new RegExp(`${EDGE_BEFORE}(\\d{1,2})(?:i?[eè]me|è|e)${EDGE_
 export function foldRanks(text: string): string {
   let out = text
     .normalize('NFC')
-    .replace(ROMAN_RANK, (_, roman: string) => `${ROMAN[roman] ?? roman}e`)
-    .replace(DIGIT_RANK, '$1e');
-  for (const [pattern, rank] of ORDINAL_WORDS) out = out.replace(pattern, rank);
+    .replace(ROMAN_RANK, (_, before: string, roman: string) => `${before}${ROMAN[roman] ?? roman}e`)
+    .replace(DIGIT_RANK, '$1$2e');
+  // A function, not « $1 » followed by the rank: « $12e » would name a twelfth group.
+  for (const [pattern, rank] of ORDINAL_WORDS) {
+    out = out.replace(pattern, (_, before: string) => `${before}${rank}`);
+  }
   return out;
 }
 

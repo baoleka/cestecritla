@@ -103,7 +103,7 @@ const strings = {
         {/* The notice, before the first use (AI Act, art. 50): what searching does, what asking
             does — sentences an AI wrote ahead — and, where a model answers, that it explains
             only when asked. */}
-        <p id="search-hint" class="ref">
+        <p id="search-hint" class="ref" data-local={`${t('search.hint')} ${t('search.local_promise')}`}>
           {model === null ? t('chat.hint') : t('chat.ai_hint', { model })}
         </p>
       </>
@@ -141,12 +141,20 @@ const strings = {
   if (__CEL_CHAT__) {
     const opener = document.querySelector<HTMLButtonElement>('#ask');
     if (opener !== null && document.querySelector('#chat-sheet') !== null) {
-      opener.disabled = false;
-      opener.addEventListener('click', () => {
-        void import('../scripts/chat.ts').then((sheet) => {
-          sheet.open();
+      // The sheet is a <dialog>: a browser that cannot open one (Safari before 15.4) gets no
+      // button, and the notice of a page that only searches — never a button that does nothing.
+      if ('showModal' in HTMLDialogElement.prototype) {
+        opener.disabled = false;
+        opener.addEventListener('click', () => {
+          void import('../scripts/chat.ts').then((sheet) => {
+            sheet.open();
+          });
         });
-      });
+      } else {
+        opener.hidden = true;
+        const hint = document.querySelector<HTMLElement>('#search-hint');
+        if (hint?.dataset.local !== undefined) hint.textContent = hint.dataset.local;
+      }
     }
   }
   // The scrutin build's note (home page only): fetched the same way, for the same reason.
