@@ -67,6 +67,8 @@ export interface Turn {
    * says how to get some (src/lib/chat-local.ts, `measuresFor`).
    */
   linksOnly?: boolean;
+  /** With links only: a word of the question that, asked alone, gets sentences — or null. */
+  example?: string | null;
   /**
    * `/api/gists`: `undefined` not asked, `'pending'` asked, `null` no answer the page can use,
    * or the answer.

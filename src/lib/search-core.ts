@@ -292,6 +292,25 @@ const FILLERS: ReadonlySet<string> = new Set(
 );
 
 /**
+ * True when a word of the question found a measure as a word of the book: the same word, or
+ * another form of it — six letters in common from the start, and about the same length
+ * (« construisent » and « construire », « retrait » and « retraite »). Not a word that merely
+ * looks like it or starts like it: « françois » is not « français », « martin » is neither
+ * « matin » nor « Martinique », « ment » is not « mentale ». `found` is what the index gives
+ * for a result: the words of the measure that matched.
+ */
+export function asWritten(asked: string, found: readonly string[]): boolean {
+  return found.some((word) => {
+    if (word === asked) return true;
+    let common = 0;
+    while (common < asked.length && common < word.length && asked[common] === word[common]) {
+      common += 1;
+    }
+    return common >= 6 && Math.abs(word.length - asked.length) <= 3;
+  });
+}
+
+/**
  * True when a measure was found only by such words, or by a bare number: it is in the results
  * of the search as one types — and is no answer to a question. `asked` is what the index gives
  * for a result: the words of the question that led to it.

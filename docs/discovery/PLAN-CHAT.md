@@ -1325,3 +1325,32 @@ vrai chiffre est plus bas, 59 sans la liste**.
 question a été « quels mots refuser » ; chaque liste se contournait par le mot d'à côté, et
 s'élargissait en refusant des questions sur le livre. La seule liste qui s'allonge sans risque
 est celle de ce qu'on **permet** : ce qu'elle oublie coûte des liens.
+
+### 15 novembre, 6 h 30 — la cinquième passe : les titres, les surnoms, et ma propre liste (D16.69)
+
+Le relecteur : 141 questions fraîches, 185 sondes ciblées, 22 questions en ligne, 14 envois.
+**Ce qui tient, pour la première fois** : « les noms inconnus et les épithètes reçoivent des liens
+dans tous les cas essayés » — minuscules, capitales, prénoms seuls, fautes, « l f i ». De ses
+61 sondes fraîches, 3 recevaient une phrase.
+
+**Ce qui restait** : une personne mise en cause sans être nommée. « L'antisémitisme du candidat »
+rendait la première capture, mot pour mot : un titre, un nom commun, deux mots du livre. « Papy
+fraude fiscale » aussi — parce que **« papy » était dans ma liste de mots permis**, avec
+« ment », « triche », « laxiste », « vendu », « pro » et « anti » : en l'écrivant j'y avais mis
+des mots de tous les jours sans voir qu'ils désignent ou accusent. Et « françois » passait pour
+« français » : la recherche pardonne une lettre, ce qui est bon pour trouver et mauvais pour
+dire qu'un mot est connu.
+
+**Ce qui a changé** (D16.69) : un titre au singulier ou un surnom retient les phrases ; la liste
+est nettoyée, et une porte lui interdit ces mots ; « connu » veut dire le même mot ou une autre
+forme de lui ; cinq noms qui sont aussi des mots valent la personne sans article. La liste gagne
+ce qu'un téléphone écrit (« koi », « jsuis », « 32h »). La ligne des liens donne en exemple un
+mot de la question.
+
+**Mesuré** : d'environ 250 sondes ciblées (passes 4 et 5), 3 reçoivent encore une phrase, dont
+aucune ne désigne quelqu'un qu'on reconnaît ; le jeu d'essai garde 83 phrases sur 87, ses
+questions « de téléphone » 75 sur 80 — chiffres optimistes, dits comme tels dans la décision.
+
+**Le relecteur avait écrit** : « avec la règle des mots de personne, le nettoyage de la liste et
+les noms qui sont des mots, oui — j'ouvrirais ; resterait ce que toute recherche rend ». Une
+sixième passe, sur des questions neuves, vérifie que c'est le cas avant toute ouverture.

@@ -78,6 +78,7 @@ interface Config {
     termsBadge: string;
     gistsWhere: string;
     linksOnly: string;
+    forExample: string;
     incipit: string;
     firstWords: string;
     noneTitle: string;
@@ -99,6 +100,9 @@ interface Config {
     example: string;
   };
 }
+
+/** A no-break space, as French sets it inside its quotation marks. */
+const NBSP = String.fromCodePoint(0xa0);
 
 /** How long the page waits for the read sentences, and for an explanation. */
 const GISTS_TIMEOUT_MS = 4_000;
@@ -369,7 +373,15 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
         const part = block(s.gistsTitle, read ? s.gistsBadge : null, 'c-gists', s.method);
         // Links on purpose — the question names someone, or holds a word the search does not
         // know: one line says how to get sentences, and nothing about what the book holds.
-        if (turn.linksOnly === true) part.append(el('p', s.linksOnly, 'ref c-how'));
+        if (turn.linksOnly === true) {
+          // …with, when the question holds one, a word of its own to ask alone.
+          const example = turn.example ?? null;
+          const how =
+            example === null
+              ? s.linksOnly
+              : `${s.linksOnly} ${s.forExample} «${NBSP}${example}${NBSP}».`;
+          part.append(el('p', how, 'ref c-how'));
+        }
         for (const row of measures.rows) {
           const item = el('div', undefined, 'c-row');
           if (row.gist !== null) item.append(written(row.gist));
@@ -645,7 +657,12 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
             (word, term) => ordinary.has(term) || hasSynonym(loaded, word),
           );
     const linksOnly = found !== null && !found.sentences && found.rows.length > 0;
-    const searched: Turn = { ...turn, rows: found?.rows ?? [], linksOnly };
+    const searched: Turn = {
+      ...turn,
+      rows: found?.rows ?? [],
+      linksOnly,
+      example: found?.example ?? null,
+    };
     // Links only: the turn is whole as it is, and nothing is asked of the base.
     turns[index] = found !== null && !found.sentences ? withGists(searched, null) : searched;
     update(index);

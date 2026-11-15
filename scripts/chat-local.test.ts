@@ -30,6 +30,7 @@ import {
   measuresFor,
   namesSomeone,
   putsOnTrial,
+  refersToSomeone,
   strangersIn,
   rowsOf,
 } from '../src/lib/chat-local.js';
@@ -223,13 +224,18 @@ void test('a recognised objection shows the measures its written answer rests on
     { id: B, score: 9, by: terms('retraite') },
   ];
   // No objection recognised: what the search ranks best, with our sentences.
-  assert.deepEqual(measuresFor('la retraite', [], hits, all), { rows: [A, B], sentences: true });
+  assert.deepEqual(measuresFor('la retraite', [], hits, all), {
+    rows: [A, B],
+    sentences: true,
+    example: null,
+  });
   // An objection: its measures, in its order, three at most, each once — whatever was found,
   // whoever its wording names: the answer is ours, and its measures were chosen with it.
   const objection = 'La 6e République, c’est Mélenchon président à vie';
   assert.deepEqual(measuresFor(objection, [C, D, C, A, B], hits, all), {
     rows: [C, D, A],
     sentences: true,
+    example: null,
   });
   assert.deepEqual(measuresFor('x', [C], [], all).rows, [C]);
   // A measure this state of the book does not know is left out; none is known: the search.
@@ -262,11 +268,11 @@ void test('our sentences are shown only when every word of the question is one t
     'la retraite de rima hassan',
     'Coquerel est accusé de violences',
   ]) {
-    assert.deepEqual(
-      measuresFor(question, [], hits, all),
-      { rows: [A], sentences: false },
-      question,
-    );
+    const shownAs = measuresFor(question, [], hits, all);
+    assert.deepEqual([shownAs.rows, shownAs.sentences], [[A], false], question);
+    // …and the line under them gives a word of the question to ask alone — one that found
+    // the measures, never the name.
+    assert.match(shownAs.example ?? 'none', /^(?:retraite|violences|conjugales|none)$/i, question);
   }
   assert.deepEqual(strangersIn('la retraite de Rima Hassan', hits), ['Rima', 'Hassan']);
   assert.deepEqual(strangersIn('la retraite à 60 ans, ça parle de quoi ?', hits), []);
@@ -283,7 +289,11 @@ void test('our sentences are shown only when every word of the question is one t
     true,
   );
   // Nothing found: nothing to show, with or without sentences.
-  assert.deepEqual(measuresFor('zorglub', [], [], all), { rows: [], sentences: false });
+  assert.deepEqual(measuresFor('zorglub', [], [], all), {
+    rows: [],
+    sentences: false,
+    example: null,
+  });
 });
 
 void test('a name the book itself holds, an epithet made of its words: links too', () => {
@@ -327,6 +337,51 @@ void test('a name the book itself holds, an epithet made of its words: links too
   assert.equal(shown('les actes antisémites'), true);
 });
 
+void test('a title, a nickname, a name that is also a word: somebody is pointed at, and the sentences are withheld (fifth review)', () => {
+  const all = (): boolean => true;
+  // Every word below is a word of the book: no stranger, no epithet, no name of the list.
+  const hits = [
+    {
+      id: A,
+      score: 10,
+      by: terms(
+        'antisémitisme candidat président groupe terrorisme drogue prison fraude fiscale marine russie inéligible députés maires portes nationale république contre finir',
+      ),
+    },
+  ];
+  const sentences = (question: string): boolean => measuresFor(question, [], hits, all).sentences;
+  for (const question of [
+    'l’antisémitisme du candidat',
+    'le président du groupe et l’antisémitisme',
+    'le candidat drogue',
+    'le candidat et le terrorisme',
+    'leur candidat va finir en prison',
+    'la présidente du groupe fraude fiscale',
+    'marine inéligible',
+    'marine et la Russie',
+    'portes et l’antisémitisme',
+  ]) {
+    assert.equal(sentences(question), false, question);
+  }
+  assert.ok(refersToSomeone('l’antisémitisme du candidat'));
+  assert.ok(refersToSomeone('papy fraude fiscale'));
+  assert.ok(namesSomeone('marine inéligible'));
+  // The plural, the indefinite, the word with its article: subjects of the book.
+  for (const question of [
+    'les députés et la fraude fiscale',
+    'des maires contre le terrorisme',
+    'la marine nationale',
+    'des portes en prison',
+    'un président pour la république ?',
+  ]) {
+    assert.equal(sentences(question), true, question);
+  }
+  // A word that only looks like a word of the book is not one: « françois » is not « français ».
+  assert.deepEqual(strangersIn('françois et la fraude', hits), ['françois']);
+  // How a phone writes a number is a number.
+  assert.deepEqual(strangersIn('la retraite a 60ans 32h 6eme 1700€', []), ['retraite', '60ans']);
+});
+
 void test('the ordinary words: words of every day and names of places — never a person, never a charge', () => {
   const file = JSON.parse(readFileSync('data/2026/ordinary.json', 'utf8')) as {
     meta: { written_by: string; note_fr: string };
@@ -343,6 +398,30 @@ void test('the ordinary words: words of every day and names of places — never 
     assert.equal(namesSomeone(word), false, `${word} is a name of the list`);
     assert.equal(putsOnTrial(word), false, `${word} is an epithet`);
     assert.equal(asksOffTopic(word), false, `${word} is refused`);
+    assert.equal(refersToSomeone(`le ${word}`), false, `${word} points at someone`);
+  }
+  // What a fifth review found in the list, and must not come back: « papy fraude fiscale »
+  // got our sentences because « papy » vouched for itself.
+  for (const word of [
+    'papy',
+    'mec',
+    'monsieur',
+    'madame',
+    'sénateur',
+    'boss',
+    'ment',
+    'mentent',
+    'triche',
+    'cache',
+    'accusé',
+    'laxiste',
+    'vendu',
+    'lâche',
+    'déteste',
+    'pro',
+    'anti',
+  ]) {
+    assert.ok(!file.words.includes(word), `${word} is in the list`);
   }
   // What the list is for: a question made of everyday words keeps its sentences.
   const ordinary = new Set(file.words.flatMap((word) => terms(word)));

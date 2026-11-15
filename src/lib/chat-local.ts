@@ -277,7 +277,7 @@ const INSULT: readonly RegExp[] = [
 ];
 /** What is thrown at a person or a party — the epithet, not the subject (« antisémitisme »). */
 const EPITHET =
-  '(?:antisemites?|racistes?|islamophobes?|islamo ?gauchistes?|islamistes?|dictateurs?|fachos?|fascistes?|nazis?|neo ?nazis?|extremistes?|populistes?|complotistes?|menteurs?|menteuse|voleurs?|corrompus?|corrompue|traitres?|poutinistes?|pro ?russes?|pro ?iran|pro ?hamas|chavistes?|communistes?|staliniens?|gourou|secte|sectaires?|terroristes?|wokistes?|woke|gauchistes?|fou|folle|dingue|cingle|violente?s?|sexistes?|misogynes?|homophobes?|transphobes?|pedophiles?|violeurs?|escrocs?|voyous?|delinquants?|dealers?|fraudeurs?|hypocrites?|demagogues?|demago|manipulateurs?|incompetente?s?|ridicules?|haineux|haineuse|dangereux|dangereuse|autoritaires?|coleriques?|communautaristes?|antisionistes?|complices?|anti ?france|ultra ?gauche|staline|hitler|mussolini|robespierre|lenine|khmers? rouges?|rouge brun|corruption|mensonges?|delire|delirant)';
+  '(?:antisemites?|racistes?|islamophobes?|islamo ?gauchistes?|islamistes?|dictateurs?|fachos?|fascistes?|nazis?|neo ?nazis?|extremistes?|populistes?|complotistes?|menteurs?|menteuse|voleurs?|corrompus?|corrompue|traitres?|poutinistes?|pro ?russes?|pro ?iran|pro ?hamas|chavistes?|communistes?|staliniens?|gourou|secte|sectaires?|terroristes?|wokistes?|woke|gauchistes?|fou|folle|dingue|cingle|violente?s?|sexistes?|misogynes?|homophobes?|transphobes?|pedophiles?|violeurs?|escrocs?|voyous?|delinquants?|dealers?|fraudeurs?|hypocrites?|demagogues?|demago|manipulateurs?|incompetente?s?|ridicules?|haineux|haineuse|dangereux|dangereuse|autoritaires?|coleriques?|communautaristes?|antisionistes?|complices?|anti ?france|ultra ?gauche|staline|hitler|mussolini|robespierre|lenine|khmers? rouges?|rouge brun|corruption|mensonges?|delire|delirant|laxistes?|vendus?|laches?|tricheurs?)';
 /** Between a name and what is thrown at it: « est », « un », « des » — never a word of its own. */
 const GLUE =
   '(?:est|sont|etait|serait|c|un|une|des|le|la|les|l|tres|trop|vraiment|si|aussi|plutot|encore|toujours|donc|qu|que|il|elle|ils|elles|bien|tous|toutes|comme|vrai|vraie|gros|sale|grand|pur|tellement|completement|totalement|devenu|devenue|parait|semble|a|ont|ete)';
@@ -381,7 +381,37 @@ export function asksOffTopic(question: string): boolean {
  * `measuresFor`.
  */
 export function namesSomeone(question: string): boolean {
-  return ANY_NAMED.test(tokenize(question).join(' ').replace(LABEL, '$1'));
+  const folded = tokenize(question).join(' ').replace(LABEL, '$1');
+  return ANY_NAMED.test(folded) || BARE_NAME.test(folded);
+}
+
+/**
+ * Names that are also words of the book, or one letter from one — « Marine », « Portes »,
+ * « Borne », « François », « Manuel ». Taken for the person when no article stands before
+ * them: « marine inéligible », « le racisme de marine », « borne et la retraite »; « la
+ * marine nationale », « des portes », « une borne de recharge », « les manuels » stay words. Not « Trouvé »: « je trouve… » is in every
+ * other question.
+ */
+const BARE_NAME =
+  /(?:^|\b(?!(?:la|le|les|une|un|des|du|sa|ses|notre|nos|leur|leurs|cette|ces|aux|mes|tes|vos|quelles) )[a-z0-9]+ )(?:marine|portes|borne|francois|manuel|emmanuel)\b/;
+
+/**
+ * Words that point at a person without naming them: a title in the singular with what makes
+ * it one person (« le candidat », « leur chef », « la présidente du groupe »), a nickname
+ * (« papy », « le boss »). A charge needs no more to find its target, and it needs no epithet
+ * either: « l'antisémitisme du candidat » is made of two words of the book (fifth review of
+ * 15/11/2026). The plural and the indefinite stay subjects of the book: « les députés », « un
+ * président », « des maires ».
+ */
+const SOMEONE: readonly RegExp[] = [
+  /\b(?:le|la|l|leur|ce|cet|cette|son|sa|notre|votre|mon|ma|du|au) (?:(?:grand|grande|vieux|vieille|petit|petite|premier|premiere|cher|chere|fameux|soi disant) )?(?:candidate?|chef|cheffe|leader|tribun|gourou|patron|patronne|presidente?|ministre|maire|deputee?|senateur|senatrice|porte parole|elue?|dirigeante?|fondateur|fondatrice|eurodeputee?|secretaire generale?|type|mec|gars|bonhomme|vieux|vieille|boss)\b/,
+  /\b(?:papy|papi|pepe|mec|boss)\b/,
+];
+
+/** True when the question points at one person by a title or a nickname. */
+export function refersToSomeone(question: string): boolean {
+  const folded = tokenize(question).join(' ');
+  return SOMEONE.some((pattern) => pattern.test(folded));
 }
 
 /**
@@ -403,7 +433,8 @@ export function putsOnTrial(question: string): boolean {
   return ANY_EPITHET.test(tokenize(question).join(' ').replace(AS_SUBJECT, ' '));
 }
 
-const NUMBER = /^\d+$/;
+/** A number, and how one is written with its unit: « 60 », « 32h », « 6eme », « 1700€ ». */
+const NUMBER = /^\d+(?:h|e|er|ere|eme|ème|k|m|%|€)?$/;
 
 /**
  * The words of a question that the search does not know: they found no measure at all, and
@@ -435,6 +466,11 @@ export interface Found {
   rows: string[];
   /** False: the rows are shown as links, and nothing is asked of the base. */
   sentences: boolean;
+  /**
+   * When the rows are links: a word of the question that found them and that, asked alone,
+   * gets sentences — an example to give. Null when the question holds none.
+   */
+  example: string | null;
 }
 
 /**
@@ -458,10 +494,12 @@ export interface Found {
  * hold. So is « proprios », and the cost is known and measured (D16.68): a question with a
  * word of its own gets links — which is what the search of the page already gives.
  *
- * Three things withhold the sentences, each for what the other two cannot see:
+ * Four things withhold the sentences, each for what the others cannot see:
  *   - a word the search does not know (`strangersIn`) — any name nobody listed;
  *   - a politician or a party of the list (`namesSomeone`) — names the book itself holds
- *     (« Macron »), parties, nicknames;
+ *     (« Macron »), parties, nicknames, a few names that are also words (« Marine »);
+ *   - a title or a nickname that points at one person (`refersToSomeone`) — « l'antisémitisme
+ *     du candidat » names nobody and charges somebody;
  *   - an epithet thrown at someone (`putsOnTrial`) — « leur chef est antisémite » is made of
  *     words of the book.
  */
@@ -473,14 +511,27 @@ export function measuresFor(
   known: (typed: string, term: string) => boolean = () => false,
 ): Found {
   const chosen = [...new Set(supports)].filter(knows).slice(0, SHOWN_MEASURES);
-  if (chosen.length > 0) return { rows: chosen, sentences: true };
+  if (chosen.length > 0) return { rows: chosen, sentences: true, example: null };
   const rows = rowsOf(hits, knows);
   const sentences =
     rows.length > 0 &&
     !namesSomeone(question) &&
+    !refersToSomeone(question) &&
     !putsOnTrial(question) &&
     strangersIn(question, hits, known).length === 0;
-  return { rows, sentences };
+  if (sentences || rows.length === 0) return { rows, sentences, example: null };
+  // A word that found the measures shown and is nothing but a subject: asked alone, it gets
+  // what this question does not.
+  const led = new Set(hits.filter((hit) => rows.includes(hit.id)).flatMap((hit) => hit.by ?? []));
+  const example =
+    [...question.matchAll(/[\p{L}\p{N}]+/gu)]
+      .map((match) => match[0])
+      .find((typed) => {
+        const term = processTerm(tokenize(typed)[0] ?? '');
+        if (term === null || typed.length < 3 || !led.has(term) || fillerOnly([term])) return false;
+        return !namesSomeone(typed) && !refersToSomeone(`le ${typed}`) && !putsOnTrial(typed);
+      }) ?? null;
+  return { rows, sentences, example };
 }
 
 /**

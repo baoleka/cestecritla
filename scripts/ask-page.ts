@@ -19,6 +19,7 @@ import { askedOf, type Asked } from '../src/lib/ask-local.js';
 import { measuresFor, rowsOf, type Found } from '../src/lib/chat-local.js';
 import {
   INDEX_OPTIONS,
+  asWritten,
   buildQuery,
   expand,
   fillerOnly,
@@ -74,7 +75,7 @@ export function loadPage(): (question: string) => PageAsk {
         terms: r.terms,
         near: lookAlikeOnly(r.terms, r.queryTerms),
         weak: fillerOnly(r.queryTerms),
-        by: r.queryTerms.filter((term) => typed.has(term)),
+        by: r.queryTerms.filter((term) => typed.has(term) && asWritten(term, r.terms)),
       }));
     const known = new Set(order);
     return {
