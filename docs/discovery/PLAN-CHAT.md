@@ -1653,3 +1653,24 @@ d'Instagram, un vrai lecteur d'écran, les captures du tableau de bord, la lectu
 une personne. **Ce qui reste à l'éditeur** : « Always Use HTTPS » (R43), les mentions de relecture
 (R44), les nombres de R35, la décision de campagne avant le 1er janvier 2027 (D16.65) — `CLAUDE.md`
 en tient la liste. **Le mandat du 14 novembre est consommé.**
+
+### 15 novembre, 10 h 25 — après l'ouverture : ce que les premiers rapports laissaient, relu
+
+Les rapports des relecteurs de la nuit sont revenus en un lot après l'ouverture (ils datent de
+0 h 26 à 8 h 29 UTC, tous d'avant elle). Chaque point précis a été revérifié dans le code tel
+qu'il est en ligne : trois mesures par requête au plus, le refus du HTTP clair, `noreferrer`, la
+phrase sur ce que disent les numéros (`privacy.chat.topic`), « elle disparaît quand tu quittes
+la page », « c koi », le commentaire de `wrangler.chat.jsonc` sur l'aperçu, la T2A — le livre
+écrit « tarification à l'acte », notre phrase le suit, et l'explication du mot dit les deux
+(VÉRIFIÉ contre `private/`, identifiants et nombres seulement).
+
+**Quatre suggestions de la revue de sécurité, données « pour information », n'avaient été ni
+faites ni consignées.** Aucune n'est un défaut constaté ; les voici pour qu'elles ne se perdent
+pas. Le mandat étant consommé, **aucune n'est faite : elles reviennent à l'éditeur.**
+
+| Suggestion | État | Ce que ça demanderait |
+|---|---|---|
+| Ajouter `require-trusted-types-for 'script'` à la règle des pages (aucun point d'insertion de HTML dans `src/`, d'après le relecteur) | non fait | une ligne de la règle, puis les trois navigateurs ; un déploiement des pages |
+| Retirer la liaison `ai` du Worker des phrases tant que `model` vaut `null` (moindre privilège : rien ne l'atteint aujourd'hui) | non fait | `wrangler.chat.jsonc`, les portes qui tiennent ses liaisons, un déploiement du Worker — avec l'accord du jour |
+| Une réponse 405 sans en-tête `Allow` | non fait | cosmétique |
+| Au retour arrière, un navigateur peut rendre la page telle qu'elle était quittée : la conversation est vidée (`pagehide`), **le champ de recherche de l'accueil ne l'est pas** — ce qui y était tapé peut s'y relire, sur le même téléphone. Vrai de la recherche seule depuis le 14 novembre ; non reproduit sous Chromium, pas essayé sur un iPhone | non fait | vider le champ au départ de la page ; à essayer sur un vrai Safari |
