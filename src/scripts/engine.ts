@@ -79,8 +79,8 @@ export function findSections(engine: Engine, question: string, max: number): Sec
  */
 export function findRanked(engine: Engine, question: string): Ranked[] {
   const query = buildQuery(question, expand(question, engine.meta.synonyms));
-  // The words of the question as the index cuts them: what a measure was found BY is told
-  // apart from what a synonym of theirs found (src/lib/chat-local.ts, `foundWith`).
+  // The words of the question as the index cuts them: a word that found no measure at all is
+  // one the book does not hold — a name, often (src/lib/chat-local.ts, `strangersIn`).
   const asked = new Set(terms(question));
   return engine.index
     .search(query as Parameters<typeof engine.index.search>[0], searchOptions())
@@ -90,7 +90,6 @@ export function findRanked(engine: Engine, question: string): Ranked[] {
       near: lookAlikeOnly(r.terms, r.queryTerms),
       weak: fillerOnly(r.queryTerms),
       by: r.queryTerms.filter((term) => asked.has(term)),
-      viaSynonym: r.queryTerms.some((term) => !asked.has(term)),
     }));
 }
 

@@ -176,6 +176,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     const count = (selector: string): Promise<number> =>
       page.evaluate<number>(`document.querySelectorAll(${JSON.stringify(selector)}).length`);
     const LAST = '#chat-thread .c-turn:last-child';
+    const FOUND_NOTHING = /Rien trouvé avec ces mots\./;
     const settled = `document.querySelector(${JSON.stringify(LAST)})?.getAttribute('aria-busy') === 'false'`;
     const ask = async (question: string): Promise<string> => {
       const turns = await count('#chat-thread .c-turn');
@@ -233,12 +234,12 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     // --- 2. typing sends nothing; the gesture sends identifiers — not the sentence
     // Three measures stand close enough to the best one for this question (src/lib/chat-local.ts,
     // `MIN_SHARE_OF_BEST`), and none of its words is one the sheet explains.
-    const QUESTION = 'et l’hôpital, moi zorglub de montcuq';
+    const QUESTION = 'et l’hôpital, moi infirmière de nuit';
     await page.locator('#q').pressSequentially(QUESTION, { delay: 20 });
     await page.waitForTimeout(900);
     const carrying = (): string[] =>
       requested.filter((url) =>
-        /infirmi|retraite|zorglub|montcuq|h[oô]pital|t2a|moratoire|smic/i.test(
+        /infirmi|nuit|retraite|zorglub|montcuq|h[oô]pital|t2a|moratoire|smic/i.test(
           decodeURIComponent(url.split('#')[0] ?? ''),
         ),
       );
@@ -270,7 +271,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
     check(
       'the sentence typed is not in it, nor a word of it',
-      !/zorglub|montcuq|pital|moi/i.test(gistsBody),
+      !/zorglub|montcuq|infirmi|nuit|pital|moi/i.test(gistsBody),
       gistsBody.slice(0, 160),
     );
 
@@ -618,29 +619,47 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       (await count(`${LAST} .c-gists`)) === 1 && !/Ici, on ne parle que/.test(position),
       position.slice(0, 160),
     );
+    const HOW =
+      /Pour cette question, voici des liens\. Pour des phrases, demande un sujet seul, par exemple «\sretraite\s»\./;
     check(
-      '…and shown as links: no sentence, no label of an AI, one line that says why and how to get sentences',
+      '…and shown as links: no sentence, no label of an AI, one line that says how to get sentences',
       (await count(`${LAST} .c-gists .c-row`)) >= 1 &&
         (await count(`${LAST} .c-gists [data-generated-by]`)) === 0 &&
         (await count(`${LAST} .c-gists .c-badge`)) === 0 &&
-        /Ta question nomme une personne ou un parti\s: voici des liens\. Pour des phrases, demande le sujet seul\./.test(
-          position,
-        ) &&
-        /Trouvées avec «\sRIC\s»\./.test(position),
+        HOW.test(position),
       position.slice(0, 300),
     );
-    const stranger = await ask('Rima Hassan antisémite ?');
-    check(
-      'a name nobody listed, typed like a name: links too, with the word that found them — and no word about a person',
-      (await count(`${LAST} .c-gists .c-row`)) >= 1 &&
+    // A name nobody listed, typed as a phone types it: the book does not hold that word.
+    for (const question of [
+      'obono antisémite',
+      'Rima Hassan antisémite ?',
+      'quatennens violences conjugales',
+    ]) {
+      const stranger = await ask(question);
+      check(
+        `« ${question} »: links — no sentence of ours stands under a name, listed or not`,
         (await count(`${LAST} .c-gists [data-generated-by]`)) === 0 &&
-        /Trouvées avec «\santisémite\s»\./.test(stranger) &&
-        !/nomme une personne/.test(stranger),
-      stranger.slice(0, 300),
+          (await count(`${LAST} .c-gists .c-badge`)) === 0 &&
+          (FOUND_NOTHING.test(stranger) || HOW.test(stranger)),
+        stranger.slice(0, 200),
+      );
+    }
+    const charged = await ask('leur chef est antisémite');
+    check(
+      'an epithet thrown at nobody named — every word of it is a word of the book: links',
+      (await count(`${LAST} .c-gists [data-generated-by]`)) === 0 && HOW.test(charged),
+      charged.slice(0, 200),
     );
     check(
-      'neither sent anything: a question that names someone asks nothing of the base',
+      'none of these sent anything: a question shown as links asks nothing of the base',
       posted.gists.length === beforeNamed,
+    );
+    check(
+      'in the sheet a link is said to be the measure — « C’est écrit là » is the search’s, and never stands under a charge',
+      (await count('#chat-thread .sources')) > 3 &&
+        (await page.evaluate<boolean>(
+          "Array.from(document.querySelectorAll('#chat-thread .sources')).every((line) => (line.textContent ?? '').startsWith('La mesure, sur le site officiel') && !/écrit là/.test(line.textContent ?? ''))",
+        )),
     );
     // A recognised objection: the measures our written answer rests on, not what its words find.
     const sentSoFar = posted.gists.length;
@@ -682,7 +701,8 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       'no request carried a word typed',
       carrying().length === 0 &&
         posted.gists.every(
-          (body) => !/zorglub|montcuq|retraite|verte|pital|t2a|moratoire|smic/i.test(body),
+          (body) =>
+            !/zorglub|montcuq|infirmi|nuit|retraite|verte|pital|t2a|moratoire|smic/i.test(body),
         ),
     );
     check(

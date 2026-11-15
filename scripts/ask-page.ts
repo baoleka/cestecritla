@@ -36,7 +36,7 @@ export interface PageAsk {
   rows: string[];
   /**
    * How the sheet shows them when no objection of ours is recognised: with our sentences, or
-   * as links — a question that names someone —, and the words that found them.
+   * as links — a question that names someone, or holds a word the search does not know.
    */
   shown: Found;
   /** What the bench sends for a written answer. */
@@ -54,6 +54,10 @@ export function loadPage(): (question: string) => PageAsk {
     INDEX_OPTIONS,
   );
   const groups = (json('data/2026/synonyms.json') as { groups: SynonymGroup[] }).groups;
+  // The ordinary words a question is made of, as the index cuts them (src/lib/chat-data.ts).
+  const ordinary = new Set(
+    (json('data/2026/ordinary.json') as { words: string[] }).words.flatMap((word) => terms(word)),
+  );
   // The order of the book, as the titles file of the page lists it: propositions only.
   const manifest = json('data/2026/manifest.json') as Manifest;
   const order = manifest.sections.flatMap((section) =>
@@ -71,7 +75,6 @@ export function loadPage(): (question: string) => PageAsk {
         near: lookAlikeOnly(r.terms, r.queryTerms),
         weak: fillerOnly(r.queryTerms),
         by: r.queryTerms.filter((term) => typed.has(term)),
-        viaSynonym: r.queryTerms.some((term) => !typed.has(term)),
       }));
     const known = new Set(order);
     return {
@@ -81,7 +84,7 @@ export function loadPage(): (question: string) => PageAsk {
         [],
         hits,
         (id) => known.has(id),
-        (word) => expand(word, groups) !== '',
+        (word, term) => expand(word, groups) !== '' || ordinary.has(term),
       ),
       asked: askedOf(hits, order),
       own: groupBySection(hits)

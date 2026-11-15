@@ -91,8 +91,6 @@ export interface Ranked {
   weak?: boolean;
   /** The words of the question, as the index cuts them, that found this measure. */
   by?: readonly string[];
-  /** True when a word that means the same as one of the question's found it too (a synonym). */
-  viaSynonym?: boolean;
 }
 
 /**
@@ -233,10 +231,13 @@ const VOTE_ADVICE: readonly RegExp[] = [
   /\b(?:meilleure?|pire) (?:candidate?|presidente?)\b/,
 ];
 
+/** « Si je vote X, mes impôts baissent ? »: a condition, and a question about the programme. */
+const IF_I_VOTE = /\bsi (?:je|on|tu|nous|vous|les gens) (?:[a-z]+ )?vot(?:e|es|ons|ez|ent)\b/;
+
 /** True when the question asks for voting advice or a forecast: it is answered on the phone. */
 export function asksForVote(question: string): boolean {
   const folded = tokenize(question).join(' ');
-  return VOTE_ADVICE.some((pattern) => pattern.test(folded));
+  return !IF_I_VOTE.test(folded) && VOTE_ADVICE.some((pattern) => pattern.test(folded));
 }
 
 /**
@@ -366,104 +367,74 @@ export function asksOffTopic(question: string): boolean {
   const rest = left
     .replace(EACH_PERSON, ' ')
     .split(' ')
-    .filter((word) => word.length >= 3 && processTerm(word) !== null && !BETWEEN.has(word));
+    .filter(
+      (word) =>
+        /^\d+$/.test(word) ||
+        (word.length >= 3 && processTerm(word) !== null && !BETWEEN.has(word)),
+    );
   return rest.length <= 1;
 }
 
 /**
- * True when the question names a politician or a party — and not merely the law that carries
- * a name. Such a question is searched like any other, and shown as LINKS: see `measuresFor`.
+ * True when the question names a politician or a party of the list — and not merely the law
+ * that carries a name. Such a question is searched like any other, and shown as LINKS: see
+ * `measuresFor`.
  */
 export function namesSomeone(question: string): boolean {
   return ANY_NAMED.test(tokenize(question).join(' ').replace(LABEL, '$1'));
 }
 
-const NUMBER = /^\d+$/;
-const ONLY_EPITHET = new RegExp(`^${EPITHET}$`);
-/** The words of a question as typed, each with what the index makes of it — null for a small word. */
-function wordsOf(question: string): { typed: string; term: string | null }[] {
-  return question
-    .split(/[^\p{L}\p{N}]+/u)
-    .filter((typed) => typed !== '')
-    .map((typed) => ({ typed, term: processTerm(tokenize(typed)[0] ?? '') }));
-}
+/**
+ * Before an epithet, what makes it the subject of a measure and not a charge: « les actes
+ * antisémites », « contre les groupes extrémistes violents ».
+ */
+const AS_SUBJECT = new RegExp(
+  `\\b(?:actes?|agressions?|violences?|propos|haines?|discriminations?|crimes?|delits?|insultes?|injures?|attaques?|menaces?|theories?|groupes?|groupuscules?|discours|ideologies?|contenus?|regimes?|controles?|policiers?|elus?|dirigeants?|militants?|patrons?|entreprises?|employeurs?|pratiques?|comportements?|derives?|contre|lutte|lutter|combattre|face) (?:(?:les|le|la|l|des|aux|au|d|ces|toutes|tous) ){0,2}(?:${EPITHET}(?: et| ou)? ?){1,3}`,
+  'g',
+);
+const ANY_EPITHET = new RegExp(`\\b${EPITHET}\\b`);
 
 /**
- * Words typed like a name — one capital, then small letters — that found no measure at all: a
- * person nobody listed (« Rima Hassan », « Méluche »). Not an acronym (« URSS »): those are
- * rarely a person, and the parties have their list. The first word of a sentence has its
- * capital anyway: it counts only in a question of a few words (« Obono antisémite »). `means`
- * says whether a word has a synonym in the files of the search: such a word found its measures
- * by another. A brand typed with its capital (« Uber ») is taken for a name too — the cost is
- * links where sentences could have been, never the reverse.
+ * True when the question throws an epithet at someone — named or not: « leur chef est
+ * antisémite », « ce parti, des fachos », « ils sont racistes ». Not when the epithet is the
+ * subject of a measure (« les actes antisémites »). Such a question gets links.
+ */
+export function putsOnTrial(question: string): boolean {
+  return ANY_EPITHET.test(tokenize(question).join(' ').replace(AS_SUBJECT, ' '));
+}
+
+const NUMBER = /^\d+$/;
+
+/**
+ * The words of a question that the search does not know: they found no measure at all, and
+ * `known` — the synonyms of the search, the ordinary words a question is made of (« virer »,
+ * « phrase », « Lyon » : data/2026/ordinary.json) — does not vouch for them. Whatever their
+ * case: on a phone a name is typed « obono » as often as « Obono ».
+ *
+ * A name is such a word. So is a word of another subject, a typo beyond repair, an ordinary
+ * word the list does not hold yet — and that is the point of an allow-list: what it misses
+ * costs links where sentences could have been, never a sentence where none should be.
  */
 export function strangersIn(
   question: string,
   hits: readonly Ranked[],
-  means: (word: string) => boolean = () => false,
+  known: (typed: string, term: string) => boolean = () => false,
 ): string[] {
   const found = new Set(hits.flatMap((hit) => hit.by ?? []));
-  const words = [...question.matchAll(/[\p{L}\p{N}]+/gu)].map((match) => ({
-    typed: match[0],
-    // At the head of the question, or of a sentence inside it.
-    opens: /(?:^|[.?!:;…«»"(])\s*$/u.test(question.slice(0, match.index)),
-  }));
-  return words
-    .filter(({ typed, opens }) => {
-      const folded = tokenize(typed)[0] ?? '';
-      const term = processTerm(folded);
-      if (term === null || NUMBER.test(typed) || typed.length < 3 || found.has(term)) return false;
-      if (ONLY_EPITHET.test(folded) || ANY_NAMED.test(folded) || means(typed)) return false;
-      const first = typed.charAt(0);
-      const named = first !== first.toLowerCase() && typed !== typed.toUpperCase();
-      return named && (!opens || words.length <= 4);
-    })
-    .map(({ typed }) => typed);
+  return [...question.matchAll(/[\p{L}\p{N}]+/gu)]
+    .map((match) => match[0])
+    .filter((typed) => {
+      const term = processTerm(tokenize(typed)[0] ?? '');
+      if (term === null || NUMBER.test(typed) || typed.length < 3) return false;
+      return !found.has(term) && !fillerOnly([term]) && !known(typed, term);
+    });
 }
 
-/**
- * The words of the question that found the measures SHOWN, as typed — given only when other
- * words of the question found none of them: the reader is then told what the result is about
- * (« Trouvées avec « école » »), and that it is a search by words, not an answer about the
- * rest. Null when every word led there, or when a measure came by a synonym: nothing sure can
- * then be said. It speaks of the search — never of what the book holds or does not.
- */
-export function foundWith(
-  question: string,
-  hits: readonly Ranked[],
-  shown: readonly string[],
-): string[] | null {
-  const rows = hits.filter((hit) => shown.includes(hit.id));
-  if (rows.length === 0 || rows.some((hit) => (hit.by ?? []).length === 0)) return null;
-  const found = new Set(rows.flatMap((hit) => hit.by ?? []));
-  const words = wordsOf(question).filter(
-    (word): word is { typed: string; term: string } => word.term !== null,
-  );
-  const filler = (term: string): boolean => !NUMBER.test(term) && fillerOnly([term]);
-  // As typed — « RIC » stays « RIC » —, each word once whatever its capitals.
-  const led = words
-    .filter(({ term }) => found.has(term) && !filler(term))
-    .map(({ typed }) => typed)
-    .filter(
-      (typed, at, all) =>
-        all.findIndex((other) => other.toLowerCase() === typed.toLowerCase()) === at,
-    );
-  const idle = words.some(
-    ({ typed, term }) =>
-      !found.has(term) && !NUMBER.test(typed) && typed.length >= 3 && !filler(term),
-  );
-  return idle && led.length > 0 ? led : null;
-}
-
-/** What a turn shows of the measures: which ones, with or without our sentences, and why. */
+/** What a turn shows of the measures: which ones, and with or without our sentences. */
 export interface Found {
   rows: string[];
   /** False: the rows are shown as links, and nothing is asked of the base. */
   sentences: boolean;
-  /** True when the question names a politician or a party: the sheet says so, in one line. */
-  named: boolean;
-  /** The words that found the rows, when others found none of them — or null. */
-  with: string[] | null;
 }
 
 /**
@@ -474,34 +445,42 @@ export interface Found {
  * thing. The words of an objection find anything: « Ils veulent sortir de l'UE et de l'euro »
  * found, first, a measure on an agreement with Israel (second review of 15/11/2026).
  *
- * Any other question gets what the search ranks best — and, WHEN IT NAMES SOMEONE, AS LINKS
- * ONLY: no sentence of ours is asked for, none is shown. A sentence that says « le programme
- * prévoit… » under « Rima Hassan antisémite ? » reads as the site answering for a person, and
- * it is the one screenshot three reviews took, each in other words, whatever the list of
- * words then refused (third review of 15/11/2026: « stop showing sentences there »). A link
- * to a measure, with the words that found it, is a search result — what it is. « Someone » is
- * a politician or a party of the list, or a word typed like a name that found nothing. The
- * cost is known: « que propose LFI pour l'école ? » gets links, and a line says how to get
- * sentences — ask for the subject alone.
+ * Any other question gets what the search ranks best — WITH OUR SENTENCES ONLY WHEN EVERY
+ * WORD OF IT IS A WORD THE SEARCH KNOWS, and nothing in it names or charges anyone. Otherwise
+ * the measures are shown as links: nothing is asked of the base, no sentence of ours is shown.
+ *
+ * Why (four reviews in one night, 15/11/2026). A sentence that says « le programme prévoit… »
+ * under « obono antisémite » reads as the site answering for a person: it is the screenshot
+ * each review took, in other words each time. Lists of words to refuse were beaten by the
+ * next wording, and refused questions about the book. A list of names was beaten by a name
+ * that was not on it; a rule on capitals, by a phone's small letters. What cannot be beaten
+ * that way is the reverse: a name nobody listed is, by construction, a word the book does not
+ * hold. So is « proprios », and the cost is known and measured (D16.68): a question with a
+ * word of its own gets links — which is what the search of the page already gives.
+ *
+ * Three things withhold the sentences, each for what the other two cannot see:
+ *   - a word the search does not know (`strangersIn`) — any name nobody listed;
+ *   - a politician or a party of the list (`namesSomeone`) — names the book itself holds
+ *     (« Macron »), parties, nicknames;
+ *   - an epithet thrown at someone (`putsOnTrial`) — « leur chef est antisémite » is made of
+ *     words of the book.
  */
 export function measuresFor(
   question: string,
   supports: readonly string[],
   hits: readonly Ranked[],
   knows: (id: string) => boolean,
-  means: (word: string) => boolean = () => false,
+  known: (typed: string, term: string) => boolean = () => false,
 ): Found {
   const chosen = [...new Set(supports)].filter(knows).slice(0, SHOWN_MEASURES);
-  if (chosen.length > 0) return { rows: chosen, sentences: true, named: false, with: null };
+  if (chosen.length > 0) return { rows: chosen, sentences: true };
   const rows = rowsOf(hits, knows);
-  const named = namesSomeone(question);
-  const strangers = named ? [] : strangersIn(question, hits, means);
-  return {
-    rows,
-    sentences: !named && strangers.length === 0,
-    named: named && rows.length > 0,
-    with: foundWith(question, hits, rows),
-  };
+  const sentences =
+    rows.length > 0 &&
+    !namesSomeone(question) &&
+    !putsOnTrial(question) &&
+    strangersIn(question, hits, known).length === 0;
+  return { rows, sentences };
 }
 
 /**
@@ -591,7 +570,7 @@ const ABOUT_SITE: readonly RegExp[] = [
   /\bcombien (?:vous etes|etes vous|tu es|es tu) paye/,
   /\b(?:tu|vous) (?:roule[sz]?|bosse[sz]?|travaille[sz]?) pour (?:qui|lfi|mel[ae]nchon|la france insoumise|les insoumis|un parti|le parti)\b/,
   new RegExp(
-    `^${YOU} (?:de |des |un |une |d )?(?:lfi|la france insoumise|insoumis|insoumise|militants?|militantes?|neutres?|objectifs?|objective|partisans?|independants?|de gauche|serieux|fiables?|benevoles?)$`,
+    `^${YOU} (?:de |des |un |une |d )?(?:lfi|la france insoumise|insoumis|insoumise|militants?|militantes?|neutres?|objectifs?|objective|partisans?|independants?|de gauche|serieux|fiables?|benevoles?)(?: [a-z]+){0,2}$`,
   ),
   // what the site keeps — what is typed HERE, asked of the site: « vous gardez les APL ? » is
   // a question about the programme, and so is « où vont nos données de santé ? »
@@ -610,6 +589,13 @@ const ABOUT_SITE: readonly RegExp[] = [
   /^(?:tu|vous) (?:mens|mentez|dis (?:n )?importe quoi|dites (?:n )?importe quoi|racontes? (?:des conneries|(?:n )?importe quoi)|racontez (?:des conneries|(?:n )?importe quoi))$/,
   /^(?:peux tu|tu peux|pouvez vous|vous pouvez) (?:m |nous )?aider$/,
   /^allo$/,
+  /\b(?:te|vous) faire confiance\b/,
+  /^(?:tu|vous) (?:bosses|bossez|travailles|travaillez|roules|roulez) pour\b/,
+  /^(?:tu|vous) (?:caches|cachez) quoi$/,
+  /\b(?:tu|vous) (?:ne )?(?:refuses|refusez) de repondre\b/,
+  /\b(?:tu|vous) (?:ne )?(?:donnes|donnez|montres|montrez) que des liens\b/,
+  /^(?:tu|vous) (?:marches|marchez|fonctionnes|fonctionnez) comment$/,
+  /\b(?:tu|vous) (?:gardes?|gardez|enregistres?|enregistrez|conserves?|conservez) (?:ma|mes|nos|notre) (?:questions?|recherches?|messages?|donnees)\b/,
 ];
 /**
  * Who answers, who wrote, who re-read — asked in a few words, and with nothing after it but

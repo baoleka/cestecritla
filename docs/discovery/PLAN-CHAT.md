@@ -1291,3 +1291,37 @@ ordinaires du jeu d'essai, 84 gardent leurs phrases.
 étaient des listes, et chaque relecture les a battues avec les mots d'à côté. Si une capture
 gênante revient, la question à se poser n'est pas « quel mot ajouter » mais « pourquoi une
 phrase est-elle montrée ici ».
+
+### 15 novembre, 5 h 30 — la quatrième passe : des phrases seulement quand chaque mot est connu (D16.68)
+
+Le relecteur a écrit 186 questions **avant** de lire les règles, puis 99 sondes ciblées ; 28
+questions en ligne, 15 envois. **Ce qui tient** : tout nom de la liste, surnom ou faute comprise,
+reçoit des liens et n'envoie rien ; « la finance », « Vous gardez les retraites à 62 ans ? »,
+l'objection sur l'Europe, le fil, les liens, la feuille à 320 px.
+
+**Ce qui ne tient pas** : « obono antisémite », tapé comme un téléphone le tape, rendait la
+phrase de la toute première capture — la règle voyait un nom à sa majuscule. De même une
+députée en capitales, un surnom, « leur chef est antisémite ». 44 de ses 53 sondes recevaient
+une phrase. Et trois choses étaient fausses, pas seulement moins bonnes : « C'est écrit là »
+revenu sous une accusation en mode liens ; la ligne « Trouvées avec… », qui laissait entendre
+que les autres mots n'avaient rien trouvé — faux dans 193 cas sur 363 — et montrait « contre »
+ou « 7 » ; « une personne ou un parti » dit d'un post-scriptum (« PS : … ») ou d'une route.
+
+**Son alternative, et le choix (D16.68).** A : une liste d'épithètes et de « mots d'affaire »,
+dont il écrit lui-même qu'elle est réglée sur ses sondes. B : des phrases seulement quand chaque
+mot de la question a trouvé quelque chose — robuste, au prix de 25 questions ordinaires sur 87
+qui perdent leurs phrases pour un mot comme « virer » ou « studio ». Il laissait le choix à
+l'éditeur ; le mandat interdit de le lui demander. **B, avec une liste de mots courants permis**
+(934 mots : conversation, temps, lieux, institutions — jamais un nom de personne), plus deux
+règles pour ce que B ne voit pas : un nom que le livre contient (la liste des responsables
+politiques) et une épithète faite de mots du livre.
+
+**Mesuré sur toutes ses listes** : de ses 53 sondes, 2 reçoivent encore une phrase (44 avant) et
+aucune ne vise une personne ; des 308 questions hostiles, 14, toutes des slogans sans nom ; le
+jeu d'essai garde 84 phrases sur 87 — **avec une liste écrite en partie d'après ses mots : le
+vrai chiffre est plus bas, 59 sans la liste**.
+
+**La leçon, cette fois écrite dans le code** (`measuresFor`) : pendant quatre versions la
+question a été « quels mots refuser » ; chaque liste se contournait par le mot d'à côté, et
+s'élargissait en refusant des questions sur le livre. La seule liste qui s'allonge sans risque
+est celle de ce qu'on **permet** : ce qu'elle oublie coûte des liens.

@@ -76,10 +76,8 @@ interface Config {
     askedTitle: string;
     termsTitle: string;
     termsBadge: string;
-    where: string;
     gistsWhere: string;
-    named: string;
-    foundWith: string;
+    linksOnly: string;
     incipit: string;
     firstWords: string;
     noneTitle: string;
@@ -101,9 +99,6 @@ interface Config {
     example: string;
   };
 }
-
-/** A no-break space, as French sets it inside its quotation marks. */
-const NBSP = String.fromCodePoint(0xa0);
 
 /** How long the page waits for the read sentences, and for an explanation. */
 const GISTS_TIMEOUT_MS = 4_000;
@@ -261,9 +256,10 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     const link = measureLink(found.meta, id, `${section[0]}, ${label.toLowerCase()}`);
     if (link === null) return null;
     link.dataset.programme = 'title';
-    // Under a sentence of ours the link is said to be the MEASURE: « c'est écrit là » would be
-    // read of the sentence above it, which is written nowhere but here (hostile review).
-    const line = el('p', `${withWords ? s.where : s.gistsWhere} :`, 'sources');
+    // In the sheet the link is always said to be the MEASURE. « C'est écrit là » would be read
+    // of the sentence above it, which is written nowhere but here — and, under a question that
+    // charges someone, as confirming the charge (hostile review, then the fourth).
+    const line = el('p', `${s.gistsWhere} :`, 'sources');
     line.append(link);
     // Under a link that stands alone, the first words its measure allows (D16.32). Not under a
     // read sentence: that sentence already says what the measure provides.
@@ -371,15 +367,9 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
       case 'rows': {
         const read = measures.rows.some((row) => row.gist !== null);
         const part = block(s.gistsTitle, read ? s.gistsBadge : null, 'c-gists', s.method);
-        // A question that names someone gets links: the line says so, and how to get sentences.
-        if (turn.named === true) part.append(el('p', s.named, 'ref c-how'));
-        // What the result is about, when some words of the question found none of it: a search
-        // by words, said as such — never a word about what the book holds or does not.
-        const led = turn.foundWith ?? [];
-        if (led.length > 0) {
-          const list = led.map((word) => `«${NBSP}${word}${NBSP}»`).join(', ');
-          part.append(el('p', `${s.foundWith} ${list}.`, 'ref c-how'));
-        }
+        // Links on purpose — the question names someone, or holds a word the search does not
+        // know: one line says how to get sentences, and nothing about what the book holds.
+        if (turn.linksOnly === true) part.append(el('p', s.linksOnly, 'ref c-how'));
         for (const row of measures.rows) {
           const item = el('div', undefined, 'c-row');
           if (row.gist !== null) item.append(written(row.gist));
@@ -641,18 +631,21 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     // question, what the search ranks best — as links only when it names someone.
     const supports =
       config.objections.find((entry) => entry.slug === turn.recognised.objection)?.supports ?? [];
+    // The ordinary words a question is made of came with the texts of the sheet; without
+    // them every word the book does not hold is a stranger, and more turns get links.
+    const ordinary = new Set(plain?.ordinary ?? []);
     const found =
       loaded === null
         ? null
-        : measuresFor(question, supports, findRanked(loaded, question), page.knows, (word) =>
-            hasSynonym(loaded, word),
+        : measuresFor(
+            question,
+            supports,
+            findRanked(loaded, question),
+            page.knows,
+            (word, term) => ordinary.has(term) || hasSynonym(loaded, word),
           );
-    const searched: Turn = {
-      ...turn,
-      rows: found?.rows ?? [],
-      named: found?.named ?? false,
-      foundWith: found?.with ?? null,
-    };
+    const linksOnly = found !== null && !found.sentences && found.rows.length > 0;
+    const searched: Turn = { ...turn, rows: found?.rows ?? [], linksOnly };
     // Links only: the turn is whole as it is, and nothing is asked of the base.
     turns[index] = found !== null && !found.sentences ? withGists(searched, null) : searched;
     update(index);

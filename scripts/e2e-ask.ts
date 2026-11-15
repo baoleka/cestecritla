@@ -265,15 +265,18 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
 
     // --- 2. typing sends nothing; the gesture sends identifiers — not the sentence
-    // « zorglub » and « montcuq » are words no programme writes: what a visitor says of
-    // themselves has nothing to leave the phone as, until they agree to send the question.
+    // « infirmière de nuit »: what a visitor says of themselves, in words of every day — the
+    // search knows them, so the sentences are shown (an invented word would withhold them:
+    // D16.68) —, and none of it has anything to leave the phone as.
     // Three measures stand close enough to the best one for this question (`MIN_SHARE_OF_BEST`).
-    const QUESTION = 'et l’hôpital, moi zorglub de montcuq';
+    const QUESTION = 'et l’hôpital, moi infirmière de nuit';
     await page.locator('#q').pressSequentially(QUESTION, { delay: 20 });
     await page.waitForTimeout(900);
     const carrying = (): string[] =>
       requested.filter((url) =>
-        /infirmi|h[oô]pital|zorglub|montcuq/i.test(decodeURIComponent(url.split('#')[0] ?? '')),
+        /infirmi|nuit|h[oô]pital|zorglub|montcuq/i.test(
+          decodeURIComponent(url.split('#')[0] ?? ''),
+        ),
       );
     check(
       'typing sends the words nowhere',
@@ -314,7 +317,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     );
     check(
       'the sentence typed is not in it, nor a word of it',
-      !/zorglub|montcuq|infirmi|pital|moi/i.test(gistsBody),
+      !/zorglub|montcuq|infirmi|nuit|pital|moi/i.test(gistsBody),
       gistsBody.slice(0, 160),
     );
     check('nothing is asked of the AI before the button is pressed', posted.chat.length === 0);
@@ -453,7 +456,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     check(
       'the question is not in the request: no field for it, and no word of it that is not ours',
       !('question' in chatBody) &&
-        !/zorglub|montcuq|infirmi|\bmoi\b/i.test(posted.chat[0] ?? '') &&
+        !/zorglub|montcuq|infirmi|nuit|\bmoi\b/i.test(posted.chat[0] ?? '') &&
         !(posted.chat[0] ?? '').includes(QUESTION),
       (posted.chat[0] ?? '').slice(0, 200),
     );
