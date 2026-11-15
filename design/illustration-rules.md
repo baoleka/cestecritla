@@ -258,6 +258,53 @@ Elle évolue par ce qu'on a **découvert**, que le choix ait été le bon ou non
 
 Tiennent sans changement : §2.2 points 1 à 6 ; §2.6 (sans nom) ; §2.7 points 1 à 3 et 6 à 9 ; §2.8 (le lait-fraise reste une ligne de texte, jamais un dessin) ; §2.10 points 2 (jamais animée toute seule), 4 (sans nom, muette) et 5 (œil petit, reculé).
 
+### 2.12 Décisions D17.1 à D17.15 (15 novembre 2026) : ta tortue change de forme
+
+> **En préparation.** La génération 1 (§2.11) reste la seule en ligne, et son dessin validé n'est pas touché, tant que la planche de la génération 2 n'est pas datée par l'éditeur et qu'il n'a pas basculé la production (`docs/discovery/PLAN-TORTUE.md` §11). Ce paragraphe dit les règles que la génération 2 suit ; ses mesures y sont écrites à mesure qu'elles existent.
+
+**Ce qu'elle devient.** Cinq états, mêmes seuils (D17.1), et elle s'appelle « ta tortue » à tous (D17.2) :
+
+| État | Forme | Ce qu'elle a autour d'elle |
+|---|---|---|
+| 0 | la tortue de §2.11, inchangée | rien |
+| 1 | la même tortue, sur une planche de surf | une vague, au trait |
+| 2 | un flamant debout, de profil ; son aile est l'ancienne carapace, avec ses trois arcs ; pâle, puis à la couleur que le joueur choisit (D17.3) | un rond dans l'eau |
+| 3 | le même flamant, en vol | une ligne d'eau, son reflet à plat |
+| 4 | le flamant en vol sous une tortue d'étoiles — sa première forme (D17.15) | la même eau ; un pan de ciel |
+
+**Ce que D17.12 amende, règle par règle.**
+
+| Où | Ce qui était écrit | Ce qui vaut pour la génération 2 |
+|---|---|---|
+| §2.2, point 3 | « quadrupède, de profil ou de trois quarts » | la tortue reste quadrupède ; le flamant est un oiseau de profil, **sans rien d'humain** : ni bras, ni main, ni objet tenu, ni vêtement, ni posture de personnage debout |
+| §2.2, point 5 ; planche, contrainte 5 (« aucun accessoire ») | aucun accessoire | **un seul objet : la planche de surf.** Toujours aucune pancarte, aucun mégaphone, aucun sigle, aucun chiffre, aucun couvre-chef ; aucune boisson, aucune paille (§2.2, point 6) |
+| §2.2, point 8 | « ne pousse rien, n'avance le long de rien » | tient : elle ne se déplace pas dans la page ; la vague et l'eau restent dans son cadre |
+| §2.2, point 9 | « posée sur rien : ni sol, ni ombre, ni socle, ni ligne d'horizon » | **un décor est admis** — planche, vague, eau, reflet, ciel — **et ne mesure jamais rien** : ni barre, ni graduation, ni nombre, ni longueur ou hauteur qui varie avec ce qui est trouvé. Toujours aucune ombre : le reflet est une forme plate |
+| §2.2, point 10 | aucun nombre, jamais ce qui reste | tient, décor compris. Les « signes d'approche » sont des attitudes (ailes entrouvertes, regard levé, une étoile), jamais une quantité |
+| §2.3 | « aucune vive : la mascotte n'est pas codée par partie » | **le corps du flamant, et lui seul, prend la couleur que le joueur choisit** parmi six, une par partie, ou reste pâle (D17.3). La tortue garde les violets de la charte |
+| §2.2, point 2 | ni mauve, ni prune, ni rose | **tient pour tous les rôles, teintes comprises** : aucune couleur officielle de partie n'est rose ; le lilas de la partie 6 tombe dans la zone lavande et se remplace par notre Violet 200 |
+| §2.7, point 5 ; §2.11 (D16.43) | l'accent : un point au sommet de la carapace, au passage | un détail d'accent par scène — une goutte d'écume, un rond dans l'eau, une étoile —, au passage seulement (D17.6) |
+| §2.11, tailles | 48 / 72 / 168 / 240 px ; 72 px dans le jeu | 80 à 96 px à côté du mot, 240 px sur la scène de fin de manche et dans sa fiche (D17.9) |
+| §2.11, fabrication | un fichier ≤ 6 Ko gzip avec sa feuille, ≤ 12 formes | un fichier, **≤ 9 Ko gzip avec sa feuille, ≤ 18 formes visibles par état (30 à l'état 4)** — PROPOSÉ (D17.13), à confirmer par mesure |
+| §2.11, mouvement | un geste ≤ 900 ms, une évolution ≤ 1 600 ms | un geste ≤ 900 ms ; **une évolution ≤ 4 500 ms**, sans éclair, passable d'un geste, jouée quand on vient de la gagner, à revoir dans sa fiche (D17.8) ; `design/motion-spec.md` |
+
+Tiennent sans changement : §2.2 points 1 (plate : ni volume, ni ombre, ni dégradé), 4 (aucun quadrillage, trois arcs au plus), 6 et 7 ; §2.6 (sans nom) ; §2.7 points 1 à 3 et 6 à 9 ; « jamais animée toute seule ni en boucle » (D17.7) ; « le bloc du jeu, et nulle part ailleurs » (D17.9) ; de profil, tournée vers la droite, jamais en miroir.
+
+**Les couleurs des six parties, lues à la source — VÉRIFIÉ le 15/11/2026** (9 requêtes vers le site officiel, avec l'accord de l'éditeur : la feuille commune de ses pages de partie, `post-26471.css` ; lue en mémoire, rien d'archivé). Contrastes mesurés contre nos deux traits :
+
+| Partie | Famille | Foncé (titre) | Clair (séparateur) | Notre trait violet sur le clair | Notre trait crème sur le foncé |
+|---|---|---|---|---|---|
+| 1 | Bleu ciel | `#004880` | `#3AADEE` | 4,76:1 | 9,15:1 |
+| 2 | Orange | `#B04E00` | `#FFB87A` | 7,03:1 | 5,20:1 |
+| 3 | Vert | `#186842` | `#7AECB6` | 8,23:1 | 6,61:1 |
+| 4 | Jaune | `#6B5100` | `#FFE566` | 9,45:1 | 7,31:1 |
+| 5 | Rouge | `#8F120A` | `#F9A89E` | 6,31:1 | 9,07:1 |
+| 6 | Violet | `#330068` | `#C9ADFF` | 6,19:1 | 15,28:1 |
+
+Le lilas `#C9ADFF` tombe dans la zone lavande de la porte de couleur (clarté 0,80, chroma 0,117, teinte 299°) : c'est la famille du corps de la tortue officielle. **La palette n'est pas décidée** (D17.4) : la planche montre deux jeux — ces six familles dans des valeurs mesurées, et les six vives de la charte — et l'éditeur tranche. Reprendre le code officiel serait un quatrième emprunt à écrire dans `design/identity-decision.md` §5.2.
+
+**Pas la même, à reprouver.** Ni flamant, ni surf, ni vague, ni oiseau dans l'imagerie de la campagne — **PROBABLE** : aucune occurrence dans les 33 pages du site officiel gardées le 12/11, rien dans ce dossier, rien dans trois recherches web du 15/11 ; les réseaux sociaux ne sont pas couverts. La tortue officielle pousse une jauge, livre du matériel, tient un lait fraise. La question « même personnage ? » est reposée sur les nouveaux dessins, images officielles à côté — HYPOTHÈSE (lecteurs joués par des agents, D14.11).
+
 ---
 
 ## 3. Faire / ne pas faire

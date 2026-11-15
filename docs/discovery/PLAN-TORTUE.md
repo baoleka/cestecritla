@@ -1,0 +1,552 @@
+# Plan — ta tortue évolue : refonte de la gamification de « Où est-ce écrit ? »
+
+> **Approuvé par l'éditeur le 15 novembre 2026** (D17.1 à D17.15, `decisions.md`). Ce fichier est
+> le plan tel qu'il l'a approuvé, écrit pour lui (« tu ») ; son **journal d'exécution**, en fin de
+> fichier, dit où en est le travail. Rien de ce plan n'est en ligne tant que le journal ne dit pas
+> que la production a été basculée.
+
+## Contexte
+
+**Ta demande (15 novembre 2026).** Une incitation claire à faire évoluer sa tortue, une tortue plus
+interactive et plus présente : elle surfe (état 1), devient un flamant à la couleur d'une partie
+(état 2), vole au-dessus de l'eau (état 3), puis un état ultime (état 4) ; une animation à chaque
+changement d'état. Rien ne se code ni ne se déploie avant ton accord sur ce plan.
+
+**Ce que la lecture a établi** (VÉRIFIÉ dans le dépôt, sauf mention) :
+
+- Le jeu : 48 mots, 16 manches. Seuils actuels, calculés sur la liste : état 1 après la manche 1,
+  état 2 après la 2, état 3 après la 7, état 4 après la 16 (`src/lib/game-engine.ts`, `turtleOf`).
+- **Le tirage est le même pour tout le monde** (`draw` : l'ordre de la liste). « Le plus de mots
+  trouvés par partie » donne donc à chacun la même couleur : six parties à égalité à la manche 2,
+  puis la partie 4 (19 mots sur 48) dès la manche 5.
+- Ce que les personas ont dit (session du 14 novembre, HYPOTHÈSE — des agents, sur images fixes) :
+  « dans son coin, j'avais pas remarqué qu'elle changeait », « minuscule sur la page », « je pensais
+  qu'elle allait faire un truc… Bof », « toute seule j'aurais jamais touché la tortue » ; la seule
+  phrase qui félicitait a été mal reçue par les sept ; un persona fermait la page pour « une tortue
+  qui gigote toute seule ».
+- **Les couleurs officielles des six parties** n'étaient pas dans le crawl local. Lues le
+  15 novembre avec ton accord (9 requêtes vers le site officiel, des feuilles de style, rien
+  d'écrit) : une famille par partie — 1 bleu ciel, 2 orange, 3 vert, 4 jaune, 5 rouge, 6 violet.
+  Aucune n'est rose.
+- **Ni flamant, ni surf, ni vague, ni oiseau dans l'imagerie de la campagne** : 0 occurrence dans
+  les 33 pages du crawl local, rien dans les documents du dépôt, rien dans trois recherches web
+  (PROBABLE : les réseaux sociaux ne sont pas couverts). La tortue officielle pousse une jauge,
+  livre du matériel, tient un lait fraise.
+- Poids mesurés le 15 novembre (gzip, arrondis : deux outils donnent quelques octets d'écart) :
+  dessin ≈ 0,5 Ko et sa feuille ≈ 1,7 Ko (plafond 6 Ko pour les deux) ; script du jeu ≈ 6,3 Ko
+  (plafond 10 Ko) ; page d'accueil ≈ 12,2 Ko (aucun plafond).
+
+**Le résultat visé.** Une tortue qu'on voit, qu'on a envie de faire changer, et qui change quatre
+fois de façon mémorable — sans score, sans nombre, sans rien de plus qui quitte le téléphone, et
+sans jamais rendre la production indéployable pendant le chantier.
+
+## 1. Tes décisions du 15 novembre (à consigner : D17.1 à D17.15)
+
+| # | Décision | Ce qu'elle amende ou confirme |
+|---|---|---|
+| D17.1 | **Seuils inchangés** : surf après la manche 1, flamant après la 2, envol après la 7, état ultime après la 16 | confirme D16.12 |
+| D17.2 | **Elle s'appelle toujours « ta tortue »**, quelle que soit sa forme ; une phrase dit le passage | amende D16.11 (« une tortue ») : ta tortue devient un flamant ; D16.20 tient |
+| D17.3 | **Le joueur choisit la couleur du flamant**, parmi six ; modifiable dans sa fiche | amende `illustration-rules.md` §2.3 (« pas codée par partie ») ; D16.12 et D16.14 tiennent (aucun choix de jeu gardé) ; un champ de plus |
+| D17.4 | Les couleurs officielles sont lues ; **la palette se tranche sur la planche** | accord de requête donné et consommé |
+| D17.5 | **Le but s'annonce en mots et en signes**, aucun nombre | confirme le non négociable et la règle 4 de §7.11 |
+| D17.6 | **Ce qui récompense, c'est ce qui lui arrive** : l'animation, une phrase qui la décrit, un geste nouveau | D16.37 tient ; **amende D16.43** : le point au sommet de la carapace laisse la place à un détail d'accent par scène |
+| D17.7 | **Jamais seule** ; davantage de gestes obtiennent une réponse | confirme D16.13 |
+| D17.8 | **Une évolution : 4,5 s au plus**, sans éclair, passable, jouée quand on vient de la gagner, **à revoir dans sa fiche** | amende D16.13 (1 600 ms), `motion-spec.md`, `perf-budget.md` P7 |
+| D17.9 | **Plus présente dans le bloc du jeu, et nulle part ailleurs** : à côté du mot, sur une scène en fin de manche, plus grande dans sa fiche | la règle de lieu de D16.11 tient ; amende « 72 px » |
+| D17.10 | **Le partage ne change pas** : l'adresse nue | confirme D16.17 |
+| D17.11 | **Pas de nouveaux mots** pour cette refonte | — |
+| D17.12 | **Décor admis, jamais une jauge** ; le flamant est un oiseau de profil ; la planche de surf est le seul objet ; la couleur de partie ne touche que le flamant ; « ni mauve, ni prune, ni rose » tient | amende `illustration-rules.md` §2.2 (points 3, 8, 9 ; « aucun accessoire ») et §2.3 |
+| D17.15 | **L'état 4 est « la tortue dans le ciel »** : des étoiles dessinent sa première forme au-dessus du flamant en vol (§6) | prolonge D17.2 : elle reste « ta tortue » jusqu'au bout |
+
+S'y ajoutent deux propositions du plan, que ton accord sur ce plan validerait : **D17.13** les
+nouveaux plafonds (§8) et **D17.14** l'aperçu d'abord, par un interrupteur par hôte (§11).
+
+## 2. Mes réponses aux dix points
+
+1. **La tortue.** Tranché : D17.1, D17.2. Elle est tortue aux états 0 et 1 (deux manches),
+   flamant ensuite ; elle reste « ta tortue » dans tous les textes, et sa fiche garde ses formes
+   de tortue (« Son parcours »). À l'état 4, elle revient : une tortue d'étoiles dans le ciel (D17.15).
+   Ni le surf ni le flamant ne reprennent un personnage de la campagne (PROBABLE, voir Contexte) ;
+   la question « même personnage ? » sera reposée sur les nouveaux dessins, images officielles à
+   côté. Reste interdit : toute boisson, toute paille, tout rose lait-fraise.
+2. **« La partie dont on est le meilleur ».** Tranché : D17.3. Ce que chaque définition aurait
+   coûté — *mots trouvés* : rien à garder, mais la même couleur pour tous ; *bons premiers choix* :
+   six compteurs à garder, D16.12 et D16.14 amendées, « Tes choix ne sont pas gardés » fausse, et
+   une couleur *mesurée* visible à l'écran ; *choisie* : un seul petit nombre, déclaré par la
+   personne. Vie privée : §9.
+3. **« Une incitation claire ».** Tranché : D17.5. Comment : §7. Avec des compteurs, le but
+   aurait été plus lisible, au prix du non négociable, d'une capture « 12 sur 48 », et d'une
+   créature le long d'une barre — le rôle exact de la tortue officielle.
+4. **« Récompensante ».** Tranché : D17.6. Aucune phrase ne parle du joueur ; chaque passage a sa
+   phrase qui la décrit, son animation, et ouvre un geste nouveau (§4).
+5. **Une animation par évolution.** Tranché : D17.8. Les quatre sont décrites au §5. Ce que je
+   prends de l'idée : un moment à part. Ce que je ne prends pas : silhouette blanche qui clignote,
+   fond qui change, son, formule de félicitation. Notre procédé : **le trait qui s'écrit** — la
+   forme se défait et se refait comme une ligne, le vocabulaire des arcs de sa carapace et d'un
+   site qui s'appelle « C'est écrit là ».
+6. **Surf, vol, « plus présente ».** Tranché : D17.7, D17.9, D17.12. Nouveaux plafonds : §8.
+7. **Où elle apparaît.** Tranché : D17.9. *Oui* : à côté du mot pendant qu'on joue (à l'écran dès
+   que le mot l'est), sur la scène de fin de manche, dans sa fiche. *Jamais* : l'en-tête du site,
+   le champ, les résultats de recherche, la feuille de « Demander », une fiche de section (dont
+   les dix-huit sensibles), le sommaire, nos réponses et nos mots expliqués, les pages légales,
+   la page 404, la page d'attente, la build « scrutin », l'aperçu de lien, le favicon, ce qui se
+   partage.
+8. **Les couleurs des parties.** Lues (Contexte). Mesuré contre nos couleurs : en thème clair
+   les teintes claires officielles portent notre trait violet à 4,8:1 au moins ; en thème sombre
+   les teintes foncées portent notre trait crème à 5,2:1 au moins — la même bascule que la
+   carapace. Un écart : le lilas de la partie 6 tombe dans la zone « lavande » que notre porte
+   refuse ; notre Violet 200 le remplace. **Reprendre ce code rapproche le site de la campagne** :
+   ce serait un quatrième emprunt à écrire dans `identity-decision.md` §5.2. Je dessine deux
+   palettes sur la planche — *les six familles officielles, dans des valeurs mesurées* (ma
+   recommandation : la couleur dit vrai, c'est celle que le lecteur retrouve sur la page
+   officielle) et *les vives de la charte* — et tu tranches là. Le jeu de couleurs neutre reçoit
+   six teintes à lui. `part-color` (2025, quatre parties) est remplacé.
+9. **Partage, silence, état déjà gardé.** Partage : inchangé (D17.10), et un contrôle tient que
+   la couleur n'est dans aucune adresse ni aucune requête. Silence : tout ce qui est neuf vit dans
+   `#jeu`, que le gel masque déjà ; une évolution en cours s'arrête au gel ; la build « scrutin »
+   ne contient rien du jeu. État déjà gardé : la clé `cestecritla.jeu.v1` **n'est pas renommée**,
+   le champ neuf est optionnel, un état écrit par la version actuelle se relit tel quel, et « elle
+   ne recule jamais » reste une propriété testée (§9). Conséquence à connaître : qui a gardé une
+   tortue à l'état 2 ou plus retrouvera un flamant pâle, sans animation (un état qui revient du
+   téléphone ne joue rien) ; sa fiche lui propose de revoir les passages et de choisir sa couleur.
+10. **Le contenu.** Tranché : D17.11. Ce que 48 mots laissent : neuf manches entre l'envol et
+    l'état ultime. Deux signes d'approche (§7) et la phrase « À la prochaine manche, elle change. »
+    tiennent ce plateau. Après l'état 4, le jeu continue en boucle jusqu'à la section, comme
+    aujourd'hui, sans rien de plus à gagner : c'est dit au §10 comme une suite possible.
+
+## 3. Les critères d'évolution, état par état
+
+Inchangés (D17.1) : elle évolue par ce qu'on a **trouvé** — un mot compte dès que son emplacement
+est montré, quel que soit le choix —, en fin de manche, et ne recule jamais. Les manches sont
+celles de la liste actuelle ; un test les recalcule depuis la liste et les imprime.
+
+| État | Forme | Critère | Arrive | Le jeu ouvre en même temps |
+|---|---|---|---|---|
+| 0 | tortue | — | au départ | |
+| 1 | tortue qui surfe | le premier mot trouvé | fin de la manche 1 | |
+| 2 | flamant, pâle puis à la couleur choisie | un mot trouvé dans chacune des six parties | fin de la manche 2 | la question va jusqu'au chapitre |
+| 3 | flamant en vol au-dessus de l'eau | un mot trouvé dans chacun des 17 chapitres où la liste a un mot | fin de la manche 7 | la question va jusqu'à la section |
+| 4 | flamant en vol sous une tortue d'étoiles (§6) | les 48 mots trouvés | fin de la manche 16 | |
+
+Ses **trois arcs** la suivent : sur la carapace de la tortue, puis sur l'aile du flamant — mêmes
+traits continus, mêmes six pas, même champ gardé. Le flamant naît **pâle** (un flamant n'a pas sa
+couleur à la naissance) ; c'est le joueur qui la lui donne.
+
+## 4. Chaque état : ce qu'elle fait, ce qu'on peut lui faire
+
+Règle commune (D17.7) : elle garde la pose, et **cinq gestes** obtiennent une réponse — la toucher
+(une figure, puis sa fiche s'ouvre), demander un indice (elle regarde les tuiles, puis les tuiles
+se marquent : l'indice vient d'elle), **chaque mot trouvé** (un petit mouvement, le même quel que
+soit le choix — un contrôle le tient), la fin de manche (les trois trouvailles viennent à elle,
+son arc grandit), « Revoir » dans sa fiche. Un geste dure 900 ms au plus, comme aujourd'hui.
+**En mouvement réduit, pour tous les états : rien ne démarre** ; la pose est fixe, sa fiche
+s'ouvre, l'indice marque les tuiles, et aucune phrase n'annonce un mouvement qui n'a pas lieu.
+
+| État | Dessin | La toucher (figure) | Mot trouvé | Formes visibles |
+|---|---|---|---|---|
+| 0 | la tortue d'aujourd'hui, inchangée | elle lève la tête | elle hoche la tête | 11 |
+| 1 | la même tortue, penchée, sur une planche, sur une vague au trait | elle prend un virage, l'écume saute | elle rebondit sur la vague | ≈ 16 |
+| 2 | flamant debout de profil, sur une patte, cou en S ; l'ancienne carapace est son aile, avec ses arcs ; un rond dans l'eau | elle change de patte et étire le cou | elle plonge la tête | ≈ 14 |
+| 3 | le même, ailes ouvertes, cou et pattes tendus ; une ligne d'eau, son reflet à plat | deux battements d'ailes | un battement | ≈ 16 |
+| 4 | le flamant en vol, sous un pan de ciel où neuf étoiles et un trait dessinent une tortue, ses trois arcs dans la carapace | le trait de la constellation se récrit | une étoile bat, une fois | ≈ 28 |
+
+Poids : un seul dessin SVG pour tous les états, écrit à la main, géométrie et classes seulement.
+Mesuré sur un brouillon synthétique (les formes actuelles recopiées avec d'autres chiffres) :
+72 formes ≈ 2,7 Ko gzip, une feuille de style cinq fois plus longue ≈ 2,4 Ko hors commentaires.
+Les plafonds du §8 partent de là ; ils sont **mesurés pour de bon au lot A1, avant d'être écrits
+dans les portes**.
+
+Ce qui s'écrit sur le dessin, et rien d'autre : `data-state`, `data-pose`, `data-passage`,
+`data-live` (existants), `data-tint` (sa couleur), `data-sign` (signe d'approche), `data-phase`
+(temps d'une évolution), et les deux attributs de chaque arc. Aucun HTML inséré, aucun style en
+ligne.
+
+**Comment c'est construit, et pourquoi** (les compromis) :
+
+1. *Un seul dessin pour tous les états, dans la page* — plutôt qu'un fichier par forme chargé à la
+   demande : la règle de sécurité interdit d'insérer du HTML par script, et une image externe ne
+   prend ni le thème, ni la couleur, ni la pose. Coût : ≈ 2,5 Ko dans l'accueil pour tous.
+2. *Des attributs et une feuille de style, aucune bibliothèque d'animation* : le script écrit des
+   `data-*`, la feuille fait le reste. Zéro dépendance, le mouvement réduit tenu par une seule
+   règle, des portes qui lisent la feuille. Coût : pas de fondu de formes — on compose avec des
+   traits qui s'écrivent, des transformations et des fondus d'opacité.
+3. *La chorégraphie est une donnée* (`src/lib/mascot2.ts` : une liste de temps par passage, comme
+   les images de `src/lib/turtle.ts` aujourd'hui) : sa durée, son ordre et l'absence d'éclair se
+   testent sans navigateur, et la planche la rejoue à l'identique.
+4. *Elle change de place par la feuille de style* (un attribut sur le bloc : à côté du mot, ou sur
+   la scène), jamais en déplaçant ni en doublant le dessin : un seul dessin dans le jeu, un seul
+   état à tenir. Sa fiche garde sa copie, comme aujourd'hui.
+5. *La même clé de stockage, un champ optionnel* — plutôt qu'une clé neuve et une migration : une
+   migration écrirait sur le téléphone sans geste, et la lecture champ par champ existe déjà.
+6. *Deux générations côte à côte, un interrupteur par hôte* (§11) — plutôt qu'une branche longue : la
+   production reste déployable, le retour arrière est une ligne. Et *des fichiers neufs plutôt que
+   des coutures dans les fichiers actuels* : la version en ligne reste identique par construction,
+   sans dépendre de ce que l'outil de build sait retirer. Coût : le script du jeu et ses portes en
+   double jusqu'au ménage.
+
+## 5. Les quatre évolutions, temps par temps
+
+Règles communes (D17.8) :
+
+- **Jouée une fois, quand on vient de la gagner** : seulement à la fin de la manche qui franchit le
+  seuil, dans la page où le geste a eu lieu. Jamais au chargement, jamais quand l'état revient du
+  téléphone, d'un autre onglet ou du cache « précédent » : la forme est alors posée d'un coup.
+- **Sur la scène** : à la fin d'une manche elle quitte le coin du mot et prend une scène large en
+  haut du panneau (240 px, 150 px de haut au plus). Rien de modal : les boutons du dessous restent
+  vivants, **un appui pendant l'évolution atteint sa cible** (et la passe).
+- **La passer** : le bouton « Passer » sur la scène, un appui sur la scène, Échap, ou tout bouton
+  du jeu. La forme finale est posée aussitôt.
+- **Sans éclair** : aucune surface ne s'allume et ne s'éteint ; chaque changement de lumière est une
+  seule rampe d'au moins 350 ms ; les petits éléments d'accent paraissent à 350 ms d'écart au
+  moins. Cible : 0 éclair ; porte : jamais plus de 3 par seconde, mesuré image par image (§12).
+- **Mouvement réduit** : la nouvelle forme s'affiche d'un coup, avec sa phrase.
+- **Lecteur d'écran** : l'évolution *est* sa phrase, dite par la ligne de statut du jeu.
+- Chaque évolution commence par le même temps : **les trois trouvailles de la manche viennent à
+  elle** — c'est ce qui dit pourquoi elle change.
+
+**0 → 1 — « La vague arrive »** · 2 400 ms · phrase : « Elle prend la vague. »
+
+| ms | Ce qu'on voit |
+|---|---|
+| 0 – 400 | trois points viennent à elle ; elle lève la tête ; le premier arc paraît sur sa carapace |
+| 400 – 1 000 | un trait s'écrit depuis la gauche, sous elle, et gonfle en vague |
+| 1 000 – 1 500 | une planche glisse sous ses pattes ; elle fait un petit saut et s'y pose |
+| 1 500 – 2 000 | la vague monte et la porte ; elle se penche vers l'avant |
+| 2 000 – 2 400 | la crête s'enroule ; deux gouttes d'écume, l'une après l'autre, dans la couleur d'accent ; elle se cale |
+
+**1 → 2 — « La vague la redessine »** · 4 200 ms · phrase : « Ta tortue est devenue un flamant. »
+
+| ms | Ce qu'on voit |
+|---|---|
+| 0 – 400 | les trois points ; elle se ramasse sur sa planche |
+| 400 – 1 200 | la vague grandit et se referme sur elle, à plat : on ne la voit plus (c'est là que la forme change, sans rien qui clignote) |
+| 1 200 – 1 500 | un temps de calme ; une bosse court sur la vague |
+| 1 500 – 2 300 | un trait sort de l'eau et monte : le cou s'écrit, se courbe en S ; la tête paraît au bout |
+| 2 300 – 3 000 | la vague retombe en un rond dans l'eau ; le corps se découvre — sa carapace est devenue son aile, ses arcs dessus ; les pattes s'allongent et la soulèvent |
+| 3 000 – 3 600 | elle replie une patte ; si une couleur est déjà choisie, elle gagne le corps depuis l'aile |
+| 3 600 – 4 200 | elle se cale ; le rond dans l'eau prend la couleur d'accent |
+
+Puis, sous la scène : « Choisir sa couleur » (ouvre sa fiche à « Sa couleur »).
+
+**2 → 3 — « L'envol »** · 3 600 ms · phrase : « Elle s'envole. »
+
+| ms | Ce qu'on voit |
+|---|---|
+| 0 – 400 | les trois points ; les deux pattes à l'eau, elle s'abaisse, le cou vers l'avant |
+| 400 – 1 500 | elle court sur l'eau, comme le font les flamants : trois pas, un rond à chaque pas |
+| 1 500 – 2 100 | les ailes s'ouvrent ; un premier battement |
+| 2 100 – 2 900 | elle décolle ; les pattes passent à l'arrière, le cou se tend ; la ligne d'eau descend ; son reflet paraît |
+| 2 900 – 3 600 | deux battements plus lents, puis elle plane ; le dernier rond prend la couleur d'accent |
+
+**3 → 4 — « La tortue dans le ciel »** · 4 400 ms · phrase : « Il y a une tortue dans le ciel. »
+
+| ms | Ce qu'on voit |
+|---|---|
+| 0 – 400 | les trois points viennent à elle ; elle plane |
+| 400 – 1 100 | un pan de ciel paraît derrière elle, en une seule rampe ; l'eau s'assombrit du même pas |
+| 1 100 – 3 300 | neuf étoiles s'allument une à une, sans jamais s'éteindre : elles suivent une carapace, une tête, des pattes |
+| 3 300 – 3 900 | un trait s'écrit d'étoile en étoile ; ses trois arcs se dessinent dans la carapace du ciel |
+| 3 900 – 4 400 | elle passe sous sa constellation, d'un battement d'ailes ; la dernière étoile prend la couleur d'accent |
+
+**Un saut de plusieurs états** (une liste qui change entre deux visites) : pas d'animation, un fondu
+simple vers la forme finale.
+
+**Revoir** (sa fiche, « Son parcours ») : les formes qu'elle a eues, en petit, dans l'ordre ; à
+chaque passage déjà franchi, « Revoir » le rejoue sur la grande image de la fiche, passable de la
+même façon. Rien n'y montre une forme à venir. En mouvement réduit, « Revoir » n'est pas proposé.
+
+## 6. L'état 4 : la tortue dans le ciel (ton choix, D17.15)
+
+- **Ce que c'est.** Le soir tombe sur l'eau. Au-dessus du flamant en vol, neuf étoiles et un trait
+  dessinent une tortue — sa première forme, ses trois arcs dans la carapace. Elle est restée
+  « ta tortue » jusqu'au bout.
+- **Son arrivée** : §5, 4 400 ms. Aucune étoile ne s'éteint, le ciel paraît en une seule rampe.
+- **Ensuite.** La toucher : le trait de la constellation se récrit (900 ms au plus). Un mot
+  trouvé : une étoile bat, une fois. L'indice : elle regarde les tuiles, comme aux autres états.
+- **Sa phrase** : « Il y a une tortue dans le ciel. »
+- **Le dessin.** La constellation réemploie le tracé même de la tortue, au trait : c'est elle, pas
+  une autre. Elle ne porte aucune couleur de partie : l'état 4 ne dépend pas de la palette.
+- **Ce qui se règle sur la planche** : le pan de ciel en thème sombre (la page y est déjà nuit) et
+  dans le jeu de couleurs neutre ; le nombre d'étoiles si le plafond de formes l'exige.
+- **Écartés** : « la volée » (cinq autres flamants en V, un par couleur de partie — une nuée peut se
+  lire « le mouvement ») et « l'éventail » (six plumes de six couleurs — peut se lire
+  « arc-en-ciel »).
+
+## 7. Le but, sans nombre (D17.5)
+
+- **Dès le départ**, une ligne près d'elle, à l'état 0 seulement : « Elle change quand tu trouves des
+  mots. »
+- **À chaque fin de manche, une seule phrase sur elle**, sous le titre :
+  - manche à passage : la phrase du passage (§5), suivie de « À la prochaine manche, elle change
+    encore. » quand c'est vrai (c'est le cas à la fin de la manche 1) ;
+  - autre manche : ce qui la fera changer — état 1 : « Elle changera encore quand tu auras trouvé un
+    mot dans chaque partie. » ; état 2 : « Elle s'envolera quand tu auras trouvé un mot dans chaque
+    chapitre du jeu. » ; état 3 : « Elle changera une dernière fois quand tu auras trouvé tous les
+    mots. » ; état 4 : « Elle a tout trouvé. » ;
+  - **« À la prochaine manche, elle change. »** remplace cette phrase quand c'est vrai (manches 6
+    et 15). Le tirage étant fixe, le jeu le sait de façon exacte : une fonction pure rejoue la
+    manche suivante.
+- **Des signes sur elle à l'approche**, liés aux pas de ses arcs, jamais une quantité (une hauteur
+  qui monterait avec les mots serait une jauge) : à l'état 2, les ailes s'entrouvrent (manche 5) ;
+  à l'état 3, elle regarde vers le haut (manche 10), puis une première étoile paraît (manche 13).
+- **Le lien de cause** : à chaque fin de manche, les trois trouvailles viennent à elle et son arc
+  grandit.
+- **Dans sa fiche** : « Son parcours », et la même phrase de but. Jamais la silhouette de la suite.
+
+Tous ces textes sont des propositions : **je te les soumets en un lot de questions avant de les
+écrire** (15 mots au plus par phrase, aucun mot que les portes refusent, « tortue » dans les seules
+clés `turtle.*`).
+
+## 8. Nouveaux plafonds (D17.13)
+
+| | Mesuré le 15/11 | Plafond actuel | Plafond proposé |
+|---|---|---|---|
+| Dessin SVG, gzip | ≈ 0,5 Ko | 6 Ko avec sa feuille | 3 Ko |
+| Feuille de style du dessin, gzip | ≈ 1,7 Ko | (le même) | 6 Ko |
+| Les deux | ≈ 2,2 Ko | 6 Ko (6 144 o) | **9 Ko** (9 216 o) |
+| Formes visibles par état | 11 | 12 | 18 (états 0 à 3), 30 (état 4) ; 72 dans le fichier |
+| Script du jeu, gzip | ≈ 6,3 Ko | 10 Ko (10 240 o) | **inchangé** |
+| Page d'accueil, HTML gzip | ≈ 12,2 Ko | aucun | **20 Ko** (porte neuve ; le chemin critique reste loin des 150 Ko de P3) |
+| Un geste | 240 ms | 900 ms | inchangé |
+| Une évolution | 840 ms | 1 600 ms | **4 500 ms** ; porte dure : moins de 5 000 |
+| Un temps d'une évolution | 320 ms | 320 ms | 900 ms ; 320 ms partout ailleurs |
+| Propriétés animées | `transform`, `opacity` | les mêmes | + `stroke-dashoffset`, pendant une évolution seulement (le trait qui s'écrit) |
+| Boucles | aucune | aucune | aucune : `infinite` refusé par une porte |
+| Éclairs | — | — | 0 visé ; 3 par seconde au plus, mesuré |
+| Rien ne bouge après un geste | 2,1 s | 2,1 s | 2,1 s ; 5,0 s après la fin d'une manche à passage |
+| Fluidité, processeur ralenti ×4 | p95 16,7 ms | 0 image > 50 ms, 5 % au plus > 20 ms | inchangé, mesuré pour chaque évolution |
+| Page immobile une fois peinte | 0,0014 | 0,02 | inchangé |
+| Tailles | 72 px (jeu), 168 px (fiche) | — | 96 px à côté du mot (80 px à 320 px de large), 240 px sur la scène et dans la fiche, jamais plus de 70 % de la largeur |
+
+Si un brouillon dépasse un plafond au lot A1, **je reviens vers toi avant de le relever**. Une
+piste gardée en réserve pour le poids de l'accueil : charger la feuille des évolutions avec le
+script du jeu plutôt que dans la page (à vérifier contre la règle de sécurité des pages).
+
+## 9. Vie privée (art. 9) : ce qui s'écrit, ce que le site en dit
+
+- **Un champ de plus, et un seul** : `tint`, un nombre de 0 à 7 (0 : rien de choisi ; 1 à 6 : une
+  partie ; 7 : « Sans couleur », choisi exprès). Dans l'onglet dès qu'on choisit ; sur le téléphone
+  seulement après « Garder ta tortue ». Jamais envoyé, jamais dans une adresse, jamais partagé.
+  « Tout effacer » l'efface avec le reste.
+- **Rien d'un choix de jeu** : ni tuile, ni réponse, ni compteur, ni heure. « Tes choix ne sont pas
+  gardés » reste vraie ; un test refuse tout autre champ.
+- **Ce qu'elle montre à qui voit l'écran ou une capture** : que le jeu a été joué au moins jusqu'à
+  l'état 2 (déjà vrai de la tortue aujourd'hui : R25), et une couleur que la personne a *choisie* —
+  lisible comme « une partie d'un programme politique » par qui connaît le code. Ce qui le
+  tempère : le choix est facultatif (elle reste pâle sinon), se change et se retire dans sa fiche ;
+  la carte « Garder » dit déjà « Qui ouvre le site dans ce navigateur la verra. » ; « Site non
+  officiel. » reste dans le cadre de la fiche.
+- **Textes touchés** : la page Confidentialité gagne une ligne (« la couleur que tu lui as
+  choisie ») ; la carte « Garder » et sa fiche nomment la couleur, sous des clés neuves (les
+  phrases de la version en ligne ne sont pas retouchées). La ligne de Confidentialité a sa propre
+  empreinte (§11.1) : **je te la montre au lot D, avant que l'aperçu la serve**, et tu la dates —
+  ou tu me dis de la dater comme relue par la session seule.
+- **Qualification** : inchangée et toujours PROBABLE (exemption de l'article 82 pour ce que le
+  joueur demande de garder) ; `11-conformite.md` §6.2 quater et `14-risques.md` (R23, R25, et un
+  risque neuf : une couleur de partie visible à l'écran) sont mis à jour.
+- **Deux onglets** : la progression se fond comme aujourd'hui (le plus de chaque) ; pour la couleur,
+  le dernier geste gagne.
+
+## 10. Mes autres idées, triées
+
+**Dans les règles actuelles (comprises dans ce plan)** : sa réaction à chaque mot trouvé ; les
+trois trouvailles qui viennent à elle ; « À la prochaine manche, elle change. » ; les signes
+d'approche ; « Son parcours » et « Revoir » ; une figure par état ; l'indice qui vient visiblement
+d'elle ; un lien « Sa fiche » sous elle en fin de manche (les personas ne devinaient pas qu'elle se
+touche) ; le flamant qui naît pâle.
+
+**Dans les règles, hors de ce plan (à ta demande)** : raccourcir la carte « Garder » (« un pavé pour
+une tortue ») ; un lien de texte vers le jeu depuis le sommaire, sans elle.
+
+**Demandent que tu amendes une règle (je ne les fais pas)** :
+
+| Idée | Règle touchée |
+|---|---|
+| Compteurs, barre, « 4 sur 6 » | non négociable « ni score ni niveau » ; règle 4 de §7.11 |
+| Vague et ailes qui bougent seules | D16.13, D17.7 |
+| Une phrase qui félicite | D16.37 |
+| Choisir la partie à explorer (la couleur « méritée » aurait alors un sens) | « le tirage est celui du jeu » ; dit ce qui intéresse la personne |
+| Une image d'elle à envoyer | D16.17, D17.10 |
+| « Ta tortue t'attend » en haut de l'accueil | D16.1 ; lire le téléphone dès l'arrivée |
+| Lui donner un nom | D16.20 ; un texte libre gardé sur le téléphone |
+| La silhouette de la forme suivante | « ne montre jamais ce qui reste » |
+| Un second tour comme critère de l'état 4 | D17.1 ; un champ de plus |
+| Plus de mots | ta validation carte par carte, et les liens revérifiés dans trois navigateurs |
+
+**Écartées** : le son, la vibration, les confettis, un rappel quotidien, une série.
+
+## 11. Les lots
+
+### 11.1 Le principe (D17.14) : deux générations côte à côte, un interrupteur par hôte
+
+Vérifié dans le code de build et de déploiement par une lecture indépendante (15 novembre) :
+
+- **La version actuelle est gelée jusqu'au ménage.** `Game.astro`, `Turtle.astro`,
+  `src/scripts/game.ts`, `src/lib/turtle.ts`, `src/lib/game-state.ts`, `src/styles/turtle.css`,
+  `design/mascot/tortue.svg`, ses portes et les cinq phrases de sa planche ne sont pas touchés :
+  l'empreinte du dessin validé tient, donc **la production reste déployable à tout moment**.
+- **La nouvelle vit dans des fichiers neufs**, qui réutilisent les fonctions pures de l'actuelle
+  sans les modifier : `Game2.astro`, `Mascot2.astro`, `src/scripts/game2.ts`, `src/lib/mascot2.ts`,
+  `src/lib/game-state2.ts`, `src/styles/mascot2.css`, `design/mascot/v2/`. La page d'accueil choisit
+  l'une ou l'autre par une constante que l'outil de build replie (`__CEL_MASCOT2__`, sur le modèle
+  de `__CEL_GAME__`) : une build « génération 1 » ne porte pas un octet de la 2.
+- **L'interrupteur** : `data/mascot.json` (`generation`, `preview_generation`), sur le modèle de
+  `mode` / `preview_mode` de `data/2026/ask.json` — l'aperçu peut être en avance, jamais l'inverse ;
+  tout ce qui est illisible vaut 1. Les builds d'essai ignorent ce fichier (`--mascot 2` écrit
+  `dist-mascot2/`) : basculer la production, ou revenir en arrière, n'est qu'une ligne de données.
+- **Trois pièges trouvés, et leur parade** :
+  - *les couleurs* : tout rôle de couleur ajouté part aujourd'hui dans la feuille de **toutes** les
+    pages. Les rôles neufs (`mascot-*`) et les durées neuves sont donc émis dans une feuille à
+    part, importée par la seule génération 2 ;
+  - *la page Confidentialité* : une phrase `privacy.*` de plus rougit les portes et bloque les
+    quatre déploiements. La ligne de la couleur reçoit donc **sa propre empreinte**
+    (`privacy_mascot`, sur le modèle de `privacy_chat`) : elle ne bloque un hôte que le jour où
+    cet hôte sert la génération 2 ;
+  - *le déploiement* : rien n'empêche aujourd'hui une build faite pour l'aperçu de partir sur la
+    production (jusqu'ici sans effet, les deux hôtes étant dans le même mode). Le garde du
+    déploiement refusera un `dist/` d'une génération plus neuve que celle de sa cible.
+- **La validation du dessin neuf** est un second enregistrement (`design/mascot/v2/validation.json`,
+  sa propre planche, sa propre empreinte). La porte de lancement lit celui de la génération que
+  l'interrupteur donne à la production : passer à 2 sans planche datée, sans « même personnage ? »
+  reposée, ou sans ton mot daté (`decided_by: "editor"`), bloque — et rougit les portes dès le
+  commit.
+- **Retour arrière** après la bascule : `generation: 1` dans `data/mascot.json`, puis
+  `npm run build && npm run deploy`. L'état de chacun est gardé ; un téléphone qui enregistre sous
+  l'ancienne version y perd seulement la couleur choisie. (Comme toute build de l'app, il ne se
+  déploie ni pendant une fenêtre de silence électoral ni la veille.)
+
+Chaque lot : portes vertes (`npx tsc --noEmit`, `npx tsx --test scripts/*.test.ts`,
+`npx tsx scripts/contrast.ts`, `npm run build`, `typecheck`, `lint`, `a11y`, `e2e`,
+`build:ask && e2e:ask && e2e:game`, `build:gists && e2e:sheet`, `build:scrutin:test`, et dès
+qu'elle existe la build d'essai de la génération 2 avec ses portes), lancées après `git add` ;
+porte anti-fuite avant tout push ; commits conventionnels ; push sur `origin main` après chaque
+lot validé ; journal tenu dans le plan versionné. **Jusqu'au lot D, chaque lot se termine sur une
+preuve : le `dist/` de la production est identique, octet pour octet, à celui du commit
+précédent** — et si un octet diffère, je te dis lequel et pourquoi avant de pousser.
+
+### 11.2 Le découpage
+
+| Lot | Ce qui est fait | Ce que tu vois ou décides | Production |
+|---|---|---|---|
+| **0 — Consigner** | D17.1 à D17.15 dans `decisions.md` ; ce plan versionné (`docs/discovery/PLAN-TORTUE.md`, avec son journal) ; règles amendées écrites (`illustration-rules.md` §2.12, `motion-spec.md`, `perf-budget.md`, `11-conformite.md`, `14-risques.md`, `16-hypotheses.md`, `CLAUDE.md`) ; les couleurs officielles consignées avec leur source et leur date | rien | intacte |
+| **A1 — La planche, images fixes** | le dessin neuf : cinq états (l'état 4 : la tortue dans le ciel), signes d'approche, figures ; deux palettes ; clair, sombre et neutre ; silhouettes en noir ; à 80, 96 et 240 px ; poids mesurés ; contraintes en oui / non ; ses propres portes (formes, couleurs) ; les couleurs neuves dans leur feuille à part. Fichiers neufs seulement | **la planche, sous tes yeux** (fichier local, et je te l'envoie) ; puis un lot de questions : le dessin, la palette. On recommence jusqu'à ton oui | intacte, identique |
+| **1 — L'interrupteur, inerte** (pendant que tu regardes la planche) | `data/mascot.json` à 1 / 1, sa règle, la constante de build, `--mascot`, le garde du déploiement, la porte de lancement par génération, la build de l'aperçu jouée par les portes | rien | intacte, identique |
+| **A2 — La planche, en mouvement** | sur la même planche : les quatre évolutions à vitesse réelle, les figures, « Passer », la case « Mouvement réduit » ; durées et éclairs mesurés. Puis « même personnage ? » reposée à des lecteurs neufs, images officielles à côté | **le mouvement, sous tes yeux** ; un lot de questions : les évolutions, puis les textes | intacte, identique |
+| **B — Règles et mémoire** | fonctions pures et leurs tests : formes et temps des évolutions, « la prochaine manche la fait changer », le champ `tint` (lecture tolérante, fusion, états écrits par la version actuelle relus tels quels), la carte des écritures par génération, la ligne de Confidentialité sous sa propre empreinte | rien | intacte, identique |
+| **C — Le bloc du jeu** | sur la build d'essai `dist-mascot2/` seulement : elle à côté du mot, la scène de fin de manche, les quatre évolutions branchées, « Passer », sa fiche (« Son parcours », « Revoir », « Sa couleur »), les phrases de but. Les portes de bout en bout jouées sur les deux générations ; une porte refuse toute trace de la 2 dans une build de la 1 | rien (je te montre des captures) | intacte, identique |
+| **D — L'aperçu** | une ligne de données : `preview_generation: 2` ; `npm run build:preview && npm run deploy:preview -- --bench` ; vérifié en ligne dans trois navigateurs ; relectures indépendantes (chasseur de captures, accessibilité, vie privée, jeu, « même personnage ? », les sept personas rejoués) ; corrections ; `/exactitude` dit ce qui n'est pas vérifié ; rapport | **la ligne de la page Confidentialité** : tu la dates, ou tu me dis de la dater comme relue par la session seule (comme en D16.81) ; puis le rapport, captures comprises — tu n'as rien à essayer toi-même | intacte |
+| **E — La production** | sur ton accord : `generation: 2`, daté et signé de toi ; `npm run build && npm run deploy` ; vérification en ligne sur les deux hôtes | **ton « oui » pour la production**, rapport en main | basculée |
+| **F — Le ménage** | plus tard, sur ton mot : retirer la génération 1, ses portes et l'interrupteur | rien | inchangée pour le visiteur |
+
+## 12. Ce que je vérifie moi-même, et ce qui reste non vérifié
+
+**Je vérifie** :
+
+- *Les règles* : les seuils recalculés depuis la liste (manches 1, 2, 7, 16) ; « ne recule jamais »
+  sur des états tirés au hasard ; les chaînes exactes que la version actuelle écrit, relues sans
+  perte ; aucun champ hors de la carte des écritures ; la couleur dans aucune requête ni adresse.
+- *Le dessin* : balises et attributs permis, aucune couleur dans le fichier, formes par état, zones
+  lavande, prune et rose refusées sur tous les rôles et toutes les teintes, contrastes de chaque
+  paire (trait sur teinte, arc sur teinte, œil, accent) dans les deux jeux de couleurs et les deux
+  thèmes.
+- *Le mouvement, dans Chromium, Firefox et WebKit* : chaque évolution jouée une fois quand elle est
+  gagnée, jamais au rechargement, depuis un autre onglet ou le cache ; passée par le bouton, la
+  scène, Échap ou un bouton du jeu ; un appui pendant l'évolution atteint sa cible ; en mouvement
+  réduit, la forme finale d'un coup et aucune animation en cours ; rien ne bouge 5 s après ; sa
+  réaction identique quel que soit le choix ; un gel qui commence arrête tout.
+- *Les éclairs* : chaque évolution filmée image par image, dans les deux thèmes ; nombre d'éclairs
+  par seconde selon la définition de WCAG 2.3.1.
+- *Les tailles de téléphone, simulées* : 320 × 568, 360 × 740, 390 × 844, 430 × 932, paysage ; elle
+  est à l'écran quand la première tuile l'est ; aucun mot coupé, aucun débordement.
+- *L'accessibilité* : l'audit automatique sous les neuf conditions du site, sur six écrans
+  (question, carte, fin de manche, fin de manche à passage, sa fiche, « Revoir ») ; le parcours au
+  clavier ; les noms lus ; les cibles de 44 px ; le mode de couleurs forcées.
+- *La performance, en labo* : fluidité à processeur ralenti ×4 pour chaque évolution, premier
+  affichage, stabilité, réponse aux gestes, tous les poids contre leurs plafonds.
+- *En ligne* : l'aperçu puis la production — fichiers identiques à la build, le parcours des deux
+  premières manches dans trois navigateurs, les en-têtes, la règle de sécurité inchangée.
+
+**Reste non vérifié (HYPOTHÈSE), et je le dirai tel quel** : de vrais téléphones (Safari sur
+iPhone, un Android modeste), le navigateur d'Instagram, un vrai lecteur d'écran, une vraie
+personne photosensible (la mesure est un calcul), de vraies personnes daltoniennes ; que de vraies
+gens la trouvent prenante et reviennent (le site ne mesure aucune audience) ; « même personnage ? »
+et le ressenti des personas (des agents, qui ne voient pas le mouvement) ; l'imagerie de la campagne
+sur les réseaux sociaux ; et le retour d'une tortue déjà gardée, qui ne peut pas s'essayer sur
+l'aperçu (autre adresse, autre stockage) : il est tenu par des tests, pas par un essai en ligne.
+
+**Les risques du chantier, et ce qui les tient** :
+
+- *Le dessin est jugé « enfantin » ou « moche »* (critère éliminatoire de toujours) : c'est pour cela
+  que la planche vient en premier, en images fixes, avant tout mouvement et tout code du jeu.
+- *Un plafond de poids ne tient pas* : je reviens vers toi avant de le relever.
+- *Le flamant, sa couleur ou l'eau font penser à la campagne* : « même personnage ? » reposée ;
+  les deux palettes sur la planche ; le jeu de couleurs neutre reste prêt.
+- *Une animation saccade sur un petit téléphone* : mesurée à processeur ralenti seulement ; chaque
+  évolution se passe d'un geste, et le mouvement réduit donne la forme d'un coup.
+- *Qui avait gardé sa tortue trouve un flamant sans l'avoir vu naître* : sa fiche propose de revoir
+  les passages ; aucun état ne recule.
+
+## 13. Fichiers critiques, et ce qui est réutilisé
+
+- **Réutilisé sans y toucher** (importé par la génération 2) : `turtleOf`, `endOfRound`, `draw`,
+  `found`, `choose`, `advance`, `judge` (`src/lib/game-engine.ts`) ; `arcSteps`, `arcAttributes`,
+  `withoutMotion` (`src/lib/turtle.ts`) ; `merge`, `parseKept`, `parseTab`, `STORAGE_KEY`
+  (`src/lib/game-state.ts`) ; `el` (`src/scripts/engine.ts`) ; le gel
+  (`src/scripts/silence-now.ts`) ; les liens officiels (`src/scripts/deep-links.ts`) ; les neuf
+  conditions (`scripts/a11y-conditions.ts`) ; `serve`, `lateLayoutShift` (`scripts/e2e-kit.ts`) ;
+  `prototypes/proto/tools/fps-probe.mjs`.
+- **Repris comme modèle** : `mode` / `preview_mode` (`src/lib/ask-mode.ts`,
+  `src/lib/ask-config.ts`) pour l'interrupteur ; `privacy_chat` (`scripts/launch.ts`) pour
+  l'empreinte à part ; `scripts/mascot-sheet.ts` et `design/mascot/validation.json` pour la planche
+  et sa validation datée.
+- **Neufs** : `data/mascot.json`, `src/lib/mascot-mode.ts`, `src/lib/mascot-config.ts` ;
+  `design/mascot/v2/` (dessin, planche, validation) ; `src/components/Game2.astro`,
+  `src/components/Mascot2.astro`, `src/scripts/game2.ts`, `src/scripts/game-store2.ts`,
+  `src/lib/mascot2.ts`, `src/lib/game-state2.ts`, `src/styles/mascot2.css`, la feuille générée
+  des couleurs neuves ; `scripts/mascot2-sheet.ts`, `scripts/mascot2.test.ts`,
+  `scripts/game-state2.test.ts`, la mesure des éclairs.
+- **Étendus** (sans changer ce que la génération 1 produit) : `astro.config.ts`,
+  `src/pages/index.astro`, `src/globals.d.ts`, `scripts/build.ts`, `scripts/build-mode.ts`,
+  `scripts/deploy.ts`, `scripts/launch.ts`, `scripts/build-tokens.ts`, `src/lib/storage-map.ts`,
+  `src/components/GameStorage.astro`, `design/tokens.json`, `design/tokens.neutral.json`,
+  `design/strings.json` (clés neuves seulement), `scripts/e2e-game.ts` (`--mascot 2`),
+  `scripts/game-page.test.ts`, `scripts/check-build.test.ts`, `scripts/e2e.ts`,
+  `scripts/contrast.ts`, `scripts/tokens-neutral.test.ts`, `scripts/launch.test.ts`,
+  `scripts/build-mode.test.ts`, `scripts/perf-probe.ts`, `.github/workflows/ci.yml`,
+  `package.json`, `.gitignore`.
+
+## 14. Ce que je te demanderai encore, et quand
+
+| Quand | Quoi |
+|---|---|
+| Lot A1 | la planche en images fixes : le dessin, la palette |
+| Lot A2 | la planche en mouvement : les évolutions ; puis les textes |
+| Lot D | la ligne de la page Confidentialité, à dater ; le rapport de l'aperçu |
+| Lot E | ton accord pour la production |
+
+---
+
+## Journal d'exécution
+
+### Lot 0, au 15 novembre 2026 (soir) — consigner
+
+- **Les quinze décisions sont au journal** : D17.1 à D17.15 dans `decisions.md` (288 décisions,
+  D0-D17), avec la réponse de l'éditeur pour chacune des treize qu'il a prises, et ce que chacune
+  amende ou confirme.
+- **Les règles amendées sont écrites là où elles vivent**, chacune marquée « en préparation, pas en
+  ligne » : `design/illustration-rules.md` §2.12 (le dessin, règle par règle ; les couleurs
+  officielles des six parties avec leurs contrastes mesurés), `design/motion-spec.md` (une
+  évolution de 4 500 ms, sans éclair, passable), `design/perf-budget.md` (P7 amendée pour ses
+  évolutions ; poids proposés), `11-conformite.md` §6.2 quater (le champ `tint`),
+  `14-risques.md` (R46 : la couleur choisie à l'écran ; R47 : le flamant ou les couleurs pris pour
+  la campagne ; R48 : une évolution qui saccade ou éblouit), `16-hypotheses.md` (H-MEC-14 à
+  H-MEC-17), `CLAUDE.md` (le chantier en tête de l'état du projet ; ce que la refonte ne peut pas
+  faire sans une nouvelle décision).
+- **Ce que la préparation du plan a établi, et qui n'était écrit nulle part** : le tirage du jeu
+  est le même pour tout le monde (c'est ce qui a écarté « le plus de mots trouvés par partie ») ;
+  les couleurs officielles des parties n'étaient pas dans le crawl local (9 requêtes le 15/11,
+  avec l'accord de l'éditeur, rien d'écrit) ; ni flamant ni surf dans l'imagerie de la campagne
+  (PROBABLE) ; une lecture indépendante du code de build a trouvé trois pièges de déploiement
+  (§11.1), dont un qui existait déjà : rien n'empêche une build de l'aperçu de partir sur la
+  production.
+- Aucun fichier de l'app n'est touché : la production et l'aperçu servent ce qu'ils servaient.
