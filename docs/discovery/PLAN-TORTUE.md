@@ -913,3 +913,7 @@ l'aperçu (autre adresse, autre stockage) : il est tenu par des tests, pas par u
   **Trois builds identiques, octet pour octet, à leurs références d'avant le chantier** : la
   production (1 156 fichiers), l'aperçu (1 156), la build d'essai `dist-ask/` (1 156).
 - **Suite** : lot C — le bloc du jeu, sur la build d'essai `dist-mascot2/` seulement.
+- **Redemandé le jour même (D17.25)** : dans sa fiche, la phrase en ligne reste telle quelle et
+  « Sa couleur aussi. » s'y ajoute ; ce que dit un lecteur d'écran quand on la touche est gardé
+  tel que proposé. Les quatre chaînes sont dans le kit ; plus rien n'attend l'éditeur avant le
+  lot C.
