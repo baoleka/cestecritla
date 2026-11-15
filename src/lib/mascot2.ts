@@ -1,5 +1,5 @@
 /**
- * The mascot, second generation, as numbers (D17.1 to D17.15; docs/discovery/PLAN-TORTUE.md) —
+ * The mascot, second generation, as numbers (D17.1 to D17.17; docs/discovery/PLAN-TORTUE.md) —
  * shared by the build, the game and the sheet the editor validates. Pure: no file, no page, no
  * clock. IN PREPARATION: nothing that is online imports this module (src/lib/turtle.ts is the
  * turtle that is served).
@@ -19,8 +19,11 @@ import { arcAttributes, type ArcProgress, type TurtleState } from './turtle.js';
 
 export type { ArcProgress, TurtleState };
 
-/** At rest; touched (the turtle raises her head); looking at the tiles (a hint was asked). */
-export type MascotPose = 'rest' | 'up' | 'look';
+/**
+ * At rest; head raised; looking at the tiles (a hint was asked); her figure (she was touched);
+ * the small move she makes for a word found.
+ */
+export type MascotPose = 'rest' | 'up' | 'look' | 'trick' | 'pulse';
 
 /**
  * The colour the player gave her flamingo (D17.3): 0 nothing chosen yet, 1 to 6 the colour of a
@@ -128,6 +131,7 @@ export function mascotMarkup(svg: string, options: LookOptions): string {
 /** What `applyMascotLook` needs of a drawing in a page: an element, or anything like one. */
 export interface MascotDrawing {
   setAttribute(name: string, value: string): void;
+  removeAttribute(name: string): void;
   toggleAttribute(name: string, force?: boolean): boolean;
   querySelectorAll(selector: string): Iterable<{ setAttribute(name: string, value: string): void }>;
 }
@@ -146,6 +150,190 @@ export function applyMascotLook(drawing: MascotDrawing, look: MascotLook): void 
       arc.setAttribute('stroke-dashoffset', dashoffset);
     }
   });
+}
+
+// ---------------------------------------------------------------------------------------------
+// Movement (D17.7, D17.8). She never moves alone: everything below answers a gesture — a round
+// that ends, a touch, a word found, « Revoir ». A gesture is 900 ms at most; an evolution 4,5 s
+// at most, in beats of 900 ms at most; nothing loops; with reduced motion nothing starts.
+//
+// The choreography is data: what is played, in what order and for how long is decided here, and
+// can be tested without a browser. The stylesheet (src/styles/mascot2.css) only knows what each
+// beat holds back of the state she is taking.
+// ---------------------------------------------------------------------------------------------
+
+export const GESTURE_MAX_MS = 900;
+export const BEAT_MAX_MS = 900;
+export const EVOLUTION_MAX_MS = 4500;
+/** Above this, a movement must be pausable (WCAG 2.2.2): nothing of hers ever gets there. */
+export const MOVING_LIMIT_MS = 5000;
+
+/** One beat of an evolution: a name the stylesheet knows, and how long it lasts. */
+export interface Beat {
+  name: string;
+  lasts: number;
+  /** She takes her new state when this beat starts — one beat of each evolution, exactly. */
+  flips?: true;
+  pose?: MascotPose;
+  /** The accent of the passage shows from this beat on. */
+  accent?: true;
+}
+
+/** How every round ends: the three finds are there, then they come to her. */
+export const FINDS: readonly Beat[] = [
+  { name: 'in', lasts: 200 },
+  { name: 'to', lasts: 320 },
+];
+
+/** The four passages, by the states they join. */
+export const PASSAGES = ['01', '12', '23', '34'] as const;
+export type Passage = (typeof PASSAGES)[number];
+
+/**
+ * The four evolutions, beat by beat, after the finds have come to her
+ * (docs/discovery/PLAN-TORTUE.md §5 says what is seen in each).
+ */
+export const EVOLUTIONS: Readonly<Record<Passage, readonly Beat[]>> = {
+  // The line of a wave writes itself; her board slides under her; the wave rises; foam.
+  '01': [
+    { name: 'wave', lasts: 640, flips: true },
+    { name: 'board', lasts: 480 },
+    { name: 'rise', lasts: 640 },
+    { name: 'foam', lasts: 700, accent: true },
+  ],
+  // The water closes over her; a calm; her neck writes itself out of it; the water falls back
+  // and uncovers her; she folds a leg; she settles.
+  '12': [
+    { name: 'cover', lasts: 480 },
+    { name: 'under', lasts: 240, flips: true },
+    { name: 'neck', lasts: 800 },
+    { name: 'shore', lasts: 700 },
+    { name: 'stand', lasts: 500 },
+    { name: 'rest', lasts: 400, accent: true },
+  ],
+  // She runs on the water; her wings open; she lifts; two slower beats.
+  '23': [
+    { name: 'run', lasts: 900 },
+    { name: 'wings', lasts: 600 },
+    { name: 'lift', lasts: 800, flips: true },
+    { name: 'glide', lasts: 700, accent: true },
+  ],
+  // The evening sky; her stars, three beats of them; the line that joins them; she passes under.
+  '34': [
+    { name: 'dusk', lasts: 700, flips: true },
+    { name: 'stars-1', lasts: 720 },
+    { name: 'stars-2', lasts: 720 },
+    { name: 'stars-3', lasts: 720 },
+    { name: 'lines', lasts: 640 },
+    { name: 'pass', lasts: 400, accent: true },
+  ],
+};
+
+/** The passage that leads to a state: `null` for the turtle she starts as. */
+export function passageTo(state: TurtleState): Passage | null {
+  return state === 0 ? null : (PASSAGES[state - 1] ?? null);
+}
+
+/** How long an evolution lasts, the finds included. */
+export function evolutionLasts(passage: Passage): number {
+  return [...FINDS, ...EVOLUTIONS[passage]].reduce((sum, beat) => sum + beat.lasts, 0);
+}
+
+/** A look, when to give it to her after the gesture that asked for it, and the beat it is. */
+export interface MascotFrame extends MascotLook {
+  at: number;
+  /** `<passage>-<beat>` during an evolution, `end-<beat>` while finds come to her; else `null`. */
+  phase: string | null;
+}
+
+/** What an evolution is told of her: the rest is hers to decide. */
+export type Standing = Pick<MascotLook, 'state' | 'arcs' | 'tint'>;
+
+const still = (look: Standing, more?: Partial<MascotLook>): MascotLook =>
+  lookOf({ state: look.state, arcs: look.arcs, tint: look.tint, ...more });
+
+/**
+ * From what she was to what she is at the end of a round, as frames.
+ *
+ * The finds come to her, and her arc grows as they reach her: that is every end of round. When
+ * she passes to the next state, the evolution follows, and the accent marks the passage. She
+ * never goes back: asked to, she stays. A leap of several states — a list of words that changed
+ * between two visits — is not played: the final look, at once.
+ */
+export function evolution(from: Standing, to: Standing): MascotFrame[] {
+  if (to.state < from.state) return [{ ...still(from), at: 0, phase: null }];
+  if (to.state > from.state + 1) return [{ ...still(to), at: 0, phase: null }];
+  const passage = to.state === from.state ? null : passageTo(to.state);
+  const frames: MascotFrame[] = [];
+  let at = 0;
+  for (const beat of FINDS) {
+    const pose = passage === '01' ? 'up' : 'rest';
+    frames.push({ ...still(from, { pose }), at, phase: `${passage ?? 'end'}-${beat.name}` });
+    at += beat.lasts;
+  }
+  let flipped = false;
+  let accent = false;
+  for (const beat of passage === null ? [] : EVOLUTIONS[passage]) {
+    flipped ||= beat.flips === true;
+    accent ||= beat.accent === true;
+    // Her arc has grown: the finds have reached her. Until she takes her new state it is drawn
+    // on the form she still has, with the sign that form had — nothing new is announced early.
+    const look = flipped
+      ? still(to, { passage: accent, sign: 0 })
+      : { ...still(from, { passage: accent }), arcs: to.arcs };
+    frames.push({ ...look, pose: beat.pose ?? 'rest', at, phase: `${passage ?? ''}-${beat.name}` });
+    at += beat.lasts;
+  }
+  frames.push({ ...still(to, { passage: passage !== null }), at, phase: null });
+  return frames;
+}
+
+/** When the last frame of a list is given to her: how long the list keeps her moving. */
+export function framesLast(frames: readonly MascotFrame[]): number {
+  return frames.at(-1)?.at ?? 0;
+}
+
+/**
+ * The frames as they are played when the reader asked for less motion, when an evolution is
+ * skipped, or when a state comes back from the phone: the last look, at once. What she became is
+ * information and is always shown; how she got there is not played.
+ */
+export function withoutMotion(frames: readonly MascotFrame[]): MascotFrame[] {
+  const last = frames.at(-1);
+  return last === undefined ? [] : [{ ...last, at: 0 }];
+}
+
+/** How long she holds her figure, state by state: the stylesheet's own figures fit inside. */
+export const TRICK_HOLD_MS: Readonly<Record<TurtleState, number>> = {
+  0: 560,
+  1: 820,
+  2: 660,
+  3: 660,
+  4: 820,
+};
+export const PULSE_HOLD_MS = 340;
+
+/** She was touched: her figure, then as she was. */
+export function trick(look: MascotLook): MascotFrame[] {
+  return [
+    { ...look, pose: 'trick', at: 0, phase: null },
+    { ...look, pose: 'rest', at: TRICK_HOLD_MS[look.state], phase: null },
+  ];
+}
+
+/** A word was found: a small move, the same whatever was chosen, then as she was. */
+export function pulse(look: MascotLook): MascotFrame[] {
+  return [
+    { ...look, pose: 'pulse', at: 0, phase: null },
+    { ...look, pose: 'rest', at: PULSE_HOLD_MS, phase: null },
+  ];
+}
+
+/** Writes a frame on a drawing: its look, and the beat it is — attributes only. */
+export function applyMascotFrame(drawing: MascotDrawing, frame: MascotFrame): void {
+  applyMascotLook(drawing, frame);
+  if (frame.phase === null) drawing.removeAttribute('data-phase');
+  else drawing.setAttribute('data-phase', frame.phase);
 }
 
 /**

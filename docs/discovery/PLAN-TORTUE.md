@@ -672,3 +672,105 @@ l'aperçu (autre adresse, autre stockage) : il est tenu par des tests, pas par u
   sur la planche en mouvement, parce que le mouvement retouche la feuille de style et ferait
   tomber une date posée aujourd'hui.
 - Les lots 0, A1 et 1 sont poussés sur `origin main` : le dessin est validé par l'éditeur.
+
+### Lot A2, au 15 novembre 2026 — la planche, en mouvement (à l'éditeur de regarder ; rien n'est daté)
+
+- **Ce qui existe.** Les quatre évolutions, une figure par état (on la touche), un petit mouvement
+  par état (un mot trouvé) et la fin de manche sans passage (les trois trouvailles viennent à
+  elle, son arc grandit) se jouent sur la planche `design/mascot/v2/planche.html`, à vitesse
+  réelle, sur un bouton et jamais avant : 22 scènes jouables, 168 figures fixes. « Passer » pose
+  la forme finale ; une case joue le mouvement réduit ; une autre ralentit tout quatre fois, pour
+  regarder de près. Sous chaque évolution, son storyboard : l'état posé à la fin de chaque temps.
+  Les images fixes du lot A1 suivent.
+- **Comment c'est fait.** *La chorégraphie est une donnée* (`src/lib/mascot2.ts` : `FINDS`,
+  `EVOLUTIONS`, `evolution`, `trick`, `pulse`, `withoutMotion`) : une évolution est une suite de
+  temps nommés ; à chaque temps le script écrit sur le dessin son état, sa pose et le nom du
+  temps (`data-phase`) — des attributs, rien d'autre. *La feuille ne fait que retenir*
+  (`src/styles/mascot2.css`) : chaque temps y dit ce qu'il retient de l'état qu'elle est en train
+  de prendre ; sans aucun temps — mouvement réduit, « Passer », état qui revient du téléphone —
+  l'état seul la dessine, entière. Un seul bloc `prefers-reduced-motion: no-preference` porte
+  tout le mouvement, sous `data-live` ; sans `data-live`, toute transition en cours est coupée :
+  c'est ce qui fait que « Passer » arrête tout d'un coup (trouvé par la mesure : une transition
+  dont la valeur d'arrivée ne change pas continuait sa course). Aucune durée n'est tapée : toutes
+  sont des multiples des durées du site.
+- **Le dessin a changé en deux endroits**, ce qui aurait fait tomber une validation : la planche de
+  surf est passée dans le groupe de la tortue (une seule rotation fait le virage) ; **une forme
+  de plus, l'eau qui la recouvre**, plate, de la couleur de sa carapace, couchée à ses pieds le
+  reste du temps. 49 formes (plafond 72), 1 615 octets gzip (plafond 3 072) ; la feuille,
+  mouvement compris : 5 667 octets gzip (plafond 6 144 — il en reste peu ; sans ses
+  commentaires, que la build retire, 2 627) ; les deux : 7 282 (plafond 9 216). Les cinq états
+  montrent les mêmes formes qu'au lot A1 (10, 14, 14, 15, 26).
+- **Écarts au §5 du plan, que la planche montre tels qu'ils sont.** (a) *1 → 2* : ce n'est pas la
+  vague qui grandit, c'est l'eau qui monte, puis retombe ; le flamant attend derrière elle, bas
+  dans l'eau, et c'est l'eau en retombant qui le découvre : rien ne se fond dans rien. Son cou ne
+  s'écrit que pour sa partie hors de l'eau. « Une bosse court sur la vague » et « la couleur gagne
+  le corps depuis l'aile » ne sont pas faits. (b) *2 → 3* : elle recule d'un pas avant de courir ;
+  l'eau ne « descend » pas, elle paraît. (c) *3 → 4* : l'eau ne s'assombrit pas ; les étoiles
+  s'allument à 240 ms d'écart, trois par temps. (d) *Figures* : le flamant debout bat des ailes
+  (il ne change pas de patte) ; le virage de la tortue ne fait pas sauter d'écume (l'accent reste
+  réservé au passage, D17.6) ; à un mot trouvé la tortue qui surfe hoche la tête (elle ne
+  rebondit pas). (e) *Durées* : 2 980, 3 640, 3 520 et 4 420 ms, pour 2 400, 4 200, 3 600 et
+  4 400 annoncées — toutes sous 4 500, aucun temps au-delà de 900 ms (le plus long : la course,
+  900).
+- **« Sans éclair », précisé par la mesure.** Le plan disait : « aucune surface ne s'allume et ne
+  s'éteint ». Dans 1 → 2 l'eau monte puis retombe : une surface paraît, puis disparaît — deux
+  rampes de 640 ms, à 1,3 s l'une de l'autre. C'est ce que le plan décrivait pour cette évolution,
+  et ce n'est pas la lettre de sa propre règle : **dit à l'éditeur, à lui de dire si cela lui
+  va.** Mesuré, chaque évolution filmée image par image dans les deux thèmes, chaque pixel
+  suivi : **0 éclair par seconde** au sens de WCAG 2.3.1 dans les quatre évolutions ; la plus
+  grande surface qui change de lumière deux fois dans la même seconde fait 8 529 px² (1 → 2, en
+  clair : la vague qui s'aplatit puis l'eau qui la couvre), pour un seuil à 21 824 ; rouge
+  saturé : 5 px² au plus (les trois trouvailles, qui paraissent puis rejoignent la tortue) ; la
+  lumière moyenne de la scène ne fait jamais l'aller-retour. Les grandes surfaces — la vague,
+  l'eau, le ciel — paraissent ou s'en vont en une rampe de 640 ms ; un test le tient, ainsi que
+  l'écart de 360 ms entre la première goutte d'écume et les deux autres.
+- **Mesuré dans trois navigateurs, sur la planche elle-même** (`npm run e2e:mascot2:motion`,
+  Chromium 153, Firefox 155, WebKit 26.6 : 132, 109 et 109 contrôles, tous bons ;
+  `design/mascot/v2/motion.json`, liée à l'empreinte du dessin) : rien ne bouge ni ne s'écrit
+  pendant 2,1 s après le chargement ; le dernier mouvement de chaque évolution finit à 2 964,
+  3 066, 3 472 et 4 342 ms au pire ; une figure à 809 ms, le mouvement d'un mot trouvé à 330, une
+  fin de manche à 528 ; chaque évolution finit sur l'image exacte de la forme fixe ; rien ne sort
+  du cadre de plus de 1,5 px pendant le mouvement ; « Passer » au milieu arrête tout d'un coup et
+  donne la même image ; en mouvement réduit — la case de la planche, ou le réglage du système —
+  rien ne bouge, même si un script écrivait chaque temps à la main. **Fluidité**, processeur
+  ralenti 4 fois, écran de téléphone, sa scène seule sur la page : 95 % des images en 16,7 ms,
+  aucune au-delà de 20 ms, pour les quatre évolutions. *Ce que cette mesure a appris* : avec la
+  planche entière (près de deux cents dessins sur la page) 3 à 5 % des images de l'envol
+  dépassaient 20 ms — c'était la page, pas elle ; et lui donner une couche à elle
+  (`will-change`) empirait tout sur cette page et ne changeait rien avec sa scène seule : la
+  règle M6 de `design/motion-spec.md` (pas de `will-change`) tient. **PROBABLE** : un Chromium
+  sans carte graphique n'est pas un téléphone ; la mesure se refera dans la page du jeu (lot C).
+- **L'empreinte du dessin compte maintenant les temps de ses évolutions** (`mascot2Fingerprint`) :
+  ce qui se joue fait partie de ce qui se valide. La mesure du mouvement est liée à la même
+  empreinte, et un test la dit périmée dès qu'on retouche le dessin, sa feuille, ses couleurs ou
+  ses temps.
+- **« Même personnage ? », posée le 15 novembre à cinq lecteurs neufs** (des agents de trois
+  modèles, deux avec un profil ; deux images seulement, les tortues officielles à côté de nos
+  cinq états, puis deux évolutions image par image ; aucune source nommée ; aucun n'a ouvert
+  autre chose) — **HYPOTHÈSE** : quatre « non », un « ne sait pas », aucun « oui » ; « faits par
+  les mêmes gens ? » : cinq « ne sait pas », à cause du violet. **Ce qu'ils ont dit d'autre, et
+  qui revient à l'éditeur** : (1) un personnage qui change de forme par paliers rappelle à trois
+  d'entre eux une évolution de jeu — Pokémon, Tamagotchi nommés —, et deux précisent que l'effet
+  n'en est pas repris (« pas de silhouette blanche ni de clignotement », « un effet de rideau
+  courant, pas un emprunt précis ») : c'est l'idée demandée, pas la signature ; (2) la vague
+  enroulée rappelle à deux d'entre eux la Grande Vague d'Hokusai, et la tortue qui surfe, à un,
+  le personnage de Crush dans *Nemo* ; (3) « un parti, une campagne ? » : un « oui », deux « ne
+  sait pas », deux « non » — le « oui » nomme la tortue violette et le trio violet, rouge, crème,
+  « les flamants, seuls, ne m'y auraient pas fait penser » : c'est l'emprunt assumé de la charte
+  et la tortue de D16.11, pas ce que la refonte ajoute ; (4) **deux trouvent le flamant en vol
+  moins lisible** — « son corps en forme de citron, avec l'aile en éventail collée dessus »,
+  « une masse confuse », l'aile lue comme une coquille ; (5) **aucun n'a vu d'emblée une tortue
+  dans la constellation**, deux y voient un schéma de réseau ; (6) « enfantin, moche ? » : cinq
+  « ni l'un ni l'autre ». Consigné dans `design/mascot/v2/validation.json`
+  (`same_character_*`, lié à l'empreinte ; `validated_on` reste à null).
+- **Portes** : 629 tests (628 passent, 1 sauté depuis toujours), contraste 0 échec, lint, types,
+  `e2e:mascot2` 47 contrôles dans chacun des trois moteurs. **`npm run build` donne les mêmes
+  1 156 fichiers, octet pour octet, qu'avant le chantier** : rien de ceci n'est servi, et aucune
+  page ne connaît encore la génération 2.
+- **Montré à l'éditeur** : la planche (le fichier), et deux vidéos des quatre évolutions à vitesse
+  réelle, sur fond clair et sur fond sombre (enregistrées dans Chromium, 25 images par seconde :
+  moins fluides que la page). **Non vérifié, et dit tel quel** : de vrais téléphones ; une
+  personne photosensible (la mesure est un calcul) ; que de vraies gens lisent dans ces
+  mouvements ce que j'y lis — les lecteurs neufs n'ont vu que des images fixes.
+- **À l'éditeur** : dire si chaque évolution tient ; ce qu'il veut faire des deux remarques sur le
+  dessin (le flamant en vol, la constellation) ; puis les textes. La planche ne se date qu'après.

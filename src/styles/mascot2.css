@@ -1,5 +1,5 @@
 /*
- * The mascot, second generation (D17.1 to D17.15; docs/discovery/PLAN-TORTUE.md) — how the one
+ * The mascot, second generation (D17.1 to D17.17; docs/discovery/PLAN-TORTUE.md) — how the one
  * drawing of design/mascot/v2/mascot.svg becomes five states: a turtle, the same turtle surfing,
  * a flamingo standing, the flamingo in flight, and the flamingo flying under a turtle of stars.
  * She is « ta tortue » in all of them (D17.2).
@@ -9,13 +9,14 @@
  *
  * The file of the drawing carries geometry and class names only. Everything seen comes from
  * here, by roles of colour: the five roles of the turtle (line, shell, arc, eye, accent) and the
- * colour the player chose for the flamingo (`--m-tint`, D17.3 — pale until chosen). The evening
- * sky is the colour of her shell, its stars the colour of her line: no role of its own.
- * Flat: no gradient, no shadow, no filter.
+ * colour the player chose for the flamingo (`--m-tint`, D17.3 — pale until chosen). The water
+ * and the evening sky are the colour of her shell, the stars the colour of her line: no role of
+ * their own. Flat: no gradient, no shadow, no filter.
  *
  * What a script writes on her, and nothing else: data-state (0 to 4), data-pose, data-tint
- * (0 to 7), data-sign (0 to 2), data-passage, and how far each arc has grown (two attributes on
- * each arc — nothing here may set a dash on an arc, or it would win over them).
+ * (0 to 7), data-sign (0 to 2), data-passage, data-phase (the beat of an evolution), data-live,
+ * and how far each arc has grown (two attributes on each arc — nothing here may set a dash on
+ * an arc, or it would win over them).
  *
  * Every part that moves has ONE transform, set whole from custom properties: the state says
  * where a part is, the pose says how it is turned.
@@ -27,6 +28,12 @@
   aspect-ratio: 96 / 60;
   overflow: visible;
   --m-tint: var(--turtle-eye);
+  /* How long she moves, from the tokens: a beat of an evolution, a figure, a step, a star. */
+  --m-beat: calc(var(--duration-slow) * 2);
+  --m-trick: calc(var(--duration-slow) * 2.5);
+  --m-step: calc(var(--duration-fast) * 2.5);
+  --m-run: calc(var(--m-step) * 3);
+  --m-star: calc(var(--duration-fast) * 2);
 }
 /* The colour of a part of the book, on the flamingo and on nothing else (D17.12).
    0: none chosen yet, 7: « sans couleur » chosen on purpose — both leave her pale. */
@@ -89,9 +96,10 @@
 .mascot .m-plank {
   fill: var(--turtle-eye);
 }
+/* Her board is drawn in her own measure, under her feet: it turns and leans with her. */
 .mascot .m-plank {
   stroke: var(--turtle-line);
-  stroke-width: 2;
+  stroke-width: 3.4;
   stroke-linejoin: round;
 }
 /* The flamingo: body, wings and head in the chosen colour, outlined like the shell — a pale
@@ -142,8 +150,10 @@
   stroke-width: 2;
   stroke-linecap: round;
 }
-/* Her reflection and the evening sky: flat, in the colour of her shell. */
+/* Her reflection, the water that closes over her once, the evening sky: flat, in the colour of
+   her shell. */
 .mascot .m-mirror,
+.mascot .m-surge,
 .mascot .m-dusk {
   fill: var(--turtle-shell);
 }
@@ -161,11 +171,19 @@
 .mascot .m-dot {
   fill: var(--turtle-accent);
 }
+/* A line that can be written: its one dash is the whole of it, pushed out of sight or not. */
+.mascot .m-crest,
+.mascot .m-neck,
+.mascot .m-neck-in,
+.mascot .m-lines {
+  stroke-dasharray: 1 1.3;
+}
 
 /* --- what is there, state by state ---------------------------------------------------------- */
-.mascot .m-sky,
-.mascot .m-swell,
-.mascot .m-crest,
+.mascot .m-dusk,
+.mascot .m-lines,
+.mascot .m-star,
+.mascot .m-wave,
 .mascot .m-ring,
 .mascot .m-water,
 .mascot .m-mirror,
@@ -177,8 +195,7 @@
 .mascot .m-neck-f {
   opacity: 0;
 }
-.mascot[data-state='1'] .m-swell,
-.mascot[data-state='1'] .m-crest,
+.mascot[data-state='1'] .m-wave,
 .mascot[data-state='1'] .m-board,
 .mascot[data-state='2'] .m-bird,
 .mascot[data-state='2'] .m-ring,
@@ -188,7 +205,9 @@
 .mascot[data-state='4'] .m-bird,
 .mascot[data-state='4'] .m-water,
 .mascot[data-state='4'] .m-mirror,
-.mascot[data-state='4'] .m-sky {
+.mascot[data-state='4'] .m-dusk,
+.mascot[data-state='4'] .m-lines,
+.mascot[data-state='4'] .m-star {
   opacity: 1;
 }
 .mascot[data-state='2'] .m-turtle,
@@ -233,11 +252,26 @@
   transform: rotate(var(--m-turn, 0deg));
 }
 /* She raises her head when touched; she looks down at the tiles when asked for a hint. */
-.mascot[data-pose='up'] {
+.mascot[data-pose='up'],
+.mascot[data-state='0'][data-pose='trick'] {
   --m-turn: -16deg;
 }
 .mascot[data-pose='look'] {
   --m-turn: 13deg;
+}
+/* The wave and the water rise from their foot. */
+.mascot .m-wave,
+.mascot .m-surge {
+  transform-box: view-box;
+  transform-origin: 3px 58px;
+}
+.mascot .m-surge {
+  transform-origin: 48px 60px;
+  transform: scaleY(0);
+}
+.mascot .m-ring {
+  transform-box: fill-box;
+  transform-origin: center;
 }
 
 /* --- the flamingo: standing, then in flight -------------------------------------------------- */
@@ -251,8 +285,8 @@
   transform-origin: 44px 31px;
   transform: rotate(var(--m-lean, 0deg));
 }
-/* Her wing is the shell she had: the same dome, the same three arcs. Folded along her flank;
-   in flight it turns about the shoulder and lengthens. */
+/* Her wing is the shell she had: its three arcs are on it. Folded along her flank; in flight it
+   turns about the shoulder and lengthens. The second wing is the same shape, further round. */
 .mascot .m-wing,
 .mascot .m-far {
   transform-box: view-box;
@@ -260,17 +294,24 @@
   transform: rotate(var(--m-lift, -12deg)) scale(var(--m-span, 1), var(--m-depth, 1));
 }
 .mascot .m-far {
-  transform: rotate(var(--m-lift-far, 72deg)) scale(1.15, 1.1);
+  --m-lift: 72deg;
+  --m-span: 1.15;
+  --m-depth: 1.1;
+  --m-down: 44deg;
 }
 .mascot .m-face {
   transform-box: view-box;
   transform-origin: 59.5px 9.5px;
   transform: translate(var(--m-fx, 0px), var(--m-fy, 0px)) rotate(var(--m-nod, 0deg));
 }
+.mascot .m-leg {
+  transform-box: view-box;
+  transform-origin: 46px 38.4px;
+}
 .mascot[data-state='3'],
 .mascot[data-state='4'] {
-  --m-lean: 9deg;
   --m-by: 2px;
+  --m-lean: 9deg;
   --m-lift: 48deg;
   --m-span: 1.35;
   --m-depth: 1.25;
@@ -297,16 +338,22 @@
 .mascot[data-state='3'][data-sign='2'] {
   --m-nod: -14deg;
 }
-.mascot[data-state='3'][data-sign='2'] .m-sky {
+.mascot[data-state='3'][data-sign='2'] .m-star:nth-child(6) {
   opacity: 1;
-}
-.mascot[data-state='3'][data-sign='2'] .m-sky > :not(:nth-child(6)) {
-  opacity: 0;
 }
 /* A passage: the accent, on one detail of the scene, until the next gesture — drops of foam,
    the ring on the water, her reflection, a star. */
 .mascot[data-passage][data-state='1'] .m-dot {
   opacity: 1;
+}
+.mascot[data-state='1'] .m-dot-1 {
+  transform: translate(35px, 0);
+}
+.mascot[data-state='1'] .m-dot-2 {
+  transform: translate(35px, -3.5px);
+}
+.mascot[data-state='1'] .m-dot-3 {
+  transform: translate(38px, -7px);
 }
 .mascot[data-passage][data-state='2'] .m-ring {
   stroke: var(--turtle-accent);
@@ -316,4 +363,379 @@
 }
 .mascot[data-passage][data-state='4'] .m-star:last-child {
   fill: var(--turtle-accent);
+}
+
+/* ---------------------------------------------------------------------------------------------
+ * An evolution (D17.8), beat by beat. src/lib/mascot2.ts says when each beat starts and at
+ * which one she takes her new state; a beat here only HOLDS BACK what that state will show — so
+ * that with no beat at all (a state that comes back from a phone, reduced motion, an evolution
+ * skipped) the state alone draws her, whole. What must not be seen arriving waits in place one
+ * state early.
+ *
+ * Every evolution opens the same way: the three finds of the round come to her.
+ * ------------------------------------------------------------------------------------------- */
+.mascot[data-phase$='-in'] .m-dot {
+  opacity: 1;
+  transform: none;
+}
+.mascot[data-phase$='-to'] .m-dot {
+  transform: translate(36px, 12px);
+}
+.mascot[data-state='1'][data-phase$='-to'] .m-dot {
+  transform: translate(56px, 8px);
+}
+
+/* 0 → 1. The line of a wave writes itself, low; she steps aside; her board slides under her
+   feet; the wave rises, fills, and she leans into it; foam. */
+.mascot[data-state='0'] .m-crest {
+  stroke-dashoffset: 1.15;
+}
+.mascot[data-state='0'] .m-wave,
+.mascot[data-phase='01-wave'] .m-wave,
+.mascot[data-phase='01-board'] .m-wave {
+  transform: scaleY(0.5);
+}
+.mascot[data-state='0'] .m-swell,
+.mascot[data-phase='01-wave'] .m-swell,
+.mascot[data-phase='01-board'] .m-swell {
+  opacity: 0;
+}
+.mascot[data-state='0'] .m-board,
+.mascot[data-phase='01-wave'] .m-board {
+  opacity: 0;
+  transform: translateX(-60px);
+}
+.mascot[data-phase='01-wave'],
+.mascot[data-phase='01-board'] {
+  --m-ty: -8px;
+  --m-tr: 0deg;
+}
+
+/* 1 → 2. She gathers herself on her board; the water closes over her, flat: she is not seen —
+   that is where she changes, and nothing blinks. A line comes out of the water and rises: her
+   neck, then her head. The water falls back to a ring; her body is uncovered, her legs lengthen
+   and lift her; she folds one. */
+.mascot[data-phase='12-to'],
+.mascot[data-phase='12-cover'],
+.mascot[data-phase='12-under'] {
+  --m-tx: 9px;
+  --m-ty: -4px;
+  --m-tr: 0deg;
+  --m-ts: 0.48;
+}
+.mascot[data-phase='12-cover'] .m-wave,
+.mascot[data-phase='12-under'] .m-wave,
+.mascot[data-phase='12-neck'] .m-wave {
+  transform: scale(0.85, 0.45);
+}
+.mascot[data-phase='12-cover'] .m-surge,
+.mascot[data-phase='12-under'] .m-surge {
+  transform: none;
+}
+.mascot[data-phase='12-neck'] .m-surge {
+  transform: scaleY(0.8);
+}
+/* The flamingo waits low in the water, legs short, her neck written no further than the water
+   hides. */
+.mascot[data-state='1'],
+.mascot[data-phase='12-under'],
+.mascot[data-phase='12-neck'] {
+  --m-by: 14px;
+}
+.mascot[data-state='1'] .m-leg,
+.mascot[data-phase='12-under'] .m-leg,
+.mascot[data-phase='12-neck'] .m-leg {
+  transform: scaleY(0.19);
+}
+.mascot[data-state='1'] .m-neck-s,
+.mascot[data-phase='12-under'] .m-neck-s {
+  stroke-dashoffset: 0.6;
+}
+.mascot[data-state='1'] .m-face,
+.mascot[data-phase='12-under'] .m-face,
+.mascot[data-state='1'] .m-leg-fold,
+.mascot[data-phase='12-under'] .m-leg-fold,
+.mascot[data-phase='12-neck'] .m-leg-fold,
+.mascot[data-phase='12-shore'] .m-leg-fold {
+  opacity: 0;
+}
+
+/* 2 → 3. She steps back and lowers herself, both feet in the water; she runs on it, as flamingos
+   do, a ring at each step; her wings open; she lifts, her legs go behind her, her neck reaches
+   forward; two slower beats. */
+.mascot[data-phase='23-to'],
+.mascot[data-phase='23-run'],
+.mascot[data-phase='23-wings'] {
+  --m-by: 8px;
+}
+.mascot[data-phase='23-to'] {
+  --m-bx: -6px;
+}
+.mascot[data-phase='23-run'] .m-ring,
+.mascot[data-phase='23-wings'] .m-ring {
+  opacity: 0;
+}
+.mascot[data-phase='23-to'] .m-leg,
+.mascot[data-phase='23-run'] .m-leg,
+.mascot[data-phase='23-wings'] .m-leg {
+  transform: scaleY(0.53);
+}
+.mascot[data-phase='23-to'] .m-leg-fold,
+.mascot[data-phase='23-run'] .m-leg-fold,
+.mascot[data-phase='23-wings'] .m-leg-fold {
+  opacity: 0;
+}
+.mascot[data-phase='23-wings'] {
+  --m-lift: 48deg;
+  --m-span: 1.35;
+  --m-depth: 1.25;
+}
+.mascot[data-phase='23-wings'] .m-far {
+  opacity: 1;
+}
+.mascot[data-state='3'] .m-leg,
+.mascot[data-state='4'] .m-leg {
+  transform: scaleY(0);
+}
+.mascot[data-state='0'] .m-neck-f,
+.mascot[data-state='1'] .m-neck-f,
+.mascot[data-state='2'] .m-neck-f,
+.mascot[data-state='3'] .m-neck-s,
+.mascot[data-state='4'] .m-neck-s {
+  stroke-dashoffset: 1.15;
+}
+
+/* 3 → 4. The evening sky comes, once; her stars light up one after the other and stay lit; a
+   line joins them; she passes under. */
+.mascot[data-phase='34-dusk'] .m-star:not(:nth-child(6)),
+.mascot[data-phase='34-stars-1'] .m-star:nth-child(n + 7),
+.mascot[data-phase='34-stars-2'] .m-star:nth-child(n + 9) {
+  opacity: 0;
+}
+.mascot[data-state='3'] .m-lines,
+.mascot[data-phase='34-dusk'] .m-lines,
+.mascot[data-phase^='34-stars'] .m-lines {
+  stroke-dashoffset: 1.15;
+}
+
+/* ---------------------------------------------------------------------------------------------
+ * Movement (D17.7, D17.8). She never moves alone: `data-live` is set by the script once the
+ * look she arrives with is drawn, so that a page that loads plays nothing, and every change
+ * below answers a gesture. Transform, opacity and — for a line that is written — the offset of
+ * its one dash; nothing else. Nothing runs without end. Whoever asked for less motion gets no
+ * movement at all: the rule is not "shorter", it is "none".
+ * ------------------------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  /* A look given at once — « Passer », a state that comes back: whatever was moving stops. */
+  .mascot:not([data-live]) * {
+    transition-property: none;
+  }
+  .mascot[data-live] .m-turtle,
+  .mascot[data-live] .m-head,
+  .mascot[data-live] .m-board,
+  .mascot[data-live] .m-bird,
+  .mascot[data-live] .m-body,
+  .mascot[data-live] .m-wing,
+  .mascot[data-live] .m-far,
+  .mascot[data-live] .m-face,
+  .mascot[data-live] .m-leg {
+    transition:
+      transform var(--duration-reveal) var(--easing-standard),
+      opacity var(--duration-slow) var(--easing-enter);
+  }
+  .mascot[data-live] .m-ring,
+  .mascot[data-live] .m-water,
+  .mascot[data-live] .m-mirror,
+  .mascot[data-live] .m-dot,
+  .mascot[data-live] .m-leg-fold,
+  .mascot[data-live] .m-legs-fly {
+    transition: opacity var(--duration-slow) var(--easing-enter);
+  }
+  /* A line that is written: the wave, her neck, the lines between her stars. */
+  .mascot[data-live] .m-crest,
+  .mascot[data-live] .m-neck,
+  .mascot[data-live] .m-neck-in,
+  .mascot[data-live] .m-lines {
+    transition:
+      opacity var(--duration-slow) var(--easing-enter),
+      stroke-dashoffset var(--m-beat) var(--easing-standard);
+  }
+  .mascot[data-live] .m-star {
+    transition: opacity var(--m-star) var(--easing-enter);
+  }
+  /* What is large comes and goes slowly, once: a wave, the water, a sky. Never a flash
+     (WCAG 2.3.1). */
+  .mascot[data-live] .m-wave,
+  .mascot[data-live] .m-swell,
+  .mascot[data-live] .m-surge,
+  .mascot[data-live] .m-dusk {
+    transition:
+      transform var(--m-beat) var(--easing-standard),
+      opacity var(--m-beat) var(--easing-enter);
+  }
+  /* During an evolution she takes her time. */
+  .mascot[data-live][data-phase] .m-turtle,
+  .mascot[data-live][data-phase] .m-board,
+  .mascot[data-live][data-phase] .m-bird,
+  .mascot[data-live][data-phase] .m-body,
+  .mascot[data-live][data-phase] .m-wing,
+  .mascot[data-live][data-phase] .m-far,
+  .mascot[data-live][data-phase] .m-face,
+  .mascot[data-live][data-phase] .m-leg {
+    transition-duration: var(--m-beat), var(--duration-slow);
+  }
+  /* The finds: there at once, then into her, and gone as they reach her. */
+  .mascot[data-live][data-phase$='-in'] .m-dot {
+    transition: opacity var(--duration-fast) var(--easing-enter);
+  }
+  .mascot[data-live][data-phase$='-to'] .m-dot {
+    transition:
+      transform var(--duration-slow) var(--easing-exit),
+      opacity var(--duration-base) var(--easing-exit) var(--duration-fast);
+  }
+  /* Her head comes last, at the end of her neck. */
+  .mascot[data-live][data-phase='12-neck'] .m-face {
+    transition-delay: var(--duration-slow);
+  }
+  /* One drop of foam, then two; one star after the other. */
+  .mascot[data-live][data-phase='01-foam'] .m-dot-2,
+  .mascot[data-live][data-phase='01-foam'] .m-dot-3 {
+    transition-delay: calc(var(--duration-fast) * 3);
+  }
+  .mascot[data-live][data-phase^='34-stars'] .m-star:nth-child(3n + 1) {
+    transition-delay: var(--m-star);
+  }
+  .mascot[data-live][data-phase^='34-stars'] .m-star:nth-child(3n + 2) {
+    transition-delay: calc(var(--m-star) * 2);
+  }
+
+  /* Her figures, and the small move she makes for each word found — the same, whatever was
+     chosen. Each plays through, a counted number of times, and stops. */
+  .mascot[data-live][data-phase='01-board'] .m-turtle {
+    animation: m-jump var(--m-step) var(--easing-standard);
+  }
+  .mascot[data-live][data-phase='23-run'] .m-bird {
+    animation: m-run var(--m-run) linear;
+  }
+  .mascot[data-live][data-phase='23-run'] .m-ring {
+    animation: m-rings var(--m-run) linear;
+  }
+  .mascot[data-live][data-phase='23-glide'] .m-wing,
+  .mascot[data-live][data-phase='23-glide'] .m-far,
+  .mascot[data-live][data-phase='34-pass'] .m-wing,
+  .mascot[data-live][data-phase='34-pass'] .m-far,
+  .mascot[data-live][data-pose='trick'] .m-wing,
+  .mascot[data-live][data-pose='trick'] .m-far {
+    animation: m-beat var(--duration-slow) var(--easing-standard) 2;
+  }
+  .mascot[data-live][data-state='3'][data-pose='pulse'] .m-wing,
+  .mascot[data-live][data-state='3'][data-pose='pulse'] .m-far,
+  .mascot[data-live][data-phase='34-pass'] .m-wing,
+  .mascot[data-live][data-phase='34-pass'] .m-far {
+    animation-iteration-count: 1;
+  }
+  .mascot[data-live][data-state='1'][data-pose='trick'] .m-turtle {
+    animation: m-carve var(--m-trick) var(--easing-standard);
+  }
+  .mascot[data-live][data-state='4'][data-pose='trick'] .m-lines {
+    animation: m-write var(--m-trick) var(--easing-standard);
+  }
+  .mascot[data-live][data-pose='pulse'] .m-head {
+    animation: m-nod var(--duration-slow) var(--easing-standard);
+  }
+  .mascot[data-live][data-state='2'][data-pose='pulse'] .m-face {
+    animation: m-dip var(--duration-slow) var(--easing-standard);
+  }
+  .mascot[data-live][data-state='4'][data-pose='pulse'] .m-star:nth-child(6) {
+    animation: m-pale var(--duration-slow) var(--easing-standard);
+  }
+  @keyframes m-jump {
+    50% {
+      transform: translate(var(--m-tx), calc(var(--m-ty) - 4px)) rotate(var(--m-tr))
+        scale(var(--m-ts));
+    }
+  }
+  /* Three steps forward, from where she stepped back to. */
+  @keyframes m-run {
+    0% {
+      transform: translate(-6px, var(--m-by));
+    }
+    17% {
+      transform: translate(-5px, calc(var(--m-by) - 3px));
+    }
+    33% {
+      transform: translate(-4px, var(--m-by));
+    }
+    50% {
+      transform: translate(-3px, calc(var(--m-by) - 3px));
+    }
+    67% {
+      transform: translate(-2px, var(--m-by));
+    }
+    83% {
+      transform: translate(-1px, calc(var(--m-by) - 3px));
+    }
+  }
+  @keyframes m-rings {
+    0% {
+      opacity: 1;
+      transform: translate(-6px) scale(0.6);
+    }
+    33.3% {
+      opacity: 0;
+      transform: translate(-6px) scale(1.5);
+    }
+    33.4% {
+      opacity: 1;
+      transform: translate(-4px) scale(0.6);
+    }
+    66.6% {
+      opacity: 0;
+      transform: translate(-4px) scale(1.5);
+    }
+    66.7% {
+      opacity: 1;
+      transform: translate(-2px) scale(0.6);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-2px) scale(1.5);
+    }
+  }
+  @keyframes m-beat {
+    50% {
+      transform: rotate(var(--m-down, 14deg)) scale(var(--m-span, 1), var(--m-depth, 1));
+    }
+  }
+  @keyframes m-carve {
+    35% {
+      transform: translate(var(--m-tx), var(--m-ty)) rotate(calc(var(--m-tr) - 15deg))
+        scale(var(--m-ts));
+    }
+    70% {
+      transform: translate(var(--m-tx), var(--m-ty)) rotate(calc(var(--m-tr) + 5deg))
+        scale(var(--m-ts));
+    }
+  }
+  @keyframes m-write {
+    from {
+      stroke-dashoffset: 1.15;
+    }
+  }
+  @keyframes m-nod {
+    50% {
+      transform: rotate(calc(var(--m-turn, 0deg) + 12deg));
+    }
+  }
+  @keyframes m-dip {
+    50% {
+      transform: translate(var(--m-fx, 0px), var(--m-fy, 0px))
+        rotate(calc(var(--m-nod, 0deg) + 14deg));
+    }
+  }
+  @keyframes m-pale {
+    50% {
+      opacity: 0.35;
+    }
+  }
 }

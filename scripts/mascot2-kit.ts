@@ -9,12 +9,15 @@
  */
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
+import { EVOLUTIONS, FINDS, PULSE_HOLD_MS, TRICK_HOLD_MS } from '../src/lib/mascot2.js';
 
 export const MASCOT2_SVG_PATH = 'design/mascot/v2/mascot.svg';
 export const MASCOT2_CSS_PATH = 'src/styles/mascot2.css';
 export const MASCOT2_PALETTE_PATH = 'design/mascot/v2/palette.json';
 export const MASCOT2_VALIDATION_PATH = 'design/mascot/v2/validation.json';
 export const MASCOT2_SHEET_PATH = 'design/mascot/v2/planche.html';
+/** What three browsers measured of her movement (scripts/mascot2-motion.ts --write). */
+export const MASCOT2_MOTION_PATH = 'design/mascot/v2/motion.json';
 
 /** The two token sets she is drawn in: the main one, and the neutral one that stands ready. */
 export const MASCOT2_TOKEN_SETS = ['design/tokens.json', 'design/tokens.neutral.json'] as const;
@@ -103,9 +106,16 @@ export function mascot2Colours(root = '.'): string[] {
 }
 
 /**
+ * Her choreography, as the fingerprint reads it: the beats of every evolution and how long she
+ * holds a figure (src/lib/mascot2.ts). What plays is part of what is validated.
+ */
+export const mascot2Choreography = (): string =>
+  JSON.stringify({ FINDS, EVOLUTIONS, TRICK_HOLD_MS, PULSE_HOLD_MS });
+
+/**
  * What the editor validates when the sheet is dated: the drawing, the stylesheet that makes its
- * states, and its colours. One fingerprint: a retouch of any of the three un-validates her.
- * Null while she is not drawn.
+ * states and its movement, its colours, and the beats of its evolutions. One fingerprint: a
+ * retouch of any of them un-validates her. Null while she is not drawn.
  */
 export function mascot2Fingerprint(root = '.'): string | null {
   const files = [MASCOT2_SVG_PATH, MASCOT2_CSS_PATH, MASCOT2_PALETTE_PATH].map((p) => at(root, p));
@@ -116,8 +126,64 @@ export function mascot2Fingerprint(root = '.'): string | null {
     .update(readFileSync(at(root, MASCOT2_CSS_PATH)))
     .update('\n')
     .update(JSON.stringify(mascot2Colours(root)))
+    .update('\n')
+    .update(mascot2Choreography())
     .digest('hex');
 }
+
+// ---------------------------------------------------------------------------------------------
+// What was measured of her movement
+// ---------------------------------------------------------------------------------------------
+
+/**
+ * One evolution in one theme, filmed frame by frame (WCAG 2.3.1, general and red flashes). A
+ * flash is a pair of opposing changes of light; the rule counts those of an area of
+ * `FLASH_AREA_PX` or more, and allows three in a second.
+ */
+export interface FlashMeasure {
+  /** Flashes in one second that an area large enough for the rule goes through, at worst. */
+  flashes_per_second: number;
+  /** The largest area, in CSS px², that changes back and forth within one same second. */
+  area_px: number;
+  /** The same two numbers for a saturated red. */
+  red_flashes_per_second: number;
+  red_area_px: number;
+  /** Pairs of opposing changes of the mean light of the whole scene, over the evolution. */
+  scene_pairs: number;
+}
+
+/** What the browsers measured of one clip. */
+export interface ClipMeasure {
+  /** How long the data says it lasts. */
+  lasts_ms: number;
+  /** When the last movement ended, engine by engine. */
+  moving_ms: Record<string, number>;
+  /** How far anything of her reached out of her frame while she moved, in CSS px, at worst. */
+  spill_px: number;
+  flashes?: { light: FlashMeasure; dark: FlashMeasure };
+  /** Frames with the processor slowed four times (Chromium): the middle one of three runs. */
+  frames?: { count: number; p95_ms: number; over_20_pct: number; over_50: number };
+}
+
+export interface MotionMeasures {
+  note_fr: string;
+  measured_on: string;
+  /** Fingerprint of the drawing that was measured: a retouch makes the measure stale. */
+  drawing_sha256: string;
+  browsers: Record<string, string>;
+  clips: Record<string, ClipMeasure>;
+}
+
+export function readMotion(root = '.'): MotionMeasures | null {
+  const path = at(root, MASCOT2_MOTION_PATH);
+  if (!existsSync(path)) return null;
+  return JSON.parse(readFileSync(path, 'utf8')) as MotionMeasures;
+}
+
+/** WCAG 2.3.1: at most three flashes in any one second — or an area too small to matter. */
+export const FLASHES_PER_SECOND_MAX = 3;
+/** A quarter of a ten-degree field of view: 341 × 256 CSS px at 1024 × 768 (WCAG, note). */
+export const FLASH_AREA_PX = Math.round(0.25 * 341 * 256);
 
 // ---------------------------------------------------------------------------------------------
 // Two measures of a colour

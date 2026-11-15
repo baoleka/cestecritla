@@ -3,9 +3,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Ta tortue, deuxième génération — planche de validation (images fixes)</title>
+<title>Ta tortue, deuxième génération — planche de validation</title>
 <style>
-body{margin:0;font:14px/1.45 system-ui,sans-serif;background:#fff;color:#212320}
+body{margin:0;font:14px/1.45 system-ui,sans-serif;background:#fff;color:#212320;--duration-fast:120ms;--duration-base:200ms;--duration-reveal:240ms;--duration-slow:320ms;--easing-standard:cubic-bezier(0.2, 0, 0, 1);--easing-enter:cubic-bezier(0, 0, 0.2, 1);--easing-exit:cubic-bezier(0.4, 0, 1, 1)}
+body[data-slow]{--duration-fast:480ms;--duration-base:800ms;--duration-reveal:960ms;--duration-slow:1280ms}
 header,footer{padding:16px 20px;max-width:62rem}
 h1{font-size:20px;margin:0 0 4px}
 section{background:var(--bg,#fff);color:var(--text,#212320);padding:14px 20px 20px}
@@ -36,8 +37,21 @@ thead th,tbody th{font-weight:600}
 .tiles span{padding:11px 12px;border:2px solid var(--turtle-line);border-radius:8px}
 .stage{display:flex;justify-content:center;margin-block:6px 10px}
 .done{font-size:18px;font-weight:700;margin-block-end:12px!important}
+h3{font-size:15px;margin:22px 0 2px}
+.says{margin:0 0 10px;font-size:13px}
+.scene{background:var(--bg);color:var(--text);padding:10px 14px;border:1px solid color-mix(in srgb,var(--text) 25%,transparent);border-radius:12px}
+.keys{margin:0;align-self:center}
+button{font:inherit;font-weight:700;padding:8px 16px;margin:0 6px 6px 0;border:2px solid currentColor;border-radius:999px;background:none;color:inherit;cursor:pointer}
+figcaption button{margin:6px 0 0;padding:5px 12px;font-size:12px}
+.controls{margin:0 0 4px;font-size:13px}
+.controls label{display:block;margin:4px 0}
+.strip-note{margin:12px 0 6px}
+.strip{gap:10px;align-items:flex-start}
+.strip figure{inline-size:118px;font-size:11px;line-height:1.3}
+.after{margin-block-start:14px}
+td,th{max-inline-size:17rem}
 /*
- * The mascot, second generation (D17.1 to D17.15; docs/discovery/PLAN-TORTUE.md) — how the one
+ * The mascot, second generation (D17.1 to D17.17; docs/discovery/PLAN-TORTUE.md) — how the one
  * drawing of design/mascot/v2/mascot.svg becomes five states: a turtle, the same turtle surfing,
  * a flamingo standing, the flamingo in flight, and the flamingo flying under a turtle of stars.
  * She is « ta tortue » in all of them (D17.2).
@@ -47,13 +61,14 @@ thead th,tbody th{font-weight:600}
  *
  * The file of the drawing carries geometry and class names only. Everything seen comes from
  * here, by roles of colour: the five roles of the turtle (line, shell, arc, eye, accent) and the
- * colour the player chose for the flamingo (`--m-tint`, D17.3 — pale until chosen). The evening
- * sky is the colour of her shell, its stars the colour of her line: no role of its own.
- * Flat: no gradient, no shadow, no filter.
+ * colour the player chose for the flamingo (`--m-tint`, D17.3 — pale until chosen). The water
+ * and the evening sky are the colour of her shell, the stars the colour of her line: no role of
+ * their own. Flat: no gradient, no shadow, no filter.
  *
  * What a script writes on her, and nothing else: data-state (0 to 4), data-pose, data-tint
- * (0 to 7), data-sign (0 to 2), data-passage, and how far each arc has grown (two attributes on
- * each arc — nothing here may set a dash on an arc, or it would win over them).
+ * (0 to 7), data-sign (0 to 2), data-passage, data-phase (the beat of an evolution), data-live,
+ * and how far each arc has grown (two attributes on each arc — nothing here may set a dash on
+ * an arc, or it would win over them).
  *
  * Every part that moves has ONE transform, set whole from custom properties: the state says
  * where a part is, the pose says how it is turned.
@@ -65,6 +80,12 @@ thead th,tbody th{font-weight:600}
   aspect-ratio: 96 / 60;
   overflow: visible;
   --m-tint: var(--turtle-eye);
+  /* How long she moves, from the tokens: a beat of an evolution, a figure, a step, a star. */
+  --m-beat: calc(var(--duration-slow) * 2);
+  --m-trick: calc(var(--duration-slow) * 2.5);
+  --m-step: calc(var(--duration-fast) * 2.5);
+  --m-run: calc(var(--m-step) * 3);
+  --m-star: calc(var(--duration-fast) * 2);
 }
 /* The colour of a part of the book, on the flamingo and on nothing else (D17.12).
    0: none chosen yet, 7: « sans couleur » chosen on purpose — both leave her pale. */
@@ -127,9 +148,10 @@ thead th,tbody th{font-weight:600}
 .mascot .m-plank {
   fill: var(--turtle-eye);
 }
+/* Her board is drawn in her own measure, under her feet: it turns and leans with her. */
 .mascot .m-plank {
   stroke: var(--turtle-line);
-  stroke-width: 2;
+  stroke-width: 3.4;
   stroke-linejoin: round;
 }
 /* The flamingo: body, wings and head in the chosen colour, outlined like the shell — a pale
@@ -180,8 +202,10 @@ thead th,tbody th{font-weight:600}
   stroke-width: 2;
   stroke-linecap: round;
 }
-/* Her reflection and the evening sky: flat, in the colour of her shell. */
+/* Her reflection, the water that closes over her once, the evening sky: flat, in the colour of
+   her shell. */
 .mascot .m-mirror,
+.mascot .m-surge,
 .mascot .m-dusk {
   fill: var(--turtle-shell);
 }
@@ -199,11 +223,19 @@ thead th,tbody th{font-weight:600}
 .mascot .m-dot {
   fill: var(--turtle-accent);
 }
+/* A line that can be written: its one dash is the whole of it, pushed out of sight or not. */
+.mascot .m-crest,
+.mascot .m-neck,
+.mascot .m-neck-in,
+.mascot .m-lines {
+  stroke-dasharray: 1 1.3;
+}
 
 /* --- what is there, state by state ---------------------------------------------------------- */
-.mascot .m-sky,
-.mascot .m-swell,
-.mascot .m-crest,
+.mascot .m-dusk,
+.mascot .m-lines,
+.mascot .m-star,
+.mascot .m-wave,
 .mascot .m-ring,
 .mascot .m-water,
 .mascot .m-mirror,
@@ -215,8 +247,7 @@ thead th,tbody th{font-weight:600}
 .mascot .m-neck-f {
   opacity: 0;
 }
-.mascot[data-state='1'] .m-swell,
-.mascot[data-state='1'] .m-crest,
+.mascot[data-state='1'] .m-wave,
 .mascot[data-state='1'] .m-board,
 .mascot[data-state='2'] .m-bird,
 .mascot[data-state='2'] .m-ring,
@@ -226,7 +257,9 @@ thead th,tbody th{font-weight:600}
 .mascot[data-state='4'] .m-bird,
 .mascot[data-state='4'] .m-water,
 .mascot[data-state='4'] .m-mirror,
-.mascot[data-state='4'] .m-sky {
+.mascot[data-state='4'] .m-dusk,
+.mascot[data-state='4'] .m-lines,
+.mascot[data-state='4'] .m-star {
   opacity: 1;
 }
 .mascot[data-state='2'] .m-turtle,
@@ -271,11 +304,26 @@ thead th,tbody th{font-weight:600}
   transform: rotate(var(--m-turn, 0deg));
 }
 /* She raises her head when touched; she looks down at the tiles when asked for a hint. */
-.mascot[data-pose='up'] {
+.mascot[data-pose='up'],
+.mascot[data-state='0'][data-pose='trick'] {
   --m-turn: -16deg;
 }
 .mascot[data-pose='look'] {
   --m-turn: 13deg;
+}
+/* The wave and the water rise from their foot. */
+.mascot .m-wave,
+.mascot .m-surge {
+  transform-box: view-box;
+  transform-origin: 3px 58px;
+}
+.mascot .m-surge {
+  transform-origin: 48px 60px;
+  transform: scaleY(0);
+}
+.mascot .m-ring {
+  transform-box: fill-box;
+  transform-origin: center;
 }
 
 /* --- the flamingo: standing, then in flight -------------------------------------------------- */
@@ -289,8 +337,8 @@ thead th,tbody th{font-weight:600}
   transform-origin: 44px 31px;
   transform: rotate(var(--m-lean, 0deg));
 }
-/* Her wing is the shell she had: the same dome, the same three arcs. Folded along her flank;
-   in flight it turns about the shoulder and lengthens. */
+/* Her wing is the shell she had: its three arcs are on it. Folded along her flank; in flight it
+   turns about the shoulder and lengthens. The second wing is the same shape, further round. */
 .mascot .m-wing,
 .mascot .m-far {
   transform-box: view-box;
@@ -298,17 +346,24 @@ thead th,tbody th{font-weight:600}
   transform: rotate(var(--m-lift, -12deg)) scale(var(--m-span, 1), var(--m-depth, 1));
 }
 .mascot .m-far {
-  transform: rotate(var(--m-lift-far, 72deg)) scale(1.15, 1.1);
+  --m-lift: 72deg;
+  --m-span: 1.15;
+  --m-depth: 1.1;
+  --m-down: 44deg;
 }
 .mascot .m-face {
   transform-box: view-box;
   transform-origin: 59.5px 9.5px;
   transform: translate(var(--m-fx, 0px), var(--m-fy, 0px)) rotate(var(--m-nod, 0deg));
 }
+.mascot .m-leg {
+  transform-box: view-box;
+  transform-origin: 46px 38.4px;
+}
 .mascot[data-state='3'],
 .mascot[data-state='4'] {
-  --m-lean: 9deg;
   --m-by: 2px;
+  --m-lean: 9deg;
   --m-lift: 48deg;
   --m-span: 1.35;
   --m-depth: 1.25;
@@ -335,16 +390,22 @@ thead th,tbody th{font-weight:600}
 .mascot[data-state='3'][data-sign='2'] {
   --m-nod: -14deg;
 }
-.mascot[data-state='3'][data-sign='2'] .m-sky {
+.mascot[data-state='3'][data-sign='2'] .m-star:nth-child(6) {
   opacity: 1;
-}
-.mascot[data-state='3'][data-sign='2'] .m-sky > :not(:nth-child(6)) {
-  opacity: 0;
 }
 /* A passage: the accent, on one detail of the scene, until the next gesture — drops of foam,
    the ring on the water, her reflection, a star. */
 .mascot[data-passage][data-state='1'] .m-dot {
   opacity: 1;
+}
+.mascot[data-state='1'] .m-dot-1 {
+  transform: translate(35px, 0);
+}
+.mascot[data-state='1'] .m-dot-2 {
+  transform: translate(35px, -3.5px);
+}
+.mascot[data-state='1'] .m-dot-3 {
+  transform: translate(38px, -7px);
 }
 .mascot[data-passage][data-state='2'] .m-ring {
   stroke: var(--turtle-accent);
@@ -356,34 +417,414 @@ thead th,tbody th{font-weight:600}
   fill: var(--turtle-accent);
 }
 
+/* ---------------------------------------------------------------------------------------------
+ * An evolution (D17.8), beat by beat. src/lib/mascot2.ts says when each beat starts and at
+ * which one she takes her new state; a beat here only HOLDS BACK what that state will show — so
+ * that with no beat at all (a state that comes back from a phone, reduced motion, an evolution
+ * skipped) the state alone draws her, whole. What must not be seen arriving waits in place one
+ * state early.
+ *
+ * Every evolution opens the same way: the three finds of the round come to her.
+ * ------------------------------------------------------------------------------------------- */
+.mascot[data-phase$='-in'] .m-dot {
+  opacity: 1;
+  transform: none;
+}
+.mascot[data-phase$='-to'] .m-dot {
+  transform: translate(36px, 12px);
+}
+.mascot[data-state='1'][data-phase$='-to'] .m-dot {
+  transform: translate(56px, 8px);
+}
+
+/* 0 → 1. The line of a wave writes itself, low; she steps aside; her board slides under her
+   feet; the wave rises, fills, and she leans into it; foam. */
+.mascot[data-state='0'] .m-crest {
+  stroke-dashoffset: 1.15;
+}
+.mascot[data-state='0'] .m-wave,
+.mascot[data-phase='01-wave'] .m-wave,
+.mascot[data-phase='01-board'] .m-wave {
+  transform: scaleY(0.5);
+}
+.mascot[data-state='0'] .m-swell,
+.mascot[data-phase='01-wave'] .m-swell,
+.mascot[data-phase='01-board'] .m-swell {
+  opacity: 0;
+}
+.mascot[data-state='0'] .m-board,
+.mascot[data-phase='01-wave'] .m-board {
+  opacity: 0;
+  transform: translateX(-60px);
+}
+.mascot[data-phase='01-wave'],
+.mascot[data-phase='01-board'] {
+  --m-ty: -8px;
+  --m-tr: 0deg;
+}
+
+/* 1 → 2. She gathers herself on her board; the water closes over her, flat: she is not seen —
+   that is where she changes, and nothing blinks. A line comes out of the water and rises: her
+   neck, then her head. The water falls back to a ring; her body is uncovered, her legs lengthen
+   and lift her; she folds one. */
+.mascot[data-phase='12-to'],
+.mascot[data-phase='12-cover'],
+.mascot[data-phase='12-under'] {
+  --m-tx: 9px;
+  --m-ty: -4px;
+  --m-tr: 0deg;
+  --m-ts: 0.48;
+}
+.mascot[data-phase='12-cover'] .m-wave,
+.mascot[data-phase='12-under'] .m-wave,
+.mascot[data-phase='12-neck'] .m-wave {
+  transform: scale(0.85, 0.45);
+}
+.mascot[data-phase='12-cover'] .m-surge,
+.mascot[data-phase='12-under'] .m-surge {
+  transform: none;
+}
+.mascot[data-phase='12-neck'] .m-surge {
+  transform: scaleY(0.8);
+}
+/* The flamingo waits low in the water, legs short, her neck written no further than the water
+   hides. */
+.mascot[data-state='1'],
+.mascot[data-phase='12-under'],
+.mascot[data-phase='12-neck'] {
+  --m-by: 14px;
+}
+.mascot[data-state='1'] .m-leg,
+.mascot[data-phase='12-under'] .m-leg,
+.mascot[data-phase='12-neck'] .m-leg {
+  transform: scaleY(0.19);
+}
+.mascot[data-state='1'] .m-neck-s,
+.mascot[data-phase='12-under'] .m-neck-s {
+  stroke-dashoffset: 0.6;
+}
+.mascot[data-state='1'] .m-face,
+.mascot[data-phase='12-under'] .m-face,
+.mascot[data-state='1'] .m-leg-fold,
+.mascot[data-phase='12-under'] .m-leg-fold,
+.mascot[data-phase='12-neck'] .m-leg-fold,
+.mascot[data-phase='12-shore'] .m-leg-fold {
+  opacity: 0;
+}
+
+/* 2 → 3. She steps back and lowers herself, both feet in the water; she runs on it, as flamingos
+   do, a ring at each step; her wings open; she lifts, her legs go behind her, her neck reaches
+   forward; two slower beats. */
+.mascot[data-phase='23-to'],
+.mascot[data-phase='23-run'],
+.mascot[data-phase='23-wings'] {
+  --m-by: 8px;
+}
+.mascot[data-phase='23-to'] {
+  --m-bx: -6px;
+}
+.mascot[data-phase='23-run'] .m-ring,
+.mascot[data-phase='23-wings'] .m-ring {
+  opacity: 0;
+}
+.mascot[data-phase='23-to'] .m-leg,
+.mascot[data-phase='23-run'] .m-leg,
+.mascot[data-phase='23-wings'] .m-leg {
+  transform: scaleY(0.53);
+}
+.mascot[data-phase='23-to'] .m-leg-fold,
+.mascot[data-phase='23-run'] .m-leg-fold,
+.mascot[data-phase='23-wings'] .m-leg-fold {
+  opacity: 0;
+}
+.mascot[data-phase='23-wings'] {
+  --m-lift: 48deg;
+  --m-span: 1.35;
+  --m-depth: 1.25;
+}
+.mascot[data-phase='23-wings'] .m-far {
+  opacity: 1;
+}
+.mascot[data-state='3'] .m-leg,
+.mascot[data-state='4'] .m-leg {
+  transform: scaleY(0);
+}
+.mascot[data-state='0'] .m-neck-f,
+.mascot[data-state='1'] .m-neck-f,
+.mascot[data-state='2'] .m-neck-f,
+.mascot[data-state='3'] .m-neck-s,
+.mascot[data-state='4'] .m-neck-s {
+  stroke-dashoffset: 1.15;
+}
+
+/* 3 → 4. The evening sky comes, once; her stars light up one after the other and stay lit; a
+   line joins them; she passes under. */
+.mascot[data-phase='34-dusk'] .m-star:not(:nth-child(6)),
+.mascot[data-phase='34-stars-1'] .m-star:nth-child(n + 7),
+.mascot[data-phase='34-stars-2'] .m-star:nth-child(n + 9) {
+  opacity: 0;
+}
+.mascot[data-state='3'] .m-lines,
+.mascot[data-phase='34-dusk'] .m-lines,
+.mascot[data-phase^='34-stars'] .m-lines {
+  stroke-dashoffset: 1.15;
+}
+
+/* ---------------------------------------------------------------------------------------------
+ * Movement (D17.7, D17.8). She never moves alone: `data-live` is set by the script once the
+ * look she arrives with is drawn, so that a page that loads plays nothing, and every change
+ * below answers a gesture. Transform, opacity and — for a line that is written — the offset of
+ * its one dash; nothing else. Nothing runs without end. Whoever asked for less motion gets no
+ * movement at all: the rule is not "shorter", it is "none".
+ * ------------------------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  /* A look given at once — « Passer », a state that comes back: whatever was moving stops. */
+  .mascot:not([data-live]) * {
+    transition-property: none;
+  }
+  .mascot[data-live] .m-turtle,
+  .mascot[data-live] .m-head,
+  .mascot[data-live] .m-board,
+  .mascot[data-live] .m-bird,
+  .mascot[data-live] .m-body,
+  .mascot[data-live] .m-wing,
+  .mascot[data-live] .m-far,
+  .mascot[data-live] .m-face,
+  .mascot[data-live] .m-leg {
+    transition:
+      transform var(--duration-reveal) var(--easing-standard),
+      opacity var(--duration-slow) var(--easing-enter);
+  }
+  .mascot[data-live] .m-ring,
+  .mascot[data-live] .m-water,
+  .mascot[data-live] .m-mirror,
+  .mascot[data-live] .m-dot,
+  .mascot[data-live] .m-leg-fold,
+  .mascot[data-live] .m-legs-fly {
+    transition: opacity var(--duration-slow) var(--easing-enter);
+  }
+  /* A line that is written: the wave, her neck, the lines between her stars. */
+  .mascot[data-live] .m-crest,
+  .mascot[data-live] .m-neck,
+  .mascot[data-live] .m-neck-in,
+  .mascot[data-live] .m-lines {
+    transition:
+      opacity var(--duration-slow) var(--easing-enter),
+      stroke-dashoffset var(--m-beat) var(--easing-standard);
+  }
+  .mascot[data-live] .m-star {
+    transition: opacity var(--m-star) var(--easing-enter);
+  }
+  /* What is large comes and goes slowly, once: a wave, the water, a sky. Never a flash
+     (WCAG 2.3.1). */
+  .mascot[data-live] .m-wave,
+  .mascot[data-live] .m-swell,
+  .mascot[data-live] .m-surge,
+  .mascot[data-live] .m-dusk {
+    transition:
+      transform var(--m-beat) var(--easing-standard),
+      opacity var(--m-beat) var(--easing-enter);
+  }
+  /* During an evolution she takes her time. */
+  .mascot[data-live][data-phase] .m-turtle,
+  .mascot[data-live][data-phase] .m-board,
+  .mascot[data-live][data-phase] .m-bird,
+  .mascot[data-live][data-phase] .m-body,
+  .mascot[data-live][data-phase] .m-wing,
+  .mascot[data-live][data-phase] .m-far,
+  .mascot[data-live][data-phase] .m-face,
+  .mascot[data-live][data-phase] .m-leg {
+    transition-duration: var(--m-beat), var(--duration-slow);
+  }
+  /* The finds: there at once, then into her, and gone as they reach her. */
+  .mascot[data-live][data-phase$='-in'] .m-dot {
+    transition: opacity var(--duration-fast) var(--easing-enter);
+  }
+  .mascot[data-live][data-phase$='-to'] .m-dot {
+    transition:
+      transform var(--duration-slow) var(--easing-exit),
+      opacity var(--duration-base) var(--easing-exit) var(--duration-fast);
+  }
+  /* Her head comes last, at the end of her neck. */
+  .mascot[data-live][data-phase='12-neck'] .m-face {
+    transition-delay: var(--duration-slow);
+  }
+  /* One drop of foam, then two; one star after the other. */
+  .mascot[data-live][data-phase='01-foam'] .m-dot-2,
+  .mascot[data-live][data-phase='01-foam'] .m-dot-3 {
+    transition-delay: calc(var(--duration-fast) * 3);
+  }
+  .mascot[data-live][data-phase^='34-stars'] .m-star:nth-child(3n + 1) {
+    transition-delay: var(--m-star);
+  }
+  .mascot[data-live][data-phase^='34-stars'] .m-star:nth-child(3n + 2) {
+    transition-delay: calc(var(--m-star) * 2);
+  }
+
+  /* Her figures, and the small move she makes for each word found — the same, whatever was
+     chosen. Each plays through, a counted number of times, and stops. */
+  .mascot[data-live][data-phase='01-board'] .m-turtle {
+    animation: m-jump var(--m-step) var(--easing-standard);
+  }
+  .mascot[data-live][data-phase='23-run'] .m-bird {
+    animation: m-run var(--m-run) linear;
+  }
+  .mascot[data-live][data-phase='23-run'] .m-ring {
+    animation: m-rings var(--m-run) linear;
+  }
+  .mascot[data-live][data-phase='23-glide'] .m-wing,
+  .mascot[data-live][data-phase='23-glide'] .m-far,
+  .mascot[data-live][data-phase='34-pass'] .m-wing,
+  .mascot[data-live][data-phase='34-pass'] .m-far,
+  .mascot[data-live][data-pose='trick'] .m-wing,
+  .mascot[data-live][data-pose='trick'] .m-far {
+    animation: m-beat var(--duration-slow) var(--easing-standard) 2;
+  }
+  .mascot[data-live][data-state='3'][data-pose='pulse'] .m-wing,
+  .mascot[data-live][data-state='3'][data-pose='pulse'] .m-far,
+  .mascot[data-live][data-phase='34-pass'] .m-wing,
+  .mascot[data-live][data-phase='34-pass'] .m-far {
+    animation-iteration-count: 1;
+  }
+  .mascot[data-live][data-state='1'][data-pose='trick'] .m-turtle {
+    animation: m-carve var(--m-trick) var(--easing-standard);
+  }
+  .mascot[data-live][data-state='4'][data-pose='trick'] .m-lines {
+    animation: m-write var(--m-trick) var(--easing-standard);
+  }
+  .mascot[data-live][data-pose='pulse'] .m-head {
+    animation: m-nod var(--duration-slow) var(--easing-standard);
+  }
+  .mascot[data-live][data-state='2'][data-pose='pulse'] .m-face {
+    animation: m-dip var(--duration-slow) var(--easing-standard);
+  }
+  .mascot[data-live][data-state='4'][data-pose='pulse'] .m-star:nth-child(6) {
+    animation: m-pale var(--duration-slow) var(--easing-standard);
+  }
+  @keyframes m-jump {
+    50% {
+      transform: translate(var(--m-tx), calc(var(--m-ty) - 4px)) rotate(var(--m-tr))
+        scale(var(--m-ts));
+    }
+  }
+  /* Three steps forward, from where she stepped back to. */
+  @keyframes m-run {
+    0% {
+      transform: translate(-6px, var(--m-by));
+    }
+    17% {
+      transform: translate(-5px, calc(var(--m-by) - 3px));
+    }
+    33% {
+      transform: translate(-4px, var(--m-by));
+    }
+    50% {
+      transform: translate(-3px, calc(var(--m-by) - 3px));
+    }
+    67% {
+      transform: translate(-2px, var(--m-by));
+    }
+    83% {
+      transform: translate(-1px, calc(var(--m-by) - 3px));
+    }
+  }
+  @keyframes m-rings {
+    0% {
+      opacity: 1;
+      transform: translate(-6px) scale(0.6);
+    }
+    33.3% {
+      opacity: 0;
+      transform: translate(-6px) scale(1.5);
+    }
+    33.4% {
+      opacity: 1;
+      transform: translate(-4px) scale(0.6);
+    }
+    66.6% {
+      opacity: 0;
+      transform: translate(-4px) scale(1.5);
+    }
+    66.7% {
+      opacity: 1;
+      transform: translate(-2px) scale(0.6);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-2px) scale(1.5);
+    }
+  }
+  @keyframes m-beat {
+    50% {
+      transform: rotate(var(--m-down, 14deg)) scale(var(--m-span, 1), var(--m-depth, 1));
+    }
+  }
+  @keyframes m-carve {
+    35% {
+      transform: translate(var(--m-tx), var(--m-ty)) rotate(calc(var(--m-tr) - 15deg))
+        scale(var(--m-ts));
+    }
+    70% {
+      transform: translate(var(--m-tx), var(--m-ty)) rotate(calc(var(--m-tr) + 5deg))
+        scale(var(--m-ts));
+    }
+  }
+  @keyframes m-write {
+    from {
+      stroke-dashoffset: 1.15;
+    }
+  }
+  @keyframes m-nod {
+    50% {
+      transform: rotate(calc(var(--m-turn, 0deg) + 12deg));
+    }
+  }
+  @keyframes m-dip {
+    50% {
+      transform: translate(var(--m-fx, 0px), var(--m-fy, 0px))
+        rotate(calc(var(--m-nod, 0deg) + 14deg));
+    }
+  }
+  @keyframes m-pale {
+    50% {
+      opacity: 0.35;
+    }
+  }
+}
+
 </style>
 <header>
-<h1>Ta tortue, deuxième génération — planche de validation (images fixes)</h1>
-<p>Elle surfe, devient un flamant dont le joueur choisit la couleur, s’envole, puis vole sous une tortue d’étoiles — et s’appelle « ta tortue » d’un bout à l’autre. Cette planche montre le dessin à l’arrêt ; le mouvement (les quatre évolutions, les figures) vient sur la planche suivante. <strong>Rien de ceci n’est en ligne.</strong> Dessin : <code>design/mascot/v2/mascot.svg</code>, états et poses : <code>src/styles/mascot2.css</code>.</p>
+<h1>Ta tortue, deuxième génération — planche de validation</h1>
+<p>Elle surfe, devient un flamant dont le joueur choisit la couleur, s’envole, puis vole sous une tortue d’étoiles — et s’appelle « ta tortue » d’un bout à l’autre. D’abord le mouvement : ses quatre évolutions, ses figures, ce qu’elle fait à chaque mot trouvé. Ensuite le dessin à l’arrêt, tel qu’il a été regardé le 15 novembre 2026. <strong>Rien de ceci n’est en ligne.</strong> Dessin : <code>design/mascot/v2/mascot.svg</code> ; états, poses et mouvement : <code>src/styles/mascot2.css</code> ; chorégraphie : <code>src/lib/mascot2.ts</code>.</p>
 </header>
-<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>Dans le jeu, à 390 px — maquettes</h2><p class="note">À gauche, pendant qu’on joue : elle est à côté du mot, à 96 px (72 px aujourd’hui, dans un coin). À droite, à chaque fin de manche : elle prend une scène de 240 px, et c’est là que ses évolutions se joueront. Elle ne vit que dans le bloc du jeu. Les écrans réels se jugent sur l’aperçu.</p><div class="row top"><div class="phone" style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><p class="bar"><b>C’est écrit là</b><span>Sommaire</span></p><p class="bar small">Site non officiel.</p><p class="title">Où est-ce écrit ?</p><div class="word-row"><div><p class="kicker">Un mot de L'Avenir en commun, édition 2026</p><p class="word">«&nbsp;un mot&nbsp;»</p></div><div class="m" style="--mascot-size:96px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3"></div></div><p class="ask">Dans quelle partie est-il écrit ?</p><p><span class="quiet">Je ne sais pas</span></p><div class="tiles"><span>Titre de la partie 1</span><span>Titre de la partie 2</span><span>Titre de la partie 3</span><span>Titre de la partie 4</span><span>Titre de la partie 5</span><span>Titre de la partie 6</span></div></div><div class="phone" style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><p class="bar"><b>C’est écrit là</b><span>Sommaire</span></p><p class="bar small">Site non officiel.</p><p class="title">Où est-ce écrit ?</p><div class="stage"><div class="m" style="--mascot-size:240px" data-look="2|rest|5|0|1|6 6|0|1 6|-2.5|0 6|-3"></div></div><p class="done">Trois mots, trois endroits du livre.</p><p><span class="again">Trois autres mots</span></p></div><div class="phone" style="--bg:#212320;--text:#FFFCF4;--turtle-line:#FFFCF4;--turtle-shell:#4C0297;--turtle-arc:#FFFCF4;--turtle-eye:#212320;--turtle-accent:#F9C900;--mascot-tint-1:#004880;--mascot-tint-2:#B04E00;--mascot-tint-3:#186842;--mascot-tint-4:#6B5100;--mascot-tint-5:#8F120A;--mascot-tint-6:#4C0297"><p class="bar"><b>C’est écrit là</b><span>Sommaire</span></p><p class="bar small">Site non officiel.</p><p class="title">Où est-ce écrit ?</p><div class="word-row"><div><p class="kicker">Un mot de L'Avenir en commun, édition 2026</p><p class="word">«&nbsp;un mot&nbsp;»</p></div><div class="m" style="--mascot-size:96px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3"></div></div><p class="ask">Dans quelle partie est-il écrit ?</p><p><span class="quiet">Je ne sais pas</span></p><div class="tiles"><span>Titre de la partie 1</span><span>Titre de la partie 2</span><span>Titre de la partie 3</span><span>Titre de la partie 4</span><span>Titre de la partie 5</span><span>Titre de la partie 6</span></div></div><div class="phone" style="--bg:#212320;--text:#FFFCF4;--turtle-line:#FFFCF4;--turtle-shell:#4C0297;--turtle-arc:#FFFCF4;--turtle-eye:#212320;--turtle-accent:#F9C900;--mascot-tint-1:#004880;--mascot-tint-2:#B04E00;--mascot-tint-3:#186842;--mascot-tint-4:#6B5100;--mascot-tint-5:#8F120A;--mascot-tint-6:#4C0297"><p class="bar"><b>C’est écrit là</b><span>Sommaire</span></p><p class="bar small">Site non officiel.</p><p class="title">Où est-ce écrit ?</p><div class="stage"><div class="m" style="--mascot-size:240px" data-look="2|rest|5|0|1|6 6|0|1 6|-2.5|0 6|-3"></div></div><p class="done">Trois mots, trois endroits du livre.</p><p><span class="again">Trois autres mots</span></p></div></div></section>
-<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>Les cinq états, à 240 px (la scène, sa fiche)</h2><div class="row"><figure><div class="m" style="--mascot-size:240px" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3"></div><figcaption>état 0 — la tortue</figcaption></figure><figure><div class="m" style="--mascot-size:240px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3"></div><figcaption>état 1 — elle surfe</figcaption></figure><figure><div class="m" style="--mascot-size:240px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>état 2 — le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:240px" data-look="3|rest|5|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>état 3 — elle vole</figcaption></figure><figure><div class="m" style="--mascot-size:240px" data-look="4|rest|5|0|0|6 6|0|6 6|0|6 6|0"></div><figcaption>état 4 — la tortue dans le ciel</figcaption></figure></div></section>
-<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>À 96 px (à côté du mot), puis à 80 px (petits écrans)</h2><div class="row"><figure><div class="m" style="--mascot-size:96px" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3"></div><figcaption>état 0 — la tortue</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3"></div><figcaption>état 1 — elle surfe</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>état 2 — le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="3|rest|5|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>état 3 — elle vole</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="4|rest|5|0|0|6 6|0|6 6|0|6 6|0"></div><figcaption>état 4 — la tortue dans le ciel</figcaption></figure><figure><div class="m" style="--mascot-size:80px" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3"></div><figcaption>état 0 — la tortue</figcaption></figure><figure><div class="m" style="--mascot-size:80px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3"></div><figcaption>état 1 — elle surfe</figcaption></figure><figure><div class="m" style="--mascot-size:80px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>état 2 — le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:80px" data-look="3|rest|5|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>état 3 — elle vole</figcaption></figure><figure><div class="m" style="--mascot-size:80px" data-look="4|rest|5|0|0|6 6|0|6 6|0|6 6|0"></div><figcaption>état 4 — la tortue dans le ciel</figcaption></figure></div></section>
-<section style="--bg:#212320;--text:#FFFCF4;--turtle-line:#FFFCF4;--turtle-shell:#4C0297;--turtle-arc:#FFFCF4;--turtle-eye:#212320;--turtle-accent:#F9C900;--mascot-tint-1:#004880;--mascot-tint-2:#B04E00;--mascot-tint-3:#186842;--mascot-tint-4:#6B5100;--mascot-tint-5:#8F120A;--mascot-tint-6:#4C0297"><h2>Sur fond sombre</h2><div class="row"><figure><div class="m" style="--mascot-size:240px" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3"></div><figcaption>état 0 — la tortue</figcaption></figure><figure><div class="m" style="--mascot-size:240px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3"></div><figcaption>état 1 — elle surfe</figcaption></figure><figure><div class="m" style="--mascot-size:240px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>état 2 — le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:240px" data-look="3|rest|5|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>état 3 — elle vole</figcaption></figure><figure><div class="m" style="--mascot-size:240px" data-look="4|rest|5|0|0|6 6|0|6 6|0|6 6|0"></div><figcaption>état 4 — la tortue dans le ciel</figcaption></figure></div></section>
-<section style="--bg:#212320;--text:#FFFCF4;--turtle-line:#FFFCF4;--turtle-shell:#4C0297;--turtle-arc:#FFFCF4;--turtle-eye:#212320;--turtle-accent:#F9C900;--mascot-tint-1:#004880;--mascot-tint-2:#B04E00;--mascot-tint-3:#186842;--mascot-tint-4:#6B5100;--mascot-tint-5:#8F120A;--mascot-tint-6:#4C0297"><div class="row"><figure><div class="m" style="--mascot-size:96px" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3"></div><figcaption>état 0 — la tortue</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3"></div><figcaption>état 1 — elle surfe</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>état 2 — le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="3|rest|5|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>état 3 — elle vole</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="4|rest|5|0|0|6 6|0|6 6|0|6 6|0"></div><figcaption>état 4 — la tortue dans le ciel</figcaption></figure><figure><div class="m" style="--mascot-size:80px" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3"></div><figcaption>état 0 — la tortue</figcaption></figure><figure><div class="m" style="--mascot-size:80px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3"></div><figcaption>état 1 — elle surfe</figcaption></figure><figure><div class="m" style="--mascot-size:80px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>état 2 — le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:80px" data-look="3|rest|5|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>état 3 — elle vole</figcaption></figure><figure><div class="m" style="--mascot-size:80px" data-look="4|rest|5|0|0|6 6|0|6 6|0|6 6|0"></div><figcaption>état 4 — la tortue dans le ciel</figcaption></figure></div></section>
+<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>Ses quatre évolutions, à vitesse réelle</h2><p class="note">Chacune se joue une fois, quand on vient de la gagner, sur la scène de fin de manche (240 px) — jamais au chargement d’une page, jamais quand son état revient du téléphone. Rien ici ne bouge avant qu’on appuie sur « Jouer ». « Passer » pose la forme finale aussitôt, comme le feront dans le jeu le bouton, un appui sur la scène, la touche Échap ou n’importe quel bouton du jeu. Les deux scènes — fond clair, fond sombre — jouent ensemble. Les phrases sont des propositions : elles se décident après le mouvement.</p><p class="controls"><label><input type="checkbox" id="less"> Mouvement réduit (ce que voit qui l’a demandé à son téléphone : la forme finale, d’un coup)</label><label><input type="checkbox" id="slowly"> Au ralenti, 4 fois plus lent (pour regarder de près ; le jeu ne ralentit jamais)</label></p><div class="evo"><h3>0 → 1 — la vague arrive · 2 980 ms</h3><p class="says">La phrase proposée pour ce passage : « Elle prend la vague. »</p><div class="row"><div class="scene" style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><div class="m" style="--mascot-size:240px" data-clip="01" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3|" data-frames="0|0|up|0|0|0|0 6|-3|0 6|-3|0 6|-3|01-in;200|0|up|0|0|0|0 6|-3|0 6|-3|0 6|-3|01-to;520|1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|01-wave;1160|1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|01-board;1640|1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|01-rise;2280|1|rest|0|0|1|3 6|-1.5|0 6|-3|0 6|-3|01-foam;2980|1|rest|0|0|1|3 6|-1.5|0 6|-3|0 6|-3|"></div></div><div class="scene" style="--bg:#212320;--text:#FFFCF4;--turtle-line:#FFFCF4;--turtle-shell:#4C0297;--turtle-arc:#FFFCF4;--turtle-eye:#212320;--turtle-accent:#F9C900;--mascot-tint-1:#004880;--mascot-tint-2:#B04E00;--mascot-tint-3:#186842;--mascot-tint-4:#6B5100;--mascot-tint-5:#8F120A;--mascot-tint-6:#4C0297"><div class="m" style="--mascot-size:240px" data-clip="01" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3|" data-frames="0|0|up|0|0|0|0 6|-3|0 6|-3|0 6|-3|01-in;200|0|up|0|0|0|0 6|-3|0 6|-3|0 6|-3|01-to;520|1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|01-wave;1160|1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|01-board;1640|1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|01-rise;2280|1|rest|0|0|1|3 6|-1.5|0 6|-3|0 6|-3|01-foam;2980|1|rest|0|0|1|3 6|-1.5|0 6|-3|0 6|-3|"></div></div><p class="keys"><button type="button" data-play="01">Jouer</button> <button type="button" data-skip="01">Passer</button> <button type="button" data-back="01">Revenir au début</button></p></div><p class="note strip-note">Temps par temps — son état posé à la fin de chaque temps :</p><div class="row strip"><figure><div class="m" style="--mascot-size:118px" data-look="0|up|0|0|0|0 6|-3|0 6|-3|0 6|-3|01-in"></div><figcaption><b>0 ms</b> · 200 ms<br>ses trois trouvailles paraissent ; elle lève la tête</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="0|up|0|0|0|0 6|-3|0 6|-3|0 6|-3|01-to"></div><figcaption><b>200 ms</b> · 320 ms<br>elles viennent à elle ; son premier arc paraît</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|01-wave"></div><figcaption><b>520 ms</b> · 640 ms<br>un trait s’écrit sous elle : une vague, encore basse</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|01-board"></div><figcaption><b>1 160 ms</b> · 480 ms<br>sa planche glisse sous ses pattes ; un petit saut</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|01-rise"></div><figcaption><b>1 640 ms</b> · 640 ms<br>la vague monte et se remplit ; elle se penche</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="1|rest|0|0|1|3 6|-1.5|0 6|-3|0 6|-3|01-foam"></div><figcaption><b>2 280 ms</b> · 700 ms<br>l’écume : une goutte, puis deux</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="1|rest|0|0|1|3 6|-1.5|0 6|-3|0 6|-3|"></div><figcaption><b>2 980 ms</b><br>elle est arrivée</figcaption></figure></div></div><div class="evo"><h3>1 → 2 — la vague la redessine · 3 640 ms</h3><p class="says">La phrase proposée pour ce passage : « Ta tortue est devenue un flamant. »</p><div class="row"><div class="scene" style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><div class="m" style="--mascot-size:240px" data-clip="12" data-look="1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|" data-frames="0|1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|12-in;200|1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|12-to;520|1|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3|12-cover;1000|2|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3|12-under;1240|2|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3|12-neck;2040|2|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3|12-shore;2740|2|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3|12-stand;3240|2|rest|0|0|1|6 6|0|1 6|-2.5|0 6|-3|12-rest;3640|2|rest|0|0|1|6 6|0|1 6|-2.5|0 6|-3|"></div></div><div class="scene" style="--bg:#212320;--text:#FFFCF4;--turtle-line:#FFFCF4;--turtle-shell:#4C0297;--turtle-arc:#FFFCF4;--turtle-eye:#212320;--turtle-accent:#F9C900;--mascot-tint-1:#004880;--mascot-tint-2:#B04E00;--mascot-tint-3:#186842;--mascot-tint-4:#6B5100;--mascot-tint-5:#8F120A;--mascot-tint-6:#4C0297"><div class="m" style="--mascot-size:240px" data-clip="12" data-look="1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|" data-frames="0|1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|12-in;200|1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|12-to;520|1|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3|12-cover;1000|2|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3|12-under;1240|2|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3|12-neck;2040|2|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3|12-shore;2740|2|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3|12-stand;3240|2|rest|0|0|1|6 6|0|1 6|-2.5|0 6|-3|12-rest;3640|2|rest|0|0|1|6 6|0|1 6|-2.5|0 6|-3|"></div></div><p class="keys"><button type="button" data-play="12">Jouer</button> <button type="button" data-skip="12">Passer</button> <button type="button" data-back="12">Revenir au début</button></p></div><p class="note strip-note">Temps par temps — son état posé à la fin de chaque temps :</p><div class="row strip"><figure><div class="m" style="--mascot-size:118px" data-look="1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|12-in"></div><figcaption><b>0 ms</b> · 200 ms<br>ses trois trouvailles paraissent</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|12-to"></div><figcaption><b>200 ms</b> · 320 ms<br>elles viennent à elle ; elle se ramasse sur sa planche</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="1|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3|12-cover"></div><figcaption><b>520 ms</b> · 480 ms<br>l’eau monte et se referme sur elle, à plat</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="2|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3|12-under"></div><figcaption><b>1 000 ms</b> · 240 ms<br>un temps de calme — c’est là qu’elle change, sans rien qui clignote</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="2|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3|12-neck"></div><figcaption><b>1 240 ms</b> · 800 ms<br>un trait sort de l’eau et monte : son cou, puis sa tête</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="2|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3|12-shore"></div><figcaption><b>2 040 ms</b> · 700 ms<br>l’eau retombe ; son corps se découvre, ses pattes s’allongent</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="2|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3|12-stand"></div><figcaption><b>2 740 ms</b> · 500 ms<br>elle replie une patte</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="2|rest|0|0|1|6 6|0|1 6|-2.5|0 6|-3|12-rest"></div><figcaption><b>3 240 ms</b> · 400 ms<br>le rond dans l’eau prend la couleur d’accent</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="2|rest|0|0|1|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption><b>3 640 ms</b><br>elle est arrivée</figcaption></figure></div></div><div class="evo"><h3>2 → 3 — l’envol · 3 520 ms</h3><p class="says">La phrase proposée pour ce passage : « Elle s’envole. »</p><div class="row"><div class="scene" style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><div class="m" style="--mascot-size:240px" data-clip="23" data-look="2|rest|3|1|0|6 6|0|5 6|-0.5|0 6|-3|" data-frames="0|2|rest|3|1|0|6 6|0|5 6|-0.5|0 6|-3|23-in;200|2|rest|3|1|0|6 6|0|5 6|-0.5|0 6|-3|23-to;520|2|rest|3|1|0|6 6|0|6 6|0|1 6|-2.5|23-run;1420|2|rest|3|1|0|6 6|0|6 6|0|1 6|-2.5|23-wings;2020|3|rest|3|0|0|6 6|0|6 6|0|1 6|-2.5|23-lift;2820|3|rest|3|0|1|6 6|0|6 6|0|1 6|-2.5|23-glide;3520|3|rest|3|0|1|6 6|0|6 6|0|1 6|-2.5|"></div></div><div class="scene" style="--bg:#212320;--text:#FFFCF4;--turtle-line:#FFFCF4;--turtle-shell:#4C0297;--turtle-arc:#FFFCF4;--turtle-eye:#212320;--turtle-accent:#F9C900;--mascot-tint-1:#004880;--mascot-tint-2:#B04E00;--mascot-tint-3:#186842;--mascot-tint-4:#6B5100;--mascot-tint-5:#8F120A;--mascot-tint-6:#4C0297"><div class="m" style="--mascot-size:240px" data-clip="23" data-look="2|rest|3|1|0|6 6|0|5 6|-0.5|0 6|-3|" data-frames="0|2|rest|3|1|0|6 6|0|5 6|-0.5|0 6|-3|23-in;200|2|rest|3|1|0|6 6|0|5 6|-0.5|0 6|-3|23-to;520|2|rest|3|1|0|6 6|0|6 6|0|1 6|-2.5|23-run;1420|2|rest|3|1|0|6 6|0|6 6|0|1 6|-2.5|23-wings;2020|3|rest|3|0|0|6 6|0|6 6|0|1 6|-2.5|23-lift;2820|3|rest|3|0|1|6 6|0|6 6|0|1 6|-2.5|23-glide;3520|3|rest|3|0|1|6 6|0|6 6|0|1 6|-2.5|"></div></div><p class="keys"><button type="button" data-play="23">Jouer</button> <button type="button" data-skip="23">Passer</button> <button type="button" data-back="23">Revenir au début</button></p></div><p class="note strip-note">Temps par temps — son état posé à la fin de chaque temps :</p><div class="row strip"><figure><div class="m" style="--mascot-size:118px" data-look="2|rest|3|1|0|6 6|0|5 6|-0.5|0 6|-3|23-in"></div><figcaption><b>0 ms</b> · 200 ms<br>ses trois trouvailles paraissent</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="2|rest|3|1|0|6 6|0|5 6|-0.5|0 6|-3|23-to"></div><figcaption><b>200 ms</b> · 320 ms<br>elles viennent à elle ; elle recule d’un pas et s’abaisse</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="2|rest|3|1|0|6 6|0|6 6|0|1 6|-2.5|23-run"></div><figcaption><b>520 ms</b> · 900 ms<br>elle court sur l’eau : trois pas, un rond à chaque pas</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="2|rest|3|1|0|6 6|0|6 6|0|1 6|-2.5|23-wings"></div><figcaption><b>1 420 ms</b> · 600 ms<br>ses ailes s’ouvrent</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="3|rest|3|0|0|6 6|0|6 6|0|1 6|-2.5|23-lift"></div><figcaption><b>2 020 ms</b> · 800 ms<br>elle décolle : pattes à l’arrière, cou tendu ; l’eau et son reflet paraissent</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="3|rest|3|0|1|6 6|0|6 6|0|1 6|-2.5|23-glide"></div><figcaption><b>2 820 ms</b> · 700 ms<br>deux battements plus lents ; son reflet prend la couleur d’accent</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="3|rest|3|0|1|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption><b>3 520 ms</b><br>elle est arrivée</figcaption></figure></div></div><div class="evo"><h3>3 → 4 — la tortue dans le ciel · 4 420 ms</h3><p class="says">La phrase proposée pour ce passage : « Il y a une tortue dans le ciel. »</p><div class="row"><div class="scene" style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><div class="m" style="--mascot-size:240px" data-clip="34" data-look="3|rest|3|2|0|6 6|0|6 6|0|5 6|-0.5|" data-frames="0|3|rest|3|2|0|6 6|0|6 6|0|5 6|-0.5|34-in;200|3|rest|3|2|0|6 6|0|6 6|0|5 6|-0.5|34-to;520|4|rest|3|0|0|6 6|0|6 6|0|6 6|0|34-dusk;1220|4|rest|3|0|0|6 6|0|6 6|0|6 6|0|34-stars-1;1940|4|rest|3|0|0|6 6|0|6 6|0|6 6|0|34-stars-2;2660|4|rest|3|0|0|6 6|0|6 6|0|6 6|0|34-stars-3;3380|4|rest|3|0|0|6 6|0|6 6|0|6 6|0|34-lines;4020|4|rest|3|0|1|6 6|0|6 6|0|6 6|0|34-pass;4420|4|rest|3|0|1|6 6|0|6 6|0|6 6|0|"></div></div><div class="scene" style="--bg:#212320;--text:#FFFCF4;--turtle-line:#FFFCF4;--turtle-shell:#4C0297;--turtle-arc:#FFFCF4;--turtle-eye:#212320;--turtle-accent:#F9C900;--mascot-tint-1:#004880;--mascot-tint-2:#B04E00;--mascot-tint-3:#186842;--mascot-tint-4:#6B5100;--mascot-tint-5:#8F120A;--mascot-tint-6:#4C0297"><div class="m" style="--mascot-size:240px" data-clip="34" data-look="3|rest|3|2|0|6 6|0|6 6|0|5 6|-0.5|" data-frames="0|3|rest|3|2|0|6 6|0|6 6|0|5 6|-0.5|34-in;200|3|rest|3|2|0|6 6|0|6 6|0|5 6|-0.5|34-to;520|4|rest|3|0|0|6 6|0|6 6|0|6 6|0|34-dusk;1220|4|rest|3|0|0|6 6|0|6 6|0|6 6|0|34-stars-1;1940|4|rest|3|0|0|6 6|0|6 6|0|6 6|0|34-stars-2;2660|4|rest|3|0|0|6 6|0|6 6|0|6 6|0|34-stars-3;3380|4|rest|3|0|0|6 6|0|6 6|0|6 6|0|34-lines;4020|4|rest|3|0|1|6 6|0|6 6|0|6 6|0|34-pass;4420|4|rest|3|0|1|6 6|0|6 6|0|6 6|0|"></div></div><p class="keys"><button type="button" data-play="34">Jouer</button> <button type="button" data-skip="34">Passer</button> <button type="button" data-back="34">Revenir au début</button></p></div><p class="note strip-note">Temps par temps — son état posé à la fin de chaque temps :</p><div class="row strip"><figure><div class="m" style="--mascot-size:118px" data-look="3|rest|3|2|0|6 6|0|6 6|0|5 6|-0.5|34-in"></div><figcaption><b>0 ms</b> · 200 ms<br>ses trois trouvailles paraissent</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="3|rest|3|2|0|6 6|0|6 6|0|5 6|-0.5|34-to"></div><figcaption><b>200 ms</b> · 320 ms<br>elles viennent à elle</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="4|rest|3|0|0|6 6|0|6 6|0|6 6|0|34-dusk"></div><figcaption><b>520 ms</b> · 700 ms<br>le ciel du soir paraît, en une seule fois ; elle descend un peu</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="4|rest|3|0|0|6 6|0|6 6|0|6 6|0|34-stars-1"></div><figcaption><b>1 220 ms</b> · 720 ms<br>trois étoiles, l’une après l’autre</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="4|rest|3|0|0|6 6|0|6 6|0|6 6|0|34-stars-2"></div><figcaption><b>1 940 ms</b> · 720 ms<br>deux autres : la carapace est là</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="4|rest|3|0|0|6 6|0|6 6|0|6 6|0|34-stars-3"></div><figcaption><b>2 660 ms</b> · 720 ms<br>les pattes, puis la tête</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="4|rest|3|0|0|6 6|0|6 6|0|6 6|0|34-lines"></div><figcaption><b>3 380 ms</b> · 640 ms<br>un trait s’écrit d’étoile en étoile</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="4|rest|3|0|1|6 6|0|6 6|0|6 6|0|34-pass"></div><figcaption><b>4 020 ms</b> · 400 ms<br>un battement d’ailes ; la dernière étoile prend la couleur d’accent</figcaption></figure><figure><div class="m" style="--mascot-size:118px" data-look="4|rest|3|0|1|6 6|0|6 6|0|6 6|0|"></div><figcaption><b>4 420 ms</b><br>elle est arrivée</figcaption></figure></div></div></section>
+<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>Ses figures : on la touche</h2><p class="note">Une figure par état, 900 ms au plus, puis elle reprend sa pose. Dans le jeu, sa fiche s’ouvre ensuite.</p><div class="row"><figure><div class="m" style="--mascot-size:170px" data-clip="trick-0" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3|" data-frames="0|0|trick|0|0|0|0 6|-3|0 6|-3|0 6|-3|;560|0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3|"></div><figcaption>elle lève la tête<br><button type="button" data-play="trick-0">La toucher</button></figcaption></figure><figure><div class="m" style="--mascot-size:170px" data-clip="trick-1" data-look="1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|" data-frames="0|1|trick|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|;820|1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|"></div><figcaption>un virage sur sa vague<br><button type="button" data-play="trick-1">La toucher</button></figcaption></figure><figure><div class="m" style="--mascot-size:170px" data-clip="trick-2" data-look="2|rest|3|0|0|6 6|0|2 6|-2|0 6|-3|" data-frames="0|2|trick|3|0|0|6 6|0|2 6|-2|0 6|-3|;660|2|rest|3|0|0|6 6|0|2 6|-2|0 6|-3|"></div><figcaption>elle bat des ailes, deux fois<br><button type="button" data-play="trick-2">La toucher</button></figcaption></figure><figure><div class="m" style="--mascot-size:170px" data-clip="trick-3" data-look="3|rest|3|0|0|6 6|0|6 6|0|2 6|-2|" data-frames="0|3|trick|3|0|0|6 6|0|6 6|0|2 6|-2|;660|3|rest|3|0|0|6 6|0|6 6|0|2 6|-2|"></div><figcaption>deux battements d’ailes<br><button type="button" data-play="trick-3">La toucher</button></figcaption></figure><figure><div class="m" style="--mascot-size:170px" data-clip="trick-4" data-look="4|rest|3|0|0|6 6|0|6 6|0|6 6|0|" data-frames="0|4|trick|3|0|0|6 6|0|6 6|0|6 6|0|;820|4|rest|3|0|0|6 6|0|6 6|0|6 6|0|"></div><figcaption>sa constellation se récrit<br><button type="button" data-play="trick-4">La toucher</button></figcaption></figure></div></section>
+<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>À chaque mot trouvé : un petit mouvement, le même quel que soit le choix</h2><p class="note">Elle ne dit jamais si le choix était le bon : un mot trouvé est un mot dont on a vu l’emplacement.</p><div class="row"><figure><div class="m" style="--mascot-size:170px" data-clip="pulse-0" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3|" data-frames="0|0|pulse|0|0|0|0 6|-3|0 6|-3|0 6|-3|;340|0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3|"></div><figcaption>elle hoche la tête<br><button type="button" data-play="pulse-0">Un mot trouvé</button></figcaption></figure><figure><div class="m" style="--mascot-size:170px" data-clip="pulse-1" data-look="1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|" data-frames="0|1|pulse|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|;340|1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|"></div><figcaption>elle hoche la tête, sur sa vague<br><button type="button" data-play="pulse-1">Un mot trouvé</button></figcaption></figure><figure><div class="m" style="--mascot-size:170px" data-clip="pulse-2" data-look="2|rest|3|0|0|6 6|0|2 6|-2|0 6|-3|" data-frames="0|2|pulse|3|0|0|6 6|0|2 6|-2|0 6|-3|;340|2|rest|3|0|0|6 6|0|2 6|-2|0 6|-3|"></div><figcaption>elle plonge la tête<br><button type="button" data-play="pulse-2">Un mot trouvé</button></figcaption></figure><figure><div class="m" style="--mascot-size:170px" data-clip="pulse-3" data-look="3|rest|3|0|0|6 6|0|6 6|0|2 6|-2|" data-frames="0|3|pulse|3|0|0|6 6|0|6 6|0|2 6|-2|;340|3|rest|3|0|0|6 6|0|6 6|0|2 6|-2|"></div><figcaption>un battement d’ailes<br><button type="button" data-play="pulse-3">Un mot trouvé</button></figcaption></figure><figure><div class="m" style="--mascot-size:170px" data-clip="pulse-4" data-look="4|rest|3|0|0|6 6|0|6 6|0|6 6|0|" data-frames="0|4|pulse|3|0|0|6 6|0|6 6|0|6 6|0|;340|4|rest|3|0|0|6 6|0|6 6|0|6 6|0|"></div><figcaption>une étoile bat, une fois<br><button type="button" data-play="pulse-4">Un mot trouvé</button></figcaption></figure></div></section>
+<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>À chaque fin de manche : les trois trouvailles viennent à elle, et son arc grandit</h2><p class="note">C’est aussi le premier temps de chaque évolution : il dit pourquoi elle change.</p><div class="row"><figure><div class="m" style="--mascot-size:170px" data-clip="end-0" data-look="1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|" data-frames="0|1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|end-in;200|1|rest|0|0|0|3 6|-1.5|0 6|-3|0 6|-3|end-to;520|1|rest|0|0|0|5 6|-0.5|0 6|-3|0 6|-3|"></div><figcaption>la tortue qui surfe : son premier arc grandit<br><button type="button" data-play="end-0">Fin de manche</button></figcaption></figure><figure><div class="m" style="--mascot-size:170px" data-clip="end-1" data-look="2|rest|3|0|0|6 6|0|2 6|-2|0 6|-3|" data-frames="0|2|rest|3|0|0|6 6|0|2 6|-2|0 6|-3|end-in;200|2|rest|3|0|0|6 6|0|2 6|-2|0 6|-3|end-to;520|2|rest|3|0|0|6 6|0|3 6|-1.5|0 6|-3|"></div><figcaption>le flamant : son deuxième arc grandit<br><button type="button" data-play="end-1">Fin de manche</button></figcaption></figure><figure><div class="m" style="--mascot-size:170px" data-clip="end-2" data-look="3|rest|3|0|0|6 6|0|6 6|0|2 6|-2|" data-frames="0|3|rest|3|0|0|6 6|0|6 6|0|2 6|-2|end-in;200|3|rest|3|0|0|6 6|0|6 6|0|2 6|-2|end-to;520|3|rest|3|0|0|6 6|0|6 6|0|3 6|-1.5|"></div><figcaption>en vol : son troisième arc grandit<br><button type="button" data-play="end-2">Fin de manche</button></figcaption></figure></div></section>
+<section><h2>Ce que son mouvement dure, et ce que les navigateurs en ont mesuré</h2><p class="note">Les durées viennent de la chorégraphie elle-même (<code>src/lib/mascot2.ts</code>). Le reste est mesuré sur cette page, le 2026-11-15, dans chromium 153.0.8010.12, firefox 155.0, webkit 26.6. Un « éclair », au sens de la règle d’accessibilité (WCAG 2.3.1), est une paire de changements de lumière opposés d’au moins 10 %, sur une surface d’au moins 21 824 px² (un quart du champ de vision central) ; la règle en admet 3 par seconde. Chaque évolution est filmée image par image, en clair et en sombre, et chaque pixel est suivi : ce qui bouge — une aile, une vague — change bien de lumière là où il passe, mais sur une surface qui reste sous ce seuil.</p><table><thead><tr><th>Évolution</th><th>Durée (plafond 4 500 ms ; jamais 5 000)</th><th>Son temps le plus long (plafond 900 ms)</th><th>Fin du dernier mouvement (chromium · firefox · webkit)</th><th>Éclairs, thème clair</th><th>Éclairs, thème sombre</th><th>Sortie du cadre, au pire</th><th>Fluidité : processeur ralenti 4 fois, écran de téléphone, sa scène seule sur la page comme dans le jeu (Chromium)</th></tr></thead><tbody><tr><th>0 → 1 — la vague arrive</th><td>2 980 ms</td><td>700 ms</td><td>2 950 ms · 2 949 ms · 2 964 ms</td><td><b>0</b> par seconde ; 7 911 px² au plus changent de lumière deux fois dans la même seconde ; rouge saturé : <b>0</b>, sur 5 px² ; la scène entière : 0</td><td><b>0</b> par seconde ; 7 368 px² au plus changent de lumière deux fois dans la même seconde ; rouge saturé : <b>0</b>, sur 0 px² ; la scène entière : 0</td><td>0,0 px</td><td>95 % des images en 16,7 ms ou moins ; 0,0 % au-delà de 20 ms ; 0 au-delà de 50 ms</td></tr><tr><th>1 → 2 — la vague la redessine</th><td>3 640 ms</td><td>800 ms</td><td>3 057 ms · 3 066 ms · 3 046 ms</td><td><b>0</b> par seconde ; 8 529 px² au plus changent de lumière deux fois dans la même seconde ; rouge saturé : <b>0</b>, sur 4 px² ; la scène entière : 0</td><td><b>0</b> par seconde ; 6 121 px² au plus changent de lumière deux fois dans la même seconde ; rouge saturé : <b>0</b>, sur 0 px² ; la scène entière : 0</td><td>0,8 px</td><td>95 % des images en 16,7 ms ou moins ; 0,0 % au-delà de 20 ms ; 0 au-delà de 50 ms</td></tr><tr><th>2 → 3 — l’envol</th><td>3 520 ms</td><td>900 ms</td><td>3 458 ms · 3 472 ms · 3 450 ms</td><td><b>0</b> par seconde ; 7 016 px² au plus changent de lumière deux fois dans la même seconde ; rouge saturé : <b>0</b>, sur 4 px² ; la scène entière : 0</td><td><b>0</b> par seconde ; 6 723 px² au plus changent de lumière deux fois dans la même seconde ; rouge saturé : <b>0</b>, sur 0 px² ; la scène entière : 0</td><td>1,5 px</td><td>95 % des images en 16,7 ms ou moins ; 0,0 % au-delà de 20 ms ; 0 au-delà de 50 ms</td></tr><tr><th>3 → 4 — la tortue dans le ciel</th><td>4 420 ms</td><td>720 ms</td><td>4 342 ms · 4 339 ms · 4 334 ms</td><td><b>0</b> par seconde ; 4 643 px² au plus changent de lumière deux fois dans la même seconde ; rouge saturé : <b>0</b>, sur 4 px² ; la scène entière : 0</td><td><b>0</b> par seconde ; 4 718 px² au plus changent de lumière deux fois dans la même seconde ; rouge saturé : <b>0</b>, sur 0 px² ; la scène entière : 0</td><td>1,5 px</td><td>95 % des images en 16,7 ms ou moins ; 0,0 % au-delà de 20 ms ; 0 au-delà de 50 ms</td></tr></tbody></table><table class="after"><thead><tr><th>Geste</th><th>Durée (plafond 900 ms)</th><th>Fin du dernier mouvement, au pire (chromium · firefox · webkit)</th></tr></thead><tbody><tr><th>Une figure (on la touche)</th><td>820 ms</td><td>809 ms · 808 ms · 797 ms</td></tr><tr><th>Un mot trouvé</th><td>340 ms</td><td>328 ms · 330 ms · 313 ms</td></tr><tr><th>Une fin de manche sans passage</th><td>520 ms</td><td>528 ms · 522 ms · 523 ms</td></tr></tbody></table><p class="note after">Ce qui bouge : <code>opacity</code>, <code>stroke-dashoffset</code>, <code>transform</code> — et rien d’autre. Aucune boucle : chaque animation se joue un nombre compté de fois. Rien ne démarre sans un geste. En mouvement réduit, rien ne bouge : la forme finale est posée d’un coup. Mesures : <code>design/mascot/v2/motion.json</code>.</p></section>
+<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>Dans le jeu, à 390 px — maquettes</h2><p class="note">À gauche, pendant qu’on joue : elle est à côté du mot, à 96 px (72 px aujourd’hui, dans un coin). À droite, à chaque fin de manche : elle prend une scène de 240 px, et c’est là que ses évolutions se joueront. Elle ne vit que dans le bloc du jeu. Les écrans réels se jugent sur l’aperçu.</p><div class="row top"><div class="phone" style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><p class="bar"><b>C’est écrit là</b><span>Sommaire</span></p><p class="bar small">Site non officiel.</p><p class="title">Où est-ce écrit ?</p><div class="word-row"><div><p class="kicker">Un mot de L'Avenir en commun, édition 2026</p><p class="word">«&nbsp;un mot&nbsp;»</p></div><div class="m" style="--mascot-size:96px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3|"></div></div><p class="ask">Dans quelle partie est-il écrit ?</p><p><span class="quiet">Je ne sais pas</span></p><div class="tiles"><span>Titre de la partie 1</span><span>Titre de la partie 2</span><span>Titre de la partie 3</span><span>Titre de la partie 4</span><span>Titre de la partie 5</span><span>Titre de la partie 6</span></div></div><div class="phone" style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><p class="bar"><b>C’est écrit là</b><span>Sommaire</span></p><p class="bar small">Site non officiel.</p><p class="title">Où est-ce écrit ?</p><div class="stage"><div class="m" style="--mascot-size:240px" data-look="2|rest|5|0|1|6 6|0|1 6|-2.5|0 6|-3|"></div></div><p class="done">Trois mots, trois endroits du livre.</p><p><span class="again">Trois autres mots</span></p></div><div class="phone" style="--bg:#212320;--text:#FFFCF4;--turtle-line:#FFFCF4;--turtle-shell:#4C0297;--turtle-arc:#FFFCF4;--turtle-eye:#212320;--turtle-accent:#F9C900;--mascot-tint-1:#004880;--mascot-tint-2:#B04E00;--mascot-tint-3:#186842;--mascot-tint-4:#6B5100;--mascot-tint-5:#8F120A;--mascot-tint-6:#4C0297"><p class="bar"><b>C’est écrit là</b><span>Sommaire</span></p><p class="bar small">Site non officiel.</p><p class="title">Où est-ce écrit ?</p><div class="word-row"><div><p class="kicker">Un mot de L'Avenir en commun, édition 2026</p><p class="word">«&nbsp;un mot&nbsp;»</p></div><div class="m" style="--mascot-size:96px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3|"></div></div><p class="ask">Dans quelle partie est-il écrit ?</p><p><span class="quiet">Je ne sais pas</span></p><div class="tiles"><span>Titre de la partie 1</span><span>Titre de la partie 2</span><span>Titre de la partie 3</span><span>Titre de la partie 4</span><span>Titre de la partie 5</span><span>Titre de la partie 6</span></div></div><div class="phone" style="--bg:#212320;--text:#FFFCF4;--turtle-line:#FFFCF4;--turtle-shell:#4C0297;--turtle-arc:#FFFCF4;--turtle-eye:#212320;--turtle-accent:#F9C900;--mascot-tint-1:#004880;--mascot-tint-2:#B04E00;--mascot-tint-3:#186842;--mascot-tint-4:#6B5100;--mascot-tint-5:#8F120A;--mascot-tint-6:#4C0297"><p class="bar"><b>C’est écrit là</b><span>Sommaire</span></p><p class="bar small">Site non officiel.</p><p class="title">Où est-ce écrit ?</p><div class="stage"><div class="m" style="--mascot-size:240px" data-look="2|rest|5|0|1|6 6|0|1 6|-2.5|0 6|-3|"></div></div><p class="done">Trois mots, trois endroits du livre.</p><p><span class="again">Trois autres mots</span></p></div></div></section>
+<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>Les cinq états, à 240 px (la scène, sa fiche)</h2><div class="row"><figure><div class="m" style="--mascot-size:240px" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3|"></div><figcaption>état 0 — la tortue</figcaption></figure><figure><div class="m" style="--mascot-size:240px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3|"></div><figcaption>état 1 — elle surfe</figcaption></figure><figure><div class="m" style="--mascot-size:240px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>état 2 — le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:240px" data-look="3|rest|5|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>état 3 — elle vole</figcaption></figure><figure><div class="m" style="--mascot-size:240px" data-look="4|rest|5|0|0|6 6|0|6 6|0|6 6|0|"></div><figcaption>état 4 — la tortue dans le ciel</figcaption></figure></div></section>
+<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>À 96 px (à côté du mot), puis à 80 px (petits écrans)</h2><div class="row"><figure><div class="m" style="--mascot-size:96px" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3|"></div><figcaption>état 0 — la tortue</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3|"></div><figcaption>état 1 — elle surfe</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>état 2 — le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="3|rest|5|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>état 3 — elle vole</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="4|rest|5|0|0|6 6|0|6 6|0|6 6|0|"></div><figcaption>état 4 — la tortue dans le ciel</figcaption></figure><figure><div class="m" style="--mascot-size:80px" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3|"></div><figcaption>état 0 — la tortue</figcaption></figure><figure><div class="m" style="--mascot-size:80px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3|"></div><figcaption>état 1 — elle surfe</figcaption></figure><figure><div class="m" style="--mascot-size:80px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>état 2 — le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:80px" data-look="3|rest|5|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>état 3 — elle vole</figcaption></figure><figure><div class="m" style="--mascot-size:80px" data-look="4|rest|5|0|0|6 6|0|6 6|0|6 6|0|"></div><figcaption>état 4 — la tortue dans le ciel</figcaption></figure></div></section>
+<section style="--bg:#212320;--text:#FFFCF4;--turtle-line:#FFFCF4;--turtle-shell:#4C0297;--turtle-arc:#FFFCF4;--turtle-eye:#212320;--turtle-accent:#F9C900;--mascot-tint-1:#004880;--mascot-tint-2:#B04E00;--mascot-tint-3:#186842;--mascot-tint-4:#6B5100;--mascot-tint-5:#8F120A;--mascot-tint-6:#4C0297"><h2>Sur fond sombre</h2><div class="row"><figure><div class="m" style="--mascot-size:240px" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3|"></div><figcaption>état 0 — la tortue</figcaption></figure><figure><div class="m" style="--mascot-size:240px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3|"></div><figcaption>état 1 — elle surfe</figcaption></figure><figure><div class="m" style="--mascot-size:240px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>état 2 — le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:240px" data-look="3|rest|5|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>état 3 — elle vole</figcaption></figure><figure><div class="m" style="--mascot-size:240px" data-look="4|rest|5|0|0|6 6|0|6 6|0|6 6|0|"></div><figcaption>état 4 — la tortue dans le ciel</figcaption></figure></div></section>
+<section style="--bg:#212320;--text:#FFFCF4;--turtle-line:#FFFCF4;--turtle-shell:#4C0297;--turtle-arc:#FFFCF4;--turtle-eye:#212320;--turtle-accent:#F9C900;--mascot-tint-1:#004880;--mascot-tint-2:#B04E00;--mascot-tint-3:#186842;--mascot-tint-4:#6B5100;--mascot-tint-5:#8F120A;--mascot-tint-6:#4C0297"><div class="row"><figure><div class="m" style="--mascot-size:96px" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3|"></div><figcaption>état 0 — la tortue</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3|"></div><figcaption>état 1 — elle surfe</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>état 2 — le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="3|rest|5|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>état 3 — elle vole</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="4|rest|5|0|0|6 6|0|6 6|0|6 6|0|"></div><figcaption>état 4 — la tortue dans le ciel</figcaption></figure><figure><div class="m" style="--mascot-size:80px" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3|"></div><figcaption>état 0 — la tortue</figcaption></figure><figure><div class="m" style="--mascot-size:80px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3|"></div><figcaption>état 1 — elle surfe</figcaption></figure><figure><div class="m" style="--mascot-size:80px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>état 2 — le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:80px" data-look="3|rest|5|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>état 3 — elle vole</figcaption></figure><figure><div class="m" style="--mascot-size:80px" data-look="4|rest|5|0|0|6 6|0|6 6|0|6 6|0|"></div><figcaption>état 4 — la tortue dans le ciel</figcaption></figure></div></section>
 <section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>Sa couleur : la palette retenue</h2><p class="note">Le flamant naît pâle ; le joueur lui donne une couleur parmi six, une par partie du livre, ou la laisse pâle. Chaque valeur est mesurée : notre trait posé sur la teinte doit faire 3:1 au moins, et aucune teinte ne tombe dans le mauve, le prune ou le rose que le dessin refuse. La tortue, elle, garde ses violets. Les six vives de la charte ont été écartées : notre trait disparaît sur trois d’entre elles, en clair comme en sombre, et le vif rose est dans la zone refusée.</p></section>
-<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>Palette « Les six familles du site officiel, dans des valeurs mesurées »</h2><div class="row"><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>pâle</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|1|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 1</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|2|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 2</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|3|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 3</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|4|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 4</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 5</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|6|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 6</figcaption></figure></div><div class="row"><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|0|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>pâle</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|1|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>partie 1</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|2|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>partie 2</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|3|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>partie 3</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|4|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>partie 4</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|5|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>partie 5</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|6|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>partie 6</figcaption></figure></div></section>
-<section style="--bg:#212320;--text:#FFFCF4;--turtle-line:#FFFCF4;--turtle-shell:#4C0297;--turtle-arc:#FFFCF4;--turtle-eye:#212320;--turtle-accent:#F9C900;--mascot-tint-1:#004880;--mascot-tint-2:#B04E00;--mascot-tint-3:#186842;--mascot-tint-4:#6B5100;--mascot-tint-5:#8F120A;--mascot-tint-6:#4C0297"><div class="row"><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>pâle</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|1|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 1</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|2|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 2</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|3|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 3</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|4|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 4</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 5</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|6|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 6</figcaption></figure></div><div class="row"><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|0|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>pâle</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|1|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>partie 1</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|2|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>partie 2</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|3|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>partie 3</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|4|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>partie 4</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|5|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>partie 5</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|6|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>partie 6</figcaption></figure></div></section>
+<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>Palette « Les six familles du site officiel, dans des valeurs mesurées »</h2><div class="row"><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>pâle</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|1|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 1</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|2|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 2</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|3|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 3</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|4|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 4</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 5</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|6|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 6</figcaption></figure></div><div class="row"><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|0|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>pâle</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|1|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>partie 1</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|2|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>partie 2</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|3|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>partie 3</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|4|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>partie 4</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|5|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>partie 5</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|6|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>partie 6</figcaption></figure></div></section>
+<section style="--bg:#212320;--text:#FFFCF4;--turtle-line:#FFFCF4;--turtle-shell:#4C0297;--turtle-arc:#FFFCF4;--turtle-eye:#212320;--turtle-accent:#F9C900;--mascot-tint-1:#004880;--mascot-tint-2:#B04E00;--mascot-tint-3:#186842;--mascot-tint-4:#6B5100;--mascot-tint-5:#8F120A;--mascot-tint-6:#4C0297"><div class="row"><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>pâle</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|1|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 1</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|2|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 2</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|3|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 3</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|4|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 4</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 5</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|6|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 6</figcaption></figure></div><div class="row"><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|0|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>pâle</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|1|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>partie 1</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|2|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>partie 2</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|3|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>partie 3</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|4|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>partie 4</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|5|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>partie 5</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|6|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>partie 6</figcaption></figure></div></section>
 <section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><table><thead><tr><th></th><th>thème clair — notre trait dessus</th><th>thème sombre — notre trait dessus</th></tr></thead><tbody><tr><th>partie 1 — bleu ciel</th><td><span class="chip" style="background:#3AADEE"></span><code>#3AADEE</code> 4,76:1</td><td><span class="chip" style="background:#004880"></span><code>#004880</code> 9,15:1</td></tr><tr><th>partie 2 — orange</th><td><span class="chip" style="background:#FFB87A"></span><code>#FFB87A</code> 7,03:1</td><td><span class="chip" style="background:#B04E00"></span><code>#B04E00</code> 5,20:1</td></tr><tr><th>partie 3 — vert</th><td><span class="chip" style="background:#7AECB6"></span><code>#7AECB6</code> 8,23:1</td><td><span class="chip" style="background:#186842"></span><code>#186842</code> 6,61:1</td></tr><tr><th>partie 4 — jaune</th><td><span class="chip" style="background:#FFE566"></span><code>#FFE566</code> 9,45:1</td><td><span class="chip" style="background:#6B5100"></span><code>#6B5100</code> 7,31:1</td></tr><tr><th>partie 5 — rouge</th><td><span class="chip" style="background:#F9A89E"></span><code>#F9A89E</code> 6,31:1</td><td><span class="chip" style="background:#8F120A"></span><code>#8F120A</code> 9,07:1</td></tr><tr><th>partie 6 — violet</th><td><span class="chip" style="background:#E5CBFF"></span><code>#E5CBFF</code> 8,12:1</td><td><span class="chip" style="background:#4C0297"></span><code>#4C0297</code> 11,62:1</td></tr></tbody></table></section>
-<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>Ses arcs la suivent : sur la carapace, puis sur l’aile</h2><p class="note">Les mêmes trois traits continus, les mêmes six pas : ce qui a grandi se voit, ce qui manque n’est dessiné nulle part.</p><div class="row"><figure><div class="m" style="--mascot-size:150px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3"></div><figcaption>1<sup>er</sup> arc : 1 pas</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="1|rest|0|0|0|4 6|-1|0 6|-3|0 6|-3"></div><figcaption>4 pas</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|3|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>entier ; 2<sup>e</sup> : 1 pas</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|3|0|0|6 6|0|4 6|-1|0 6|-3"></div><figcaption>2<sup>e</sup> : 4 pas</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|3|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>entier ; 3<sup>e</sup> : 1 pas</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|3|0|0|6 6|0|6 6|0|4 6|-1"></div><figcaption>3<sup>e</sup> : 4 pas</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="4|rest|3|0|0|6 6|0|6 6|0|6 6|0"></div><figcaption>trois arcs entiers</figcaption></figure></div></section>
-<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>Signes qu’un changement approche — des attitudes, jamais une quantité</h2><div class="row"><figure><div class="m" style="--mascot-size:190px" data-look="2|rest|1|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>le flamant, au repos</figcaption></figure><figure><div class="m" style="--mascot-size:190px" data-look="2|rest|1|1|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>ses ailes s’entrouvrent</figcaption></figure><figure><div class="m" style="--mascot-size:190px" data-look="3|rest|1|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>en vol</figcaption></figure><figure><div class="m" style="--mascot-size:190px" data-look="3|rest|1|1|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>elle regarde vers le haut</figcaption></figure><figure><div class="m" style="--mascot-size:190px" data-look="3|rest|1|2|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>puis une première étoile</figcaption></figure></div></section>
-<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>Deux poses : on la touche, on lui demande un indice</h2><p class="note">Les figures (un virage, un changement de patte, un battement d’ailes) sont du mouvement : elles viennent au lot A2.</p><div class="row"><figure><div class="m" style="--mascot-size:170px" data-look="0|up|0|0|0|0 6|-3|0 6|-3|0 6|-3"></div><figcaption>la tortue touchée : tête levée</figcaption></figure><figure><div class="m" style="--mascot-size:170px" data-look="0|look|0|0|0|0 6|-3|0 6|-3|0 6|-3"></div><figcaption>un indice : elle regarde les tuiles</figcaption></figure><figure><div class="m" style="--mascot-size:170px" data-look="1|look|0|0|0|1 6|-2.5|0 6|-3|0 6|-3"></div><figcaption>en surf</figcaption></figure><figure><div class="m" style="--mascot-size:170px" data-look="2|look|4|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:170px" data-look="3|look|4|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>en vol</figcaption></figure></div></section>
-<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>Le seul accent, et seulement à un passage : un détail de la scène</h2><div class="row"><figure><div class="m" style="--mascot-size:190px" data-look="1|rest|0|0|1|1 6|-2.5|0 6|-3|0 6|-3"></div><figcaption>des gouttes d’écume</figcaption></figure><figure><div class="m" style="--mascot-size:190px" data-look="2|rest|3|0|1|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>le rond dans l’eau</figcaption></figure><figure><div class="m" style="--mascot-size:190px" data-look="3|rest|3|0|1|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>son reflet</figcaption></figure><figure><div class="m" style="--mascot-size:190px" data-look="4|rest|3|0|1|6 6|0|6 6|0|6 6|0"></div><figcaption>une étoile</figcaption></figure></div></section>
-<section style="--bg:#fff;--text:#000;--turtle-line:#000;--turtle-shell:#000;--turtle-arc:#000;--turtle-eye:#000;--turtle-accent:#000;--mascot-tint-1:#000;--mascot-tint-2:#000;--mascot-tint-3:#000;--mascot-tint-4:#000;--mascot-tint-5:#000;--mascot-tint-6:#000"><h2>Silhouettes en noir — reconnaît-on une tortue, un surf, un flamant, un vol ?</h2><div class="row"><figure><div class="m" style="--mascot-size:96px" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3"></div><figcaption>état 0 — la tortue</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3"></div><figcaption>état 1 — elle surfe</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>état 2 — le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="3|rest|5|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>état 3 — elle vole</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="4|rest|5|0|0|6 6|0|6 6|0|6 6|0"></div><figcaption>état 4 — la tortue dans le ciel</figcaption></figure><figure><div class="m" style="--mascot-size:48px" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3"></div><figcaption>état 0 — la tortue</figcaption></figure><figure><div class="m" style="--mascot-size:48px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3"></div><figcaption>état 1 — elle surfe</figcaption></figure><figure><div class="m" style="--mascot-size:48px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>état 2 — le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:48px" data-look="3|rest|5|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>état 3 — elle vole</figcaption></figure><figure><div class="m" style="--mascot-size:48px" data-look="4|rest|5|0|0|6 6|0|6 6|0|6 6|0"></div><figcaption>état 4 — la tortue dans le ciel</figcaption></figure></div></section>
-<section style="--bg:#FBFAF7;--text:#1A1A18;--turtle-line:#1E3A5F;--turtle-shell:#D9D9D2;--turtle-arc:#1E3A5F;--turtle-eye:#FBFAF7;--turtle-accent:#0F5132;--mascot-tint-1:#A9C9EC;--mascot-tint-2:#F0C79B;--mascot-tint-3:#A6DBBE;--mascot-tint-4:#EADF96;--mascot-tint-5:#EDB4A6;--mascot-tint-6:#C8CDD9"><h2>Jeu de couleurs neutre (si la charte est retirée), clair puis sombre</h2><div class="row"><figure><div class="m" style="--mascot-size:110px" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3"></div><figcaption>état 0 — la tortue</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3"></div><figcaption>état 1 — elle surfe</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>état 2 — le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="3|rest|0|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>état 3 — elle vole</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="4|rest|0|0|0|6 6|0|6 6|0|6 6|0"></div><figcaption>état 4 — la tortue dans le ciel</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|1|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 1</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|2|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 2</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|3|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 3</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|4|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 4</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 5</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|6|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 6</figcaption></figure></div></section>
-<section style="--bg:#1A1A18;--text:#FBFAF7;--turtle-line:#A8C5E8;--turtle-shell:#1E3A5F;--turtle-arc:#A8C5E8;--turtle-eye:#1A1A18;--turtle-accent:#7BD3A0;--mascot-tint-1:#1C3F6E;--mascot-tint-2:#6B4420;--mascot-tint-3:#17573A;--mascot-tint-4:#57501A;--mascot-tint-5:#6E2E24;--mascot-tint-6:#3B4254"><div class="row"><figure><div class="m" style="--mascot-size:110px" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3"></div><figcaption>état 0 — la tortue</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3"></div><figcaption>état 1 — elle surfe</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>état 2 — le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="3|rest|0|0|0|6 6|0|6 6|0|1 6|-2.5"></div><figcaption>état 3 — elle vole</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="4|rest|0|0|0|6 6|0|6 6|0|6 6|0"></div><figcaption>état 4 — la tortue dans le ciel</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|1|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 1</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|2|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 2</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|3|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 3</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|4|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 4</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 5</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|6|0|0|6 6|0|1 6|-2.5|0 6|-3"></div><figcaption>partie 6</figcaption></figure></div></section>
-<section><h2>Ce que le dessin pèse, et ce qu’il contient</h2><table><tbody><tr><th>Le dessin, gzip</th><td>1 538 o</td><td>plafond 3 072 o</td></tr><tr><th>Sa feuille de style, gzip — sans le mouvement, qui vient au lot A2</th><td>2 695 o</td><td>plafond 6 144 o</td></tr><tr><th>Les deux</th><td>4 233 o</td><td>plafond 9 216 o (6 144 o pour la tortue en ligne)</td></tr><tr><th>Formes dans le fichier</th><td>48</td><td>plafond 72</td></tr><tr><th>Formes visibles — état 0 — la tortue</th><td>10</td><td>plafond 18</td></tr><tr><th>Formes visibles — état 1 — elle surfe</th><td>14</td><td>plafond 18</td></tr><tr><th>Formes visibles — état 2 — le flamant</th><td>14</td><td>plafond 18</td></tr><tr><th>Formes visibles — état 3 — elle vole</th><td>15</td><td>plafond 18</td></tr><tr><th>Formes visibles — état 4 — la tortue dans le ciel</th><td>26</td><td>plafond 30</td></tr></tbody></table></section>
+<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>Ses arcs la suivent : sur la carapace, puis sur l’aile</h2><p class="note">Les mêmes trois traits continus, les mêmes six pas : ce qui a grandi se voit, ce qui manque n’est dessiné nulle part.</p><div class="row"><figure><div class="m" style="--mascot-size:150px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3|"></div><figcaption>1<sup>er</sup> arc : 1 pas</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="1|rest|0|0|0|4 6|-1|0 6|-3|0 6|-3|"></div><figcaption>4 pas</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|3|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>entier ; 2<sup>e</sup> : 1 pas</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="2|rest|3|0|0|6 6|0|4 6|-1|0 6|-3|"></div><figcaption>2<sup>e</sup> : 4 pas</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|3|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>entier ; 3<sup>e</sup> : 1 pas</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="3|rest|3|0|0|6 6|0|6 6|0|4 6|-1|"></div><figcaption>3<sup>e</sup> : 4 pas</figcaption></figure><figure><div class="m" style="--mascot-size:150px" data-look="4|rest|3|0|0|6 6|0|6 6|0|6 6|0|"></div><figcaption>trois arcs entiers</figcaption></figure></div></section>
+<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>Signes qu’un changement approche — des attitudes, jamais une quantité</h2><div class="row"><figure><div class="m" style="--mascot-size:190px" data-look="2|rest|1|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>le flamant, au repos</figcaption></figure><figure><div class="m" style="--mascot-size:190px" data-look="2|rest|1|1|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>ses ailes s’entrouvrent</figcaption></figure><figure><div class="m" style="--mascot-size:190px" data-look="3|rest|1|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>en vol</figcaption></figure><figure><div class="m" style="--mascot-size:190px" data-look="3|rest|1|1|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>elle regarde vers le haut</figcaption></figure><figure><div class="m" style="--mascot-size:190px" data-look="3|rest|1|2|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>puis une première étoile</figcaption></figure></div></section>
+<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>Deux poses : on la touche, on lui demande un indice</h2><p class="note">Ses figures sont plus haut : elles se jouent.</p><div class="row"><figure><div class="m" style="--mascot-size:170px" data-look="0|up|0|0|0|0 6|-3|0 6|-3|0 6|-3|"></div><figcaption>la tortue touchée : tête levée</figcaption></figure><figure><div class="m" style="--mascot-size:170px" data-look="0|look|0|0|0|0 6|-3|0 6|-3|0 6|-3|"></div><figcaption>un indice : elle regarde les tuiles</figcaption></figure><figure><div class="m" style="--mascot-size:170px" data-look="1|look|0|0|0|1 6|-2.5|0 6|-3|0 6|-3|"></div><figcaption>en surf</figcaption></figure><figure><div class="m" style="--mascot-size:170px" data-look="2|look|4|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:170px" data-look="3|look|4|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>en vol</figcaption></figure></div></section>
+<section style="--bg:#FFFCF4;--text:#212320;--turtle-line:#4C0297;--turtle-shell:#E5CBFF;--turtle-arc:#4C0297;--turtle-eye:#FFFCF4;--turtle-accent:#D1271C;--mascot-tint-1:#3AADEE;--mascot-tint-2:#FFB87A;--mascot-tint-3:#7AECB6;--mascot-tint-4:#FFE566;--mascot-tint-5:#F9A89E;--mascot-tint-6:#E5CBFF"><h2>Le seul accent, et seulement à un passage : un détail de la scène</h2><div class="row"><figure><div class="m" style="--mascot-size:190px" data-look="1|rest|0|0|1|1 6|-2.5|0 6|-3|0 6|-3|"></div><figcaption>des gouttes d’écume</figcaption></figure><figure><div class="m" style="--mascot-size:190px" data-look="2|rest|3|0|1|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>le rond dans l’eau</figcaption></figure><figure><div class="m" style="--mascot-size:190px" data-look="3|rest|3|0|1|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>son reflet</figcaption></figure><figure><div class="m" style="--mascot-size:190px" data-look="4|rest|3|0|1|6 6|0|6 6|0|6 6|0|"></div><figcaption>une étoile</figcaption></figure></div></section>
+<section style="--bg:#fff;--text:#000;--turtle-line:#000;--turtle-shell:#000;--turtle-arc:#000;--turtle-eye:#000;--turtle-accent:#000;--mascot-tint-1:#000;--mascot-tint-2:#000;--mascot-tint-3:#000;--mascot-tint-4:#000;--mascot-tint-5:#000;--mascot-tint-6:#000"><h2>Silhouettes en noir — reconnaît-on une tortue, un surf, un flamant, un vol ?</h2><div class="row"><figure><div class="m" style="--mascot-size:96px" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3|"></div><figcaption>état 0 — la tortue</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3|"></div><figcaption>état 1 — elle surfe</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>état 2 — le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="3|rest|5|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>état 3 — elle vole</figcaption></figure><figure><div class="m" style="--mascot-size:96px" data-look="4|rest|5|0|0|6 6|0|6 6|0|6 6|0|"></div><figcaption>état 4 — la tortue dans le ciel</figcaption></figure><figure><div class="m" style="--mascot-size:48px" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3|"></div><figcaption>état 0 — la tortue</figcaption></figure><figure><div class="m" style="--mascot-size:48px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3|"></div><figcaption>état 1 — elle surfe</figcaption></figure><figure><div class="m" style="--mascot-size:48px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>état 2 — le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:48px" data-look="3|rest|5|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>état 3 — elle vole</figcaption></figure><figure><div class="m" style="--mascot-size:48px" data-look="4|rest|5|0|0|6 6|0|6 6|0|6 6|0|"></div><figcaption>état 4 — la tortue dans le ciel</figcaption></figure></div></section>
+<section style="--bg:#FBFAF7;--text:#1A1A18;--turtle-line:#1E3A5F;--turtle-shell:#D9D9D2;--turtle-arc:#1E3A5F;--turtle-eye:#FBFAF7;--turtle-accent:#0F5132;--mascot-tint-1:#A9C9EC;--mascot-tint-2:#F0C79B;--mascot-tint-3:#A6DBBE;--mascot-tint-4:#EADF96;--mascot-tint-5:#EDB4A6;--mascot-tint-6:#C8CDD9"><h2>Jeu de couleurs neutre (si la charte est retirée), clair puis sombre</h2><div class="row"><figure><div class="m" style="--mascot-size:110px" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3|"></div><figcaption>état 0 — la tortue</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3|"></div><figcaption>état 1 — elle surfe</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>état 2 — le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="3|rest|0|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>état 3 — elle vole</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="4|rest|0|0|0|6 6|0|6 6|0|6 6|0|"></div><figcaption>état 4 — la tortue dans le ciel</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|1|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 1</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|2|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 2</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|3|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 3</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|4|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 4</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 5</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|6|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 6</figcaption></figure></div></section>
+<section style="--bg:#1A1A18;--text:#FBFAF7;--turtle-line:#A8C5E8;--turtle-shell:#1E3A5F;--turtle-arc:#A8C5E8;--turtle-eye:#1A1A18;--turtle-accent:#7BD3A0;--mascot-tint-1:#1C3F6E;--mascot-tint-2:#6B4420;--mascot-tint-3:#17573A;--mascot-tint-4:#57501A;--mascot-tint-5:#6E2E24;--mascot-tint-6:#3B4254"><div class="row"><figure><div class="m" style="--mascot-size:110px" data-look="0|rest|0|0|0|0 6|-3|0 6|-3|0 6|-3|"></div><figcaption>état 0 — la tortue</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="1|rest|0|0|0|1 6|-2.5|0 6|-3|0 6|-3|"></div><figcaption>état 1 — elle surfe</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|0|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>état 2 — le flamant</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="3|rest|0|0|0|6 6|0|6 6|0|1 6|-2.5|"></div><figcaption>état 3 — elle vole</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="4|rest|0|0|0|6 6|0|6 6|0|6 6|0|"></div><figcaption>état 4 — la tortue dans le ciel</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|1|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 1</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|2|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 2</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|3|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 3</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|4|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 4</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|5|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 5</figcaption></figure><figure><div class="m" style="--mascot-size:110px" data-look="2|rest|6|0|0|6 6|0|1 6|-2.5|0 6|-3|"></div><figcaption>partie 6</figcaption></figure></div></section>
+<section><h2>Ce que le dessin pèse, et ce qu’il contient</h2><table><tbody><tr><th>Le dessin, gzip</th><td>1 613 o</td><td>plafond 3 072 o</td></tr><tr><th>Sa feuille de style, gzip — états et mouvement</th><td>5 667 o</td><td>plafond 6 144 o</td></tr><tr><th>Les deux</th><td>7 280 o</td><td>plafond 9 216 o (6 144 o pour la tortue en ligne)</td></tr><tr><th>Formes dans le fichier</th><td>49</td><td>plafond 72</td></tr><tr><th>Formes visibles — état 0 — la tortue</th><td>10</td><td>plafond 18</td></tr><tr><th>Formes visibles — état 1 — elle surfe</th><td>14</td><td>plafond 18</td></tr><tr><th>Formes visibles — état 2 — le flamant</th><td>14</td><td>plafond 18</td></tr><tr><th>Formes visibles — état 3 — elle vole</th><td>15</td><td>plafond 18</td></tr><tr><th>Formes visibles — état 4 — la tortue dans le ciel</th><td>26</td><td>plafond 30</td></tr></tbody></table></section>
 <footer>
 <h2>Neuf contraintes, à cocher oui ou non</h2>
 <ol><li>De profil, tournée vers la droite, à tous les états ; jamais de face ni en miroir</li><li>Plate : ni volume, ni ombre, ni dégradé — son reflet et le ciel du soir sont des aplats</li><li>La tortue : quadrupède, tête sortie, cou visible. Le flamant : un oiseau, rien d’humain</li><li>Trois arcs continus, sur la carapace puis sur l’aile ; aucun quadrillage</li><li>La tortue garde les violets de la charte ; seul le flamant prend une couleur de partie ; ni mauve, ni prune, ni rose</li><li>Un seul objet : la planche de surf. Ni pancarte, ni sigle, ni chiffre, ni boisson</li><li>Le décor ne mesure rien : ni barre, ni graduation, ni hauteur qui dirait une progression</li><li>Elle ne pousse rien, et ne sort pas de son cadre</li><li>Les cinq états se distinguent à 80 px</li></ol>
 <p>Et le critère éliminatoire de toujours : sobre et tenace — <strong>ni enfantine, ni moche</strong>.</p>
-<p>Valider, une fois la palette choisie : <code>npx tsx scripts/mascot2-sheet.ts --validated AAAA-MM-JJ</code> (la date du jour) l’écrit dans <code>design/mascot/v2/validation.json</code>, avec l’empreinte de ce qui est montré ici — le dessin, sa feuille de style, ses couleurs. Une retouche de l’un des trois fait tomber la validation.</p>
-<p>Empreinte : <code>a97c1533465046a4f163db5bf71ce088238615b47b02e2edd59a60df0edb377a</code></p>
+<p>Valider, une fois la palette choisie : <code>npx tsx scripts/mascot2-sheet.ts --validated AAAA-MM-JJ</code> (la date du jour) l’écrit dans <code>design/mascot/v2/validation.json</code>, avec l’empreinte de ce qui est montré ici — le dessin, sa feuille de style, ses couleurs, les temps de ses évolutions. Une retouche de l’un des quatre fait tomber la validation.</p>
+<p>Empreinte : <code>7de59b6585edac411d30c32bf99df5a45710f929776e2bc58ed8492fc3ad6aa0</code></p>
 </footer>
 <template id="mascot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" class="mascot" data-state="0" data-pose="rest" data-tint="0" data-sign="0" focusable="false" aria-hidden="true">
   <g class="m-sky">
@@ -400,8 +841,10 @@ thead th,tbody th{font-weight:600}
     <circle class="m-star" cx="40.5" cy="14.5" r="1.6"/>
   </g>
   <g class="m-sea">
-    <path class="m-swell" d="M3 56C7 40 10 18 23 13C32.5 9.6 40 16.5 37.4 24.4C36 28.4 31 28.8 29.6 25.6C32 22.8 30 19.6 26.4 20C18.6 21 17 36 30 44C45 53 72 54 94 53.5C70 58.5 30 59.5 3 56Z"/>
-    <path class="m-crest" pathLength="1" d="M3 56C7 40 10 18 23 13C32.5 9.6 40 16.5 37.4 24.4C36 28.4 31 28.8 29.6 25.6C32 22.8 30 19.6 26.4 20C18.6 21 17 36 30 44C45 53 72 54 94 53.5"/>
+    <g class="m-wave">
+      <path class="m-swell" d="M3 56C7 40 10 18 23 13C32.5 9.6 40 16.5 37.4 24.4C36 28.4 31 28.8 29.6 25.6C32 22.8 30 19.6 26.4 20C18.6 21 17 36 30 44C45 53 72 54 94 53.5C70 58.5 30 59.5 3 56Z"/>
+      <path class="m-crest" pathLength="1" d="M3 56C7 40 10 18 23 13C32.5 9.6 40 16.5 37.4 24.4C36 28.4 31 28.8 29.6 25.6C32 22.8 30 19.6 26.4 20C18.6 21 17 36 30 44C45 53 72 54 94 53.5"/>
+    </g>
     <path class="m-ring" d="M38 56.2a8 1.7 0 1 0 16 0a8 1.7 0 1 0-16 0"/>
     <path class="m-water" d="M5 54.6C14 53 20 56.2 30 54.7S48 53.2 60 54.8S80 56 91 54.2"/>
     <path class="m-mirror" d="M40 57.7C47 56.7 57 56.7 64 57.7C57 58.7 47 58.7 40 57.7Z"/>
@@ -419,10 +862,10 @@ thead th,tbody th{font-weight:600}
       <path class="m-skull m-line" d="M68.27 37.31C70.57 34.03 72.37 30.35 73.85 27.18A7.5 7.5 0 1 1 82.59 37.59C79.69 38.37 76.68 40.49 75.01 42.48A4.25 4.25 0 0 1 68.27 37.31Z"/>
       <circle class="m-eye" cx="83.25" cy="28.15" r="1.4"/>
     </g>
-  </g>
-  <g class="m-board">
-    <path class="m-plank" d="M40.5 40.4C55 41 74 43.6 90.5 47.6C73 51.4 55 49.4 41 44.2C38.6 43.2 38.4 40.6 40.5 40.4Z"/>
-    <path class="m-fin m-line" d="M46.5 46.2l-1.6 4.8 6.2-3Z"/>
+    <g class="m-board">
+      <path class="m-fin m-line" d="M13.2 64.8 11.6 73.3 21.5 66.8Z"/>
+      <path class="m-plank" d="M1.7 56.2C26.6 54 59.7 54.2 88.8 57.4C59.7 67.8 28.5 68.4 3.4 62.6C-0.9 61.4-1.9 57 1.7 56.2Z"/>
+    </g>
   </g>
   <g class="m-bird">
     <path class="m-far" d="M55.2 32C54 24 44.5 20.6 37 24.4C33.6 26.2 31.4 29.6 30.2 33.4C37 34.4 46.4 34.4 55.2 32Z"/>
@@ -447,29 +890,83 @@ thead th,tbody th{font-weight:600}
       <circle class="m-pupil m-line" cx="62.5" cy="7.9" r="0.8"/>
     </g>
   </g>
+  <path class="m-surge" d="M1 60V30C7 24.5 13 22 21 23.5S33 27 42 25.5S57 21 67 22.5S83 27 95 24V60Z"/>
   <g class="m-dots">
-    <circle class="m-dot m-dot-1" cx="42" cy="12" r="1.5"/>
-    <circle class="m-dot m-dot-2" cx="46" cy="18.5" r="1.2"/>
-    <circle class="m-dot m-dot-3" cx="44" cy="25" r="1"/>
+    <circle class="m-dot m-dot-1" cx="7" cy="12" r="1.5"/>
+    <circle class="m-dot m-dot-2" cx="11" cy="22" r="1.2"/>
+    <circle class="m-dot m-dot-3" cx="6" cy="32" r="1"/>
   </g>
 </svg></template>
 <script>(() => {
   const model = document.getElementById('mascot').content.firstElementChild;
-  for (const box of document.querySelectorAll('[data-look]')) {
-    const [state, pose, tint, sign, passage, ...arcs] = box.dataset.look.split('|');
-    const svg = model.cloneNode(true);
+  const write = (svg, text) => {
+    const [state, pose, tint, sign, passage, a1, o1, a2, o2, a3, o3, phase] = text.split('|');
     svg.setAttribute('data-state', state);
     svg.setAttribute('data-pose', pose);
     svg.setAttribute('data-tint', tint);
     svg.setAttribute('data-sign', sign);
     svg.toggleAttribute('data-passage', passage === '1');
+    const arcs = [a1, o1, a2, o2, a3, o3];
     for (const i of [0, 1, 2]) {
       for (const arc of svg.querySelectorAll('.m-arc-' + String(i + 1))) {
         arc.setAttribute('stroke-dasharray', arcs[2 * i]);
         arc.setAttribute('stroke-dashoffset', arcs[2 * i + 1]);
       }
     }
+    if (phase) svg.setAttribute('data-phase', phase);
+    else svg.removeAttribute('data-phase');
+  };
+  for (const box of document.querySelectorAll('[data-look]')) {
+    const svg = model.cloneNode(true);
+    write(svg, box.dataset.look);
     box.append(svg);
   }
+
+  const less = document.getElementById('less');
+  const slowly = document.getElementById('slowly');
+  const system = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const timers = new Map();
+  const frames = (box) =>
+    box.dataset.frames.split(';').map((frame) => {
+      const cut = frame.indexOf('|');
+      return [Number(frame.slice(0, cut)), frame.slice(cut + 1)];
+    });
+  const hold = (svg) => {
+    for (const timer of timers.get(svg) ?? []) window.clearTimeout(timer);
+    timers.set(svg, []);
+  };
+  // A look given at once: nothing of it is played.
+  const settle = (svg, text) => {
+    hold(svg);
+    svg.removeAttribute('data-live');
+    write(svg, text);
+  };
+  const play = (box) => {
+    const svg = box.querySelector('svg');
+    const list = frames(box);
+    if (less.checked || system.matches) return settle(svg, list[list.length - 1][1]);
+    settle(svg, box.dataset.look);
+    void svg.getBoundingClientRect();
+    svg.setAttribute('data-live', '');
+    const slow = Number(document.body.dataset.slow ?? '1');
+    for (const [at, text] of list) {
+      timers.get(svg).push(window.setTimeout(write, at * slow, svg, text));
+    }
+  };
+  document.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-play], [data-skip], [data-back]');
+    if (button === null) return;
+    const name = button.dataset.play ?? button.dataset.skip ?? button.dataset.back;
+    for (const box of document.querySelectorAll('[data-clip="' + name + '"]')) {
+      const list = frames(box);
+      if (button.dataset.play !== undefined) play(box);
+      else if (button.dataset.skip !== undefined) settle(box.querySelector('svg'), list[list.length - 1][1]);
+      else settle(box.querySelector('svg'), box.dataset.look);
+    }
+  });
+  slowly.addEventListener('change', () => {
+    if (slowly.checked) document.body.dataset.slow = '4';
+    else document.body.removeAttribute('data-slow');
+  });
 })();</script>
 </html>

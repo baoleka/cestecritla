@@ -84,8 +84,11 @@ const SEEN = `(id) => {
       opacity *= Number(getComputedStyle(node).opacity);
     }
     if (opacity === 0 || getComputedStyle(shape).visibility === 'hidden') continue;
-    shapes.push(shape.classList[0]);
     const box = shape.getBoundingClientRect();
+    // The water that closes over her once lies flat at her feet the rest of the time: a shape
+    // with no height is not seen.
+    if (box.width === 0 || box.height === 0) continue;
+    shapes.push(shape.classList[0]);
     spill = Math.max(spill, frame.left - box.left, box.right - frame.right, frame.top - box.top, box.bottom - frame.bottom);
   }
   return { shapes, spill: Math.max(0, spill) };

@@ -1,10 +1,13 @@
 /**
- * The second-generation mascot, held (lot A1 of docs/discovery/PLAN-TORTUE.md; D17.1 to D17.15):
- * what her drawing may contain, what her stylesheet may do, what her colours must measure, and
- * that the sheet the editor validates is the sheet of today's drawing.
+ * The second-generation mascot, held (lots A1 and A2 of docs/discovery/PLAN-TORTUE.md; D17.1 to
+ * D17.17): what her drawing may contain, what her stylesheet may do, what her colours must
+ * measure, what her movement is made of and how long it lasts, and that the sheet the editor
+ * validates is the sheet of today's drawing.
  *
  * What only a browser can see — which shapes show in a state, whether anything leaves her
- * frame — is scripts/mascot2-render.ts, in three engines.
+ * frame — is scripts/mascot2-render.ts, in three engines; her movement as it is played — when
+ * it ends, what flashes, how the frames hold — is scripts/mascot2-motion.ts, whose measures are
+ * read back here.
  *
  * The turtle that is online keeps her own gate (scripts/mascot.test.ts), untouched: this file
  * holds a drawing nothing serves yet.
@@ -15,32 +18,56 @@ import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { gzipSync } from 'node:zlib';
 import {
+  BEAT_MAX_MS,
+  EVOLUTIONS,
+  EVOLUTION_MAX_MS,
+  FINDS,
+  GESTURE_MAX_MS,
   MAX_BOTH_BYTES,
   MAX_DRAWING_BYTES,
   MAX_SHAPES_IN_FILE,
   MAX_SHAPES_SEEN,
   MAX_STYLESHEET_BYTES,
+  MOVING_LIMIT_MS,
+  PASSAGES,
+  PULSE_HOLD_MS,
   SHAPES_SEEN,
   STATE_ARCS,
+  TRICK_HOLD_MS,
+  applyMascotFrame,
   applyMascotLook,
+  evolution,
+  evolutionLasts,
+  framesLast,
   lookOf,
   mascotMarkup,
+  passageTo,
+  pulse,
   signOf,
   tintOf,
+  trick,
+  withoutMotion,
+  type MascotDrawing,
+  type Standing,
   type TurtleState,
 } from '../src/lib/mascot2.js';
 import { TOKEN_SETS, TURTLE_SVG_PATH, turtleColours } from './launch.js';
 import {
+  FLASHES_PER_SECOND_MAX,
   LINE_MIN,
   MASCOT2_CSS_PATH,
+  MASCOT2_MOTION_PATH,
   MASCOT2_PALETTE_PATH,
   MASCOT2_SHEET_PATH,
   MASCOT2_SVG_PATH,
   contrastRatio,
   mascot2Colours,
   mascot2Fingerprint,
+  readMotion,
   readPalette,
   refused,
+  type ClipMeasure,
+  type FlashMeasure,
   type PaletteSet,
 } from './mascot2-kit.js';
 import { readValidation, sheet } from './mascot2-sheet.js';
@@ -183,8 +210,30 @@ void test('her stylesheet colours by role, and only by role', () => {
 });
 
 void test('her stylesheet never sets a dash on an arc, never mirrors her, never loops', () => {
+  // A dash is how a line is written (D17.8): the line of the wave, her neck, the lines between
+  // her stars — and never an arc, whose two attributes say what has been found.
+  const WRITTEN = /^\.mascot(?:\[[^\]]+\])* \.m-(?:crest|neck|neck-in|neck-s|neck-f|lines)$/;
+  const dashed = /(?:^|;)\s*stroke-dash(?:array|offset)\s*:/;
+  const STEP = /^(?:from|to|\d+(?:\.\d+)?%)$/;
   for (const { selector, body } of rules) {
-    if (selector.includes('.m-arc')) assert.doesNotMatch(body, /stroke-dash/, selector);
+    if (!dashed.test(body)) continue;
+    for (const one of selector.split(',').map((part) => part.trim())) {
+      // A step of an animation: held just below, by who plays it.
+      if (!STEP.test(one)) assert.match(one, WRITTEN, `a dash is set on « ${one} »`);
+    }
+  }
+  // An animation that moves a dash is played by a line that is written, and by nothing else.
+  for (const [, name, steps] of bare.matchAll(
+    /@keyframes (m-[a-z]+) \{((?:[^{}]*\{[^{}]*\})+)\s*\}/g,
+  )) {
+    if (!/stroke-dash/.test(steps ?? '')) continue;
+    const players = rules.filter((r) => new RegExp(`animation:\\s*${name ?? ''}\\b`).test(r.body));
+    assert.ok(players.length > 0, `@keyframes ${name ?? ''}`);
+    for (const { selector } of players) {
+      for (const one of selector.split(',').map((part) => part.trim())) {
+        assert.match(one, WRITTEN, `${name ?? ''} is played by « ${one} »`);
+      }
+    }
   }
   assert.ok(
     rules.some(
@@ -332,17 +381,23 @@ void test('her look, written: attributes only, on both sets of arcs, and the pat
     setAttribute: (attribute: string, value: string) =>
       void written.push(`${name} ${attribute}=${value}`),
   });
-  applyMascotLook(
-    {
-      setAttribute: (name, value) => void written.push(`${name}=${value}`),
-      toggleAttribute: (name, force) => {
-        written.push(`${name}:${String(force)}`);
-        return force === true;
-      },
-      querySelectorAll: (selector) => [arc(`${selector}#shell`), arc(`${selector}#wing`)],
+  const drawing: MascotDrawing = {
+    setAttribute: (name, value) => void written.push(`${name}=${value}`),
+    removeAttribute: (name) => void written.push(`${name}:removed`),
+    toggleAttribute: (name, force) => {
+      written.push(`${name}:${String(force)}`);
+      return force === true;
     },
-    { state: 3, arcs: [6, 6, 2], pose: 'rest', tint: 5, sign: 0, passage: true },
-  );
+    querySelectorAll: (selector) => [arc(`${selector}#shell`), arc(`${selector}#wing`)],
+  };
+  applyMascotLook(drawing, {
+    state: 3,
+    arcs: [6, 6, 2],
+    pose: 'rest',
+    tint: 5,
+    sign: 0,
+    passage: true,
+  });
   assert.deepEqual(written, [
     'data-state=3',
     'data-pose=rest',
@@ -362,6 +417,368 @@ void test('her look, written: attributes only, on both sets of arcs, and the pat
       `${a} stroke-dashoffset=-2`,
     ]),
   ]);
+  // A frame is a look and the beat it is: one attribute more, written last — or taken away.
+  const look = lookOf({ state: 1 });
+  written.length = 0;
+  applyMascotFrame(drawing, { ...look, at: 0, phase: '01-wave' });
+  assert.equal(written.at(-1), 'data-phase=01-wave');
+  written.length = 0;
+  applyMascotFrame(drawing, { ...look, at: 0, phase: null });
+  assert.equal(written.at(-1), 'data-phase:removed');
+});
+
+// ---------------------------------------------------------------------------------------------
+// Her movement (lot A2; D17.7, D17.8)
+// ---------------------------------------------------------------------------------------------
+
+/** What she is just before each passage and just after, as the game will have her. */
+const BEFORE: Readonly<Record<string, Standing>> = {
+  '01': { state: 0, arcs: [0, 0, 0], tint: 0 },
+  '12': { state: 1, arcs: [3, 0, 0], tint: 0 },
+  '23': { state: 2, arcs: [6, 5, 0], tint: 3 },
+  '34': { state: 3, arcs: [6, 6, 5], tint: 3 },
+};
+const AFTER: Readonly<Record<string, Standing>> = {
+  '01': { state: 1, arcs: [3, 0, 0], tint: 0 },
+  '12': { state: 2, arcs: [6, 1, 0], tint: 0 },
+  '23': { state: 3, arcs: [6, 6, 1], tint: 3 },
+  '34': { state: 4, arcs: [6, 6, 6], tint: 3 },
+};
+
+void test('her choreography: four evolutions, each within its ceilings, each one passage', () => {
+  // Under what WCAG 2.2.2 asks a pause for.
+  const ceilings: number[] = [EVOLUTION_MAX_MS, MOVING_LIMIT_MS];
+  assert.deepEqual(
+    [...ceilings].sort((a, b) => a - b),
+    ceilings,
+  );
+  assert.notEqual(ceilings[0], ceilings[1]);
+  assert.deepEqual(STATES.map(passageTo), [null, ...PASSAGES]);
+  for (const passage of PASSAGES) {
+    const beats = [...FINDS, ...EVOLUTIONS[passage]];
+    for (const beat of beats) {
+      assert.match(beat.name, /^[a-z]+(?:-\d)?$/, `${passage}: a beat is called « ${beat.name} »`);
+      assert.ok(beat.lasts > 0 && beat.lasts <= BEAT_MAX_MS, `${passage}-${beat.name}`);
+    }
+    assert.equal(new Set(beats.map((beat) => beat.name)).size, beats.length, passage);
+    assert.ok(
+      evolutionLasts(passage) <= EVOLUTION_MAX_MS,
+      `${passage}: ${String(evolutionLasts(passage))} ms`,
+    );
+    // She takes her new state once, and the accent comes with it or after it — never before.
+    const flips = beats.map((beat) => beat.flips === true);
+    const accents = beats.map((beat) => beat.accent === true);
+    assert.equal(flips.filter(Boolean).length, 1, `${passage}: she takes her new state once`);
+    assert.equal(accents.filter(Boolean).length, 1, `${passage}: one accent`);
+    assert.ok(accents.indexOf(true) >= flips.indexOf(true), `${passage}: the accent is early`);
+    assert.ok(FINDS.every((beat) => beat.flips !== true && beat.accent !== true));
+  }
+});
+
+void test('an evolution, as frames: the finds, the beats, then the still look — and never back', () => {
+  for (const passage of PASSAGES) {
+    const [from, to] = [BEFORE[passage], AFTER[passage]];
+    assert.ok(from !== undefined && to !== undefined);
+    const frames = evolution(from, to);
+    const beats = [...FINDS, ...EVOLUTIONS[passage]];
+    assert.equal(frames.length, beats.length + 1);
+    assert.equal(frames[0]?.at, 0);
+    assert.equal(framesLast(frames), evolutionLasts(passage));
+    frames.forEach((frame, index) => {
+      const beat = beats[index];
+      const next = frames[index + 1];
+      if (beat === undefined || next === undefined) return;
+      assert.equal(frame.phase, `${passage}-${beat.name}`);
+      assert.equal(next.at - frame.at, beat.lasts);
+      // Never back, and never further than the state she is passing to.
+      assert.ok(next.state >= frame.state && frame.state >= from.state && next.state <= to.state);
+      assert.equal(frame.tint, from.tint, 'an evolution never changes the colour she was given');
+    });
+    const flip = beats.findIndex((beat) => beat.flips === true);
+    assert.deepEqual(
+      frames.slice(0, -1).map((frame) => frame.state),
+      beats.map((_, index) => (index < flip ? from.state : to.state)),
+    );
+    // Her arc grows when the finds have reached her — not before, and on the form she has.
+    assert.deepEqual(frames[0].arcs, from.arcs);
+    assert.deepEqual(frames[1]?.arcs, from.arcs);
+    assert.deepEqual(frames[2]?.arcs, to.arcs);
+    // The last frame is the still look of the state she has passed to, the accent on.
+    assert.deepEqual(frames.at(-1), {
+      ...lookOf({ state: to.state, arcs: to.arcs, tint: to.tint, passage: true }),
+      at: evolutionLasts(passage),
+      phase: null,
+    });
+    // Less motion, an evolution skipped, a state that comes back: that last look, at once.
+    assert.deepEqual(withoutMotion(frames), [{ ...frames.at(-1), at: 0 }]);
+  }
+  assert.deepEqual(withoutMotion([]), []);
+
+  // The end of a round that changes no state: the finds come to her, her arc grows, no accent.
+  const same = evolution(
+    { state: 2, arcs: [6, 2, 0], tint: 4 },
+    { state: 2, arcs: [6, 3, 0], tint: 4 },
+  );
+  assert.deepEqual(
+    same.map((frame) => frame.phase),
+    ['end-in', 'end-to', null],
+  );
+  assert.ok(framesLast(same) <= GESTURE_MAX_MS);
+  assert.deepEqual(same.at(-1), {
+    ...lookOf({ state: 2, arcs: [6, 3, 0], tint: 4 }),
+    at: framesLast(same),
+    phase: null,
+  });
+  assert.ok(same.every((frame) => !frame.passage));
+  // She never goes back: asked to, she stays as she is, and nothing plays.
+  assert.deepEqual(
+    evolution({ state: 3, arcs: [6, 6, 2], tint: 1 }, { state: 2, arcs: [6, 1, 0], tint: 1 }),
+    [{ ...lookOf({ state: 3, arcs: [6, 6, 2], tint: 1 }), at: 0, phase: null }],
+  );
+  // A leap of several states is not played: the look she lands on, with no accent.
+  assert.deepEqual(
+    evolution({ state: 0, arcs: [0, 0, 0], tint: 0 }, { state: 3, arcs: [6, 6, 1], tint: 0 }),
+    [{ ...lookOf({ state: 3, arcs: [6, 6, 1], tint: 0 }), at: 0, phase: null }],
+  );
+});
+
+void test('her figure and the move for a word found: short, and she comes back as she was', () => {
+  for (const state of STATES) {
+    const look = lookOf({ state, tint: 2 });
+    for (const [frames, pose, held] of [
+      [trick(look), 'trick', TRICK_HOLD_MS[state]],
+      [pulse(look), 'pulse', PULSE_HOLD_MS],
+    ] as const) {
+      assert.deepEqual(frames, [
+        { ...look, pose, at: 0, phase: null },
+        { ...look, pose: 'rest', at: held, phase: null },
+      ]);
+      assert.ok(framesLast(frames) <= GESTURE_MAX_MS, `state ${String(state)}, ${pose}`);
+    }
+  }
+  // The same move whatever was chosen: nothing of a choice goes in.
+  assert.equal(pulse.length, 1);
+});
+
+/** The durations of the site (design/tokens.json), in milliseconds, as the stylesheet names them. */
+const tokenMs = (): Record<string, number> => {
+  const tokens = JSON.parse(readFileSync(TOKEN_SETS[0], 'utf8')) as {
+    motion: { duration: Record<string, string> };
+  };
+  return Object.fromEntries(
+    Object.entries(tokens.motion.duration)
+      .filter(([, value]) => /^\d+ms$/.test(value))
+      .map(([name, value]) => [`--duration-${name}`, parseInt(value, 10)]),
+  );
+};
+
+void test('her stylesheet moves her only on a gesture, only as allowed, and never without end', () => {
+  const cut = css.indexOf('@media (prefers-reduced-motion: no-preference)');
+  assert.ok(cut > 0, 'the stylesheet has no block for those who did not ask for less motion');
+  const still = css.slice(0, cut).replace(/\/\*[\s\S]*?\*\//g, '');
+  const moving = css.slice(cut).replace(/\/\*[\s\S]*?\*\//g, '');
+  // Whoever asked for less motion gets none: every movement is inside that one block…
+  assert.doesNotMatch(still, /transition|animation|@keyframes/);
+  assert.equal(css.match(/@media/g)?.length, 1);
+  // …which is the last thing in the file, and closes with it.
+  assert.match(moving, /\}\s*\}\s*$/);
+
+  // Inside it, she moves only once the script has said she may (`data-live`): a page that
+  // loads plays nothing. The one rule without it is the one that stops her.
+  const movingRules = [...moving.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+    .map((m) => ({ selector: (m[1] ?? '').trim().replace(/\s+/g, ' '), body: m[2] ?? '' }))
+    .filter(
+      (rule) =>
+        !/^(?:\d+(?:\.\d+)?%|from|to)(?:\s*,\s*(?:\d+(?:\.\d+)?%|from|to))*$/.test(rule.selector),
+    )
+    .map((rule) => ({ ...rule, selector: rule.selector.replace(/^@media[^{]*\{\s*/, '') }));
+  const stops = movingRules.filter((rule) => rule.selector === '.mascot:not([data-live]) *');
+  assert.equal(stops.length, 1);
+  assert.match(stops[0]?.body ?? '', /^\s*transition-property:\s*none;\s*$/);
+  for (const rule of movingRules) {
+    if (rule === stops[0] || rule.selector.startsWith('@keyframes')) continue;
+    for (const one of rule.selector.split(',').map((part) => part.trim())) {
+      assert.match(one, /^\.mascot\[data-live\]/, `« ${one} » moves without data-live`);
+    }
+    assert.match(rule.body, /^\s*(?:(?:transition|animation)[a-z-]*:[^;]+;\s*)+$/, rule.selector);
+  }
+
+  // What moves: a transform, an opacity, the offset of the dash of a line that is written.
+  const MAY_MOVE = new Set(['transform', 'opacity', 'stroke-dashoffset']);
+  for (const [, list] of moving.matchAll(/transition:([^;]+);/g)) {
+    for (const part of (list ?? '').split(',')) {
+      const property = part.trim().split(/\s+/)[0] ?? '';
+      assert.ok(MAY_MOVE.has(property), `a transition of « ${property} »`);
+    }
+  }
+  const keyframes = [...moving.matchAll(/@keyframes (m-[a-z]+) \{((?:[^{}]*\{[^{}]*\})+)\s*\}/g)];
+  assert.ok(keyframes.length > 0);
+  for (const [, name, body] of keyframes) {
+    for (const [, property] of (body ?? '').matchAll(/(?:\{|;)\s*([a-z-]+)\s*:/g)) {
+      assert.ok(
+        MAY_MOVE.has(property ?? ''),
+        `@keyframes ${name ?? ''} moves « ${property ?? ''} »`,
+      );
+    }
+  }
+
+  // How long: only the durations of the site and her own, which are multiples of them — never a
+  // number of milliseconds typed here — and none longer than a beat may be.
+  const tokens = tokenMs();
+  const own = Object.fromEntries(
+    [...bare.matchAll(/(--m-[a-z]+):\s*calc\(var\((--[a-z-]+)\) \* ([\d.]+)\)/g)].map((m) => [
+      m[1] ?? '',
+      { of: m[2] ?? '', times: Number(m[3]) },
+    ]),
+  );
+  const ms = (name: string): number => {
+    const mine = own[name];
+    if (mine !== undefined) return ms(mine.of) * mine.times;
+    const token = tokens[name];
+    assert.ok(token !== undefined, `the stylesheet names a duration nobody defines: ${name}`);
+    return token;
+  };
+  assert.doesNotMatch(moving, /\d(?:ms|s)\b/, 'a duration is typed in the stylesheet');
+  const timed = [...moving.matchAll(/(?:transition|animation)[a-z-]*:([^;]+);/g)].map(
+    (m) => m[1] ?? '',
+  );
+  const durations = timed.flatMap((value) =>
+    [...value.matchAll(/var\((--[a-z-]+)\)/g)].map((m) => m[1] ?? ''),
+  );
+  assert.ok(durations.length > 0);
+  for (const name of new Set(durations)) {
+    if (name.startsWith('--easing-')) continue;
+    assert.ok(ms(name) <= BEAT_MAX_MS, `${name} is ${String(ms(name))} ms`);
+  }
+  // …multiplied, where something must wait its turn, into no more than a beat either.
+  for (const value of timed) {
+    for (const [, name, times] of value.matchAll(/calc\(var\((--[a-z-]+)\) \* ([\d.]+)\)/g)) {
+      const lasts = ms(name ?? '') * Number(times);
+      assert.ok(lasts <= BEAT_MAX_MS, `${name ?? ''} × ${times ?? ''} is ${String(lasts)} ms`);
+    }
+  }
+
+  // Never a flash (WCAG 2.3.1; design/motion-spec.md). What is large — a wave, the water that
+  // closes over her, a sky — comes or goes in one slow ramp, 350 ms at least…
+  const large = movingRules.find((rule) => rule.selector.includes('.m-dusk'));
+  assert.ok(large !== undefined);
+  for (const part of ['.m-wave', '.m-swell', '.m-surge', '.m-dusk']) {
+    assert.ok(large.selector.split(', ').includes(`.mascot[data-live] ${part}`), part);
+  }
+  const ramps = [...large.body.matchAll(/var\((--(?:m|duration)-[a-z]+)\)/g)].map(
+    (m) => m[1] ?? '',
+  );
+  assert.equal(ramps.length, 2);
+  for (const name of ramps) assert.ok(ms(name) >= 350, `${name}: ${String(ms(name))} ms`);
+  // …and the drops of foam, which are the accent, come one, then two, 350 ms apart at least.
+  const foam = movingRules.find((rule) => rule.selector.includes("[data-phase='01-foam']"));
+  const apart = /transition-delay:\s*calc\(var\((--[a-z-]+)\) \* ([\d.]+)\)/.exec(foam?.body ?? '');
+  assert.ok(apart !== null && ms(apart[1] ?? '') * Number(apart[2]) >= 350);
+
+  // Never without end: every animation plays a counted number of times, three at most.
+  assert.ok(!bare.includes('infinite'), 'an animation runs without end');
+  assert.doesNotMatch(moving, /alternate|forwards|both|steps\(|paused/);
+  const played = [...moving.matchAll(/animation:\s*(m-[a-z]+)\s+var\((--[a-z-]+)\)[^;]*?(\d+)?;/g)];
+  assert.ok(played.length > 0);
+  const names = new Set(keyframes.map((k) => k[1]));
+  for (const [, name, duration, times] of played) {
+    assert.ok(names.has(name), `an animation nobody wrote: ${name ?? ''}`);
+    const lasts = ms(duration ?? '') * Number(times ?? '1');
+    assert.ok(
+      Number(times ?? '1') <= 3 && lasts <= GESTURE_MAX_MS,
+      `${name ?? ''}: ${String(lasts)} ms`,
+    );
+  }
+  for (const name of names) {
+    assert.ok(
+      played.some((p) => p[1] === name),
+      `@keyframes ${name ?? ''} is never played`,
+    );
+  }
+});
+
+void test('every beat the choreography names is one the stylesheet knows, and the reverse', () => {
+  const known = new Set(
+    [...bare.matchAll(/\[data-phase='([a-z0-9-]+)'\]/g)].map((m) => m[1] ?? ''),
+  );
+  const prefixes = [...bare.matchAll(/\[data-phase\^='([a-z0-9-]+)'\]/g)].map((m) => m[1] ?? '');
+  const suffixes = [...bare.matchAll(/\[data-phase\$='([a-z0-9-]+)'\]/g)].map((m) => m[1] ?? '');
+  const named = new Set<string>();
+  for (const passage of PASSAGES) {
+    for (const beat of [...FINDS, ...EVOLUTIONS[passage]]) named.add(`${passage}-${beat.name}`);
+  }
+  for (const beat of FINDS) named.add(`end-${beat.name}`);
+  // A beat where nothing changes would be a pause nobody decided: every beat is held by a rule,
+  // or lets go of what the beat before it held, or is where she takes her new state or her
+  // accent. And a rule for a beat nobody plays would be a look nobody has seen.
+  const held = (phase: string): boolean =>
+    known.has(phase) ||
+    prefixes.some((prefix) => phase.startsWith(prefix)) ||
+    suffixes.some((suffix) => phase.endsWith(suffix));
+  for (const passage of PASSAGES) {
+    const beats = [...FINDS, ...EVOLUTIONS[passage]];
+    beats.forEach((beat, index) => {
+      const before = beats[index - 1];
+      assert.ok(
+        held(`${passage}-${beat.name}`) ||
+          (before !== undefined && held(`${passage}-${before.name}`)) ||
+          beat.flips === true ||
+          beat.accent === true,
+        `nothing changes at the beat « ${passage}-${beat.name} »`,
+      );
+    });
+  }
+  for (const phase of known)
+    assert.ok(named.has(phase), `the stylesheet holds « ${phase} », which no evolution plays`);
+  for (const prefix of prefixes) {
+    assert.ok(
+      [...named].some((phase) => phase.startsWith(prefix)),
+      `[data-phase^='${prefix}']`,
+    );
+  }
+  assert.deepEqual([...new Set(suffixes)].sort(), ['-in', '-to']);
+});
+
+void test('what three browsers measured of her movement is of today’s drawing, and within the rules', () => {
+  const motion = readMotion();
+  assert.ok(
+    motion !== null,
+    `${MASCOT2_MOTION_PATH} is missing: npx tsx scripts/mascot2-motion.ts --write`,
+  );
+  assert.equal(
+    motion.drawing_sha256,
+    mascot2Fingerprint(),
+    `${MASCOT2_MOTION_PATH} measures another drawing: npx tsx scripts/mascot2-motion.ts --write`,
+  );
+  assert.match(motion.measured_on, /^\d{4}-\d{2}-\d{2}$/);
+  assert.deepEqual(Object.keys(motion.browsers).sort(), ['chromium', 'firefox', 'webkit']);
+  for (const passage of PASSAGES) {
+    const clip: ClipMeasure | undefined = motion.clips[passage];
+    assert.ok(clip !== undefined, `${passage} was not measured`);
+    assert.equal(clip.lasts_ms, evolutionLasts(passage));
+    assert.equal(Object.keys(clip.moving_ms).length, 3);
+    for (const [engine, ends] of Object.entries(clip.moving_ms)) {
+      assert.ok(ends > 0 && ends <= EVOLUTION_MAX_MS, `${passage}, ${engine}: ${String(ends)} ms`);
+    }
+    assert.ok(clip.spill_px <= 2, `${passage}: ${String(clip.spill_px)} px out of her frame`);
+    assert.ok(clip.flashes !== undefined && clip.frames !== undefined, passage);
+    for (const theme of ['light', 'dark'] as const) {
+      const f: FlashMeasure = clip.flashes[theme];
+      assert.ok(f.flashes_per_second <= FLASHES_PER_SECOND_MAX, `${passage}, ${theme}`);
+      assert.ok(f.red_flashes_per_second <= FLASHES_PER_SECOND_MAX, `${passage}, ${theme}, red`);
+      // The aim is above the rule: the scene as a whole never goes dark and light again.
+      assert.equal(f.scene_pairs, 0, `${passage}, ${theme}: the whole scene flashes`);
+    }
+    assert.ok(clip.frames.over_50 === 0 && clip.frames.over_20_pct <= 5, `${passage}: frames`);
+  }
+  const gestures = Object.entries(motion.clips).filter(([name]) => !/^\d\d$/.test(name));
+  assert.ok(gestures.length >= 2 * STATES.length);
+  for (const [name, clip] of gestures) {
+    for (const [engine, ends] of Object.entries(clip.moving_ms)) {
+      assert.ok(ends > 0 && ends <= GESTURE_MAX_MS, `${name}, ${engine}: ${String(ends)} ms`);
+    }
+    assert.ok(clip.spill_px <= 2, `${name}: ${String(clip.spill_px)} px out of her frame`);
+  }
 });
 
 void test('the sheet the editor validates is the sheet of today’s drawing', () => {
