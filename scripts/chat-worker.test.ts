@@ -622,6 +622,22 @@ void test('from 1 January 2027 the sentences are served only if the editor decid
   assert.ok(committed.campaign !== undefined, 'data/2026/ask.json: campaign');
   if (committed.campaign.decided_by !== 'editor') {
     assert.equal(campaignAllows(committed, firstHour), false);
+  } else {
+    // His decision is written where decisions are, on its day, as his: a session never
+    // writes « editor » from nothing (D16.65). He decided on 15 November 2026 (D16.78).
+    const on = String(committed.campaign.decided_on);
+    const rows = readFileSync('docs/discovery/decisions.md', 'utf8').split('\n');
+    assert.ok(
+      rows.some(
+        (row) =>
+          /^\| D\d+\.\d+ \|/.test(row) &&
+          row.includes(`| ${on} |`) &&
+          /campagne/.test(row) &&
+          /DÉCISION \(utilisateur\)/.test(row),
+      ),
+      `docs/discovery/decisions.md: no decision of the editor about the campaign on ${on}`,
+    );
+    assert.equal(campaignAllows(committed, firstHour), committed.campaign.serve === true);
   }
 });
 

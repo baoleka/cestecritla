@@ -18,6 +18,7 @@ import {
   pendingReviewCount,
   quoteFacts,
   searchFacts,
+  unreadReviewCount,
   verification,
 } from '../../lib/facts.ts';
 import { fr, frDate, t } from '../../lib/strings.ts';
@@ -30,6 +31,7 @@ const search = searchFacts();
 const checked = verification();
 const cited = quoteFacts();
 const pending = pendingReviewCount();
+const unread = unreadReviewCount();
 // What the game shows of the book: only in a build of a site that plays.
 const game = gameFacts();
 const located = checked.locators;
@@ -134,9 +136,14 @@ const ENGINE_NAMES: Record<string, string> = {
   <h2>{t('accuracy.review.title')}</h2>
   <p>
     {
-      pending === 0
-        ? t('accuracy.review.done')
-        : t('accuracy.review.pending', { count: fr(pending) })
+      /* What the files say, and no more (D16.79): « done » names a reader only when every
+         text was re-read by a person; published on the editor's word alone, the page says
+         that nobody re-read them one by one. */
+      pending > 0
+        ? t('accuracy.review.pending', { count: fr(pending) })
+        : unread > 0
+          ? t('accuracy.review.accepted')
+          : t('accuracy.review.done')
     }
   </p>
   {

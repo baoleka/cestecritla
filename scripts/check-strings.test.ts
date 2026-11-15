@@ -354,7 +354,9 @@ const WITHDRAWN_LIANT_KEYS: Readonly<Record<string, string>> = {
  * Strings that name a runtime AI. None of them may be rendered while the mode of
  * data/2026/ask.json is `off` (D16.4, D9.15, H-CNF-17g). Two keys are exempt on purpose:
  *   - about.no_ai says the opposite (it is the string of the "search only" mode);
- *   - about.writing_method names the AI used to WRITE the cards offline, which stays true.
+ *   - about.writing_method names the AI used to WRITE the cards offline, which stays true —
+ *     and so do concept.authorship.accepted and accuracy.review.accepted, which say it where
+ *     it is owed since no page claims a human re-reading any more (D16.79).
  * Every other key of this list needs a rendered fallback, listed here next to it — `null` when
  * the surface it belongs to is simply not built in that mode.
  */
@@ -392,7 +394,12 @@ const RUNTIME_AI_KEYS: Readonly<Record<string, string | null>> = {
   'privacy.chat.words': null,
   'silence.chat': 'silence.chat.local',
 };
-const AI_EXEMPT = new Set(['about.no_ai', 'about.writing_method']);
+const AI_EXEMPT = new Set([
+  'about.no_ai',
+  'about.writing_method',
+  'concept.authorship.accepted',
+  'accuracy.review.accepted',
+]);
 const AI_PATTERN = /\bIA\b|intelligence artificielle|Mistral|assistant|modèle|\{model\}/i;
 
 void test('an answer opens in one of two ways, and no withdrawn liant came back (D16.4, D16.5)', () => {
@@ -504,18 +511,36 @@ void test('no string says a person read the sentences unless the editor did (D16
   if (reader === 'editor') return;
   const CLAIMS =
     /phrases? (?:re)?lues?\b|(?:re)?lues? par l['’]éditeur|(?:re)?lues? par (?:une personne|un humain|Baoleka)/i;
-  /** Strings about OTHER texts, which a person did re-read: the cards, the fifteen answers. */
-  const ABOUT_OUR_OWN_TEXTS = new Set([
-    'about.ai_reviewed',
-    'accuracy.review.done',
-    'chat.human_reviewed_badge',
-    'chat.reviewed.title',
-  ]);
   for (const [key, value] of strings) {
-    if (ABOUT_OUR_OWN_TEXTS.has(key)) continue;
     if (!/phrase/i.test(value)) continue;
     assert.ok(!CLAIMS.test(value), `${key}: says the sentences were read by a person — "${value}"`);
   }
+});
+
+/**
+ * What the site may say of who RE-READ our own texts — the fifteen answers, the five cards — is
+ * held to what their files record (D16.79), as it is for the sentences (D16.59). Each entry says
+ * its state, and a string that names a reader is rendered only where every text concerned was
+ * re-read by a person (src/components/Authorship.astro, src/pages/exactitude/). So the strings
+ * that claim a re-reading are those two and no other — and what an « accepted » text shows
+ * claims none: until 15/11/2026 the site said « relu par Baoleka » on dates written by default.
+ */
+void test('no string says a person re-read our own texts, but the two kept for the day one has (D16.79)', () => {
+  const CLAIMS =
+    /(?:re)?lu(?:e|es|s)? par (?:l['’]éditeur|Baoleka|une personne|un humain|nous)|relu(?:e|es|s)? à la main|relecture (?:faite|en cours)/i;
+  const FOR_REVIEWED_ONLY = new Set(['concept.authorship.reviewed', 'accuracy.review.done']);
+  for (const [key, value] of strings) {
+    if (FOR_REVIEWED_ONLY.has(key)) continue;
+    assert.ok(!CLAIMS.test(value), `${key}: claims a re-reading by a person — "${value}"`);
+  }
+  for (const key of FOR_REVIEWED_ONLY) assert.ok(strings.has(key), key);
+  // What an accepted text shows says what it is: prepared with an AI, and no reader is named.
+  for (const key of ['concept.authorship.accepted', 'accuracy.review.accepted']) {
+    const value = strings.get(key) ?? '';
+    assert.match(value, /avec une IA/, key);
+    assert.ok(!value.includes(PSEUDONYM), `${key} names a reader`);
+  }
+  assert.match(strings.get('accuracy.review.accepted') ?? '', /Personne ne les a relus un à un/);
 });
 
 void test('no cta.* string hard-codes a year: an administrative date is computed at build (D9.9)', () => {

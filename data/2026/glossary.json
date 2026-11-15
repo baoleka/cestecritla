@@ -3,7 +3,7 @@
     "title_fr": "Mots du programme — édition 2026",
     "version": "1.0.0",
     "corpus_version": "27ee6e713fe25e7e",
-    "note_fr": "Cinq cartes-concept. « plain », « why » et la réponse à l'objection sont rédigés par nous ; chaque phrase s'appuie sur les propositions listées, épinglées par empreinte. Réécrit le 12/11/2026 sur le texte de l'édition 2026 ; rien n'est publié avant relecture (D0.27)."
+    "note_fr": "Cinq cartes-concept. « plain », « why » et la réponse à l'objection sont rédigés par nous ; chaque phrase s'appuie sur les propositions listées, épinglées par empreinte. Réécrit le 12/11/2026 sur le texte de l'édition 2026, avec un outil d'IA. « review.status » dit où en est chaque entrée, et le site ne dit jamais plus qu'elle : « pending » (pas publiée), « accepted » (publiée sur la parole de l'éditeur, nommé par « by » et datée par « on », sans qu'il l'ait relue ligne à ligne : D16.34, D16.79) ou « reviewed » (relue par une personne). Les cinq entrées disaient « reviewed » jusqu'au 15/11/2026, sur des dates écrites par défaut ; l'éditeur a choisi ce jour-là de ne pas les relire et de le faire dire au site."
   },
   "entries": [
     {
@@ -37,7 +37,7 @@
         "ecocide"
       ],
       "review": {
-        "status": "reviewed",
+        "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
       }
@@ -76,7 +76,7 @@
         "planification-ecologique"
       ],
       "review": {
-        "status": "reviewed",
+        "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
       }
@@ -118,7 +118,7 @@
         "planification-ecologique"
       ],
       "review": {
-        "status": "reviewed",
+        "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
       }
@@ -157,7 +157,7 @@
         "bifurcation-ecologique"
       ],
       "review": {
-        "status": "reviewed",
+        "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
       }
@@ -192,7 +192,7 @@
         "bifurcation-ecologique"
       ],
       "review": {
-        "status": "reviewed",
+        "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
       }

@@ -764,15 +764,19 @@ void test('the chat is a Worker of its own: two exact addresses a host, no file,
   assert.equal(chat.preview_urls, false);
 });
 
-void test('the Worker of the chat binds what the other binds, keeps no log, and counts for itself', () => {
+void test('the Worker of the chat binds what the other binds — but no model while none is named —, keeps no log, and counts for itself', () => {
   const preview = chat.env?.['preview'];
   assert.ok(preview);
   const environments: [string, Environment][] = [
     ['top level', chat],
     ['env.preview', preview],
   ];
+  // No model named, no binding to call one (D16.80): the two go together, in both directions.
+  const { model } = JSON.parse(readFileSync('data/2026/ask.json', 'utf8')) as { model: unknown };
   for (const [name, env] of environments) {
-    assert.equal(env.ai?.binding, 'AI', `${name}: the AI binding`);
+    if (model === null)
+      assert.equal(env.ai, undefined, `${name}: no model is named, none can be called`);
+    else assert.equal(env.ai?.binding, 'AI', `${name}: the AI binding`);
     assert.equal((env.d1_databases ?? [])[0]?.binding, 'DB', `${name}: the private base`);
     assert.equal(
       (env.durable_objects?.bindings ?? [])[0]?.name,

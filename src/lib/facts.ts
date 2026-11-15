@@ -92,9 +92,14 @@ export function quoteFacts(): QuoteFacts {
   };
 }
 
-/** How many of our own texts are still waiting to be re-read (D0.27). */
+/** How many of our own texts the editor has not accepted yet: none of them is published (D0.27). */
 export function pendingReviewCount(): number {
-  return [...ripostes(), ...cards()].filter((entry) => entry.review.status !== 'reviewed').length;
+  return [...ripostes(), ...cards()].filter((entry) => entry.review.status === 'pending').length;
+}
+
+/** How many are published without a person having re-read them line by line (D16.79). */
+export function unreadReviewCount(): number {
+  return [...ripostes(), ...cards()].filter((entry) => entry.review.status === 'accepted').length;
 }
 
 export interface LaunchFacts {

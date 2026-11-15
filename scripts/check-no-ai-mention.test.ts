@@ -22,11 +22,16 @@
  * which ones actually ship. design/strings.json holds 13 strings naming an AI while the `ai`
  * binding is absent from wrangler.jsonc; that is correct, as long as none of them reaches a page.
  *
- * Two exemptions, named rather than pattern-matched:
+ * Four exemptions, named rather than pattern-matched:
  *   about.no_ai           says there is no AI. A gate reading "no page mentions an AI" would
  *                         delete the sentence that tells the truth.
  *   about.writing_method  the OFFLINE writing tool, which stays true and must survive. D6.10
  *                         constrains execution, never fabrication (D9.15, D14.4).
+ *   concept.authorship.accepted, accuracy.review.accepted
+ *                         the same fact, said where it is owed since D16.79: at the foot of
+ *                         each of our twenty texts and on the accuracy page — « prepared with
+ *                         an AI », because no person re-read them and the site no longer
+ *                         says one did (AI Act art. 50 § 4: the text says what it is).
  *
  * Run: npx tsx --test scripts/check-no-ai-mention.test.ts
  */
@@ -53,7 +58,12 @@ const askMode = builtAskMode();
 const MENTIONS_ABSENT_COMPONENT =
   /\bIA\b|intelligence artificielle|Mistral|Llama|Gemma|gpt-oss|assistant|Turnstile/i;
 
-const EXEMPT = new Set(['about.no_ai', 'about.writing_method']);
+const EXEMPT = new Set([
+  'about.no_ai',
+  'about.writing_method',
+  'concept.authorship.accepted',
+  'accuracy.review.accepted',
+]);
 
 /** Whether a configuration binds a model — read in the file, not in the sketch of 09-architecture.md §2. */
 const bindsAi = (config: string): boolean =>
@@ -78,10 +88,15 @@ void test('a model is bound only where a script runs, and the pages of productio
     assert.equal(wranglerConfig('holding', mode, 'apex'), STATIC_CONFIG, mode);
     assert.equal(wranglerConfig('holding', mode, 'preview'), STATIC_CONFIG, mode);
   }
-  // A model exists in the two configurations that carry the script, and nowhere else.
-  for (const config of [WORKER_CONFIG, CHAT_CONFIG]) {
-    assert.equal(bindsAi(config), true, `${config}: the AI binding`);
-  }
+  // A model can be called where the bench runs — the Worker of the preview — and, on the
+  // Worker of the sentences, only while data/2026/ask.json names one (D16.80): no model
+  // named, no binding to call one, even by mistake.
+  assert.equal(bindsAi(WORKER_CONFIG), true, `${WORKER_CONFIG}: the AI binding`);
+  assert.equal(
+    bindsAi(CHAT_CONFIG),
+    configuredModel() !== null,
+    `${CHAT_CONFIG}: the AI binding goes with a named model, and only with one`,
+  );
   // No configuration carries a bot check, in any mode: there is none (D16.23).
   for (const config of [STATIC_CONFIG, WORKER_CONFIG, CHAT_CONFIG]) {
     const code = readFileSync(config, 'utf8').replace(/\/\/.*$/gm, '');
@@ -456,7 +471,17 @@ void test('no string of the kit names a bot check: there is none (D16.23)', () =
   }
 });
 
-void test('the two exemptions still exist and still say what they are exempt for', () => {
+void test('the four exemptions still exist and still say what they are exempt for', () => {
   assert.match(String(strings['about.no_ai']), /Aucune IA/i);
   assert.match(String(strings['about.writing_method']), /outil d.IA|d'IA/i);
+  // How our own texts were prepared — offline, by a tool: never a model at work on the page.
+  assert.match(String(strings['concept.authorship.accepted']), /^Préparé avec une IA\./);
+  assert.match(String(strings['accuracy.review.accepted']), /préparés avec une IA/);
+  for (const key of ['concept.authorship.accepted', 'accuracy.review.accepted']) {
+    assert.doesNotMatch(
+      String(strings[key]),
+      /répond|explique|Mistral|Llama|Gemma|\{model\}/i,
+      key,
+    );
+  }
 });

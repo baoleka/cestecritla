@@ -106,7 +106,12 @@ const OVERRIDE: SilenceOverride =
     ? flags.silence_override
     : 'auto';
 
-const empty = (status: number): Response => new Response(null, { status, headers: HEADERS });
+/** A refusal says nothing — except a 405, which names the one method these routes read. */
+const empty = (status: number): Response =>
+  new Response(null, {
+    status,
+    headers: status === 405 ? { ...HEADERS, allow: 'POST' } : HEADERS,
+  });
 const json = (body: unknown): Response =>
   new Response(JSON.stringify(body), { status: 200, headers: HEADERS });
 
@@ -114,7 +119,8 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;
 
 /**
- * What a person wrote and re-read (data/2026/glossary.json, riposte.json), built into the
+ * Our own texts, as far as the editor accepted them (data/2026/glossary.json, riposte.json;
+ * `review.status`, D16.79), built into the
  * Worker: the objections that never reach a model, the cards handed to it with a question.
  */
 const KNOWN = knownOf(glossary.entries, riposte.entries);

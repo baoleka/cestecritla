@@ -7,8 +7,15 @@
  * official page for each support, and the whole text for the few that are quoted
  * (data/2026/quotes.json, written by the publisher from the private corpus).
  *
- * Nothing is published before a human has re-read it (D0.27): `review.status` travels with
- * each entry, the page says which it is, and the launch gate refuses a pending entry.
+ * Nothing is published that the editor has not accepted (D0.27, amended by D16.79):
+ * `review.status` travels with each entry, the page says which it is, and the launch gate
+ * refuses a pending entry. THREE states, and the site never says more than the file does:
+ *   pending   written, not accepted — not published
+ *   accepted  the editor accepted its publication WITHOUT re-reading it line by line; the
+ *             page says « prepared with an AI », names no reader (D16.79, 15/11/2026)
+ *   reviewed  a person re-read it, and the page may name who (`by`)
+ * Until 15/11/2026 the twenty entries said « reviewed » on dates written by default
+ * (D16.34) — a re-reading that had not taken place (14-risques.md, R44).
  */
 import { readFileSync } from 'node:fs';
 import {
@@ -27,7 +34,7 @@ export interface Support {
   quote?: boolean;
 }
 export interface Review {
-  status: 'pending' | 'reviewed';
+  status: 'pending' | 'accepted' | 'reviewed';
   by: string | null;
   on: string | null;
 }
@@ -51,6 +58,10 @@ export interface Card {
   related: string[];
   review: Review;
 }
+
+/** True when an entry may be shown: the editor accepted it, re-read or not. */
+export const published = (review: { status: string }): boolean =>
+  review.status === 'accepted' || review.status === 'reviewed';
 
 /** A published JSON file. The caller names the shape it expects: the cast is visible there. */
 function read(path: string): unknown {

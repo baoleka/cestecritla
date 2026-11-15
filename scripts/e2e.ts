@@ -581,6 +581,20 @@ async function runEngine(
       escaped.length === 0,
       escaped.slice(0, 3).join(' '),
     );
+
+    // --- 6 bis. Trusted Types (D16.80): where the engine knows them, the page refuses a
+    // string handed to the HTML parser. Asked last: the refusal itself is a violation, and
+    // the count above must be of what WE ship. An engine that does not know them yet says so.
+    await page.goto(`${origin}/`);
+    const trusted = await page.evaluate(
+      "(() => { if (typeof window.trustedTypes === 'undefined') return 'unknown'; " +
+        "try { document.createElement('div').innerHTML = '<b>x</b>'; return 'accepted'; } " +
+        "catch { return 'refused'; } })()",
+    );
+    check(
+      `a script cannot hand a string to the HTML parser (Trusted Types: ${String(trusted)})`,
+      trusted === 'refused' || trusted === 'unknown',
+    );
     await context.close();
   } finally {
     await browser.close();

@@ -124,6 +124,54 @@ void test('a page opens no origin but ours — none, on any page, whether the si
       const origins = [...new Set(policy.match(/https?:\/\/[^\s;'"]+/g) ?? [])];
       assert.deepEqual(origins, [], `${page}: opens ${origins.join(', ')}`);
       assert.doesNotMatch(policy, /frame-src (?!'none')/, `${page}: allows a frame`);
+      // No script may hand a string to the HTML parser or to a script loader, and no policy
+      // can be created to let one through (D16.80).
+      assert.match(policy, /require-trusted-types-for 'script'/, `${page}: Trusted Types`);
+      assert.match(policy, /trusted-types 'none'/, `${page}: a policy could be created`);
+    }
+  }
+});
+
+void test('no script we ship does what the policy of the pages forbids: a string handed to the parser or to a loader (D16.80)', () => {
+  // `require-trusted-types-for 'script'` makes these calls throw in the browsers that know
+  // it — and a page that throws there is a page that breaks only for them. So what ships is
+  // read: the sinks the directive guards appear in none of our scripts, inline ones included.
+  const SINKS =
+    /\.(?:innerHTML|outerHTML|srcdoc)\s*=(?!=)|\binsertAdjacentHTML\(|\bdocument\.write(?:ln)?\(|\bcreateContextualFragment\(|\bparseFromString\(|\bnew Function\(|(?<![\w.])eval\(|\bimportScripts\(|\bserviceWorker\.register\(|\bnew (?:Shared)?Worker\(|\bcreateElement\(\s*["'`]script["'`]\s*\)|\bset(?:Timeout|Interval)\(\s*["'`]/;
+  for (const root of ['dist', 'dist-ask']) {
+    for (const file of walk(root)) {
+      if (file.endsWith('.js') || file.endsWith('.mjs')) {
+        assert.doesNotMatch(read(file), SINKS, `${file}: a sink Trusted Types refuses`);
+      } else if (file.endsWith('.html')) {
+        const inline = [
+          ...read(file).matchAll(
+            /<script(?![^>]*type="application\/(?:ld\+)?json")[^>]*>([\s\S]*?)<\/script>/g,
+          ),
+        ];
+        for (const script of inline) {
+          assert.doesNotMatch(script[1] ?? '', SINKS, `${file}: an inline script with a sink`);
+        }
+      }
+    }
+  }
+});
+
+void test('no page says a person re-read our own texts unless their files say one did (D16.79)', () => {
+  // The fifteen answers and the five cards each carry their state (data/2026/riposte.json,
+  // glossary.json): « accepted » is published on the editor's word, without a line-by-line
+  // re-reading. While one of them is not « reviewed », no page names a reader — the site said
+  // « relu par Baoleka » until 15/11/2026, on dates written by default (14-risques.md, R44).
+  const states = ['data/2026/riposte.json', 'data/2026/glossary.json'].flatMap((path) =>
+    (JSON.parse(read(path)) as { entries: { review: { status: string } }[] }).entries.map(
+      (entry) => entry.review.status,
+    ),
+  );
+  assert.ok(states.length > 0);
+  if (states.every((status) => status === 'reviewed')) return;
+  const CLAIM = /relu(?:e|es|s)? par (?:Baoleka|l['’]éditeur|une personne|un humain)/i;
+  for (const root of ['dist', 'dist-ask']) {
+    for (const file of walk(root).filter((f) => f.endsWith('.html'))) {
+      assert.doesNotMatch(read(file), CLAIM, `${file}: claims a re-reading by a person`);
     }
   }
 });

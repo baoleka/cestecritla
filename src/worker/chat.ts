@@ -127,6 +127,10 @@ export const CAMPAIGN_FROM = '2026-12-31T23:00:00.000Z';
  * the page keeps its links and what a person wrote. The plan left him this decision « before
  * 1 January 2027 » (PLAN-CHAT §7); the session, which was told to ask him nothing (D16.57),
  * wrote the default — it cannot write his decision.
+ *
+ * He gave it on 15 November 2026, when asked (D16.78): the sentences stay served during the
+ * campaign, as they are. The file says so, with his date; the rule below did not change, and
+ * setting the three fields back to null brings the default back.
  */
 export function campaignAllows(config: unknown, now: Date): boolean {
   if (now.getTime() < Date.parse(CAMPAIGN_FROM)) return true;

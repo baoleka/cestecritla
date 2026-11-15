@@ -3,7 +3,7 @@
     "title_fr": "Réponses aux objections — édition 2026",
     "version": "1.0.0",
     "corpus_version": "27ee6e713fe25e7e",
-    "note_fr": "Quinze objections de terrain. Chaque réponse est rédigée par nous et ne dit que ce que portent ses appuis, cités par identifiant et épinglés par empreinte. « quote » : la proposition est citée en entier sur la page, avec son auteur et son lien. Réécrit le 12/11/2026 sur le texte de l'édition 2026 ; rien n'est publié avant relecture (D0.27)."
+    "note_fr": "Quinze objections de terrain. Chaque réponse est rédigée par nous et ne dit que ce que portent ses appuis, cités par identifiant et épinglés par empreinte. « quote » : la proposition est citée en entier sur la page, avec son auteur et son lien. Réécrit le 12/11/2026 sur le texte de l'édition 2026, avec un outil d'IA. « review.status » dit où en est chaque entrée, et le site ne dit jamais plus qu'elle : « pending » (pas publiée), « accepted » (publiée sur la parole de l'éditeur, nommé par « by » et datée par « on », sans qu'il l'ait relue ligne à ligne : D16.34, D16.79) ou « reviewed » (relue par une personne). Les quinze entrées disaient « reviewed » jusqu'au 15/11/2026, sur des dates écrites par défaut ; l'éditeur a choisi ce jour-là de ne pas les relire et de le faire dire au site."
   },
   "entries": [
     {
@@ -30,7 +30,7 @@
         }
       ],
       "review": {
-        "status": "reviewed",
+        "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
       }
@@ -59,7 +59,7 @@
         }
       ],
       "review": {
-        "status": "reviewed",
+        "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
       }
@@ -91,7 +91,7 @@
         }
       ],
       "review": {
-        "status": "reviewed",
+        "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
       }
@@ -124,7 +124,7 @@
         }
       ],
       "review": {
-        "status": "reviewed",
+        "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
       }
@@ -156,7 +156,7 @@
         }
       ],
       "review": {
-        "status": "reviewed",
+        "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
       }
@@ -189,7 +189,7 @@
         }
       ],
       "review": {
-        "status": "reviewed",
+        "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
       }
@@ -221,7 +221,7 @@
         }
       ],
       "review": {
-        "status": "reviewed",
+        "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
       }
@@ -254,7 +254,7 @@
         }
       ],
       "review": {
-        "status": "reviewed",
+        "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
       }
@@ -287,7 +287,7 @@
         }
       ],
       "review": {
-        "status": "reviewed",
+        "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
       }
@@ -315,7 +315,7 @@
         }
       ],
       "review": {
-        "status": "reviewed",
+        "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
       }
@@ -348,7 +348,7 @@
         }
       ],
       "review": {
-        "status": "reviewed",
+        "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
       }
@@ -379,7 +379,7 @@
         }
       ],
       "review": {
-        "status": "reviewed",
+        "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
       }
@@ -412,7 +412,7 @@
         }
       ],
       "review": {
-        "status": "reviewed",
+        "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
       }
@@ -441,7 +441,7 @@
         }
       ],
       "review": {
-        "status": "reviewed",
+        "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
       }
@@ -470,7 +470,7 @@
         }
       ],
       "review": {
-        "status": "reviewed",
+        "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
       }

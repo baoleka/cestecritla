@@ -63,6 +63,14 @@ export default defineConfig({
         "font-src 'self'",
         "connect-src 'self'",
         "manifest-src 'self'",
+        // No script of ours hands a string to the HTML parser or to a script loader: every node
+        // is built with `textContent` (src/scripts/engine.ts, `el`). So the browser is told to
+        // refuse it outright, and no policy can be created to let one through (D16.80, the
+        // editor's choice after the security review; Chrome 83, Safari 26, Firefox 148 —
+        // older browsers ignore the two directives). In the meta policy, not in
+        // public/_headers: it must hold wherever the page is served, the local tests included.
+        "require-trusted-types-for 'script'",
+        "trusted-types 'none'",
       ],
     },
   },

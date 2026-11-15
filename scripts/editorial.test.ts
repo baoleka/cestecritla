@@ -186,13 +186,15 @@ void test('our sentences obey the voice: short, typeset, calm, and they name no 
   }
 });
 
-void test('the state of the review is said, and a review names who and when', () => {
+void test('the state of each text is said, and whoever accepted or re-read it is named, with a day', () => {
   for (const entry of entries) {
-    assert.ok(['pending', 'reviewed'].includes(entry.review.status), entry.id);
-    if (entry.review.status === 'reviewed') {
+    // Three states (src/lib/editorial.ts, D16.79): « accepted » is published on the editor's
+    // word without a line-by-line re-reading, and only « reviewed » says a person re-read it.
+    assert.ok(['pending', 'accepted', 'reviewed'].includes(entry.review.status), entry.id);
+    if (entry.review.status !== 'pending') {
       assert.ok(
         entry.review.by !== null && entry.review.on !== null,
-        `${entry.id}: reviewed by whom, when?`,
+        `${entry.id}: ${entry.review.status} by whom, when?`,
       );
       assert.match(entry.review.on, /^\d{4}-\d{2}-\d{2}$/);
     }

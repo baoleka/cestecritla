@@ -154,19 +154,22 @@ interface Reviewable {
 }
 
 /**
- * What a person wrote AND re-read, out of the two editorial files (data/2026/glossary.json,
- * data/2026/riposte.json): nothing is recognised, shown as « relu par un humain » or handed to
- * a model before that (D0.27). The page and the Worker both come through here.
+ * Our own texts as far as they are published, out of the two editorial files
+ * (data/2026/glossary.json, data/2026/riposte.json): nothing is recognised, shown under
+ * « En clair » or handed to a model before the editor accepted it (D0.27 ; « accepted » or
+ * « reviewed », D16.79 — the label of the sheet claims no reader either way). The page and
+ * the Worker both come through here.
  */
 export function knownOf(
   cards: readonly (Reviewable & KnownCard)[],
   objections: readonly (Reviewable & KnownObjection)[],
 ): { cards: KnownCard[]; objections: KnownObjection[] } {
-  const reread = (entry: Reviewable): boolean => entry.review.status === 'reviewed';
+  const shown = (entry: Reviewable): boolean =>
+    entry.review.status === 'accepted' || entry.review.status === 'reviewed';
   return {
-    cards: cards.filter(reread).map(({ id, term, plain }) => ({ id, term, plain })),
+    cards: cards.filter(shown).map(({ id, term, plain }) => ({ id, term, plain })),
     objections: objections
-      .filter(reread)
+      .filter(shown)
       .map(({ slug, objection, answer }) => ({ slug, objection, answer })),
   };
 }

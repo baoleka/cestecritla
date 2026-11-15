@@ -255,7 +255,10 @@ void test('the guards, as the platform sees them: origin, method, shape, book, s
     (await worker.post('/api/chat', asked, { origin: 'https://example.org' })).status,
     403,
   );
-  assert.equal((await worker.post('/api/gists', null, { method: 'GET' })).status, 405);
+  const wrongMethod = await worker.post('/api/gists', null, { method: 'GET' });
+  assert.equal(wrongMethod.status, 405);
+  // …and it names the one method the route reads, as a 405 should (D16.80).
+  assert.equal(wrongMethod.headers.get('allow'), 'POST');
   // What only this Worker and its pages agree on: a field too many, a sentence, another book.
   assert.equal((await worker.post('/api/gists', { ...asked, question: 'x' })).status, 400);
   assert.equal(

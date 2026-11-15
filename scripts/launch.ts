@@ -129,7 +129,7 @@ export function launchBlockers(inputs: LaunchInputs): string[] {
   }
   if (inputs.pendingReviews.length > 0) {
     out.push(
-      `${String(inputs.pendingReviews.length)} of our own texts have not been re-read (D0.27): ` +
+      `${String(inputs.pendingReviews.length)} of our own texts are not accepted for publication (D0.27, D16.79): ` +
         `${inputs.pendingReviews.slice(0, 6).join(', ')}${inputs.pendingReviews.length > 6 ? ', …' : ''}`,
     );
   }
@@ -513,7 +513,10 @@ export function pendingReviews(): string[] {
     if (!existsSync(path)) continue;
     const file = JSON.parse(readFileSync(path, 'utf8')) as Reviewed;
     for (const entry of file.entries) {
-      if (entry.review.status !== 'reviewed') out.push(`${prefix}:${entry.id}`);
+      // « accepted »: published on the editor's word, not re-read (D16.79) — the page says so.
+      if (entry.review.status !== 'reviewed' && entry.review.status !== 'accepted') {
+        out.push(`${prefix}:${entry.id}`);
+      }
     }
   }
   return out;

@@ -18,12 +18,18 @@
   // its key is never set on this Worker.
   //
   // What it binds, and nothing else:
-  //   AI      Workers AI, called directly for the chat — no gateway, no cache, no log (D16.51)
   //   DB      the private base, read by identifier: the read sentences, one by one (D16.49)
   //   BUDGET  what the model spends over twenty-four hours, one Durable Object of its own
   //   RATE    the rate limiter, on a key that says nothing of an address (D7.5)
   // One secret, set in the editor's terminal with `wrangler secret put`, never written here:
   // RATE_SALT.
+  //
+  // NO `ai` binding since 15/11/2026 (D16.80: the editor's choice, after the security review).
+  // While data/2026/ask.json names no model, this Worker cannot call one, even by mistake: a
+  // call would find no binding and be read as a model that says nothing (src/worker/index.ts,
+  // `runDirect`). Opening the variant where a model explains means putting the binding back —
+  // with that variant's own gates and the editor's accord (scripts/build-mode.test.ts holds
+  // the two together: no model named, no binding).
   //
   // The allowance is the account's, and each Worker counts only what it spends itself: this
   // one, the preview's, the bench. The platform's refusal is what they have in common — the
@@ -48,8 +54,6 @@
   ],
   "workers_dev": false,
   "preview_urls": false,
-
-  "ai": { "binding": "AI" },
 
   // The same base as wrangler.jsonc: one copy at Cloudflare, read by three Workers at most.
   "d1_databases": [
@@ -97,7 +101,6 @@
         { "pattern": "beta.cestecritla.fr/api/chat", "zone_name": "cestecritla.fr" },
       ],
       "observability": { "enabled": false },
-      "ai": { "binding": "AI" },
       "d1_databases": [
         {
           "binding": "DB",
