@@ -362,7 +362,15 @@ async function runEngine(
   const type = ENGINES[name];
   if (type === undefined) throw new Error(`unknown engine ${name}`);
   const { out, check } = checker(name);
-  const browser = await type.launch();
+  // Online, the pages are served with `Cross-Origin-Opener-Policy: same-origin`: Firefox gives
+  // each tab a process of its own, and the driver of the automated Firefox then never sees a
+  // second tab of a context load — on production too, which this gate does not touch (found on
+  // 15/11/2026). That Firefox is told to ignore the policy; nothing the game does depends on it.
+  const browser = await type.launch(
+    ONLINE !== null && name === 'firefox'
+      ? { firefoxUserPrefs: { 'browser.tabs.remote.useCrossOriginOpenerPolicy': false } }
+      : {},
+  );
   const kit = JSON.parse(readFileSync('design/strings.json', 'utf8')) as Record<string, string>;
   const says = (key: string): string => shown(kit[key] ?? `(no ${key})`);
   const first = data.words.slice(0, ROUND);

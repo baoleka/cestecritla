@@ -1141,3 +1141,57 @@ l'aperçu (autre adresse, autre stockage) : il est tenu par des tests, pas par u
     Ses fichiers sont gelés jusqu'au lot E, et le passage à la génération 2 les corrige : c'est
     à l'éditeur de dire s'il en veut une correction avant.
 - **Preuves.** 647 tests (646 passent, 1 sauté depuis toujours), contraste, lint, types. La porte du jeu de la génération 2, dans les trois moteurs : 247 vérifications sous Chromium, 212 sous Firefox, 212 sous WebKit, toutes bonnes ; mesures inchangées — aucun éclair dans les deux thèmes, aucune image au-delà de 50 ms processeur ralenti quatre fois. **`npm run build` reste identique, octet pour octet** (1 156 fichiers), de même `dist-ask/`, `dist-gists/` et `dist-scrutin/`. Script du jeu 9 336 octets gzip (plafond 10 240), page d'accueil 17 134 (plafond 20 480). La porte peut maintenant jouer une autre build (`--root dist`) et un hôte en ligne (`--origin https://…`) : c'est ce que le lot D fera de l'aperçu.
+
+### 15 novembre 2026 (nuit) — la relecture du code et de la vie privée ; l'aperçu passe à la génération 2 (lot D)
+
+- **La relecture du code et de la vie privée**, relancée sur le code corrigé : **ni bloquant, ni
+  sérieux.** Elle a trouvé cinq défauts mineurs, tous reproduits par l'exécution, et tous corrigés :
+  1. *La règle des 350 ms se contournait* en alternant « Revoir » et un appui sur sa grande copie.
+     À 150 % de texte sur un écran d'ordinateur, dix appuis par seconde donnaient cinq éclairs par
+     seconde. Tout changement de ses dessins sous un appui passe maintenant par cette règle. Des
+     couleurs choisies plus vite qu'elle sont bien gardées, et elle porte la dernière quand le délai
+     est écoulé.
+  2. *« Envoyer le lien du jeu » pendant un passage*, là où l'adresse est copiée : « Lien copié. »
+     effaçait la phrase du passage. Les deux sont maintenant dites ensemble.
+  3. *Sa fiche disait que le téléphone gardait sa couleur* alors que seul l'onglet la tenait. Elle
+     lit maintenant ce que tient le téléphone.
+  4. *Un indice demandé pendant qu'un autre onglet écrivait* pouvait perdre ses marques. Les tuiles
+     sont marquées par une minuterie à elles.
+  5. *La ligne de fin de manche était réécrite* quand un autre onglet trouvait un mot sans la faire
+     changer. Elle ne l'est plus que si sa forme a changé.
+
+  Vérifié sans rien trouver, d'après elle :
+  - rien ne part que le fichier du jeu et l'heure ;
+  - le partage ne porte que l'adresse nue, et l'ancre est retirée de l'adresse ;
+  - seuls les champs déclarés s'écrivent, et la couleur n'est jamais sur le téléphone avant
+    « Garder » ;
+  - un stockage forgé ou énorme se lit champ par champ, sans exception ni balisage ;
+  - rien ne passe par un point que Trusted Types refuse ;
+  - un passage n'est jamais joué au chargement, depuis un autre onglet ni depuis le cache ;
+  - une touche tenue n'appuie qu'une fois, dans les trois moteurs.
+
+  Les cinq nouveaux contrôles échouent sur la build d'avant et passent après. La section des
+  relectures compte maintenant 20 contrôles.
+- **L'aperçu passe à la génération 2.** C'est la décision de l'éditeur : l'option de D17.26 le
+  disait, et il l'a choisie avec elle.
+  - `data/mascot.json` passe à `preview_generation: 2` ; `generation` reste à 1 et
+    `decided_by` vide : la production n'a pas bougé.
+  - Un test supposait qu'une build montre toujours la génération 1. Il compare maintenant la build
+    à ce que le fichier donne à son hôte.
+  - **Avant le déploiement, sur la build exacte qui part** (`npm run build:preview`) : 652 tests (651 passent, 1 sauté depuis toujours) ; la porte du jeu dans les trois moteurs — 252 vérifications sous Chromium, 217 sous Firefox, 217 sous WebKit, toutes bonnes, après qu'un contrôle eut été corrigé : deux appuis plus rapprochés que la règle des 350 ms n'y passaient que par chance de minutage, et WebKit l'a montré ; la porte du site (44 / 41 / 41) et l'audit d'accessibilité (225 contrôles, 25 pages × 9 conditions, aucun échec), joués sur la build d'avant les cinq corrections du code, qui ne touchent que le script du jeu ; un essai à blanc du déploiement ; la porte de lancement ne refuse rien. **La build de la production reste identique, octet pour octet** (1 156 fichiers).
+- **Déployé le 15 novembre à 22 h 43 (21 h 43 UTC)** — `npm run build:preview && npm run deploy:preview -- --bench`, commit `29c1616`, version `5e3a4951` — **et vérifié en ligne** :
+  - 1 153 fichiers sur 1 156 identiques à la build, avec les trois écarts connus : `404.html`
+    redirigé, `_headers` et `_redirects` non servis comme fichiers ;
+  - `noindex` sur l'aperçu, et l'accueil sert la génération 2 ;
+  - **la production sert toujours la génération 1**, sur `cestecritla.fr` et `www` ;
+  - la porte du jeu, jouée contre l'aperçu en ligne dans les trois moteurs : 203 vérifications
+    sous Chromium, Firefox et WebKit, toutes bonnes. Les sections qui demandent un serveur que la
+    porte commande (le gel, les données qui manquent) ou une machine au repos (la fluidité, les
+    éclairs, l'audit) restent jouées en local, sur les mêmes fichiers.
+- **Trouvé en route, sans rapport avec la refonte.** Firefox, piloté par l'outil d'automatisation,
+  ne voit jamais se charger un deuxième onglet d'un même contexte sur nos pages en ligne. La
+  production fait de même. Ces pages sont servies avec `Cross-Origin-Opener-Policy: same-origin`,
+  qui donne à chaque onglet un processus à part, et le pilote de Firefox perd l'onglet. Pour la
+  passe en ligne, ce Firefox-là est lancé en ignorant cet en-tête ; rien de ce que fait le jeu
+  n'en dépend. Qu'un vrai Firefox ouvre bien nos pages en plusieurs onglets reste une HYPOTHÈSE :
+  personne ne l'a essayé à la main.
