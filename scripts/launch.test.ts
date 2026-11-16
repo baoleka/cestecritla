@@ -17,25 +17,29 @@ import {
   LAUNCH_PATH,
   MANIFEST_PATH,
   TOKEN_SETS,
-  TURTLE_CSS_PATH,
-  TURTLE_SVG_PATH,
-  TURTLE_VALIDATION_PATH,
   WORDS_PATH,
   artefactBlockers,
   canonicalHash,
   STRINGS_PATH,
   isChatPrivacyKey,
   launchBlockers,
+  mascotBlockers,
   pendingReviews,
   previewChatBlockers,
   privacyChatStringsHash,
+  privacyMascotStringsHash,
   privacyStringsHash,
-  turtleColours,
-  turtleFingerprint,
   type DatedGestures,
   type LaunchFile,
   type LaunchInputs,
 } from './launch.js';
+import {
+  MASCOT2_CSS_PATH,
+  MASCOT2_PALETTE_PATH,
+  MASCOT2_SVG_PATH,
+  MASCOT2_VALIDATION_PATH,
+  mascot2Fingerprint,
+} from './mascot2-kit.js';
 
 const DATES: DatedGestures = {
   lcen_declared_on: '2026-12-01',
@@ -106,7 +110,7 @@ void test('each missing condition blocks, and is named', () => {
       { pendingReviews: ['riposte:rip-01', 'mot:ecocide'] },
       /2 of our own texts .* riposte:rip-01, mot:ecocide/,
     ],
-    [{ artefacts: ['the turtle is not drawn or not validated'] }, /turtle is not drawn/],
+    [{ artefacts: ['the mascot is not drawn or not validated'] }, /mascot is not drawn/],
   ];
   for (const [change, pattern] of cases) {
     const inputs: LaunchInputs = {
@@ -228,17 +232,45 @@ void test('the files that validate themselves: missing, in place, then edited af
 
   const empty = tree({ [MANIFEST_PATH]: manifest });
   const missing = artefactBlockers(empty);
-  assert.equal(missing.length, 3);
+  assert.equal(missing.length, 4);
   assert.match(
     missing.join('\n'),
-    /ask\.json is missing[\s\S]*game-words\.json is missing[\s\S]*turtle is not drawn/,
+    /ask\.json is missing[\s\S]*game-words\.json is missing[\s\S]*colour given to the mascot is not re-read[\s\S]*mascot is not drawn/,
   );
   rmSync(empty, { recursive: true });
 
   const words = [{ slot: 0, id: 'w000', word: 'mot', pin: { id: 'p1c1-s01-m01', sha256: 'x' } }];
   const pool = { sensitive_2025: ['c4-s01'], judged: { 'p6c1-s01': null } };
-  const svg = '<svg xmlns="http://www.w3.org/2000/svg"/>';
-  const kit = { 'privacy.lead': 'x', 'privacy.chat.title': 'Quand tu demandes' };
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" class="mascot"/>';
+  // Six colours for her flamingo, in each theme, and the neutral set's six (D17.3, D17.16).
+  const palette = {
+    note_fr: '',
+    chosen: 'only',
+    palettes: {
+      only: {
+        label_fr: '',
+        light: ['#111111', '#222222', '#333333', '#444444', '#555555', '#666666'],
+        dark: ['#AAAAAA', '#BBBBBB', '#CCCCCC', '#DDDDDD', '#EEEEEE', '#FFFFFF'],
+      },
+    },
+    neutral: {
+      label_fr: '',
+      light: ['#111112', '#222223', '#333334', '#444445', '#555556', '#666667'],
+      dark: ['#AAAAAB', '#BBBBBC', '#CCCCCD', '#DDDDDE', '#EEEEEF', '#FFFFFE'],
+    },
+  };
+  // The kit of a site: a page of privacy, the section of the chat, and the one line the mascot
+  // adds to it (D17.3).
+  const kit = {
+    'privacy.lead': 'x',
+    'privacy.chat.title': 'Quand tu demandes',
+    'privacy.game.field.tint': 'sa couleur',
+  };
+  const reread = {
+    reviewed_on: '2026-12-02',
+    reviewed_by: 'session',
+    sha256: privacyMascotStringsHash(kit),
+  };
   const complete = {
     [MANIFEST_PATH]: manifest,
     [STRINGS_PATH]: kit,
@@ -248,6 +280,7 @@ void test('the files that validate themselves: missing, in place, then edited af
         reviewed_by: 'editor',
         sha256: privacyChatStringsHash(kit),
       },
+      privacy_mascot: reread,
     },
     [ASK_PATH]: {
       mode: 'chat',
@@ -285,35 +318,59 @@ void test('the files that validate themselves: missing, in place, then edited af
       highlighted: ['w000'],
       measure_only: [],
     },
-    [TURTLE_SVG_PATH]: svg,
-    [TURTLE_CSS_PATH]: '.turtle { display: block; }',
+    [MASCOT2_SVG_PATH]: svg,
+    [MASCOT2_CSS_PATH]: '.mascot { display: block; }',
+    [MASCOT2_PALETTE_PATH]: palette,
     [TOKEN_SETS[0]]: {
       color: { violet: { $value: '#4C0297' } },
       'color-role': { light: { bg: '#fff', 'turtle-line': '{color.violet}' } },
     },
   };
   const ready = tree(complete);
-  // The sheet is dated on the drawing as it stands: the file, its stylesheet, its colours.
+  // The sheet is dated on the drawing as it stands: the file, its stylesheet, its colours, its
+  // choreography.
   const stamp = (): void => {
     writeFileSync(
-      join(ready, TURTLE_VALIDATION_PATH),
+      join(ready, MASCOT2_VALIDATION_PATH),
       JSON.stringify({
         validated_on: '2026-12-03',
-        drawing_sha256: turtleFingerprint(ready),
+        drawing_sha256: mascot2Fingerprint(ready),
         same_character_asked_on: '2026-12-03',
-        same_character_sha256: turtleFingerprint(ready),
+        same_character_sha256: mascot2Fingerprint(ready),
       }),
     );
   };
-  assert.match(artefactBlockers(ready).join('\n'), /turtle is not drawn or not validated/);
+  assert.match(artefactBlockers(ready).join('\n'), /mascot is not drawn or not validated/);
   stamp();
   assert.deepEqual(artefactBlockers(ready), []);
-  assert.deepEqual(turtleColours(ready), [`${TOKEN_SETS[0]} light turtle-line #4C0297`]);
 
-  // Each of the three things the editor looked at un-validates her when it moves — and a colour
-  // that is not hers does not.
+  // The line of the privacy page about her colour: re-read as it stands, and signed. A date
+  // nobody signs is not a reading; a line changed since is not the line that was read.
+  const launchFile = (privacy: Record<string, unknown>): void => {
+    writeFileSync(
+      join(ready, LAUNCH_PATH),
+      JSON.stringify({ ...complete[LAUNCH_PATH], privacy_mascot: privacy }),
+    );
+  };
+  launchFile({ ...reread, reviewed_by: null });
+  assert.match(
+    artefactBlockers(ready).join('\n'),
+    /nothing says who re-read it .* privacy_mascot\.reviewed_by$/,
+  );
+  launchFile({
+    ...reread,
+    sha256: privacyMascotStringsHash({ ...kit, 'privacy.game.field.tint': 'x' }),
+  });
+  assert.match(artefactBlockers(ready).join('\n'), /not re-read as it stands: privacy_mascot/);
+  launchFile(reread);
+  assert.deepEqual(artefactBlockers(ready), []);
+  // That line is read apart: it is not in the fingerprint of the rest of the page.
+  assert.equal(privacyStringsHash(kit), privacyStringsHash({ 'privacy.lead': 'x' }));
+
+  // Each of the things the editor looked at un-validates her when it moves — and a colour that
+  // is not hers does not.
   const retouches: [string, string][] = [
-    [TURTLE_CSS_PATH, '.turtle { display: inline; }'],
+    [MASCOT2_CSS_PATH, '.mascot { display: inline; }'],
     [
       TOKEN_SETS[0],
       JSON.stringify({
@@ -321,6 +378,7 @@ void test('the files that validate themselves: missing, in place, then edited af
         'color-role': { light: { bg: '#fff', 'turtle-line': '{color.violet}' } },
       }),
     ],
+    [MASCOT2_PALETTE_PATH, JSON.stringify({ ...palette, chosen: null })],
   ];
   for (const [path, content] of retouches) {
     const before = readFileSync(join(ready, path), 'utf8');
@@ -329,6 +387,11 @@ void test('the files that validate themselves: missing, in place, then edited af
     writeFileSync(join(ready, path), before);
     assert.deepEqual(artefactBlockers(ready), [], path);
   }
+  // A palette that cannot be read is a drawing nobody can have validated — and nothing throws.
+  writeFileSync(join(ready, MASCOT2_PALETTE_PATH), 'not json');
+  assert.match(artefactBlockers(ready).join('\n'), /mascot is not drawn or not validated/);
+  writeFileSync(join(ready, MASCOT2_PALETTE_PATH), JSON.stringify(palette));
+  assert.deepEqual(artefactBlockers(ready), []);
   writeFileSync(
     join(ready, TOKEN_SETS[0]),
     JSON.stringify({
@@ -361,7 +424,7 @@ void test('the files that validate themselves: missing, in place, then edited af
     }),
   );
   // A retouched drawing after the sheet was dated.
-  writeFileSync(join(ready, TURTLE_SVG_PATH), `${svg}<!-- retouched -->`);
+  writeFileSync(join(ready, MASCOT2_SVG_PATH), `${svg}<!-- retouched -->`);
   // A re-crawl changed the corpus under the private database.
   writeFileSync(join(ready, MANIFEST_PATH), JSON.stringify({ meta: { corpus_version: 'decaf' } }));
   const stale = artefactBlockers(ready).join('\n');
@@ -475,6 +538,10 @@ void test('the committed launch file is well formed', () => {
   assert.ok(sha256 === null || /^[0-9a-f]{64}$/.test(sha256));
   // An app at the apex with a text nobody re-read is exactly what D0.27 forbids.
   if (launch.apex === 'app') assert.deepEqual(pendingReviews(), []);
+  // …and production as committed is deployable: its mascot is validated on the drawing as it
+  // stands, and the line of the privacy page about her colour is re-read (lot F: what the test
+  // of the switch held, scripts/mascot-mode.test.ts).
+  if (launch.apex === 'app') assert.deepEqual(mascotBlockers(), []);
 });
 
 void test('the preview host asks only once what comes before any question holds (lot C11)', () => {

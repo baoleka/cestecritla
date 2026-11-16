@@ -1,7 +1,6 @@
 import { defineConfig } from 'astro/config';
 import { askSite } from './src/lib/ask-config.ts';
 import { gameSite } from './src/lib/game-data.ts';
-import { mascotSite } from './src/lib/mascot-config.ts';
 
 // Static output, no adapter (D7.2): every page is HTML at build time and is served by
 // Static Assets. The Worker (src/worker/index.ts) only handles /api/*.
@@ -36,11 +35,6 @@ const scrutin = process.env.CEL_SCRUTIN === '1';
 // like the game's: in mode "off" the page does not even import the sheet, and neither its
 // script nor its stylesheet nor a word of it reaches dist/ (PLAN-CHAT §4).
 const chat = !holding && askSite().mode === 'chat';
-// Which mascot the game shows (data/mascot.json, D17.14): the turtle validated on 13 November
-// 2026, or the second generation — the preview host first, production on the editor's word.
-// A constant the bundler can see, like the game's: a build of the first generation does not
-// import a byte of the second.
-const mascot2 = !holding && mascotSite().generation === 2;
 
 export default defineConfig({
   output: 'static',
@@ -87,7 +81,6 @@ export default defineConfig({
       __CEL_GAME_WRITES__: JSON.stringify(gameWrites),
       __CEL_CHAT__: JSON.stringify(chat),
       __CEL_SCRUTIN__: JSON.stringify(scrutin),
-      __CEL_MASCOT2__: JSON.stringify(mascot2),
     },
     json: { stringify: true },
     build: { target: 'es2022', modulePreload: { polyfill: false }, sourcemap: false },

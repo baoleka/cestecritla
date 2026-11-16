@@ -2,10 +2,9 @@
  * The second-generation mascot, as files (D17.1 to D17.15; docs/discovery/PLAN-TORTUE.md): where
  * her drawing, her stylesheet, her colours and her validation live, the one fingerprint that
  * binds them, and the two measures her colours are held to. Read by the sheet the editor
- * validates (scripts/mascot2-sheet.ts) and by her gates (scripts/mascot2.test.ts).
- *
- * IN PREPARATION: nothing that is deployed reads any of this. The turtle that is online keeps
- * her own files and her own fingerprint (scripts/launch.ts, `turtleFingerprint`), untouched.
+ * validates (scripts/mascot2-sheet.ts), by her gates (scripts/mascot2.test.ts) and by the
+ * launch gate (scripts/launch.ts, `mascotBlockers`): the mascot the site serves since
+ * 15 November 2026 (D17.36), and the only one since lot F.
  */
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
@@ -53,10 +52,10 @@ interface TokenFile {
 }
 
 /**
- * The five roles she shares with the turtle, in every theme of both token sets, resolved to
- * their values — the very lines scripts/launch.ts reads for the turtle (`turtleColours`; a test
- * holds the two equal). Read here and not imported from there: the launch gate reads this
- * module, and must not be read by it.
+ * The five roles she shares with the turtle of the first generation (`turtle-*`), in every theme
+ * of both token sets, resolved to their values — the very lines the launch gate read for that
+ * turtle until lot F. Changing what they resolve to changes what she looks like: they are in her
+ * fingerprint.
  */
 function sharedRoles(root: string): string[] {
   const out: string[] = [];
@@ -213,7 +212,8 @@ export function contrastRatio(a: string, b: string): number {
 }
 export const LINE_MIN = 3;
 
-function oklch(hex: string): { l: number; c: number; h: number } {
+/** A colour in OKLCH — lightness, chroma, hue in degrees: what makes a palette is its hue. */
+export function oklch(hex: string): { l: number; c: number; h: number } {
   const [r, g, b] = rgb(hex);
   const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
   const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
@@ -237,7 +237,8 @@ interface Range {
 /**
  * What is not hers (illustration-rules §2.2, point 2 — kept by D17.12 for every role, tints
  * included): the lavender of the official turtle's body, the plum of its shell, the pink of the
- * campaign's illustrations. The very ranges scripts/mascot.test.ts holds the turtle to.
+ * campaign's illustrations. The very ranges the gate of the first generation held the turtle to
+ * (scripts/mascot.test.ts, until lot F).
  */
 export const NOT_HERS: readonly Range[] = [
   { name_fr: 'lavande', l: [0.6, 0.82], c: [0.04, 0.12], h: [295, 335] },

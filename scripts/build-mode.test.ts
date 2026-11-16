@@ -10,15 +10,7 @@
  */
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import {
-  existsSync,
-  mkdirSync,
-  mkdtempSync,
-  readdirSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from 'node:fs';
+import { existsSync, mkdtempSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { test } from 'node:test';
@@ -27,8 +19,6 @@ import {
   CHAT_CONFIG,
   DEPLOY_GUARD,
   HOLDING_PAGES,
-  MASCOT2_MARKS,
-  MASCOT_PATH,
   HOLDING_REDIRECT_PREFIXES,
   SILENCE_APPROACH_MS,
   STATIC_CONFIG,
@@ -51,9 +41,7 @@ import {
   nearSilenceWindow,
   readAskMode,
   readBuildHost,
-  readBuildMode,
   readBuildScrutin,
-  readMascot,
   readDist,
   refusedArguments,
   workerProblems,
@@ -61,10 +49,8 @@ import {
   wranglerDeployArgs,
   type ChatDeployContext,
   type DeployContext,
-  type DistContent,
 } from './build-mode.js';
 import { parseJsonc, stripJsoncComments } from './jsonc.js';
-import { generationFor } from '../src/lib/mascot-mode.js';
 
 /** The editor has dated the citation policy, and this is a real deployment. */
 const VALIDATED: DeployContext = {
@@ -681,10 +667,7 @@ void test('the preview host may ask before production does, never the other way 
   // read, and production's mode says the site answers none.
   const pages = ['index.html', 's/p1c1-s01/index.html'];
   const open: DeployContext = { ...VALIDATED, launchBlockers: [] };
-  const asks = distProblems(
-    { gameFiles: [], asks: true, mascot: 1 },
-    { gameFile: null, ask: 'off' },
-  );
+  const asks = distProblems({ gameFiles: [], asks: true }, { gameFile: null, ask: 'off' });
   assert.match(
     String(deployRefusal('apex', 'app', pages, { ...open, ask: 'off', distProblems: asks })),
     /dist\/ sends questions, and data\/2026\/ask\.json says this host answers none/,
@@ -959,41 +942,29 @@ void test('dist/ is read, whatever the marker says: no game without its list, no
   const off = { gameFile: null, ask: 'off' } as const;
   const playing = { gameFile: game, ask: 'off' } as const;
   // Nothing shown is nothing to refuse — the scrutin build, or a build older than the list.
-  assert.deepEqual(distProblems({ gameFiles: [], asks: false, mascot: 1 }, off), []);
-  assert.deepEqual(distProblems({ gameFiles: [], asks: false, mascot: 1 }, playing), []);
-  assert.deepEqual(distProblems({ gameFiles: [game], asks: false, mascot: 1 }, playing), []);
+  assert.deepEqual(distProblems({ gameFiles: [], asks: false }, off), []);
+  assert.deepEqual(distProblems({ gameFiles: [], asks: false }, playing), []);
+  assert.deepEqual(distProblems({ gameFiles: [game], asks: false }, playing), []);
   // A test build copied over dist/, an `astro build` run by hand with the test variable.
-  assert.match(
-    distProblems({ gameFiles: [game], asks: false, mascot: 1 }, off).join(),
-    /not validated/,
-  );
+  assert.match(distProblems({ gameFiles: [game], asks: false }, off).join(), /not validated/);
   // A build made before the list changed.
   assert.match(
-    distProblems(
-      { gameFiles: ['jeu-ffffffffffffffff.json'], asks: false, mascot: 1 },
-      playing,
-    ).join(),
+    distProblems({ gameFiles: ['jeu-ffffffffffffffff.json'], asks: false }, playing).join(),
     /another list of words/,
   );
   assert.match(
-    distProblems(
-      { gameFiles: [game, 'jeu-ffffffffffffffff.json'], asks: false, mascot: 1 },
-      playing,
-    ).join(),
+    distProblems({ gameFiles: [game, 'jeu-ffffffffffffffff.json'], asks: false }, playing).join(),
     /another list of words/,
   );
   // A page that sends questions while the data says none is answered — the bench included:
   // there the Worker goes out, and the page still asks nothing.
+  assert.match(distProblems({ gameFiles: [], asks: true }, off).join(), /sends questions/);
   assert.match(
-    distProblems({ gameFiles: [], asks: true, mascot: 1 }, off).join(),
-    /sends questions/,
-  );
-  assert.match(
-    distProblems({ gameFiles: [], asks: true, mascot: 1 }, { gameFile: null, ask: 'bench' }).join(),
+    distProblems({ gameFiles: [], asks: true }, { gameFile: null, ask: 'bench' }).join(),
     /sends questions/,
   );
   assert.deepEqual(
-    distProblems({ gameFiles: [], asks: true, mascot: 1 }, { gameFile: null, ask: 'chat' }),
+    distProblems({ gameFiles: [], asks: true }, { gameFile: null, ask: 'chat' }),
     [],
   );
 
@@ -1002,7 +973,7 @@ void test('dist/ is read, whatever the marker says: no game without its list, no
   const wrong: DeployContext = {
     ...VALIDATED,
     launchBlockers: [],
-    distProblems: distProblems({ gameFiles: [game], asks: true, mascot: 1 }, off),
+    distProblems: distProblems({ gameFiles: [game], asks: true }, off),
   };
   for (const target of ['apex', 'preview'] as const) {
     const refusal = String(deployRefusal(target, 'app', pages, wrong));
@@ -1010,85 +981,13 @@ void test('dist/ is read, whatever the marker says: no game without its list, no
     assert.equal(deployRefusal(target, 'holding', [...HOLDING_PAGES], wrong), null);
   }
 
-  assert.deepEqual(readDist('build/does-not-exist'), { gameFiles: [], asks: false, mascot: 1 });
+  assert.deepEqual(readDist('build/does-not-exist'), { gameFiles: [], asks: false });
   // The test builds are exactly what this refuses: they show everything, validated or not.
   if (existsSync('dist-ask/index.html')) {
     const test = readDist('dist-ask');
     assert.equal(test.asks, true);
     assert.equal(test.gameFiles.length, 1);
     assert.notDeepEqual(distProblems(test, off), []);
-  }
-});
-
-void test('a build of the second mascot goes only where data/mascot.json gives it — never to a host that is behind', () => {
-  const game = 'jeu-0123456789abcdef.json';
-  const second: DistContent = { gameFiles: [game], asks: true, mascot: 2 };
-  const first: DistContent = { gameFiles: [game], asks: true, mascot: 1 };
-  const playing = { gameFile: game, ask: 'chat' } as const;
-  // One way only: a build that is ahead of its target is refused…
-  assert.match(distProblems(second, { ...playing, mascot: 1 }).join(), /second generation/);
-  // …and a target nobody named is production as it is today: the first generation.
-  assert.match(distProblems(second, playing).join(), /second generation/);
-  assert.deepEqual(distProblems(second, { ...playing, mascot: 2 }), []);
-  // A build that is behind shows less than its host may: it goes (CI sends the apex build to
-  // the preview host as a dry run on every push).
-  assert.deepEqual(distProblems(first, { ...playing, mascot: 2 }), []);
-  assert.deepEqual(distProblems(first, { ...playing, mascot: 1 }), []);
-
-  // This is what stops `npm run build:preview` followed by `npm run deploy`.
-  const pages = ['index.html', 's/p1c1-s01/index.html'];
-  const ahead: DeployContext = {
-    ...VALIDATED,
-    launchBlockers: [],
-    ask: 'chat',
-    distProblems: distProblems(second, { ...playing, mascot: 1 }),
-  };
-  assert.match(
-    String(deployRefusal('apex', 'app', pages, ahead)),
-    /second generation of the mascot.*gives this host the first.*npm run build/,
-  );
-  assert.equal(deployRefusal('apex', 'holding', [...HOLDING_PAGES], ahead), null);
-
-  // The file, read for a host: total, and one way.
-  const dir = mkdtempSync(join(tmpdir(), 'cel-mascot-'));
-  const file = join(dir, 'mascot.json');
-  const said = (content: string): [number, number] => {
-    writeFileSync(file, content);
-    return [readMascot(file, 'apex'), readMascot(file, 'preview')];
-  };
-  assert.deepEqual(said('{"generation":1,"preview_generation":1}'), [1, 1]);
-  assert.deepEqual(said('{"generation":1,"preview_generation":2}'), [1, 2]);
-  assert.deepEqual(said('{"generation":2,"preview_generation":1}'), [2, 2]);
-  assert.deepEqual(said('{"generation":"2","preview_generation":3}'), [1, 1]);
-  assert.deepEqual(said('not json'), [1, 1]);
-  assert.deepEqual(said('[2]'), [1, 1]);
-  assert.equal(readMascot(join(dir, 'missing.json'), 'preview'), 1);
-  rmSync(dir, { recursive: true });
-  // The committed file, read for production: the same answer as the rule gives it — the second
-  // generation since the editor said so (D17.36; scripts/mascot-mode.test.ts holds his word).
-  assert.equal(
-    readMascot(undefined, 'apex'),
-    generationFor(JSON.parse(readFileSync(MASCOT_PATH, 'utf8')) as unknown, 'apex'),
-  );
-
-  // The directory, read: the two marks of a second-generation build, and nothing else.
-  const built = mkdtempSync(join(tmpdir(), 'cel-dist-'));
-  mkdirSync(join(built, 'confidentialite'), { recursive: true });
-  writeFileSync(join(built, 'index.html'), '<section class="game" id="jeu"></section>');
-  writeFileSync(join(built, 'confidentialite', 'index.html'), '<li data-field="turtle"></li>');
-  assert.equal(readDist(built).mascot, 1);
-  writeFileSync(join(built, 'index.html'), `<section id="jeu" ${MASCOT2_MARKS.home}></section>`);
-  assert.equal(readDist(built).mascot, 2);
-  // The build served during a silence window has no game block: its privacy page still says.
-  writeFileSync(join(built, 'index.html'), '<p>pause</p>');
-  writeFileSync(join(built, 'confidentialite', 'index.html'), `<li ${MASCOT2_MARKS.privacy}></li>`);
-  assert.equal(readDist(built).mascot, 2);
-  rmSync(built, { recursive: true });
-  // What is built shows the generation the file gives the host it was built for — the first for
-  // production; the second for the preview host since the editor opened it to her (D17.26).
-  // (A build of the app: the holding page has no game, and so no generation to show.)
-  if (existsSync('dist/index.html') && readBuildMode() === 'app') {
-    assert.equal(readDist('dist').mascot, readMascot(undefined, readBuildHost()));
   }
 });
 

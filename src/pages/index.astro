@@ -23,14 +23,11 @@ import { t } from '../lib/strings.ts';
 // constant the bundler folds, so that without the game neither its stylesheet nor its script
 // reaches the page or dist/.
 //
-// Which game block: the one whose turtle is online, or the one whose mascot is of the second
-// generation (data/mascot.json, D17.14) — a second constant, folded the same way, so that a
-// build of one carries not a byte of the other.
-const Game = !__CEL_GAME__
-  ? null
-  : __CEL_MASCOT2__
-    ? (await import('../components/Game2.astro')).default
-    : (await import('../components/Game.astro')).default;
+// The block is Game2.astro: the game with the mascot of the second generation, the one served
+// since 15 November 2026 (D17.36). The first generation was removed from the repository with
+// lot F of docs/discovery/PLAN-TORTUE.md; the block kept its name, because the files a build
+// publishes are named after it.
+const Game = __CEL_GAME__ ? (await import('../components/Game2.astro')).default : null;
 
 // Electoral silence (D16.16). A page that shows the game hides it before its first paint when
 // the device's clock is in a silence window: a few synchronous lines in the <head>, allowed by

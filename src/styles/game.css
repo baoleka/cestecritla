@@ -27,6 +27,11 @@ html[data-silence] .g-silence {
 html[data-silence] .game {
   display: none;
 }
+/* The three rules below — and `--turtle-size` in `.t-sheet-her` — were the first generation's:
+   no element of the block carries these classes since she was replaced (D17.36). They were left
+   in place by her removal (lot F of docs/discovery/PLAN-TORTUE.md) because removing them changes
+   the page production serves, and lot F changed nothing there: they go with the next deployment
+   that changes the home page anyway. */
 .g-head {
   display: flex;
   align-items: flex-end;
@@ -323,7 +328,7 @@ html[data-silence] .game {
   min-block-size: var(--tap-min);
 }
 
-/* With script: one screen at a time, built by src/scripts/game.ts. */
+/* With script: one screen at a time, built by src/scripts/game2.ts. */
 .g-live .g-word,
 .g-live .g-place,
 .g-live .g-end {

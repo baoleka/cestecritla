@@ -1,7 +1,7 @@
 /**
  * Pictures of a page, and what can be measured on them (lots A2 and C of
  * docs/discovery/PLAN-TORTUE.md) — shared by the gates that film the mascot: on her sheet
- * (scripts/mascot2-motion.ts) and in the game itself (scripts/e2e-game2.ts).
+ * (scripts/mascot2-motion.ts) and in the game itself (scripts/e2e-game.ts).
  *
  *   - a PNG as a browser gives it, read without a library;
  *   - whether two pictures of the same place are the same picture;

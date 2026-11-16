@@ -165,12 +165,11 @@ const ENGINE_NAMES: Record<string, string> = {
     <li>{t('accuracy.unverified.03')}</li>
     <li>{t('accuracy.unverified.04')}</li>
     {game !== null && <li>{t('accuracy.unverified.05')}</li>}{
-      /* The second generation of the mascot moves for up to four seconds and a half: measured
-         in a lab only, and the page says so where she is served (data/mascot.json, D17.27).
-         Written against the line above, with nothing between the two: a space there would be
-         a space in the page of a build that does not show her — and that page must not change
-         by a byte. */
-      game !== null && __CEL_MASCOT2__ && <li>{t('accuracy.unverified.06')}</li>
+      /* The mascot moves for up to four seconds and a half: measured in a lab only, and the
+         page says so wherever the game is shown (D17.27). Written against the line above, with
+         nothing between the two: a space there would be one more character in the page, which
+         lot F (the first generation removed) left as it was, byte for byte. */
+      game !== null && <li>{t('accuracy.unverified.06')}</li>
     }
   </ul>
 

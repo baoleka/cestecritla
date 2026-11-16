@@ -9,11 +9,12 @@
  * it ends, what flashes, how the frames hold — is scripts/mascot2-motion.ts, whose measures are
  * read back here.
  *
- * The turtle that is online keeps her own gate (scripts/mascot.test.ts), untouched: this file
- * holds a drawing nothing serves yet.
+ * She is the mascot the site serves since 15 November 2026 (D17.36). The gate of the first
+ * generation (scripts/mascot.test.ts) went with that generation, lot F; so did two tests of this
+ * file that only held the two apart — state 0 drawn with the very shapes of the turtle then
+ * online, and her files imported behind a constant a build of the first generation folded.
  */
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { gzipSync } from 'node:zlib';
@@ -57,7 +58,8 @@ import {
   buildMascotTokensCss,
   buildTokensCss,
 } from './build-tokens.js';
-import { TOKEN_SETS, TURTLE_SVG_PATH, turtleColours } from './launch.js';
+import { TOKEN_SETS } from './launch.js';
+import { ARC_STEPS, arcAttributes, arcSteps } from '../src/lib/turtle.js';
 import {
   FLASHES_PER_SECOND_MAX,
   LINE_MIN,
@@ -69,6 +71,7 @@ import {
   contrastRatio,
   mascot2Colours,
   mascot2Fingerprint,
+  oklch,
   readMotion,
   readPalette,
   refused,
@@ -134,7 +137,7 @@ void test('the file of the drawing holds geometry and class names, and nothing e
   assert.doesNotMatch(svg, /\b(?:href|url\()/);
   const root = all[0];
   assert.equal(root?.tag, 'svg');
-  assert.equal(root.attributes['viewBox'], '0 0 96 60', 'the frame of the turtle that is online');
+  assert.equal(root.attributes['viewBox'], '0 0 96 60', 'the frame of the first turtle, kept');
   assert.equal(root.attributes['class'], 'mascot');
   assert.equal(root.attributes['aria-hidden'], 'true');
   assert.equal(root.attributes['focusable'], 'false');
@@ -162,21 +165,6 @@ void test('her shapes: every one named, and no more than a state may show (D17.1
       assert.ok(counted <= drawn, `state ${String(state)} counts ${name} ${String(counted)} times`);
     }
   }
-});
-
-void test('state 0 is the turtle that is online: the same shapes, to the last number', () => {
-  const online = elements(readFileSync(TURTLE_SVG_PATH, 'utf8')).filter((e) =>
-    ['path', 'rect', 'circle'].includes(e.tag),
-  );
-  const geometry = (shape: Shape): string =>
-    ['d', 'x', 'y', 'width', 'height', 'rx', 'cx', 'cy', 'r']
-      .map((name) => shape.attributes[name] ?? '')
-      .join('|');
-  const hers = new Set(shapes.map(geometry));
-  // All of her but the accent dot of her shell, which D17.6 replaces by a detail of each scene.
-  const kept = online.filter((shape) => !shape.classes.includes('t-accent'));
-  assert.equal(kept.length, 10);
-  for (const shape of kept) assert.ok(hers.has(geometry(shape)), `missing: ${geometry(shape)}`);
 });
 
 void test('her three arcs are there three times — shell, folded wing, wing in flight — written as not grown', () => {
@@ -265,6 +253,105 @@ void test('the ranges of colour that are not hers do describe what they are name
   // The lilac the official site gives its sixth part: why ours takes our own violet instead.
   assert.deepEqual(refused('#C9ADFF'), ['lavande']);
   assert.deepEqual(refused('#E5CBFF'), []);
+});
+
+/** A purple, for the pairing rule: the hues from violet to plum, with enough chroma to be one. */
+const purple = (hex: string): boolean => {
+  const { c, h } = oklch(hex);
+  return c >= 0.04 && h >= 285 && h <= 350;
+};
+
+void test('her five roles of line, in every theme of both token sets: never the official palette', () => {
+  // Held by the gate of the first generation until lot F (scripts/mascot.test.ts): the five
+  // roles are hers too — the turtle of her first states, the line of every form after.
+  const colours = mascot2Colours().filter((line) => / turtle-/.test(line));
+  const ROLES = ['turtle-accent', 'turtle-arc', 'turtle-eye', 'turtle-line', 'turtle-shell'];
+  for (const set of TOKEN_SETS) {
+    for (const theme of ['light', 'dark']) {
+      const own = new Map(
+        colours
+          .filter((line) => line.startsWith(`${set} ${theme} `))
+          .map((line) => [line.split(' ')[2] ?? '', line.split(' ')[3] ?? '']),
+      );
+      assert.deepEqual([...own.keys()].sort(), ROLES, `${set} ${theme}`);
+      for (const [name, value] of own) {
+        assert.match(value, /^#[0-9A-Fa-f]{6}$/, `${set} ${theme} ${name}`);
+        // What makes the character is her body, her shell and her arcs; the eye is a dot, and
+        // the accent is the charter's action colour, shown for a moment.
+        if (name === 'turtle-eye' || name === 'turtle-accent') continue;
+        assert.deepEqual(refused(value), [], `${set} ${theme} ${name} ${value}`);
+      }
+      // The pairing that makes the official one at a glance, whatever the exact tints: a light
+      // purple body under a dark purple shell. In the light theme hers is the reverse; in the
+      // dark theme her body is cream.
+      const [body, shell] = [own.get('turtle-line') ?? '', own.get('turtle-shell') ?? ''];
+      const theirs =
+        purple(body) && purple(shell) && oklch(body).l >= 0.6 && oklch(shell).l <= 0.45;
+      assert.ok(!theirs, `${set} ${theme}: a light purple body under a dark purple shell`);
+    }
+  }
+  // The stylesheet every page ships declares the five roles, light and dark.
+  const tokens = readFileSync(TOKENS_CSS_PATH, 'utf8');
+  for (const name of ROLES) {
+    assert.ok((tokens.match(new RegExp(`--${name}:`, 'g')) ?? []).length >= 3, name);
+  }
+});
+
+void test('an arc grows from the crown, by whole steps, and never shows what is missing', () => {
+  // src/lib/turtle.ts, held by the gate of the first generation until lot F: her arcs grow on
+  // her shell, then on her wing, by the same rule.
+  assert.deepEqual(arcAttributes(0), { dasharray: '0 6', dashoffset: '-3' });
+  assert.deepEqual(arcAttributes(6), { dasharray: '6 6', dashoffset: '0' });
+  for (let steps = 0; steps <= ARC_STEPS; steps += 1) {
+    const { dasharray, dashoffset } = arcAttributes(steps);
+    const [dash, gap] = dasharray.split(' ').map(Number);
+    // One dash, then a gap as long as the path: never a second dash, so never a dashed line.
+    assert.equal(gap, ARC_STEPS);
+    // Astride the top: as much is missing before the dash as after it.
+    assert.equal(Number(dashoffset) + (ARC_STEPS - (dash ?? NaN)) / 2, 0);
+  }
+  assert.deepEqual(arcAttributes(-2), arcAttributes(0));
+  assert.deepEqual(arcAttributes(9), arcAttributes(6));
+
+  // A share of what there is to find becomes steps: one as soon as something is found, six
+  // only when nothing is left, and never a step back.
+  assert.equal(arcSteps(0, 20), 0);
+  assert.equal(arcSteps(1, 20), 1);
+  assert.equal(arcSteps(19, 20), 5);
+  assert.equal(arcSteps(20, 20), 6);
+  assert.equal(arcSteps(3, 0), 0);
+  // Few things to find: one step each, and the last one closes the arc.
+  assert.deepEqual(
+    [1, 2, 3, 4, 5].map((n) => arcSteps(n, 5)),
+    [1, 2, 3, 4, 6],
+  );
+  assert.deepEqual(
+    [1, 2, 3].map((n) => arcSteps(n, 3)),
+    [1, 2, 6],
+  );
+  for (const total of [1, 2, 5, 6, 7, 21, 90]) {
+    let previous = 0;
+    const seen = new Set<number>();
+    for (let found = 0; found <= total; found += 1) {
+      const steps = arcSteps(found, total);
+      assert.ok(steps >= previous, `${String(found)}/${String(total)} goes back`);
+      assert.equal(steps === ARC_STEPS, found === total);
+      seen.add(steps);
+      previous = steps;
+    }
+    // Six parts, six steps: one per part of the book.
+    if (total === ARC_STEPS) assert.equal(seen.size, ARC_STEPS + 1);
+  }
+
+  // The least each state shows never shrinks from one state to the next.
+  for (const state of [1, 2, 3, 4] as const) {
+    const before = STATE_ARCS[(state - 1) as TurtleState];
+    STATE_ARCS[state].forEach((steps, index) => {
+      assert.ok(steps >= (before[index] ?? 0), `state ${String(state)}, arc ${String(index)}`);
+    });
+  }
+  assert.deepEqual(STATE_ARCS[0], [0, 0, 0]);
+  assert.deepEqual(STATE_ARCS[4], [6, 6, 6]);
 });
 
 interface Tokens {
@@ -873,92 +960,6 @@ void test('a validation is a date bound to what was looked at — or it is not t
   const colours = mascot2Colours();
   const shared = colours.filter((line) => / turtle-/.test(line));
   assert.equal(shared.length, 20);
-  // …read exactly as the launch gate reads them for the turtle: one place, two readers.
-  assert.deepEqual(shared, turtleColours());
   assert.ok(colours.some((line) => line.includes(' mascot-tint-6 ')));
   assert.ok(MASCOT2_PALETTE_PATH.length > 0);
-});
-
-/** The modules of the second generation: hers, and those of the game that remembers her colour. */
-/** Her own files: her modules, and the block of the game built around them (lot C). */
-const SECOND_GENERATION = [
-  'src/lib/mascot2.ts',
-  'src/styles/mascot2.css',
-  'src/styles/mascot2-tokens.css',
-  'src/lib/game-state2.ts',
-  'src/lib/game-goal.ts',
-  'src/lib/storage-map2.ts',
-  'src/components/Mascot2.astro',
-  'src/components/Game2.astro',
-  'src/styles/game2.css',
-  'src/scripts/game2.ts',
-  'src/scripts/game-store2.ts',
-];
-/**
- * The two pages that choose her — and what each may import of hers, behind `__CEL_MASCOT2__`,
- * a constant the bundler folds: a build of the first generation drops the import itself.
- */
-const CHOOSES_HER: Readonly<Record<string, string>> = {
-  'src/pages/index.astro': '../components/Game2.astro',
-  'src/pages/confidentialite/index.astro': '../../lib/storage-map2.ts',
-};
-
-void test('what is served knows her through two pages only, each behind a constant the build folds', () => {
-  const tracked = execFileSync('git', ['ls-files', 'src'], { encoding: 'utf8' })
-    .split('\n')
-    .filter((path) => /\.(?:astro|ts|css)$/.test(path));
-  for (const path of SECOND_GENERATION) assert.ok(tracked.includes(path), `${path} is not tracked`);
-  // An import of one of her files — module, component, script or stylesheet —, static or not,
-  // or a read of her drawing.
-  const HERS =
-    /['"][^'"]*\/(?:mascot2|game-state2|game-goal|storage-map2|game2|game-store2|Game2|Mascot2)(?:\.[a-z]+)?['"]|['"][^'"]*(?:mascot2(?:-tokens)?|game2)\.css['"]|mascot\/v2\//g;
-  /** The code of a file: what is said of her in a comment imports nothing. */
-  const code = (source: string): string =>
-    source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
-  for (const path of tracked) {
-    if (SECOND_GENERATION.includes(path)) continue;
-    const source = code(readFileSync(path, 'utf8'));
-    const hers = source.match(HERS) ?? [];
-    const allowed = CHOOSES_HER[path];
-    if (allowed === undefined) {
-      assert.deepEqual(hers, [], `${path} imports her`);
-      continue;
-    }
-    // One import of hers, and one only; never a static one; and it follows the constant.
-    assert.deepEqual(hers, [`'${allowed}'`], `${path}: what it imports of hers`);
-    assert.ok(
-      source.includes(`__CEL_MASCOT2__\n    ? (await import('${allowed}'))`),
-      `${path}: her import does not follow __CEL_MASCOT2__`,
-    );
-    assert.doesNotMatch(source, /^import\s[^;]*(?:2\.astro|2\.ts|2\.css)['"]/m, `${path}: static`);
-  }
-  // …and her own files read the first generation's without changing a line of them: these
-  // imports are all there is between the two.
-  const MAY_IMPORT = new Set([
-    ...['./game-engine.js', './game-state.js', './storage-map.js', './turtle.js'],
-    ...['./mascot-mode.js', './mascot2.js', './game-state2.js'],
-    // The script of her block: the rules, her memory, what the page already has.
-    ...['./deep-links.ts', './engine.ts', './game-store2.ts', './silence-now.ts'],
-    ...['../lib/game-engine.ts', '../lib/game-goal.ts', '../lib/game-state2.ts'],
-    ...['../lib/mascot2.ts', '../lib/silence.ts'],
-  ]);
-  for (const path of SECOND_GENERATION.filter((p) => p.endsWith('.ts'))) {
-    const source = readFileSync(path, 'utf8');
-    for (const [, from] of source.matchAll(/from\s+['"]([^'"]+)['"]/g)) {
-      assert.ok(MAY_IMPORT.has(from ?? ''), `${path} imports ${from ?? ''}`);
-    }
-  }
-  // The files of the turtle that is online are read by hers and never import hers back: the
-  // loop above has checked each of them (docs/discovery/PLAN-TORTUE.md §11.1).
-  for (const frozen of [
-    'src/components/Game.astro',
-    'src/components/Turtle.astro',
-    'src/scripts/game.ts',
-    'src/scripts/game-store.ts',
-    'src/lib/turtle.ts',
-    'src/lib/game-state.ts',
-    'src/styles/turtle.css',
-  ]) {
-    assert.ok(tracked.includes(frozen), `${frozen} is gone`);
-  }
 });

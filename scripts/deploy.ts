@@ -42,7 +42,6 @@ import {
   nearSilenceWindow,
   readAskMode,
   readBuildMode,
-  readMascot,
   readBuildScrutin,
   readDist,
   refusedArguments,
@@ -174,10 +173,7 @@ const refusal = deployRefusal(target, mode, pages, {
   ask,
   workerProblems: workerProblems(),
   previewBlockers: previewChatBlockers(),
-  distProblems:
-    mode === 'app'
-      ? distProblems(readDist('dist'), { gameFile, ask, mascot: readMascot(undefined, target) })
-      : [],
+  distProblems: mode === 'app' ? distProblems(readDist('dist'), { gameFile, ask }) : [],
 });
 if (refusal !== null) {
   console.error(`deploy refused (${target}, ${mode} build): ${refusal}`);

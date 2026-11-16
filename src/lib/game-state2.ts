@@ -1,7 +1,8 @@
 /**
- * What the game remembers once the mascot is of the second generation (D17.3, D17.14;
+ * What the game remembers with the mascot of the second generation (D17.3, D17.14;
  * docs/discovery/PLAN-TORTUE.md §9) — pure, like src/lib/game-state.ts, which it reads through
- * and never changes. IN PREPARATION: nothing that is served imports this module.
+ * and never changes. Served since 15 November 2026 (D17.36); the first generation, which wrote
+ * through src/lib/game-state.ts alone, was removed with lot F.
  *
  * ONE field more, and one only: `tint`, the colour the player gave her flamingo — a whole
  * number from 1 to 7 (1 to 6: a colour, one per part of the book; 7: « sans couleur », chosen
@@ -13,8 +14,8 @@
  *     colour chosen.
  *   - While no colour is chosen, what this module writes is, byte for byte, what the first
  *     generation writes: the field exists only once there is a colour to keep.
- *   - A string written here and read by the first generation — after a step back — loses the
- *     colour and nothing else: that reader takes the fields it knows, one by one.
+ *   - A string written here and read by the first generation — had she been brought back —
+ *     loses the colour and nothing else: that reader took the fields it knew, one by one.
  *
  * Nothing goes back: progress is merged as before, by taking the most of each. A colour is not
  * progress, and has no "most": the last gesture wins — see `fromPhone` and `ontoPhone`.

@@ -49,8 +49,7 @@ import {
   type TabState2,
 } from '../src/lib/game-state2.js';
 import type { MascotTint } from '../src/lib/mascot2.js';
-import { STORAGE_MAP, STORAGE_STRINGS } from '../src/lib/storage-map.js';
-import { TINT_LABEL, storageMap, storageStrings } from '../src/lib/storage-map2.js';
+import { STORAGE_MAP, STORAGE_STRINGS, TINT_LABEL } from '../src/lib/storage-map.js';
 import { STRINGS_PATH, isMascotPrivacyKey } from './launch.js';
 
 const entry = (slot: number, at: string): GameEntry => ({
@@ -286,44 +285,36 @@ void test('what is said of her is one sentence, two at most, and never about a c
 });
 
 // ---------------------------------------------------------------------------------------------
-// What the privacy page will list (D17.3; docs/discovery/PLAN-TORTUE.md §9)
+// What the privacy page lists (D17.3; docs/discovery/PLAN-TORTUE.md §9)
 // ---------------------------------------------------------------------------------------------
 
-void test('the map of what is written on a phone: the same for the turtle that is online, one field more for her', () => {
-  // The first generation: the very map the privacy page prints today.
-  assert.equal(storageMap(1), STORAGE_MAP);
-  assert.deepEqual(storageStrings(1), STORAGE_STRINGS);
-
-  const [first, second] = [storageMap(1), storageMap(2)];
-  assert.equal(second.length, first.length);
-  second.forEach((entry, index) => {
-    const before = first[index];
-    assert.ok(before !== undefined);
-    // The same key, the same storage, the same sentence that says when it is written.
+void test('the map of what is written on a phone: the fields of the first generation, and her colour', () => {
+  assert.equal(STORAGE_MAP.length, 2);
+  for (const entry of STORAGE_MAP) {
+    // The same key in both storages, as before her: nobody loses their turtle.
     assert.equal(entry.key, STORAGE_KEY);
-    assert.deepEqual([entry.storage, entry.lead], [before.storage, before.lead]);
-    // Every field of before, in its place, and one more at the end.
-    assert.deepEqual(entry.fields.slice(0, -1), before.fields);
+    // Every field the first generation wrote, in its place, and one more at the end.
+    const before = entry.storage === 'localStorage' ? KEPT_FIELDS : TAB_FIELDS;
+    assert.deepEqual(
+      entry.fields.slice(0, -1).map((f) => f.name),
+      [...before],
+    );
     assert.deepEqual(entry.fields.at(-1), { name: 'tint', label: TINT_LABEL });
-  });
+  }
   // The fields the map lists are the fields her memory writes — the same lists, not a copy.
   assert.deepEqual(
-    second.map((entry) => entry.fields.map((f) => f.name)),
+    STORAGE_MAP.map((entry) => entry.fields.map((f) => f.name)),
     [[...TAB_FIELDS2], [...KEPT_FIELDS2]],
   );
 
   // Every sentence the map points at exists, and is one a reader can be shown.
   const kit = JSON.parse(readFileSync(STRINGS_PATH, 'utf8')) as Record<string, unknown>;
-  for (const key of storageStrings(2)) {
+  for (const key of STORAGE_STRINGS) {
     assert.ok(typeof kit[key] === 'string' && kit[key].length > 0, `the kit has no ${key}`);
   }
   // Her line is the one the launch gate reads apart (`privacy_mascot`) — and the only one.
   assert.deepEqual(
-    storageStrings(2).filter((key) => isMascotPrivacyKey(key)),
+    STORAGE_STRINGS.filter((key) => isMascotPrivacyKey(key)),
     [TINT_LABEL],
-  );
-  assert.deepEqual(
-    storageStrings(1).filter((key) => isMascotPrivacyKey(key)),
-    [],
   );
 });

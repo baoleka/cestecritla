@@ -47,13 +47,6 @@ const CLOUDFLARE_DPA = 'cloudflare.com/cloudflare-customer-dpa';
 const GameStorage = __CEL_GAME_WRITES__
   ? (await import('../../components/GameStorage.astro')).default
   : null;
-// A build whose mascot is of the second generation (data/mascot.json, D17.14) writes one field
-// more — the colour the player gave her (D17.3) — and the page lists it, from that build's own
-// map. A constant the bundler folds: a build of the first generation does not import the map.
-const storage =
-  __CEL_GAME_WRITES__ && __CEL_MASCOT2__
-    ? (await import('../../lib/storage-map2.ts')).storageMap(2)
-    : undefined;
 ---
 
 <Base title={`${t('privacy.title')} — ${t('app.name')}`} description={promise}>
@@ -136,7 +129,7 @@ const storage =
     )
   }
 
-  {GameStorage !== null && <GameStorage map={storage} />}
+  {GameStorage !== null && <GameStorage />}
 
   <h2>{t('privacy.never.title')}</h2>
   <ul class="counts">
@@ -145,11 +138,11 @@ const storage =
     <li>{t('privacy.never.03')}</li>
     <li>{t('privacy.never.04')}</li>
     {
-      /* Where the mascot of the second generation is served, the colour the player gives her is
-         kept — a choice: what is never kept is said « Tes réponses » (D17.30). */
-      GameStorage !== null && (
-        <li>{t(__CEL_MASCOT2__ ? 'privacy.never.05.tint' : 'privacy.never.05')}</li>
-      )
+      /* The colour the player gives her is kept — a choice: what is never kept is said « Tes
+         réponses » (D17.30). The line of the first generation, « Tes choix dans le jeu. », is
+         rendered nowhere since lot F; it stays in the kit, inside the fingerprint of the
+         reading of this page (data/launch.json, privacy_page). */
+      GameStorage !== null && <li>{t('privacy.never.05.tint')}</li>
     }
     <li>{t('privacy.never.06')}</li>
     <li>{t('privacy.never.09')}</li>

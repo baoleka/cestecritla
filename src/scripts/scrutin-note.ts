@@ -10,7 +10,7 @@
  * The sentence says « après », not « à »: on this build the game comes back when the editor
  * redeploys the ordinary one, not at the stroke of the hour.
  *
- * Same caution as the game's own notice (src/scripts/game.ts): an hour is announced only on a
+ * Same caution as the game's own notice (src/scripts/game2.ts): an hour is announced only on a
  * clock that can be believed — a clock our server contradicts has no hour to give. Without
  * script, nothing is added: the page says what is paused and why, as before.
  */

@@ -2,10 +2,11 @@
  * « Où est-ce écrit ? » with the mascot of the second generation, once the script has the block
  * (D17.1 to D17.25; lot C of docs/discovery/PLAN-TORTUE.md).
  *
- * The game is the game of src/scripts/game.ts, which is not touched: the page arrives with the
- * first round in its HTML, playable with links alone; this script takes the block over when it
- * comes near the screen, fetches the published data of the game, and from then on builds one
- * screen at a time. Every rule is in src/lib/game-engine.ts. This file only draws, and listens.
+ * The game is the game of the first generation's script (src/scripts/game.ts, removed with lot
+ * F: in the history of the repository): the page arrives with the first round in its HTML,
+ * playable with links alone; this script takes the block over when it comes near the screen,
+ * fetches the published data of the game, and from then on builds one screen at a time. Every
+ * rule is in src/lib/game-engine.ts. This file only draws, and listens.
  *
  * What it adds is her (src/lib/mascot2.ts says what she does, src/lib/game-goal.ts what is said
  * of her, src/scripts/game-store2.ts what is kept):

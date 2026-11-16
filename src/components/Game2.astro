@@ -3,10 +3,11 @@
  * « Où est-ce écrit ? » — the game block of the home page, with the mascot of the second
  * generation (D17.1 to D17.25; docs/discovery/PLAN-TORTUE.md, lot C).
  *
- * The game is the game of src/components/Game.astro, rule for rule: one word of the programme,
- * a question, the official titles as tiles, the card of the place. Never "wrong", never red, no
+ * The game is the game of the first generation's block (src/components/Game.astro, removed with
+ * lot F: in the history of the repository), rule for rule: one word of the programme, a
+ * question, the official titles as tiles, the card of the place. Never "wrong", never red, no
  * timer, no score. Without JavaScript the first round is here, whole, played with links and
- * `:target`. What changes is her:
+ * `:target`. What changed is her:
  *
  *   - she is beside the word while one plays, and on a stage at the top of the panel when a
  *     round ends — ONE drawing, moved by the stylesheet (an attribute on the block), never
@@ -17,9 +18,9 @@
  *   - her sheet shows the forms she has had, replays a passage, and lets the player give her
  *     flamingo one of six colours, or none (D17.3).
  *
- * Imported by the home page only in a build of the second generation (`__CEL_MASCOT2__`,
- * data/mascot.json): the block says so itself (`data-mascot`), which is how the deploy guard
- * tells such a build from its files (scripts/build-mode.ts).
+ * Imported by the home page in every build that shows the game (`__CEL_GAME__`). The block
+ * still says its generation (`data-mascot="2"`): two were served side by side until lot F, and
+ * the attribute stays because the stylesheets and the gates read it.
  *
  * What a visitor reads here that is the book's: the word (`data-programme="word"`) and the
  * official titles (`data-programme="title"`), whole, never cut. Everything else is ours, and

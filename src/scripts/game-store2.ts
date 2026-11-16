@@ -1,7 +1,8 @@
 /**
- * Where the game's memory goes once the mascot is of the second generation (D17.3, D17.14;
- * docs/discovery/PLAN-TORTUE.md §9) — the only file of that build that touches a storage. It is
- * src/scripts/game-store.ts, rule for rule, with the one field she adds: her colour.
+ * Where the game's memory goes (D16.14, D17.3; docs/discovery/PLAN-TORTUE.md §9) — the only
+ * file of the game that touches a storage. It is the first generation's store
+ * (src/scripts/game-store.ts, removed with lot F), rule for rule, with the one field the second
+ * generation adds: her colour.
  *
  *   - the tab (sessionStorage): written from the first reveal on, gone when the tab closes;
  *   - the phone (localStorage): written only after « Garder ta tortue », then at every change;

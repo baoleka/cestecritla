@@ -1,6 +1,7 @@
 /**
  * What the game remembers, as text (D16.14; PLAN-JEU §5) — pure: it reads and writes strings,
- * and never touches a storage. src/scripts/game-store.ts decides where a string goes.
+ * and never touches a storage. src/scripts/game-store2.ts decides where a string goes, through
+ * src/lib/game-state2.ts, which adds the one field of the second generation: her colour.
  *
  * Two shapes, and nothing else is ever written:
  *

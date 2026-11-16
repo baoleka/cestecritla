@@ -14,22 +14,21 @@
  *     dated in data/launch.json;
  *   - facts about a file live IN that file, with a fingerprint, so that editing the file after it
  *     was validated un-validates it: the answer mode and its bench (data/2026/ask.json), the words
- *     of the game (data/2026/game-words.json), the turtle (design/mascot/validation.json), and the
- *     privacy page (the fingerprint of its strings, kept here because the page has no data file).
+ *     of the game (data/2026/game-words.json), the mascot (design/mascot/v2/validation.json), and
+ *     the privacy page (the fingerprint of its strings, kept here because the page has no data
+ *     file).
  *
  * Going back to "holding" is never blocked by any of this: it is the withdrawal gesture of
  * runbook sheet 9 (D14.10) — build the holding site, deploy.
  *
  *   npx tsx scripts/launch.ts        lists what is still missing; exits 1 while something is
  */
-import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { canonicalHash, listFingerprint } from '../src/lib/fingerprint.js';
 import { WORD_LINKS_PATH, highlightedWords, wordsFingerprint } from '../src/lib/word-links.js';
 import { LOCAL_CHECKS } from '../src/lib/game.js';
-import { MASCOT_PATH, citationPolicyValidated } from './build-mode.js';
+import { citationPolicyValidated } from './build-mode.js';
 import { modeFor } from '../src/lib/ask-mode.js';
-import { generationFor, type MascotHost } from '../src/lib/mascot-mode.js';
 import { MASCOT2_VALIDATION_PATH, mascot2Fingerprint } from './mascot2-kit.js';
 import { isModelKey, keepsNothing } from '../src/worker/models.js';
 
@@ -40,9 +39,6 @@ export const STRINGS_PATH = 'design/strings.json';
 export const MANIFEST_PATH = 'data/2026/manifest.json';
 export const ASK_PATH = 'data/2026/ask.json';
 export const WORDS_PATH = 'data/2026/game-words.json';
-export const TURTLE_SVG_PATH = 'design/mascot/tortue.svg';
-export const TURTLE_CSS_PATH = 'src/styles/turtle.css';
-export const TURTLE_VALIDATION_PATH = 'design/mascot/validation.json';
 /** The charter's colours, and the set that replaces them if the charter is withdrawn (D14.12). */
 export const TOKEN_SETS = ['design/tokens.json', 'design/tokens.neutral.json'] as const;
 
@@ -201,49 +197,6 @@ export function privacyMascotStringsHash(strings: Record<string, unknown>): stri
 }
 
 type Json = Record<string, unknown>;
-
-/**
- * The colours the turtle is drawn in: every `turtle-*` role of every theme of both token sets,
- * resolved to its value — `tokens.json light turtle-line #4C0297`. Renaming a colour changes
- * nothing here; changing what she looks like does.
- */
-export function turtleColours(root = '.'): string[] {
-  const at = (path: string): string => (root === '.' ? path : `${root}/${path}`);
-  const out: string[] = [];
-  for (const path of TOKEN_SETS) {
-    const tokens = readObject(at(path));
-    const colours = field(tokens, 'color');
-    const themes = field(tokens, 'color-role');
-    if (typeof themes !== 'object' || themes === null) continue;
-    for (const [theme, roles] of Object.entries(themes as Json)) {
-      if (typeof roles !== 'object' || roles === null) continue;
-      for (const [role, raw] of Object.entries(roles as Json)) {
-        if (!role.startsWith('turtle-') || typeof raw !== 'string') continue;
-        const name = /^\{color\.([a-z0-9-]+)\}$/.exec(raw)?.[1];
-        const value = name === undefined ? raw : field(field(colours, name), '$value');
-        out.push(`${path} ${theme} ${role} ${typeof value === 'string' ? value : raw}`);
-      }
-    }
-  }
-  return out.sort();
-}
-
-/**
- * What the editor validates when the sheet is dated: the drawing, the stylesheet that makes its
- * five states and three poses, and the colours of both token sets. One fingerprint, so that a
- * retouch of any of the three un-validates her. Null while she is not drawn.
- */
-export function turtleFingerprint(root = '.'): string | null {
-  const at = (path: string): string => (root === '.' ? path : `${root}/${path}`);
-  if (!existsSync(at(TURTLE_SVG_PATH)) || !existsSync(at(TURTLE_CSS_PATH))) return null;
-  return createHash('sha256')
-    .update(readFileSync(at(TURTLE_SVG_PATH)))
-    .update('\n')
-    .update(readFileSync(at(TURTLE_CSS_PATH)))
-    .update('\n')
-    .update(JSON.stringify(turtleColours(root)))
-    .digest('hex');
-}
 
 /** Reads a JSON object, or says why it could not: these readers never throw (the withdrawal). */
 function readObject(path: string): Json | null {
@@ -469,58 +422,31 @@ export function artefactBlockers(root = '.'): string[] {
     }
   }
 
-  // The mascot production serves: validated on a sheet, bound to the drawing it was validated on.
-  out.push(...mascotBlockers(root, 'apex'));
+  // The mascot: validated on a sheet, bound to the drawing it was validated on.
+  out.push(...mascotBlockers(root));
   return out;
 }
 
 /**
- * What the mascot a host is given still lacks (D16.11, D17.14) — empty when it may be served.
+ * What the mascot still lacks before production may serve her (D16.11, D17.14) — empty when it
+ * may.
  *
- * Two generations live side by side (docs/discovery/PLAN-TORTUE.md §11); data/mascot.json says
- * which one a host serves, and each has its own sheet, its own fingerprint and its own record:
- * the one that applies is the one of the generation that host is given. So production stays
- * deployable on the turtle's record while the second generation is drawn, redrawn and tried —
- * and cannot be switched to her before she is validated: a file that says 2 with no dated sheet,
- * no question asked of that drawing, or no word of the editor, blocks here.
+ * She is validated on a sheet (design/mascot/v2/validation.json), bound to the drawing it was
+ * validated on: her drawing, her stylesheet, her colours and her choreography make one
+ * fingerprint (scripts/mascot2-kit.ts), and « même personnage ? » was asked of that very
+ * drawing. A retouch of any of them un-validates her: production is held until the editor has
+ * seen what changed and dated it again. She writes one field more on a phone — the colour the
+ * player gave her (D17.3) —, so the line of the privacy page that says so is re-read as it
+ * stands (privacy_mascot).
  *
- * The preview host is where she is tried: nothing of that validation is asked of it.
+ * Until lot F of docs/discovery/PLAN-TORTUE.md, two generations lived side by side and
+ * data/mascot.json said which one each host served: the record that applied was that
+ * generation's, and serving the second in production took the editor's dated word (given on
+ * 15 November 2026, D17.36). One generation is left, and one record.
  */
-export function mascotBlockers(root = '.', host: MascotHost = 'apex'): string[] {
+export function mascotBlockers(root = '.'): string[] {
   const at = (path: string): string => (root === '.' ? path : `${root}/${path}`);
-  const out: string[] = [];
-  const mascot = readObject(at(MASCOT_PATH));
-  if (generationFor(mascot, host) === 1) {
-    // The turtle: validated on a sheet, and bound to the drawing it was validated on (D16.11).
-    const turtle = readObject(at(TURTLE_VALIDATION_PATH));
-    const drawing = turtleFingerprint(root);
-    if (turtle === null || drawing === null) {
-      out.push(`the turtle is not drawn or not validated: ${TURTLE_VALIDATION_PATH} (lot K3)`);
-      return out;
-    }
-    if (!isDate(turtle.validated_on)) {
-      out.push(`${TURTLE_VALIDATION_PATH}: the sheet is not dated by the editor: validated_on`);
-    } else if (turtle.drawing_sha256 !== drawing) {
-      out.push(`${TURTLE_VALIDATION_PATH}: the drawing changed after the sheet was validated`);
-    }
-    // The question is about a drawing too: asked of another one, it was not asked of her.
-    if (!isDate(turtle.same_character_asked_on)) {
-      out.push(
-        `${TURTLE_VALIDATION_PATH}: "same character?" has not been asked: same_character_asked_on`,
-      );
-    } else if (turtle.same_character_sha256 !== drawing) {
-      out.push(`${TURTLE_VALIDATION_PATH}: the drawing changed after "same character?" was asked`);
-    }
-    return out;
-  }
-  // She writes one field more on a phone: wherever she is served, the page says so in words
-  // somebody re-read.
-  out.push(...mascotPrivacyBlockers(at));
-  // Ahead of production, on the preview host alone: the place where a drawing is looked at.
-  if (host === 'preview' && generationFor(mascot, 'apex') === 1) return out;
-
-  // The second generation, in production: the same two dates, on her own drawing — and the
-  // editor's word, because serving her is his decision and nobody else's.
+  const out: string[] = [...mascotPrivacyBlockers(at)];
   let drawing: string | null = null;
   try {
     drawing = mascot2Fingerprint(root);
@@ -529,27 +455,21 @@ export function mascotBlockers(root = '.', host: MascotHost = 'apex'): string[] 
   }
   const record = readObject(at(MASCOT2_VALIDATION_PATH));
   if (record === null || drawing === null) {
-    out.push(
-      `the second-generation mascot is not drawn or not validated: ${MASCOT2_VALIDATION_PATH} (lot A2)`,
-    );
-  } else {
-    if (!isDate(record.validated_on)) {
-      out.push(`${MASCOT2_VALIDATION_PATH}: the sheet is not dated by the editor: validated_on`);
-    } else if (record.drawing_sha256 !== drawing) {
-      out.push(`${MASCOT2_VALIDATION_PATH}: the drawing changed after the sheet was validated`);
-    }
-    if (!isDate(record.same_character_asked_on)) {
-      out.push(
-        `${MASCOT2_VALIDATION_PATH}: "same character?" has not been asked: same_character_asked_on`,
-      );
-    } else if (record.same_character_sha256 !== drawing) {
-      out.push(`${MASCOT2_VALIDATION_PATH}: the drawing changed after "same character?" was asked`);
-    }
+    out.push(`the mascot is not drawn or not validated: ${MASCOT2_VALIDATION_PATH} (lot A2)`);
+    return out;
   }
-  if (!isDate(field(mascot, 'decided_on')) || field(mascot, 'decided_by') !== 'editor') {
+  if (!isDate(record.validated_on)) {
+    out.push(`${MASCOT2_VALIDATION_PATH}: the sheet is not dated by the editor: validated_on`);
+  } else if (record.drawing_sha256 !== drawing) {
+    out.push(`${MASCOT2_VALIDATION_PATH}: the drawing changed after the sheet was validated`);
+  }
+  // The question is about a drawing too: asked of another one, it was not asked of her.
+  if (!isDate(record.same_character_asked_on)) {
     out.push(
-      `${MASCOT_PATH}: serving the second generation in production is the editor's decision, dated: decided_on, decided_by (D17.14)`,
+      `${MASCOT2_VALIDATION_PATH}: "same character?" has not been asked: same_character_asked_on`,
     );
+  } else if (record.same_character_sha256 !== drawing) {
+    out.push(`${MASCOT2_VALIDATION_PATH}: the drawing changed after "same character?" was asked`);
   }
   return out;
 }

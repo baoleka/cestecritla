@@ -21,8 +21,9 @@
  * frames, the true end of a movement), which scripts/mascot2-motion.ts measures on this very
  * page and writes to design/mascot/v2/motion.json.
  *
- * IN PREPARATION: the turtle that is online has her own sheet (scripts/mascot-sheet.ts,
- * design/mascot/planche.html), validated on 13 November 2026 and not touched.
+ * The sheet of the first generation (scripts/mascot-sheet.ts, design/mascot/planche.html,
+ * validated on 13 November 2026) went with that generation, lot F: it is in the history of the
+ * repository.
  */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { gzipSync } from 'node:zlib';

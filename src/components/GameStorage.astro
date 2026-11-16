@@ -4,7 +4,7 @@
  *
  * Nothing here is typed by hand: the storages, the key and every field come from the one map
  * (src/lib/storage-map.ts), which is itself built from the lists of fields the game's memory is
- * written with. The page cannot say less than the code writes.
+ * written with — her colour among them (D17.3). The page cannot say less than the code writes.
  *
  * « Tout effacer » stays within reach whatever happens to the game — a freeze included: this
  * page is never frozen (src/lib/silence.ts).
@@ -12,29 +12,12 @@
 import { STORAGE_KEY } from '../lib/game-state.ts';
 import { STORAGE_MAP } from '../lib/storage-map.ts';
 import { t, type StringKey } from '../lib/strings.ts';
-
-interface Props {
-  /**
-   * The map of a build whose mascot is of the second generation (src/lib/storage-map2.ts,
-   * D17.3): the same storages, the same key, and one field more — her colour. Left out, the
-   * map is the one that is online. The page that renders this component chooses.
-   */
-  map?:
-    | readonly {
-        storage: string;
-        lead: string;
-        fields: readonly { name: string; label: string }[];
-      }[]
-    | undefined;
-}
-
-const { map = STORAGE_MAP } = Astro.props;
 ---
 
 <h2 id="ce-que-le-jeu-ecrit">{t('privacy.game.title')}</h2>
 <p>{t('privacy.game.lead')}</p>
 {
-  map.map((entry) => (
+  STORAGE_MAP.map((entry) => (
     <>
       <p>
         {t(entry.lead as StringKey)} <span class="ref">({entry.storage})</span>
