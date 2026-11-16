@@ -4,6 +4,12 @@
 > le plan tel qu'il l'a approuvé, écrit pour lui (« tu ») ; son **journal d'exécution**, en fin de
 > fichier, dit où en est le travail. Rien de ce plan n'est en ligne tant que le journal ne dit pas
 > que la production a été basculée.
+>
+> **Exécuté jusqu'au bout** : la production sert la génération 2 depuis le 15 novembre 2026,
+> 23 h 27 (lot E, D17.36), et le ménage est fait le 16 novembre (lot F, D17.37) — la génération 1,
+> ses portes et l'interrupteur ont quitté le dépôt sans que rien de servi ne change. Ce que le
+> plan dit de `data/mascot.json`, de `__CEL_MASCOT2__`, de `--mascot 2` et de `dist-mascot2/` est
+> l'état du chantier, pas celui du dépôt.
 
 ## Contexte
 
@@ -1254,3 +1260,69 @@ l'aperçu (autre adresse, autre stockage) : il est tenu par des tests, pas par u
   deploy`. L'état de chacun est gardé ; un téléphone y perd seulement la couleur choisie. La
   génération 1, ses fichiers et ses portes restent dans le dépôt jusqu'au ménage (lot F), sur
   son mot.
+
+### 16 novembre 2026 — le ménage (lot F, D17.37)
+
+- **Son mot** : « fais le lot F » (D17.37).
+- **Ce qui a quitté le dépôt** — dans l'historique git, dernier commit qui le porte : `5a008b8` :
+  - la génération 1 : `src/components/Game.astro` et `Turtle.astro`, `src/scripts/game.ts` et
+    `game-store.ts`, `src/styles/turtle.css`, `design/mascot/tortue.svg`, sa planche et sa
+    validation (`design/mascot/planche.html`, `validation.json`) ;
+  - ses portes : `scripts/mascot.test.ts`, `scripts/mascot-sheet.ts`, la porte de bout en bout de
+    son jeu ;
+  - l'interrupteur : `data/mascot.json`, `src/lib/mascot-mode.ts`, `src/lib/mascot-config.ts`,
+    `scripts/mascot-mode.test.ts`, la constante `__CEL_MASCOT2__`, le drapeau `--mascot` (refusé
+    désormais, avec sa raison), `npm run build:mascot2` et `dist-mascot2/`, la règle du garde de
+    déploiement qui comparait les générations, et la condition « decided_by » de la porte de
+    lancement ;
+  - la seconde carte de ce qui s'écrit sur le téléphone (`src/lib/storage-map2.ts`) : il n'en
+    reste qu'une, la sienne, dans `src/lib/storage-map.ts` ; de `src/lib/turtle.ts`, tout ce qui
+    n'était qu'à la génération 1 (dessin, poses, images) — restent les arcs et les états, qu'elle
+    utilise ;
+  - une phrase du kit, `turtle.keep.not_kept`, que seule la génération 1 disait.
+- **Ce qui prend un nom simple** : la porte du jeu est `scripts/e2e-game.ts` (`npm run e2e:game`),
+  sur la build d'essai de l'app (`dist-ask/`) ; ses tests des pages construites sont dans
+  `scripts/game-page.test.ts`.
+- **Ce qui garde son nom « 2 »** : ses fichiers (`Game2.astro`, `game2.ts`, `mascot2.css`…) —
+  renommer le bloc changerait le nom des fichiers que la build publie, donc la production.
+- **Ce qui a été repris de la porte supprimée**, parce que cela vaut pour elle : ses cinq rôles de
+  trait `turtle-*`, dans les deux jeux de couleurs et les deux thèmes, jamais dans le lavande, le
+  prune ou le rose de la tortue officielle, ni un corps violet clair sous une carapace violet
+  sombre ; la croissance de ses arcs. Les deux sont dans `scripts/mascot2.test.ts`. Ce que tenait
+  le test de l'interrupteur et qui vaut toujours — la mascotte du dépôt est déployable telle
+  quelle (planche datée, « même personnage ? », ligne de Confidentialité relue et signée) — est
+  dans `scripts/launch.test.ts`.
+- **Ce qui n'a pas bougé, exprès** :
+  - le dessin validé, sa feuille, ses couleurs et ses temps : la planche reste datée du 15
+    novembre. L'en-tête de `src/styles/mascot2.css` dit encore « IN PREPARATION… The turtle that
+    is online is src/styles/turtle.css » : il est dans l'empreinte, et ne se corrige qu'avec une
+    retouche montrée à l'éditeur ;
+  - trois règles mortes de la génération 1 dans `src/styles/game.css` (`.g-head`, `.g-turtle`,
+    `--turtle-size`), servies dans la page d'accueil : les retirer change cette page ; elles
+    partent avec le prochain déploiement qui la change de toute façon ;
+  - `privacy.never.05` (« Tes choix dans le jeu. ») reste dans le kit, rendue nulle part : elle est
+    dans l'empreinte de la lecture datée de la page Confidentialité (`privacy_page`), que la
+    retirer ferait tomber.
+- **La preuve que rien de servi ne change.** Les huit builds ont été faites avant le ménage (commit
+  `5a008b8`) et après, puis comparées fichier par fichier :
+  - production, aperçu, « scrutin », page d'attente : **identiques** (1 156, 1 156, 1 150 et 10
+    fichiers) — **aucun redéploiement** ;
+  - la build d'essai du jeu (`dist-ask/`) est identique à l'ancienne build d'essai de la
+    génération 2 (`dist-mascot2/`) ;
+  - les deux autres builds d'essai passent à la génération 2 : `dist-gists/` ; `dist-scrutin/`,
+    dont seule la page Confidentialité change — elle est maintenant, octet pour octet, la build
+    « scrutin » déployable.
+- **Les portes**, après `git add` : 630 tests (629 réussis, un sauté : celui d'une build qui ne montre pas le jeu), porte anti-fuite comprise ; vérification de types, lint, contrastes ;
+  accessibilité, 225 contrôles, aucun échec ; site, 44, 41 et 41 vérifications (Chromium,
+  Firefox, WebKit) ; « Demander », 109, 102 et 102 ; la feuille, 102, 96 et 96 ; le rendu de sa
+  planche, 47 dans chaque moteur ; le jeu, 252, 217 et 217 vérifications — les nombres d'avant le ménage —, aucun éclair, aucune image au-delà de 50 ms à processeur ralenti quatre fois (p95 de 16,7 à 16,8 ms), sur la build d'essai reconstruite. La mesure de son mouvement sur la planche
+  (`e2e:mascot2:motion`) n'a pas été rejouée : ni la planche, ni le dessin, ni sa feuille, ni ses
+  temps n'ont changé, et la mesure enregistrée est liée à leur empreinte.
+- **Trouvé en route, hors du ménage** : `design/identity-decision.md` disait le quatrième écart à la
+  charte (les couleurs des six parties sur le flamant) « pas en ligne », et prévoyait de l'écrire
+  sur `/a-propos` le jour de la bascule. `/a-propos` ne parle pas de la charte et ne liste aucun
+  écart, ni ces quatre ni les trois d'avant. Le document le dit maintenant ; l'écrire sur la page
+  serait un texte neuf du site, à décider par l'éditeur.
+- **Retour arrière, s'il le fallait un jour** : annuler le commit de ce lot (`git revert 3d4299b`), qui
+  ramène la génération 1 et `data/mascot.json`, y mettre `generation` à 1, puis `npm run build &&
+  npm run deploy`. L'état de chacun est gardé ; un téléphone y perd seulement la couleur choisie.
