@@ -262,3 +262,36 @@ npx tsx scripts/perf-probe.ts
   est écrite en deux fonctions, `homeBlockersOf` (pure, testée sans fichier) et `homeBlockers`
   (qui lit le fichier).
 - Rien de servi n'a changé.
+
+### Lot 2, au 18 novembre 2026 (nuit) — l'accueil : le jeu d'abord
+
+- **L'ordre de la page est celui de D19.1** : l'en-tête, la ligne « de qui est le programme, qui
+  fait le site » (première ligne de la page, à 14 px), le jeu, puis une section `#chercher`
+  — son titre « Chercher », un lien vers le sommaire, le champ, « Demander au programme », les
+  résultats, les quinze puces. Dans une build sans jeu (« scrutin ») et pendant un silence, la
+  section vient seule sous la première ligne.
+- **L'en-tête de l'accueil mène au champ** : « Chercher » y remplace « Sommaire » — un seul lien,
+  deux ne tenaient pas à côté du nom à 320 px. Le script y met le curseur et laisse l'adresse
+  nue ; sans script le cadre garde « Sommaire », puisqu'il n'y a alors pas de champ. Le sommaire
+  reste à un geste : dans la section et dans le pied de page.
+- **Un lien qui porte une question (`/#q=…`) arrive sur sa réponse** : le champ vient en haut de
+  la fenêtre, les résultats prennent le focus.
+- **D19.9 est tenu par la mise en page et par une porte** : le bloc du jeu est au moins aussi
+  haut que la fenêtre sous son cadre (`min-block-size`, `svh` là où le navigateur le connaît) ;
+  `e2e-game.ts` vérifie, de 320 × 568 à 430 × 932 et en paysage, pendant qu'on joue et à la fin
+  d'une manche, qu'elle et le champ ne tiennent jamais entiers dans le même écran.
+- **Le gras de Gowun Batang est préchargé sur l'accueil qui montre le jeu** : le mot est le
+  premier texte du premier écran dans cette police.
+- **Mesuré** (labo, PROBABLE tant qu'un vrai téléphone ne l'a pas dit) : LCP médian 380 ms pour
+  2 500 ; décalage de mise en page 0,0007 pour 0,1 ; quand le script prend le jeu au premier
+  écran, 0,0003 pour une première visite comme pour un flamant qui revient — la crainte du plan
+  (« essai jetable ») ne se réalise pas. Accueil : 17 054 octets gzip pour 20 480.
+- **Portes** : 632 tests ; `e2e` 46 / 43 / 43 ; `a11y` 225 contrôles ; `e2e:ask` 109 / 102 / 102 ;
+  `e2e:sheet` 102 / 96 / 96 ; `e2e:game` 254 / 218 / 218 (Chromium, Firefox, WebKit) — tous
+  verts. Assertions retournées : l'ordre des blocs (`game-page.test.ts`, `site.test.ts`), la
+  ligne du premier écran et le témoin du décalage (`e2e.ts`), la position de la page derrière la
+  feuille « Demander », qui se compare désormais à ce qu'elle était à l'ouverture
+  (`e2e-ask.ts`).
+- **Ce qui n'est pas encore fait de l'accueil** : l'écran du jeu lui-même (lot 5) ; les textes
+  (la description de la page dit encore « Retrouver une mesure… », lot 7).
+- Rien de servi n'a changé : la production attend derrière la porte du lot 1.

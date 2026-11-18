@@ -8,18 +8,20 @@
  * Never a colour that judges: a tile is a neutral surface before and after it is chosen, and
  * the card of the place looks the same whatever was chosen.
  */
+/* The block opens the home page (D19.1): no rule above it — the frame of the page has one —
+   and it is at least as tall as the window under that frame, so that what comes below (the
+   field, « Demander ») starts one screen further down and she is never on screen next to it
+   (D19.9). `svh` where the browser knows it: the height that stays when its bars are shown. */
 .game {
-  margin-block-start: var(--space-10);
-  padding-block-start: var(--space-4);
-  border-block-start: 2px solid var(--brand);
+  min-block-size: calc(100vh - 5rem);
+  min-block-size: calc(100svh - 5rem);
+  margin-block-start: var(--space-3);
 }
 /* Electoral silence (D16.16): the game is not shown at all, and one sentence says why. The
    attribute is set on <html> before the first paint (src/lib/silence-guard.ts). */
 .g-silence {
   display: none;
-  margin-block-start: var(--space-10);
-  padding-block-start: var(--space-4);
-  border-block-start: 2px solid var(--brand);
+  margin-block: var(--space-3) 0;
 }
 html[data-silence] .g-silence {
   display: block;

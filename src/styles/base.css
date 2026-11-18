@@ -265,13 +265,28 @@ a.wordmark::after {
   line-height: 1.25;
   font-weight: 700;
 }
-.site-toc {
+.site-toc,
+.site-find {
   display: inline-flex;
   align-items: center;
   min-block-size: var(--tap-comfortable);
   font-weight: 700;
   /* One word, one line: at 200 % text it would otherwise be cut as « Som-maire ». */
   white-space: nowrap;
+}
+/* The home page opens on the game (D19.1): the one link of its frame leads to the field, below.
+   Without script there is no field — the frame then leads to the table of contents, as on
+   every other page. One link at a time: two would not fit beside the name at 320 px. */
+.site-home .site-toc {
+  display: none;
+}
+@media (scripting: none) {
+  .site-home .site-find {
+    display: none;
+  }
+  .site-home .site-toc {
+    display: inline-flex;
+  }
 }
 header.site {
   hyphens: manual;
@@ -480,9 +495,37 @@ button.quiet {
   min-block-size: calc(var(--font-size-min) * var(--line-height-body));
   margin-block: var(--space-2);
 }
-/* Whose programme, whose site: one line under the field of the home page, at reading size. */
+/* Whose programme, whose site: the first line of the home page, above the game (D19.1) —
+   small, because it is a notice and not the subject of the screen, and never under 14 px. */
 .what {
-  margin-block: var(--space-2) 0;
+  margin-block: 0 var(--space-2);
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+/* Searching and asking: a section of its own under the game, with a rule above it like every
+   other part of the page. Its title and the way to the table of contents share one line. */
+.find {
+  margin-block-start: var(--space-10);
+  padding-block-start: var(--space-4);
+  border-block-start: 2px solid var(--brand);
+}
+.find-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0 var(--space-4);
+  margin-block-end: var(--space-2);
+}
+.find-head h2 {
+  margin-block: 0;
+}
+.find-toc {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--tap-comfortable);
+  font-weight: 700;
+  white-space: nowrap;
 }
 /* The heading takes the focus after Enter: it shows it like any other target. */
 #search-results-title:focus-visible {

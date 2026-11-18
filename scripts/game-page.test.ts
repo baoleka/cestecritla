@@ -241,9 +241,14 @@ for (const root of ['dist', 'dist-ask']) {
         const html = readFileSync(join(root, page), 'utf8');
         if (page === 'index.html') {
           assert.deepEqual(marked(html), first);
-          // She lives in the game block, once, and the block comes after the field.
+          // She lives in the game block, once. The block opens the page (D19.1): after the
+          // line that says whose programme this is, before the section of the field.
           assert.equal(html.split(HER).length - 1, 1);
-          assert.ok(html.indexOf('id="jeu"') > html.indexOf('id="search"'));
+          const at = (mark: string): number => html.indexOf(mark);
+          assert.ok(at('class="what"') !== -1 && at('class="what"') < at('id="jeu"'));
+          assert.ok(at('id="jeu"') < at('id="chercher"'));
+          assert.ok(at('id="chercher"') < at('id="search"'));
+          assert.ok(at('id="search"') < at('class="chips"'));
         } else {
           assert.deepEqual(marked(html), [], `${page}: a word of the game`);
           assert.ok(!ANY_MASCOT.test(html), `${page}: the turtle`);
@@ -398,9 +403,9 @@ for (const root of ['dist', 'dist-ask']) {
         /data-state="0" data-pose="rest" data-tint="0" data-sign="0"/,
       );
       assert.ok(!/data-(?:live|phase|passage)/.test(drawings[0] ?? ''), 'she arrives moving');
-      // In the block, after its title and before the round; the block after the field.
+      // In the block, after its title and before the round; the block before the field (D19.1).
       const at = (mark: string): number => home.indexOf(mark);
-      assert.ok(at('id="search"') < at('id="jeu"'));
+      assert.ok(at('id="jeu"') < at('id="search"'));
       assert.ok(at('id="game-title"') < at(HER));
       assert.ok(at(HER) < at('id="game-static"'));
       // The game block, and nowhere else (D17.9): not a section page, not a legal page, not the

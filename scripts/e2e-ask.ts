@@ -296,6 +296,9 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     await page.click('#ask');
     await until(page, "document.querySelector('#chat-sheet').open");
     await until(page, settled);
+    // Where the page stands behind the sheet: the field is one screen below the game (D19.1),
+    // so the page was scrolled to it before the sheet opened — and must not move after.
+    const behind = await page.evaluate<number>('window.scrollY');
     check(
       'the script of the sheet is fetched at the first press',
       requested.filter((url) => /\/_astro\/chat\./.test(url)).length === 1,
@@ -736,7 +739,11 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
           frame.field <= frame.bottom,
         JSON.stringify(frame),
       );
-      check('…and the page behind it has not moved', frame.page === 0, String(frame.page));
+      check(
+        '…and the page behind it has not moved since the sheet opened',
+        frame.page === behind,
+        `${String(frame.page)} — ${String(behind)} when it opened`,
+      );
       const last = await page.evaluate<{ top: number; scroll: number }>(
         `(() => { const s = document.querySelector('#chat-scroll'); const t = document.querySelector(${JSON.stringify(LAST)}); return { top: Math.round(t.getBoundingClientRect().top - s.getBoundingClientRect().top), scroll: s.scrollTop }; })()`,
       );

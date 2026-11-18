@@ -1,15 +1,30 @@
 ---
 /**
- * Home: the field first (D16.1, D16.9).
+ * Home: the game first (D19.1, which amends D16.1).
  *
- * The page is where one asks and where one searches; the game comes below it. Its <h1> is the
- * name, in the header every page shares, so the first thing under the header is the field — no
- * lead in between: the label of the field says what it is for.
+ * The page opens on « Où est-ce écrit ? ». Searching and asking stay on it, below, in a section
+ * of their own that the header leads to (« Chercher »): one more feature of the page, no longer
+ * its first screen. Its <h1> is the name, in the header every page shares.
  *
- * Under the field, the fifteen answers a person wrote and re-read, as chips (lot H3).
+ * In reading order:
  *
- * The table of contents has its own page, /sommaire/, one tap away in the header. It is still
- * the navigation for a browser without JavaScript: the sentence the search leaves behind there
+ *   1. whose programme this is, and whose site — one small line, before anything else: said on
+ *      the first screen because none of the seven personas could tell (session of 14/11/2026),
+ *      and above the game because a game about a programme must say whose it is first;
+ *   2. the game (src/components/Game2.astro), in a build that shows it;
+ *   3. the section « Chercher »: the field, « Demander au programme » where the site asks, the
+ *      results, the way to the table of contents, and the fifteen answers as chips (lot H3).
+ *
+ * She — the mascot — lives in the block of the game and nowhere else (D17.9); the field is one
+ * phone screen further down (D19.9: the block of the game is at least as tall as the window,
+ * src/styles/game2.css), so that she is never on screen next to it.
+ *
+ * During an electoral silence the game is not shown (D16.16), and the section below simply
+ * comes up: the page is then where one searches and reads, as the law allows. The "scrutin"
+ * build has no game at all.
+ *
+ * The table of contents has its own page, /sommaire/. It is still the navigation for a browser
+ * without JavaScript: the header leads to it there, and the sentence the search leaves behind
  * is a link to it.
  */
 import Base from '../layouts/Base.astro';
@@ -35,17 +50,12 @@ const Game = __CEL_GAME__ ? (await import('../components/Game2.astro')).default 
 // before each window, has no game to hide: it says in one sentence what is paused, and why.
 const guard = __CEL_GAME__ ? silenceGuardScript() : null;
 if (guard !== null) Astro.csp.insertScriptHash(silenceGuardHash());
-
 ---
 
-<Base title={t('app.name')} description={t('home.tagline')} home>
+<Base title={t('app.name')} description={t('home.tagline')} home word={Game !== null}>
   {guard !== null && <script is:inline slot="head" set:html={guard} />}
-  <Search ask />
-  {/* Whose programme, and whose site: said on the first screen, under the field — none of the
-      seven personas could tell from it (session of 14/11/2026). Results, when there are some,
-      come between the field and this line: a keyboard leaves little room under a field. */}
+  {/* Whose programme, and whose site: the first line of the page, small — never its hero. */}
   <p class="what">{t('home.what')}</p>
-  <Chips />
   {
     /* The scrutin build has no game to hide: it says what is paused and why — and, once its
        script has read the hour, until when (D16.41: six personas out of seven asked). Without
@@ -60,6 +70,18 @@ if (guard !== null) Astro.csp.insertScriptHash(silenceGuardHash());
       </p>
     )
   }
-  {/* The game comes below: the second screen of the page, never the first (D16.1). */}
+  {/* The game opens the page (D19.1). */}
   {Game !== null && <Game />}
+  {
+    /* Searching and asking: one section, below the game, that the header leads to. Its field is
+       in the page from the first paint, as before (src/components/Search.astro) — only lower. */
+  }
+  <section class="find" id="chercher" aria-labelledby="chercher-titre">
+    <div class="find-head">
+      <h2 id="chercher-titre">{t('nav.search')}</h2>
+      <a class="find-toc" href="/sommaire/">{t('nav.toc')}</a>
+    </div>
+    <Search ask />
+    <Chips />
+  </section>
 </Base>

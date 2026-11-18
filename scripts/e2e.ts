@@ -202,13 +202,15 @@ async function runEngine(
           shift.toFixed(4),
         );
       }
-      // The witness: the same page, its field hidden then shown late — as it was until today.
+      // The witness: the same page, something of its first screen hidden then shown late — as
+      // the field was until 13/11/2026. (The field is now one screen below, D19.1: revealed
+      // late there, it would move nothing anyone sees, and the witness would prove nothing.)
       const moved = await lateLayoutShift(
         browser,
         `${origin}/`,
-        "document.addEventListener('DOMContentLoaded', () => { const form = document.querySelector('#search'); form.hidden = true; setTimeout(() => { form.hidden = false; }, 600); });",
+        "document.addEventListener('DOMContentLoaded', () => { const line = document.querySelector('p.what'); line.hidden = true; setTimeout(() => { line.hidden = false; }, 600); });",
       );
-      check('…and a field revealed late is seen to move it', moved > STILL, moved.toFixed(4));
+      check('…and a block revealed late is seen to move it', moved > STILL, moved.toFixed(4));
     }
 
     const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
@@ -236,7 +238,8 @@ async function runEngine(
     check('the search form appears with JavaScript', await page.locator('#search').isVisible());
 
     // The first screen says whose programme this is, and whose site: none of the seven personas
-    // could tell from it (13-tests-humains.md §7). Under the field — not a word more before it.
+    // could tell from it (13-tests-humains.md §7). It is the first line of the page — above the
+    // game, which opens it (D19.1), and above the field.
     const inFirstScreen =
       "(() => { const r = document.querySelector('p.what').getBoundingClientRect();" +
       ' return r.top > 0 && r.bottom <= window.innerHeight && r.width > 0; })()';
@@ -250,10 +253,31 @@ async function runEngine(
       what,
     );
     check(
-      '…after the field, never before it',
+      '…as the first line of the page: under its frame, above the game and above the field',
       await page.evaluate<boolean>(
-        "document.querySelector('#q').getBoundingClientRect().bottom <= document.querySelector('p.what').getBoundingClientRect().top",
+        '(() => { const top = (selector) => document.querySelector(selector)?.getBoundingClientRect().top ?? Infinity;' +
+          " const line = document.querySelector('p.what').getBoundingClientRect();" +
+          " return line.top >= document.querySelector('header.site').getBoundingClientRect().bottom &&" +
+          " line.bottom <= top('#jeu') && line.bottom <= top('#q') &&" +
+          " document.querySelector('main').firstElementChild === document.querySelector('p.what'); })()",
       ),
+    );
+    // The field is a section of its own, below the game, and the frame of the page leads to
+    // it: « Chercher » brings it into view and puts the cursor in it.
+    await page.getByRole('link', { name: 'Chercher', exact: true }).click();
+    check(
+      '« Chercher », in the frame, leads to the field and puts the cursor in it',
+      await page.evaluate<boolean>(
+        "(() => { const field = document.querySelector('#q').getBoundingClientRect();" +
+          " return document.activeElement === document.querySelector('#q') &&" +
+          " field.top >= document.querySelector('header.site').getBoundingClientRect().bottom &&" +
+          ' field.bottom <= window.innerHeight; })()',
+      ),
+    );
+    check(
+      '…and the frame has that one link: the table of contents is in the section and the footer',
+      (await page.locator('header.site a:visible').count()) === 1 &&
+        (await page.locator('#chercher a[href="/sommaire/"]').isVisible()),
     );
     {
       const small = await browser.newContext({ viewport: { width: 320, height: 640 } });
@@ -307,9 +331,11 @@ async function runEngine(
       lead,
     );
     check(
-      'results come right under the field: the line about the site moves below them',
+      'results come right under the field, above the chips',
       await page.evaluate<boolean>(
-        "document.querySelector('#search-list > li').getBoundingClientRect().top < document.querySelector('p.what').getBoundingClientRect().top",
+        "(() => { const first = document.querySelector('#search-list > li').getBoundingClientRect();" +
+          " return first.top >= document.querySelector('#q').getBoundingClientRect().bottom &&" +
+          " document.querySelector('#search-list').getBoundingClientRect().bottom <= document.querySelector('.chips').getBoundingClientRect().top; })()",
       ),
     );
     await until(page, "/trouvé/.test(document.querySelector('#search-status').textContent)");

@@ -1290,7 +1290,9 @@ if (parts !== null && raw != null) {
     if (document.visibilityState === 'visible') lookedAtAgain();
   });
   window.addEventListener('pageshow', lookedAtAgain);
-  // Near the screen, or touched: not before — who only came to ask or to search fetches nothing.
+  // Near the screen, or touched: not before. The block opens the home page (D19.1), so for most
+  // visitors that is on arrival — its one file is then the first thing the page asks for.
+  // A page whose game is hidden (a freeze) asks for nothing.
   if ('IntersectionObserver' in window) {
     const watcher = new IntersectionObserver(
       (entries) => {

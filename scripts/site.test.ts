@@ -245,9 +245,22 @@ void test(
   () => {
     // The frame of every screen (D16.1): the name, the label and the way to the table of contents.
     const header =
-      /<header class="site">[\s\S]*?<p class="unofficial">Site non officiel\.<\/p>[\s\S]*?href="\/sommaire\/"[\s\S]*?<\/header>/;
+      /<header class="site(?: site-home)?">[\s\S]*?<p class="unofficial">Site non officiel\.<\/p>[\s\S]*?href="\/sommaire\/"[\s\S]*?<\/header>/;
     const without = pages.filter((page) => !header.test(read(page)));
     assert.deepEqual(without.slice(0, 10), [], 'pages without the label in their header');
+    // The home page opens on the game (D19.1): its frame also leads to the field, below — one
+    // link, to a section that exists, and on no other page.
+    const home = read('index.html');
+    const frame = /<header class="site site-home">[\s\S]*?<\/header>/.exec(home)?.[0] ?? '';
+    assert.equal(frame.split('href="#chercher"').length - 1, 1, 'the way to the field');
+    assert.equal(home.split('id="chercher"').length - 1, 1, 'the section of the field');
+    const elsewhere = pages.filter(
+      // The markup, not the word: the stylesheet every page inlines names `.site-home` too.
+      (page) =>
+        page !== 'index.html' &&
+        /<header class="site site-home">|href="#chercher"/.test(read(page)),
+    );
+    assert.deepEqual(elsewhere.slice(0, 10), [], 'pages that lead to a field they do not have');
     // The name is the <h1> of the home page and of no other.
     assert.match(read('index.html'), /<h1 class="wordmark">/);
     const named = pages.filter(

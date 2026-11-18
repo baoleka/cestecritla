@@ -48,7 +48,7 @@ export const ROUTES: readonly Route[] = [
   {
     prefix: '/',
     status: 'built',
-    object: 'accueil : chercher, demander, puis le jeu (D16.1)',
+    object: 'accueil : le jeu, puis chercher et demander (D19.1, qui amende D16.1)',
     sample: 'index.html',
   },
   {

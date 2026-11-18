@@ -2371,19 +2371,25 @@ async function runEngine(
       height: number;
       overflow: boolean;
       block: { left: number; right: number; width: number };
+      /** The field is far enough below her that both are never whole on screen (D19.9). */
+      apart: boolean;
     }
     const placed = (view: Page): Promise<Placed> =>
       view.evaluate<Placed>(`(() => {
         const box = document.querySelector('${HER}').getBoundingClientRect();
         const tile = document.querySelector('#game-live .g-tile');
         const block = document.querySelector('#jeu').getBoundingClientRect();
+        const header = document.querySelector('header.site').getBoundingClientRect().bottom;
+        const field = document.querySelector('#q');
         return {
           her: { top: box.top, bottom: box.bottom, left: box.left, right: box.right, width: box.width },
           tile: tile === null ? 0 : tile.getBoundingClientRect().bottom,
-          header: document.querySelector('header.site').getBoundingClientRect().bottom,
+          header,
           height: innerHeight,
           overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
           block: { left: block.left, right: block.right, width: block.width },
+          // From her top to the bottom of the field: more than the window keeps under its frame.
+          apart: field === null || field.getBoundingClientRect().bottom - box.top > innerHeight - header,
         };
       })()`);
     const wrong: string[] = [];
@@ -2417,6 +2423,7 @@ async function runEngine(
         wrong.push(`${screen}: she leaves the block`);
       }
       if (asking.overflow) wrong.push(`${screen}: the question overflows`);
+      if (!asking.apart) wrong.push(`${screen}: she and the field fit one screen while one plays`);
       // The end of a round: the stage — brought into view, whole, under the header.
       await view.evaluate(`sessionStorage.setItem('${STORAGE_KEY}', ${JSON.stringify(at.stored)})`);
       await arrive(view);
@@ -2437,6 +2444,7 @@ async function runEngine(
         wrong.push(`${screen}: the stage is not whole on screen when the round ends`);
       }
       if (ended.overflow) wrong.push(`${screen}: the end of the round overflows`);
+      if (!ended.apart) wrong.push(`${screen}: she and the field fit one screen when a round ends`);
       // Her sheet: as large as the stage, and nothing wider than its window.
       await view.keyboard.press('Escape');
       await view.getByRole('button', { name: 'Sa fiche' }).click();
@@ -2462,7 +2470,14 @@ async function runEngine(
     );
     check(
       '…she is on screen, whole, when the first tile is; the stage is whole on screen when a round ends; nothing overflows',
-      wrong.filter((line) => !/px|70 %|too high/.test(line)).length === 0,
+      wrong.filter((line) => !/px|70 %|too high|the field/.test(line)).length === 0,
+      wrong.join(' | '),
+    );
+    // D19.9 (which makes D17.9 precise): she stays in the block of the game, and the field is a
+    // section of its own, one phone screen further down — whatever the screen of the game.
+    check(
+      '…and she is never whole on screen together with the field: it is one screen below the game',
+      wrong.filter((line) => /the field/.test(line)).length === 0,
       wrong.join(' | '),
     );
     console.log(`  ${name}: ${sizes.join(' · ')}`);
@@ -2871,6 +2886,7 @@ async function runEngine(
     for (const [label, path, also] of [
       ['a first visit', '/', ''],
       ['a first visit, on the block', '/#jeu', ''],
+      ['a first visit, on the section of the field', '/#chercher', ''],
       ['a flamingo comes back', '/', flamingo],
       ['a flamingo comes back, on the block', '/#jeu', flamingo],
     ] as const) {
@@ -2994,8 +3010,11 @@ async function runEngine(
       const page = await context.newPage();
       await page.goto(`${origin}/`);
       check(
-        'without script, the game is on the page, below the field',
-        (await page.locator('#jeu').count()) === 1,
+        'without script, the game is on the page, and opens it: above the section of the field',
+        (await page.locator('#jeu').count()) === 1 &&
+          (await page.evaluate<boolean>(
+            "document.querySelector('#jeu').getBoundingClientRect().bottom <= document.querySelector('#chercher').getBoundingClientRect().top",
+          )),
       );
       const words = (
         await page.locator('#game-static [data-programme="word"]').allTextContents()

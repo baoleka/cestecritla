@@ -218,17 +218,38 @@ if (form && input && status && results && heading && list && stringsNode) {
     });
   });
 
+  /**
+   * On the home page the field is one screen below the game (D19.1). A link that carries a query
+   * leads to its answer: the field comes to the top of the window — under the frame of the page,
+   * which `scroll-padding` keeps room for — and the results take the focus; with nothing found,
+   * the field does. Where the field is already at the top of its page, nothing moves.
+   */
+  const reach = (): void => {
+    form.scrollIntoView({ block: 'start' });
+    (results.hidden ? input : heading).focus({ preventScroll: true });
+  };
+
+  // « Chercher », in the frame of the home page: the section of the field comes to the top of
+  // the window and the field takes the focus — on a phone, that is what opens its keyboard. The
+  // link's own jump is done here, so that the address stays the bare one: without this script
+  // the link still leads to its section, as any link does.
+  document.querySelector('a.site-find')?.addEventListener('click', (event) => {
+    event.preventDefault();
+    (form.closest('section') ?? form).scrollIntoView({ block: 'start' });
+    input.focus({ preventScroll: true });
+  });
+
   window.addEventListener('hashchange', () => {
     const question = fromAddress();
     if (question === '' || question === clean(input.value)) return;
     input.value = question;
-    void searchNow(question);
+    void searchNow(question).then(reach);
   });
 
   const initial = fromAddress();
   if (initial !== '') {
     input.value = initial;
-    void searchNow(initial);
+    void searchNow(initial).then(reach);
   } else if (longEnough(clean(input.value))) {
     // …and may have typed: what is in the field is searched as if it had just been typed.
     void searchNow(clean(input.value));

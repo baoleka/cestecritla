@@ -24,6 +24,13 @@ interface Props {
    */
   verbatim?: boolean | undefined;
   /**
+   * Set by the home page when it shows the game: the word of the game is the first thing the
+   * first screen draws in Gowun Batang Bold (D19.1), so that one face is preloaded there — the
+   * promise the note above asks for. Nowhere else: no other first screen draws a bold glyph
+   * of that family.
+   */
+  word?: boolean | undefined;
+  /**
    * Keeps a page out of search indexes. The launch playbook opens indexing at J-3 and not
    * before (12-positionnement-lancement.md §9.4.3); until then nothing we serve should be found
    * by a search rather than by a link someone chose to send. Bridges for the addresses of the
@@ -39,6 +46,7 @@ const {
   title,
   description,
   verbatim = false,
+  word = false,
   noindex = false,
   home = false,
   toc = false,
@@ -115,6 +123,17 @@ const footer: readonly { href: string; label: string }[] = [
         />
       )
     }
+    {
+      word && (
+        <link
+          rel="preload"
+          href="/fonts/GowunBatang-Bold-latin.woff2"
+          as="font"
+          type="font/woff2"
+          crossorigin
+        />
+      )
+    }
     {/* What a page must run before its first paint (the home page's silence guard). */}
     <slot name="head" />
   </head>
@@ -124,9 +143,14 @@ const footer: readonly { href: string; label: string }[] = [
         The frame of every screen (D16.1): the name, « Site non officiel. » and the way to the
         table of contents stay in view at any scroll height — so that a screenshot taken anywhere
         on the page still says whose page it is not.
+
+        On the home page the game comes first (D19.1), and the one link of the frame leads to
+        what is below it: « Chercher », the section of the field. The table of contents is one
+        tap further, in that section and in the footer. Where no script runs there is no field
+        to lead to: the stylesheet shows the way to the table of contents instead (base.css).
       */
       !holding && (
-        <header class="site">
+        <header class:list={['site', home && 'site-home']}>
           <div class="site-bar">
             <div class="site-id">
               {home ? (
@@ -138,6 +162,11 @@ const footer: readonly { href: string; label: string }[] = [
               )}
               <p class="unofficial">{t('independence.unofficial')}</p>
             </div>
+            {home && (
+              <a class="site-find" href="#chercher">
+                {t('nav.search')}
+              </a>
+            )}
             <a class="site-toc" href="/sommaire/" aria-current={toc ? 'page' : null}>
               {t('nav.toc')}
             </a>
