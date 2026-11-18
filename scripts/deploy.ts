@@ -49,7 +49,7 @@ import {
   wranglerDeployArgs,
   type AskDeploy,
 } from './build-mode.js';
-import { launchBlockers, previewChatBlockers, readLaunchInputs } from './launch.js';
+import { homeBlockers, launchBlockers, previewChatBlockers, readLaunchInputs } from './launch.js';
 
 const [target, ...given] = process.argv.slice(2);
 if (target !== 'apex' && target !== 'preview') {
@@ -174,6 +174,7 @@ const refusal = deployRefusal(target, mode, pages, {
   workerProblems: workerProblems(),
   previewBlockers: previewChatBlockers(),
   distProblems: mode === 'app' ? distProblems(readDist('dist'), { gameFile, ask }) : [],
+  homeBlockers: homeBlockers(),
 });
 if (refusal !== null) {
   console.error(`deploy refused (${target}, ${mode} build): ${refusal}`);

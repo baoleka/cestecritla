@@ -84,6 +84,17 @@ export interface LaunchFile extends DatedGestures {
     reviewed_by?: 'editor' | 'session' | null;
     sha256: string | null;
   };
+  /**
+   * The home page that opens on the game (D19.1): written on main before production serves it
+   * (D19.12). `decided_on` and `decided_by` are the editor's word that production may take it;
+   * `serving` names the commit production is built from until then (`homeBlockers`).
+   */
+  home?: {
+    opens_on: 'game';
+    decided_on: string | null;
+    decided_by: 'editor' | null;
+    serving: string | null;
+  };
   note_fr: string;
 }
 
@@ -557,6 +568,50 @@ export function pendingReviews(): string[] {
   return out;
 }
 
+/**
+ * What stands between the code on main and production while the game-first redesign is being
+ * written (D19.1, D19.12) — empty once the editor has said yes, and dated it.
+ *
+ * One code path, not two generations side by side: main runs ahead of what production serves,
+ * and nothing but this rule keeps `npm run deploy` from putting an unfinished home page on the
+ * apex. It is NOT a launch blocker (`launchBlockers`): those also hold back the Worker of the
+ * chat (`chatDeployRefusal`), which must stay deployable, and they turn the apex back into a
+ * holding page — this one refuses app builds on the apex and nothing else (`deployRefusal`).
+ * The preview host, the holding page and a dry run are never concerned.
+ *
+ * Only the editor decides production: a record a session dated for him is refused like no
+ * record at all (scripts/launch.test.ts holds that his decision is written in decisions.md).
+ * Until then an urgent fix of production is built from the commit `serving` names — runbook
+ * sheet 14, docs/discovery/09-architecture.md.
+ *
+ * Pure: the record is passed in, so the rule is tested without a file.
+ */
+export function homeBlockersOf(record: unknown): string[] {
+  if (typeof record !== 'object' || record === null || Array.isArray(record)) {
+    return [
+      `${LAUNCH_PATH}: nothing says whether production may serve the home page of main: home (D19.12)`,
+    ];
+  }
+  if (field(record, 'opens_on') !== 'game') {
+    return [`${LAUNCH_PATH}: home.opens_on must say what the home page of main opens on: "game"`];
+  }
+  if (!isDate(field(record, 'decided_on')) || field(record, 'decided_by') !== 'editor') {
+    const serving = field(record, 'serving');
+    const from = typeof serving === 'string' && serving !== '' ? serving : 'the production tag';
+    return [
+      `${LAUNCH_PATH}: the editor has not said yes to the game-first home in production: ` +
+        `home.decided_on, home.decided_by (D19.12) — until then production is built from ${from}`,
+    ];
+  }
+  return [];
+}
+
+/** The same, read from the committed file. Never throws: an unreadable file blocks. */
+export function homeBlockers(root = '.'): string[] {
+  const at = (path: string): string => (root === '.' ? path : `${root}/${path}`);
+  return homeBlockersOf(field(readObject(at(LAUNCH_PATH)), 'home'));
+}
+
 export function readLaunchInputs(): LaunchInputs {
   return {
     launch: JSON.parse(readFileSync(LAUNCH_PATH, 'utf8')) as LaunchFile,
@@ -569,6 +624,14 @@ export function readLaunchInputs(): LaunchInputs {
 
 function main(): void {
   const blockers = launchBlockers(readLaunchInputs());
+  // Apart from the launch: what keeps the code of main from production for now (D19.12).
+  const home = homeBlockers();
+  if (blockers.length === 0 && home.length > 0) {
+    console.log('launch: nothing is missing — but production waits for the editor:');
+    for (const line of home) console.log(`  · ${line}`);
+    process.exitCode = 1;
+    return;
+  }
   if (blockers.length === 0) {
     console.log(
       'launch: nothing is missing — `npm run build && npm run deploy` puts the app on the apex',
@@ -580,6 +643,7 @@ function main(): void {
   console.log(`launch: ${String(rest.length)} thing(s) missing before the decision itself`);
   for (const line of rest) console.log(`  - ${line}`);
   for (const line of decision) console.log(`  · ${line}`);
+  for (const line of home) console.log(`  · ${line}`);
   process.exitCode = 1;
 }
 

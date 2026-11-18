@@ -237,3 +237,28 @@ npx tsx scripts/perf-probe.ts
   - tous les mouvements de la page sont comptés par les portes du jeu
     (`document.getAnimations()`), pas seulement ceux de la mascotte.
 - Aucun fichier de l'app n'est touché : la production et l'aperçu servent ce qu'ils servaient.
+
+### Lot 1, au 18 novembre 2026 (soir) — le garde-fou de déploiement
+
+- **La porte existe** : `data/launch.json` porte `home` (`opens_on`, `decided_on`, `decided_by`,
+  `serving`) ; `homeBlockers` (`scripts/launch.ts`) le lit, et `deployRefusal`
+  (`scripts/build-mode.ts`) refuse toute build de l'app sur l'apex tant que l'éditeur n'a pas
+  daté son « oui ». Elle n'est pas un blocage du lancement : ceux-là retiendraient aussi le
+  Worker des phrases et rendraient l'apex à la page d'attente.
+- **Ce qu'elle ne retient pas**, tenu par un test : la page d'attente (le retrait), l'aperçu, un
+  essai à blanc (la CI empaquette l'apex à chaque push), le Worker des phrases.
+- **Une session ne peut pas écrire le « oui » à sa place** : `decided_by: "session"` est refusé
+  comme une date absente, et un test exige que la décision de l'éditeur soit dans
+  `decisions.md`, à sa date, avant que le fichier puisse dire « editor ».
+- **`npx tsx scripts/launch.ts` répond désormais** « nothing is missing — but production waits
+  for the editor », avec la ligne de la porte, et sort en 1. La CI ne lance pas ce script.
+- **La voie de secours est répétée** (fiche 14 du runbook, `09-architecture.md` §9) : une copie
+  de travail à l'étiquette `prod-avant-jeu-dabord`, hors du dépôt, `node_modules` lié ; la build
+  y sort 1 156 fichiers, identiques un à un à ceux de `main` ce jour-là (eux-mêmes vérifiés en
+  ligne au lot 0) ; `scripts/launch.ts` y répond « nothing is missing » ; le déploiement à blanc
+  passe. VÉRIFIÉ jusque-là ; le déploiement réel depuis cette copie est PROBABLE — c'est le même
+  script, il n'a pas été joué.
+- **Écart au plan** : le plan disait la porte « sur le modèle de `mascotPrivacyBlockers` ». Elle
+  est écrite en deux fonctions, `homeBlockersOf` (pure, testée sans fichier) et `homeBlockers`
+  (qui lit le fichier).
+- Rien de servi n'a changé.

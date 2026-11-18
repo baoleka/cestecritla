@@ -63,6 +63,7 @@ const VALIDATED: DeployContext = {
   workerProblems: [],
   previewBlockers: [],
   distProblems: [],
+  homeBlockers: [],
 };
 
 interface Route {
@@ -993,4 +994,34 @@ void test('dist/ is read, whatever the marker says: no game without its list, no
 
 void test('a build is a scrutin build only when its marker says so', () => {
   assert.equal(readBuildScrutin('build/does-not-exist.json'), false);
+});
+
+void test('the apex takes no app build from main until the editor has dated his yes (D19.12)', () => {
+  const pages = ['index.html', 's/p1c1-s01/index.html'];
+  const waiting = ['data/launch.json: the editor has not said yes to the game-first home'];
+  // Everything else of the launch holds: only the home record stands in the way.
+  const held: DeployContext = { ...VALIDATED, launchBlockers: [], homeBlockers: waiting };
+  const refusal = String(deployRefusal('apex', 'app', pages, held));
+  assert.match(refusal, /production does not take the code of main yet \(D19\.12\)/);
+  assert.match(refusal, /the editor has not said yes/);
+  // …and it says where to go instead: the preview host, or the sheet of the urgent fix.
+  assert.match(refusal, /deploy:preview -- --bench/);
+  assert.match(refusal, /runbook sheet 14/);
+  // The scrutin build is an app build too: before his word it would carry the new home page.
+  assert.match(
+    String(deployRefusal('apex', 'app', pages, { ...held, scrutinBuild: true })),
+    /D19\.12/,
+  );
+  // What closes always may; the preview host is where the redesign is shown; a dry run sends
+  // nothing, and CI bundles the apex on every push.
+  assert.equal(deployRefusal('apex', 'holding', [...HOLDING_PAGES], held), null);
+  assert.equal(deployRefusal('preview', 'app', pages, held), null);
+  assert.equal(deployRefusal('apex', 'app', pages, { ...held, dryRun: true }), null);
+  // His word given, nothing of this rule is left.
+  assert.equal(deployRefusal('apex', 'app', pages, { ...held, homeBlockers: [] }), null);
+  // A launch that is not decided still speaks first: the holding page is what the apex takes.
+  assert.match(
+    String(deployRefusal('apex', 'app', pages, { ...held, launchBlockers: ['not decided'] })),
+    /holding page until the launch is decided/,
+  );
 });

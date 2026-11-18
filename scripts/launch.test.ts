@@ -21,6 +21,8 @@ import {
   artefactBlockers,
   canonicalHash,
   STRINGS_PATH,
+  homeBlockers,
+  homeBlockersOf,
   isChatPrivacyKey,
   launchBlockers,
   mascotBlockers,
@@ -76,6 +78,7 @@ const OPEN: DeployContext = {
   workerProblems: [],
   previewBlockers: [],
   distProblems: [],
+  homeBlockers: [],
 };
 
 void test('when everything is in place, nothing blocks the launch', () => {
@@ -647,4 +650,67 @@ void test('the preview host asks only once what comes before any question holds 
   rmSync(root, { recursive: true });
   // The committed file opens nothing: nothing is waited for.
   assert.deepEqual(previewChatBlockers(), []);
+});
+
+void test("production takes the home page of main only on the editor's dated word (D19.12)", () => {
+  const decided = {
+    opens_on: 'game',
+    decided_on: '2026-12-01',
+    decided_by: 'editor',
+    serving: 'abc1234',
+  };
+  assert.deepEqual(homeBlockersOf(decided), []);
+  // No record is not a yes: deleting the field must not open production.
+  for (const none of [undefined, null, 'yes', 42, []]) {
+    assert.match(String(homeBlockersOf(none)), /nothing says whether production may serve/);
+  }
+  assert.match(String(homeBlockersOf({ ...decided, opens_on: 'field' })), /home\.opens_on/);
+  // Not dated, dated by nobody, or dated by a session for him: all the same refusal, which
+  // names the commit production is built from meanwhile.
+  for (const record of [
+    { ...decided, decided_on: null },
+    { ...decided, decided_on: 'bientôt' },
+    { ...decided, decided_by: null },
+    { ...decided, decided_by: 'session' },
+    { opens_on: 'game' },
+  ]) {
+    const [line] = homeBlockersOf(record);
+    assert.match(String(line), /the editor has not said yes .* home\.decided_on, home\.decided_by/);
+    assert.match(String(line), /\(D19\.12\)/);
+  }
+  assert.match(String(homeBlockersOf({ ...decided, decided_by: null })), /built from abc1234/);
+  assert.match(
+    String(homeBlockersOf({ ...decided, decided_by: null, serving: null })),
+    /built from the production tag/,
+  );
+  // It is not one of the launch's own blockers: those also hold back the Worker of the chat.
+  assert.deepEqual(launchBlockers(READY), []);
+
+  // The committed file carries the record — and no answer a session would have invented: his
+  // decision is written where decisions are, on its day, as his.
+  const launch = JSON.parse(readFileSync(LAUNCH_PATH, 'utf8')) as LaunchFile;
+  assert.ok(launch.home !== undefined, `${LAUNCH_PATH}: home`);
+  assert.equal(launch.home.opens_on, 'game');
+  assert.ok(
+    typeof launch.home.serving === 'string' && /^[0-9a-f]{7,40}$/.test(launch.home.serving),
+    `${LAUNCH_PATH}: home.serving names the commit production is built from`,
+  );
+  if (launch.home.decided_by !== 'editor') {
+    assert.notDeepEqual(homeBlockers(), []);
+  } else {
+    const on = String(launch.home.decided_on);
+    const rows = readFileSync('docs/discovery/decisions.md', 'utf8').split('\n');
+    assert.ok(
+      rows.some(
+        (row) =>
+          /^\| D\d+\.\d+ \|/.test(row) &&
+          row.includes(`| ${on} |`) &&
+          /production/.test(row) &&
+          /jeu/.test(row) &&
+          /DÉCISION \(utilisateur\)/.test(row),
+      ),
+      `docs/discovery/decisions.md: no decision of the editor about production on ${on}`,
+    );
+    assert.deepEqual(homeBlockers(), []);
+  }
 });

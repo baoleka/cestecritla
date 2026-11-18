@@ -512,6 +512,11 @@ export interface DeployContext {
   previewBlockers: readonly string[];
   /** Where dist/ disagrees with the data it would go out under (`distProblems`). */
   distProblems: readonly string[];
+  /**
+   * What keeps the code of main from production while the game-first redesign is being written
+   * (scripts/launch.ts, `homeBlockers`, D19.12): empty once the editor has dated his yes.
+   */
+  homeBlockers: readonly string[];
 }
 
 /** True when the build in dist/ was made with `--scrutin` (the build deployed before each window). */
@@ -572,6 +577,20 @@ export function deployRefusal(
       'the apex serves the holding page until the launch is decided (D15.15): ' +
       'run `npm run build:holding` first, or deploy the app with `npm run deploy:preview`. ' +
       `Before the app can go there — ${context.launchBlockers.join(' · ')}`
+    );
+  }
+  // The game-first home (D19.1) is written on main before production serves it — one code path,
+  // no second generation (D19.12). Until the editor's dated word the apex takes no app build
+  // from here, whatever it holds: an urgent fix of production is built from the commit that
+  // production serves (runbook sheet 14). What closes always may: the holding page is not an
+  // app build. The preview host is where the redesign is shown first, and a dry run sends
+  // nothing — CI bundles the apex on every push.
+  if (target === 'apex' && mode === 'app' && !context.dryRun && context.homeBlockers.length > 0) {
+    return (
+      'production does not take the code of main yet (D19.12): ' +
+      `${context.homeBlockers.join(' · ')}. ` +
+      'Show it on the preview host with `npm run build:preview && npm run deploy:preview -- --bench`; ' +
+      'for an urgent fix of production, runbook sheet 14 (docs/discovery/09-architecture.md)'
     );
   }
   // L49 (D16.16): inside a window, and from the day before, nothing that OPENS is deployed.
