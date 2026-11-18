@@ -34,12 +34,24 @@
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { gzipSync } from 'node:zlib';
 import { MAX_GIST_CHARS } from '../src/lib/chat-contract.js';
+import { gameWords } from '../src/lib/game-data.js';
+import {
+  GAME_GISTS_PATH,
+  depositOf,
+  gameGistsFingerprint,
+  readGameGists,
+  type GameGistsFile,
+} from '../src/lib/game-gists.js';
+import { wordsFingerprint } from '../src/lib/word-links.js';
 import type { Manifest, PrivateCorpus } from './aec26-types.js';
 import { LocalD1 } from './d1-local.js';
 import {
+  ASK_CONFIG_PATH,
   DAY,
   controlGist,
+  gameGistsFrom,
   lastVerdicts,
   measuresOf,
   pinned,
@@ -414,17 +426,31 @@ function leakIndexOf(corpus: PrivateCorpus): LeakIndex {
  * loads the SQL into SQLite and checks it there. With `check`, nothing is written. Returns the
  * file to send — or null, with the exit code that says why. Nothing is ever sent from here.
  */
-export function prepareGists(check: boolean): { code: number; file: string | null } {
+interface Standing {
+  corpus: PrivateCorpus;
+  manifest: Manifest;
+  version: string;
+  measures: Measure[];
+  minOverlap: number;
+  texts: Map<string, string>;
+  set: ReturnType<typeof validated>;
+}
+
+/**
+ * What `--gists` and `--game` both start from: the verdicts of this machine, as they stand on
+ * the book as published today — or null, with the reason said, where the book is not.
+ */
+function standing(): Standing | null {
   if (!existsSync(PRIVATE_CORPUS_PATH)) {
     console.error(`seed: ${PRIVATE_CORPUS_PATH} is not on this machine`);
-    return { code: 1, file: null };
+    return null;
   }
   const corpus = readPrivateCorpus();
   const manifest = JSON.parse(readFileSync(MANIFEST_PATH, 'utf8')) as Manifest;
   const version = manifest.meta.corpus_version;
   if (corpus.meta.corpus_version !== version) {
     console.error('seed: the text on this machine is not at the corpus version of the manifest');
-    return { code: 1, file: null };
+    return null;
   }
   const measures = measuresOf(manifest);
   const minOverlap = readMinOverlap();
@@ -432,6 +458,13 @@ export function prepareGists(check: boolean): { code: number; file: string | nul
   // A verdict that no longer holds leaves its measure out, and only it: what still stands is
   // deposited while the rest waits to be read again (`npm run gists -- --serve` shows it).
   const set = validated(measures, lastVerdicts(readVerdicts()), recheckWith(texts, minOverlap));
+  return { corpus, manifest, version, measures, minOverlap, texts, set };
+}
+
+export function prepareGists(check: boolean): { code: number; file: string | null } {
+  const found = standing();
+  if (found === null) return { code: 1, file: null };
+  const { corpus, manifest, version, measures, minOverlap, texts, set } = found;
   console.log(
     `sentences of corpus ${version}: ${String(set.rows.length)} read and kept, ` +
       `${String(set.linkOnly)} link only, ${String(set.waiting)} without a verdict, of ` +
@@ -481,6 +514,147 @@ export function prepareGists(check: boolean): { code: number; file: string | nul
   writeFileSync(file, sql);
   console.log(`written: ${file} (private, never committed)`);
   return { code: 0, file };
+}
+
+// ---------------------------------------------------------------------------------------------
+// The sentences of the game (D19.2; docs/discovery/PLAN-JEU-DABORD.md, lot 4)
+// ---------------------------------------------------------------------------------------------
+
+/** A word as a sentence may hold it: lower case, no accent — and its stem, short of an ending. */
+const folded = (text: string): string =>
+  text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+
+/** True when the sentence writes the word, in the singular or the plural. A count, not a gate. */
+function writesWord(sentence: string, word: string): boolean {
+  const stem = folded(word).replace(/(?:s|x)$/, '');
+  return new RegExp(`(?<![a-z])${stem.replace(/[^a-z]/g, '.')}(?:s|x|aux)?(?![a-z])`).test(
+    folded(sentence),
+  );
+}
+
+/**
+ * `--game`: the file of the game's sentences, data/2026/game-gists.json — the sentences of the
+ * DEPOSIT, for the measures the words of the game are pinned to, and nothing else.
+ *
+ * It refuses unless what this machine would deposit today is, fingerprint for fingerprint, what
+ * data/2026/ask.json says was deposited: the game shows the sentences « Demander » serves, not
+ * a later state of them. Every sentence passes here the checks of a deposit — its pin, the
+ * control of today, no run of the book — before the file is written.
+ *
+ * The file is written and NOT added to the repository: its first push is the editor's accord,
+ * given at that moment on the numbers this prints (CLAUDE.md). An accord already written in the
+ * file is kept only if the sentences are, to the byte, the ones it was given on.
+ *
+ * Identifiers and numbers only: never a sentence, never a word of a measure.
+ */
+export function prepareGameGists(check: boolean, linkOnly: readonly string[] = []): number {
+  const found = standing();
+  if (found === null) return 1;
+  const { corpus, manifest, version, minOverlap, texts, set } = found;
+  const ask = JSON.parse(readFileSync(ASK_CONFIG_PATH, 'utf8')) as Record<string, unknown>;
+  const deposit = depositOf(ask);
+  const here = gistsFingerprint(set.rows);
+  if (deposit === null || here !== deposit) {
+    console.error(
+      'game: the sentences this machine holds are not those of the deposit ' +
+        `(${here.slice(0, 12)}… here, ${String(deposit).slice(0, 12)}… in ${ASK_CONFIG_PATH}): ` +
+        'the game shows the sentences the site serves — deposit first, or read again',
+    );
+    return 1;
+  }
+  const words = gameWords().words;
+  // Words whose card keeps its link alone, on purpose (`--link-only`): a sentence that is
+  // faithful and still should not stand under a game word — the editor's call, word by word.
+  const unknown = linkOnly.filter((id) => !words.some((word) => word.id === id));
+  if (unknown.length > 0) {
+    console.error(`game: --link-only names no word of the list: ${unknown.join(', ')}`);
+    return 1;
+  }
+  const draft = gameGistsFrom(
+    set.rows,
+    words.filter((word) => !linkOnly.includes(word.id)),
+  );
+  const problems = gistProblems(
+    set.rows.filter((row) => draft.gists.some((gist) => gist.id === row.id)),
+    manifest,
+    { minOverlap, texts, leaks: leakIndexOf(corpus) },
+  );
+  for (const id of draft.moved)
+    problems.push(`${id}: its measure moved since its sentence was read`);
+  for (const problem of problems) console.error(`  ✖ ${problem}`);
+  if (problems.length > 0) return 1;
+
+  const sha256 = gameGistsFingerprint(draft.gists);
+  const before = readGameGists();
+  const kept =
+    before !== null && before.meta.sha256 === sha256 && before.meta.validated.sha256 === sha256
+      ? before.meta.validated
+      : { on: null, by: null, sha256: null };
+  const file: GameGistsFile = {
+    meta: {
+      title: 'Les phrases du jeu « Où est-ce écrit ? » — édition 2026',
+      corpus_version: version,
+      words_sha256: wordsFingerprint(words),
+      deposit_sha256: deposit,
+      written_by: 'session',
+      read_by_a_person: false,
+      sha256,
+      validated: kept,
+      ...(linkOnly.length === 0 ? {} : { link_only: [...linkOnly].sort() }),
+      note_fr:
+        'Une phrase par mot du jeu : celle de la mesure où le mot est épinglé, telle que déposée ' +
+        'dans la base privée (D16.49) et servie par « Demander ». Ce sont nos mots — écrits et ' +
+        'vérifiés par une IA, lus par aucune personne une à une — jamais des extraits du livre. ' +
+        'Seules ces phrases-là sont publiées en fichier (D19.2) ; les autres restent dans la base. ' +
+        'Fichier écrit par « npm run gists -- --game », jamais à la main : une phrase changée ' +
+        'ici ne serait plus celle du dépôt, et la build ne la montrerait pas. « validated » est ' +
+        "l'accord de l'éditeur pour publier ce fichier tel qu'il est : une session ne l'écrit " +
+        'jamais sans un mot daté de lui (decisions.md). « link_only », quand il existe, nomme ' +
+        'les mots dont la carte garde son lien seul, par choix : leur phrase reste dans la base.',
+    },
+    gists: draft.gists,
+  };
+  const text = `${JSON.stringify(file, null, 2)}\n`;
+  const holding = draft.gists.filter((gist) => {
+    const word = words.find((entry) => entry.pin.id === gist.id);
+    return word !== undefined && writesWord(gist.text, word.word);
+  }).length;
+  const lengths = draft.gists.map((gist) => gist.text.length);
+  console.log(
+    `sentences of the game, corpus ${version}: ${String(draft.gists.length)} for ` +
+      `${String(words.length)} words (${String(draft.without.length)} word(s) whose measure has ` +
+      `none, ${String(linkOnly.length)} left to their link on purpose) — ` +
+      `${String(set.rows.length)} in the deposit`,
+  );
+  if (linkOnly.length > 0)
+    console.log(`  link alone, on purpose: ${[...linkOnly].sort().join(', ')}`);
+  if (draft.without.length > 0)
+    console.log(`  no sentence, link alone: ${draft.without.join(', ')}`);
+  console.log(
+    `  ${String(lengths.reduce((a, b) => a + b, 0))} characters in all, ` +
+      `${String(Math.max(0, ...lengths))} for the longest (${String(MAX_GIST_CHARS)} allowed), ` +
+      `${String(gzipSync(Buffer.from(draft.gists.map((g) => g.text).join('\n')), { level: 9 }).length)} ` +
+      'bytes gzip',
+  );
+  console.log(
+    `  ${String(holding)} of ${String(draft.gists.length)} write the word of their card ` +
+      '(the others say the measure without it: the link shows the word in the book)',
+  );
+  console.log(`  fingerprint ${sha256}`);
+  console.log(
+    kept.on === null
+      ? '  not agreed for publication yet: meta.validated is empty'
+      : `  agreed for publication on ${kept.on}, on this very content`,
+  );
+  if (check) return 0;
+  writeFileSync(GAME_GISTS_PATH, text);
+  console.log(
+    `written: ${GAME_GISTS_PATH} — NOT added to the repository: its push is the editor's`,
+  );
+  return 0;
 }
 
 // ---------------------------------------------------------------------------------------------

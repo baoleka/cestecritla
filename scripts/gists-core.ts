@@ -497,3 +497,54 @@ export function validated(
   }
   return out;
 }
+
+// ---------------------------------------------------------------------------------------------
+// The sentences of the game (D19.2; docs/discovery/PLAN-JEU-DABORD.md, lot 4)
+// ---------------------------------------------------------------------------------------------
+
+/** One sentence of the game, as data/2026/game-gists.json holds it (src/lib/game-gists.ts). */
+export interface GameGistRow {
+  id: string;
+  sha256: string;
+  lead_sha256?: string;
+  text: string;
+}
+
+export interface GameGistsDraft {
+  /** In the order of the list: one sentence per word whose measure has one. */
+  gists: GameGistRow[];
+  /** Words whose measure has no sentence in the deposit (« link only »): their card keeps its link. */
+  without: string[];
+  /** Words whose measure is not the one the deposit's sentence was read against. */
+  moved: string[];
+}
+
+/**
+ * The sentences of the game: those of the deposit — as they are, not a character changed — for
+ * the measures the words of the list are pinned to. Pure: rows in, rows out. A word whose
+ * measure has no sentence gets none; a sentence read against another state of its measure is
+ * left out and named, like everywhere else.
+ */
+export function gameGistsFrom(
+  rows: readonly GistRow[],
+  words: readonly { id: string; pin: { id: string; sha256: string } }[],
+): GameGistsDraft {
+  const byMeasure = new Map(rows.map((row) => [row.id, row]));
+  const out: GameGistsDraft = { gists: [], without: [], moved: [] };
+  const taken = new Set<string>();
+  for (const word of words) {
+    const row = byMeasure.get(word.pin.id);
+    if (row === undefined) out.without.push(word.id);
+    else if (row.measure_sha256 !== word.pin.sha256) out.moved.push(word.id);
+    else if (!taken.has(row.id)) {
+      taken.add(row.id);
+      out.gists.push({
+        id: row.id,
+        sha256: row.measure_sha256,
+        ...(row.lead_sha256 === undefined ? {} : { lead_sha256: row.lead_sha256 }),
+        text: row.text,
+      });
+    }
+  }
+  return out;
+}

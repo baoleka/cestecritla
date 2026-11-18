@@ -46,9 +46,16 @@ https://beta.cestecritla.fr/*
 
 # The search index and its titles carry the corpus version in their name (D15.7): a new state of
 # the book gets new files, so these can be frozen too.
+#
+# Never indexed (D19.6): these are the files pages download, not pages. Since 18 November 2026
+# the file of the game may hold OUR sentences about measures — written and checked by an AI,
+# labelled as such on the card that shows them. Read alone by a search engine they would be an
+# AI's sentences about a programme with no label next to them: so no engine is given them.
+# (On the preview host this header leaves twice, « noindex, noindex » — the same word.)
 /data/*
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
+  X-Robots-Tag: noindex
 
 # Share previews are versioned by corpus_version in their path (D13.2), so a re-crawl changes
 # the URL rather than the bytes: a permanent link never breaks and caches renew on their own.

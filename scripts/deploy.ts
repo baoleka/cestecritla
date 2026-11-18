@@ -27,7 +27,8 @@
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
-import { buildGame, gameSite } from '../src/lib/game-data.js';
+import { buildGame, gameSite, gameSources, gameWords, wordLinks } from '../src/lib/game-data.js';
+import { gameGists } from '../src/lib/game-gists.js';
 import {
   chatDeployArgs,
   chatDeployRefusal,
@@ -162,8 +163,22 @@ const pages = htmlPages('dist');
 // What a build of today would publish of the game: its one file, or nothing — while the editor
 // has not validated the list as it stands, and in the build served during a silence window.
 const scrutinBuild = readBuildScrutin();
+// …with the sentences a build made for THIS host may show (D19.5: they follow the host's mode —
+// src/lib/game-gists.ts): the name computed here is then the name of the file that build holds.
 const gameFile =
-  mode === 'app' && !scrutinBuild && gameSite().on ? `jeu-${buildGame().fingerprint}.json` : null;
+  mode === 'app' && !scrutinBuild && gameSite().on
+    ? `jeu-${
+        buildGame(
+          gameWords(),
+          gameSources(),
+          wordLinks(),
+          gameGists(gameWords().words, gameSources().manifest.meta.corpus_version, {
+            mode: hostAsk === 'off' ? 'off' : 'chat',
+            test: false,
+          }),
+        ).fingerprint
+      }.json`
+    : null;
 const refusal = deployRefusal(target, mode, pages, {
   policyValidated: citationPolicyValidated(),
   dryRun: passthrough.includes('--dry-run'),

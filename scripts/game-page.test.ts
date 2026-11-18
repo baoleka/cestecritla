@@ -29,8 +29,10 @@ import {
   gameSite,
   gameSources,
   gameWords,
+  wordLinks,
   wordsNotReady,
 } from '../src/lib/game-data.js';
+import { gameGists, readGameGists } from '../src/lib/game-gists.js';
 import { wordFragment } from '../src/lib/word-links.js';
 import { ROUND, type GameData } from '../src/lib/game-engine.js';
 import { KEPT_FIELDS2, STORAGE_KEY, TAB_FIELDS2 } from '../src/lib/game-state2.js';
@@ -228,12 +230,40 @@ for (const root of ['dist', 'dist-ask']) {
     `${root}: every word shown is a proven word of the list, where it is declared`,
     { skip: !shows },
     () => {
-      const { data, fingerprint } = buildGame();
+      // The sentences THIS build may show (D19.2, D19.5): those of the mode it was built for —
+      // and, in dist/, only on the editor's dated word; the test build pretends that word.
+      const gists = gameGists(
+        gameWords().words,
+        gameSources().manifest.meta.corpus_version,
+        root === 'dist' ? { mode: builtAskMode(), test: false } : { mode: 'chat', test: true },
+      );
+      const { data, fingerprint } = buildGame(gameWords(), gameSources(), wordLinks(), gists);
       const name = gameFile(root);
       // The file is the list, proven, under the name of its own fingerprint: never stale bytes.
       assert.equal(name, `jeu-${fingerprint}.json`);
       const published = JSON.parse(readFileSync(join(root, 'data', name), 'utf8')) as GameData;
       assert.deepEqual(published, data);
+      // A sentence is in the file of the game and NOWHERE in the HTML (D19.6): the round
+      // without script keeps the card of before, and no page a search engine reads carries a
+      // sentence of an AI. Read as a page would print it — typographic apostrophe, entities.
+      const sentences = (readGameGists()?.gists ?? []).flatMap((gist) => [
+        gist.text,
+        printed(gist.text),
+        printed(gist.text).replace(/’/g, '&#39;'),
+      ]);
+      for (const page of pages(root)) {
+        const html = readFileSync(join(root, page), 'utf8');
+        const found = sentences.find((sentence) => html.includes(sentence));
+        assert.equal(found === undefined, true, `${page}: a sentence of the game in the HTML`);
+      }
+      // …and where there are some, each is the file's, on the card of the word pinned to its
+      // measure — never a sentence from anywhere else.
+      const fileOf = new Map((readGameGists()?.gists ?? []).map((gist) => [gist.id, gist.text]));
+      for (const word of published.words) {
+        const pin = gameWords().words.find((entry) => entry.id === word.id)?.pin.id ?? '';
+        if (word.gist !== undefined) assert.equal(word.gist, fileOf.get(pin), word.id);
+        else assert.ok(gists === null || !gists.has(pin), `${word.id}: its sentence is missing`);
+      }
 
       // On the pages: the first round on the home page, and not a word anywhere else.
       const first = data.words.slice(0, ROUND).map((w) => w.word);
@@ -305,6 +335,8 @@ for (const root of ['dist', 'dist-ask']) {
       const { manifest } = gameSources();
       const known = new Set<string>([
         manifest.meta.corpus_version,
+        // Our sentences, where this build may show them: a public file holds them (D19.2).
+        ...(gists === null ? [] : gists.values()),
         ...gameWords().words.flatMap((w) => [w.id, w.word]),
         ...manifest.parts.map((p) => p.title),
         ...manifest.chapters.flatMap((c) => [c.id, c.title]),

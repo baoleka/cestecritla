@@ -6,7 +6,9 @@
  *                                the label and the link locator of each proposition, and the
  *                                rationed incipit of the key measures. Plus our synonyms.
  *   /data/jeu-<fingerprint>.json the game: its words, where each is written, and the titles
- *                                of the tiles — only in a build that shows the game.
+ *                                of the tiles — only in a build that shows the game. Where the
+ *                                site asks questions, also OUR sentence for the measure of each
+ *                                word (D19.2: src/lib/game-gists.ts) — ours, never the book's.
  *   /data/clair-<fingerprint>.json  « En clair »: our cards and our answers to objections, the
  *                                texts a person re-read — only in a build whose field asks
  *                                (src/lib/chat-data.ts). Fetched with the sheet, never with
@@ -29,13 +31,14 @@ import {
 } from '../../lib/edition.ts';
 import { askSite } from '../../lib/ask-config.ts';
 import { chatPlain } from '../../lib/chat-data.ts';
-import { buildGame, gameSite } from '../../lib/game-data.ts';
+import { builtGame } from '../../lib/game-built.ts';
+import { gameSite } from '../../lib/game-data.ts';
 import { t } from '../../lib/strings.ts';
 
 const version = manifest().meta.corpus_version;
 
 /** The game's data exists only in a build that shows the game (src/lib/game-data.ts). */
-const game = gameSite().on ? buildGame() : null;
+const game = gameSite().on ? builtGame() : null;
 /** The texts of « En clair » exist only in a build whose field opens the sheet. */
 const plain = askSite().mode === 'chat' ? chatPlain() : null;
 

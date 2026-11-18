@@ -114,11 +114,22 @@ void test('the preview host is never indexed, and the rule cannot reach the apex
   );
   assert.equal(preview[0]?.set.get('x-robots-tag'), 'noindex');
   // The apex must stay indexable once the app is live: no relative rule may carry noindex,
-  // except the Worker's own /api/ prefix.
+  // except the Worker's own /api/ prefix — and /data/, the files pages download, which are
+  // not pages and may hold our sentences about measures (D19.6): read alone they would be an
+  // AI's sentences with no label beside them.
+  const NOT_PAGES = ['/api/*', '/data/*'];
   const relativeNoindex = rules.filter(
-    (r) => !r.path.startsWith('https://') && r.set.has('x-robots-tag') && r.path !== '/api/*',
+    (r) =>
+      !r.path.startsWith('https://') && r.set.has('x-robots-tag') && !NOT_PAGES.includes(r.path),
   );
   assert.deepEqual(relativeNoindex, []);
+  for (const path of NOT_PAGES) {
+    assert.equal(
+      rules.find((r) => r.path === path)?.set.get('x-robots-tag'),
+      'noindex',
+      `${path} is handed to search engines`,
+    );
+  }
 });
 
 void test('the file stays within the documented limits (100 rules, 2 000 characters a line)', () => {

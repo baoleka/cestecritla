@@ -25,6 +25,13 @@
  *   npm run gists -- --sql [--check]
  *       the file of the deposit, built by the `--gists` logic of scripts/seed-ask-2026.ts —
  *       which alone sends it, with the editor's accord
+ *   npm run gists -- --game [--check] [--link-only w037,…]
+ *       the sentences of the GAME (D19.2): data/2026/game-gists.json — the sentences of the
+ *       deposit for the measures the words of the game are pinned to, and nothing else. It
+ *       refuses unless what this machine holds is what data/2026/ask.json says was deposited.
+ *       The file is written, never added to the repository: its push is the editor's accord.
+ *       `--link-only` leaves the card of these words with its link alone — a faithful sentence
+ *       that should still not stand under a game word; the file names them
  *
  * Exit codes: 0 done (or the budget of the session reached); 1 something is wrong and nothing
  * more was asked; 2 a command line this tool does not read; 3 the free allowance is spent —
@@ -79,7 +86,7 @@ import {
   type VerdictLine,
 } from './gists-core.js';
 import { PRIVATE_CORPUS_PATH } from './ingest-2026.js';
-import { prepareGists, readPrivateCorpus, seedRows } from './seed-ask-2026.js';
+import { prepareGameGists, prepareGists, readPrivateCorpus, seedRows } from './seed-ask-2026.js';
 
 const MANIFEST_PATH = 'data/2026/manifest.json';
 const BENCH_URL = 'https://beta.cestecritla.fr/api/bench';
@@ -1691,6 +1698,13 @@ async function main(args: readonly string[]): Promise<number> {
   };
 
   if (has('--sql')) return prepareGists(has('--check')).code;
+  if (has('--game')) {
+    const named = value('--link-only');
+    if (named !== undefined && !/^w\d{3}(?:,w\d{3})*$/.test(named)) {
+      throw new UsageError('--link-only takes word ids of the game: w037 or w037,w012');
+    }
+    return prepareGameGists(has('--check'), named === undefined ? [] : named.split(','));
+  }
 
   const manifest = JSON.parse(readFileSync(MANIFEST_PATH, 'utf8')) as Manifest;
   const corpus = manifest.meta.corpus_version;
@@ -1879,7 +1893,7 @@ async function main(args: readonly string[]): Promise<number> {
     return 0;
   }
 
-  throw new UsageError('one of --status, --write, --serve, --take, --sql');
+  throw new UsageError('one of --status, --write, --serve, --take, --sql, --game');
 }
 
 if (process.argv[1] !== undefined && /gists-2026\.ts$/.test(process.argv[1])) {

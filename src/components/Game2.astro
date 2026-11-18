@@ -30,11 +30,11 @@ import '../styles/game.css';
 import '../styles/game2.css';
 import Mascot2 from './Mascot2.astro';
 import { pausedKey } from '../lib/ask-config.ts';
-import { buildGame } from '../lib/game-data.ts';
+import { builtGame } from '../lib/game-built.ts';
 import { ROUND, isLongWord, locate, otherParts } from '../lib/game-engine.ts';
 import { safeJson, t } from '../lib/strings.ts';
 
-const { data, fingerprint } = buildGame();
+const { data, fingerprint } = builtGame();
 
 const round = data.words.slice(0, ROUND);
 

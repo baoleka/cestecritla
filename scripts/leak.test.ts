@@ -153,9 +153,18 @@ const EDITORIAL = new Set(['riposte.json', 'glossary.json', 'synonyms.json', 'te
 /** Keys allowed to hold more than eight words in the generated files. */
 const LONG_OK = new Set(['title', 'id_scheme', 'hash_rule', 'note_fr', 'attribution']);
 
+/**
+ * The sentences of the game (D19.2): the one file of data/2026 that holds sentences ABOUT
+ * measures of the book — our words, published for the words of the game and for them only. It
+ * is not waved through with the editorial files, whose invariant is « nothing of the book in
+ * it »: it has a rule of its own, right below, and the content gate reads it like any other
+ * file where the private corpus is — tracked or not.
+ */
+const GAME_SENTENCES = 'game-gists.json';
+
 void test('structure: no generated file of data/2026 has room for a sentence', () => {
   for (const name of readdirSync('data/2026').filter((f) => f.endsWith('.json'))) {
-    if (EDITORIAL.has(name)) continue;
+    if (EDITORIAL.has(name) || name === GAME_SENTENCES) continue;
     const walk = (value: unknown, path: string, key: string): void => {
       if (typeof value === 'string') {
         const words = value.split(/\s+/).filter((w) => w !== '').length;
@@ -186,6 +195,47 @@ void test('structure: no generated file of data/2026 has room for a sentence', (
     walk(json(join('data/2026', name)), name, '');
   }
 });
+
+void test(
+  'structure: the file of the game’s sentences holds one line per word of the game, and nothing else that is long',
+  {
+    skip:
+      !existsSync(join('data/2026', GAME_SENTENCES)) &&
+      'the sentences of the game are not on this machine yet (the editor’s go)',
+  },
+  () => {
+    const file = json(join('data/2026', GAME_SENTENCES)) as {
+      meta: Record<string, unknown>;
+      gists: Record<string, unknown>[];
+    };
+    const words = (
+      json('data/2026/game-words.json') as { words: { pin: { id: string } }[] }
+    ).words.map((word) => word.pin.id);
+    // Two keys, and no room anywhere else: a third would be a place to put text.
+    assert.deepEqual(Object.keys(file).sort(), ['gists', 'meta']);
+    assert.ok(file.gists.length <= words.length, 'more sentences than the game has words');
+    for (const gist of file.gists) {
+      const keys = Object.keys(gist).sort();
+      assert.ok(
+        keys.join() === 'id,sha256,text' || keys.join() === 'id,lead_sha256,sha256,text',
+        `a sentence with other fields: ${keys.join()}`,
+      );
+      assert.ok(
+        words.includes(String(gist['id'])),
+        `${String(gist['id'])}: no word is pinned to it`,
+      );
+      // One sentence: what a card can hold, on one line.
+      const text = String(gist['text']);
+      assert.ok(text.length <= 300 && !/[\r\n]/.test(text), `${String(gist['id'])}: not one line`);
+    }
+    // In `meta`, our own notice and title may be long; nothing else may.
+    for (const [key, value] of Object.entries(file.meta)) {
+      if (typeof value !== 'string' || LONG_OK.has(key)) continue;
+      const count = value.split(/\s+/).filter((w) => w !== '').length;
+      assert.ok(count <= 8, `meta.${key} holds ${String(count)} words`);
+    }
+  },
+);
 
 // ---------------------------------------------------------------------------------------------
 // Content — only where the private corpus is
@@ -253,6 +303,9 @@ void test('content: nothing added since the freeze holds the 2026 text', { skip 
     ...git('diff', '--name-only', '-z', FREEZE).split('\0'),
     ...git('ls-files', '-o', '--exclude-standard', '-z').split('\0'),
   ]);
+  // The sentences of the game are written on this machine before they are tracked, and may be
+  // kept out of `git status` meanwhile: they are read here whatever git says of them.
+  changed.add(join('data/2026', GAME_SENTENCES));
   const candidates = [...changed].filter((f) => f !== '' && !BINARY.test(f) && existsSync(f));
   const built = walkDir('dist').filter((f) => !BINARY.test(f));
   const findings: string[] = [];

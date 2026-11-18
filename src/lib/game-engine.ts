@@ -48,9 +48,18 @@ export interface GameEntry {
   places: string[];
   /** Three parts the hint points at, the right one among them. */
   hint: number[];
+  /**
+   * The sentence written ahead for the measure the word is pinned to (D19.2) — OURS, written and
+   * checked by an AI, never the book's. Absent where the build may show none
+   * (src/lib/game-gists.ts): the card then says where, and gives the link, as before.
+   */
+  gist?: string;
 }
 
-/** /data/jeu-<fingerprint>.json: everything the game needs, and nothing of the book but titles. */
+/**
+ * /data/jeu-<fingerprint>.json: everything the game needs — and of the book, nothing but its
+ * titles and the words of the list. The sentences some builds add are ours.
+ */
 export interface GameData {
   corpus: string;
   /** What may be a tile: the parts, their chapters, their sections (rule 11 already applied). */

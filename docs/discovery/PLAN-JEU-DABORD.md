@@ -323,3 +323,58 @@ npx tsx scripts/perf-probe.ts
   désormais l'indice à la première profondeur (souris, clavier, mouvement réduit, deux onglets)
   et vérifie, à la deuxième, la partie donnée, ses chapitres en tuiles, l'absence d'indice.
 - Rien de servi n'a changé.
+
+### Lot 4, au 18 novembre 2026 (nuit) — les phrases du jeu : l'outil, le fichier en local, les portes
+
+- **L'éditeur a donné son accord pour la lecture** (D19.14, « Oui, lis-les ») : la session, elle
+  seule, lit dans `private/` les phrases du jeu et le texte de leurs mesures. Aucun sous-agent.
+- **L'export existe** : `npm run gists -- --game [--check] [--link-only w037,…]`
+  (`scripts/gists-2026.ts`, `prepareGameGists` dans `scripts/seed-ask-2026.ts`, constructeur pur
+  `gameGistsFrom` dans `scripts/gists-core.ts`). Il prend les phrases **du dépôt**, sans en
+  changer un caractère, pour les mesures où les mots du jeu sont épinglés. **Il refuse si ce que
+  la machine tient n'est pas, empreinte pour empreinte, ce que `data/2026/ask.json` dit déposé**
+  (`gists.sha256`) : le jeu montre les phrases que « Demander » sert. Chaque phrase repasse les
+  portes d'un dépôt — épingle, contrôle du jour, aucune suite de mots du livre. Il n'imprime que
+  des identifiants et des nombres.
+- **Le fichier est écrit en local, et n'est pas dans le dépôt** : `data/2026/game-gists.json`,
+  tenu hors de `git status` par `.git/info/exclude` jusqu'à l'accord du lot 9. La porte de
+  contenu (`scripts/leak.test.ts`) le lit quand même, quoi que git en dise.
+- **Mesuré** (VÉRIFIÉ sur cette machine) : 48 mots, 48 mesures qui ont chacune leur phrase dans
+  le dépôt ; 8 330 caractères en tout, 272 pour la plus longue (300 permis), 3 486 octets gzip ;
+  46 des 48 phrases écrivent le mot de leur carte, les deux autres disent la mesure avec un mot
+  voisin (w025, w037) — le lien montre le mot dans le livre.
+- **La session a relu les 48 phrases contre le texte de leur mesure**, manche par manche
+  (`private/tmp/game-read.mts`) : chiffres, négations, portée, phrase lue seule sous son mot.
+  **Aucune n'est infidèle** : les nombres des mesures y sont, aucune négation n'est retournée,
+  la portée que seul le titre de la section donnait est dite dans la phrase. Deux emploient un
+  verbe un peu plus net que leur mesure (w002, w014) : laissées telles que déposées — les changer
+  serait un nouveau dépôt. C'est la lecture d'une IA : PROBABLE, pas une lecture humaine.
+- **Une carte est proposée « à son lien seul »** : w037. Sa phrase est fidèle, mais ce qu'elle
+  dit de l'école — sous un jeu que cinq personas sur sept disent enfantin — est la capture
+  hostile la plus probable des 48. Le fichier de travail en tient donc 47 (empreinte
+  `932a7125…deaf86`, 8 070 caractères, 3 369 octets gzip) et nomme w037 dans `link_only`.
+  **C'est à l'éditeur de trancher, au moment du push** : 47 avec cette carte en lien seul, ou
+  les 48 (empreinte `8801dffd…79db23`).
+- **Le vocabulaire sensible de « Demander » ne refuse rien ici, il fait relire** : lu comme la
+  feuille lit une question, il signale quatre phrases sur 48 — w037, et trois faux positifs sans
+  personne à côté (w006, w015, w035). Ces listes jugent une question, pas une phrase : une
+  exclusion automatique aurait retiré trois phrases sans risque. La porte
+  (`scripts/game-gists.test.ts`) exige donc que toute phrase signalée soit nommée comme lue et
+  gardée, ou laissée à son lien — et tombe dans les deux sens.
+- **Quelle build montre les phrases** (`src/lib/game-gists.ts`, D19.5) : seulement là où le mode
+  du site est « chat », tant que la décision de campagne de l'éditeur est écrite, et si le
+  fichier est celui qu'il a accepté de publier (`meta.validated`). La règle de campagne est plus
+  stricte que celle du Worker avant le 1er janvier — un fichier ne s'arrête pas seul à une date —
+  et la même après : un test tient les deux ensemble. **Aujourd'hui `dist/` n'en montre aucune**
+  et son fichier du jeu porte le même nom qu'en production (`jeu-642ccb46…`) ; les builds
+  d'essai en montrent 47 (10 002 octets gzip pour 12 288).
+- **`/data/*` est servi « noindex »** (`public/_headers`, D19.6).
+- **Écarts au plan** : (1) le plan disait « aucune racine sensible » comme une porte qui refuse ;
+  c'est une porte de relecture, pour la raison ci-dessus. (2) `buildGame` ne lit pas le mode
+  lui-même : les pages passent par `src/lib/game-built.ts`, les scripts disent de quelle build
+  ils parlent — `src/lib/game-data.ts` est lu par les deux et ne peut pas importer la
+  configuration des pages. (3) `--link-only` n'était pas au plan.
+- **Portes** : 641 tests (dont la porte de contenu, 313 fichiers changés et 1 152 construits
+  lus) ; `e2e:game` 256 / 220 / 220 ; `e2e:ask` 109 / 102 / 102 ; `e2e:sheet` 102 / 96 / 96 ;
+  `e2e` 46 / 43 / 43 — tous verts.
+- Rien de servi n'a changé, et aucune phrase n'est dans le dépôt.

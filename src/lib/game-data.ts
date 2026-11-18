@@ -135,11 +135,20 @@ export interface BuiltGame {
   fingerprint: string;
 }
 
-/** The game of this state of the book, or an error that names every word that cannot be shown. */
+/**
+ * The game of this state of the book, or an error that names every word that cannot be shown.
+ *
+ * `gists`: the sentences THIS build may put on its cards, by measure (D19.2, D19.5:
+ * src/lib/game-gists.ts) — none by default. Whoever builds a page passes them
+ * (src/lib/game-built.ts); whoever looks at a build from outside it — scripts/deploy.ts, the
+ * gates — passes the sentences of that build, so that the file name computed here is the one
+ * it holds.
+ */
 export function buildGame(
   file: GameWordsFile = gameWords(),
   sources: GamePublicSources = gameSources(),
   links: unknown = wordLinks(),
+  gists: ReadonlyMap<string, string> | null = null,
 ): BuiltGame {
   const { proven, problems } = proveWords(file, sources);
   if (problems.length > 0) {
@@ -160,15 +169,22 @@ export function buildGame(
   const data: GameData = {
     corpus: sources.manifest.meta.corpus_version,
     parts: tiles(sources),
-    words: proven.map((word) => ({
-      id: word.id,
-      word: word.word,
-      section: word.sectionId,
-      url: urls.get(word.sectionId) ?? '',
-      fragment: wordFragment(locators.get(word.pin.id) ?? '', word.word, lit.has(word.id)),
-      places: word.sections,
-      hint: word.hint,
-    })),
+    words: proven.map((word) => {
+      const gist = gists?.get(word.pin.id);
+      return {
+        id: word.id,
+        word: word.word,
+        section: word.sectionId,
+        url: urls.get(word.sectionId) ?? '',
+        fragment: wordFragment(locators.get(word.pin.id) ?? '', word.word, lit.has(word.id)),
+        places: word.sections,
+        hint: word.hint,
+        // Added only where there is one: a build without sentences holds, byte for byte, the
+        // file it held before they existed — same content, same fingerprint, same name. (A key
+        // set to `undefined` would not do: the fingerprint writes it as null.)
+        ...(gist === undefined ? {} : { gist }),
+      };
+    }),
   };
   return { data, proven, fingerprint: canonicalHash(data).slice(0, 16) };
 }
