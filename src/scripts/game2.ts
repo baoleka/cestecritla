@@ -44,6 +44,7 @@ import {
   endOfRound,
   entryOf,
   foundNow,
+  givenFor,
   hintFor,
   isLongWord,
   judge,
@@ -332,7 +333,7 @@ function start(parts: Block, config: Config, data: GameData): void {
     // the end of it would say « trois mots » of fewer.
     play:
       memory.round === null || memory.round.words.length < Math.min(ROUND, data.words.length)
-        ? begin(draw(data, memory.seen, memory.seen.at(-1) ?? null))
+        ? begin(draw(data, memory.seen, memory.seen.at(-1) ?? null), memory.depth)
         : resume(memory.round.words, memory.round.at, memory.round.shown, memory.depth),
     declined: memory.declined,
   });
@@ -509,33 +510,44 @@ function start(parts: Block, config: Config, data: GameData): void {
 
   function renderAsk(wordId: string, word: string, focus: boolean): void {
     if (session.play.screen.kind !== 'ask') return;
-    const { ask, said } = session.play.screen;
+    const { ask } = session.play.screen;
     const panel = wordPanel(word);
-    if (said !== null) {
-      const told = el('p', sentence(wordId, said.ask, said.verdict), 'g-said');
+    // One question a word (D19.4): what stands above it is given — the part in a sentence, as
+    // the card would say it, then the official titles down to the list that is asked. Nothing
+    // here is about a choice: none was made.
+    const given = givenFor(data, wordId, ask);
+    if (given.length > 0) {
+      const told = el('p', sentence(wordId, 'part', null), 'g-said');
       told.id = 'game-the-said';
-      panel.append(told);
+      const titles = el('ul', undefined, 'g-given');
+      titles.id = 'game-the-given';
+      for (const title of given) titles.append(titled('li', title));
+      panel.append(told, titles);
     }
 
     const heading = el('h3', s.ask[ask], 'g-ask');
     // The focus lands on the question; the word is above it — and, at the chapter or the
-    // section, where the part was said to be. Who hears the question hears them with it.
+    // section, where the game says it is written. Who hears the question hears them with it.
     heading.id = 'game-the-ask';
     heading.setAttribute(
       'aria-labelledby',
-      ['game-the-word', ...(said === null ? [] : ['game-the-said']), 'game-the-ask'].join(' '),
+      [
+        'game-the-word',
+        ...(given.length === 0 ? [] : ['game-the-said', 'game-the-given']),
+        'game-the-ask',
+      ].join(' '),
     );
     const gestures = el('p', undefined, 'g-with');
     gestures.append(
       button(s.dontKnow, 'g-quiet', () => {
-        act(choose(data, session.play, session.depth, null));
+        act(choose(data, session.play, null));
       }),
     );
     const tiles = el('ul', undefined, 'g-tiles');
     for (const tile of tilesFor(data, wordId, ask)) {
       const item = el('li');
       const press = button('', 'g-tile', () => {
-        act(choose(data, session.play, session.depth, tile.id));
+        act(choose(data, session.play, tile.id));
       });
       press.dataset.tile = tile.id;
       press.append(titled('span', tile.title));
@@ -545,7 +557,7 @@ function start(parts: Block, config: Config, data: GameData): void {
     // The hint comes from her: she looks down at the tiles, then three of them say so in
     // words. No tile is ruled out. Less motion asked: the tiles are marked at once and the
     // sentence is said all the same; she does not move.
-    const hinted = hintFor(data, wordId, session.depth, ask);
+    const hinted = hintFor(data, wordId, ask);
     if (hinted.length > 0) {
       const hint = button(s.hint, 'g-quiet', () => {
         // The button leaves: a focus left on it goes to the question it was a help for.
@@ -610,7 +622,7 @@ function start(parts: Block, config: Config, data: GameData): void {
     actions.append(
       there,
       button(s.next, 'g-quiet', () => {
-        act(advance(session.play));
+        act(advance(session.play, session.depth));
       }),
     );
     card.append(actions);
@@ -647,7 +659,7 @@ function start(parts: Block, config: Config, data: GameData): void {
     const deeper = end.opened === null ? undefined : s.depth[String(end.opened)];
     if (deeper !== undefined) panel.append(el('p', deeper));
     const again = button(s.again, '', () => {
-      act(begin(draw(data, session.seen, last)));
+      act(begin(draw(data, session.seen, last), session.depth));
     });
     // « Garder ta tortue »: asked here, in the page, until answered — two gestures of the same
     // weight, and every consequence said before either. Nothing is on the phone before « Garder ».
@@ -1157,7 +1169,7 @@ function start(parts: Block, config: Config, data: GameData): void {
       // The word of the anchor heads a whole round: its end must be able to say « trois mots ».
       const words = [wordId, ...drawn.filter((id) => id !== wordId)];
       if (tile === undefined) {
-        session.play = { words, at: 0, screen: { kind: 'ask', ask: 'part', said: null } };
+        session.play = begin(words, 1);
       } else {
         const verdict = tile === '0' ? null : judge(data, wordId, 'part', tile);
         session.play = { words, at: 0, screen: { kind: 'place', ask: 'part', verdict } };

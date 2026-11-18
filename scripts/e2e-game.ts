@@ -1694,23 +1694,26 @@ async function runEngine(
 
     // Less motion asked: her sheet opens, and nothing starts.
     {
-      const calm = await visitor(resting(data, passageRound.get('12') ?? 2), {
-        ...phone,
-        reducedMotion: 'reduce',
-      });
-      const still = calm.view;
-      const as = lookOf({ state: 2, arcs: after(data, passageRound.get('12') ?? 2).standing.arcs });
-      await still.getByRole('button', { name: 'Un indice' }).click();
+      // The hint lives where the part is asked — the first depth (D19.4, D19.7).
+      const early = await visitor(resting(data, 1), { ...phone, reducedMotion: 'reduce' });
+      await early.view.getByRole('button', { name: 'Un indice' }).click();
       const hinted = {
-        marks: await still.locator('#game-live .g-mark').count(),
-        said: text(await still.locator('#game-status').textContent()),
-        pose: (await her(still))?.pose,
+        marks: await early.view.locator('#game-live .g-mark').count(),
+        said: text(await early.view.locator('#game-status').textContent()),
+        pose: (await her(early.view))?.pose,
       };
       check(
         'less motion: the hint marks its tiles at once and is said, and she does not move',
         hinted.marks === 3 && hinted.said.startsWith('Elle regarde') && hinted.pose === 'rest',
         JSON.stringify(hinted),
       );
+      await early.context.close();
+      const calm = await visitor(resting(data, passageRound.get('12') ?? 2), {
+        ...phone,
+        reducedMotion: 'reduce',
+      });
+      const still = calm.view;
+      const as = lookOf({ state: 2, arcs: after(data, passageRound.get('12') ?? 2).standing.arcs });
       await still.getByRole('button', { name: 'Ta tortue', exact: true }).click();
       const calmSheet = await sheetOf(still);
       check(
@@ -2161,20 +2164,10 @@ async function runEngine(
       await pocket.close();
     }
 
-    // The question is heard with its word — and, at the chapter, with where the part was said
-    // to be: the focus lands on the question, and the rest is above it.
+    // The question is heard with its word — and, at the chapter, with what the game gives above
+    // it (D19.4): the focus lands on the question, and the rest is above it.
     {
-      const { context, view } = await visitor(resting(data, 2));
-      await view.getByRole('button', { name: 'Un indice' }).focus();
-      await view.keyboard.press('Enter');
-      check(
-        'the hint pressed by a key: the focus goes to the question it helps with, not to the page',
-        await view.evaluate<boolean>(
-          "document.activeElement === document.querySelector('#game-live .g-ask')",
-        ),
-        await focusedName(view),
-      );
-      const named = async (): Promise<string[]> =>
+      const named = (view: Page): Promise<string[]> =>
         view.evaluate<string[]>(`(() => {
           const heading = document.querySelector('#game-live .g-ask');
           return (heading.getAttribute('aria-labelledby') ?? '').split(' ').map((id) => {
@@ -2182,24 +2175,41 @@ async function runEngine(
             return node === null ? '(missing ' + id + ')' : node.textContent.replace(/\\s+/g, ' ').trim();
           });
         })()`);
+      // The first depth: the part is asked, and the hint is there to be pressed by a key.
+      const early = await visitor(resting(data, 1));
+      await early.view.getByRole('button', { name: 'Un indice' }).focus();
+      await early.view.keyboard.press('Enter');
+      check(
+        'the hint pressed by a key: the focus goes to the question it helps with, not to the page',
+        await early.view.evaluate<boolean>(
+          "document.activeElement === document.querySelector('#game-live .g-ask')",
+        ),
+        await focusedName(early.view),
+      );
+      const atPart = await named(early.view);
+      await early.context.close();
+      // The second depth: the part is given — in a sentence, then by its official title — and
+      // the chapter is the one question.
+      const { context, view } = await visitor(resting(data, 2));
       const word = data.words[2 * ROUND];
       const place = word === undefined ? null : locate(data, word.section);
-      const atPart = await named();
-      await view
-        .locator(`#game-live .g-tile[data-tile="${String(place?.part.number ?? 0)}"]`)
-        .click();
-      const atChapter = await named();
+      const atChapter = await named(view);
       check(
-        'the question is named with its word, and at the chapter with where the part was said to be',
+        'the question is named with its word, and at the chapter with the part the game gives',
         JSON.stringify(atPart) ===
-          JSON.stringify([word?.word, 'Dans quelle partie est-il écrit ?']) &&
+          JSON.stringify([data.words[ROUND]?.word, 'Dans quelle partie est-il écrit ?']) &&
           JSON.stringify(atChapter) ===
             JSON.stringify([
               word?.word,
-              `Oui. C’est écrit dans la partie ${String(place?.part.number)}.`,
+              `C’est écrit dans la partie ${String(place?.part.number)}.`,
+              place?.part.title,
               'Dans quel chapitre ?',
             ]),
         `${atPart.join(' / ')} || ${atChapter.join(' / ')}`,
+      );
+      check(
+        '…and where the part is given there is no hint left to ask for',
+        (await view.getByRole('button', { name: 'Un indice' }).count()) === 0,
       );
       await context.close();
     }
@@ -2288,7 +2298,8 @@ async function runEngine(
     // marked all the same.
     {
       const pocket = await browser.newContext(phone);
-      await pocket.addInitScript(seedTab(resting(data, passageRound.get('12') ?? 2)));
+      // After the first round: the part is still what is asked, so the hint is there (D19.7).
+      await pocket.addInitScript(seedTab(resting(data, 1)));
       const one = await pocket.newPage();
       await arrive(one);
       await one.getByRole('button', { name: 'Ta tortue', exact: true }).click();
@@ -3434,6 +3445,37 @@ async function runEngine(
       JSON.stringify(back),
     );
 
+    // The hint is offered from the first words (D19.7): it comes from her — she looks at the
+    // tiles, then three of them say « par ici ». None is ruled out.
+    {
+      const word = data.words[ROUND];
+      const place = word === undefined ? null : locate(data, word.section);
+      if (word === undefined || place === null) throw new Error('no word in the second round');
+      await page.getByRole('button', { name: 'Un indice' }).click();
+      const looking = await her(page);
+      const before = await page.locator('#game-live .g-mark').count();
+      await until(page, "document.querySelectorAll('#game-live .g-mark').length === 3", 2000);
+      const marked = await page
+        .locator('#game-live .g-tile:has(.g-mark)')
+        .evaluateAll((tiles) => tiles.map((t) => (t as HTMLElement).dataset['tile'] ?? ''));
+      check(
+        'the hint: she looks at the tiles first, then three of them are marked — the right one among them, none ruled out',
+        looking?.pose === 'look' &&
+          before === 0 &&
+          JSON.stringify(marked) === JSON.stringify(word.hint.map(String)) &&
+          marked.includes(String(place.part.number)) &&
+          (await page.locator('#game-live .g-tile').count()) === data.parts.length,
+        `${String(looking?.pose)} ${String(before)} ${marked.join(',')}`,
+      );
+      check(
+        'the hint is said in words, once',
+        text(await page.locator('#game-status').textContent()).startsWith(
+          'Elle regarde du côté des parties',
+        ) && (await page.getByRole('button', { name: 'Un indice' }).count()) === 0,
+        text(await page.locator('#game-status').textContent()),
+      );
+    }
+
     // The depth: with every part that has a word found, the chapter is asked — and she changes.
     const deepAfter = [1, 2, 3].find(
       (rounds) =>
@@ -3452,8 +3494,9 @@ async function runEngine(
       }
       voice = await page.evaluate(OWN_VOICE);
       check(
-        'a word found in every part that has one: the game says it now asks the chapter',
-        voice.includes('Maintenant, le jeu demande aussi le chapitre.'),
+        'a word found in every part that has one: the game says it now gives the part and asks the chapter',
+        voice.includes(shown(says('game.depth.chapter'))) &&
+          /donne la partie et demande le chapitre/.test(voice),
         voice,
       );
       // « Passer »: the form she takes, at once, and its sentence.
@@ -3491,44 +3534,28 @@ async function runEngine(
       const word = data.words[deepAfter * ROUND];
       const place = word === undefined ? null : locate(data, word.section);
       if (word === undefined || place === null) throw new Error('no word after the depth opened');
-      // The hint comes from her: she looks at the tiles, then three of them say « par ici ».
-      await page.getByRole('button', { name: 'Un indice' }).click();
-      const looking = await her(page);
-      const before = await page.locator('#game-live .g-mark').count();
-      await until(page, "document.querySelectorAll('#game-live .g-mark').length === 3", 2000);
-      const marked = await page
-        .locator('#game-live .g-tile:has(.g-mark)')
-        .evaluateAll((tiles) => tiles.map((t) => (t as HTMLElement).dataset['tile'] ?? ''));
-      check(
-        'the hint: she looks at the tiles first, then three of them are marked — the right one among them, none ruled out',
-        looking?.pose === 'look' &&
-          before === 0 &&
-          JSON.stringify(marked) === JSON.stringify(word.hint.map(String)) &&
-          marked.includes(String(place.part.number)) &&
-          (await page.locator('#game-live .g-tile').count()) === data.parts.length,
-        `${String(looking?.pose)} ${String(before)} ${marked.join(',')}`,
-      );
-      check(
-        'the hint is said in words, once',
-        text(await page.locator('#game-status').textContent()).startsWith(
-          'Elle regarde du côté des parties',
-        ) && (await page.getByRole('button', { name: 'Un indice' }).count()) === 0,
-        text(await page.locator('#game-status').textContent()),
-      );
-      await page.locator(`#game-live .g-tile[data-tile="${String(place.part.number)}"]`).click();
+      // One question a word (D19.4): the part is given — a sentence, then its official title —
+      // and the chapters of that part are the tiles. Nothing is said of a choice: none was made.
       const chapters = (await page.locator('#game-live .g-tile').allTextContents()).map(text);
+      const given = (await page.locator('#game-live .g-given li').allTextContents()).map(text);
       check(
-        'after the part, the chapters of that part, by their official titles — and she looks up again',
+        'at the second depth the part is given and the chapter is asked: the chapters of that part, by their official titles',
         text(await page.locator('#game-live .g-ask').textContent()) === 'Dans quel chapitre ?' &&
           text(await page.locator('#game-live .g-said').textContent()) ===
-            `Oui. C’est écrit dans la partie ${String(place.part.number)}.` &&
+            `C’est écrit dans la partie ${String(place.part.number)}.` &&
+          JSON.stringify(given) === JSON.stringify([place.part.title]) &&
           JSON.stringify(chapters) === JSON.stringify(place.part.chapters.map((c) => c.title)) &&
+          (await page.locator('#game-live .g-given [data-programme="title"]').count()) === 1 &&
           (await her(page))?.pose === 'rest',
-        chapters.join(' | '),
+        `${given.join(' | ')} || ${chapters.join(' | ')}`,
+      );
+      check(
+        '…and no hint is offered there: the part is no longer asked',
+        (await page.getByRole('button', { name: 'Un indice' }).count()) === 0,
       );
       await page.locator(`#game-live .g-tile[data-tile="${place.chapter.id}"]`).click();
       check(
-        'the right chapter: « Oui. », and its number',
+        'the right chapter: « Oui. », and its number — one question, then the card',
         text(await page.locator('#game-live .g-place h3').textContent()) ===
           `Oui. C’est écrit dans le chapitre ${String(place.chapter.number)}.`,
         text(await page.locator('#game-live .g-place h3').textContent()),

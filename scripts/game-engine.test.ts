@@ -9,9 +9,10 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
   LONG_WORD,
+  QUESTIONS,
   ROUND,
   advance,
-  asksAt,
+  askAt,
   begin,
   choose,
   current,
@@ -21,6 +22,7 @@ import {
   entryOf,
   found,
   foundNow,
+  givenFor,
   hintFor,
   isLongWord,
   judge,
@@ -176,10 +178,26 @@ void test('the draw is the game’s: the reading order of the list, then round a
   assert.deepEqual(draw({ ...BOOK, words: [] }, [], null), []);
 });
 
-void test('what is asked at each depth, and the tiles of each question', () => {
-  assert.deepEqual(asksAt(1), ['part']);
-  assert.deepEqual(asksAt(2), ['part', 'chapter']);
-  assert.deepEqual(asksAt(3), ['part', 'chapter', 'section']);
+void test('what is asked at each depth, what is given above it, and the tiles of each question', () => {
+  // One question a word (D19.4): the deepest the game has reached — a depth replaces the ones
+  // before it, it does not add to them.
+  assert.equal(askAt(1), 'part');
+  assert.equal(askAt(2), 'chapter');
+  assert.equal(askAt(3), 'section');
+  assert.deepEqual([...QUESTIONS], ['part', 'chapter', 'section']);
+  // What stands above the question is given, as official titles in the order of the book.
+  assert.deepEqual(givenFor(BOOK, 'w007', 'part'), []);
+  assert.deepEqual(givenFor(BOOK, 'w007', 'chapter'), ['Partie inventée 2']);
+  assert.deepEqual(givenFor(BOOK, 'w007', 'section'), [
+    'Partie inventée 2',
+    'Chapitre inventé 2.2',
+  ]);
+  assert.deepEqual(givenFor(BOOK, 'w999', 'section'), []);
+  // …and it is the place the game shows the word in: the tiles below belong to it.
+  for (const word of BOOK.words) {
+    const place = placeOf(BOOK, word.id);
+    assert.deepEqual(givenFor(BOOK, word.id, 'section'), [place?.part.title, place?.chapter.title]);
+  }
 
   const parts = tilesFor(BOOK, 'w007', 'part');
   assert.deepEqual(
@@ -225,7 +243,7 @@ void test('a choice is here, also here, or elsewhere — and there is no fourth 
 
   // Every tile of every question of every word gets one of the three, and exactly one "here".
   for (const word of BOOK.words) {
-    for (const ask of asksAt(3)) {
+    for (const ask of QUESTIONS) {
       const verdicts = tilesFor(BOOK, word.id, ask).map((t) => judge(BOOK, word.id, ask, t.id));
       for (const verdict of verdicts) assert.match(verdict, /^(?:here|also|elsewhere)$/);
       assert.equal(verdicts.filter((v) => v === 'here').length, 1);
@@ -259,74 +277,98 @@ void test('the end of a round is the only moment anything changes, and nothing g
   assert.deepEqual([kept.opened, kept.passage], [null, false]);
 });
 
-void test('a round, step by step: one question deeper at each depth, then the card of the place', () => {
+void test('a round, step by step: one question a word at every depth, then the card of the place', () => {
   // Depth 1: one question, then the card — and the word is found whatever was chosen.
-  let play = begin(['w000', 'w001', 'w002']);
-  assert.deepEqual(play.screen, { kind: 'ask', ask: 'part', said: null });
+  let play = begin(['w000', 'w001', 'w002'], 1);
+  assert.deepEqual(play.screen, { kind: 'ask', ask: 'part' });
   assert.equal(current(play), 'w000');
   assert.equal(foundNow(play), null);
-  play = choose(BOOK, play, 1, '5');
+  play = choose(BOOK, play, '5');
   assert.deepEqual(play.screen, { kind: 'place', ask: 'part', verdict: 'elsewhere' });
   assert.equal(foundNow(play), 'w000');
   // A second tap on a tile changes nothing: the card stays what it was.
-  assert.deepEqual(choose(BOOK, play, 1, '1'), play);
-  play = advance(play);
+  assert.deepEqual(choose(BOOK, play, '1'), play);
+  play = advance(play, 1);
   assert.deepEqual([current(play), play.screen.kind], ['w001', 'ask']);
   // « Mot suivant » does nothing on a question.
-  assert.deepEqual(advance(play), play);
+  assert.deepEqual(advance(play, 1), play);
   // « Je ne sais pas »: straight to the card, which says nothing about a choice.
-  play = choose(BOOK, play, 1, null);
+  play = choose(BOOK, play, null);
   assert.deepEqual(play.screen, { kind: 'place', ask: 'part', verdict: null });
-  play = advance(choose(BOOK, advance(play), 1, '3'));
+  play = advance(choose(BOOK, advance(play, 1), '3'), 1);
   assert.deepEqual(play.screen, { kind: 'end' });
   assert.equal(current(play), null);
-  assert.deepEqual(advance(play), play);
-  assert.deepEqual(choose(BOOK, play, 1, '1'), play);
+  assert.deepEqual(advance(play, 1), play);
+  assert.deepEqual(choose(BOOK, play, '1'), play);
 
-  // Depth 3: the part, then the chapter, then the section — each choice said before the next.
-  play = choose(BOOK, begin(['w000']), 3, '3');
-  assert.deepEqual(play.screen, {
-    kind: 'ask',
+  // Depth 2: the chapter is the question — the only one. The part is not asked any more.
+  play = begin(['w007', 'w000'], 2);
+  assert.deepEqual(play.screen, { kind: 'ask', ask: 'chapter' });
+  play = choose(BOOK, play, 'p2c1');
+  assert.deepEqual(play.screen, { kind: 'place', ask: 'chapter', verdict: 'elsewhere' });
+  assert.equal(foundNow(play), 'w007');
+  // The next word of the round is asked at the round's depth: again the chapter, at once.
+  play = advance(play, 2);
+  assert.deepEqual([current(play), play.screen], ['w000', { kind: 'ask', ask: 'chapter' }]);
+  // « lampe » is also written in the other chapter of its part.
+  assert.deepEqual(choose(BOOK, play, 'p1c2').screen, {
+    kind: 'place',
     ask: 'chapter',
-    said: { ask: 'part', verdict: 'also' },
+    verdict: 'also',
   });
-  assert.equal(foundNow(play), null);
-  play = choose(BOOK, play, 3, 'p1c1');
-  assert.deepEqual(play.screen, {
-    kind: 'ask',
-    ask: 'section',
-    said: { ask: 'chapter', verdict: 'here' },
+  // Not knowing the chapter shows the place at once.
+  assert.deepEqual(choose(BOOK, play, null).screen, {
+    kind: 'place',
+    ask: 'chapter',
+    verdict: null,
   });
-  play = choose(BOOK, play, 3, section(1, 1, 1));
-  assert.deepEqual(play.screen, { kind: 'place', ask: 'section', verdict: 'here' });
-  // Not knowing the chapter at depth 3 shows the place at once.
-  const unsure = choose(BOOK, choose(BOOK, begin(['w000']), 3, '1'), 3, null);
-  assert.deepEqual(unsure.screen, { kind: 'place', ask: 'chapter', verdict: null });
-  // Depth 2 stops at the chapter.
-  const two = choose(BOOK, choose(BOOK, begin(['w007']), 2, '2'), 2, 'p2c1');
-  assert.deepEqual(two.screen, { kind: 'place', ask: 'chapter', verdict: 'elsewhere' });
 
-  // A round found again in the tab: its word, at the first question or at its card — and
-  // nothing of what was chosen.
+  // Depth 3: the section, and nothing before it.
+  play = begin(['w000'], 3);
+  assert.deepEqual(play.screen, { kind: 'ask', ask: 'section' });
+  play = choose(BOOK, play, section(1, 1, 1));
+  assert.deepEqual(play.screen, { kind: 'place', ask: 'section', verdict: 'here' });
+  assert.deepEqual(advance(play, 3).screen, { kind: 'end' });
+
+  // Whatever the depth, a word costs one choice: a round of three is three questions (D19.4 —
+  // it was three, six, then nine).
+  for (const depth of [1, 2, 3] as const) {
+    let round = begin(ids(3), depth);
+    let asked = 0;
+    while (round.screen.kind !== 'end') {
+      if (round.screen.kind === 'ask') {
+        asked += 1;
+        round = choose(BOOK, round, null);
+      } else {
+        round = advance(round, depth);
+      }
+    }
+    assert.equal(asked, ROUND, `depth ${String(depth)}`);
+  }
+
+  // A round found again in the tab: its word, at its question or at its card — and nothing of
+  // what was chosen.
   assert.deepEqual(resume(['w003', 'w004'], 1, false, 2), {
     words: ['w003', 'w004'],
     at: 1,
-    screen: { kind: 'ask', ask: 'part', said: null },
+    screen: { kind: 'ask', ask: 'chapter' },
   });
   assert.deepEqual(resume(['w003', 'w004'], 1, true, 2).screen, {
     kind: 'place',
     ask: 'chapter',
     verdict: null,
   });
+  assert.deepEqual(resume(['w003'], 0, false, 1).screen, { kind: 'ask', ask: 'part' });
   assert.equal(resume(['w003'], 7, false, 1).at, 0);
   assert.deepEqual(resume([], 0, true, 1).screen, { kind: 'end' });
-  assert.deepEqual(begin([]).screen, { kind: 'end' });
+  assert.deepEqual(begin([], 1).screen, { kind: 'end' });
 
-  // The hint: three parts, from the second depth on, for the first question only.
-  assert.deepEqual(hintFor(BOOK, 'w000', 1, 'part'), []);
-  assert.deepEqual(hintFor(BOOK, 'w000', 2, 'part'), ['1', '3', '6']);
-  assert.deepEqual(hintFor(BOOK, 'w000', 3, 'chapter'), []);
-  assert.deepEqual(hintFor(BOOK, 'w999', 3, 'part'), []);
+  // The hint: three parts, whenever the part is asked — from the first word (D19.7). Deeper,
+  // the part is given: there is nothing left to hint at.
+  assert.deepEqual(hintFor(BOOK, 'w000', 'part'), ['1', '3', '6']);
+  assert.deepEqual(hintFor(BOOK, 'w000', 'chapter'), []);
+  assert.deepEqual(hintFor(BOOK, 'w000', 'section'), []);
+  assert.deepEqual(hintFor(BOOK, 'w999', 'part'), []);
 });
 
 // ---------------------------------------------------------------------------------------------

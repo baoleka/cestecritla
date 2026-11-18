@@ -295,3 +295,31 @@ npx tsx scripts/perf-probe.ts
 - **Ce qui n'est pas encore fait de l'accueil** : l'écran du jeu lui-même (lot 5) ; les textes
   (la description de la page dit encore « Retrouver une mesure… », lot 7).
 - Rien de servi n'a changé : la production attend derrière la porte du lot 1.
+
+### Lot 3, au 18 novembre 2026 (nuit) — une question par mot, l'indice dès le premier mot
+
+- **Le moteur ne pose plus qu'une question par mot** (D19.4, `src/lib/game-engine.ts`) :
+  `askAt(depth)` rend la seule question d'une profondeur — la partie, puis le chapitre, puis la
+  section — là où `asksAt` rendait la liste qui s'allongeait. `choose` mène toujours à la carte ;
+  `begin`, `advance` et `resume` prennent la profondeur de la manche. Une manche de trois mots
+  est trois questions à toute profondeur : un test le compte (c'était trois, six, puis neuf).
+- **Ce qui est au-dessus de la question est donné** (`givenFor`) : la phrase « C'est écrit dans
+  la partie N. » — la phrase neutre de la carte, puisque rien n'a été choisi — puis les titres
+  officiels, entiers : la partie quand on demande le chapitre, la partie et le chapitre quand on
+  demande la section. Le lecteur d'écran entend le mot, cette phrase, ces titres, puis la
+  question.
+- **« Un indice » est offert dès le premier mot** (D19.7) : `hintFor` ne regarde plus la
+  profondeur, seulement que la partie soit demandée. Plus profond, la partie est donnée : il n'y
+  a plus d'indice, et une porte le tient.
+- **La phrase d'annonce change** : `game.depth.chapter` dit « Maintenant, le jeu donne la partie
+  et demande le chapitre. » — proposée dans la question que l'éditeur a tranchée, **à valider par
+  lui avec les autres textes (lot 7)**. Kit de chaînes en v0.14.0.
+- **Ce qui ne change pas** : les seuils de profondeur et d'évolution, l'ordre des mots, ce qui
+  s'écrit sur le téléphone (la forme de l'état est la même, octet pour octet), la manche sans
+  script (elle est à la première profondeur), le poids du script (9 450 octets gzip).
+- **Écart au plan** : aucun.
+- **Portes** : 632 tests ; `e2e:game` 256 / 220 / 220 ; `e2e` 46 / 43 / 43 ; `e2e:ask` 109 / 102 /
+  102 ; `e2e:sheet` 102 / 96 / 96 ; `a11y` 225 contrôles — tous verts. Le parcours du jeu joue
+  désormais l'indice à la première profondeur (souris, clavier, mouvement réduit, deux onglets)
+  et vérifie, à la deuxième, la partie donnée, ses chapitres en tuiles, l'absence d'indice.
+- Rien de servi n'a changé.

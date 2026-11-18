@@ -84,6 +84,16 @@ html[data-silence] .game {
   margin-block: var(--space-2) 0;
   font-weight: 700;
 }
+/* What the game gives above a question (D19.4): the part, then the chapter — official titles,
+   whole, under the sentence that says where the word is written. Given, not asked: no tile. */
+.g-given {
+  margin: var(--space-1) 0 var(--space-2);
+  padding: 0;
+  list-style: none;
+}
+.g-given li + li {
+  margin-block-start: var(--space-1);
+}
 .g-with {
   display: flex;
   flex-wrap: wrap;

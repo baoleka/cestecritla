@@ -10,6 +10,9 @@
  *     where, in the affirmative. Nothing here can produce a sentence about absence;
  *   - a level is a depth of the book — the part, then the chapter, then the section — and never
  *     a rank of the player. It opens with what has been FOUND, right choice or not;
+ *   - a word is asked ONE question (D19.4): the deepest the game has reached. What stands above
+ *     it — the part, then the chapter — is given, not asked: a round is three questions at every
+ *     depth, and the deeper ones are asked of titles one can reason on;
  *   - the draw is the game's: the reading order of the list, never the player's results;
  *   - nothing goes back: a depth once open stays open, the turtle never shrinks.
  */
@@ -188,8 +191,26 @@ export function draw(data: GameData, seen: Iterable<string>, after: string | nul
   return round;
 }
 
-/** What is asked of each word at a depth, in order. */
-export const asksAt = (depth: Depth): Ask[] => ASKS.slice(0, depth);
+/** The three questions the game can ask, from the widest to the most precise. */
+export const QUESTIONS: readonly Ask[] = ASKS;
+
+/**
+ * The one question asked of a word at a depth (D19.4): the part at the first, the chapter at the
+ * second, the section at the third. Until 18 November 2026 a depth ADDED its question to the
+ * ones before it — three, then six, then nine questions a round; it now replaces them.
+ */
+export const askAt = (depth: Depth): Ask => ASKS[depth - 1] ?? 'part';
+
+/**
+ * What the game gives above a question, as official titles in the order of the book: nothing
+ * for the part, the part for the chapter, the part and the chapter for the section. Given, not
+ * asked — so that the question below is one a reader can reason on.
+ */
+export function givenFor(data: GameData, wordId: string, ask: Ask): string[] {
+  const place = placeOf(data, wordId);
+  if (place === null || ask === 'part') return [];
+  return ask === 'chapter' ? [place.part.title] : [place.part.title, place.chapter.title];
+}
 
 export interface Tile {
   /** The part number, or the identifier of the chapter or section. */
@@ -289,10 +310,15 @@ export function endOfRound(data: GameData, before: Standing, seen: Iterable<stri
   };
 }
 
-/** The tiles the turtle looks at when asked for a hint: three parts, from the second depth on. */
-export function hintFor(data: GameData, wordId: string, depth: Depth, ask: Ask): string[] {
+/**
+ * The tiles the turtle looks at when asked for a hint: three parts, the right one among them.
+ * Offered whenever the part is asked — from the very first word (D19.7, which amends D16.13:
+ * it used to wait for the second depth, where the part is no longer asked at all since D19.4).
+ * It points; it never rules a tile out.
+ */
+export function hintFor(data: GameData, wordId: string, ask: Ask): string[] {
   const entry = entryOf(data, wordId);
-  return entry !== null && depth >= 2 && ask === 'part' ? entry.hint.map(String) : [];
+  return entry !== null && ask === 'part' ? entry.hint.map(String) : [];
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -301,12 +327,12 @@ export function hintFor(data: GameData, wordId: string, depth: Depth, ask: Ask):
 
 /**
  * What is on screen. A question; or the card of the place, which is where a word counts as
- * found; or the end of the round. `verdict` is what the last choice meant — null when there was
+ * found; or the end of the round. `verdict` is what the choice meant — null when there was
  * none (« Je ne sais pas », or a round found again after the tab was left): the card then says
  * where the word is written, and nothing about a choice.
  */
 export type Screen =
-  | { kind: 'ask'; ask: Ask; said: { ask: Ask; verdict: Verdict } | null }
+  | { kind: 'ask'; ask: Ask }
   | { kind: 'place'; ask: Ask; verdict: Verdict | null }
   | { kind: 'end' };
 
@@ -318,27 +344,27 @@ export interface Play {
   screen: Screen;
 }
 
-const firstAsk = (): Screen => ({ kind: 'ask', ask: 'part', said: null });
+/** The question of a word, at the depth the game has reached. */
+const question = (depth: Depth): Screen => ({ kind: 'ask', ask: askAt(depth) });
 
 /** A round at its first question; a round with no word is over before it starts. */
-export const begin = (words: readonly string[]): Play =>
+export const begin = (words: readonly string[], depth: Depth): Play =>
   words.length === 0
     ? { words: [], at: 0, screen: { kind: 'end' } }
-    : { words: [...words], at: 0, screen: firstAsk() };
+    : { words: [...words], at: 0, screen: question(depth) };
 
 /**
- * A round found again in the tab: the word it had reached, at its first question — or at its
- * card, if the place had already been shown. Nothing of what was chosen is known any more.
+ * A round found again in the tab: the word it had reached, at its question — or at its card, if
+ * the place had already been shown. Nothing of what was chosen is known any more.
  */
 export function resume(words: readonly string[], at: number, shown: boolean, depth: Depth): Play {
-  const play = begin(words);
+  const play = begin(words, depth);
   if (play.screen.kind === 'end') return play;
   const index = Number.isInteger(at) && at >= 0 && at < words.length ? at : 0;
-  const deepest = asksAt(depth).at(-1) ?? 'part';
   return {
     ...play,
     at: index,
-    screen: shown ? { kind: 'place', ask: deepest, verdict: null } : firstAsk(),
+    screen: shown ? { kind: 'place', ask: askAt(depth), verdict: null } : question(depth),
   };
 }
 
@@ -347,28 +373,26 @@ export const current = (play: Play): string | null =>
   play.screen.kind === 'end' ? null : (play.words[play.at] ?? null);
 
 /**
- * A tile is chosen, or « Je ne sais pas » (null). A choice leads one question deeper, down to
- * the depth of the game, then to the card of the place; not knowing leads straight to the card.
- * Anywhere but on a question, nothing happens: a second tap changes nothing.
+ * A tile is chosen, or « Je ne sais pas » (null): either way the card of the place comes next —
+ * one question a word (D19.4). Anywhere but on a question, nothing happens: a second tap
+ * changes nothing.
  */
-export function choose(data: GameData, play: Play, depth: Depth, tile: string | null): Play {
+export function choose(data: GameData, play: Play, tile: string | null): Play {
   const word = current(play);
   if (word === null || play.screen.kind !== 'ask') return play;
   const { ask } = play.screen;
-  if (tile === null) return { ...play, screen: { kind: 'place', ask, verdict: null } };
-  const verdict = judge(data, word, ask, tile);
-  const asks = asksAt(depth);
-  const deeper = asks[asks.indexOf(ask) + 1];
-  return deeper === undefined
-    ? { ...play, screen: { kind: 'place', ask, verdict } }
-    : { ...play, screen: { kind: 'ask', ask: deeper, said: { ask, verdict } } };
+  const verdict = tile === null ? null : judge(data, word, ask, tile);
+  return { ...play, screen: { kind: 'place', ask, verdict } };
 }
 
-/** « Mot suivant »: from a card to the next word, or to the end of the round. */
-export function advance(play: Play): Play {
+/**
+ * « Mot suivant »: from a card to the next word, or to the end of the round. The depth is the
+ * round's: it changes at the end of a round and nowhere else (`endOfRound`).
+ */
+export function advance(play: Play, depth: Depth): Play {
   if (play.screen.kind !== 'place') return play;
   return play.at + 1 < play.words.length
-    ? { ...play, at: play.at + 1, screen: firstAsk() }
+    ? { ...play, at: play.at + 1, screen: question(depth) }
     : { ...play, screen: { kind: 'end' } };
 }
 

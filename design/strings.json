@@ -1,9 +1,9 @@
 {
   "$meta": {
     "name": "C'est écrit là — kit de chaînes d'interface",
-    "version": "0.13.0",
-    "date": "2026-11-15",
-    "supersedes": "0.12.0",
+    "version": "0.14.0",
+    "date": "2026-11-18",
+    "supersedes": "0.13.0",
     "decisions": [
       "D0.1",
       "D0.22",
@@ -136,7 +136,8 @@
       "v0.13.0, suite (15/11/2026, D17.27, décision de l'éditeur) : accuracy.unverified.06 — « Les animations du personnage du jeu gênent-elles quelqu'un, sur un vrai téléphone ? » — s'ajoute aux questions que de vraies personnes n'ont pas encore vérifiées : le mouvement de la génération 2 n'a été mesuré qu'en labo. Elle n'est rendue que là où la génération 2 est servie (data/mascot.json) ; les cinq autres ne sont pas touchées.",
       "v0.13.0, suite (15/11/2026, D17.30 à D17.32, décisions de l'éditeur après les relectures indépendantes du jeu de la génération 2) : turtle.keep.not_kept.tint — « Tes réponses ne sont pas gardées. Rien n'est envoyé. » — et privacy.never.05.tint — « Tes réponses dans le jeu. » — remplacent, là où la génération 2 est servie, « Tes choix ne sont pas gardés. » et « Tes choix dans le jeu. », fausses à la lettre dès qu'une couleur est choisie : la couleur est un choix, et elle est gardée ; les deux phrases de la tortue en ligne ne sont pas touchées. turtle.tint.lead — « Une couleur par partie du livre. » — est retirée : elle reliait une couleur à une partie du livre, ce que les noms de couleur voulaient éviter (D17.23). Correction de l'entrée précédente : turtle.figure.surf, .wings et .sky ne sont pas « jamais affichées » — elles s'affichent sous elle dans sa fiche quand on la touche, comme turtle.raises_head en ligne, et un lecteur d'écran les entend ; l'éditeur les garde affichées (D17.32).",
       "v0.13.0, suite (15/11/2026, D17.34 et D17.35, décisions de l'éditeur après la session des personas sur l'aperçu) : turtle.goal.start devient « Ta tortue change quand tu trouves des mots. » — « elle » arrivait avant qu'on sache que c'était la tortue (quatre personas sur sept) ; turtle.skip devient « Passer l'animation » — « Passer » ne disait pas ce qu'il passe (quatre sur sept). Les deux ne sont rendues que par la génération 2.",
-      "v0.13.0, suite (16/11/2026, lot F de docs/discovery/PLAN-TORTUE.md) : la génération 1 de la mascotte est retirée du dépôt, et avec elle l'interrupteur data/mascot.json. Ce qui était rendu « là où la génération 2 est servie » l'est partout où le jeu est montré : turtle.keep.not_kept.tint, privacy.never.05.tint, privacy.game.field.tint, accuracy.unverified.06 ; aucune phrase servie ne change. turtle.keep.not_kept est retirée ; privacy.never.05 reste, non rendue (voir removed_since_0_1_fr)."
+      "v0.13.0, suite (16/11/2026, lot F de docs/discovery/PLAN-TORTUE.md) : la génération 1 de la mascotte est retirée du dépôt, et avec elle l'interrupteur data/mascot.json. Ce qui était rendu « là où la génération 2 est servie » l'est partout où le jeu est montré : turtle.keep.not_kept.tint, privacy.never.05.tint, privacy.game.field.tint, accuracy.unverified.06 ; aucune phrase servie ne change. turtle.keep.not_kept est retirée ; privacy.never.05 reste, non rendue (voir removed_since_0_1_fr).",
+      "v0.14.0, en préparation (18/11/2026, docs/discovery/PLAN-JEU-DABORD.md, D19.4) : game.depth.chapter devient « Maintenant, le jeu donne la partie et demande le chapitre. » — depuis D19.4 le jeu ne pose plus qu'une question par mot, et « demande aussi le chapitre » serait faux. Texte proposé par la session dans la question même que l'éditeur a tranchée ; il le valide avec les autres textes du chantier (lot 7), et rien n'est servi avant."
     ],
     "status_fr": "v0.8 : les familles chat.*, game.* et turtle.* existent dans le kit avant leurs écrans ; elles sont relues à la construction de chacun (lots H, I, L, M), puis par l'éditeur sur l'aperçu. Les chaînes chat.* ne sont rendues que si data/2026/ask.json dit « chat » (D16.4, D16.51) ; easter.strawberry_milk, confirmée par l'éditeur le 13 novembre, a été retirée par lui le 14 après la session des personas (D16.37)."
   },
@@ -316,7 +317,7 @@
   "error.data.lead": "Le lien est bon. Un instant, puis recharge la page.",
   "error.data.title": "Le texte n'est pas arrivé.",
   "error.generic": "Quelque chose a coincé de notre côté. Réessaie dans un instant.",
-  "game.depth.chapter": "Maintenant, le jeu demande aussi le chapitre.",
+  "game.depth.chapter": "Maintenant, le jeu donne la partie et demande le chapitre.",
   "game.depth.section": "Maintenant, le jeu va jusqu'à la section.",
   "game.dont_know": "Je ne sais pas",
   "game.hint.cta": "Un indice",
