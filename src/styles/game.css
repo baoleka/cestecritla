@@ -29,11 +29,15 @@ html[data-silence] .g-silence {
 html[data-silence] .game {
   display: none;
 }
-/* Whose word it is, right above it and at the size of the text: a capture that holds the word
-   holds this line. */
+/* Whose word it is, right above it: a capture that holds the word holds this line. Small and
+   in capitals, as a label — the word under it is what the screen is about (D19.15). */
 .g-kicker {
-  margin-block: var(--space-4) 0;
+  margin-block: var(--space-3) 0;
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
   font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 /* The one word: the programme's, so in the programme's face — and large, because it is the
    whole subject of the screen. */
@@ -46,11 +50,22 @@ html[data-silence] .game {
   content: '\00a0»';
 }
 .g-the-word {
-  margin-block: 0 var(--space-2);
+  margin-block: var(--space-2);
   font-family: var(--font-family-verbatim);
   font-size: var(--font-size-display);
   line-height: 1.15;
   font-weight: 700;
+  /* The mark of a highlighter under it: on the official page, « C'est écrit là » shows the word
+     highlighted in its measure — the screen says so before a word of ours does. Flat, in the
+     colour of her shell, which every theme already holds against the text (scripts/contrast.ts);
+     a browser that forces its own colours draws the word without it.
+     It runs a little past the word on each side, into the margin of the page, and takes no room
+     from it: the word starts where it would without the mark, and is as wide as it may be
+     without it (src/styles/game2.css) — the longest of the list still stands on one line at
+     320 px. */
+  padding-inline: 0.12em;
+  margin-inline: -0.12em;
+  background: linear-gradient(to top, var(--turtle-shell) 0 36%, transparent 36%);
 }
 /* Fifteen letters or more (LONG_WORD, src/lib/game-engine.ts): one step smaller, so that the
    word stands on one line at 320 px instead of being cut by the browser. */
@@ -59,6 +74,59 @@ html[data-silence] .game {
 }
 .game h3 {
   margin-block: var(--space-2);
+}
+
+/* The entrance (D19.15): what a newcomer finds under the first word instead of a question and
+   six tiles — a sentence that says why the word is there, ONE gesture that gives its card, and
+   where every card leads. Then, under a rule, the other door of the site: six of the themes
+   people hear about, and the way to the field. The first screen, whole, at 390 × 844. */
+.g-hook {
+  margin-block: var(--space-1) var(--space-3);
+  font-size: var(--font-size-h3);
+  line-height: var(--line-height-h3);
+  font-weight: 700;
+}
+.g-hook span {
+  display: block;
+}
+.g-go {
+  margin-block: 0;
+}
+.g-go .cta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  inline-size: 100%;
+  min-block-size: 3.5rem;
+  font-size: var(--font-size-h3);
+}
+.g-source {
+  margin-block: var(--space-3) 0;
+}
+.g-door {
+  margin-block-start: var(--space-6);
+  padding-block-start: var(--space-3);
+  border-block-start: 2px solid var(--brand);
+}
+.g-door h3 {
+  margin-block: 0 var(--space-2);
+}
+.g-door ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+.g-door p {
+  margin: 0;
+}
+.g-door .g-find {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--tap-comfortable);
+  font-weight: 700;
 }
 .g-said {
   margin-block: var(--space-2) 0;
@@ -325,6 +393,24 @@ html[data-silence] .game {
 .g-over:target ~ .g-end {
   display: block;
 }
+/* The first word is given (D19.15): its entrance stands where a question would, and leaves
+   when its card comes. What is said of her keeps its room beside her for the card only — the
+   entrance does not speak of her. */
+.g-word-1 .g-goal,
+.g-r.g-w1:target ~ .g-word-1 .g-start {
+  display: none;
+}
+.g-r.g-w1:target ~ .g-word-1 .g-goal {
+  display: block;
+}
+/* …and on the entrance the label stands as it does where nothing is said above it: the script
+   draws the entrance without that sentence, and nothing may move when it takes the block. */
+.g-word-1 .g-goal + .g-kicker {
+  margin-block-start: var(--space-3);
+}
+.g-r.g-w1:target ~ .g-word-1 .g-goal + .g-kicker {
+  margin-block-start: var(--space-2);
+}
 /* A tile was followed: the tiles fold, the card of the place takes their room. */
 .g-r.g-w1:target ~ .g-word-1 .g-question,
 .g-r.g-w2:target ~ .g-word-2 .g-question,
@@ -407,26 +493,11 @@ html[data-silence] .game {
 .g-again .g-said {
   margin-block: 0 var(--space-2);
 }
-/* Under a way on, what it leads to — small, as a caption: the three words of the round to come
-   under « Trois autres mots », each with its guillemets, in the face of the book; and under the
-   way to send the game, that the list is the same for everybody. */
-.g-ahead,
-.g-same {
+/* Under « Trois autres mots », what it leads to, as a caption: the three words of the round to
+   come, each with its guillemets, in the face of the book — at the size of the text (at 14 px a
+   reader with tired eyes called it « petit et serré », persona session of 19/11/2026). */
+.g-ahead {
   margin-block: var(--space-2) var(--space-4);
-  font-size: var(--font-size-small);
-  line-height: var(--line-height-small);
-}
-.g-word-in {
-  font-family: var(--font-family-verbatim);
-  font-weight: 700;
-  hyphens: manual;
-  white-space: nowrap;
-}
-.g-word-in::before {
-  content: '«\00a0';
-}
-.g-word-in::after {
-  content: '\00a0»';
 }
 /* Keeping: one line that says nothing is kept, and the quiet button that opens the card. */
 .g-keep-ask {

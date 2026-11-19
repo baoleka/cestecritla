@@ -65,9 +65,7 @@ import {
   lineAtRoundEnd,
   lineAtStart,
   nextRoundChangesHer,
-  signAtRoundEnd,
   type GoalKey,
-  type SignKey,
 } from '../lib/game-goal.ts';
 import { recallFor } from '../lib/game-recall.ts';
 import type { TabState2 } from '../lib/game-state2.ts';
@@ -100,6 +98,8 @@ interface Config {
      */
     gist?: string;
     kicker: string;
+    /** The entrance (D19.15): what a newcomer reads under the first word, and its gesture. */
+    start: { hook: string[]; cta: string; source: string };
     ask: Record<Ask, string>;
     reveal: Record<Ask, Sentences>;
     dontKnow: string;
@@ -116,8 +116,6 @@ interface Config {
     /** « Les prochains mots »: what stands before the three words of the round to come. */
     ahead: string;
     share: string;
-    /** Said under the way to send the game: the list is the same for everybody. */
-    shareSame: string;
     copied: string;
     /** « Tu te souviens ? »: its title, and what to do with the words under it. */
     recall: { title: string; lead: string };
@@ -150,8 +148,6 @@ interface Config {
       foundLead: string;
     };
     goal: Record<GoalKey, string>;
-    /** A sign she has just shown, named: an attitude, never a quantity. */
-    sign: Record<SignKey, string>;
     /** By the state a passage leads to, by her state, by the colour: the keys of a JSON file. */
     passage: Record<string, string>;
     figure: Record<string, string>;
@@ -363,8 +359,6 @@ function start(parts: Block, config: Config, data: GameData): void {
   let session = remembered(arrived);
   /** A passage is being played on the stage: the sentence that says it waits for its end. */
   let evolving = false;
-  /** The script has drawn its first screen: the block is its own from then on. */
-  let taken = false;
   /**
    * A passage cut short by a press that goes on to draw another screen: its sentence, to be said
    * there — the new screen would otherwise clear it before anyone heard it.
@@ -532,27 +526,73 @@ function start(parts: Block, config: Config, data: GameData): void {
     return shown;
   }
   /**
-   * The top of a screen where a word is shown — and, before a first word is found, her goal.
-   * The page arrived with the room of that sentence (src/components/Game2.astro): the screen
-   * the script takes the block with keeps that room even when she is past it, so that nothing
-   * moves at that moment; the first gesture gives the room back.
+   * The top of a screen where a word is shown — and, before a round has ended, her goal: said
+   * beside her from the first card on. The page arrives on the entrance, which does not speak
+   * of her (D19.15): no room is kept for that sentence when the script takes the block.
    */
   function wordPanel(word: string): HTMLElement {
     const panel = el('div', undefined, 'g-word');
     const goal = lineAtStart(session.state);
-    if (goal !== null || !taken) {
-      const line = el('p', s.goal[goal ?? 'start'], 'g-goal');
-      if (goal === null) line.setAttribute('data-wait', '');
-      panel.append(line);
-    }
+    if (goal !== null) panel.append(el('p', s.goal[goal], 'g-goal'));
     const shown = theWord(word);
     shown.id = 'game-the-word';
     panel.append(el('p', s.kicker, 'g-kicker'), shown);
     return panel;
   }
 
+  /**
+   * The other door of the site, as the page arrived with it: six themes people hear about and
+   * the way to the field (src/components/Game2.astro). Copied from there each time the entrance
+   * is drawn — never built from strings.
+   */
+  const door = fixed.querySelector('#game-door');
+
+  /**
+   * The entrance (D19.15): a newcomer's first word comes with ONE gesture that gives its card —
+   * where it is written, the way to the official page and, in a build that may, what the
+   * measure provides. Nothing is asked: it is the gesture of « Je ne sais pas » under another
+   * name, and it judges nothing. The question starts at the second word.
+   *
+   * Only before anything is found, and only on the first word of the list: who comes back with
+   * a game, or follows a link to another word, finds the question.
+   */
+  const entering = (wordId: string): boolean =>
+    session.seen.length === 0 &&
+    wordId === data.words[0]?.id &&
+    session.play.screen.kind === 'ask' &&
+    session.play.screen.ask === 'part';
+
+  function renderStart(word: string, focus: boolean): void {
+    const panel = el('div', undefined, 'g-word');
+    const shown = theWord(word);
+    shown.id = 'game-the-word';
+    // Sentence by sentence, each on its line: the question it ends on is read alone.
+    const hook = el('p', undefined, 'g-hook');
+    for (const sentence of s.start.hook) hook.append(el('span', sentence));
+    const gesture = el('p', undefined, 'g-go');
+    gesture.append(
+      button(s.start.cta, 'cta', () => {
+        act(choose(data, session.play, null));
+      }),
+    );
+    const start = el('div', undefined, 'g-start');
+    start.append(hook, gesture, el('p', s.start.source, 'g-source'));
+    if (door !== null) {
+      const copy = door.cloneNode(true);
+      // One element of the page bears that name: the one it arrived with.
+      if (copy instanceof Element) copy.removeAttribute('id');
+      start.append(copy);
+    }
+    panel.append(el('p', s.kicker, 'g-kicker'), shown, start);
+    show(panel, hook, focus);
+  }
+
   function renderAsk(wordId: string, word: string, focus: boolean): void {
     if (session.play.screen.kind !== 'ask') return;
+    if (entering(wordId)) {
+      renderStart(word, focus);
+      return;
+    }
     const { ask } = session.play.screen;
     const panel = wordPanel(word);
     // One question a word (D19.4): what stands above it is given — the part in a sentence, as
@@ -605,6 +645,8 @@ function start(parts: Block, config: Config, data: GameData): void {
     const hinted = hintFor(data, wordId, ask);
     if (hinted.length > 0) {
       const hint = button(s.hint, 'g-quiet', () => {
+        // A freeze that starts while the page is open: she gives no hint, the block leaves.
+        if (frozen()) return;
         // The button leaves: a focus left on it goes to the question it was a help for.
         if (document.activeElement === hint) heading.focus();
         hint.remove();
@@ -704,6 +746,9 @@ function start(parts: Block, config: Config, data: GameData): void {
         if (frozen()) return;
         const closing = open === press;
         if (open !== null) open.setAttribute('aria-expanded', 'false');
+        // A focus left in the card that goes — its link to the book — would fall to the page
+        // with it (WebKit gives a button no focus at a touch): the word pressed takes it first.
+        if (shown.contains(document.activeElement)) press.focus({ preventScroll: true });
         shown.remove();
         open = null;
         if (closing) return;
@@ -784,16 +829,7 @@ function start(parts: Block, config: Config, data: GameData): void {
     // One line about her, two sentences at most: what has just happened to her, and her goal
     // — in words, never a number (D17.5). Nothing in it is about the player.
     const line = lineAtRoundEnd(end, nextRoundChangesHer(data, end, session.seen, last));
-    // What has just happened to her: a passage — or, at a round that changes nothing else, a
-    // sign she has just shown (her wings ajar, her eyes up, a first star). Never both: a passage
-    // has its own sentence.
-    const sign = signAtRoundEnd(before, end);
-    const passed =
-      line.passage !== null
-        ? (s.passage[String(line.passage)] ?? '')
-        : sign !== null
-          ? s.sign[sign]
-          : '';
+    const passed = line.passage === null ? '' : (s.passage[String(line.passage)] ?? '');
     const goal = line.goal === null ? '' : s.goal[line.goal];
     const about = el('p', undefined, 'g-line');
     if (passed !== '') about.append(el('span', passed, 'g-passage'));
@@ -823,10 +859,15 @@ function start(parts: Block, config: Config, data: GameData): void {
     // same for everybody, so it can be said. What is next, never how much is left. Under the
     // way on, as its caption: above it, on a small phone, it kept « Trois autres mots » under
     // the fold.
-    const coming = draw(data, session.seen, last).flatMap((id) => {
-      const entry = entryOf(data, id);
-      return entry === null ? [] : [entry.word];
-    });
+    // Not once everything has been found: the game goes round again, and words already seen
+    // would be announced as words to come.
+    const next = draw(data, session.seen, last);
+    const coming = next.some((id) => !session.seen.includes(id))
+      ? next.flatMap((id) => {
+          const entry = entryOf(data, id);
+          return entry === null ? [] : [entry.word];
+        })
+      : [];
     const ahead = coming.length === 0 ? null : el('p', `${s.ahead}\u00a0: `, 'g-ahead');
     coming.forEach((word, index) => {
       const shown = el('span', word, 'g-word-in');
@@ -915,9 +956,7 @@ function start(parts: Block, config: Config, data: GameData): void {
           sent.catch(() => undefined);
         }),
       );
-      // The list is the game's: everyone who follows the link plays the same words, in the
-      // same order. Said under the way to send it — a thing to talk about that is no score.
-      panel.append(send, el('p', s.shareSame, 'g-same'));
+      panel.append(send);
     }
     if (keeping !== null) panel.append(keeping);
     show(panel, heading, earned);
@@ -1372,13 +1411,22 @@ function start(parts: Block, config: Config, data: GameData): void {
   }
 
   // Someone already in the round of the HTML, by the keyboard: the focus follows them into the
-  // script's — it is their round that goes on, not the script that arrives.
-  const inRound = fixed.contains(document.activeElement);
+  // script's — it is their round that goes on, not the script that arrives. On the same link of
+  // the other door where it stood on one, on the gesture of the entrance where that is drawn,
+  // on the question otherwise.
+  const held = document.activeElement;
+  const inRound = fixed.contains(held);
+  const inDoor =
+    door !== null && held instanceof HTMLAnchorElement
+      ? [...door.querySelectorAll('a')].indexOf(held)
+      : -1;
   fixed.hidden = true;
   live.hidden = false;
   render(false);
-  taken = true;
-  if (inRound) live.querySelector<HTMLElement>('h3')?.focus();
+  if (inRound) {
+    const twin = inDoor < 0 ? undefined : live.querySelectorAll<HTMLElement>('.g-door a')[inDoor];
+    (twin ?? live.querySelector<HTMLElement>('.g-go .cta, h3'))?.focus();
+  }
   // The look she arrives with is drawn at once: from then on what she does is a movement.
   her.settle(look());
   // Nothing is written here: arriving — by a link, in a new tab — is not a gesture of the game.
@@ -1452,6 +1500,20 @@ const raw = document.querySelector('#game-config')?.textContent;
 if (parts !== null && raw != null) {
   const { block } = parts;
   const config = JSON.parse(raw) as Config;
+  // The round of the HTML is played with anchors. Followed as plain links, each would leave an
+  // entry in the history of the browser — a tile that was chosen, kept where the page says no
+  // choice is kept. From the moment this script runs, an anchor REPLACES the entry it leaves:
+  // « back » goes back to where one came from, not through the tiles. Before it runs — and
+  // where it never does — a link is a link (security review of 19/11/2026).
+  parts.fixed.addEventListener('click', (event) => {
+    const link =
+      event.target instanceof Element
+        ? event.target.closest('a[href^="#m"], a[href="#fin"]')
+        : null;
+    if (link === null) return;
+    event.preventDefault();
+    window.location.replace(link.getAttribute('href') ?? '#');
+  });
   let asked = false;
   const open = (): void => {
     if (asked) return;

@@ -523,3 +523,130 @@ npx tsx scripts/perf-probe.ts
   109 / 102 / 102 ; `e2e:sheet` 102 / 96 / 96 ; la build « scrutin ». Le jeu lui-même n'a pas
   bougé depuis le lot 6 (`e2e:game` 293 / 257 / 257).
 - Rien de servi n'a changé.
+
+### Lot 8, au 19 novembre 2026 — les vérifications, et le premier écran repris sur son mot
+
+**Le mot de l'éditeur, en cours de lot** — à la lecture du compte rendu des sept personas (six
+« bof » sur sept à « ça te donne envie d'essayer ? ») : **« Le premier écran doit donner envie,
+sinon on remplace pas. »** Consigné D19.15 (328 décisions). Le lot s'est élargi d'autant : le
+premier écran a été repris, relu, construit — et c'est lui qui en juge, sur pièces.
+
+- **Le balayage** (`npm run sweep:game`, `scripts/sweep-game.ts` — Chromium, mouvement réduit,
+  cinq tailles, les 48 cartes et les 16 fins de manche à chacune) : aucune tuile de plus de
+  cinq lignes ; **à 390 × 844 et 412 × 915, « Mot suivant » entier à l'écran sur 48 cartes sur
+  48** (26 px de marge sur la plus serrée) et « Trois autres mots » sur 16 fins de manche sur
+  16 ; à 360 × 740, 35 cartes ; à 360 × 640, 7 ; à 320 × 568, 1. L'entrée tient entière à
+  l'écran à partir de 360 × 740. Le script sort en échec si l'un des deux critères du plan
+  tombe.
+- **La session des sept personas, à l'aveugle** (`13-tests-humains.md` §9, HYPOTHÈSE) : aucun
+  ne prend le site pour officiel ; les sept nomment une IA comme l'auteur de la phrase ; aucun
+  ne lit « tort » ; aucun ne voit de score ni de reste ; **les sept citent de mémoire une
+  mesure lue sur une carte**. Et : « un peu enfantin » pour les sept ; envie d'essayer, un
+  « oui » ; pour cinq, « le site », c'est la recherche ; **la phrase de la première carte est
+  lue à contresens par six sur sept**. Quatre lectures à l'aveugle sans fiche (§9.2) : une IA
+  a écrit la phrase, cinq sur cinq ; « même équipe que la campagne ? » — non 4 et ne sait pas
+  1 à côté des affiches, non 2 et ne sait pas 3 à côté de l'en-tête de son site ; « pour
+  enfants ? » — non, cinq sur cinq.
+- **Le premier écran (D19.15)** : onze maquettes, faites en réarrangeant la page d'une build
+  dans le navigateur, lues à une image par les sept personas ; puis l'écran retenu construit et
+  relu deux fois ; puis une variante de plus (§9.6 : dix-sept lectures). **Aucun écran ne
+  passe trois « oui » sur sept, et quatre fiches ne disent « oui » à rien** : l'instrument ne
+  mesure pas l'envie, il dit ce qui la retient. L'accueil en ligne : 1 « oui » ; le plateau de
+  tuiles : 1 « oui », 1 « non » ; **l'entrée construite : 2 puis 1, et plus aucun « non »** ;
+  arriver sur une carte ouverte : 0 — l'étiquette d'IA, d'emblée, refroidit six lecteurs sur
+  sept (R62).
+- **L'entrée, telle que construite.** Pour un nouveau venu — rien de trouvé, premier mot de la
+  liste — **le premier mot est donné** : l'étiquette, le mot géant sous un trait de surligneur
+  (la couleur de sa carapace, déjà tenue contre le texte dans chaque thème), « Ce mot est
+  écrit dans le programme. Pour dire quoi ? », UN geste — « Voir la mesure », qui est celui de
+  « Je ne sais pas » sous un autre nom : il ouvre la carte et ne juge rien —, « Chaque carte
+  mène à la page officielle. », puis sous un filet « Ce qu'on entend souvent », six thèmes et
+  « Chercher dans le programme ». La question commence au deuxième mot. La ligne « Ta tortue
+  change quand tu trouves des mots. » vient avec la première carte.
+  - Dans toute build, avec ou sans phrases ; **sans script, la même entrée** : le geste est un
+    lien vers l'ancre de « Je ne sais pas » (`#m1-0`), et la machine en CSS seul fait le
+    reste (`src/styles/game.css`).
+  - **Rien ne bouge quand le script prend le bloc** : l'entrée du HTML et celle du script
+    tiennent au même endroit, au pixel (tenu dans trois moteurs). Il a fallu pour cela que sa
+    boîte à elle ait la même hauteur avant et après qu'elle devient un bouton — elle gagnait
+    12 px, ce qui ne se voyait pas tant qu'une ligne de texte plus haute qu'elle la longeait.
+    Le décalage mesuré de la page au premier écran passe de 0,0003 à 0,0000.
+  - **Les six thèmes sont tenus par la règle des mots du jeu** (D16.26), calculée et non
+    listée : aucun ne repose sur une section dont le jeu ne tire pas de mot
+    (`doorRefusals`, `src/lib/game-door.ts`). Sur les quinze réponses, la règle en écarte
+    trois — « Immigration », « Police et sécurité », « Laïcité » : celles qu'une capture
+    retournerait avec une tortue à côté. La build s'arrête sur une liste qui la viole.
+  - Le trait de surligneur ne prend aucune place au mot : le plus long de la liste tient
+    toujours sur une ligne à 320 px.
+  - Un focus déjà posé dans la manche du HTML suit dans celle du script : sur le geste, sur le
+    même lien de l'autre porte, ou sur la question.
+  - Le script du jeu ne porte aucune expression « look-behind » (Safari d'avant 16.4 refuse la
+    syntaxe, et le script avec elle) : les deux phrases de l'accroche sont coupées à la build.
+- **La relecture hostile** des 48 cartes, des 16 fins de manche et des textes : **« non, pas
+  telles quelles »** (§9.7). Chaque constat vérifié par la session, contre la mesure pour les
+  phrases. Vrai et laissé à l'éditeur : la phrase de la première carte (w000), à réécrire et
+  redéposer ou à laisser à son lien ; le lien seul pour w005, w026 et w047, que la session
+  recommande ; « vérifiée » dans l'étiquette. Corrigé : cinq phrases des pages de faits et de
+  la description de l'accueil, la notice. Retiré avant d'avoir été montré : les trois phrases
+  de ses signes, « Les mêmes mots pour tout le monde. », le compte des cartes sans phrase.
+- **La revue de sécurité et de vie privée** : aucun constat bloquant, deux sérieux, neuf
+  mineurs — tous traités (§9.7). Ce qui en reste dans le code : le sceau du fichier des
+  phrases couvre aussi ce qu'il dit d'elles ; les deux tests qui tiennent le mot de l'éditeur
+  exigent une ligne de `decisions.md` à sa date, avec le début de l'empreinte ;
+  `npm run deploy` refuse une build qui montre des phrases dont le fichier n'est pas celui du
+  dépôt, et dit sinon pourquoi les cartes n'en montrent pas ; une ancre de la manche du HTML
+  remplace l'entrée d'historique qu'elle quitte dès que le script tourne ; le fichier du jeu
+  dit lui-même qui a écrit ses phrases ; « Un indice » se tait pendant un silence électoral.
+  **Et une porte nouvelle : tant que l'éditeur n'a pas accordé le fichier des phrases, aucun
+  fichier suivi ne porte douze mots de suite de l'une d'elles** — les images et les copies des
+  personas, qui en portent, sont sous `private/personas/` et n'entreront au dépôt qu'avec lui.
+- **Ce que le lot n'a pas fait, et pourquoi.** Une ligne portant son mot sur chaque carte
+  (pour qu'une carte recadrée se lise seule) : 26 px de marge à 390 × 844 n'y suffisent pas.
+  « Mot suivant » reste pleine largeur à côté d'un « C'est écrit là » en pastille : c'est le
+  dessin du plan approuvé.
+- **Textes** : dix-sept propositions de la session, au lieu de dix-neuf
+  (`TEXTES-JEU-DABORD.md`) — trois de plus pour l'entrée, cinq retirées, cinq corrigées.
+- **Portes** : 654 tests (653 passent, 1 sauté depuis toujours) — la liste des thèmes de
+  l'entrée, la porte des douze mots ; types, lint, contraste ; `a11y` 225 contrôles ; `e2e`
+  46 / 43 / 43 ; `e2e:ask` 109 / 102 / 102 ; `e2e:sheet` 102 / 96 / 96 ; `e2e:mascot2`
+  47 / 47 / 47 ; `e2e:game` 305 sous Chromium avec les mesures de laboratoire (286 sans),
+  270 sous Firefox, 270 sous WebKit — Firefox a trouvé qu'à 360 px un mot touchait le flamant
+  d'un pixel, la boîte de la mascotte ayant perdu 4 px de marge : rendus ; le balayage. **Non
+  rejoués sur cet écran** : le mode « off » et la sonde de performance — ils le seront sur
+  le premier écran qui restera.
+- Rien de servi n'a changé. `personas_session_on` et `hostile_review_on` sont redatés du
+  19 novembre dans `data/launch.json`, comme le plan le prévoyait.
+
+**Son second mot, à la fin du lot** — quand la session annonçait cette entrée : **« Le premier
+écran doit donner bien plus envie que le premier écran actuellement en ligne. C'est non
+négociable. »** Consigné D19.16 (329 décisions). **L'entrée de ce lot ne tient pas cette
+barre**, et la mesure qui le dit a dû être changée : à « ça te donne envie d'essayer ? »,
+posée écran par écran, quatre lecteurs sur sept ne disent « oui » à rien, et deux versions ne
+se séparent pas. Le **face-à-face** — les deux images côte à côte, « laquelle donne le plus
+envie, et de combien ? », treize lecteurs (les sept personas et six lecteurs sans fiche),
+l'ordre inversé pour la moitié — sépare, lui :
+
+| Face à l'accueil en ligne | la préfèrent | préfèrent l'accueil en ligne |
+|---|---|---|
+| l'entrée de ce lot (un mot, « Voir la mesure ») | 6 | **7** |
+| la même, sa seconde porte dite pour ce qu'elle est (« Tu cherches une mesure ? », un champ) | 8 | 5 |
+| **trois mots à toucher** (« wagon », « cantine », « mairies »), puis « Tu cherches autre chose ? », un champ et six thèmes | **11** (dont 7 « nettement ») | 2 |
+| la même avec « carburant », « cantine », « électricité » | **12** (dont 9 « nettement ») | 1 |
+| la même, la seconde porte commençant par « Ce qu'on entend souvent » | 10 | 3 |
+
+Deux camps, constants : ceux qui veulent comprendre tout de suite à quoi sert le site et
+partir de leur sujet — un mot seul et une tortue leur font « une devinette dont je ne vois pas
+l'intérêt » ; ceux qu'un mot concret accroche — un champ vide leur fait « un formulaire ».
+**Trois mots du quotidien à toucher servent les deux** : « une vraie liste », « des choses de
+ma vie », et « j'ai juste à appuyer ». Le premier écran est donc repris une seconde fois
+(lot 8 bis, ci-dessous) ; HYPOTHÈSE (lecteurs simulés) dans tous les cas.
+
+**Ce qui attend l'éditeur, dans cet ordre** — rien n'avance sans lui :
+
+1. **Un premier écran qui tient sa barre (D19.16)** — à construire, à mesurer face à l'accueil
+   en ligne, puis à lui montrer.
+2. Les textes nouveaux, dont « vérifiée ».
+3. Les cartes : la phrase de la première (réécrire et redéposer, ou lien seul) ; le lien seul
+   pour w005, w026, w047, en plus de w037.
+4. Le premier push du fichier des phrases, puis l'aperçu (lot 9) ; son « oui » daté pour la
+   production (lot 10).

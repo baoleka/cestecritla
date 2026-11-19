@@ -462,7 +462,9 @@ void test('every string naming an absent component has a local fallback or is ex
     // …and the label of the sentence a card of the game shows (D19.2): it is built only in a
     // build that shows such sentences — where the site asks (src/lib/game-gists.ts). Without
     // them there is no sentence to label, and the card says where, as before: no fallback.
-    if (key === 'game.gist.badge') continue;
+    // Likewise what /exactitude says of those sentences — who wrote them, what their
+    // fingerprint proves: counted in the game of the build, rendered only where there are any.
+    if (key === 'game.gist.badge' || key === 'accuracy.game.sentences') continue;
     if (typeof strings[`${key}.local`] !== 'string') missing.push(key);
   }
   assert.deepEqual(

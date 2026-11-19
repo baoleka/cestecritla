@@ -32,6 +32,8 @@ import {
   wordLinks,
   wordsNotReady,
 } from '../src/lib/game-data.js';
+import { DOOR_THEMES, doorRefusals, type DoorAnswer } from '../src/lib/game-door.js';
+import { wordlessSections } from '../src/lib/game.js';
 import { gameGists, readGameGists } from '../src/lib/game-gists.js';
 import { wordFragment } from '../src/lib/word-links.js';
 import { ROUND, type GameData } from '../src/lib/game-engine.js';
@@ -77,7 +79,7 @@ const printed = (text: string): string =>
 const flat = (html: string): string => html.replace(/&#39;/g, '’').replace(/\s+/g, ' ');
 /** The keys of the kit that are said of her, the mascot of the second generation. */
 const HERS =
-  /^(?:turtle\.(?:goal|passage|tint|figure|sign)\.|turtle\.(?:skip|keep\.tint|keep\.not_kept\.tint)$|turtle\.sheet\.(?:link|path|replay|on_phone_tint)$|privacy\.(?:game\.field|never\.05)\.tint$|accuracy\.unverified\.06$)/;
+  /^(?:turtle\.(?:goal|passage|tint|figure)\.|turtle\.(?:skip|keep\.tint|keep\.not_kept\.tint)$|turtle\.sheet\.(?:link|path|replay|on_phone_tint)$|privacy\.(?:game\.field|never\.05)\.tint$|accuracy\.unverified\.06$)/;
 const hers = Object.keys(kit).filter((key) => HERS.test(key));
 
 const manifestWords = (
@@ -160,6 +162,40 @@ void test(
     );
   },
 );
+
+void test('the themes under the first gesture are six published answers of ours, and none rests on a section no word of the game is taken from (D19.15, D16.26)', () => {
+  const sources = gameSources();
+  const sectionOf = new Map(
+    sources.manifest.sections.flatMap((section) =>
+      section.items.map((item) => [item.id, section.id] as const),
+    ),
+  );
+  const wordless = wordlessSections(gameWords(), sources);
+  // The answers as the build reads them (src/lib/editorial.ts, which belongs to the app).
+  const answers = (
+    JSON.parse(readFileSync('data/2026/riposte.json', 'utf8')) as { entries: DoorAnswer[] }
+  ).entries;
+  const refusals = (themes: readonly string[], among: readonly DoorAnswer[] = answers): string[] =>
+    doorRefusals(themes, among, wordless, (measure) => sectionOf.get(measure));
+  assert.equal(DOOR_THEMES.length, 6);
+  assert.deepEqual(refusals(DOOR_THEMES), []);
+  // The rule bites, on the answers as they are: the three themes a capture could turn with a
+  // turtle beside them are exactly those it leaves out — computed, not listed.
+  const out = answers.filter((answer) => refusals([answer.slug]).length > 0).map((a) => a.slug);
+  assert.deepEqual(out.sort(), ['immigration', 'laicite', 'police']);
+  for (const slug of out) assert.match(refusals([slug]).join('\n'), /no word of the game/);
+  // …and on what a list could become: a theme twice, a name nobody filed, an answer that is
+  // not published, a measure no section holds.
+  const first = DOOR_THEMES[0] ?? '';
+  assert.match(refusals([first, first]).join('\n'), /listed twice/);
+  assert.match(refusals(['nulle-part']).join('\n'), /no answer is filed/);
+  const pending: DoorAnswer[] = [
+    { slug: 'x', supports: [], review: { status: 'pending' } },
+    { slug: 'y', supports: [{ id: 'p9c9-s99-m99' }], review: { status: 'accepted' } },
+  ];
+  assert.match(refusals(['x'], pending).join('\n'), /not published/);
+  assert.match(refusals(['y'], pending).join('\n'), /no section holds/);
+});
 
 void test('the map of what is written is the game’s memory, field for field', () => {
   for (const key of STORAGE_STRINGS) {
@@ -256,10 +292,17 @@ for (const root of ['dist', 'dist-ask', 'dist-gists', 'dist-scrutin']) {
       // À propos, Exactitude: the game shows some of the sentences written ahead.
       assert.equal(says('a-propos', 'about.gists_game'), shows, 'a-propos');
       assert.equal(says('exactitude', 'about.gists_game'), shows, 'exactitude');
-      // Exactitude, « Les mots du jeu »: how many — the number of the file, never a typed one —
-      // and the cards that keep their link alone, when there are any.
+      // Exactitude, « Les mots du jeu »: how many — the number of the file, never a typed one —,
+      // that an AI wrote them, and what their fingerprint proves: that the measure has not
+      // changed, not that the sentence is right. The cards that keep their link alone are not
+      // counted on the page (withdrawn at lot 8: a number of what is missing, without a why).
       assert.equal(says('exactitude', 'accuracy.game.sentences', count), shows, 'the count');
-      assert.equal(says('exactitude', 'accuracy.game.link_only', linkOnly), linkOnly > 0);
+      assert.match(said('accuracy.game.sentences'), /Une IA les a écrites/);
+      assert.match(said('accuracy.game.sentences'), /pas que la phrase est juste/);
+      assert.ok(
+        !page('exactitude').includes('avec leur lien seul'),
+        'the count of what is missing',
+      );
       // Exactitude, « Nos propres textes »: nobody re-read them one by one — said of the game's
       // too, in the paragraph that speaks of re-reading; never both wordings.
       const alone = printed(said('accuracy.review.sentences').split('.')[0] ?? '');
@@ -267,9 +310,12 @@ for (const root of ['dist', 'dist-ask', 'dist-gists', 'dist-scrutin']) {
       if (shows) assert.ok(!page('exactitude').includes(`${alone}.`), 'both wordings');
       // Méthode: how they reach the page — with the game, in a file; playing sends nothing.
       assert.equal(says('methodologie', 'about.gists_game_method'), shows, 'methodologie');
-      // Licence: they are no extracts of the book, and those of the game are in a public file.
+      // Licence: they are no extracts of the book, and those of the game are in a public file
+      // — on which no licence to reuse is given: a public file is not a free one.
       assert.equal(says('licence', 'legal.license.sentences_game'), shows, 'licence');
       assert.equal(says('licence', 'legal.license.game_file'), shows, 'licence, the file');
+      assert.match(said('legal.license.game_file'), /Aucune licence de réutilisation/);
+      assert.doesNotMatch(said('legal.license.game_file'), /avec le code/);
       if (shows) assert.ok(!says('licence', 'legal.license.sentences'), 'both wordings');
       // The home page says what it opens on: the game where there is one (D19.1), and the
       // sentence of every other page where there is none.
@@ -277,6 +323,9 @@ for (const root of ['dist', 'dist-ask', 'dist-gists', 'dist-scrutin']) {
       const described = /<meta name="description" content="([^"]*)"/.exec(home)?.[1] ?? '';
       const wanted = published === null ? 'home.tagline' : 'home.description';
       assert.equal(flat(described), printed(said(wanted)), `${root}: its description`);
+      // …and that description is what a search engine and the preview of a link show, where
+      // the header of the site is not: it says first that the site is not official.
+      assert.match(said('home.description'), /^Site non officiel\. /);
     },
   );
 }
@@ -420,9 +469,22 @@ for (const root of ['dist', 'dist-ask']) {
         else if (Array.isArray(value)) value.forEach(walk);
         else if (typeof value === 'object' && value !== null) Object.values(value).forEach(walk);
       };
-      walk(published);
+      // What the file says of its own sentences is not walked with the rest: it is checked on
+      // its own, to the letter — there where sentences are, and nowhere else (below).
+      const { sentences: provenance, ...rest } = published;
+      walk(rest);
       const strangers = [...new Set(strings.filter((s) => !known.has(s)))];
       assert.deepEqual(strangers, [], 'strings no public file accounts for');
+      // A file that holds sentences says who wrote them, where a program reads it — the label
+      // of the card lives in the page, and this file is served, kept and copied without it
+      // (AI Act, art. 50 § 2). A file without sentences says nothing of the kind.
+      assert.deepEqual(
+        provenance,
+        published.words.some((word) => word.gist !== undefined)
+          ? { written_by: 'ai', read_by_a_person: false }
+          : undefined,
+        'the file of the game does not say who wrote its sentences — or says it of none',
+      );
       // Every word leads somewhere a link can land.
       for (const word of published.words) {
         assert.match(word.url, /^https:\/\/melenchon2027\.fr\/programme\/livre\/[^#]+#.+/, word.id);
@@ -459,7 +521,7 @@ for (const root of ['dist', 'dist-ask']) {
       level: 9,
     }).byteLength;
     // 14 KB since 18 November 2026 (D19.8, which amends D17.13's 10 KB): the card that holds a
-    // sentence, « Tu te souviens ? », the next words, her signs named. Still ONE file — a second
+    // sentence, « Tu te souviens ? », the next words, the entrance. Still ONE file — a second
     // one would be asked for during a round, and a round sends nothing.
     assert.ok(js <= 14 * 1024, `the game’s script: ${String(js)} B gzip`);
     // The home page, her drawing and her two stylesheets in it: the ceiling of D17.13 (20 KB).
@@ -540,6 +602,30 @@ for (const root of ['dist', 'dist-ask']) {
         ),
         'the room of her first sentence is never filled before the script',
       );
+      // The entrance (D19.15): a newcomer's first word is given. The page arrives with ONE
+      // gesture under it — a link to the anchor of « Je ne sais pas », which shows the card and
+      // judges nothing —, no tile and no question for that word, and the other door of the
+      // site: six themes, each a page of this build, and the way to the field.
+      const firstWord = /<div class="g-word g-word-1">[\s\S]*?<div class="g-place">/.exec(
+        home,
+      )?.[0];
+      assert.ok(firstWord !== undefined, 'the first word of the HTML round is not found');
+      assert.match(firstWord, /<a class="cta" href="#m1-0">/, 'its gesture');
+      assert.ok(firstWord.includes(printed(said('game.start.cta'))), 'what its gesture says');
+      assert.ok(firstWord.includes(printed(said('game.start.source'))), 'where every card leads');
+      assert.ok(!/class="g-tile"|class="g-ask"/.test(firstWord), 'the first word asks something');
+      const themes = [...firstWord.matchAll(/<a class="g-quiet" href="\/r\/([a-z-]+)\/"/g)].map(
+        (match) => match[1] ?? '',
+      );
+      assert.deepEqual(themes, [...DOOR_THEMES], 'the themes of the other door');
+      for (const slug of themes) {
+        assert.ok(existsSync(join(root, 'r', slug, 'index.html')), `/r/${slug}/ is not built`);
+      }
+      assert.match(firstWord, /<a class="g-find" href="#chercher">/, 'the way to the field');
+      assert.match(home, /<section[^>]*\bid="chercher"/, 'the section the door leads to');
+      // The question starts at the second word: two words with their six tiles.
+      assert.equal((home.match(/<a class="g-tile" href="#m[23]-[1-6]"/g) ?? []).length, 12);
+      assert.equal((home.match(/<a class="g-tile"/g) ?? []).length, 12, 'a tile of the first word');
       // Her sheet carries the label itself.
       const sheet = /<dialog[^>]*id="turtle-sheet"[\s\S]*?<\/dialog>/.exec(home)?.[0] ?? '';
       assert.ok(sheet.includes('Site non officiel.'), 'her sheet has lost « Site non officiel. »');

@@ -18,12 +18,25 @@
    long for the room left simply starts under her. */
 .g-her {
   float: inline-end;
-  margin-block: var(--space-3) var(--space-1);
+  /* A box of her own height, with no line in it: once the script has her she is in a button
+     (src/styles/game.css, `.g-press`), and a button on a line of text adds the room of that
+     line's descenders — the block was 12 px taller with the script than without, and since
+     the entrance (D19.15) the word stands right under her. */
+  display: flex;
+  /* …and the room under her is what that line used to add: as a flamingo she is drawn a little
+     past her box, and the word that stands under her must not touch her (Firefox, 360 px). */
+  margin-block: var(--space-3) var(--space-2);
   margin-inline-start: var(--space-3);
   --mascot-size: min(6rem, 25vw);
 }
-/* What is asked, and the card of the place, are never beside her: under her, whole. */
+/* Before the script has her — and where none runs — she keeps around her the room her button
+   will have: she does not move when she becomes one. */
+.g-her > .mascot {
+  margin: var(--space-1);
+}
+/* What is asked, the entrance and the card of the place are never beside her: under her, whole. */
 .g-question,
+.g-start,
 .g-place {
   clear: both;
 }
@@ -35,7 +48,8 @@
 .g-the-word {
   display: flow-root;
   inline-size: max-content;
-  max-inline-size: 100%;
+  /* As wide as the block, plus the two ends of its highlighter, which run into the margin. */
+  max-inline-size: calc(100% + 0.24em);
   hyphens: manual;
   /* On a line of its own, under her and under what is said of it (D19.1): the word is the
      subject of the first screen, and stands at the same place whatever its length. */
@@ -45,7 +59,12 @@
    step larger, since such a word still stands on one line at 320 px. Nothing in the scale of
    the kit is that large: the size is said from it, not typed. */
 .g-the-word[data-short] {
-  font-size: calc(var(--font-size-display) * 1.4);
+  /* …and larger still where the window gives the room: never under what stood at 320 px. */
+  font-size: clamp(
+    calc(var(--font-size-display) * 1.4),
+    14vw,
+    calc(var(--font-size-display) * 1.8)
+  );
   line-height: 1.1;
 }
 /* What will make her change, said beside her before a first word is found (D17.5). */

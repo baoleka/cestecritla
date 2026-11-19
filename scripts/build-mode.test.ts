@@ -996,6 +996,39 @@ void test('a build is a scrutin build only when its marker says so', () => {
   assert.equal(readBuildScrutin('build/does-not-exist.json'), false);
 });
 
+void test('a build that shows the sentences of the game goes out only with their committed file (D19.2)', () => {
+  const pages = ['index.html', 's/p1c1-s01/index.html'];
+  const open: DeployContext = { ...VALIDATED, launchBlockers: [], homeBlockers: [] };
+  const local = ['data/2026/game-gists.json is shown by this build and is not in the repository'];
+  // Shown from a file only this machine holds: refused on both hosts — the site says the file
+  // is public, and CI would build another game than the one deployed.
+  for (const target of ['preview', 'apex'] as const) {
+    const refusal = String(deployRefusal(target, 'app', pages, { ...open, gistsProblems: local }));
+    assert.match(refusal, /is not in the repository/, target);
+    assert.match(refusal, /commit and push the file first/, target);
+  }
+  // A dry run sends nothing; a build that shows none has nothing to publish; the holding page
+  // is no app build.
+  assert.equal(
+    deployRefusal('preview', 'app', pages, { ...open, gistsProblems: local, dryRun: true }),
+    null,
+  );
+  assert.equal(deployRefusal('preview', 'app', pages, { ...open, gistsProblems: [] }), null);
+  assert.equal(deployRefusal('preview', 'app', pages, open), null);
+  assert.equal(
+    deployRefusal('apex', 'holding', [...HOLDING_PAGES], { ...open, gistsProblems: local }),
+    null,
+  );
+  // The script asks git itself, and only for a build that shows sentences; and it reads no
+  // test variable a shell may have kept.
+  const deploy = readFileSync('scripts/deploy.ts', 'utf8');
+  assert.match(deploy, /gistsProblems: shownGists === null \? \[\] : gistsUnpublished\(\)/);
+  assert.match(deploy, /'ls-files', '--error-unmatch', '--', GAME_GISTS_PATH/);
+  assert.match(deploy, /'diff', '--quiet', 'HEAD', '--', GAME_GISTS_PATH/);
+  assert.match(deploy, /delete process\.env\['CEL_GAME_TEST'\]/);
+  assert.match(deploy, /delete process\.env\['CEL_SCRUTIN'\]/);
+});
+
 void test('the apex takes no app build from main until the editor has dated his yes (D19.12)', () => {
   const pages = ['index.html', 's/p1c1-s01/index.html'];
   const waiting = ['data/launch.json: the editor has not said yes to the game-first home'];

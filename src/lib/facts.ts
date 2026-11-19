@@ -125,8 +125,6 @@ export interface GameFacts {
    * validated.
    */
   sentences: number;
-  /** Cards that keep their link alone, in a build that shows sentences on the others. */
-  linkOnly: number;
 }
 
 /**
@@ -143,7 +141,6 @@ export function gameFacts(): GameFacts | null {
     words,
     share: `${percent(words / total, 3)}\u00a0%`,
     sentences,
-    linkOnly: sentences === 0 ? 0 : words - sentences,
   };
 }
 

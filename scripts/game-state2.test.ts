@@ -22,9 +22,7 @@ import {
   lineAtRoundEnd,
   lineAtStart,
   nextRoundChangesHer,
-  signAtRoundEnd,
   type HerLine,
-  type SignKey,
 } from '../src/lib/game-goal.js';
 import {
   KEPT_FIELDS,
@@ -206,16 +204,10 @@ void test('her colour: the last gesture wins', () => {
 // ---------------------------------------------------------------------------------------------
 
 /** The game, played to the end and once round again: what each round does to her. */
-function played(data: GameData): {
-  passages: number[];
-  announced: number[];
-  lines: HerLine[];
-  signs: (SignKey | null)[];
-} {
+function played(data: GameData): { passages: number[]; announced: number[]; lines: HerLine[] } {
   const passages: number[] = [];
   const announced: number[] = [];
   const lines: HerLine[] = [];
-  const signs: (SignKey | null)[] = [];
   let standing: Standing = { depth: 1, state: 0, arcs: [0, 0, 0] };
   let seen: string[] = [];
   let after: string | null = null;
@@ -229,10 +221,9 @@ function played(data: GameData): {
     const end = endOfRound(data, standing, seen);
     if (end.passage) passages.push(round);
     lines.push(lineAtRoundEnd(end, nextRoundChangesHer(data, end, seen, after)));
-    signs.push(signAtRoundEnd(standing, end));
     standing = end;
   }
-  return { passages, announced, lines, signs };
+  return { passages, announced, lines };
 }
 
 void test('on the committed list: the rounds where she changes, and the rounds that say so before', () => {
@@ -259,69 +250,6 @@ void test('on the committed list: the rounds where she changes, and the rounds t
   assert.deepEqual(said(16), { passage: 4, goal: null });
   // Everything is found: the game goes on, and she has nothing more to become.
   assert.deepEqual(said(17), { passage: null, goal: 'done' });
-});
-
-void test('on the committed list: a sign she shows is named when it appears, at a round that changes nothing else', () => {
-  const { data } = buildGame(gameWords(), gameSources(), null);
-  const { passages, lines, signs } = played(data);
-  const named = signs.flatMap((sign, index) => (sign === null ? [] : [[index + 1, sign] as const]));
-  console.log(
-    `  her signs are named at the end of rounds ${named.map(([r, k]) => `${String(r)} (${k})`).join(', ')}`,
-  );
-  // Her wings come ajar while she stands; then, in flight, she looks up, and a star is there.
-  assert.deepEqual(named, [
-    [5, 'ajar'],
-    [10, 'up'],
-    [13, 'star'],
-  ]);
-  // Never at a round that makes her pass: a passage has its own sentence — so what is said of
-  // her stays one sentence, two at most (the sign, then her goal).
-  for (const [round] of named) {
-    assert.ok(!passages.includes(round), `round ${String(round)}`);
-    assert.equal(lines[round - 1]?.passage, null);
-  }
-  // A sign is named once, when it appears: the rounds that follow say her goal alone.
-  assert.equal(signs[5], null);
-  assert.equal(signs[10], null);
-});
-
-void test('a sign is named from her arcs alone, and never when she passes', () => {
-  const arcs = (second: number, third: number): [number, number, number] => [6, second, third];
-  // Standing: her wings come ajar when the second arc reaches four steps.
-  assert.equal(
-    signAtRoundEnd({ state: 2, arcs: arcs(3, 0) }, { state: 2, arcs: arcs(4, 0), passage: false }),
-    'ajar',
-  );
-  assert.equal(
-    signAtRoundEnd({ state: 2, arcs: arcs(4, 0) }, { state: 2, arcs: arcs(5, 0), passage: false }),
-    null,
-  );
-  // In flight: she looks up at four steps of the third arc, and a star is there at five.
-  assert.equal(
-    signAtRoundEnd({ state: 3, arcs: arcs(6, 3) }, { state: 3, arcs: arcs(6, 4), passage: false }),
-    'up',
-  );
-  assert.equal(
-    signAtRoundEnd({ state: 3, arcs: arcs(6, 4) }, { state: 3, arcs: arcs(6, 5), passage: false }),
-    'star',
-  );
-  // Both at once: the last one shown is the one named.
-  assert.equal(
-    signAtRoundEnd({ state: 3, arcs: arcs(6, 2) }, { state: 3, arcs: arcs(6, 5), passage: false }),
-    'star',
-  );
-  // A passage is not a sign, whatever her arcs: it has its own sentence.
-  assert.equal(
-    signAtRoundEnd({ state: 2, arcs: arcs(5, 0) }, { state: 3, arcs: arcs(6, 5), passage: true }),
-    null,
-  );
-  // Nothing new, or a state that shows no sign: nothing to say.
-  for (const state of [0, 1, 4] as const) {
-    assert.equal(
-      signAtRoundEnd({ state, arcs: arcs(6, 6) }, { state, arcs: arcs(6, 6), passage: false }),
-      null,
-    );
-  }
 });
 
 void test('what is said of her is one sentence, two at most, and never about a choice', () => {

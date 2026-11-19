@@ -71,7 +71,11 @@ export interface GameGistsFile {
     written_by: string;
     /** `false`: no person read them one by one. The label of the card is held to this. */
     read_by_a_person: boolean;
-    /** The fingerprint of `gists` as they stand (`gameGistsFingerprint`). */
+    /**
+     * The seal of the file (`gameGistsFingerprint`): its sentences as they stand AND what it
+     * claims of them above — the book, the list, the deposit, who wrote them, who read them,
+     * the cards left to their link.
+     */
     sha256: string;
     /**
      * The editor's word that this very file may be published with the game (D19.2): a date, his
@@ -91,11 +95,34 @@ export interface GameGistsFile {
 const isDate = (value: unknown): value is string =>
   typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value);
 
-/** The fingerprint of a set of sentences: each as the file holds it, in the file's order. */
-export function gameGistsFingerprint(gists: readonly GameGist[]): string {
-  return canonicalHash(
+/** What a file says of its own sentences: sealed with them. */
+export type GameGistsClaims = Pick<
+  GameGistsFile['meta'],
+  | 'corpus_version'
+  | 'words_sha256'
+  | 'deposit_sha256'
+  | 'written_by'
+  | 'read_by_a_person'
+  | 'link_only'
+>;
+
+/**
+ * The seal of a file: its sentences, each as the file holds it and in the file's order, AND
+ * what the file claims of them. The editor's validation is given on this one value — so a
+ * claim cannot be edited under it: a file whose `deposit_sha256` was retyped after a new
+ * deposit is no longer the file he agreed to (found by the security review of 19/11/2026: the
+ * first seal covered the rows alone).
+ */
+export function gameGistsFingerprint(claims: GameGistsClaims, gists: readonly GameGist[]): string {
+  return canonicalHash([
+    claims.corpus_version,
+    claims.words_sha256,
+    claims.deposit_sha256,
+    claims.written_by,
+    claims.read_by_a_person,
+    [...(claims.link_only ?? [])].sort(),
     gists.map((gist) => [gist.id, gist.sha256, gist.lead_sha256 ?? null, gist.text]),
-  );
+  ]);
 }
 
 /** The file, or null where there is none (a checkout made before the editor's go). */
@@ -155,8 +182,10 @@ export function gameGistsNotReady(file: GameGistsFile, context: GameGistsContext
     seen.add(gist.id);
     if (unfit(gist.id, gist.text)) out.push(`${gist.id}: not one line a card can hold`);
   }
-  if (meta.sha256 !== gameGistsFingerprint(gists)) {
-    out.push('the sentences changed after the file was sealed: meta.sha256');
+  if (meta.sha256 !== gameGistsFingerprint(meta, gists)) {
+    out.push(
+      'the sentences, or what the file says of them, changed after it was sealed: meta.sha256',
+    );
   }
   if (context.test !== true) {
     const { on, by, sha256 } = meta.validated;
@@ -201,10 +230,25 @@ export interface GameGistsDecision {
  * Pure: the mode, the two files and the list are passed in.
  */
 export function gameGistsOf(decision: GameGistsDecision): ReadonlyMap<string, string> | null {
-  const { mode, ask, file, context } = decision;
-  if (mode !== 'chat' || file === null || !campaignDecided(ask)) return null;
-  if (gameGistsNotReady(file, context).length > 0) return null;
+  const { file } = decision;
+  if (file === null || gameGistsSilence(decision).length > 0) return null;
   return new Map(file.gists.map((gist) => [gist.id, gist.text]));
+}
+
+/**
+ * Why a build puts no sentence on its cards — nothing when it puts them. The same rule as
+ * `gameGistsOf`, in words: a build does not FAIL on a file it will not show, it keeps every
+ * card at its link alone — so whoever deploys is told why (scripts/deploy.ts), and a file
+ * retouched by hand cannot go unnoticed as « the sentences are simply not there ».
+ */
+export function gameGistsSilence(decision: GameGistsDecision): string[] {
+  const { mode, ask, file, context } = decision;
+  if (mode !== 'chat') return ['this host does not answer questions (mode « off »)'];
+  if (file === null) return [`${GAME_GISTS_PATH} is not on this machine`];
+  return [
+    ...(campaignDecided(ask) ? [] : ['the decision on the campaign is not the editor’s, dated']),
+    ...gameGistsNotReady(file, context),
+  ];
 }
 
 /** The deposit data/2026/ask.json says the site serves, or null. */
@@ -233,13 +277,30 @@ export function gameGists(
   corpus: string,
   build: GameGistsBuild = {},
 ): ReadonlyMap<string, string> | null {
+  return gameGistsOf(decisionFor(words, corpus, build));
+}
+
+/** Why the build under way puts no sentence on its cards (`gameGistsSilence`), or nothing. */
+export function gameGistsWhyNot(
+  words: GameWordsFile['words'],
+  corpus: string,
+  build: GameGistsBuild = {},
+): string[] {
+  return gameGistsSilence(decisionFor(words, corpus, build));
+}
+
+function decisionFor(
+  words: GameWordsFile['words'],
+  corpus: string,
+  build: GameGistsBuild,
+): GameGistsDecision {
   const ask: unknown = JSON.parse(readFileSync(ASK_PATH, 'utf8'));
   const test = build.test ?? process.env['CEL_GAME_TEST'] === '1';
   const host = build.host ?? (process.env['CEL_HOST'] === 'preview' ? 'preview' : 'apex');
-  return gameGistsOf({
+  return {
     mode: build.mode ?? modeFor(ask, host),
     ask,
     file: readGameGists(),
     context: { corpus, words, deposit: depositOf(ask), test },
-  });
+  };
 }

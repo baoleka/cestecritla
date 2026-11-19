@@ -133,15 +133,10 @@ const ENGINE_NAMES: Record<string, string> = {
         <p>{t('accuracy.game.words', { count: fr(game.words), total: game.share })}</p>
         <p>{t('accuracy.game.proof')}</p>
         {
-          /* The sentences on its cards (D19.2), counted in the game this build publishes —
-             and the cards that keep their link alone, when there are any. */
+          /* The sentences on its cards (D19.2), counted in the game this build publishes:
+             who wrote them, and what their fingerprint proves — and does not. */
           game.sentences > 0 && (
             <p>{t('accuracy.game.sentences', { count: fr(game.sentences) })}</p>
-          )
-        }
-        {
-          game.linkOnly > 0 && (
-            <p>{t('accuracy.game.link_only', { count: fr(game.linkOnly) })}</p>
           )
         }
       </>

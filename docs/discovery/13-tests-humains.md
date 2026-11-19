@@ -1118,3 +1118,171 @@ Durées estimées par les agents pour tout le parcours, en secondes : M1 20 (ell
 - Des modèles, pas des personnes, sur des images fixes. Rien n'a été touché ni vu bouger : le passage n'est connu que par six instants.
 - Le chemin du dossier de travail trahissait un test : à rendre neutre la prochaine fois.
 - La question T5 citait « Une couleur par partie du livre. », que D17.31 venait de retirer de l'écran. Trois personas l'ont dit, et leurs réponses portent sur ce qu'ils voyaient.
+
+## 9. Session 5 (19 novembre 2026, par personas-agents lancés à l'aveugle) — le jeu d'abord, sur une build locale
+
+> **Ce qui a été joué.** Le jeu refait du chantier « Le jeu d'abord » (`PLAN-JEU-DABORD.md`, lots 0 à 7, commit `b29d890`), **sur une build d'essai locale** — `dist-gists/` : la feuille telle qu'elle ouvre, sans IA en direct, et dans le jeu 47 phrases et une carte à son lien seul. **Rien n'en est en ligne** : c'est la différence avec la session 4, jouée sur l'aperçu. Douze images à 390 × 844 :
+> - `01` le premier écran ; `02` après « Un indice » ;
+> - `03` la carte après une tuile qui n'est pas la bonne ; `04` la carte du mot suivant, tuile juste ;
+> - `05` et `06` la fin de la première manche (le haut, puis le bas) ; `07` le mot de « Tu te souviens ? » touché ; `08` la carte « Garder ta tortue » ouverte ;
+> - `09` la question de chapitre, à la troisième manche ; `10` la fin de la cinquième manche (« Ses ailes s'entrouvrent. ») ;
+> - `11` sa fiche, un mot touché ; `12` la section « Chercher », plus bas sur la page.
+>
+> **Sept personas, à l'aveugle** (R49), comme au §8 : chacun lancé hors du dépôt, dans un dossier au nom neutre, par `claude -p --tools Read --no-session-persistence --strict-mcp-config`, avec sa fiche de `eval/personas.json`, le chemin exact de chaque image et une feuille de questions. Lecteurs : Opus pour M1, M3 et N1 ; Sonnet pour M2, M4 et N2 ; Haiku pour N3. **Les copies, la feuille de questions et les images sont gardées telles que rendues, hors du dépôt** (`private/personas/2026-11-19/`, sur la machine de l'éditeur) : elles portent des phrases du jeu, et aucune n'entre dans un dépôt public avant l'accord de l'éditeur sur le fichier des phrases (revue de sécurité du 19 novembre ; une porte le tient, `scripts/game-gists.test.ts`). Elles seront archivées ici, sous `captures/`, avec ce fichier.
+>
+> **Ce qu'ils disent avoir reçu (T13) : rien sur le site, pour les sept.** Quatre signalent les préférences générales de l'utilisateur, l'adresse du compte (non recopiée), le chemin du dossier de travail — qui porte encore l'ancien nom du projet — et un dossier de greffon. Le dossier lui-même avait un nom neutre ; son chemin ne peut pas l'être tant que le dossier de travail temporaire est celui de la session.
+>
+> **Statut : HYPOTHÈSE (personas)** (D14.8) : des modèles, sur des images fixes.
+
+### 9.1 Ce que les sept ont répondu
+
+| Tâche | Réponse | Sur 7 |
+|---|---|---|
+| T1 | le site est officiel | non : 7 (« Site non officiel », « projet militant indépendant », lus par les sept ; N2 : « qui est ce militant ? Il n'y a pas de nom ») |
+| T1 | à quoi sert la page | un jeu, un quiz : 7 ; M1 : « je venais chercher un chiffre, pas deviner où se trouve wagon » ; N1 choisirait « au pif » : « bifurcation », « nouvelles frontières de l'humanité », « j'ai rien compris » |
+| T1 | le dessin | une mascotte qui évolue : 7 (« tamagotchi » : 3 ; « une sorte de récompense, un peu gamin » : N2 ; « un compteur peut-être » : N3) |
+| T1 | envie d'essayer | **oui 1 (M3) · bof 6** |
+| T2 | « Un indice » | aide sans donner la réponse : 7 ; trois tuiles sont marquées, quatre lecteurs en comptent deux ; « le rose est très pâle, sans « par ici » je ne le verrais pas » (M4) |
+| T3 | une tuile qui n'est pas la bonne : le jeu a dit « tort » | **non : 7** — ni raison ni tort : 6, N3 a lu « raison ». Trois ne savent pas s'ils avaient bon (M3, M4, N1) ; M1 le déduit |
+| T3 | qui a écrit la phrase du cadre | **une IA : 7**, l'étiquette citée par les sept ; « pas le programme », dit par six |
+| T3 | la croient-ils | à moitié, pas sur parole : 7. **Les trois derniers mots de la phrase du premier mot — la condition du raccordement — arrêtent six lecteurs sur sept** : « on dirait le contraire de ce qu'on défend, et en capture ça peut se retourner contre moi » (M1), « on dirait que ça dit le contraire de l'écologie » (M3). Pour lire le vrai texte : « C'est écrit là » pour 5 ; M4 n'est pas sûr que le bouton y mène ; N3 chercherait un PDF |
+| T3 | ont appris quelque chose | oui : 6 (le fret ferroviaire) ; N3 : « que wagon est dans la partie 1, rien de plus » |
+| T4 | tuile juste : félicité | non : 7 (« Oui. », « sobre » pour 4 ; « sec, on dirait un prof qui corrige » : M3) |
+| T5 | un score, un niveau, ce qui reste | non : 7 |
+| T5 | « Tu te souviens ? » | compris : 7. Le feraient : peut-être 6, non 1 (M1 : « je ne suis pas là pour réviser »). « Pourquoi un seul mot ? » : 2 ; « révision de cours », « exercice » : 3 ; « je ne sais pas ce qui va se passer » : 2 |
+| T5 | « Les prochains mots » | curiosité : 3 (« braille dans un programme politique, je veux savoir ce que ça fait là », M3) · utile, « pas de piège » : 3 · « ça casse le suspense, mais ça m'est égal » : 1. « Trois autres mots » : oui 1, peut-être 6. « Petit et un peu serré » (M4) |
+| T5 | « Les mêmes mots pour tout le monde. » | compris : 7 ; lu « comme Wordle » par 3 (« ils ne disent pas si ça change chaque jour », M3) ; « on ne me profile pas, ça me rassure » (N2) |
+| T6 | la carte rouverte : noté, corrigé | non : 7 (« le site ne sait pas si je m'en souvenais. C'est bien : pas de contrôle », N2) |
+| T7 | « Garder » : quoi, où, vu par qui, envoyé | juste : 6 ; N3 croit que personne ne le voit. Gardent : 2 (M3, M4) ; non : 5. « Six phrases pour un bouton » : 3 |
+| T8 | la question de chapitre | comprise : 7 ; plus dure : 7. Continuent : oui 1 (M4 : « ça m'apprend le plan du programme »), peut-être 4, non 2 (M1 ; N1 : « Entrer en mer sans saccage, j'y comprends rien ») |
+| T9 | « Ses ailes s'entrouvrent. » | lue comme une étape vers la suite : 7 ; « un peu mièvre » (N2), « un peu obscur » (M4), « par métaphore, pas très limpide » (M2) ; « avoir un objectif, ça me plaît » (M3) |
+| T9 | l'écran dit où on en est, ou ce qui reste | non : 7 ; deux voudraient un compteur (M3 : « un 4/20 » ; M4 : « un 3 sur 6 ») |
+| T10 | sa fiche | un carnet des mots vus : 7. S'en serviraient : 6 (« retrouver une mesure et l'envoyer », « quand on me pose la question au café ») ; non : 1 (N3) |
+| T11 | la section « Chercher » | une recherche dans le programme : 7 ; s'en serviraient : 7. **Pour cinq, c'est elle « le site », ou sa partie utile** (M1 : « le jeu est un bonus qui cache l'outil utile ») |
+| T12 | pour qui | des adultes, sympathisants ou curieux, de 18 à 40 ans : 7 |
+| T12 | enfantin | **un peu : 7** (la tortue, la vague, le flamant, le tutoiement ; « ses ailes s'entrouvrent » cité par 2) |
+| T12 | de mémoire : une chose que le programme prévoit, lue ici | **les sept en citent une** : l'école publique réellement gratuite (7), le fret ferroviaire (2), le braille à l'école (2) |
+| T12 | combien de manches | une ou deux : 2 (M1, N1) · deux ou trois : 4 · trois ou quatre : 1 (N3) |
+| T12 | l'envoyer | aux militants : 2 (M3, M4) · à un proche : 2 (N1, N2) · peut-être, après vérification : 1 (M2) · « le jeu jamais, la recherche oui » : 1 (M1) · non : 1 (N3) |
+| T12 | ce qui gêne | des phrases d'IA à la place du texte : 4 (M1, M2, M4, N2) · pas de compteur : 2 · des titres qu'on ne comprend pas : 1 (N1) · ne pas savoir qui est derrière : 1 (N2) · trop de texte : 2 (M3, N3) |
+
+Durées estimées par les agents, en secondes : M1 120, M2 420, M3 300, M4 600, N1 190, N2 420, N3 150. Ce ne sont pas des mesures.
+
+### 9.2 Quatre lectures à l'aveugle, sans fiche de persona
+
+Une image, une question, cinq lecteurs lancés hors du dépôt (Opus deux fois, Sonnet deux fois, Haiku une fois). Aucun ne dit avoir reçu quoi que ce soit sur le site.
+
+| Ce qu'on montre | La question | Réponses (sur 5) |
+|---|---|---|
+| La carte seule (le lieu, « C'est écrit là », le cadre de la phrase) | « Qui a écrit la phrase du cadre ? Est-ce une citation ? » | **une IA : 5** (l'étiquette) ; une citation : non 5. Deux lecteurs rattachent « C'est écrit dans la partie 4. » à la phrase : le mot, qui la précède à l'écran, n'était pas sur l'image |
+| Notre premier écran, à côté de cinq affiches de la campagne | « Même équipe ? Un site officiel ? » | même équipe : non 4, ne sait pas 1 ; officiel : non 5 |
+| Notre premier écran, à côté de l'en-tête du site de la campagne (capturé le 7 septembre) | « Même équipe ? Un site officiel ? » | même équipe : **non 2, ne sait pas 3, oui 0** — « la même palette », « un site qui s'inspire de la charte » ; officiel : non 5 |
+| Le premier écran et une fin de manche (le flamant) | « À qui s'adresse ce site ? Un site pour enfants ? » | des adultes : 5 ; pour enfants : non 5 — deux ajoutent que « le style peut tromper au premier coup d'œil », ou paraître « infantilisant » |
+
+### 9.3 Ce que la session dit, ce qu'elle a fait corriger, ce qu'elle laisse à l'éditeur
+
+- **Aucun critère de correction du §6 ne se déclenche.** Personne ne lit « tort » sur la carte (0 sur 7) ; les sept nomment l'IA comme l'auteur de la phrase, et les cinq lecteurs à l'aveugle aussi (`14-risques.md` R50) ; personne ne prend le site pour officiel ; personne ne voit de score ni de reste.
+- **Ce que la refonte visait est atteint, à sa mesure** : les sept citent de mémoire une mesure lue sur une carte. Ce sont des modèles sur des images — ce n'est pas la mémoire d'une personne une semaine plus tard.
+- **Corrigé le jour même** :
+  - les mots qui viennent, sous « Trois autres mots », à la taille du texte (14 px était « petit et serré ») ; ils ne sont plus annoncés une fois tous les mots trouvés (le jeu repart du début : des mots déjà vus auraient été dits « prochains ») ;
+  - la ligne du rappel dit ce que fait le geste — « Touche un mot : sa carte se rouvre. » — et le titre porte seul l'invitation à se souvenir ;
+  - **les trois phrases qui disaient ses signes sont retirées** (« mièvre », « obscur », « pas limpide » pour trois lecteurs ; « phrases d'album pour enfants » pour le relecteur hostile, §9.7) : ses signes restent dessinés, plus rien ne les nomme ;
+  - **« Les mêmes mots pour tout le monde. » est retirée** : lue « comme Wordle » par trois lecteurs, alors que rien ne change chaque jour.
+- **À l'éditeur, parce que la décision est la sienne** :
+  - **la phrase du premier mot** (« wagon », w000) : ses trois derniers mots se lisent à contresens pour six lecteurs sur sept. La mesure, relue par la session, ne dit pas le contraire de l'écologie : la phrase a trop serré sa condition. Une phrase ne se retouche pas à la main dans le fichier du jeu : ou bien sa carte passe « à son lien seul », ou bien elle est réécrite et **redéposée** — ce qui corrige aussi « Demander », où elle est servie aujourd'hui ;
+  - **le premier écran ne donne pas envie** (bof : 6) : il annonce la mascotte, pas ce qu'on y gagne — or c'est la phrase de la carte que les lecteurs citent ensuite comme ce qu'ils gardent. **L'éditeur l'a lu et tranché le jour même (D19.15) : « Le premier écran doit donner envie, sinon on remplace pas. » — la suite est au §9.6** ;
+  - **« un peu enfantin », pour les sept** : l'idée, plus que le trait — et le tutoiement, et ses phrases (« Ses ailes s'entrouvrent. » : « mièvre », « obscur », « pas limpide » pour trois) ;
+  - **pour cinq, « le site », c'est la recherche** : D19.1 a mis le jeu devant en le sachant ; le lien « Chercher » de l'en-tête est ce qui les y mène ;
+  - quatre se méfient d'une phrase d'IA à la place du texte ; deux voudraient un compteur (refusé, D19.3) ; la carte « Garder » reste longue (D19.11 : texte inchangé).
+- **`14-risques.md`** : R50 tient dans cette session et à l'aveugle ; R54 — à côté des affiches, quatre « non » ; à côté de l'en-tête de la campagne, trois « ne sait pas » pour la palette, aucun « oui » ; R55 — personne ne dit « pour enfants », mais « infantilisant » est écrit deux fois.
+
+### 9.4 Ce qui a été mesuré le même jour, sans lecteur
+
+- **Le balayage du jeu entier** (`npm run sweep:game`, Chromium, cinq tailles, 48 cartes et 16 fins de manche à chacune ; rejoué avec l'entrée du §9.6) : aucune tuile de plus de cinq lignes (cinq à 360 px pour la partie 4, quatre ailleurs) ; **à 390 × 844 et 412 × 915, « Mot suivant » est entier à l'écran sur les 48 cartes** (26 px de marge sur la plus serrée à 390 × 844) et « Trois autres mots » sur les 16 fins de manche ; à 360 × 740, sur 35 cartes (au pire 115 px à défiler) ; à 360 × 640, sur 7 ; à 320 × 568, sur 1 — là, le mot reste en haut et la carte se lit en défilant. **L'entrée tient entière à l'écran à 360 × 740, 390 × 844 et 412 × 915** ; sa dernière ligne (« Chercher dans le programme ») finit 42 px sous l'écran à 360 × 640 et 152 px à 320 × 568 — son geste, lui, est à l'écran partout. Aucun débordement de côté ; les 47 phrases sous leur étiquette à chaque taille.
+- **Le site avec « Demander » coupé** (« mode » : « off », construit puis remis) : la build passe ; 651 tests sur 652 — le seul qui tombe est la ligne qui épingle le mode enregistré, faite pour changer avec un retrait ; `e2e` 50 / 47 / 47 ; dans le jeu, 48 cartes, aucune phrase, aucune étiquette, et aucune page ne nomme d'IA à son propos.
+- **Performance, dans le labo du budget** (`scripts/perf-probe.ts`) : LCP médian 384 ms pour 2 500 ; CLS 0,0048 pour 0,1 ; interactions de 16 à 40 ms pour 200.
+
+### 9.5 Limites propres à cette session
+
+- Des modèles, pas des personnes, sur des images fixes : rien n'a été touché, rien n'a été vu bouger ; « de mémoire » ne mesure pas une mémoire.
+- Une build locale, pas l'aperçu : ni le réseau, ni un vrai téléphone.
+- La première carte montrée était celle que la session propose de corriger : la méfiance envers les phrases (T3, T12) en porte la trace.
+- Le chemin du dossier de travail n'était pas neutre (l'ancien nom du projet s'y lit).
+
+### 9.6 Le premier écran (D19.15) — dix-sept lectures à une image
+
+> **Le mot de l'éditeur, le 19 novembre, à la lecture du §9.3 : « Le premier écran doit donner envie, sinon on remplace pas. »** La refonte ne remplace donc l'accueil en ligne que si son premier écran donne envie ; il a été repris, relu, et **c'est l'éditeur qui en juge, sur pièces** (D19.15). L'envie ne s'achète ni par un score, ni par une série, ni par un bravo (D19.3).
+
+**La méthode.** Une seule image à 390 × 844 — « la première chose que tu vois en ouvrant ce site » —, regardée « cinq secondes, sans défiler », par les sept personas lancés à l'aveugle comme au §9 (mêmes modèles, mêmes fiches). Six questions ; celle qui compte ici : **« Ça te donne envie d'essayer ? Réponds d'abord par un seul mot — oui, bof ou non. »** Onze maquettes ont été faites en réarrangeant, dans le navigateur, la page d'une build (rien n'en était construit), puis l'écran retenu a été **construit** et relu deux fois, avec une variante que les maquettes n'avaient pas couverte.
+
+| | Ce que montre l'image | oui | bof | non |
+|---|---|---|---|---|
+| P | **l'accueil en ligne aujourd'hui** : le champ d'abord, les quinze puces, le jeu sous le pli | 1 (M1) | 6 | 0 |
+| A | **le jeu d'abord tel que construit aux lots 2 à 6** : la ligne de la tortue, le mot, la question, « Je ne sais pas », « Un indice », six tuiles | 1 (M3) | 5 | 1 (M1) |
+| B | A, l'étiquette en capitales, le mot géant sous un trait de surligneur, une phrase sous le mot | 1 | 5 | 1 |
+| D | B, les six tuiles sur une colonne | 1 | 5 | 1 |
+| S1 | plus de tuiles : le mot, la phrase, un bouton « Trouver où c'est écrit », les mots qui suivent, et un renvoi à la recherche | 1 | 6 | 0 |
+| R1 | le mot (« cantine »), la ligne de la tortue, un bouton « Que prévoit le programme ? », « Puis trouve où c'est écrit : chaque carte mène à la page officielle. », le renvoi à la recherche | 1 | 6 | 0 |
+| R2 | R1, avec « wagon » | 0 | 7 | 0 |
+| R3 | R1, sans la ligne de la tortue | 1 | 6 | 0 |
+| H1 | R3, et sous un filet six thèmes en pastilles (« Ou cherche une mesure ») | **3** (M1, M3, M4) | 4 | 0 |
+| H3 | H1, la question lue sous le mot et un bouton « Voir la mesure » | 2 | 5 | 0 |
+| H4 | H3, la ligne « de qui est le programme » descendue sous les thèmes | 2 | 5 | 0 |
+| H5 | « Ce mot est écrit dans le programme. Pour dire quoi ? », « Voir la mesure », et un second bouton « Deviner où c'est écrit » (« cantine ») | 2 | 5 | 0 |
+| H5 bis | la même image, relue | 1 | 5 | 0 (une copie illisible) |
+| H6 | H5, avec « wagon » | 2 | 5 | 0 |
+| **K1** | **l'entrée telle que construite** (capture de la build) : l'étiquette, « wagon » géant et surligné, « Ce mot est écrit dans le programme. Pour dire quoi ? », **« Voir la mesure »**, « Chaque carte mène à la page officielle. », puis sous un filet « Ce qu'on entend souvent », six thèmes et « Chercher dans le programme » | **2** (M3, M4) | 5 | 0 |
+| K1 bis | la même image, relue | 1 (M3) | 6 | 0 |
+| L1 | **arriver sur une carte ouverte** (état réel de la build) : « cantine », le lieu, « C'est écrit là », la phrase sous son étiquette, « Mot suivant » | **0** | 7 | 0 |
+
+**Ce que ces lectures disent.**
+
+- **Aucun premier écran ne fait dire « oui » à plus de trois lecteurs sur sept**, et quatre des sept (M2, N1, N2, N3) n'ont dit « oui » à aucun des dix-sept. L'instrument a un plafond bas : il sépare mal deux bons écrans, et la même image relue donne 2 puis 1 (K1), 2 puis 1 (H5). **Ce n'est pas une mesure de l'envie ; c'est une liste de ce qui la retient.**
+- **Ce que l'entrée change, et qui tient d'une lecture à l'autre : plus aucun « non ».** Devant le plateau de tuiles, M1 — la militante pressée, le public premier du site — disait « non » trois fois sur trois ; devant l'entrée elle dit « bof » et nomme ce qu'elle y prend : les thèmes, et le renvoi à la page officielle.
+- **Ce qui attire, dans leurs mots** : « chaque carte mène à la page officielle » (M1, M2, N2 : « je peux vérifier moi-même ») ; les thèmes en pastilles (M1, M4, N1 : « c'est direct et ça me parle ») ; le mot géant surligné (M3 : « ça claque, ça fait pas tract » ; N3 : « ça fait une surprise »).
+- **Ce qui freine, et que la mise en page ne règle pas** : un mot « sorti de nulle part » dont on ne voit pas ce qu'il rapporte (cinq sur sept) ; la tortue, lue « jeu pour gamins » ou « sans rapport » (M1, M2, M4 ; N1 et N2 ne la comprennent pas — M3 et N3, eux, l'aiment) ; « militant » et un seul parti, sans nom derrière (N1, N2) ; la ligne du haut et l'étiquette, « trop de texte » (M3, N3).
+- **Une phrase d'IA ne se met pas au premier écran.** Arriver sur une carte ouverte fait tomber les deux « oui » : six lecteurs sur sept citent l'étiquette comme ce qui les refroidit (« en face ils diront c'est ChatGPT », M1 ; « je veux le texte exact du programme et pas un résumé », M4 ; « ça me refroidit direct sur la fiabilité », M3) — alors que la même phrase, lue après un geste, est ce que les sept retenaient au §9.1. L'entrée la laisse derrière « Voir la mesure ».
+- Le mot (« wagon » ou « cantine ») ne change rien au compte (H5, H6).
+
+**Ce qui est construit** (lot 8, `src/components/Game2.astro`, `src/scripts/game2.ts`) : pour un nouveau venu — rien de trouvé, premier mot de la liste — **le premier mot est donné**. Pas de question, pas de tuile : un geste, « Voir la mesure », qui est celui de « Je ne sais pas » sous un autre nom et ne juge rien ; il ouvre la carte du mot. La question commence au deuxième mot. Sous ce geste, l'autre porte du site : six des quinze thèmes de « Ce qu'on entend souvent » — ceux qui ne reposent sur aucune section dont le jeu ne tire pas de mot (D16.26 ; `src/lib/game-door.ts`) — et « Chercher dans le programme ». La ligne « Ta tortue change quand tu trouves des mots. » n'est plus sur l'entrée : elle vient avec la première carte. L'entrée existe dans toute build, avec ou sans phrases, avec ou sans script (son geste est alors un lien), et elle ne bouge pas quand le script prend le bloc (tenu dans trois moteurs).
+
+**Ce qui revient à l'éditeur** : dire si cet écran donne envie — c'est son critère, et ces lectures ne le remplacent pas. Ce que la session ne peut pas changer sans lui, et que les lecteurs nomment : la tortue sur le premier écran (D16.11, D17.9), la ligne « de qui est le programme, qui fait le site » (validée le 14 novembre), l'ordre des mots (sa validation).
+
+**Limites.** Des modèles, une image, cinq secondes simulées, une seule réponse par lecteur et par image ; les sept fiches portent chacune ses lignes rouges (« tout ce qui ressemble à un jeu pour enfants », pour M1) : un « bof » dit autant la fiche que l'écran. Trois lecteurs disent avoir reçu, en plus de l'image, les préférences générales de l'utilisateur et le chemin du dossier de travail, où se lit l'ancien nom du projet ; aucun, quoi que ce soit sur le site. **HYPOTHÈSE (personas).** Les réponses brutes sont gardées hors du dépôt (`private/personas/2026-11-19/`).
+
+### 9.7 Les deux relectures indépendantes du lot 8 — hostile, sécurité
+
+Deux sous-agents, sans `private/`, sur l'état du dépôt au commit `b29d890` et sur la build d'essai. Leurs rapports sont des sorties de modèle : chaque constat a été vérifié par la session avant d'être suivi — contre la mesure, pour les phrases (la session seule lit `private/`, D19.14).
+
+**La relecture hostile** — les 48 cartes, les 16 fins de manche, les textes nouveaux. **Verdict : « non, pas telles quelles ».**
+
+| Constat | Vérifié par la session | Ce qui a été fait |
+|---|---|---|
+| **w000 « wagon »**, la première carte : la fin de sa phrase se lit à contresens (c'est aussi ce que disent six personas sur sept, §9.1) | **vrai** : la phrase a trop serré la condition que pose la mesure | rien dans le fichier — une phrase ne s'y retouche pas à la main. **À l'éditeur** : réécrire et redéposer (ce qui corrige aussi « Demander », où elle est servie), ou laisser la carte à son lien seul |
+| **w026 « archipel »** et **w047 « assainissement »** : un territoire meurtri, un scandale sanitaire, à côté de la mascotte ; la seconde phrase est lourde | phrases fidèles à leur mesure ; l'objection porte sur le lieu, pas sur l'exactitude | **à l'éditeur** : lien seul, recommandé par la session |
+| **w005 « îles »** : souveraineté, deux États nommés | fidèle ; chargée | **à l'éditeur** : lien seul, recommandé |
+| **w036 « dollar »**, **w029 « bouteilles »** : omission possible | fidèles à leur mesure, relues | gardées ; signalées |
+| des synonymes sur des verbes de droit (w014, w002 ; w025, où le mot de la carte n'est pas dans sa phrase) | w014 et w002 : le verbe de la phrase est un peu plus net que celui de la mesure ; w025 : fidèle | gardées ; **signalées à l'éditeur** |
+| six phrases glosent un sigle par du savoir général, dont une inexactement à la lettre | non tranché : ce n'est pas le texte du livre | **signalé à l'éditeur** |
+| « vérifiée », dans l'étiquette de la phrase : le registre classe cette relecture « PROBABLE », et w000 est une phrase « vérifiée » lue à l'envers | vrai | l'étiquette est le singulier de celle de « Demander » (D16.59), sa décision : **à lui de la garder ou de la changer** |
+| trois phrases des pages de faits : « avec le code » (lu « sous la licence du code »), « épinglée à l'empreinte » (lu comme une preuve de fidélité), « Cartes sans phrase… : 1 » (un nombre de ce qui manque, sans pourquoi) ; « la mesure où le mot est écrit » | vrai | **corrigées** : la licence dit qu'aucune réutilisation n'est donnée ; Exactitude dit qu'une IA a écrit ces phrases et ce que l'empreinte prouve — que la mesure n'a pas changé, pas que la phrase est juste ; le compte des cartes sans phrase est retiré ; « une mesure » |
+| la notice écrit que l'éditeur juge « cette carte », alors qu'il a jugé des cartes à titres seuls ; « elles ne disent pas le programme à sa place », alors que chacune commence par « Le programme prévoit » | vrai | **corrigé** dans `data/2026/NOTICE.md` : ce qu'il a jugé, et pourquoi le fichier a sa propre validation |
+| les trois phrases de ses signes : « phrases d'album pour enfants » ; « Les mêmes mots pour tout le monde. » | concorde avec les personas | **retirées** (§9.3) |
+| « Mot suivant » pleine largeur, « C'est écrit là » en pastille : pas « le même poids » | vrai à la lettre | **laissé** : c'est le dessin du plan approuvé (D19.10 : même couleur pleine, le lien avant la phrase) ; signalé |
+| les captures de la session 5, indexées, auraient publié des phrases du jeu avant l'accord | vrai | retirées de l'index le jour même ; une porte le tient (ci-dessous) |
+
+**La revue de sécurité et de vie privée** — de l'étiquette de production (`38b8ae6`) à `b29d890`. **Aucun constat bloquant ; deux sérieux, neuf mineurs.**
+
+| | Constat | Ce qui a été fait |
+|---|---|---|
+| S1 | les deux tests qui « tiennent le mot de l'éditeur » acceptaient une ligne de `decisions.md` qui parlait d'autre chose | resserrés : la ligne doit porter la date et, pour le fichier des phrases, le début de son empreinte ; pour l'accueil, `home.decided_on`, qui n'est admis qu'à partir du 18 novembre 2026 et jamais dans le futur |
+| S2 | des captures et des copies de personas, indexées, auraient publié des phrases du fichier non validé | sorties de l'index, gardées sous `private/` ; **porte nouvelle** : tant que `meta.validated` n'a pas son mot, aucun fichier suivi ne porte douze mots de suite d'une phrase du jeu (`scripts/game-gists.test.ts`) |
+| M1 | le sceau du fichier ne couvrait que les phrases, pas ce que le fichier dit d'elles | le sceau couvre les deux (`gameGistsFingerprint`) |
+| M2 | une build déployable pouvait montrer des phrases d'un fichier absent du dépôt | `npm run deploy` refuse une build qui montre des phrases dont le fichier n'est pas, octet pour octet, celui du dépôt |
+| M3 | la manche du HTML ouvre désormais l'accueil : une tuile suivie pouvait rester dans l'historique du navigateur | dès que le script du jeu tourne, une ancre de cette manche **remplace** l'entrée qu'elle quitte (tenu dans trois moteurs) ; avant qu'il tourne, et sans script, un lien reste un lien |
+| M4 | « Un indice », offert dès le premier mot, n'avait pas de garde de silence électoral | garde ajoutée |
+| M5 | fermer une carte rouverte pouvait laisser le focus sur la page (WebKit, non reproduit) | le focus revient au mot avant le retrait de la carte |
+| M6 | un fichier inapte échoue en silence : la build ne montre aucune phrase, sans rien dire | le déploiement dit ce que montrent les cartes, et pourquoi (`gameGistsSilence`) ; la notice ne dit plus qu'une build « refuse » |
+| M7 | `scripts/deploy.ts` lisait deux variables d'essai dans l'environnement de l'appelant | effacées avant tout calcul |
+| M8 | le fichier servi porte les phrases sans dire d'où elles viennent, et reste en cache | le fichier du jeu dit de lui-même qui les a écrites (`sentences.written_by` : « ai ») ; que l'ancien nom de fichier ne réponde plus après un retrait se vérifie sur l'aperçu, au lot 9 |
+| M9 | l'aperçu n'a pas de garde mécanique | par conception (D19.12) : l'accord de l'éditeur, au moment de le faire |

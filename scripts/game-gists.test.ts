@@ -18,7 +18,8 @@
  * Run: npx tsx --test scripts/game-gists.test.ts
  */
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import { test } from 'node:test';
 import { lexiconOf } from '../src/lib/chat-local.js';
 import { buildGame, gameSources, gameWords } from '../src/lib/game-data.js';
@@ -30,8 +31,10 @@ import {
   gameGistsFingerprint,
   gameGistsNotReady,
   gameGistsOf,
+  gameGistsSilence,
   readGameGists,
   type GameGist,
+  type GameGistsDecision,
   type GameGistsFile,
 } from '../src/lib/game-gists.js';
 import { terms } from '../src/lib/search-core.js';
@@ -73,20 +76,33 @@ const GISTS: GameGist[] = [
     text: 'Une phrase inventée sur un pont inventé.',
   },
 ];
-const sealed = (gists: GameGist[], over: Partial<GameGistsFile['meta']> = {}): GameGistsFile => {
-  const sha256 = gameGistsFingerprint(gists);
+/**
+ * A file sealed on what it says: `over` changes a claim BEFORE the seal (a file honestly made
+ * for another book, list or deposit); `after` retypes one under the seal (a tampered file).
+ */
+const sealed = (
+  gists: GameGist[],
+  over: Partial<GameGistsFile['meta']> = {},
+  after: Partial<GameGistsFile['meta']> = {},
+): GameGistsFile => {
+  const claims = {
+    corpus_version: 'c0ffeec0ffeec0ff',
+    words_sha256: wordsFingerprint(WORDS),
+    deposit_sha256: 'd'.repeat(64),
+    written_by: 'session',
+    read_by_a_person: false,
+    ...over,
+  };
+  const sha256 = gameGistsFingerprint(claims, gists);
   return {
     meta: {
       title: 'invented',
-      corpus_version: 'c0ffeec0ffeec0ff',
-      words_sha256: wordsFingerprint(WORDS),
-      deposit_sha256: 'd'.repeat(64),
-      written_by: 'session',
-      read_by_a_person: false,
+      ...claims,
       sha256,
       validated: { on: '2026-12-01', by: 'editor', sha256 },
       note_fr: '',
       ...over,
+      ...after,
     },
     gists,
   };
@@ -141,6 +157,13 @@ void test('a file is fit only as it was sealed, on this book, this list and this
       /p1c1-s01-m01: its measure moved/,
     ],
     [sealed([...GISTS, ...GISTS.slice(0, 1)]), CONTEXT, /two sentences for one measure/],
+    // A claim retyped under the seal — the deposit, after a new one: no longer the file agreed.
+    [
+      sealed(GISTS, {}, { deposit_sha256: 'e'.repeat(64) }),
+      { ...CONTEXT, deposit: 'e'.repeat(64) },
+      /changed after it was sealed/,
+    ],
+    [sealed(GISTS, {}, { link_only: ['w001'] }), CONTEXT, /changed after it was sealed/],
     [
       sealed([{ id: 'p1c1-s01-m01', sha256: A, text: 'Deux\nlignes inventées.' }]),
       CONTEXT,
@@ -159,7 +182,7 @@ void test('a file is fit only as it was sealed, on this book, this list and this
         gists: [{ id: 'p1c1-s01-m01', sha256: A, text: 'Une autre phrase inventée.' }],
       },
       CONTEXT,
-      /changed after the file was sealed/,
+      /changed after it was sealed/,
     ],
     [
       sealed(GISTS, { validated: { on: null, by: null, sha256: null } }),
@@ -252,6 +275,21 @@ void test('a build shows the sentences only where the site asks, the campaign is
   const unsigned = sealed(GISTS, { validated: { on: null, by: null, sha256: null } });
   assert.equal(gameGistsOf({ ...open, file: unsigned }), null);
   assert.ok(gameGistsOf({ ...open, file: unsigned, context: { ...CONTEXT, test: true } }) !== null);
+  // A build does not fail on a file it will not show: it keeps every card at its link alone,
+  // and says why to whoever deploys — the same rule, in words, never a second one.
+  assert.deepEqual(gameGistsSilence(open), []);
+  const silences: [Partial<GameGistsDecision>, RegExp][] = [
+    [{ mode: 'off' }, /does not answer questions/],
+    [{ file: null }, /is not on this machine/],
+    [{ ask: {} }, /decision on the campaign/],
+    [{ file: unsigned }, /validated/],
+    [{ file: sealed(GISTS, {}, { link_only: ['w001'] }) }, /changed after it was sealed/],
+  ];
+  for (const [change, why] of silences) {
+    const decision: GameGistsDecision = { ...open, ...change };
+    assert.equal(gameGistsOf(decision), null);
+    assert.match(gameGistsSilence(decision).join('\n'), why);
+  }
   // What the deposit is, as data/2026/ask.json says it.
   assert.equal(depositOf({ gists: { sha256: 'abc' } }), 'abc');
   for (const none of [null, {}, { gists: null }, { gists: { sha256: 7 } }]) {
@@ -301,6 +339,82 @@ const KEPT_ON_READING: Readonly<Record<string, string>> = {
 };
 
 const onDisk = existsSync(GAME_GISTS_PATH);
+
+/** A text as a list of bare words: case, accents kept, every sign and space dropped. */
+const bareWords = (text: string): string[] =>
+  text
+    .normalize('NFC')
+    .toLowerCase()
+    .split(/[^\p{L}\p{N}]+/u)
+    .filter((word) => word !== '');
+/**
+ * Twelve words in a row — or the whole sentence, when it is shorter: a third of a sentence of
+ * ours, more than a turn of phrase. (Eight was too few: one sentence shares eight words in a
+ * row — a list of nouns — with the archive of the 2025 edition, which is tracked, public and
+ * not ours to edit. The control that refuses a sentence copying the book reads the 2026 text,
+ * on the machine that holds it: scripts/leak.test.ts.)
+ */
+const WINDOW = 12;
+const windowsOf = (words: readonly string[], size = Math.min(WINDOW, words.length)): string[] =>
+  size === 0
+    ? []
+    : Array.from({ length: words.length - size + 1 }, (_, at) =>
+        words.slice(at, at + size).join(' '),
+      );
+
+/**
+ * The sentences of the game are published by ONE gesture, the editor's: the push of their file
+ * (D19.2, lot 9). Until then nothing tracked may carry one — a note, a test report, a copy of
+ * what a reviewer was shown would publish it first, in a repository that is public (security
+ * review of 19/11/2026: captures and copies made for the personas were staged, and left the
+ * index). Read here on the machine that holds the file; a text is searched by windows of twelve
+ * words, so a sentence cut, re-wrapped or quoted in part is found. Images cannot be read:
+ * a capture of a card stays under private/ until the same gesture.
+ */
+void test(
+  'data/2026/game-gists.json: until the editor has agreed to publish it, no tracked file holds one of its sentences',
+  { skip: !onDisk && `${GAME_GISTS_PATH} is not on this machine yet (the editor's go, lot 9)` },
+  () => {
+    const file = readGameGists();
+    if (file === null) throw new Error('no file');
+    const windows = new Map<string, string>();
+    for (const gist of file.gists) {
+      for (const window of windowsOf(bareWords(gist.text))) windows.set(window, gist.id);
+    }
+    assert.ok(windows.size > 0, 'no sentence is long enough to be searched for');
+    // Every window size the sentences were cut in: twelve words, and fewer for a short one.
+    const sizes = [...new Set([...windows.keys()].map((window) => window.split(' ').length))];
+    const found = (text: string): string[] => {
+      const hits = new Set<string>();
+      const words = bareWords(text);
+      for (const size of sizes) {
+        if (words.length < size) continue;
+        for (const window of windowsOf(words, size)) {
+          const id = windows.get(window);
+          if (id !== undefined) hits.add(id);
+        }
+      }
+      return [...hits];
+    };
+    // The gate can fail: a sentence of the file, re-wrapped and quoted, is found.
+    const sample = file.gists[0]?.text ?? '';
+    assert.deepEqual(found(`> « ${sample.replace(/ /g, '\n  ')} »`), [file.gists[0]?.id]);
+    if (file.meta.validated.by === 'editor') return; // published by his gesture: nothing to hold
+    const tracked = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' })
+      .split('\0')
+      .filter((path) => path !== '' && existsSync(path));
+    assert.ok(!tracked.includes(GAME_GISTS_PATH), `${GAME_GISTS_PATH} is tracked before his word`);
+    const findings: string[] = [];
+    for (const path of tracked) {
+      if (/\.(?:png|jpe?g|gif|webp|avif|ico|woff2?|ttf|otf|pdf|zip|gz|br|wasm)$/i.test(path))
+        continue;
+      if (statSync(path).size > 4 * 1024 * 1024) continue;
+      const hits = found(readFileSync(path, 'utf8'));
+      if (hits.length > 0) findings.push(`${path}: ${hits.join(', ')}`);
+    }
+    assert.deepEqual(findings, [], 'a tracked file carries a sentence of the game');
+  },
+);
 
 void test(
   'data/2026/game-gists.json: pinned as the words pin their measures, sealed, and ours',
@@ -389,19 +503,23 @@ void test(
       return;
     }
     // His agreement is written where decisions are, on its day, as his — a session never
-    // writes « editor » from nothing — and it was given on these very sentences.
+    // writes « editor » from nothing — and it was given on these very sentences: the row
+    // names the seal of the file it agreed to. (Words alone were not enough: « phrases »,
+    // « jeu » and « DÉCISION (utilisateur) » are in the rows that DECIDED the feature, on
+    // 18/11/2026, days before any file was shown to him — found by the security review of
+    // 19/11/2026.)
     assert.equal(sha256, file.meta.sha256);
+    const seal = file.meta.sha256.slice(0, 12);
     const rows = readFileSync('docs/discovery/decisions.md', 'utf8').split('\n');
     assert.ok(
       rows.some(
         (line) =>
           /^\| D\d+\.\d+ \|/.test(line) &&
           line.includes(`| ${String(on)} |`) &&
-          /phrases/.test(line) &&
-          /jeu/.test(line) &&
+          line.includes(seal) &&
           /DÉCISION \(utilisateur\)/.test(line),
       ),
-      `docs/discovery/decisions.md: no decision of the editor about the sentences of the game on ${String(on)}`,
+      `docs/discovery/decisions.md: no decision of the editor on ${String(on)} that names the file he agreed to (${seal}…)`,
     );
     assert.ok(shown !== null && shown.size === file.gists.length);
     // Cutting « Demander » cuts them too, whatever the file says (D19.5).

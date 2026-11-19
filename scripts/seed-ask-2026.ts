@@ -587,7 +587,16 @@ export function prepareGameGists(check: boolean, linkOnly: readonly string[] = [
   for (const problem of problems) console.error(`  ✖ ${problem}`);
   if (problems.length > 0) return 1;
 
-  const sha256 = gameGistsFingerprint(draft.gists);
+  // What the file says of its sentences is sealed with them: the validation is given on both.
+  const claims = {
+    corpus_version: version,
+    words_sha256: wordsFingerprint(words),
+    deposit_sha256: deposit,
+    written_by: 'session',
+    read_by_a_person: false,
+    ...(linkOnly.length === 0 ? {} : { link_only: [...linkOnly].sort() }),
+  };
+  const sha256 = gameGistsFingerprint(claims, draft.gists);
   const before = readGameGists();
   const kept =
     before !== null && before.meta.sha256 === sha256 && before.meta.validated.sha256 === sha256
@@ -596,18 +605,22 @@ export function prepareGameGists(check: boolean, linkOnly: readonly string[] = [
   const file: GameGistsFile = {
     meta: {
       title: 'Les phrases du jeu « Où est-ce écrit ? » — édition 2026',
-      corpus_version: version,
-      words_sha256: wordsFingerprint(words),
-      deposit_sha256: deposit,
-      written_by: 'session',
-      read_by_a_person: false,
+      corpus_version: claims.corpus_version,
+      words_sha256: claims.words_sha256,
+      deposit_sha256: claims.deposit_sha256,
+      written_by: claims.written_by,
+      read_by_a_person: claims.read_by_a_person,
       sha256,
       validated: kept,
-      ...(linkOnly.length === 0 ? {} : { link_only: [...linkOnly].sort() }),
+      ...(claims.link_only === undefined ? {} : { link_only: claims.link_only }),
       note_fr:
         'Une phrase par mot du jeu : celle de la mesure où le mot est épinglé, telle que déposée ' +
         'dans la base privée (D16.49) et servie par « Demander ». Ce sont nos mots — écrits et ' +
-        'vérifiés par une IA, lus par aucune personne une à une — jamais des extraits du livre. ' +
+        'vérifiés par une IA (« written_by » : « session », la session de travail d’une IA), ' +
+        'lus par aucune personne une à une — jamais des extraits du livre. Le livre est ' +
+        '« L’Avenir en commun », édition 2026, de La France insoumise, tous droits réservés : ' +
+        'ce site n’est pas le sien, et chaque phrase peut être incomplète ou imprécise — la page ' +
+        'officielle de la mesure fait foi. ' +
         'Seules ces phrases-là sont publiées en fichier (D19.2) ; les autres restent dans la base. ' +
         'Fichier écrit par « npm run gists -- --game », jamais à la main : une phrase changée ' +
         'ici ne serait plus celle du dépôt, et la build ne la montrerait pas. « validated » est ' +

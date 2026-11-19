@@ -513,6 +513,12 @@ export interface DeployContext {
   /** Where dist/ disagrees with the data it would go out under (`distProblems`). */
   distProblems: readonly string[];
   /**
+   * Why the sentences this build shows on the cards of the game may not go out yet
+   * (`gistsUnpublished`, scripts/deploy.ts): their file is not in the repository as committed.
+   * Empty when the build shows none, and when the file it shows is the committed one.
+   */
+  gistsProblems?: readonly string[];
+  /**
    * What keeps the code of main from production while the game-first redesign is being written
    * (scripts/launch.ts, `homeBlockers`, D19.12): empty once the editor has dated his yes.
    */
@@ -604,6 +610,13 @@ export function deployRefusal(
     );
   }
   // The directory is read, whatever the marker says of the last build.
+  // The sentences of the game are published in a file of the PUBLIC repository (D19.2), and the
+  // site says so: a build may not serve them from a file that only this machine holds — one the
+  // editor's word was written into before it was ever pushed, or one edited since (found by
+  // the security review of 19/11/2026). A dry run sends nothing.
+  if (mode === 'app' && !context.dryRun && (context.gistsProblems ?? []).length > 0) {
+    return `${(context.gistsProblems ?? []).join(' · ')} — commit and push the file first, then build again`;
+  }
   if (mode === 'app' && context.distProblems.length > 0) {
     return `${context.distProblems.join(' · ')} — run \`npm run build\` and deploy that`;
   }

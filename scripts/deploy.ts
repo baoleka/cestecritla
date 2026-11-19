@@ -28,7 +28,7 @@
 import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { buildGame, gameSite, gameSources, gameWords, wordLinks } from '../src/lib/game-data.js';
-import { gameGists } from '../src/lib/game-gists.js';
+import { GAME_GISTS_PATH, gameGists, gameGistsWhyNot } from '../src/lib/game-gists.js';
 import {
   chatDeployArgs,
   chatDeployRefusal,
@@ -51,6 +51,11 @@ import {
   type AskDeploy,
 } from './build-mode.js';
 import { homeBlockers, launchBlockers, previewChatBlockers, readLaunchInputs } from './launch.js';
+
+// A deploy reads the committed state of the site, never a test of it: two variables a shell may
+// still hold from a test build are dropped before anything is read (security review, 19/11/2026).
+delete process.env['CEL_GAME_TEST'];
+delete process.env['CEL_SCRUTIN'];
 
 const [target, ...given] = process.argv.slice(2);
 if (target !== 'apex' && target !== 'preview') {
@@ -165,20 +170,32 @@ const pages = htmlPages('dist');
 const scrutinBuild = readBuildScrutin();
 // …with the sentences a build made for THIS host may show (D19.5: they follow the host's mode —
 // src/lib/game-gists.ts): the name computed here is then the name of the file that build holds.
+const shownGists =
+  mode === 'app' && !scrutinBuild && gameSite().on
+    ? gameGists(gameWords().words, gameSources().manifest.meta.corpus_version, {
+        mode: hostAsk === 'off' ? 'off' : 'chat',
+        test: false,
+      })
+    : null;
 const gameFile =
   mode === 'app' && !scrutinBuild && gameSite().on
-    ? `jeu-${
-        buildGame(
-          gameWords(),
-          gameSources(),
-          wordLinks(),
-          gameGists(gameWords().words, gameSources().manifest.meta.corpus_version, {
-            mode: hostAsk === 'off' ? 'off' : 'chat',
-            test: false,
-          }),
-        ).fingerprint
-      }.json`
+    ? `jeu-${buildGame(gameWords(), gameSources(), wordLinks(), shownGists).fingerprint}.json`
     : null;
+/**
+ * Why the file of the sentences is not the one of the repository: untracked (it was kept out of
+ * git until the editor's go), or changed since the last commit. Asked of git itself.
+ */
+function gistsUnpublished(): string[] {
+  const git = (...args: string[]): number =>
+    spawnSync('git', args, { stdio: 'ignore' }).status ?? 1;
+  if (git('ls-files', '--error-unmatch', '--', GAME_GISTS_PATH) !== 0) {
+    return [`${GAME_GISTS_PATH} is shown by this build and is not in the repository`];
+  }
+  if (git('diff', '--quiet', 'HEAD', '--', GAME_GISTS_PATH) !== 0) {
+    return [`${GAME_GISTS_PATH} is shown by this build and differs from the committed file`];
+  }
+  return [];
+}
 const refusal = deployRefusal(target, mode, pages, {
   policyValidated: citationPolicyValidated(),
   dryRun: passthrough.includes('--dry-run'),
@@ -189,6 +206,7 @@ const refusal = deployRefusal(target, mode, pages, {
   workerProblems: workerProblems(),
   previewBlockers: previewChatBlockers(),
   distProblems: mode === 'app' ? distProblems(readDist('dist'), { gameFile, ask }) : [],
+  gistsProblems: shownGists === null ? [] : gistsUnpublished(),
   homeBlockers: homeBlockers(),
 });
 if (refusal !== null) {
@@ -201,6 +219,19 @@ console.log(
   `deploy: ${mode} build, ${String(pages.length)} page(s) → ${target}` +
     (mode === 'app' ? ` — questions: ${ask}` : ''),
 );
+// What goes out of the game's sentences, said before it goes: a build never fails on a file it
+// will not show — it keeps every card at its link alone —, so the reason is printed here.
+if (gameFile !== null) {
+  if (shownGists !== null) {
+    console.log(`        the cards of the game show ${String(shownGists.size)} sentence(s)`);
+  } else {
+    const why = gameGistsWhyNot(gameWords().words, gameSources().manifest.meta.corpus_version, {
+      mode: hostAsk === 'off' ? 'off' : 'chat',
+      test: false,
+    });
+    console.log(`        the cards of the game show no sentence: ${why.join('; ')}`);
+  }
+}
 console.log(`        wrangler ${args.join(' ')}`);
 const result = spawnSync('npx', ['--no-install', 'wrangler', ...args], {
   stdio: 'inherit',

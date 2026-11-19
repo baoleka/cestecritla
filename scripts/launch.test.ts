@@ -659,12 +659,14 @@ void test("production takes the home page of main only on the editor's dated wor
     decided_by: 'editor',
     serving: 'abc1234',
   };
-  assert.deepEqual(homeBlockersOf(decided), []);
+  // The day the rule is read: the day after his word, in this test.
+  const now = new Date('2026-12-02T09:00:00Z');
+  assert.deepEqual(homeBlockersOf(decided, now), []);
   // No record is not a yes: deleting the field must not open production.
   for (const none of [undefined, null, 'yes', 42, []]) {
-    assert.match(String(homeBlockersOf(none)), /nothing says whether production may serve/);
+    assert.match(String(homeBlockersOf(none, now)), /nothing says whether production may serve/);
   }
-  assert.match(String(homeBlockersOf({ ...decided, opens_on: 'field' })), /home\.opens_on/);
+  assert.match(String(homeBlockersOf({ ...decided, opens_on: 'field' }, now)), /home\.opens_on/);
   // Not dated, dated by nobody, or dated by a session for him: all the same refusal, which
   // names the commit production is built from meanwhile.
   for (const record of [
@@ -673,16 +675,25 @@ void test("production takes the home page of main only on the editor's dated wor
     { ...decided, decided_by: null },
     { ...decided, decided_by: 'session' },
     { opens_on: 'game' },
+    // A day his yes cannot bear: before the redesign was decided (a row of that day decides
+    // something else), a day to come, a date that is none (security review of 19/11/2026).
+    { ...decided, decided_on: '2026-11-15' },
+    { ...decided, decided_on: '2026-12-03' },
+    { ...decided, decided_on: '0000-00-00' },
+    { ...decided, decided_on: '2026-13-45' },
   ]) {
-    const [line] = homeBlockersOf(record);
+    const [line] = homeBlockersOf(record, now);
     assert.match(String(line), /the editor has not said yes .* home\.decided_on, home\.decided_by/);
     assert.match(String(line), /\(D19\.12\)/);
   }
-  assert.match(String(homeBlockersOf({ ...decided, decided_by: null })), /built from abc1234/);
+  assert.match(String(homeBlockersOf({ ...decided, decided_by: null }, now)), /built from abc1234/);
   assert.match(
-    String(homeBlockersOf({ ...decided, decided_by: null, serving: null })),
+    String(homeBlockersOf({ ...decided, decided_by: null, serving: null }, now)),
     /built from the production tag/,
   );
+  // The first day it can be said, and the day itself.
+  assert.deepEqual(homeBlockersOf({ ...decided, decided_on: '2026-11-18' }, now), []);
+  assert.deepEqual(homeBlockersOf(decided, new Date('2026-12-01T00:00:01Z')), []);
   // It is not one of the launch's own blockers: those also hold back the Worker of the chat.
   assert.deepEqual(launchBlockers(READY), []);
 
@@ -698,6 +709,10 @@ void test("production takes the home page of main only on the editor's dated wor
   if (launch.home.decided_by !== 'editor') {
     assert.notDeepEqual(homeBlockers(), []);
   } else {
+    // The row names the very field it fills. (Words alone were not enough: « production »,
+    // « jeu » and « DÉCISION (utilisateur) » stand together in rows that decide something
+    // else — D16.19, D17.30, and D19.15, his condition on the first screen, which is not a
+    // yes — found by the security review of 19/11/2026.)
     const on = String(launch.home.decided_on);
     const rows = readFileSync('docs/discovery/decisions.md', 'utf8').split('\n');
     assert.ok(
@@ -705,11 +720,10 @@ void test("production takes the home page of main only on the editor's dated wor
         (row) =>
           /^\| D\d+\.\d+ \|/.test(row) &&
           row.includes(`| ${on} |`) &&
-          /production/.test(row) &&
-          /jeu/.test(row) &&
+          row.includes('home.decided_on') &&
           /DÉCISION \(utilisateur\)/.test(row),
       ),
-      `docs/discovery/decisions.md: no decision of the editor about production on ${on}`,
+      `docs/discovery/decisions.md: no decision of the editor on ${on} that names home.decided_on`,
     );
     assert.deepEqual(homeBlockers(), []);
   }

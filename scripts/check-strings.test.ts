@@ -367,6 +367,9 @@ const RUNTIME_AI_KEYS: Readonly<Record<string, string | null>> = {
   'about.gists_line': 'about.no_ai',
   'about.gists_method': 'about.no_ai',
   'about.gists_terms': null,
+  // What /exactitude says of the sentences on the cards of the game: an AI wrote them
+  // (lot 8). Rendered only where the game of the build holds some: no fallback.
+  'accuracy.game.sentences': null,
   'accuracy.review.sentences': null,
   // The same paragraph where the cards of the game show sentences too (D19.2, lot 7).
   'accuracy.review.sentences_game': null,

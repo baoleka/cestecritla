@@ -36,12 +36,26 @@
  *     and checked by an AI (D19.2). That sentence comes with the file of the game, by script:
  *     the round below, played without script, keeps the card without it (D19.6), and not a
  *     sentence of an AI is written in this page.
+ *
+ * Since 19 November 2026 a newcomer does not land on the board (D19.15: « Le premier écran
+ * doit donner envie, sinon on remplace pas »). The first word comes with ONE gesture — « Voir
+ * la mesure » — that gives its card: where it is written, the way to the official page and,
+ * in a build that may, what the measure provides. The question — « Dans quelle partie est-il
+ * écrit ? » — starts at the second word. Under that gesture, six of the fifteen themes people
+ * hear about and the way to the search: the two doors of the site, on its first screen.
+ * Eleven mock-ups were read blind by the seven personas before this one was built
+ * (docs/discovery/13-tests-humains.md §9.6): the board alone, and the home page of before,
+ * each made one reader of seven want to try; this made two to three.
  */
 import '../styles/game.css';
 import '../styles/game2.css';
 import Mascot2 from './Mascot2.astro';
 import { pausedKey } from '../lib/ask-config.ts';
+import { prose, ripostes } from '../lib/editorial.ts';
 import { builtGame } from '../lib/game-built.ts';
+import { gameSources, gameWords } from '../lib/game-data.ts';
+import { DOOR_THEMES, doorRefusals } from '../lib/game-door.ts';
+import { wordlessSections } from '../lib/game.ts';
 import {
   ROUND,
   isLongWord,
@@ -90,8 +104,34 @@ const reveal = (ask: 'part' | 'chapter' | 'section') => ({
   neutral: ask === 'part' ? t('game.reveal.neutral', { n: '{n}' }) : ask === 'chapter' ? t('game.reveal.chapter.neutral', { n: '{n}' }) : t('game.reveal.section.neutral'),
 });
 
+/**
+ * The six themes shown under the first gesture (src/lib/game-door.ts), as answers of ours —
+ * published, and none that rests on a section no word of the game is taken from: they stand
+ * on the same screen as her. The build stops on a list that breaks that rule.
+ */
+const doorSources = gameSources();
+const sectionOfMeasure = new Map(
+  doorSources.manifest.sections.flatMap((section) =>
+    section.items.map((item) => [item.id, section.id] as const),
+  ),
+);
+const refused = doorRefusals(
+  DOOR_THEMES,
+  ripostes(),
+  wordlessSections(gameWords(), doorSources),
+  (measure) => sectionOfMeasure.get(measure),
+);
+if (refused.length > 0) {
+  throw new Error(`game: the themes under the first gesture\n  ${refused.join('\n  ')}`);
+}
+const door = ripostes().filter((entry) => DOOR_THEMES.includes(entry.slug));
+door.sort((a, b) => DOOR_THEMES.indexOf(a.slug) - DOOR_THEMES.indexOf(b.slug));
+
 /** This build puts our sentences on its cards (src/lib/game-gists.ts) — or none at all. */
 const sentences = data.words.some((word) => word.gist !== undefined);
+
+/** A line of ours, sentence by sentence: each on a line of its own where it is said so. */
+const sentencesOf = (text: string): string[] => text.split(/(?<=[.!?…])\s+/u);
 
 /** An official title, whole: its number in bold where it has one (`titleLead`). */
 const titled = (title: string): [string, string] => [
@@ -106,6 +146,14 @@ const config = {
     // site that asks nothing names no AI (scripts/check-no-ai-mention.test.ts).
     ...(sentences ? { gist: t('game.gist.badge') } : {}),
     kicker: t('game.kicker'),
+    // The entrance (D19.15): what a newcomer reads under the first word, and its one gesture.
+    start: {
+      // Sentence by sentence, cut here: the script that draws them carries no look-behind,
+      // which Safari refused until 16.4 — a syntax error there would take the whole game.
+      hook: sentencesOf(t('game.start.hook')),
+      cta: t('game.start.cta'),
+      source: t('game.start.source'),
+    },
     ask: {
       part: t('game.question.part'),
       chapter: t('game.question.chapter'),
@@ -125,7 +173,6 @@ const config = {
     again: t('game.round.again'),
     ahead: t('game.round.ahead'),
     share: t('game.share'),
-    shareSame: t('game.share.same'),
     copied: t('share.toast_copied'),
     // « Tu te souviens ? » (lot 6): two words already found, whose card one opens again.
     recall: { title: t('game.recall.title'), lead: t('game.recall.lead') },
@@ -155,12 +202,6 @@ const config = {
       replay: t('turtle.sheet.replay'),
       skip: t('turtle.skip'),
       foundLead: t('turtle.found.lead'),
-    },
-    // A sign she has just shown, named when it appears: an attitude, never a quantity.
-    sign: {
-      ajar: t('turtle.sign.ajar'),
-      up: t('turtle.sign.up'),
-      star: t('turtle.sign.star'),
     },
     // Her goal, in words (D17.5): the sentence the game says is picked by src/lib/game-goal.ts.
     goal: {
@@ -283,26 +324,68 @@ const config = {
             data-long={isLongWord(word.word) ? '' : undefined}
             data-short={isShortWord(word.word) ? '' : undefined}
           >{word.word}</p>
-          <div class="g-question">
-            <h3 class="g-ask">{t('game.question.part')}</h3>
-            <p class="g-with">
-              <a class="g-quiet" href={`#m${String(word.n)}-0`}>
-                {t('game.dont_know')}
-              </a>
-              {/* The room of « Un indice », which only the script can offer (D19.7): kept from
-                  the first paint, so that nothing moves when the script takes the block. */}
-              <span class="g-quiet" data-wait>{t('game.hint.cta')}</span>
-            </p>
-            <ul class="g-tiles g-board">
-              {data.parts.map((part) => (
-                <li>
-                  <a class="g-tile" href={`#m${String(word.n)}-${String(part.number)}`}>
-                    <span data-programme="title"><b>{titled(part.title)[0]}</b>{titled(part.title)[1]}</span>
+          {
+            /* The first word is given (D19.15): one gesture, and its card — the anchor of
+               « Je ne sais pas », which shows the card and judges nothing. Under it, the other
+               door of the site. The question starts at the second word. */
+            word.n === 1 ? (
+              <div class="g-start">
+                <p class="g-hook">
+                  {sentencesOf(t('game.start.hook')).map((sentence) => (
+                    <span>{sentence}</span>
+                  ))}
+                </p>
+                <p class="g-go">
+                  <a class="cta" href="#m1-0">
+                    {t('game.start.cta')}
                   </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+                </p>
+                <p class="g-source">{t('game.start.source')}</p>
+                <div class="g-door" id="game-door">
+                  <h3>{t('riposte.heard_label')}</h3>
+                  <ul>
+                    {door.map((entry) => (
+                      <li>
+                        <a
+                          class="g-quiet"
+                          href={`/r/${entry.slug}/`}
+                          aria-label={`${entry.theme} : ${prose(entry.objection)}`}
+                        >
+                          {entry.theme}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                  <p>
+                    <a class="g-find" href="#chercher">
+                      {t('home.direct.cta_search')}
+                    </a>
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div class="g-question">
+                <h3 class="g-ask">{t('game.question.part')}</h3>
+                <p class="g-with">
+                  <a class="g-quiet" href={`#m${String(word.n)}-0`}>
+                    {t('game.dont_know')}
+                  </a>
+                  {/* The room of « Un indice », which only the script can offer (D19.7): kept from
+                      the first paint, so that nothing moves when the script takes the block. */}
+                  <span class="g-quiet" data-wait>{t('game.hint.cta')}</span>
+                </p>
+                <ul class="g-tiles g-board">
+                  {data.parts.map((part) => (
+                    <li>
+                      <a class="g-tile" href={`#m${String(word.n)}-${String(part.number)}`}>
+                        <span data-programme="title"><b>{titled(part.title)[0]}</b>{titled(part.title)[1]}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
           <div class="g-place">
             <h3 class="g-yes">{t('game.reveal.yes', { n: word.place.part.number })}</h3>
             <h3 class="g-also">{t('game.reveal.also', { n: word.place.part.number })}</h3>

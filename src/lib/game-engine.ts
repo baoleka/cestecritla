@@ -66,6 +66,13 @@ export interface GameData {
   parts: GamePart[];
   /** In the reading order of the game: the first round is the first three. */
   words: GameEntry[];
+  /**
+   * In a file that holds sentences (`gist`), who wrote them — said by the file itself, where a
+   * program reads it: the label of the card lives in the page, and this file is served, kept
+   * and copied without it (AI Act, art. 50 § 2; security review of 19/11/2026). Absent from a
+   * file without sentences.
+   */
+  sentences?: { written_by: 'ai'; read_by_a_person: false };
 }
 
 export type Depth = 1 | 2 | 3;

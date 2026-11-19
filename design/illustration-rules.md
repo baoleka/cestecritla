@@ -329,10 +329,20 @@ et un test le prouve (son empreinte n'a pas bougé). Ce qu'il fixe autour d'elle
   l'écran à côté du champ, de 320 × 568 à 430 × 932 (`e2e:game`).
 - **« Un indice » vient d'elle dès le premier mot** (D19.7, qui amende D16.13) : elle regarde
   les tuiles, puis trois disent « par ici ». Aucune n'est écartée, aucune ne change de taille.
-- **Ses trois signes sont dits quand ils paraissent** (lot 6) : ses ailes s'entrouvrent, elle
-  lève les yeux, une étoile paraît — la phrase est lue des mêmes arcs que le dessin
-  (`signAtRoundEnd`, `src/lib/game-goal.ts`). Une attitude, jamais une quantité (§2.12,
-  point 10) ; jamais à une manche où elle change ; jamais un mot sur le joueur.
+- **Ses trois signes sont dessinés et ne sont plus dits** (lot 8, 19 novembre 2026). Le lot 6
+  avait ajouté une phrase pour chacun, lue des mêmes arcs que le dessin ; elles ont été
+  retirées avant d'être montrées à l'éditeur : « mièvre », « obscur » pour trois personas sur
+  sept, « phrases d'album pour enfants » pour le relecteur hostile (`13-tests-humains.md`
+  §9.3, §9.7 ; `14-risques.md` R55). Ses signes restent ce qu'ils étaient : une attitude,
+  jamais une quantité (§2.12, point 10).
+- **L'entrée du jeu ne parle pas d'elle** (D19.15, lot 8) : elle est là, à côté de l'étiquette
+  du premier mot, à sa taille ; « Ta tortue change quand tu trouves des mots. » vient avec la
+  première carte. Avant comme après que le script la prend, elle tient dans la même boîte :
+  rien ne bouge quand elle devient un bouton.
+- **Les thèmes montrés sous le premier geste se tiennent sur le même écran qu'elle** : aucun
+  ne repose sur une section dont le jeu ne tire pas de mot (D16.26 ; `src/lib/game-door.ts`,
+  tenu à la build et par un test) — ni « Immigration », ni « Police et sécurité », ni
+  « Laïcité » à côté d'une tortue (`14-risques.md` R22).
 - **Rien d'elle ne bouge pour une carte rouverte** (« Tu te souviens ? », sa fiche) : son
   petit bond dit un mot trouvé, pas une relecture.
 - **Ce que le plateau ne lui prend pas** : aucune couleur de partie sur une tuile (D17.12),

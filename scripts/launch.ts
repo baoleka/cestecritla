@@ -586,7 +586,20 @@ export function pendingReviews(): string[] {
  *
  * Pure: the record is passed in, so the rule is tested without a file.
  */
-export function homeBlockersOf(record: unknown): string[] {
+/** The day the redesign was decided (D19.1): no yes to it can be older. */
+const HOME_DECIDED_FROM = '2026-11-18';
+
+/**
+ * A day his yes can bear: a real date, not before the redesign existed, not after today (UTC).
+ * A shape alone let « 0000-00-00 », a day of last month or a day to come stand for his word.
+ */
+const saidSince = (value: unknown, today: Date): value is string =>
+  isDate(value) &&
+  !Number.isNaN(Date.parse(value)) &&
+  value >= HOME_DECIDED_FROM &&
+  value <= today.toISOString().slice(0, 10);
+
+export function homeBlockersOf(record: unknown, today: Date = new Date()): string[] {
   if (typeof record !== 'object' || record === null || Array.isArray(record)) {
     return [
       `${LAUNCH_PATH}: nothing says whether production may serve the home page of main: home (D19.12)`,
@@ -595,7 +608,7 @@ export function homeBlockersOf(record: unknown): string[] {
   if (field(record, 'opens_on') !== 'game') {
     return [`${LAUNCH_PATH}: home.opens_on must say what the home page of main opens on: "game"`];
   }
-  if (!isDate(field(record, 'decided_on')) || field(record, 'decided_by') !== 'editor') {
+  if (!saidSince(field(record, 'decided_on'), today) || field(record, 'decided_by') !== 'editor') {
     const serving = field(record, 'serving');
     const from = typeof serving === 'string' && serving !== '' ? serving : 'the production tag';
     return [

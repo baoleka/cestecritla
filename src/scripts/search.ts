@@ -229,11 +229,16 @@ if (form && input && status && results && heading && list && stringsNode) {
     (results.hidden ? input : heading).focus({ preventScroll: true });
   };
 
-  // « Chercher », in the frame of the home page: the section of the field comes to the top of
-  // the window and the field takes the focus — on a phone, that is what opens its keyboard. The
-  // link's own jump is done here, so that the address stays the bare one: without this script
-  // the link still leads to its section, as any link does.
-  document.querySelector('a.site-find')?.addEventListener('click', (event) => {
+  // « Chercher », in the frame of the home page — and « Chercher dans le programme », under the
+  // first gesture of the game (D19.15): the section of the field comes to the top of the window
+  // and the field takes the focus — on a phone, that is what opens its keyboard. The link's own
+  // jump is done here, so that the address stays the bare one: without this script the link
+  // still leads to its section, as any link does. Heard on the page itself: the game draws its
+  // own copy of that link after this script has run.
+  document.addEventListener('click', (event) => {
+    const link =
+      event.target instanceof Element ? event.target.closest('a[href="#chercher"]') : null;
+    if (link === null) return;
     event.preventDefault();
     (form.closest('section') ?? form).scrollIntoView({ block: 'start' });
     input.focus({ preventScroll: true });

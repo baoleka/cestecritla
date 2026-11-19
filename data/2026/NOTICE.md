@@ -115,19 +115,32 @@ Depuis le 18 novembre 2026 (D19.2), une carte du jeu peut montrer, sous le lieu 
   `meta.read_by_a_person`), et le site les étiquette : « Phrase écrite et vérifiée par une
   IA ».
 - **Ce qu'elles ne sont pas.** Des extraits : aucune ne recopie le livre, dont le texte n'est
-  pas dans ce dépôt. Elles ne disent pas non plus « le programme » à sa place : chacune mène à
-  la page officielle, qui seule fait foi.
+  pas dans ce dépôt. Ni la parole du programme : chacune commence par « Le programme
+  prévoit », et c'est pourtant notre résumé — une phrase pour une mesure, qui peut être
+  incomplète ou imprécise. Chacune mène à la page officielle, qui seule fait foi.
 - **Combien.** Au plus une par mot du jeu — quarante-huit au plus, sur 1 069 mesures. Toutes
   les autres phrases restent dans une base privée et ne sont publiées dans aucun fichier.
   Une carte peut garder son lien seul (`meta.link_only`).
 - **Comment le fichier est fait.** `npm run gists -- --game` l'écrit, en local, à partir du
-  dépôt de phrases que `ask.json` nomme, et le scelle (`meta.sha256`). **On n'y écrit jamais
-  une phrase à la main** : une build refuse un fichier retouché, fait pour une autre liste de
-  mots, une autre version du livre ou un autre dépôt de phrases
-  (`src/lib/game-gists.ts`, `scripts/game-gists.test.ts`).
+  dépôt de phrases que `ask.json` nomme, et le scelle (`meta.sha256` : les phrases **et** ce
+  que le fichier dit d'elles — qui les a écrites, le livre, la liste, le dépôt, les cartes
+  laissées à leur lien). **On n'y écrit jamais une phrase à la main.** Une build n'échoue pas
+  sur un fichier retouché, fait pour une autre liste de mots, une autre version du livre ou un
+  autre dépôt de phrases : elle n'en montre **aucune** phrase, et garde chaque carte à son
+  lien seul. Le déploiement dit alors pourquoi (`scripts/deploy.ts`), et refuse une build qui
+  montre des phrases dont le fichier n'est pas, octet pour octet, celui du dépôt
+  (`src/lib/game-gists.ts`, `scripts/build-mode.ts`, `scripts/game-gists.test.ts`).
+- **Ce que le site en sert.** Le fichier du jeu (`/data/jeu-….json`) porte ces phrases avec
+  les mots, et dit de lui-même qui les a écrites (`sentences.written_by` : « ai »,
+  `sentences.read_by_a_person` : faux) : l'étiquette de la carte vit dans la page, pas dans le
+  fichier, qui se lit, se garde et se copie sans elle.
 - **Quand il est montré.** Seulement si l'éditeur l'a validé tel quel (`meta.validated`, un
   mot daté de lui), si le site répond aux questions (`ask.json` : « chat ») et si la décision
   de campagne le permet (D19.5). Sinon la carte montre le lieu et son lien, comme avant.
+- **Ce que l'éditeur a jugé.** Les mots, un par un, sur une carte qui ne montrait que les
+  titres officiels (voir « Les mots du jeu ») : la phrase n'en faisait pas partie. C'est
+  pourquoi ce fichier a **sa propre validation**, distincte de celle des mots — et une carte
+  peut garder son lien seul quand sa phrase, même fidèle, n'a pas sa place sous un mot du jeu.
 - **Sous quels termes.** Comme le reste de ce dossier, ce fichier n'est ni sous la licence MIT
   du code ni sous Creative Commons : ce dépôt ne donne sur ces phrases aucune licence de
   réutilisation. Elles disent les mesures d'un livre dont tous les droits sont réservés.

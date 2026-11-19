@@ -169,11 +169,16 @@ async function main(): Promise<void> {
     if ((await game.count()) > 0) {
       await game.scrollIntoViewIfNeeded();
       await page.waitForTimeout(1500);
-      await during('a tile of the game, the card of the place', async () => {
-        await page.locator('#game-live .g-tile').first().click();
+      // A newcomer's first word is given (D19.15): one gesture, and its card; the question —
+      // and its tiles — starts at the second word.
+      await during('the gesture of the entrance, the card of the first word', async () => {
+        await page.locator('#game-live .g-go .cta').click();
       });
       await during('« Mot suivant »', async () => {
         await page.getByRole('button', { name: 'Mot suivant' }).click();
+      });
+      await during('a tile of the game, the card of the place', async () => {
+        await page.locator('#game-live .g-tile').first().click();
       });
       await during('her sheet opens', async () => {
         await page.getByRole('button', { name: 'Ta tortue', exact: true }).click();

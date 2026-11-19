@@ -60,7 +60,8 @@ import {
   type RoundEnd,
   type Standing,
 } from '../src/lib/game-engine.js';
-import { lineAtRoundEnd, nextRoundChangesHer, signAtRoundEnd } from '../src/lib/game-goal.js';
+import { DOOR_THEMES } from '../src/lib/game-door.js';
+import { lineAtRoundEnd, nextRoundChangesHer } from '../src/lib/game-goal.js';
 import { recallFor } from '../src/lib/game-recall.js';
 import { KEPT_FIELDS, TAB_FIELDS, serialiseTab } from '../src/lib/game-state.js';
 import { KEPT_FIELDS2, STORAGE_KEY, TAB_FIELDS2 } from '../src/lib/game-state2.js';
@@ -72,7 +73,6 @@ import {
   evolutionLasts,
   lookOf,
   passageTo,
-  signOf,
   type MascotLook,
   type MascotTint,
   type Passage,
@@ -124,6 +124,53 @@ const OWN_VOICE = `(() => {
   return copy.textContent.replace(/\\s+/g, ' ').trim();
 })()`;
 
+/** The entrance of the game (D19.15), as the HTML holds it or as the script draws it. */
+interface Entrance {
+  hook: string[];
+  /** The gesture: what it says, what it is (`a` in the HTML, `button` once drawn), its anchor. */
+  go: [string, string, string | null];
+  source: string;
+  heard: string;
+  /** The themes of the other door: what each says, where it leads, how it is named aloud. */
+  themes: [string, string | null, string | null][];
+  find: [string, string | null];
+  /** What an entrance never holds: a tile, a question, a sentence about her — shown. */
+  tiles: number;
+  asks: number;
+  ofHer: number;
+  /** The order of what it holds, and where three of its pieces stand on the page. */
+  order: string[];
+  at: { word: number; go: number; goHeight: number; door: number };
+}
+const entranceIn = (root: string): string => `(() => {
+  const flat = (node) => (node ? node.textContent.replace(/\\s+/g, ' ').trim() : '');
+  const seen = (node) => node !== null && node.getClientRects().length > 0;
+  const down = (node) => Math.round(node.getBoundingClientRect().top + scrollY);
+  const box = document.querySelector(${JSON.stringify(root)});
+  const start = box.querySelector('.g-start');
+  const go = start.querySelector('.g-go .cta');
+  const find = start.querySelector('.g-door .g-find');
+  const door = start.querySelector('.g-door');
+  return {
+    hook: [...start.querySelectorAll('.g-hook span')].map(flat),
+    go: [flat(go), go.tagName.toLowerCase(), go.getAttribute('href')],
+    source: flat(start.querySelector('.g-source')),
+    heard: flat(door.querySelector('h3')),
+    themes: [...door.querySelectorAll('li a')].map((a) => [flat(a), a.getAttribute('href'), a.getAttribute('aria-label')]),
+    find: [flat(find), find.getAttribute('href')],
+    tiles: [...box.querySelectorAll('.g-tile')].filter(seen).length,
+    asks: [...box.querySelectorAll('.g-ask')].filter(seen).length,
+    ofHer: [...box.querySelectorAll('.g-goal')].filter(seen).length,
+    order: [...start.children].map((node) => node.classList[0] || node.tagName.toLowerCase()),
+    at: {
+      word: down(box.querySelector('[data-programme="word"]')),
+      go: down(go),
+      goHeight: Math.round(go.getBoundingClientRect().height),
+      door: Math.round(door.getBoundingClientRect().bottom + scrollY),
+    },
+  };
+})()`;
+
 /** What the end of a round holds under its title (lot 6), as the page shows it. */
 interface EndPanel {
   /** Its children, in order: the first class of each, or its tag. */
@@ -137,7 +184,6 @@ interface EndPanel {
   cards: number;
   ahead: string;
   aheadWords: string[];
-  same: string;
   keep: string;
 }
 const END_PANEL = `(() => {
@@ -154,7 +200,6 @@ const END_PANEL = `(() => {
     cards: panel.querySelectorAll('.g-recall .g-place').length,
     ahead: flat(panel.querySelector('.g-ahead')),
     aheadWords: [...panel.querySelectorAll('.g-ahead [data-programme="word"]')].map(flat),
-    same: flat(panel.querySelector('.g-same')),
     keep: flat(panel.querySelector('.g-keep-ask')),
   };
 })()`;
@@ -396,11 +441,8 @@ function ending(
   const seen = [...seenBefore, ...words.filter((id) => !seenBefore.includes(id))];
   const end = endOfRound(data, before, seen);
   const line = lineAtRoundEnd(end, nextRoundChangesHer(data, end, seen, words.at(-1) ?? null));
-  // A sign she has just shown is named where no passage is (lot 6): never both.
-  const sign = signAtRoundEnd(before, end);
   const said = [
     ...(line.passage === null ? [] : [kit[`turtle.passage.${String(line.passage)}`] ?? '']),
-    ...(line.passage !== null || sign === null ? [] : [kit[`turtle.sign.${sign}`] ?? '']),
     ...(line.goal === null ? [] : [kit[`turtle.goal.${line.goal}`] ?? '']),
   ];
   const stored = {
@@ -532,9 +574,19 @@ async function runEngine(
   const openKeep = async (view: Page): Promise<void> => {
     await view.getByRole('button', { name: says('turtle.keep.open') }).click();
   };
+  /**
+   * The card of the word on screen, without a choice: « Voir la mesure » where the entrance is
+   * drawn — a newcomer's first word is given (D19.15) — and « Je ne sais pas » on a question.
+   * The same gesture under two names: both show the card and judge nothing.
+   */
+  const reveal = async (view: Page): Promise<void> => {
+    const entrance = view.locator('#game-live .g-go .cta');
+    if ((await entrance.count()) > 0) await entrance.click();
+    else await view.getByRole('button', { name: 'Je ne sais pas' }).click();
+  };
   const playRound = async (view: Page): Promise<void> => {
     for (let i = 0; i < ROUND; i += 1) {
-      await view.getByRole('button', { name: 'Je ne sais pas' }).click();
+      await reveal(view);
       await view.getByRole('button', { name: 'Mot suivant' }).click();
     }
   };
@@ -944,12 +996,28 @@ async function runEngine(
     const word = first[0];
     const place = word === undefined ? null : locate(data, word.section);
     if (word === undefined || place === null) throw new Error('the first word has no place');
-    const other = data.parts.map((p) => p.number).find((n) => n !== place.part.number) ?? 0;
 
     // Two visitors, two different choices for the same word: what is written is the same
-    // string — a choice has nowhere to go.
+    // string — a choice has nowhere to go. The first word is given (D19.15): the first choice
+    // one can make is on the second.
     const inTab: string[] = [];
-    for (const tile of [place.part.number, other]) {
+    {
+      const asked = first[1];
+      const there = asked === undefined ? null : locate(data, asked.section);
+      if (asked === undefined || there === null) throw new Error('the second word has no place');
+      const elsewhere = data.parts.map((p) => p.number).find((n) => n !== there.part.number) ?? 0;
+      for (const tile of [there.part.number, elsewhere]) {
+        const context = await browser.newContext(phone);
+        const view = await context.newPage();
+        await arrive(view);
+        await reveal(view);
+        await view.getByRole('button', { name: 'Mot suivant' }).click();
+        await view.locator(`#game-live .g-tile[data-tile="${String(tile)}"]`).click();
+        inTab.push((await view.evaluate<Stores>(stores)).tab[STORAGE_KEY] ?? '');
+        await context.close();
+      }
+    }
+    for (const tile of [place.part.number]) {
       const context = await browser.newContext(phone);
       const view = await context.newPage();
       await arrive(view);
@@ -961,9 +1029,8 @@ async function runEngine(
           JSON.stringify(before),
         );
       }
-      await view.locator(`#game-live .g-tile[data-tile="${String(tile)}"]`).click();
+      await reveal(view);
       const afterIt: Stores = await view.evaluate(stores);
-      inTab.push(afterIt.tab[STORAGE_KEY] ?? '');
       if (tile === place.part.number) {
         const state = JSON.parse(afterIt.tab[STORAGE_KEY] ?? '{}') as Record<string, unknown>;
         check(
@@ -1867,14 +1934,11 @@ async function runEngine(
     }
 
     // The ends of later rounds (lot 6): « Tu te souviens ? » offers the round's first word and
-    // an earlier one; and where she has just shown a sign — her wings ajar, her eyes up, a
-    // first star — the sign is named, with her goal, as her drawing shows it.
-    for (const [round, sign] of [
-      [2, null],
-      [5, 'ajar'],
-      [10, 'up'],
-      [13, 'star'],
-    ] as const) {
+    // an earlier one. Rounds 5, 10 and 13 are those where her drawing has just shown a sign —
+    // her wings ajar, her eyes up, a first star: nothing names it (the three sentences that
+    // did were withdrawn on 19/11/2026, after the readings of lot 8), and what is said of her
+    // there is her goal, as at any other round.
+    for (const round of [2, 5, 10, 13]) {
       const at = ending(data, kit, round);
       const { context, view } = await visitor(at.stored);
       await press(view, 'Mot suivant');
@@ -1906,18 +1970,15 @@ async function runEngine(
         under.line === at.said.map(shown).join(' ') && at.said.length <= 2,
         under.line,
       );
-      if (sign !== null) {
-        await until(view, "document.querySelector('#game-status').textContent.trim() !== ''");
-        const drawn = await her(view);
-        const expected = signOf(at.end.state, at.end.arcs);
+      if (round !== 2) {
+        // To a screen reader a passage is its sentence, said when it can be seen: where there
+        // is none, nothing is announced — the line is read in its place, under the title.
         check(
-          `round ${String(round)}: the sign she has just shown is named first — « ${says(`turtle.sign.${sign}`)} » — as her drawing shows it, and said to a screen reader`,
-          at.said[0] === kit[`turtle.sign.${sign}`] &&
-            !at.end.passage &&
-            expected > 0 &&
-            drawn?.sign === String(expected) &&
-            text(await view.locator('#game-status').textContent()) === under.line,
-          JSON.stringify({ line: under.line, sign: drawn?.sign }),
+          `round ${String(round)}: no passage here — what is said of her is her goal alone, and nothing is announced apart`,
+          !at.end.passage &&
+            at.said.length === 1 &&
+            text(await view.locator('#game-status').textContent()) === '',
+          `${under.line} | ${text(await view.locator('#game-status').textContent())}`,
         );
         // The second of the two words, pressed: its card — the card of an earlier round.
         await view.locator('#game-live .g-recall button').nth(1).click();
@@ -2019,13 +2080,26 @@ async function runEngine(
     const view = await offline.newPage();
     await view.goto(`${origin}/`);
     await view.waitForTimeout(500);
-    await view.locator('.g-word-1 .g-tile').first().click();
+    const entries = await view.evaluate<number>('history.length');
+    await view.locator('.g-word-1 .g-go .cta').click();
     check(
       'without its data the game is still the round of the HTML, and she is the turtle she arrived as',
       (await view.locator('#game-live').isHidden()) &&
         (await view.locator('.g-word-1 .g-place').isVisible()) &&
         (await view.locator(HER).getAttribute('data-state')) === '0' &&
         (await view.locator('#jeu button:visible').count()) === 0,
+    );
+    // The round of the HTML is played with anchors. Once the script of the game runs, each
+    // REPLACES the entry it leaves: a tile that was followed is not kept in the history of
+    // the browser, where the page says no choice is kept (security review of 19/11/2026).
+    await view.locator('.g-word-1 .g-place a.g-next').click();
+    await view.locator('.g-word-2 .g-tile').nth(2).click();
+    check(
+      '…and the anchors of that round leave no entry behind them in the history: « back » does not go through the tiles',
+      (await view.evaluate<number>('history.length')) === entries &&
+        /#m2-[1-6]$/.test(view.url()) &&
+        (await view.locator('.g-word-2 .g-place').isVisible()),
+      `${String(entries)} → ${String(await view.evaluate<number>('history.length'))} ${view.url()}`,
     );
     await offline.close();
     server.failData = false;
@@ -2192,7 +2266,7 @@ async function runEngine(
         const { context, view } = await visitor(rounds === 0 ? null : resting(data, rounds), {
           viewport: { width, height: 740 },
         });
-        await view.getByRole('button', { name: 'Je ne sais pas' }).click();
+        await reveal(view);
         await view.getByRole('button', { name: 'Mot suivant' }).click();
         const found = await view.evaluate<string[]>(`(() => {
           const node = document.querySelector('#game-live .g-the-word');
@@ -2616,10 +2690,50 @@ async function runEngine(
         await route.continue();
       });
       await view.goto(`${origin}/`);
-      await view.locator('#game-static .g-word-1 .g-tile').first().focus();
+      await view.locator('#game-static .g-word-1 .g-go .cta').focus();
       await until(view, "!document.querySelector('#game-live').hidden");
       check(
-        'a focus already in the round of the HTML follows into the script’s when it takes over',
+        'a focus already on the gesture of the HTML’s entrance follows onto the script’s when it takes over',
+        await view.evaluate<boolean>(
+          "document.activeElement === document.querySelector('#game-live .g-go .cta')",
+        ),
+        await focusedName(view),
+      );
+      await context.close();
+    }
+    // …and on a link of the other door, onto the same link — never back up to the gesture.
+    {
+      const context = await browser.newContext(phone);
+      const view = await context.newPage();
+      await view.route('**/data/jeu-*.json', async (route) => {
+        await new Promise((done) => setTimeout(done, 1200));
+        await route.continue();
+      });
+      await view.goto(`${origin}/`);
+      await view.locator('#game-static .g-door li a').nth(3).focus();
+      await until(view, "!document.querySelector('#game-live').hidden");
+      check(
+        '…and a focus on a link of the other door follows onto the same link',
+        await view.evaluate<boolean>(
+          "document.activeElement === document.querySelectorAll('#game-live .g-door li a')[3]",
+        ),
+        await focusedName(view),
+      );
+      await context.close();
+    }
+    // Someone further in the round of the HTML — a question, by its anchor: onto the question.
+    {
+      const context = await browser.newContext(phone);
+      const view = await context.newPage();
+      await view.route('**/data/jeu-*.json', async (route) => {
+        await new Promise((done) => setTimeout(done, 1200));
+        await route.continue();
+      });
+      await view.goto(`${origin}/#m2`);
+      await view.locator('#game-static .g-word-2 .g-tile').first().focus();
+      await until(view, "!document.querySelector('#game-live').hidden");
+      check(
+        '…and a focus on a tile of the HTML’s second word follows onto the script’s question',
         await view.evaluate<boolean>(
           "document.activeElement === document.querySelector('#game-live .g-ask')",
         ),
@@ -2910,7 +3024,7 @@ async function runEngine(
     const eve = new Date('2027-04-15T21:00:00Z');
     seen = await visit(eve, { date: eve });
     await until(seen.view, "!document.querySelector('#game-live').hidden");
-    await seen.view.getByRole('button', { name: 'Je ne sais pas' }).click();
+    await reveal(seen.view);
     const midnight = new Date('2027-04-15T22:10:00Z');
     await seen.view.clock.setFixedTime(midnight);
     await seen.view.getByRole('button', { name: 'Mot suivant' }).click();
@@ -3059,13 +3173,16 @@ async function runEngine(
       // A first visit: the question, the card, then the end of the round — while she passes
       // (where a passage is played at all), and once she has.
       const fresh = await open(null);
+      await audit(fresh.view, 'the entrance');
+      await reveal(fresh.view);
+      await audit(fresh.view, 'the card of the first word');
+      await fresh.view.getByRole('button', { name: 'Mot suivant' }).click();
       await audit(fresh.view, 'the question');
       await fresh.view.locator('#game-live .g-tile').first().click();
       await audit(fresh.view, 'the card of the place');
-      for (let i = 0; i < ROUND; i += 1) {
-        if (i > 0) await fresh.view.getByRole('button', { name: 'Je ne sais pas' }).click();
-        await fresh.view.getByRole('button', { name: 'Mot suivant' }).click();
-      }
+      await fresh.view.getByRole('button', { name: 'Mot suivant' }).click();
+      await reveal(fresh.view);
+      await fresh.view.getByRole('button', { name: 'Mot suivant' }).click();
       await fresh.view.waitForTimeout(600);
       await audit(fresh.view, 'the end of a round, while she passes');
       await fresh.view.waitForTimeout(evolutionLasts('01'));
@@ -3304,6 +3421,8 @@ async function runEngine(
 
   // --- 1 to 4. a first visit: without script, then with it — a round, its end, her passage
   async function runVisit(): Promise<void> {
+    /** The entrance as the HTML holds it: what the script must draw again, at the same place. */
+    let fromHtml: Entrance;
     // --- 1. without JavaScript
     {
       const context = await browser.newContext({ ...phone, javaScriptEnabled: false });
@@ -3324,25 +3443,59 @@ async function runEngine(
         JSON.stringify(words) === JSON.stringify(first.map((w) => w.word)),
         words.join(','),
       );
+      // A newcomer's first word is given (D19.15): the page opens on its entrance, not on a
+      // question — why the word is there, ONE gesture that gives its card, where every card
+      // leads; and, under a rule, six themes people hear about and the way to the field.
+      const entrance = await page.evaluate<Entrance>(entranceIn('#game-static .g-word-1'));
+      fromHtml = entrance;
       check(
-        'one question shows at a time',
+        'the page opens on the entrance of the first word: why it is there, one gesture that gives its card, where every card leads',
+        entrance.hook.join(' ') === says('game.start.hook') &&
+          entrance.hook.length === 2 &&
+          JSON.stringify(entrance.go) === JSON.stringify([says('game.start.cta'), 'a', '#m1-0']) &&
+          entrance.source === says('game.start.source') &&
+          JSON.stringify(entrance.order) ===
+            JSON.stringify(['g-hook', 'g-go', 'g-source', 'g-door']),
+        JSON.stringify(entrance),
+      );
+      check(
+        '…nothing is asked of a newcomer: no question, no tile — and the entrance says nothing of her',
+        entrance.tiles === 0 && entrance.asks === 0 && entrance.ofHer === 0,
+        JSON.stringify(entrance),
+      );
+      check(
+        '…and under it, the other door of the site: six themes people hear about, each a link to our answer, and the way to the field',
+        entrance.heard === says('riposte.heard_label') &&
+          JSON.stringify(entrance.themes.map((theme) => theme[1])) ===
+            JSON.stringify(DOOR_THEMES.map((slug) => `/r/${slug}/`)) &&
+          entrance.themes.every(
+            (theme) => theme[0] !== '' && (theme[2] ?? '').startsWith(`${theme[0]} : `),
+          ) &&
+          JSON.stringify(entrance.find) ===
+            JSON.stringify([says('home.direct.cta_search'), '#chercher']),
+        JSON.stringify(entrance.themes),
+      );
+      await page.goto(`${origin}/#m2`);
+      check(
+        'the question starts at the second word, and one question shows at a time',
         JSON.stringify(await visibleHeadings(page)) ===
           JSON.stringify(['Dans quelle partie est-il écrit ?']),
         (await visibleHeadings(page)).join(' | '),
       );
-      const tiles = (await page.locator('.g-word-1 .g-tile').allTextContents()).map(text);
+      const tiles = (await page.locator('.g-word-2 .g-tile').allTextContents()).map(text);
       check(
         'the six tiles are the six official titles, whole',
         JSON.stringify(tiles) === JSON.stringify(partTitles),
         tiles.join(' | '),
       );
+      await page.goto(`${origin}/`);
       const hrefs = await page
         .locator('#game-static a[href^="#"]')
         .evaluateAll((links) => links.map((a) => a.getAttribute('href') ?? ''));
       check(
         'an anchor says a position, never a word or an answer',
-        hrefs.length > 0 && hrefs.every((h) => /^#(?:m[1-3](?:-[0-6])?|fin)$/.test(h)),
-        hrefs.filter((h) => !/^#(?:m[1-3](?:-[0-6])?|fin)$/.test(h)).join(','),
+        hrefs.length > 0 && hrefs.every((h) => /^#(?:m[1-3](?:-[0-6])?|fin|chercher)$/.test(h)),
+        hrefs.filter((h) => !/^#(?:m[1-3](?:-[0-6])?|fin|chercher)$/.test(h)).join(','),
       );
       // She is there, once, as the turtle — and nothing that only a script can answer is.
       const without = await page.evaluate<{
@@ -3375,14 +3528,15 @@ async function runEngine(
         without.goal.join(','),
       );
 
-      // Every tile of the first word leads to its card, and the card never judges.
-      const word = first[0];
+      // Every tile of a word leads to its card, and the card never judges: asked of the
+      // second word, the first that has tiles.
+      const word = first[1];
       const place = word === undefined ? null : locate(data, word.section);
-      if (word === undefined || place === null) throw new Error('the first word has no place');
+      if (word === undefined || place === null) throw new Error('the second word has no place');
       const also = otherParts(data, word.id);
       let cards = 0;
       for (let tile = 0; tile <= 6; tile += 1) {
-        await page.goto(`${origin}/#m1-${String(tile)}`);
+        await page.goto(`${origin}/#m2-${String(tile)}`);
         const [heading = ''] = await visibleHeadings(page);
         const n = String(place.part.number);
         const expected =
@@ -3398,15 +3552,15 @@ async function runEngine(
         cards === 7,
         String(cards),
       );
-      await page.goto(`${origin}/#m1-${String(place.part.number)}`);
-      const where = (await page.locator('.g-word-1 .g-where li').allTextContents()).map(text);
+      await page.goto(`${origin}/#m2-${String(place.part.number)}`);
+      const where = (await page.locator('.g-word-2 .g-where li').allTextContents()).map(text);
       check(
         'the card names the part, the chapter and the section by their official titles',
         JSON.stringify(where) ===
           JSON.stringify([place.part.title, place.chapter.title, place.section.title]),
         where.join(' | '),
       );
-      const cta = page.locator('.g-word-1 .g-place a.cta');
+      const cta = page.locator('.g-word-2 .g-place a.cta');
       check(
         '« C’est écrit là » leads to the section in the official book',
         (await cta.getAttribute('href')) === sectionUrl(word.section) &&
@@ -3415,7 +3569,7 @@ async function runEngine(
       );
       // The card is under her, whole: never beside her.
       const beside = await page.evaluate<{ card: number; her: number }>(`({
-        card: document.querySelector('.g-word-1 .g-place').getBoundingClientRect().top,
+        card: document.querySelector('.g-word-2 .g-place').getBoundingClientRect().top,
         her: document.querySelector('${HER}').getBoundingClientRect().bottom,
       })`);
       check(
@@ -3423,7 +3577,20 @@ async function runEngine(
         beside.card >= beside.her,
         JSON.stringify(beside),
       );
-      // The whole round, link by link.
+      // The whole round, link by link — from its entrance: the first card is given, and says
+      // where without a word about a choice, since none was made.
+      await page.goto(`${origin}/`);
+      await page.locator('.g-word-1 .g-go a.cta').click();
+      const given = await visibleHeadings(page);
+      const firstPlace = locate(data, first[0]?.section ?? '');
+      check(
+        'the gesture of the entrance leads to the card of the first word: where it is written, and nothing else is said',
+        JSON.stringify(given) ===
+          JSON.stringify([`C’est écrit dans la partie ${String(firstPlace?.part.number)}.`]) &&
+          (await page.locator('.g-word-1 .g-start').isHidden()) &&
+          page.url().endsWith('#m1-0'),
+        given.join(' | '),
+      );
       await page.locator('.g-word-1 .g-place a.g-next').click();
       const second = text(await page.locator('[data-programme="word"]:visible').textContent());
       await page.locator('.g-word-2 .g-with a').click();
@@ -3503,12 +3670,45 @@ async function runEngine(
       isLook(arrived, lookOf({ state: 0 })) && arrived?.live === true && (await moving(page)) === 0,
       JSON.stringify(arrived),
     );
+    // The entrance, drawn again by the script: what the HTML held, in the same order and at
+    // the same place — its gesture a button now, the other door the very copy of the page's.
+    const drawn = await page.evaluate<Entrance>(entranceIn('#game-live'));
+    const same = (a: Entrance, b: Entrance): boolean =>
+      JSON.stringify([a.hook, a.go[0], a.source, a.heard, a.themes, a.find, a.order]) ===
+      JSON.stringify([b.hook, b.go[0], b.source, b.heard, b.themes, b.find, b.order]);
     check(
-      'what will make her change is said beside her before a first word is found',
-      text(await page.locator('#game-live .g-goal').textContent()) === says('turtle.goal.start') &&
-        (await page.locator('#game-live .g-goal').isVisible()) &&
+      'the script draws the entrance the page arrived with: the same words, the same links, in the same order — and its gesture is a button',
+      same(drawn, fromHtml) &&
+        drawn.go[1] === 'button' &&
+        drawn.go[2] === null &&
+        drawn.tiles === 0 &&
+        drawn.asks === 0,
+      JSON.stringify(drawn),
+    );
+    check(
+      '…at the very place it stood in the HTML: the word, the gesture and the end of the other door have not moved',
+      JSON.stringify(drawn.at) === JSON.stringify(fromHtml.at),
+      `${JSON.stringify(fromHtml.at)} → ${JSON.stringify(drawn.at)}`,
+    );
+    check(
+      '…and one element of the page bears the name of the other door: the one it arrived with',
+      (await page.locator('[id="game-door"]').count()) === 1 &&
+        (await page.locator('#game-static #game-door').count()) === 1,
+    );
+    check(
+      'the entrance says nothing of her: what will make her change is said from the first card on',
+      (await page.locator('#game-live .g-goal').count()) === 0 &&
         (await page.locator('#game-her-with').isHidden()),
-      text(await page.locator('#game-live .g-goal').textContent()),
+    );
+    check(
+      'the gesture of the entrance is the first thing of the game one can press, and it is as tall as a thumb',
+      drawn.go[0] === says('game.start.cta') && drawn.at.goHeight >= 44,
+      String(drawn.at.goHeight),
+    );
+    check(
+      'the entrance holds whole in the window of a phone: the way to the field is above the fold',
+      drawn.at.door <= 844,
+      String(drawn.at.door),
     );
     check(
       'she is a button, by her name, and says it opens something',
@@ -3518,7 +3718,7 @@ async function runEngine(
           .getAttribute('aria-haspopup')) === 'dialog',
     );
 
-    // --- 3. a round: the right tile, another one, not knowing
+    // --- 3. a round: the first word given, then the right tile, then another one
     const seenBefore = requests.length;
     const playWord = async (index: number, how: 'here' | 'other' | 'unknown'): Promise<string> => {
       const word = first[index];
@@ -3528,7 +3728,7 @@ async function runEngine(
       const taken = new Set([place.part.number, ...otherParts(data, word.id)]);
       const other = String(data.parts.map((p) => p.number).find((n) => !taken.has(n)) ?? 0);
       await page.evaluate('window.__seen.her.log.length = 0');
-      if (how === 'unknown') await page.getByRole('button', { name: 'Je ne sais pas' }).click();
+      if (how === 'unknown') await reveal(page);
       else
         await page
           .locator(`#game-live .g-tile[data-tile="${how === 'here' ? right : other}"]`)
@@ -3541,11 +3741,12 @@ async function runEngine(
       await page.waitForTimeout(PULSE_HOLD_MS + LATE_MS);
       moves.push(JSON.stringify((await logOf(page)).map((line) => line.slice(1))));
     };
-    let right = await playWord(0, 'here');
+    let right = await playWord(0, 'unknown');
     check(
-      'the right tile: « Oui. », and where',
+      'the gesture of the entrance gives the card of the first word: where it is written, and not a word about a choice — none was made',
       text(await page.locator('#game-live .g-place h3').textContent()) ===
-        `Oui. C’est écrit dans la partie ${right}.`,
+        `C’est écrit dans la partie ${right}.` &&
+        (await page.locator('#game-live .g-start').count()) === 0,
       text(await page.locator('#game-live .g-place h3').textContent()),
     );
     check(
@@ -3661,19 +3862,36 @@ async function runEngine(
       `${fragment} | ${href.split('#')[1] ?? ''}`,
     );
     check(
-      'the sentence that says she changes is beside her on the card too',
-      text(await page.locator('#game-live .g-goal').textContent()) === says('turtle.goal.start'),
+      'what will make her change is said beside her from the first card on',
+      text(await page.locator('#game-live .g-goal').textContent()) === says('turtle.goal.start') &&
+        (await page.locator('#game-live .g-goal').isVisible()),
+      text(await page.locator('#game-live .g-goal').textContent()),
     );
     await page.getByRole('button', { name: 'Mot suivant' }).click();
     check(
-      'the next word, and the focus on its question',
+      'the next word, and the focus on its question: the question starts at the second word',
       text(await page.locator('#game-live [data-programme="word"]').textContent()) ===
         first[1]?.word &&
+        text(await page.locator('#game-live .g-ask').textContent()) ===
+          'Dans quelle partie est-il écrit ?' &&
+        (await page.locator('#game-live .g-tile').count()) === partTitles.length &&
+        (await page.locator('#game-live .g-start').count()) === 0 &&
+        text(await page.locator('#game-live .g-goal').textContent()) ===
+          says('turtle.goal.start') &&
         (await page.evaluate<boolean>(
           "document.activeElement === document.querySelector('#game-live .g-ask')",
         )),
     );
-    right = await playWord(1, 'other');
+    right = await playWord(1, 'here');
+    check(
+      'the right tile: « Oui. », and where',
+      text(await page.locator('#game-live .g-place h3').textContent()) ===
+        `Oui. C’est écrit dans la partie ${right}.`,
+      text(await page.locator('#game-live .g-place h3').textContent()),
+    );
+    await moved();
+    await page.getByRole('button', { name: 'Mot suivant' }).click();
+    right = await playWord(2, 'other');
     check(
       'another tile: where the word is written, and nothing about the choice',
       text(await page.locator('#game-live .g-place h3').textContent()) ===
@@ -3683,11 +3901,8 @@ async function runEngine(
     await moved();
     let voice: string = await page.evaluate(OWN_VOICE);
     check('the card never judges nor counts', !NEVER.test(voice), NEVER.exec(voice)?.[0]);
-    await page.getByRole('button', { name: 'Mot suivant' }).click();
-    await playWord(2, 'unknown');
-    await moved();
     check(
-      'her move for a word found is the same whatever was chosen: the right tile, another, none',
+      'her move for a word found is the same whatever was chosen: none (the word given), the right tile, another',
       moves.length === 3 &&
         moves[0] !== '[]' &&
         moves[0] === moves[1] &&
@@ -3776,7 +3991,7 @@ async function runEngine(
         (await page.getByRole('button', { name: 'Envoyer le lien du jeu' }).count()) > 0;
       const under = await page.evaluate<EndPanel>(END_PANEL);
       check(
-        'under her line, in this order: « Tu te souviens ? », the way on and the next words, the way to send the game and whose words they are, the way to keep her',
+        'under her line, in this order: « Tu te souviens ? », the way on and the next words, the way to send the game, the way to keep her',
         JSON.stringify(under.order) ===
           JSON.stringify([
             'h3',
@@ -3784,7 +3999,7 @@ async function runEngine(
             'g-recall',
             'g-actions',
             'g-ahead',
-            ...(sends ? ['g-actions', 'g-same'] : []),
+            ...(sends ? ['g-actions'] : []),
             'g-keep-ask',
           ]),
         under.order.join(' > '),
@@ -3803,17 +4018,16 @@ async function runEngine(
       );
       const next = data.words.slice(ROUND, 2 * ROUND).map((w) => w.word);
       check(
-        'under « Trois autres mots »: the three words of the round to come, each marked as a word of the programme — and under the way to send it, that the words are the same for everybody',
+        'under « Trois autres mots »: the three words of the round to come, each marked as a word of the programme',
         under.ahead === `${says('game.round.ahead')} : ${next.join(', ')}.` &&
-          JSON.stringify(under.aheadWords) === JSON.stringify(next) &&
-          under.same === (sends ? says('game.share.same') : ''),
-        `${under.ahead} | ${under.same}`,
+          JSON.stringify(under.aheadWords) === JSON.stringify(next),
+        under.ahead,
       );
       check(
         'what is said there holds no number: what comes next, never what is left',
-        !/\d/.test([under.title, under.lead, under.same, under.keep].join(' ')) &&
+        !/\d/.test([under.title, under.lead, under.keep].join(' ')) &&
           !/\d/.test(says('game.round.ahead')),
-        [under.title, under.lead, under.same, under.keep].join(' | '),
+        [under.title, under.lead, under.keep].join(' | '),
       );
       // The word pressed: its card opens right after it — and nothing else happens.
       const first = data.words[0];

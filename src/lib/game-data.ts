@@ -186,5 +186,10 @@ export function buildGame(
       };
     }),
   };
+  // A file that holds sentences says who wrote them. Added only where there is one, like the
+  // sentences themselves: a build without them keeps the file, and the name, it had before.
+  if (data.words.some((word) => word.gist !== undefined)) {
+    data.sentences = { written_by: 'ai', read_by_a_person: false };
+  }
   return { data, proven, fingerprint: canonicalHash(data).slice(0, 16) };
 }
