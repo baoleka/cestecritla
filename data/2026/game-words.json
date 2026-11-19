@@ -35,13 +35,13 @@
     },
     "pool_reviewed_on": "2026-11-13",
     "validated": {
-      "on": "2026-11-13",
-      "list_sha256": "f90c52ad9a7f9511b10a91e284224896981200d12216f92b492bfe5f2bc670cb"
+      "on": "2026-11-19",
+      "list_sha256": "8fc8898fd770388a2bb32e61cb4f50038ab11029c79900b718be56c721a94caf"
     },
     "attested": {
-      "list_sha256": "f90c52ad9a7f9511b10a91e284224896981200d12216f92b492bfe5f2bc670cb",
+      "list_sha256": "8fc8898fd770388a2bb32e61cb4f50038ab11029c79900b718be56c721a94caf",
       "corpus_version": "27ee6e713fe25e7e",
-      "on": "2026-11-13",
+      "on": "2026-11-19",
       "checks": [
         "written",
         "affirm",
@@ -55,11 +55,11 @@
   "words": [
     {
       "slot": 0,
-      "id": "w000",
-      "word": "wagon",
+      "id": "w003",
+      "word": "carburant",
       "pin": {
-        "id": "p1c3-s03-m06",
-        "sha256": "27a6641a7b16c27a513417ac68c18daabece34a88d855f67afaef5f6c793a71e"
+        "id": "p2c2-s01-k01",
+        "sha256": "9330bf10c11a0f6c5a5d2fb0679e1bac51f4d51e2e1c204b94cb8503cdec3e77"
       }
     },
     {
@@ -73,29 +73,29 @@
     },
     {
       "slot": 2,
+      "id": "w016",
+      "word": "électricité",
+      "pin": {
+        "id": "p3c1-s01-m03",
+        "sha256": "58bb9258f2d1209cf25455168882f3e337469b8c9dfa321adb25c51f88e54aca"
+      }
+    },
+    {
+      "slot": 3,
+      "id": "w000",
+      "word": "wagon",
+      "pin": {
+        "id": "p1c3-s03-m06",
+        "sha256": "27a6641a7b16c27a513417ac68c18daabece34a88d855f67afaef5f6c793a71e"
+      }
+    },
+    {
+      "slot": 4,
       "id": "w002",
       "word": "mairies",
       "pin": {
         "id": "p5c3-s01-m06",
         "sha256": "da7e613edf5822f042f00434f81801399919ed674e3c290b0b165f37d7c8f281"
-      }
-    },
-    {
-      "slot": 3,
-      "id": "w003",
-      "word": "carburant",
-      "pin": {
-        "id": "p2c2-s01-k01",
-        "sha256": "9330bf10c11a0f6c5a5d2fb0679e1bac51f4d51e2e1c204b94cb8503cdec3e77"
-      }
-    },
-    {
-      "slot": 4,
-      "id": "w008",
-      "word": "braille",
-      "pin": {
-        "id": "p3c2-s05-m06.s2",
-        "sha256": "183553aea372dd1cf638199668f2367dbb8e9cbc9de9031a0c1a6d3a4acd75f9"
       }
     },
     {
@@ -109,6 +109,15 @@
     },
     {
       "slot": 6,
+      "id": "w008",
+      "word": "braille",
+      "pin": {
+        "id": "p3c2-s05-m06.s2",
+        "sha256": "183553aea372dd1cf638199668f2367dbb8e9cbc9de9031a0c1a6d3a4acd75f9"
+      }
+    },
+    {
+      "slot": 7,
       "id": "w006",
       "word": "fontaines",
       "pin": {
@@ -117,7 +126,7 @@
       }
     },
     {
-      "slot": 7,
+      "slot": 8,
       "id": "w007",
       "word": "ponts",
       "pin": {
@@ -126,7 +135,7 @@
       }
     },
     {
-      "slot": 8,
+      "slot": 9,
       "id": "w011",
       "word": "gare",
       "pin": {
@@ -135,7 +144,7 @@
       }
     },
     {
-      "slot": 9,
+      "slot": 10,
       "id": "w012",
       "word": "train",
       "pin": {
@@ -144,7 +153,7 @@
       }
     },
     {
-      "slot": 10,
+      "slot": 11,
       "id": "w013",
       "word": "légumes",
       "pin": {
@@ -153,7 +162,7 @@
       }
     },
     {
-      "slot": 11,
+      "slot": 12,
       "id": "w014",
       "word": "aéroports",
       "pin": {
@@ -162,21 +171,12 @@
       }
     },
     {
-      "slot": 12,
+      "slot": 13,
       "id": "w015",
       "word": "bibliothèques",
       "pin": {
         "id": "p4c3-s01-m04",
         "sha256": "64974260bd6537fb5b8d9c6ef5aa39b2063c08d94b9a99e9aedccf30a5c7cb45"
-      }
-    },
-    {
-      "slot": 13,
-      "id": "w016",
-      "word": "électricité",
-      "pin": {
-        "id": "p3c1-s01-m03",
-        "sha256": "58bb9258f2d1209cf25455168882f3e337469b8c9dfa321adb25c51f88e54aca"
       }
     },
     {

@@ -332,3 +332,95 @@ void test('content: nothing added since the freeze holds the 2026 text', { skip 
       `${String(index.shingles.size)} windows, ${String(index.covered)}/${String(index.items)} items covered`,
   );
 });
+
+/**
+ * Our own sentences — one per measure, written ahead — live in a private base and are served
+ * three at most by request: « never published in a file », but for those of the game, and
+ * those only (D16.49, D19.2). The editor decides, card by card, which sentences the file of
+ * the game holds (D19.20, D19.21): a sentence he left out must not reach the public
+ * repository by another door — a note, a test report, a copy of what a reviewer was shown.
+ *
+ * Read where the sentences are (private/gists/verdicts.jsonl): every sentence that is NOT in
+ * the file of the game as tracked — all of them, while that file is not tracked — is searched
+ * for in every tracked text file and in what a deployable build publishes, by windows of
+ * twelve words (or the whole sentence when it is shorter). A file HOLDS a sentence when more
+ * than half of its windows are there: a list of nouns the book already wrote in 2025 — « de
+ * l'eau, l'air, la forêt… », fourteen words that the public archive of that edition holds
+ * too — is one or two windows of a sentence, not the sentence.
+ */
+const VERDICTS = 'private/gists/verdicts.jsonl';
+void test(
+  'content: no tracked file, and no built file, holds a sentence of ours that the game does not publish',
+  { skip: !existsSync(VERDICTS) && 'no sentences on this machine' },
+  () => {
+    const kept = new Map<string, string>();
+    for (const line of readFileSync(VERDICTS, 'utf8').split('\n')) {
+      if (line.trim() === '') continue;
+      const row = JSON.parse(line) as { id?: unknown; text?: unknown };
+      if (typeof row.id === 'string' && typeof row.text === 'string') kept.set(row.id, row.text);
+    }
+    assert.ok(kept.size > 1000, `only ${String(kept.size)} sentences were found`);
+    const tracked = git('ls-files', '-z')
+      .split('\0')
+      .filter((f) => f !== '' && !BINARY.test(f) && existsSync(f));
+    // The sentences the game publishes: those of its file — once that file is in the repository.
+    const gamePath = join('data/2026', GAME_SENTENCES);
+    const published = new Set<string>(
+      tracked.includes(gamePath)
+        ? (json(gamePath) as { gists: { id: string }[] }).gists.map((gist) => gist.id)
+        : [],
+    );
+    const bare = (text: string): string[] =>
+      text
+        .normalize('NFC')
+        .toLowerCase()
+        .split(/[^\p{L}\p{N}]+/u)
+        .filter((word) => word !== '');
+    const SIZE = 12;
+    const windows = new Map<string, string>();
+    const sizes = new Set<number>();
+    /** How many windows each sentence was cut in. */
+    const cut = new Map<string, number>();
+    for (const [id, text] of kept) {
+      if (published.has(id)) continue;
+      const words = bare(text);
+      const size = Math.min(SIZE, words.length);
+      if (size === 0) continue;
+      sizes.add(size);
+      cut.set(id, words.length - size + 1);
+      for (let at = 0; at + size <= words.length; at += 1) {
+        windows.set(words.slice(at, at + size).join(' '), id);
+      }
+    }
+    const found = (text: string): string[] => {
+      const hits = new Map<string, Set<string>>();
+      const words = bare(text);
+      for (const size of sizes) {
+        for (let at = 0; at + size <= words.length; at += 1) {
+          const window = words.slice(at, at + size).join(' ');
+          const id = windows.get(window);
+          if (id === undefined) continue;
+          const seen = hits.get(id) ?? new Set<string>();
+          seen.add(window);
+          hits.set(id, seen);
+        }
+      }
+      // More than half of a sentence's windows: the sentence is there.
+      return [...hits].filter(([id, seen]) => seen.size * 2 > (cut.get(id) ?? 0)).map(([id]) => id);
+    };
+    // The gate can fail: a sentence that is not published, quoted and re-wrapped, is found.
+    const [sampleId, sample] = [...kept].find(([id]) => !published.has(id)) ?? ['', ''];
+    assert.deepEqual(found(`> « ${sample.replace(/ /g, '\n  ')} »`), [sampleId]);
+    const findings: string[] = [];
+    for (const file of [...tracked, ...walkDir('dist').filter((f) => !BINARY.test(f))]) {
+      if (statSync(file).size > 8 * 1024 * 1024) continue;
+      const hits = found(readFileSync(file, 'utf8'));
+      if (hits.length > 0) findings.push(`${file}: ${hits.join(', ')}`);
+    }
+    assert.deepEqual(findings, [], 'a sentence the game does not publish is in a public file');
+    console.log(
+      `sentences gate: ${String(kept.size - published.size)} of ${String(kept.size)} sentences are not published; ` +
+        `none is in ${String(tracked.length)} tracked file(s) nor in dist/`,
+    );
+  },
+);

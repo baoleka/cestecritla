@@ -1,7 +1,13 @@
-# Les textes du chantier « Le jeu d'abord » — à valider par l'éditeur
+# Les textes du chantier « Le jeu d'abord » — validés par l'éditeur le 19 novembre 2026
 
-> **État au 19 novembre 2026, après les relectures du lot 8 : tous sont des propositions de la
-> session, aucun n'est servi.** Le plan (`PLAN-JEU-DABORD.md`, lot 7) demande un seul document
+> **VALIDÉS LE 19 NOVEMBRE 2026 (D19.19).** À la question « Les dix-huit textes nouveaux du
+> chantier : tu les valides ? », posée avec ce document et le point de « vérifiée », l'éditeur a
+> répondu : **« Je valide les dix-huit »**. L'étiquette de la phrase d'une carte reste donc
+> « Phrase écrite et vérifiée par une IA ». Aucun n'est servi : la production attend son
+> « oui » daté. Changer un mot de l'un d'eux redemande sa validation.
+>
+> **Ce qui suit est le document tel qu'il l'a validé.** Tous étaient des propositions de la
+> session. Le plan (`PLAN-JEU-DABORD.md`, lot 7) demande un seul document
 > de toutes les phrases nouvelles depuis la build en ligne (kit `design/strings.json`,
 > v0.13.0 → v0.14.0). Le voici : **dix-huit textes**, dont trois en remplacent un autre là où
 > ils valent. Chacun tient les règles du kit — quinze mots au plus par phrase, aucun mot de
@@ -21,8 +27,7 @@
 > `game.round.again`, `independence.unofficial`, `nav.toc`), toutes les lignes de la page
 > Confidentialité, et les phrases de la carte « Garder ta tortue », au mot près.
 >
-> **Validation** : à demander à l'éditeur en un dialogue de questions. Sa réponse sera
-> consignée ici et dans `decisions.md`.
+> **Validation** : donnée le 19 novembre 2026, consignée ici et dans `decisions.md` (D19.19).
 
 ## 1. L'entrée du jeu (D19.15, D19.16)
 
@@ -48,7 +53,7 @@ d'elle (D19.9).
 
 | Où on le lit | Clé | Le texte | Pourquoi |
 |---|---|---|---|
-| Sur la carte, au-dessus de la phrase de la mesure | `game.gist.badge` | **Phrase écrite et vérifiée par une IA** | D19.2 : la phrase dit elle-même ce qu'elle est, avant d'être lue. Le singulier de l'étiquette de « Demander » (« Phrases écrites et vérifiées par une IA », D16.59). **À trancher avec l'éditeur** : le relecteur hostile conteste « vérifiée » — la première carte porte une phrase « vérifiée » que six lecteurs sur sept lisent à l'envers |
+| Sur la carte, au-dessus de la phrase de la mesure | `game.gist.badge` | **Phrase écrite et vérifiée par une IA** | D19.2 : la phrase dit elle-même ce qu'elle est, avant d'être lue. Le singulier de l'étiquette de « Demander » (« Phrases écrites et vérifiées par une IA », D16.59). Le relecteur hostile contestait « vérifiée » — une phrase « vérifiée », celle de « wagon », est lue à l'envers par six lecteurs sur sept ; **tranché par l'éditeur : l'étiquette reste** (D19.19), et la carte « wagon » n'a pas de phrase pour l'instant (D19.20) |
 | Fin de la deuxième manche | `game.depth.chapter` | **Maintenant, le jeu donne la partie et demande le chapitre.** | D19.4 : une seule question par mot. Remplace « Maintenant, le jeu demande aussi le chapitre. » |
 | Fin de manche, titre du rappel | `game.recall.title` | **Tu te souviens ?** | Le nom que le plan lui donne |
 | Fin de manche, sous ce titre | `game.recall.lead` | **Touche un mot : sa carte se rouvre.** | Dit ce que le geste fait ; le titre porte seul l'invitation à se souvenir. Avant la session des personas : « Essaie de tête, puis touche un mot. » — lu comme une révision de cours par trois sur sept, et deux ne savaient pas ce que toucher ferait |
@@ -66,7 +71,7 @@ aucune n'est rendue, et les pages disent ce qu'elles disent aujourd'hui.
 |---|---|---|
 | À propos (« Qui écrit quoi ») ; Exactitude (« La réponse à une question ») | `about.gists_game` | **Le jeu montre aussi de ces phrases, sur ses cartes. Chacune dit une mesure où le mot est écrit.** — « une », pas « la » : un mot peut être écrit dans plusieurs mesures |
 | Méthode (« Quand tu demandes ») | `about.gists_game_method` | **Les phrases du jeu arrivent avec lui, dans un fichier. Jouer n'envoie rien.** |
-| Exactitude (« Les mots du jeu ») | `accuracy.game.sentences` | **Sur les cartes, 47 phrases disent une mesure avec nos mots. Une IA les a écrites : ce sont celles de « Demander ». L'empreinte prouve que la mesure n'a pas changé depuis, pas que la phrase est juste.** — le nombre est lu dans le jeu de la build. Corrigée au lot 8 : elle ne disait ni qui a écrit ces phrases, ni ce qu'une empreinte ne prouve pas |
+| Exactitude (« Les mots du jeu ») | `accuracy.game.sentences` | **Sur les cartes, 43 phrases disent une mesure avec nos mots. Une IA les a écrites : ce sont celles de « Demander ». L'empreinte prouve que la mesure n'a pas changé depuis, pas que la phrase est juste.** — le nombre est lu dans le jeu de la build. Corrigée au lot 8 : elle ne disait ni qui a écrit ces phrases, ni ce qu'une empreinte ne prouve pas |
 | Exactitude (« Nos propres textes ») | `accuracy.review.sentences_game` | **Les phrases de « Demander » et du jeu sont à part. Une IA les a écrites et vérifiées elle-même. Personne ne les a relues une à une.** — remplace « Les phrases de « Demander » sont à part. … » |
 | Licence et sources | `legal.license.sentences_game` | **Quand tu demandes, et dans le jeu, des phrases disent une mesure avec nos mots. Ce ne sont pas des extraits du livre : son texte reste sur le site officiel.** — remplace « Quand tu demandes, des phrases disent chaque mesure avec nos mots. … » |
 | Licence et sources, à la suite | `legal.license.game_file` | **Celles du jeu sont aussi dans un fichier public. Aucune licence de réutilisation n'est donnée sur elles.** — corrigée au lot 8 : « avec le code » se lisait « sous la licence du code » |

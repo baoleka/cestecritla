@@ -721,3 +721,56 @@ la remplace.
    laisser à son lien ; lien seul recommandé pour w005, w026, w047, en plus de w037).
 4. Le premier push du fichier des phrases, l'aperçu (lot 9), puis son « oui » daté pour la
    production (lot 10).
+
+### Ses deux réponses du 19 novembre 2026 — l'écran tient la barre ; « carburant », « cantine », « électricité »
+
+Les deux planches envoyées (l'accueil en ligne à côté du nouvel écran, avec deux jeux de mots ;
+ce qui suit quand on touche un mot), deux questions posées, deux réponses de lui :
+
+- **D19.17 — « Oui, il tient la barre »** : le premier écran aux trois mots donne, pour lui,
+  bien plus envie que l'accueil en ligne. La condition de D19.15 et D19.16 est levée pour le
+  premier écran ; **le « oui » de la production reste à part** (`data/launch.json`, `home` :
+  toujours vide, `npm run deploy` refuse toujours l'app sur l'apex).
+- **D19.18 — le jeu ouvre sur « carburant », « cantine », « électricité »**, et sa réponse
+  vaut validation de la liste dans ce nouvel ordre, datée du 19 novembre.
+
+Appliqué le jour même :
+
+- **Les rangs** (`slot`, `data/2026/game-words.json`) : « carburant », « cantine »,
+  « électricité », puis « wagon », « mairies », « îles », « braille », et tous les autres
+  dans leur rang relatif d'avant. **« îles » devant « braille » est un choix de la session**,
+  dit à l'éditeur : avec les trois nouveaux mots d'ouverture, la deuxième manche ne couvrait
+  plus les six parties du livre, et le flamant serait venu une manche plus tard ; ainsi rien
+  d'autre ne bouge — elle change aux manches 1, 2, 7 et 16, la question passe au chapitre et
+  à la section aux mêmes manches, ses signes paraissent aux mêmes manches.
+- **La liste** : vérifiée de nouveau sur le texte, attestée et datée (`scripts/words-2026.ts
+  --validated`, empreinte `8fc8898fd770…`). Les liens des mots (`word-links.json`) tiennent :
+  leur empreinte ne lit pas les rangs.
+- **Les phrases du jeu**, en local : régénérées dans le nouvel ordre (47 phrases, w037 à son
+  lien seul ; nouveau sceau). Toujours hors du dépôt.
+- **Portes, sur le jeu qui ouvre sur les nouveaux mots** : 654 tests (653 passent, 1 sauté) ;
+  `e2e:game` 319 / 283 / 283, avec les mesures de laboratoire ; `e2e` 46 / 43 / 43 ; `e2e:ask`
+  109 / 102 / 102 ; `e2e:sheet` 102 / 96 / 96 ; `a11y` 225 contrôles ; `e2e:mascot2`
+  47 / 47 / 47 ; le balayage.
+- Rien de servi n'a changé.
+
+**Puis trois réponses de plus, le même jour, à trois questions posées avec le document des
+textes** :
+
+- **D19.19 — « Je valide les dix-huit »** : les textes nouveaux sont validés tels qu'écrits,
+  l'étiquette « Phrase écrite et vérifiée par une IA » comprise.
+- **D19.20 — « wagon » : « Carte sans phrase pour l'instant »**. Rien ne change en
+  production ; la réécriture de la phrase et son redépôt lui seront proposés à part.
+- **D19.21 — « îles », « archipel », « collège », « assainissement » gardent leur lien seul.**
+
+Appliqué : le fichier des phrases du jeu, en local, tient **quarante-trois phrases et cinq
+cartes à leur lien seul** (`--link-only w000,w005,w026,w037,w047` ; quarante-deux écrivent le
+mot de leur carte). Données du jeu d'une build d'essai : 9 749 octets gzip pour 12 Ko.
+Rejoué avec ces quarante-trois phrases : 654 tests, `e2e:game` 299 / 283 / 283 sans les mesures
+de laboratoire, le balayage. **Une porte de plus, locale** (`scripts/leak.test.ts`) : aucune de
+nos 1 069 phrases autre que celles que le fichier du jeu publie n'est dans un fichier suivi ni
+dans `dist/` (655 tests avec elle) — les cinq phrases écartées ne sortiront pas par une autre porte ; les images et
+copies des personas, qui montrent celle de « wagon », restent sous `private/`.
+
+**Ce qui attend encore l'éditeur** : le premier push du fichier des phrases et l'aperçu
+(lot 9), puis son « oui » daté pour la production (lot 10) ; à part, la phrase de « wagon ».
