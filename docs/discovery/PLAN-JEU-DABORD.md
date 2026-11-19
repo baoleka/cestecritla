@@ -650,3 +650,74 @@ ma vie », et « j'ai juste à appuyer ». Le premier écran est donc repris une
    pour w005, w026, w047, en plus de w037.
 4. Le premier push du fichier des phrases, puis l'aperçu (lot 9) ; son « oui » daté pour la
    production (lot 10).
+
+### Lot 8 bis, au 19 novembre 2026 — l'entrée aux trois mots, mesurée face à l'accueil en ligne
+
+D19.16 demande que le premier écran donne **bien plus** envie que celui qui est en ligne. Le lot
+8 avait construit une entrée à un seul mot ; le face-à-face a montré qu'elle perdait. Ce lot
+la remplace.
+
+- **La mesure** (`13-tests-humains.md` §9.8) : les deux images côte à côte, « laquelle donne
+  le plus envie, et de combien ? », treize lecteurs — les sept personas et six lecteurs sans
+  fiche —, l'accueil en ligne présenté en premier pour sept, en second pour six. Dix
+  face-à-face, cent trente lectures. HYPOTHÈSE (lecteurs simulés).
+- **Ce qu'elle a montré** : un mot seul, c'est « une devinette dont je ne vois pas l'intérêt »
+  pour qui veut savoir à quoi sert le site (6 à 7, perdu) ; un champ vide, « un formulaire »
+  pour qui n'a pas de question. **Trois mots du quotidien à toucher** parlent aux deux :
+  11 à 2 et 12 à 1 en maquette ; **sur l'écran construit, 9, 9 et 10 lecteurs sur treize avec
+  les mots actuels, 11 et 12 avec « carburant », « cantine », « électricité »**. « Oui,
+  envie d'essayer » : 7 à 10 lecteurs sur treize, contre 1 à 3 pour l'accueil en ligne.
+- **L'entrée, telle que construite.** « Trois mots du programme. Que prévoit-il ? », puis les
+  trois mots de la première manche, chacun une rangée qu'on touche : sa carte s'ouvre — donnée,
+  sans question, sans verdict (le geste de « Je ne sais pas » sous un autre nom). La manche
+  continue avec les deux autres, chacun avec sa question, en tournant à partir du mot touché
+  (`roundFrom`, `src/scripts/game2.ts`). Dessous : « Touche un mot pour voir sa mesure. Chaque
+  carte mène à la page officielle. », un filet, « Tu cherches autre chose ? », « Chercher dans
+  le programme » en bouton, et les six thèmes du lot 8.
+- **Sans script, la même manche depuis n'importe lequel des trois mots.** Les ancres disent
+  une position dans la manche, plus un rang dans la liste : `#a2` la carte du deuxième mot
+  quand c'est lui qu'on a touché, `#b2` sa question quand il vient en deuxième, `#b2-4` la
+  carte où mène sa quatrième tuile, `#c2` quand il vient en troisième, `#fin`. La suite d'une
+  carte se sait donc sans script : après `a` la question `b` du mot suivant, après `b` la
+  question `c`, après `c` la fin. Chaque question est deux fois dans la page (36 tuiles), ce
+  qui porte l'accueil à 18,6 Ko gzip pour un plafond de 20 ; la feuille de style de la manche,
+  elle, raccourcit : un seul mot étant montré à la fois, une règle n'a plus à le nommer.
+- **Ce que la maquette avait et que l'écran construit n'a pas** : une boîte à l'allure de
+  champ sous les trois mots. Rien ne se tape à côté de la mascotte (D19.9), et une boîte qui a
+  l'air d'un champ sans en être un tromperait : c'est un bouton. Une à deux voix d'écart, dites
+  au §9.8.
+- **Les mots d'ouverture.** L'écran construit montre les trois premiers de la liste validée —
+  « wagon », « cantine », « mairies ». « carburant », « cantine », « électricité » font
+  mieux et écartent de l'entrée la carte dont la phrase est à réécrire (w000) ; les mettre en
+  tête change l'ordre de la liste, donc l'empreinte sur laquelle l'éditeur l'a validée : **sa
+  décision, et sa validation datée**. Rien n'a été réordonné dans le dépôt — la build d'essai
+  qui a servi à la mesure a été faite sur une copie, puis la liste remise telle quelle. (Une
+  première copie avait déplacé les mots dans le fichier sans changer leur rang : c'est `slot`
+  qui ordonne le jeu. La capture montrait les mêmes mots ; vue à l'image, refaite — la lecture
+  faite entre-temps compte pour ce qu'elle est, une troisième des mots actuels.)
+- **Portes** : 654 tests (653 passent, 1 sauté depuis toujours) ; types, lint, contraste ;
+  `a11y` 225 contrôles ; `e2e` 46 / 43 / 43 ; `e2e:ask` 109 / 102 / 102 ; `e2e:sheet`
+  102 / 96 / 96 ; `e2e:mascot2` 47 / 47 / 47 ; **`e2e:game` 319 / 283 / 283** — la manche sans
+  script jouée de bout en bout depuis chacun des trois mots, l'entrée du script au pixel de
+  celle du HTML, n'importe lequel des trois mots touché d'abord, le clavier, le chemin vers la
+  recherche (le champ prend le focus, la mascotte n'est plus entière à l'écran, rien dans
+  l'adresse), le focus qui suit ; le balayage (les deux critères tiennent ; l'entrée entière à
+  l'écran à 390 × 844 et 412 × 915, sa dernière ligne 2 px sous l'écran à 360 × 740).
+  **« Demander » coupé** (mode « off », construit puis remis) : la build passe ; 652 tests
+  sur 654 et un sauté — le seul qui tombe est la ligne qui épingle le mode enregistré ; `e2e`
+  50 / 47 / 47 ; 48 cartes, aucune phrase, aucune ligne de provenance, et l'accueil ne nomme
+  aucune IA. **Performance, dans le labo du budget** : LCP médian 388 ms pour 2 500 ; CLS
+  0,0011 pour 0,1 ; interactions de 16 à 40 ms pour 200 (« un mot de l'entrée, sa carte » :
+  32 ms). Poids : script du jeu 10 746 octets gzip pour 14 Ko, accueil 18 622 pour 20 Ko.
+- Rien de servi n'a changé.
+
+**Ce qui attend l'éditeur, dans cet ordre** :
+
+1. **Cet écran tient-il sa barre ?** (D19.15, D19.16) — sur les images, face à l'accueil en
+   ligne.
+2. **Quels trois mots ouvrent le jeu** : les trois premiers de la liste, ou « carburant »,
+   « cantine », « électricité » (sa validation datée de la liste dans ce nouvel ordre).
+3. Les dix-huit textes, dont « vérifiée » ; les cartes (w000 à réécrire et redéposer ou à
+   laisser à son lien ; lien seul recommandé pour w005, w026, w047, en plus de w037).
+4. Le premier push du fichier des phrases, l'aperçu (lot 9), puis son « oui » daté pour la
+   production (lot 10).

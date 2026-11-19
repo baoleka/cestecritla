@@ -8,29 +8,30 @@
   "lcp_ms": {
     "median": 388,
     "all": [
-      408,
-      388,
-      404,
+      412,
+      384,
+      392,
       384,
       388
     ]
   },
   "cls": {
-    "worst": 0.0048,
+    "worst": 0.0011,
     "all": [
-      0.0048,
-      0.0048,
-      0.0048,
-      0.0048,
-      0.0048
+      0.0011,
+      0.0011,
+      0.0011,
+      0.0011,
+      0.0011
     ]
   },
   "interactions": {
     "a key in the field, results while typing": 40,
     "Enter, the focus moves to the results": 16,
-    "a tile of the game, the card of the place": 32,
-    "« Mot suivant »": 16,
-    "her sheet opens": 40
+    "a word of the entrance, its card": 32,
+    "« Mot suivant »": 24,
+    "a tile of the game, the card of the place": 24,
+    "her sheet opens": 32
   },
   "budget": {
     "lcpMs": 2500,

@@ -76,57 +76,145 @@ html[data-silence] .game {
   margin-block: var(--space-2);
 }
 
-/* The entrance (D19.15): what a newcomer finds under the first word instead of a question and
-   six tiles — a sentence that says why the word is there, ONE gesture that gives its card, and
-   where every card leads. Then, under a rule, the other door of the site: six of the themes
-   people hear about, and the way to the field. The first screen, whole, at 390 × 844. */
-.g-hook {
-  margin-block: var(--space-1) var(--space-3);
+/* The entrance (D19.15, D19.16): what a newcomer finds instead of a question and six tiles —
+   the three words of the first round, each a row one touches to see its card. Then, under a
+   rule, the other door of the site: the way to the search, and six of the themes people hear
+   about. The first screen, whole, at 390 × 844. */
+.g-lead {
+  margin-block: var(--space-3) 0;
   font-size: var(--font-size-h3);
   line-height: var(--line-height-h3);
   font-weight: 700;
 }
-.g-hook span {
+.g-lead span {
   display: block;
 }
-.g-go {
-  margin-block: 0;
+/* The three words: one frame, a row each — never beside her, whole under her. */
+.g-pick {
+  clear: both;
+  margin: var(--space-3) 0 var(--space-2);
+  padding: 0;
+  border: 2px solid var(--brand);
+  border-radius: var(--radius-l);
+  list-style: none;
+  overflow: hidden;
 }
-.g-go .cta {
+.g-pick li + li {
+  border-block-start: 2px solid var(--brand);
+}
+/* A row: the word, in the face of the book and under the mark of a highlighter like the word
+   of a question; and a disc that says it leads somewhere. A link without script, a button with
+   it: the same box. */
+.game .g-pick-word {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
   inline-size: 100%;
-  min-block-size: 3.5rem;
-  font-size: var(--font-size-h3);
+  min-block-size: 4.25rem;
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  border-radius: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  text-decoration: none;
+  transition: transform var(--duration-fast) var(--easing-standard);
 }
-.g-source {
-  margin-block: var(--space-3) 0;
+.g-pick-word:active {
+  transform: scale(0.98);
+}
+@media (prefers-reduced-motion: reduce) {
+  .g-pick-word:active {
+    transform: none;
+  }
+}
+/* The frame cuts what goes past it: the mark of the focus is drawn inside the row. */
+.g-pick-word:focus-visible {
+  outline-offset: -5px;
+}
+.g-picked {
+  padding-inline: 0.12em;
+  margin-inline-start: -0.12em;
+  background: linear-gradient(to top, var(--turtle-shell) 0 36%, transparent 36%);
+  font-family: var(--font-family-verbatim);
+  /* As large as the row allows at 320 px, and never larger than the display size. */
+  font-size: clamp(1.5rem, 8.5vw, var(--font-size-display));
+  line-height: 1.15;
+  font-weight: 700;
+}
+.g-picked::before {
+  content: '«\00a0';
+}
+.g-picked::after {
+  content: '\00a0»';
+}
+/* The disc: drawn, not typed — no glyph of an arrow is asked of a font. */
+.g-go {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  border-radius: 50%;
+  background: var(--brand);
+  color: var(--brand-on);
+}
+.g-go::before {
+  inline-size: 0.625rem;
+  block-size: 0.625rem;
+  margin-inline-end: 0.2rem;
+  border-block-start: 3px solid;
+  border-inline-end: 3px solid;
+  content: '';
+  transform: rotate(45deg);
+}
+.g-how {
+  margin-block: var(--space-2) 0;
 }
 .g-door {
-  margin-block-start: var(--space-6);
-  padding-block-start: var(--space-3);
+  margin-block-start: var(--space-5);
+  padding-block-start: var(--space-4);
   border-block-start: 2px solid var(--brand);
 }
 .g-door h3 {
   margin-block: 0 var(--space-2);
 }
+.g-door p {
+  margin: 0;
+}
+/* The way to the search: a wide gesture, outlined like every second gesture of the block —
+   never a field, and nothing can be typed beside her (D19.9). */
+.game .g-door .g-find {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-block-size: 3rem;
+  padding-inline: var(--space-4);
+  border: 2px solid var(--brand);
+  border-radius: var(--radius-pill);
+  background: var(--bg);
+  color: var(--text);
+  font-weight: 700;
+  text-decoration: none;
+}
+.g-find svg {
+  flex: none;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
 .g-door ul {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
-  margin: 0 0 var(--space-3);
+  margin: var(--space-3) 0 0;
   padding: 0;
   list-style: none;
-}
-.g-door p {
-  margin: 0;
-}
-.g-door .g-find {
-  display: inline-flex;
-  align-items: center;
-  min-block-size: var(--tap-comfortable);
-  font-weight: 700;
 }
 .g-said {
   margin-block: var(--space-2) 0;
@@ -364,9 +452,17 @@ html[data-silence] .game {
 }
 
 /* ------------------------------------------------------------------------------------------
- * Without script: three words, moved by `:target`. Default: the first word's question.
- * An anchor is a position — #m2 the second word, #m2-4 its fourth tile, #fin the end — and the
- * panels after it show or hide by what is targeted.
+ * Without script: three words, moved by `:target`. Default: the entrance — the three words.
+ *
+ * An anchor is a position, never a word or an answer. For the word n of the round:
+ *   #a2      its card, when it is the word that was touched on the entrance;
+ *   #b2      its question, when it is the second word of the round — #b2-4 the card its
+ *            fourth tile leads to (#b2-0: « Je ne sais pas ») ;
+ *   #c2      the same when it is the third word; and #fin the end.
+ * The round goes round its three words from the one that was touched, so the way on from a
+ * card is known by where it stands: after `a` the question `b` of the next word, after `b`
+ * the question `c` of the next, after `c` the end. The panels after the anchors show or hide
+ * by what is targeted — and since one word only is shown at a time, a rule need not name it.
  * ---------------------------------------------------------------------------------------- */
 .g-at {
   display: block;
@@ -374,71 +470,51 @@ html[data-silence] .game {
   scroll-margin-block-start: 9rem;
 }
 .g-word,
+.g-question,
 .g-place,
 .g-end,
 .g-yes,
-.g-also {
+.g-also,
+.g-static .g-next {
   display: none;
 }
-.g-word-1 {
-  display: block;
-}
-.g-over:target ~ .g-word-1,
-.g-w2:target ~ .g-word-1,
-.g-w3:target ~ .g-word-1 {
+/* Any position: the entrance leaves. */
+.g-at:target ~ .g-enter {
   display: none;
 }
+.g-w1:target ~ .g-word-1,
 .g-w2:target ~ .g-word-2,
 .g-w3:target ~ .g-word-3,
 .g-over:target ~ .g-end {
   display: block;
 }
-/* The first word is given (D19.15): its entrance stands where a question would, and leaves
-   when its card comes. What is said of her keeps its room beside her for the card only — the
-   entrance does not speak of her. */
-.g-word-1 .g-goal,
-.g-r.g-w1:target ~ .g-word-1 .g-start {
-  display: none;
-}
-.g-r.g-w1:target ~ .g-word-1 .g-goal {
+/* A question, where its word stands in the round… */
+.g-b:target ~ .g-word .g-qb,
+.g-c:target ~ .g-word .g-qc {
   display: block;
 }
-/* …and on the entrance the label stands as it does where nothing is said above it: the script
-   draws the entrance without that sentence, and nothing may move when it takes the block. */
-.g-word-1 .g-goal + .g-kicker {
-  margin-block-start: var(--space-3);
-}
-.g-r.g-w1:target ~ .g-word-1 .g-goal + .g-kicker {
-  margin-block-start: var(--space-2);
-}
-/* A tile was followed: the tiles fold, the card of the place takes their room. */
-.g-r.g-w1:target ~ .g-word-1 .g-question,
-.g-r.g-w2:target ~ .g-word-2 .g-question,
-.g-r.g-w3:target ~ .g-word-3 .g-question {
+/* …and, a tile followed, the tiles fold: the card of the place takes their room. */
+.g-r:target ~ .g-word .g-question {
   display: none;
 }
-.g-r.g-w1:target ~ .g-word-1 .g-place,
-.g-r.g-w2:target ~ .g-word-2 .g-place,
-.g-r.g-w3:target ~ .g-word-3 .g-place {
+.g-r:target ~ .g-word .g-place {
   display: block;
 }
 /* The sentence of the card: « Oui. » where the game shows the word, « Oui, là aussi. » where
    it is written too, and otherwise simply where it is written. */
-.g-here.g-w1:target ~ .g-word-1 .g-yes,
-.g-here.g-w2:target ~ .g-word-2 .g-yes,
-.g-here.g-w3:target ~ .g-word-3 .g-yes,
-.g-there.g-w1:target ~ .g-word-1 .g-also,
-.g-there.g-w2:target ~ .g-word-2 .g-also,
-.g-there.g-w3:target ~ .g-word-3 .g-also {
+.g-here:target ~ .g-word .g-yes,
+.g-there:target ~ .g-word .g-also {
   display: block;
 }
-.g-here.g-w1:target ~ .g-word-1 .g-neutral,
-.g-here.g-w2:target ~ .g-word-2 .g-neutral,
-.g-here.g-w3:target ~ .g-word-3 .g-neutral,
-.g-there.g-w1:target ~ .g-word-1 .g-neutral,
-.g-there.g-w2:target ~ .g-word-2 .g-neutral,
-.g-there.g-w3:target ~ .g-word-3 .g-neutral {
+.g-here:target ~ .g-word .g-neutral,
+.g-there:target ~ .g-word .g-neutral {
   display: none;
+}
+/* The way on, by where the card stands in the round. */
+.g-a:target ~ .g-word .g-next-a,
+.g-b:target ~ .g-word .g-next-b,
+.g-c:target ~ .g-word .g-next-c {
+  display: inline-flex;
 }
 
 /* The end of a round, under what is said of her (lot 6 of docs/discovery/PLAN-JEU-DABORD.md).
@@ -571,6 +647,7 @@ html[data-silence] .game {
 
 /* With script: one screen at a time, built by src/scripts/game2.ts. */
 .g-live .g-word,
+.g-live .g-question,
 .g-live .g-place,
 .g-live .g-end,
 .g-again .g-place {

@@ -3,14 +3,15 @@
 > **État au 19 novembre 2026, après les relectures du lot 8 : tous sont des propositions de la
 > session, aucun n'est servi.** Le plan (`PLAN-JEU-DABORD.md`, lot 7) demande un seul document
 > de toutes les phrases nouvelles depuis la build en ligne (kit `design/strings.json`,
-> v0.13.0 → v0.14.0). Le voici : **dix-sept textes**, dont trois en remplacent un autre là où
+> v0.13.0 → v0.14.0). Le voici : **dix-huit textes**, dont trois en remplacent un autre là où
 > ils valent. Chacun tient les règles du kit — quinze mots au plus par phrase, aucun mot de
 > récompense, de rang ni de verdict, « tortue » dans les seules clés `turtle.*`, les espaces
 > insécables de la typographie française.
 >
-> **Ce que le lot 8 a changé à cette liste** (`13-tests-humains.md` §9) : trois textes s'ajoutent
-> — l'entrée du jeu, née de D19.15 (« Le premier écran doit donner envie, sinon on remplace
-> pas. ») ; cinq sont retirés avant d'avoir été montrés — les trois phrases qui disaient ses
+> **Ce que le lot 8 a changé à cette liste** (`13-tests-humains.md` §9) : quatre textes
+> s'ajoutent — l'entrée du jeu, née de D19.15 (« Le premier écran doit donner envie, sinon on
+> remplace pas. ») et reprise sur D19.16 (« …bien plus envie que le premier écran actuellement
+> en ligne. C'est non négociable. ») ; cinq sont retirés avant d'avoir été montrés — les trois phrases qui disaient ses
 > signes, « Les mêmes mots pour tout le monde. », et le compte des cartes sans phrase ; cinq
 > sont corrigés après la relecture hostile ; la ligne du rappel a changé après la session des
 > personas.
@@ -23,23 +24,25 @@
 > **Validation** : à demander à l'éditeur en un dialogue de questions. Sa réponse sera
 > consignée ici et dans `decisions.md`.
 
-## 1. L'entrée du jeu (D19.15)
+## 1. L'entrée du jeu (D19.15, D19.16)
 
-Ce qu'un nouveau venu lit sous le premier mot, à la place de la question et des six tuiles. Le
-premier geste donne la carte du mot ; la question commence au mot suivant.
+Ce qu'un nouveau venu trouve à la place de la question et des six tuiles : **trois mots à
+toucher**, ceux de la première manche. Toucher un mot ouvre sa carte ; la manche continue avec
+les deux autres, chacun avec sa question. Mesuré face à l'accueil en ligne
+(`13-tests-humains.md` §9.8).
 
 | Où on le lit | Clé | Le texte | Pourquoi |
 |---|---|---|---|
-| Sous le premier mot | `game.start.hook` | **Ce mot est écrit dans le programme. Pour dire quoi ?** | Dit pourquoi ce mot est là, et pose la question à laquelle le geste répond. Deux phrases, chacune sur sa ligne |
-| Le bouton | `game.start.cta` | **Voir la mesure** | Dit ce que le geste fait. C'est celui de « Je ne sais pas », sous un autre nom : il ouvre la carte et ne juge rien |
-| Sous le bouton | `game.start.source` | **Chaque carte mène à la page officielle.** | Ce que trois lecteurs sur sept citent comme ce qui les rassure : on peut vérifier soi-même |
+| Au-dessus des trois mots | `game.start.hook` | **Trois mots du programme. Que prévoit-il ?** | Dit ce que sont ces mots, et pose la question à laquelle le geste répond. Deux phrases, chacune sur sa ligne |
+| Sous les trois mots | `game.start.source` | **Touche un mot pour voir sa mesure. Chaque carte mène à la page officielle.** | Ce que fait le geste ; et ce que les lecteurs citent comme ce qui les rassure : on peut vérifier soi-même |
+| Dans le nom de chaque mot, pour un lecteur d'écran | `game.start.cta` | **Voir la mesure** | « wagon — Voir la mesure » : ce que fait le geste, dit à qui ne voit pas la flèche. N'est pas affiché |
+| Sous un filet | `game.start.find` | **Tu cherches autre chose ?** | La seconde porte dite pour ce qu'elle est. Dessous, deux textes qui existent déjà : « Chercher dans le programme » (`home.direct.cta_search`), en bouton, et six thèmes |
 
-Sous ces trois lignes, un filet, puis **des textes qui existent déjà**, à une place nouvelle :
-« Ce qu'on entend souvent » (`riposte.heard_label`), six des quinze thèmes — Logement,
-Transports, Salaires, Retraites, Impôts, Énergie, chacun un lien vers notre réponse — et
-« Chercher dans le programme » (`home.direct.cta_search`). Les six thèmes sont ceux qui ne
-reposent sur aucune section dont le jeu ne tire pas de mot (D16.26) : ni « Immigration », ni
-« Police et sécurité », ni « Laïcité » à côté de la mascotte.
+Les six thèmes — Logement, Transports, Salaires, Retraites, Impôts, Énergie, chacun un lien
+vers notre réponse — sont ceux qui ne reposent sur aucune section dont le jeu ne tire pas de
+mot (D16.26) : ni « Immigration », ni « Police et sécurité », ni « Laïcité » à côté de la
+mascotte. « Chercher dans le programme » est un bouton, pas un champ : rien ne se tape à côté
+d'elle (D19.9).
 
 ## 2. Dans le jeu
 
@@ -95,3 +98,5 @@ L'Avenir en commun, et la lire à sa source. »).
   (D16.64, D19.10). Il vient avant, attaché au lieu.
 - L'entrée ne dit rien de la tortue : « Ta tortue change quand tu trouves des mots. » vient
   avec la première carte.
+- Aucun ne dit « le mot du jour », ni rien qui promette que les mots changent : ils ne
+  changent pas.

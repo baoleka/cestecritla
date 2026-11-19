@@ -60,6 +60,13 @@ const gameFile = (root: string): string | undefined =>
     ? readdirSync(join(root, 'data')).find((name) => name.startsWith('jeu-'))
     : undefined;
 
+/** The game a build publishes, read from its one file. */
+const builtGameOf = (root: string): GameData => {
+  const name = gameFile(root);
+  if (name === undefined) throw new Error(`${root} publishes no game`);
+  return JSON.parse(readFileSync(join(root, 'data', name), 'utf8')) as GameData;
+};
+
 /** Her drawing, and the script of the game, as a build names them. */
 const HER = 'class="mascot"';
 const GAME_SCRIPT = 'Game2.';
@@ -376,7 +383,8 @@ for (const root of ['dist', 'dist-ask']) {
       for (const page of pages(root)) {
         const html = readFileSync(join(root, page), 'utf8');
         if (page === 'index.html') {
-          assert.deepEqual(marked(html), first);
+          // Twice each: on the entrance, where one touches it (D19.16), and on its own screen.
+          assert.deepEqual(marked(html), [...first, ...first]);
           // She lives in the game block, once. The block opens the page (D19.1): after the
           // line that says whose programme this is, before the section of the field.
           assert.equal(html.split(HER).length - 1, 1);
@@ -602,30 +610,61 @@ for (const root of ['dist', 'dist-ask']) {
         ),
         'the room of her first sentence is never filled before the script',
       );
-      // The entrance (D19.15): a newcomer's first word is given. The page arrives with ONE
-      // gesture under it — a link to the anchor of « Je ne sais pas », which shows the card and
-      // judges nothing —, no tile and no question for that word, and the other door of the
-      // site: six themes, each a page of this build, and the way to the field.
-      const firstWord = /<div class="g-word g-word-1">[\s\S]*?<div class="g-place">/.exec(
-        home,
-      )?.[0];
-      assert.ok(firstWord !== undefined, 'the first word of the HTML round is not found');
-      assert.match(firstWord, /<a class="cta" href="#m1-0">/, 'its gesture');
-      assert.ok(firstWord.includes(printed(said('game.start.cta'))), 'what its gesture says');
-      assert.ok(firstWord.includes(printed(said('game.start.source'))), 'where every card leads');
-      assert.ok(!/class="g-tile"|class="g-ask"/.test(firstWord), 'the first word asks something');
-      const themes = [...firstWord.matchAll(/<a class="g-quiet" href="\/r\/([a-z-]+)\/"/g)].map(
+      // The entrance (D19.15, D19.16): the page arrives with THREE WORDS TO TOUCH — those of
+      // the first round, each a link to the anchor of its card, marked as a word of the
+      // programme — and no question shown; then the other door of the site: the way to the
+      // search, and six themes, each a page of this build.
+      const entrance = /<div class="g-enter">[\s\S]*?<div class="g-word g-word-1">/.exec(home)?.[0];
+      assert.ok(entrance !== undefined, 'the entrance of the HTML round is not found');
+      const picks = [
+        ...entrance.matchAll(
+          /<a class="g-pick-word" href="#a([1-3])">\s*<span class="g-picked" data-programme="word">([^<]+)<\/span>/g,
+        ),
+      ].map((match) => [match[1], match[2]]);
+      const opening = builtGameOf(root)
+        .words.slice(0, ROUND)
+        .map((word) => word.word);
+      assert.deepEqual(
+        picks,
+        opening.map((word, index) => [String(index + 1), word]),
+        'the three words of the entrance',
+      );
+      assert.ok(entrance.includes(printed(said('game.start.source'))), 'what touching a word does');
+      assert.ok(!/class="g-tile"|class="g-ask"/.test(entrance), 'the entrance asks something');
+      const themes = [...entrance.matchAll(/<a class="g-quiet" href="\/r\/([a-z-]+)\/"/g)].map(
         (match) => match[1] ?? '',
       );
       assert.deepEqual(themes, [...DOOR_THEMES], 'the themes of the other door');
       for (const slug of themes) {
         assert.ok(existsSync(join(root, 'r', slug, 'index.html')), `/r/${slug}/ is not built`);
       }
-      assert.match(firstWord, /<a class="g-find" href="#chercher">/, 'the way to the field');
+      assert.match(entrance, /<a class="g-find" href="#chercher">/, 'the way to the search');
       assert.match(home, /<section[^>]*\bid="chercher"/, 'the section the door leads to');
-      // The question starts at the second word: two words with their six tiles.
-      assert.equal((home.match(/<a class="g-tile" href="#m[23]-[1-6]"/g) ?? []).length, 12);
-      assert.equal((home.match(/<a class="g-tile"/g) ?? []).length, 12, 'a tile of the first word');
+      // Nothing can be typed beside her (D19.9): the way to the search is a link, and the game
+      // block holds no field.
+      const block = /<section[^>]*\bid="jeu"[\s\S]*?<\/section>/.exec(home)?.[0] ?? '';
+      assert.ok(
+        block !== '' && !/<input|<textarea|<select/.test(block),
+        'a field in the game block',
+      );
+      // The round of the HTML, from any of the three words: each word has its question twice —
+      // where it is the second word of the round, and the third —, six tiles each time, and
+      // every anchor is a position.
+      const tiles = [...home.matchAll(/<a class="g-tile" href="#([bc])([1-3])-([1-6])"/g)];
+      assert.equal(tiles.length, 2 * ROUND * 6, 'the tiles of the HTML round');
+      assert.equal((home.match(/<a class="g-tile"/g) ?? []).length, tiles.length, 'a stray tile');
+      const ways = [...home.matchAll(/<a class="g-next g-next-([abc])" href="#([^"]+)"/g)].map(
+        (match) => `${match[1] ?? ''}>${match[2] ?? ''}`,
+      );
+      assert.deepEqual(
+        ways,
+        // After the word touched, the question of the next; after it, that of the third; then the end.
+        [1, 2, 3].flatMap((n) => {
+          const after = (n % ROUND) + 1;
+          return [`a>b${String(after)}`, `b>c${String(after)}`, 'c>fin'];
+        }),
+        'the way on from each card of the HTML round',
+      );
       // Her sheet carries the label itself.
       const sheet = /<dialog[^>]*id="turtle-sheet"[\s\S]*?<\/dialog>/.exec(home)?.[0] ?? '';
       assert.ok(sheet.includes('Site non officiel.'), 'her sheet has lost « Site non officiel. »');

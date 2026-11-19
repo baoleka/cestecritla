@@ -34,9 +34,9 @@
 .g-her > .mascot {
   margin: var(--space-1);
 }
-/* What is asked, the entrance and the card of the place are never beside her: under her, whole. */
+/* What is asked, the three words of the entrance and the card of the place are never beside
+   her: under her, whole (the three words clear her themselves: src/styles/game.css). */
 .g-question,
-.g-start,
 .g-place {
   clear: both;
 }

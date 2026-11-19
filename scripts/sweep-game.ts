@@ -203,8 +203,8 @@ async function main(): Promise<void> {
         await until(page, "!document.querySelector('#game-live').hidden");
         const dealt = data.words.slice((round - 1) * ROUND, round * ROUND);
         for (const word of dealt) {
-          // The first word of a newcomer is given (D19.15): one gesture, and its card.
-          const entrance = page.locator('#game-live .g-go .cta');
+          // A newcomer finds three words to touch (D19.16): the first of them, and its card.
+          const entrance = page.locator('#game-live .g-pick-word').first();
           if ((await entrance.count()) > 0) {
             const door = await page.evaluate<number>(
               "Math.round(document.querySelector('#game-live .g-door').getBoundingClientRect().bottom - innerHeight)",

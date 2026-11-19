@@ -541,56 +541,77 @@ function start(parts: Block, config: Config, data: GameData): void {
   }
 
   /**
-   * The other door of the site, as the page arrived with it: six themes people hear about and
-   * the way to the field (src/components/Game2.astro). Copied from there each time the entrance
-   * is drawn — never built from strings.
+   * The other door of the site, as the page arrived with it: the way to the search and six
+   * themes people hear about (src/components/Game2.astro). Copied from there each time the
+   * entrance is drawn — never built from strings.
    */
   const door = fixed.querySelector('#game-door');
 
   /**
-   * The entrance (D19.15): a newcomer's first word comes with ONE gesture that gives its card —
-   * where it is written, the way to the official page and, in a build that may, what the
-   * measure provides. Nothing is asked: it is the gesture of « Je ne sais pas » under another
-   * name, and it judges nothing. The question starts at the second word.
-   *
-   * Only before anything is found, and only on the first word of the list: who comes back with
-   * a game, or follows a link to another word, finds the question.
+   * The game was placed on a question by an anchor of the round of the HTML: someone was
+   * already playing there, and goes on from that question — not from the entrance.
    */
-  const entering = (wordId: string): boolean =>
-    session.seen.length === 0 &&
-    wordId === data.words[0]?.id &&
-    session.play.screen.kind === 'ask' &&
-    session.play.screen.ask === 'part';
+  let direct = false;
 
-  function renderStart(word: string, focus: boolean): void {
-    const panel = el('div', undefined, 'g-word');
-    const shown = theWord(word);
-    shown.id = 'game-the-word';
+  /**
+   * The entrance (D19.15, D19.16): a newcomer finds THREE WORDS TO TOUCH — the three of the
+   * first round. Touching one gives its card: where it is written, the way to the official
+   * page and, in a build that may, what the measure provides. Nothing is asked for that word —
+   * it is the gesture of « Je ne sais pas » under another name, and it judges nothing; the
+   * round goes on with the two others, each with its question.
+   *
+   * Only before anything is found: who comes back with a game finds the question.
+   */
+  const entering = (): boolean =>
+    session.seen.length === 0 &&
+    !direct &&
+    session.play.at === 0 &&
+    session.play.screen.kind === 'ask';
+
+  /** The round, from the word that was touched: it goes round its words from there. */
+  const roundFrom = (words: readonly string[], first: string): string[] => {
+    const at = words.indexOf(first);
+    return at < 0 ? [...words] : [...words.slice(at), ...words.slice(0, at)];
+  };
+
+  function renderStart(focus: boolean): void {
+    const panel = el('div', undefined, 'g-enter');
     // Sentence by sentence, each on its line: the question it ends on is read alone.
-    const hook = el('p', undefined, 'g-hook');
-    for (const sentence of s.start.hook) hook.append(el('span', sentence));
-    const gesture = el('p', undefined, 'g-go');
-    gesture.append(
-      button(s.start.cta, 'cta', () => {
+    const lead = el('p', undefined, 'g-lead');
+    for (const sentence of s.start.hook) lead.append(el('span', sentence));
+    const list = el('ul', undefined, 'g-pick');
+    for (const id of session.play.words) {
+      const entry = entryOf(data, id);
+      if (entry === null) continue;
+      const press = button('', 'g-pick-word', () => {
+        // The word touched heads the round, and its card is given: no tile was chosen.
+        session.play = begin(roundFrom(session.play.words, id), session.depth);
         act(choose(data, session.play, null));
-      }),
-    );
-    const start = el('div', undefined, 'g-start');
-    start.append(hook, gesture, el('p', s.start.source, 'g-source'));
+      });
+      const shown = el('span', entry.word, 'g-picked');
+      shown.dataset.programme = 'word';
+      const go = el('span', undefined, 'g-go');
+      go.setAttribute('aria-hidden', 'true');
+      // What the gesture does, for who cannot see the disc: « wagon — Voir la mesure ».
+      press.append(shown, go, el('span', s.start.cta, 'sr-only'));
+      const item = el('li');
+      item.append(press);
+      list.append(item);
+    }
+    panel.append(lead, list, el('p', s.start.source, 'g-how'));
     if (door !== null) {
       const copy = door.cloneNode(true);
       // One element of the page bears that name: the one it arrived with.
       if (copy instanceof Element) copy.removeAttribute('id');
-      start.append(copy);
+      panel.append(copy);
     }
-    panel.append(el('p', s.kicker, 'g-kicker'), shown, start);
-    show(panel, hook, focus);
+    show(panel, lead, focus);
   }
 
   function renderAsk(wordId: string, word: string, focus: boolean): void {
     if (session.play.screen.kind !== 'ask') return;
-    if (entering(wordId)) {
-      renderStart(word, focus);
+    if (entering()) {
+      renderStart(focus);
       return;
     }
     const { ask } = session.play.screen;
@@ -1379,31 +1400,40 @@ function start(parts: Block, config: Config, data: GameData): void {
   sheetErase.addEventListener('click', () => {
     store.erase();
     session = remembered(store.load());
+    direct = false;
     render(false);
     follow();
     sheetSaid.textContent = s.sheet.erased;
   });
 
   // Someone already playing the round of the HTML goes on from where they are: the anchor says
-  // which word and which tile, and the script draws the same screen. An anchor is a position,
-  // never a past: it marks no word as found but the one whose card is on screen — and « #fin »,
-  // which shows no word at all, is simply forgotten. (A link is something anyone can send:
-  // followed, it must not write a game nobody played, nor move a turtle someone kept.)
-  const anchor = /^#m([1-3])(?:-([0-6]))?$/.exec(window.location.hash);
-  if (anchor !== null || window.location.hash === '#fin') {
+  // which word, where it stood in that round and which tile, and the script draws the same
+  // screen — #a2 the card of the second word, touched on the entrance; #b2 its question,
+  // #b2-4 the card its fourth tile leads to; #c2 the same further in the round (the anchors of
+  // src/components/Game2.astro). An anchor is a position, never a past: it marks no word as
+  // found but the one whose card is on screen — and « #fin », which shows no word at all, is
+  // simply forgotten, like the anchors of the round as it was before the entrance (#m2-3).
+  // (A link is something anyone can send: followed, it must not write a game nobody played,
+  // nor move a turtle someone kept.)
+  const anchor = /^#([abc])([1-3])(?:-([0-6]))?$/.exec(window.location.hash);
+  if (anchor !== null || /^#(?:fin|m[1-3](?:-[0-6])?)$/.test(window.location.hash)) {
     window.history.replaceState(null, '', window.location.pathname + window.location.search);
   }
   if (anchor !== null && arrived.seen.length === 0) {
     const drawn = session.play.words;
-    const wordId = drawn[Math.min(Number(anchor[1]) - 1, drawn.length - 1)];
-    const tile = anchor[2];
+    const wordId = drawn[Math.min(Number(anchor[2]) - 1, drawn.length - 1)];
+    const given = anchor[1] === 'a';
+    const tile = anchor[3];
     if (wordId !== undefined) {
       // The word of the anchor heads a whole round: its end must be able to say « trois mots ».
-      const words = [wordId, ...drawn.filter((id) => id !== wordId)];
-      if (tile === undefined) {
+      const words = roundFrom(drawn, wordId);
+      if (!given && tile === undefined) {
         session.play = begin(words, 1);
+        direct = true;
       } else {
-        const verdict = tile === '0' ? null : judge(data, wordId, 'part', tile);
+        // A card: given — touched on the entrance, no tile was chosen — or reached by a tile.
+        const verdict =
+          given || tile === undefined || tile === '0' ? null : judge(data, wordId, 'part', tile);
         session.play = { words, at: 0, screen: { kind: 'place', ask: 'part', verdict } };
         session.seen = [wordId];
       }
@@ -1411,21 +1441,24 @@ function start(parts: Block, config: Config, data: GameData): void {
   }
 
   // Someone already in the round of the HTML, by the keyboard: the focus follows them into the
-  // script's — it is their round that goes on, not the script that arrives. On the same link of
-  // the other door where it stood on one, on the gesture of the entrance where that is drawn,
-  // on the question otherwise.
+  // script's — it is their round that goes on, not the script that arrives. On the entrance,
+  // onto the very gesture it stood on — one of the three words, the way to the search, a
+  // theme: the script draws them in the same order; on the question otherwise.
   const held = document.activeElement;
   const inRound = fixed.contains(held);
-  const inDoor =
-    door !== null && held instanceof HTMLAnchorElement
-      ? [...door.querySelectorAll('a')].indexOf(held)
+  const onEntrance =
+    held instanceof HTMLAnchorElement
+      ? [...fixed.querySelectorAll('.g-enter a')].indexOf(held)
       : -1;
   fixed.hidden = true;
   live.hidden = false;
   render(false);
   if (inRound) {
-    const twin = inDoor < 0 ? undefined : live.querySelectorAll<HTMLElement>('.g-door a')[inDoor];
-    (twin ?? live.querySelector<HTMLElement>('.g-go .cta, h3'))?.focus();
+    const twin =
+      onEntrance < 0
+        ? undefined
+        : live.querySelectorAll<HTMLElement>('.g-enter button, .g-enter a')[onEntrance];
+    (twin ?? live.querySelector<HTMLElement>('.g-pick-word, h3'))?.focus();
   }
   // The look she arrives with is drawn at once: from then on what she does is a movement.
   her.settle(look());
@@ -1439,6 +1472,7 @@ function start(parts: Block, config: Config, data: GameData): void {
     if (!event.persisted) return;
     if (evolving) her.skip();
     session = remembered(store.load());
+    direct = false;
     sheet.close();
     render(false);
     follow();
@@ -1457,6 +1491,7 @@ function start(parts: Block, config: Config, data: GameData): void {
     erased: () => {
       if (evolving) her.skip();
       session = remembered(store.load());
+      direct = false;
       render(false);
       follow();
     },
@@ -1506,13 +1541,12 @@ if (parts !== null && raw != null) {
   // « back » goes back to where one came from, not through the tiles. Before it runs — and
   // where it never does — a link is a link (security review of 19/11/2026).
   parts.fixed.addEventListener('click', (event) => {
-    const link =
-      event.target instanceof Element
-        ? event.target.closest('a[href^="#m"], a[href="#fin"]')
-        : null;
-    if (link === null) return;
+    const link = event.target instanceof Element ? event.target.closest('a[href^="#"]') : null;
+    const to = link?.getAttribute('href') ?? '';
+    // The anchors of the round, and they alone: the way to the search is the page's own.
+    if (!/^#(?:[abc][1-3](?:-[0-6])?|fin)$/.test(to)) return;
     event.preventDefault();
-    window.location.replace(link.getAttribute('href') ?? '#');
+    window.location.replace(to);
   });
   let asked = false;
   const open = (): void => {

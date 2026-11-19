@@ -335,11 +335,16 @@ et un test le prouve (son empreinte n'a pas bougé). Ce qu'il fixe autour d'elle
   sept, « phrases d'album pour enfants » pour le relecteur hostile (`13-tests-humains.md`
   §9.3, §9.7 ; `14-risques.md` R55). Ses signes restent ce qu'ils étaient : une attitude,
   jamais une quantité (§2.12, point 10).
-- **L'entrée du jeu ne parle pas d'elle** (D19.15, lot 8) : elle est là, à côté de l'étiquette
-  du premier mot, à sa taille ; « Ta tortue change quand tu trouves des mots. » vient avec la
-  première carte. Avant comme après que le script la prend, elle tient dans la même boîte :
-  rien ne bouge quand elle devient un bouton.
-- **Les thèmes montrés sous le premier geste se tiennent sur le même écran qu'elle** : aucun
+- **L'entrée du jeu ne parle pas d'elle** (D19.15, D19.16, lots 8 et 8 bis) : elle est là, à
+  droite de « Trois mots du programme. Que prévoit-il ? », à sa taille, au-dessus des trois
+  mots — qui tiennent entiers sous elle, jamais à côté ; « Ta tortue change quand tu trouves
+  des mots. » vient avec la première carte. Avant comme après que le script la prend, elle
+  tient dans la même boîte : rien ne bouge quand elle devient un bouton.
+- **Rien ne se tape à côté d'elle** (D19.9, §2.11 : « jamais près du champ de question ») : sous
+  les trois mots, le chemin vers la recherche est un bouton — « Chercher dans le programme » —
+  qui mène au champ, un écran plus bas ; ni un champ, ni une boîte qui en aurait l'air. Le
+  bloc du jeu ne contient aucun champ (tenu par un test).
+- **Les thèmes montrés sous les trois mots se tiennent sur le même écran qu'elle** : aucun
   ne repose sur une section dont le jeu ne tire pas de mot (D16.26 ; `src/lib/game-door.ts`,
   tenu à la build et par un test) — ni « Immigration », ni « Police et sécurité », ni
   « Laïcité » à côté d'une tortue (`14-risques.md` R22).
