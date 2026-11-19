@@ -138,7 +138,7 @@ aucun n'a rien reçu sur le site.
 - **Revue de sécurité et de vie privée** (lot 15) : rien de bloquant.
 - **Relecteur indépendant sur l'aperçu** (lot 16) : « oui, j'ouvrirais la production » — sept
   mineurs, deux corrigés, cinq gardés avec leur raison ; confirmé sur l'aperçu redéployé.
-- **Production** : depuis le 20 novembre 2026, 0 h 16 (le 19 à 23 h 16 UTC) — `cestecritla.fr` et `www`, Worker `cestecritla` version `9664cdaf`, commit `aa20877` ; vérifiée en ligne sur les deux hôtes (1 309 fichiers sur 1 312 identiques à la build, les trois écarts connus ; les mots, la feuille et le jeu dans trois moteurs). L'aperçu `beta.cestecritla.fr` sert la même build depuis le 19 novembre, 23 h 45.
+- **Production** : depuis le 20 novembre 2026, 0 h 16 (le 19 à 23 h 16 UTC) — `cestecritla.fr` et `www`, Worker `cestecritla` version `9664cdaf`, commit `aa20877`. Vérifiée en ligne : sur les deux hôtes, 1 309 fichiers sur 1 312 identiques à la build (les trois écarts connus), et la ligne des mots sous la carte du jeu, jouée depuis chacun des trois mots d'ouverture (66 vérifications par hôte) ; sur `cestecritla.fr`, les mots (106 vérifications) et la feuille (257) ; chaque fois dans trois moteurs, sans un échec. L'aperçu `beta.cestecritla.fr` sert les mêmes mots depuis le 19 novembre, 23 h 45 (version `e21abcba`).
 - **Retour arrière, s'il le fallait** : l'étiquette locale `prod-avant-mots` (`d7e9814`), fiche
   15 du runbook ; ou, plus simplement, fermer les surfaces dans `data/2026/words.json` puis
   `npm run build && npm run deploy`.
