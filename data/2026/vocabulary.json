@@ -261,6 +261,7 @@
   "appliqu",
   "applique",
   "appliquer",
+  "appliquerait",
   "apportant",
   "apporte",
   "apporter",
@@ -481,6 +482,7 @@
   "boulangerie",
   "boulevers",
   "boulimie",
+  "boussole",
   "bout",
   "bouteille",
   "boutique",
@@ -959,6 +961,7 @@
   "decompte",
   "deconnexion",
   "decoupe",
+  "decourager",
   "decouverte",
   "decrete",
   "decreter",
@@ -2364,6 +2367,7 @@
   "mondialisation",
   "monnaie",
   "monoparentale",
+  "montagne",
   "montagneux",
   "montant",
   "monte",
@@ -2989,6 +2993,7 @@
   "question",
   "queue",
   "quinze",
+  "quitt",
   "quitte",
   "quitter",
   "quota",
@@ -3195,6 +3200,7 @@
   "renard",
   "rend",
   "rendant",
+  "rende",
   "rendent",
   "rendez",
   "rendre",
@@ -4407,6 +4413,7 @@
    "congres"
   ],
   "conscription": [
+   "card:conscription-citoyenne",
    "conscription"
   ],
   "constituant": [
@@ -4669,7 +4676,9 @@
   "echeant": [
    "le-cas-echeant"
   ],
-  "eco": [],
+  "eco": [
+   "card:eco-region"
+  ],
   "ecocide": [
    "card:ecocide"
   ],
@@ -5093,7 +5102,6 @@
   "lsf": [
    "lsf"
   ],
-  "lut": [],
   "magistrat": [
    "magistrats"
   ],
@@ -5291,7 +5299,6 @@
   "oms": [
    "oms"
   ],
-  "onbam": [],
   "ondam": [
    "ondam"
   ],
@@ -5588,7 +5595,9 @@
   "regie": [
    "regie"
   ],
-  "regression": [],
+  "regression": [
+   "card:principe-de-non-regression"
+  ],
   "reindustrialiser": [
    "desindustrialisation"
   ],
@@ -6039,6 +6048,7 @@
    "haut-commissariat"
   ],
   "commission": [
+   "card:commission-controle-egalite",
    "ciivise",
    "commission-d-enquete"
   ],
@@ -6171,7 +6181,9 @@
    "franchises-medicales"
   ],
   "frequence": [],
-  "front": [],
+  "front": [
+   "card:front-du-refus"
+  ],
   "fusion": [],
   "gel": [],
   "genre": [
@@ -6202,6 +6214,7 @@
    "ia-generative"
   ],
   "interet": [
+   "card:interet-general-humain",
    "conflit-d-interets",
    "convention-judiciaire-d-interet-public",
    "interets-fondamentaux",
@@ -6215,7 +6228,9 @@
    "mise-a-l-isolement"
   ],
   "jet": [],
-  "kilometrique": [],
+  "kilometrique": [
+   "card:taxe-kilometrique-aux-frontieres"
+  ],
   "lanceur": [
    "lanceur-d-alerte"
   ],
@@ -6362,7 +6377,9 @@
   "point": [
    "point-d-indice"
   ],
-  "pole": [],
+  "pole": [
+   "card:pole-public"
+  ],
   "polytechnique": [],
   "poursuite": [],
   "precaution": [
@@ -6594,6 +6611,7 @@
   "liban": "place",
   "libanai": "place",
   "lisbonne": "place",
+  "lut": "other",
   "lyon": "place",
   "macron": "person",
   "macronie": "other",
@@ -6617,6 +6635,7 @@
   "netanyahou": "person",
   "nice": "place",
   "no": "other",
+  "onbam": "other",
   "orient": "place",
   "pacifique": "place",
   "palestine": "place",

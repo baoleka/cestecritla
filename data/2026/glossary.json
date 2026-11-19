@@ -31,11 +31,7 @@
           "quote": true
         }
       ],
-      "related": [
-        "planification-ecologique",
-        "bifurcation-ecologique",
-        "ecocide"
-      ],
+      "related": ["planification-ecologique", "bifurcation-ecologique", "ecocide"],
       "review": {
         "status": "accepted",
         "by": "Baoleka",
@@ -71,10 +67,7 @@
           "sha256": "feed0f5e00c80eab4e62719f0237ff849bf7318718f60d55665c23a563c4ec18"
         }
       ],
-      "related": [
-        "regle-verte",
-        "planification-ecologique"
-      ],
+      "related": ["regle-verte", "planification-ecologique"],
       "review": {
         "status": "accepted",
         "by": "Baoleka",
@@ -114,9 +107,7 @@
           "sha256": "1ab56a0a89197563108197c9003fdafa394798fbff985305613b6c3e790e36a3"
         }
       ],
-      "related": [
-        "planification-ecologique"
-      ],
+      "related": ["planification-ecologique"],
       "review": {
         "status": "accepted",
         "by": "Baoleka",
@@ -152,10 +143,7 @@
           "quote": true
         }
       ],
-      "related": [
-        "regle-verte",
-        "bifurcation-ecologique"
-      ],
+      "related": ["regle-verte", "bifurcation-ecologique"],
       "review": {
         "status": "accepted",
         "by": "Baoleka",
@@ -187,14 +175,256 @@
           "sha256": "2b2ccda7aa2ac913855680ab376898d39424f5457bbdd265873e0dbd45d18a0e"
         }
       ],
-      "related": [
-        "regle-verte",
-        "bifurcation-ecologique"
-      ],
+      "related": ["regle-verte", "bifurcation-ecologique"],
       "review": {
         "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
+      }
+    },
+    {
+      "id": "pole-public",
+      "term": "pôle public",
+      "plain": "Un pôle public regroupe, sous contrôle public, les entreprises d'un même secteur pour le planifier. Le programme en prévoit pour les transports, l'énergie, la banque, le médicament, le satellite et l'armement.",
+      "supports": [
+        {
+          "id": "p1c3-s03-k01",
+          "sha256": "32d651c7884fa496938b122d79089068ee5f8190ec8336530a5abf2d6b555e20"
+        },
+        {
+          "id": "p1c3-s04-m08",
+          "sha256": "77ec5b307fc04582d2a1432789ed2ef742282338bcc3dfc975e82804b81c79c4"
+        },
+        {
+          "id": "p2c3-s02-k01",
+          "sha256": "3a619780e7e9dffb86fcb5bdc45ebb99583081ce3d1494d89bbf8fdea0d6a35e"
+        },
+        {
+          "id": "p4c4-s02-m05",
+          "sha256": "24f078930f74f8936b53cd7f93800b5b182cc911590665188469e5ce48dec9ef"
+        },
+        {
+          "id": "p4c6-s01-m03",
+          "sha256": "fbb46e7acdda4ef6293d5e6ca19c68a618b54f95504164717101db61e408981d"
+        },
+        {
+          "id": "p6c2-s02-m03",
+          "sha256": "68f2e254f851dbe41fe5b05b26b47a79d408d83ce20d9183f9a4908ba24eb7f0"
+        }
+      ],
+      "related": ["planification-ecologique"],
+      "review": {
+        "status": "accepted",
+        "by": "Baoleka",
+        "on": "2026-11-19"
+      }
+    },
+    {
+      "id": "interet-general-humain",
+      "term": "intérêt général humain",
+      "plain": "L'intérêt général humain est ce qui importe à toute l'humanité. Le programme en fait une boussole pour l'usage des ressources, la mer, l'espace et la diplomatie.",
+      "supports": [
+        {
+          "id": "p1c3-s01-m12",
+          "sha256": "aa3c9ead2e559e5d9724f6abfa179577664d478b177e2176bd6d34834c008fe4"
+        },
+        {
+          "id": "p6c2-s05-m03",
+          "sha256": "7ff86369f3248009fb460b1475109b4a3e28f075abb0d7f0dc4fbf4bd47b0a08"
+        },
+        {
+          "id": "p4c5-s03-p01",
+          "sha256": "02edf81946c7fdc159baadef2cd7de8ceef442dbdf2225513d52d20700f17023"
+        },
+        {
+          "id": "p6c3-s06-p01",
+          "sha256": "0e06394b3b45e68e0260f94b4e6dca5494b577fe697703307024e28f30e89aa7"
+        }
+      ],
+      "related": ["bifurcation-ecologique", "planification-ecologique"],
+      "review": {
+        "status": "accepted",
+        "by": "Baoleka",
+        "on": "2026-11-19"
+      }
+    },
+    {
+      "id": "securite-sociale-integrale",
+      "term": "Sécurité sociale intégrale",
+      "plain": "La Sécurité sociale intégrale est l'objectif de rembourser tous les soins prescrits, sans rien laisser à payer au patient. Il s'agit aussi d'étendre la Sécurité sociale à d'autres besoins, comme l'alimentation ou les obsèques.",
+      "supports": [
+        {
+          "id": "p3c1-s08-k01",
+          "sha256": "89c960930b913dfbca3165f37383b5e85a7e93b09c1cc601561a9bcbb2e300af"
+        },
+        {
+          "id": "p3c1-s08-m03",
+          "sha256": "bea06131395ff85633e0d13c3b805f04fffb2bae4eacdf376c215941f18e9a86"
+        },
+        {
+          "id": "p3c1-s08-m07",
+          "sha256": "4d9ecce62a36c2e745940ea79d9b30c621e911ffe2c4a14d555514ece116a9e1"
+        },
+        {
+          "id": "p3c1-s08-m08",
+          "sha256": "160e683e7ab8003048dc040c5484fd3aa169778d144aeb4ec4571db9e03f9845"
+        }
+      ],
+      "related": [],
+      "review": {
+        "status": "accepted",
+        "by": "Baoleka",
+        "on": "2026-11-19"
+      }
+    },
+    {
+      "id": "garantie-d-autonomie",
+      "term": "garantie d'autonomie",
+      "plain": "La garantie d'autonomie doit porter le revenu mensuel de chaque personne au moins au seuil de pauvreté. Le programme veut aussi qu'elle rende autonomes les jeunes qui quittent le foyer fiscal de leurs parents.",
+      "short": true,
+      "supports": [
+        {
+          "id": "p3c1-s01-k01",
+          "sha256": "4ffa2de9ada8d9394034882baf00fd864665d641a5642fa87ac6b524b08556f5"
+        },
+        {
+          "id": "p3c2-s03-m01",
+          "sha256": "c083707e8ac54118073cb195c4c3ec9378c84903904e9c8775c52c6abfb15b76"
+        }
+      ],
+      "related": [],
+      "review": {
+        "status": "accepted",
+        "by": "Baoleka",
+        "on": "2026-11-19"
+      }
+    },
+    {
+      "id": "conscription-citoyenne",
+      "term": "conscription citoyenne",
+      "plain": "La conscription citoyenne est un service de neuf mois que le programme veut instaurer, surtout pour aider la société face aux crises du climat. Elle comprend une formation militaire initiale, avec droit d'objection de conscience.",
+      "short": true,
+      "supports": [
+        {
+          "id": "p4c2-s07-k01",
+          "sha256": "33238c993f0e5e3547e93b34c2b8207b87b85b5c688ff495d1299e7e53c81075"
+        },
+        {
+          "id": "p4c2-s07-m01",
+          "sha256": "6349aac260b0c52d2390bddb4f71ce79274c60d0939cb49d8a34ee5743fd3edc"
+        }
+      ],
+      "related": [],
+      "review": {
+        "status": "accepted",
+        "by": "Baoleka",
+        "on": "2026-11-19"
+      }
+    },
+    {
+      "id": "eco-region",
+      "term": "éco-région",
+      "plain": "Le programme veut remplacer les régions par des éco-régions, délimitées selon la nature : bassins-versants, côtes ou montagnes. Elles seraient chargées de la planification écologique et des communs.",
+      "short": true,
+      "supports": [
+        {
+          "id": "p5c3-s02-k01",
+          "sha256": "0c9cbe55a9cb5ff342b3188b99f591a87f45efb7b56dca2d44020e591450f982"
+        },
+        {
+          "id": "p5c1-s01-m08",
+          "sha256": "19c8c1c95ac6c739439278b32841fd44b80948d404e9146a8c169db1c5436801"
+        }
+      ],
+      "related": ["planification-ecologique"],
+      "review": {
+        "status": "accepted",
+        "by": "Baoleka",
+        "on": "2026-11-19"
+      }
+    },
+    {
+      "id": "principe-de-non-regression",
+      "term": "principe de non-régression",
+      "plain": "Avec le principe de non-régression, une règle européenne ne s'appliquerait en France que si elle protège au moins autant que le droit français. Le programme le veut pour le social, l'environnement et les droits humains.",
+      "short": true,
+      "supports": [
+        {
+          "id": "p6c1-s01-p01",
+          "sha256": "66c3d85df149d46569297363042686c7001200b6683001dce8d16530c50a23da"
+        },
+        {
+          "id": "p5c1-s01-m10",
+          "sha256": "b220b095e22a43f9daace35a40e1f08bf90fb731691d87ed7f1c15414468a2a8"
+        }
+      ],
+      "related": ["regle-verte"],
+      "review": {
+        "status": "accepted",
+        "by": "Baoleka",
+        "on": "2026-11-19"
+      }
+    },
+    {
+      "id": "front-du-refus",
+      "term": "Front du refus",
+      "plain": "Le Front du refus est une alliance de pays opposés à la stratégie des États-Unis, que le programme juge belliciste. Il veut que la France soit le premier membre permanent du Conseil de sécurité à la rejoindre.",
+      "short": true,
+      "supports": [
+        {
+          "id": "p6c2-s01-m02",
+          "sha256": "7a09357f9054a7c8fca25763272cafb6d213dfe4ecf3fee7976ca3af652baddc"
+        }
+      ],
+      "related": [],
+      "review": {
+        "status": "accepted",
+        "by": "Baoleka",
+        "on": "2026-11-19"
+      }
+    },
+    {
+      "id": "taxe-kilometrique-aux-frontieres",
+      "term": "taxe kilométrique aux frontières",
+      "plain": "Le programme prévoit une taxe kilométrique aux frontières, de la France puis de l'Union européenne. Plus un produit importé vient de loin, plus il est taxé, pour décourager les délocalisations.",
+      "short": true,
+      "supports": [
+        {
+          "id": "p1c2-s03-m05",
+          "sha256": "b378ca2acff3e4c8f43e12d92746bc636739951adcf763c472b8e6dc5b36b077"
+        },
+        {
+          "id": "p6c1-s04-m05",
+          "sha256": "84e21712289e606d59e44a71aa48d4f71b452697a3f5d5b482ab677fbf22325b"
+        }
+      ],
+      "related": [],
+      "review": {
+        "status": "accepted",
+        "by": "Baoleka",
+        "on": "2026-11-19"
+      }
+    },
+    {
+      "id": "commission-controle-egalite",
+      "term": "commission de contrôle salarié sur l'égalité",
+      "plain": "Le programme prévoit, dans chaque entreprise, une commission de salariés qui contrôle l'égalité entre les femmes et les hommes. Il veut aussi punir l'inégalité de salaire par des sanctions financières et pénales.",
+      "short": true,
+      "supports": [
+        {
+          "id": "p3c3-s01-m03",
+          "sha256": "23a10bcbaf428efc29507a5a3d28f2b1a335ba909efeda39e75d095c90b178a4"
+        },
+        {
+          "id": "p2c2-s03-m02.s4",
+          "sha256": "39722114a1b896c5254c7edf0f5ede92063f0d5bbd4888a26fc0d4f7a4dcb5a2"
+        }
+      ],
+      "related": [],
+      "review": {
+        "status": "accepted",
+        "by": "Baoleka",
+        "on": "2026-11-19"
       }
     }
   ]
