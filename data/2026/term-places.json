@@ -1,7 +1,7 @@
 {
   "meta": {
     "corpus_version": "27ee6e713fe25e7e",
-    "wordings_sha256": "8d27b73330218dddc57fe0261f179834bf3b7cb07df2a26df1dc2021a54b8344",
+    "wordings_sha256": "bfa787fa8740fa9196dae4ffbf3cae1dbb2243d0af8ab885de0f9794f49c1c5c",
     "note_fr": "Où chaque mot expliqué est écrit dans le livre : pour chaque section, les identifiants des mots de data/2026/terms.json que son texte emploie (son titre, ses mesures et leurs points, les paragraphes entre eux), triés. Les sections qui n'en emploient aucun n'y sont pas. Écrit par scripts/lexicon-2026.ts --places, sur la machine qui tient le texte du livre, par la session seule (D20.1) : aucun mot du livre, seulement des identifiants de sections et de mots. Il ne dit ni où dans la section, ni combien de fois. La fiche de chaque section montre ces mots, expliqués, sous une ligne qu'on ouvre (PLAN-MOTS, lot 4). À refaire après tout changement des formulations de terms.json : wordings_sha256 dit sur lesquelles il a été calculé."
   },
   "sections": {
@@ -495,7 +495,8 @@
       "principe-de-faveur",
       "service-public-de-l-emploi",
       "temps-partiel-subi",
-      "titulariser"
+      "titulariser",
+      "transposer"
     ],
     "p3c1-s04": [
       "annualisation",
@@ -537,6 +538,7 @@
       "chsct",
       "circ",
       "commande-publique",
+      "contraignant",
       "droit-a-la-deconnexion",
       "inspection-du-travail",
       "maladie-professionnelle",
@@ -600,7 +602,10 @@
       "securite-sociale-professionnelle"
     ],
     "p3c2-s01": [
+      "constitutionnaliser",
       "defenseur-des-droits",
+      "dejudiciariser",
+      "filiation",
       "gpa",
       "ivg",
       "marchandisation",
@@ -612,8 +617,13 @@
     ],
     "p3c2-s02": [
       "ase",
+      "attestation-d-honorabilite",
+      "ciivise",
+      "constitutionnaliser",
+      "delits",
       "famille-d-accueil",
       "mineur",
+      "non-denonciation",
       "outre-mer",
       "penal",
       "pjj",
@@ -643,27 +653,36 @@
     "p3c2-s05": [
       "aah",
       "aesh",
+      "desinstitutionnalisation",
       "dispositif-medical",
       "esat",
       "formation-professionnelle",
       "inspection-du-travail",
       "loi-elan",
+      "lsf",
       "mdph",
       "medico-social",
       "mutualiser",
       "perenniser",
+      "periscolaire",
       "prefets",
       "securite-sociale",
       "smic"
     ],
     "p3c2-s06": [
       "ald",
+      "intersexe",
       "lgbti",
       "pma",
+      "reactionnaire",
       "securite-sociale"
     ],
     "p3c2-s07": [
       "asf",
+      "beau-parent",
+      "deconjugaliser",
+      "defiscaliser",
+      "homoparentale",
       "pension",
       "pma"
     ],
@@ -681,10 +700,17 @@
       "travailleur-pauvre"
     ],
     "p3c3-s02": [
-      "soumission-chimique"
+      "correctionnalisation",
+      "feminicide",
+      "masculiniste",
+      "soumission-chimique",
+      "systemique",
+      "violences-obstetricales"
     ],
     "p3c3-s03": [
       "clause-de-conscience",
+      "constitutionnaliser",
+      "effectivite",
       "ivg",
       "lgbti",
       "perenniser",
@@ -697,27 +723,42 @@
       "but-lucratif",
       "jardin-d-enfants",
       "maillage",
+      "perinatalite",
       "pmi"
     ],
     "p3c4-s01": [
+      "antisemitisme",
       "arcom",
       "commande-publique",
       "cultuel",
+      "egide",
       "ia",
+      "islamophobie",
       "penal",
+      "sine-qua-non",
       "testing"
     ],
     "p3c4-s02": [
       "abroger",
-      "droit-du-sol"
+      "contrat-d-engagement-republicain",
+      "droit-du-sol",
+      "liberticide",
+      "loi-separatisme"
     ],
     "p3c4-s03": [
+      "colonisation",
       "commission-d-enquete",
-      "outre-mer"
+      "genocide",
+      "outre-mer",
+      "roms",
+      "tirailleurs-senegalais"
     ],
     "p3c4-s04": [
       "abroger",
-      "amende-forfaitaire-delictuelle"
+      "amende-forfaitaire-delictuelle",
+      "controle-au-facies",
+      "racise",
+      "recepisse"
     ],
     "p4c1-s01": [
       "abonder",
@@ -791,6 +832,7 @@
     "p4c1-s04": [
       "biens-communs",
       "brevet-sur-le-vivant",
+      "contraignant",
       "grands-fonds",
       "haute-mer",
       "moratoire",
@@ -801,23 +843,37 @@
       "traite-plastiques"
     ],
     "p4c2-s01": [
+      "allophone",
       "hexagone",
+      "illectronisme",
+      "illettrisme",
       "outre-mer"
     ],
     "p4c2-s02": [
       "abroger",
+      "carte-scolaire",
       "collectivites-locales",
       "contre-reforme",
       "droit-a-la-deconnexion",
       "fonction-publique",
+      "periscolaire",
+      "prive-sous-contrat",
       "rep",
+      "segregation-socio-scolaire",
       "subventions"
     ],
     "p4c2-s03": [
       "aesh",
       "cap",
+      "contractuels",
+      "desamiantage",
       "evars",
+      "identite-de-genre",
+      "lgbti",
       "mutualiser",
+      "orientation-sexuelle",
+      "periscolaire",
+      "philanthropique",
       "point-d-indice",
       "titulariser"
     ],
@@ -829,16 +885,22 @@
       "but",
       "cfa",
       "contre-reforme",
+      "flecher",
+      "licence-professionnelle",
       "lobbys",
       "marchandisation",
-      "mineur"
+      "mineur",
+      "taxe-d-apprentissage"
     ],
     "p4c2-s05": [
       "anr",
       "cnrs",
       "dotations",
+      "enseignant-chercheur",
+      "genocide",
       "inrae",
       "inserm",
+      "internationalisme",
       "ird",
       "lobbys"
     ],
@@ -847,10 +909,12 @@
       "actionnaires",
       "apl",
       "but-lucratif",
+      "contractuels",
       "cotation",
       "crous",
       "cvec",
       "hceres",
+      "libertes-academiques",
       "lru",
       "marchandisation",
       "monopole",
@@ -863,28 +927,41 @@
     "p4c2-s07": [
       "abroger",
       "conscription",
+      "cyber",
       "formation-professionnelle",
       "securite-civile",
-      "smic"
+      "smic",
+      "smv",
+      "snu"
     ],
     "p4c3-s01": [
       "audiovisuel-public",
+      "chronologie-des-medias",
       "cnl",
       "cotisation-sociale",
       "depense-publique",
-      "ia",
+      "domaine-public",
+      "ia-generative",
       "intermittents",
       "mecenat",
       "monopole",
       "perenniser",
-      "pib"
+      "pib",
+      "redevance",
+      "subventions"
     ],
     "p4c3-s02": [
+      "biometrique",
+      "cts",
+      "lgbti",
+      "multipropriete",
       "parite",
       "souverainete"
     ],
     "p4c3-s03": [
       "education-populaire",
+      "eps",
+      "pass-culture",
       "perenniser",
       "staps"
     ],
@@ -1059,13 +1136,21 @@
       "accords-artemis",
       "biens-communs",
       "onu",
+      "orbite-basse",
+      "ratifier",
       "traite-de-la-lune"
     ],
     "p4c7-s01": [
       "biens-communs",
+      "chiffrement",
       "cnil",
       "collectivites-locales",
+      "constitutionnaliser",
       "cryptographie-post-quantique",
+      "dematerialisation",
+      "donnees-ouvertes",
+      "privatisation",
+      "quantique",
       "rgpd",
       "sous-traitance",
       "souverainete"
@@ -1075,14 +1160,17 @@
       "centres-de-donnees",
       "cloud",
       "delocalisation",
+      "discretionnaire",
       "ecoconception",
       "efficacite-energetique",
       "fonds-d-investissement",
       "gafam",
       "interoperabilite",
       "logiciels-libres",
+      "microprocesseurs",
       "moratoire",
       "nationaliser",
+      "neutralite-du-net",
       "obsolescence-programmee",
       "participation-du-public",
       "semi-conducteur",
@@ -1092,8 +1180,12 @@
       "accord-de-branche",
       "actifs",
       "administrations-publiques",
+      "big-data",
+      "biometrique",
+      "domaine-public",
       "entreprise-publique",
       "ia",
+      "police-predictive",
       "veto"
     ],
     "p5c1-s01": [
@@ -1120,7 +1212,8 @@
       "sous-traitance",
       "souverainete",
       "suffrages-exprimes",
-      "technocratie"
+      "technocratie",
+      "traite-de-lisbonne"
     ],
     "p5c1-s02": [
       "article-11",
@@ -1195,43 +1288,64 @@
     ],
     "p5c2-s01": [
       "abroger",
+      "blanchiment",
       "etat-d-urgence",
       "fraude-fiscale",
+      "liberticide",
       "pharos"
     ],
     "p5c2-s02": [
       "abroger",
       "defenseur-des-droits",
       "deontologie",
+      "desencerclement",
       "desescalade",
       "iggn",
       "igpn",
       "lbd",
+      "letal",
       "magistrats",
-      "rio"
+      "nasse",
+      "octroyer",
+      "plaquage-ventral",
+      "presomption-de-legitime-defense",
+      "refus-d-obtemperer",
+      "rio",
+      "taser"
     ],
     "p5c2-s03": [
       "bac-police",
+      "biometrique",
       "brav-m",
-      "magistrats"
+      "letal",
+      "magistrats",
+      "resolutions",
+      "technopolice"
     ],
     "p5c2-s04": [
+      "carceral",
       "constituante",
+      "contraignant",
       "convention-judiciaire-d-interet-public",
+      "correctionnalisation",
       "executif",
+      "juge-d-instruction",
       "penal",
       "plan-social",
       "pollueur-payeur",
       "regulation-carcerale",
       "securite-sociale",
-      "verrou-de-bercy"
+      "verrou-de-bercy",
+      "victimisation-secondaire"
     ],
     "p5c2-s05": [
       "aide-juridictionnelle",
       "cours-criminelles",
+      "greffiers",
       "jures-populaires",
       "magistrats",
-      "outre-mer"
+      "outre-mer",
+      "tribunal-correctionnel"
     ],
     "p5c3-s01": [
       "abroger",
@@ -1335,8 +1449,11 @@
     ],
     "p6c1-s01": [
       "constituante",
+      "deregulation",
+      "devoir-de-vigilance",
       "directives-europeennes",
       "niches-fiscales",
+      "pacte-migration-asile",
       "plan-social",
       "protection-sociale",
       "securite-sociale",
@@ -1346,6 +1463,7 @@
       "austerite",
       "biens-communs",
       "clause-de-sauvegarde",
+      "conseil-europeen",
       "liberalisation",
       "libre-echange",
       "moratoire",
@@ -1355,95 +1473,150 @@
       "veto"
     ],
     "p6c1-s03": [
+      "accord-ue-israel",
       "bce",
+      "clause-europeenne",
+      "genocide",
+      "harmonisation",
       "pac",
       "politique-monetaire",
       "rachat-de-dettes",
-      "regles-budgetaires-europeennes",
-      "ue"
+      "regle-des-3",
+      "regles-budgetaires-europeennes"
     ],
     "p6c1-s04": [
       "bce",
+      "clause-defense-mutuelle",
+      "clause-europeenne",
       "conflit-d-interets",
       "consentement-a-l-impot",
       "demandeurs-d-asile",
+      "geometrie-variable",
       "liberalisme",
       "monopole-d-etat",
       "paradis-fiscaux",
       "protectionnisme-ecologique",
       "referendum",
       "souverainete",
+      "traite-de-lisbonne",
       "ue",
       "veto"
     ],
     "p6c2-s01": [
       "altermondialiste",
+      "annexion",
+      "atlantisme",
+      "belliciste",
       "capitalisme",
+      "choc-des-civilisations",
       "commandement-integre",
       "conseil-de-securite",
+      "fascisant",
+      "genocide",
+      "guerre-d-agression",
+      "imperialisme",
+      "integrite-territoriale",
       "non-alignee",
       "otan",
       "pib",
+      "servitude-volontaire",
+      "supremacisme",
+      "tribut",
       "ue"
     ],
     "p6c2-s02": [
       "aiea",
       "athos",
+      "belligerants",
       "biens-a-double-usage",
+      "clause-defense-mutuelle",
       "cloud",
+      "cyber",
+      "droit-international-humanitaire",
+      "encapacitants",
       "grands-fonds",
       "ia",
       "indemniser",
+      "le-cas-echeant",
+      "multilateral",
       "onu",
       "otan",
       "pallier",
       "plateforme-logistique",
       "sala",
       "starlink",
-      "tian"
+      "tian",
+      "traite-commerce-armes"
     ],
     "p6c2-s03": [
+      "assemblee-generale-onu",
       "conseil-de-securite",
+      "egide",
       "fao",
       "oms",
       "onu",
+      "refugies-palestiniens",
+      "securite-collective",
       "souverainete-alimentaire",
       "unesco",
       "unrwa"
     ],
     "p6c2-s04": [
+      "accord-nucleaire-iranien",
+      "accord-ue-israel",
+      "annexion",
+      "belliciste",
+      "belligerants",
       "biens-a-double-usage",
       "cij",
+      "colonisation",
       "cpi",
       "embargo",
+      "etat-de-palestine",
+      "guerre-d-agression",
+      "mandat-d-arret",
+      "mesures-conservatoires",
       "onu",
       "osce",
       "perenniser",
+      "resolutions",
+      "securite-collective",
+      "societe-civile",
       "souverainete",
-      "ue"
+      "territoires-palestiniens-occupes",
+      "ue",
+      "velleite"
     ],
     "p6c2-s05": [
       "biens-communs",
       "brevet-sur-le-vivant",
+      "contraignant",
       "contrevenir",
-      "energies-fossiles",
       "ia",
+      "levee-des-brevets",
       "licence-d-office",
+      "non-proliferation-fossiles",
       "onu",
       "traite-plastiques"
     ],
     "p6c3-s01": [
+      "assemblee-generale-onu",
+      "banque-mondiale",
       "cnuced",
+      "contraignant",
       "dette-publique",
       "droits-de-douane",
       "fmi",
+      "imperialisme",
       "liberalisme",
       "libre-echange",
+      "mondialisation-heureuse",
       "oit",
       "omc",
       "onu",
       "protectionnisme",
       "protectionnisme-ecologique",
+      "resolutions",
       "souverainete"
     ],
     "p6c3-s02": [
@@ -1455,30 +1628,48 @@
       "demandeurs-d-asile",
       "haut-commissariat",
       "hcr",
+      "identite-de-genre",
+      "multilateral",
       "ofpra",
       "onu",
+      "orientation-sexuelle",
+      "pacte-migration-asile",
       "pays-d-origine-surs",
+      "regulariser",
+      "sans-papiers",
       "titre-de-sejour"
     ],
     "p6c3-s03": [
       "altermondialiste",
       "cdaa",
       "celac",
+      "co-souverainete",
+      "codeveloppement",
       "iora",
+      "maintien-de-la-paix",
       "outre-mer",
+      "peuples-autochtones",
       "plateforme-logistique",
-      "souverainete",
+      "union-africaine",
       "zone-economique-exclusive"
     ],
     "p6c3-s04": [
       "afd",
       "aide-publique-au-developpement",
       "altermondialiste",
+      "biens-publics-mondiaux",
+      "codeveloppement",
       "dette-souveraine",
+      "internationalisme",
       "liberalisme",
+      "monnaie-commune",
+      "neocolonialisme",
+      "non-alignee",
+      "oligarchie",
       "ppp",
       "restructurer",
       "revenu-national-brut",
+      "societe-civile",
       "souverainete"
     ],
     "p6c3-s05": [
@@ -1487,13 +1678,16 @@
     ],
     "p6c3-s06": [
       "cfa",
+      "colonisation",
       "ingerence",
       "oligarchie",
       "souverainete"
     ],
     "p6c3-s07": [
+      "apf",
       "creolisation",
       "erasmus",
+      "institut-francais",
       "onu"
     ]
   }

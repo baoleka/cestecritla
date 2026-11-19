@@ -35,170 +35,201 @@
     {
       "id": "onu",
       "term": "ONU",
-      "aliases": ["Nations unies"],
+      "aliases": ["Nations unies", "onusien", "onusienne", "onusiennes", "onusiens"],
       "anyCase": true,
-      "plain": "L'Organisation des Nations unies réunit presque tous les États du monde. Elle a été créée en 1945 pour maintenir la paix."
+      "plain": "L'Organisation des Nations unies réunit presque tous les États du monde. Elle a été créée en 1945 pour maintenir la paix.",
+      "noExample": "E"
     },
     {
       "id": "conseil-de-securite",
       "term": "Conseil de sécurité",
-      "plain": "Le Conseil de sécurité est l'organe de l'ONU chargé de la paix. Il compte quinze États membres ; cinq y siègent en permanence, avec un droit de veto."
+      "aliases": ["membre permanent", "membres permanents"],
+      "plain": "Le Conseil de sécurité est l'organe de l'ONU chargé de la paix. Il compte quinze États membres ; cinq y siègent en permanence, avec un droit de veto.",
+      "noExample": "E"
     },
     {
       "id": "otan",
       "term": "OTAN",
       "anyCase": true,
-      "plain": "L'OTAN est une alliance militaire entre des pays d'Amérique du Nord et d'Europe. Son nom complet : Organisation du traité de l'Atlantique nord."
+      "plain": "L'OTAN est une alliance militaire entre des pays d'Amérique du Nord et d'Europe. Son nom complet : Organisation du traité de l'Atlantique nord.",
+      "noExample": "E"
     },
     {
       "id": "bce",
       "term": "BCE",
       "aliases": ["Banque centrale européenne"],
       "anyCase": true,
-      "plain": "La Banque centrale européenne gère l'euro. Elle fixe ses taux directeurs, qui influencent les taux d'intérêt dans la zone euro."
+      "plain": "La Banque centrale européenne gère l'euro. Elle fixe ses taux directeurs, qui influencent les taux d'intérêt dans la zone euro.",
+      "noExample": "E"
     },
     {
       "id": "omc",
       "term": "OMC",
       "anyCase": true,
-      "plain": "L'Organisation mondiale du commerce est le lieu où les États négocient les règles du commerce entre eux. Elle a aussi un système pour régler leurs différends."
+      "plain": "L'Organisation mondiale du commerce est le lieu où les États négocient les règles du commerce entre eux. Elle a aussi un système pour régler leurs différends.",
+      "noExample": "E"
     },
     {
       "id": "oms",
       "term": "OMS",
       "anyCase": true,
-      "plain": "L'Organisation mondiale de la santé est l'agence des Nations unies chargée de la santé publique dans le monde."
+      "plain": "L'Organisation mondiale de la santé est l'agence des Nations unies chargée de la santé publique dans le monde.",
+      "noExample": "E"
     },
     {
       "id": "oit",
       "term": "OIT",
       "anyCase": true,
-      "plain": "L'Organisation internationale du travail est une agence des Nations unies. Elle adopte des normes sur les droits au travail."
+      "plain": "L'Organisation internationale du travail est une agence des Nations unies. Elle adopte des normes sur les droits au travail.",
+      "noExample": "E"
     },
     {
       "id": "fmi",
       "term": "FMI",
+      "aliases": ["Fonds monétaire international"],
       "anyCase": true,
-      "plain": "Le Fonds monétaire international prête de l'argent aux États en difficulté financière, sous conditions."
+      "plain": "Le Fonds monétaire international prête de l'argent aux États en difficulté financière, sous conditions.",
+      "noExample": "E"
     },
     {
       "id": "fao",
       "term": "FAO",
       "anyCase": true,
-      "plain": "La FAO est l'agence des Nations unies pour l'alimentation et l'agriculture."
+      "plain": "La FAO est l'agence des Nations unies pour l'alimentation et l'agriculture.",
+      "noExample": "E"
     },
     {
       "id": "cnuced",
       "term": "CNUCED",
       "anyCase": true,
-      "plain": "La CNUCED, aussi appelée ONU commerce et développement, est l'organe des Nations unies qui aide les pays en développement à tirer parti du commerce."
+      "plain": "La CNUCED, aussi appelée ONU commerce et développement, est l'organe des Nations unies qui aide les pays en développement à tirer parti du commerce.",
+      "noExample": "E"
     },
     {
       "id": "unesco",
       "term": "Unesco",
-      "plain": "L'Unesco est l'agence des Nations unies pour l'éducation, la science et la culture."
+      "plain": "L'Unesco est l'agence des Nations unies pour l'éducation, la science et la culture.",
+      "noExample": "E"
     },
     {
       "id": "unrwa",
       "term": "UNRWA",
       "anyCase": true,
-      "plain": "L'UNRWA est l'agence des Nations unies qui aide les réfugiés palestiniens : écoles, soins, aide d'urgence."
+      "plain": "L'UNRWA est l'agence des Nations unies qui aide les réfugiés palestiniens : écoles, soins, aide d'urgence.",
+      "noExample": "E"
     },
     {
       "id": "hcr",
       "term": "HCR",
-      "plain": "Le HCR, Haut-Commissariat des Nations unies pour les réfugiés, protège et aide les réfugiés et les personnes déplacées."
+      "plain": "Le HCR, Haut-Commissariat des Nations unies pour les réfugiés, protège et aide les réfugiés et les personnes déplacées.",
+      "noExample": "E"
     },
     {
       "id": "aiea",
       "term": "AIEA",
       "anyCase": true,
-      "plain": "L'AIEA, Agence internationale de l'énergie atomique, aide à l'usage pacifique du nucléaire et contrôle qu'il ne sert pas à fabriquer des armes. Elle est liée aux Nations unies."
+      "plain": "L'AIEA, Agence internationale de l'énergie atomique, aide à l'usage pacifique du nucléaire et contrôle qu'il ne sert pas à fabriquer des armes. Elle est liée aux Nations unies.",
+      "noExample": "E"
     },
     {
       "id": "osce",
       "term": "OSCE",
       "anyCase": true,
-      "plain": "L'OSCE, Organisation pour la sécurité et la coopération en Europe, réunit des États d'Europe, d'Asie centrale et d'Amérique du Nord. Elle travaille à prévenir les conflits."
+      "plain": "L'OSCE, Organisation pour la sécurité et la coopération en Europe, réunit des États d'Europe, d'Asie centrale et d'Amérique du Nord. Elle travaille à prévenir les conflits.",
+      "noExample": "E"
     },
     {
       "id": "cpi",
       "term": "CPI",
       "aliases": ["Cour pénale internationale"],
-      "plain": "La Cour pénale internationale, à La Haye, juge des personnes accusées de génocide, de crimes contre l'humanité, de crimes de guerre ou de crime d'agression."
+      "plain": "La Cour pénale internationale, à La Haye, juge des personnes accusées de génocide, de crimes contre l'humanité, de crimes de guerre ou de crime d'agression.",
+      "noExample": "E"
     },
     {
       "id": "cij",
       "term": "CIJ",
       "aliases": ["Cour internationale de justice"],
-      "plain": "La Cour internationale de justice est le tribunal des Nations unies. Elle tranche les différends entre États."
+      "plain": "La Cour internationale de justice est le tribunal des Nations unies. Elle tranche les différends entre États.",
+      "noExample": "E"
     },
     {
       "id": "omi",
       "term": "OMI",
-      "plain": "L'Organisation maritime internationale est l'agence des Nations unies qui fixe les règles du transport par mer."
+      "plain": "L'Organisation maritime internationale est l'agence des Nations unies qui fixe les règles du transport par mer.",
+      "noExample": "E"
     },
     {
       "id": "celac",
       "term": "CELAC",
-      "plain": "La CELAC est une communauté qui réunit les États d'Amérique latine et des Caraïbes."
+      "plain": "La CELAC est une communauté qui réunit les États d'Amérique latine et des Caraïbes.",
+      "noExample": "E"
     },
     {
       "id": "cdaa",
       "term": "CDAA",
-      "plain": "La CDAA est la Communauté de développement de l'Afrique australe. Elle réunit des pays du sud de l'Afrique."
+      "plain": "La CDAA est la Communauté de développement de l'Afrique australe. Elle réunit des pays du sud de l'Afrique.",
+      "noExample": "E"
     },
     {
       "id": "iora",
       "term": "IORA",
-      "plain": "L'IORA est une association d'États riverains de l'océan Indien, qui coopèrent entre eux."
+      "plain": "L'IORA est une association d'États riverains de l'océan Indien, qui coopèrent entre eux.",
+      "noExample": "E"
     },
     {
       "id": "ue",
       "term": "UE",
       "anyCase": true,
-      "plain": "L'UE, Union européenne, réunit 27 États d'Europe. Ils partagent un marché, des règles communes et des institutions, comme le Parlement européen."
+      "plain": "L'UE, Union européenne, réunit 27 États d'Europe. Ils partagent un marché, des règles communes et des institutions, comme le Parlement européen.",
+      "noExample": "E"
     },
     {
       "id": "tian",
       "term": "TIAN",
       "anyCase": true,
-      "plain": "Le TIAN, traité sur l'interdiction des armes nucléaires, a été adopté à l'ONU en 2017. Il s'applique depuis 2021 aux États qui l'ont ratifié."
+      "plain": "Le TIAN, traité sur l'interdiction des armes nucléaires, a été adopté à l'ONU en 2017. Il s'applique depuis 2021 aux États qui l'ont ratifié.",
+      "noExample": "E"
     },
     {
       "id": "tfue",
       "term": "TFUE",
       "anyCase": true,
-      "plain": "Le TFUE est le traité sur le fonctionnement de l'Union européenne. C'est l'un des deux grands traités qui organisent l'Union."
+      "plain": "Le TFUE est le traité sur le fonctionnement de l'Union européenne. C'est l'un des deux grands traités qui organisent l'Union.",
+      "noExample": "E"
     },
     {
       "id": "pac",
       "term": "PAC",
       "aliases": ["politique agricole commune"],
       "anyCase": true,
-      "plain": "La politique agricole commune, la PAC, est la politique de l'Union européenne pour l'agriculture : aides, règles des marchés, développement rural. PAC désigne aussi une pompe à chaleur."
+      "plain": "La politique agricole commune, la PAC, est la politique de l'Union européenne pour l'agriculture : aides, règles des marchés, développement rural. PAC désigne aussi une pompe à chaleur.",
+      "noExample": "E"
     },
     {
       "id": "rgpd",
       "term": "RGPD",
       "anyCase": true,
-      "plain": "Le RGPD est le règlement européen qui protège les données personnelles. Il s'applique depuis 2018."
+      "plain": "Le RGPD est le règlement européen qui protège les données personnelles. Il s'applique depuis 2018.",
+      "noExample": "E"
     },
     {
       "id": "gafam",
       "term": "GAFAM",
       "anyCase": true,
-      "plain": "GAFAM désigne cinq géants américains du numérique : Google, Apple, Facebook (Meta), Amazon et Microsoft."
+      "plain": "GAFAM désigne cinq géants américains du numérique : Google, Apple, Facebook (Meta), Amazon et Microsoft.",
+      "noExample": "E"
     },
     {
       "id": "cop",
       "term": "COP",
-      "plain": "Une COP est une conférence où les États qui ont signé un traité se réunissent pour négocier, par exemple sur le climat."
+      "plain": "Une COP est une conférence où les États qui ont signé un traité se réunissent pour négocier, par exemple sur le climat.",
+      "noExample": "E"
     },
     {
       "id": "mercosur",
       "term": "Mercosur",
-      "plain": "Le Mercosur est une alliance commerciale de pays d'Amérique du Sud, dont le Brésil et l'Argentine."
+      "plain": "Le Mercosur est une alliance commerciale de pays d'Amérique du Sud, dont le Brésil et l'Argentine.",
+      "noExample": "E"
     },
     {
       "id": "semestre-europeen",
@@ -210,32 +241,38 @@
       "id": "travailleurs-detaches",
       "term": "travailleurs détachés",
       "aliases": ["travail détaché"],
-      "plain": "Un travailleur détaché est envoyé par son employeur travailler un temps dans un autre pays de l'Union européenne."
+      "plain": "Un travailleur détaché est envoyé par son employeur travailler un temps dans un autre pays de l'Union européenne.",
+      "noExample": "E"
     },
     {
       "id": "commandement-integre",
       "term": "commandement intégré",
-      "plain": "Le commandement intégré est la structure militaire de l'OTAN : des états-majors communs où servent des militaires des pays membres. La France l'a quitté en 1966 et l'a rejoint en 2009."
+      "plain": "Le commandement intégré est la structure militaire de l'OTAN : des états-majors communs où servent des militaires des pays membres. La France l'a quitté en 1966 et l'a rejoint en 2009.",
+      "noExample": "E"
     },
     {
       "id": "accords-artemis",
       "term": "accords Artemis",
-      "plain": "Les accords Artemis, lancés par les États-Unis en 2020, fixent des principes non contraignants pour explorer la Lune et l'espace. Plusieurs dizaines de pays les ont signés, dont la France."
+      "plain": "Les accords Artemis, lancés par les États-Unis en 2020, fixent des principes non contraignants pour explorer la Lune et l'espace. Plusieurs dizaines de pays les ont signés, dont la France.",
+      "noExample": "E"
     },
     {
       "id": "traite-de-la-lune",
       "term": "traité de la Lune",
-      "plain": "Le traité de la Lune, adopté à l'ONU en 1979, fait de la Lune et de ses ressources un patrimoine commun de l'humanité. Peu d'États l'ont ratifié."
+      "plain": "Le traité de la Lune, adopté à l'ONU en 1979, fait de la Lune et de ses ressources un patrimoine commun de l'humanité. Peu d'États l'ont ratifié.",
+      "noExample": "E"
     },
     {
       "id": "galileo",
       "term": "Galileo",
-      "plain": "Galileo est le système européen de positionnement par satellite, comparable au GPS américain."
+      "plain": "Galileo est le système européen de positionnement par satellite, comparable au GPS américain.",
+      "noExample": "E"
     },
     {
       "id": "starlink",
       "term": "Starlink",
-      "plain": "Starlink est un réseau de satellites de l'entreprise américaine SpaceX. Il fournit un accès à Internet."
+      "plain": "Starlink est un réseau de satellites de l'entreprise américaine SpaceX. Il fournit un accès à Internet.",
+      "noExample": "E"
     },
     {
       "id": "ric",
@@ -381,7 +418,7 @@
     {
       "id": "privatisation",
       "term": "privatisations",
-      "aliases": ["privatisation"],
+      "aliases": ["privatisation", "privatiser"],
       "plain": "Une privatisation fait passer une entreprise publique à des propriétaires privés.",
       "noExample": "E"
     },
@@ -423,77 +460,93 @@
       "id": "igpn",
       "term": "IGPN",
       "anyCase": true,
-      "plain": "L'IGPN est le service d'inspection de la police nationale. On l'appelle la police des polices."
+      "plain": "L'IGPN est le service d'inspection de la police nationale. On l'appelle la police des polices.",
+      "noExample": "E"
     },
     {
       "id": "iggn",
       "term": "IGGN",
       "anyCase": true,
-      "plain": "L'IGGN est le service d'inspection de la gendarmerie nationale."
+      "plain": "L'IGGN est le service d'inspection de la gendarmerie nationale.",
+      "noExample": "E"
     },
     {
       "id": "bac-police",
       "term": "BAC",
-      "plain": "BAC a deux sens. Dans la police, les BAC sont les brigades anticriminalité : des équipes souvent en civil. Le bac est aussi le baccalauréat, le diplôme de fin de lycée."
+      "aliases": ["brigades anticriminalité"],
+      "plain": "BAC a deux sens. Dans la police, les BAC sont les brigades anticriminalité : des équipes souvent en civil. Le bac est aussi le baccalauréat, le diplôme de fin de lycée.",
+      "noExample": "D"
     },
     {
       "id": "brav-m",
       "term": "BRAV-M",
       "anyCase": true,
-      "plain": "Les BRAV-M, brigades de répression de l'action violente motorisées, sont des équipes de policiers à moto créées à Paris en 2019. Elles interviennent surtout lors de manifestations."
+      "plain": "Les BRAV-M, brigades de répression de l'action violente motorisées, sont des équipes de policiers à moto créées à Paris en 2019. Elles interviennent surtout lors de manifestations.",
+      "noExample": "E"
     },
     {
       "id": "lbd",
       "term": "LBD",
       "anyCase": true,
-      "plain": "Un LBD, lanceur de balles de défense, est une arme des forces de l'ordre. Il tire à distance de gros projectiles en mousse dure ou en caoutchouc."
+      "plain": "Un LBD, lanceur de balles de défense, est une arme des forces de l'ordre. Il tire à distance de gros projectiles en mousse dure ou en caoutchouc.",
+      "noExample": "E"
     },
     {
       "id": "rio",
       "term": "RIO",
-      "plain": "Le RIO est le numéro d'identification que policiers et gendarmes doivent porter sur leur uniforme."
+      "aliases": ["référentiel des identités et de l'organisation"],
+      "plain": "Le RIO est le numéro d'identification que policiers et gendarmes doivent porter sur leur uniforme.",
+      "noExample": "E"
     },
     {
       "id": "pharos",
       "term": "PHAROS",
       "anyCase": true,
-      "plain": "PHAROS est la plateforme du ministère de l'Intérieur où l'on signale des contenus illicites vus sur Internet."
+      "plain": "PHAROS est la plateforme du ministère de l'Intérieur où l'on signale des contenus illicites vus sur Internet.",
+      "noExample": "E"
     },
     {
       "id": "cra",
       "term": "CRA",
       "aliases": ["centres de rétention administrative"],
-      "plain": "Un centre de rétention administrative est un lieu fermé où sont retenus des étrangers avant un possible éloignement."
+      "plain": "Un centre de rétention administrative est un lieu fermé où sont retenus des étrangers avant un possible éloignement.",
+      "noExample": "E"
     },
     {
       "id": "desescalade",
       "term": "désescalade",
-      "plain": "La désescalade vise à faire baisser la tension, dans un conflit ou lors d'une manifestation, par le dialogue plutôt que par la force."
+      "plain": "La désescalade vise à faire baisser la tension, dans un conflit ou lors d'une manifestation, par le dialogue plutôt que par la force.",
+      "noExample": "E"
     },
     {
       "id": "jures-populaires",
       "term": "jurés populaires",
-      "plain": "Les jurés populaires sont des citoyens tirés au sort pour juger un crime aux côtés de juges professionnels."
+      "plain": "Les jurés populaires sont des citoyens tirés au sort pour juger un crime aux côtés de juges professionnels.",
+      "noExample": "E"
     },
     {
       "id": "cours-criminelles",
       "term": "cours criminelles",
-      "plain": "Les cours criminelles départementales jugent certains crimes sans jurés tirés au sort. Elles existent dans tous les départements depuis 2023."
+      "plain": "Les cours criminelles départementales jugent certains crimes sans jurés tirés au sort. Elles existent dans tous les départements depuis 2023.",
+      "noExample": "E"
     },
     {
       "id": "aide-juridictionnelle",
       "term": "aide juridictionnelle",
-      "plain": "L'aide juridictionnelle paie tout ou partie des frais de justice des personnes aux revenus modestes."
+      "plain": "L'aide juridictionnelle paie tout ou partie des frais de justice des personnes aux revenus modestes.",
+      "noExample": "E"
     },
     {
       "id": "amende-forfaitaire-delictuelle",
       "term": "amendes forfaitaires délictuelles",
-      "plain": "Une amende forfaitaire délictuelle punit certains délits, comme l'usage de stupéfiants, par une amende fixe dressée par la police, sans procès, sauf si la personne la conteste."
+      "plain": "Une amende forfaitaire délictuelle punit certains délits, comme l'usage de stupéfiants, par une amende fixe dressée par la police, sans procès, sauf si la personne la conteste.",
+      "noExample": "E"
     },
     {
       "id": "regulation-carcerale",
       "term": "régulation carcérale",
-      "plain": "La régulation carcérale désigne tout mécanisme qui empêche une prison de compter plus de détenus que de places. Exemple : avancer la sortie de détenus en fin de peine."
+      "plain": "La régulation carcérale désigne tout mécanisme qui empêche une prison de compter plus de détenus que de places. Exemple : avancer la sortie de détenus en fin de peine.",
+      "noExample": "E"
     },
     {
       "id": "verrou-de-bercy",
@@ -510,44 +563,52 @@
     {
       "id": "testing",
       "term": "testing",
-      "plain": "Un testing compare les réponses à des demandes presque identiques, pour un emploi ou un logement par exemple. Il sert à repérer une discrimination liée à l'origine, au sexe ou à l'adresse."
+      "plain": "Un testing compare les réponses à des demandes presque identiques, pour un emploi ou un logement par exemple. Il sert à repérer une discrimination liée à l'origine, au sexe ou à l'adresse.",
+      "noExample": "E"
     },
     {
       "id": "soumission-chimique",
       "term": "soumission chimique",
-      "plain": "La soumission chimique consiste à droguer une personne à son insu, pour l'agresser ou la voler."
+      "plain": "La soumission chimique consiste à droguer une personne à son insu, pour l'agresser ou la voler.",
+      "noExample": "E"
     },
     {
       "id": "droit-du-sol",
       "term": "droit du sol",
-      "plain": "Le droit du sol donne la nationalité d'un pays à une personne née sur son territoire, à certaines conditions."
+      "plain": "Le droit du sol donne la nationalité d'un pays à une personne née sur son territoire, à certaines conditions.",
+      "noExample": "E"
     },
     {
       "id": "ofpra",
       "term": "Ofpra",
-      "plain": "L'Ofpra est l'office public qui examine les demandes d'asile."
+      "plain": "L'Ofpra est l'office public qui examine les demandes d'asile.",
+      "noExample": "E"
     },
     {
       "id": "demandeurs-d-asile",
       "term": "demandeurs d'asile",
-      "aliases": ["droit d'asile"],
-      "plain": "Un demandeur d'asile demande à un pays de le protéger, parce qu'il est menacé dans le sien. Le droit d'asile est le droit de recevoir cette protection."
+      "aliases": ["droit d'asile", "asile"],
+      "plain": "Un demandeur d'asile demande à un pays de le protéger, parce qu'il est menacé dans le sien. Le droit d'asile est le droit de recevoir cette protection.",
+      "noExample": "E"
     },
     {
       "id": "apatrides",
       "term": "apatrides",
-      "plain": "Un apatride est une personne qu'aucun État ne reconnaît comme son ressortissant."
+      "plain": "Un apatride est une personne qu'aucun État ne reconnaît comme l'un de ses citoyens.",
+      "noExample": "E"
     },
     {
       "id": "pays-d-origine-surs",
       "term": "pays d'origine sûrs",
-      "plain": "Un pays d'origine sûr est un pays jugé sans risque de persécution. Les demandes d'asile de ses ressortissants sont examinées plus vite."
+      "plain": "Un pays d'origine sûr est un pays jugé sans risque de persécution. Les demandes d'asile de ses citoyens sont examinées plus vite.",
+      "noExample": "E"
     },
     {
       "id": "titre-de-sejour",
       "term": "titre de séjour",
-      "aliases": ["carte de séjour"],
-      "plain": "Un titre de séjour est le document qui autorise un étranger à vivre en France."
+      "aliases": ["carte de séjour", "cartes de séjour"],
+      "plain": "Un titre de séjour est le document qui autorise un étranger à vivre en France.",
+      "noExample": "E"
     },
     {
       "id": "smic",
@@ -877,131 +938,156 @@
     {
       "id": "ase",
       "term": "ASE",
-      "plain": "L'ASE, aide sociale à l'enfance, protège les enfants en danger. Elle dépend des départements."
+      "plain": "L'ASE, aide sociale à l'enfance, protège les enfants en danger. Elle dépend des départements.",
+      "noExample": "E"
     },
     {
       "id": "pjj",
       "term": "PJJ",
-      "plain": "La PJJ, protection judiciaire de la jeunesse, suit les mineurs concernés par une décision de justice."
+      "plain": "La PJJ, protection judiciaire de la jeunesse, suit les mineurs concernés par une décision de justice.",
+      "noExample": "E"
     },
     {
       "id": "aesh",
       "term": "AESH",
       "anyCase": true,
-      "plain": "Les AESH, accompagnants d'élèves en situation de handicap, aident ces élèves en classe."
+      "plain": "Les AESH, accompagnants d'élèves en situation de handicap, aident ces élèves en classe.",
+      "noExample": "E"
     },
     {
       "id": "evars",
       "term": "EVARS",
       "anyCase": true,
-      "plain": "L'EVARS est l'éducation à la vie affective et relationnelle, et à la sexualité, donnée à l'école. En primaire, elle porte sur la vie affective et relationnelle ; la sexualité s'y ajoute au collège."
+      "plain": "L'EVARS est l'éducation à la vie affective et relationnelle, et à la sexualité, donnée à l'école. En primaire, elle porte sur la vie affective et relationnelle ; la sexualité s'y ajoute au collège.",
+      "noExample": "E"
     },
     {
       "id": "rep",
       "term": "REP",
-      "plain": "À l'école, les REP sont les réseaux d'éducation prioritaire, qui reçoivent plus de moyens. Pour les déchets, la REP est la responsabilité élargie du producteur."
+      "plain": "À l'école, les REP sont les réseaux d'éducation prioritaire, qui reçoivent plus de moyens. Pour les déchets, la REP est la responsabilité élargie du producteur.",
+      "noExample": "D"
     },
     {
       "id": "parcoursup",
       "term": "Parcoursup",
-      "plain": "Parcoursup est la plateforme où les lycéens demandent une place dans l'enseignement supérieur."
+      "plain": "Parcoursup est la plateforme où les lycéens demandent une place dans l'enseignement supérieur.",
+      "noExample": "E"
     },
     {
       "id": "bts",
       "term": "BTS",
       "anyCase": true,
-      "plain": "Le BTS, brevet de technicien supérieur, est un diplôme en deux ans après le bac."
+      "plain": "Le BTS, brevet de technicien supérieur, est un diplôme en deux ans après le bac.",
+      "noExample": "E"
     },
     {
       "id": "but",
       "term": "BUT",
-      "plain": "Le BUT, bachelor universitaire de technologie, est un diplôme en trois ans après le bac, préparé en IUT et tourné vers un métier."
+      "aliases": ["bachelor universitaire de technologie"],
+      "plain": "Le BUT, bachelor universitaire de technologie, est un diplôme en trois ans après le bac, préparé en IUT et tourné vers un métier.",
+      "noExample": "E"
     },
     {
       "id": "cap",
       "term": "CAP",
-      "plain": "Le CAP, certificat d'aptitude professionnelle, est un diplôme qui forme à un métier précis."
+      "plain": "Le CAP, certificat d'aptitude professionnelle, est un diplôme qui forme à un métier précis.",
+      "noExample": "E"
     },
     {
       "id": "cfa",
       "term": "CFA",
       "anyCase": true,
-      "plain": "CFA a deux sens. Un CFA est un centre de formation d'apprentis. Le franc CFA est la monnaie de pays d'Afrique de l'Ouest et du centre ; sa valeur est fixée par rapport à l'euro."
+      "plain": "CFA a deux sens. Un CFA est un centre de formation d'apprentis. Le franc CFA est la monnaie de pays d'Afrique de l'Ouest et du centre ; sa valeur est fixée par rapport à l'euro.",
+      "noExample": "D"
     },
     {
       "id": "greta",
       "term": "les Greta",
+      "aliases": ["des Greta", "aux Greta", "un Greta", "GRETA"],
       "plain": "Les Greta sont des groupements d'établissements publics qui forment des adultes.",
-      "aliases": ["des Greta", "aux Greta", "un Greta", "GRETA"]
+      "noExample": "E"
     },
     {
       "id": "lru",
       "term": "LRU",
-      "plain": "La loi LRU, votée en 2007, a donné aux universités plus d'autonomie, notamment sur leur budget."
+      "plain": "La loi LRU, votée en 2007, a donné aux universités plus d'autonomie, notamment sur leur budget.",
+      "noExample": "E"
     },
     {
       "id": "hceres",
       "term": "Hcéres",
-      "plain": "Le Hcéres est l'autorité qui évalue les universités et les organismes de recherche."
+      "plain": "Le Hcéres est l'autorité qui évalue les universités et les organismes de recherche.",
+      "noExample": "E"
     },
     {
       "id": "crous",
       "term": "Crous",
-      "plain": "Les Crous gèrent les restaurants universitaires, les logements étudiants et les bourses."
+      "plain": "Les Crous gèrent les restaurants universitaires, les logements étudiants et les bourses.",
+      "noExample": "E"
     },
     {
       "id": "cvec",
       "term": "CVEC",
       "anyCase": true,
-      "plain": "La CVEC est une contribution que la plupart des étudiants paient chaque année pour financer la vie de campus."
+      "plain": "La CVEC est une contribution que la plupart des étudiants paient chaque année pour financer la vie de campus.",
+      "noExample": "E"
     },
     {
       "id": "staps",
       "term": "STAPS",
       "anyCase": true,
-      "plain": "STAPS est la filière universitaire des métiers du sport et de l'activité physique."
+      "plain": "STAPS est la filière universitaire des métiers du sport et de l'activité physique.",
+      "noExample": "E"
     },
     {
       "id": "cnrs",
       "term": "CNRS",
       "anyCase": true,
-      "plain": "Le CNRS est le plus grand organisme public de recherche français."
+      "plain": "Le CNRS est le plus grand organisme public de recherche français.",
+      "noExample": "E"
     },
     {
       "id": "inserm",
       "term": "Inserm",
-      "plain": "L'Inserm est l'institut public de recherche médicale."
+      "plain": "L'Inserm est l'institut public de recherche médicale.",
+      "noExample": "E"
     },
     {
       "id": "inrae",
       "term": "INRAE",
       "anyCase": true,
-      "plain": "L'INRAE est l'institut public de recherche sur l'agriculture, l'alimentation et l'environnement."
+      "plain": "L'INRAE est l'institut public de recherche sur l'agriculture, l'alimentation et l'environnement.",
+      "noExample": "E"
     },
     {
       "id": "ird",
       "term": "IRD",
-      "plain": "L'IRD, Institut de recherche pour le développement, est un institut public qui travaille avec des pays du Sud."
+      "plain": "L'IRD, Institut de recherche pour le développement, est un institut public qui travaille avec des pays du Sud.",
+      "noExample": "E"
     },
     {
       "id": "anr",
       "term": "ANR",
-      "plain": "L'ANR, Agence nationale de la recherche, finance des projets de recherche choisis sur appels à projets."
+      "plain": "L'ANR, Agence nationale de la recherche, finance des projets de recherche choisis sur appels à projets.",
+      "noExample": "E"
     },
     {
       "id": "cnl",
       "term": "CNL",
-      "plain": "CNL a deux sens. Le Centre national du livre soutient auteurs, éditeurs, libraires et bibliothèques. La Confédération nationale du logement est une association de locataires."
+      "plain": "CNL a deux sens. Le Centre national du livre soutient auteurs, éditeurs, libraires et bibliothèques. La Confédération nationale du logement est une association de locataires.",
+      "noExample": "D"
     },
     {
       "id": "mecenat",
       "term": "mécénat",
-      "plain": "Le mécénat est le soutien, en argent ou en nature, d'une entreprise ou d'un particulier à une œuvre d'intérêt général. En France, il donne droit à une réduction d'impôt."
+      "plain": "Le mécénat est le soutien, en argent ou en nature, d'une entreprise ou d'un particulier à une œuvre d'intérêt général. En France, il donne droit à une réduction d'impôt.",
+      "noExample": "E"
     },
     {
       "id": "creolisation",
       "term": "créolisation",
-      "plain": "La créolisation est le mélange de cultures et de langues d'où naissent des formes nouvelles. L'idée a été développée par l'écrivain martiniquais Édouard Glissant."
+      "plain": "La créolisation est le mélange de cultures et de langues d'où naissent des formes nouvelles. L'idée a été développée par l'écrivain martiniquais Édouard Glissant.",
+      "noExample": "S"
     },
     {
       "id": "tva",
@@ -1138,18 +1224,21 @@
     {
       "id": "afd",
       "term": "AFD",
-      "plain": "AFD a deux sens. L'Agence française de développement finance des projets dans des pays en développement et en Outre-mer. AFD désigne aussi une amende forfaitaire délictuelle."
+      "plain": "AFD a deux sens. L'Agence française de développement finance des projets dans des pays en développement et en Outre-mer. AFD désigne aussi une amende forfaitaire délictuelle.",
+      "noExample": "D"
     },
     {
       "id": "aide-publique-au-developpement",
       "term": "aide publique au développement",
-      "plain": "L'aide publique au développement est l'argent public que des pays riches consacrent à aider des pays pauvres."
+      "plain": "L'aide publique au développement est l'argent public que des pays riches consacrent à aider des pays pauvres.",
+      "noExample": "E"
     },
     {
       "id": "dettes-odieuses",
       "term": "dettes dites odieuses",
       "aliases": ["dettes odieuses", "dette odieuse"],
-      "plain": "Selon une doctrine juridique débattue, une dette odieuse est une dette contractée par un régime contre l'intérêt de sa population. Ses défenseurs jugent qu'elle n'a pas à être remboursée."
+      "plain": "Selon une doctrine juridique débattue, une dette odieuse est une dette contractée par un régime contre l'intérêt de sa population. Ses défenseurs jugent qu'elle n'a pas à être remboursée.",
+      "noExample": "E"
     },
     {
       "id": "pme",
@@ -1188,7 +1277,8 @@
     {
       "id": "cae",
       "term": "CAE",
-      "plain": "CAE a deux sens. Une coopérative d'activités et d'emploi permet à des entrepreneurs d'être salariés d'une structure commune. Le Conseil d'analyse économique conseille le Premier ministre."
+      "plain": "CAE a deux sens. Une coopérative d'activités et d'emploi permet à des entrepreneurs d'être salariés d'une structure commune. Le Conseil d'analyse économique conseille le Premier ministre.",
+      "noExample": "D"
     },
     {
       "id": "libre-echange",
@@ -1588,45 +1678,54 @@
       "id": "logiciels-libres",
       "term": "logiciels libres",
       "aliases": ["logiciel libre"],
-      "plain": "Un logiciel libre peut être utilisé, étudié, modifié et partagé par tous."
+      "plain": "Un logiciel libre peut être utilisé, étudié, modifié et partagé par tous.",
+      "noExample": "E"
     },
     {
       "id": "interoperabilite",
       "term": "interopérabilité",
-      "plain": "L'interopérabilité, c'est la capacité de logiciels ou de services différents à fonctionner ensemble."
+      "plain": "L'interopérabilité, c'est la capacité de logiciels ou de services différents à fonctionner ensemble.",
+      "noExample": "E"
     },
     {
       "id": "cloud",
       "term": "cloud",
-      "plain": "Le cloud désigne des serveurs distants où l'on stocke des données et fait tourner des logiciels, par Internet."
+      "plain": "Le cloud désigne des serveurs distants où l'on stocke des données et fait tourner des logiciels, par Internet.",
+      "noExample": "E"
     },
     {
       "id": "ia",
       "term": "IA",
       "aliases": ["intelligence artificielle"],
       "anyCase": true,
-      "plain": "L'IA, intelligence artificielle, désigne des logiciels qui imitent des capacités humaines : comprendre un texte, reconnaître une image, écrire, décider."
+      "plain": "L'IA, intelligence artificielle, désigne des logiciels qui imitent des capacités humaines : comprendre un texte, reconnaître une image, écrire, décider.",
+      "noExample": "E"
     },
     {
       "id": "centres-de-donnees",
       "term": "centres de données",
       "aliases": ["data centers"],
-      "plain": "Un centre de données est un bâtiment rempli de serveurs informatiques."
+      "plain": "Un centre de données est un bâtiment rempli de serveurs informatiques.",
+      "noExample": "E"
     },
     {
       "id": "cryptographie-post-quantique",
       "term": "cryptographie post-quantique",
-      "plain": "La cryptographie post-quantique regroupe des méthodes de chiffrement conçues pour résister aux futurs ordinateurs quantiques."
+      "plain": "La cryptographie post-quantique regroupe des méthodes de chiffrement conçues pour résister aux futurs ordinateurs quantiques.",
+      "noExample": "E"
     },
     {
       "id": "sala",
       "term": "SALA",
-      "plain": "Les SALA sont des systèmes d'armes létales autonomes : des armes capables de choisir et de frapper une cible sans décision humaine."
+      "aliases": ["systèmes d'armes létales autonomes"],
+      "plain": "Les SALA sont des systèmes d'armes létales autonomes : des armes capables de choisir et de frapper une cible sans décision humaine.",
+      "noExample": "E"
     },
     {
       "id": "conscription",
       "term": "conscription",
-      "plain": "La conscription est l'obligation, pour toute une classe d'âge, de faire un service, en général militaire. En France, le service militaire obligatoire est suspendu depuis 1997."
+      "plain": "La conscription est l'obligation, pour toute une classe d'âge, de faire un service, en général militaire. En France, le service militaire obligatoire est suspendu depuis 1997.",
+      "noExample": "E"
     },
     {
       "id": "orsec",
@@ -1639,26 +1738,39 @@
       "id": "athos",
       "term": "ATHOS",
       "aliases": ["maisons Athos"],
-      "plain": "Les maisons ATHOS accueillent des militaires blessés psychiques, pour les aider à se reconstruire."
+      "plain": "Les maisons ATHOS accueillent des militaires blessés psychiques, pour les aider à se reconstruire.",
+      "noExample": "E"
     },
     {
       "id": "altermondialiste",
       "term": "altermondialiste",
       "aliases": ["altermondialistes"],
-      "plain": "Le mouvement altermondialiste critique la mondialisation telle qu'elle se fait et dit vouloir une autre mondialisation, plus sociale et plus écologique."
+      "plain": "Le mouvement altermondialiste critique la mondialisation telle qu'elle se fait et dit vouloir une autre mondialisation, plus sociale et plus écologique.",
+      "noExample": "E"
     },
     {
       "id": "non-alignee",
       "term": "non-alignée",
-      "aliases": ["non-aligné"],
-      "plain": "Un pays non-aligné refuse de se ranger dans le camp d'une grande puissance. Le Mouvement des non-alignés est né en 1961, pendant la guerre froide."
+      "aliases": ["non-aligné", "non alignée", "non aligné", "non-alignement"],
+      "plain": "Un pays non-aligné refuse de se ranger dans le camp d'une grande puissance. Le Mouvement des non-alignés est né en 1961, pendant la guerre froide.",
+      "noExample": "E"
     },
     {
       "id": "lgbti",
       "term": "LGBTI",
-      "aliases": ["LGBT", "LGBTQ", "LGBTQI", "LGBTQIA"],
+      "aliases": [
+        "LGBT",
+        "LGBTQ",
+        "LGBTQI",
+        "LGBTQIA",
+        "LGBTIphobie",
+        "LGBTIphobies",
+        "LGBTIphobe",
+        "LGBTIphobes"
+      ],
       "anyCase": true,
-      "plain": "LGBTI désigne les personnes lesbiennes, gays, bisexuelles, trans et intersexes."
+      "plain": "LGBTI désigne les personnes lesbiennes, gays, bisexuelles, trans et intersexes. Les LGBTIphobies sont les rejets et les violences qui les visent.",
+      "noExample": "S"
     },
     {
       "id": "ifi",
@@ -1902,13 +2014,18 @@
     {
       "id": "politique-monetaire",
       "term": "politique monétaire",
+      "aliases": ["resserrement monétaire", "monétaire", "monétaires"],
       "plain": "La politique monétaire est l'action d'une banque centrale sur la monnaie et le crédit, surtout en fixant ses taux d'intérêt.",
       "noExample": "E"
     },
     {
       "id": "rachat-de-dettes",
       "term": "rachat de dettes souveraines",
-      "aliases": ["rachats de dettes publiques", "assouplissement quantitatif"],
+      "aliases": [
+        "rachats de dettes publiques",
+        "assouplissement quantitatif",
+        "rachat de dettes publiques"
+      ],
       "plain": "Quand une banque centrale rachète en masse des titres de dette, publique surtout, elle tend à faire baisser les taux auxquels les États empruntent. On parle d'assouplissement quantitatif.",
       "noExample": "E"
     },
@@ -2520,7 +2637,7 @@
     {
       "id": "austerite",
       "term": "austérité",
-      "aliases": ["austéritaires"],
+      "aliases": ["austéritaires", "austéritaire"],
       "plain": "L'austérité désigne une politique qui réduit fortement les dépenses publiques, ou augmente les impôts, pour baisser un déficit. Ses défenseurs parlent plutôt de rigueur.",
       "noExample": "E"
     },
@@ -3124,7 +3241,7 @@
     {
       "id": "prix-remunerateur",
       "term": "prix rémunérateurs",
-      "aliases": ["prix rémunérateur"],
+      "aliases": ["prix rémunérateur", "rémunérateur"],
       "plain": "Un prix est rémunérateur quand il couvre au moins les coûts de production et laisse de quoi vivre à celui qui produit.",
       "noExample": "E"
     },
@@ -3638,7 +3755,7 @@
     {
       "id": "droit-opposable",
       "term": "droit opposable",
-      "aliases": ["droit au logement opposable"],
+      "aliases": ["droit au logement opposable", "opposable"],
       "plain": "Un droit est opposable quand on peut saisir la justice pour obliger l'État à le respecter, comme le droit au logement.",
       "noExample": "E"
     },
@@ -3785,7 +3902,7 @@
     {
       "id": "marchandisation",
       "term": "marchandisation",
-      "aliases": ["démarchandiser", "démarchandisation"],
+      "aliases": ["démarchandiser", "démarchandisation", "démarchandisée"],
       "plain": "La marchandisation fait d'une chose une marchandise, qu'on achète et qu'on vend. Le mot sert souvent à critiquer ce changement, pour l'eau ou la santé. Démarchandiser une chose, c'est faire l'inverse.",
       "noExample": "E"
     },
@@ -3919,6 +4036,7 @@
     {
       "id": "liberalisation",
       "term": "libéralisation",
+      "aliases": ["libéraliser"],
       "plain": "La libéralisation d'un secteur, comme l'électricité ou le rail, y supprime un monopole public et l'ouvre à des entreprises concurrentes.",
       "noExample": "E"
     },
@@ -4000,7 +4118,7 @@
     {
       "id": "subventions",
       "term": "subventions",
-      "aliases": ["subvention"],
+      "aliases": ["subvention", "subventionner"],
       "plain": "Une subvention est une aide en argent versée par l'État ou une collectivité à une entreprise, une association ou une activité.",
       "noExample": "E"
     },
@@ -4120,7 +4238,7 @@
     {
       "id": "octroyer",
       "term": "octroyer",
-      "aliases": ["octroyé", "octroyée", "octroyés", "octroyées"],
+      "aliases": ["octroyé", "octroyée", "octroyés", "octroyées", "octroyant"],
       "plain": "Octroyer quelque chose, c'est l'accorder, le donner à quelqu'un.",
       "noExample": "E"
     },
@@ -4209,7 +4327,7 @@
     {
       "id": "nouvelle-caledonie",
       "term": "Kanaky-Nouvelle-Calédonie",
-      "aliases": ["Nouvelle-Calédonie"],
+      "aliases": ["Nouvelle-Calédonie", "Kanaky"],
       "plain": "La Nouvelle-Calédonie, dont la France a pris possession en 1853, est un archipel du Pacifique Sud doté d'un statut particulier. Kanaky est le nom que lui donnent les indépendantistes kanak.",
       "noExample": "S"
     },
@@ -4223,7 +4341,7 @@
     {
       "id": "oligarchie",
       "term": "oligarchie",
-      "aliases": ["oligarchies"],
+      "aliases": ["oligarchies", "oligarchique", "oligarchiques"],
       "plain": "Une oligarchie est un régime où le pouvoir appartient à un petit nombre de personnes. Le mot sert aussi à critiquer l'influence d'une petite élite.",
       "noExample": "E"
     },
@@ -4257,7 +4375,7 @@
     {
       "id": "technocratie",
       "term": "technocratiques",
-      "aliases": ["technocratique", "technocrates", "technocrate"],
+      "aliases": ["technocratique", "technocrates", "technocrate", "technocratie"],
       "plain": "La technocratie désigne un pouvoir exercé par des experts et des dirigeants de l'administration plutôt que par des élus. Le mot est surtout critique.",
       "noExample": "E"
     },
@@ -4291,7 +4409,7 @@
     {
       "id": "bassin-versant",
       "term": "bassins-versants",
-      "aliases": ["bassin-versant"],
+      "aliases": ["bassin-versant", "bassin versant"],
       "plain": "Un bassin versant est le territoire dont toutes les eaux s'écoulent vers une même rivière ou un même fleuve.",
       "noExample": "E"
     },
@@ -4331,7 +4449,7 @@
     {
       "id": "chanoine-de-latran",
       "term": "chanoine de Latran",
-      "plain": "Chanoine de Latran est un titre honorifique que la basilique Saint-Jean-de-Latran, à Rome, offre par tradition aux chefs de l'État français, depuis Henri IV.",
+      "plain": "Le titre de chanoine de Latran est honorifique : la basilique Saint-Jean-de-Latran, à Rome, l'offre par tradition aux chefs de l'État français, depuis Henri IV.",
       "noExample": "S"
     },
     {
@@ -4372,7 +4490,7 @@
     {
       "id": "motion-de-defiance",
       "term": "motion de défiance",
-      "aliases": ["motions de défiance", "vote de défiance"],
+      "aliases": ["motions de défiance", "vote de défiance", "motion de censure"],
       "plain": "Une motion de défiance est un vote par lequel des membres, par exemple les journalistes d'une rédaction, disent ne plus faire confiance à leur dirigeant. À l'Assemblée, on parle de motion de censure.",
       "noExample": "E"
     },
@@ -4798,6 +4916,7 @@
     {
       "id": "patriarcat",
       "term": "patriarcal",
+      "aliases": ["patriarcat"],
       "plain": "Le patriarcat est, au sens strict, l'autorité du père sur la famille. Plus largement, c'est une organisation de la société où les hommes ont plus de pouvoir que les femmes.",
       "noExample": "D"
     },
@@ -5067,6 +5186,1074 @@
       "term": "tribunaux de commerce",
       "aliases": ["tribunal de commerce"],
       "plain": "Le tribunal de commerce juge les litiges entre entreprises et les faillites ; ses juges sont des chefs d'entreprise élus. En 2025, douze sont devenus, à l'essai, tribunaux des activités économiques.",
+      "noExample": "E"
+    },
+    {
+      "id": "genocide",
+      "term": "génocide",
+      "aliases": ["génocides"],
+      "plain": "Un génocide est un crime défini par une convention de l'ONU de 1948. Il est commis dans l'intention de détruire, en tout ou en partie, un groupe national, ethnique, racial ou religieux.",
+      "noExample": "S"
+    },
+    {
+      "id": "peuples-autochtones",
+      "term": "peuples autochtones",
+      "aliases": ["peuple autochtone"],
+      "plain": "Les peuples autochtones descendent des habitants d'une région avant sa conquête ou sa colonisation, et gardent une culture propre. L'ONU retient surtout le fait de s'en reconnaître membre.",
+      "noExample": "S"
+    },
+    {
+      "id": "territoires-palestiniens-occupes",
+      "term": "territoires palestiniens occupés",
+      "aliases": ["territoires palestiniens"],
+      "plain": "Pour l'ONU, les territoires palestiniens occupés sont la Cisjordanie, Jérusalem-Est et la bande de Gaza, occupés par Israël depuis 1967. Israël, qui a quitté Gaza en 2005, conteste ce terme.",
+      "noExample": "S"
+    },
+    {
+      "id": "etat-de-palestine",
+      "term": "État de Palestine",
+      "plain": "L'État de Palestine est reconnu par une large majorité des pays de l'ONU, dont la France depuis 2025 ; il y siège comme État observateur, sans droit de vote.",
+      "noExample": "S"
+    },
+    {
+      "id": "refugies-palestiniens",
+      "term": "réfugiés palestiniens",
+      "plain": "Les réfugiés palestiniens sont les Palestiniens qui ont fui ou ont été chassés de leurs terres en 1948, pendant la guerre qui a suivi la création d'Israël. Leurs descendants le sont aussi.",
+      "noExample": "S"
+    },
+    {
+      "id": "supremacisme",
+      "term": "suprémaciste",
+      "aliases": ["suprémacistes", "suprémacisme"],
+      "plain": "Le suprémacisme est la croyance en la supériorité d'un groupe, d'une race ou d'une nation sur les autres, et en son droit de les dominer.",
+      "noExample": "S"
+    },
+    {
+      "id": "fascisant",
+      "term": "fascisante",
+      "aliases": ["fascisantes", "fascisant"],
+      "plain": "Fascisant se dit de ce qui se rapproche du fascisme. Fondé en Italie par Mussolini, ce régime associe le culte du chef, le nationalisme et la violence contre ses opposants.",
+      "noExample": "S"
+    },
+    {
+      "id": "accord-ue-israel",
+      "term": "accord d'association UE-Israël",
+      "aliases": ["accord d'association"],
+      "plain": "L'accord d'association entre l'Union européenne et Israël, en vigueur depuis 2000, organise leurs échanges ; comme d'autres accords européens, son article 2 lie les parties aux droits humains.",
+      "noExample": "E"
+    },
+    {
+      "id": "colonisation",
+      "term": "colonisation",
+      "aliases": ["colonialiste", "colonialistes", "colonialisme"],
+      "plain": "La colonisation est la conquête et la domination d'un territoire par un pays étranger, qui y installe souvent une partie de sa population. Le colonialisme est la doctrine qui la justifie.",
+      "noExample": "E"
+    },
+    {
+      "id": "neocolonialisme",
+      "term": "néocoloniale",
+      "aliases": ["néocoloniales", "néocolonialisme"],
+      "plain": "Le néocolonialisme désigne la domination qu'un pays garde sur ses anciennes colonies après leur indépendance, par l'économie ou la politique. Le mot est critique.",
+      "noExample": "E"
+    },
+    {
+      "id": "imperialisme",
+      "term": "impérialisme",
+      "aliases": ["impérialiste", "impérialistes"],
+      "plain": "L'impérialisme est la volonté d'un pays d'étendre sa domination sur d'autres, par la force, l'économie ou l'influence.",
+      "noExample": "E"
+    },
+    {
+      "id": "internationalisme",
+      "term": "internationalistes",
+      "aliases": ["internationaliste", "internationalisme"],
+      "plain": "L'internationalisme défend la solidarité entre les peuples par-delà les frontières ; à l'origine, celle des travailleurs de tous les pays.",
+      "noExample": "E"
+    },
+    {
+      "id": "atlantisme",
+      "term": "atlantisme",
+      "plain": "L'atlantisme est le choix d'une alliance étroite avec les États-Unis, notamment dans l'OTAN.",
+      "noExample": "E"
+    },
+    {
+      "id": "belliciste",
+      "term": "bellicistes",
+      "aliases": ["belliciste"],
+      "plain": "Belliciste se dit de ce qui pousse à la guerre.",
+      "noExample": "E"
+    },
+    {
+      "id": "belligerants",
+      "term": "belligérants",
+      "aliases": ["belligérant"],
+      "plain": "Un belligérant est un pays ou un groupe armé qui prend part à une guerre.",
+      "noExample": "E"
+    },
+    {
+      "id": "tribut",
+      "term": "tribut",
+      "plain": "Un tribut était ce qu'un peuple vaincu devait payer à son vainqueur ; au figuré, une somme imposée par plus fort que soi.",
+      "noExample": "E"
+    },
+    {
+      "id": "encapacitants",
+      "term": "encapacitants",
+      "aliases": ["encapacitant"],
+      "plain": "Dans le vocabulaire militaire, les encapacitants sont les moyens qui rendent une action possible : renseignement, satellites, transport, ravitaillement.",
+      "noExample": "E"
+    },
+    {
+      "id": "cyber",
+      "term": "cyber",
+      "plain": "Dans le vocabulaire militaire, le cyber désigne ce qui se passe dans les réseaux informatiques : attaques, défense, espionnage.",
+      "noExample": "E"
+    },
+    {
+      "id": "egide",
+      "term": "sous l'égide",
+      "aliases": ["égide"],
+      "plain": "Sous l'égide d'une organisation, c'est sous sa protection et sa conduite.",
+      "noExample": "E"
+    },
+    {
+      "id": "codeveloppement",
+      "term": "codéveloppement",
+      "plain": "Le codéveloppement est une aide au développement menée avec les pays concernés ; en France, il associe souvent des migrants à des projets dans leur pays d'origine.",
+      "noExample": "E"
+    },
+    {
+      "id": "clause-europeenne",
+      "term": "clause de l'Européenne la plus favorisée",
+      "aliases": ["clause dite de l'Européenne la plus favorisée"],
+      "plain": "La clause de l'Européenne la plus favorisée est une idée féministe. Elle consiste à appliquer à toutes les femmes de l'Union la loi la plus protectrice qui existe dans l'un de ses pays.",
+      "noExample": "E"
+    },
+    {
+      "id": "clause-defense-mutuelle",
+      "term": "clause de défense mutuelle",
+      "aliases": ["article 42-7"],
+      "plain": "La clause de défense mutuelle du traité sur l'Union européenne, son article 42-7, oblige les pays membres à aider celui qui est attaqué sur son territoire.",
+      "noExample": "E"
+    },
+    {
+      "id": "traite-de-lisbonne",
+      "term": "traité de Lisbonne",
+      "aliases": ["traités européens"],
+      "plain": "Le traité de Lisbonne, signé en 2007 et ratifié par le Parlement français en 2008, organise l'Union européenne. Il reprend une grande part du projet de Constitution rejeté par les Français en 2005.",
+      "noExample": "E"
+    },
+    {
+      "id": "deregulation",
+      "term": "dérégulation",
+      "aliases": ["dérégulatrice", "omnibus"],
+      "plain": "La dérégulation consiste à supprimer ou alléger des règles qui encadrent une activité. L'Union européenne appelle omnibus des textes qui allègent plusieurs règles à la fois.",
+      "noExample": "E"
+    },
+    {
+      "id": "multilateral",
+      "term": "multilatéraux",
+      "aliases": ["multilatérale", "multilatérales", "multilatéral"],
+      "plain": "Multilatéral se dit de ce qui se négocie ou se fait entre de nombreux pays à la fois, souvent dans le cadre de l'ONU.",
+      "noExample": "E"
+    },
+    {
+      "id": "velleite",
+      "term": "velléités",
+      "aliases": ["velléité"],
+      "plain": "Une velléité est une intention faible, qui ne mène pas à l'acte.",
+      "noExample": "E"
+    },
+    {
+      "id": "non-proliferation-fossiles",
+      "term": "non-prolifération des énergies fossiles",
+      "plain": "Le traité de non-prolifération des énergies fossiles est une proposition de pays et d'associations. Il vise à ne plus ouvrir de mines de charbon ni de puits de pétrole ou de gaz.",
+      "noExample": "E"
+    },
+    {
+      "id": "co-souverainete",
+      "term": "co-souveraineté",
+      "plain": "La co-souveraineté, ou condominium, est le partage, entre deux pays, de l'autorité sur un territoire ou un espace.",
+      "noExample": "E"
+    },
+    {
+      "id": "apf",
+      "term": "Assemblée parlementaire de la Francophonie",
+      "aliases": ["APF"],
+      "plain": "L'Assemblée parlementaire de la Francophonie réunit des parlementaires des pays et régions où l'on parle français.",
+      "noExample": "E"
+    },
+    {
+      "id": "ordoliberalisme",
+      "term": "ordolibéralisme",
+      "plain": "L'ordolibéralisme, né en Allemagne, veut un marché libre encadré par des règles strictes, notamment sur la monnaie et les budgets publics.",
+      "noExample": "E"
+    },
+    {
+      "id": "recession",
+      "term": "récession",
+      "aliases": ["récessions"],
+      "plain": "Une récession est un recul de l'activité économique d'un pays, de sa production, pendant plusieurs mois.",
+      "noExample": "E"
+    },
+    {
+      "id": "le-cas-echeant",
+      "term": "le cas échéant",
+      "plain": "Le cas échéant veut dire si cela se produit, si besoin.",
+      "noExample": "E"
+    },
+    {
+      "id": "pacte-migration-asile",
+      "term": "pacte sur la migration et l'asile",
+      "aliases": [
+        "pacte européen sur la migration et l'asile",
+        "pacte sur l'asile et la migration",
+        "pacte européen sur l'asile et la migration"
+      ],
+      "plain": "Le pacte européen sur la migration et l'asile, adopté en 2024 et appliqué depuis 2026, harmonise l'examen des demandes d'asile et le contrôle aux frontières de l'Union.",
+      "noExample": "E"
+    },
+    {
+      "id": "annexion",
+      "term": "annexion",
+      "aliases": ["annexions", "annexer"],
+      "plain": "Une annexion est le rattachement par la force, à un État, d'un territoire qui ne lui appartenait pas ; le droit international l'interdit.",
+      "noExample": "E"
+    },
+    {
+      "id": "assemblee-generale-onu",
+      "term": "Assemblée générale de l'ONU",
+      "plain": "L'Assemblée générale de l'ONU réunit tous les États membres, chacun avec une voix ; ses résolutions sont, pour la plupart, des recommandations.",
+      "noExample": "E"
+    },
+    {
+      "id": "banque-mondiale",
+      "term": "Banque mondiale",
+      "plain": "La Banque mondiale prête de l'argent et donne des conseils aux pays en développement pour financer des projets.",
+      "noExample": "E"
+    },
+    {
+      "id": "biens-publics-mondiaux",
+      "term": "biens publics mondiaux",
+      "plain": "Les biens publics mondiaux profitent à toute l'humanité, comme un climat stable ou la santé mondiale, et ne se protègent que par tous les pays ensemble.",
+      "noExample": "E"
+    },
+    {
+      "id": "concurrence-libre",
+      "term": "concurrence libre et non faussée",
+      "plain": "La concurrence libre et non faussée, principe des traités européens, interdit les ententes entre entreprises et, sauf exceptions, les aides publiques à l'une d'elles.",
+      "noExample": "E"
+    },
+    {
+      "id": "conseil-europeen",
+      "term": "Conseil européen",
+      "plain": "Le Conseil européen réunit les chefs d'État ou de gouvernement des pays de l'Union, qui en fixent les grandes orientations.",
+      "noExample": "E"
+    },
+    {
+      "id": "devoir-de-vigilance",
+      "term": "devoir de vigilance",
+      "plain": "Depuis une loi de 2017, le devoir de vigilance oblige les grandes entreprises à prévenir les atteintes aux droits humains et à l'environnement chez leurs filiales et fournisseurs.",
+      "noExample": "E"
+    },
+    {
+      "id": "droit-international-humanitaire",
+      "term": "droit international humanitaire",
+      "plain": "Le droit international humanitaire, ou droit de la guerre, protège les civils, les blessés et les prisonniers pendant les conflits armés.",
+      "noExample": "E"
+    },
+    {
+      "id": "geometrie-variable",
+      "term": "géométrie variable",
+      "plain": "Une Europe à géométrie variable permet à certains pays d'aller plus loin ensemble, sans attendre tous les autres.",
+      "noExample": "E"
+    },
+    {
+      "id": "guerre-d-agression",
+      "term": "guerres d'agression",
+      "aliases": ["guerre d'agression"],
+      "plain": "Une guerre d'agression est lancée contre un autre pays sans légitime défense ni autorisation du Conseil de sécurité, l'organe de l'ONU chargé de la paix. C'est un crime en droit international.",
+      "noExample": "E"
+    },
+    {
+      "id": "integrite-territoriale",
+      "term": "intégrité territoriale",
+      "plain": "L'intégrité territoriale est le droit d'un État à ce que ses frontières soient respectées.",
+      "noExample": "E"
+    },
+    {
+      "id": "levee-des-brevets",
+      "term": "lever les brevets",
+      "aliases": ["levée des brevets"],
+      "plain": "Lever les brevets d'un produit, comme un vaccin, permet à d'autres de le fabriquer, soit en suspendant ces droits, soit en imposant une licence payée au détenteur.",
+      "noExample": "E"
+    },
+    {
+      "id": "maintien-de-la-paix",
+      "term": "maintien de la paix",
+      "plain": "Les opérations de maintien de la paix de l'ONU envoient des soldats, des policiers et des civils de plusieurs pays, les casques bleus. Ils surveillent des cessez-le-feu et protègent les civils.",
+      "noExample": "E"
+    },
+    {
+      "id": "mandat-d-arret",
+      "term": "mandats d'arrêt",
+      "aliases": ["mandat d'arrêt"],
+      "plain": "Un mandat d'arrêt est l'ordre d'un juge d'arrêter une personne pour la conduire devant la justice ; la Cour pénale internationale peut en émettre.",
+      "noExample": "E"
+    },
+    {
+      "id": "marche-carbone",
+      "term": "marché carbone",
+      "aliases": ["marchés carbone"],
+      "plain": "Un marché carbone fixe un plafond d'émissions et oblige les entreprises à détenir un droit pour chaque tonne de CO2 émise ; ces droits s'achètent et se vendent.",
+      "noExample": "E"
+    },
+    {
+      "id": "mesures-conservatoires",
+      "term": "mesures conservatoires",
+      "plain": "Ce sont des décisions urgentes d'un juge, prises avant son jugement final, pour éviter un préjudice irréparable.",
+      "noExample": "E"
+    },
+    {
+      "id": "mondialisation-heureuse",
+      "term": "mondialisation heureuse",
+      "plain": "L'expression mondialisation heureuse, née dans les années 1990, présente l'ouverture des échanges entre pays comme profitable à tous ; elle est souvent reprise avec ironie.",
+      "noExample": "E"
+    },
+    {
+      "id": "monnaie-commune",
+      "term": "monnaie commune",
+      "plain": "Une monnaie commune, au sens où l'emploient ses partisans, circule à côté des monnaies nationales pour les échanges entre pays ; l'euro, lui, les a remplacées.",
+      "noExample": "E"
+    },
+    {
+      "id": "regulariser",
+      "term": "régulariser",
+      "plain": "Régulariser un étranger, c'est lui accorder un titre de séjour alors qu'il vivait en France sans papiers.",
+      "noExample": "E"
+    },
+    {
+      "id": "resolutions",
+      "term": "résolutions",
+      "aliases": ["résolution"],
+      "plain": "Une résolution est un texte voté par une assemblée, comme l'Assemblée générale ou le Conseil de sécurité de l'ONU.",
+      "noExample": "E"
+    },
+    {
+      "id": "regle-des-3",
+      "term": "3 % de déficit",
+      "aliases": ["règle des 3 %"],
+      "plain": "La règle des 3 % limite le déficit public d'un pays de l'Union européenne à 3 % de la richesse qu'il produit chaque année, son PIB.",
+      "noExample": "E"
+    },
+    {
+      "id": "sans-papiers",
+      "term": "sans papiers",
+      "aliases": ["sans-papiers"],
+      "plain": "Un étranger sans papiers vit dans un pays sans titre de séjour qui l'y autorise.",
+      "noExample": "E"
+    },
+    {
+      "id": "securite-collective",
+      "term": "sécurité collective",
+      "plain": "La sécurité collective est le principe selon lequel des pays s'engagent ensemble à protéger chacun d'eux d'une agression.",
+      "noExample": "E"
+    },
+    {
+      "id": "servitude-volontaire",
+      "term": "servitude volontaire",
+      "plain": "La servitude volontaire, idée d'Étienne de La Boétie au XVIe siècle, désigne la soumission que les dominés acceptent d'eux-mêmes.",
+      "noExample": "E"
+    },
+    {
+      "id": "societe-civile",
+      "term": "société civile",
+      "plain": "La société civile regroupe les citoyens organisés hors de l'État et des partis : associations, syndicats, ONG.",
+      "noExample": "E"
+    },
+    {
+      "id": "contraignant",
+      "term": "contraignant",
+      "aliases": ["contraignants", "contraignante", "contraignantes"],
+      "plain": "Un texte contraignant oblige juridiquement les États qui l'ont accepté officiellement ; un texte non contraignant n'est qu'un engagement politique.",
+      "noExample": "E"
+    },
+    {
+      "id": "traite-commerce-armes",
+      "term": "traité sur le commerce des armes",
+      "plain": "Le traité sur le commerce des armes, adopté à l'ONU en 2013, encadre les ventes d'armes classiques entre pays.",
+      "noExample": "E"
+    },
+    {
+      "id": "transposer",
+      "term": "transposer",
+      "plain": "Transposer une directive européenne, un texte qui fixe un but aux pays de l'Union, c'est l'inscrire dans la loi d'un pays.",
+      "noExample": "E"
+    },
+    {
+      "id": "union-africaine",
+      "term": "Union africaine",
+      "plain": "L'Union africaine réunit les 55 États d'Afrique pour la paix et la coopération sur le continent.",
+      "noExample": "E"
+    },
+    {
+      "id": "zone-euro",
+      "term": "zone euro",
+      "plain": "La zone euro regroupe les pays de l'Union européenne qui ont l'euro pour monnaie.",
+      "noExample": "E"
+    },
+    {
+      "id": "accord-nucleaire-iranien",
+      "term": "accord sur le nucléaire iranien",
+      "plain": "Signé en 2015, l'accord sur le nucléaire iranien a limité les activités nucléaires de l'Iran contre la levée de sanctions. Les États-Unis l'ont quitté en 2018 ; l'ONU a rétabli ses sanctions en 2025.",
+      "noExample": "E"
+    },
+    {
+      "id": "aides-d-etat",
+      "term": "aides d'État",
+      "aliases": ["aide d'État"],
+      "plain": "Une aide d'État est un soutien public à une entreprise, subvention ou avantage fiscal, que les règles européennes interdisent en principe, sauf exceptions.",
+      "noExample": "E"
+    },
+    {
+      "id": "institut-francais",
+      "term": "Institut français",
+      "aliases": ["Alliance française", "Alliances françaises"],
+      "plain": "L'Institut français fait connaître la culture française à l'étranger ; les Alliances françaises, des associations locales, y enseignent le français.",
+      "noExample": "E"
+    },
+    {
+      "id": "choc-des-civilisations",
+      "term": "choc des civilisations",
+      "plain": "Le choc des civilisations est la thèse du politologue Samuel Huntington selon laquelle les grands conflits opposent désormais des aires culturelles et religieuses. Elle a partisans et critiques.",
+      "noExample": "E"
+    },
+    {
+      "id": "congres",
+      "term": "Congrès",
+      "aliases": ["en congrès"],
+      "plain": "Le Congrès réunit à Versailles les députés et les sénateurs, notamment pour modifier la Constitution.",
+      "noExample": "E"
+    },
+    {
+      "id": "harmonisation",
+      "term": "harmonisation fiscale et sociale",
+      "aliases": [
+        "harmonisation sociale et fiscale",
+        "harmonisation par le haut",
+        "harmonisation par le bas"
+      ],
+      "plain": "Harmoniser les règles fiscales et sociales des pays européens, c'est les rapprocher : par le haut, vers les plus protectrices ; par le bas, vers les moins exigeantes.",
+      "noExample": "E"
+    },
+    {
+      "id": "illettrisme",
+      "term": "illettrisme",
+      "plain": "L'illettrisme désigne la situation d'adultes qui sont allés à l'école mais ne maîtrisent pas assez la lecture et l'écriture pour la vie courante.",
+      "noExample": "E"
+    },
+    {
+      "id": "illectronisme",
+      "term": "illectronisme",
+      "plain": "L'illectronisme est la difficulté à se servir des outils numériques : ordinateur, Internet, démarches en ligne.",
+      "noExample": "E"
+    },
+    {
+      "id": "periscolaire",
+      "term": "périscolaire",
+      "aliases": ["périscolaires"],
+      "plain": "Le périscolaire regroupe les activités organisées autour des heures de classe : garderie, cantine, ateliers après l'école.",
+      "noExample": "E"
+    },
+    {
+      "id": "quantique",
+      "term": "quantique",
+      "aliases": ["quantiques"],
+      "plain": "La physique quantique étudie la matière à l'échelle des atomes ; elle ouvre des technologies nouvelles, comme les ordinateurs quantiques, qui calculent autrement.",
+      "noExample": "E"
+    },
+    {
+      "id": "segregation-socio-scolaire",
+      "term": "ségrégation socio-scolaire",
+      "plain": "La ségrégation socio-scolaire est le regroupement des élèves de milieux aisés et de milieux modestes dans des écoles différentes.",
+      "noExample": "E"
+    },
+    {
+      "id": "contractuels",
+      "term": "contractuels",
+      "aliases": ["contractuel"],
+      "plain": "Un contractuel est un agent public embauché par un contrat, sans le statut de fonctionnaire titulaire.",
+      "noExample": "E"
+    },
+    {
+      "id": "allophone",
+      "term": "allophones",
+      "aliases": ["allophone"],
+      "plain": "Une personne allophone a pour langue maternelle une autre langue que le français.",
+      "noExample": "E"
+    },
+    {
+      "id": "philanthropique",
+      "term": "philanthropiques",
+      "aliases": ["philanthropique"],
+      "plain": "Philanthropique se dit de ce qui agit pour le bien de l'humanité, souvent par des dons : une fondation philanthropique finance des causes d'intérêt général.",
+      "noExample": "E"
+    },
+    {
+      "id": "desamiantage",
+      "term": "désamiantage",
+      "plain": "Le désamiantage retire d'un bâtiment l'amiante, un matériau autrefois utilisé dans la construction, qui provoque des cancers.",
+      "noExample": "E"
+    },
+    {
+      "id": "redevance",
+      "term": "redevance",
+      "aliases": ["redevances"],
+      "plain": "Une redevance est une somme payée régulièrement pour utiliser un bien ou un service, par exemple des œuvres.",
+      "noExample": "E"
+    },
+    {
+      "id": "ia-generative",
+      "term": "intelligences artificielles génératives",
+      "aliases": ["intelligence artificielle générative"],
+      "plain": "Une intelligence artificielle générative produit des textes, des images ou des sons sur demande, à partir des données sur lesquelles elle a été entraînée.",
+      "noExample": "E"
+    },
+    {
+      "id": "multipropriete",
+      "term": "multipropriété",
+      "plain": "Dans le sport, la multipropriété est le fait, pour un même propriétaire, de posséder plusieurs clubs professionnels.",
+      "noExample": "E"
+    },
+    {
+      "id": "cts",
+      "term": "CTS",
+      "aliases": ["conseillers techniques sportifs", "conseillers techniques et sportifs"],
+      "plain": "Les CTS, conseillers techniques sportifs, sont des agents de l'État placés auprès des fédérations pour développer leur sport.",
+      "noExample": "E"
+    },
+    {
+      "id": "eps",
+      "term": "EPS",
+      "aliases": ["éducation physique et sportive"],
+      "plain": "L'EPS, éducation physique et sportive, est le sport enseigné à l'école.",
+      "noExample": "E"
+    },
+    {
+      "id": "chiffrement",
+      "term": "chiffrement",
+      "aliases": ["chiffrer"],
+      "plain": "Le chiffrement rend des messages ou des données illisibles pour qui n'a pas la clé, afin de les protéger.",
+      "noExample": "E"
+    },
+    {
+      "id": "microprocesseurs",
+      "term": "microprocesseurs",
+      "aliases": ["microprocesseur"],
+      "plain": "Un microprocesseur est la puce qui fait les calculs d'un ordinateur ou d'un téléphone ; une fonderie de microprocesseurs les fabrique.",
+      "noExample": "E"
+    },
+    {
+      "id": "discretionnaire",
+      "term": "discrétionnaire",
+      "plain": "Un pouvoir discrétionnaire laisse à celui qui l'exerce une large liberté de choix, dans les limites que fixe la loi.",
+      "noExample": "E"
+    },
+    {
+      "id": "big-data",
+      "term": "big data",
+      "plain": "Le big data désigne les masses énormes de données numériques et leur analyse par ordinateur.",
+      "noExample": "E"
+    },
+    {
+      "id": "biometrique",
+      "term": "identification biométrique",
+      "aliases": ["biométrique", "biométriques", "reconnaissance faciale"],
+      "plain": "L'identification biométrique reconnaît une personne par son corps : visage, empreintes, voix. La reconnaissance faciale en est une forme.",
+      "noExample": "E"
+    },
+    {
+      "id": "police-predictive",
+      "term": "police prédictive",
+      "plain": "La police prédictive utilise des logiciels qui analysent les délits passés pour prévoir les lieux et les moments où d'autres risquent d'avoir lieu.",
+      "noExample": "E"
+    },
+    {
+      "id": "flecher",
+      "term": "fléchant",
+      "aliases": ["flécher"],
+      "plain": "Flécher de l'argent, c'est le réserver à un usage précis.",
+      "noExample": "E"
+    },
+    {
+      "id": "snu",
+      "term": "SNU",
+      "aliases": ["service national universel"],
+      "plain": "Le SNU, service national universel, lancé en 2019, proposait aux jeunes un séjour collectif, en uniforme, et une mission d'intérêt général.",
+      "noExample": "E"
+    },
+    {
+      "id": "smv",
+      "term": "SMV",
+      "aliases": ["service militaire volontaire"],
+      "plain": "Le service militaire volontaire forme depuis 2015, dans les armées, des jeunes éloignés de l'emploi. Une loi de 2026 a aussi créé un volontariat de dix mois dans les armées.",
+      "noExample": "E"
+    },
+    {
+      "id": "ratifier",
+      "term": "ratifier",
+      "aliases": ["ratifie", "ratifié", "ratifiera"],
+      "plain": "Ratifier un traité, c'est l'approuver officiellement pour qu'il s'applique au pays.",
+      "noExample": "E"
+    },
+    {
+      "id": "constitutionnaliser",
+      "term": "constitutionnaliser",
+      "aliases": ["constitutionnalisation"],
+      "plain": "Constitutionnaliser un droit, c'est l'inscrire dans la Constitution.",
+      "noExample": "E"
+    },
+    {
+      "id": "dematerialisation",
+      "term": "dématérialisation",
+      "aliases": ["dématérialisé", "dématérialisés"],
+      "plain": "La dématérialisation remplace les papiers et les guichets par des démarches en ligne.",
+      "noExample": "E"
+    },
+    {
+      "id": "carte-scolaire",
+      "term": "carte scolaire",
+      "plain": "La carte scolaire affecte chaque élève à un collège ou à un lycée public selon son adresse.",
+      "noExample": "E"
+    },
+    {
+      "id": "prive-sous-contrat",
+      "term": "établissements privés sous contrat",
+      "aliases": ["établissement privé sous contrat", "sous contrat"],
+      "plain": "Un établissement privé sous contrat enseigne selon les règles de l'école publique, et l'État paie ses enseignants.",
+      "noExample": "E"
+    },
+    {
+      "id": "donnees-personnelles",
+      "term": "données personnelles",
+      "aliases": ["donnée personnelle"],
+      "plain": "Une donnée personnelle permet de reconnaître une personne : nom, adresse, photo, numéro de téléphone, historique en ligne.",
+      "noExample": "E"
+    },
+    {
+      "id": "neutralite-du-net",
+      "term": "neutralité du Net",
+      "plain": "La neutralité du Net oblige les fournisseurs d'accès à Internet à traiter de la même façon tous les contenus qui y circulent, sans en favoriser.",
+      "noExample": "E"
+    },
+    {
+      "id": "libertes-academiques",
+      "term": "libertés académiques",
+      "plain": "Les libertés académiques garantissent aux enseignants et aux chercheurs d'universités le droit d'enseigner et de chercher librement.",
+      "noExample": "E"
+    },
+    {
+      "id": "chronologie-des-medias",
+      "term": "chronologie des médias",
+      "plain": "La chronologie des médias fixe le délai avant qu'un film sorti au cinéma puisse passer en vidéo, sur une plateforme ou à la télévision.",
+      "noExample": "E"
+    },
+    {
+      "id": "pass-culture",
+      "term": "pass Culture",
+      "plain": "Le pass Culture est une somme versée par l'État aux jeunes pour des livres, des places de spectacle ou des cours d'art.",
+      "noExample": "E"
+    },
+    {
+      "id": "domaine-public",
+      "term": "domaine public",
+      "plain": "Une œuvre entre dans le domaine public soixante-dix ans après la mort de son auteur : chacun peut alors l'utiliser librement.",
+      "noExample": "D"
+    },
+    {
+      "id": "orbite-basse",
+      "term": "orbite basse",
+      "plain": "L'orbite basse est la zone de l'espace, à moins de 2 000 kilomètres d'altitude, où tournent la plupart des satellites.",
+      "noExample": "E"
+    },
+    {
+      "id": "donnees-ouvertes",
+      "term": "données ouvertes",
+      "plain": "Les données ouvertes sont des données publiques que chacun peut consulter et réutiliser librement.",
+      "noExample": "E"
+    },
+    {
+      "id": "taxe-d-apprentissage",
+      "term": "taxe d'apprentissage",
+      "plain": "La taxe d'apprentissage est payée par les entreprises pour financer l'apprentissage et les formations professionnelles.",
+      "noExample": "E"
+    },
+    {
+      "id": "enseignant-chercheur",
+      "term": "enseignant-chercheur",
+      "plain": "Un enseignant-chercheur partage son temps entre les cours à l'université et la recherche.",
+      "noExample": "E"
+    },
+    {
+      "id": "licence-professionnelle",
+      "term": "licences professionnelles",
+      "aliases": ["licence professionnelle"],
+      "plain": "La licence est le diplôme universitaire obtenu trois ans après le bac ; une licence professionnelle prépare directement à un métier.",
+      "noExample": "E"
+    },
+    {
+      "id": "roms",
+      "term": "Roms",
+      "aliases": ["Manouches", "Sinti", "Gitans", "Yéniches"],
+      "plain": "Les Roms, les Sinti, les Manouches et les Gitans forment un ensemble de peuples venus d'Inde en Europe au Moyen Âge ; les Yéniches sont d'origine européenne.",
+      "noExample": "S"
+    },
+    {
+      "id": "tirailleurs-senegalais",
+      "term": "tirailleurs sénégalais",
+      "plain": "Les tirailleurs sénégalais étaient des soldats des colonies d'Afrique. À Thiaroye, en 1944, l'armée française a tiré sur ceux qui réclamaient leur solde, parlant de mutinerie ; le bilan reste flou.",
+      "noExample": "S"
+    },
+    {
+      "id": "islamophobie",
+      "term": "islamophobie",
+      "aliases": ["islamophobe", "islamophobes"],
+      "plain": "L'islamophobie désigne l'hostilité envers l'islam et les musulmans. Certains contestent le mot, qui gêne selon eux la critique de la religion.",
+      "noExample": "S"
+    },
+    {
+      "id": "antisemitisme",
+      "term": "antisémitisme",
+      "aliases": ["antisémite", "antisémites"],
+      "plain": "L'antisémitisme est l'hostilité envers les Juifs.",
+      "noExample": "S"
+    },
+    {
+      "id": "intersexe",
+      "term": "intersexes",
+      "aliases": ["intersexe"],
+      "plain": "Une personne intersexe naît avec des caractères sexuels, du corps ou des chromosomes, qui ne correspondent pas aux définitions habituelles du masculin ou du féminin.",
+      "noExample": "S"
+    },
+    {
+      "id": "masculiniste",
+      "term": "masculinistes",
+      "aliases": ["masculiniste", "masculinisme"],
+      "plain": "Le masculinisme désigne des mouvements qui disent défendre la condition masculine ; leurs critiques, dont des rapports publics, y voient un courant antiféministe.",
+      "noExample": "S"
+    },
+    {
+      "id": "feminicide",
+      "term": "féminicides",
+      "aliases": ["féminicide"],
+      "plain": "Un féminicide est le meurtre d'une femme parce qu'elle est une femme, souvent par son conjoint. Le mot n'est pas dans le Code pénal, qui aggrave la peine d'un meurtre conjugal.",
+      "noExample": "S"
+    },
+    {
+      "id": "racise",
+      "term": "racisées",
+      "aliases": ["racisée"],
+      "plain": "Une personne racisée est, dans le vocabulaire des sciences sociales, une personne exposée au racisme à cause de l'origine qu'on lui prête. Le terme est discuté.",
+      "noExample": "S"
+    },
+    {
+      "id": "reactionnaire",
+      "term": "réactionnaire",
+      "aliases": ["réactionnaires"],
+      "plain": "Réactionnaire se dit de ce qui veut revenir à un ordre social ancien. Le mot est souvent polémique.",
+      "noExample": "E"
+    },
+    {
+      "id": "loi-separatisme",
+      "term": "séparatisme",
+      "plain": "La loi de 2021 confortant le respect des principes de la République, dite contre le séparatisme, renforce le contrôle des associations, des cultes et de l'instruction en famille.",
+      "noExample": "E"
+    },
+    {
+      "id": "liberticide",
+      "term": "liberticides",
+      "aliases": ["liberticide"],
+      "plain": "Liberticide se dit de ce qui détruit ou réduit les libertés. Le mot est critique.",
+      "noExample": "E"
+    },
+    {
+      "id": "correctionnalisation",
+      "term": "correctionnalisation",
+      "plain": "La correctionnalisation d'un viol consiste à le poursuivre comme une faute moins grave, par exemple une agression sexuelle, jugée au tribunal des délits, et non comme un crime.",
+      "noExample": "E"
+    },
+    {
+      "id": "tribunal-correctionnel",
+      "term": "tribunaux correctionnels",
+      "aliases": ["tribunal correctionnel"],
+      "plain": "Le tribunal correctionnel juge les délits ; les crimes sont jugés par une cour criminelle ou par une cour d'assises.",
+      "noExample": "E"
+    },
+    {
+      "id": "delits",
+      "term": "délits",
+      "aliases": ["délit", "contraventions", "contravention"],
+      "plain": "Le droit classe les fautes qu'il punit en trois : les contraventions, comme un stationnement interdit ; les délits, comme un vol ; les crimes, les plus graves, comme un meurtre.",
+      "noExample": "E"
+    },
+    {
+      "id": "letal",
+      "term": "létales",
+      "aliases": ["létale", "létal", "létaux"],
+      "plain": "Une arme létale est une arme qui peut tuer : létal veut dire mortel.",
+      "noExample": "E"
+    },
+    {
+      "id": "beau-parent",
+      "term": "beau-parent",
+      "plain": "Un beau-parent est le conjoint du père ou de la mère d'un enfant, sans être son parent légal.",
+      "noExample": "E"
+    },
+    {
+      "id": "filiation",
+      "term": "filiation",
+      "plain": "La filiation est le lien juridique entre un enfant et ses parents. Elle s'établit notamment par la naissance, le mariage, la reconnaissance du parent, l'adoption ou une décision de justice.",
+      "noExample": "E"
+    },
+    {
+      "id": "ciivise",
+      "term": "Ciivise",
+      "aliases": ["Commission indépendante sur l'inceste"],
+      "plain": "La Ciivise, commission indépendante sur l'inceste et les violences sexuelles faites aux enfants, a été créée en 2021 pour recueillir la parole des victimes et faire des recommandations.",
+      "noExample": "E"
+    },
+    {
+      "id": "non-denonciation",
+      "term": "non-dénonciation",
+      "plain": "Le délit de non-dénonciation punit celui qui, ayant connaissance de mauvais traitements ou d'atteintes sexuelles sur un mineur ou une personne vulnérable, n'en informe pas les autorités.",
+      "noExample": "E"
+    },
+    {
+      "id": "attestation-d-honorabilite",
+      "term": "attestation d'honorabilité",
+      "plain": "L'attestation d'honorabilité prouve qu'une personne qui travaille auprès d'enfants n'a pas été condamnée pour certaines infractions.",
+      "noExample": "E"
+    },
+    {
+      "id": "violences-obstetricales",
+      "term": "violences obstétricales",
+      "aliases": [
+        "violences gynécologiques et obstétricales",
+        "violences obstétricales et gynécologiques"
+      ],
+      "plain": "On appelle violences obstétricales et gynécologiques des actes ou paroles qui blessent ou humilient une patiente lors d'un examen ou d'un accouchement ; des soignants contestent l'expression.",
+      "noExample": "E"
+    },
+    {
+      "id": "perinatalite",
+      "term": "périnatalité",
+      "plain": "La périnatalité est la période qui entoure la naissance, de la grossesse aux premiers mois du bébé ; ses limites varient selon les définitions.",
+      "noExample": "E"
+    },
+    {
+      "id": "recepisse",
+      "term": "récépissé",
+      "aliases": ["récépissés"],
+      "plain": "Le récépissé de contrôle d'identité est un reçu remis à la personne contrôlée, qui dit qui l'a contrôlée, quand et pourquoi. D'autres pays en délivrent ; la France, non.",
+      "noExample": "E"
+    },
+    {
+      "id": "controle-au-facies",
+      "term": "contrôle au faciès",
+      "aliases": ["contrôles au faciès"],
+      "plain": "Un contrôle au faciès est un contrôle d'identité décidé à cause de l'apparence d'une personne, comme sa couleur de peau.",
+      "noExample": "E"
+    },
+    {
+      "id": "blanchiment",
+      "term": "blanchiment",
+      "plain": "Le blanchiment consiste à faire passer de l'argent gagné illégalement pour de l'argent propre, par des placements ou des sociétés écrans.",
+      "noExample": "E"
+    },
+    {
+      "id": "taser",
+      "term": "tasers",
+      "aliases": ["taser", "pistolets à impulsion électrique", "pistolet à impulsion électrique"],
+      "plain": "Un taser est un pistolet à impulsion électrique, qui paralyse un moment la personne touchée.",
+      "noExample": "E"
+    },
+    {
+      "id": "desencerclement",
+      "term": "grenades de désencerclement",
+      "aliases": ["grenade de désencerclement"],
+      "plain": "Une grenade de désencerclement, dite à éclats non létaux, projette en explosant des palets de caoutchouc ; elle sert à dégager des policiers encerclés et peut blesser gravement.",
+      "noExample": "E"
+    },
+    {
+      "id": "nasse",
+      "term": "nasse",
+      "plain": "La nasse est une technique de maintien de l'ordre qui consiste à encercler des manifestants pour les empêcher de partir.",
+      "noExample": "E"
+    },
+    {
+      "id": "refus-d-obtemperer",
+      "term": "refus d'obtempérer",
+      "plain": "Il y a refus d'obtempérer quand un conducteur ne s'arrête pas à l'ordre d'un policier ou d'un gendarme.",
+      "noExample": "E"
+    },
+    {
+      "id": "loi-cazeneuve",
+      "term": "loi dite Cazeneuve",
+      "plain": "La loi de 2017 dite Cazeneuve, du nom du Premier ministre d'alors, fixe aux policiers et aux gendarmes un cadre commun pour l'usage de leurs armes.",
+      "noExample": "E"
+    },
+    {
+      "id": "presomption-de-legitime-defense",
+      "term": "présomption de légitime défense",
+      "plain": "Avec une présomption de légitime défense, qui a tiré est tenu pour s'être défendu, sauf preuve contraire. La loi la prévoit dans quelques cas, comme une intrusion de nuit, pas pour la police.",
+      "noExample": "E"
+    },
+    {
+      "id": "plaquage-ventral",
+      "term": "plaquage ventral",
+      "aliases": ["pliage ventral", "clé d'étranglement"],
+      "plain": "Le plaquage ventral et le pliage ventral maintiennent une personne au sol, sur le ventre ; la clé d'étranglement, abandonnée depuis 2020, serre le cou. Ces gestes peuvent asphyxier la personne.",
+      "noExample": "E"
+    },
+    {
+      "id": "technopolice",
+      "term": "technopolice",
+      "plain": "Technopolice est un nom critique pour les outils de surveillance policière par la technologie : caméras intelligentes, reconnaissance faciale, drones.",
+      "noExample": "E"
+    },
+    {
+      "id": "carceral",
+      "term": "carcéral",
+      "aliases": ["carcérale"],
+      "plain": "Carcéral se dit de ce qui concerne la prison. La surpopulation carcérale, c'est plus de détenus que de places.",
+      "noExample": "E"
+    },
+    {
+      "id": "victimisation-secondaire",
+      "term": "victimisation secondaire",
+      "plain": "La victimisation secondaire est la souffrance de plus qu'une victime subit à cause de la façon dont l'enquête ou le procès la traite.",
+      "noExample": "E"
+    },
+    {
+      "id": "greffiers",
+      "term": "greffiers",
+      "aliases": ["greffier"],
+      "plain": "Le greffier assiste les juges : il tient les dossiers, note ce qui se dit à l'audience et authentifie les décisions.",
+      "noExample": "E"
+    },
+    {
+      "id": "dejudiciariser",
+      "term": "déjudiciariser",
+      "plain": "Déjudiciariser une démarche, c'est la retirer aux tribunaux pour la confier à l'administration, à un notaire ou à un médiateur.",
+      "noExample": "E"
+    },
+    {
+      "id": "desinstitutionnalisation",
+      "term": "désinstitutionnalisation",
+      "aliases": ["désinstitutionnaliser"],
+      "plain": "La désinstitutionnalisation vise à ce que des personnes handicapées vivent chez elles, avec de l'aide, plutôt qu'en établissement. L'ONU la recommande ; des familles s'en inquiètent.",
+      "noExample": "E"
+    },
+    {
+      "id": "lsf",
+      "term": "LSF",
+      "aliases": ["langue des signes française"],
+      "plain": "La LSF, langue des signes française, est la langue gestuelle des personnes sourdes en France.",
+      "noExample": "E"
+    },
+    {
+      "id": "homoparentale",
+      "term": "homoparentales",
+      "aliases": ["homoparentale"],
+      "plain": "Une famille homoparentale compte au moins un parent homosexuel ; souvent, deux parents du même sexe.",
+      "noExample": "E"
+    },
+    {
+      "id": "deconjugaliser",
+      "term": "déconjugaliser",
+      "aliases": ["déconjugalisée"],
+      "plain": "Déconjugaliser une aide, c'est ne plus la faire dépendre de la vie en couple de celui qui la reçoit.",
+      "noExample": "E"
+    },
+    {
+      "id": "defiscaliser",
+      "term": "défiscaliser",
+      "aliases": ["défiscalisées"],
+      "plain": "Défiscaliser une somme, c'est la faire échapper légalement, en tout ou en partie, à l'impôt.",
+      "noExample": "E"
+    },
+    {
+      "id": "systemique",
+      "term": "systémiques",
+      "aliases": ["systémique"],
+      "plain": "Systémique se dit d'un phénomène produit par le fonctionnement d'ensemble d'une société, et pas seulement par quelques personnes.",
+      "noExample": "E"
+    },
+    {
+      "id": "effectivite",
+      "term": "effectivité",
+      "plain": "L'effectivité d'un droit est le fait qu'il s'applique réellement, et pas seulement sur le papier.",
+      "noExample": "E"
+    },
+    {
+      "id": "sine-qua-non",
+      "term": "sine qua non",
+      "plain": "Une condition sine qua non est une condition indispensable.",
+      "noExample": "E"
+    },
+    {
+      "id": "procureur",
+      "term": "procureurs",
+      "aliases": ["procureur"],
+      "plain": "Le procureur dirige les enquêtes et décide des poursuites ; au procès, il défend l'intérêt de la société.",
+      "noExample": "E"
+    },
+    {
+      "id": "juge-d-instruction",
+      "term": "juges d'instruction",
+      "aliases": ["juge d'instruction"],
+      "plain": "Le juge d'instruction mène l'enquête dans les affaires graves ou complexes, et décide s'il y a lieu de renvoyer devant un tribunal.",
+      "noExample": "E"
+    },
+    {
+      "id": "cour-d-assises",
+      "term": "cour d'assises",
+      "aliases": ["cours d'assises"],
+      "plain": "La cour d'assises juge les crimes les plus graves, avec des jurés tirés au sort ; depuis 2023, d'autres crimes sont jugés par des cours criminelles, sans jurés.",
+      "noExample": "E"
+    },
+    {
+      "id": "identite-de-genre",
+      "term": "identité de genre",
+      "plain": "L'identité de genre est le genre auquel une personne se sent appartenir, femme, homme ou autre, qui peut différer de celui noté à sa naissance.",
+      "noExample": "S"
+    },
+    {
+      "id": "orientation-sexuelle",
+      "term": "orientation sexuelle",
+      "plain": "L'orientation sexuelle désigne le sexe des personnes qui attirent quelqu'un : du sexe opposé, du même sexe, ou des deux.",
+      "noExample": "S"
+    },
+    {
+      "id": "contrat-d-engagement-republicain",
+      "term": "contrat d'engagement républicain",
+      "plain": "Le contrat d'engagement républicain, créé en 2021, oblige les associations qui demandent une subvention ou un agrément à respecter les principes de la République.",
+      "noExample": "E"
+    },
+    {
+      "id": "iut",
+      "term": "IUT",
+      "aliases": [
+        "instituts universitaires de technologie",
+        "institut universitaire de technologie"
+      ],
+      "plain": "Un IUT, institut universitaire de technologie, est une école de l'université qui forme en trois ans aux métiers techniques.",
+      "noExample": "E"
+    },
+    {
+      "id": "transhumanisme",
+      "term": "transhumanisme",
+      "plain": "Le transhumanisme veut améliorer l'être humain par la technique : prolonger la vie, augmenter le corps et l'esprit.",
       "noExample": "E"
     }
   ]
