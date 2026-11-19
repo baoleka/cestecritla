@@ -28,17 +28,19 @@
 
 ## 2. Comment les mots ont été trouvés, et l'accord des juges
 
-5 436 racines dans le livre, nos 1 069 phrases et nos textes ; 4 087 que le site montre. Deux
-juges à part — la session, et un autre modèle sur la seule liste : **accord 86,4 %** sur « à
-expliquer ». La session a lu le livre entier, chapitre par chapitre. 1 714 candidats, 1 620
-gardés par une règle écrite avant d'en écrire aucun. Aujourd'hui : 635 racines publiques jugées
-difficiles, toutes tenues par une entrée ou une carte ; 3 988 claires ; 243 à surveiller ; 126
-noms.
+Au relevé (lot 9) : 5 436 racines dans le livre, nos 1 069 phrases et nos textes, dont 4 087
+que le site montrait. Deux juges à part — la session, et un autre modèle sur la seule liste des
+racines de l'index : **accord 86,4 %** sur « à expliquer ». La session a lu le livre entier,
+chapitre par chapitre. 1 714 candidats, 1 620 gardés par une règle écrite avant d'en écrire
+aucun. Aujourd'hui, nos textes ayant grandi (933 explications, 103 exemples, 15 cartes), le site
+montre **4 992 racines** : 635 jugées difficiles, toutes tenues par une entrée ou une carte ;
+3 988 claires ; 243 à surveiller ; 126 noms.
 
 ## 3. La couverture, avant et après
 
-- Avant l'écriture des domaines 4 à 8 : **387 racines difficiles** du livre n'étaient tenues par
-  aucune entrée ; après, **0**.
+- Avant l'écriture des domaines 4 à 8 : **387 racines difficiles** que le livre, nos phrases ou
+  nos textes employaient hors de toute entrée ; **4** après — quatre cartes courtes les tiennent
+  depuis le lot 12 ; aujourd'hui, **0**.
 - **Attestation du livre entier** (1 360 unités, prose comprise, et nos 1 069 phrases) : **666
   racines difficiles, aucune occurrence hors d'une entrée ou d'une carte** (`meta.attested`).
 - **Graphe** : aucune explication ne s'appuie sur un mot à plus de deux pas ; aucune ne tourne
@@ -48,7 +50,7 @@ noms.
 
 Voir `19-mots-expliques.md` §5. En bref : un modèle autre que celui qui écrit, avec le web,
 sur des sources primaires seulement ; **de 67 à 90 % de « ok » au premier passage** selon les
-domaines, puis des reprises jusqu'à **aucun faux, aucun daté, aucun orienté, aucun exemple
+domaines (41 sur 42 pour les exemples ajoutés), puis des reprises jusqu'à **aucun faux, aucun daté, aucun orienté, aucun exemple
 fautif** ; les invérifiables et les imprécisions mineures levés par écrit, chacun nommé, sous
 les 5 % que le plan permet. Les faits que la session n'avait pas, ou mal, et que les
 vérificateurs ont trouvés, sont au journal (la loi Cazeneuve, le récépissé, le Fonds de réserve
@@ -63,14 +65,22 @@ Sans exemple, une phrase d'identification, lue par deux lecteurs hostiles, un de
 
 ## 6. Le panel — HYPOTHÈSE (des modèles, pas des lycéens)
 
-Cinq lecteurs simulés par pièce (trois « lycéens », un adulte, un lecteur méfiant), modèles
-mêlés, hors du dépôt : **les réponses d'application justes, de 25 à 30 sur 30 aux premiers
-tours, puis 30 sur 30**, 50 sur 50 pour les exemples ajoutés ; personne ne s'est dit « pris de
-haut » ; chaque mot qu'au moins deux « lycéens » sur trois ne savaient pas expliquer a été
-réécrit ou expliqué. Treize lecteurs à l'aveugle (les sept personas et six sans fiche), sur tout
-le site : douze trouvent le programme plus facile à explorer, aucun plus difficile ; tous lisent
-l'exemple comme un cas inventé ; **presque tous font moins confiance à « vérifiées par une IA »**
-(« une IA qui se vérifie elle-même ») — R62 ; l'étiquette reste, elle dit vrai.
+Cinq lecteurs simulés par pièce — trois « lycéens » (seconde générale, seconde professionnelle,
+terminale), un adulte, un lecteur méfiant —, modèles mêlés, hors du dépôt. **Réponses
+d'application justes** : 60 sur 60 à l'étalonnage ; de 25 à 30 sur 30 par tour dans les
+domaines ; 79 sur 80, puis deux fois 40 sur 40, à la troisième vérification ; 50 sur 50 pour les
+exemples ajoutés. **Dans aucun panel un lecteur ne s'est dit « pris de haut ».** Chaque mot que
+deux des trois « lycéens » au moins recopiaient comme inexpliqué a été réécrit, ou était déjà
+expliqué ailleurs sur le site ; les reprises du dernier tour n'ont pas été relues par un panel.
+
+**Treize lecteurs à l'aveugle** (les sept personas et six sans fiche), sur tout le site : douze
+trouvent le programme plus facile à explorer, aucun plus difficile ; les treize lisent l'exemple
+comme un cas inventé ; **« ça prend de haut » : aucun « oui », cinq « un peu »** ; **presque tous
+font moins confiance à « vérifiées par une IA »** (« une IA qui se vérifie elle-même ») — R62 ;
+l'étiquette reste, elle dit vrai. Sur la carte du jeu, aucun des treize ne préfère la carte sans
+la ligne des mots, et aucune persona n'a moins envie de jouer. Ces lecteurs étaient lancés hors
+du dépôt, mais l'outil joint d'office l'adresse du compte à leur contexte : plusieurs l'ont dit ;
+aucun n'a rien reçu sur le site.
 
 ## 7. Un échantillon (tiré d'une graine prise au sceau)
 

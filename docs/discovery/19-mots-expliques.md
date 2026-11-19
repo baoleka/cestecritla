@@ -28,7 +28,7 @@ arrivent par script avec leur étiquette, « Explications écrites et vérifiée
 ## 2. « Aucun mot ne bloque », en quatre propriétés (D20.8)
 
 1. **Chaque racine que le site montre est jugée** : claire, à expliquer, à surveiller, ou nom
-   (`data/2026/vocabulary.json`). **MESURÉ** : 5 123 racines — 3 988 claires, 635 à
+   (`data/2026/vocabulary.json`). **MESURÉ** : 4 992 racines — 3 988 claires, 635 à
    expliquer, 243 à surveiller, 126 noms. Porte de la CI.
 2. **Chaque occurrence d'une racine à expliquer est dans l'étendue d'un mot expliqué ou d'une
    carte.** Porte de la CI pour nos textes ; **attestée en local** pour le livre entier (1 360
