@@ -260,15 +260,16 @@ void test('a site that answers no question ships nothing of the sheet: not a scr
   // (scripts/build-mode.ts, `builtAskMode`). While that mode is "off" the home page does not
   // even import the sheet (astro.config.ts, `__CEL_CHAT__`).
   if (builtAskMode() === 'chat') return;
+  // …nor anything of the explained words: they follow the mode of the site (D20.11).
   assert.deepEqual(
-    files.filter((f) => /\/_astro\/chat\.|\/data\/clair-/.test(f)),
+    files.filter((f) => /\/_astro\/(?:chat|words)\.|\/data\/(?:clair|mots)-/.test(f)),
     [],
     'the script or the texts of the sheet are in dist/',
   );
   for (const file of textFiles.filter((f) => /\.(?:html|js)$/.test(f))) {
     assert.doesNotMatch(
       read(file),
-      /api\/chat|api\/gists|chat-sheet|chat-config|chat-offer|c-offer/,
+      /api\/chat|api\/gists|chat-sheet|chat-config|chat-offer|c-offer|data-words/,
       `${relative('dist', file)} carries a piece of the sheet`,
     );
   }
@@ -324,10 +325,10 @@ void test('the script of the sheet is small, and fetched at the first press — 
   // weighs 1.6 KB, and it is the one that closes what five lists of words did not. So: 16 KB,
   // said plainly (D16.70) — the script is fetched at the first press, never with the page; the
   // lists of words are data, fetched with the texts of the sheet, and only the ways of reading
-  // a question are code. It stays a ceiling, and less than 0.2 KB is left under it: the
-  // titles, the faces and the small words of people left the code for the data on 15/11
-  // (D16.72, D16.73), which paid for the rules of those passes; the next rule comes in the
-  // same way.
+  // a question are code. It stays a ceiling: the titles, the faces and the small words of
+  // people left the code for the data on 15/11 (D16.72, D16.73), which paid for the rules of
+  // those passes; the next rule comes in the same way. On 19/11/2026 the reading of the
+  // explained words left it for a module of its own (PLAN-MOTS, lot 1, test below): 15.2 KB.
   const budget = 16 * 1024;
   assert.ok(gz <= budget, `the sheet's script: ${String(gz)} B gzip > ${String(budget)} B`);
   console.log(`  sheet script: ${String(gz)} B gzip of ${String(budget)} B`);
@@ -340,6 +341,31 @@ void test('the script of the sheet is small, and fetched at the first press — 
   const importers = walk('dist-ask/_astro').filter((f) => f !== script && read(f).includes(name));
   assert.equal(importers.length, 1, importers.join(', '));
   assert.match(importers[0] ?? '', /Search\.astro/);
+});
+
+void test('the explained words are a module of their own, asked for by the sheet’s script and named by no page', () => {
+  const found = walk('dist-ask/_astro').filter((f) => /\/words\.[^/]+\.js$/.test(f));
+  if (found.length === 0) {
+    console.log('  (skipped: no dist-ask/ — run `npm run build:ask` first)');
+    return;
+  }
+  assert.equal(found.length, 1, 'one module for the explained words');
+  const [script = ''] = found;
+  const gz = gzipSync(readFileSync(script), { level: 9 }).byteLength;
+  // PLAN-MOTS, lot 1 (19/11/2026): how the terms are found and drawn left the sheet's script,
+  // which asks for this module as soon as it runs. Measured then: 1 536 B. Its ceiling is set
+  // in lot 3 (D20.12: its measure plus a fifth), once it also fetches the texts on demand;
+  // until then, a provisional one.
+  const budget = 2 * 1024;
+  assert.ok(gz <= budget, `the explained words: ${String(gz)} B gzip > ${String(budget)} B`);
+  console.log(`  explained words: ${String(gz)} B gzip of ${String(budget)} B`);
+  const name = script.slice(script.lastIndexOf('/') + 1);
+  for (const page of walk('dist-ask').filter((f) => f.endsWith('.html'))) {
+    assert.ok(!read(page).includes(name), `${relative('dist-ask', page)} names ${name}`);
+  }
+  const importers = walk('dist-ask/_astro').filter((f) => f !== script && read(f).includes(name));
+  assert.equal(importers.length, 1, importers.join(', '));
+  assert.match(importers[0] ?? '', /\/chat\.[^/]+\.js$/);
 });
 
 void test('the sheet is told, for each of our fifteen answers, the measures it rests on', () => {

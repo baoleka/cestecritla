@@ -14,7 +14,8 @@
  *      on the phone, in a file fetched whole with the sheet, and shown with a short explanation
  *      written ahead — general knowledge, labelled as written by an AI; nothing is sent. A
  *      question that asks what a word means gets it first, open; the others come under the
- *      measures, closed;
+ *      measures, closed. Finding and drawing them is a module of its own (src/scripts/words.ts),
+ *      asked for as soon as this script runs;
  *   6. only then, only if the Worker says a model may be asked, only once the visitor pressed
  *      « Expliquer avec l'IA »: /api/chat is sent the measures whose sentence is on the screen
  *      and the words of those sentences that the question uses — NEVER THE QUESTION (D16.53) —
@@ -48,7 +49,7 @@ import {
   type Turn,
 } from '../lib/chat-view.ts';
 import { recognise } from '../lib/notions.ts';
-import { explainedFor, type Explained } from '../lib/terms.ts';
+import type { Explained } from '../lib/terms.ts';
 import { formatReopenTimeFr } from '../lib/silence.ts';
 import { enhanceOfficialLinks } from './deep-links.ts';
 import {
@@ -62,6 +63,7 @@ import {
   type Engine,
 } from './engine.ts';
 import { silenceReading } from './silence-now.ts';
+import type * as Explainer from './words.ts';
 
 interface Config {
   corpus: string;
@@ -153,6 +155,16 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
   let found: Engine | null = null;
   let plain: ChatPlain | null = null;
   /**
+   * The explained words — how they are found and drawn — in a module of their own (PLAN-MOTS,
+   * lot 1): asked for now, so that it is there with the texts of the first question. Its
+   * address is the same for everyone. Without it, no word is explained, and nothing says so.
+   */
+  let explainer: typeof Explainer | null = null;
+  const explainerReady = import('./words.ts').then(
+    (loaded) => (explainer = loaded),
+    () => null,
+  );
+  /**
    * The explained words a visitor opened or closed, by turn and by term: a turn is drawn again
    * when the thread moves on, and it must come back as it was left. In memory, like the rest.
    */
@@ -238,6 +250,7 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
    * visitor opened or closed stays so when the turn is drawn again.
    */
   const words = (
+    kit: typeof Explainer,
     title: string,
     list: readonly Explained[],
     index: number,
@@ -247,13 +260,11 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     const part = block(title, s.termsBadge, className);
     for (const { entry } of list) {
       const key = `${String(index)}:${entry.id}`;
-      const item = el('details', undefined, 'c-term');
-      item.open = toggled.get(key) ?? open;
-      item.append(el('summary', set(entry.term)), written(entry.plain));
-      item.addEventListener('toggle', () => {
-        toggled.set(key, item.open);
-      });
-      part.append(item);
+      part.append(
+        kit.wordItem(entry.term, entry.plain, toggled.get(key) ?? open, (isOpen) => {
+          toggled.set(key, isOpen);
+        }),
+      );
     }
     return part;
   };
@@ -325,15 +336,16 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
 
     // The explained words: the acronyms and technical terms of the question and of the
     // sentences on the screen. Found here, on the phone — nothing is sent to find a word.
+    const kit = explainer;
     const explained =
-      view.wording === null || plain === null
+      view.wording === null || plain === null || kit === null
         ? []
-        : explainedFor(view.wording.question, view.wording.sentences ?? [], plain.terms);
+        : kit.explain(view.wording.question, view.wording.sentences ?? [], plain.terms);
     // A question that asks what a word means gets that word first, open: it is what was asked.
     // It depends on the question alone, so it is there from the first paint and moves nothing.
     const named = explained.filter((e) => e.top);
-    if (named.length > 0) {
-      node.append(words(s.askedTitle, named, index, 'c-terms c-asked', true));
+    if (kit !== null && named.length > 0) {
+      node.append(words(kit, s.askedTitle, named, index, 'c-terms c-asked', true));
     }
 
     const { measures } = view;
@@ -404,7 +416,9 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     // the sentences are all there: a block that grew would move what is being read.
     const shown = view.wording?.sentences ?? null;
     const others = shown === null ? [] : explained.filter((e) => !e.top);
-    if (others.length > 0) node.append(words(s.termsTitle, others, index, 'c-terms', false));
+    if (kit !== null && others.length > 0) {
+      node.append(words(kit, s.termsTitle, others, index, 'c-terms', false));
+    }
 
     if (view.ai !== null && explains) {
       // While the AI is only offered, the block says what is offered; then, what it holds.
@@ -642,7 +656,7 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     // The new question goes to the top of what scrolls: its answer builds under it. Only the
     // thread is moved — `scrollIntoView` would move the sheet and the page behind it too.
     scroller.scrollTop = nodes[index]?.offsetTop ?? 0;
-    const [loaded] = await Promise.all([engine(), texts()]);
+    const [loaded] = await Promise.all([engine(), texts(), explainerReady]);
     const turn = turns[index];
     if (asked !== epoch || turn === undefined) return;
     // A recognised objection shows the measures its written answer rests on; any other

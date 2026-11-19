@@ -284,3 +284,12 @@ Rien de servi n'a changé.
 - **Ce que l'exécution a établi, et qui n'était écrit nulle part** : le `$meta` de `design/strings.json` change sans changer un seul fichier servi — la build ne publie que les chaînes.
 
 Rien de servi n'a changé.
+
+### Lot 1, au 19 novembre 2026 (après-midi) — les mots sortent du script de la feuille
+
+- **Deux modules neufs** : `src/scripts/words-view.ts` dessine un mot (son propre `el`, `written`, `wordItem` ; il n'importe rien de `engine.ts`, pour qu'une page qui n'explique que des mots n'emporte jamais le moteur de recherche) ; `src/scripts/words.ts` lit les mots d'un tour (`explain`, autour de `explainedFor`) et redonne `wordItem`. `src/scripts/chat.ts` n'importe plus `terms.ts` que pour un type : il demande `./words.ts` dès qu'il s'exécute, et l'attend dans `ask()` avec le moteur et les textes de la feuille. Sans ce module, aucun mot n'est expliqué, et rien ne le dit.
+- **MESURÉ** (`dist-ask/`, gzip niveau 9) : le script de la feuille passe de 16 171 à **15 211 octets** (sous 16 384) ; le module des mots pèse **1 536 octets**, sous un plafond provisoire de 2 Kio que le lot 3 remplacera (D20.12 : sa mesure plus un cinquième).
+- **Portes** : `scripts/check-build.test.ts` — un test neuf (le module des mots est un fichier à lui, que seul le script de la feuille nomme, et aucune page) ; en mode « off », ni `/_astro/words`, ni `/data/mots-`, ni `data-words` ; `scripts/e2e.ts` : en mode « off », le module des mots n'est jamais demandé. **`scripts/e2e-sheet.ts` passe sans avoir été touché** (102, 96 et 96 contrôles) : c'est la preuve que le découpage ne change rien à ce que la feuille montre. Toute la batterie : 656 tests (655 bons, un sauté), a11y, e2e, feuille, jeu (319, 283, 283) — aucun échec.
+- **Ce qui a changé dans les builds** : `dist-scrutin/` est identique à l'octet ; `dist/`, `dist-ask/` et `dist-gists/` diffèrent de neuf lignes chacun, toutes attendues — le script de la feuille et celui de la recherche changent de nom (le second nomme le premier), le module des mots s'ajoute, et les deux pages qui nomment le script de la recherche (l'accueil, le sommaire) changent avec lui.
+
+Rien de servi n'a changé : `main` n'est pas déployé.

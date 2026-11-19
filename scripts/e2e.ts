@@ -571,8 +571,8 @@ async function runEngine(
         (await page.locator('#chat-sheet, #chat-config').count()) === 0,
       );
       check(
-        'mode "off": the script of « Demander » is never fetched',
-        !requested.some((url) => /\/_astro\/(?:ask|chat)\./.test(url)),
+        'mode "off": the script of « Demander » is never fetched, nor that of its words',
+        !requested.some((url) => /\/_astro\/(?:ask|chat|words)\./.test(url)),
       );
       check(
         'mode "off": the page says the search is local, and names no AI',
