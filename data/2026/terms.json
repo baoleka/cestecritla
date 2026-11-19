@@ -513,78 +513,100 @@
       "id": "smic",
       "term": "SMIC",
       "anyCase": true,
-      "plain": "Le SMIC est le salaire minimum légal en France."
+      "plain": "Le SMIC est le salaire minimum légal en France. Il est revalorisé au moins une fois par an.",
+      "noExample": "E"
     },
     {
       "id": "rsa",
       "term": "RSA",
       "aliases": ["revenu de solidarité active"],
       "anyCase": true,
-      "plain": "Le RSA, revenu de solidarité active, est versé sous conditions aux personnes qui ont peu ou pas de revenus."
+      "plain": "Le RSA, revenu de solidarité active, est versé sous conditions aux personnes qui ont peu ou pas de revenus.",
+      "noExample": "E"
     },
     {
       "id": "ass",
       "term": "ASS",
-      "plain": "L'ASS, allocation de solidarité spécifique, est versée sous conditions de ressources à des chômeurs qui n'ont plus droit à l'allocation chômage."
+      "aliases": ["allocation de solidarité spécifique"],
+      "plain": "L'ASS, allocation de solidarité spécifique, est versée sous conditions de ressources à des chômeurs qui n'ont plus droit à l'allocation chômage.",
+      "noExample": "E"
     },
     {
       "id": "aah",
       "term": "AAH",
-      "plain": "L'AAH est l'allocation aux adultes handicapés. Elle assure un revenu minimum aux personnes en situation de handicap."
+      "aliases": ["allocation aux adultes handicapés"],
+      "plain": "L'AAH est l'allocation aux adultes handicapés. Elle assure un revenu minimum aux personnes en situation de handicap.",
+      "noExample": "E"
     },
     {
       "id": "apl",
       "term": "APL",
+      "aliases": [
+        "aides personnalisées au logement",
+        "aides pour le logement",
+        "aides au logement"
+      ],
       "anyCase": true,
-      "plain": "Les APL, aides personnalisées au logement, réduisent le loyer de locataires aux revenus modestes."
+      "plain": "Les APL, aides personnalisées au logement, réduisent le loyer de locataires aux revenus modestes.",
+      "noExample": "E"
     },
     {
       "id": "asf",
       "term": "ASF",
-      "plain": "L'ASF, allocation de soutien familial, est versée pour un enfant privé de l'aide d'un de ses parents ou des deux. Elle sert par exemple quand une pension alimentaire n'est pas payée."
+      "aliases": ["allocation de soutien familial"],
+      "plain": "L'ASF, allocation de soutien familial, est versée pour un enfant privé de l'aide d'un de ses parents ou des deux. Elle sert par exemple quand une pension alimentaire n'est pas payée.",
+      "noExample": "E"
     },
     {
       "id": "minima-sociaux",
       "term": "minima sociaux",
-      "plain": "Les minima sociaux sont les aides qui garantissent un revenu minimum, comme le RSA."
+      "plain": "Les minima sociaux sont les aides qui garantissent un revenu minimum, comme le RSA.",
+      "noExample": "E"
     },
     {
       "id": "seuil-de-pauvrete",
       "term": "seuil de pauvreté",
-      "plain": "Le seuil de pauvreté est le niveau de vie sous lequel une personne est comptée comme pauvre. En France, on retient le plus souvent 60 % du niveau de vie médian."
+      "plain": "Le seuil de pauvreté est le niveau de vie sous lequel une personne est comptée comme pauvre. En France, on retient le plus souvent 60 % du niveau de vie médian.",
+      "example": "Si le niveau de vie médian est de 2 000 euros par mois, le seuil à 60 % est de 1 200 euros."
     },
     {
       "id": "non-recours",
       "term": "non-recours",
-      "plain": "Le non-recours, c'est quand une personne ne demande pas une aide à laquelle elle a droit."
+      "plain": "Le non-recours, c'est quand une personne ne demande pas une aide à laquelle elle a droit.",
+      "example": "Une personne a droit au RSA. Elle ne dépose pas de dossier, faute de savoir qu'elle y a droit."
     },
     {
       "id": "cdd",
       "term": "CDD",
       "anyCase": true,
-      "plain": "Un CDD est un contrat de travail à durée déterminée : il a une date de fin."
+      "plain": "Un CDD est un contrat de travail à durée déterminée : il a une date de fin.",
+      "noExample": "E"
     },
     {
       "id": "cdi",
       "term": "CDI",
       "anyCase": true,
-      "plain": "Un CDI est un contrat de travail à durée indéterminée : il n'a pas de date de fin. Au collège et au lycée, le CDI est aussi le centre de documentation."
+      "plain": "Un CDI est un contrat de travail à durée indéterminée : il n'a pas de date de fin. Au collège et au lycée, le CDI est aussi le centre de documentation.",
+      "noExample": "D"
     },
     {
       "id": "chsct",
       "term": "CHSCT",
       "anyCase": true,
-      "plain": "Les CHSCT étaient des comités chargés de la santé, de la sécurité et des conditions de travail. Dans les entreprises, des ordonnances de 2017 les ont fondus dans une autre instance, le CSE."
+      "plain": "Les CHSCT étaient des comités chargés de la santé, de la sécurité et des conditions de travail. Dans les entreprises, des ordonnances de 2017 les ont fondus dans une autre instance, le CSE.",
+      "noExample": "E"
     },
     {
       "id": "unedic",
       "term": "Unédic",
-      "plain": "L'Unédic gère le financement et les règles de l'assurance chômage. Elle est dirigée par les syndicats et le patronat, dans un cadre fixé par l'État."
+      "plain": "L'Unédic gère le financement et les règles de l'assurance chômage. Elle est dirigée par les syndicats et le patronat, dans un cadre fixé par l'État.",
+      "noExample": "E"
     },
     {
       "id": "dumping-social",
       "term": "dumping social",
-      "plain": "Le dumping social, c'est profiter de salaires plus bas ou de droits sociaux plus faibles, souvent dans un autre pays, pour produire moins cher que ses concurrents."
+      "plain": "Le dumping social désigne le fait de produire moins cher grâce à des salaires plus bas ou des droits sociaux plus faibles, ailleurs ou en contournant les règles. La notion est discutée.",
+      "noExample": "E"
     },
     {
       "id": "point-d-indice",
@@ -595,29 +617,33 @@
     {
       "id": "decote",
       "term": "décote",
-      "plain": "Pour la retraite, la décote réduit la pension de qui part sans avoir cotisé assez longtemps. Pour l'impôt sur le revenu, la décote allège l'impôt des revenus modestes."
+      "plain": "Pour la retraite, la décote réduit la pension de qui part sans avoir cotisé assez longtemps. Pour l'impôt sur le revenu, la décote allège l'impôt des revenus modestes.",
+      "noExample": "D"
     },
     {
       "id": "annuites",
       "term": "annuités",
-      "plain": "Pour la retraite, les annuités sont les années de cotisation exigées pour une pension complète. Pour un emprunt, une annuité est la somme remboursée chaque année."
+      "plain": "Pour la retraite, les annuités sont les années de cotisation exigées pour une pension complète ; on les compte aujourd'hui en trimestres. Pour un emprunt, c'est la somme remboursée chaque année.",
+      "noExample": "D"
     },
     {
       "id": "retraite-par-repartition",
       "term": "retraite par répartition",
-      "aliases": ["système par répartition", "régime par répartition"],
-      "plain": "Dans un système de retraite par répartition, les cotisations des actifs paient les pensions des retraités d'aujourd'hui."
+      "aliases": ["système par répartition"],
+      "plain": "Dans un système de retraite par répartition, les cotisations de ceux qui travaillent paient les pensions des retraités d'aujourd'hui.",
+      "example": "Les cotisations prélevées ce mois-ci sur les salaires paient les pensions versées ce mois-ci."
     },
     {
       "id": "retraite-par-capitalisation",
       "term": "retraite par capitalisation",
-      "aliases": ["système par capitalisation", "régime par capitalisation"],
-      "plain": "Dans un système de retraite par capitalisation, ce que chacun verse est placé, souvent en Bourse, puis lui est reversé sous forme de pension."
+      "plain": "Dans un système de retraite par capitalisation, ce que chacun verse est placé, souvent en Bourse, puis lui est reversé sous forme de pension.",
+      "example": "Une personne place chaque mois une part de son salaire sur un compte à son nom. À la retraite, elle touche ce capital et ce qu'il a rapporté, ou perdu, suivant les placements."
     },
     {
       "id": "intermittents",
       "term": "intermittents du spectacle",
-      "plain": "Les intermittents du spectacle sont des artistes et techniciens qui alternent emplois courts et chômage, avec un régime d'assurance chômage adapté."
+      "plain": "Les intermittents du spectacle sont des artistes et techniciens qui alternent emplois courts et chômage, avec un régime d'assurance chômage adapté.",
+      "noExample": "E"
     },
     {
       "id": "csg",
@@ -1797,6 +1823,500 @@
       "term": "fonds d'investissement",
       "aliases": ["fonds financiers", "fonds de capital-investissement", "fonds prédateurs"],
       "plain": "Un fonds d'investissement réunit l'argent d'épargnants ou d'institutions pour le placer, souvent en achetant des parts d'entreprises, afin qu'il rapporte.",
+      "noExample": "E"
+    },
+    {
+      "id": "niveau-de-vie",
+      "term": "niveau de vie",
+      "plain": "Le niveau de vie est le revenu d'un ménage, après impôts et aides, rapporté à sa taille. Un enfant y compte moins qu'un adulte.",
+      "noExample": "E"
+    },
+    {
+      "id": "niveau-de-vie-median",
+      "term": "niveau de vie médian",
+      "plain": "Le niveau de vie médian partage la population en deux moitiés égales : la moitié vit avec moins, l'autre avec plus.",
+      "noExample": "E"
+    },
+    {
+      "id": "securite-sociale",
+      "term": "Sécurité sociale",
+      "aliases": ["Sécu"],
+      "plain": "La Sécurité sociale, créée en 1945, protège contre les risques de la vie : maladie, accidents du travail, vieillesse, charges de famille. Elle est financée surtout par les cotisations et la CSG.",
+      "noExample": "E"
+    },
+    {
+      "id": "assurance-maladie",
+      "term": "Assurance maladie",
+      "plain": "L'Assurance maladie est la branche de la Sécurité sociale qui rembourse les soins et verse des indemnités pendant les arrêts maladie.",
+      "noExample": "E"
+    },
+    {
+      "id": "regime-general",
+      "term": "régime général",
+      "plain": "Le régime général est la partie de la Sécurité sociale qui couvre la plupart des salariés du privé. D'autres régimes couvrent par exemple les agriculteurs ou certains métiers.",
+      "noExample": "E"
+    },
+    {
+      "id": "cotisation-sociale",
+      "term": "cotisation sociale",
+      "aliases": ["cotisation", "cotisant"],
+      "plain": "Une cotisation sociale est une somme versée sur les salaires, par l'employeur ou le salarié, à la Sécurité sociale ou à l'assurance chômage. Elle ouvre des droits : pension, soins, allocation.",
+      "noExample": "E"
+    },
+    {
+      "id": "assurance-chomage",
+      "term": "assurance chômage",
+      "plain": "L'assurance chômage verse une allocation aux salariés qui perdent leur emploi. Elle est financée surtout par des cotisations des employeurs et par une part de la CSG.",
+      "example": "Une salariée licenciée après plusieurs années de travail reçoit une allocation calculée sur ses anciens salaires, pendant une durée limitée."
+    },
+    {
+      "id": "revenu-de-remplacement",
+      "term": "revenu de remplacement",
+      "plain": "Un revenu de remplacement est versé à la place d'un salaire qui manque : allocation chômage, pension de retraite, indemnité pendant une maladie.",
+      "noExample": "E"
+    },
+    {
+      "id": "prestation-sociale",
+      "term": "prestation sociale",
+      "plain": "Une prestation sociale est une aide versée par un organisme public à une personne, en argent ou en nature : allocation, remboursement de soins, pension.",
+      "noExample": "E"
+    },
+    {
+      "id": "allocataire",
+      "term": "allocataire",
+      "plain": "Un allocataire est une personne qui reçoit une allocation, par exemple de la caisse d'allocations familiales.",
+      "noExample": "E"
+    },
+    {
+      "id": "eligibilite",
+      "term": "éligibilité",
+      "plain": "L'éligibilité est le fait de remplir les conditions pour recevoir une aide, accéder à un droit ou être candidat à une élection.",
+      "noExample": "D"
+    },
+    {
+      "id": "minimum-vieillesse",
+      "term": "minimum vieillesse",
+      "aliases": ["allocation de solidarité aux personnes âgées"],
+      "plain": "Le minimum vieillesse, aujourd'hui l'allocation de solidarité aux personnes âgées, complète les revenus des retraités les plus modestes.",
+      "noExample": "E"
+    },
+    {
+      "id": "carriere-complete",
+      "term": "carrière complète",
+      "plain": "Une personne a une carrière complète quand elle a cotisé assez de trimestres pour toucher une retraite sans décote.",
+      "noExample": "E"
+    },
+    {
+      "id": "taux-plein",
+      "term": "taux plein",
+      "plain": "Partir à la retraite à taux plein, c'est toucher une pension sans décote, parce qu'on a cotisé assez longtemps ou atteint un certain âge.",
+      "noExample": "E"
+    },
+    {
+      "id": "valider-des-trimestres",
+      "term": "valider des trimestres",
+      "plain": "Pour la retraite, on valide un trimestre dès qu'on a cotisé sur un revenu minimal. Le nombre de trimestres fixe l'âge d'un départ sans décote ; le montant dépend aussi des meilleurs salaires.",
+      "noExample": "E"
+    },
+    {
+      "id": "age-de-depart",
+      "term": "âge de départ",
+      "plain": "L'âge de départ à la retraite est l'âge à partir duquel on peut toucher sa pension. La loi fixe un âge minimum.",
+      "noExample": "E"
+    },
+    {
+      "id": "reforme-des-retraites-de-2023",
+      "term": "retraite à 64 ans",
+      "plain": "La réforme des retraites de 2023 a prévu de relever l'âge légal de départ de 62 à 64 ans, par étapes. Fin 2025, cette hausse a été suspendue.",
+      "noExample": "E"
+    },
+    {
+      "id": "fonds-de-reserve-pour-les-retraites",
+      "term": "Fonds de réserve pour les retraites",
+      "plain": "Le Fonds de réserve pour les retraites est un fonds public créé en 1999. Il place de l'argent pour aider à payer les pensions des années à venir.",
+      "noExample": "E"
+    },
+    {
+      "id": "principe-de-faveur",
+      "term": "principe de faveur",
+      "plain": "Le principe de faveur veut que la règle la plus favorable au salarié s'applique. Depuis 2016 et 2017, il joue moins entre accords : l'accord d'entreprise l'emporte souvent sur la branche.",
+      "example": "La loi garantit une prime de 100 euros. Un accord de branche la porte à 150 euros : c'est ce montant qui s'applique dans les entreprises de la branche."
+    },
+    {
+      "id": "accord-d-entreprise",
+      "term": "accord d'entreprise",
+      "plain": "Un accord d'entreprise est un texte signé entre la direction d'une entreprise et les syndicats de ses salariés. Il fixe des règles pour cette seule entreprise.",
+      "noExample": "E"
+    },
+    {
+      "id": "accord-de-branche",
+      "term": "accord de branche",
+      "aliases": ["syndicats de branche", "branches patronales"],
+      "plain": "Un accord de branche est signé par les syndicats et les organisations patronales d'un même secteur, comme le bâtiment ou la banque. Quand l'État l'étend, il vaut pour toutes ses entreprises.",
+      "noExample": "E"
+    },
+    {
+      "id": "negociation-collective",
+      "term": "négociation collective",
+      "plain": "La négociation collective réunit syndicats et employeurs pour fixer ensemble des règles de travail : salaires, horaires, conditions.",
+      "noExample": "E"
+    },
+    {
+      "id": "loi-el-khomri",
+      "term": "loi El Khomri",
+      "aliases": ["El Khomri"],
+      "plain": "La loi El Khomri, ou loi Travail, a été adoptée en 2016 malgré une forte contestation. Les accords d'entreprise peuvent depuis l'emporter sur la branche dans plusieurs domaines, dont les horaires.",
+      "noExample": "E"
+    },
+    {
+      "id": "ordonnances-penicaud",
+      "term": "ordonnances Pénicaud",
+      "aliases": ["Pénicaud"],
+      "plain": "Les ordonnances Pénicaud, prises en 2017, ont modifié le droit du travail. Les instances du personnel ont été fusionnées dans le CSE, et un barème plafonne les indemnités d'un licenciement abusif.",
+      "noExample": "E"
+    },
+    {
+      "id": "france-travail",
+      "term": "France Travail",
+      "plain": "France Travail est l'organisme public qui accompagne les demandeurs d'emploi depuis 2024, à la place de Pôle emploi. La loi qui l'a créé, en 2023, lie aussi le RSA à des heures d'activité.",
+      "noExample": "E"
+    },
+    {
+      "id": "service-public-de-l-emploi",
+      "term": "service public de l'emploi",
+      "plain": "Le service public de l'emploi accompagne les personnes qui cherchent un emploi et verse leurs allocations. France Travail en est le principal acteur.",
+      "noExample": "E"
+    },
+    {
+      "id": "offre-raisonnable-d-emploi",
+      "term": "offre raisonnable d'emploi",
+      "plain": "Une offre raisonnable d'emploi correspond à ce qu'un demandeur d'emploi a fixé avec France Travail : métier, lieu, salaire. Refuser ces offres peut entraîner des sanctions.",
+      "noExample": "E"
+    },
+    {
+      "id": "radiation",
+      "term": "radiation",
+      "plain": "Une radiation est le fait d'être retiré d'une liste : celle des demandeurs d'emploi, qui ouvre droit aux allocations, ou une liste électorale.",
+      "noExample": "E"
+    },
+    {
+      "id": "chomeur-de-longue-duree",
+      "term": "chômeur de longue durée",
+      "plain": "Un chômeur de longue durée cherche un emploi depuis plus d'un an.",
+      "noExample": "E"
+    },
+    {
+      "id": "plein-emploi",
+      "term": "plein-emploi",
+      "plain": "On parle de plein-emploi quand presque toutes les personnes qui veulent travailler trouvent un emploi.",
+      "noExample": "E"
+    },
+    {
+      "id": "sous-emploi",
+      "term": "sous-emploi",
+      "plain": "Le sous-emploi touche les personnes qui travaillent moins qu'elles le souhaitent, à temps partiel faute de mieux par exemple.",
+      "noExample": "E"
+    },
+    {
+      "id": "emploi-precaire",
+      "term": "emploi précaire",
+      "aliases": ["contrats courts", "contrats précaires"],
+      "plain": "Un emploi précaire est un emploi sans garantie de durée : contrat court, intérim, temps partiel imposé.",
+      "noExample": "E"
+    },
+    {
+      "id": "temps-partiel-subi",
+      "term": "temps partiel subi",
+      "aliases": ["temps partiel contraint", "temps partiel imposé"],
+      "plain": "Le temps partiel est subi quand une personne travaille moins d'heures qu'elle le souhaite, faute de pouvoir faire mieux.",
+      "noExample": "E"
+    },
+    {
+      "id": "interim",
+      "term": "intérim",
+      "aliases": ["intérimaire", "travail temporaire", "entreprises d'intérim"],
+      "plain": "En intérim, une agence emploie une personne et la met à disposition d'une entreprise pour une mission courte.",
+      "noExample": "E"
+    },
+    {
+      "id": "faux-independant",
+      "term": "faux indépendants",
+      "plain": "Un faux indépendant est inscrit comme travailleur indépendant, mais travaille en fait sous l'autorité de celui qui le fait travailler, comme un salarié.",
+      "example": "Un livreur inscrit comme travailleur indépendant travaille pour une seule plateforme, qui fixe ses horaires, ses tarifs et ses sanctions."
+    },
+    {
+      "id": "presomption-de-salariat",
+      "term": "présomption de salariat",
+      "plain": "Avec une présomption de salariat, qui travaille pour une plateforme est tenu pour salarié dès que des faits montrent qu'elle dirige son travail. La plateforme peut prouver le contraire.",
+      "noExample": "E"
+    },
+    {
+      "id": "plateforme-numerique",
+      "term": "plateformes numériques",
+      "plain": "Une plateforme numérique met en relation des clients et des travailleurs, pour livrer des repas ou conduire des clients par exemple. Son rôle, intermédiaire ou employeur, est discuté en justice.",
+      "noExample": "E"
+    },
+    {
+      "id": "travailleur-independant",
+      "term": "travailleurs indépendants",
+      "plain": "Un travailleur indépendant travaille à son compte, sans employeur : artisan, commerçant, médecin ou avocat installé, autoentrepreneur. Sa protection sociale diffère de celle d'un salarié.",
+      "noExample": "E"
+    },
+    {
+      "id": "travailleur-pauvre",
+      "term": "travailleurs pauvres",
+      "plain": "Un travailleur pauvre a un emploi mais vit sous le seuil de pauvreté.",
+      "noExample": "E"
+    },
+    {
+      "id": "contre-reforme",
+      "term": "contre-réforme",
+      "plain": "Une contre-réforme est une réforme qui revient sur des droits obtenus auparavant. Le mot est surtout employé par ceux qui s'y opposent.",
+      "noExample": "E"
+    },
+    {
+      "id": "duree-legale-du-travail",
+      "term": "durée légale",
+      "plain": "La durée légale du travail est le nombre d'heures par semaine au-delà duquel les heures travaillées comptent comme heures supplémentaires.",
+      "noExample": "E"
+    },
+    {
+      "id": "heures-supplementaires",
+      "term": "heures supplémentaires",
+      "plain": "Les heures supplémentaires sont les heures travaillées au-delà de la durée légale. Elles sont payées plus cher, ou compensées par du repos.",
+      "noExample": "E"
+    },
+    {
+      "id": "annualisation",
+      "term": "annualisation",
+      "plain": "Avec l'annualisation, prévue par accord, les heures se comptent sur l'année : plus certaines semaines, moins d'autres. Seules celles au-delà du total annuel sont supplémentaires.",
+      "example": "Une entreprise de jardinage fait travailler ses salariés plus longtemps au printemps et moins en hiver, sans heures supplémentaires, tant que le total de l'année ne change pas."
+    },
+    {
+      "id": "flexibilisation",
+      "term": "flexibilisation",
+      "plain": "La flexibilisation du travail rend moins strictes les règles sur les contrats, les horaires ou les licenciements. Ses partisans y voient une adaptation, ses opposants une perte de protection.",
+      "noExample": "E"
+    },
+    {
+      "id": "horaires-fractionnes",
+      "term": "horaires fractionnés",
+      "plain": "Avec des horaires fractionnés, une journée de travail est coupée en plusieurs morceaux séparés par de longues pauses.",
+      "example": "Une personne fait le ménage dans des bureaux de 7 h à 10 h, puis de 16 h à 19 h, le même jour."
+    },
+    {
+      "id": "jour-ferie-chome",
+      "term": "jour férié chômé",
+      "plain": "Un jour férié est chômé quand on ne travaille pas ce jour-là, sans perdre de salaire. Suivant le jour, c'est la loi, un accord ou l'employeur qui le décide.",
+      "noExample": "E"
+    },
+    {
+      "id": "penibilite",
+      "term": "pénibilité",
+      "aliases": ["métiers pénibles"],
+      "plain": "La pénibilité désigne l'usure que certains métiers font subir au corps : travail de nuit, charges lourdes, bruit. Un compte permet d'en tenir compte pour partir plus tôt.",
+      "noExample": "E"
+    },
+    {
+      "id": "accident-du-travail",
+      "term": "accident du travail",
+      "plain": "Un accident du travail arrive pendant le travail ou à cause de lui. Il ouvre droit à des soins et à des indemnités pris en charge par la Sécurité sociale.",
+      "noExample": "E"
+    },
+    {
+      "id": "maladie-professionnelle",
+      "term": "maladie professionnelle",
+      "plain": "Une maladie professionnelle est causée par le travail : exposition à un produit, gestes répétés, bruit. Elle est reconnue d'après des listes officielles.",
+      "noExample": "E"
+    },
+    {
+      "id": "medecine-du-travail",
+      "term": "médecine du travail",
+      "plain": "La médecine du travail suit la santé des salariés et vérifie que leur poste ne leur nuit pas.",
+      "noExample": "E"
+    },
+    {
+      "id": "inspection-du-travail",
+      "term": "inspection du travail",
+      "aliases": ["inspecteurs du travail"],
+      "plain": "L'inspection du travail contrôle que les entreprises respectent le droit du travail. Ses inspecteurs peuvent constater des infractions et arrêter un chantier dangereux.",
+      "noExample": "E"
+    },
+    {
+      "id": "droit-a-la-deconnexion",
+      "term": "droit à la déconnexion",
+      "plain": "Le droit à la déconnexion permet à un salarié de ne pas répondre aux messages de travail en dehors de ses heures. Ses règles sont fixées dans chaque entreprise.",
+      "noExample": "E"
+    },
+    {
+      "id": "management-algorithmique",
+      "term": "management algorithmique",
+      "plain": "On parle de management algorithmique quand un logiciel distribue le travail, surveille les travailleurs et les évalue à la place d'un chef.",
+      "example": "Une application attribue les tournées, calcule les trajets et note chaque livreur selon sa vitesse."
+    },
+    {
+      "id": "individualisation-des-droits",
+      "term": "individualisation des droits",
+      "plain": "L'individualisation des droits calcule une aide sur la situation de la seule personne, et non sur celle de son couple ou de sa famille.",
+      "example": "Avec des droits individualisés, l'aide d'une personne est calculée sur ses seules ressources, que son conjoint gagne peu ou beaucoup."
+    },
+    {
+      "id": "notation-des-allocataires",
+      "term": "notation des allocataires",
+      "plain": "La notation des allocataires donne à chaque personne aidée une note de risque, calculée par un logiciel. Elle sert à cibler les contrôles contre les erreurs et la fraude.",
+      "noExample": "E"
+    },
+    {
+      "id": "abandon-de-poste",
+      "term": "abandon de poste",
+      "aliases": ["présomption de démission"],
+      "plain": "Il y a abandon de poste quand un salarié cesse de venir sans raison valable. Depuis 2023, s'il ne revient pas après un courrier qui le lui demande, il est présumé démissionnaire, sauf recours.",
+      "noExample": "E"
+    },
+    {
+      "id": "titulariser",
+      "term": "titulariser",
+      "aliases": ["titularisation"],
+      "plain": "Titulariser un agent public, c'est le rendre fonctionnaire, avec un emploi garanti, au lieu d'un contrat à durée limitée.",
+      "noExample": "E"
+    },
+    {
+      "id": "fonction-publique",
+      "term": "fonction publique",
+      "aliases": ["fonctions publiques"],
+      "plain": "La fonction publique regroupe les agents de l'État, des collectivités locales et des hôpitaux publics : ce sont les trois fonctions publiques.",
+      "noExample": "E"
+    },
+    {
+      "id": "apprenti",
+      "term": "apprentis",
+      "aliases": ["alternant"],
+      "plain": "Un apprenti, ou alternant, se forme à un métier en partageant son temps entre une école et une entreprise qui le paie.",
+      "noExample": "E"
+    },
+    {
+      "id": "formation-professionnelle",
+      "term": "formation professionnelle",
+      "plain": "La formation professionnelle prépare à un métier, ou permet d'en apprendre un nouveau en cours de carrière.",
+      "noExample": "E"
+    },
+    {
+      "id": "but-lucratif",
+      "term": "à but lucratif",
+      "aliases": ["but non lucratif", "à but non lucratif", "privé lucratif", "caractère lucratif"],
+      "plain": "Une activité est à but lucratif quand elle cherche à faire des bénéfices pour ses propriétaires. Une association est à but non lucratif.",
+      "noExample": "E"
+    },
+    {
+      "id": "secteur-non-marchand",
+      "term": "secteur non marchand",
+      "plain": "Le secteur non marchand produit des services gratuits ou presque : administrations, associations, hôpitaux publics.",
+      "noExample": "E"
+    },
+    {
+      "id": "frais-d-incident-bancaire",
+      "term": "frais d'incidents bancaires",
+      "plain": "Les frais d'incidents bancaires sont prélevés par une banque quand un compte passe à découvert ou qu'un paiement est rejeté.",
+      "noExample": "E"
+    },
+    {
+      "id": "complementaire-sante",
+      "term": "complémentaire santé",
+      "aliases": ["assurances maladie complémentaires"],
+      "plain": "Une complémentaire santé, souvent appelée mutuelle, rembourse la part des soins que la Sécurité sociale ne prend pas en charge.",
+      "noExample": "E"
+    },
+    {
+      "id": "capital-deces",
+      "term": "capital-décès",
+      "plain": "Le capital-décès est une somme versée par la Sécurité sociale aux proches d'un salarié qui meurt.",
+      "noExample": "E"
+    },
+    {
+      "id": "ayant-droit",
+      "term": "ayants droit",
+      "plain": "Un ayant droit est une personne qui bénéficie d'un droit grâce à une autre, par exemple un enfant couvert par la Sécurité sociale de ses parents.",
+      "noExample": "E"
+    },
+    {
+      "id": "carte-vitale",
+      "term": "carte Vitale",
+      "plain": "La carte Vitale est la carte de l'Assurance maladie. Présentée chez un soignant, elle permet d'être remboursé vite, sans feuille de soins en papier.",
+      "noExample": "E"
+    },
+    {
+      "id": "securite-sociale-professionnelle",
+      "term": "Sécurité sociale professionnelle",
+      "plain": "La Sécurité sociale professionnelle est l'idée de garder ses droits de travailleur entre deux emplois : revenu, formation, ancienneté. C'est une proposition, pas un droit en vigueur.",
+      "noExample": "E"
+    },
+    {
+      "id": "securite-sociale-de-l-alimentation",
+      "term": "Sécurité sociale de l'alimentation",
+      "plain": "La Sécurité sociale de l'alimentation est un projet, essayé localement. Il prévoit pour chacun une somme mensuelle pour acheter des aliments choisis, financée en commun.",
+      "noExample": "E"
+    },
+    {
+      "id": "perte-d-autonomie",
+      "term": "perte d'autonomie",
+      "plain": "Une personne en perte d'autonomie a besoin d'aide pour les gestes du quotidien : se laver, se lever, manger. On parle aussi de dépendance.",
+      "noExample": "E"
+    },
+    {
+      "id": "maintien-a-domicile",
+      "term": "maintien à domicile",
+      "plain": "Le maintien à domicile permet à une personne âgée ou malade de rester chez elle, avec des soins et des aides adaptés.",
+      "noExample": "E"
+    },
+    {
+      "id": "medico-social",
+      "term": "médico-social",
+      "plain": "Le secteur médico-social accompagne les personnes âgées, handicapées ou en difficulté, entre le soin et l'aide sociale : EHPAD, foyers, services à domicile.",
+      "noExample": "E"
+    },
+    {
+      "id": "protection-de-l-enfance",
+      "term": "protection de l'enfance",
+      "plain": "La protection de l'enfance aide les enfants en danger et leurs familles. Elle peut confier un enfant à une famille d'accueil ou à un foyer.",
+      "noExample": "E"
+    },
+    {
+      "id": "famille-d-accueil",
+      "term": "familles d'accueil",
+      "aliases": ["lieux de placement"],
+      "plain": "Une famille d'accueil reçoit chez elle, contre rémunération, un enfant que la protection de l'enfance ne peut pas laisser chez ses parents.",
+      "noExample": "E"
+    },
+    {
+      "id": "assistante-maternelle",
+      "term": "assistantes maternelles",
+      "plain": "Une assistante maternelle garde chez elle de jeunes enfants, avec un agrément du département.",
+      "noExample": "E"
+    },
+    {
+      "id": "jardin-d-enfants",
+      "term": "jardins d'enfants",
+      "plain": "Un jardin d'enfants accueille les enfants de deux à six ans pour jouer et apprendre, à côté de la crèche et de l'école.",
+      "noExample": "E"
+    },
+    {
+      "id": "mineur",
+      "term": "mineurs",
+      "plain": "En droit, un mineur est une personne de moins de dix-huit ans.",
+      "noExample": "E"
+    },
+    {
+      "id": "pension",
+      "term": "pension",
+      "aliases": ["pension de retraite"],
+      "plain": "Une pension de retraite est la somme versée chaque mois à une personne retraitée, selon ce qu'elle a cotisé pendant sa vie de travail.",
+      "noExample": "E"
+    },
+    {
+      "id": "autoentrepreneur",
+      "term": "autoentrepreneur",
+      "aliases": ["autoentrepreneuriat", "microentrepreneur"],
+      "plain": "Un autoentrepreneur, ou microentrepreneur, travaille à son compte avec des règles simplifiées : il paie impôts et cotisations sur ce qu'il encaisse.",
       "noExample": "E"
     }
   ]

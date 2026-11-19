@@ -1,7 +1,7 @@
 {
   "meta": {
     "corpus_version": "27ee6e713fe25e7e",
-    "wordings_sha256": "ee1756433a5c72253bb6819a0d2331b0f5cb1d94fd4ab3f47f90dce4e1da28bf",
+    "wordings_sha256": "59dfb0d9943faa7068d5de81d8f0e4353a46a590b4fceda64b5f5167dc49d007",
     "note_fr": "Où chaque mot expliqué est écrit dans le livre : pour chaque section, les identifiants des mots de data/2026/terms.json que son texte emploie (son titre, ses mesures et leurs points, les paragraphes entre eux), triés. Les sections qui n'en emploient aucun n'y sont pas. Écrit par scripts/lexicon-2026.ts --places, sur la machine qui tient le texte du livre, par la session seule (D20.1) : aucun mot du livre, seulement des identifiants de sections et de mots. Il ne dit ni où dans la section, ni combien de fois. La fiche de chaque section montre ces mots, expliqués, sous une ligne qu'on ouvre (PLAN-MOTS, lot 4). À refaire après tout changement des formulations de terms.json : wordings_sha256 dit sur lesquelles il a été calculé."
   },
   "sections": {
@@ -105,6 +105,7 @@
       "droit-de-preemption"
     ],
     "p2c1-s04": [
+      "autoentrepreneur",
       "cae",
       "ess",
       "scic",
@@ -151,11 +152,14 @@
       "tva"
     ],
     "p2c2-s03": [
+      "apprenti",
+      "fonction-publique",
       "indexer",
       "inflation",
       "seuil-de-pauvrete",
       "smic",
-      "stock-options"
+      "stock-options",
+      "temps-partiel-subi"
     ],
     "p2c3-s01": [
       "contribuable",
@@ -187,6 +191,7 @@
       "patrimoine",
       "privatisation",
       "rachat-de-dettes",
+      "securite-sociale",
       "taux-d-interet",
       "tfue",
       "titre-de-dette",
@@ -202,92 +207,185 @@
       "tresorerie"
     ],
     "p3c1-s01": [
+      "frais-d-incident-bancaire",
+      "individualisation-des-droits",
       "logement-d-abord",
       "non-recours",
+      "notation-des-allocataires",
+      "plein-emploi",
+      "prestation-sociale",
       "reduflation",
       "seuil-de-pauvrete"
     ],
     "p3c1-s02": [
+      "chomeur-de-longue-duree",
       "smic"
     ],
     "p3c1-s03": [
       "abroger",
+      "accord-d-entreprise",
+      "accord-de-branche",
+      "but-lucratif",
       "cdi",
-      "pme"
+      "emploi-precaire",
+      "faux-independant",
+      "fonction-publique",
+      "interim",
+      "loi-el-khomri",
+      "ordonnances-penicaud",
+      "plateforme-numerique",
+      "pme",
+      "presomption-de-salariat",
+      "principe-de-faveur",
+      "service-public-de-l-emploi",
+      "temps-partiel-subi",
+      "titulariser"
+    ],
+    "p3c1-s04": [
+      "annualisation",
+      "cotisation-sociale",
+      "duree-legale-du-travail",
+      "flexibilisation",
+      "heures-supplementaires",
+      "horaires-fractionnes",
+      "jour-ferie-chome",
+      "negociation-collective",
+      "penibilite",
+      "sous-emploi"
     ],
     "p3c1-s05": [
+      "abandon-de-poste",
       "abroger",
       "ass",
+      "assurance-chomage",
       "cdd",
       "cdi",
+      "cotisation-sociale",
+      "eligibilite",
+      "france-travail",
+      "interim",
+      "medecine-du-travail",
+      "offre-raisonnable-d-emploi",
+      "radiation",
+      "revenu-de-remplacement",
       "rsa",
       "unedic"
     ],
     "p3c1-s06": [
+      "accident-du-travail",
       "chsct",
-      "circ"
+      "circ",
+      "droit-a-la-deconnexion",
+      "inspection-du-travail",
+      "maladie-professionnelle",
+      "management-algorithmique",
+      "medecine-du-travail",
+      "travailleur-independant"
     ],
     "p3c1-s07": [
       "abroger",
+      "age-de-depart",
       "annuites",
+      "carriere-complete",
+      "contre-reforme",
+      "cotisation-sociale",
       "decote",
       "exoneration",
       "fonds-d-investissement",
+      "fonds-de-reserve-pour-les-retraites",
+      "minimum-vieillesse",
       "niches-fiscales",
+      "pension",
+      "reforme-des-retraites-de-2023",
       "retraite-par-capitalisation",
       "retraite-par-repartition",
       "rsa",
       "seuil-de-pauvrete",
-      "smic"
+      "smic",
+      "taux-plein",
+      "valider-des-trimestres"
     ],
     "p3c1-s08": [
       "abroger",
       "ame",
+      "ayant-droit",
+      "capital-deces",
+      "complementaire-sante",
+      "cotisation-sociale",
       "csg",
       "depassements-d-honoraires",
       "franchises-medicales",
       "jours-de-carence",
       "privatisation",
-      "reste-a-charge"
+      "regime-general",
+      "reste-a-charge",
+      "securite-sociale",
+      "securite-sociale-de-l-alimentation"
+    ],
+    "p3c1-s09": [
+      "carte-vitale",
+      "securite-sociale-professionnelle"
     ],
     "p3c2-s01": [
       "defenseur-des-droits",
       "gpa",
-      "ivg"
+      "ivg",
+      "mineur"
     ],
     "p3c2-s02": [
       "ase",
-      "pjj"
+      "famille-d-accueil",
+      "mineur",
+      "pjj",
+      "protection-de-l-enfance"
     ],
     "p3c2-s03": [
+      "accord-de-branche",
       "cdd",
       "crous",
+      "emploi-precaire",
       "foyer-fiscal",
+      "secteur-non-marchand",
       "seuil-de-pauvrete"
     ],
     "p3c2-s04": [
-      "ehpad"
+      "but-lucratif",
+      "ehpad",
+      "maintien-a-domicile",
+      "perte-d-autonomie",
+      "securite-sociale"
     ],
     "p3c2-s05": [
       "aah",
       "aesh",
       "esat",
+      "formation-professionnelle",
+      "inspection-du-travail",
       "loi-elan",
       "mdph",
+      "medico-social",
+      "securite-sociale",
       "smic"
     ],
     "p3c2-s06": [
       "ald",
       "lgbti",
-      "pma"
+      "pma",
+      "securite-sociale"
     ],
     "p3c2-s07": [
       "asf",
+      "pension",
       "pma"
     ],
     "p3c2-s08": [
       "conscription",
       "privatisation"
+    ],
+    "p3c3-s01": [
+      "penibilite",
+      "temps-partiel-subi",
+      "travailleur-pauvre"
     ],
     "p3c3-s02": [
       "soumission-chimique"
@@ -298,6 +396,9 @@
       "lgbti"
     ],
     "p3c3-s04": [
+      "assistante-maternelle",
+      "but-lucratif",
+      "jardin-d-enfants",
       "pmi"
     ],
     "p3c4-s01": [
@@ -331,9 +432,12 @@
       "circuits-courts",
       "coupes-rases",
       "droit-de-preemption",
+      "formation-professionnelle",
+      "maladie-professionnelle",
       "mercosur",
       "onf",
       "orpaillage",
+      "penibilite",
       "privatisation",
       "travailleurs-detaches"
     ],
@@ -343,20 +447,27 @@
     ],
     "p4c2-s02": [
       "abroger",
+      "contre-reforme",
+      "droit-a-la-deconnexion",
+      "fonction-publique",
       "rep"
     ],
     "p4c2-s03": [
       "aesh",
       "cap",
       "evars",
-      "point-d-indice"
+      "point-d-indice",
+      "titulariser"
     ],
     "p4c2-s04": [
       "abroger",
+      "apprenti",
       "bts",
       "but",
       "cfa",
-      "lobbys"
+      "contre-reforme",
+      "lobbys",
+      "mineur"
     ],
     "p4c2-s05": [
       "anr",
@@ -368,19 +479,24 @@
     ],
     "p4c2-s06": [
       "abroger",
+      "apl",
+      "but-lucratif",
       "crous",
       "cvec",
       "hceres",
       "lru",
-      "parcoursup"
+      "parcoursup",
+      "titulariser"
     ],
     "p4c2-s07": [
       "abroger",
       "conscription",
+      "formation-professionnelle",
       "smic"
     ],
     "p4c3-s01": [
       "cnl",
+      "cotisation-sociale",
       "depense-publique",
       "ia",
       "intermittents",
@@ -392,6 +508,7 @@
     ],
     "p4c4-s01": [
       "chlordecone",
+      "medecine-du-travail",
       "perturbateurs-endocriniens",
       "pfas",
       "zoonoses"
@@ -409,15 +526,19 @@
       "nutri-score"
     ],
     "p4c4-s04": [
+      "assurance-maladie",
       "deserts-medicaux",
       "ehpad",
       "fonds-d-investissement",
+      "medico-social",
       "ondam",
       "t2a"
     ],
     "p4c4-s05": [
+      "assurance-maladie",
       "contention",
-      "privatisation"
+      "privatisation",
+      "securite-sociale"
     ],
     "p4c5-s01": [
       "aires-marines-protegees",
@@ -437,6 +558,7 @@
       "taxe-au-tonnage"
     ],
     "p4c5-s03": [
+      "formation-professionnelle",
       "onu"
     ],
     "p4c6-s01": [
@@ -471,14 +593,17 @@
       "obsolescence-programmee"
     ],
     "p4c7-s03": [
+      "accord-de-branche",
       "administrations-publiques",
       "ia"
     ],
     "p5c1-s01": [
       "abroger",
       "amnistie",
+      "formation-professionnelle",
       "intercommunalites",
       "moratoire",
+      "radiation",
       "referendum",
       "ric"
     ],
@@ -493,6 +618,7 @@
     ],
     "p5c1-s04": [
       "conflit-d-interets",
+      "fonction-publique",
       "ineligible",
       "lobbys",
       "pantouflage"
@@ -530,6 +656,7 @@
       "convention-judiciaire-d-interet-public",
       "pollueur-payeur",
       "regulation-carcerale",
+      "securite-sociale",
       "verrou-de-bercy"
     ],
     "p5c2-s05": [
@@ -556,6 +683,7 @@
       "anru",
       "encadrement-des-loyers",
       "hlm",
+      "inspection-du-travail",
       "loi-sru",
       "niches-fiscales",
       "organismes-de-foncier-solidaire",
@@ -567,13 +695,18 @@
     ],
     "p5c3-s05": [
       "chlordecone",
+      "fonction-publique",
       "minima-sociaux",
+      "minimum-vieillesse",
+      "prestation-sociale",
+      "principe-de-faveur",
       "seuil-de-pauvrete",
       "tarifs-reglementes"
     ],
     "p6c1-s01": [
       "constituante",
       "niches-fiscales",
+      "securite-sociale",
       "travailleurs-detaches"
     ],
     "p6c1-s02": [

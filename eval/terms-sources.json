@@ -19,6 +19,15 @@
     "point-d-indice": {
       "example": "illustrative"
     },
+    "seuil-de-pauvrete": {
+      "example": "fact",
+      "sources": [
+        {
+          "url": "https://www.insee.fr/fr/statistiques/2408282",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
     "taux-d-interet": {
       "example": "illustrative"
     },
