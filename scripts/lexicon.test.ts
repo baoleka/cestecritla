@@ -211,7 +211,7 @@ void test('data/2026/vocabulary.json: every stem the site shows judged once — 
   assert.deepEqual(partitionProblems(vocabulary, stems), []);
   if (charter !== 2) return;
   const entries = explainedTerms();
-  assert.deepEqual(coverageProblems(vocabulary, entries), []);
+  // A hard stem may be held by one of our cards: the card wins on its span (D20.14).
   const cards = cardWordings(
     (
       JSON.parse(readFileSync('data/2026/glossary.json', 'utf8')) as {
@@ -219,6 +219,7 @@ void test('data/2026/vocabulary.json: every stem the site shows judged once — 
       }
     ).entries,
   );
+  assert.deepEqual(coverageProblems(vocabulary, [...cards, ...entries]), []);
   const hard = new Set(Object.keys(vocabulary.explain));
   const problems = texts.flatMap(({ where, text }) =>
     uncoveredIn(text, hard, [...cards, ...entries]).map((stem) => `${where}: ${stem}`),

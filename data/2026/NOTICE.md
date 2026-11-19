@@ -24,6 +24,7 @@ ses pages et admettent de courts extraits, avec l'auteur et un lien vers la page
 | `game-words.json`, `word-links.json` | Les mots du jeu « Où est-ce écrit ? », et où trois navigateurs ont vu chacun surligné (voir « Les mots du jeu ») | la liste à la main, attestée par `scripts/words-2026.ts --attest` ; `scripts/verify-2026.ts --words --write` |
 | `words.json` | Où les mots expliqués paraissent hors de la feuille de « Demander » : les pages, la recherche, le jeu — un interrupteur par hôte (PLAN-MOTS, D20.11) | à la main |
 | `term-places.json` | Pour chaque section, les identifiants des mots expliqués (`terms.json`) que son texte emploie — aucun mot du livre, ni où, ni combien de fois (PLAN-MOTS, lot 4) | `scripts/lexicon-2026.ts --places`, sur la machine qui tient le texte |
+| `vocabulary.json` | Chaque racine de ce que le site montre — l'index du livre et nos propres textes —, jugée une fois : claire, à expliquer (et les entrées qui la tiennent), à surveiller, ou nom propre ; jugée par la session, une IA, et, pour l'index, par un autre modèle à part (PLAN-MOTS, lot 9) | `scripts/lexicon-2026.ts --vocabulary`, depuis les jugements gardés hors du dépôt |
 | `game-gists.json` | Les phrases du jeu : une phrase **de nous** par mesure où un mot du jeu est épinglé (voir « Les phrases du jeu »). **Dans ce dépôt depuis le 19 novembre 2026, sur l'accord daté de l'éditeur : quarante-trois phrases ; cinq cartes gardent leur lien seul** | `npm run gists -- --game --link-only …` |
 
 ## Vérifier une citation

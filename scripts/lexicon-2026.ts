@@ -12,6 +12,9 @@
  *                                  written under private/lexicon/, the table the session judges
  *   npm run lexicon -- --patterns  the acronyms, named instruments, units, Latin and expressions
  *                                  of the book and our sentences, counted, under private/lexicon/
+ *   npm run lexicon -- --vocabulary  data/2026/vocabulary.json: the class of every public stem,
+ *                                  from the session's judgments, and the entries that hold the
+ *                                  hard ones; refuses while a stem the site shows is not judged
  *
  * It prints identifiers and numbers. Never a word of the text: a tool that printed what it reads
  * would be the shortest way for the book to end up in a terminal log (D15.6).
@@ -19,7 +22,7 @@
  * After any change to the wordings of data/2026/terms.json, run `--places` again: the gate of
  * the public file (scripts/lexicon.test.ts) holds it to the wordings it was computed with.
  */
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { cardWordings, termsIn } from '../src/lib/terms.js';
 import {
   TERM_PLACES_PATH as PLACES_PATH,
@@ -41,10 +44,14 @@ import {
   publicTexts,
   stemCounts,
   stemRows,
+  VOCABULARY_PATH,
+  vocabularyFingerprint,
   type Found,
   type Placed,
   type StemRow,
+  type Vocabulary,
 } from './lexicon-core.js';
+import { terms } from '../src/lib/search-core.js';
 import { PRIVATE_CORPUS } from './probe-2026.js';
 
 const NOTE_FR =
@@ -216,6 +223,93 @@ function patterns(): number {
   return 0;
 }
 
+/** The judgments of the stems, under the private folder: `stem<TAB>class` per line (P, E, NE, W, N:kind). */
+const JUDGED = /^judged.*\.tsv$/;
+
+/** Every judgment of a stem the session has written, the later files winning. */
+function judgments(): Map<string, string> {
+  const out = new Map<string, string>();
+  const files = existsSync(INVENTORY)
+    ? readdirSync(INVENTORY)
+        .filter((f) => JUDGED.test(f))
+        .sort()
+    : [];
+  for (const file of files) {
+    for (const line of readFileSync(`${INVENTORY}/${file}`, 'utf8').split('\n').slice(1)) {
+      const [stem, verdict] = line.split('\t');
+      if (stem !== undefined && stem !== '' && verdict !== undefined && verdict !== '') {
+        out.set(stem, verdict);
+      }
+    }
+  }
+  return out;
+}
+
+const VOCABULARY_NOTE_FR =
+  "Chaque racine de ce que le site montre — l'index du livre et nos propres textes —, jugée une fois pour un élève qui entre en seconde générale (D20.9) : claire (plain), à expliquer (explain : les entrées qui la tiennent), à surveiller (watch : un mot courant qui peut avoir un sens technique, et les entrées qui couvrent ce sens), ou nom propre (names : ce qu'il est quand rien n'est à expliquer). Jugé par la session, une IA, et à part, pour les racines de l'index, par un autre modèle sur la seule liste ; leur désaccord a été arbitré par la session. Aucune personne ne l'a relu. Les racines que seuls la prose du livre ou nos phrases emploient se jugent hors du dépôt, et ne sont jamais publiées. Écrit par scripts/lexicon-2026.ts --vocabulary ; scripts/lexicon.test.ts en tient la partition, et, pour la charte 2, la couverture et la fermeture.";
+
+/**
+ * `--vocabulary`: data/2026/vocabulary.json — the class of every public stem, from the session's
+ * judgments, and the entries (and cards) that hold each hard stem, from data/2026/terms.json.
+ * Refuses while a stem the site shows is not judged: those are listed under the private folder.
+ */
+function vocabulary(): number {
+  const index = [...measuresOf().keys()];
+  const universe = new Set([...index, ...publicTexts().flatMap(({ text }) => terms(text))]);
+  const judged = judgments();
+  const unjudged = [...universe].filter((stem) => !/^\d+$/.test(stem) && !judged.has(stem));
+  if (unjudged.length > 0) {
+    writeFileSync(`${INVENTORY}/unjudged.txt`, `${unjudged.sort().join('\n')}\n`);
+    console.error(
+      `lexicon: ${String(unjudged.length)} stem(s) the site shows are not judged — ${INVENTORY}/unjudged.txt`,
+    );
+    return 1;
+  }
+  const cards = cardWordings(
+    (
+      JSON.parse(readFileSync('data/2026/glossary.json', 'utf8')) as {
+        entries: { id: string; term: string }[];
+      }
+    ).entries,
+  );
+  const holders = new Map<string, string[]>();
+  for (const entry of [...cards, ...explainedTerms()]) {
+    for (const wording of [entry.term, ...(entry.aliases ?? [])]) {
+      for (const stem of terms(wording)) {
+        holders.set(stem, [...new Set([...(holders.get(stem) ?? []), entry.id])].sort());
+      }
+    }
+  }
+  const file: Vocabulary = {
+    meta: {
+      index: { terms: index.length, sha256: vocabularyFingerprint(index) },
+      judged_on: new Date().toISOString().slice(0, 10),
+      judged_by: 'session',
+      second_judge: 'another model, on the index stems',
+      note_fr: VOCABULARY_NOTE_FR,
+    },
+    plain: [],
+    explain: {},
+    watch: {},
+    names: {},
+  };
+  for (const stem of [...universe].filter((s) => !/^\d+$/.test(s)).sort()) {
+    const verdict = judged.get(stem) ?? 'P';
+    if (verdict === 'E' || verdict === 'NE') file.explain[stem] = holders.get(stem) ?? [];
+    else if (verdict === 'W') file.watch[stem] = holders.get(stem) ?? [];
+    else if (verdict.startsWith('N:')) file.names[stem] = verdict.slice(2);
+    else file.plain.push(stem);
+  }
+  writeFileSync(VOCABULARY_PATH, `${JSON.stringify(file, null, 1)}\n`);
+  const held = Object.values(file.explain).filter((ids) => ids.length > 0).length;
+  console.log(
+    `lexicon: ${VOCABULARY_PATH} written — ${String(universe.size)} stems: ${String(file.plain.length)} plain, ` +
+      `${String(Object.keys(file.explain).length)} to explain (${String(held)} held by an entry or a card), ` +
+      `${String(Object.keys(file.watch).length)} to watch, ${String(Object.keys(file.names).length)} names`,
+  );
+  return 0;
+}
+
 function main(): number {
   const args = process.argv.slice(2);
   if (args.includes('--places')) {
@@ -237,7 +331,8 @@ function main(): number {
   }
   if (args.includes('--stems')) return stems();
   if (args.includes('--patterns')) return patterns();
-  console.error('lexicon: --places, --check, --stems or --patterns');
+  if (args.includes('--vocabulary')) return vocabulary();
+  console.error('lexicon: --places, --check, --stems, --patterns or --vocabulary');
   return 2;
 }
 
