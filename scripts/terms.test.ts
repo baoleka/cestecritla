@@ -630,7 +630,12 @@ const PROPER: ReadonlySet<string> = new Set([
  * Entries in a sensitive field that may hold an example all the same — each named, with why.
  * Empty: in a sensitive field there is no example by default (PLAN-MOTS, « Neutralité »).
  */
-const SENSITIVE_EXAMPLES: ReadonlyMap<string, string> = new Map();
+const SENSITIVE_EXAMPLES: ReadonlyMap<string, string> = new Map([
+  [
+    'chiffre-d-affaires',
+    'les affaires y sont le commerce d’une entreprise, jamais une affaire judiciaire (lot 13 bis)',
+  ],
+]);
 
 const withExample = entries.filter(
   (entry): entry is TermEntry & { example: string } => entry.example !== undefined,

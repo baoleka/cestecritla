@@ -8,7 +8,7 @@
     "read_by_a_person": false,
     "charter": 2,
     "sealed": {
-      "sha256": "fadf5f20aa4af2d5ad8d786cd867084a70e5c00680c1841dc2255b37ed148c9b",
+      "sha256": "c008941bb51a1e861ff4b57e8bf7282895d78b8c03ec1b257d38cf171e1a0aa5",
       "on": "2026-11-19",
       "by": "session",
       "passes": [
@@ -51,6 +51,16 @@
           "what": "checked a third time: the dated, the sensitive, 15 % drawn",
           "on": "2026-11-19",
           "by": "independent-model"
+        },
+        {
+          "what": "examples added where a case helps",
+          "on": "2026-11-19",
+          "by": "session"
+        },
+        {
+          "what": "examples checked on primary sources, read by hostile readers and a panel",
+          "on": "2026-11-19",
+          "by": "independent-model"
         }
       ]
     },
@@ -59,11 +69,11 @@
       "on": "2026-11-19",
       "by": "session",
       "corpus_version": "27ee6e713fe25e7e",
-      "wordings_sha256": "db929eef524d503406a9aae2112aee2ee65a1eda2581e23da5f6f0a7e9b1ec7f",
-      "explain_sha256": "28ab0986b76f8a9d0bc7ded8c283f8a89e144826c9d4d028511a30cf52944cf0",
+      "wordings_sha256": "e1edac384dd80761e4e2664e24d69e2e0363d89493e41d53f81f6cf1cdb954ef",
+      "explain_sha256": "fa328c7a19727edc223473857855a50c19502f2b11e9b56e529824e702f76580",
       "units": 1360,
       "sentences": 1069,
-      "hard_stems": 664,
+      "hard_stems": 666,
       "uncovered": 0
     }
   },
@@ -329,7 +339,7 @@
       "term": "49.3",
       "aliases": ["49-3", "49 alinéa 3"],
       "plain": "L'article 49.3 de la Constitution permet au gouvernement de faire adopter un texte sans vote des députés, sauf si une motion de censure est votée.",
-      "noExample": "E"
+      "example": "Le gouvernement engage sa responsabilité sur un budget. Des députés déposent une motion de censure, qui ne réunit pas la majorité : le budget est adopté sans que les députés aient voté sur lui."
     },
     {
       "id": "constituante",
@@ -1326,7 +1336,7 @@
       "id": "droits-de-douane",
       "term": "droits de douane",
       "plain": "Un droit de douane est une taxe payée à l'entrée d'un produit étranger dans un pays.",
-      "noExample": "E"
+      "example": "Un pays applique un droit de douane de 10 % sur les vélos importés. Un vélo étranger vendu 300 euros à la frontière paie 30 euros pour entrer."
     },
     {
       "id": "protectionnisme",
@@ -1683,7 +1693,7 @@
       "id": "pollueur-payeur",
       "term": "pollueur-payeur",
       "plain": "Selon le principe pollueur-payeur, celui qui pollue paie les dégâts et leur réparation.",
-      "noExample": "E"
+      "example": "Une usine doit payer les filtres qui limitent ses rejets dans une rivière. Si elle pollue quand même, c'est elle qui paie le nettoyage de l'eau et la réparation des dégâts."
     },
     {
       "id": "ferroutage",
@@ -1983,7 +1993,7 @@
       "term": "exonération",
       "aliases": ["exonérer", "exonéré"],
       "plain": "Une exonération dispense une personne ou une entreprise de payer un impôt ou une cotisation, en tout ou en partie.",
-      "noExample": "E"
+      "example": "Une entreprise doit 100 euros de cotisations sur un salaire. Avec une exonération de moitié, elle n'en paie que 50."
     },
     {
       "id": "transactions-financieres",
@@ -1995,7 +2005,7 @@
       "id": "rachat-d-actions",
       "term": "rachat d'actions",
       "plain": "Un rachat d'actions est l'achat par une entreprise de ses propres actions. C'est, à côté des dividendes, une autre façon de reverser de l'argent aux actionnaires.",
-      "noExample": "E"
+      "example": "Une entreprise compte 100 actions, réparties entre ses actionnaires. Elle en rachète 10 et les annule : chacune des 90 restantes représente alors une part plus grande de l'entreprise."
     },
     {
       "id": "arbitrage-de-dividendes",
@@ -2014,7 +2024,7 @@
       "id": "perequation",
       "term": "péréquation",
       "plain": "La péréquation consiste à répartir des ressources pour réduire les écarts de richesse, par exemple entre collectivités locales riches et pauvres.",
-      "noExample": "E"
+      "example": "Une commune riche verse une part de ses recettes à un fonds commun. Ce fonds aide une commune pauvre à payer l'entretien de ses écoles."
     },
     {
       "id": "contribuable",
@@ -2069,7 +2079,7 @@
       "id": "dette-perpetuelle",
       "term": "dette perpétuelle",
       "plain": "Une dette perpétuelle n'est jamais remboursée : l'emprunteur paie seulement des intérêts, sans limite de temps.",
-      "noExample": "E"
+      "example": "Un État emprunte 1 million d'euros sans date de remboursement. Il paie chaque année des intérêts, par exemple 40 000 euros, aussi longtemps que la dette court."
     },
     {
       "id": "pacse",
@@ -2083,7 +2093,7 @@
       "term": "indexer",
       "aliases": ["indexé", "indexée", "indexation"],
       "plain": "Indexer une somme, c'est la faire suivre automatiquement un indice, le plus souvent les prix : quand ils montent, elle monte d'autant.",
-      "noExample": "E"
+      "example": "Une pension de 1 000 euros est indexée sur les prix. Si les prix montent de 10 %, elle monte aussi de 10 %, à 1 100 euros."
     },
     {
       "id": "inflation",
@@ -2116,19 +2126,19 @@
       "term": "fonds d'investissement",
       "aliases": ["fonds financiers", "fonds de capital-investissement", "fonds prédateurs"],
       "plain": "Un fonds d'investissement réunit l'argent d'épargnants ou d'institutions pour le placer, souvent en achetant des parts d'entreprises, afin qu'il rapporte.",
-      "noExample": "E"
+      "example": "Deux cents épargnants versent chacun 25 000 euros à un fonds. Avec ces 5 millions, le fonds achète des parts de plusieurs entreprises ; ses gains ou ses pertes reviennent aux épargnants."
     },
     {
       "id": "niveau-de-vie",
       "term": "niveau de vie",
-      "plain": "Le niveau de vie est le revenu d'un ménage, après impôts et aides, rapporté à sa taille. Un enfant y compte moins qu'un adulte.",
-      "noExample": "E"
+      "plain": "Le niveau de vie est le revenu des personnes qui vivent sous un même toit, après impôts et aides, rapporté à leur nombre. Un enfant y compte moins qu'un adulte.",
+      "example": "Un couple sans enfant touche 3 000 euros par mois, après impôts et aides. Le premier adulte compte pour 1, le second pour 0,5 : leur niveau de vie est de 2 000 euros par mois."
     },
     {
       "id": "niveau-de-vie-median",
       "term": "niveau de vie médian",
       "plain": "Le niveau de vie médian partage la population en deux moitiés égales : la moitié vit avec moins, l'autre avec plus.",
-      "noExample": "E"
+      "example": "Cinq personnes vivent avec 1 000, 1 500, 2 000, 3 000 et 9 000 euros par mois. La valeur médiane est celle du milieu, 2 000 euros ; la moyenne, tirée vers le haut, fait 3 300 euros."
     },
     {
       "id": "securite-sociale",
@@ -2322,14 +2332,14 @@
       "term": "temps partiel subi",
       "aliases": ["temps partiel contraint", "temps partiel imposé"],
       "plain": "Le temps partiel est subi quand une personne travaille moins d'heures qu'elle le souhaite, faute de pouvoir faire mieux.",
-      "noExample": "E"
+      "example": "Un caissier travaille vingt heures par semaine parce que son magasin ne lui en propose pas plus, alors qu'il souhaite un temps plein."
     },
     {
       "id": "interim",
       "term": "intérim",
       "aliases": ["intérimaire", "travail temporaire", "entreprises d'intérim"],
       "plain": "En intérim, une agence emploie une personne et la met à disposition d'une entreprise pour une mission courte.",
-      "noExample": "E"
+      "example": "Une agence d'intérim emploie un magasinier et l'envoie trois semaines dans un entrepôt. L'entrepôt paie l'agence, et l'agence paie le magasinier."
     },
     {
       "id": "faux-independant",
@@ -2819,7 +2829,7 @@
       "id": "principe-de-precaution",
       "term": "principe de précaution",
       "plain": "Le principe de précaution demande d'agir, de façon provisoire et proportionnée, contre un risque d'atteinte grave et irréversible à l'environnement, même encore incertain.",
-      "noExample": "E"
+      "example": "Des études encore incertaines laissent craindre qu'un produit nouveau pollue gravement les nappes d'eau. Les autorités en limitent l'usage, le temps d'en savoir plus."
     },
     {
       "id": "prix-de-journee",
@@ -3183,7 +3193,7 @@
       "term": "régie",
       "aliases": ["régies"],
       "plain": "Un service public est en régie quand la commune ou l'État le gère elle-même, avec ses agents, au lieu de le confier à une entreprise.",
-      "noExample": "E"
+      "example": "Une commune gère elle-même l'eau potable, avec ses agents : le service est en régie. Sa voisine en confie la gestion à une entreprise, par un contrat."
     },
     {
       "id": "delegation-de-service-public",
@@ -3701,8 +3711,8 @@
     {
       "id": "rep-producteur",
       "term": "responsabilité élargie du producteur",
-      "plain": "Avec la responsabilité élargie du producteur, ceux qui vendent un produit paient sa collecte et son recyclage, une fois qu'il est devenu un déchet.",
-      "noExample": "E"
+      "plain": "Avec la responsabilité élargie du producteur, ceux qui fabriquent ou importent un produit paient sa collecte et son recyclage, une fois qu'il est devenu un déchet.",
+      "example": "Sur chaque réfrigérateur vendu, une somme comprise dans son prix est versée à un organisme. Cet argent finance la collecte et le recyclage des appareils jetés."
     },
     {
       "id": "mesusage",
@@ -3753,7 +3763,7 @@
       "id": "hierarchie-des-normes",
       "term": "hiérarchie des normes",
       "plain": "La hiérarchie des normes classe les règles de droit : la Constitution d'abord, puis les traités, les lois, les décrets. Une règle doit respecter celles du dessus.",
-      "noExample": "E"
+      "example": "Un décret contredit une loi. Un juge peut l'annuler, car un décret doit respecter la loi, qui doit elle-même respecter la Constitution."
     },
     {
       "id": "decret",
@@ -3765,9 +3775,9 @@
     {
       "id": "deroger",
       "term": "déroger",
-      "aliases": ["dérogation", "dérogations"],
+      "aliases": ["dérogation", "dérogations", "déroge"],
       "plain": "Déroger à une règle, c'est ne pas l'appliquer dans un cas précis, avec une autorisation.",
-      "noExample": "E"
+      "example": "Une règle interdit de construire au bord d'une rivière. Le préfet autorise une exception pour une station de pompage : ce chantier déroge à la règle."
     },
     {
       "id": "participation-du-public",
@@ -3792,8 +3802,8 @@
       "id": "droit-opposable",
       "term": "droit opposable",
       "aliases": ["droit au logement opposable", "opposable"],
-      "plain": "Un droit est opposable quand on peut saisir la justice pour obliger l'État à le respecter, comme le droit au logement.",
-      "noExample": "E"
+      "plain": "Un droit est opposable quand on peut aller devant un juge pour obliger l'État à le respecter, comme le droit au logement.",
+      "example": "Une commission reconnaît qu'une personne mal logée doit être relogée en priorité. Si rien ne lui est proposé dans le délai prévu, elle peut aller devant le juge, qui peut obliger l'État à la loger."
     },
     {
       "id": "hexagone",
@@ -4016,7 +4026,7 @@
       "term": "coopératives",
       "aliases": ["coopérative"],
       "plain": "Une coopérative est une entreprise détenue par ses membres, salariés, producteurs ou clients, qui ont chacun une voix, quelle que soit leur part.",
-      "noExample": "E"
+      "example": "Dans une coopérative, un membre qui a apporté 100 euros et un autre qui en a apporté 5 000 ont chacun une voix."
     },
     {
       "id": "voix-deliberative",
@@ -4101,7 +4111,7 @@
         "mutualisation"
       ],
       "plain": "Mutualiser, c'est mettre en commun des moyens, pour en partager le coût.",
-      "noExample": "E"
+      "example": "Trois communes voisines achètent ensemble une balayeuse et se partagent son coût."
     },
     {
       "id": "prefets",
@@ -4169,7 +4179,7 @@
       "term": "sous-traitance",
       "aliases": ["sous-traitant", "sous-traitants", "donneur d'ordre", "donneurs d'ordre"],
       "plain": "La sous-traitance consiste, pour une entreprise, à confier une partie de son travail à une autre entreprise, le sous-traitant ; elle est son donneur d'ordre.",
-      "noExample": "E"
+      "example": "Un constructeur d'avions confie la fabrication des sièges à une autre entreprise. Celle-ci est son sous-traitant, et le constructeur, son donneur d'ordre."
     },
     {
       "id": "liberalisme",
@@ -4324,21 +4334,21 @@
         "restructuration"
       ],
       "plain": "Restructurer une dette, c'est en changer les conditions, durée ou montant, pour qu'elle puisse être remboursée.",
-      "noExample": "E"
+      "example": "Un pays doit rembourser 100 millions d'euros en deux ans et ne le peut pas. Ses créanciers lui laissent dix ans, ou effacent une partie de la dette."
     },
     {
       "id": "surendettement",
       "term": "surendettement",
       "aliases": ["surendetté", "surendettés", "surendettée", "surendettées"],
       "plain": "Un ménage est surendetté quand il ne peut plus payer ses dettes. Une commission de la Banque de France peut alors étaler ou réduire ce qu'il doit.",
-      "noExample": "E"
+      "example": "Un ménage doit chaque mois plus qu'il ne gagne, entre crédits et factures. Une commission peut étaler ses remboursements, ou en effacer une partie."
     },
     {
       "id": "veto",
       "term": "veto",
       "aliases": ["véto", "droit de veto", "veto suspensif"],
       "plain": "Un droit de veto permet de bloquer seul une décision ; un veto suspensif la retarde seulement.",
-      "noExample": "E"
+      "example": "Dans une assemblée de quinze membres, treize approuvent une décision. Un seul membre qui a un droit de veto s'y oppose : la décision est bloquée."
     },
     {
       "id": "accession",
@@ -4406,7 +4416,7 @@
         "spéculateurs"
       ],
       "plain": "La spéculation, c'est acheter un bien pour le revendre plus cher, en pariant sur la hausse de son prix. Ses défenseurs disent qu'elle facilite les échanges, ses critiques qu'elle fait monter les prix.",
-      "noExample": "E"
+      "example": "Un négociant achète des tonnes de blé pour les revendre plus tard, en pariant sur une hausse de leur prix. Il ne compte ni les moudre ni les consommer."
     },
     {
       "id": "technocratie",
@@ -4812,7 +4822,7 @@
       "id": "rupture-d-egalite",
       "term": "rupture d'égalité",
       "plain": "Il y a rupture d'égalité quand une règle traite différemment, sans raison valable, des personnes dans la même situation.",
-      "noExample": "E"
+      "example": "Une règle accorde une prime aux agents d'un service et la refuse, sans raison, à ceux d'un service voisin qui font le même travail. Il y a rupture d'égalité."
     },
     {
       "id": "secretaire-de-mairie",
@@ -4832,7 +4842,7 @@
       "term": "vote blanc",
       "aliases": ["votes blancs", "suffrages exprimés"],
       "plain": "Un vote blanc est un bulletin vide, ou une enveloppe vide. Il est compté à part des suffrages, c'est-à-dire des votes, exprimés pour un candidat ou une liste.",
-      "noExample": "E"
+      "example": "Sur 100 bulletins, 10 sont blancs. Un candidat qui obtient 50 voix a donc 50 voix sur 90 suffrages exprimés : plus de la moitié."
     },
     {
       "id": "zones-tendues",
@@ -4879,7 +4889,7 @@
       "id": "affacturage",
       "term": "affacturage",
       "plain": "Avec l'affacturage, une entreprise se fait payer tout de suite ses factures par un organisme, qui se charge ensuite de les encaisser, contre une commission.",
-      "noExample": "E"
+      "example": "Une entreprise envoie une facture de 50 000 euros, payable dans deux mois. Un organisme lui en verse tout de suite 49 000, puis encaisse lui-même la facture."
     },
     {
       "id": "fleurons",
@@ -4933,14 +4943,14 @@
       "term": "escompte",
       "aliases": ["escompter"],
       "plain": "L'escompte permet à une entreprise d'obtenir tout de suite, auprès d'une banque, l'argent d'une facture payable plus tard.",
-      "noExample": "E"
+      "example": "Une entreprise détient une facture de 20 000 euros, payable dans trois mois. Une banque lui avance tout de suite cette somme, moins une part qu'elle garde."
     },
     {
       "id": "holdings",
       "term": "holdings",
       "aliases": ["holding"],
       "plain": "Une holding est une société qui possède des parts d'autres sociétés pour les contrôler, sans forcément produire elle-même.",
-      "noExample": "E"
+      "example": "Une société détient la majorité d'une boulangerie industrielle, d'un transporteur et d'une chaîne de magasins. Elle fixe leurs grandes orientations ; chacune garde sa propre activité."
     },
     {
       "id": "ostentatoire",
@@ -5027,7 +5037,7 @@
       "term": "chiffre d'affaires",
       "aliases": ["chiffres d'affaires"],
       "plain": "Le chiffre d'affaires est le total des ventes d'une entreprise sur une période, avant d'en retirer les coûts. Ce n'est pas son bénéfice.",
-      "noExample": "E"
+      "example": "Un restaurant vend pour 800 000 euros de repas dans l'année : c'est son chiffre d'affaires. Une fois payés les produits, les salaires et le loyer, il lui reste 40 000 euros de bénéfice."
     },
     {
       "id": "commission-d-enquete",
@@ -5156,7 +5166,7 @@
       "term": "produits dérivés",
       "aliases": ["produit dérivé"],
       "plain": "Un produit dérivé est un contrat financier dont la valeur dépend d'autre chose : un prix, un taux, une action. Il sert à parier sur son évolution ou à s'en protéger.",
-      "noExample": "E"
+      "example": "Un boulanger signe un contrat pour acheter sa farine dans six mois, à un prix fixé d'avance : il se protège d'une hausse. Un financier peut signer le même contrat pour parier sur cette hausse."
     },
     {
       "id": "protection-sociale",
@@ -5215,7 +5225,7 @@
       "id": "traitement-des-fonctionnaires",
       "term": "traitement des fonctionnaires",
       "plain": "Le traitement d'un fonctionnaire est son salaire de base, calculé à partir de la valeur du point d'indice.",
-      "noExample": "E"
+      "example": "Le traitement d'un agent dont l'indice est 400 est cet indice multiplié par la valeur du point. Quand l'État relève le point, tous les traitements montent."
     },
     {
       "id": "tribunal-de-commerce",
@@ -5430,7 +5440,7 @@
       "term": "récession",
       "aliases": ["récessions"],
       "plain": "Une récession est un recul de l'activité économique d'un pays, de sa production, pendant plusieurs mois.",
-      "noExample": "E"
+      "example": "Pendant deux trimestres de suite, un pays produit moins qu'au trimestre précédent : on parle alors souvent de récession."
     },
     {
       "id": "le-cas-echeant",
@@ -5542,7 +5552,7 @@
       "term": "marché carbone",
       "aliases": ["marchés carbone"],
       "plain": "Un marché carbone fixe un plafond d'émissions et oblige les entreprises à détenir un droit pour chaque tonne de CO2 émise ; ces droits s'achètent et se vendent.",
-      "noExample": "E"
+      "example": "Une usine a le droit d'émettre 100 tonnes de gaz à effet de serre dans l'année. Elle en émet 120 : elle achète 20 droits à une autre usine, qui en a émis moins que permis."
     },
     {
       "id": "mesures-conservatoires",
@@ -5793,7 +5803,7 @@
       "id": "discretionnaire",
       "term": "discrétionnaire",
       "plain": "Un pouvoir discrétionnaire laisse à celui qui l'exerce une large liberté de choix, dans les limites que fixe la loi.",
-      "noExample": "E"
+      "example": "La loi permet au préfet d'accorder ou non une dérogation, sans lui imposer sa réponse : il dispose d'un pouvoir discrétionnaire, dans les limites de la loi."
     },
     {
       "id": "big-data",
@@ -5817,9 +5827,9 @@
     {
       "id": "flecher",
       "term": "fléchant",
-      "aliases": ["flécher"],
+      "aliases": ["flécher", "fléchés"],
       "plain": "Flécher de l'argent, c'est le réserver à un usage précis.",
-      "noExample": "E"
+      "example": "Une commune reçoit 400 000 euros fléchés vers la rénovation de ses écoles. Elle ne peut pas les dépenser pour autre chose."
     },
     {
       "id": "snu",
@@ -5880,7 +5890,7 @@
       "id": "neutralite-du-net",
       "term": "neutralité du Net",
       "plain": "La neutralité du Net oblige les fournisseurs d'accès à Internet à traiter de la même façon tous les contenus qui y circulent, sans en favoriser.",
-      "noExample": "E"
+      "example": "Un fournisseur d'accès ne peut pas ralentir les vidéos d'un site concurrent pour favoriser son propre service."
     },
     {
       "id": "libertes-academiques",
@@ -6181,7 +6191,7 @@
       "id": "dejudiciariser",
       "term": "déjudiciariser",
       "plain": "Déjudiciariser une démarche, c'est la retirer aux tribunaux pour la confier à l'administration, à un notaire ou à un médiateur.",
-      "noExample": "E"
+      "example": "Un couple d'accord pour divorcer peut le faire par une convention signée de ses avocats et déposée chez un notaire, sans passer devant un juge."
     },
     {
       "id": "desinstitutionnalisation",
@@ -6209,7 +6219,7 @@
       "term": "déconjugaliser",
       "aliases": ["déconjugalisée"],
       "plain": "Déconjugaliser une aide, c'est ne plus la faire dépendre de la vie en couple de celui qui la reçoit.",
-      "noExample": "E"
+      "example": "Une allocation baisse quand son bénéficiaire vit avec quelqu'un qui gagne bien sa vie. Déconjugalisée, elle ne dépend que de ses propres revenus."
     },
     {
       "id": "defiscaliser",
@@ -6229,7 +6239,7 @@
       "id": "effectivite",
       "term": "effectivité",
       "plain": "L'effectivité d'un droit est le fait qu'il s'applique réellement, et pas seulement sur le papier.",
-      "noExample": "E"
+      "example": "Une loi garantit à chaque enfant une place à l'école. Si une école refuse un élève en fauteuil roulant faute d'accès, ce droit n'est pas effectif pour lui."
     },
     {
       "id": "sine-qua-non",
