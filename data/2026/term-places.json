@@ -1,7 +1,7 @@
 {
   "meta": {
     "corpus_version": "27ee6e713fe25e7e",
-    "wordings_sha256": "59dfb0d9943faa7068d5de81d8f0e4353a46a590b4fceda64b5f5167dc49d007",
+    "wordings_sha256": "716dbac0666d0fcd98aa29e080e41257b19610a6e13c5b73bf87fcc2fb3ac3d4",
     "note_fr": "Où chaque mot expliqué est écrit dans le livre : pour chaque section, les identifiants des mots de data/2026/terms.json que son texte emploie (son titre, ses mesures et leurs points, les paragraphes entre eux), triés. Les sections qui n'en emploient aucun n'y sont pas. Écrit par scripts/lexicon-2026.ts --places, sur la machine qui tient le texte du livre, par la session seule (D20.1) : aucun mot du livre, seulement des identifiants de sections et de mots. Il ne dit ni où dans la section, ni combien de fois. La fiche de chaque section montre ces mots, expliqués, sous une ligne qu'on ouvre (PLAN-MOTS, lot 4). À refaire après tout changement des formulations de terms.json : wordings_sha256 dit sur lesquelles il a été calculé."
   },
   "sections": {
@@ -12,6 +12,7 @@
       "onf"
     ],
     "p1c1-s02": [
+      "agroecologie",
       "circuits-courts"
     ],
     "p1c2-s01": [
@@ -108,6 +109,7 @@
       "autoentrepreneur",
       "cae",
       "ess",
+      "restauration-collective",
       "scic",
       "scop"
     ],
@@ -263,6 +265,7 @@
       "cotisation-sociale",
       "eligibilite",
       "france-travail",
+      "indemniser",
       "interim",
       "medecine-du-travail",
       "offre-raisonnable-d-emploi",
@@ -273,6 +276,7 @@
     ],
     "p3c1-s06": [
       "accident-du-travail",
+      "arret-maladie",
       "chsct",
       "circ",
       "droit-a-la-deconnexion",
@@ -308,14 +312,18 @@
     "p3c1-s08": [
       "abroger",
       "ame",
+      "arret-maladie",
       "ayant-droit",
       "capital-deces",
       "complementaire-sante",
+      "conventionnement",
       "cotisation-sociale",
       "csg",
       "depassements-d-honoraires",
       "franchises-medicales",
+      "indemniser",
       "jours-de-carence",
+      "participation-forfaitaire",
       "privatisation",
       "regime-general",
       "reste-a-charge",
@@ -330,7 +338,10 @@
       "defenseur-des-droits",
       "gpa",
       "ivg",
-      "mineur"
+      "mineur",
+      "mourir-dans-la-dignite",
+      "personnes-menstruees",
+      "soins-palliatifs"
     ],
     "p3c2-s02": [
       "ase",
@@ -345,6 +356,7 @@
       "crous",
       "emploi-precaire",
       "foyer-fiscal",
+      "indemniser",
       "secteur-non-marchand",
       "seuil-de-pauvrete"
     ],
@@ -358,6 +370,7 @@
     "p3c2-s05": [
       "aah",
       "aesh",
+      "dispositif-medical",
       "esat",
       "formation-professionnelle",
       "inspection-du-travail",
@@ -393,7 +406,10 @@
     "p3c3-s03": [
       "clause-de-conscience",
       "ivg",
-      "lgbti"
+      "lgbti",
+      "planning-familial",
+      "sante-sexuelle",
+      "traitement-hormonal-de-la-menopause"
     ],
     "p3c3-s04": [
       "assistante-maternelle",
@@ -420,6 +436,7 @@
       "collectivites-locales",
       "glyphosate",
       "icpe",
+      "indemniser",
       "neonicotinoides",
       "pfas"
     ],
@@ -442,6 +459,7 @@
       "travailleurs-detaches"
     ],
     "p4c1-s04": [
+      "brevet-sur-le-vivant",
       "moratoire",
       "ogm"
     ],
@@ -461,6 +479,7 @@
     ],
     "p4c2-s04": [
       "abroger",
+      "agro-industrie",
       "apprenti",
       "bts",
       "but",
@@ -507,38 +526,87 @@
       "staps"
     ],
     "p4c4-s01": [
+      "amiante",
       "chlordecone",
+      "fonds-d-indemnisation",
+      "institut-national-du-cancer",
+      "maladie-chronique",
       "medecine-du-travail",
+      "medecine-scolaire",
       "perturbateurs-endocriniens",
       "pfas",
+      "principe-de-precaution",
+      "registre-des-cancers",
+      "sante-environnementale",
       "zoonoses"
     ],
     "p4c4-s02": [
       "antibioresistance",
       "biomedicaments",
+      "brevet-sur-le-vivant",
+      "catastrophe-naturelle",
+      "fonds-mondial",
       "licence-d-office",
       "nationaliser",
+      "pharmacie-hospitaliere",
       "requisition",
+      "seropositif",
       "vih",
       "zoonoses"
     ],
     "p4c4-s03": [
-      "nutri-score"
+      "acides-gras-satures",
+      "agro-industrie",
+      "aliment-transforme",
+      "maladie-chronique",
+      "nutri-score",
+      "restauration-collective"
     ],
     "p4c4-s04": [
+      "acte-liberal",
       "assurance-maladie",
+      "austerite",
+      "centre-de-sante",
       "deserts-medicaux",
+      "dotation-forfaitaire",
       "ehpad",
+      "equivalence",
+      "exercice-salarie",
       "fonds-d-investissement",
+      "maison-de-sante",
+      "maladie-chronique",
+      "medecin-traitant",
       "medico-social",
       "ondam",
+      "padhue",
+      "permanence-des-soins",
+      "premier-recours",
+      "prix-de-journee",
+      "regulation-de-l-installation",
+      "service-public-hospitalier",
       "t2a"
     ],
     "p4c4-s05": [
       "assurance-maladie",
+      "attentatoire",
+      "cmp",
+      "cmpp",
       "contention",
+      "conventionnement",
+      "deliter",
+      "infirmier-en-pratique-avancee",
+      "mise-a-l-isolement",
       "privatisation",
-      "securite-sociale"
+      "securite-sociale",
+      "troubles-des-conduites-alimentaires"
+    ],
+    "p4c4-s06": [
+      "monopole-d-etat",
+      "ofdt",
+      "reduction-des-risques",
+      "salle-de-consommation",
+      "traitement-de-substitution",
+      "usage-recreatif"
     ],
     "p4c5-s01": [
       "aires-marines-protegees",
@@ -601,6 +669,7 @@
       "abroger",
       "amnistie",
       "formation-professionnelle",
+      "indemniser",
       "intercommunalites",
       "moratoire",
       "radiation",
@@ -668,6 +737,7 @@
       "dotation-globale-de-fonctionnement",
       "exoneration",
       "impot-progressif",
+      "indemniser",
       "indexer",
       "inflation",
       "taxe-d-habitation"
@@ -710,6 +780,7 @@
       "travailleurs-detaches"
     ],
     "p6c1-s02": [
+      "austerite",
       "clause-de-sauvegarde",
       "libre-echange",
       "moratoire",
@@ -750,6 +821,7 @@
       "biens-a-double-usage",
       "cloud",
       "ia",
+      "indemniser",
       "onu",
       "otan",
       "sala",
@@ -774,6 +846,7 @@
       "ue"
     ],
     "p6c2-s05": [
+      "brevet-sur-le-vivant",
       "ia",
       "licence-d-office",
       "onu"
@@ -814,6 +887,9 @@
       "dette-souveraine",
       "ppp",
       "revenu-national-brut"
+    ],
+    "p6c3-s05": [
+      "catastrophe-naturelle"
     ],
     "p6c3-s06": [
       "cfa"

@@ -16,11 +16,19 @@ import { explainedTerms } from '../src/lib/words-data.js';
 import { CARD_PREFIX, spansIn, type TermWording } from '../src/lib/terms.js';
 
 /** The texts of a unit of the book, in order: its title, then each item and its points. */
+/**
+ * The book's text, as the engine of the words can read it: without the soft hyphens the official
+ * pages leave in some words (« médico-­psychologiques »). The search drops them too
+ * (src/lib/search-core.ts, `normalize`); the engine keeps every character in place, so they are
+ * taken out before it reads.
+ */
+export const readable = (text: string): string => text.replace(/\u00ad/g, '');
+
 export function unitTexts(title: string, items: readonly PrivateItem[]): string[] {
-  const out = [title];
+  const out = [readable(title)];
   const walk = (list: readonly PrivateItem[]): void => {
     for (const item of list) {
-      out.push(item.text);
+      out.push(readable(item.text));
       walk(item.subMeasures ?? []);
     }
   };
@@ -223,14 +231,14 @@ export interface BookUnits {
 /** The items of a unit and their points, each with its id. */
 const placedItems = (items: readonly PrivateItem[]): Placed[] =>
   items.flatMap((item) => [
-    { where: item.id, text: item.text },
+    { where: item.id, text: readable(item.text) },
     ...placedItems(item.subMeasures ?? []),
   ]);
 
 /** Every text of the book — titles, measures, points, paragraphs — with the id of what holds it. */
 export function bookTexts(book: BookUnits): Placed[] {
   return [book.introduction, ...book.parts, ...book.chapters, ...book.sections].flatMap((unit) => [
-    { where: unit.id, text: unit.title },
+    { where: unit.id, text: readable(unit.title) },
     ...placedItems(unit.items),
   ]);
 }

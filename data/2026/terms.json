@@ -665,146 +665,172 @@
       "term": "T2A",
       "aliases": ["tarification à l'activité"],
       "anyCase": true,
-      "plain": "La T2A, tarification à l'activité, finance une grande part du budget des hôpitaux selon les soins réalisés. On parle aussi de tarification à l'acte, mais elle paie surtout des séjours."
+      "plain": "La T2A, tarification à l'activité, paie les hôpitaux selon les soins réalisés : un tarif fixé d'avance par séjour, selon la maladie. On dit parfois tarification à l'acte, mais elle paie des séjours.",
+      "example": "Un hôpital reçoit un tarif fixé d'avance pour chaque séjour d'un patient, selon sa maladie, en plus de dotations. Une part de son budget suit donc le nombre de patients soignés."
     },
     {
       "id": "ondam",
       "term": "ONDAM",
       "anyCase": true,
-      "plain": "L'ONDAM, objectif national de dépenses d'assurance maladie, est le montant de dépenses de santé que le Parlement vote chaque année. Ce n'est pas un plafond strict."
+      "plain": "L'ONDAM, objectif national de dépenses d'assurance maladie, est le montant de dépenses de santé que le Parlement vote chaque année. Ce n'est pas un plafond strict.",
+      "noExample": "E"
     },
     {
       "id": "ald",
       "term": "ALD",
-      "plain": "Une ALD, affection de longue durée, est une maladie grave ou chronique. Ses soins sont mieux remboursés."
+      "plain": "Une ALD, affection de longue durée, est une maladie grave ou chronique. Ses soins sont mieux remboursés.",
+      "noExample": "E"
     },
     {
       "id": "ame",
       "term": "AME",
       "aliases": ["aide médicale d'État"],
-      "plain": "L'aide médicale d'État prend en charge, sous conditions, les soins des étrangers en situation irrégulière qui vivent en France."
+      "plain": "L'aide médicale d'État prend en charge, sous conditions, les soins des étrangers en situation irrégulière qui vivent en France.",
+      "noExample": "S"
     },
     {
       "id": "ehpad",
       "term": "EHPAD",
       "anyCase": true,
-      "plain": "Un EHPAD est une maison de retraite médicalisée, pour des personnes âgées qui ont besoin d'aide au quotidien."
+      "plain": "Un EHPAD est une maison de retraite médicalisée, pour des personnes âgées qui ont besoin d'aide au quotidien.",
+      "noExample": "E"
     },
     {
       "id": "pmi",
       "term": "PMI",
       "anyCase": true,
-      "plain": "La PMI, protection maternelle et infantile, suit gratuitement les femmes enceintes et les jeunes enfants. Accolé à PME, PMI désigne les petites et moyennes industries."
+      "plain": "La PMI, protection maternelle et infantile, suit gratuitement les femmes enceintes et les jeunes enfants. Accolé à PME, PMI désigne les petites et moyennes industries.",
+      "noExample": "E"
     },
     {
       "id": "mdph",
       "term": "MDPH",
       "anyCase": true,
-      "plain": "La MDPH est la maison départementale des personnes handicapées. Elle ouvre les droits liés au handicap."
+      "plain": "La MDPH est la maison départementale des personnes handicapées. Elle ouvre les droits liés au handicap.",
+      "noExample": "E"
     },
     {
       "id": "esat",
       "term": "ESAT",
       "anyCase": true,
-      "plain": "Un ESAT est un établissement où des personnes handicapées travaillent avec un accompagnement médico-social."
+      "plain": "Un ESAT est un établissement où des personnes handicapées travaillent avec un accompagnement médico-social.",
+      "noExample": "E"
     },
     {
       "id": "ivg",
       "term": "IVG",
       "aliases": ["interruption volontaire de grossesse"],
       "anyCase": true,
-      "plain": "L'IVG est l'interruption volontaire de grossesse : l'avortement choisi par la femme."
+      "plain": "L'IVG est l'interruption volontaire de grossesse : l'avortement choisi par la femme.",
+      "noExample": "S"
     },
     {
       "id": "pma",
       "term": "PMA",
       "aliases": ["procréation médicalement assistée"],
       "anyCase": true,
-      "plain": "La PMA, procréation médicalement assistée, regroupe les techniques médicales qui aident à avoir un enfant."
+      "plain": "La PMA, procréation médicalement assistée, regroupe les techniques médicales qui aident à avoir un enfant.",
+      "noExample": "S"
     },
     {
       "id": "gpa",
       "term": "GPA",
       "aliases": ["gestation pour autrui"],
       "anyCase": true,
-      "plain": "Dans une GPA, gestation pour autrui, une femme porte un enfant pour d'autres personnes. Elle est interdite en France."
+      "plain": "Dans une GPA, gestation pour autrui, une femme porte un enfant pour d'autres personnes. Elle est interdite en France.",
+      "noExample": "S"
     },
     {
       "id": "vih",
       "term": "VIH",
       "anyCase": true,
-      "plain": "Le VIH est le virus qui, sans traitement, peut provoquer le sida. Un traitement efficace permet de vivre avec et de ne pas le transmettre."
+      "plain": "Le VIH est le virus qui, sans traitement, peut provoquer le sida. Un traitement efficace permet de vivre avec et de ne pas le transmettre.",
+      "noExample": "E"
     },
     {
       "id": "clause-de-conscience",
       "term": "clause de conscience",
-      "plain": "La clause de conscience permet à un soignant de refuser un acte, comme une IVG, en orientant la personne vers un confrère. Les journalistes en ont une aussi, pour quitter un média qui change de ligne."
+      "plain": "La clause de conscience permet à un soignant de refuser un acte, comme une IVG, en orientant la personne vers un confrère. Les journalistes en ont une aussi, pour quitter un média qui change de ligne.",
+      "noExample": "S"
     },
     {
       "id": "franchises-medicales",
       "term": "franchises médicales",
-      "plain": "Les franchises médicales sont de petites sommes qui restent à la charge du patient sur les médicaments, certains actes et les transports."
+      "plain": "Les franchises médicales sont des sommes fixes, retirées des remboursements, que le patient paie lui-même sur les médicaments, certains actes et les transports.",
+      "example": "Sur le remboursement de chaque boîte de médicaments, l'Assurance maladie retire une somme fixe : c'est autant que le patient paie lui-même."
     },
     {
       "id": "depassements-d-honoraires",
       "term": "dépassements d'honoraires",
-      "plain": "Un dépassement d'honoraires est la part du prix d'une consultation au-dessus du tarif de la Sécurité sociale."
+      "plain": "Un dépassement d'honoraires est la part du prix d'une consultation au-dessus du tarif de la Sécurité sociale.",
+      "example": "Une consultation remboursée sur la base de 100 euros est facturée 150 euros : les 50 euros en plus sont un dépassement d'honoraires."
     },
     {
       "id": "jours-de-carence",
       "term": "jours de carence",
-      "plain": "Les jours de carence sont les premiers jours d'un arrêt maladie, pour lesquels on n'est pas indemnisé, sauf si l'employeur les prend en charge."
+      "plain": "Les jours de carence sont les premiers jours d'un arrêt maladie, pour lesquels on n'est pas indemnisé, sauf si l'employeur les prend en charge.",
+      "example": "Avec des jours de carence, les premiers jours d'un arrêt maladie ne sont pas indemnisés : un arrêt très court peut ne rien rapporter."
     },
     {
       "id": "reste-a-charge",
       "term": "reste à charge",
-      "plain": "Le reste à charge est ce qu'une personne paie elle-même une fois déduits les remboursements ou les aides, pour des soins ou une maison de retraite par exemple."
+      "plain": "Le reste à charge est ce qu'une personne paie elle-même une fois déduits les remboursements ou les aides, pour des soins ou une maison de retraite par exemple.",
+      "example": "Une paire de lunettes coûte 300 euros. La Sécurité sociale et la complémentaire santé en remboursent 250 : le reste à charge est de 50 euros."
     },
     {
       "id": "deserts-medicaux",
       "term": "déserts médicaux",
-      "plain": "Un désert médical est un territoire où il est difficile de trouver un médecin."
+      "plain": "Un désert médical est un territoire où il est difficile de trouver un médecin.",
+      "noExample": "E"
     },
     {
       "id": "contention",
       "term": "contention",
-      "plain": "En psychiatrie ou en maison de retraite, la contention consiste à attacher ou à immobiliser un patient."
+      "plain": "En psychiatrie ou en maison de retraite, la contention consiste à attacher ou à immobiliser un patient.",
+      "noExample": "E"
     },
     {
       "id": "licence-d-office",
       "term": "licence d'office",
-      "plain": "La licence d'office permet à l'État, pour la santé publique, d'autoriser un tiers à exploiter un brevet sans l'accord de son titulaire, contre une indemnité. Elle vise surtout des médicaments."
+      "plain": "La licence d'office permet à l'État, pour la santé publique, d'autoriser un tiers à exploiter un brevet sans l'accord de son titulaire, contre une indemnité. Elle vise surtout des médicaments.",
+      "noExample": "E"
     },
     {
       "id": "biomedicaments",
       "term": "biomédicaments",
-      "plain": "Un biomédicament est fabriqué à partir de cellules vivantes, et non par la seule chimie."
+      "plain": "Un biomédicament est fabriqué à partir de cellules vivantes, et non par la seule chimie.",
+      "noExample": "E"
     },
     {
       "id": "antibioresistance",
       "term": "antibiorésistance",
-      "plain": "L'antibiorésistance, c'est quand des bactéries résistent aux antibiotiques."
+      "plain": "L'antibiorésistance, c'est quand des bactéries résistent aux antibiotiques.",
+      "noExample": "E"
     },
     {
       "id": "zoonoses",
       "term": "zoonoses",
-      "plain": "Une zoonose est une maladie qui passe de l'animal à l'être humain."
+      "plain": "Une zoonose est une maladie qui passe de l'animal à l'être humain.",
+      "noExample": "E"
     },
     {
       "id": "perturbateurs-endocriniens",
       "term": "perturbateurs endocriniens",
-      "plain": "Un perturbateur endocrinien est une substance qui dérègle le système hormonal."
+      "plain": "Un perturbateur endocrinien est une substance qui dérègle le système hormonal.",
+      "noExample": "E"
     },
     {
       "id": "circ",
       "term": "CIRC",
-      "plain": "Le CIRC, installé à Lyon, est l'agence de l'OMS spécialisée dans le cancer. Il classe des substances ou des expositions selon les preuves qu'elles peuvent causer un cancer."
+      "plain": "Le CIRC, installé à Lyon, est l'agence de l'OMS spécialisée dans le cancer. Il classe des substances ou des expositions selon les preuves qu'elles peuvent causer un cancer.",
+      "noExample": "E"
     },
     {
       "id": "nutri-score",
       "term": "Nutri-Score",
       "anyCase": true,
-      "plain": "Le Nutri-Score note un aliment de A à E selon sa qualité nutritionnelle."
+      "plain": "Le Nutri-Score note un aliment de A à E selon sa qualité nutritionnelle.",
+      "noExample": "E"
     },
     {
       "id": "ase",
@@ -2317,6 +2343,363 @@
       "term": "autoentrepreneur",
       "aliases": ["autoentrepreneuriat", "microentrepreneur"],
       "plain": "Un autoentrepreneur, ou microentrepreneur, travaille à son compte avec des règles simplifiées : il paie impôts et cotisations sur ce qu'il encaisse.",
+      "noExample": "E"
+    },
+    {
+      "id": "fonds-mondial",
+      "term": "Fonds mondial",
+      "plain": "Le Fonds mondial est un partenariat international, entre États, fondations et entreprises, qui finance la lutte contre le sida, la tuberculose et le paludisme dans les pays pauvres.",
+      "noExample": "E"
+    },
+    {
+      "id": "institut-national-du-cancer",
+      "term": "Institut national du cancer",
+      "plain": "L'Institut national du cancer est l'agence publique qui coordonne en France la recherche et la lutte contre les cancers.",
+      "noExample": "E"
+    },
+    {
+      "id": "ofdt",
+      "term": "Observatoire français des drogues et tendances addictives",
+      "plain": "L'Observatoire français des drogues et des tendances addictives est l'organisme public qui étudie la consommation de drogues, d'alcool et de tabac en France.",
+      "noExample": "E"
+    },
+    {
+      "id": "acides-gras-satures",
+      "term": "acides gras saturés",
+      "plain": "Les acides gras saturés sont des graisses, nombreuses dans le beurre, la charcuterie ou certains plats industriels. En excès, ils favorisent les maladies du cœur.",
+      "noExample": "E"
+    },
+    {
+      "id": "acte-liberal",
+      "term": "actes libéraux",
+      "plain": "Un acte libéral est un soin fait par un professionnel de santé installé à son compte, payé à chaque acte.",
+      "noExample": "E"
+    },
+    {
+      "id": "agro-industrie",
+      "term": "agro-industrie",
+      "aliases": ["agro-industriels"],
+      "plain": "L'agro-industrie transforme à grande échelle les produits agricoles en aliments vendus en magasin.",
+      "noExample": "E"
+    },
+    {
+      "id": "aliment-transforme",
+      "term": "aliments transformés",
+      "plain": "Un aliment transformé a été préparé ou modifié par l'industrie avant d'être vendu : plat cuisiné, biscuit, charcuterie.",
+      "noExample": "E"
+    },
+    {
+      "id": "amiante",
+      "term": "amiante",
+      "plain": "L'amiante est un minéral longtemps utilisé dans le bâtiment. Ses fibres, respirées, causent des cancers ; il est interdit en France depuis 1997.",
+      "noExample": "E"
+    },
+    {
+      "id": "attentatoire",
+      "term": "attentatoires",
+      "aliases": ["attentatoire"],
+      "plain": "Est attentatoire ce qui porte atteinte à quelque chose : une pratique attentatoire à la dignité blesse la dignité d'une personne.",
+      "noExample": "E"
+    },
+    {
+      "id": "austerite",
+      "term": "austérité",
+      "aliases": ["austéritaires"],
+      "plain": "L'austérité désigne une politique qui réduit fortement les dépenses publiques, ou augmente les impôts, pour baisser un déficit. Ses défenseurs parlent plutôt de rigueur.",
+      "noExample": "E"
+    },
+    {
+      "id": "brevet-sur-le-vivant",
+      "term": "dépôt de brevets",
+      "aliases": ["dépôts de brevets", "brevets sur les médicaments", "brevets sur les vaccins"],
+      "plain": "Un brevet donne à son inventeur le droit exclusif d'exploiter une invention, vingt ans en général : un médicament, une machine, et sous conditions certains êtres vivants modifiés.",
+      "noExample": "E"
+    },
+    {
+      "id": "catastrophe-naturelle",
+      "term": "catastrophes naturelles",
+      "aliases": ["catastrophe naturelle"],
+      "plain": "Quand l'État reconnaît une catastrophe naturelle, comme une inondation, les assurances indemnisent les dégâts selon un régime spécial.",
+      "noExample": "E"
+    },
+    {
+      "id": "centre-de-sante",
+      "term": "centres de santé",
+      "aliases": ["centre de santé"],
+      "plain": "Un centre de santé réunit des médecins et des soignants salariés, souvent par une commune ou une association. On y paie peu ou pas d'avance.",
+      "noExample": "E"
+    },
+    {
+      "id": "cmp",
+      "term": "centres médico-psychologiques",
+      "aliases": ["centre médico-psychologique"],
+      "plain": "Un centre médico-psychologique offre des soins psychiatriques gratuits, près de chez soi, avec des psychiatres, des psychologues et des infirmiers.",
+      "noExample": "E"
+    },
+    {
+      "id": "cmpp",
+      "term": "centres médico-psycho-pédagogiques",
+      "plain": "Un centre médico-psycho-pédagogique soigne les enfants et les adolescents en difficulté psychologique ou scolaire, sans frais pour les familles.",
+      "noExample": "E"
+    },
+    {
+      "id": "conventionnement",
+      "term": "conventionnement",
+      "aliases": ["conventionné", "secteur conventionné"],
+      "plain": "Un soignant conventionné a signé un accord avec l'Assurance maladie : ses soins sont mieux remboursés. Certains peuvent facturer en plus des dépassements d'honoraires.",
+      "noExample": "E"
+    },
+    {
+      "id": "dotation-forfaitaire",
+      "term": "dotation forfaitaire",
+      "plain": "Une dotation forfaitaire est une somme fixée à l'avance, versée quel que soit le nombre d'actes réalisés.",
+      "noExample": "E"
+    },
+    {
+      "id": "deliter",
+      "term": "déliter",
+      "aliases": ["se déliter"],
+      "plain": "Se déliter, c'est se défaire peu à peu, perdre sa force et son unité.",
+      "noExample": "E"
+    },
+    {
+      "id": "exercice-salarie",
+      "term": "exercice salarié",
+      "plain": "Un médecin en exercice salarié est payé par un employeur, comme un hôpital ou un centre de santé, au lieu d'être payé à chaque acte.",
+      "noExample": "E"
+    },
+    {
+      "id": "fonds-d-indemnisation",
+      "term": "fonds d'indemnisation",
+      "plain": "Un fonds d'indemnisation verse de l'argent aux victimes d'un même accident ou d'une même pollution, sans qu'elles aient à attaquer un responsable en justice.",
+      "noExample": "E"
+    },
+    {
+      "id": "infirmier-en-pratique-avancee",
+      "term": "infirmières en pratique avancée",
+      "aliases": ["pratique avancée"],
+      "plain": "Une infirmière en pratique avancée, formée plus longtemps, peut suivre seule certains patients et renouveler des traitements.",
+      "noExample": "E"
+    },
+    {
+      "id": "maison-de-sante",
+      "term": "maisons de santé pluriprofessionnelles",
+      "aliases": ["maison de santé pluriprofessionnelle", "maisons de santé"],
+      "plain": "Une maison de santé pluriprofessionnelle réunit plusieurs soignants installés à leur compte, médecins, infirmiers, kinés, qui travaillent ensemble.",
+      "noExample": "E"
+    },
+    {
+      "id": "maladie-chronique",
+      "term": "maladies chroniques",
+      "aliases": ["maladie chronique"],
+      "plain": "Une maladie chronique dure longtemps, souvent toute la vie : diabète, asthme, maladies du cœur.",
+      "noExample": "E"
+    },
+    {
+      "id": "mise-a-l-isolement",
+      "term": "mise à l'isolement",
+      "plain": "En psychiatrie, la mise à l'isolement consiste à enfermer un patient seul dans une chambre, en principe pour sa sécurité ou celle des autres.",
+      "noExample": "E"
+    },
+    {
+      "id": "monopole-d-etat",
+      "term": "monopole d'État",
+      "plain": "Il y a monopole d'État quand seul l'État, ou une entreprise publique, a le droit de produire ou de vendre un bien.",
+      "noExample": "E"
+    },
+    {
+      "id": "medecin-traitant",
+      "term": "médecin traitant",
+      "plain": "Le médecin traitant est le médecin que chacun déclare à l'Assurance maladie pour le suivre. Le consulter d'abord permet d'être mieux remboursé.",
+      "noExample": "E"
+    },
+    {
+      "id": "medecine-scolaire",
+      "term": "médecine scolaire",
+      "plain": "La médecine scolaire suit la santé des élèves : visites médicales, dépistages, conseils aux familles.",
+      "noExample": "E"
+    },
+    {
+      "id": "permanence-des-soins",
+      "term": "permanence des soins",
+      "plain": "La permanence des soins organise l'accès à un médecin le soir, la nuit et le week-end, quand les cabinets sont fermés.",
+      "noExample": "E"
+    },
+    {
+      "id": "pharmacie-hospitaliere",
+      "term": "pharmacies hospitalières",
+      "aliases": ["pharmacie hospitalière"],
+      "plain": "Une pharmacie hospitalière fournit les médicaments d'un hôpital, et peut en fabriquer certains.",
+      "noExample": "E"
+    },
+    {
+      "id": "padhue",
+      "term": "praticiens diplômés hors Union européenne",
+      "plain": "Les praticiens diplômés hors Union européenne sont des médecins formés à l'étranger qui doivent réussir des épreuves pour exercer pleinement en France.",
+      "noExample": "E"
+    },
+    {
+      "id": "premier-recours",
+      "term": "premier recours",
+      "plain": "Les soins de premier recours sont ceux qu'on consulte en premier, près de chez soi : médecin généraliste, pharmacien, infirmier.",
+      "noExample": "E"
+    },
+    {
+      "id": "principe-de-precaution",
+      "term": "principe de précaution",
+      "plain": "Le principe de précaution demande d'agir, de façon provisoire et proportionnée, contre un risque d'atteinte grave et irréversible à l'environnement, même encore incertain.",
+      "noExample": "E"
+    },
+    {
+      "id": "prix-de-journee",
+      "term": "prix de la journée",
+      "plain": "Le prix de journée est la somme fixée pour chaque journée d'hospitalisation ou d'hébergement d'une personne.",
+      "noExample": "E"
+    },
+    {
+      "id": "registre-des-cancers",
+      "term": "registre national des cancers",
+      "plain": "Le registre national des cancers, créé par une loi de 2025, recense les cas de cancer en France pour mieux connaître leurs causes et guider la prévention.",
+      "noExample": "E"
+    },
+    {
+      "id": "restauration-collective",
+      "term": "restauration collective",
+      "plain": "La restauration collective sert des repas à des groupes : cantines scolaires, restaurants d'entreprise, hôpitaux.",
+      "noExample": "E"
+    },
+    {
+      "id": "reduction-des-risques",
+      "term": "réduction des risques",
+      "plain": "La réduction des risques cherche à limiter les dangers d'une drogue sans exiger d'abord l'arrêt. Ses défenseurs disent qu'elle sauve des vies, ses critiques qu'elle banalise la drogue.",
+      "noExample": "E"
+    },
+    {
+      "id": "regulation-de-l-installation",
+      "term": "réguler l'installation des médecins",
+      "plain": "Réguler l'installation des médecins, c'est encadrer les lieux où ils s'installent. Ses partisans y voient une réponse aux déserts médicaux, ses opposants une atteinte à leur liberté.",
+      "noExample": "E"
+    },
+    {
+      "id": "salle-de-consommation",
+      "term": "salles de consommation à moindre risque",
+      "aliases": ["salle de consommation à moindre risque"],
+      "plain": "Une salle de consommation à moindre risque accueille des usagers de drogue pour qu'ils consomment avec du matériel propre, sous l'œil de soignants. Ses critiques l'appellent salle de shoot.",
+      "noExample": "E"
+    },
+    {
+      "id": "sante-environnementale",
+      "term": "santé environnementale",
+      "plain": "La santé environnementale étudie les effets sur la santé de l'environnement : air, eau, sols, produits chimiques, bruit.",
+      "noExample": "E"
+    },
+    {
+      "id": "service-public-hospitalier",
+      "term": "service public hospitalier",
+      "plain": "Le service public hospitalier regroupe les établissements, surtout publics, qui s'engagent à accueillir tout le monde, jour et nuit, aux tarifs de la Sécurité sociale.",
+      "noExample": "E"
+    },
+    {
+      "id": "seropositif",
+      "term": "séropositives",
+      "aliases": ["séropositif", "séropositifs", "séropositive"],
+      "plain": "Une personne séropositive porte le virus du sida, le VIH. Avec un traitement, elle peut vivre normalement et ne plus le transmettre.",
+      "noExample": "E"
+    },
+    {
+      "id": "traitement-de-substitution",
+      "term": "traitements de substitution",
+      "aliases": ["traitement de substitution"],
+      "plain": "Un traitement de substitution remplace une drogue par un médicament prescrit, pour aider à arrêter sans souffrir du manque.",
+      "noExample": "E"
+    },
+    {
+      "id": "troubles-des-conduites-alimentaires",
+      "term": "troubles des conduites alimentaires",
+      "plain": "Les troubles des conduites alimentaires sont des maladies liées à la façon de manger, comme l'anorexie ou la boulimie.",
+      "noExample": "E"
+    },
+    {
+      "id": "usage-recreatif",
+      "term": "récréatives",
+      "plain": "On parle d'usage récréatif d'une drogue quand elle est consommée pour le plaisir, et non pour se soigner. Le mot ne dit rien de ses dangers ni de sa légalité.",
+      "noExample": "E"
+    },
+    {
+      "id": "equivalence",
+      "term": "équivalences",
+      "aliases": ["équivalence"],
+      "plain": "Une équivalence reconnaît qu'un diplôme obtenu ailleurs vaut un diplôme français.",
+      "noExample": "E"
+    },
+    {
+      "id": "participation-forfaitaire",
+      "term": "participations forfaitaires",
+      "aliases": ["participation forfaitaire"],
+      "plain": "Une participation forfaitaire est une somme fixe, retenue par l'Assurance maladie sur la plupart des consultations et analyses, avec des exceptions et un plafond. Le patient la paie lui-même.",
+      "noExample": "E"
+    },
+    {
+      "id": "arret-maladie",
+      "term": "arrêt maladie",
+      "aliases": ["arrêts de travail", "arrêt de travail"],
+      "plain": "Un arrêt maladie, prescrit par un médecin, permet de ne pas travailler en étant malade. La Sécurité sociale verse alors des indemnités.",
+      "noExample": "E"
+    },
+    {
+      "id": "soins-palliatifs",
+      "term": "soins palliatifs",
+      "plain": "Les soins palliatifs soulagent la douleur et accompagnent les personnes atteintes d'une maladie grave, souvent en fin de vie.",
+      "noExample": "S"
+    },
+    {
+      "id": "mourir-dans-la-dignite",
+      "term": "mourir dans la dignité",
+      "plain": "Mourir dans la dignité désigne la possibilité d'obtenir une aide médicale pour mourir, sous conditions. Ses opposants parlent de suicide assisté ou d'euthanasie. Une loi l'a créée en 2026.",
+      "noExample": "S"
+    },
+    {
+      "id": "dispositif-medical",
+      "term": "dispositifs médicaux",
+      "plain": "Un dispositif médical est un objet utilisé pour soigner ou compenser un handicap : fauteuil roulant, prothèse, appareil auditif, pansement.",
+      "noExample": "E"
+    },
+    {
+      "id": "sante-sexuelle",
+      "term": "santé sexuelle et reproductive",
+      "plain": "La santé sexuelle et reproductive couvre ce qui touche à la sexualité et à la procréation : contraception, grossesse, infections transmissibles.",
+      "noExample": "S"
+    },
+    {
+      "id": "traitement-hormonal-de-la-menopause",
+      "term": "traitement hormonal de la ménopause",
+      "plain": "Le traitement hormonal de la ménopause donne des hormones aux femmes à l'arrêt des règles, pour en soulager les troubles.",
+      "noExample": "E"
+    },
+    {
+      "id": "planning-familial",
+      "term": "Planning familial",
+      "aliases": ["planning familial"],
+      "plain": "Le Planning familial est une association qui informe et accompagne sur la contraception, l'avortement et la sexualité.",
+      "noExample": "E"
+    },
+    {
+      "id": "personnes-menstruees",
+      "term": "personnes menstruées",
+      "plain": "On appelle personnes menstruées celles qui ont leurs règles. L'expression veut inclure des personnes qui ne se disent pas femmes ; d'autres préfèrent parler des femmes.",
+      "noExample": "S"
+    },
+    {
+      "id": "indemniser",
+      "term": "indemniser",
+      "aliases": ["indemnisé", "indemnités", "indemnité", "indemnisation"],
+      "plain": "Indemniser quelqu'un, c'est lui verser de l'argent pour compenser une perte : un salaire qui manque, un dégât subi.",
+      "noExample": "E"
+    },
+    {
+      "id": "honoraires",
+      "term": "honoraires",
+      "plain": "Les honoraires sont ce qu'on paie à un médecin, un avocat ou un autre professionnel installé à son compte, pour une consultation ou un service.",
       "noExample": "E"
     }
   ]

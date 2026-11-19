@@ -320,3 +320,19 @@ void test('our public texts: every explanation, card, answer, sentence of the ga
   assert.deepEqual([...kinds].sort(), ['jeu', 'mot', 'r', 'terms', 'titre']);
   assert.ok(texts.every((placed) => placed.text.trim() !== ''));
 });
+
+void test('the book is read without its soft hyphens: a word cut by one is still found', () => {
+  const soft = String.fromCodePoint(0xad);
+  const placed = bookTexts({
+    introduction: {
+      id: 'p0',
+      title: 'Intro',
+      items: [item('p0-k01', `des centres médico-${soft}psychologiques`)],
+    },
+    parts: [],
+    chapters: [],
+    sections: [],
+  });
+  assert.equal(placed[1]?.text, 'des centres médico-psychologiques');
+  assert.deepEqual(unitTexts(`Un ti${soft}tre`, []), ['Un titre']);
+});

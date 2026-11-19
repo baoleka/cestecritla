@@ -79,6 +79,7 @@
   "adapte",
   "adapter",
   "addiction",
+  "addictive",
   "additif",
   "additionne",
   "adequat",
@@ -130,6 +131,7 @@
   "agroalimentaire",
   "aide",
   "aident",
+  "aient",
   "aile",
   "ailleur",
   "aine",
@@ -139,6 +141,7 @@
   "ajout",
   "ajoutant",
   "ajouter",
+  "alcool",
   "alerte",
   "algerien",
   "algorithme",
@@ -193,6 +196,7 @@
   "annulant",
   "annuler",
   "anonyme",
+  "anorexie",
   "ans",
   "anteced",
   "antibiotique",
@@ -202,6 +206,7 @@
   "antisemitisme",
   "antiterroriste",
   "aout",
+  "appareil",
   "appartienn",
   "appel",
   "appele",
@@ -262,6 +267,7 @@
   "assurant",
   "assure",
   "assurer",
+  "asthme",
   "atelier",
   "atomique",
   "attache",
@@ -281,6 +287,7 @@
   "aucune",
   "audiovisuel",
   "audiovisuelle",
+  "auditif",
   "augment",
   "augmentant",
   "augmentation",
@@ -331,6 +338,7 @@
   "balayer",
   "balise",
   "balle",
+  "banalise",
   "bananeraie",
   "bancaire",
   "bande",
@@ -354,6 +362,7 @@
   "beneficier",
   "benevolat",
   "besoin",
+  "beurre",
   "biai",
   "bibliotheque",
   "bien",
@@ -365,6 +374,7 @@
   "bio",
   "biodiversite",
   "biologique",
+  "biscuit",
   "bisexuelle",
   "blanc",
   "blesse",
@@ -383,6 +393,7 @@
   "bord",
   "boulangerie",
   "boulevers",
+  "boulimie",
   "bout",
   "bouteille",
   "boutique",
@@ -435,6 +446,7 @@
   "categorique",
   "catholique",
   "cause",
+  "causent",
   "causer",
   "cellule",
   "cent",
@@ -462,6 +474,7 @@
   "chapitre",
   "chaque",
   "charbon",
+  "charcuterie",
   "charge",
   "charger",
   "charpente",
@@ -518,6 +531,7 @@
   "climatisation",
   "co2",
   "coeffici",
+  "coeur",
   "coherence",
   "col",
   "collaboration",
@@ -641,8 +655,10 @@
   "consiste",
   "consolidant",
   "consolider",
+  "consomm",
   "consommateur",
   "consommation",
+  "consomme",
   "consommer",
   "constater",
   "constitue",
@@ -652,6 +668,8 @@
   "construire",
   "construit",
   "consultation",
+  "consulte",
+  "consulter",
   "contact",
   "contamination",
   "contenu",
@@ -740,6 +758,7 @@
   "croire",
   "cruelle",
   "cube",
+  "cuisine",
   "culte",
   "cultive",
   "cultiver",
@@ -774,6 +793,7 @@
   "decider",
   "decision",
   "declar",
+  "declare",
   "declench",
   "declencher",
   "decline",
@@ -791,6 +811,7 @@
   "deduit",
   "defaillant",
   "defaille",
+  "defaire",
   "defait",
   "defaut",
   "defavorise",
@@ -900,6 +921,7 @@
   "devienne",
   "devoir",
   "devra",
+  "diabete",
   "diagnostic",
   "dialogue",
   "dictature",
@@ -992,6 +1014,7 @@
   "double",
   "doubler",
   "douche",
+  "douleur",
   "drastiqu",
   "dressant",
   "dresse",
@@ -1113,6 +1136,7 @@
   "enfance",
   "enfant",
   "enferm",
+  "enfermer",
   "enfreignant",
   "engag",
   "engageant",
@@ -1157,6 +1181,7 @@
   "epargne",
   "eparpille",
   "epidemie",
+  "epreuve",
   "equilibre",
   "equilibrer",
   "equip",
@@ -1196,6 +1221,7 @@
   "etranger",
   "etrangere",
   "etrangl",
+  "etre",
   "etroit",
   "etude",
   "etudiant",
@@ -1205,6 +1231,7 @@
   "europe",
   "europeen",
   "europeenne",
+  "euthanasie",
   "eux",
   "evacuation",
   "evaluation",
@@ -1218,6 +1245,7 @@
   "ex",
   "examen",
   "examine",
+  "exce",
   "exception",
   "exceptionnell",
   "excessif",
@@ -1272,6 +1300,7 @@
   "facteur",
   "facturation",
   "facture",
+  "facturer",
   "facultative",
   "faculte",
   "faible",
@@ -1284,9 +1313,11 @@
   "farine",
   "fausse",
   "faute",
+  "fauteuil",
   "fautif",
   "faux",
   "favorable",
+  "favoris",
   "favorisant",
   "favorise",
   "favoriser",
@@ -1419,6 +1450,7 @@
   "generalisation",
   "generalise",
   "generaliser",
+  "generaliste",
   "generateur",
   "genetiqu",
   "geographie",
@@ -1437,6 +1469,7 @@
   "gps",
   "gra",
   "grace",
+  "graisse",
   "grand",
   "grande",
   "gratuit",
@@ -1451,6 +1484,7 @@
   "guerre",
   "guichet",
   "guide",
+  "guider",
   "gynecologique",
   "habitable",
   "habitant",
@@ -1489,8 +1523,10 @@
   "horizon",
   "horizontale",
   "hormonal",
+  "hormone",
   "hospitalier",
   "hospitaliere",
+  "hospitalisation",
   "hostile",
   "hotel",
   "hotellerie",
@@ -1542,6 +1578,7 @@
   "impulsion",
   "impunite",
   "incendie",
+  "incertain",
   "inceste",
   "incid",
   "incinerateur",
@@ -1554,6 +1591,7 @@
   "inclusion",
   "incompatible",
   "inconnue",
+  "indemnis",
   "indemnisation",
   "indemnise",
   "indemniser",
@@ -1584,6 +1622,7 @@
   "inegalite",
   "inequitable",
   "infantile",
+  "infection",
   "inferieur",
   "inferieure",
   "infinancable",
@@ -1594,6 +1633,7 @@
   "influencer",
   "information",
   "informatique",
+  "informe",
   "informer",
   "infraction",
   "infrastructure",
@@ -1614,6 +1654,7 @@
   "insecticide",
   "inspecteur",
   "inspire",
+  "install",
   "installation",
   "installe",
   "instaurant",
@@ -1668,12 +1709,15 @@
   "introduire",
   "inutile",
   "inventaire",
+  "inventeur",
+  "invention",
   "investie",
   "investigation",
   "investir",
   "investiss",
   "investit",
   "inviter",
+  "irreversible",
   "irriguer",
   "isolation",
   "isole",
@@ -1707,6 +1751,7 @@
   "justice",
   "justifie",
   "kilometre",
+  "kine",
   "label",
   "laboratoire",
   "laique",
@@ -1725,6 +1770,7 @@
   "legal",
   "legale",
   "legaliser",
+  "legalite",
   "legere",
   "legislation",
   "legislative",
@@ -1781,6 +1827,7 @@
   "lourde",
   "loyer",
   "lune",
+  "lunette",
   "luttant",
   "lutte",
   "luttent",
@@ -1789,6 +1836,7 @@
   "lyce",
   "lyceen",
   "lyceenne",
+  "machine",
   "magasin",
   "mai",
   "main",
@@ -1899,6 +1947,7 @@
   "million",
   "mine",
   "minerai",
+  "mineral",
   "miniere",
   "minimal",
   "minimale",
@@ -2000,6 +2049,7 @@
   "nombreux",
   "nomme",
   "nord",
+  "normal",
   "normale",
   "norme",
   "note",
@@ -2018,6 +2068,7 @@
   "nutritionnel",
   "nutritionnelle",
   "objectif",
+  "objet",
   "obligatoire",
   "oblige",
   "obligeant",
@@ -2036,6 +2087,7 @@
   "ocean",
   "octobre",
   "odieuse",
+  "oeil",
   "oeuf",
   "oeuvre",
   "oeuvrer",
@@ -2089,14 +2141,17 @@
   "paieront",
   "paille",
   "pain",
+  "paire",
   "paix",
   "palace",
   "palestinien",
   "palestinienne",
+  "paludisme",
   "pan",
   "pandemie",
   "panier",
   "panneau",
+  "pans",
   "papier",
   "parce",
   "parcelle",
@@ -2110,6 +2165,7 @@
   "parl",
   "parle",
   "parlementaire",
+  "parlent",
   "parler",
   "parmi",
   "parole",
@@ -2199,6 +2255,7 @@
   "peuple",
   "pharmaceutique",
   "pharmacie",
+  "pharmacien",
   "phenomene",
   "piece",
   "pillage",
@@ -2214,6 +2271,7 @@
   "plafonne",
   "plafonner",
   "plainte",
+  "plaisir",
   "plan",
   "planetaire",
   "planete",
@@ -2221,6 +2279,7 @@
   "planifie",
   "planifier",
   "plastique",
+  "plat",
   "plateau",
   "plein",
   "pleine",
@@ -2283,6 +2342,7 @@
   "precise",
   "precision",
   "predateur",
+  "prefer",
   "preferer",
   "preleve",
   "prelever",
@@ -2378,6 +2438,7 @@
   "promouvoir",
   "prononce",
   "propagande",
+  "proportionne",
   "proposant",
   "propose",
   "proposition",
@@ -2394,11 +2455,15 @@
   "protege",
   "proteger",
   "proteine",
+  "prothese",
   "prouver",
+  "provisoire",
   "provoquer",
   "proximite",
   "psy",
+  "psychiatre",
   "psychiatrie",
+  "psychiatrique",
   "psychique",
   "psychologie",
   "psychologue",
@@ -2470,6 +2535,7 @@
   "reautorisation",
   "reautorise",
   "recens",
+  "recense",
   "recente",
   "recevoir",
   "rechange",
@@ -2491,6 +2557,7 @@
   "reconvertit",
   "reconvoquer",
   "recourant",
+  "recreatif",
   "recreative",
   "recreer",
   "recrut",
@@ -2609,6 +2676,7 @@
   "renforcer",
   "renouer",
   "renouvelable",
+  "renouveler",
   "renouvell",
   "renovation",
   "renover",
@@ -2662,6 +2730,7 @@
   "respecter",
   "respectif",
   "respectueux",
+  "respire",
   "responsabilite",
   "responsable",
   "resserr",
@@ -2686,6 +2755,7 @@
   "retablit",
   "retard",
   "retenu",
+  "retenue",
   "retienn",
   "retient",
   "retire",
@@ -2727,6 +2797,7 @@
   "robotisation",
   "role",
   "rompre",
+  "roulant",
   "routiere",
   "rouvre",
   "rue",
@@ -2757,6 +2828,7 @@
   "saumon",
   "saut",
   "sauvage",
+  "sauve",
   "sauvegarde",
   "sauver",
   "savoir",
@@ -2817,6 +2889,7 @@
   "sexualite",
   "sexuel",
   "sexuelle",
+  "shoot",
   "sida",
   "siege",
   "siegent",
@@ -2850,7 +2923,10 @@
   "soient",
   "soignant",
   "soignante",
+  "soigne",
+  "soigner",
   "soin",
+  "soir",
   "soit",
   "sol",
   "solaire",
@@ -2871,10 +2947,13 @@
   "sortira",
   "soudaine",
   "souffrance",
+  "souffrir",
   "souhait",
   "souhaitant",
   "souhaite",
+  "soulag",
   "soulage",
+  "soulager",
   "soumettre",
   "soumi",
   "soumise",
@@ -2891,6 +2970,7 @@
   "souveraine",
   "spatial",
   "spatiale",
+  "special",
   "speciale",
   "specialise",
   "specialite",
@@ -2929,6 +3009,7 @@
   "suffisamm",
   "suffisant",
   "suffisante",
+  "suicide",
   "suisse",
   "suit",
   "suite",
@@ -2996,6 +3077,7 @@
   "temporaire",
   "tenant",
   "tend",
+  "tendance",
   "tendre",
   "tenir",
   "tension",
@@ -3082,6 +3164,7 @@
   "troupe",
   "trouv",
   "trouver",
+  "tuberculose",
   "tue",
   "tuer",
   "turbine",
@@ -3173,6 +3256,7 @@
   "vigilance",
   "village",
   "ville",
+  "vingt",
   "viol",
   "violation",
   "violence",
@@ -3253,7 +3337,9 @@
   "agraire": [],
   "agre": [],
   "agree": [],
-  "agro": [],
+  "agro": [
+   "agro-industrie"
+  ],
   "agroecologie": [
    "agroecologie"
   ],
@@ -3288,7 +3374,9 @@
   "ame": [
    "ame"
   ],
-  "amiante": [],
+  "amiante": [
+   "amiante"
+  ],
   "amnistie": [
    "amnistie"
   ],
@@ -3370,10 +3458,14 @@
    "athos"
   ],
   "atlantisme": [],
-  "attentatoire": [],
+  "attentatoire": [
+   "attentatoire"
+  ],
   "audit": [],
   "auditer": [],
-  "austerite": [],
+  "austerite": [
+   "austerite"
+  ],
   "auto": [],
   "autochtone": [],
   "autoentrepreneur": [
@@ -3561,8 +3653,12 @@
   "contribuable": [
    "contribuable"
   ],
-  "conventionn": [],
-  "conventionne": [],
+  "conventionn": [
+   "conventionnement"
+  ],
+  "conventionne": [
+   "conventionnement"
+  ],
   "cooperative": [],
   "cop": [
    "cop"
@@ -3642,6 +3738,9 @@
    "amende-forfaitaire-delictuelle"
   ],
   "delit": [],
+  "deliter": [
+   "deliter"
+  ],
   "delocalisation": [],
   "delphinarium": [],
   "demarchandiser": [],
@@ -3675,6 +3774,7 @@
    "dividendes"
   ],
   "dotation": [
+   "dotation-forfaitaire",
    "dotation-globale-de-fonctionnement"
   ],
   "dumping": [
@@ -3723,7 +3823,9 @@
    "epr2"
   ],
   "eps": [],
-  "equivalence": [],
+  "equivalence": [
+   "equivalence"
+  ],
   "erasmu": [],
   "esat": [
    "esat"
@@ -3783,7 +3885,9 @@
   ],
   "foresterie": [],
   "forfaitaire": [
-   "amende-forfaitaire-delictuelle"
+   "amende-forfaitaire-delictuelle",
+   "dotation-forfaitaire",
+   "participation-forfaitaire"
   ],
   "fret": [],
   "gafam": [
@@ -3835,7 +3939,8 @@
   "homologuer": [],
   "honorabilite": [],
   "honoraire": [
-   "depassements-d-honoraires"
+   "depassements-d-honoraires",
+   "honoraires"
   ],
   "houle": [],
   "hydrographique": [],
@@ -4002,6 +4107,8 @@
    "niveau-de-vie-median"
   ],
   "medico": [
+   "cmp",
+   "cmpp",
    "medico-social"
   ],
   "mega": [
@@ -4027,7 +4134,9 @@
   "monetaire": [
    "politique-monetaire"
   ],
-  "monopole": [],
+  "monopole": [
+   "monopole-d-etat"
+  ],
   "moratoire": [
    "moratoire"
   ],
@@ -4129,7 +4238,9 @@
    "pacse"
   ],
   "palestine": [],
-  "palliatif": [],
+  "palliatif": [
+   "soins-palliatifs"
+  ],
   "pallier": [],
   "paneuropeen": [],
   "pantouflage": [
@@ -4192,7 +4303,9 @@
   "pluriannuel": [],
   "pluriannuelle": [],
   "pluridisciplinaire": [],
-  "pluriprofessionnelle": [],
+  "pluriprofessionnelle": [
+   "maison-de-sante"
+  ],
   "pma": [
    "pma"
   ],
@@ -4212,7 +4325,9 @@
   "ppp": [
    "ppp"
   ],
-  "praticien": [],
+  "praticien": [
+   "padhue"
+  ],
   "preconisation": [],
   "predictive": [],
   "preemption": [
@@ -4255,8 +4370,12 @@
   "protectionnisme": [
    "protectionnisme"
   ],
-  "psycho": [],
-  "psychologique": [],
+  "psycho": [
+   "cmpp"
+  ],
+  "psychologique": [
+   "cmp"
+  ],
   "psychosocial": [],
   "quantique": [
    "cryptographie-post-quantique"
@@ -4383,7 +4502,9 @@
   "seine": [],
   "semi": [],
   "separatisme": [],
-  "seropositive": [],
+  "seropositive": [
+   "seropositif"
+  ],
   "shom": [
    "shom"
   ],
@@ -4460,7 +4581,9 @@
    "tpe"
   ],
   "traitance": [],
-  "traitant": [],
+  "traitant": [
+   "medecin-traitant"
+  ],
   "tram": [],
   "transfrontaliere": [],
   "transnational": [],
@@ -4513,7 +4636,9 @@
   ]
  },
  "watch": {
-  "acide": [],
+  "acide": [
+   "acides-gras-satures"
+  ],
   "actif": [],
   "action": [
    "rachat-d-actions"
@@ -4535,7 +4660,9 @@
   "arbitrage": [
    "arbitrage-de-dividendes"
   ],
-  "arret": [],
+  "arret": [
+   "arret-maladie"
+  ],
   "assemble": [
    "constituante"
   ],
@@ -4547,7 +4674,9 @@
   "branche": [
    "accord-de-branche"
   ],
-  "brevet": [],
+  "brevet": [
+   "brevet-sur-le-vivant"
+  ],
   "brune": [],
   "brut": [
    "pib",
@@ -4651,7 +4780,9 @@
   "evasion": [
    "evasion-fiscale"
   ],
-  "exercice": [],
+  "exercice": [
+   "exercice-salarie"
+  ],
   "exploitation": [],
   "faciale": [],
   "faveur": [
@@ -4664,8 +4795,10 @@
    "fonction-publique"
   ],
   "fond": [
+   "fonds-d-indemnisation",
    "fonds-d-investissement",
-   "fonds-de-reserve-pour-les-retraites"
+   "fonds-de-reserve-pour-les-retraites",
+   "fonds-mondial"
   ],
   "fortune": [],
   "foyer": [
@@ -4705,14 +4838,18 @@
    "ivg"
   ],
   "irreguliere": [],
-  "isol": [],
+  "isol": [
+   "mise-a-l-isolement"
+  ],
   "jet": [],
   "kilometrique": [],
   "lanceur": [],
   "lecture": [],
   "legitime": [],
   "levier": [],
-  "liberal": [],
+  "liberal": [
+   "acte-liberal"
+  ],
   "licence": [
    "licence-d-office"
   ],
@@ -4772,7 +4909,9 @@
   ],
   "parc": [],
   "parrainage": [],
-  "participation": [],
+  "participation": [
+   "participation-forfaitaire"
+  ],
   "participative": [],
   "pass": [],
   "patrimoine": [
@@ -4793,7 +4932,9 @@
   "plancher": [
    "prix-planchers"
   ],
-  "planning": [],
+  "planning": [
+   "planning-familial"
+  ],
   "plateforme": [
    "plateforme-numerique"
   ],
@@ -4803,7 +4944,9 @@
   "pole": [],
   "polytechnique": [],
   "poursuite": [],
-  "precaution": [],
+  "precaution": [
+   "principe-de-precaution"
+  ],
   "preference": [],
   "prescription": [],
   "primaire": [],
@@ -4820,7 +4963,8 @@
   "recette": [],
   "reconnaissance": [],
   "recour": [
-   "non-recours"
+   "non-recours",
+   "premier-recours"
   ],
   "redress": [],
   "refer": [],
@@ -4843,6 +4987,7 @@
   "retention": [
    "cra"
   ],
+  "rigueur": [],
   "rupture": [],
   "saisir": [],
   "sejour": [
@@ -4876,7 +5021,10 @@
    "titre-de-dette",
    "titre-de-sejour"
   ],
-  "trait": [],
+  "trait": [
+   "traitement-de-substitution",
+   "traitement-hormonal-de-la-menopause"
+  ],
   "traite": [
    "traite-de-la-lune"
   ],
@@ -4892,7 +5040,9 @@
    "valider-des-trimestres"
   ],
   "tutelle": [],
-  "union": [],
+  "union": [
+   "padhue"
+  ],
   "valeur": [
    "cvae",
    "tva",
