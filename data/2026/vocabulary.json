@@ -61,6 +61,7 @@
   "accueill",
   "accueille",
   "accueillir",
+  "accumule",
   "accusation",
   "accuse",
   "achat",
@@ -89,6 +90,7 @@
   "additionne",
   "additionner",
   "adequat",
+  "adher",
   "adjoint",
   "administrant",
   "administrateur",
@@ -115,6 +117,7 @@
   "affectif",
   "affective",
   "affiche",
+  "afficher",
   "affirmant",
   "affirmer",
   "afflux",
@@ -160,6 +163,7 @@
   "algorithme",
   "algorithmique",
   "algue",
+  "aligne",
   "aligner",
   "aliment",
   "alimentaire",
@@ -230,6 +234,7 @@
   "apparti",
   "appartienn",
   "appat",
+  "appauvriss",
   "appel",
   "appele",
   "appell",
@@ -276,6 +281,7 @@
   "artistique",
   "aspiration",
   "assecher",
+  "assigner",
   "assimilable",
   "assistance",
   "assistant",
@@ -365,6 +371,7 @@
   "baccalaureat",
   "bacterie",
   "baie",
+  "bail",
   "baissant",
   "baisse",
   "baisser",
@@ -392,6 +399,7 @@
   "batissant",
   "batit",
   "batterie",
+  "beau",
   "bec",
   "benefice",
   "benefici",
@@ -411,12 +419,14 @@
   "bilan",
   "bilingue",
   "billet",
+  "binational",
   "binome",
   "bio",
   "biodiversite",
   "biologique",
   "biscuit",
   "bisexuelle",
+  "bitcoin",
   "blaireau",
   "blanc",
   "blesse",
@@ -424,6 +434,7 @@
   "bleue",
   "bloc",
   "blocage",
+  "blocu",
   "bloqu",
   "bloque",
   "bloquer",
@@ -455,6 +466,7 @@
   "brute",
   "budget",
   "budgetaire",
+  "budgetisation",
   "bulletin",
   "bureau",
   "burn",
@@ -490,6 +502,7 @@
   "caractere",
   "caracteristique",
   "carburant",
+  "carcan",
   "carre",
   "carriere",
   "cartographie",
@@ -597,6 +610,7 @@
   "climat",
   "climatique",
   "climatisation",
+  "co",
   "co2",
   "coeffici",
   "coeur",
@@ -793,6 +807,7 @@
   "copie",
   "coquillage",
   "coral",
+  "corne",
   "corp",
   "correction",
   "correspond",
@@ -802,6 +817,7 @@
   "corruption",
   "cote",
   "cotier",
+  "coup",
   "coupable",
   "couper",
   "couple",
@@ -890,6 +906,7 @@
   "declench",
   "declencher",
   "decline",
+  "decloisonner",
   "decollage",
   "decolonisation",
   "decoloniser",
@@ -916,6 +933,7 @@
   "deficit",
   "defini",
   "definir",
+  "definit",
   "definition",
   "deforestation",
   "degat",
@@ -938,6 +956,7 @@
   "demanteler",
   "demarche",
   "demi",
+  "demilitarisation",
   "demission",
   "demissionnaire",
   "demissionner",
@@ -978,6 +997,7 @@
   "derniere",
   "desarm",
   "desastre",
+  "desdit",
   "desempoisonner",
   "desescalade",
   "deshumanise",
@@ -1025,6 +1045,7 @@
   "devienne",
   "devient",
   "devoir",
+  "devoye",
   "devra",
   "diabete",
   "diagnostic",
@@ -1047,6 +1068,7 @@
   "digne",
   "dignite",
   "digue",
+  "diligente",
   "dimanche",
   "dimension",
   "diminue",
@@ -1072,6 +1094,7 @@
   "discriminatoire",
   "discussion",
   "discute",
+  "discuter",
   "disparition",
   "disparu",
   "dispense",
@@ -1126,6 +1149,7 @@
   "doubler",
   "douche",
   "douleur",
+  "douze",
   "drastiqu",
   "dressant",
   "dresse",
@@ -1146,6 +1170,7 @@
   "eau",
   "eaux",
   "ecart",
+  "echang",
   "echange",
   "echanger",
   "echapper",
@@ -1209,6 +1234,7 @@
   "elever",
   "eliminer",
   "elire",
+  "elisent",
   "elite",
   "eloign",
   "eloigne",
@@ -1244,11 +1270,13 @@
   "emprise",
   "emprunt",
   "emprunte",
+  "emprunter",
   "emprunteur",
   "encadrant",
   "encadre",
   "encadrer",
   "encaisse",
+  "encaisser",
   "enceinte",
   "encercl",
   "encontre",
@@ -1285,6 +1313,7 @@
   "ensemble",
   "ensuite",
   "entamer",
+  "entendre",
   "entier",
   "entour",
   "entraide",
@@ -1497,6 +1526,7 @@
   "fiable",
   "fibre",
   "figure",
+  "fil",
   "film",
   "fin",
   "financ",
@@ -1539,6 +1569,7 @@
   "fondu",
   "fontaine",
   "forage",
+  "forc",
   "force",
   "foresterie",
   "forestier",
@@ -1590,6 +1621,7 @@
   "futur",
   "gagne",
   "gain",
+  "gamete",
   "garage",
   "garant",
   "garanti",
@@ -1645,6 +1677,7 @@
   "graisse",
   "grand",
   "grande",
+  "grandit",
   "gratuit",
   "gratuite",
   "grave",
@@ -1696,6 +1729,7 @@
   "histoire",
   "hiver",
   "homme",
+  "homologuer",
   "honnetete",
   "honorifique",
   "hopital",
@@ -1741,12 +1775,14 @@
   "immatricule",
   "immediat",
   "immediate",
+  "immeuble",
   "immigration",
   "immobilier",
   "immobiliere",
   "immobilisation",
   "immobiliser",
   "impact",
+  "impartialite",
   "impasse",
   "impaye",
   "imperatif",
@@ -1755,6 +1791,7 @@
   "importation",
   "importe",
   "importer",
+  "impos",
   "imposable",
   "imposant",
   "impose",
@@ -1893,6 +1930,7 @@
   "international",
   "internationale",
   "internet",
+  "interpretariat",
   "interrogatoire",
   "interroge",
   "interrompre",
@@ -1901,6 +1939,7 @@
   "intervenant",
   "intervention",
   "intervienn",
+  "intra",
   "intrafamiliale",
   "intraterritorial",
   "introduction",
@@ -1968,6 +2007,7 @@
   "lancer",
   "langue",
   "lapin",
+  "larg",
   "large",
   "latine",
   "latino",
@@ -2011,6 +2051,7 @@
   "lire",
   "liste",
   "lit",
+  "litige",
   "littoral",
   "livraison",
   "livre",
@@ -2033,6 +2074,7 @@
   "longue",
   "lor",
   "lorsque",
+  "loterie",
   "loue",
   "louer",
   "louera",
@@ -2217,6 +2259,7 @@
   "montent",
   "monter",
   "montr",
+  "montre",
   "montrer",
   "morceau",
   "mort",
@@ -2265,6 +2308,7 @@
   "negoci",
   "negociant",
   "negociation",
+  "negocie",
   "negocier",
   "nerveux",
   "nes",
@@ -2373,6 +2417,7 @@
   "out",
   "outil",
   "outrance",
+  "outre",
   "ouvert",
   "ouverte",
   "ouvrant",
@@ -2395,20 +2440,24 @@
   "paludisme",
   "pan",
   "pandemie",
+  "paneuropeen",
   "panier",
   "panne",
   "panneau",
   "pans",
   "papier",
+  "paramilitaire",
   "parce",
   "parcelle",
   "parcour",
   "parent",
   "parental",
+  "parentalite",
   "parente",
   "parfoi",
   "pari",
   "pariant",
+  "parier",
   "parking",
   "parl",
   "parle",
@@ -2454,6 +2503,7 @@
   "pauvre",
   "pauvrete",
   "pay",
+  "payable",
   "payant",
   "paye",
   "payer",
@@ -2478,6 +2528,7 @@
   "perdent",
   "perdre",
   "perdu",
+  "pere",
   "performance",
   "periode",
   "periodique",
@@ -2485,6 +2536,7 @@
   "permanence",
   "permanente",
   "permet",
+  "permett",
   "permettant",
   "permette",
   "permettra",
@@ -2521,6 +2573,7 @@
   "pistolet",
   "placant",
   "place",
+  "placent",
   "placer",
   "plafonnant",
   "plafonne",
@@ -2547,6 +2600,8 @@
   "plupart",
   "pluriannuel",
   "pluriannuelle",
+  "pluridisciplinaire",
+  "pluriel",
   "plusieur",
   "poid",
   "pointe",
@@ -2561,6 +2616,7 @@
   "polluante",
   "pollue",
   "polluer",
+  "pollueur",
   "pollution",
   "pompant",
   "pompe",
@@ -2596,6 +2652,7 @@
   "poursuivant",
   "poursuivie",
   "poursuivre",
+  "pourtant",
   "pouss",
   "pousse",
   "poussin",
@@ -2615,9 +2672,11 @@
   "precis",
   "precise",
   "precision",
+  "preconisation",
   "predateur",
   "prefer",
   "preferentiel",
+  "preferentielle",
   "preferer",
   "prelev",
   "prelevant",
@@ -2629,6 +2688,7 @@
   "prenant",
   "prend",
   "prendre",
+  "prenn",
   "prenne",
   "prepare",
   "preparer",
@@ -2646,11 +2706,13 @@
   "presidentielle",
   "presque",
   "presse",
+  "pression",
   "prestation",
   "presume",
   "pret",
   "prete",
   "pretendue",
+  "pretent",
   "preter",
   "preteur",
   "pretexte",
@@ -2664,6 +2726,7 @@
   "prevue",
   "pri",
   "priere",
+  "primaute",
   "principal",
   "principale",
   "principe",
@@ -2718,6 +2781,7 @@
   "prolongeant",
   "prolonger",
   "promettre",
+  "promise",
   "promotion",
   "promouvant",
   "promouvoir",
@@ -2754,6 +2818,7 @@
   "psychologie",
   "psychologique",
   "psychologue",
+  "psychosocial",
   "psychotherapie",
   "public",
   "publication",
@@ -2793,6 +2858,7 @@
   "quotidienne",
   "raccord",
   "rachat",
+  "rachet",
   "rachete",
   "racisme",
   "raciste",
@@ -2815,6 +2881,8 @@
   "rapprocher",
   "rare",
   "rassembl",
+  "rassemble",
+  "ratio",
   "rattache",
   "rattacher",
   "rattrapage",
@@ -2833,12 +2901,14 @@
   "recens",
   "recense",
   "recente",
+  "recentraliser",
   "recevoir",
   "rechange",
   "rechauff",
   "rechauffe",
   "recherche",
   "recit",
+  "reclam",
   "recoit",
   "recoiv",
   "recommandation",
@@ -2887,6 +2957,7 @@
   "reequilibrer",
   "reevalue",
   "reevaluer",
+  "refacturation",
   "refaire",
   "reference",
   "reflechi",
@@ -2994,6 +3065,8 @@
   "renover",
   "rentabilite",
   "renverse",
+  "renvoye",
+  "reorganisation",
   "reorganiser",
   "reorientant",
   "reoriente",
@@ -3036,6 +3109,7 @@
   "republicain",
   "republicaine",
   "republique",
+  "repute",
   "reseau",
   "reserver",
   "reservoir",
@@ -3076,6 +3150,7 @@
   "retablissant",
   "retablit",
   "retard",
+  "retarde",
   "retenu",
   "retenue",
   "retienn",
@@ -3093,8 +3168,10 @@
   "reuniss",
   "reunissant",
   "reunit",
+  "reussi",
   "reussir",
   "reutilise",
+  "revalorisant",
   "revalorise",
   "revaloriser",
   "revele",
@@ -3256,6 +3333,7 @@
   "simplifie",
   "simplifier",
   "simuler",
+  "sinon",
   "site",
   "situation",
   "situe",
@@ -3341,6 +3419,7 @@
   "station",
   "stationn",
   "statistique",
+  "sterilisation",
   "stock",
   "stockage",
   "stocke",
@@ -3470,6 +3549,7 @@
   "therapie",
   "thermique",
   "tienn",
+  "tient",
   "tire",
   "tirent",
   "tirer",
@@ -3517,6 +3597,7 @@
   "transmise",
   "transmissible",
   "transmission",
+  "transnational",
   "transparence",
   "transparente",
   "transport",
@@ -3559,6 +3640,7 @@
   "unienne",
   "unifie",
   "uniforme",
+  "unilaterale",
   "uniqu",
   "unique",
   "unir",
@@ -3571,6 +3653,7 @@
   "ups",
   "urbain",
   "urbaine",
+  "urbanisme",
   "urgence",
   "urgent",
   "urgente",
@@ -3597,6 +3680,7 @@
   "valider",
   "valorisant",
   "varie",
+  "varient",
   "varier",
   "vaut",
   "vecu",
@@ -3654,6 +3738,7 @@
   "violation",
   "violence",
   "violente",
+  "virement",
   "viru",
   "vis",
   "visa",
@@ -3735,8 +3820,12 @@
   "actionnaire": [
    "actionnaires"
   ],
-  "actionnarial": [],
-  "actionnariat": [],
+  "actionnarial": [
+   "actionnaires"
+  ],
+  "actionnariat": [
+   "actionnaires"
+  ],
   "ademe": [
    "ademe"
   ],
@@ -3746,7 +3835,9 @@
   "afd": [
    "afd"
   ],
-  "affacturage": [],
+  "affacturage": [
+   "affacturage"
+  ],
   "agraire": [
    "reforme-agraire"
   ],
@@ -3766,15 +3857,11 @@
   "aiea": [
    "aiea"
   ],
-  "alcatel": [],
   "ald": [
    "ald"
   ],
   "algoculture": [
    "algoculture"
-  ],
-  "aligne": [
-   "non-alignee"
   ],
   "allocataire": [
    "allocataire",
@@ -3837,7 +3924,6 @@
   "aquaculture": [
    "aquaculture"
   ],
-  "arabo": [],
   "arcelormittal": [
    "arcelormittal"
   ],
@@ -3849,7 +3935,6 @@
   "armateur": [
    "armateur"
   ],
-  "arte": [],
   "artemi": [
    "accords-artemis"
   ],
@@ -3891,7 +3976,9 @@
   "audit": [
    "audit"
   ],
-  "auditer": [],
+  "auditer": [
+   "audit"
+  ],
   "austerite": [
    "austerite"
   ],
@@ -3901,6 +3988,9 @@
   ],
   "autoentrepreneuriat": [
    "autoentrepreneur"
+  ],
+  "autoritarisme": [
+   "autoritarisme"
   ],
   "autosuffisance": [
    "autosuffisance-alimentaire"
@@ -3923,11 +4013,12 @@
   "bassine": [
    "mega-bassines"
   ],
-  "baux": [],
+  "baux": [
+   "baux"
+  ],
   "bce": [
    "bce"
   ],
-  "beau": [],
   "belliciste": [],
   "belligerant": [],
   "bercy": [
@@ -3935,7 +4026,6 @@
    "verrou-de-bercy"
   ],
   "big": [],
-  "binational": [],
   "biomedicam": [
    "biomedicaments"
   ],
@@ -3950,7 +4040,6 @@
    "biosphere"
   ],
   "blanchim": [],
-  "blocu": [],
   "bpi": [
    "bpi"
   ],
@@ -3966,11 +4055,9 @@
   "bts": [
    "bts"
   ],
-  "budgetisation": [],
   "cabotage": [
    "cabotage"
   ],
-  "cachemire": [],
   "cade": [
    "cades"
   ],
@@ -3992,7 +4079,6 @@
   "capitalisme": [
    "capitalisme"
   ],
-  "carcan": [],
   "carceral": [],
   "carcerale": [
    "regulation-carcerale"
@@ -4000,7 +4086,6 @@
   "caste": [
    "caste"
   ],
-  "caucase": [],
   "cdaa": [
    "cdaa"
   ],
@@ -4054,7 +4139,6 @@
   "circ": [
    "circ"
   ],
-  "cisjordanie": [],
   "clause": [
    "clause-de-conscience",
    "clause-de-sauvegarde"
@@ -4077,15 +4161,15 @@
   "cnuced": [
    "cnuced"
   ],
-  "co": [],
   "codevelopp": [],
-  "collectiviser": [],
-  "collectivisme": [],
+  "collectiviser": [
+   "collectivisme"
+  ],
+  "collectivisme": [
+   "collectivisme"
+  ],
   "collectivite": [
    "collectivites-locales"
-  ],
-  "commissariat": [
-   "haut-commissariat"
   ],
   "communaliste": [
    "communalisme"
@@ -4132,8 +4216,12 @@
   "contrevenir": [
    "contrevenir"
   ],
-  "contrevi": [],
-  "contrevienn": [],
+  "contrevi": [
+   "contrevenir"
+  ],
+  "contrevienn": [
+   "contrevenir"
+  ],
   "contribuable": [
    "contribuable"
   ],
@@ -4150,10 +4238,11 @@
    "cop",
    "cop-oceans"
   ],
-  "corne": [],
   "correctionnalisation": [],
   "correctionnel": [],
-  "cotation": [],
+  "cotation": [
+   "cotation"
+  ],
   "cotisant": [
    "cotisation-sociale"
   ],
@@ -4182,7 +4271,9 @@
   "crou": [
    "crous"
   ],
-  "crypto": [],
+  "crypto": [
+   "crypto-actifs"
+  ],
   "cryptographie": [
    "cryptographie-post-quantique"
   ],
@@ -4221,7 +4312,6 @@
   "decentralise": [
    "decentralisation"
   ],
-  "decloisonner": [],
   "deconjugaliser": [],
   "decote": [
    "decote"
@@ -4232,7 +4322,9 @@
   "defaisance": [
    "caisse-de-defaisance"
   ],
-  "definanciariser": [],
+  "definanciariser": [
+   "financiarisation"
+  ],
   "defiscaliser": [],
   "degressif": [
    "tarification-progressive"
@@ -4264,7 +4356,6 @@
   ],
   "dematerialisation": [],
   "dematerialise": [],
-  "demilitarisation": [],
   "denonciation": [],
   "deontologie": [
    "deontologie"
@@ -4283,7 +4374,6 @@
    "deroger"
   ],
   "desamiantage": [],
-  "desdit": [],
   "desencercl": [],
   "desenclav": [
    "desenclavement"
@@ -4295,7 +4385,9 @@
    "desindustrialisation"
   ],
   "desinstitutionnalisation": [],
-  "desinvestiss": [],
+  "desinvestiss": [
+   "desinvestissement"
+  ],
   "desserte": [
    "desserte"
   ],
@@ -4305,9 +4397,7 @@
   "deterrage": [
    "deterrage"
   ],
-  "devoye": [],
   "differend": [],
-  "diligente": [],
   "dirigeable": [
    "dirigeable"
   ],
@@ -4328,7 +4418,6 @@
    "dumping",
    "dumping-social"
   ],
-  "ead": [],
   "eco": [],
   "ecocide": [
    "card:ecocide"
@@ -4366,7 +4455,6 @@
   "engie": [
    "engie"
   ],
-  "eparse": [],
   "epr": [
    "epr2"
   ],
@@ -4383,7 +4471,9 @@
   "esat": [
    "esat"
   ],
-  "escompte": [],
+  "escompte": [
+   "escompte"
+  ],
   "ess": [
    "ess"
   ],
@@ -4430,7 +4520,9 @@
    "flat-tax"
   ],
   "flechant": [],
-  "fleuron": [],
+  "fleuron": [
+   "fleurons"
+  ],
   "flexibilisation": [
    "flexibilisation"
   ],
@@ -4460,8 +4552,6 @@
   "galileo": [
    "galileo"
   ],
-  "gamete": [],
-  "gaza": [],
   "ge": [
    "ge-vernova"
   ],
@@ -4489,7 +4579,6 @@
   "glyphosate": [
    "glyphosate"
   ],
-  "golan": [],
   "gouvernance": [
    "gouvernance"
   ],
@@ -4516,8 +4605,9 @@
   "hlm": [
    "hlm"
   ],
-  "holding": [],
-  "homologuer": [],
+  "holding": [
+   "holdings"
+  ],
   "honorabilite": [],
   "honoraire": [
    "depassements-d-honoraires",
@@ -4552,7 +4642,6 @@
   ],
   "illectronisme": [],
   "illettrisme": [],
-  "impartialite": [],
   "inao": [
    "inao"
   ],
@@ -4606,12 +4695,10 @@
   "interoperabilite": [
    "interoperabilite"
   ],
-  "interpretariat": [],
   "interprofessionnelle": [
    "unedic"
   ],
   "intersexe": [],
-  "intra": [],
   "iora": [
    "iora"
   ],
@@ -4630,7 +4717,6 @@
   "ivg": [
    "ivg"
   ],
-  "jerusalem": [],
   "juridictionnelle": [
    "aide-juridictionnelle"
   ],
@@ -4676,7 +4762,6 @@
   "liquidation": [
    "liquidation"
   ],
-  "lisbonne": [],
   "lobby": [
    "lobbys"
   ],
@@ -4885,12 +4970,11 @@
   "osce": [
    "osce"
   ],
-  "ostentatoire": [],
+  "ostentatoire": [
+   "ostentatoire"
+  ],
   "otan": [
    "otan"
-  ],
-  "outre": [
-   "outre-mer"
   ],
   "pac": [
    "pac"
@@ -4898,32 +4982,31 @@
   "pacse": [
    "pacse"
   ],
-  "palestine": [],
   "palliatif": [
    "soins-palliatifs"
   ],
   "pallier": [
    "pallier"
   ],
-  "paneuropeen": [],
   "pantouflage": [
    "pantouflage"
   ],
   "paramedicale": [
    "paramedical"
   ],
-  "paramilitaire": [],
   "parcoursup": [
    "parcoursup"
   ],
-  "parentalite": [],
   "parite": [
    "parite"
   ],
   "passoire": [
    "passoires-thermiques"
   ],
-  "patriarcal": [],
+  "patriarcal": [
+   "patriarcat"
+  ],
+  "patriarcat": [],
   "patronale": [
    "accord-de-branche",
    "patronat"
@@ -4931,12 +5014,18 @@
   "patronat": [
    "patronat"
   ],
+  "pauperisation": [
+   "pauperisation"
+  ],
   "payeur": [
    "pollueur-payeur"
   ],
-  "penal": [],
+  "penal": [
+   "penal"
+  ],
   "penale": [
-   "cpi"
+   "cpi",
+   "penal"
   ],
   "penibilite": [
    "penibilite"
@@ -4955,7 +5044,6 @@
   "permeabilite": [
    "desimpermeabiliser"
   ],
-  "persique": [],
   "perturbateur": [
    "perturbateurs-endocriniens"
   ],
@@ -4982,7 +5070,6 @@
   "pluralisme": [
    "pluralisme"
   ],
-  "pluridisciplinaire": [],
   "pluriprofessionnelle": [
    "maison-de-sante"
   ],
@@ -4995,13 +5082,12 @@
   "pmi": [
    "pmi"
   ],
-  "pollueur": [
-   "pollueur-payeur"
-  ],
   "post": [
    "cryptographie-post-quantique"
   ],
-  "posteriori": [],
+  "posteriori": [
+   "a-posteriori"
+  ],
   "ppp": [
    "ppp"
   ],
@@ -5009,7 +5095,6 @@
    "padhue",
    "praticiens"
   ],
-  "preconisation": [],
   "predictive": [],
   "preemption": [
    "droit-de-preemption"
@@ -5017,18 +5102,20 @@
   "prefectoral": [
    "corps-prefectoral"
   ],
-  "preferentielle": [],
   "prefet": [
    "prefets"
   ],
   "premunir": [],
-  "prenante": [],
+  "prenante": [
+   "parties-prenantes"
+  ],
   "presomption": [
    "abandon-de-poste",
    "presomption-de-salariat"
   ],
-  "prevaloir": [],
-  "primaute": [],
+  "prevaloir": [
+   "prevaloir"
+  ],
   "primo": [],
   "privatisation": [
    "privatisation"
@@ -5060,7 +5147,6 @@
   "psycho": [
    "cmpp"
   ],
-  "psychosocial": [],
   "quantique": [
    "cryptographie-post-quantique"
   ],
@@ -5089,8 +5175,6 @@
   ],
   "ratifie": [],
   "ratifiera": [],
-  "ratio": [],
-  "recentraliser": [],
   "recepisse": [],
   "recidiviste": [
    "recidivistes"
@@ -5108,7 +5192,6 @@
   "reemploi": [
    "reemploi"
   ],
-  "refacturation": [],
   "referendum": [
    "referendum",
    "ric"
@@ -5142,11 +5225,18 @@
   "renationaliser": [
    "nationaliser"
   ],
-  "rencherissant": [],
+  "rencherir": [
+   "rencherir"
+  ],
+  "rencherissant": [
+   "rencherir"
+  ],
   "rep": [
    "rep"
   ],
-  "representativite": [],
+  "representativite": [
+   "representativite"
+  ],
   "requisition": [
    "requisition"
   ],
@@ -5169,7 +5259,6 @@
   "restructurer": [
    "restructurer"
   ],
-  "revalorisant": [],
   "revoquer": [
    "revoquer"
   ],
@@ -5186,8 +5275,6 @@
   "rsa": [
    "rsa"
   ],
-  "sahel": [],
-  "sahelienne": [],
   "sala": [
    "sala"
   ],
@@ -5252,7 +5339,9 @@
   "sobriete": [
    "sobriete-energetique"
   ],
-  "socialiser": [],
+  "socialiser": [
+   "socialiser"
+  ],
   "socio": [],
   "souverainete": [
    "souverainete",
@@ -5270,7 +5359,6 @@
   "stap": [
    "staps"
   ],
-  "sterilisation": [],
   "stupefiant": [],
   "subvention": [
    "subventions"
@@ -5281,7 +5369,9 @@
   "surendette": [
    "surendettement"
   ],
-  "suspensif": [],
+  "suspensif": [
+   "veto"
+  ],
   "suv": [
    "suv"
   ],
@@ -5340,12 +5430,10 @@
   "transfrontaliere": [
    "euroregions"
   ],
-  "transnational": [],
   "tresorerie": [
    "tresorerie"
   ],
   "tribut": [],
-  "tromelin": [],
   "tva": [
    "tva"
   ],
@@ -5364,11 +5452,9 @@
   "unesco": [
    "unesco"
   ],
-  "unilaterale": [],
   "unrwa": [
    "unrwa"
   ],
-  "urbanisme": [],
   "velique": [
    "propulsion-velique"
   ],
@@ -5407,6 +5493,8 @@
    "acides-gras-satures"
   ],
   "actif": [
+   "actifs",
+   "crypto-actifs",
    "principe-actif"
   ],
   "action": [
@@ -5442,7 +5530,9 @@
   "bati": [],
   "bouclier": [],
   "bourse": [],
-  "boursier": [],
+  "boursier": [
+   "licenciement-boursier"
+  ],
   "branche": [
    "accord-de-branche"
   ],
@@ -5470,6 +5560,7 @@
   "capital": [
    "capital-deces",
    "fonds-d-investissement",
+   "mouvements-de-capitaux",
    "revenus-du-capital"
   ],
   "carbone": [
@@ -5490,7 +5581,9 @@
    "bce"
   ],
   "chambre": [],
-  "chapeau": [],
+  "chapeau": [
+   "retraite-chapeau"
+  ],
   "charte": [],
   "circuit": [
    "circuit-du-tresor",
@@ -5501,12 +5594,18 @@
    "effet-cocktail"
   ],
   "code": [
-   "code-des-marches-publics"
+   "code-des-marches-publics",
+   "penal"
   ],
   "commande": [
    "commande-publique"
   ],
-  "commission": [],
+  "commissariat": [
+   "haut-commissariat"
+  ],
+  "commission": [
+   "commission-d-enquete"
+  ],
   "commun": [
    "biens-communs"
   ],
@@ -5573,11 +5672,15 @@
   "domaine": [
    "zone-economique-exclusive"
   ],
-  "dore": [],
+  "dore": [
+   "parachute-dore"
+  ],
   "echelon": [],
   "ecocidaire": [],
   "effectif": [],
-  "empreinte": [],
+  "empreinte": [
+   "empreinte-ecologique"
+  ],
   "encadr": [
    "encadrement-des-loyers"
   ],
@@ -5614,6 +5717,7 @@
    "fonds-d-investissement",
    "fonds-de-reserve-pour-les-retraites",
    "fonds-mondial",
+   "fonds-vautours",
    "grands-fonds"
   ],
   "fortune": [],
@@ -5649,6 +5753,7 @@
   "interet": [
    "conflit-d-interets",
    "convention-judiciaire-d-interet-public",
+   "interets-fondamentaux",
    "taux-d-interet"
   ],
   "interruption": [
@@ -5665,7 +5770,9 @@
   ],
   "lecture": [],
   "legitime": [],
-  "levier": [],
+  "levier": [
+   "effet-de-levier"
+  ],
   "liberal": [
    "acte-liberal"
   ],
@@ -5741,7 +5848,9 @@
    "pacse"
   ],
   "pair": [],
-  "parachute": [],
+  "parachute": [
+   "parachute-dore"
+  ],
   "paradi": [
    "paradis-fiscaux"
   ],
@@ -5869,7 +5978,9 @@
   "surete": [
    "irsn"
   ],
-  "tampon": [],
+  "tampon": [
+   "stock-tampon"
+  ],
   "taux": [
    "taux-d-interet",
    "taux-plein"
@@ -5884,6 +5995,7 @@
   ],
   "trait": [
    "traitement-de-substitution",
+   "traitement-des-fonctionnaires",
    "traitement-hormonal-de-la-menopause"
   ],
   "traite": [
@@ -5915,7 +6027,9 @@
    "valeur-ajoutee"
   ],
   "valoriser": [],
-  "vautour": [],
+  "vautour": [
+   "fonds-vautours"
+  ],
   "verrou": [
    "verrou-de-bercy"
   ],
@@ -5929,6 +6043,7 @@
  "names": {
   "afrique": "place",
   "airbnb": "brand",
+  "alcatel": "brand",
   "allemagne": "place",
   "alsace": "place",
   "alstom": "brand",
@@ -5938,28 +6053,37 @@
   "antarctique": "place",
   "antille": "place",
   "apple": "brand",
+  "arabo": "place",
   "arctique": "place",
   "argentine": "place",
+  "arte": "brand",
   "asie": "place",
   "atlantique": "place",
   "avenir": "other",
   "baltique": "place",
   "bresil": "place",
+  "cachemire": "place",
   "caraibe": "place",
   "carle": "person",
+  "caucase": "place",
   "cazeneuve": "person",
+  "cisjordanie": "place",
   "corse": "place",
   "cpme": "body",
   "deliveroo": "brand",
   "doliprane": "brand",
+  "ead": "brand",
   "edouard": "person",
   "el": "other",
   "emmanuel": "person",
+  "eparse": "place",
   "facebook": "brand",
   "fioraso": "person",
   "gabriel": "person",
+  "gaza": "place",
   "geneve": "place",
   "glissant": "person",
+  "golan": "place",
   "google": "brand",
   "greta": "person",
   "groenland": "place",
@@ -5974,12 +6098,14 @@
   "israel": "place",
   "israelien": "place",
   "jean": "place",
+  "jerusalem": "place",
   "kanak": "other",
   "kasbarian": "person",
   "khomri": "person",
   "kid": "other",
   "liban": "place",
   "libanai": "place",
+  "lisbonne": "place",
   "lyon": "place",
   "macron": "person",
   "macronie": "other",
@@ -6003,18 +6129,23 @@
   "no": "other",
   "orient": "place",
   "pacifique": "place",
+  "palestine": "place",
   "penicaud": "person",
+  "persique": "place",
   "polynesie": "place",
   "retailleau": "person",
   "reunion": "place",
   "rome": "place",
   "sahara": "place",
+  "sahel": "place",
+  "sahelienne": "place",
   "seine": "place",
   "senegalai": "place",
   "soudan": "place",
   "spacex": "brand",
   "starlink": "brand",
   "toulouse": "place",
+  "tromelin": "place",
   "u2p": "body",
   "uber": "brand",
   "ukraine": "place",

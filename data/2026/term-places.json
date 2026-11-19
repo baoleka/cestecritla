@@ -1,11 +1,12 @@
 {
   "meta": {
     "corpus_version": "27ee6e713fe25e7e",
-    "wordings_sha256": "c10b6b30d61b413bc57faf5582a1e81ac9731a338935353d0ad7f2b2f9694049",
+    "wordings_sha256": "8d27b73330218dddc57fe0261f179834bf3b7cb07df2a26df1dc2021a54b8344",
     "note_fr": "Où chaque mot expliqué est écrit dans le livre : pour chaque section, les identifiants des mots de data/2026/terms.json que son texte emploie (son titre, ses mesures et leurs points, les paragraphes entre eux), triés. Les sections qui n'en emploient aucun n'y sont pas. Écrit par scripts/lexicon-2026.ts --places, sur la machine qui tient le texte du livre, par la session seule (D20.1) : aucun mot du livre, seulement des identifiants de sections et de mots. Il ne dit ni où dans la section, ni combien de fois. La fiche de chaque section montre ces mots, expliqués, sous une ligne qu'on ouvre (PLAN-MOTS, lot 4). À refaire après tout changement des formulations de terms.json : wordings_sha256 dit sur lesquelles il a été calculé."
   },
   "sections": {
     "p1c1-s01": [
+      "actifs",
       "biophysique",
       "biosphere",
       "cerema",
@@ -33,6 +34,7 @@
       "delocalisation",
       "eaux-territoriales",
       "ecoconstruction",
+      "empreinte-ecologique",
       "hexagone",
       "jardin-creole",
       "outre-mer",
@@ -246,33 +248,49 @@
     ],
     "p2c1-s01": [
       "abroger",
+      "audit",
+      "fleurons",
       "fonds-d-investissement",
+      "francaise-des-jeux",
+      "interets-fondamentaux",
       "moratoire",
       "patrimoine",
+      "penal",
       "ppp",
       "privatisation",
       "requisition",
       "souverainete"
     ],
     "p2c1-s02": [
-      "biens-communs"
+      "biens-communs",
+      "collectivisme",
+      "prevaloir"
     ],
     "p2c1-s03": [
       "cession",
       "cooperatives",
+      "delegue-syndical",
       "droit-de-preemption",
+      "holdings",
       "liquidation",
+      "motion-de-defiance",
+      "parties-prenantes",
       "plan-social",
       "redressement",
+      "representants-du-personnel",
+      "salarie-protege",
+      "tribunal-de-commerce",
       "veto"
     ],
     "p2c1-s04": [
       "actionnaires",
       "autoentrepreneur",
+      "autoritarisme",
       "cae",
       "capitalisme",
       "commande-publique",
       "cooperatives",
+      "education-populaire",
       "ess",
       "gouvernance",
       "restauration-collective",
@@ -282,17 +300,21 @@
     "p2c2-s01": [
       "apl",
       "collectivites-locales",
+      "etat-d-urgence",
       "minima-sociaux",
       "outre-mer",
       "point-d-indice",
       "reduflation",
-      "smic"
+      "smic",
+      "stock-tampon"
     ],
     "p2c2-s02": [
       "arbitrage-de-dividendes",
       "bareme",
       "centimillionnaire",
       "cession",
+      "chiffre-d-affaires",
+      "commission-d-enquete",
       "controle-fiscal",
       "convention-judiciaire-d-interet-public",
       "credit-d-impot",
@@ -300,10 +322,12 @@
       "cvae",
       "dividendes",
       "droits-de-succession",
+      "empreinte-ecologique",
       "evasion-fiscale",
       "exit-tax",
       "exoneration",
       "flat-tax",
+      "fleurons",
       "fraude-fiscale",
       "impot-progressif",
       "impot-sur-le-revenu",
@@ -311,12 +335,15 @@
       "impot-universel",
       "isf",
       "niches-fiscales",
+      "ostentatoire",
+      "patriarcat",
       "patrimoine",
       "pme",
       "privatisation",
       "quotient-conjugal",
       "reduction-d-impot",
       "revenus-du-capital",
+      "salaire-reel",
       "sobriete-energetique",
       "superprofits",
       "taxe-zucman",
@@ -324,38 +351,67 @@
     ],
     "p2c2-s03": [
       "apprenti",
+      "conference-sociale",
       "fonction-publique",
       "indexer",
       "inflation",
       "majorer",
+      "parachute-dore",
+      "penal",
+      "retraite-chapeau",
       "seuil-de-pauvrete",
       "smic",
       "stock-options",
-      "temps-partiel-subi"
+      "temps-partiel-subi",
+      "traitement-des-fonctionnaires"
     ],
     "p2c3-s01": [
+      "a-posteriori",
+      "actionnaires",
+      "banque-de-detail",
       "contribuable",
+      "economie-reelle",
+      "effet-de-levier",
       "filiales",
+      "finance-de-l-ombre",
       "financiarisation",
       "fonds-d-investissement",
+      "fonds-vautours",
+      "holdings",
       "lbo",
+      "mouvements-de-capitaux",
       "niches-fiscales",
+      "produits-derives",
       "rachat-d-actions",
       "transactions-financieres"
     ],
     "p2c3-s02": [
+      "actifs",
       "audit",
+      "banque-de-detail",
       "biens-communs",
       "bpi",
       "comptabilite-carbone",
+      "contrevenir",
+      "crypto-actifs",
+      "desinvestissement",
+      "euro-numerique",
+      "rencherir",
+      "socialiser",
       "speculation",
       "tpe"
     ],
     "p2c3-s03": [
       "actionnaires",
-      "dividendes"
+      "cotation",
+      "dividendes",
+      "economie-reelle",
+      "financiarisation",
+      "licenciement-boursier",
+      "speculation"
     ],
     "p2c3-s04": [
+      "actifs",
       "bce",
       "cades",
       "circuit-du-tresor",
@@ -364,12 +420,14 @@
       "dette-perpetuelle",
       "dette-publique",
       "dette-souveraine",
+      "financiarisation",
       "indexer",
       "inflation",
       "marches-financiers",
       "oati",
       "patrimoine",
       "privatisation",
+      "puissance-publique",
       "rachat-de-dettes",
       "securite-sociale",
       "taux-d-interet",
@@ -378,13 +436,21 @@
       "ue"
     ],
     "p2c3-s05": [
+      "affacturage",
+      "baux",
       "commande-publique",
+      "cout-du-travail",
       "delocalisation",
+      "escompte",
       "ess",
       "impot-progressif",
       "patronat",
+      "pauperisation",
       "perequation",
       "pme",
+      "protection-sociale",
+      "puissance-publique",
+      "representativite",
       "sous-traitance",
       "taxe-fonciere",
       "tpe",
@@ -400,6 +466,7 @@
       "prestation-sociale",
       "reduflation",
       "restructurer",
+      "services-bancaires-de-base",
       "seuil-de-pauvrete",
       "surendettement"
     ],
@@ -477,6 +544,7 @@
       "medecine-du-travail",
       "octroyer",
       "recidivistes",
+      "sous-traitance",
       "travailleur-independant",
       "veto"
     ],
@@ -539,6 +607,7 @@
       "mineur",
       "mourir-dans-la-dignite",
       "personnes-menstruees",
+      "prevaloir",
       "soins-palliatifs"
     ],
     "p3c2-s02": [
@@ -546,6 +615,7 @@
       "famille-d-accueil",
       "mineur",
       "outre-mer",
+      "penal",
       "pjj",
       "protection-de-l-enfance"
     ],
@@ -561,7 +631,9 @@
       "seuil-de-pauvrete"
     ],
     "p3c2-s04": [
+      "actifs",
       "but-lucratif",
+      "collectivisme",
       "cooperatives",
       "ehpad",
       "maintien-a-domicile",
@@ -603,6 +675,7 @@
     "p3c3-s01": [
       "commande-publique",
       "parite",
+      "penal",
       "penibilite",
       "temps-partiel-subi",
       "travailleur-pauvre"
@@ -631,6 +704,7 @@
       "commande-publique",
       "cultuel",
       "ia",
+      "penal",
       "testing"
     ],
     "p3c4-s02": [
@@ -638,6 +712,7 @@
       "droit-du-sol"
     ],
     "p3c4-s03": [
+      "commission-d-enquete",
       "outre-mer"
     ],
     "p3c4-s04": [
@@ -646,6 +721,7 @@
     ],
     "p4c1-s01": [
       "abonder",
+      "actifs",
       "assainissement",
       "cadmium",
       "chlordecone",
@@ -768,8 +844,10 @@
     ],
     "p4c2-s06": [
       "abroger",
+      "actionnaires",
       "apl",
       "but-lucratif",
+      "cotation",
       "crous",
       "cvec",
       "hceres",
@@ -778,6 +856,7 @@
       "monopole",
       "parcoursup",
       "perenniser",
+      "prevaloir",
       "subventions",
       "titulariser"
     ],
@@ -805,6 +884,7 @@
       "souverainete"
     ],
     "p4c3-s03": [
+      "education-populaire",
       "perenniser",
       "staps"
     ],
@@ -1010,6 +1090,7 @@
     ],
     "p4c7-s03": [
       "accord-de-branche",
+      "actifs",
       "administrations-publiques",
       "entreprise-publique",
       "ia",
@@ -1043,6 +1124,7 @@
     ],
     "p5c1-s02": [
       "article-11",
+      "autoritarisme",
       "constituante",
       "referendum",
       "souverainete",
@@ -1050,6 +1132,7 @@
     ],
     "p5c1-s03": [
       "article-49-3",
+      "autoritarisme",
       "constituante",
       "monarchie-presidentielle",
       "regime-parlementaire",
@@ -1107,10 +1190,12 @@
       "outre-mer",
       "pluralisme",
       "procedure-baillon",
-      "redressement"
+      "redressement",
+      "tribunal-de-commerce"
     ],
     "p5c2-s01": [
       "abroger",
+      "etat-d-urgence",
       "fraude-fiscale",
       "pharos"
     ],
@@ -1134,6 +1219,7 @@
       "constituante",
       "convention-judiciaire-d-interet-public",
       "executif",
+      "penal",
       "plan-social",
       "pollueur-payeur",
       "regulation-carcerale",
@@ -1252,6 +1338,7 @@
       "directives-europeennes",
       "niches-fiscales",
       "plan-social",
+      "protection-sociale",
       "securite-sociale",
       "travailleurs-detaches"
     ],
@@ -1338,6 +1425,7 @@
     "p6c2-s05": [
       "biens-communs",
       "brevet-sur-le-vivant",
+      "contrevenir",
       "energies-fossiles",
       "ia",
       "licence-d-office",

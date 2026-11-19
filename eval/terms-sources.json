@@ -7,6 +7,9 @@
     "bareme": {
       "example": "illustrative"
     },
+    "effet-de-levier": {
+      "example": "illustrative"
+    },
     "impot-progressif": {
       "example": "illustrative"
     },
@@ -20,6 +23,9 @@
       "example": "illustrative"
     },
     "point-d-indice": {
+      "example": "illustrative"
+    },
+    "salaire-reel": {
       "example": "illustrative"
     },
     "scrutin-proportionnel": {

@@ -1155,13 +1155,15 @@
       "id": "pme",
       "term": "PME",
       "anyCase": true,
-      "plain": "Une PME est une petite ou moyenne entreprise : moins de 250 salariés."
+      "plain": "Une PME est une petite ou moyenne entreprise : moins de 250 salariés.",
+      "noExample": "E"
     },
     {
       "id": "tpe",
       "term": "TPE",
       "anyCase": true,
-      "plain": "Une TPE est une très petite entreprise : moins de 10 salariés."
+      "plain": "Une TPE est une très petite entreprise : moins de 10 salariés.",
+      "noExample": "E"
     },
     {
       "id": "ess",
@@ -1173,13 +1175,15 @@
     {
       "id": "scop",
       "term": "Scop",
-      "plain": "Une Scop est une entreprise coopérative. Ses salariés en sont les associés majoritaires."
+      "plain": "Une Scop est une entreprise coopérative. Ses salariés en sont les associés majoritaires.",
+      "noExample": "E"
     },
     {
       "id": "scic",
       "term": "SCIC",
       "anyCase": true,
-      "plain": "Une SCIC est une coopérative qui associe salariés, usagers et partenaires autour d'un projet d'intérêt collectif."
+      "plain": "Une SCIC est une coopérative qui associe salariés, usagers et partenaires autour d'un projet d'intérêt collectif.",
+      "noExample": "E"
     },
     {
       "id": "cae",
@@ -1189,32 +1193,38 @@
     {
       "id": "libre-echange",
       "term": "libre-échange",
-      "plain": "Le libre-échange est le commerce entre pays sans droits de douane ni autres barrières. Un accord de libre-échange les réduit ou les supprime entre les pays qui le signent."
+      "plain": "Le libre-échange est le commerce entre pays sans droits de douane ni autres barrières. Un accord de libre-échange les réduit ou les supprime entre les pays qui le signent.",
+      "noExample": "E"
     },
     {
       "id": "droits-de-douane",
       "term": "droits de douane",
-      "plain": "Un droit de douane est une taxe payée à l'entrée d'un produit étranger dans un pays."
+      "plain": "Un droit de douane est une taxe payée à l'entrée d'un produit étranger dans un pays.",
+      "noExample": "E"
     },
     {
       "id": "protectionnisme",
       "term": "protectionnisme",
-      "plain": "Le protectionnisme protège la production d'un pays par des taxes ou des règles à l'importation."
+      "plain": "Le protectionnisme protège la production d'un pays par des taxes ou des règles à l'importation.",
+      "noExample": "E"
     },
     {
       "id": "clause-de-sauvegarde",
       "term": "clause de sauvegarde",
-      "plain": "Une clause de sauvegarde permet à un État de suspendre un engagement commercial face à un danger grave. Exemples : un afflux d'importations qui menace un secteur, un risque sanitaire."
+      "plain": "Une clause de sauvegarde permet à un État de suspendre un engagement commercial face à un danger grave. Exemples : un afflux d'importations qui menace un secteur, un risque sanitaire.",
+      "noExample": "E"
     },
     {
       "id": "embargo",
       "term": "embargo",
-      "plain": "Un embargo interdit, en tout ou en partie, de commercer avec un pays : par exemple de lui vendre des armes ou de lui acheter du pétrole."
+      "plain": "Un embargo interdit, en tout ou en partie, de commercer avec un pays : par exemple de lui vendre des armes ou de lui acheter du pétrole.",
+      "noExample": "E"
     },
     {
       "id": "biens-a-double-usage",
       "term": "biens à double usage",
-      "plain": "Un bien à double usage est un bien civil qui peut aussi servir à un usage militaire."
+      "plain": "Un bien à double usage est un bien civil qui peut aussi servir à un usage militaire.",
+      "noExample": "E"
     },
     {
       "id": "coefficients-multiplicateurs",
@@ -1925,6 +1935,7 @@
     {
       "id": "inflation",
       "term": "inflation",
+      "aliases": ["inflationniste", "inflationnistes"],
       "plain": "L'inflation est la hausse générale des prix : avec la même somme, on achète moins qu'avant.",
       "example": "Avec une inflation de 4 % sur un an, un panier de courses de 50 euros en coûte 52."
     },
@@ -3717,7 +3728,7 @@
     {
       "id": "plan-social",
       "term": "plans sociaux",
-      "aliases": ["plan social", "plans de licenciements"],
+      "aliases": ["plan social", "plans de licenciements", "plan de licenciement"],
       "plain": "Un plan social, ou plan de sauvegarde de l'emploi, s'impose quand une entreprise d'au moins 50 salariés en licencie au moins dix en trente jours pour motif économique. Il aide à retrouver un emploi.",
       "noExample": "E"
     },
@@ -3801,7 +3812,7 @@
     {
       "id": "actionnaires",
       "term": "actionnaires",
-      "aliases": ["actionnaire"],
+      "aliases": ["actionnaire", "actionnarial", "actionnariaux", "actionnariale", "actionnariat"],
       "plain": "Un actionnaire possède des actions, c'est-à-dire des parts d'une entreprise. Il reçoit une part de ses bénéfices, les dividendes, et vote sur ses grandes décisions.",
       "noExample": "E"
     },
@@ -3836,7 +3847,14 @@
     {
       "id": "contrevenir",
       "term": "contrevenir",
-      "aliases": ["contrevenant", "contrevenants", "contrevenante", "contrevenantes"],
+      "aliases": [
+        "contrevenant",
+        "contrevenants",
+        "contrevenante",
+        "contrevenantes",
+        "contrevient",
+        "contreviennent"
+      ],
       "plain": "Contrevenir à une règle, c'est ne pas la respecter.",
       "noExample": "E"
     },
@@ -3995,8 +4013,8 @@
     {
       "id": "sous-traitance",
       "term": "sous-traitance",
-      "aliases": ["sous-traitant", "sous-traitants"],
-      "plain": "La sous-traitance consiste, pour une entreprise, à confier une partie de son travail à une autre entreprise, le sous-traitant.",
+      "aliases": ["sous-traitant", "sous-traitants", "donneur d'ordre", "donneurs d'ordre"],
+      "plain": "La sous-traitance consiste, pour une entreprise, à confier une partie de son travail à une autre entreprise, le sous-traitant ; elle est son donneur d'ordre.",
       "noExample": "E"
     },
     {
@@ -4069,7 +4087,8 @@
     {
       "id": "financiarisation",
       "term": "financiarisation",
-      "plain": "La financiarisation d'un secteur désigne le poids croissant de la finance et des investisseurs, qui y cherchent avant tout un rendement.",
+      "aliases": ["définanciariser", "définanciarisation"],
+      "plain": "La financiarisation d'un secteur désigne le poids croissant qu'y prennent la finance et les investisseurs ; le mot est surtout critique. Définanciariser, c'est réduire ce poids.",
       "noExample": "E"
     },
     {
@@ -4163,8 +4182,8 @@
     {
       "id": "veto",
       "term": "veto",
-      "aliases": ["véto", "droit de veto"],
-      "plain": "Un droit de veto permet de bloquer seul une décision.",
+      "aliases": ["véto", "droit de veto", "veto suspensif"],
+      "plain": "Un droit de veto permet de bloquer seul une décision ; un veto suspensif la retarde seulement.",
       "noExample": "E"
     },
     {
@@ -4176,7 +4195,7 @@
     {
       "id": "audit",
       "term": "audit",
-      "aliases": ["audits"],
+      "aliases": ["audits", "auditer"],
       "plain": "Un audit est un examen approfondi d'une organisation ou d'une situation, mené par des experts, qui en dresse l'état et en relève les forces et les défauts.",
       "noExample": "E"
     },
@@ -4225,7 +4244,13 @@
     {
       "id": "speculation",
       "term": "spéculation",
-      "aliases": ["spéculation immobilière", "spéculatif", "spéculatifs"],
+      "aliases": [
+        "spéculation immobilière",
+        "spéculatif",
+        "spéculatifs",
+        "spéculateur",
+        "spéculateurs"
+      ],
       "plain": "La spéculation, c'est acheter un bien pour le revendre plus cher, en pariant sur la hausse de son prix. Ses défenseurs disent qu'elle facilite les échanges, ses critiques qu'elle fait monter les prix.",
       "noExample": "E"
     },
@@ -4347,7 +4372,7 @@
     {
       "id": "motion-de-defiance",
       "term": "motion de défiance",
-      "aliases": ["motions de défiance"],
+      "aliases": ["motions de défiance", "vote de défiance"],
       "plain": "Une motion de défiance est un vote par lequel des membres, par exemple les journalistes d'une rédaction, disent ne plus faire confiance à leur dirigeant. À l'Assemblée, on parle de motion de censure.",
       "noExample": "E"
     },
@@ -4694,6 +4719,354 @@
       "term": "directives",
       "aliases": ["directive", "directive européenne", "directives européennes"],
       "plain": "Une directive européenne fixe un but que chaque pays de l'Union européenne doit atteindre, en l'inscrivant dans ses propres lois.",
+      "noExample": "E"
+    },
+    {
+      "id": "affacturage",
+      "term": "affacturage",
+      "plain": "Avec l'affacturage, une entreprise se fait payer tout de suite ses factures par un organisme, qui se charge ensuite de les encaisser, contre une commission.",
+      "noExample": "E"
+    },
+    {
+      "id": "fleurons",
+      "term": "fleurons",
+      "aliases": ["fleuron"],
+      "plain": "Un fleuron est ce qu'un pays a de plus réussi : ses fleurons industriels sont ses grandes entreprises les plus réputées.",
+      "noExample": "E"
+    },
+    {
+      "id": "autoritarisme",
+      "term": "autoritarisme",
+      "aliases": ["autoritaire", "autoritaires"],
+      "plain": "L'autoritarisme est une façon d'exercer le pouvoir qui impose ses décisions sans laisser de place au débat ni à la contestation.",
+      "noExample": "E"
+    },
+    {
+      "id": "baux",
+      "term": "baux",
+      "aliases": ["bail", "baux commerciaux", "bail commercial"],
+      "plain": "Un bail est un contrat de location ; au pluriel, on dit des baux. Un bail commercial loue un local à un commerce ou à une entreprise.",
+      "noExample": "E"
+    },
+    {
+      "id": "collectivisme",
+      "term": "collectivisme",
+      "aliases": ["collectiviser", "collectivisé", "collectivisés"],
+      "plain": "Le collectivisme met en commun des biens ou des moyens de produire, sous le contrôle de la société, au lieu de les laisser à des propriétaires privés. Collectiviser, c'est les mettre en commun.",
+      "noExample": "E"
+    },
+    {
+      "id": "cotation",
+      "term": "cotation",
+      "plain": "Une entreprise est cotée quand ses actions s'échangent en Bourse ; leur prix s'y fixe au fil des achats et des ventes. La cotation est continue quand ce prix change à tout moment.",
+      "noExample": "E"
+    },
+    {
+      "id": "crypto-actifs",
+      "term": "crypto-actifs",
+      "aliases": ["crypto-actif"],
+      "plain": "Les crypto-actifs, comme le bitcoin, sont des biens numériques échangés sur Internet, sans être émis par un État. Personne n'est obligé de les accepter en paiement, à la différence de l'euro.",
+      "noExample": "E"
+    },
+    {
+      "id": "desinvestissement",
+      "term": "désinvestissement",
+      "plain": "Le désinvestissement consiste à retirer son argent d'une entreprise ou d'un secteur, par exemple des énergies fossiles.",
+      "noExample": "E"
+    },
+    {
+      "id": "escompte",
+      "term": "escompte",
+      "aliases": ["escompter"],
+      "plain": "L'escompte permet à une entreprise d'obtenir tout de suite, auprès d'une banque, l'argent d'une facture payable plus tard.",
+      "noExample": "E"
+    },
+    {
+      "id": "holdings",
+      "term": "holdings",
+      "aliases": ["holding"],
+      "plain": "Une holding est une société qui possède des parts d'autres sociétés pour les contrôler, sans forcément produire elle-même.",
+      "noExample": "E"
+    },
+    {
+      "id": "ostentatoire",
+      "term": "ostentatoires",
+      "aliases": ["ostentatoire"],
+      "plain": "Ostentatoire se dit de ce qu'on montre pour afficher sa richesse.",
+      "noExample": "E"
+    },
+    {
+      "id": "patriarcat",
+      "term": "patriarcal",
+      "plain": "Le patriarcat est, au sens strict, l'autorité du père sur la famille. Plus largement, c'est une organisation de la société où les hommes ont plus de pouvoir que les femmes.",
+      "noExample": "D"
+    },
+    {
+      "id": "pauperisation",
+      "term": "paupérisation",
+      "plain": "La paupérisation est l'appauvrissement d'une personne ou d'un groupe.",
+      "noExample": "E"
+    },
+    {
+      "id": "penal",
+      "term": "pénal",
+      "aliases": ["pénale", "pénales", "Code pénal"],
+      "plain": "Le droit pénal définit les infractions et leurs peines ; le Code pénal les rassemble. Une sanction pénale est une peine, amende ou prison, décidée par un juge.",
+      "noExample": "E"
+    },
+    {
+      "id": "a-posteriori",
+      "term": "a posteriori",
+      "plain": "A posteriori veut dire après coup, une fois la chose faite.",
+      "noExample": "E"
+    },
+    {
+      "id": "parties-prenantes",
+      "term": "parties prenantes",
+      "aliases": ["partie prenante"],
+      "plain": "Les parties prenantes d'une entreprise sont tous ceux que ses décisions concernent : salariés, clients, fournisseurs, voisins, associations.",
+      "noExample": "E"
+    },
+    {
+      "id": "prevaloir",
+      "term": "prévaloir",
+      "aliases": ["prévale"],
+      "plain": "Prévaloir sur une chose, c'est l'emporter sur elle, passer avant.",
+      "noExample": "E"
+    },
+    {
+      "id": "rencherir",
+      "term": "renchérir",
+      "aliases": ["renchérissant"],
+      "plain": "Renchérir une chose, c'est la rendre plus chère.",
+      "noExample": "E"
+    },
+    {
+      "id": "representativite",
+      "term": "représentativité",
+      "plain": "La représentativité d'un syndicat est sa reconnaissance par la loi, selon les voix des salariés quand ils élisent leurs représentants ; celle d'une organisation patronale, selon ses adhérents.",
+      "noExample": "E"
+    },
+    {
+      "id": "socialiser",
+      "term": "socialiser",
+      "plain": "Socialiser une entreprise, c'est la retirer à ses actionnaires privés pour la confier à l'État, à ses salariés ou à ceux qui l'utilisent. Les formes varient selon ceux qui le proposent.",
+      "noExample": "E"
+    },
+    {
+      "id": "actifs",
+      "term": "actifs",
+      "aliases": ["actif financier", "actifs financiers"],
+      "plain": "Les actifs sont ce que possède une entreprise ou une personne et qui a une valeur : immeubles, machines, actions, argent placé.",
+      "noExample": "D"
+    },
+    {
+      "id": "banque-de-detail",
+      "term": "banques de détail",
+      "aliases": ["banque de détail", "banque d'affaires", "banques d'affaires"],
+      "plain": "Une banque de détail tient les comptes des particuliers et des entreprises et leur prête ; une banque d'affaires conseille les grandes entreprises et agit sur les marchés financiers.",
+      "noExample": "E"
+    },
+    {
+      "id": "chiffre-d-affaires",
+      "term": "chiffre d'affaires",
+      "aliases": ["chiffres d'affaires"],
+      "plain": "Le chiffre d'affaires est le total des ventes d'une entreprise sur une période, avant d'en retirer les coûts. Ce n'est pas son bénéfice.",
+      "noExample": "E"
+    },
+    {
+      "id": "commission-d-enquete",
+      "term": "commission d'enquête",
+      "aliases": ["commissions d'enquête"],
+      "plain": "Une commission d'enquête réunit des députés ou des sénateurs pour enquêter sur un sujet ; elle peut convoquer toute personne qu'elle veut entendre.",
+      "noExample": "E"
+    },
+    {
+      "id": "conference-sociale",
+      "term": "conférence sociale",
+      "aliases": ["conférences sociales"],
+      "plain": "Une conférence sociale réunit l'État, les syndicats et le patronat pour discuter de l'emploi, des salaires ou des retraites.",
+      "noExample": "E"
+    },
+    {
+      "id": "cout-du-travail",
+      "term": "coût du travail",
+      "plain": "Le coût du travail est ce que paie un employeur pour un salarié : son salaire brut et les cotisations dues par l'employeur.",
+      "noExample": "E"
+    },
+    {
+      "id": "delegue-syndical",
+      "term": "délégués syndicaux",
+      "aliases": ["délégué syndical"],
+      "plain": "Un délégué syndical représente son syndicat dans une entreprise et négocie les accords avec l'employeur.",
+      "noExample": "E"
+    },
+    {
+      "id": "dette-sociale",
+      "term": "dette sociale",
+      "plain": "La dette sociale est la dette de la Sécurité sociale, accumulée par ses déficits ; un organisme public, la Cades, la rembourse peu à peu.",
+      "noExample": "E"
+    },
+    {
+      "id": "economie-reelle",
+      "term": "économie réelle",
+      "plain": "L'économie réelle désigne la production et l'échange de biens et de services, par opposition aux seules opérations financières.",
+      "noExample": "E"
+    },
+    {
+      "id": "education-populaire",
+      "term": "éducation populaire",
+      "plain": "L'éducation populaire désigne les associations et les activités qui permettent à chacun d'apprendre et de se cultiver toute sa vie, en dehors de l'école.",
+      "noExample": "E"
+    },
+    {
+      "id": "effet-de-levier",
+      "term": "effets de levier",
+      "aliases": ["effet de levier"],
+      "plain": "L'effet de levier consiste à emprunter pour investir davantage : si l'affaire rapporte plus que l'emprunt ne coûte, le gain grandit ; sinon, la perte aussi.",
+      "example": "Avec 10 euros à soi et 90 empruntés, on achète un bien de 100 euros. S'il prend 10 %, on gagne 10 euros, autant que sa mise ; s'il perd 10 %, on perd toute sa mise. L'emprunt coûte en plus."
+    },
+    {
+      "id": "empreinte-ecologique",
+      "term": "empreinte écologique",
+      "plain": "L'empreinte écologique évalue la pression qu'une personne, un pays ou une activité exerce sur la nature, en surface de terre et de mer nécessaire.",
+      "noExample": "E"
+    },
+    {
+      "id": "etat-d-urgence",
+      "term": "état d'urgence",
+      "plain": "L'état d'urgence donne pour un temps des pouvoirs renforcés au gouvernement et aux préfets, comme interdire des rassemblements ou assigner des personnes à résidence.",
+      "noExample": "E"
+    },
+    {
+      "id": "euro-numerique",
+      "term": "euro numérique",
+      "plain": "L'euro numérique est une monnaie électronique que prépare la Banque centrale européenne : une forme numérique des billets, émise par elle.",
+      "noExample": "E"
+    },
+    {
+      "id": "finance-de-l-ombre",
+      "term": "finance de l'ombre",
+      "plain": "La finance de l'ombre, ou finance non bancaire, regroupe des fonds et des sociétés qui prêtent ou placent de l'argent comme des banques. Leurs règles sont moins strictes.",
+      "noExample": "E"
+    },
+    {
+      "id": "fonds-vautours",
+      "term": "fonds vautours",
+      "aliases": ["fonds vautour"],
+      "plain": "On appelle fonds vautours, pour les critiquer, des fonds qui rachètent à bas prix les dettes d'un pays ou d'une entreprise en difficulté. Ils en réclament ensuite en justice le remboursement entier.",
+      "noExample": "E"
+    },
+    {
+      "id": "francaise-des-jeux",
+      "term": "Française des jeux",
+      "plain": "La Française des jeux organise les loteries et des jeux d'argent en France ; l'État l'a privatisée en 2019.",
+      "noExample": "E"
+    },
+    {
+      "id": "interets-fondamentaux",
+      "term": "intérêts fondamentaux de la Nation",
+      "plain": "Les intérêts fondamentaux de la Nation, notion du Code pénal, regroupent notamment son indépendance, son territoire, sa sécurité, ses institutions et ses capacités économiques essentielles.",
+      "noExample": "E"
+    },
+    {
+      "id": "licenciement-economique",
+      "term": "licenciement économique",
+      "aliases": ["licenciements économiques", "motif économique"],
+      "plain": "Un licenciement économique a une cause qui ne tient pas au salarié : difficultés de l'entreprise, changement technique, réorganisation.",
+      "noExample": "E"
+    },
+    {
+      "id": "licenciement-boursier",
+      "term": "licenciements boursiers",
+      "aliases": ["licenciement boursier"],
+      "plain": "On appelle licenciement boursier, pour le critiquer, un licenciement qui sert surtout, selon ses critiques, à augmenter la valeur des actions d'une entreprise pourtant bénéficiaire.",
+      "noExample": "E"
+    },
+    {
+      "id": "mouvements-de-capitaux",
+      "term": "mouvements de capitaux",
+      "plain": "Les mouvements de capitaux sont les entrées et sorties d'argent placé entre pays : achats d'actions, prêts, investissements.",
+      "noExample": "E"
+    },
+    {
+      "id": "parachute-dore",
+      "term": "parachutes dorés",
+      "aliases": ["parachute doré"],
+      "plain": "Un parachute doré est une forte somme promise à un dirigeant d'entreprise s'il part ou s'il est renvoyé.",
+      "noExample": "E"
+    },
+    {
+      "id": "produits-derives",
+      "term": "produits dérivés",
+      "aliases": ["produit dérivé"],
+      "plain": "Un produit dérivé est un contrat financier dont la valeur dépend d'autre chose : un prix, un taux, une action. Il sert à parier sur son évolution ou à s'en protéger.",
+      "noExample": "E"
+    },
+    {
+      "id": "protection-sociale",
+      "term": "protection sociale",
+      "plain": "La protection sociale regroupe ce qui protège contre les risques de la vie : maladie, chômage, vieillesse, charges de famille, pauvreté.",
+      "noExample": "E"
+    },
+    {
+      "id": "puissance-publique",
+      "term": "puissance publique",
+      "plain": "La puissance publique désigne l'État et les collectivités, quand ils imposent des règles ou agissent pour tous.",
+      "noExample": "E"
+    },
+    {
+      "id": "representants-du-personnel",
+      "term": "représentants du personnel",
+      "aliases": ["représentant du personnel"],
+      "plain": "Un représentant du personnel est un salarié élu ou désigné pour défendre les salariés auprès de l'employeur, par exemple au CSE.",
+      "noExample": "E"
+    },
+    {
+      "id": "retraite-chapeau",
+      "term": "retraites chapeaux",
+      "aliases": ["retraite chapeau", "retraites chapeau"],
+      "plain": "Une retraite chapeau est une retraite en plus, payée par une entreprise à certains de ses dirigeants.",
+      "noExample": "E"
+    },
+    {
+      "id": "salaire-reel",
+      "term": "salaire réel",
+      "aliases": ["salaires réels"],
+      "plain": "Le salaire réel est le salaire corrigé de la hausse des prix : il dit ce qu'on peut vraiment acheter avec.",
+      "example": "Si les salaires montent de 2 % dans l'année et les prix de 3 %, le salaire réel baisse."
+    },
+    {
+      "id": "salarie-protege",
+      "term": "salariés protégés",
+      "aliases": ["salarié protégé"],
+      "plain": "Un salarié protégé, comme un délégué syndical ou un élu du personnel, ne peut être licencié qu'avec l'accord de l'inspection du travail.",
+      "noExample": "E"
+    },
+    {
+      "id": "services-bancaires-de-base",
+      "term": "services bancaires de base",
+      "plain": "Les services bancaires de base sont ce qu'une banque doit fournir à qui obtient le droit au compte, notamment un compte, une carte, des virements et des retraits.",
+      "noExample": "E"
+    },
+    {
+      "id": "stock-tampon",
+      "term": "stocks tampons",
+      "aliases": ["stock tampon", "stocks tampon"],
+      "plain": "Un stock tampon est une réserve de produits qu'on achète quand les prix sont bas et qu'on revend quand ils montent, pour les rendre plus stables.",
+      "noExample": "E"
+    },
+    {
+      "id": "traitement-des-fonctionnaires",
+      "term": "traitement des fonctionnaires",
+      "plain": "Le traitement d'un fonctionnaire est son salaire de base, calculé à partir de la valeur du point d'indice.",
+      "noExample": "E"
+    },
+    {
+      "id": "tribunal-de-commerce",
+      "term": "tribunaux de commerce",
+      "aliases": ["tribunal de commerce"],
+      "plain": "Le tribunal de commerce juge les litiges entre entreprises et les faillites ; ses juges sont des chefs d'entreprise élus. En 2025, douze sont devenus, à l'essai, tribunaux des activités économiques.",
       "noExample": "E"
     }
   ]
