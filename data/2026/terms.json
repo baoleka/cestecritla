@@ -8,7 +8,7 @@
     "read_by_a_person": false,
     "charter": 2,
     "sealed": {
-      "sha256": "be5007df49ce7428ea3e95ee688ea6c5bb70984ba61872087fbf3f7a5d75b3c1",
+      "sha256": "eda9f3abf6870b101284f4b9133bdc21acf9a82de7c0a8afe105d063a8e0e98b",
       "on": "2026-11-19",
       "by": "session",
       "passes": [
@@ -69,6 +69,16 @@
         },
         {
           "what": "the whole read again: hostile readers of each side, thirteen simulated readers, security review",
+          "on": "2026-11-19",
+          "by": "independent-model"
+        },
+        {
+          "what": "one entry reworded after the independent review of the preview host",
+          "on": "2026-11-19",
+          "by": "session"
+        },
+        {
+          "what": "reviewed on the preview host by an independent reviewer: yes",
           "on": "2026-11-19",
           "by": "independent-model"
         }
@@ -5382,7 +5392,7 @@
       "id": "clause-europeenne",
       "term": "clause de l'Européenne la plus favorisée",
       "aliases": ["clause dite de l'Européenne la plus favorisée"],
-      "plain": "La clause de l'Européenne la plus favorisée est une idée féministe. Elle consiste à appliquer à toutes les femmes de l'Union la loi la plus protectrice qui existe dans l'un de ses pays.",
+      "plain": "La clause de l'Européenne la plus favorisée est portée par des associations féministes. Elle vise à donner aux femmes de l'Union, domaine par domaine, la loi la plus protectrice de ses pays.",
       "noExample": "E"
     },
     {

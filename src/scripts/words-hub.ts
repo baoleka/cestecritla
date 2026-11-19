@@ -74,7 +74,9 @@ if (hub !== null) {
   }
 
   // A link to « #mot-… » opens that word, and brings it into view — on arrival, and when the
-  // address changes on this very page (a link from the same page does not load it again).
+  // address changes on this very page (a link from the same page does not load it again). The
+  // focus goes to its line too: a keyboard, or a screen reader, starts from the word asked for,
+  // not from the top of the page (review of the preview host, lot 16).
   const openFromAddress = (): void => {
     const target = /^#mot-[a-z0-9-]+$/.test(location.hash)
       ? document.getElementById(location.hash.slice(1))
@@ -82,6 +84,16 @@ if (hub !== null) {
     if (target instanceof HTMLDetailsElement) {
       target.open = true;
       target.scrollIntoView({ block: 'center' });
+      // On arrival the browser runs its own focusing steps for the fragment once the page has
+      // loaded, and falls back to the page itself, the target being no control: the line takes
+      // the focus after that (Chromium and WebKit do it later than Firefox).
+      const focusLine = (): void => {
+        requestAnimationFrame(() =>
+          target.querySelector('summary')?.focus({ preventScroll: true }),
+        );
+      };
+      if (document.readyState === 'complete') focusLine();
+      else window.addEventListener('load', focusLine, { once: true });
     }
   };
   openFromAddress();

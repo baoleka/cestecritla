@@ -325,6 +325,12 @@ async function hubChecks(
     'a link to « #mot-… » arrives on that word, open, with what it means',
     await view.evaluate<boolean>("document.querySelector('#mot-moratoire').open"),
   );
+  check(
+    '…and the focus on its line: a keyboard or a screen reader starts from the word asked for',
+    await view.evaluate<boolean>(
+      "document.activeElement === document.querySelector('#mot-moratoire > summary')",
+    ),
+  );
   await arriving.close();
 }
 
