@@ -22,6 +22,9 @@ ses pages et admettent de courts extraits, avec l'auteur et un lien vers la page
 | `verification.json` | Ce que trois navigateurs ont trouvé en relisant les pages officielles et en suivant chaque lien | `scripts/verify-2026.ts --write` |
 | `search-eval.json` | La qualité mesurée de la recherche sur le jeu de questions | `scripts/eval-2026.ts --write` |
 | `game-words.json`, `word-links.json` | Les mots du jeu « Où est-ce écrit ? », et où trois navigateurs ont vu chacun surligné (voir « Les mots du jeu ») | la liste à la main, attestée par `scripts/words-2026.ts --attest` ; `scripts/verify-2026.ts --words --write` |
+| `terms.json` | Les mots expliqués : 933 explications courtes — sigles, termes techniques, lois, traités, institutions, notions —, chacune avec un exemple inventé ou le code qui dit pourquoi elle n'en a pas. **Nos mots, pas des extraits** : écrits et vérifiés par une IA, relus par aucune personne une à une ; scellés (`meta.sealed`) et attestés sur le livre entier (`meta.attested`) — voir « Les mots expliqués » | par la session (PLAN-MOTS, D20.3) ; `scripts/lexicon-2026.ts --attest`, puis `--seal` |
+| `ordinary.json` | Les mots courants que la feuille de « Demander » admet dans une question sans les trouver dans le livre : des mots neutres (`words`), et des gens et des noms (`people`), qui ne valent jamais à côté d'un sujet sensible (D16.68) | à la main |
+| `sensitive.json` | La liste fermée des sujets sensibles, tirée de la lecture des racines de l'index, et les expressions qui font montrer des liens plutôt que nos phrases (D16.70, D16.73) | à la main |
 | `words.json` | Où les mots expliqués paraissent hors de la feuille de « Demander » : les pages, la recherche, le jeu — un interrupteur par hôte (PLAN-MOTS, D20.11) | à la main |
 | `term-places.json` | Pour chaque section, les identifiants des mots expliqués (`terms.json`) que son texte emploie — aucun mot du livre, ni où, ni combien de fois (PLAN-MOTS, lot 4) | `scripts/lexicon-2026.ts --places`, sur la machine qui tient le texte |
 | `vocabulary.json` | Chaque racine de ce que le site montre — l'index du livre et nos propres textes —, jugée une fois : claire, à expliquer (et les entrées qui la tiennent), à surveiller, ou nom propre ; jugée par la session, une IA, et, pour l'index, par un autre modèle à part (PLAN-MOTS, lot 9) | `scripts/lexicon-2026.ts --vocabulary`, depuis les jugements gardés hors du dépôt |
@@ -153,6 +156,44 @@ Depuis le 18 novembre 2026 (D19.2), une carte du jeu peut montrer, sous le lieu 
 
 Ce qui a été publié reste dans l'historique de ce dépôt : retirer une phrase du site se fait
 par une build ; la retirer d'ici ne la rappelle pas.
+
+## Les mots expliqués
+
+Depuis le 19 novembre 2026 (chantier « Aucun mot ne bloque », `docs/discovery/PLAN-MOTS.md` ;
+dossier : `docs/discovery/19-mots-expliques.md`), le site explique les mots du livre partout où
+on le lit. Ces explications sont dans `terms.json`.
+
+- **Ce qu'elles sont.** Des explications de connaissances générales, écrites d'avance et
+  vérifiées par une IA, qu'aucune personne n'a relues une à une ; le fichier le dit de lui-même
+  (`meta.written_by`, `meta.read_by_a_person`), et le site les étiquette : « Explications
+  écrites et vérifiées par une IA ». Elles disent le sens d'un mot, jamais ce que prévoit le
+  programme. Leurs exemples sont des cas inventés, aux montants ronds — jamais un barème de
+  l'année, jamais un nombre du livre.
+- **Ce qu'elles ne sont pas.** Des extraits. Les mots ont été relevés dans le livre, sur la
+  machine qui le tient, par la session seule (D20.1) ; ce fichier n'en garde que les mots
+  expliqués et leurs formes, jamais une phrase du livre — une porte locale refuse neuf mots du
+  livre de suite (`scripts/leak.test.ts`). `term-places.json` ne dit, pour chaque section, que
+  les identifiants des mots qu'elle emploie ; `vocabulary.json`, que les racines de l'index
+  public et de nos textes. Les racines que seule la prose du livre emploie sont jugées hors du
+  dépôt et ne sont publiées nulle part.
+- **Ce qui les tient.** Quatre propriétés, dont trois sont des portes de la CI : chaque racine
+  que le site montre est jugée ; chaque entrée a un exemple ou le code qui dit pourquoi non ;
+  aucune explication ne s'appuie sur un mot à plus de deux pas, aucune ne tourne en rond. La
+  quatrième — aucun mot jugé difficile hors d'une entrée ou d'une carte — est une porte pour
+  nos propres textes ; pour le livre entier et nos 1 069 phrases, elle se vérifie sur la
+  machine qui tient le livre (`npm run lexicon -- --attest`), et la CI refuse une attestation
+  faite sur d'autres mots. C'est le jugement d'une IA, pas une preuve qu'aucun lecteur ne
+  bute.
+- **Les faits qu'elles datent.** Une année, une part, une durée : chacun est déclaré dans
+  `eval/terms-sources.json` avec la page officielle qui le porte et le jour où elle a été lue,
+  et relu tous les quatre-vingt-dix jours (`scripts/terms-recall.ts`, un rappel, pas une
+  garde).
+- **Le sceau.** `meta.sealed` porte l'empreinte des entrées : la production ne prend un
+  fichier de mots que scellé tel qu'il est, et ouvert dans `words.json` (D20.15,
+  `scripts/launch.ts`). Changer un mot fait tomber le sceau.
+- **Sous quels termes.** Comme le reste de ce dossier, ce fichier n'est ni sous la licence MIT
+  du code ni sous Creative Commons : ce dépôt ne donne sur ces textes aucune licence de
+  réutilisation.
 
 ## Attribution
 

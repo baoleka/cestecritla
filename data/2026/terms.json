@@ -8,7 +8,7 @@
     "read_by_a_person": false,
     "charter": 2,
     "sealed": {
-      "sha256": "c008941bb51a1e861ff4b57e8bf7282895d78b8c03ec1b257d38cf171e1a0aa5",
+      "sha256": "be5007df49ce7428ea3e95ee688ea6c5bb70984ba61872087fbf3f7a5d75b3c1",
       "on": "2026-11-19",
       "by": "session",
       "passes": [
@@ -59,6 +59,16 @@
         },
         {
           "what": "examples checked on primary sources, read by hostile readers and a panel",
+          "on": "2026-11-19",
+          "by": "independent-model"
+        },
+        {
+          "what": "typeset; three entries reworded after the hostile reading of the whole",
+          "on": "2026-11-19",
+          "by": "session"
+        },
+        {
+          "what": "the whole read again: hostile readers of each side, thirteen simulated readers, security review",
           "on": "2026-11-19",
           "by": "independent-model"
         }
@@ -353,7 +363,7 @@
       "term": "scrutin proportionnel",
       "aliases": ["la proportionnelle", "représentation proportionnelle"],
       "plain": "Au scrutin proportionnel, chaque liste reçoit des sièges selon sa part des voix.",
-      "example": "Une liste obtient 20 % des voix. Elle reçoit environ 20 sièges sur 100."
+      "example": "Une liste obtient 20 % des voix. Elle reçoit environ 20 sièges sur 100."
     },
     {
       "id": "abroger",
@@ -714,7 +724,7 @@
       "id": "seuil-de-pauvrete",
       "term": "seuil de pauvreté",
       "plain": "Le seuil de pauvreté est le niveau de vie sous lequel une personne est comptée comme pauvre. En France, on retient le plus souvent 60 % du niveau de vie médian.",
-      "example": "Si le niveau de vie médian est de 2 000 euros par mois, le seuil à 60 % est de 1 200 euros."
+      "example": "Si le niveau de vie médian est de 2 000 euros par mois, le seuil à 60 % est de 1 200 euros."
     },
     {
       "id": "non-recours",
@@ -760,7 +770,7 @@
       "id": "point-d-indice",
       "term": "point d'indice",
       "plain": "Le point d'indice est la valeur en euros qui sert à calculer le salaire des fonctionnaires : chacun a un nombre de points, multiplié par cette valeur.",
-      "example": "Un agent touche un traitement de base de 2 000 euros par mois. Si la valeur du point augmente de 3 %, ce traitement augmente de 60 euros."
+      "example": "Un agent touche un traitement de base de 2 000 euros par mois. Si la valeur du point augmente de 3 %, ce traitement augmente de 60 euros."
     },
     {
       "id": "decote",
@@ -912,7 +922,7 @@
       "id": "depassements-d-honoraires",
       "term": "dépassements d'honoraires",
       "plain": "Un dépassement d'honoraires est la part du prix d'une consultation au-dessus du tarif de la Sécurité sociale.",
-      "example": "Une consultation remboursée sur la base de 100 euros est facturée 150 euros : les 50 euros en plus sont un dépassement d'honoraires."
+      "example": "Une consultation remboursée sur la base de 100 euros est facturée 150 euros : les 50 euros en plus sont un dépassement d'honoraires."
     },
     {
       "id": "jours-de-carence",
@@ -924,7 +934,7 @@
       "id": "reste-a-charge",
       "term": "reste à charge",
       "plain": "Le reste à charge est ce qu'une personne paie elle-même une fois déduits les remboursements ou les aides, pour des soins ou une maison de retraite par exemple.",
-      "example": "Une paire de lunettes coûte 300 euros. La Sécurité sociale et la complémentaire santé en remboursent 250 : le reste à charge est de 50 euros."
+      "example": "Une paire de lunettes coûte 300 euros. La Sécurité sociale et la complémentaire santé en remboursent 250 : le reste à charge est de 50 euros."
     },
     {
       "id": "deserts-medicaux",
@@ -1132,7 +1142,7 @@
     {
       "id": "creolisation",
       "term": "créolisation",
-      "plain": "La créolisation est le mélange de cultures et de langues d'où naissent des formes nouvelles. L'idée a été développée par l'écrivain martiniquais Édouard Glissant.",
+      "plain": "La créolisation est le mélange de cultures et de langues d'où naissent des formes nouvelles, idée de l'écrivain martiniquais Édouard Glissant. En politique, le mot a ses partisans et ses critiques.",
       "noExample": "S"
     },
     {
@@ -1141,7 +1151,7 @@
       "aliases": ["taxe sur la valeur ajoutée"],
       "anyCase": true,
       "plain": "La TVA, taxe sur la valeur ajoutée, est un impôt compris dans le prix de presque tout ce qu'on achète. Le vendeur l'encaisse et la reverse à l'État.",
-      "example": "Un livre est vendu 10 euros, taxe comprise. Le libraire ne garde pas tout : il reverse la part de TVA à l'État."
+      "example": "Un livre est vendu 10 euros, taxe comprise. Le libraire ne garde pas tout : il reverse la part de TVA à l'État."
     },
     {
       "id": "pib",
@@ -1170,26 +1180,26 @@
       "id": "taxe-zucman",
       "term": "taxe Zucman",
       "plain": "La taxe Zucman, du nom de l'économiste Gabriel Zucman, est un projet d'impôt minimum sur le patrimoine des très grandes fortunes. Si les impôts déjà payés sont plus bas, la différence est due.",
-      "example": "Le plancher calculé sur la fortune d'une personne est de 60 000 euros. Si elle a déjà payé 40 000 euros d'impôts, elle doit encore 20 000 euros."
+      "example": "Le plancher calculé sur la fortune d'une personne est de 60 000 euros. Si elle a déjà payé 40 000 euros d'impôts, elle doit encore 20 000 euros."
     },
     {
       "id": "exit-tax",
       "term": "exit tax",
       "plain": "L'exit tax est un impôt dû par un contribuable qui part vivre à l'étranger. Elle porte sur la hausse de valeur des actions qu'il détient, au-delà d'un seuil élevé.",
-      "example": "Une personne détient des actions achetées 1 million d'euros. Elles en valent 3 millions quand elle s'installe à l'étranger : l'impôt porte sur les 2 millions de hausse."
+      "example": "Une personne détient des actions achetées 1 million d'euros. Elles en valent 3 millions quand elle s'installe à l'étranger : l'impôt porte sur les 2 millions de hausse."
     },
     {
       "id": "flat-tax",
       "term": "flat tax",
       "aliases": ["prélèvement forfaitaire unique"],
       "plain": "Une flat tax est un impôt à taux unique. En France, le mot désigne le prélèvement forfaitaire unique, créé en 2018, sur les revenus des placements : un même taux, sauf si le foyer préfère le barème.",
-      "example": "Deux personnes touchent chacune 1 000 euros de dividendes. Avec un taux unique, elles paient le même impôt dessus, quels que soient leurs autres revenus."
+      "example": "Deux personnes touchent chacune 1 000 euros de dividendes. Avec un taux unique, elles paient le même impôt dessus, quels que soient leurs autres revenus."
     },
     {
       "id": "quotient-conjugal",
       "term": "quotient conjugal",
       "plain": "Le quotient conjugal est la part du quotient familial qui tient au couple. Le revenu d'un couple marié ou pacsé est divisé en deux parts ; l'impôt est calculé sur une part, puis doublé.",
-      "example": "Une personne gagne 4 000 euros par mois, son conjoint rien : l'impôt est calculé sur deux parts de 2 000 euros, ce qui le rend plus bas. Avec deux revenus égaux, il ne change rien."
+      "example": "Une personne gagne 4 000 euros par mois, son conjoint rien : l'impôt est calculé sur deux parts de 2 000 euros, ce qui le rend plus bas. Avec deux revenus égaux, il ne change rien."
     },
     {
       "id": "niches-fiscales",
@@ -1227,26 +1237,26 @@
       "id": "dividendes",
       "term": "dividendes",
       "plain": "Les dividendes sont la part des bénéfices qu'une entreprise verse à ses propriétaires.",
-      "example": "Une entreprise fait 1 million d'euros de bénéfice. Elle en verse 400 000 euros à ses propriétaires : ce sont les dividendes."
+      "example": "Une entreprise fait 1 million d'euros de bénéfice. Elle en verse 400 000 euros à ses propriétaires : ce sont les dividendes."
     },
     {
       "id": "stock-options",
       "term": "stock-options",
       "plain": "Une stock-option donne à un dirigeant ou à un salarié le droit d'acheter plus tard des actions de son entreprise, à un prix fixé d'avance.",
-      "example": "Un salarié reçoit le droit d'acheter une action 50 euros dans trois ans. Si elle en vaut alors 80, il l'achète 50 euros et peut la revendre 80."
+      "example": "Un salarié reçoit le droit d'acheter une action 50 euros dans trois ans. Si elle en vaut alors 80, il l'achète 50 euros et peut la revendre 80."
     },
     {
       "id": "lbo",
       "term": "LBO",
       "plain": "Un LBO, de l'anglais leveraged buy-out, est le rachat d'une entreprise financé surtout par de l'emprunt. Cette dette est ensuite remboursée avec les bénéfices de l'entreprise rachetée.",
-      "example": "Un fonds d'investissement achète une entreprise 100 millions d'euros, dont 70 millions empruntés. L'entreprise rachetée rembourse ensuite cet emprunt sur ses bénéfices."
+      "example": "Un fonds d'investissement achète une entreprise 100 millions d'euros, dont 70 millions empruntés. L'entreprise rachetée rembourse ensuite cet emprunt sur ses bénéfices."
     },
     {
       "id": "oati",
       "term": "OATi",
       "aliases": ["obligations assimilables du Trésor"],
       "plain": "Les OATi, obligations assimilables du Trésor indexées sur l'inflation, sont des emprunts de l'État dont la valeur suit les prix. Le prêteur est protégé de leur hausse ; l'État rembourse d'autant plus.",
-      "example": "Un prêt de 5 000 euros à l'État est indexé sur les prix. Si les prix montent de 4 %, l'État doit 5 200 euros."
+      "example": "Un prêt de 5 000 euros à l'État est indexé sur les prix. Si les prix montent de 4 %, l'État doit 5 200 euros."
     },
     {
       "id": "circuit-du-tresor",
@@ -1336,7 +1346,7 @@
       "id": "droits-de-douane",
       "term": "droits de douane",
       "plain": "Un droit de douane est une taxe payée à l'entrée d'un produit étranger dans un pays.",
-      "example": "Un pays applique un droit de douane de 10 % sur les vélos importés. Un vélo étranger vendu 300 euros à la frontière paie 30 euros pour entrer."
+      "example": "Un pays applique un droit de douane de 10 % sur les vélos importés. Un vélo étranger vendu 300 euros à la frontière paie 30 euros pour entrer."
     },
     {
       "id": "protectionnisme",
@@ -1366,7 +1376,7 @@
       "id": "coefficients-multiplicateurs",
       "term": "coefficients multiplicateurs",
       "plain": "Un coefficient multiplicateur limite l'écart entre le prix payé au producteur et le prix de vente en magasin. La loi le permet pour les fruits et légumes frais, en période de crise.",
-      "example": "Avec un coefficient multiplicateur de 2, des tomates achetées 1 euro le kilo au producteur ne peuvent pas être revendues plus de 2 euros le kilo en magasin."
+      "example": "Avec un coefficient multiplicateur de 2, des tomates achetées 1 euro le kilo au producteur ne peuvent pas être revendues plus de 2 euros le kilo en magasin."
     },
     {
       "id": "prix-planchers",
@@ -1418,7 +1428,7 @@
       "id": "encadrement-des-loyers",
       "term": "encadrement des loyers",
       "plain": "L'encadrement des loyers plafonne le loyer, ou sa hausse, dans certaines villes où les logements manquent, selon le quartier et le type de logement.",
-      "example": "Le plafond d'un quartier est de 20 euros le mètre carré. Un studio de 30 mètres carrés ne peut donc pas s'y louer plus de 600 euros par mois, sans compter les charges comme l'eau."
+      "example": "Le plafond d'un quartier est de 20 euros le mètre carré. Un studio de 30 mètres carrés ne peut donc pas s'y louer plus de 600 euros par mois, sans compter les charges comme l'eau."
     },
     {
       "id": "permis-de-louer",
@@ -1791,7 +1801,7 @@
       "id": "altermondialiste",
       "term": "altermondialiste",
       "aliases": ["altermondialistes"],
-      "plain": "Le mouvement altermondialiste critique la mondialisation telle qu'elle se fait et dit vouloir une autre mondialisation, plus sociale et plus écologique.",
+      "plain": "Le mouvement altermondialiste critique la mondialisation telle qu'elle se fait ; ses partisans en veulent une autre, plus sociale et plus écologique.",
       "noExample": "E"
     },
     {
@@ -1847,7 +1857,7 @@
       "id": "bareme",
       "term": "barème",
       "plain": "Un barème fixe le taux d'un impôt, ou le montant d'une aide, selon le revenu. Il se découpe souvent en tranches : chaque taux ne s'applique qu'à la part du revenu comprise dans sa tranche.",
-      "example": "Avec 15 % jusqu'à 2 000 euros et 30 % au-delà, un revenu de 3 000 euros paie 300 euros sur la première part. Il paie 300 euros sur le reste, soit 600 euros en tout."
+      "example": "Avec 15 % jusqu'à 2 000 euros et 30 % au-delà, un revenu de 3 000 euros paie 300 euros sur la première part. Il paie 300 euros sur le reste, soit 600 euros en tout."
     },
     {
       "id": "impot-sur-le-revenu",
@@ -1865,19 +1875,19 @@
       "id": "droits-de-succession",
       "term": "droits de succession",
       "plain": "Les droits de succession sont l'impôt payé par ceux qui héritent. Leur montant dépend de ce qui est reçu et du lien de parenté avec la personne décédée.",
-      "example": "Deux enfants héritent d'une maison de 600 000 euros. Chacun en reçoit 300 000 et paie l'impôt sur la part qui dépasse ce que la loi laisse sans impôt."
+      "example": "Deux enfants héritent d'une maison de 600 000 euros. Chacun en reçoit 300 000 et paie l'impôt sur la part qui dépasse ce que la loi laisse sans impôt."
     },
     {
       "id": "credit-d-impot",
       "term": "crédit d'impôt",
       "plain": "Un crédit d'impôt diminue l'impôt à payer ; le plus souvent, s'il dépasse cet impôt, l'État verse la différence. Il bénéficie alors aussi à ceux qui ne paient pas d'impôt sur le revenu.",
-      "example": "Une famille a droit à 1 000 euros de crédit d'impôt et doit 300 euros d'impôt. Elle ne paie rien et reçoit 700 euros."
+      "example": "Une famille a droit à 1 000 euros de crédit d'impôt et doit 300 euros d'impôt. Elle ne paie rien et reçoit 700 euros."
     },
     {
       "id": "reduction-d-impot",
       "term": "réduction d'impôt",
       "plain": "Une réduction d'impôt diminue l'impôt à payer, sans jamais rien verser au-delà. Elle ne bénéficie qu'à ceux qui paient l'impôt sur le revenu.",
-      "example": "Une famille a droit à 1 000 euros de réduction d'impôt et doit 300 euros d'impôt. Elle ne paie rien et ne reçoit rien de plus."
+      "example": "Une famille a droit à 1 000 euros de réduction d'impôt et doit 300 euros d'impôt. Elle ne paie rien et ne reçoit rien de plus."
     },
     {
       "id": "foyer-fiscal",
@@ -1895,13 +1905,13 @@
       "id": "revenus-du-capital",
       "term": "revenus du capital",
       "plain": "Les revenus du capital sont ce que rapporte ce qu'on possède : intérêts d'un placement, parts de bénéfices, loyers, gains à la revente d'un bien.",
-      "example": "Une personne touche un salaire pour son travail et 500 euros par an de loyers : ces loyers sont un revenu du capital."
+      "example": "Une personne touche un salaire pour son travail et 500 euros par an de loyers : ces loyers sont un revenu du capital."
     },
     {
       "id": "patrimoine",
       "term": "patrimoine",
       "plain": "Le patrimoine est l'ensemble de ce qu'une personne, une entreprise ou un État possède, moins ses dettes.",
-      "example": "Une personne possède une maison de 400 000 euros et doit encore 100 000 euros à sa banque : son patrimoine est de 300 000 euros."
+      "example": "Une personne possède une maison de 400 000 euros et doit encore 100 000 euros à sa banque : son patrimoine est de 300 000 euros."
     },
     {
       "id": "centimillionnaire",
@@ -1932,7 +1942,7 @@
       "id": "deficit-public",
       "term": "déficit public",
       "plain": "Le déficit public est ce qui manque, sur une année, pour que les recettes de l'État et des autres administrations couvrent leurs dépenses. Il est comblé par l'emprunt.",
-      "example": "Des recettes de 100 milliards pour 120 milliards de dépenses font un déficit de 20 milliards, comblé par l'emprunt."
+      "example": "Des recettes de 100 milliards pour 120 milliards de dépenses font un déficit de 20 milliards, comblé par l'emprunt."
     },
     {
       "id": "deficit-agricole",
@@ -1956,13 +1966,13 @@
       "id": "titre-de-dette",
       "term": "titre de dette",
       "plain": "Un titre de dette est le papier par lequel un État ou une entreprise emprunte : celui qui l'achète prête de l'argent, remboursé plus tard avec des intérêts.",
-      "example": "Un État vend un titre de 1 000 euros à 4 % sur dix ans : il verse 40 euros chaque année, puis rend les 1 000 euros."
+      "example": "Un État vend un titre de 1 000 euros à 4 % sur dix ans : il verse 40 euros chaque année, puis rend les 1 000 euros."
     },
     {
       "id": "taux-d-interet",
       "term": "taux d'intérêt",
       "plain": "Le taux d'intérêt est le prix d'un emprunt : la part de la somme prêtée que l'emprunteur paie chaque année en plus du remboursement.",
-      "example": "À 4 % par an, un emprunt de 20 000 euros remboursé en une fois au bout d'un an coûte 800 euros d'intérêts."
+      "example": "À 4 % par an, un emprunt de 20 000 euros remboursé en une fois au bout d'un an coûte 800 euros d'intérêts."
     },
     {
       "id": "creancier",
@@ -1993,19 +2003,19 @@
       "term": "exonération",
       "aliases": ["exonérer", "exonéré"],
       "plain": "Une exonération dispense une personne ou une entreprise de payer un impôt ou une cotisation, en tout ou en partie.",
-      "example": "Une entreprise doit 100 euros de cotisations sur un salaire. Avec une exonération de moitié, elle n'en paie que 50."
+      "example": "Une entreprise doit 100 euros de cotisations sur un salaire. Avec une exonération de moitié, elle n'en paie que 50."
     },
     {
       "id": "transactions-financieres",
       "term": "transactions financières",
       "plain": "Une transaction financière est l'achat ou la vente d'actions, de titres de dette ou de monnaies étrangères. Une taxe sur les transactions en prélève une petite part, sur toutes ou sur certaines.",
-      "example": "Avec une taxe de 1 %, l'achat de 50 000 euros d'actions rapporte 500 euros à l'État."
+      "example": "Avec une taxe de 1 %, l'achat de 50 000 euros d'actions rapporte 500 euros à l'État."
     },
     {
       "id": "rachat-d-actions",
       "term": "rachat d'actions",
       "plain": "Un rachat d'actions est l'achat par une entreprise de ses propres actions. C'est, à côté des dividendes, une autre façon de reverser de l'argent aux actionnaires.",
-      "example": "Une entreprise compte 100 actions, réparties entre ses actionnaires. Elle en rachète 10 et les annule : chacune des 90 restantes représente alors une part plus grande de l'entreprise."
+      "example": "Une entreprise compte 100 actions, réparties entre ses actionnaires. Elle en rachète 10 et les annule : chacune des 90 restantes représente alors une part plus grande de l'entreprise."
     },
     {
       "id": "arbitrage-de-dividendes",
@@ -2048,7 +2058,7 @@
       "id": "tresorerie",
       "term": "trésorerie",
       "plain": "La trésorerie est l'argent dont une entreprise dispose tout de suite pour payer ses dépenses.",
-      "example": "Une entreprise dont les clients paient à 90 jours peut faire des bénéfices et manquer de trésorerie pour verser les salaires du mois."
+      "example": "Une entreprise dont les clients paient à 90 jours peut faire des bénéfices et manquer de trésorerie pour verser les salaires du mois."
     },
     {
       "id": "politique-budgetaire",
@@ -2079,7 +2089,7 @@
       "id": "dette-perpetuelle",
       "term": "dette perpétuelle",
       "plain": "Une dette perpétuelle n'est jamais remboursée : l'emprunteur paie seulement des intérêts, sans limite de temps.",
-      "example": "Un État emprunte 1 million d'euros sans date de remboursement. Il paie chaque année des intérêts, par exemple 40 000 euros, aussi longtemps que la dette court."
+      "example": "Un État emprunte 1 million d'euros sans date de remboursement. Il paie chaque année des intérêts, par exemple 40 000 euros, aussi longtemps que la dette court."
     },
     {
       "id": "pacse",
@@ -2093,20 +2103,20 @@
       "term": "indexer",
       "aliases": ["indexé", "indexée", "indexation"],
       "plain": "Indexer une somme, c'est la faire suivre automatiquement un indice, le plus souvent les prix : quand ils montent, elle monte d'autant.",
-      "example": "Une pension de 1 000 euros est indexée sur les prix. Si les prix montent de 10 %, elle monte aussi de 10 %, à 1 100 euros."
+      "example": "Une pension de 1 000 euros est indexée sur les prix. Si les prix montent de 10 %, elle monte aussi de 10 %, à 1 100 euros."
     },
     {
       "id": "inflation",
       "term": "inflation",
       "aliases": ["inflationniste", "inflationnistes"],
       "plain": "L'inflation est la hausse générale des prix : avec la même somme, on achète moins qu'avant.",
-      "example": "Avec une inflation de 4 % sur un an, un panier de courses de 50 euros en coûte 52."
+      "example": "Avec une inflation de 4 % sur un an, un panier de courses de 50 euros en coûte 52."
     },
     {
       "id": "valeur-ajoutee",
       "term": "valeur ajoutée",
       "plain": "La valeur ajoutée est la différence entre le prix de ce qu'une entreprise vend et celui de ce qu'elle a acheté pour le produire. Leur somme, dans un pays, fait l'essentiel du PIB.",
-      "example": "Une boulangerie achète 30 euros de farine et vend 100 euros de pain : sa valeur ajoutée est de 70 euros."
+      "example": "Une boulangerie achète 30 euros de farine et vend 100 euros de pain : sa valeur ajoutée est de 70 euros."
     },
     {
       "id": "collectivites-locales",
@@ -2126,19 +2136,19 @@
       "term": "fonds d'investissement",
       "aliases": ["fonds financiers", "fonds de capital-investissement", "fonds prédateurs"],
       "plain": "Un fonds d'investissement réunit l'argent d'épargnants ou d'institutions pour le placer, souvent en achetant des parts d'entreprises, afin qu'il rapporte.",
-      "example": "Deux cents épargnants versent chacun 25 000 euros à un fonds. Avec ces 5 millions, le fonds achète des parts de plusieurs entreprises ; ses gains ou ses pertes reviennent aux épargnants."
+      "example": "Deux cents épargnants versent chacun 25 000 euros à un fonds. Avec ces 5 millions, le fonds achète des parts de plusieurs entreprises ; ses gains ou ses pertes reviennent aux épargnants."
     },
     {
       "id": "niveau-de-vie",
       "term": "niveau de vie",
       "plain": "Le niveau de vie est le revenu des personnes qui vivent sous un même toit, après impôts et aides, rapporté à leur nombre. Un enfant y compte moins qu'un adulte.",
-      "example": "Un couple sans enfant touche 3 000 euros par mois, après impôts et aides. Le premier adulte compte pour 1, le second pour 0,5 : leur niveau de vie est de 2 000 euros par mois."
+      "example": "Un couple sans enfant touche 3 000 euros par mois, après impôts et aides. Le premier adulte compte pour 1, le second pour 0,5 : leur niveau de vie est de 2 000 euros par mois."
     },
     {
       "id": "niveau-de-vie-median",
       "term": "niveau de vie médian",
       "plain": "Le niveau de vie médian partage la population en deux moitiés égales : la moitié vit avec moins, l'autre avec plus.",
-      "example": "Cinq personnes vivent avec 1 000, 1 500, 2 000, 3 000 et 9 000 euros par mois. La valeur médiane est celle du milieu, 2 000 euros ; la moyenne, tirée vers le haut, fait 3 300 euros."
+      "example": "Cinq personnes vivent avec 1 000, 1 500, 2 000, 3 000 et 9 000 euros par mois. La valeur médiane est celle du milieu, 2 000 euros ; la moyenne, tirée vers le haut, fait 3 300 euros."
     },
     {
       "id": "securite-sociale",
@@ -2230,7 +2240,7 @@
     {
       "id": "reforme-des-retraites-de-2023",
       "term": "retraite à 64 ans",
-      "plain": "La réforme des retraites de 2023 a prévu de relever l'âge légal de départ de 62 à 64 ans, par étapes. Fin 2025, cette hausse a été suspendue jusqu'au 1er janvier 2028.",
+      "plain": "La réforme des retraites de 2023 a prévu de relever l'âge légal de départ de 62 à 64 ans, par étapes. Fin 2025, cette hausse a été suspendue jusqu'au 1er janvier 2028.",
       "noExample": "E"
     },
     {
@@ -2243,7 +2253,7 @@
       "id": "principe-de-faveur",
       "term": "principe de faveur",
       "plain": "Le principe de faveur veut que la règle la plus favorable au salarié s'applique. Depuis 2016 et 2017, il joue moins entre accords : l'accord d'entreprise l'emporte souvent sur la branche.",
-      "example": "La loi garantit une prime de 100 euros. Un accord de branche la porte à 150 euros : c'est ce montant qui s'applique dans les entreprises de la branche."
+      "example": "La loi garantit une prime de 100 euros. Un accord de branche la porte à 150 euros : c'est ce montant qui s'applique dans les entreprises de la branche."
     },
     {
       "id": "accord-d-entreprise",
@@ -3461,14 +3471,14 @@
       "id": "zone-economique-exclusive",
       "term": "espace maritime",
       "aliases": ["domaine maritime", "zone économique exclusive", "territoire marin"],
-      "plain": "L'espace maritime d'un pays s'étend jusqu'à 370 kilomètres des côtes : c'est sa zone économique exclusive. Il y décide seul de la pêche et de l'usage des ressources ; tout navire peut y passer.",
+      "plain": "L'espace maritime d'un pays s'étend jusqu'à 370 kilomètres des côtes : c'est sa zone économique exclusive. Il y décide seul de la pêche et de l'usage des ressources ; tout navire peut y passer.",
       "noExample": "E"
     },
     {
       "id": "eaux-territoriales",
       "term": "eaux territoriales",
       "aliases": ["12 milles côtiers", "milles marins", "mille marin"],
-      "plain": "Les eaux territoriales s'étendent jusqu'à 12 milles marins des côtes, environ 22 kilomètres : le pays y exerce sa souveraineté comme sur terre.",
+      "plain": "Les eaux territoriales s'étendent jusqu'à 12 milles marins des côtes, environ 22 kilomètres : le pays y exerce sa souveraineté comme sur terre.",
       "noExample": "E"
     },
     {
@@ -4026,7 +4036,7 @@
       "term": "coopératives",
       "aliases": ["coopérative"],
       "plain": "Une coopérative est une entreprise détenue par ses membres, salariés, producteurs ou clients, qui ont chacun une voix, quelle que soit leur part.",
-      "example": "Dans une coopérative, un membre qui a apporté 100 euros et un autre qui en a apporté 5 000 ont chacun une voix."
+      "example": "Dans une coopérative, un membre qui a apporté 100 euros et un autre qui en a apporté 5 000 ont chacun une voix."
     },
     {
       "id": "voix-deliberative",
@@ -4334,7 +4344,7 @@
         "restructuration"
       ],
       "plain": "Restructurer une dette, c'est en changer les conditions, durée ou montant, pour qu'elle puisse être remboursée.",
-      "example": "Un pays doit rembourser 100 millions d'euros en deux ans et ne le peut pas. Ses créanciers lui laissent dix ans, ou effacent une partie de la dette."
+      "example": "Un pays doit rembourser 100 millions d'euros en deux ans et ne le peut pas. Ses créanciers lui laissent dix ans, ou effacent une partie de la dette."
     },
     {
       "id": "surendettement",
@@ -4842,7 +4852,7 @@
       "term": "vote blanc",
       "aliases": ["votes blancs", "suffrages exprimés"],
       "plain": "Un vote blanc est un bulletin vide, ou une enveloppe vide. Il est compté à part des suffrages, c'est-à-dire des votes, exprimés pour un candidat ou une liste.",
-      "example": "Sur 100 bulletins, 10 sont blancs. Un candidat qui obtient 50 voix a donc 50 voix sur 90 suffrages exprimés : plus de la moitié."
+      "example": "Sur 100 bulletins, 10 sont blancs. Un candidat qui obtient 50 voix a donc 50 voix sur 90 suffrages exprimés : plus de la moitié."
     },
     {
       "id": "zones-tendues",
@@ -4889,7 +4899,7 @@
       "id": "affacturage",
       "term": "affacturage",
       "plain": "Avec l'affacturage, une entreprise se fait payer tout de suite ses factures par un organisme, qui se charge ensuite de les encaisser, contre une commission.",
-      "example": "Une entreprise envoie une facture de 50 000 euros, payable dans deux mois. Un organisme lui en verse tout de suite 49 000, puis encaisse lui-même la facture."
+      "example": "Une entreprise envoie une facture de 50 000 euros, payable dans deux mois. Un organisme lui en verse tout de suite 49 000, puis encaisse lui-même la facture."
     },
     {
       "id": "fleurons",
@@ -4943,7 +4953,7 @@
       "term": "escompte",
       "aliases": ["escompter"],
       "plain": "L'escompte permet à une entreprise d'obtenir tout de suite, auprès d'une banque, l'argent d'une facture payable plus tard.",
-      "example": "Une entreprise détient une facture de 20 000 euros, payable dans trois mois. Une banque lui avance tout de suite cette somme, moins une part qu'elle garde."
+      "example": "Une entreprise détient une facture de 20 000 euros, payable dans trois mois. Une banque lui avance tout de suite cette somme, moins une part qu'elle garde."
     },
     {
       "id": "holdings",
@@ -5037,7 +5047,7 @@
       "term": "chiffre d'affaires",
       "aliases": ["chiffres d'affaires"],
       "plain": "Le chiffre d'affaires est le total des ventes d'une entreprise sur une période, avant d'en retirer les coûts. Ce n'est pas son bénéfice.",
-      "example": "Un restaurant vend pour 800 000 euros de repas dans l'année : c'est son chiffre d'affaires. Une fois payés les produits, les salaires et le loyer, il lui reste 40 000 euros de bénéfice."
+      "example": "Un restaurant vend pour 800 000 euros de repas dans l'année : c'est son chiffre d'affaires. Une fois payés les produits, les salaires et le loyer, il lui reste 40 000 euros de bénéfice."
     },
     {
       "id": "commission-d-enquete",
@@ -5089,7 +5099,7 @@
       "term": "effets de levier",
       "aliases": ["effet de levier"],
       "plain": "L'effet de levier consiste à emprunter pour investir davantage : si l'affaire rapporte plus que l'emprunt ne coûte, le gain grandit ; sinon, la perte aussi.",
-      "example": "Avec 10 euros à soi et 90 empruntés, on achète un bien de 100 euros. S'il prend 10 %, on gagne 10 euros, autant que sa mise ; s'il perd 10 %, on perd toute sa mise. L'emprunt coûte en plus."
+      "example": "Avec 10 euros à soi et 90 empruntés, on achète un bien de 100 euros. S'il prend 10 %, on gagne 10 euros, autant que sa mise ; s'il perd 10 %, on perd toute sa mise. L'emprunt coûte en plus."
     },
     {
       "id": "empreinte-ecologique",
@@ -5252,7 +5262,7 @@
       "id": "territoires-palestiniens-occupes",
       "term": "territoires palestiniens occupés",
       "aliases": ["territoires palestiniens"],
-      "plain": "Pour l'ONU, les territoires palestiniens occupés sont la Cisjordanie, Jérusalem-Est et la bande de Gaza, occupés par Israël depuis 1967. Israël, qui a quitté Gaza en 2005, conteste ce terme.",
+      "plain": "Pour l'ONU, les territoires palestiniens occupés depuis 1967 sont la Cisjordanie, Jérusalem-Est et Gaza. Israël conteste ce terme.",
       "noExample": "S"
     },
     {
@@ -5552,7 +5562,7 @@
       "term": "marché carbone",
       "aliases": ["marchés carbone"],
       "plain": "Un marché carbone fixe un plafond d'émissions et oblige les entreprises à détenir un droit pour chaque tonne de CO2 émise ; ces droits s'achètent et se vendent.",
-      "example": "Une usine a le droit d'émettre 100 tonnes de gaz à effet de serre dans l'année. Elle en émet 120 : elle achète 20 droits à une autre usine, qui en a émis moins que permis."
+      "example": "Une usine a le droit d'émettre 100 tonnes de gaz à effet de serre dans l'année. Elle en émet 120 : elle achète 20 droits à une autre usine, qui en a émis moins que permis."
     },
     {
       "id": "mesures-conservatoires",
@@ -5829,7 +5839,7 @@
       "term": "fléchant",
       "aliases": ["flécher", "fléchés"],
       "plain": "Flécher de l'argent, c'est le réserver à un usage précis.",
-      "example": "Une commune reçoit 400 000 euros fléchés vers la rénovation de ses écoles. Elle ne peut pas les dépenser pour autre chose."
+      "example": "Une commune reçoit 400 000 euros fléchés vers la rénovation de ses écoles. Elle ne peut pas les dépenser pour autre chose."
     },
     {
       "id": "snu",
@@ -5919,7 +5929,7 @@
     {
       "id": "orbite-basse",
       "term": "orbite basse",
-      "plain": "L'orbite basse est la zone de l'espace, à moins de 2 000 kilomètres d'altitude, où tournent la plupart des satellites.",
+      "plain": "L'orbite basse est la zone de l'espace, à moins de 2 000 kilomètres d'altitude, où tournent la plupart des satellites.",
       "noExample": "E"
     },
     {

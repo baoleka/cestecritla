@@ -1352,3 +1352,63 @@ Les trois comparaisons du §9.2 avaient été lues sur le premier écran d'avant
 - **R54 ne bouge pas** : personne ne dit « même équipe », personne ne prend le site pour officiel ; le « ne sait pas » tient à la palette, qui est celle de la charte par décision. Le trait de surligneur, de la couleur de sa carapace, s'ajoute à ce que deux lecteurs rapprochent du site de la campagne.
 - **R55 se dégrade.** Les deux lecteurs Opus ne tranchent plus : « l'habillage reprend des codes enfantins : tortue et flamant rose, « Choisir sa couleur », « Elle s'envolera quand tu auras trouvé un mot… », mots à collectionner » ; « un parent ou un enseignant pourrait le prendre pour un site jeunesse » ; l'un d'eux situe le public à « 15-25 ans, des primo-votants ». Les trois autres disent non : « le contenu est politique », « des thèmes d'adultes ». Ce qui a changé entre les deux lectures est la première image : le plateau des six titres officiels — du texte d'adulte — a laissé la place à trois mots du quotidien. **Aucun ne dit oui** ; mais le « non » unanime n'y est plus. Cinq lecteurs simulés, une réponse chacun : HYPOTHÈSE.
 - **Dit à l'éditeur avec la question de la production** : c'est le risque qu'il a accepté avec D19.1, et il lui revient de dire s'il l'accepte encore tel que mesuré.
+
+## 10. Session 6 (19 novembre 2026, dans la nuit, par lecteurs-agents lancés à l'aveugle) — les mots expliqués
+
+> **Ce qui a été lu.** Le chantier « Aucun mot ne bloque » (`PLAN-MOTS.md`, lots 14 et 15), **sur
+> des builds locales** — rien n'en est en ligne. Images à 390 × 844. **Lecteurs** : les sept
+> personas de `eval/personas.json` et six lecteurs sans fiche, treize en tout, chacun lancé hors
+> du dépôt, dans un dossier au nom neutre, avec `--setting-sources local`, le chemin exact de
+> chaque image et une feuille de questions ; modèles mêlés (Opus, Sonnet, Haiku — Fable avait
+> épuisé son quota). **Les critères de chaque lecture ont été écrits avant de la lancer**
+> (`private/personas/2026-11-19-mots/` et `-mots-tour/`, avec les copies et les images, hors du
+> dépôt). **Statut : HYPOTHÈSE** (des modèles, sur des images fixes).
+>
+> **Ce qu'ils disent avoir reçu** : rien sur le site ; cinq à six lancements sur treize
+> signalent l'adresse du compte, que l'outil joint d'office au contexte, et la consigne du test.
+
+### 10.1 La ligne des mots sous la carte du jeu (lot 14, D20.4)
+
+Face-à-face de la même carte, sans la ligne (la production) et avec elle, l'ordre inversé pour
+la moitié des lecteurs ; puis la ligne ouverte, puis un mot ouvert. **Ce qui faisait tomber le
+lot** : sept lecteurs sur treize préférant la carte sans la ligne ; quatre personas sur sept
+jouant moins pour elle ; trois personas sur sept la trouvant condescendante.
+
+| Question | Réponse | Sur 13 |
+|---|---|---|
+| La carte qui donne le plus envie de jouer | sans la ligne : **0** ; avec, « un peu » : 5 ; aucune différence : 8 | 13 |
+| La ligne donne moins envie de jouer (personas) | **0** ; « ça ne change rien » : 6 ; « un tout petit plus » : 1 | 7 |
+| L'explication prend de haut, fait « cours » (personas) | « oui » : **0** ; « un peu » : 1 | 7 |
+| Moins confiance, à cause de « vérifiées par une IA » | 6 personas sur 7, 4 lecteurs sur 6 | 13 |
+
+**Le lot tient.** Relevé sans le faire tomber : l'étiquette d'IA (R62) ; et, sur cette carte-là,
+la phrase disait déjà ce que veut dire son mot (« réduflation ») : la ligne le répète.
+
+### 10.2 Les mots sur tout le site (lot 15)
+
+Une fiche de section (sa ligne fermée, ouverte, un mot ouvert sur son exemple), la page « Mots
+du programme », la ligne de la recherche. **Ce qui déclenchait une correction** : trois personas
+sur sept trouvant une explication condescendante ; quatre trouvant le programme plus difficile à
+explorer ; un lecteur citant des mots orientés que la session retrouve ; deux lecteurs lisant
+l'exemple comme un fait réel ; deux ne sachant pas qui a écrit.
+
+| Question | Réponse | Sur 13 |
+|---|---|---|
+| Qui a écrit les explications, d'après l'écran | une IA : **13** | 13 |
+| L'exemple se lit comme un fait réel | **0** ; comme un cas inventé : 13 | 13 |
+| L'explication prend de haut, fait « cours » | « oui » : **0** ; « un peu » : 5 | 13 |
+| Plus facile à explorer | oui, ou un peu : 12 ; ça ne change rien : 1 ; plus difficile : **0** | 13 |
+| Moins confiance, à cause de « vérifiées par une IA » | la plupart (« une IA qui se vérifie elle-même ») | 13 |
+
+**Une correction** : deux lecteurs sans fiche lisaient, sous « Les idées du programme »,
+« expliquées en clair » comme l'adoption du point de vue du parti sur ses propres notions : la
+ligne dit désormais « Les notions propres au programme, décrites en clair, avec leurs mesures »
+(`concept.index_lead`). Les autres titres relevés comme orientés (« Mettre au pas la
+finance ») sont ceux du programme, que le site cite.
+
+### 10.3 Limites propres à cette session
+
+Des modèles, pas des gens ; des images, pas des gestes ; une seule section montrée. L'étiquette
+d'IA, qui refroidit presque tous les lecteurs, reste telle quelle : elle dit vrai, et l'éditeur
+a validé sa forme pour les phrases (D19.19). La page « Exactitude » pose à de vraies personnes
+la question que cette session ne peut pas trancher (`accuracy.unverified.07`).

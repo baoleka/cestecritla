@@ -181,6 +181,10 @@ const ENGINE_NAMES: Record<string, string> = {
          nothing between the two: a space there would be one more character in the page, which
          lot F (the first generation removed) left as it was, byte for byte. */
       game !== null && <li>{t('accuracy.unverified.06')}</li>
+    }{
+      /* The explained words, where the site shows them (PLAN-MOTS, lot 15): whether they help
+         a reader entering seconde without talking down to one is a question for real people. */
+      site.mode === 'chat' && <li>{t('accuracy.unverified.07')}</li>
     }
   </ul>
 

@@ -922,3 +922,59 @@ Par ordre de coût si on se trompe : **A1** (identité dans le dépôt) et **B1/
 - CNIL, « Cookies et traceurs : que dit la loi ? » (page mise à jour le 29/9/2020) — https://www.cnil.fr/fr/cookies-et-autres-traceurs/regles/cookies/que-dit-la-loi ; lignes directrices art. 82 — https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000042388179
 
 **Pièces locales** : `git log --format='%an <%ae>'` et `git ls-files` (A1, B1) ; `git grep -n "<home>"` (17 fichiers) ; `data/desintox.json` (`content_text`, `content_html`, 26 posts) ; `data/riposte.json` (13 entrées sur 15 avec `stat_card_id`) ; `data/glossary.json` (`counts.by_review_status`) ; `LICENSE`, `data/LICENSE` ; `npx tsx --test scripts/check-strings.test.ts` (5 échecs avant, 9/9 après) ; `npx tsc --noEmit`.
+
+## 20. Les mots expliqués (chantier « Aucun mot ne bloque », 19 novembre 2026)
+
+> Écrit par la session, sous le mandat D20.3 ; **l'éditeur ne l'a pas relu**. Le dossier du
+> chantier est `docs/discovery/19-mots-expliques.md` ; le plan et son journal,
+> `docs/discovery/PLAN-MOTS.md`.
+
+**Ce qui est publié.** 933 explications de mots et 15 cartes, nos textes, écrits par une IA à
+partir de connaissances générales (`data/2026/terms.json`, `glossary.json`). Les mots ont été
+relevés dans le livre, sur la machine qui le tient, par la session seule (D20.1).
+
+**Droit d'auteur** (le livre : « tous droits réservés », D15.2). Aucune explication ne
+reproduit le livre : elles disent le sens d'un mot de la langue ou d'une institution, jamais une
+mesure. Ce que le dépôt garde du livre se limite aux mots expliqués et à leurs formes (des
+expressions de huit mots au plus), aux identifiants des sections où ils sont écrits
+(`term-places.json`) et aux racines de l'index public (`vocabulary.json`). Une porte locale
+refuse neuf mots du livre de suite dans tout fichier suivi et servi (`scripts/leak.test.ts`) ;
+elle a mordu une fois, sur un nom officiel long, corrigé avant le commit (journal, domaine 4).
+Les nouvelles cartes ne citent aucune mesure en entier ; `quotes.json` reste à 33.
+
+**Règlement (UE) 2024/1689, article 50.** § 2 (marquage lisible par une machine) : chaque
+fichier de mots dit `written_by: "ai"` et `read_by_a_person: false`, le fichier du jeu aussi
+(`explained`), et chaque explication et chaque exemple portent `data-generated-by="ai"` dans la
+page. § 4 (information du public) : l'étiquette « Explications écrites et vérifiées par une IA »
+arrive avec les explications, en tête de chaque bloc, dans le même fichier qu'elles (D20.11) ;
+les pages Méthode, Exactitude et À propos le redisent (`about.gists_terms`,
+`accuracy.review.terms`). L'exception du § 4 (relecture humaine) ne s'applique pas : personne
+n'a relu ces textes un à un, et une porte interdit de dire le contraire.
+
+**RGPD et ce que l'hôte voit** (revue de sécurité du lot 15, agent d'un autre modèle, sans
+`private/`, « rien de bloquant »). Chercher n'envoie rien ; aucune adresse demandée ne contient
+un mot (D20.13) : le fichier des mots d'une page ne dépend que de la page lue et n'est demandé
+qu'à l'ouverture de sa ligne ; les textes des mots sont deux fichiers identiques pour tous,
+demandés à la première explication ouverte ; rien n'est écrit sur le téléphone ni dans
+l'adresse. **Ce que l'hôte peut déduire de plus qu'avant** : qu'une ligne a été ouverte sur
+telle page ; et, dans la feuille de « Demander », qu'une question demandait ce qu'un mot veut
+dire — la feuille demande alors les textes avant de répondre —, jamais lequel. C'est moins que
+les identifiants de mesures que « Demander » envoie déjà (D16.53). **DÉCISION (session, sur le
+mandat D20.3)** : ce signal n'est pas fermé par un préchargement des textes à chaque première
+question, qui coûterait 59 Ko de plus au premier usage — le cas d'arrêt 6 du plan ; la revue le
+proposait comme correctif possible, sans l'exiger.
+
+**Neutralité et droit électoral.** Une explication ne dit jamais ce que prévoit le programme ;
+un mot de camp dit son noyau, puis qui l'emploie ; les entrées sensibles n'ont pas d'exemple et
+ont été lues par deux lecteurs hostiles, un de chaque bord (D20.6). Aucune ne nomme une personne
+vivante hors de l'éponyme d'un terme, aucune n'appelle à voter. Le gel du silence électoral
+(L49) ne touche pas les explications : elles relèvent de la lecture, qui reste ; la build
+« scrutin » n'en porte aucune, comme elle ne porte aucune phrase (D20.11).
+
+**Faits datés.** 84 explications et cinq exemples disent un fait qui peut changer : chacun
+est déclaré avec la page officielle qui le porte (`eval/terms-sources.json`) et relu tous les
+quatre-vingt-dix jours (`scripts/terms-recall.ts`, un rappel par ticket, pas une garde).
+
+**Ce qui reste ouvert** : la lecture de ces textes par une personne ; leur effet sur de vrais
+lecteurs (HYPOTHÈSE : les panels sont des modèles) ; R62 — l'étiquette d'IA fait baisser la
+confiance de la plupart des lecteurs simulés.

@@ -50,7 +50,11 @@ dossier, chacune consignée dans `decisions.md` :
    pas (`data/2026/ask.json`, `gists.read_by`).
 3. **Aucune IA ne répond à un visiteur** (D16.60) : `model` vaut `null`, le bouton « Expliquer
    avec l'IA » n'est pas dans la page, `/api/chat` répond « rien » sans rien ouvrir. Les mots
-   s'expliquent par 259 textes écrits d'avance (D16.62), trouvés sur le téléphone.
+   s'expliquent par 259 textes écrits d'avance (D16.62), trouvés sur le téléphone — **933 depuis
+   le 19 novembre 2026**, relevés dans le livre et montrés aussi hors de la feuille (chantier
+   « Aucun mot ne bloque », `PLAN-MOTS.md` ; ce qu'il change à ce dossier : `11-conformite.md`
+   §20). Les mêmes règles valent : écrits d'avance, étiquetés, aucune adresse qui dépende d'un
+   mot (D20.13), aucun texte dans le HTML (D20.11).
 4. **Qui date ce dossier** : la session, sur ce mandat (`preview_legal_on`) — **l'éditeur ne
    l'a pas relu**. Ce qui lui revient encore est au §5, et rien de ce qui ne peut être fait
    qu'à sa place n'est écrit comme fait.
