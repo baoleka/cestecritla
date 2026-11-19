@@ -326,6 +326,21 @@ export function explainedFor<T extends TermWording>(
   ];
 }
 
+/** A card as the words are read with it: its term, under an identifier no word can have. */
+export const CARD_PREFIX = 'card:';
+export const cardWordings = (cards: readonly { id: string; term: string }[]): TermWording[] =>
+  cards.map(({ id, term }) => ({ id: `${CARD_PREFIX}${id}`, term }));
+
+/**
+ * The words some texts use, read with our cards (PLAN-MOTS, D20.14): a card's term may hold an
+ * explained word — « protectionnisme » in a card on a protectionism of its own —, and the card
+ * wins on its span. The cards are read like words, so that the longer span takes the shorter
+ * (`spansIn`), and are never returned.
+ */
+export function withoutCards<T extends TermWording>(found: readonly T[]): T[] {
+  return found.filter((entry) => !entry.id.startsWith(CARD_PREFIX));
+}
+
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 const isNoExample = (value: unknown): value is NoExample =>

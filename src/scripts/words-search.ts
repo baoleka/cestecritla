@@ -13,7 +13,7 @@
  * the index — one file, the same for everyone (D20.13). What is typed is read here, and sent
  * nowhere.
  */
-import type { TermWording } from '../lib/terms.ts';
+import { CARD_PREFIX, type TermWording } from '../lib/terms.ts';
 import { el, typographic } from './words-view.ts';
 import type * as Words from './words.ts';
 
@@ -29,10 +29,7 @@ if (form && input && row && results && list && stringsNode) {
     wordRow?: string;
     cards?: { id: string; term: string }[];
   };
-  const cards: TermWording[] = (strings.cards ?? []).map(({ id, term }) => ({
-    id: `card:${id}`,
-    term,
-  }));
+  const cards = strings.cards ?? [];
   let kit: typeof Words | null = null;
   let wordings: TermWording[] | null = null;
   let asked = false;
@@ -60,7 +57,7 @@ if (form && input && row && results && list && stringsNode) {
     const found =
       kit === null || wordings === null || question === ''
         ? []
-        : kit.explain(question, [], [...cards, ...wordings]).filter((word) => word.top);
+        : kit.named(question, wordings, cards);
     const first = found[0]?.entry;
     const text =
       first === undefined ? '' : (strings.wordRow ?? '').replace('{term}', typographic(first.term));
@@ -68,7 +65,7 @@ if (form && input && row && results && list && stringsNode) {
     row.replaceChildren();
     row.hidden = first === undefined;
     if (first === undefined) return;
-    const card = first.id.startsWith('card:') ? first.id.slice('card:'.length) : null;
+    const card = first.id.startsWith(CARD_PREFIX) ? first.id.slice(CARD_PREFIX.length) : null;
     const link = el('a', text);
     link.href = card === null ? `/mot/#mot-${first.id}` : `/mot/${card}/`;
     row.append(link);

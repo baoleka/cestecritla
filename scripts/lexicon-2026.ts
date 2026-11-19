@@ -15,6 +15,7 @@
  * the public file (scripts/lexicon.test.ts) holds it to the wordings it was computed with.
  */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { cardWordings } from '../src/lib/terms.js';
 import {
   TERM_PLACES_PATH as PLACES_PATH,
   explainedTerms,
@@ -38,13 +39,21 @@ function compute(): PlacesFile {
   }
   const corpus = JSON.parse(readFileSync(PRIVATE_CORPUS, 'utf8')) as PrivateCorpus;
   const entries = explainedTerms();
+  // Our cards are read with the words: a word inside the term of a card is the card's (D20.14).
+  const cards = cardWordings(
+    (
+      JSON.parse(readFileSync('data/2026/glossary.json', 'utf8')) as {
+        entries: { id: string; term: string }[];
+      }
+    ).entries,
+  );
   return {
     meta: {
       corpus_version: corpus.meta.corpus_version,
-      wordings_sha256: wordingsFingerprint(entries),
+      wordings_sha256: wordingsFingerprint([...cards, ...entries]),
       note_fr: NOTE_FR,
     },
-    sections: placesOf(corpus, entries),
+    sections: placesOf(corpus, entries, cards),
   };
 }
 

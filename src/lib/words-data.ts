@@ -21,7 +21,14 @@
 import { readFileSync } from 'node:fs';
 import { canonicalHash } from './fingerprint.js';
 import { notionsIn, type NotionEntry } from './notions.js';
-import { parseTerms, termsIn, type TermEntry, type TermWording } from './terms.js';
+import {
+  cardWordings,
+  parseTerms,
+  termsIn,
+  withoutCards,
+  type TermEntry,
+  type TermWording,
+} from './terms.js';
 
 export const TERMS_PATH = 'data/2026/terms.json';
 const CARDS_PATH = 'data/2026/glossary.json';
@@ -200,8 +207,10 @@ export function wordsPages(entries: readonly TermEntry[] = explainedTerms()): Wo
   );
   const quoted = (entry: Supported): string[] =>
     entry.supports.filter((s) => s.quote === true).map((s) => quotes.get(s.id) ?? '');
+  // Read with our cards: a word inside the term of a card is the card's (D20.14).
+  const blockers = cardWordings(ourCards());
   const idsIn = (texts: readonly string[]): string[] =>
-    termsIn(texts, entries, entries.length)
+    withoutCards(termsIn(texts, [...blockers, ...entries], blockers.length + entries.length))
       .map((entry) => entry.id)
       .sort();
   const out: WordsPage[] = Object.entries(places.sections).map(([key, ids]) => ({

@@ -11,7 +11,13 @@
  * time an explanation is needed — whichever it is. Nothing tells which (D20.13), and nothing is
  * sent to find a word: the words of a question and of the sentences are read here, on the phone.
  */
-import { explainedFor, type Explained, type TermWording } from '../lib/terms.ts';
+import {
+  CARD_PREFIX,
+  cardWordings,
+  explainedFor,
+  type Explained,
+  type TermWording,
+} from '../lib/terms.ts';
 import { fillItem, type WordText } from './words-view.ts';
 
 export { wordItem } from './words-view.ts';
@@ -111,12 +117,31 @@ export function fillAll(root: ParentNode, exampleLabel: string): void {
 
 /**
  * What the sheet explains for a turn: the terms its question asks about, first; then every term
- * its sentences use (src/lib/terms.ts, `explainedFor`).
+ * its sentences use (src/lib/terms.ts, `explainedFor`). Read with our cards: a word inside the
+ * term of a card is the card's (D20.14), and the card has its own block.
  */
 export function explain(
   question: string,
   sentences: readonly string[],
   wordings: readonly TermWording[],
+  cards: readonly { id: string; term: string }[] = [],
 ): Explained<TermWording>[] {
-  return explainedFor(question, sentences, wordings);
+  return explainedFor(question, sentences, [...cardWordings(cards), ...wordings]).filter(
+    (found) => !found.entry.id.startsWith(CARD_PREFIX),
+  );
+}
+
+/**
+ * What a search names (src/scripts/words-search.ts): the words its question asks about — an
+ * explained word, or one of our cards, whose id then starts with `CARD_PREFIX`. Read the same
+ * way: the card wins on its span (D20.14), and here it is what is shown.
+ */
+export function named(
+  question: string,
+  wordings: readonly TermWording[],
+  cards: readonly { id: string; term: string }[],
+): Explained<TermWording>[] {
+  return explainedFor(question, [], [...cardWordings(cards), ...wordings]).filter(
+    (found) => found.top,
+  );
 }

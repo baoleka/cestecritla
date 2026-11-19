@@ -14,7 +14,7 @@ import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import type { PrivateItem } from './aec26-types.js';
 import { placesOf, placesSummary, unitTexts, wordsOf } from './lexicon-core.js';
-import type { TermEntry } from '../src/lib/terms.js';
+import { cardWordings, type TermEntry } from '../src/lib/terms.js';
 import { TERM_PLACES_PATH, explainedTerms, wordingsFingerprint } from '../src/lib/words-data.js';
 
 /** Invented entries and an invented book: the rules are tested on words that are in no file. */
@@ -73,10 +73,17 @@ void test('the public map holds identifiers only, was computed on these very wor
     sections: { id: string }[];
   };
   const entries = explainedTerms();
+  const cards = cardWordings(
+    (
+      JSON.parse(readFileSync('data/2026/glossary.json', 'utf8')) as {
+        entries: { id: string; term: string }[];
+      }
+    ).entries,
+  );
   assert.equal(file.meta.corpus_version, manifest.meta.corpus_version);
   assert.equal(
     file.meta.wordings_sha256,
-    wordingsFingerprint(entries),
+    wordingsFingerprint([...cards, ...entries]),
     'the wordings of data/2026/terms.json changed since the map was computed: npm run lexicon -- --places',
   );
   assert.match(file.meta.note_fr, /identifiants/);

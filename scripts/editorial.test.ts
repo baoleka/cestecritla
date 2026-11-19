@@ -30,8 +30,12 @@ interface Entry {
   id: string;
   supports: Support[];
   review: Review;
-  /** Every sentence of ours the entry prints. */
+  /** Every sentence the entry prints. */
   texts: string[];
+  /** Those that are ours: what an objection says is someone else's, and needs no support. */
+  ours: string[];
+  /** A short card rests on the one measure that defines its device (D20.5). */
+  short: boolean;
 }
 
 const json = (path: string): unknown => JSON.parse(readFileSync(path, 'utf8'));
@@ -49,11 +53,12 @@ interface RiposteFile {
   })[];
 }
 interface GlossaryFile {
-  entries: (Omit<Entry, 'texts'> & {
+  entries: (Omit<Entry, 'texts' | 'ours' | 'short'> & {
     term: string;
     plain: string;
-    why: string;
-    objection: { text: string; answer: string };
+    why?: string;
+    objection?: { text: string; answer: string };
+    short?: true;
     related: string[];
   })[];
 }
@@ -65,11 +70,23 @@ const entries: Entry[] = [
     ...e,
     id: `riposte:${e.id}`,
     texts: [e.objection, e.answer, e.avoid],
+    ours: [e.answer, e.avoid],
+    short: false,
   })),
   ...glossary.entries.map((e) => ({
     ...e,
     id: `mot:${e.id}`,
-    texts: [e.plain, e.why, e.objection.text, e.objection.answer],
+    texts: [
+      e.plain,
+      ...(e.why === undefined ? [] : [e.why]),
+      ...(e.objection === undefined ? [] : [e.objection.text, e.objection.answer]),
+    ],
+    ours: [
+      e.plain,
+      ...(e.why === undefined ? [] : [e.why]),
+      ...(e.objection === undefined ? [] : [e.objection.answer]),
+    ],
+    short: e.short === true,
   })),
 ];
 const published = new Map(manifest.sections.flatMap((s) => s.items).map((i) => [i.id, i]));
@@ -77,7 +94,11 @@ const NBSP = String.fromCodePoint(0xa0);
 
 void test('every support is in the manifest, pinned by the hash it has there', () => {
   for (const entry of entries) {
-    assert.ok(entry.supports.length >= 2, `${entry.id}: an answer rests on at least two supports`);
+    // A short card rests on the measure that defines its device (D20.5); anything else, on two.
+    assert.ok(
+      entry.supports.length >= (entry.short ? 1 : 2),
+      `${entry.id}: rests on ${String(entry.supports.length)} support(s)`,
+    );
     for (const support of entry.supports) {
       const item = published.get(support.id);
       assert.ok(item, `${entry.id}: ${support.id} is not in the manifest`);
@@ -234,16 +255,13 @@ void test('every figure we state is written in one of the supports', { skip }, (
     const written = new Set(figures(source));
     const lower = source.toLowerCase();
     // The objection is not ours: what an opponent says needs no support.
-    const ours = entry.id.startsWith('riposte:')
-      ? entry.texts.slice(1)
-      : [entry.texts[0], entry.texts[1], entry.texts[3]];
-    for (const text of ours) {
-      for (const figure of figures(text ?? '')) {
+    for (const text of entry.ours) {
+      for (const figure of figures(text)) {
         if (!written.has(figure)) unsupported.push(`${entry.id}: ${figure}`);
       }
       for (const word of NUMBER_WORDS) {
         if (
-          new RegExp(`\\b${word}\\b`, 'i').test(text ?? '') &&
+          new RegExp(`\\b${word}\\b`, 'i').test(text) &&
           !new RegExp(`\\b${word}\\b`).test(lower)
         ) {
           unsupported.push(`${entry.id}: « ${word} »`);
@@ -252,4 +270,23 @@ void test('every figure we state is written in one of the supports', { skip }, (
     }
   }
   assert.deepEqual(unsupported, [], 'figures stated by us and written in none of the supports');
+});
+
+void test('a card accepted under the mandate is written in decisions.md, on its day, by its name (D20.14)', () => {
+  // « accepted » is published on the editor's word without a re-reading (D16.79); since
+  // 19 November 2026 that word is his mandate (D20.3): each card it publishes is named in a
+  // decision of the day it was accepted — a session never publishes in silence.
+  const rows = readFileSync('docs/discovery/decisions.md', 'utf8')
+    .split('\n')
+    .filter((row) => /^\| D\d+\.\d+ \|/.test(row));
+  for (const card of glossary.entries) {
+    const on = card.review.on ?? '';
+    if (card.review.status !== 'accepted' || on < '2026-11-19') continue;
+    assert.ok(
+      rows.some(
+        (row) => row.includes(`| ${on} |`) && row.includes(card.id) && row.includes('D20.3'),
+      ),
+      `mot:${card.id}: accepted on ${on}, and no decision of that day names it under D20.3`,
+    );
+  }
 });

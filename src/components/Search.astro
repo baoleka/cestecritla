@@ -178,8 +178,10 @@ const strings = {
   }
   // The line that says what is typed is an explained word (PLAN-MOTS, lot 6): only where the
   // build shows it — elsewhere the constant folds this away, and the script is the one of before.
+  // A page left while the module loads rejects the import (Firefox): the line is an extra, and
+  // its failure is nobody's error.
   if (__CEL_WORDS_SEARCH__) {
-    void import('../scripts/words-search.ts');
+    import('../scripts/words-search.ts').catch(() => undefined);
   }
   // The scrutin build's note (home page only): fetched the same way, for the same reason.
   if (document.querySelector('#scrutin-reopen') !== null) {

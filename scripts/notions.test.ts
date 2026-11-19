@@ -26,7 +26,8 @@ const objections = (
 const set = loadAskSet();
 
 void test('each card is recognised by its term: as written, retyped, in the plural, inside a question', () => {
-  assert.equal(cards.length, 5);
+  // Five until 19 November 2026; more since (PLAN-MOTS, D20.14).
+  assert.ok(cards.length >= 5);
   for (const card of cards) {
     assert.deepEqual(notionsIn(card.term, cards), [card.id], card.term);
     const retyped = card.term

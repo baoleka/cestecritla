@@ -362,7 +362,7 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     const explained =
       view.wording === null || kit === null || wordings === null
         ? []
-        : kit.explain(view.wording.question, view.wording.sentences ?? [], wordings);
+        : kit.explain(view.wording.question, view.wording.sentences ?? [], wordings, config.cards);
     // A question that asks what a word means gets that word first, open: it is what was asked.
     // It depends on the question alone, and comes with its text — `ask` fetches it first: an
     // open line that waited for its text would grow under its reader.
@@ -703,7 +703,7 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     if (
       kit !== null &&
       wordings !== null &&
-      kit.explain(question, [], wordings).some((e) => e.top)
+      kit.explain(question, [], wordings, config.cards).some((e) => e.top)
     ) {
       await kit.loadTexts(config.words);
     }

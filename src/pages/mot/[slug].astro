@@ -28,6 +28,12 @@ const term = prose(card.term);
 const Words = __CEL_WORDS_PAGES__ ? (await import('../../components/Words.astro')).default : null;
 const wordsFile = Words === null ? null : pageWordsFile('c', card.id);
 const title = term.charAt(0).toUpperCase() + term.slice(1);
+// A short card says what the programme calls so, and no more (D20.5): neither why it matters
+// nor an objection — the measure it rests on is listed below. Below, each block is one line
+// that ends on a space: Astro keeps the whitespace before an expression and drops the one after
+// it, and this way the cards of before are the same pages, byte for byte.
+const why = card.why;
+const objection = card.objection;
 ---
 
 <Base
@@ -41,12 +47,8 @@ const title = term.charAt(0).toUpperCase() + term.slice(1);
   <h2>{t('concept.label.plain')}</h2>
   <p class="lead">{prose(card.plain)}</p>
 
-  <h2>{t('concept.label.why')}</h2>
-  <p>{prose(card.why)}</p>
-
-  <h2>{t('concept.label.objection')}</h2>
-  <p>«&nbsp;{prose(card.objection.text)}&nbsp;»</p>
-  <p>{prose(card.objection.answer)}</p>
+  {why !== undefined && <><h2>{t('concept.label.why')}</h2> <p>{prose(why)}</p> </>}
+  {objection !== undefined && <><h2>{t('concept.label.objection')}</h2> <p>«&nbsp;{prose(objection.text)}&nbsp;»</p> <p>{prose(objection.answer)}</p> </>}
 
   <Supports supports={supports} />
 

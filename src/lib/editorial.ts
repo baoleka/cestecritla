@@ -52,8 +52,12 @@ export interface Card {
   id: string;
   term: string;
   plain: string;
-  why: string;
-  objection: { text: string; answer: string };
+  /** Why it matters — a short card has none (PLAN-MOTS, D20.5, D20.14). */
+  why?: string;
+  /** What is said against it, and our answer — optional since D20.14. */
+  objection?: { text: string; answer: string };
+  /** A short card: a device of the programme that one measure defines (D20.5). */
+  short?: true;
   supports: Support[];
   related: string[];
   review: Review;

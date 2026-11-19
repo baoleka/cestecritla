@@ -9,7 +9,7 @@
  * uses, never where, never how often, never next to what.
  */
 import type { PrivateItem } from './aec26-types.js';
-import { spansIn, type TermWording } from '../src/lib/terms.js';
+import { CARD_PREFIX, spansIn, type TermWording } from '../src/lib/terms.js';
 
 /** The texts of a unit of the book, in order: its title, then each item and its points. */
 export function unitTexts(title: string, items: readonly PrivateItem[]): string[] {
@@ -24,13 +24,20 @@ export function unitTexts(title: string, items: readonly PrivateItem[]): string[
   return out;
 }
 
-/** The explained words a set of texts uses: their identifiers, each once, sorted. */
-export function wordsOf(texts: readonly string[], wordings: readonly TermWording[]): string[] {
+/**
+ * The explained words a set of texts uses: their identifiers, each once, sorted. `cards` are
+ * read with them and never returned: a word inside the term of a card is the card's (D20.14).
+ */
+export function wordsOf(
+  texts: readonly string[],
+  wordings: readonly TermWording[],
+  cards: readonly TermWording[] = [],
+): string[] {
   const ids = new Set<string>();
   for (const text of texts) {
-    for (const span of spansIn(text, wordings)) ids.add(span.entry.id);
+    for (const span of spansIn(text, [...cards, ...wordings])) ids.add(span.entry.id);
   }
-  return [...ids].sort();
+  return [...ids].filter((id) => !id.startsWith(CARD_PREFIX)).sort();
 }
 
 /**
@@ -40,10 +47,11 @@ export function wordsOf(texts: readonly string[], wordings: readonly TermWording
 export function placesOf(
   corpus: { sections: readonly { id: string; title: string; items: readonly PrivateItem[] }[] },
   wordings: readonly TermWording[],
+  cards: readonly TermWording[] = [],
 ): Record<string, string[]> {
   const out: Record<string, string[]> = {};
   for (const section of corpus.sections) {
-    const ids = wordsOf(unitTexts(section.title, section.items), wordings);
+    const ids = wordsOf(unitTexts(section.title, section.items), wordings, cards);
     if (ids.length > 0) out[section.id] = ids;
   }
   return out;

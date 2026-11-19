@@ -24,6 +24,7 @@ import {
   MAX_TERMS,
   NO_EXAMPLE_CODES,
   asksMeaning,
+  cardWordings,
   explainedFor,
   folded,
   parseTerms,
@@ -31,6 +32,7 @@ import {
   readingOf,
   spansIn,
   termsIn,
+  withoutCards,
   type TermEntry,
 } from '../src/lib/terms.js';
 import { SAMPLE_IDS, SHEET_CASES, plainSentence, wordySentence } from './terms-fixtures.js';
@@ -454,10 +456,36 @@ void test('no explained word is one of our cards: a person wrote those, and they
       assert.deepEqual(notionsIn(wording, cards), [], `« ${wording} » is a card`);
     }
   }
-  // …and the other way round: no card names a term of this file.
+  // …and the other way round: a card's term may hold an explained word (D20.14) — the card
+  // wins on its span. Read with the cards, a card's term finds the card, and nothing inside it.
   for (const card of cards) {
-    assert.deepEqual(ids(termsIn([card.term], entries)), [], `« ${card.term} » is explained twice`);
+    const found = termsIn([card.term], [...cardWordings([card]), ...entries], 99).map(
+      (entry) => entry.id,
+    );
+    assert.deepEqual(found, [`card:${card.id}`], `« ${card.term} »: ${found.join(', ')}`);
   }
+  // …and in a text, the word inside a card's term is the card's, the word beside it its own.
+  const inside = withoutCards(
+    termsIn(
+      ['Un moratoire écologique, puis un moratoire.'],
+      [...cardWordings([{ id: 'x', term: 'moratoire écologique' }]), MORATOIRE],
+      9,
+    ),
+  );
+  assert.deepEqual(
+    inside.map((entry) => entry.id),
+    ['moratoire'],
+  );
+  assert.deepEqual(
+    withoutCards(
+      termsIn(
+        ['Un moratoire écologique.'],
+        [...cardWordings([{ id: 'x', term: 'moratoire écologique' }]), MORATOIRE],
+        9,
+      ),
+    ),
+    [],
+  );
 });
 
 /**

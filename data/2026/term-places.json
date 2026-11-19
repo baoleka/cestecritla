@@ -1,7 +1,7 @@
 {
   "meta": {
     "corpus_version": "27ee6e713fe25e7e",
-    "wordings_sha256": "4556c7a0d9b3fe1be97ba3ab186bd1aac2501ae3bd65d635b19e8ccab89a33d0",
+    "wordings_sha256": "709053c5c376a28e00e380627c1189b2e050887a24aede493f0fe5f432b45e4e",
     "note_fr": "Où chaque mot expliqué est écrit dans le livre : pour chaque section, les identifiants des mots de data/2026/terms.json que son texte emploie (son titre, ses mesures et leurs points, les paragraphes entre eux), triés. Les sections qui n'en emploient aucun n'y sont pas. Écrit par scripts/lexicon-2026.ts --places, sur la machine qui tient le texte du livre, par la session seule (D20.1) : aucun mot du livre, seulement des identifiants de sections et de mots. Il ne dit ni où dans la section, ni combien de fois. La fiche de chaque section montre ces mots, expliqués, sous une ligne qu'on ouvre (PLAN-MOTS, lot 4). À refaire après tout changement des formulations de terms.json : wordings_sha256 dit sur lesquelles il a été calculé."
   },
   "sections": {
