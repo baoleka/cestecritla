@@ -61,10 +61,13 @@ jobs:
       - name: Tests
         run: npm test
 
-      # While data/2026/ask.json says "off" the app is static files: it goes through scripts/deploy.ts like the holding
-      # site, to the preview host only — the apex refuses it until launch day (D15.5).
-      - name: Deploy dry run (app → preview host)
-        run: npx tsx scripts/deploy.ts preview --dry-run --outdir /tmp/wdry-app
+      # The build of production goes through scripts/deploy.ts to production, as a dry run: it sends
+      # nothing, so the guards that hold production back (homeBlockers, wordsBlockers) do not speak —
+      # but what dist/ holds must be what this host would serve. Since the preview host shows the
+      # explained words first (PLAN-MOTS, lot 16), a build of production is no longer a build of
+      # the preview host: that one is made and sent below.
+      - name: Deploy dry run (app → apex)
+        run: npx tsx scripts/deploy.ts apex --dry-run --outdir /tmp/wdry-app
 
       # Gate 3: the 28 role pairs actually rendered, 4.5:1 for text and 3:1 for a rule, border or
       # focus ring, non-zero exit on failure.
@@ -91,14 +94,6 @@ jobs:
             done
           done
 
-      # The Worker of « Demander » (D16.7) is bundled on every pull request, whether or not the
-      # site answers questions yet: its bindings are the AI, the private base, the allowance and
-      # the rate limiter, and nothing else (scripts/build-mode.test.ts holds the list) — through
-      # scripts/deploy.ts, as the bench deploys it: the rule that keeps the Worker off the apex
-      # and waits for the base must accept a dry run.
-      - name: Deploy dry run (bench → preview host)
-        run: npx tsx scripts/deploy.ts preview --bench --dry-run --outdir /tmp/wdry-bench
-
       # « Demander » reaches the apex as a Worker of its own, on two exact addresses in front
       # of the static files (wrangler.chat.jsonc, PLAN-CHAT lot C10). It is bundled here in both
       # environments, through the script that alone may deploy it: a dry run sends nothing and
@@ -121,6 +116,15 @@ jobs:
 
       - name: Deploy dry run (the build of the preview host → preview host)
         run: npx tsx scripts/deploy.ts preview --dry-run --outdir /tmp/wdry-preview
+
+      # The Worker of « Demander » (D16.7) is bundled on every pull request, whether or not the
+      # site answers questions yet: its bindings are the AI, the private base, the allowance and
+      # the rate limiter, and nothing else (scripts/build-mode.test.ts holds the list) — through
+      # scripts/deploy.ts, as the bench deploys it: the rule that keeps the Worker off the apex
+      # and waits for the base must accept a dry run. It carries the build of the preview host,
+      # the only host it goes to.
+      - name: Deploy dry run (bench → preview host)
+        run: npx tsx scripts/deploy.ts preview --bench --dry-run --outdir /tmp/wdry-bench
 
       # The holding site (D15.4) is what the apex actually serves until launch day, and the
       # withdrawal gesture of runbook sheet 9. It is a second build of the same tree, so it goes
