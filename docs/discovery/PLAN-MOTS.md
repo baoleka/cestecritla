@@ -325,3 +325,12 @@ Rien de servi n'a changé.
 - **Écart au plan** : `scripts/a11y.ts` ne juge les pages ouvertes qu'à partir du lot 5 (deux chemins qui ouvrent la ligne et un mot dès que la build les montre) ; d'ici là l'audit de ces surfaces est celui de `e2e-words.ts`.
 
 Rien de servi n'a changé.
+
+### Lot 5, au 19 novembre 2026 (après-midi) — la page « Mots du programme »
+
+- **`src/components/WordsHub.astro`**, sous nos cartes (« Les idées du programme ») sur `/mot/`, là où la build montre les pages : « Les mots, de A à Z » — l'étiquette d'IA et le lien « Comment c'est fabriqué » dans le HTML, un champ qui filtre (sans nom, sans correcteur), les mots sous leurs lettres, chacun une ligne qui s'ouvre. **Aucune explication dans le HTML** : `src/scripts/words-hub.ts` demande les deux fichiers de textes — ceux de la feuille, quel que soit le mot — à la première ouverture, et remplit sur place. Sans correspondance, une ligne dit qu'aucun mot expliqué ne correspond, jamais qu'un mot manque au programme, avec le lien de la recherche. `#mot-<id>` ouvre un mot et le met au centre de l'écran. Kit v0.15.0 : cinq chaînes (`words.hub.*`). La page rejoint celles qui nomment une IA (`scripts/check-no-ai-mention.test.ts`).
+- **Trouvé en regardant** : une ancre changée sur la page déjà ouverte (`/mot/` puis `#mot-…`) ne relançait pas le script, et le mot ne s'ouvrait pas ; la page des mots et la ligne repliée écoutent désormais `hashchange`.
+- **`scripts/a11y.ts`** juge deux chemins de plus, `/mot/#mot-smic` et `/s/p2c2-s01/#mots` : les pages simples tant que l'interrupteur est éteint, la ligne et le mot ouverts dès qu'une build les montre — dans les neuf conditions. **243 contrôles, aucun échec.**
+- **Portes** (mode « app » : un changement de l'app qui ne touche ni « Demander » ni le jeu, `CLAUDE.md`) : 676 tests, types, lint, a11y, e2e, **e2e des mots : 34, 27 et 27 contrôles** (la page entière : toutes les entrées, l'étiquette, aucune explication avant l'ouverture, deux fichiers à la première, rien à la deuxième, le filtre, la ligne sans correspondance, l'arrivée par `#mot-…`). MESURÉ : la page pèse 11,6 Ko gzip à 259 mots. `dist/` et `dist-scrutin/` identiques au lot 4.
+
+Rien de servi n'a changé.

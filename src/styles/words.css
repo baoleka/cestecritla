@@ -3,9 +3,11 @@
    (src/styles/chat.css): a dashed rule for what explains a word and says nothing of the
    programme, one line to press per word. */
 
-/* Without script the line would open on nothing: it is not shown. */
+/* Without script a line would open on nothing: it is not shown — nor is the list of the page
+   « Mots du programme », whose every word is such a line. */
 @media (scripting: none) {
-  details.words {
+  details.words,
+  .words-hub {
     display: none;
   }
 }
@@ -20,7 +22,8 @@ details.words > summary {
   cursor: pointer;
 }
 details.words > summary:focus-visible,
-.words .c-term summary:focus-visible {
+.words .c-term summary:focus-visible,
+.words-hub .c-term summary:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
@@ -34,18 +37,47 @@ details.words > summary:focus-visible,
   font-size: var(--font-size-small);
   line-height: var(--line-height-small);
 }
-.words .c-term {
+.words .c-term,
+.words-hub .c-term {
   margin-block-start: var(--space-1);
 }
-.words .c-term summary {
+.words .c-term summary,
+.words-hub .c-term summary {
   min-block-size: var(--tap-comfortable);
   padding-block: var(--space-2);
   font-weight: var(--font-weight-bold);
   cursor: pointer;
 }
-.words .c-term p {
+.words .c-term p,
+.words-hub .c-term p {
   margin-block: 0 var(--space-2);
 }
-.words .c-example-label {
+.words .c-example-label,
+.words-hub .c-example-label {
   font-weight: var(--font-weight-bold);
+}
+
+/* The page « Mots du programme »: a field that filters, letters, a line per word. */
+.words-hub .c-badge {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+.words-filter {
+  display: block;
+  margin-block: var(--space-4) var(--space-2);
+  font-weight: var(--font-weight-bold);
+}
+#mots-filtre {
+  inline-size: 100%;
+  min-block-size: var(--tap-comfortable);
+  padding-inline: var(--space-3);
+  font: inherit;
+}
+.words-hub h3 {
+  margin-block: var(--space-5) var(--space-1);
+}
+.words-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }

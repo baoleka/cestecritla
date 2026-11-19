@@ -20,5 +20,10 @@ for (const shell of document.querySelectorAll<HTMLDetailsElement>('details.words
   });
 }
 
-const target = location.hash === '#mots' ? document.getElementById('mots') : null;
-if (target instanceof HTMLDetailsElement) target.open = true;
+/** A link to « #mots » opens the line — on arrival, and when the address changes on this page. */
+const openFromAddress = (): void => {
+  const target = location.hash === '#mots' ? document.getElementById('mots') : null;
+  if (target instanceof HTMLDetailsElement) target.open = true;
+};
+openFromAddress();
+window.addEventListener('hashchange', openFromAddress);

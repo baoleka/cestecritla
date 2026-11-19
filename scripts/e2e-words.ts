@@ -120,10 +120,7 @@ async function runEngine(name: string, origin: string): Promise<Outcome> {
             JSON.stringify(words.terms.map(([, term]) => typeset(term))) &&
           shown.open === 0 &&
           shown.marked ===
-            words.terms.reduce(
-              (n, [, , , example]) => n + (example === undefined ? 1 : 2),
-              0,
-            ),
+            words.terms.reduce((n, [, , , example]) => n + (example === undefined ? 1 : 2), 0),
         JSON.stringify(shown),
       );
       await page.click(`${SHELL} details.c-term summary`);
@@ -142,6 +139,9 @@ async function runEngine(name: string, origin: string): Promise<Outcome> {
       );
       await context.close();
     }
+
+    // --- the page « Mots du programme » (lot 5)
+    await hubChecks(browser, origin, check);
 
     // --- 4. a link to « #mots » arrives on the line open; without script it is not shown
     const first = pages[0];
@@ -219,6 +219,98 @@ async function runEngine(name: string, origin: string): Promise<Outcome> {
     await browser.close();
   }
   return out;
+}
+
+/**
+ * The page « Mots du programme » (lot 5): the names of the words in the HTML and the label that
+ * says who wrote what they mean; nothing of what they mean until a word is opened — then the two
+ * files of texts, once; a field that filters on the phone and never says a word is missing from
+ * the programme; a link to « #mot-… » that arrives on that word, open.
+ */
+async function hubChecks(
+  browser: Browser,
+  origin: string,
+  check: (label: string, ok: boolean, detail?: string) => void,
+): Promise<void> {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const page = await context.newPage();
+  const requested: string[] = [];
+  await page.route('**/*', async (route: Route) => {
+    requested.push(route.request().url());
+    await route.continue();
+  });
+  await page.goto(`${origin}/mot/`);
+  await page.waitForTimeout(300);
+  const html = await page.content();
+  const meanings = JSON.parse(
+    readFileSync(
+      join(
+        ROOT,
+        'data',
+        readdirSync(join(ROOT, 'data')).find((n) => n.endsWith('-sens.json')) ?? '',
+      ),
+      'utf8',
+    ),
+  ) as { texts: Record<string, string> };
+  const words = await page.locator('#mots-az details.c-term').count();
+  check(
+    'the page of the words lists every explained word, under its label, and none of what they mean',
+    words === Object.keys(meanings.texts).length &&
+      html.includes(BADGE) &&
+      !Object.values(meanings.texts).some((text) => html.includes(text.slice(0, 40))) &&
+      !requested.some((url) => /\/data\/mots-/.test(url)),
+    `${String(words)} words; ${requested.filter((url) => /mots/.test(url)).join(' ')}`,
+  );
+  const before = requested.length;
+  await page.click('#mot-smic summary');
+  await until(page, "document.querySelector('#mot-smic').dataset.filled !== undefined");
+  const fetched = requested.slice(before).filter((url) => /\/data\//.test(url));
+  check(
+    'a word opened asks for the two files of texts — the same whatever the word — and shows what it means',
+    fetched.length === 2 &&
+      fetched.every((url) => /\/data\/mots-[0-9a-f]{16}-(?:sens|exemples)\.json$/.test(url)) &&
+      (await page.evaluate<string>("document.querySelector('#mot-smic p')?.textContent ?? ''")) ===
+        (meanings.texts['smic'] ?? '-'),
+    fetched.join(' '),
+  );
+  const opened = requested.length;
+  await page.click('#mot-t2a summary');
+  await until(page, "document.querySelector('#mot-t2a').dataset.filled !== undefined");
+  check(
+    'a second word asks for nothing',
+    requested.length === opened,
+    requested.slice(opened).join(' '),
+  );
+  await page.fill('#mots-filtre', 'smi');
+  const kept = await page.evaluate<string[]>(
+    "Array.from(document.querySelectorAll('#mots-az li')).filter((li) => !li.hidden && !li.closest('[data-letter]').hidden).map((li) => li.querySelector('summary').textContent)",
+  );
+  check(
+    'the field filters the words on the phone',
+    kept.includes('SMIC') && kept.length < words && requested.length === opened,
+    kept.slice(0, 6).join(', '),
+  );
+  await page.fill('#mots-filtre', 'zorglubique');
+  const none = await page.evaluate<{ shown: boolean; text: string }>(
+    "({ shown: !document.querySelector('#mots-aucun').hidden, text: document.querySelector('#mots-aucun').textContent ?? '' })",
+  );
+  check(
+    'no word matching: one line says none of the explained words does — never that the programme lacks it',
+    none.shown &&
+      !/n[’']est pas dans le programme|absent|ne contient pas|n[’']en parle pas/i.test(none.text),
+    none.text,
+  );
+  await context.close();
+
+  const arriving = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const view = await arriving.newPage();
+  await view.goto(`${origin}/mot/#mot-moratoire`);
+  await until(view, "document.querySelector('#mot-moratoire').dataset.filled !== undefined");
+  check(
+    'a link to « #mot-… » arrives on that word, open, with what it means',
+    await view.evaluate<boolean>("document.querySelector('#mot-moratoire').open"),
+  );
+  await arriving.close();
 }
 
 async function main(): Promise<void> {

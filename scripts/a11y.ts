@@ -58,6 +58,11 @@ const APP_PATHS: readonly string[] = [
   '/r/rip-01/',
   '/mot/',
   '/mot/regle-verte/',
+  // The explained words (PLAN-MOTS, D20.11), open: a section's folded line, a word of the page
+  // that lists them. Where the build does not show them these are the plain pages — and a page
+  // other than the one before, so that its script runs again.
+  '/mot/#mot-smic',
+  '/s/p2c2-s01/#mots',
   '/exactitude/',
   '/methodologie/',
   '/licence/',

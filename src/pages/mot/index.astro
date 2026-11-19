@@ -1,15 +1,20 @@
 ---
 /**
- * `/mot/` — the words of the programme that need explaining, listed.
+ * `/mot/` — the words of the programme that need explaining, listed: our cards — the ideas of
+ * the programme, which say what it provides —, then, where the build explains words on its
+ * pages (PLAN-MOTS, lot 5), every explained word from A to Z (src/components/WordsHub.astro).
  */
 import Base from '../../layouts/Base.astro';
 import { cards, prose } from '../../lib/editorial.ts';
 import { t } from '../../lib/strings.ts';
+
+const Hub = __CEL_WORDS_PAGES__ ? (await import('../../components/WordsHub.astro')).default : null;
 ---
 
 <Base title={`${t('nav.words')} — ${t('app.name')}`} description={t('concept.index_lead')}>
   <h1>{t('nav.words')}</h1>
   <p class="lead">{t('concept.index_lead')}</p>
+  {Hub !== null && <h2>{t('words.hub.ideas')}</h2>}
   <ul class="toc">
     {
       cards().map((card) => (
@@ -19,4 +24,5 @@ import { t } from '../../lib/strings.ts';
       ))
     }
   </ul>
+  {Hub !== null && <Hub />}
 </Base>

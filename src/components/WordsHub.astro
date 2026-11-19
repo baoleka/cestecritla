@@ -1,0 +1,95 @@
+---
+/**
+ * « Les mots, de A à Z » — every explained word of the site, on the page « Mots du programme »
+ * (PLAN-MOTS, lot 5; D20.11).
+ *
+ * In the HTML: the names of the words, under their letters, each a line that opens; a field
+ * that filters them; and the label that says who wrote what they mean — this page is one of
+ * those that speak of the AI that wrote them (scripts/check-no-ai-mention.test.ts). What a word
+ * means is not in the HTML: it comes by script, the first time a word is opened, from the two
+ * files the sheet of « Demander » fetches too (src/scripts/words-hub.ts). A search engine reads
+ * the names and the label, never an explanation (D19.6, D20.11).
+ *
+ * Without script the section is not shown: its lines would open on nothing. Imported only by a
+ * build that explains words on its pages (`__CEL_WORDS_PAGES__`).
+ */
+import '../styles/words.css';
+import { t } from '../lib/strings.ts';
+import { builtWords, explainedTerms, wordsNames } from '../lib/words-data.ts';
+
+const names = wordsNames(builtWords().fingerprint);
+/** One spelling for the filter and for the letters: no case, no accent. */
+const fold = (text: string): string =>
+  text
+    .normalize('NFD')
+    .replace(/\p{M}/gu, '')
+    .replace(/[’‘]/g, "'")
+    .toLowerCase();
+const typeset = (text: string): string => text.replace(/'/g, '’');
+const letterOf = (term: string): string => {
+  const first = fold(term).charAt(0);
+  return /[a-z]/.test(first) ? first.toUpperCase() : '0–9';
+};
+const sorted = [...explainedTerms()].sort(
+  (a, b) => a.term.localeCompare(b.term, 'fr', { sensitivity: 'base' }) || a.id.localeCompare(b.id),
+);
+const groups = new Map<string, typeof sorted>();
+for (const entry of sorted) {
+  const letter = letterOf(entry.term);
+  groups.set(letter, [...(groups.get(letter) ?? []), entry]);
+}
+/** Digits first, then the alphabet. */
+const letters = [...groups.keys()].sort((a, b) => (a === '0–9' ? -1 : b === '0–9' ? 1 : a < b ? -1 : 1));
+const anchor = (letter: string): string => (letter === '0–9' ? 'lettre-0' : `lettre-${letter.toLowerCase()}`);
+---
+
+<section class="words-hub" aria-labelledby="mots-az-title">
+  <h2 id="mots-az-title">{t('words.hub.title')}</h2>
+  <p>{t('words.hub.lead')}</p>
+  <p class="c-badge ref">
+    {t('chat.terms.badge')} — <a href="/methodologie/#demander">{t('chat.method_link')}</a>
+  </p>
+  {
+    /* No name, and no spell-check: what is typed here filters the list on the phone and goes
+       nowhere — not even to a browser's cloud spell-checker. */
+  }
+  <label class="words-filter" for="mots-filtre">{t('words.hub.filter')}</label>
+  <input
+    id="mots-filtre"
+    type="search"
+    autocomplete="off"
+    autocapitalize="off"
+    spellcheck="false"
+    enterkeyhint="search"
+  />
+  <p id="mots-aucun" role="status" hidden>
+    {t('words.hub.none')} <a href="/sommaire/">{t('search.label')}</a>
+  </p>
+  <div
+    id="mots-az"
+    data-meanings={`/data/${names.meanings}.json`}
+    data-examples={`/data/${names.examples}.json`}
+    data-example={t('words.example')}
+  >
+    {
+      letters.map((letter) => (
+        <section data-letter={letter} aria-labelledby={anchor(letter)}>
+          <h3 id={anchor(letter)}>{letter}</h3>
+          <ul class="words-list">
+            {(groups.get(letter) ?? []).map((entry) => (
+              <li data-name={fold([entry.term, ...(entry.aliases ?? [])].join(' | '))}>
+                <details class="c-term" id={`mot-${entry.id}`} data-term={entry.id}>
+                  <summary>{typeset(entry.term)}</summary>
+                </details>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  import '../scripts/words-hub.ts';
+</script>

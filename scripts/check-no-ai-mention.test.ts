@@ -132,8 +132,10 @@ function mentions(root: string): Map<string, string> {
 
 /**
  * Where a site that answers questions may speak of its AI: the page that asks, and the four
- * that say how it works, what it keeps, and who is behind it. A section page, a bridge, an
- * answer written by a person, the table of contents: none of them has anything to say about it.
+ * that say how it works, what it keeps, and who is behind it — and, where the build explains
+ * words on its pages, the page that lists them all, with the label that says who wrote them
+ * (PLAN-MOTS, D20.11). A section page, a bridge, an answer written by a person, the table of
+ * contents: none of them has anything to say about it — their explained words come by script.
  */
 const PAGES_THAT_EXPLAIN = [
   'index.html',
@@ -141,6 +143,7 @@ const PAGES_THAT_EXPLAIN = [
   'methodologie/index.html',
   'confidentialite/index.html',
   'a-propos/index.html',
+  'mot/index.html',
 ];
 
 /** A name of our catalogue of models, as a page would print it. */
