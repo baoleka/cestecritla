@@ -270,7 +270,7 @@
     {
       "id": "abroger",
       "term": "abroger",
-      "aliases": ["abrogation"],
+      "aliases": ["abrogation", "abrogé", "abrogée", "abrogés", "abrogées"],
       "plain": "Abroger une loi, c'est la supprimer pour l'avenir."
     },
     {
@@ -332,31 +332,42 @@
       "id": "droit-de-preemption",
       "term": "droit de préemption",
       "aliases": ["préemption"],
-      "plain": "Le droit de préemption permet à certains acheteurs désignés par la loi, souvent une commune, d'acheter en priorité un bien mis en vente."
+      "plain": "Le droit de préemption permet à certains acheteurs désignés par la loi, souvent une commune, d'acheter en priorité un bien mis en vente.",
+      "example": "Un terrain est mis en vente dans une zone où la commune a ce droit. Elle peut l'acheter à la place de l'acheteur prévu, au prix convenu ou à un prix fixé par un juge."
     },
     {
       "id": "requisition",
       "term": "réquisition",
       "aliases": ["réquisitionner"],
-      "plain": "Par une réquisition, l'autorité publique oblige une personne à lui laisser l'usage d'un bien ou à fournir un service, contre indemnité."
+      "plain": "Par une réquisition, l'autorité publique oblige une personne à lui laisser l'usage d'un bien ou à fournir un service, contre indemnité.",
+      "noExample": "E"
     },
     {
       "id": "nationaliser",
       "term": "nationaliser",
-      "aliases": ["nationalisation", "renationaliser"],
-      "plain": "Nationaliser une entreprise, c'est la faire passer sous la propriété de l'État."
+      "aliases": [
+        "nationalisation",
+        "renationaliser",
+        "nationalisant",
+        "renationalisant",
+        "renationalisation"
+      ],
+      "plain": "Nationaliser une entreprise, c'est la faire passer sous la propriété de l'État.",
+      "noExample": "E"
     },
     {
       "id": "privatisation",
       "term": "privatisations",
       "aliases": ["privatisation"],
-      "plain": "Une privatisation fait passer une entreprise publique à des propriétaires privés."
+      "plain": "Une privatisation fait passer une entreprise publique à des propriétaires privés.",
+      "noExample": "E"
     },
     {
       "id": "ppp",
       "term": "PPP",
       "aliases": ["partenariats public-privé"],
-      "plain": "Dans un partenariat public-privé, une entreprise construit et gère un équipement public. L'État ou une collectivité la paie pendant des années."
+      "plain": "Dans un partenariat public-privé, une entreprise construit et gère un équipement public. L'État ou une collectivité la paie pendant des années.",
+      "example": "Une entreprise construit un hôpital et l'entretient ; en échange, l'État lui verse un loyer chaque année, pendant toute la durée du contrat."
     },
     {
       "id": "arcom",
@@ -599,6 +610,7 @@
     {
       "id": "unedic",
       "term": "Unédic",
+      "aliases": ["Union nationale interprofessionnelle"],
       "plain": "L'Unédic gère le financement et les règles de l'assurance chômage. Elle est dirigée par les syndicats et le patronat, dans un cadre fixé par l'État.",
       "noExample": "E"
     },
@@ -636,6 +648,7 @@
     {
       "id": "retraite-par-capitalisation",
       "term": "retraite par capitalisation",
+      "aliases": ["capitalisation"],
       "plain": "Dans un système de retraite par capitalisation, ce que chacun verse est placé, souvent en Bourse, puis lui est reversé sous forme de pension.",
       "example": "Une personne place chaque mois une part de son salaire sur un compte à son nom. À la retraite, elle touche ce capital et ce qu'il a rapporté, ou perdu, suivant les placements."
     },
@@ -1007,6 +1020,7 @@
     {
       "id": "flat-tax",
       "term": "flat tax",
+      "aliases": ["prélèvement forfaitaire unique"],
       "plain": "Une flat tax est un impôt à taux unique. En France, le mot désigne le prélèvement forfaitaire unique sur les revenus du capital, créé en 2018 : le même taux, quels que soient les revenus.",
       "example": "Deux personnes touchent chacune 1 000 euros de dividendes. Avec un taux unique, elles paient le même impôt dessus, quels que soient leurs autres revenus."
     },
@@ -1123,8 +1137,9 @@
     {
       "id": "ess",
       "term": "ESS",
-      "aliases": ["économie sociale et solidaire"],
-      "plain": "L'économie sociale et solidaire réunit associations, coopératives, mutuelles et fondations. Leur but premier n'est pas le profit."
+      "aliases": ["économie sociale et solidaire", "entreprise sociale et solidaire"],
+      "plain": "L'économie sociale et solidaire réunit associations, coopératives, mutuelles et fondations. Leur but premier n'est pas le profit.",
+      "noExample": "E"
     },
     {
       "id": "scop",
@@ -1175,302 +1190,359 @@
     {
       "id": "coefficients-multiplicateurs",
       "term": "coefficients multiplicateurs",
-      "plain": "Un coefficient multiplicateur limite l'écart entre le prix payé au producteur et le prix de vente en magasin."
+      "plain": "Un coefficient multiplicateur limite l'écart entre le prix payé au producteur et le prix de vente en magasin. La loi le permet pour les fruits et légumes frais, en période de crise.",
+      "example": "Avec un coefficient multiplicateur de 2, des tomates achetées 1 euro le kilo au producteur ne peuvent pas être revendues plus de 2 euros le kilo en magasin."
     },
     {
       "id": "prix-planchers",
       "term": "prix planchers",
-      "plain": "Un prix plancher est un prix minimum fixé par une règle : on ne peut pas acheter un produit en dessous, par exemple à un agriculteur."
+      "plain": "Un prix plancher est un prix minimum fixé par une règle : on ne peut pas acheter un produit en dessous, par exemple à un agriculteur.",
+      "noExample": "E"
     },
     {
       "id": "reduflation",
       "term": "réduflation",
       "aliases": ["shrinkflation"],
-      "plain": "La réduflation, c'est vendre moins de produit dans le même emballage, sans baisser le prix."
+      "plain": "La réduflation, c'est vendre moins de produit dans le même emballage, sans baisser le prix.",
+      "noExample": "E"
     },
     {
       "id": "tarifs-reglementes",
       "term": "tarifs réglementés",
-      "plain": "Un tarif réglementé est un prix fixé par les pouvoirs publics."
+      "plain": "Un tarif réglementé est un prix fixé par les pouvoirs publics.",
+      "noExample": "E"
     },
     {
       "id": "hlm",
       "term": "HLM",
       "anyCase": true,
-      "plain": "Un HLM, habitation à loyer modéré, est un logement social au loyer plafonné."
+      "plain": "Un HLM, habitation à loyer modéré, est un logement social au loyer plafonné.",
+      "noExample": "E"
     },
     {
       "id": "loi-sru",
       "term": "SRU",
-      "plain": "La loi SRU, votée en 2000, oblige de nombreuses communes à compter une part minimale de logements sociaux."
+      "plain": "La loi SRU, votée en 2000, oblige de nombreuses communes à compter une part minimale de logements sociaux.",
+      "noExample": "E"
     },
     {
       "id": "anru",
       "term": "ANRU",
       "anyCase": true,
-      "plain": "L'ANRU est l'agence nationale qui finance la rénovation urbaine des quartiers."
+      "plain": "L'ANRU est l'agence nationale qui finance la rénovation urbaine des quartiers.",
+      "noExample": "E"
     },
     {
       "id": "loi-elan",
       "term": "ELAN",
-      "plain": "La loi ELAN, votée en 2018, a modifié des règles du logement et de la construction."
+      "plain": "La loi ELAN, votée en 2018, a modifié des règles du logement et de la construction.",
+      "noExample": "E"
     },
     {
       "id": "encadrement-des-loyers",
       "term": "encadrement des loyers",
-      "plain": "L'encadrement des loyers plafonne le loyer, ou sa hausse, dans certaines villes où les logements manquent, selon le quartier et le type de logement."
+      "plain": "L'encadrement des loyers plafonne le loyer, ou sa hausse, dans certaines villes où les logements manquent, selon le quartier et le type de logement.",
+      "example": "Le plafond d'un quartier est de 20 euros le mètre carré. Un studio de 30 mètres carrés ne peut donc pas s'y louer plus de 600 euros par mois, sans compter les charges comme l'eau."
     },
     {
       "id": "permis-de-louer",
       "term": "permis de louer",
-      "plain": "Avec un permis de louer, un propriétaire doit obtenir une autorisation avant de mettre un logement en location."
+      "plain": "Avec un permis de louer, un propriétaire doit obtenir une autorisation avant de mettre un logement en location.",
+      "noExample": "E"
     },
     {
       "id": "logement-d-abord",
       "term": "logement d'abord",
-      "plain": "Le logement d'abord consiste à donner un logement stable à une personne sans abri, avant de traiter ses autres difficultés."
+      "plain": "Le logement d'abord consiste à donner un logement stable à une personne sans abri, avant de traiter ses autres difficultés.",
+      "noExample": "E"
     },
     {
       "id": "organismes-de-foncier-solidaire",
       "term": "organismes de foncier solidaire",
-      "plain": "Un organisme de foncier solidaire reste propriétaire du terrain et vend le logement seul, ce qui en baisse le prix."
+      "plain": "Un organisme de foncier solidaire reste propriétaire du terrain et vend le logement seul, ce qui en baisse le prix.",
+      "example": "Un ménage achète un appartement sans son terrain, que garde l'organisme contre une petite somme chaque mois. S'il revend, c'est à un ménage aux revenus modestes, à un prix encadré."
     },
     {
       "id": "passoires-thermiques",
       "term": "passoires thermiques",
-      "aliases": ["passoires énergétiques"],
-      "plain": "Une passoire thermique est un logement très mal isolé, coûteux à chauffer."
+      "aliases": ["passoires énergétiques", "bouilloires thermiques", "bouilloire"],
+      "plain": "Une passoire thermique est un logement mal isolé, classé F ou G au diagnostic de performance énergétique. Une bouilloire thermique est un logement où il fait trop chaud l'été.",
+      "noExample": "E"
     },
     {
       "id": "precarite-energetique",
       "term": "précarité énergétique",
-      "plain": "La précarité énergétique, c'est avoir du mal à payer l'énergie de son logement, ou à se chauffer."
+      "plain": "La précarité énergétique, c'est avoir du mal à payer l'énergie de son logement, ou à se chauffer.",
+      "noExample": "E"
     },
     {
       "id": "zan",
       "term": "ZAN",
       "aliases": ["zéro artificialisation nette"],
       "anyCase": true,
-      "plain": "Le ZAN, zéro artificialisation nette, est un objectif fixé par une loi de 2021 pour 2050. Il s'agit de ne plus construire sur des sols naturels ou agricoles sans en rendre autant à la nature."
+      "plain": "Le ZAN, zéro artificialisation nette, est un objectif fixé par une loi de 2021 pour 2050. Il s'agit de ne plus construire sur des sols naturels ou agricoles sans en rendre autant à la nature.",
+      "example": "Une commune qui construit sur un hectare de champs et rend à la nature un hectare de parking ailleurs a une artificialisation nette nulle."
     },
     {
       "id": "zfe",
       "term": "ZFE",
       "aliases": ["zones à faibles émissions"],
       "anyCase": true,
-      "plain": "Une ZFE, zone à faibles émissions, est une zone, souvent en ville, où la circulation des véhicules les plus polluants est limitée."
+      "plain": "Une ZFE, zone à faibles émissions, est une zone, souvent en ville, où la circulation des véhicules les plus polluants est limitée.",
+      "noExample": "E"
     },
     {
       "id": "ges",
       "term": "GES",
       "aliases": ["gaz à effet de serre"],
-      "plain": "Les gaz à effet de serre retiennent la chaleur autour de la Terre. Le CO2 et le méthane en font partie."
+      "plain": "Les gaz à effet de serre retiennent la chaleur autour de la Terre. Le CO2 et le méthane en font partie.",
+      "noExample": "E"
     },
     {
       "id": "pfas",
       "term": "PFAS",
       "aliases": ["polluants éternels"],
       "anyCase": true,
-      "plain": "Les PFAS sont des substances chimiques très résistantes. On les appelle polluants éternels, car ils ne se dégradent presque pas."
+      "plain": "Les PFAS sont des substances chimiques très résistantes. On les appelle polluants éternels, car ils ne se dégradent presque pas.",
+      "noExample": "E"
     },
     {
       "id": "ogm",
       "term": "OGM",
       "aliases": ["organismes génétiquement modifiés"],
       "anyCase": true,
-      "plain": "Un OGM est un organisme dont on a modifié les gènes en laboratoire."
+      "plain": "Un OGM est un organisme dont on a modifié les gènes en laboratoire.",
+      "noExample": "E"
     },
     {
       "id": "icpe",
       "term": "ICPE",
+      "aliases": ["installations classées"],
       "anyCase": true,
-      "plain": "Une ICPE est une installation, usine ou grand élevage par exemple, classée parce qu'elle peut polluer ou présenter un danger."
+      "plain": "Une ICPE est une installation, usine ou grand élevage par exemple, classée parce qu'elle peut polluer ou présenter un danger.",
+      "noExample": "E"
     },
     {
       "id": "ademe",
       "term": "ADEME",
       "anyCase": true,
-      "plain": "L'ADEME est l'agence publique de la transition écologique."
+      "plain": "L'ADEME est l'agence publique de la transition écologique.",
+      "noExample": "E"
     },
     {
       "id": "onf",
       "term": "ONF",
       "anyCase": true,
-      "plain": "L'ONF, Office national des forêts, gère les forêts publiques."
+      "plain": "L'ONF, Office national des forêts, gère les forêts publiques.",
+      "noExample": "E"
     },
     {
       "id": "inao",
       "term": "INAO",
       "anyCase": true,
-      "plain": "L'INAO est l'institut public qui gère les signes officiels de qualité, comme l'AOP et l'IGP."
+      "plain": "L'INAO est l'institut public qui gère les signes officiels de qualité, comme l'AOP et l'IGP.",
+      "noExample": "E"
     },
     {
       "id": "aop",
       "term": "AOP",
       "anyCase": true,
-      "plain": "L'AOP, appellation d'origine protégée, garantit qu'un produit est fabriqué dans une zone précise, selon un savoir-faire reconnu."
+      "plain": "L'AOP, appellation d'origine protégée, garantit qu'un produit est fabriqué dans une zone précise, selon un savoir-faire reconnu.",
+      "noExample": "E"
     },
     {
       "id": "igp",
       "term": "IGP",
       "anyCase": true,
-      "plain": "L'IGP, indication géographique protégée, lie un produit à un territoire où a lieu au moins une étape de sa fabrication."
+      "plain": "L'IGP, indication géographique protégée, lie un produit à un territoire où a lieu au moins une étape de sa fabrication.",
+      "noExample": "E"
     },
     {
       "id": "epr2",
       "term": "EPR2",
       "aliases": ["EPR"],
       "anyCase": true,
-      "plain": "L'EPR2 est un modèle de réacteur nucléaire français, version simplifiée de l'EPR. L'État a annoncé la construction de plusieurs d'entre eux."
+      "plain": "L'EPR2 est un modèle de réacteur nucléaire français, version simplifiée de l'EPR. L'État a annoncé la construction de plusieurs d'entre eux.",
+      "noExample": "E"
     },
     {
       "id": "asn",
       "term": "ASN",
       "aliases": ["ASNR"],
-      "plain": "L'ASN était l'autorité de sûreté nucléaire. Le 1er janvier 2025, elle a fusionné avec l'IRSN dans une nouvelle autorité, l'ASNR."
+      "plain": "L'ASN était l'autorité de sûreté nucléaire. Le 1er janvier 2025, elle a fusionné avec l'IRSN dans une nouvelle autorité, l'ASNR.",
+      "noExample": "E"
     },
     {
       "id": "irsn",
       "term": "IRSN",
+      "aliases": ["Institut de radioprotection et de sûreté nucléaire"],
       "anyCase": true,
-      "plain": "L'IRSN était l'institut public d'expertise sur les risques nucléaires. Le 1er janvier 2025, il a fusionné avec l'ASN dans une nouvelle autorité, l'ASNR."
+      "plain": "L'IRSN était l'institut public d'expertise sur les risques nucléaires. Le 1er janvier 2025, il a fusionné avec l'ASN dans une nouvelle autorité, l'ASNR.",
+      "noExample": "E"
     },
     {
       "id": "cnes",
       "term": "CNES",
       "anyCase": true,
-      "plain": "Le CNES est l'agence spatiale française."
+      "plain": "Le CNES est l'agence spatiale française.",
+      "noExample": "E"
     },
     {
       "id": "shom",
       "term": "SHOM",
+      "aliases": ["service hydrographique et océanographique de la marine"],
       "anyCase": true,
-      "plain": "Le SHOM est le service public qui cartographie les mers et les fonds marins pour la France."
+      "plain": "Le SHOM est le service public qui cartographie les mers et les fonds marins pour la France.",
+      "noExample": "E"
     },
     {
       "id": "aires-marines-protegees",
       "term": "aires marines protégées",
       "aliases": ["AMP"],
-      "plain": "Une aire marine protégée, ou AMP, est une zone de mer où des règles protègent la nature. En santé, AMP désigne l'assistance médicale à la procréation, la PMA."
+      "plain": "Une aire marine protégée, ou AMP, est une zone de mer où des règles protègent la nature. En santé, AMP désigne l'assistance médicale à la procréation, la PMA.",
+      "noExample": "D"
     },
     {
       "id": "hydrolien",
       "term": "hydrolien",
       "aliases": ["hydrolienne"],
-      "plain": "L'hydrolien produit de l'électricité avec des turbines placées dans les courants marins, ou parfois dans les fleuves."
+      "plain": "L'hydrolien produit de l'électricité avec des turbines placées dans les courants marins, ou parfois dans les fleuves.",
+      "noExample": "E"
     },
     {
       "id": "propulsion-velique",
       "term": "propulsion vélique",
-      "plain": "La propulsion vélique fait avancer un navire grâce au vent, avec des voiles ou des ailes."
+      "plain": "La propulsion vélique fait avancer un navire grâce au vent, avec des voiles ou des ailes.",
+      "noExample": "E"
     },
     {
       "id": "taxe-au-tonnage",
       "term": "taxe au tonnage",
-      "plain": "Avec la taxe au tonnage, l'impôt d'un armateur est calculé sur la taille de ses navires, et non sur ses bénéfices."
+      "plain": "Avec la taxe au tonnage, l'impôt d'un armateur est calculé sur la taille de ses navires, et non sur ses bénéfices.",
+      "example": "Deux armateurs ont des flottes de même taille : ils paient le même impôt. L'un fait de gros bénéfices, l'autre presque aucun."
     },
     {
       "id": "pavillon",
       "term": "pavillon français",
-      "plain": "Le pavillon d'un navire est le pays où il est immatriculé. Ce sont ses règles qui s'appliquent à bord."
+      "plain": "Le pavillon d'un navire est le pays où il est immatriculé. Ce sont ses règles qui s'appliquent à bord.",
+      "noExample": "E"
     },
     {
       "id": "plateau-continental",
       "term": "plateau continental",
-      "plain": "Le plateau continental est le prolongement des terres d'un pays sous la mer. Ce pays y a des droits sur les ressources du sol et du sous-sol marins."
+      "plain": "Le plateau continental est le prolongement des terres d'un pays sous la mer. Ce pays y a des droits sur les ressources du sol et du sous-sol marins.",
+      "noExample": "E"
     },
     {
       "id": "sargasses",
       "term": "sargasses",
-      "plain": "Les sargasses sont des algues brunes qui s'échouent en masse sur les côtes, notamment aux Antilles."
+      "plain": "Les sargasses sont des algues brunes qui s'échouent en masse sur les côtes, notamment aux Antilles.",
+      "noExample": "E"
     },
     {
       "id": "orpaillage",
       "term": "orpaillage",
-      "plain": "L'orpaillage est la recherche d'or dans les rivières et les sols."
+      "plain": "L'orpaillage est la recherche d'or dans les rivières et les sols.",
+      "noExample": "E"
     },
     {
       "id": "chlordecone",
       "term": "chlordécone",
-      "plain": "Le chlordécone est un insecticide utilisé aux Antilles dans les bananeraies jusqu'en 1993. Il pollue durablement les sols et l'eau."
+      "plain": "Le chlordécone est un insecticide utilisé aux Antilles dans les bananeraies, par dérogation, jusqu'en 1993, alors qu'il était interdit en France depuis 1990. Il pollue durablement les sols et l'eau.",
+      "noExample": "E"
     },
     {
       "id": "glyphosate",
       "term": "glyphosate",
-      "plain": "Le glyphosate est l'herbicide le plus utilisé au monde. Ses effets sur la santé font débat."
+      "plain": "Le glyphosate est l'herbicide le plus utilisé au monde. En 2015, le Centre international de recherche sur le cancer l'a classé cancérogène probable ; les agences européennes, non.",
+      "noExample": "E"
     },
     {
       "id": "neonicotinoides",
       "term": "néonicotinoïdes",
-      "plain": "Les néonicotinoïdes sont des insecticides qui agissent sur le système nerveux des insectes. Les agences sanitaires les jugent dangereux pour les abeilles."
+      "plain": "Les néonicotinoïdes sont des insecticides qui agissent sur le système nerveux des insectes. Les agences sanitaires les jugent dangereux pour les abeilles.",
+      "noExample": "E"
     },
     {
       "id": "cadmium",
       "term": "cadmium",
-      "plain": "Le cadmium est un métal toxique, présent notamment dans certains engrais."
+      "plain": "Le cadmium est un métal toxique, présent notamment dans certains engrais.",
+      "noExample": "E"
     },
     {
       "id": "mega-bassines",
       "term": "méga-bassines",
       "aliases": ["mégabassines"],
-      "plain": "Une méga-bassine, ou réserve de substitution, est une grande réserve d'eau à ciel ouvert. Elle est remplie en hiver en pompant dans les nappes ou les rivières, pour irriguer en été."
+      "plain": "Une méga-bassine, dite réserve de substitution par ses défenseurs, est une grande réserve d'eau à ciel ouvert. Elle se remplit l'hiver en pompant dans les nappes ou les rivières, pour irriguer l'été.",
+      "noExample": "E"
     },
     {
       "id": "coupes-rases",
       "term": "coupes rases",
-      "plain": "Une coupe rase consiste à abattre en une fois tous les arbres d'une parcelle de forêt."
+      "plain": "Une coupe rase consiste à abattre en une fois tous les arbres d'une parcelle de forêt.",
+      "noExample": "E"
     },
     {
       "id": "agroecologie",
       "term": "agroécologique",
       "aliases": ["agroécologiques", "agroécologie"],
-      "plain": "L'agroécologie est une façon de cultiver qui s'appuie sur la nature et réduit les produits chimiques."
+      "plain": "L'agroécologie est une façon de cultiver qui s'appuie sur la nature et réduit les produits chimiques.",
+      "noExample": "E"
     },
     {
       "id": "circuits-courts",
       "term": "circuits courts",
-      "plain": "Un circuit court est une vente avec, au plus, un intermédiaire entre le producteur et le consommateur."
+      "plain": "Un circuit court est une vente avec, au plus, un intermédiaire entre le producteur et le consommateur.",
+      "example": "Un maraîcher qui vend ses légumes au marché, ou à une épicerie qui les revend, vend en circuit court. S'il passe par un grossiste puis un supermarché, ce n'en est plus un."
     },
     {
       "id": "obsolescence-programmee",
       "term": "obsolescence programmée",
-      "plain": "L'obsolescence programmée, c'est réduire volontairement la durée de vie d'un produit pour qu'on le remplace plus vite. En France, c'est un délit depuis 2015."
+      "plain": "L'obsolescence programmée, c'est réduire volontairement la durée de vie d'un produit pour qu'on le remplace plus vite. En France, c'est un délit depuis 2015.",
+      "noExample": "E"
     },
     {
       "id": "ecoconception",
       "term": "écoconception",
-      "plain": "L'écoconception consiste à concevoir un produit en réduisant son impact sur l'environnement."
+      "plain": "L'écoconception consiste à concevoir un produit en réduisant son impact sur l'environnement.",
+      "noExample": "E"
     },
     {
       "id": "low-tech",
       "term": "low-tech",
-      "plain": "Le low-tech désigne des techniques simples, sobres et réparables."
+      "plain": "Le low-tech désigne des techniques simples, sobres et réparables.",
+      "noExample": "E"
     },
     {
       "id": "pollueur-payeur",
       "term": "pollueur-payeur",
-      "plain": "Selon le principe pollueur-payeur, celui qui pollue paie les dégâts et leur réparation."
+      "plain": "Selon le principe pollueur-payeur, celui qui pollue paie les dégâts et leur réparation.",
+      "noExample": "E"
     },
     {
       "id": "ferroutage",
       "term": "ferroutage",
-      "plain": "Le ferroutage consiste à transporter des camions sur des trains."
+      "plain": "Le ferroutage consiste à transporter des camions sur des trains.",
+      "noExample": "E"
     },
     {
       "id": "wagon-isole",
       "term": "wagon isolé",
-      "plain": "Le wagon isolé est un service de fret où un client envoie un ou quelques wagons, et non un train entier."
+      "plain": "Le wagon isolé est un service de fret où un client envoie un ou quelques wagons, et non un train entier.",
+      "noExample": "E"
     },
     {
       "id": "leasing-social",
       "term": "leasing social",
-      "plain": "Le leasing social est une location de voiture électrique à petit prix, aidée par l'État, pour des ménages modestes."
+      "plain": "Le leasing social est une location de voiture électrique à petit prix, aidée par l'État, pour des ménages modestes.",
+      "noExample": "E"
     },
     {
       "id": "suv",
       "term": "SUV",
       "anyCase": true,
-      "plain": "Un SUV est une voiture haute et lourde, inspirée des tout-terrain."
+      "plain": "Un SUV est une voiture haute et lourde, inspirée des tout-terrain.",
+      "noExample": "E"
     },
     {
       "id": "logiciels-libres",
@@ -1520,7 +1592,8 @@
       "id": "orsec",
       "term": "ORSEC",
       "anyCase": true,
-      "plain": "ORSEC est le dispositif public qui organise les secours lors d'une catastrophe."
+      "plain": "ORSEC est le dispositif public qui organise les secours lors d'une catastrophe.",
+      "noExample": "E"
     },
     {
       "id": "athos",
@@ -1833,10 +1906,10 @@
     },
     {
       "id": "collectivites-locales",
-      "term": "collectivités locales",
-      "aliases": ["collectivités territoriales"],
-      "plain": "Les collectivités locales sont les communes, les départements et les régions, ainsi que quelques collectivités à statut particulier. Elles sont gérées par des élus et ont leur propre budget.",
-      "noExample": "E"
+      "term": "collectivité",
+      "aliases": ["collectivités locales", "collectivités territoriales"],
+      "plain": "Une collectivité territoriale, comme une commune, un département ou une région, est administrée par des élus et a son budget. Au sens large, la collectivité désigne l'ensemble des citoyens.",
+      "noExample": "D"
     },
     {
       "id": "administrations-publiques",
@@ -1885,7 +1958,7 @@
     {
       "id": "cotisation-sociale",
       "term": "cotisation sociale",
-      "aliases": ["cotisation", "cotisant"],
+      "aliases": ["cotisation", "cotisant", "cotiser", "cotisé", "cotisée", "cotisés", "cotisées"],
       "plain": "Une cotisation sociale est une somme versée sur les salaires, par l'employeur ou le salarié, à la Sécurité sociale ou à l'assurance chômage. Elle ouvre des droits : pension, soins, allocation.",
       "noExample": "E"
     },
@@ -2133,6 +2206,7 @@
     {
       "id": "jour-ferie-chome",
       "term": "jour férié chômé",
+      "aliases": ["chômé"],
       "plain": "Un jour férié est chômé quand on ne travaille pas ce jour-là, sans perdre de salaire. Suivant le jour, c'est la loi, un accord ou l'employeur qui le décide.",
       "noExample": "E"
     },
@@ -2296,8 +2370,9 @@
     },
     {
       "id": "medico-social",
-      "term": "médico-social",
-      "plain": "Le secteur médico-social accompagne les personnes âgées, handicapées ou en difficulté, entre le soin et l'aide sociale : EHPAD, foyers, services à domicile.",
+      "term": "médico-sociales",
+      "aliases": ["médico-social", "médico-sociaux", "médico-sociale"],
+      "plain": "Le secteur médico-social accueille et accompagne des personnes âgées, handicapées ou en difficulté, avec des soins : maisons de retraite, foyers, centres d'accueil.",
       "noExample": "E"
     },
     {
@@ -2439,6 +2514,7 @@
     {
       "id": "cmpp",
       "term": "centres médico-psycho-pédagogiques",
+      "aliases": ["médico-psycho-pédagogiques"],
       "plain": "Un centre médico-psycho-pédagogique soigne les enfants et les adolescents en difficulté psychologique ou scolaire, sans frais pour les familles.",
       "noExample": "E"
     },
@@ -2504,6 +2580,7 @@
     {
       "id": "monopole-d-etat",
       "term": "monopole d'État",
+      "aliases": ["monopole public"],
       "plain": "Il y a monopole d'État quand seul l'État, ou une entreprise publique, a le droit de produire ou de vendre un bien.",
       "noExample": "E"
     },
@@ -2700,6 +2777,1364 @@
       "id": "honoraires",
       "term": "honoraires",
       "plain": "Les honoraires sont ce qu'on paie à un médecin, un avocat ou un autre professionnel installé à son compte, pour une consultation ou un service.",
+      "noExample": "E"
+    },
+    {
+      "id": "artificialisation",
+      "term": "artificialisation",
+      "plain": "L'artificialisation abîme durablement un sol naturel, agricole ou forestier, le plus souvent en le bâtissant ou en le goudronnant : il absorbe moins l'eau et abrite moins de vie.",
+      "noExample": "E"
+    },
+    {
+      "id": "assainissement",
+      "term": "assainissement",
+      "plain": "L'assainissement collecte et nettoie les eaux usées, des toilettes, des douches, des usines, avant de les rendre à la nature.",
+      "noExample": "E"
+    },
+    {
+      "id": "biosphere",
+      "term": "biosphère",
+      "plain": "La biosphère est l'ensemble des êtres vivants de la Terre et des milieux où ils vivent : sols, océans, atmosphère.",
+      "noExample": "E"
+    },
+    {
+      "id": "bois-d-oeuvre",
+      "term": "bois d'œuvre",
+      "plain": "Le bois d'œuvre est le bois de qualité qu'on scie pour construire ou fabriquer des meubles, à la différence du bois brûlé pour l'énergie.",
+      "noExample": "E"
+    },
+    {
+      "id": "bois-energie",
+      "term": "bois-énergie",
+      "aliases": ["énergie bois"],
+      "plain": "Le bois-énergie est le bois brûlé pour produire de la chaleur ou de l'électricité.",
+      "noExample": "E"
+    },
+    {
+      "id": "biens-communs",
+      "term": "biens communs",
+      "aliases": ["bien commun", "un commun", "communs forestiers", "biens communs planétaires"],
+      "plain": "On appelle biens communs ce qui appartient à tous, ou dont tous dépendent, comme l'eau, l'air ou le climat. Un commun est une ressource que ses usagers gèrent ensemble.",
+      "example": "Les pêcheurs d'une même baie fixent ensemble ce que chacun peut pêcher, pour que le poisson ne s'épuise pas : ils font de la baie un commun."
+    },
+    {
+      "id": "dechets-nucleaires",
+      "term": "déchets nucléaires",
+      "aliases": ["enfouissement des déchets nucléaires"],
+      "plain": "Les déchets nucléaires sont des matières radioactives sans usage prévu, venues des centrales, des hôpitaux, de la recherche ou de l'armée. Certains le restent des centaines de milliers d'années.",
+      "noExample": "E"
+    },
+    {
+      "id": "decarbonation",
+      "term": "décarbonation",
+      "aliases": ["décarboné", "décarbonée", "décarboner"],
+      "plain": "La décarbonation consiste à réduire, dans une activité, les émissions de CO2 qui réchauffent le climat, par exemple en se passant de pétrole ou de charbon.",
+      "noExample": "E"
+    },
+    {
+      "id": "efficacite-energetique",
+      "term": "efficacité énergétique",
+      "plain": "L'efficacité énergétique consiste à obtenir le même service avec moins d'énergie, grâce à de meilleurs appareils ou bâtiments.",
+      "noExample": "E"
+    },
+    {
+      "id": "sobriete-energetique",
+      "term": "sobriété",
+      "aliases": [
+        "sobriété énergétique",
+        "sobriété et efficacité énergétiques",
+        "efficacité et la sobriété énergétiques",
+        "sobriété et l'efficacité énergétiques"
+      ],
+      "plain": "La sobriété consiste à consommer moins, d'énergie ou de matières, en changeant ses usages : moins chauffer, moins rouler. L'efficacité, elle, rend le même service avec moins d'énergie.",
+      "example": "Baisser le chauffage d'un degré relève de la sobriété. Isoler sa maison pour avoir aussi chaud en consommant moins relève de l'efficacité."
+    },
+    {
+      "id": "energies-fossiles",
+      "term": "énergies fossiles",
+      "plain": "Les énergies fossiles, pétrole, charbon et gaz naturel, viennent de restes d'êtres vivants enfouis depuis des millions d'années. Les brûler réchauffe le climat.",
+      "noExample": "E"
+    },
+    {
+      "id": "gaz-fossile",
+      "term": "gaz fossile",
+      "plain": "Le gaz fossile, appelé aussi gaz naturel, est extrait du sous-sol comme le pétrole et le charbon. Le nom le distingue du gaz produit à partir de déchets.",
+      "noExample": "E"
+    },
+    {
+      "id": "energies-marines",
+      "term": "énergies marines renouvelables",
+      "aliases": ["EMR", "éolien en mer", "énergie de la houle"],
+      "plain": "Les énergies marines renouvelables tirent de l'électricité de la mer : éoliennes en mer, posées sur le fond ou flottantes, courants, vagues, marées.",
+      "noExample": "E"
+    },
+    {
+      "id": "gigawatt",
+      "term": "gigawatts",
+      "aliases": ["gigawatt", "puissance installée"],
+      "plain": "Un gigawatt, un milliard de watts, est une unité de puissance électrique. La puissance installée d'un ensemble de centrales est le maximum qu'elles peuvent fournir en même temps.",
+      "noExample": "E"
+    },
+    {
+      "id": "methanisation",
+      "term": "méthanisation",
+      "plain": "La méthanisation fait fermenter sans air du fumier, des déchets ou des cultures, pour produire un gaz qu'on brûle comme le gaz naturel ; le reste sert d'engrais. Y consacrer des cultures fait débat.",
+      "noExample": "E"
+    },
+    {
+      "id": "neutralite-carbone",
+      "term": "neutralité carbone",
+      "aliases": ["neutre en carbone"],
+      "plain": "La neutralité carbone est atteinte quand on n'émet pas plus de gaz à effet de serre, comme le CO2, qu'on n'en retire de l'air. Les forêts et les sols en retirent notamment.",
+      "noExample": "E"
+    },
+    {
+      "id": "photovoltaique",
+      "term": "photovoltaïque",
+      "plain": "Le photovoltaïque produit de l'électricité avec des panneaux solaires.",
+      "noExample": "E"
+    },
+    {
+      "id": "pompe-a-chaleur",
+      "term": "pompes à chaleur",
+      "aliases": ["pompe à chaleur"],
+      "plain": "Une pompe à chaleur chauffe un logement, le plus souvent avec de l'électricité, en prenant la chaleur de l'air, du sol ou de l'eau du dehors. Certaines le rafraîchissent aussi l'été.",
+      "noExample": "E"
+    },
+    {
+      "id": "renovation-thermique",
+      "term": "rénovation thermique",
+      "aliases": ["rénovation énergétique", "rénovations thermiques"],
+      "plain": "La rénovation thermique isole un bâtiment et change son chauffage, pour qu'il consomme moins d'énergie.",
+      "noExample": "E"
+    },
+    {
+      "id": "reseau-de-fraicheur",
+      "term": "réseaux de fraîcheur",
+      "aliases": ["réseau de fraîcheur"],
+      "plain": "Un réseau de fraîcheur distribue du froid à plusieurs bâtiments d'une ville par des tuyaux, comme un chauffage collectif à l'envers.",
+      "noExample": "E"
+    },
+    {
+      "id": "ombriere",
+      "term": "ombrières",
+      "aliases": ["ombrière"],
+      "plain": "Une ombrière est un toit léger qui fait de l'ombre, au-dessus d'un parking ou d'une cour, souvent couvert de panneaux solaires.",
+      "noExample": "E"
+    },
+    {
+      "id": "stockage-d-energie",
+      "term": "stockage d'énergie",
+      "plain": "Le stockage d'énergie garde l'électricité produite pour l'utiliser plus tard : batteries, barrages qui remontent l'eau, hydrogène.",
+      "noExample": "E"
+    },
+    {
+      "id": "puits-de-carbone",
+      "term": "puits de carbone",
+      "aliases": ["stockage du carbone"],
+      "plain": "Un puits de carbone, comme une forêt, un sol ou l'océan, absorbe du CO2 de l'air et le stocke. Ce stockage peut être temporaire : un incendie relâche le carbone d'une forêt.",
+      "noExample": "E"
+    },
+    {
+      "id": "compensation-carbone",
+      "term": "compensation carbone",
+      "aliases": ["crédits compensation carbone"],
+      "plain": "La compensation carbone consiste à financer ailleurs une action qui retire ou évite du CO2, en échange de ce qu'on émet. Son efficacité fait débat.",
+      "example": "Une compagnie aérienne finance une plantation d'arbres pour compenser une partie des émissions de ses vols."
+    },
+    {
+      "id": "comptabilite-carbone",
+      "term": "comptabilité carbone",
+      "aliases": ["émissions directes et indirectes", "émissions importées"],
+      "plain": "La comptabilité carbone compte les gaz à effet de serre dus à une activité. Elle inclut ceux qu'elle émet, ceux de l'énergie et des biens qu'elle achète, et l'usage de ce qu'elle vend.",
+      "noExample": "E"
+    },
+    {
+      "id": "effet-cocktail",
+      "term": "effets cocktails",
+      "aliases": ["effet cocktail"],
+      "plain": "L'effet cocktail désigne les effets d'un mélange de substances chimiques, qui peuvent s'additionner ou se renforcer, même quand chacune est à faible dose. Il est encore étudié.",
+      "noExample": "E"
+    },
+    {
+      "id": "lanceur-d-alerte",
+      "term": "lanceurs d'alerte",
+      "aliases": ["lanceur d'alerte"],
+      "plain": "Un lanceur d'alerte révèle un danger ou une faute grave qu'il a découverts, souvent dans son travail. La loi le protège contre les représailles.",
+      "noExample": "E"
+    },
+    {
+      "id": "nappe-phreatique",
+      "term": "nappes phréatiques",
+      "aliases": ["nappe phréatique"],
+      "plain": "Une nappe phréatique est la réserve d'eau souterraine la plus proche de la surface, celle qu'atteignent les puits. D'autres nappes, plus profondes, se trouvent en dessous.",
+      "noExample": "E"
+    },
+    {
+      "id": "police-de-l-eau",
+      "term": "police de l'eau",
+      "aliases": ["inspecteurs de l'environnement"],
+      "plain": "La police de l'eau, faite d'inspecteurs de l'environnement, contrôle les prélèvements et les rejets dans les rivières et les nappes.",
+      "noExample": "E"
+    },
+    {
+      "id": "station-d-epuration",
+      "term": "stations d'épuration",
+      "aliases": ["station d'épuration"],
+      "plain": "Une station d'épuration nettoie les eaux usées d'une ville avant de les rejeter dans une rivière ou la mer.",
+      "noExample": "E"
+    },
+    {
+      "id": "regie",
+      "term": "régie",
+      "aliases": ["régies"],
+      "plain": "Un service public est en régie quand la commune ou l'État le gère elle-même, avec ses agents, au lieu de le confier à une entreprise.",
+      "noExample": "E"
+    },
+    {
+      "id": "delegation-de-service-public",
+      "term": "délégation de service public",
+      "aliases": [
+        "délégataires",
+        "délégataire",
+        "concessionnaires",
+        "concessionnaire",
+        "concessions",
+        "fermiers"
+      ],
+      "plain": "Une délégation de service public confie un service, comme l'eau, à une entreprise, le délégataire. S'il bâtit aussi les installations, il est concessionnaire ; s'il gère celles de la commune, fermier.",
+      "example": "Une commune confie son eau à une entreprise, qui facture les habitants et entretient le réseau. Si elle reprend le service avec ses propres agents, elle le gère en régie, directement."
+    },
+    {
+      "id": "tarification-progressive",
+      "term": "tarification progressive",
+      "aliases": ["tarifs dégressifs"],
+      "plain": "Avec une tarification progressive, le prix de chaque unité monte quand on consomme plus. Avec des tarifs dégressifs, il baisse.",
+      "example": "Les premiers mètres cubes d'eau d'un foyer sont facturés à un prix bas ; au-delà d'un certain volume, chaque mètre cube coûte plus cher."
+    },
+    {
+      "id": "regeneration-naturelle",
+      "term": "régénération naturelle",
+      "plain": "La régénération naturelle laisse une forêt repousser d'elle-même, à partir de ses graines, au lieu de replanter.",
+      "noExample": "E"
+    },
+    {
+      "id": "libre-evolution",
+      "term": "libre évolution",
+      "plain": "Une forêt en libre évolution est laissée sans coupe ni intervention humaine.",
+      "noExample": "E"
+    },
+    {
+      "id": "dessouchage",
+      "term": "dessouchage",
+      "plain": "Le dessouchage arrache les souches des arbres coupés, souvent avant de replanter ou de cultiver.",
+      "noExample": "E"
+    },
+    {
+      "id": "sixieme-extinction",
+      "term": "sixième extinction de masse",
+      "plain": "L'expression sixième extinction de masse compare la disparition actuelle des espèces aux cinq grandes extinctions du passé de la Terre. Des scientifiques l'emploient, d'autres la jugent prématurée.",
+      "noExample": "E"
+    },
+    {
+      "id": "nouvelles-techniques-genomiques",
+      "term": "nouvelles techniques génomiques",
+      "plain": "Les nouvelles techniques génomiques modifient l'ADN d'une plante de façon ciblée. Leurs critiques y voient de nouveaux OGM.",
+      "noExample": "E"
+    },
+    {
+      "id": "agriculture-paysanne",
+      "term": "agriculture paysanne",
+      "plain": "L'agriculture paysanne est le modèle que défend la Confédération paysanne, un syndicat agricole : des fermes de taille modeste, tenues par ceux qui y travaillent, peu dépendantes de l'industrie.",
+      "noExample": "E"
+    },
+    {
+      "id": "agrobusiness",
+      "term": "agrobusiness",
+      "plain": "Le mot agrobusiness désigne la grande industrie agricole et alimentaire, organisée pour la rentabilité. Il est souvent employé pour la critiquer.",
+      "noExample": "E"
+    },
+    {
+      "id": "reforme-agraire",
+      "term": "réforme agraire",
+      "plain": "Une réforme agraire change la répartition des terres agricoles, par exemple pour aider de nouveaux paysans à s'installer.",
+      "noExample": "E"
+    },
+    {
+      "id": "foncier",
+      "term": "foncier",
+      "aliases": ["foncier agricole", "foncière"],
+      "plain": "Le foncier désigne les terrains, et ce qui touche à leur propriété : prix des terres, droit de les acheter, impôts sur elles.",
+      "noExample": "E"
+    },
+    {
+      "id": "souverainete-alimentaire",
+      "term": "souveraineté alimentaire",
+      "plain": "La souveraineté alimentaire est le droit d'un pays de choisir sa politique agricole et alimentaire. Le mot désigne aussi sa capacité à nourrir sa population sans dépendre des importations.",
+      "noExample": "D"
+    },
+    {
+      "id": "autosuffisance-alimentaire",
+      "term": "autosuffisance alimentaire",
+      "aliases": ["autosuffisance"],
+      "plain": "Un territoire est en autosuffisance alimentaire quand il produit assez pour nourrir ses habitants sans importer.",
+      "noExample": "E"
+    },
+    {
+      "id": "prix-remunerateur",
+      "term": "prix rémunérateurs",
+      "aliases": ["prix rémunérateur"],
+      "plain": "Un prix est rémunérateur quand il couvre au moins les coûts de production et laisse de quoi vivre à celui qui produit.",
+      "noExample": "E"
+    },
+    {
+      "id": "grande-distribution",
+      "term": "grande distribution",
+      "plain": "La grande distribution désigne les chaînes de supermarchés et d'hypermarchés.",
+      "noExample": "E"
+    },
+    {
+      "id": "protectionnisme-ecologique",
+      "term": "protectionnisme écologique",
+      "aliases": ["protectionnisme écologique et solidaire"],
+      "plain": "Le protectionnisme écologique est l'idée, débattue, de taxer ou limiter les importations produites en abîmant l'environnement. L'Union européenne taxe depuis 2026 le carbone de certaines importations.",
+      "noExample": "E"
+    },
+    {
+      "id": "prix-minimum-d-entree",
+      "term": "prix minimum d'entrée",
+      "plain": "Un prix minimum d'entrée est un prix en dessous duquel un produit importé paie une taxe de plus, pour protéger les producteurs du pays. L'Union européenne en applique à certains fruits et légumes.",
+      "noExample": "E"
+    },
+    {
+      "id": "concurrence-deloyale",
+      "term": "concurrence déloyale",
+      "plain": "Il y a concurrence déloyale quand une entreprise gagne des clients par des moyens interdits ou injustes : tromperie, copie, règles contournées.",
+      "noExample": "E"
+    },
+    {
+      "id": "preference-commerciale",
+      "term": "préférence commerciale",
+      "plain": "Une préférence commerciale facilite la vente de certains produits, par exemple en baissant les taxes sur ceux d'une région.",
+      "noExample": "E"
+    },
+    {
+      "id": "protection-sociale-agricole",
+      "term": "protection sociale agricole",
+      "plain": "La protection sociale agricole, gérée par la Mutualité sociale agricole, couvre la santé, la famille et la retraite des agriculteurs et des salariés agricoles.",
+      "noExample": "E"
+    },
+    {
+      "id": "jardin-creole",
+      "term": "jardins créoles",
+      "aliases": ["jardin créole"],
+      "plain": "Un jardin créole est un potager familial des Antilles, où poussent ensemble légumes, fruits, plantes médicinales et arbres.",
+      "noExample": "E"
+    },
+    {
+      "id": "essais-nucleaires",
+      "term": "essais nucléaires",
+      "plain": "La France a fait exploser des bombes atomiques pour les essayer, au Sahara algérien de 1960 à 1966, puis en Polynésie de 1966 à 1996. Ces essais ont exposé habitants et militaires aux radiations.",
+      "noExample": "E"
+    },
+    {
+      "id": "grippe-aviaire",
+      "term": "grippe aviaire",
+      "plain": "La grippe aviaire est une maladie des oiseaux, qui touche parfois les humains.",
+      "noExample": "E"
+    },
+    {
+      "id": "ferme-usine",
+      "term": "fermes-usines",
+      "aliases": ["ferme-usine"],
+      "plain": "Ferme-usine est un nom critique donné à une très grande exploitation qui élève de façon industrielle un grand nombre d'animaux, souvent en bâtiment.",
+      "noExample": "E"
+    },
+    {
+      "id": "elevage-en-batterie",
+      "term": "en batterie",
+      "aliases": ["élevage en batterie"],
+      "plain": "Un élevage en batterie enferme des animaux, souvent des poules, dans de petites cages empilées.",
+      "noExample": "E"
+    },
+    {
+      "id": "broyage-des-oisillons",
+      "term": "broyage des oisillons",
+      "plain": "Le broyage des oisillons désigne la mise à mort, à la naissance, des poussins mâles des élevages de poules pondeuses. La France l'interdit depuis 2023, avec des exceptions.",
+      "noExample": "E"
+    },
+    {
+      "id": "condition-animale",
+      "term": "condition animale",
+      "plain": "La condition animale désigne le sort des animaux, élevés, chassés ou utilisés par les humains, et la façon dont ils sont traités.",
+      "noExample": "E"
+    },
+    {
+      "id": "chasse-a-courre",
+      "term": "chasse à courre",
+      "aliases": ["vénerie"],
+      "plain": "La chasse à courre, ou vénerie, est une chasse ancienne, encadrée par la loi et contestée. Une meute de chiens y poursuit un animal sauvage, comme un cerf ou un lièvre, jusqu'à sa mise à mort.",
+      "noExample": "E"
+    },
+    {
+      "id": "deterrage",
+      "term": "déterrage",
+      "aliases": ["vénerie sous terre"],
+      "plain": "Le déterrage, ou vénerie sous terre, est une chasse encadrée par la loi et contestée. Des chiens bloquent un blaireau ou un renard dans son terrier ; les chasseurs creusent pour le sortir et le tuer.",
+      "noExample": "E"
+    },
+    {
+      "id": "peche-au-vif",
+      "term": "pêche au vif",
+      "plain": "La pêche au vif utilise un petit poisson vivant comme appât.",
+      "noExample": "E"
+    },
+    {
+      "id": "delphinarium",
+      "term": "delphinariums",
+      "aliases": ["delphinarium"],
+      "plain": "Un delphinarium est un parc où des dauphins vivent dans des bassins et font des spectacles.",
+      "noExample": "E"
+    },
+    {
+      "id": "cephalopode",
+      "term": "céphalopodes",
+      "aliases": ["céphalopode"],
+      "plain": "Les céphalopodes sont des animaux marins à tentacules : pieuvres, calamars, seiches.",
+      "noExample": "E"
+    },
+    {
+      "id": "sanctuariser",
+      "term": "sanctuariser",
+      "aliases": ["sanctuarisant", "sanctuaires"],
+      "plain": "Sanctuariser, c'est protéger quelque chose de toute atteinte. Un sanctuaire pour animaux est un refuge où ils vivent à l'abri.",
+      "noExample": "E"
+    },
+    {
+      "id": "ablation",
+      "term": "ablation",
+      "plain": "Une ablation retire une partie du corps. En élevage, couper la queue des porcelets ou le bout du bec des volailles est une ablation ; la loi la limite, et l'interdit en routine pour les porcelets.",
+      "noExample": "E"
+    },
+    {
+      "id": "accaparement",
+      "term": "accaparement",
+      "plain": "L'accaparement consiste à s'emparer d'une ressource, comme des terres ou de l'eau, à son seul profit et au détriment des autres.",
+      "noExample": "E"
+    },
+    {
+      "id": "haute-mer",
+      "term": "haute mer",
+      "aliases": ["traité sur la haute mer"],
+      "plain": "La haute mer est la partie des océans qui n'appartient à aucun pays, au-delà de leurs zones. Un traité de l'ONU, adopté en 2023, vise à y protéger la vie marine.",
+      "noExample": "E"
+    },
+    {
+      "id": "grands-fonds",
+      "term": "grands fonds",
+      "aliases": [
+        "exploitation minière des grands fonds marins",
+        "extraction minière en eaux profondes",
+        "fonds marins"
+      ],
+      "plain": "Les grands fonds marins sont le sol des océans, à des milliers de mètres. Certains veulent y extraire des métaux ; d'autres demandent d'attendre de mieux connaître la vie qui s'y trouve.",
+      "noExample": "E"
+    },
+    {
+      "id": "acidification-des-oceans",
+      "term": "acidification des océans",
+      "plain": "L'acidification des océans vient du CO2 que l'eau absorbe : elle rend l'eau plus acide, ce qui fragilise coraux et coquillages.",
+      "noExample": "E"
+    },
+    {
+      "id": "zone-morte",
+      "term": "zones mortes",
+      "aliases": ["zone morte"],
+      "plain": "Une zone morte est un endroit de la mer si pauvre en oxygène que presque rien n'y vit, souvent à cause des engrais rejetés par les rivières.",
+      "noExample": "E"
+    },
+    {
+      "id": "zone-economique-exclusive",
+      "term": "espace maritime",
+      "aliases": ["domaine maritime", "zone économique exclusive", "territoire marin"],
+      "plain": "L'espace maritime d'un pays s'étend jusqu'à 370 kilomètres des côtes : c'est sa zone économique exclusive. Il y décide seul de la pêche et de l'usage des ressources ; tout navire peut y passer.",
+      "noExample": "E"
+    },
+    {
+      "id": "eaux-territoriales",
+      "term": "eaux territoriales",
+      "aliases": ["12 milles côtiers", "milles marins", "mille marin"],
+      "plain": "Les eaux territoriales s'étendent jusqu'à 12 milles marins des côtes, environ 22 kilomètres : le pays y exerce sa souveraineté comme sur terre.",
+      "noExample": "E"
+    },
+    {
+      "id": "accord-de-peche",
+      "term": "accords de pêche",
+      "aliases": ["accord de pêche"],
+      "plain": "Un accord de pêche permet aux bateaux d'un pays de pêcher dans les eaux d'un autre, souvent contre paiement.",
+      "noExample": "E"
+    },
+    {
+      "id": "quota-de-peche",
+      "term": "quotas de pêche",
+      "aliases": ["quota de pêche"],
+      "plain": "Un quota de pêche fixe la quantité d'une espèce qu'un pays ou un bateau peut pêcher dans l'année.",
+      "noExample": "E"
+    },
+    {
+      "id": "peche-artisanale",
+      "term": "pêcheurs artisans",
+      "aliases": ["pêche artisanale"],
+      "plain": "La pêche artisanale se fait sur de petits navires, souvent menés par des patrons qui en sont propriétaires. Sa définition exacte varie selon les textes.",
+      "noExample": "E"
+    },
+    {
+      "id": "peche-electrique",
+      "term": "pêche électrique",
+      "plain": "La pêche électrique envoie des décharges dans le fond de la mer pour en faire sortir les poissons. L'Union européenne l'a interdite en 2021.",
+      "noExample": "E"
+    },
+    {
+      "id": "navire-usine",
+      "term": "navires usines",
+      "plain": "Un navire-usine pêche en très grande quantité et transforme le poisson à bord.",
+      "noExample": "E"
+    },
+    {
+      "id": "aquaculture",
+      "term": "aquaculture",
+      "plain": "L'aquaculture élève des poissons, des coquillages ou des algues dans l'eau, en bassins ou en mer.",
+      "noExample": "E"
+    },
+    {
+      "id": "algoculture",
+      "term": "algoculture",
+      "plain": "L'algoculture cultive des algues, pour l'alimentation, la santé ou l'industrie.",
+      "noExample": "E"
+    },
+    {
+      "id": "armateur",
+      "term": "armateurs",
+      "aliases": ["armateur"],
+      "plain": "Un armateur est l'entreprise ou la personne qui exploite des navires de commerce ou de pêche.",
+      "noExample": "E"
+    },
+    {
+      "id": "marine-marchande",
+      "term": "marine marchande",
+      "plain": "La marine marchande regroupe les navires qui transportent des marchandises ou des passagers, à la différence de la marine militaire.",
+      "noExample": "E"
+    },
+    {
+      "id": "remorquage-portuaire",
+      "term": "remorquage portuaire",
+      "plain": "Le remorquage portuaire aide les grands navires à entrer et sortir d'un port, tirés ou poussés par de petits bateaux puissants.",
+      "noExample": "E"
+    },
+    {
+      "id": "chantier-naval",
+      "term": "chantiers navals",
+      "aliases": ["chantier naval"],
+      "plain": "Un chantier naval construit et répare des navires.",
+      "noExample": "E"
+    },
+    {
+      "id": "cabotage",
+      "term": "cabotage",
+      "plain": "Le cabotage transporte des marchandises par bateau d'un port à un autre, le long des côtes.",
+      "noExample": "E"
+    },
+    {
+      "id": "droit-de-la-mer",
+      "term": "droit de la mer",
+      "aliases": ["droit international de la mer"],
+      "plain": "Le droit de la mer est l'ensemble des règles internationales sur les océans : frontières en mer, navigation, pêche, secours.",
+      "noExample": "E"
+    },
+    {
+      "id": "marine-nationale",
+      "term": "Marine nationale",
+      "plain": "La Marine nationale est la marine militaire française.",
+      "noExample": "E"
+    },
+    {
+      "id": "cop-oceans",
+      "term": "conférence des Nations unies sur l'océan",
+      "aliases": ["COP « Océans »"],
+      "plain": "La conférence des Nations unies sur l'océan réunit les États pour protéger les mers. La troisième s'est tenue à Nice en 2025.",
+      "noExample": "E"
+    },
+    {
+      "id": "traite-plastiques",
+      "term": "traité sur l'interdiction des plastiques",
+      "aliases": [
+        "traité international de lutte contre les plastiques",
+        "traité international contre les plastiques"
+      ],
+      "plain": "Depuis 2022, les États négocient à l'ONU un traité mondial contre la pollution plastique ; certains veulent limiter la production de plastique. À Genève, en août 2025, ils n'ont pas trouvé d'accord.",
+      "noExample": "E"
+    },
+    {
+      "id": "report-modal",
+      "term": "report modal",
+      "plain": "Le report modal fait passer des voyageurs ou des marchandises d'un mode de transport à un autre, moins polluant, par exemple de la route au train.",
+      "noExample": "E"
+    },
+    {
+      "id": "fret-ferroviaire",
+      "term": "fret",
+      "aliases": ["fret ferroviaire", "Fret SNCF"],
+      "plain": "Le fret est le transport de marchandises, par train pour le fret ferroviaire. Après une enquête européenne sur des aides d'État, Fret SNCF a été remplacée en 2025 par deux sociétés.",
+      "noExample": "E"
+    },
+    {
+      "id": "sncf",
+      "term": "SNCF",
+      "aliases": ["Société nationale des chemins de fer français"],
+      "plain": "La SNCF, Société nationale des chemins de fer français, est l'entreprise publique des trains en France.",
+      "noExample": "E"
+    },
+    {
+      "id": "tram-train",
+      "term": "tram-train",
+      "plain": "Un tram-train roule comme un tramway en ville et comme un train sur les voies ferrées en dehors.",
+      "noExample": "E"
+    },
+    {
+      "id": "transport-a-la-demande",
+      "term": "transports publics à la demande",
+      "aliases": ["transport à la demande"],
+      "plain": "Un transport à la demande est un bus ou un taxi public qui ne circule que si des voyageurs l'ont réservé.",
+      "noExample": "E"
+    },
+    {
+      "id": "dirigeable",
+      "term": "dirigeable",
+      "plain": "Un dirigeable est un grand ballon allongé, gonflé d'un gaz plus léger que l'air et poussé par des moteurs.",
+      "noExample": "E"
+    },
+    {
+      "id": "plateforme-logistique",
+      "term": "plateformes logistiques",
+      "aliases": ["plateforme logistique", "logistique"],
+      "plain": "La logistique organise le stockage et le transport des marchandises. Une plateforme logistique est un grand entrepôt d'où elles repartent.",
+      "noExample": "E"
+    },
+    {
+      "id": "flux-tendus",
+      "term": "flux tendus",
+      "plain": "Travailler à flux tendus, c'est produire ou livrer au moment exact du besoin, avec très peu de stock.",
+      "noExample": "E"
+    },
+    {
+      "id": "dernier-kilometre",
+      "term": "dernier kilomètre",
+      "plain": "Le dernier kilomètre est la dernière étape d'une livraison, de l'entrepôt jusqu'au client.",
+      "noExample": "E"
+    },
+    {
+      "id": "garage-solidaire",
+      "term": "garages solidaires",
+      "aliases": ["garage solidaire"],
+      "plain": "Un garage solidaire répare les voitures moins cher pour les personnes aux revenus modestes.",
+      "noExample": "E"
+    },
+    {
+      "id": "controle-technique",
+      "term": "contrôle technique",
+      "plain": "Le contrôle technique est la vérification obligatoire de l'état d'une voiture, tous les deux ans au-delà de ses quatre premières années.",
+      "noExample": "E"
+    },
+    {
+      "id": "mise-en-concurrence",
+      "term": "mise en concurrence",
+      "plain": "Une mise en concurrence confie un service, comme des lignes de train, à une entreprise choisie parmi plusieurs candidates, au lieu de le réserver à une seule.",
+      "noExample": "E"
+    },
+    {
+      "id": "ligne-haute-tension",
+      "term": "lignes à haute tension",
+      "aliases": ["ligne à haute tension"],
+      "plain": "Une ligne à haute tension transporte l'électricité sur de longues distances, des centrales vers les villes.",
+      "noExample": "E"
+    },
+    {
+      "id": "gestion-algorithmique-des-prix",
+      "term": "gestion algorithmique des prix",
+      "plain": "Avec une gestion algorithmique des prix, un logiciel fait varier le prix d'un billet selon la demande, la date d'achat et les places qui restent.",
+      "noExample": "E"
+    },
+    {
+      "id": "consigne",
+      "term": "consigne",
+      "plain": "Avec la consigne, on paie un peu plus une bouteille, et on récupère cette somme en la rapportant pour qu'elle soit lavée et réutilisée.",
+      "noExample": "E"
+    },
+    {
+      "id": "garantie-legale",
+      "term": "garantie légale",
+      "aliases": ["durées de garantie légale"],
+      "plain": "La garantie légale oblige le vendeur à réparer ou remplacer un produit qui tombe en panne, pendant une durée fixée par la loi.",
+      "noExample": "E"
+    },
+    {
+      "id": "indice-de-durabilite",
+      "term": "indice de durabilité",
+      "aliases": ["score de durabilité"],
+      "plain": "L'indice de durabilité note un appareil selon sa solidité et la facilité de le réparer.",
+      "noExample": "E"
+    },
+    {
+      "id": "mine-urbaine",
+      "term": "mines urbaines",
+      "aliases": ["mine urbaine"],
+      "plain": "On appelle mines urbaines les métaux qu'on peut récupérer dans les objets jetés, comme les téléphones ou les ordinateurs.",
+      "noExample": "E"
+    },
+    {
+      "id": "recyclerie",
+      "term": "recycleries",
+      "aliases": ["recyclerie"],
+      "plain": "Une recyclerie récupère des objets dont on ne veut plus, les répare et les revend à petit prix.",
+      "noExample": "E"
+    },
+    {
+      "id": "reemploi",
+      "term": "réemploi",
+      "plain": "Le réemploi consiste à utiliser de nouveau, pour le même usage, un objet qui n'est pas devenu un déchet : un meuble revendu, une bouteille consignée.",
+      "noExample": "E"
+    },
+    {
+      "id": "rep-producteur",
+      "term": "responsabilité élargie du producteur",
+      "plain": "Avec la responsabilité élargie du producteur, ceux qui vendent un produit paient sa collecte et son recyclage, une fois qu'il est devenu un déchet.",
+      "noExample": "E"
+    },
+    {
+      "id": "mesusage",
+      "term": "mésusage",
+      "plain": "Le mésusage est un mauvais usage d'une chose, contraire à ce à quoi elle sert ou aux règles qui l'encadrent.",
+      "noExample": "E"
+    },
+    {
+      "id": "ecoconstruction",
+      "term": "écoconstruction",
+      "aliases": ["matériaux biosourcés", "biosourcés", "géosourcés"],
+      "plain": "L'écoconstruction bâtit avec des matériaux peu polluants : biosourcés, tirés du vivant comme le bois ou la paille, ou géosourcés, tirés du sol comme la terre crue.",
+      "noExample": "E"
+    },
+    {
+      "id": "cerema",
+      "term": "Cerema",
+      "plain": "Le Cerema est un organisme public d'experts qui conseille l'État et les collectivités sur l'aménagement, les transports, les risques et l'environnement.",
+      "noExample": "E"
+    },
+    {
+      "id": "ofb",
+      "term": "OFB",
+      "aliases": ["Office français de la biodiversité"],
+      "plain": "L'OFB, Office français de la biodiversité, protège la faune, la flore et les milieux naturels ; ses agents contrôlent aussi la chasse et la pêche.",
+      "noExample": "E"
+    },
+    {
+      "id": "haut-commissariat",
+      "term": "haut-commissariat",
+      "plain": "Un haut-commissariat est une administration chargée d'une mission précise, placée auprès du gouvernement.",
+      "noExample": "E"
+    },
+    {
+      "id": "operateur-public",
+      "term": "opérateurs publics",
+      "aliases": ["opérateur public"],
+      "plain": "Un opérateur public est un organisme qui agit pour l'État dans un domaine, comme l'ONF pour les forêts ou Météo-France.",
+      "noExample": "E"
+    },
+    {
+      "id": "loi-cadre",
+      "term": "lois-cadres",
+      "plain": "Une loi-cadre fixe les grands principes et objectifs d'une politique ; d'autres textes en précisent ensuite les détails.",
+      "noExample": "E"
+    },
+    {
+      "id": "hierarchie-des-normes",
+      "term": "hiérarchie des normes",
+      "plain": "La hiérarchie des normes classe les règles de droit : la Constitution d'abord, puis les traités, les lois, les décrets. Une règle doit respecter celles du dessus.",
+      "noExample": "E"
+    },
+    {
+      "id": "decret",
+      "term": "décrets",
+      "aliases": ["décret"],
+      "plain": "Un décret est une décision écrite du Premier ministre ou du président de la République, souvent pour appliquer une loi.",
+      "noExample": "E"
+    },
+    {
+      "id": "deroger",
+      "term": "déroger",
+      "aliases": ["dérogation", "dérogations"],
+      "plain": "Déroger à une règle, c'est ne pas l'appliquer dans un cas précis, avec une autorisation.",
+      "noExample": "E"
+    },
+    {
+      "id": "participation-du-public",
+      "term": "participation publique",
+      "plain": "La participation du public permet aux habitants de donner leur avis sur un projet qui touche l'environnement, avant qu'il soit décidé.",
+      "noExample": "E"
+    },
+    {
+      "id": "securite-civile",
+      "term": "sécurité civile",
+      "plain": "La sécurité civile protège la population face aux catastrophes et aux accidents : pompiers, secouristes, plans de secours.",
+      "noExample": "E"
+    },
+    {
+      "id": "grands-projets-inutiles",
+      "term": "grands projets inutiles",
+      "aliases": ["grands projets inutiles, imposés"],
+      "plain": "L'expression grands projets inutiles et imposés vient de leurs opposants : ils désignent ainsi de grands chantiers, aéroports ou autoroutes, faits selon eux contre l'avis des habitants.",
+      "noExample": "E"
+    },
+    {
+      "id": "droit-opposable",
+      "term": "droit opposable",
+      "aliases": ["droit au logement opposable"],
+      "plain": "Un droit est opposable quand on peut saisir la justice pour obliger l'État à le respecter, comme le droit au logement.",
+      "noExample": "E"
+    },
+    {
+      "id": "hexagone",
+      "term": "Hexagone",
+      "aliases": ["hexagonal", "hexagonale", "territoire hexagonal", "France hexagonale"],
+      "plain": "L'Hexagone désigne la France métropolitaine, celle d'Europe, à cause de sa forme sur la carte, par opposition aux Outre-mer.",
+      "noExample": "E"
+    },
+    {
+      "id": "outre-mer",
+      "term": "Outre-mer",
+      "aliases": ["ultramarins", "ultramarin"],
+      "plain": "Les Outre-mer sont les territoires français situés hors d'Europe, comme la Guadeloupe, La Réunion ou la Polynésie. Leurs habitants sont des Ultramarins.",
+      "noExample": "E"
+    },
+    {
+      "id": "desindustrialisation",
+      "term": "désindustrialisation",
+      "aliases": ["réindustrialiser", "réindustrialisation"],
+      "plain": "La désindustrialisation est le recul des usines et des emplois industriels dans un pays. Réindustrialiser, c'est les faire revenir.",
+      "noExample": "E"
+    },
+    {
+      "id": "delocalisation",
+      "term": "délocalisations",
+      "aliases": [
+        "délocalisation",
+        "délocaliser",
+        "relocaliser",
+        "relocalisation",
+        "relocalisations",
+        "relocalisé",
+        "relocalisée"
+      ],
+      "plain": "Une délocalisation transfère une production dans un autre pays, souvent où les salaires sont plus bas. Une relocalisation la fait revenir.",
+      "noExample": "E"
+    },
+    {
+      "id": "semi-conducteur",
+      "term": "semi-conducteurs",
+      "aliases": ["semi-conducteur"],
+      "plain": "Les semi-conducteurs sont les matériaux des puces électroniques, présentes dans les téléphones, les voitures et les ordinateurs.",
+      "noExample": "E"
+    },
+    {
+      "id": "siderurgie",
+      "term": "sidérurgie",
+      "plain": "La sidérurgie produit l'acier à partir du minerai de fer.",
+      "noExample": "E"
+    },
+    {
+      "id": "antidumping",
+      "term": "antidumping",
+      "aliases": ["mesures antidumping"],
+      "plain": "Les droits antidumping sont des taxes sur des produits importés vendus moins cher que leur prix normal, quand cela nuit aux producteurs du pays. Ils sont décidés après une enquête.",
+      "noExample": "E"
+    },
+    {
+      "id": "commande-publique",
+      "term": "commande publique",
+      "aliases": ["marchés publics", "marché public"],
+      "plain": "La commande publique regroupe les achats de l'État et des collectivités : travaux, fournitures, services. Les marchés publics en sont les contrats.",
+      "noExample": "E"
+    },
+    {
+      "id": "code-des-marches-publics",
+      "term": "Code des marchés publics",
+      "plain": "Le Code des marchés publics fixait les règles des achats publics. Il a été remplacé en 2019 par le code de la commande publique.",
+      "noExample": "E"
+    },
+    {
+      "id": "comite-strategique-de-filiere",
+      "term": "comités stratégiques de filières",
+      "aliases": ["CSF"],
+      "plain": "Un comité stratégique de filière réunit l'État, les entreprises et les syndicats d'un secteur industriel pour préparer son avenir.",
+      "noExample": "E"
+    },
+    {
+      "id": "principe-actif",
+      "term": "principes actifs",
+      "aliases": ["principe actif"],
+      "plain": "Le principe actif est la substance d'un médicament qui soigne ; le reste aide à le prendre ou à le conserver.",
+      "noExample": "E"
+    },
+    {
+      "id": "plan-social",
+      "term": "plans sociaux",
+      "aliases": ["plan social", "plans de licenciements"],
+      "plain": "Un plan social, ou plan de sauvegarde de l'emploi, s'impose quand une entreprise d'au moins 50 salariés en licencie au moins dix en trente jours pour motif économique. Il aide à retrouver un emploi.",
+      "noExample": "E"
+    },
+    {
+      "id": "entreprise-publique",
+      "term": "entreprises publiques",
+      "aliases": ["entreprise publique"],
+      "plain": "Une entreprise publique appartient en tout ou en majorité à l'État ou à une collectivité, comme la SNCF ou EDF.",
+      "noExample": "E"
+    },
+    {
+      "id": "edf",
+      "term": "EDF",
+      "plain": "EDF est la grande entreprise française de l'électricité. Elle appartient entièrement à l'État depuis 2023.",
+      "noExample": "E"
+    },
+    {
+      "id": "engie",
+      "term": "Engie",
+      "plain": "Engie est une grande entreprise française du gaz et de l'électricité, issue de Gaz de France, privatisée par étapes ; l'État en détient une partie.",
+      "noExample": "E"
+    },
+    {
+      "id": "arcelormittal",
+      "term": "ArcelorMittal",
+      "plain": "ArcelorMittal est un groupe mondial de l'acier, qui exploite plusieurs grandes usines en France.",
+      "noExample": "E"
+    },
+    {
+      "id": "ge-vernova",
+      "term": "GE Vernova",
+      "plain": "GE Vernova est une entreprise américaine de l'énergie, née en 2024 de General Electric, qui avait racheté en 2015 la branche énergie d'Alstom, dont des usines en France.",
+      "noExample": "E"
+    },
+    {
+      "id": "souverainete",
+      "term": "souveraineté",
+      "plain": "La souveraineté est le pouvoir suprême de décider, celui d'un État ou d'un peuple. On parle aussi de souveraineté industrielle ou énergétique : ne pas dépendre des autres pour produire.",
+      "noExample": "D"
+    },
+    {
+      "id": "quinquennat",
+      "term": "quinquennats",
+      "aliases": ["quinquennat"],
+      "plain": "Un quinquennat est un mandat de cinq ans, celui du président de la République depuis 2002.",
+      "noExample": "E"
+    },
+    {
+      "id": "pallier",
+      "term": "pallier",
+      "plain": "Pallier un manque, c'est y remédier, au moins en partie.",
+      "noExample": "E"
+    },
+    {
+      "id": "marchandisation",
+      "term": "marchandisation",
+      "aliases": ["démarchandiser", "démarchandisation"],
+      "plain": "La marchandisation fait d'une chose une marchandise, qu'on achète et qu'on vend. Le mot sert souvent à critiquer ce changement, pour l'eau ou la santé. Démarchandiser une chose, c'est faire l'inverse.",
+      "noExample": "E"
+    },
+    {
+      "id": "marches-financiers",
+      "term": "marchés financiers",
+      "plain": "Les marchés financiers sont les lieux, souvent électroniques, où s'achètent et se vendent actions, titres de dette et monnaies.",
+      "noExample": "E"
+    },
+    {
+      "id": "resilience",
+      "term": "résilience",
+      "aliases": ["résilient", "résilients", "résilientes"],
+      "plain": "La résilience est la capacité de résister à un choc et de s'en remettre : une forêt, une ville, une personne.",
+      "noExample": "E"
+    },
+    {
+      "id": "abonder",
+      "term": "abonder",
+      "aliases": ["abondé", "abondée", "abondés", "abondées"],
+      "plain": "Abonder un fonds, c'est y verser de l'argent.",
+      "noExample": "E"
+    },
+    {
+      "id": "actionnaires",
+      "term": "actionnaires",
+      "aliases": ["actionnaire"],
+      "plain": "Un actionnaire possède des actions, c'est-à-dire des parts d'une entreprise. Il reçoit une part de ses bénéfices, les dividendes, et vote sur ses grandes décisions.",
+      "noExample": "E"
+    },
+    {
+      "id": "antiepileptiques",
+      "term": "antiépileptiques",
+      "aliases": ["antiépileptique"],
+      "plain": "Un antiépileptique est un médicament qui prévient les crises d'épilepsie, une maladie du cerveau.",
+      "noExample": "E"
+    },
+    {
+      "id": "bailleurs",
+      "term": "bailleurs",
+      "aliases": ["bailleur", "bailleurs sociaux", "bailleur social"],
+      "plain": "Un bailleur loue un logement : c'est le propriétaire. Un bailleur social, souvent un organisme HLM, loue des logements à loyer modéré.",
+      "noExample": "E"
+    },
+    {
+      "id": "biophysique",
+      "term": "biophysiques",
+      "aliases": ["biophysique"],
+      "plain": "Des indicateurs biophysiques mesurent l'état de la nature en unités physiques, comme des tonnes, des hectares ou un nombre d'espèces, et non en euros.",
+      "noExample": "E"
+    },
+    {
+      "id": "cession",
+      "term": "cession",
+      "aliases": ["cessions"],
+      "plain": "Une cession est la vente ou la transmission d'un bien, par exemple d'une entreprise, à un nouveau propriétaire.",
+      "noExample": "E"
+    },
+    {
+      "id": "contrevenir",
+      "term": "contrevenir",
+      "aliases": ["contrevenant", "contrevenants", "contrevenante", "contrevenantes"],
+      "plain": "Contrevenir à une règle, c'est ne pas la respecter.",
+      "noExample": "E"
+    },
+    {
+      "id": "cooperatives",
+      "term": "coopératives",
+      "aliases": ["coopérative"],
+      "plain": "Une coopérative est une entreprise détenue par ses membres, salariés, producteurs ou clients, qui ont chacun une voix, quelle que soit leur part.",
+      "noExample": "E"
+    },
+    {
+      "id": "voix-deliberative",
+      "term": "voix délibérative",
+      "plain": "Avoir voix délibérative, c'est pouvoir voter dans une assemblée, et pas seulement donner son avis.",
+      "noExample": "E"
+    },
+    {
+      "id": "moins-disant",
+      "term": "moins-disant",
+      "aliases": ["moins-disante", "moins-disantes", "moins-disants"],
+      "plain": "Le moins-disant est, parmi plusieurs offres, la moins chère ; le mieux-disant, la meilleure selon plusieurs critères. Des règles moins-disantes sont les moins exigeantes.",
+      "noExample": "D"
+    },
+    {
+      "id": "dumping",
+      "term": "dumping",
+      "plain": "Au sens strict, le dumping est la vente à l'étranger moins cher que chez soi. Parler de dumping social ou fiscal, c'est reprocher à un pays d'attirer des entreprises par des salaires ou impôts bas.",
+      "noExample": "D"
+    },
+    {
+      "id": "erasmus",
+      "term": "Erasmus",
+      "plain": "Erasmus+ est le dispositif de l'Union européenne qui finance des séjours d'études, de stage ou de formation dans un autre pays européen.",
+      "noExample": "E"
+    },
+    {
+      "id": "hemicycle",
+      "term": "hémicycle",
+      "plain": "L'hémicycle est la salle en demi-cercle où siègent les députés, à l'Assemblée nationale, ou les sénateurs, au Sénat.",
+      "noExample": "E"
+    },
+    {
+      "id": "insee",
+      "term": "Insee",
+      "aliases": ["Institut national de la statistique"],
+      "anyCase": true,
+      "plain": "L'Insee, Institut national de la statistique et des études économiques, produit les statistiques publiques : population, emploi, prix, revenus.",
+      "noExample": "E"
+    },
+    {
+      "id": "kerosene",
+      "term": "kérosène",
+      "plain": "Le kérosène est le carburant des avions, tiré du pétrole.",
+      "noExample": "E"
+    },
+    {
+      "id": "led",
+      "term": "LED",
+      "plain": "Une LED est une petite lampe électronique qui éclaire en consommant peu d'électricité.",
+      "noExample": "E"
+    },
+    {
+      "id": "liberalisation",
+      "term": "libéralisation",
+      "plain": "La libéralisation d'un secteur, comme l'électricité ou le rail, y supprime un monopole public et l'ouvre à des entreprises concurrentes.",
+      "noExample": "E"
+    },
+    {
+      "id": "liquidation",
+      "term": "liquidation",
+      "plain": "La liquidation d'une entreprise met fin à son activité : ses biens sont vendus pour payer ses dettes.",
+      "noExample": "E"
+    },
+    {
+      "id": "maillage",
+      "term": "maillage",
+      "aliases": ["mailler"],
+      "plain": "Le maillage d'un territoire est un réseau de lieux ou de services répartis partout, sans zone oubliée. Mailler un pays, c'est le couvrir ainsi.",
+      "noExample": "E"
+    },
+    {
+      "id": "mutualiser",
+      "term": "mutualiser",
+      "aliases": [
+        "mutualisant",
+        "mutualisé",
+        "mutualisés",
+        "mutualisée",
+        "mutualisées",
+        "mutualisation"
+      ],
+      "plain": "Mutualiser, c'est mettre en commun des moyens, pour en partager le coût.",
+      "noExample": "E"
+    },
+    {
+      "id": "prefets",
+      "term": "préfets",
+      "aliases": ["préfet", "préfète"],
+      "plain": "Le préfet représente l'État dans un département ou une région. Nommé par le gouvernement, il veille à l'application des lois.",
+      "noExample": "E"
+    },
+    {
+      "id": "productivisme",
+      "term": "productivisme",
+      "aliases": ["productiviste", "productivistes"],
+      "plain": "Le productivisme fait de la hausse de la production le premier but de l'économie ou de l'agriculture. Le mot est surtout employé par ses critiques.",
+      "noExample": "E"
+    },
+    {
+      "id": "proscrire",
+      "term": "proscrire",
+      "aliases": [
+        "prohiber",
+        "proscrit",
+        "proscrits",
+        "prohibé",
+        "prohibés",
+        "prohibée",
+        "prohibées"
+      ],
+      "plain": "Proscrire, ou prohiber, c'est interdire.",
+      "noExample": "E"
+    },
+    {
+      "id": "radioprotection",
+      "term": "radioprotection",
+      "plain": "La radioprotection protège les personnes et l'environnement des rayonnements radioactifs.",
+      "noExample": "E"
+    },
+    {
+      "id": "recouvrement",
+      "term": "recouvrement",
+      "plain": "Le recouvrement consiste à faire payer une somme due, facture ou impôt. Un recouvrement forcé y contraint, par exemple en prélevant la somme sur un compte bancaire.",
+      "noExample": "E"
+    },
+    {
+      "id": "scieries",
+      "term": "scieries",
+      "aliases": ["scierie", "sciage"],
+      "plain": "Une scierie découpe les troncs d'arbres en planches et en poutres : c'est le sciage.",
+      "noExample": "E"
+    },
+    {
+      "id": "subventions",
+      "term": "subventions",
+      "aliases": ["subvention"],
+      "plain": "Une subvention est une aide en argent versée par l'État ou une collectivité à une entreprise, une association ou une activité.",
+      "noExample": "E"
+    },
+    {
+      "id": "tertiaire",
+      "term": "tertiaire",
+      "plain": "Le secteur tertiaire est celui des services : commerce, transports, santé, administration. Le tertiaire désigne aussi les bâtiments où ils s'exercent, comme les bureaux.",
+      "noExample": "D"
+    },
+    {
+      "id": "sous-traitance",
+      "term": "sous-traitance",
+      "aliases": ["sous-traitant", "sous-traitants"],
+      "plain": "La sous-traitance consiste, pour une entreprise, à confier une partie de son travail à une autre entreprise, le sous-traitant.",
+      "noExample": "E"
+    },
+    {
+      "id": "liberalisme",
+      "term": "libéralisme",
+      "aliases": [
+        "libéralisme économique",
+        "néolibéralisme",
+        "néolibéral",
+        "néolibérale",
+        "néolibéraux",
+        "néolibérales",
+        "ultralibéral",
+        "ultralibérale",
+        "ultralibéraux",
+        "ultralibérales",
+        "ultralibéralisme"
+      ],
+      "plain": "Le libéralisme économique défend la liberté d'entreprendre et d'échanger ; l'État y garantit surtout le droit et la concurrence. Néolibéral et ultralibéral sont aujourd'hui surtout des mots critiques.",
+      "noExample": "E"
+    },
+    {
+      "id": "cse",
+      "term": "CSE",
+      "aliases": ["comité social et économique"],
+      "plain": "Le CSE, comité social et économique, représente les salariés dans les entreprises d'au moins onze salariés. Créé en 2017, il a fusionné les anciens comités, dont celui de la santé et de la sécurité.",
+      "noExample": "E"
+    },
+    {
+      "id": "patronat",
+      "term": "patronat",
+      "aliases": ["organisations patronales", "patronale", "patronales", "patronaux"],
+      "plain": "Le patronat désigne les employeurs et les organisations qui les représentent, comme le Medef, la CPME ou l'U2P.",
+      "noExample": "E"
+    },
+    {
+      "id": "quotient-familial",
+      "term": "quotient familial",
+      "plain": "Avec le quotient familial, le revenu imposable d'un foyer est divisé en parts selon sa composition, adultes et enfants. L'impôt est calculé sur une part, puis multiplié par le nombre de parts.",
+      "noExample": "E"
+    },
+    {
+      "id": "cancerogene",
+      "term": "cancérogènes",
+      "aliases": ["cancérogène"],
+      "plain": "Un produit cancérogène peut provoquer un cancer.",
+      "noExample": "E"
+    },
+    {
+      "id": "capitalisme",
+      "term": "capitalisme",
+      "aliases": ["capitaliste", "capitalistes"],
+      "plain": "Le capitalisme est un système économique où les entreprises et leurs moyens de production appartiennent surtout à des propriétaires privés, qui cherchent à en tirer un profit.",
+      "noExample": "E"
+    },
+    {
+      "id": "deremboursement",
+      "term": "déremboursement",
+      "aliases": ["déremboursements"],
+      "plain": "Un déremboursement retire un médicament ou un soin de la liste de ceux que l'Assurance maladie rembourse.",
+      "noExample": "E"
+    },
+    {
+      "id": "filiales",
+      "term": "filiales",
+      "aliases": ["filiale"],
+      "plain": "Une filiale est une entreprise contrôlée par une autre, la société mère, qui en possède la majorité.",
+      "noExample": "E"
+    },
+    {
+      "id": "financiarisation",
+      "term": "financiarisation",
+      "plain": "La financiarisation d'un secteur désigne le poids croissant de la finance et des investisseurs, qui y cherchent avant tout un rendement.",
+      "noExample": "E"
+    },
+    {
+      "id": "intermittents-de-l-emploi",
+      "term": "intermittents de l'emploi",
+      "plain": "Les intermittents de l'emploi alternent contrats courts et périodes de chômage, hors du régime propre aux artistes et techniciens du spectacle.",
+      "noExample": "E"
+    },
+    {
+      "id": "magistrats",
+      "term": "magistrats",
+      "aliases": ["magistrat", "magistrats de liaison", "magistrat de liaison"],
+      "plain": "Un magistrat est un juge, ou un procureur qui engage les poursuites. Un magistrat de liaison représente la justice française dans un pays étranger.",
+      "noExample": "E"
+    },
+    {
+      "id": "majorer",
+      "term": "majorer",
+      "aliases": ["majorant", "majoré", "majorée", "majorés", "majorées", "majoration"],
+      "plain": "Majorer un paiement, c'est l'augmenter d'une part fixée : une heure supplémentaire majorée est mieux payée qu'une heure normale.",
+      "noExample": "E"
+    },
+    {
+      "id": "a-minima",
+      "term": "a minima",
+      "plain": "A minima signifie au minimum, au moins.",
+      "noExample": "E"
+    },
+    {
+      "id": "octroyer",
+      "term": "octroyer",
+      "aliases": ["octroyé", "octroyée", "octroyés", "octroyées"],
+      "plain": "Octroyer quelque chose, c'est l'accorder, le donner à quelqu'un.",
+      "noExample": "E"
+    },
+    {
+      "id": "paramedical",
+      "term": "paramédicales",
+      "aliases": ["paramédical", "paramédicaux", "paramédicale"],
+      "plain": "Les professions paramédicales soignent aux côtés des médecins, comme les infirmiers, les kinésithérapeutes ou les orthophonistes.",
+      "noExample": "E"
+    },
+    {
+      "id": "perenniser",
+      "term": "pérenniser",
+      "aliases": ["pérenne", "pérennes", "pérennisation"],
+      "plain": "Pérenniser, c'est rendre durable. Pérenne veut dire durable.",
+      "noExample": "E"
+    },
+    {
+      "id": "praticiens",
+      "term": "praticiens",
+      "aliases": ["praticien"],
+      "plain": "Un praticien exerce la médecine ou un métier de soin : médecin, dentiste, sage-femme, pharmacien.",
+      "noExample": "E"
+    },
+    {
+      "id": "radier",
+      "term": "radier",
+      "aliases": ["radié", "radiés", "radiée", "radiées"],
+      "plain": "Radier, c'est retirer d'une liste. Un chômeur radié perd son inscription, et ses allocations, pour un temps.",
+      "noExample": "E"
+    },
+    {
+      "id": "recidivistes",
+      "term": "récidivistes",
+      "aliases": ["récidiviste", "récidive"],
+      "plain": "Un récidiviste commet de nouveau une infraction après avoir déjà été condamné pour une infraction.",
+      "noExample": "E"
+    },
+    {
+      "id": "restructurer",
+      "term": "restructurer",
+      "aliases": [
+        "restructuré",
+        "restructurés",
+        "restructurée",
+        "restructurées",
+        "restructuration"
+      ],
+      "plain": "Restructurer une dette, c'est en changer les conditions, durée ou montant, pour qu'elle puisse être remboursée.",
+      "noExample": "E"
+    },
+    {
+      "id": "surendettement",
+      "term": "surendettement",
+      "aliases": ["surendetté", "surendettés", "surendettée", "surendettées"],
+      "plain": "Un ménage est surendetté quand il ne peut plus payer ses dettes. Une commission de la Banque de France peut alors étaler ou réduire ce qu'il doit.",
+      "noExample": "E"
+    },
+    {
+      "id": "veto",
+      "term": "veto",
+      "aliases": ["véto", "droit de veto"],
+      "plain": "Un droit de veto permet de bloquer seul une décision.",
       "noExample": "E"
     }
   ]

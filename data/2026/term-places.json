@@ -1,96 +1,247 @@
 {
   "meta": {
     "corpus_version": "27ee6e713fe25e7e",
-    "wordings_sha256": "716dbac0666d0fcd98aa29e080e41257b19610a6e13c5b73bf87fcc2fb3ac3d4",
+    "wordings_sha256": "a1cdf06f91d545e0dc8ec7334ef0eb0148e3ce6b9589b6f0152d2b148f84961d",
     "note_fr": "Où chaque mot expliqué est écrit dans le livre : pour chaque section, les identifiants des mots de data/2026/terms.json que son texte emploie (son titre, ses mesures et leurs points, les paragraphes entre eux), triés. Les sections qui n'en emploient aucun n'y sont pas. Écrit par scripts/lexicon-2026.ts --places, sur la machine qui tient le texte du livre, par la session seule (D20.1) : aucun mot du livre, seulement des identifiants de sections et de mots. Il ne dit ni où dans la section, ni combien de fois. La fiche de chaque section montre ces mots, expliqués, sous une ligne qu'on ouvre (PLAN-MOTS, lot 4). À refaire après tout changement des formulations de terms.json : wordings_sha256 dit sur lesquelles il a été calculé."
   },
   "sections": {
     "p1c1-s01": [
+      "biophysique",
+      "biosphere",
+      "cerema",
+      "comptabilite-carbone",
       "comptes-publics",
+      "dernier-kilometre",
+      "flux-tendus",
       "ges",
+      "grands-projets-inutiles",
+      "hierarchie-des-normes",
+      "insee",
+      "loi-cadre",
       "moratoire",
-      "onf"
+      "mutualiser",
+      "ofb",
+      "onf",
+      "operateur-public",
+      "plateforme-logistique"
     ],
     "p1c1-s02": [
+      "agriculture-paysanne",
       "agroecologie",
-      "circuits-courts"
+      "autosuffisance-alimentaire",
+      "circuits-courts",
+      "delocalisation",
+      "eaux-territoriales",
+      "ecoconstruction",
+      "hexagone",
+      "jardin-creole",
+      "outre-mer",
+      "preference-commerciale",
+      "resilience",
+      "tram-train"
     ],
     "p1c2-s01": [
+      "actionnaires",
+      "cession",
+      "comite-strategique-de-filiere",
+      "commande-publique",
+      "delocalisation",
+      "desindustrialisation",
       "dividendes",
-      "droit-de-preemption"
+      "droit-de-preemption",
+      "hemicycle",
+      "liberalisme",
+      "plan-social",
+      "quinquennat",
+      "semi-conducteur",
+      "souverainete"
     ],
     "p1c2-s02": [
       "administrations-publiques",
       "agroecologie",
+      "antiepileptiques",
+      "arcelormittal",
       "cnes",
-      "collectivites-locales"
+      "collectivites-locales",
+      "decarbonation",
+      "delocalisation",
+      "entreprise-publique",
+      "nationaliser",
+      "pallier",
+      "principe-actif",
+      "reemploi",
+      "souverainete"
     ],
     "p1c2-s03": [
+      "actionnaires",
+      "antidumping",
       "assurance-vie",
+      "code-des-marches-publics",
+      "commande-publique",
+      "delocalisation",
       "droits-de-douane",
+      "dumping",
+      "ess",
+      "kerosene",
       "libre-echange",
+      "moins-disant",
       "niches-fiscales",
       "omc",
-      "requisition"
+      "requisition",
+      "siderurgie"
     ],
     "p1c3-s01": [
-      "ehpad"
+      "assainissement",
+      "commande-publique",
+      "ecoconstruction",
+      "ehpad",
+      "energies-marines",
+      "grands-fonds",
+      "ligne-haute-tension",
+      "ombriere",
+      "reseau-de-fraicheur",
+      "scieries",
+      "securite-civile",
+      "sobriete-energetique"
     ],
     "p1c3-s02": [
-      "orsec"
+      "assainissement",
+      "delegation-de-service-public",
+      "orsec",
+      "outre-mer",
+      "recouvrement",
+      "regie"
     ],
     "p1c3-s03": [
+      "cabotage",
+      "collectivites-locales",
+      "commande-publique",
+      "controle-technique",
+      "delocalisation",
+      "dirigeable",
       "ferroutage",
+      "fret-ferroviaire",
+      "garage-solidaire",
+      "gestion-algorithmique-des-prix",
       "leasing-social",
+      "liberalisation",
+      "liquidation",
+      "maillage",
+      "mise-en-concurrence",
       "moratoire",
       "nationaliser",
+      "plateforme-logistique",
+      "report-modal",
+      "sncf",
       "suv",
+      "transport-a-la-demande",
       "wagon-isole",
       "zfe"
     ],
     "p1c3-s04": [
       "abroger",
       "asn",
+      "bailleurs",
       "collectivites-locales",
+      "cooperatives",
+      "dechets-nucleaires",
+      "edf",
+      "energies-fossiles",
+      "engie",
       "epr2",
       "ges",
       "irsn",
+      "liberalisation",
+      "methanisation",
+      "nationaliser",
       "privatisation",
+      "sobriete-energetique",
+      "sous-traitance",
+      "stockage-d-energie",
+      "subventions",
       "tarifs-reglementes"
     ],
     "p1c3-s05": [
+      "bailleurs",
+      "droit-opposable",
+      "ecoconstruction",
+      "gaz-fossile",
       "ges",
+      "led",
       "passoires-thermiques",
-      "precarite-energetique"
+      "pompe-a-chaleur",
+      "precarite-energetique",
+      "renovation-thermique",
+      "tertiaire"
     ],
     "p1c3-s06": [
+      "ablation",
+      "broyage-des-oisillons",
+      "cephalopode",
+      "chasse-a-courre",
+      "condition-animale",
+      "delphinarium",
+      "deterrage",
+      "elevage-en-batterie",
+      "ferme-usine",
       "ges",
+      "grippe-aviaire",
+      "haut-commissariat",
       "moratoire",
+      "peche-au-vif",
+      "productivisme",
+      "proscrire",
+      "sanctuariser",
       "zoonoses"
     ],
     "p1c3-s07": [
       "ademe",
+      "consigne",
       "ecoconception",
+      "garantie-legale",
       "ges",
+      "indice-de-durabilite",
       "low-tech",
+      "maillage",
+      "mesusage",
+      "mine-urbaine",
       "moratoire",
+      "neutralite-carbone",
       "obsolescence-programmee",
-      "pfas"
+      "pfas",
+      "proscrire",
+      "recyclerie",
+      "reemploi",
+      "rep-producteur"
     ],
     "p1c3-s08": [
+      "agrobusiness",
       "agroecologie",
       "aop",
       "caisse-de-defaisance",
       "circuits-courts",
       "clause-de-sauvegarde",
       "coefficients-multiplicateurs",
+      "concurrence-deloyale",
+      "contrevenir",
       "deficit-agricole",
+      "delocalisation",
       "droit-de-preemption",
+      "foncier",
+      "grande-distribution",
+      "hexagone",
       "igp",
       "inao",
+      "marches-financiers",
       "pac",
+      "prix-minimum-d-entree",
       "prix-planchers",
-      "protectionnisme",
+      "prix-remunerateur",
+      "protection-sociale-agricole",
+      "protectionnisme-ecologique",
+      "reforme-agraire",
+      "sanctuariser",
+      "souverainete-alimentaire",
       "zan"
     ],
     "p2c1-s01": [
@@ -100,14 +251,27 @@
       "patrimoine",
       "ppp",
       "privatisation",
-      "requisition"
+      "requisition",
+      "souverainete"
+    ],
+    "p2c1-s02": [
+      "biens-communs"
     ],
     "p2c1-s03": [
-      "droit-de-preemption"
+      "cession",
+      "cooperatives",
+      "droit-de-preemption",
+      "liquidation",
+      "plan-social",
+      "veto"
     ],
     "p2c1-s04": [
+      "actionnaires",
       "autoentrepreneur",
       "cae",
+      "capitalisme",
+      "commande-publique",
+      "cooperatives",
       "ess",
       "restauration-collective",
       "scic",
@@ -117,6 +281,7 @@
       "apl",
       "collectivites-locales",
       "minima-sociaux",
+      "outre-mer",
       "point-d-indice",
       "reduflation",
       "smic"
@@ -125,6 +290,7 @@
       "arbitrage-de-dividendes",
       "bareme",
       "centimillionnaire",
+      "cession",
       "controle-fiscal",
       "convention-judiciaire-d-interet-public",
       "credit-d-impot",
@@ -149,6 +315,7 @@
       "quotient-conjugal",
       "reduction-d-impot",
       "revenus-du-capital",
+      "sobriete-energetique",
       "superprofits",
       "taxe-zucman",
       "tva"
@@ -158,6 +325,7 @@
       "fonction-publique",
       "indexer",
       "inflation",
+      "majorer",
       "seuil-de-pauvrete",
       "smic",
       "stock-options",
@@ -165,6 +333,8 @@
     ],
     "p2c3-s01": [
       "contribuable",
+      "filiales",
+      "financiarisation",
       "fonds-d-investissement",
       "lbo",
       "niches-fiscales",
@@ -172,10 +342,13 @@
       "transactions-financieres"
     ],
     "p2c3-s02": [
+      "biens-communs",
       "bpi",
+      "comptabilite-carbone",
       "tpe"
     ],
     "p2c3-s03": [
+      "actionnaires",
       "dividendes"
     ],
     "p2c3-s04": [
@@ -189,6 +362,7 @@
       "dette-souveraine",
       "indexer",
       "inflation",
+      "marches-financiers",
       "oati",
       "patrimoine",
       "privatisation",
@@ -200,10 +374,14 @@
       "ue"
     ],
     "p2c3-s05": [
+      "commande-publique",
+      "delocalisation",
       "ess",
       "impot-progressif",
+      "patronat",
       "perequation",
       "pme",
+      "sous-traitance",
       "taxe-fonciere",
       "tpe",
       "tresorerie"
@@ -217,10 +395,13 @@
       "plein-emploi",
       "prestation-sociale",
       "reduflation",
-      "seuil-de-pauvrete"
+      "restructurer",
+      "seuil-de-pauvrete",
+      "surendettement"
     ],
     "p3c1-s02": [
       "chomeur-de-longue-duree",
+      "collectivites-locales",
       "smic"
     ],
     "p3c1-s03": [
@@ -234,6 +415,7 @@
       "fonction-publique",
       "interim",
       "loi-el-khomri",
+      "marchandisation",
       "ordonnances-penicaud",
       "plateforme-numerique",
       "pme",
@@ -251,6 +433,7 @@
       "heures-supplementaires",
       "horaires-fractionnes",
       "jour-ferie-chome",
+      "majorer",
       "negociation-collective",
       "penibilite",
       "sous-emploi"
@@ -267,6 +450,7 @@
       "france-travail",
       "indemniser",
       "interim",
+      "intermittents-de-l-emploi",
       "medecine-du-travail",
       "offre-raisonnable-d-emploi",
       "radiation",
@@ -277,16 +461,22 @@
     "p3c1-s06": [
       "accident-du-travail",
       "arret-maladie",
+      "cancerogene",
       "chsct",
       "circ",
+      "commande-publique",
       "droit-a-la-deconnexion",
       "inspection-du-travail",
       "maladie-professionnelle",
       "management-algorithmique",
       "medecine-du-travail",
-      "travailleur-independant"
+      "octroyer",
+      "recidivistes",
+      "travailleur-independant",
+      "veto"
     ],
     "p3c1-s07": [
+      "a-minima",
       "abroger",
       "age-de-depart",
       "annuites",
@@ -320,9 +510,11 @@
       "cotisation-sociale",
       "csg",
       "depassements-d-honoraires",
+      "deremboursement",
       "franchises-medicales",
       "indemniser",
       "jours-de-carence",
+      "liberalisme",
       "participation-forfaitaire",
       "privatisation",
       "regime-general",
@@ -338,6 +530,7 @@
       "defenseur-des-droits",
       "gpa",
       "ivg",
+      "marchandisation",
       "mineur",
       "mourir-dans-la-dignite",
       "personnes-menstruees",
@@ -347,6 +540,7 @@
       "ase",
       "famille-d-accueil",
       "mineur",
+      "outre-mer",
       "pjj",
       "protection-de-l-enfance"
     ],
@@ -362,6 +556,7 @@
     ],
     "p3c2-s04": [
       "but-lucratif",
+      "cooperatives",
       "ehpad",
       "maintien-a-domicile",
       "perte-d-autonomie",
@@ -377,6 +572,9 @@
       "loi-elan",
       "mdph",
       "medico-social",
+      "mutualiser",
+      "perenniser",
+      "prefets",
       "securite-sociale",
       "smic"
     ],
@@ -393,9 +591,11 @@
     ],
     "p3c2-s08": [
       "conscription",
+      "liberalisme",
       "privatisation"
     ],
     "p3c3-s01": [
+      "commande-publique",
       "penibilite",
       "temps-partiel-subi",
       "travailleur-pauvre"
@@ -407,6 +607,7 @@
       "clause-de-conscience",
       "ivg",
       "lgbti",
+      "perenniser",
       "planning-familial",
       "sante-sexuelle",
       "traitement-hormonal-de-la-menopause"
@@ -415,10 +616,12 @@
       "assistante-maternelle",
       "but-lucratif",
       "jardin-d-enfants",
+      "maillage",
       "pmi"
     ],
     "p3c4-s01": [
       "arcom",
+      "commande-publique",
       "ia",
       "testing"
     ],
@@ -426,54 +629,111 @@
       "abroger",
       "droit-du-sol"
     ],
+    "p3c4-s03": [
+      "outre-mer"
+    ],
     "p3c4-s04": [
       "abroger",
       "amende-forfaitaire-delictuelle"
     ],
     "p4c1-s01": [
+      "abonder",
+      "assainissement",
       "cadmium",
       "chlordecone",
       "collectivites-locales",
+      "decret",
+      "deroger",
+      "effet-cocktail",
+      "essais-nucleaires",
       "glyphosate",
       "icpe",
       "indemniser",
+      "lanceur-d-alerte",
       "neonicotinoides",
-      "pfas"
+      "participation-du-public",
+      "pfas",
+      "prefets",
+      "quinquennat"
     ],
     "p4c1-s02": [
+      "accaparement",
+      "assainissement",
+      "biens-communs",
+      "haut-commissariat",
+      "maillage",
       "mega-bassines",
       "moratoire",
-      "pfas"
+      "nappe-phreatique",
+      "outre-mer",
+      "pfas",
+      "police-de-l-eau",
+      "prefets",
+      "regie",
+      "sanctuariser",
+      "tarification-progressive",
+      "voix-deliberative"
     ],
     "p4c1-s03": [
+      "biens-communs",
+      "bois-d-oeuvre",
+      "bois-energie",
       "circuits-courts",
+      "commande-publique",
+      "compensation-carbone",
       "coupes-rases",
+      "delocalisation",
+      "dessouchage",
       "droit-de-preemption",
       "formation-professionnelle",
+      "hexagone",
+      "libre-evolution",
+      "maillage",
       "maladie-professionnelle",
+      "marchandisation",
       "mercosur",
       "onf",
       "orpaillage",
+      "outre-mer",
       "penibilite",
+      "photovoltaique",
       "privatisation",
+      "puits-de-carbone",
+      "regeneration-naturelle",
+      "resilience",
+      "scieries",
       "travailleurs-detaches"
     ],
     "p4c1-s04": [
+      "biens-communs",
       "brevet-sur-le-vivant",
+      "grands-fonds",
+      "haute-mer",
       "moratoire",
-      "ogm"
+      "nouvelles-techniques-genomiques",
+      "ogm",
+      "puits-de-carbone",
+      "sixieme-extinction",
+      "traite-plastiques"
+    ],
+    "p4c2-s01": [
+      "hexagone",
+      "outre-mer"
     ],
     "p4c2-s02": [
       "abroger",
+      "collectivites-locales",
       "contre-reforme",
       "droit-a-la-deconnexion",
       "fonction-publique",
-      "rep"
+      "rep",
+      "subventions"
     ],
     "p4c2-s03": [
       "aesh",
       "cap",
       "evars",
+      "mutualiser",
       "point-d-indice",
       "titulariser"
     ],
@@ -486,6 +746,7 @@
       "cfa",
       "contre-reforme",
       "lobbys",
+      "marchandisation",
       "mineur"
     ],
     "p4c2-s05": [
@@ -504,13 +765,17 @@
       "cvec",
       "hceres",
       "lru",
+      "marchandisation",
       "parcoursup",
+      "perenniser",
+      "subventions",
       "titulariser"
     ],
     "p4c2-s07": [
       "abroger",
       "conscription",
       "formation-professionnelle",
+      "securite-civile",
       "smic"
     ],
     "p4c3-s01": [
@@ -520,13 +785,19 @@
       "ia",
       "intermittents",
       "mecenat",
+      "perenniser",
       "pib"
     ],
+    "p4c3-s02": [
+      "souverainete"
+    ],
     "p4c3-s03": [
+      "perenniser",
       "staps"
     ],
     "p4c4-s01": [
       "amiante",
+      "capitalisme",
       "chlordecone",
       "fonds-d-indemnisation",
       "institut-national-du-cancer",
@@ -545,10 +816,13 @@
       "biomedicaments",
       "brevet-sur-le-vivant",
       "catastrophe-naturelle",
+      "delocalisation",
+      "filiales",
       "fonds-mondial",
       "licence-d-office",
       "nationaliser",
       "pharmacie-hospitaliere",
+      "principe-actif",
       "requisition",
       "seropositif",
       "vih",
@@ -558,8 +832,10 @@
       "acides-gras-satures",
       "agro-industrie",
       "aliment-transforme",
+      "grande-distribution",
       "maladie-chronique",
       "nutri-score",
+      "outre-mer",
       "restauration-collective"
     ],
     "p4c4-s04": [
@@ -567,18 +843,24 @@
       "assurance-maladie",
       "austerite",
       "centre-de-sante",
+      "collectivites-locales",
       "deserts-medicaux",
       "dotation-forfaitaire",
       "ehpad",
       "equivalence",
       "exercice-salarie",
+      "financiarisation",
       "fonds-d-investissement",
+      "maillage",
       "maison-de-sante",
       "maladie-chronique",
+      "marchandisation",
       "medecin-traitant",
       "medico-social",
       "ondam",
       "padhue",
+      "paramedical",
+      "perenniser",
       "permanence-des-soins",
       "premier-recours",
       "prix-de-journee",
@@ -595,75 +877,129 @@
       "conventionnement",
       "deliter",
       "infirmier-en-pratique-avancee",
+      "liberalisme",
+      "maillage",
       "mise-a-l-isolement",
       "privatisation",
       "securite-sociale",
       "troubles-des-conduites-alimentaires"
     ],
     "p4c4-s06": [
+      "magistrats",
       "monopole-d-etat",
       "ofdt",
+      "perenniser",
       "reduction-des-risques",
       "salle-de-consommation",
       "traitement-de-substitution",
       "usage-recreatif"
     ],
     "p4c5-s01": [
+      "accord-de-peche",
+      "acidification-des-oceans",
       "aires-marines-protegees",
-      "cop",
+      "aquaculture",
+      "cop-oceans",
+      "eaux-territoriales",
+      "ferme-usine",
+      "grands-fonds",
+      "haute-mer",
       "moratoire",
-      "sargasses"
+      "navire-usine",
+      "outre-mer",
+      "peche-artisanale",
+      "peche-electrique",
+      "quota-de-peche",
+      "sanctuariser",
+      "sargasses",
+      "station-d-epuration",
+      "subventions",
+      "zone-morte"
     ],
     "p4c5-s02": [
+      "armateur",
+      "chantier-naval",
+      "concurrence-deloyale",
+      "decarbonation",
+      "droit-de-la-mer",
       "dumping-social",
+      "energies-marines",
+      "ge-vernova",
+      "gigawatt",
+      "haute-mer",
       "hydrolien",
+      "marine-marchande",
+      "marine-nationale",
       "nationaliser",
+      "neutralite-carbone",
       "omi",
       "pavillon",
       "plateau-continental",
       "propulsion-velique",
+      "remorquage-portuaire",
       "shom",
-      "taxe-au-tonnage"
+      "taxe-au-tonnage",
+      "zone-economique-exclusive"
     ],
     "p4c5-s03": [
+      "algoculture",
+      "aquaculture",
+      "droit-de-la-mer",
+      "erasmus",
       "formation-professionnelle",
-      "onu"
+      "onu",
+      "outre-mer"
     ],
     "p4c6-s01": [
+      "biens-communs",
+      "filiales",
       "galileo",
       "nationaliser",
-      "otan"
+      "otan",
+      "souverainete"
     ],
     "p4c6-s02": [
       "cnes"
     ],
     "p4c6-s03": [
       "accords-artemis",
+      "biens-communs",
       "onu",
       "traite-de-la-lune"
     ],
     "p4c7-s01": [
+      "biens-communs",
       "cnil",
+      "collectivites-locales",
       "cryptographie-post-quantique",
-      "rgpd"
+      "rgpd",
+      "sous-traitance",
+      "souverainete"
     ],
     "p4c7-s02": [
       "administrations-publiques",
       "centres-de-donnees",
       "cloud",
+      "delocalisation",
       "ecoconception",
+      "efficacite-energetique",
       "fonds-d-investissement",
       "gafam",
       "interoperabilite",
       "logiciels-libres",
       "moratoire",
       "nationaliser",
-      "obsolescence-programmee"
+      "obsolescence-programmee",
+      "participation-du-public",
+      "semi-conducteur",
+      "souverainete"
     ],
     "p4c7-s03": [
       "accord-de-branche",
       "administrations-publiques",
-      "ia"
+      "entreprise-publique",
+      "ia",
+      "veto"
     ],
     "p5c1-s01": [
       "abroger",
@@ -672,13 +1008,17 @@
       "indemniser",
       "intercommunalites",
       "moratoire",
+      "outre-mer",
       "radiation",
       "referendum",
-      "ric"
+      "ric",
+      "sous-traitance",
+      "souverainete"
     ],
     "p5c1-s02": [
       "constituante",
-      "referendum"
+      "referendum",
+      "souverainete"
     ],
     "p5c1-s03": [
       "article-49-3",
@@ -690,17 +1030,23 @@
       "fonction-publique",
       "ineligible",
       "lobbys",
-      "pantouflage"
+      "pantouflage",
+      "sous-traitance"
     ],
     "p5c1-s05": [
       "abroger",
       "concordat",
       "laicite",
-      "miviludes"
+      "miviludes",
+      "outre-mer",
+      "prefets",
+      "souverainete"
     ],
     "p5c1-s06": [
       "arcom",
-      "droit-de-preemption"
+      "cession",
+      "droit-de-preemption",
+      "outre-mer"
     ],
     "p5c2-s01": [
       "abroger",
@@ -714,15 +1060,18 @@
       "iggn",
       "igpn",
       "lbd",
+      "magistrats",
       "rio"
     ],
     "p5c2-s03": [
       "bac-police",
-      "brav-m"
+      "brav-m",
+      "magistrats"
     ],
     "p5c2-s04": [
       "constituante",
       "convention-judiciaire-d-interet-public",
+      "plan-social",
       "pollueur-payeur",
       "regulation-carcerale",
       "securite-sociale",
@@ -731,27 +1080,41 @@
     "p5c2-s05": [
       "aide-juridictionnelle",
       "cours-criminelles",
-      "jures-populaires"
+      "jures-populaires",
+      "magistrats",
+      "outre-mer"
     ],
     "p5c3-s01": [
+      "collectivites-locales",
       "dotation-globale-de-fonctionnement",
       "exoneration",
       "impot-progressif",
       "indemniser",
       "indexer",
       "inflation",
+      "liberalisme",
+      "mise-en-concurrence",
+      "souverainete",
       "taxe-d-habitation"
     ],
     "p5c3-s02": [
-      "collectivites-locales"
+      "collectivites-locales",
+      "outre-mer"
     ],
     "p5c3-s03": [
-      "moratoire"
+      "collectivites-locales",
+      "maillage",
+      "moratoire",
+      "outre-mer",
+      "securite-civile"
     ],
     "p5c3-s04": [
       "abroger",
       "anru",
+      "bailleurs",
+      "delocalisation",
       "encadrement-des-loyers",
+      "foncier",
       "hlm",
       "inspection-du-travail",
       "loi-sru",
@@ -760,14 +1123,18 @@
       "passoires-thermiques",
       "patrimoine",
       "permis-de-louer",
+      "quinquennat",
       "requisition",
       "taxe-fonciere"
     ],
     "p5c3-s05": [
       "chlordecone",
       "fonction-publique",
+      "hexagone",
       "minima-sociaux",
       "minimum-vieillesse",
+      "outre-mer",
+      "paramedical",
       "prestation-sociale",
       "principe-de-faveur",
       "seuil-de-pauvrete",
@@ -776,17 +1143,21 @@
     "p6c1-s01": [
       "constituante",
       "niches-fiscales",
+      "plan-social",
       "securite-sociale",
       "travailleurs-detaches"
     ],
     "p6c1-s02": [
       "austerite",
+      "biens-communs",
       "clause-de-sauvegarde",
+      "liberalisation",
       "libre-echange",
       "moratoire",
       "otan",
       "semestre-europeen",
-      "ue"
+      "ue",
+      "veto"
     ],
     "p6c1-s03": [
       "bce",
@@ -801,13 +1172,18 @@
       "conflit-d-interets",
       "consentement-a-l-impot",
       "demandeurs-d-asile",
+      "liberalisme",
+      "monopole-d-etat",
       "paradis-fiscaux",
-      "protectionnisme",
+      "protectionnisme-ecologique",
       "referendum",
-      "ue"
+      "souverainete",
+      "ue",
+      "veto"
     ],
     "p6c2-s01": [
       "altermondialiste",
+      "capitalisme",
       "commandement-integre",
       "conseil-de-securite",
       "non-alignee",
@@ -820,10 +1196,13 @@
       "athos",
       "biens-a-double-usage",
       "cloud",
+      "grands-fonds",
       "ia",
       "indemniser",
       "onu",
       "otan",
+      "pallier",
+      "plateforme-logistique",
       "sala",
       "starlink",
       "tian"
@@ -833,6 +1212,7 @@
       "fao",
       "oms",
       "onu",
+      "souverainete-alimentaire",
       "unesco",
       "unrwa"
     ],
@@ -843,31 +1223,41 @@
       "embargo",
       "onu",
       "osce",
+      "perenniser",
+      "souverainete",
       "ue"
     ],
     "p6c2-s05": [
+      "biens-communs",
       "brevet-sur-le-vivant",
+      "energies-fossiles",
       "ia",
       "licence-d-office",
-      "onu"
+      "onu",
+      "traite-plastiques"
     ],
     "p6c3-s01": [
       "cnuced",
       "dette-publique",
       "droits-de-douane",
       "fmi",
+      "liberalisme",
       "libre-echange",
       "oit",
       "omc",
       "onu",
-      "protectionnisme"
+      "protectionnisme",
+      "protectionnisme-ecologique",
+      "souverainete"
     ],
     "p6c3-s02": [
       "abroger",
       "ame",
       "apatrides",
       "cra",
+      "delegation-de-service-public",
       "demandeurs-d-asile",
+      "haut-commissariat",
       "hcr",
       "ofpra",
       "onu",
@@ -878,24 +1268,34 @@
       "altermondialiste",
       "cdaa",
       "celac",
-      "iora"
+      "iora",
+      "outre-mer",
+      "plateforme-logistique",
+      "souverainete",
+      "zone-economique-exclusive"
     ],
     "p6c3-s04": [
       "afd",
       "aide-publique-au-developpement",
       "altermondialiste",
       "dette-souveraine",
+      "liberalisme",
       "ppp",
-      "revenu-national-brut"
+      "restructurer",
+      "revenu-national-brut",
+      "souverainete"
     ],
     "p6c3-s05": [
-      "catastrophe-naturelle"
+      "catastrophe-naturelle",
+      "securite-civile"
     ],
     "p6c3-s06": [
-      "cfa"
+      "cfa",
+      "souverainete"
     ],
     "p6c3-s07": [
       "creolisation",
+      "erasmus",
       "onu"
     ]
   }
