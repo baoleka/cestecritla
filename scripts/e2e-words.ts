@@ -3,6 +3,8 @@
  * D20.13) — on dist-gists/, the test build that shows every surface. Three engines.
  *
  *   npm run build:gists && npx tsx scripts/e2e-words.ts [--engines chromium]
+ *   npx tsx scripts/e2e-words.ts --origin https://beta.cestecritla.fr --root dist
+ *                       (a live host, built from dist/ — lot 16: what it serves is that build)
  *
  * What it holds, on a page of a section, of one of our cards and of one of our answers:
  *   1. the page carries a folded line, closed, and nothing of a word: no word is fetched, nor
@@ -21,7 +23,17 @@ import type { Browser, Page, Route } from 'playwright';
 import { ENGINES, STILL, checker, lateLayoutShift, report, serve, until } from './e2e-kit.js';
 import type { Outcome } from './e2e-kit.js';
 
-const ROOT = 'dist-gists';
+const flag = (name: string): string | null => {
+  const at = process.argv.indexOf(name);
+  return at < 0 ? null : (process.argv[at + 1] ?? null);
+};
+/** The build whose files name the pages: dist-gists/ by default; dist/ for a host built from it. */
+const ROOT = flag('--root') ?? 'dist-gists';
+/**
+ * A live host to test instead of a local copy of the build (PLAN-MOTS, lot 16): what it serves
+ * must be the build of `--root` — the names of the files come from there.
+ */
+const ORIGIN = flag('--origin');
 const BADGE = 'Explications écrites et vérifiées par une IA';
 const SHELL = 'details.words';
 
@@ -380,6 +392,11 @@ async function main(): Promise<void> {
   if (!existsSync(join(ROOT, 'index.html'))) {
     console.error(`no ${ROOT}/ — run \`npm run build:gists\` first`);
     process.exitCode = 1;
+    return;
+  }
+  if (ORIGIN !== null) {
+    if (!/^https:\/\/[a-z.]+$/.test(ORIGIN)) throw new Error('--origin takes https://host');
+    await report((engine) => runEngine(engine, ORIGIN));
     return;
   }
   const { server, origin } = await serve(ROOT);

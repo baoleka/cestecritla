@@ -1,8 +1,16 @@
 {
-  "production": { "pages": "off", "search": "off", "game": "off" },
-  "preview": { "pages": "off", "search": "off", "game": "off" },
-  "decided_on": null,
-  "decided_by": null,
+  "production": {
+    "pages": "off",
+    "search": "off",
+    "game": "off"
+  },
+  "preview": {
+    "pages": "on",
+    "search": "on",
+    "game": "on"
+  },
+  "decided_on": "2026-11-19",
+  "decided_by": "session",
   "reviewer_yes_on": null,
   "note_fr": "Où les mots expliqués paraissent hors de la feuille de « Demander » (PLAN-MOTS, D20.11, D20.15) : « pages » — les fiches de section, nos cartes, nos réponses, une ligne repliée « Des mots de cette section, expliqués », et la page « Mots du programme » ; « search » — une ligne au-dessus des résultats quand ce qui est tapé est un mot expliqué ; « game » — sous la carte du jeu, les mots de sa phrase (D20.4). « on » ou « off » par surface. « production » vaut pour cestecritla.fr et www ; « preview » ouvre l'aperçu avant elle, jamais l'inverse (src/lib/words-config.ts). Une build dont le champ ne demande rien (mode « off », build « scrutin ») n'en montre aucun, quoi que dise ce fichier. Ouvrir la production demande, sous le mandat D20.3, un fichier de mots scellé et le « oui » d'un relecteur indépendant sur l'aperçu (reviewer_yes_on), daté ; decided_by dit qui a écrit la dernière ouverture — « session », sous ce mandat : jamais « editor » sans un mot daté de lui (scripts/launch.ts, wordsBlockers)."
 }
