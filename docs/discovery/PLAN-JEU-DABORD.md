@@ -818,3 +818,45 @@ qui reste signalé sans être retiré) ; **D19.23 — « Oui, déploie l'aperçu
 
 **Ce qui attend l'éditeur** : son « oui » daté pour la production (lot 10). À part : la phrase
 de « wagon » — la réécrire et la redéposer touche la base que sert la production.
+
+### Lot 10, au 19 novembre 2026 — la production
+
+**D19.24 — « Oui, mets en production »**, répondu le 19 novembre à la question posée après la
+vérification de l'aperçu, avec ce qui est moins bon dit dans la question même : sur le nouvel
+écran, à « un site pour enfants ? », cinq lecteurs simulés répondent 3 « non » et 2 « ne sait
+pas » (5 « non » sur l'ancien — `13-tests-humains.md` §9.9) ; des lecteurs simulés seulement ;
+ni vrai téléphone ni lecteur d'écran ; la phrase de « wagon » toujours servie par « Demander ».
+
+- **Le geste** : `data/launch.json` — `home.decided_on` 2026-11-19, `home.decided_by`
+  « editor » (commit `d7e9814`) ; le garde-fou se tait (`npx tsx scripts/launch.ts` :
+  « nothing is missing ») ; `npm run build && npm run deploy`, de 8 h 54 min 16 s à
+  8 h 54 min 40 s UTC (9 h 54 à Paris). Worker `cestecritla`, version `383a9a8b`, sur
+  `cestecritla.fr` et `www.cestecritla.fr`. Les Workers des phrases et la base n'ont pas été
+  touchés.
+- **Vérifié en ligne, sur les deux hôtes** : 1 153 fichiers sur 1 156 identiques à la build,
+  les trois écarts connus (`404.html` redirigé, `_headers` et `_redirects` non servis comme
+  fichiers) ; aucune réponse `noindex` sur les pages, `noindex` et un cache d'un an sur le
+  fichier du jeu ; celui-ci porte 48 mots, 43 phrases et la ligne qui dit qui les a écrites,
+  et ouvre sur « carburant », « cantine », « électricité » ; le HTTP clair est renvoyé en
+  HTTPS. **Le jeu joué en ligne dans trois moteurs sur `cestecritla.fr`** : 267 contrôles
+  sous Chromium, 267 sous Firefox, 267 sous WebKit, aucun échec ; sur `www`, la première visite
+  et l'entrée : 92 dans chacun. **La feuille de « Demander » sondée en production**, trois
+  moteurs : tout bon.
+- **`home.serving`** nomme maintenant `d7e9814`, le commit dont la production est construite.
+  **Retour arrière** : la build d'avant, depuis une copie de travail à l'étiquette locale
+  `prod-avant-jeu-dabord` (`38b8ae6`) — fiche 14 du runbook, fermée pour son premier usage et
+  gardée pour celui-là.
+- **Ce que le déploiement ne dit pas** : personne n'a ouvert le nouvel accueil sur un vrai
+  téléphone, dans le navigateur d'Instagram ni avec un lecteur d'écran (D16.81 : l'éditeur ne
+  les essaiera pas ; la session vérifie ce qu'elle peut — trois moteurs, des tailles de
+  téléphone simulées, l'audit automatique) : HYPOTHÈSE.
+
+**Le chantier est exécuté jusqu'à son dernier lot.** Ce qui reste ouvert, sans date, pour
+l'éditeur :
+
+- **la phrase de « wagon »**, que « Demander » sert telle quelle : la réécrire et la redéposer
+  touche la base de production — à lui proposer à part, avec ce que cela implique ;
+- **R55**, tel que mesuré le 19 novembre sur le nouvel écran ;
+- la boîte en forme de champ sous les trois mots, que les maquettes avaient et que l'écran
+  construit n'a pas (une à deux voix de mieux, §9.8) : elle touche la règle « rien ne se tape
+  à côté d'elle ».
