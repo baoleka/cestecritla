@@ -546,6 +546,7 @@ void test('French typography, as the kit: no-break spaces around double punctuat
   for (const entry of entries) {
     for (const [what, value] of [
       ['plain', entry.plain],
+      ...(entry.example === undefined ? [] : [['example', entry.example] as const]),
       ...wordingsOf(entry).map((wording) => ['wording', wording] as const),
     ] as const) {
       const where = `${entry.id} (${what})`;

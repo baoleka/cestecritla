@@ -1,11 +1,12 @@
 {
   "meta": {
     "corpus_version": "27ee6e713fe25e7e",
-    "wordings_sha256": "709053c5c376a28e00e380627c1189b2e050887a24aede493f0fe5f432b45e4e",
+    "wordings_sha256": "ee1756433a5c72253bb6819a0d2331b0f5cb1d94fd4ab3f47f90dce4e1da28bf",
     "note_fr": "Où chaque mot expliqué est écrit dans le livre : pour chaque section, les identifiants des mots de data/2026/terms.json que son texte emploie (son titre, ses mesures et leurs points, les paragraphes entre eux), triés. Les sections qui n'en emploient aucun n'y sont pas. Écrit par scripts/lexicon-2026.ts --places, sur la machine qui tient le texte du livre, par la session seule (D20.1) : aucun mot du livre, seulement des identifiants de sections et de mots. Il ne dit ni où dans la section, ni combien de fois. La fiche de chaque section montre ces mots, expliqués, sous une ligne qu'on ouvre (PLAN-MOTS, lot 4). À refaire après tout changement des formulations de terms.json : wordings_sha256 dit sur lesquelles il a été calculé."
   },
   "sections": {
     "p1c1-s01": [
+      "comptes-publics",
       "ges",
       "moratoire",
       "onf"
@@ -18,10 +19,13 @@
       "droit-de-preemption"
     ],
     "p1c2-s02": [
+      "administrations-publiques",
       "agroecologie",
-      "cnes"
+      "cnes",
+      "collectivites-locales"
     ],
     "p1c2-s03": [
+      "assurance-vie",
       "droits-de-douane",
       "libre-echange",
       "niches-fiscales",
@@ -46,6 +50,7 @@
     "p1c3-s04": [
       "abroger",
       "asn",
+      "collectivites-locales",
       "epr2",
       "ges",
       "irsn",
@@ -78,6 +83,7 @@
       "circuits-courts",
       "clause-de-sauvegarde",
       "coefficients-multiplicateurs",
+      "deficit-agricole",
       "droit-de-preemption",
       "igp",
       "inao",
@@ -88,7 +94,9 @@
     ],
     "p2c1-s01": [
       "abroger",
+      "fonds-d-investissement",
       "moratoire",
+      "patrimoine",
       "ppp",
       "privatisation",
       "requisition"
@@ -104,33 +112,58 @@
     ],
     "p2c2-s01": [
       "apl",
+      "collectivites-locales",
       "minima-sociaux",
       "point-d-indice",
       "reduflation",
       "smic"
     ],
     "p2c2-s02": [
+      "arbitrage-de-dividendes",
+      "bareme",
+      "centimillionnaire",
+      "controle-fiscal",
       "convention-judiciaire-d-interet-public",
+      "credit-d-impot",
+      "criminalite-en-col-blanc",
       "cvae",
       "dividendes",
+      "droits-de-succession",
       "evasion-fiscale",
       "exit-tax",
+      "exoneration",
       "flat-tax",
+      "fraude-fiscale",
+      "impot-progressif",
+      "impot-sur-le-revenu",
+      "impot-sur-les-societes",
+      "impot-universel",
       "isf",
       "niches-fiscales",
+      "patrimoine",
       "pme",
       "privatisation",
       "quotient-conjugal",
+      "reduction-d-impot",
+      "revenus-du-capital",
+      "superprofits",
       "taxe-zucman",
       "tva"
     ],
     "p2c2-s03": [
+      "indexer",
+      "inflation",
       "seuil-de-pauvrete",
       "smic",
       "stock-options"
     ],
     "p2c3-s01": [
-      "lbo"
+      "contribuable",
+      "fonds-d-investissement",
+      "lbo",
+      "niches-fiscales",
+      "rachat-d-actions",
+      "transactions-financieres"
     ],
     "p2c3-s02": [
       "bpi",
@@ -143,16 +176,30 @@
       "bce",
       "cades",
       "circuit-du-tresor",
+      "comptes-publics",
+      "creancier",
+      "dette-perpetuelle",
+      "dette-publique",
+      "dette-souveraine",
+      "indexer",
+      "inflation",
       "oati",
+      "patrimoine",
       "privatisation",
+      "rachat-de-dettes",
+      "taux-d-interet",
       "tfue",
+      "titre-de-dette",
       "ue"
     ],
     "p2c3-s05": [
       "ess",
+      "impot-progressif",
+      "perequation",
       "pme",
       "taxe-fonciere",
-      "tpe"
+      "tpe",
+      "tresorerie"
     ],
     "p3c1-s01": [
       "logement-d-abord",
@@ -184,6 +231,9 @@
       "abroger",
       "annuites",
       "decote",
+      "exoneration",
+      "fonds-d-investissement",
+      "niches-fiscales",
       "retraite-par-capitalisation",
       "retraite-par-repartition",
       "rsa",
@@ -212,6 +262,7 @@
     "p3c2-s03": [
       "cdd",
       "crous",
+      "foyer-fiscal",
       "seuil-de-pauvrete"
     ],
     "p3c2-s04": [
@@ -265,6 +316,7 @@
     "p4c1-s01": [
       "cadmium",
       "chlordecone",
+      "collectivites-locales",
       "glyphosate",
       "icpe",
       "neonicotinoides",
@@ -329,6 +381,7 @@
     ],
     "p4c3-s01": [
       "cnl",
+      "depense-publique",
       "ia",
       "intermittents",
       "mecenat",
@@ -358,6 +411,7 @@
     "p4c4-s04": [
       "deserts-medicaux",
       "ehpad",
+      "fonds-d-investissement",
       "ondam",
       "t2a"
     ],
@@ -404,9 +458,11 @@
       "rgpd"
     ],
     "p4c7-s02": [
+      "administrations-publiques",
       "centres-de-donnees",
       "cloud",
       "ecoconception",
+      "fonds-d-investissement",
       "gafam",
       "interoperabilite",
       "logiciels-libres",
@@ -415,6 +471,7 @@
       "obsolescence-programmee"
     ],
     "p4c7-s03": [
+      "administrations-publiques",
       "ia"
     ],
     "p5c1-s01": [
@@ -452,6 +509,7 @@
     ],
     "p5c2-s01": [
       "abroger",
+      "fraude-fiscale",
       "pharos"
     ],
     "p5c2-s02": [
@@ -481,7 +539,14 @@
     ],
     "p5c3-s01": [
       "dotation-globale-de-fonctionnement",
+      "exoneration",
+      "impot-progressif",
+      "indexer",
+      "inflation",
       "taxe-d-habitation"
+    ],
+    "p5c3-s02": [
+      "collectivites-locales"
     ],
     "p5c3-s03": [
       "moratoire"
@@ -495,6 +560,7 @@
       "niches-fiscales",
       "organismes-de-foncier-solidaire",
       "passoires-thermiques",
+      "patrimoine",
       "permis-de-louer",
       "requisition",
       "taxe-fonciere"
@@ -521,11 +587,15 @@
     "p6c1-s03": [
       "bce",
       "pac",
+      "politique-monetaire",
+      "rachat-de-dettes",
+      "regles-budgetaires-europeennes",
       "ue"
     ],
     "p6c1-s04": [
       "bce",
       "conflit-d-interets",
+      "consentement-a-l-impot",
       "demandeurs-d-asile",
       "paradis-fiscaux",
       "protectionnisme",
@@ -577,6 +647,7 @@
     ],
     "p6c3-s01": [
       "cnuced",
+      "dette-publique",
       "droits-de-douane",
       "fmi",
       "libre-echange",
@@ -607,7 +678,9 @@
       "afd",
       "aide-publique-au-developpement",
       "altermondialiste",
-      "ppp"
+      "dette-souveraine",
+      "ppp",
+      "revenu-national-brut"
     ],
     "p6c3-s06": [
       "cfa"

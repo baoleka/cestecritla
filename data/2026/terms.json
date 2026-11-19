@@ -12,9 +12,21 @@
       "on": "2026-11-19",
       "by": "session",
       "passes": [
-        { "what": "written", "on": "2026-11-15", "by": "session" },
-        { "what": "checked", "on": "2026-11-15", "by": "independent-model" },
-        { "what": "checked again", "on": "2026-11-15", "by": "independent-model" }
+        {
+          "what": "written",
+          "on": "2026-11-15",
+          "by": "session"
+        },
+        {
+          "what": "checked",
+          "on": "2026-11-15",
+          "by": "independent-model"
+        },
+        {
+          "what": "checked again",
+          "on": "2026-11-15",
+          "by": "independent-model"
+        }
       ]
     },
     "note_fr": "Explications courtes des sigles et des termes techniques que la question ou les phrases de « Demander » emploient (D16.60, D16.62). Une IA les a écrites — la session —, à partir de connaissances générales, jamais du texte du livre ; un autre modèle, qui n'a lu que ce fichier, en a vérifié les faits le 15/11/2026 (257 entrées, 88 à reprendre), et la session a repris ce qu'il relevait : tout ce qu'il demandait de corriger avant de servir, et la plupart du reste. Deux entrées (« UE », « IA ») et les retouches faites après les relectures du 15/11 sont passées par une seconde vérification du même relecteur. Aucune personne ne les a relues une à une : la feuille le dit, « Explications écrites et vérifiées par une IA ». Aucune ne dit ce que le programme prévoit, aucune ne donne un avis, aucune ne porte un montant en euros ni une règle qui change d'une année à l'autre quand une formule durable suffit. Un sigle — un mot écrit avec une majuscule après sa première lettre, ou avec un chiffre — est reconnu tel quel, à la casse près ; « anyCase » l'admet aussi en minuscules, quand elles ne peuvent rien vouloir dire d'autre. Les autres termes sont reconnus sans tenir compte de la casse, des accents ni du pluriel."
@@ -191,7 +203,8 @@
     {
       "id": "semestre-europeen",
       "term": "semestre européen",
-      "plain": "Le semestre européen est le calendrier annuel où l'Union européenne examine les budgets et les réformes de ses États membres."
+      "plain": "Le semestre européen est le calendrier annuel où l'Union européenne examine les budgets et les réformes de ses États membres.",
+      "noExample": "E"
     },
     {
       "id": "travailleurs-detaches",
@@ -445,13 +458,14 @@
     {
       "id": "verrou-de-bercy",
       "term": "verrou de Bercy",
-      "plain": "Le verrou de Bercy désigne le pouvoir de l'administration fiscale de décider si une fraude est poursuivie en justice. Depuis 2018, les fraudes les plus graves sont transmises d'office au procureur."
+      "plain": "Le verrou de Bercy désigne le pouvoir de l'administration fiscale de décider si une fraude est poursuivie en justice. Depuis 2018, les fraudes les plus graves sont transmises d'office au procureur.",
+      "noExample": "E"
     },
     {
       "id": "convention-judiciaire-d-interet-public",
       "term": "convention judiciaire d'intérêt public",
-      "aliases": ["CJIP"],
-      "plain": "Avec une convention judiciaire d'intérêt public, une entreprise poursuivie pour corruption, fraude fiscale ou atteinte à l'environnement paie une amende, sans procès ni condamnation."
+      "plain": "Avec une convention judiciaire d'intérêt public, une entreprise poursuivie pour corruption, fraude fiscale ou atteinte à l'environnement paie une amende, sans procès ni condamnation.",
+      "noExample": "E"
     },
     {
       "id": "testing",
@@ -575,7 +589,8 @@
     {
       "id": "point-d-indice",
       "term": "point d'indice",
-      "plain": "Le point d'indice est la valeur qui sert à calculer le salaire des fonctionnaires."
+      "plain": "Le point d'indice est la valeur en euros qui sert à calculer le salaire des fonctionnaires : chacun a un nombre de points, multiplié par cette valeur.",
+      "example": "Un agent touche un traitement de base de 2 000 euros par mois. Si la valeur du point augmente de 3 %, ce traitement augmente de 60 euros."
     },
     {
       "id": "decote",
@@ -607,13 +622,17 @@
     {
       "id": "csg",
       "term": "CSG",
+      "aliases": ["contribution sociale généralisée"],
       "anyCase": true,
-      "plain": "La CSG, contribution sociale généralisée, est un prélèvement sur presque tous les revenus. Elle finance la protection sociale."
+      "plain": "La CSG, contribution sociale généralisée, est un prélèvement sur presque tous les revenus : salaires, pensions, revenus du capital. Elle finance la protection sociale.",
+      "noExample": "E"
     },
     {
       "id": "cades",
       "term": "Cades",
-      "plain": "La Cades est la caisse chargée de rembourser la dette de la Sécurité sociale."
+      "aliases": ["Caisse d'amortissement de la dette sociale"],
+      "plain": "La Cades, Caisse d'amortissement de la dette sociale, est l'organisme chargé de rembourser la dette de la Sécurité sociale.",
+      "noExample": "E"
     },
     {
       "id": "t2a",
@@ -895,107 +914,131 @@
       "term": "TVA",
       "aliases": ["taxe sur la valeur ajoutée"],
       "anyCase": true,
-      "plain": "La TVA, taxe sur la valeur ajoutée, est comprise dans le prix de presque tout ce qu'on achète."
+      "plain": "La TVA, taxe sur la valeur ajoutée, est un impôt compris dans le prix de presque tout ce qu'on achète. Le vendeur l'encaisse et la reverse à l'État.",
+      "example": "Un livre est vendu 10 euros, taxe comprise. Le libraire ne garde pas tout : il reverse la part de TVA à l'État."
     },
     {
       "id": "pib",
       "term": "PIB",
       "aliases": ["produit intérieur brut"],
       "anyCase": true,
-      "plain": "Le PIB, produit intérieur brut, est la richesse produite dans un pays en un an."
+      "plain": "Le PIB, produit intérieur brut, additionne les valeurs ajoutées de tous ceux qui produisent dans un pays en un an. C'est la richesse créée, sans compter deux fois ce qui sert à produire.",
+      "noExample": "E"
     },
     {
       "id": "isf",
       "term": "ISF",
       "anyCase": true,
-      "plain": "L'ISF, impôt de solidarité sur la fortune, taxait chaque année les plus gros patrimoines. En 2018, il a été remplacé par l'IFI, qui ne porte que sur l'immobilier."
+      "plain": "L'ISF, impôt de solidarité sur la fortune, taxait chaque année les plus gros patrimoines. En 2018, il a été remplacé par l'IFI, qui ne porte que sur l'immobilier.",
+      "noExample": "E"
     },
     {
       "id": "cvae",
       "term": "CVAE",
+      "aliases": ["cotisation sur la valeur ajoutée des entreprises"],
       "anyCase": true,
-      "plain": "La CVAE est un impôt des entreprises, calculé sur la richesse qu'elles produisent. Sa suppression par étapes a été décidée."
+      "plain": "La CVAE, cotisation sur la valeur ajoutée des entreprises, est un impôt local payé par les entreprises sur la richesse qu'elles produisent. Sa suppression, décidée en 2023, a été repoussée.",
+      "noExample": "E"
     },
     {
       "id": "taxe-zucman",
       "term": "taxe Zucman",
-      "plain": "La taxe Zucman est une proposition d'impôt minimum sur les très grandes fortunes. Elle porte le nom de l'économiste Gabriel Zucman."
+      "plain": "La taxe Zucman, du nom de l'économiste Gabriel Zucman, est un projet d'impôt minimum sur le patrimoine des très grandes fortunes. Si les impôts déjà payés sont plus bas, la différence est due.",
+      "example": "Le plancher calculé sur la fortune d'une personne est de 60 000 euros. Si elle a déjà payé 40 000 euros d'impôts, elle doit encore 20 000 euros."
     },
     {
       "id": "exit-tax",
       "term": "exit tax",
-      "plain": "L'exit tax est un impôt dû par un contribuable qui part vivre à l'étranger avec des actions qui ont pris de la valeur."
+      "plain": "L'exit tax est un impôt dû par un contribuable qui part vivre à l'étranger. Elle porte sur la hausse de valeur des actions qu'il détient, au-delà d'un seuil élevé.",
+      "example": "Une personne détient des actions achetées 1 million d'euros. Elles en valent 3 millions quand elle s'installe à l'étranger : l'impôt porte sur les 2 millions de hausse."
     },
     {
       "id": "flat-tax",
       "term": "flat tax",
-      "plain": "Une flat tax est un impôt à taux unique. En France, le mot désigne le prélèvement forfaitaire unique sur les revenus du capital, créé en 2018."
+      "plain": "Une flat tax est un impôt à taux unique. En France, le mot désigne le prélèvement forfaitaire unique sur les revenus du capital, créé en 2018 : le même taux, quels que soient les revenus.",
+      "example": "Deux personnes touchent chacune 1 000 euros de dividendes. Avec un taux unique, elles paient le même impôt dessus, quels que soient leurs autres revenus."
     },
     {
       "id": "quotient-conjugal",
       "term": "quotient conjugal",
-      "plain": "Avec le quotient conjugal, l'impôt d'un couple marié ou pacsé est calculé sur la moyenne de ses deux revenus."
+      "plain": "Avec le quotient conjugal, le revenu d'un couple marié ou pacsé est divisé en deux parts égales, et l'impôt est calculé sur chaque part. Il fait partie du quotient familial.",
+      "example": "Une personne gagne 4 000 euros par mois, son conjoint rien : l'impôt est calculé sur deux parts de 2 000 euros, ce qui le rend plus bas. Avec deux revenus égaux, il ne change rien."
     },
     {
       "id": "niches-fiscales",
       "term": "niches fiscales",
-      "aliases": ["niche fiscale"],
-      "plain": "Une niche fiscale est un avantage qui réduit l'impôt de certains contribuables."
+      "aliases": ["niche fiscale", "avantages fiscaux"],
+      "plain": "Une niche fiscale est une règle qui réduit l'impôt de certains contribuables, pour une dépense, un placement ou une activité donnés.",
+      "example": "Une famille qui emploie une aide à domicile paie moins d'impôt sur le revenu : une partie de cette dépense lui est rendue."
     },
     {
       "id": "evasion-fiscale",
       "term": "évasion fiscale",
-      "plain": "L'évasion fiscale consiste à échapper à l'impôt en plaçant son argent ou ses bénéfices à l'étranger."
+      "plain": "L'évasion fiscale consiste à échapper à l'impôt, souvent en plaçant de l'argent ou des bénéfices dans un autre pays. Le mot vaut pour des procédés légaux comme pour de la fraude.",
+      "noExample": "D"
     },
     {
       "id": "paradis-fiscaux",
       "term": "paradis fiscaux",
-      "plain": "Un paradis fiscal est un pays où l'impôt est très faible et les comptes peu transparents."
+      "aliases": ["paradis fiscal"],
+      "plain": "Un paradis fiscal est un pays ou un territoire où l'impôt est très faible, ou qui garde secrets les comptes qu'on y ouvre. La France et l'Union européenne en tiennent chacune une liste.",
+      "noExample": "E"
     },
     {
       "id": "taxe-fonciere",
       "term": "taxe foncière",
-      "plain": "La taxe foncière est un impôt local payé par les propriétaires."
+      "plain": "La taxe foncière est un impôt local payé chaque année par les propriétaires d'un logement, d'un terrain ou d'un local.",
+      "noExample": "E"
     },
     {
       "id": "taxe-d-habitation",
       "term": "taxe d'habitation",
-      "plain": "La taxe d'habitation est un impôt local sur le logement occupé. Depuis 2023, elle ne concerne plus les résidences principales ; elle reste due pour les résidences secondaires."
+      "plain": "La taxe d'habitation est un impôt local sur le logement occupé. Depuis 2023, elle ne concerne plus les résidences principales ; elle reste due pour les résidences secondaires.",
+      "noExample": "E"
     },
     {
       "id": "dividendes",
       "term": "dividendes",
-      "plain": "Les dividendes sont la part des bénéfices qu'une entreprise verse à ses actionnaires."
+      "plain": "Les dividendes sont la part des bénéfices qu'une entreprise verse à ses actionnaires.",
+      "example": "Une entreprise fait 1 million d'euros de bénéfice. Elle en verse 400 000 euros à ses actionnaires : ce sont les dividendes."
     },
     {
       "id": "stock-options",
       "term": "stock-options",
-      "plain": "Une stock-option donne à un dirigeant ou à un salarié le droit d'acheter plus tard des actions de son entreprise, à un prix fixé d'avance."
+      "plain": "Une stock-option donne à un dirigeant ou à un salarié le droit d'acheter plus tard des actions de son entreprise, à un prix fixé d'avance.",
+      "example": "Un salarié reçoit le droit d'acheter une action 50 euros dans trois ans. Si elle en vaut alors 80, il l'achète 50 euros et peut la revendre 80."
     },
     {
       "id": "lbo",
       "term": "LBO",
-      "plain": "Un LBO est le rachat d'une entreprise financé surtout par de la dette. Cette dette est ensuite remboursée avec les bénéfices de l'entreprise rachetée."
+      "plain": "Un LBO, de l'anglais leveraged buy-out, est le rachat d'une entreprise financé surtout par de l'emprunt. Cette dette est ensuite remboursée avec les bénéfices de l'entreprise rachetée.",
+      "example": "Un fonds d'investissement achète une entreprise 100 millions d'euros, dont 70 millions empruntés. L'entreprise rachetée rembourse ensuite cet emprunt sur ses bénéfices."
     },
     {
       "id": "oati",
       "term": "OATi",
-      "plain": "Les OATi sont des emprunts de l'État dont la valeur suit l'inflation."
+      "aliases": ["obligations assimilables du Trésor"],
+      "plain": "Les OATi, obligations assimilables du Trésor indexées sur l'inflation, sont des emprunts de l'État dont la valeur suit les prix. Le prêteur est protégé de leur hausse ; l'État rembourse d'autant plus.",
+      "example": "Un prêt de 5 000 euros à l'État est indexé sur les prix. Si les prix montent de 4 %, l'État doit 5 200 euros."
     },
     {
       "id": "circuit-du-tresor",
       "term": "circuit du Trésor",
-      "plain": "Le circuit du Trésor désigne le système d'après-guerre où l'État se finançait hors des marchés. Banques et organismes publics devaient lui confier une partie de leurs fonds."
+      "plain": "Le circuit du Trésor désigne le système d'après-guerre où l'État se finançait hors des marchés, grâce aux fonds que lui confiaient banques et organismes publics. Il a été défait dès les années 1960.",
+      "noExample": "E"
     },
     {
       "id": "caisse-de-defaisance",
       "term": "caisse de défaisance",
-      "plain": "Une caisse de défaisance reprend des dettes pour en soulager ceux qui les portaient."
+      "plain": "Une caisse de défaisance reprend des dettes ou des biens difficiles à vendre, pour en décharger ceux qui les portaient. Elle est souvent financée avec de l'argent public.",
+      "example": "Une banque détient des prêts qui risquent de ne pas être remboursés. Une structure à part les lui rachète : la banque peut de nouveau prêter."
     },
     {
       "id": "bpi",
       "term": "BPI",
-      "plain": "La BPI, ou Bpifrance, est une banque publique qui finance les entreprises."
+      "aliases": ["Bpifrance"],
+      "plain": "La BPI, ou Bpifrance, est une banque publique qui prête aux entreprises et investit dans leur capital.",
+      "noExample": "E"
     },
     {
       "id": "afd",
@@ -1451,6 +1494,310 @@
       "aliases": ["LGBT", "LGBTQ", "LGBTQI", "LGBTQIA"],
       "anyCase": true,
       "plain": "LGBTI désigne les personnes lesbiennes, gays, bisexuelles, trans et intersexes."
+    },
+    {
+      "id": "ifi",
+      "term": "IFI",
+      "plain": "L'IFI, impôt sur la fortune immobilière, est payé chaque année par les foyers dont les biens immobiliers dépassent un seuil élevé. Il a remplacé l'ISF en 2018.",
+      "noExample": "E"
+    },
+    {
+      "id": "fraude-fiscale",
+      "term": "fraude fiscale",
+      "plain": "La fraude fiscale consiste à ne pas payer l'impôt dû en enfreignant la loi : cacher des revenus, faire une fausse déclaration.",
+      "noExample": "S"
+    },
+    {
+      "id": "bercy",
+      "term": "Bercy",
+      "plain": "Bercy désigne le ministère de l'Économie et des Finances, du nom du quartier de Paris où il est installé.",
+      "noExample": "E"
+    },
+    {
+      "id": "impot-progressif",
+      "term": "impôt progressif",
+      "aliases": ["progressivité", "barème progressif"],
+      "plain": "Un impôt est progressif quand son taux augmente avec le revenu ou la fortune : plus on a, plus la part prélevée est grande.",
+      "example": "Une personne qui gagne peu paie 5 % de son revenu en impôt, une autre, qui gagne dix fois plus, en paie 30 %."
+    },
+    {
+      "id": "bareme",
+      "term": "barème",
+      "plain": "Un barème fixe le taux d'un impôt, ou le montant d'une aide, selon le revenu. Il se découpe souvent en tranches : chaque taux ne s'applique qu'à la part du revenu comprise dans sa tranche.",
+      "example": "Avec 15 % jusqu'à 2 000 euros et 30 % au-delà, un revenu de 3 000 euros paie 300 euros sur la première part. Il paie 300 euros sur le reste, soit 600 euros en tout."
+    },
+    {
+      "id": "impot-sur-le-revenu",
+      "term": "impôt sur le revenu",
+      "plain": "L'impôt sur le revenu est payé chaque année par chaque foyer fiscal sur la plupart de ses revenus. Son taux augmente avec le revenu ; certains revenus du capital sont taxés à part, à taux unique.",
+      "noExample": "E"
+    },
+    {
+      "id": "impot-sur-les-societes",
+      "term": "impôt sur les sociétés",
+      "plain": "L'impôt sur les sociétés est payé par les entreprises sur leurs bénéfices, c'est-à-dire ce qu'il leur reste une fois leurs dépenses payées.",
+      "noExample": "E"
+    },
+    {
+      "id": "droits-de-succession",
+      "term": "droits de succession",
+      "plain": "Les droits de succession sont l'impôt payé par ceux qui héritent. Leur montant dépend de ce qui est reçu et du lien de parenté avec la personne décédée.",
+      "example": "Deux enfants héritent d'une maison de 600 000 euros. Chacun en reçoit 300 000 et paie l'impôt sur la part qui dépasse ce que la loi laisse sans impôt."
+    },
+    {
+      "id": "credit-d-impot",
+      "term": "crédit d'impôt",
+      "plain": "Un crédit d'impôt diminue l'impôt à payer ; le plus souvent, s'il dépasse cet impôt, l'État verse la différence. Il bénéficie alors aussi à ceux qui ne paient pas d'impôt sur le revenu.",
+      "example": "Une famille a droit à 1 000 euros de crédit d'impôt et doit 300 euros d'impôt. Elle ne paie rien et reçoit 700 euros."
+    },
+    {
+      "id": "reduction-d-impot",
+      "term": "réduction d'impôt",
+      "plain": "Une réduction d'impôt diminue l'impôt à payer, sans jamais rien verser au-delà. Elle ne bénéficie qu'à ceux qui paient l'impôt sur le revenu.",
+      "example": "Une famille a droit à 1 000 euros de réduction d'impôt et doit 300 euros d'impôt. Elle ne paie rien et ne reçoit rien de plus."
+    },
+    {
+      "id": "foyer-fiscal",
+      "term": "foyer fiscal",
+      "plain": "Le foyer fiscal regroupe les personnes qui déclarent leurs revenus ensemble : une personne seule, ou un couple marié ou pacsé, avec les enfants à charge.",
+      "noExample": "E"
+    },
+    {
+      "id": "controle-fiscal",
+      "term": "contrôle fiscal",
+      "plain": "Un contrôle fiscal est la vérification, par l'administration des impôts, des déclarations d'une personne ou d'une entreprise.",
+      "noExample": "E"
+    },
+    {
+      "id": "revenus-du-capital",
+      "term": "revenus du capital",
+      "plain": "Les revenus du capital sont ce que rapporte ce qu'on possède : intérêts d'un placement, dividendes, loyers, gains à la revente d'un bien.",
+      "example": "Une personne touche un salaire pour son travail et 500 euros par an de loyers : ces loyers sont un revenu du capital."
+    },
+    {
+      "id": "patrimoine",
+      "term": "patrimoine",
+      "plain": "Le patrimoine est l'ensemble de ce qu'une personne, une entreprise ou un État possède, moins ses dettes.",
+      "example": "Une personne possède une maison de 400 000 euros et doit encore 100 000 euros à sa banque : son patrimoine est de 300 000 euros."
+    },
+    {
+      "id": "centimillionnaire",
+      "term": "centimillionaire",
+      "aliases": ["centimillionnaire"],
+      "plain": "Un centimillionaire, ou centimillionnaire, possède une fortune d'au moins cent millions, en euros ou en dollars.",
+      "noExample": "E"
+    },
+    {
+      "id": "superprofits",
+      "term": "superprofits",
+      "plain": "Le mot superprofits désigne des bénéfices exceptionnellement élevés, en général liés à une situation particulière, comme une hausse brutale des prix. Il n'a pas de définition légale.",
+      "noExample": "E"
+    },
+    {
+      "id": "impot-universel",
+      "term": "impôt universel",
+      "plain": "En droit fiscal, un impôt universel porte sur tous les revenus d'un résident, d'où qu'ils viennent. L'expression sert aussi pour un impôt dû en raison de la nationalité, comme aux États-Unis.",
+      "noExample": "D"
+    },
+    {
+      "id": "dette-publique",
+      "term": "dette publique",
+      "plain": "La dette publique est l'ensemble des emprunts de l'État, des collectivités locales et de la Sécurité sociale qui restent à rembourser.",
+      "example": "Un État dépense 110 et perçoit 100 : il emprunte 10. Année après année, ces emprunts s'ajoutent les uns aux autres : c'est sa dette."
+    },
+    {
+      "id": "deficit-public",
+      "term": "déficit public",
+      "plain": "Le déficit public est ce qui manque, sur une année, pour que les recettes publiques couvrent les dépenses publiques. Il est comblé par l'emprunt.",
+      "example": "Des recettes de 100 milliards pour 120 milliards de dépenses font un déficit de 20 milliards, comblé par l'emprunt."
+    },
+    {
+      "id": "deficit-agricole",
+      "term": "déficit agricole",
+      "plain": "Un pays est en déficit agricole quand il achète à l'étranger plus de produits agricoles qu'il n'en vend.",
+      "noExample": "E"
+    },
+    {
+      "id": "regles-budgetaires-europeennes",
+      "term": "règles budgétaires",
+      "plain": "Fixées par les traités, les règles budgétaires européennes demandent à chaque État de tenir son déficit sous 3 % de son PIB et sa dette sous 60 %. Depuis 2024, s'y ajoute une trajectoire de dépenses.",
+      "noExample": "E"
+    },
+    {
+      "id": "dette-souveraine",
+      "term": "dette souveraine",
+      "plain": "Une dette souveraine est la dette d'un État, souvent empruntée en vendant des titres sur les marchés financiers.",
+      "noExample": "E"
+    },
+    {
+      "id": "titre-de-dette",
+      "term": "titre de dette",
+      "plain": "Un titre de dette est le papier par lequel un État ou une entreprise emprunte : celui qui l'achète prête de l'argent, remboursé plus tard avec des intérêts.",
+      "example": "Un État vend un titre de 1 000 euros à 4 % sur dix ans : il verse 40 euros chaque année, puis rend les 1 000 euros."
+    },
+    {
+      "id": "taux-d-interet",
+      "term": "taux d'intérêt",
+      "plain": "Le taux d'intérêt est le prix d'un emprunt : la part de la somme prêtée que l'emprunteur paie chaque année en plus du remboursement.",
+      "example": "À 4 % par an, un emprunt de 20 000 euros remboursé en une fois au bout d'un an coûte 800 euros d'intérêts."
+    },
+    {
+      "id": "creancier",
+      "term": "créancier",
+      "plain": "Un créancier est celui à qui l'on doit de l'argent : une banque, un épargnant, une entreprise, un État.",
+      "noExample": "E"
+    },
+    {
+      "id": "comptes-publics",
+      "term": "comptes publics",
+      "plain": "Les comptes publics retracent les recettes, les dépenses, la dette et les biens de l'État, des collectivités locales et de la Sécurité sociale.",
+      "noExample": "E"
+    },
+    {
+      "id": "depense-publique",
+      "term": "dépense publique",
+      "plain": "La dépense publique regroupe tout ce que paient l'État, les collectivités locales et la Sécurité sociale : salaires des agents, pensions, aides, investissements.",
+      "noExample": "E"
+    },
+    {
+      "id": "consentement-a-l-impot",
+      "term": "consentement à l'impôt",
+      "plain": "Le consentement à l'impôt est l'acceptation de l'impôt par ceux qui le paient, à travers leurs représentants élus. La Déclaration des droits de l'homme de 1789 l'inscrit dans son article 14.",
+      "noExample": "E"
+    },
+    {
+      "id": "exoneration",
+      "term": "exonération",
+      "aliases": ["exonérer", "exonéré"],
+      "plain": "Une exonération dispense une personne ou une entreprise de payer un impôt ou une cotisation, en tout ou en partie.",
+      "noExample": "E"
+    },
+    {
+      "id": "transactions-financieres",
+      "term": "transactions financières",
+      "plain": "Une transaction financière est l'achat ou la vente d'actions, de titres de dette ou de monnaies étrangères. Une taxe sur les transactions en prélève une petite part, sur toutes ou sur certaines.",
+      "example": "Avec une taxe de 1 %, l'achat de 50 000 euros d'actions rapporte 500 euros à l'État."
+    },
+    {
+      "id": "rachat-d-actions",
+      "term": "rachat d'actions",
+      "plain": "Un rachat d'actions est l'achat par une entreprise de ses propres actions. C'est, à côté des dividendes, une autre façon de reverser de l'argent aux actionnaires.",
+      "noExample": "E"
+    },
+    {
+      "id": "arbitrage-de-dividendes",
+      "term": "arbitrage de dividendes",
+      "plain": "L'arbitrage de dividendes consiste à confier brièvement des actions, au moment où les dividendes sont versés, à quelqu'un qui paie moins d'impôt sur eux. La loi en sanctionne certains comme des abus.",
+      "example": "Un actionnaire étranger prête ses actions à une banque française juste avant le versement. La banque touche les dividendes, paie moins d'impôt, puis rend les actions."
+    },
+    {
+      "id": "criminalite-en-col-blanc",
+      "term": "criminels en col blanc",
+      "aliases": ["criminalité en col blanc"],
+      "plain": "La criminalité en col blanc désigne les délits commis dans le cadre d'un métier, souvent à un poste de responsabilité : fraude, corruption, détournement. L'expression vient de la criminologie.",
+      "noExample": "E"
+    },
+    {
+      "id": "perequation",
+      "term": "péréquation",
+      "plain": "La péréquation consiste à répartir des ressources pour réduire les écarts de richesse, par exemple entre collectivités locales riches et pauvres.",
+      "noExample": "E"
+    },
+    {
+      "id": "contribuable",
+      "term": "contribuable",
+      "plain": "Un contribuable est une personne ou une entreprise qui paie des impôts.",
+      "noExample": "E"
+    },
+    {
+      "id": "assurance-vie",
+      "term": "assurance-vie",
+      "plain": "L'assurance-vie est un placement : l'argent versé peut rapporter, ou perdre, selon le support choisi. Il peut être retiré, et se transmet aux proches avec moins d'impôts, dans certaines limites.",
+      "noExample": "E"
+    },
+    {
+      "id": "revenu-national-brut",
+      "term": "revenu national brut",
+      "plain": "Le revenu national brut additionne les revenus touchés en un an par les habitants et les entreprises d'un pays, y compris ceux qui viennent de l'étranger.",
+      "noExample": "E"
+    },
+    {
+      "id": "tresorerie",
+      "term": "trésorerie",
+      "plain": "La trésorerie est l'argent dont une entreprise dispose tout de suite pour payer ses dépenses.",
+      "example": "Une entreprise dont les clients paient à 90 jours peut faire des bénéfices et manquer de trésorerie pour verser les salaires du mois."
+    },
+    {
+      "id": "politique-budgetaire",
+      "term": "politique budgétaire",
+      "aliases": ["politiques budgétaires"],
+      "plain": "La politique budgétaire est l'usage que fait un État de ses dépenses et de ses impôts pour agir sur l'économie.",
+      "noExample": "E"
+    },
+    {
+      "id": "politique-monetaire",
+      "term": "politique monétaire",
+      "plain": "La politique monétaire est l'action d'une banque centrale sur la monnaie et le crédit, surtout en fixant ses taux d'intérêt.",
+      "noExample": "E"
+    },
+    {
+      "id": "rachat-de-dettes",
+      "term": "rachat de dettes souveraines",
+      "aliases": ["rachats de dettes publiques", "assouplissement quantitatif"],
+      "plain": "Quand une banque centrale rachète en masse des titres de dette, publique surtout, elle tend à faire baisser les taux auxquels les États empruntent. On parle d'assouplissement quantitatif.",
+      "noExample": "E"
+    },
+    {
+      "id": "dette-perpetuelle",
+      "term": "dette perpétuelle",
+      "plain": "Une dette perpétuelle n'est jamais remboursée : l'emprunteur paie seulement des intérêts, sans limite de temps.",
+      "noExample": "E"
+    },
+    {
+      "id": "pacse",
+      "term": "pacsé",
+      "aliases": ["pacte civil de solidarité"],
+      "plain": "Être pacsé, c'est avoir conclu un pacte civil de solidarité. Ce contrat organise la vie commune de deux personnes ; il est plus simple à conclure et à rompre que le mariage.",
+      "noExample": "E"
+    },
+    {
+      "id": "indexer",
+      "term": "indexer",
+      "aliases": ["indexé", "indexée", "indexation"],
+      "plain": "Indexer une somme, c'est la faire suivre automatiquement un indice, le plus souvent les prix : quand ils montent, elle monte d'autant.",
+      "noExample": "E"
+    },
+    {
+      "id": "inflation",
+      "term": "inflation",
+      "plain": "L'inflation est la hausse générale des prix : avec la même somme, on achète moins qu'avant.",
+      "example": "Avec une inflation de 4 % sur un an, un panier de courses de 50 euros en coûte 52."
+    },
+    {
+      "id": "valeur-ajoutee",
+      "term": "valeur ajoutée",
+      "plain": "La valeur ajoutée est la différence entre le prix de ce qu'une entreprise vend et celui de ce qu'elle a acheté pour le produire. Leur somme, dans un pays, fait l'essentiel du PIB.",
+      "example": "Une boulangerie achète 30 euros de farine et vend 100 euros de pain : sa valeur ajoutée est de 70 euros."
+    },
+    {
+      "id": "collectivites-locales",
+      "term": "collectivités locales",
+      "aliases": ["collectivités territoriales"],
+      "plain": "Les collectivités locales sont les communes, les départements et les régions, ainsi que quelques collectivités à statut particulier. Elles sont gérées par des élus et ont leur propre budget.",
+      "noExample": "E"
+    },
+    {
+      "id": "administrations-publiques",
+      "term": "administrations publiques",
+      "plain": "Les administrations publiques regroupent l'État, les collectivités locales, la Sécurité sociale et les organismes publics qui en dépendent.",
+      "noExample": "E"
+    },
+    {
+      "id": "fonds-d-investissement",
+      "term": "fonds d'investissement",
+      "aliases": ["fonds financiers", "fonds de capital-investissement", "fonds prédateurs"],
+      "plain": "Un fonds d'investissement réunit l'argent d'épargnants ou d'institutions pour le placer, souvent en achetant des parts d'entreprises, afin qu'il rapporte.",
+      "noExample": "E"
     }
   ]
 }

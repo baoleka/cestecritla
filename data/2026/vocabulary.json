@@ -37,6 +37,7 @@
   "acce",
   "acceder",
   "accelerer",
+  "acceptation",
   "accepter",
   "accessibilite",
   "accessible",
@@ -58,6 +59,7 @@
   "accuse",
   "achat",
   "achet",
+  "achetant",
   "achete",
   "acheter",
   "acheteur",
@@ -77,6 +79,7 @@
   "adapter",
   "addiction",
   "additif",
+  "additionne",
   "adequat",
   "adjoint",
   "administrant",
@@ -132,6 +135,7 @@
   "ainsi",
   "air",
   "aire",
+  "ajout",
   "ajoutant",
   "ajouter",
   "alerte",
@@ -150,6 +154,7 @@
   "alliance",
   "allocation",
   "allonger",
+  "alor",
   "alphabetisation",
   "altern",
   "alternative",
@@ -174,6 +179,7 @@
   "analyser",
   "ancien",
   "anciennete",
+  "anglai",
   "animal",
   "animale",
   "animation",
@@ -285,6 +291,7 @@
   "australe",
   "autant",
   "auteur",
+  "automatiqu",
   "automatique",
   "automatisation",
   "automatiser",
@@ -339,6 +346,7 @@
   "benefici",
   "beneficiaire",
   "beneficiant",
+  "beneficie",
   "beneficier",
   "benevolat",
   "besoin",
@@ -369,18 +377,23 @@
   "bon",
   "bonne",
   "bord",
+  "boulangerie",
   "boulevers",
+  "bout",
   "bouteille",
   "boutique",
   "box",
   "braille",
   "brasseur",
+  "briev",
   "brigade",
+  "brutale",
   "budget",
   "budgetaire",
   "bureau",
   "burn",
   "but",
+  "buy",
   "cacher",
   "cadeau",
   "cadrage",
@@ -419,6 +432,7 @@
   "cause",
   "causer",
   "cellule",
+  "cent",
   "central",
   "centre",
   "ceremonie",
@@ -429,6 +443,7 @@
   "cesser",
   "cessez",
   "chacun",
+  "chacune",
   "chaine",
   "chaleur",
   "champ",
@@ -506,6 +521,7 @@
   "colonne",
   "combattre",
   "combinant",
+  "comble",
   "comite",
   "command",
   "commemoration",
@@ -564,6 +580,7 @@
   "concevoir",
   "concilier",
   "conclu",
+  "conclure",
   "conclut",
   "concour",
   "concret",
@@ -579,6 +596,7 @@
   "conduite",
   "conference",
   "conferencier",
+  "confiai",
   "confiance",
   "confiant",
   "confier",
@@ -589,6 +607,7 @@
   "confortant",
   "confrere",
   "conge",
+  "conjoint",
   "conjugal",
   "conjugale",
   "connaissance",
@@ -679,6 +698,7 @@
   "cout",
   "coute",
   "couteux",
+  "couvr",
   "couvrant",
   "couvre",
   "covid",
@@ -699,6 +719,7 @@
   "criminalite",
   "criminel",
   "criminelle",
+  "criminologie",
   "crise",
   "critere",
   "critique",
@@ -728,14 +749,17 @@
   "debattue",
   "decale",
   "dece",
+  "decede",
   "decembre",
   "decennie",
   "decent",
   "decente",
+  "decharger",
   "dechet",
   "decide",
   "decider",
   "decision",
+  "declar",
   "declench",
   "declencher",
   "decline",
@@ -744,6 +768,7 @@
   "decoloniser",
   "decompte",
   "deconnexion",
+  "decoupe",
   "decouverte",
   "decrete",
   "decreter",
@@ -752,6 +777,7 @@
   "deduit",
   "defaillant",
   "defaille",
+  "defait",
   "defaut",
   "defavorise",
   "defendre",
@@ -791,6 +817,7 @@
   "dentaire",
   "depart",
   "departementale",
+  "depasse",
   "depend",
   "dependante",
   "depense",
@@ -840,13 +867,13 @@
   "determine",
   "determiner",
   "detient",
+  "detourn",
   "detresse",
   "detruire",
   "detruis",
   "dette",
   "deux",
   "deuxieme",
-  "devai",
   "devant",
   "developp",
   "developpant",
@@ -860,6 +887,7 @@
   "dialogue",
   "dictature",
   "differ",
+  "difference",
   "differente",
   "difficile",
   "difficulte",
@@ -874,6 +902,7 @@
   "digue",
   "dimanche",
   "dimension",
+  "diminue",
   "diminuer",
   "diplomatie",
   "diplomatique",
@@ -895,8 +924,10 @@
   "discussion",
   "disparition",
   "disparu",
+  "dispense",
   "disponible",
   "disposant",
+  "dispose",
   "disposer",
   "dispositif",
   "disposition",
@@ -913,6 +944,7 @@
   "diversifie",
   "diversifier",
   "diversite",
+  "divise",
   "divorce",
   "dix",
   "dizaine",
@@ -994,6 +1026,7 @@
   "efficacite",
   "effort",
   "egal",
+  "egale",
   "egalitaire",
   "egalite",
   "egard",
@@ -1035,11 +1068,15 @@
   "empecher",
   "empire",
   "emploi",
+  "emploie",
   "employeur",
   "emprunt",
+  "emprunte",
+  "emprunteur",
   "encadrant",
   "encadre",
   "encadrer",
+  "encaisse",
   "enceinte",
   "encercl",
   "encontre",
@@ -1052,6 +1089,7 @@
   "enfance",
   "enfant",
   "enferm",
+  "enfreignant",
   "engag",
   "engageant",
   "engager",
@@ -1090,6 +1128,7 @@
   "envoie",
   "envoye",
   "eolien",
+  "epargnant",
   "epargne",
   "eparpille",
   "epidemie",
@@ -1152,6 +1191,7 @@
   "examen",
   "examine",
   "exception",
+  "exceptionnell",
   "excessif",
   "exclusif",
   "exclusiv",
@@ -1213,6 +1253,8 @@
   "familial",
   "familiale",
   "famille",
+  "farine",
+  "fausse",
   "fautif",
   "faux",
   "favorable",
@@ -1318,6 +1360,8 @@
   "fusionnant",
   "fusionne",
   "futur",
+  "gagne",
+  "gain",
   "garage",
   "garant",
   "garanti",
@@ -1398,6 +1442,7 @@
   "heberge",
   "hemorragie",
   "herbicide",
+  "herit",
   "heritage",
   "heure",
   "hier",
@@ -1594,6 +1639,7 @@
   "investigation",
   "investir",
   "investiss",
+  "investit",
   "inviter",
   "irriguer",
   "isolation",
@@ -1628,6 +1674,7 @@
   "label",
   "laboratoire",
   "laique",
+  "laisse",
   "laisser",
   "laitier",
   "lance",
@@ -1648,6 +1695,7 @@
   "lesbienne",
   "lettre",
   "lever",
+  "leveraged",
   "liaison",
   "libere",
   "liberer",
@@ -1726,11 +1774,13 @@
   "manipulation",
   "manqu",
   "manque",
+  "manquer",
   "manuel",
   "marchand",
   "marchande",
   "marchandise",
   "mare",
+  "mariage",
   "marie",
   "marin",
   "marine",
@@ -1830,6 +1880,7 @@
   "moduler",
   "moi",
   "moindre",
+  "moment",
   "monarchie",
   "monde",
   "mondial",
@@ -1840,6 +1891,7 @@
   "montagneux",
   "montant",
   "monte",
+  "montent",
   "montrer",
   "mort",
   "morte",
@@ -1856,6 +1908,7 @@
   "moyenne",
   "multinationale",
   "multiplication",
+  "multiplie",
   "multiplier",
   "municipal",
   "municipale",
@@ -1985,12 +2038,14 @@
   "paiera",
   "paieront",
   "paille",
+  "pain",
   "paix",
   "palace",
   "palestinien",
   "palestinienne",
   "pan",
   "pandemie",
+  "panier",
   "panneau",
   "papier",
   "parce",
@@ -1998,6 +2053,7 @@
   "parcour",
   "parent",
   "parental",
+  "parente",
   "parfoi",
   "pari",
   "parking",
@@ -2021,6 +2077,7 @@
   "participera",
   "particularite",
   "particulier",
+  "particuliere",
   "partie",
   "partiel",
   "partir",
@@ -2056,7 +2113,9 @@
   "penible",
   "pension",
   "penurie",
+  "percoit",
   "percue",
+  "perdre",
   "periode",
   "periodique",
   "perman",
@@ -2196,9 +2255,11 @@
   "presque",
   "presse",
   "presume",
+  "pret",
   "prete",
   "pretendue",
   "preter",
+  "preteur",
   "pretexte",
   "preuve",
   "prevenir",
@@ -2207,7 +2268,6 @@
   "prevision",
   "prevoyant",
   "prevue",
-  "pri",
   "principal",
   "principale",
   "principe",
@@ -2226,6 +2286,7 @@
   "problematique",
   "probleme",
   "proce",
+  "procede",
   "proceder",
   "procedure",
   "processu",
@@ -2238,7 +2299,6 @@
   "produire",
   "produis",
   "produit",
-  "produite",
   "professeur",
   "profession",
   "professionnaliser",
@@ -2310,6 +2370,7 @@
   "quartier",
   "quasim",
   "quatre",
+  "quelqu",
   "quelque",
   "question",
   "queue",
@@ -2333,6 +2394,8 @@
   "ranger",
   "rapide",
   "rapport",
+  "rapporte",
+  "rapporter",
   "rapprocher",
   "rare",
   "rassembl",
@@ -2480,6 +2543,7 @@
   "rendez",
   "rendre",
   "rendu",
+  "rendue",
   "renegocier",
   "renforc",
   "renforcant",
@@ -2510,6 +2574,7 @@
   "repond",
   "reponse",
   "reposant",
+  "repousse",
   "reprend",
   "reprendre",
   "representant",
@@ -2564,8 +2629,10 @@
   "retenu",
   "retienn",
   "retient",
+  "retire",
   "retirer",
   "retour",
+  "retrac",
   "retrait",
   "retraite",
   "retransmission",
@@ -2577,9 +2644,11 @@
   "revenant",
   "revendre",
   "revenir",
+  "revente",
   "revenu",
   "revenue",
   "reverse",
+  "reverser",
   "revient",
   "revisant",
   "reviser",
@@ -2615,6 +2684,7 @@
   "salarie",
   "salle",
   "sanction",
+  "sanctionne",
   "sanctionner",
   "sanctuaire",
   "sanitaire",
@@ -2745,7 +2815,6 @@
   "souhaitant",
   "souhaite",
   "soulage",
-  "soulager",
   "soumettre",
   "soumi",
   "soumise",
@@ -2801,6 +2870,7 @@
   "suffisante",
   "suisse",
   "suit",
+  "suite",
   "suivi",
   "suivre",
   "superieur",
@@ -2862,6 +2932,7 @@
   "tempete",
   "temporaire",
   "tenant",
+  "tend",
   "tendre",
   "tenir",
   "tension",
@@ -2883,6 +2954,7 @@
   "therapeutique",
   "therapie",
   "thermique",
+  "tienn",
   "tire",
   "tirer",
   "tissu",
@@ -2891,6 +2963,7 @@
   "tort",
   "total",
   "totale",
+  "touch",
   "touche",
   "touristique",
   "tourne",
@@ -2911,11 +2984,11 @@
   "transformer",
   "transit",
   "transition",
+  "transmet",
   "transmettre",
   "transmise",
   "transmissible",
   "transmission",
-  "transpar",
   "transparence",
   "transparente",
   "transport",
@@ -2959,6 +3032,7 @@
   "universelle",
   "universitaire",
   "universite",
+  "uns",
   "ups",
   "urbain",
   "urbaine",
@@ -2977,11 +3051,13 @@
   "vacance",
   "vacant",
   "vaccin",
+  "valent",
   "validation",
   "valide",
   "valider",
   "valorisant",
   "varie",
+  "vaut",
   "vecu",
   "vegetale",
   "vegetalisation",
@@ -2993,10 +3069,14 @@
   "veiller",
   "velo",
   "vend",
+  "vendant",
+  "vendeur",
   "vendre",
+  "vendu",
   "venir",
   "vent",
   "vente",
+  "verification",
   "verifie",
   "veritabl",
   "veritable",
@@ -3005,6 +3085,7 @@
   "vers",
   "verse",
   "versent",
+  "verser",
   "version",
   "vetement",
   "via",
@@ -3018,6 +3099,7 @@
   "vieillesse",
   "vieillir",
   "vienn",
+  "vient",
   "vif",
   "vigilance",
   "village",
@@ -3132,7 +3214,9 @@
   "amnistie": [
    "amnistie"
   ],
-  "amortiss": [],
+  "amortiss": [
+   "cades"
+  ],
   "amp": [
    "aires-marines-protegees"
   ],
@@ -3199,6 +3283,9 @@
    "ass"
   ],
   "assainiss": [],
+  "assoupliss": [
+   "rachat-de-dettes"
+  ],
   "atho": [
    "athos"
   ],
@@ -3215,7 +3302,10 @@
   "bachelor": [],
   "bailleur": [],
   "baillon": [],
-  "bareme": [],
+  "bareme": [
+   "bareme",
+   "impot-progressif"
+  ],
   "bassine": [
    "mega-bassines"
   ],
@@ -3227,6 +3317,7 @@
   "belliciste": [],
   "belligerant": [],
   "bercy": [
+   "bercy",
    "verrou-de-bercy"
   ],
   "big": [],
@@ -3244,7 +3335,9 @@
   "bpi": [
    "bpi"
   ],
-  "bpifrance": [],
+  "bpifrance": [
+   "bpi"
+  ],
   "brav": [
    "brav-m"
   ],
@@ -3292,7 +3385,12 @@
   "center": [
    "centres-de-donnees"
   ],
-  "centimillionaire": [],
+  "centimillionaire": [
+   "centimillionnaire"
+  ],
+  "centimillionnaire": [
+   "centimillionnaire"
+  ],
   "cephalopode": [],
   "cerema": [],
   "cession": [],
@@ -3343,7 +3441,9 @@
   "codevelopp": [],
   "collectiviser": [],
   "collectivisme": [],
-  "collectivite": [],
+  "collectivite": [
+   "collectivites-locales"
+  ],
   "commissariat": [],
   "communautarisme": [],
   "concentration": [],
@@ -3371,7 +3471,9 @@
   "contrevenant": [],
   "contrevi": [],
   "contrevienn": [],
-  "contribuable": [],
+  "contribuable": [
+   "contribuable"
+  ],
   "conventionn": [],
   "conventionne": [],
   "cooperative": [],
@@ -3383,7 +3485,9 @@
   "correctionnel": [],
   "cotation": [],
   "cotisant": [],
-  "cotisation": [],
+  "cotisation": [
+   "cvae"
+  ],
   "cotise": [],
   "courre": [],
   "cpi": [
@@ -3392,7 +3496,9 @@
   "cra": [
    "cra"
   ],
-  "creancier": [],
+  "creancier": [
+   "creancier"
+  ],
   "creolisation": [
    "creolisation"
   ],
@@ -3475,6 +3581,7 @@
   "dirigeable": [],
   "discretionnaire": [],
   "dividende": [
+   "arbitrage-de-dividendes",
    "dividendes"
   ],
   "dotation": [
@@ -3543,9 +3650,15 @@
   "exit": [
    "exit-tax"
   ],
-  "exoneration": [],
-  "exonere": [],
-  "exonerer": [],
+  "exoneration": [
+   "exoneration"
+  ],
+  "exonere": [
+   "exoneration"
+  ],
+  "exonerer": [
+   "exoneration"
+  ],
   "extraterritorial": [],
   "facie": [],
   "fao": [
@@ -3642,7 +3755,9 @@
   "icpe": [
    "icpe"
   ],
-  "ifi": [],
+  "ifi": [
+   "ifi"
+  ],
   "iggn": [
    "iggn"
   ],
@@ -3660,13 +3775,19 @@
    "inao"
   ],
   "inconditionnel": [],
-  "indexe": [],
-  "indexer": [],
+  "indexe": [
+   "indexer"
+  ],
+  "indexer": [
+   "indexer"
+  ],
   "individualisation": [],
   "ineligible": [
    "ineligible"
   ],
-  "inflation": [],
+  "inflation": [
+   "inflation"
+  ],
   "informationnel": [],
   "ingerence": [],
   "inrae": [
@@ -3796,7 +3917,9 @@
    "miviludes"
   ],
   "modal": [],
-  "monetaire": [],
+  "monetaire": [
+   "politique-monetaire"
+  ],
   "monopole": [],
   "moratoire": [
    "moratoire"
@@ -3895,7 +4018,9 @@
   "pac": [
    "pac"
   ],
-  "pacse": [],
+  "pacse": [
+   "pacse"
+  ],
   "palestine": [],
   "palliatif": [],
   "pallier": [],
@@ -3926,7 +4051,9 @@
   "penibilite": [],
   "perenne": [],
   "perenniser": [],
-  "perequation": [],
+  "perequation": [
+   "perequation"
+  ],
   "perinatalite": [],
   "periscolaire": [],
   "permeabilite": [],
@@ -4000,7 +4127,9 @@
    "pma"
   ],
   "procureur": [],
-  "progressivite": [],
+  "progressivite": [
+   "impot-progressif"
+  ],
   "prohiber": [],
   "proliferation": [],
   "proportionnel": [
@@ -4015,6 +4144,9 @@
   "psychosocial": [],
   "quantique": [
    "cryptographie-post-quantique"
+  ],
+  "quantitatif": [
+   "rachat-de-dettes"
   ],
   "quinquennat": [],
   "quota": [],
@@ -4157,7 +4289,9 @@
   "stupefiant": [],
   "subsistance": [],
   "subvention": [],
-  "superprofit": [],
+  "superprofit": [
+   "superprofits"
+  ],
   "surendette": [],
   "surfacturation": [],
   "suspensif": [],
@@ -4206,10 +4340,9 @@
   "tram": [],
   "transfrontaliere": [],
   "transnational": [],
-  "tresor": [
-   "circuit-du-tresor"
+  "tresorerie": [
+   "tresorerie"
   ],
-  "tresorerie": [],
   "tribut": [],
   "triptyque": [],
   "tromelin": [],
@@ -4258,20 +4391,26 @@
  "watch": {
   "acide": [],
   "actif": [],
-  "action": [],
+  "action": [
+   "rachat-d-actions"
+  ],
   "affecter": [],
   "affection": [],
   "agrement": [],
   "aidant": [],
   "aidante": [],
   "ajoute": [
-   "tva"
+   "cvae",
+   "tva",
+   "valeur-ajoutee"
   ],
   "align": [],
   "annexion": [],
   "appellation": [],
   "apprentissage": [],
-  "arbitrage": [],
+  "arbitrage": [
+   "arbitrage-de-dividendes"
+  ],
   "arret": [],
   "assemble": [
    "constituante"
@@ -4285,17 +4424,22 @@
   "brevet": [],
   "brune": [],
   "brut": [
-   "pib"
+   "pib",
+   "revenu-national-brut"
   ],
   "cabinet": [],
   "cadre": [],
   "caisse": [
+   "cades",
    "caisse-de-defaisance"
   ],
   "cap": [
    "cap"
   ],
-  "capital": [],
+  "capital": [
+   "fonds-d-investissement",
+   "revenus-du-capital"
+  ],
   "carbone": [],
   "carence": [
    "jours-de-carence"
@@ -4326,7 +4470,9 @@
   "concurrence": [],
   "consigne": [],
   "consolidation": [],
-  "contribution": [],
+  "contribution": [
+   "csg"
+  ],
   "convention": [
    "convention-judiciaire-d-interet-public"
   ],
@@ -4341,7 +4487,9 @@
    "cpi"
   ],
   "couverture": [],
-  "credit": [],
+  "credit": [
+   "credit-d-impot"
+  ],
   "decouvert": [],
   "degel": [],
   "deloyale": [],
@@ -4381,9 +4529,13 @@
   "filiere": [],
   "flottant": [],
   "fonction": [],
-  "fond": [],
+  "fond": [
+   "fonds-d-investissement"
+  ],
   "fortune": [],
-  "foyer": [],
+  "foyer": [
+   "foyer-fiscal"
+  ],
   "franc": [],
   "franchise": [
    "franchises-medicales"
@@ -4409,7 +4561,8 @@
   ],
   "interet": [
    "conflit-d-interets",
-   "convention-judiciaire-d-interet-public"
+   "convention-judiciaire-d-interet-public",
+   "taux-d-interet"
   ],
   "interruption": [
    "ivg"
@@ -4452,7 +4605,9 @@
   "notation": [],
   "nuisible": [],
   "objection": [],
-  "obligation": [],
+  "obligation": [
+   "oati"
+  ],
   "office": [
    "licence-d-office"
   ],
@@ -4462,7 +4617,9 @@
   "ordonnance": [],
   "ouverture": [],
   "ouvrage": [],
-  "pacte": [],
+  "pacte": [
+   "pacse"
+  ],
   "pair": [],
   "parachute": [],
   "paradi": [
@@ -4473,11 +4630,15 @@
   "participation": [],
   "participative": [],
   "pass": [],
-  "patrimoine": [],
+  "patrimoine": [
+   "patrimoine"
+  ],
   "pavillon": [
    "pavillon"
   ],
-  "perpetuelle": [],
+  "perpetuelle": [
+   "dette-perpetuelle"
+  ],
   "physique": [],
   "pilier": [],
   "plac": [],
@@ -4499,7 +4660,9 @@
   "primaire": [],
   "prime": [],
   "programmation": [],
-  "progressif": [],
+  "progressif": [
+   "impot-progressif"
+  ],
   "puit": [],
   "radiation": [],
   "raisonne": [],
@@ -4545,14 +4708,19 @@
   "siphonne": [],
   "socle": [],
   "statut": [],
-  "succession": [],
+  "succession": [
+   "droits-de-succession"
+  ],
   "surchauffe": [],
   "surete": [],
   "tampon": [],
-  "taux": [],
+  "taux": [
+   "taux-d-interet"
+  ],
   "tendu": [],
   "tier": [],
   "titre": [
+   "titre-de-dette",
    "titre-de-sejour"
   ],
   "trait": [],
@@ -4563,11 +4731,17 @@
   "trame": [],
   "tranche": [],
   "transposer": [],
+  "tresor": [
+   "circuit-du-tresor",
+   "oati"
+  ],
   "trimestre": [],
   "tutelle": [],
   "union": [],
   "valeur": [
-   "tva"
+   "cvae",
+   "tva",
+   "valeur-ajoutee"
   ],
   "valoriser": [],
   "vautour": [],
