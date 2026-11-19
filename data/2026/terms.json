@@ -242,91 +242,107 @@
       "term": "RIC",
       "aliases": ["référendum d'initiative citoyenne"],
       "anyCase": true,
-      "plain": "Le RIC, référendum d'initiative citoyenne, est un référendum que des citoyens peuvent déclencher en réunissant assez de signatures. La France n'en a pas ; la Suisse a un système proche."
+      "plain": "Le RIC, référendum d'initiative citoyenne, est un référendum que des citoyens peuvent déclencher en réunissant assez de signatures. La France n'en a pas ; la Suisse a un système proche.",
+      "noExample": "E"
     },
     {
       "id": "referendum",
       "term": "référendum",
-      "plain": "Un référendum est un vote où les citoyens répondent directement, par oui ou par non, à une question."
+      "plain": "Un référendum est un vote où les citoyens répondent directement, par oui ou par non, à une question.",
+      "noExample": "E"
     },
     {
       "id": "article-49-3",
       "term": "49.3",
       "aliases": ["49-3", "49 alinéa 3"],
-      "plain": "L'article 49.3 de la Constitution permet au gouvernement de faire adopter un texte sans vote des députés, sauf si une motion de censure est votée."
+      "plain": "L'article 49.3 de la Constitution permet au gouvernement de faire adopter un texte sans vote des députés, sauf si une motion de censure est votée.",
+      "noExample": "E"
     },
     {
       "id": "constituante",
       "term": "Constituante",
-      "aliases": ["Assemblée constituante"],
-      "plain": "Une Assemblée constituante est une assemblée chargée d'écrire une nouvelle Constitution."
+      "aliases": ["Assemblée constituante", "processus constituant"],
+      "plain": "Une Assemblée constituante est élue pour écrire une nouvelle Constitution ; le processus constituant est la démarche qui y mène.",
+      "noExample": "E"
     },
     {
       "id": "scrutin-proportionnel",
       "term": "scrutin proportionnel",
       "aliases": ["la proportionnelle", "représentation proportionnelle"],
-      "plain": "Au scrutin proportionnel, chaque liste reçoit des sièges selon sa part des voix."
+      "plain": "Au scrutin proportionnel, chaque liste reçoit des sièges selon sa part des voix.",
+      "example": "Une liste obtient 20 % des voix. Elle reçoit environ 20 sièges sur 100."
     },
     {
       "id": "abroger",
       "term": "abroger",
-      "aliases": ["abrogation", "abrogé", "abrogée", "abrogés", "abrogées"],
-      "plain": "Abroger une loi, c'est la supprimer pour l'avenir."
+      "aliases": ["abrogation", "abrogé", "abrogée", "abrogés", "abrogées", "abrogeant"],
+      "plain": "Abroger une loi, c'est la supprimer pour l'avenir.",
+      "noExample": "E"
     },
     {
       "id": "moratoire",
       "term": "moratoire",
-      "plain": "Un moratoire suspend une activité ou une décision pendant un temps donné."
+      "plain": "Un moratoire suspend une activité ou une décision pendant un temps donné.",
+      "noExample": "E"
     },
     {
       "id": "amnistie",
       "term": "amnistie",
-      "plain": "Une amnistie est une loi qui efface certaines infractions : on ne peut plus les poursuivre, et les condamnations déjà prononcées sont effacées."
+      "plain": "Une amnistie est une loi qui efface certaines infractions : on ne peut plus les poursuivre, et les condamnations déjà prononcées sont effacées.",
+      "noExample": "E"
     },
     {
       "id": "laicite",
       "term": "laïcité",
-      "plain": "La laïcité sépare les religions et l'État. L'État n'en favorise aucune, et chacun est libre de croire ou de ne pas croire."
+      "plain": "La laïcité sépare les religions et l'État. L'État n'en favorise aucune, et chacun est libre de croire ou de ne pas croire.",
+      "noExample": "E"
     },
     {
       "id": "concordat",
       "term": "concordat",
-      "plain": "Un concordat est un accord entre un État et l'Église catholique. En Alsace-Moselle, le régime né du concordat de 1801 reconnaît quatre cultes, dont l'État paie les ministres."
+      "plain": "Un concordat est un accord entre un État et l'Église catholique. En Alsace-Moselle, le régime né du concordat de 1801 reconnaît quatre cultes, dont l'État paie les ministres.",
+      "noExample": "E"
     },
     {
       "id": "pantouflage",
       "term": "pantouflage",
-      "plain": "Le pantouflage, c'est quand un haut fonctionnaire quitte l'État pour travailler dans une entreprise privée."
+      "plain": "Le pantouflage, c'est quand un haut fonctionnaire quitte l'État pour travailler dans une entreprise privée.",
+      "noExample": "E"
     },
     {
       "id": "conflit-d-interets",
       "term": "conflits d'intérêts",
       "aliases": ["conflit d'intérêts"],
-      "plain": "Il y a conflit d'intérêts quand un intérêt personnel peut influencer une décision prise au nom de tous."
+      "plain": "Il y a conflit d'intérêts quand un intérêt personnel peut influencer une décision prise au nom de tous.",
+      "noExample": "E"
     },
     {
       "id": "lobbys",
       "term": "lobbys",
       "aliases": ["lobbies", "lobbyistes", "lobbying"],
-      "plain": "Un lobby est un groupe qui cherche à influencer les décisions publiques au profit de ses intérêts."
+      "plain": "Un lobby est un groupe qui cherche à influencer les décisions publiques au profit de ses intérêts.",
+      "noExample": "E"
     },
     {
       "id": "ineligible",
       "term": "inéligible",
       "aliases": ["inéligibles"],
-      "plain": "Une personne inéligible n'a pas le droit de se présenter à une élection."
+      "plain": "Une personne inéligible n'a pas le droit de se présenter à une élection.",
+      "noExample": "E"
     },
     {
       "id": "intercommunalites",
       "term": "intercommunalités",
       "aliases": ["intercommunalité"],
-      "plain": "Une intercommunalité est un groupement de communes qui gèrent ensemble certains services."
+      "plain": "Une intercommunalité est un groupement de communes qui gèrent ensemble certains services.",
+      "noExample": "E"
     },
     {
       "id": "dotation-globale-de-fonctionnement",
       "term": "dotation globale de fonctionnement",
       "aliases": ["DGF"],
-      "plain": "La dotation globale de fonctionnement est la principale somme que l'État verse chaque année aux collectivités."
+      "plain": "La dotation globale de fonctionnement est la principale somme que l'État verse chaque année aux collectivités.",
+      "noExample": "E"
     },
     {
       "id": "droit-de-preemption",
@@ -338,7 +354,14 @@
     {
       "id": "requisition",
       "term": "réquisition",
-      "aliases": ["réquisitionner"],
+      "aliases": [
+        "réquisitionner",
+        "réquisitionne",
+        "réquisitionné",
+        "réquisitionnés",
+        "réquisitionnée",
+        "réquisitionnées"
+      ],
       "plain": "Par une réquisition, l'autorité publique oblige une personne à lui laisser l'usage d'un bien ou à fournir un service, contre indemnité.",
       "noExample": "E"
     },
@@ -372,23 +395,29 @@
     {
       "id": "arcom",
       "term": "Arcom",
-      "plain": "L'Arcom est l'autorité qui régule la télévision, la radio et les plateformes en ligne."
+      "aliases": ["Autorité de régulation de la communication audiovisuelle"],
+      "plain": "L'Arcom est l'autorité qui régule la télévision, la radio et les plateformes en ligne.",
+      "noExample": "E"
     },
     {
       "id": "cnil",
       "term": "CNIL",
       "anyCase": true,
-      "plain": "La CNIL est l'autorité qui veille à la protection des données personnelles en France."
+      "plain": "La CNIL est l'autorité qui veille à la protection des données personnelles en France.",
+      "noExample": "E"
     },
     {
       "id": "miviludes",
       "term": "Miviludes",
-      "plain": "La Miviludes est la mission de l'État qui surveille les dérives sectaires."
+      "aliases": ["Mission interministérielle de vigilance"],
+      "plain": "La Miviludes est la mission de l'État qui surveille les dérives sectaires.",
+      "noExample": "E"
     },
     {
       "id": "defenseur-des-droits",
       "term": "Défenseur des droits",
-      "plain": "Le Défenseur des droits est une autorité indépendante. On le saisit contre une administration, une discrimination, une atteinte aux droits d'un enfant ou un manquement des forces de l'ordre."
+      "plain": "Le Défenseur des droits est une autorité indépendante. On le saisit contre une administration, une discrimination, une atteinte aux droits d'un enfant ou un manquement des forces de l'ordre.",
+      "noExample": "E"
     },
     {
       "id": "igpn",
@@ -1228,6 +1257,7 @@
     {
       "id": "anru",
       "term": "ANRU",
+      "aliases": ["rénovation urbaine"],
       "anyCase": true,
       "plain": "L'ANRU est l'agence nationale qui finance la rénovation urbaine des quartiers.",
       "noExample": "E"
@@ -4135,6 +4165,535 @@
       "term": "veto",
       "aliases": ["véto", "droit de veto"],
       "plain": "Un droit de veto permet de bloquer seul une décision.",
+      "noExample": "E"
+    },
+    {
+      "id": "accession",
+      "term": "accession",
+      "plain": "L'accession est le fait de parvenir à un état : l'accession d'un territoire à l'indépendance, ou l'accession à la propriété, quand on devient propriétaire de son logement.",
+      "noExample": "D"
+    },
+    {
+      "id": "audit",
+      "term": "audit",
+      "aliases": ["audits"],
+      "plain": "Un audit est un examen approfondi d'une organisation ou d'une situation, mené par des experts, qui en dresse l'état et en relève les forces et les défauts.",
+      "noExample": "E"
+    },
+    {
+      "id": "procedure-baillon",
+      "term": "procédures bâillons",
+      "aliases": ["procédure bâillon"],
+      "plain": "Une procédure bâillon est un procès abusif contre un journaliste ou une association, pour les faire taire par son coût et sa durée.",
+      "noExample": "E"
+    },
+    {
+      "id": "nouvelle-caledonie",
+      "term": "Kanaky-Nouvelle-Calédonie",
+      "aliases": ["Nouvelle-Calédonie"],
+      "plain": "La Nouvelle-Calédonie, dont la France a pris possession en 1853, est un archipel du Pacifique Sud doté d'un statut particulier. Kanaky est le nom que lui donnent les indépendantistes kanak.",
+      "noExample": "S"
+    },
+    {
+      "id": "caste",
+      "term": "caste",
+      "aliases": ["castes"],
+      "plain": "Une caste est un groupe social fermé, qui se transmet ses privilèges. Au figuré, le mot sert à critiquer une élite jugée coupée du reste de la société.",
+      "noExample": "E"
+    },
+    {
+      "id": "oligarchie",
+      "term": "oligarchie",
+      "aliases": ["oligarchies"],
+      "plain": "Une oligarchie est un régime où le pouvoir appartient à un petit nombre de personnes. Le mot sert aussi à critiquer l'influence d'une petite élite.",
+      "noExample": "E"
+    },
+    {
+      "id": "monopole",
+      "term": "monopoles",
+      "aliases": ["monopole", "oligopole", "oligopoles", "oligopolistique", "oligopolistiques"],
+      "plain": "Il y a monopole quand un seul acteur peut vendre un produit ou exercer une activité ; oligopole, quand quelques entreprises se partagent l'essentiel des ventes.",
+      "noExample": "E"
+    },
+    {
+      "id": "concentration",
+      "term": "concentration",
+      "aliases": ["anti-concentration"],
+      "plain": "En économie, la concentration désigne le fait que quelques entreprises détiennent l'essentiel d'un secteur. On parle aussi de concentration des pouvoirs quand peu de personnes en détiennent beaucoup.",
+      "noExample": "D"
+    },
+    {
+      "id": "speculation",
+      "term": "spéculation",
+      "aliases": ["spéculation immobilière", "spéculatif", "spéculatifs"],
+      "plain": "La spéculation, c'est acheter un bien pour le revendre plus cher, en pariant sur la hausse de son prix. Ses défenseurs disent qu'elle facilite les échanges, ses critiques qu'elle fait monter les prix.",
+      "noExample": "E"
+    },
+    {
+      "id": "technocratie",
+      "term": "technocratiques",
+      "aliases": ["technocratique", "technocrates", "technocrate"],
+      "plain": "La technocratie désigne un pouvoir exercé par des experts et des dirigeants de l'administration plutôt que par des élus. Le mot est surtout critique.",
+      "noExample": "E"
+    },
+    {
+      "id": "parite",
+      "term": "parité",
+      "plain": "La parité est l'égalité de nombre entre femmes et hommes, par exemple parmi les élus d'une assemblée.",
+      "noExample": "E"
+    },
+    {
+      "id": "executif",
+      "term": "exécutifs",
+      "aliases": ["exécutif"],
+      "plain": "L'exécutif est le pouvoir qui dirige et applique les décisions : le gouvernement pour l'État, le maire et ses adjoints pour une commune.",
+      "noExample": "E"
+    },
+    {
+      "id": "ingerence",
+      "term": "ingérences",
+      "aliases": ["ingérence"],
+      "plain": "Une ingérence est le fait de se mêler des affaires d'un autre sans en avoir le droit, comme un pays étranger qui cherche à peser sur une élection.",
+      "noExample": "E"
+    },
+    {
+      "id": "pluralisme",
+      "term": "pluralisme",
+      "aliases": ["pluraliste", "pluralistes"],
+      "plain": "Le pluralisme est la présence d'opinions et de médias variés, indépendants les uns des autres.",
+      "noExample": "E"
+    },
+    {
+      "id": "bassin-versant",
+      "term": "bassins-versants",
+      "aliases": ["bassin-versant"],
+      "plain": "Un bassin versant est le territoire dont toutes les eaux s'écoulent vers une même rivière ou un même fleuve.",
+      "noExample": "E"
+    },
+    {
+      "id": "agences-de-l-eau",
+      "term": "agences de l'eau",
+      "aliases": ["agence de l'eau"],
+      "plain": "Les agences de l'eau sont des établissements publics, un par grand bassin, qui financent la protection de l'eau avec les redevances payées par ceux qui l'utilisent.",
+      "noExample": "E"
+    },
+    {
+      "id": "revoquer",
+      "term": "révoquer",
+      "plain": "Révoquer un élu, c'est lui retirer son mandat avant son terme. En France, le gouvernement peut révoquer un maire par décret ; les électeurs, eux, n'en ont pas le pouvoir.",
+      "noExample": "E"
+    },
+    {
+      "id": "decentralisation",
+      "term": "décentralisée",
+      "aliases": ["décentralisation", "décentralisées", "décentralisé"],
+      "plain": "La décentralisation confie des pouvoirs et des budgets de l'État à des communes, des départements et des régions dirigés par des élus.",
+      "noExample": "E"
+    },
+    {
+      "id": "gilets-jaunes",
+      "term": "Gilets jaunes",
+      "plain": "Les Gilets jaunes sont un mouvement de protestation né fin 2018 contre la hausse des taxes sur le carburant, puis pour la justice fiscale et le pouvoir d'achat.",
+      "noExample": "E"
+    },
+    {
+      "id": "delits-de-probite",
+      "term": "délits de probité",
+      "aliases": ["délit de probité", "probité"],
+      "plain": "Les délits de probité sont les manquements à l'honnêteté que la loi punit chez les élus et les agents publics : corruption, détournement d'argent public, prise illégale d'intérêts.",
+      "noExample": "E"
+    },
+    {
+      "id": "chanoine-de-latran",
+      "term": "chanoine de Latran",
+      "plain": "Chanoine de Latran est un titre honorifique que la basilique Saint-Jean-de-Latran, à Rome, offre par tradition aux chefs de l'État français, depuis Henri IV.",
+      "noExample": "S"
+    },
+    {
+      "id": "communautarisme",
+      "term": "communautarismes",
+      "aliases": ["communautarisme"],
+      "plain": "Le communautarisme désigne le repli d'un groupe, religieux ou d'origine, sur ses propres règles, avant celles de la nation. Le mot sert surtout à critiquer, et ceux qu'il vise le contestent souvent.",
+      "noExample": "S"
+    },
+    {
+      "id": "confessionnel",
+      "term": "confessionnels",
+      "aliases": ["confessionnel"],
+      "plain": "Confessionnel se dit de ce qui relève d'une religion : un établissement confessionnel est lié à une Église ou à un culte.",
+      "noExample": "E"
+    },
+    {
+      "id": "cultuel",
+      "term": "cultuels",
+      "aliases": ["cultuel"],
+      "plain": "Cultuel se dit de ce qui concerne le culte, c'est-à-dire la pratique d'une religion : offices, prières, fêtes religieuses.",
+      "noExample": "E"
+    },
+    {
+      "id": "derives-sectaires",
+      "term": "dérives sectaires",
+      "aliases": ["dérive sectaire"],
+      "plain": "Une dérive sectaire est l'emprise d'un groupe ou d'un gourou sur ses membres, qui les isole et nuit à leur santé, à leur argent ou à leurs droits.",
+      "noExample": "E"
+    },
+    {
+      "id": "deontologie",
+      "term": "déontologie",
+      "aliases": ["déontologique", "déontologiques"],
+      "plain": "La déontologie est l'ensemble des règles et des devoirs d'une profession, comme le respect de la vérité pour les journalistes.",
+      "noExample": "E"
+    },
+    {
+      "id": "motion-de-defiance",
+      "term": "motion de défiance",
+      "aliases": ["motions de défiance"],
+      "plain": "Une motion de défiance est un vote par lequel des membres, par exemple les journalistes d'une rédaction, disent ne plus faire confiance à leur dirigeant. À l'Assemblée, on parle de motion de censure.",
+      "noExample": "E"
+    },
+    {
+      "id": "gouvernance",
+      "term": "gouvernance",
+      "plain": "La gouvernance d'une organisation est la façon dont elle est dirigée : qui décide, et comment.",
+      "noExample": "E"
+    },
+    {
+      "id": "desert-informationnel",
+      "term": "déserts informationnels",
+      "aliases": ["désert informationnel"],
+      "plain": "On appelle désert informationnel un territoire où il reste très peu de journaux ou de médias locaux.",
+      "noExample": "E"
+    },
+    {
+      "id": "euroregions",
+      "term": "eurorégions",
+      "aliases": ["eurorégion", "régions transfrontalières", "région transfrontalière"],
+      "plain": "Une eurorégion regroupe des collectivités de part et d'autre d'une frontière, qui coopèrent sur des projets communs.",
+      "noExample": "E"
+    },
+    {
+      "id": "desimpermeabiliser",
+      "term": "désimperméabiliser",
+      "aliases": ["perméabilité"],
+      "plain": "Désimperméabiliser un sol, c'est retirer le béton ou le goudron qui le couvre, pour que la pluie puisse de nouveau s'y infiltrer : c'est lui rendre sa perméabilité.",
+      "noExample": "E"
+    },
+    {
+      "id": "etalement-urbain",
+      "term": "étalement urbain",
+      "plain": "L'étalement urbain est l'extension des villes sur les terres agricoles et naturelles qui les entourent, par des quartiers peu denses.",
+      "noExample": "E"
+    },
+    {
+      "id": "dotations",
+      "term": "dotations",
+      "aliases": ["dotation"],
+      "plain": "Une dotation est une somme que l'État verse à une collectivité ou à un organisme, pour son fonctionnement ou ses investissements.",
+      "noExample": "E"
+    },
+    {
+      "id": "expulsion-locative",
+      "term": "expulsions locatives",
+      "aliases": ["expulsion locative"],
+      "plain": "Une expulsion locative oblige un locataire à quitter son logement, après une décision de justice, le plus souvent pour des loyers impayés.",
+      "noExample": "E"
+    },
+    {
+      "id": "insalubre",
+      "term": "insalubre",
+      "aliases": ["insalubres", "habitat indigne"],
+      "plain": "Un logement insalubre menace la santé de ceux qui l'habitent, par l'humidité, le manque d'hygiène ou le plomb. L'habitat indigne regroupe ces logements et ceux qui menacent ruine.",
+      "noExample": "E"
+    },
+    {
+      "id": "hypercentre",
+      "term": "hypercentre",
+      "plain": "L'hypercentre est le cœur d'une ville, son quartier le plus central et le plus commerçant.",
+      "noExample": "E"
+    },
+    {
+      "id": "desserte",
+      "term": "desserte",
+      "aliases": ["dessertes"],
+      "plain": "La desserte d'un lieu est le service de transport qui le relie à d'autres : trains, bus, bateaux ou avions.",
+      "noExample": "E"
+    },
+    {
+      "id": "desenclavement",
+      "term": "désenclavement",
+      "plain": "Le désenclavement consiste à mieux relier un territoire isolé, à l'intérieur de lui-même et avec l'extérieur, par des routes, des bateaux ou des avions.",
+      "noExample": "E"
+    },
+    {
+      "id": "communalisme",
+      "term": "communaliste",
+      "aliases": ["communalistes"],
+      "plain": "Communaliste se dit d'une organisation politique qui donne l'essentiel du pouvoir aux communes et à leurs habitants.",
+      "noExample": "E"
+    },
+    {
+      "id": "article-11",
+      "term": "article 11",
+      "plain": "L'article 11 de la Constitution permet, sur proposition du gouvernement ou des assemblées, de soumettre certains projets de loi au référendum. Il prévoit aussi le référendum d'initiative partagée.",
+      "noExample": "E"
+    },
+    {
+      "id": "audiovisuel-public",
+      "term": "audiovisuel public",
+      "plain": "L'audiovisuel public regroupe les télévisions et radios qui appartiennent à l'État, comme France Télévisions et Radio France.",
+      "noExample": "E"
+    },
+    {
+      "id": "aides-a-la-presse",
+      "term": "aides publiques à la presse",
+      "aliases": ["aide publique à la presse"],
+      "plain": "Les aides à la presse sont des aides publiques aux journaux : tarifs postaux réduits, avantages fiscaux, subventions.",
+      "noExample": "E"
+    },
+    {
+      "id": "cabinets-de-conseil",
+      "term": "cabinets de conseil",
+      "aliases": ["cabinet de conseil", "cabinets de conseils", "conseils privés"],
+      "plain": "Un cabinet de conseil est une entreprise privée payée pour conseiller une organisation, par exemple un ministère sur une réforme.",
+      "noExample": "E"
+    },
+    {
+      "id": "conseil-communautaire",
+      "term": "conseils communautaires",
+      "aliases": ["conseil communautaire", "communautaires"],
+      "plain": "Le conseil communautaire est l'assemblée d'élus qui dirige une intercommunalité.",
+      "noExample": "E"
+    },
+    {
+      "id": "continuite-territoriale",
+      "term": "continuité territoriale",
+      "plain": "La continuité territoriale vise à relier les territoires isolés, îles et Outre-mer, au reste du pays à des prix proches, grâce à des aides au transport.",
+      "noExample": "E"
+    },
+    {
+      "id": "convention-citoyenne",
+      "term": "convention citoyenne",
+      "aliases": ["conventions citoyennes"],
+      "plain": "Une convention citoyenne réunit des citoyens tirés au sort, chargés de débattre d'un sujet et de faire des propositions, comme celle sur le climat en 2019 et 2020.",
+      "noExample": "E"
+    },
+    {
+      "id": "trame-verte-et-bleue",
+      "term": "trames vertes et bleues",
+      "aliases": ["trame verte et bleue"],
+      "plain": "La trame verte et bleue est un réseau de milieux naturels, haies, forêts, rivières, reliés entre eux pour que les animaux et les plantes puissent circuler.",
+      "noExample": "E"
+    },
+    {
+      "id": "etats-generaux",
+      "term": "états généraux",
+      "plain": "Des états généraux réunissent les acteurs d'un domaine pour faire le point et proposer des changements.",
+      "noExample": "E"
+    },
+    {
+      "id": "garantie-universelle-des-loyers",
+      "term": "garantie universelle des loyers",
+      "plain": "La garantie universelle des loyers devait payer au propriétaire les loyers impayés à la place du locataire. Votée en 2014, elle n'a jamais été appliquée.",
+      "noExample": "E"
+    },
+    {
+      "id": "haut-fonctionnaire",
+      "term": "hauts fonctionnaires",
+      "aliases": ["haut fonctionnaire"],
+      "plain": "Un haut fonctionnaire occupe un poste de direction dans l'administration : préfet, directeur de ministère, ambassadeur.",
+      "noExample": "E"
+    },
+    {
+      "id": "hebergement-d-urgence",
+      "term": "hébergement d'urgence",
+      "plain": "L'hébergement d'urgence accueille, pour quelques nuits ou plus longtemps, les personnes sans abri, sans condition.",
+      "noExample": "E"
+    },
+    {
+      "id": "ilots-de-fraicheur",
+      "term": "îlots de fraîcheur",
+      "aliases": ["îlot de fraîcheur"],
+      "plain": "Un îlot de fraîcheur est un lieu ombragé et frais, parc, cour plantée, fontaine, où l'on se protège des fortes chaleurs en ville.",
+      "noExample": "E"
+    },
+    {
+      "id": "ingenierie-territoriale",
+      "term": "ingénierie des territoires",
+      "plain": "L'ingénierie des territoires désigne l'aide technique, en experts et en études, apportée aux communes pour mener leurs projets.",
+      "noExample": "E"
+    },
+    {
+      "id": "liberte-de-conscience",
+      "term": "liberté de conscience",
+      "aliases": ["libre exercice des cultes"],
+      "plain": "La liberté de conscience est le droit de croire, de ne pas croire ou de changer de religion. Le libre exercice des cultes permet de pratiquer la sienne.",
+      "noExample": "E"
+    },
+    {
+      "id": "logement-decent",
+      "term": "logement décent",
+      "aliases": ["logements décents"],
+      "plain": "Un logement décent respecte des règles minimales de surface, de sécurité, de chauffage et de confort, fixées par la loi.",
+      "noExample": "E"
+    },
+    {
+      "id": "logement-social",
+      "term": "logements sociaux",
+      "aliases": ["logement social", "parc social"],
+      "plain": "Un logement social est loué, à un loyer plafonné, à des ménages aux revenus modestes par un bailleur social. Le parc social est l'ensemble de ces logements.",
+      "noExample": "E"
+    },
+    {
+      "id": "loi-de-1905",
+      "term": "loi de 1905",
+      "plain": "La loi de 1905 sépare les Églises et l'État : la République ne reconnaît, ne paie ni ne subventionne aucun culte, sauf exceptions, et garantit la liberté de conscience.",
+      "noExample": "E"
+    },
+    {
+      "id": "loi-kasbarian",
+      "term": "loi dite « Kasbarian »",
+      "aliases": ["loi dite Kasbarian"],
+      "plain": "La loi dite Kasbarian-Bergé, du nom des deux députés qui l'ont proposée, date de 2023. Elle alourdit les peines pour l'occupation illicite de logements et accélère les procédures en cas d'impayés.",
+      "noExample": "E"
+    },
+    {
+      "id": "metropoles",
+      "term": "métropoles",
+      "aliases": ["métropole"],
+      "plain": "Une métropole est une intercommunalité qui réunit une grande ville et ses voisines. La métropole désigne aussi la France d'Europe, par opposition aux Outre-mer.",
+      "noExample": "D"
+    },
+    {
+      "id": "meubles-de-tourisme",
+      "term": "meublés touristiques",
+      "aliases": ["meublé touristique"],
+      "plain": "Un meublé de tourisme est un logement meublé loué pour de courts séjours à des touristes, souvent par une plateforme en ligne.",
+      "noExample": "E"
+    },
+    {
+      "id": "millefeuille",
+      "term": "millefeuille administratif",
+      "aliases": ["millefeuille territorial"],
+      "plain": "Le millefeuille administratif désigne, pour le critiquer, l'empilement des niveaux d'administration : communes, intercommunalités, départements, régions, État.",
+      "noExample": "E"
+    },
+    {
+      "id": "monarchie-presidentielle",
+      "term": "monarchie présidentielle",
+      "plain": "Monarchie présidentielle est une expression critique : elle compare le président de la République, qui concentre beaucoup de pouvoirs, à un monarque.",
+      "noExample": "E"
+    },
+    {
+      "id": "non-cumul",
+      "term": "non-cumul des mandats",
+      "aliases": ["cumul des mandats"],
+      "plain": "Le non-cumul des mandats interdit notamment à un député ou à un sénateur d'être aussi maire, ou président d'un département ou d'une région.",
+      "noExample": "E"
+    },
+    {
+      "id": "observatoire-de-la-laicite",
+      "term": "Observatoire de la laïcité",
+      "plain": "L'Observatoire de la laïcité conseillait le gouvernement sur l'application de la laïcité. Il a été supprimé en 2021.",
+      "noExample": "E"
+    },
+    {
+      "id": "parrainages",
+      "term": "parrainages",
+      "aliases": ["parrainage"],
+      "plain": "Pour se présenter à l'élection présidentielle, un candidat doit réunir 500 parrainages, des signatures d'élus venus d'au moins trente départements.",
+      "noExample": "E"
+    },
+    {
+      "id": "ppri",
+      "term": "plan de prévention des risques d'inondation",
+      "aliases": ["plans de prévention des risques d'inondation"],
+      "plain": "Un plan de prévention des risques d'inondation délimite les zones inondables d'une commune et y fixe des règles pour construire.",
+      "noExample": "E"
+    },
+    {
+      "id": "propagande-electorale",
+      "term": "propagande électorale",
+      "plain": "En droit, la propagande électorale désigne les documents de campagne des candidats : affiches, bulletins et lettres envoyées aux électeurs.",
+      "noExample": "E"
+    },
+    {
+      "id": "corps-prefectoral",
+      "term": "corps préfectoral et diplomatique",
+      "aliases": ["corps préfectoral", "corps diplomatique et préfectoral", "préfectoral"],
+      "plain": "Les préfets et les diplomates formaient chacun un corps de fonctionnaires. Une réforme décidée en 2021 les éteint peu à peu : ces postes reviennent surtout aux administrateurs de l'État.",
+      "noExample": "E"
+    },
+    {
+      "id": "regime-parlementaire",
+      "term": "régime parlementaire",
+      "plain": "Dans un régime parlementaire, le gouvernement est issu de la majorité du Parlement et peut être renversé par lui.",
+      "noExample": "E"
+    },
+    {
+      "id": "rupture-d-egalite",
+      "term": "rupture d'égalité",
+      "plain": "Il y a rupture d'égalité quand une règle traite différemment, sans raison valable, des personnes dans la même situation.",
+      "noExample": "E"
+    },
+    {
+      "id": "secretaire-de-mairie",
+      "term": "secrétaires de mairie",
+      "aliases": ["secrétaire de mairie"],
+      "plain": "Le secrétaire de mairie est l'agent qui fait fonctionner l'administration d'une petite commune.",
+      "noExample": "E"
+    },
+    {
+      "id": "cultes-outre-mer",
+      "term": "statuts spécifiques",
+      "plain": "Dans plusieurs territoires d'Outre-mer, comme la Guyane, la loi de 1905 ne s'applique pas : des règles plus anciennes encadrent ou financent certains cultes.",
+      "noExample": "E"
+    },
+    {
+      "id": "suffrages-exprimes",
+      "term": "vote blanc",
+      "aliases": ["votes blancs", "suffrages exprimés"],
+      "plain": "Un vote blanc est un bulletin vide, ou une enveloppe vide. Il est compté à part des suffrages, c'est-à-dire des votes, exprimés pour un candidat ou une liste.",
+      "noExample": "E"
+    },
+    {
+      "id": "zones-tendues",
+      "term": "zones en tension",
+      "aliases": ["zone en tension"],
+      "plain": "Une zone en tension, ou zone tendue, est une agglomération où les logements à louer manquent face à la demande. La hausse des loyers y est limitée, surtout entre deux locataires.",
+      "noExample": "E"
+    },
+    {
+      "id": "redressement",
+      "term": "redressement",
+      "aliases": ["redressements", "colonnes de redressement"],
+      "plain": "Le redressement judiciaire laisse à une entreprise en difficulté le temps de payer ses dettes, sous le contrôle d'un juge. Dans un sondage, le redressement corrige les réponses brutes.",
+      "noExample": "D"
+    },
+    {
+      "id": "intervalle-de-confiance",
+      "term": "intervalles",
+      "aliases": ["intervalles de confiance", "intervalle de confiance"],
+      "plain": "Les intervalles de confiance d'un sondage encadrent son résultat : le vrai score a de fortes chances de s'y trouver. Ils viennent de ce qu'on n'interroge qu'une partie de la population.",
+      "example": "Un sondage donne 30 % à une liste, avec une marge de 3 points : son score réel a de fortes chances de se situer entre 27 et 33 %."
+    },
+    {
+      "id": "logements-vacants",
+      "term": "logements vacants",
+      "aliases": ["logement vacant"],
+      "plain": "Un logement vacant est un logement vide, ni habité ni loué. Dans les villes où les logements manquent, une taxe frappe ceux qui restent vides plus d'un an.",
+      "noExample": "E"
+    },
+    {
+      "id": "ve-republique",
+      "term": "Ve République",
+      "plain": "La Ve République est l'organisation actuelle des pouvoirs en France, fixée en 1958 par la Constitution, son texte fondamental. Son président y est élu directement par les citoyens depuis 1962.",
+      "noExample": "E"
+    },
+    {
+      "id": "directives-europeennes",
+      "term": "directives",
+      "aliases": ["directive", "directive européenne", "directives européennes"],
+      "plain": "Une directive européenne fixe un but que chaque pays de l'Union européenne doit atteindre, en l'inscrivant dans ses propres lois.",
       "noExample": "E"
     }
   ]

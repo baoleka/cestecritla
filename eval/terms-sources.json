@@ -13,10 +13,16 @@
     "inflation": {
       "example": "illustrative"
     },
+    "intervalle-de-confiance": {
+      "example": "illustrative"
+    },
     "oati": {
       "example": "illustrative"
     },
     "point-d-indice": {
+      "example": "illustrative"
+    },
+    "scrutin-proportionnel": {
       "example": "illustrative"
     },
     "seuil-de-pauvrete": {

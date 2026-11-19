@@ -1,7 +1,7 @@
 {
   "meta": {
     "corpus_version": "27ee6e713fe25e7e",
-    "wordings_sha256": "a1cdf06f91d545e0dc8ec7334ef0eb0148e3ce6b9589b6f0152d2b148f84961d",
+    "wordings_sha256": "c10b6b30d61b413bc57faf5582a1e81ac9731a338935353d0ad7f2b2f9694049",
     "note_fr": "Où chaque mot expliqué est écrit dans le livre : pour chaque section, les identifiants des mots de data/2026/terms.json que son texte emploie (son titre, ses mesures et leurs points, les paragraphes entre eux), triés. Les sections qui n'en emploient aucun n'y sont pas. Écrit par scripts/lexicon-2026.ts --places, sur la machine qui tient le texte du livre, par la session seule (D20.1) : aucun mot du livre, seulement des identifiants de sections et de mots. Il ne dit ni où dans la section, ni combien de fois. La fiche de chaque section montre ces mots, expliqués, sous une ligne qu'on ouvre (PLAN-MOTS, lot 4). À refaire après tout changement des formulations de terms.json : wordings_sha256 dit sur lesquelles il a été calculé."
   },
   "sections": {
@@ -263,6 +263,7 @@
       "droit-de-preemption",
       "liquidation",
       "plan-social",
+      "redressement",
       "veto"
     ],
     "p2c1-s04": [
@@ -273,6 +274,7 @@
       "commande-publique",
       "cooperatives",
       "ess",
+      "gouvernance",
       "restauration-collective",
       "scic",
       "scop"
@@ -342,9 +344,11 @@
       "transactions-financieres"
     ],
     "p2c3-s02": [
+      "audit",
       "biens-communs",
       "bpi",
       "comptabilite-carbone",
+      "speculation",
       "tpe"
     ],
     "p2c3-s03": [
@@ -410,6 +414,7 @@
       "accord-de-branche",
       "but-lucratif",
       "cdi",
+      "directives-europeennes",
       "emploi-precaire",
       "faux-independant",
       "fonction-publique",
@@ -551,6 +556,7 @@
       "emploi-precaire",
       "foyer-fiscal",
       "indemniser",
+      "logement-social",
       "secteur-non-marchand",
       "seuil-de-pauvrete"
     ],
@@ -596,6 +602,7 @@
     ],
     "p3c3-s01": [
       "commande-publique",
+      "parite",
       "penibilite",
       "temps-partiel-subi",
       "travailleur-pauvre"
@@ -622,6 +629,7 @@
     "p3c4-s01": [
       "arcom",
       "commande-publique",
+      "cultuel",
       "ia",
       "testing"
     ],
@@ -752,6 +760,7 @@
     "p4c2-s05": [
       "anr",
       "cnrs",
+      "dotations",
       "inrae",
       "inserm",
       "ird",
@@ -766,6 +775,7 @@
       "hceres",
       "lru",
       "marchandisation",
+      "monopole",
       "parcoursup",
       "perenniser",
       "subventions",
@@ -779,16 +789,19 @@
       "smic"
     ],
     "p4c3-s01": [
+      "audiovisuel-public",
       "cnl",
       "cotisation-sociale",
       "depense-publique",
       "ia",
       "intermittents",
       "mecenat",
+      "monopole",
       "perenniser",
       "pib"
     ],
     "p4c3-s02": [
+      "parite",
       "souverainete"
     ],
     "p4c3-s03": [
@@ -844,6 +857,7 @@
       "austerite",
       "centre-de-sante",
       "collectivites-locales",
+      "conseil-communautaire",
       "deserts-medicaux",
       "dotation-forfaitaire",
       "ehpad",
@@ -1003,50 +1017,97 @@
     ],
     "p5c1-s01": [
       "abroger",
+      "accession",
       "amnistie",
+      "convention-citoyenne",
+      "decentralisation",
       "formation-professionnelle",
+      "gilets-jaunes",
       "indemniser",
       "intercommunalites",
+      "metropoles",
       "moratoire",
+      "non-cumul",
+      "nouvelle-caledonie",
       "outre-mer",
+      "parrainages",
+      "propagande-electorale",
       "radiation",
       "referendum",
+      "revoquer",
       "ric",
       "sous-traitance",
-      "souverainete"
+      "souverainete",
+      "suffrages-exprimes",
+      "technocratie"
     ],
     "p5c1-s02": [
+      "article-11",
       "constituante",
       "referendum",
-      "souverainete"
+      "souverainete",
+      "ve-republique"
     ],
     "p5c1-s03": [
       "article-49-3",
       "constituante",
-      "scrutin-proportionnel"
+      "monarchie-presidentielle",
+      "regime-parlementaire",
+      "scrutin-proportionnel",
+      "ve-republique"
     ],
     "p5c1-s04": [
+      "cabinets-de-conseil",
+      "caste",
       "conflit-d-interets",
+      "corps-prefectoral",
+      "delits-de-probite",
       "fonction-publique",
+      "haut-fonctionnaire",
       "ineligible",
       "lobbys",
+      "monopole",
+      "oligarchie",
       "pantouflage",
       "sous-traitance"
     ],
     "p5c1-s05": [
       "abroger",
+      "chanoine-de-latran",
+      "communautarisme",
       "concordat",
+      "confessionnel",
+      "cultes-outre-mer",
+      "cultuel",
+      "derives-sectaires",
+      "ingerence",
       "laicite",
+      "liberte-de-conscience",
+      "loi-de-1905",
       "miviludes",
+      "observatoire-de-la-laicite",
       "outre-mer",
       "prefets",
       "souverainete"
     ],
     "p5c1-s06": [
+      "aides-a-la-presse",
       "arcom",
+      "audiovisuel-public",
       "cession",
+      "concentration",
+      "deontologie",
+      "desert-informationnel",
       "droit-de-preemption",
-      "outre-mer"
+      "gouvernance",
+      "ingerence",
+      "intervalle-de-confiance",
+      "monopole",
+      "motion-de-defiance",
+      "outre-mer",
+      "pluralisme",
+      "procedure-baillon",
+      "redressement"
     ],
     "p5c2-s01": [
       "abroger",
@@ -1056,6 +1117,7 @@
     "p5c2-s02": [
       "abroger",
       "defenseur-des-droits",
+      "deontologie",
       "desescalade",
       "iggn",
       "igpn",
@@ -1071,6 +1133,7 @@
     "p5c2-s04": [
       "constituante",
       "convention-judiciaire-d-interet-public",
+      "executif",
       "plan-social",
       "pollueur-payeur",
       "regulation-carcerale",
@@ -1085,24 +1148,43 @@
       "outre-mer"
     ],
     "p5c3-s01": [
+      "abroger",
       "collectivites-locales",
+      "communalisme",
+      "concentration",
+      "conseil-communautaire",
       "dotation-globale-de-fonctionnement",
+      "executif",
       "exoneration",
       "impot-progressif",
       "indemniser",
       "indexer",
       "inflation",
       "liberalisme",
+      "metropoles",
       "mise-en-concurrence",
+      "parite",
+      "secretaire-de-mairie",
       "souverainete",
-      "taxe-d-habitation"
+      "taxe-d-habitation",
+      "technocratie"
     ],
     "p5c3-s02": [
+      "agences-de-l-eau",
+      "bassin-versant",
       "collectivites-locales",
-      "outre-mer"
+      "desimpermeabiliser",
+      "etalement-urbain",
+      "euroregions",
+      "ingenierie-territoriale",
+      "millefeuille",
+      "outre-mer",
+      "trame-verte-et-bleue"
     ],
     "p5c3-s03": [
       "collectivites-locales",
+      "dotations",
+      "etats-generaux",
       "maillage",
       "moratoire",
       "outre-mer",
@@ -1110,38 +1192,64 @@
     ],
     "p5c3-s04": [
       "abroger",
+      "accession",
       "anru",
       "bailleurs",
+      "concentration",
       "delocalisation",
       "encadrement-des-loyers",
+      "expulsion-locative",
       "foncier",
+      "garantie-universelle-des-loyers",
+      "hebergement-d-urgence",
       "hlm",
+      "hypercentre",
+      "insalubre",
       "inspection-du-travail",
+      "logement-decent",
+      "logement-social",
+      "logements-vacants",
+      "loi-kasbarian",
       "loi-sru",
+      "metropoles",
+      "meubles-de-tourisme",
       "niches-fiscales",
       "organismes-de-foncier-solidaire",
       "passoires-thermiques",
       "patrimoine",
       "permis-de-louer",
+      "ppri",
       "quinquennat",
       "requisition",
-      "taxe-fonciere"
+      "speculation",
+      "taxe-fonciere",
+      "zones-tendues"
     ],
     "p5c3-s05": [
+      "audit",
       "chlordecone",
+      "continuite-territoriale",
+      "desenclavement",
+      "desserte",
       "fonction-publique",
       "hexagone",
+      "metropoles",
       "minima-sociaux",
       "minimum-vieillesse",
+      "monopole",
+      "nouvelle-caledonie",
+      "oligarchie",
       "outre-mer",
       "paramedical",
       "prestation-sociale",
       "principe-de-faveur",
+      "rupture-d-egalite",
       "seuil-de-pauvrete",
       "tarifs-reglementes"
     ],
     "p6c1-s01": [
       "constituante",
+      "directives-europeennes",
       "niches-fiscales",
       "plan-social",
       "securite-sociale",
@@ -1291,6 +1399,8 @@
     ],
     "p6c3-s06": [
       "cfa",
+      "ingerence",
+      "oligarchie",
       "souverainete"
     ],
     "p6c3-s07": [
