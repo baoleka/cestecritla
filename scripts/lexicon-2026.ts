@@ -15,6 +15,12 @@
  *   npm run lexicon -- --vocabulary  data/2026/vocabulary.json: the class of every public stem,
  *                                  from the session's judgments, and the entries that hold the
  *                                  hard ones; refuses while a stem the site shows is not judged
+ *   npm run lexicon -- --attest    the closure of the whole book and of our sentences: every
+ *                                  hard stem they use is within a word or a card; written in
+ *                                  data/2026/terms.json (meta.attested), refused otherwise
+ *   npm run lexicon -- --seal      data/2026/terms.json sealed as it stands (meta.sealed, D20.15):
+ *                                  for the new charter, only once attested; prints the twelve
+ *                                  characters the decision of the day must carry
  *
  * It prints identifiers and numbers. Never a word of the text: a tool that printed what it reads
  * would be the shortest way for the book to end up in a terminal log (D15.6).
@@ -26,6 +32,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 
 import { cardWordings, termsIn } from '../src/lib/terms.js';
 import {
   TERM_PLACES_PATH as PLACES_PATH,
+  TERMS_PATH,
   explainedTerms,
   wordingsFingerprint,
 } from '../src/lib/words-data.js';
@@ -35,7 +42,9 @@ import {
   INSTRUMENT,
   LATIN,
   UNIT,
+  attestationProblems,
   bookTexts,
+  closureProblems,
   findAll,
   formsOf,
   pairsIn,
@@ -46,12 +55,14 @@ import {
   stemRows,
   VOCABULARY_PATH,
   vocabularyFingerprint,
+  type Attestation,
   type Found,
   type Placed,
   type StemRow,
   type Vocabulary,
 } from './lexicon-core.js';
 import { terms } from '../src/lib/search-core.js';
+import { canonicalHash } from '../src/lib/fingerprint.js';
 import { PRIVATE_CORPUS } from './probe-2026.js';
 
 const NOTE_FR =
@@ -310,6 +321,139 @@ function vocabulary(): number {
   return 0;
 }
 
+/**
+ * The session's judgments of the stems that only the prose of the book or our sentences use
+ * (lot 9): one form and its class a line, the later files winning. They are never published.
+ */
+const PRIVATE_JUDGMENTS = `${INVENTORY}/judge`;
+
+/** The hard stems that only the book or our sentences use, as the session judged their forms. */
+function privateHardStems(publicStems: ReadonlySet<string>): Set<string> {
+  const judged = new Map<string, string>();
+  const files = existsSync(PRIVATE_JUDGMENTS)
+    ? readdirSync(PRIVATE_JUDGMENTS)
+        .filter((f) => f.startsWith('session-'))
+        .sort()
+    : [];
+  for (const file of files) {
+    for (const line of readFileSync(`${PRIVATE_JUDGMENTS}/${file}`, 'utf8').split('\n')) {
+      const judgedLine = /^(.*\S)\s+(\S+)$/.exec(line.trim());
+      if (judgedLine === null) continue;
+      const stems = terms(judgedLine[1] ?? '');
+      const stem = stems[0];
+      if (stems.length === 1 && stem !== undefined && !publicStems.has(stem)) {
+        judged.set(stem, judgedLine[2] ?? '');
+      }
+    }
+  }
+  return new Set(
+    [...judged].filter(([, verdict]) => verdict === 'E' || verdict === 'NE').map(([stem]) => stem),
+  );
+}
+
+/**
+ * `--attest`: the closure of the whole book, prose included, and of our sentences (every hard
+ * stem they use lies within the span of an entry or a card), written in data/2026/terms.json
+ * as `meta.attested`. Refuses, and writes the occurrences under the private folder, while one
+ * is not held.
+ */
+function attest(): number {
+  if (!existsSync(PRIVATE_CORPUS))
+    throw new Error(`lexicon: ${PRIVATE_CORPUS} is not on this machine`);
+  const corpus = JSON.parse(readFileSync(PRIVATE_CORPUS, 'utf8')) as PrivateCorpus;
+  const book = bookTexts(corpus);
+  const sentences = ourSentences();
+  const vocabulary = JSON.parse(readFileSync(VOCABULARY_PATH, 'utf8')) as Vocabulary;
+  const explain = Object.keys(vocabulary.explain);
+  const publicStems = new Set([
+    ...vocabulary.plain,
+    ...explain,
+    ...Object.keys(vocabulary.watch),
+    ...Object.keys(vocabulary.names),
+  ]);
+  const hard = new Set([...explain, ...privateHardStems(publicStems)]);
+  const cards = cardWordings(
+    (
+      JSON.parse(readFileSync('data/2026/glossary.json', 'utf8')) as {
+        entries: { id: string; term: string }[];
+      }
+    ).entries,
+  );
+  const wordings = [...cards, ...explainedTerms()];
+  const problems = closureProblems([...book, ...sentences, ...publicTexts()], hard, wordings);
+  if (problems.length > 0) {
+    writeFileSync(`${INVENTORY}/unattested.txt`, `${problems.join('\n')}\n`);
+    console.error(
+      `lexicon: ${String(problems.length)} occurrence(s) of a hard stem outside every wording — ${INVENTORY}/unattested.txt`,
+    );
+    return 1;
+  }
+  const file = JSON.parse(readFileSync(TERMS_PATH, 'utf8')) as { meta: Record<string, unknown> };
+  const attested: Attestation = {
+    on: new Date().toISOString().slice(0, 10),
+    by: 'session',
+    corpus_version: corpus.meta.corpus_version,
+    wordings_sha256: wordingsFingerprint(wordings),
+    explain_sha256: vocabularyFingerprint(explain),
+    units: book.length,
+    sentences: sentences.length,
+    hard_stems: hard.size,
+    uncovered: 0,
+  };
+  file.meta.attested = attested;
+  writeFileSync(TERMS_PATH, `${JSON.stringify(file, null, 2)}\n`);
+  console.log(
+    `lexicon: ${TERMS_PATH} attested — ${String(book.length)} units of the book and ${String(sentences.length)} sentences read, ` +
+      `${String(hard.size)} hard stems, every occurrence within a word or a card`,
+  );
+  return 0;
+}
+
+/**
+ * `--seal`: data/2026/terms.json sealed as it stands (D20.15). The seal is the canonical
+ * fingerprint of its entries, with today's date, by the session under its mandate (D20.3), and
+ * the passes the file already lists. A file of the new charter is sealed only once it is attested
+ * on these very words, cards and hard stems. The first twelve characters it prints must appear
+ * in the decision of the day (scripts/launch.ts, `wordsBlockers`).
+ */
+function seal(): number {
+  const file = JSON.parse(readFileSync(TERMS_PATH, 'utf8')) as {
+    meta: Record<string, unknown>;
+    entries: unknown;
+  };
+  if (file.meta.charter === 2) {
+    const vocabulary = JSON.parse(readFileSync(VOCABULARY_PATH, 'utf8')) as Vocabulary;
+    const manifest = JSON.parse(readFileSync('data/2026/manifest.json', 'utf8')) as {
+      meta: { corpus_version: string };
+    };
+    const cards = cardWordings(
+      (
+        JSON.parse(readFileSync('data/2026/glossary.json', 'utf8')) as {
+          entries: { id: string; term: string }[];
+        }
+      ).entries,
+    );
+    const problems = attestationProblems(file.meta.attested, {
+      corpus_version: manifest.meta.corpus_version,
+      wordings_sha256: wordingsFingerprint([...cards, ...explainedTerms()]),
+      explain_sha256: vocabularyFingerprint(Object.keys(vocabulary.explain)),
+    });
+    if (problems.length > 0) {
+      console.error(`lexicon: not sealed — ${problems.join('; ')}`);
+      return 1;
+    }
+  }
+  const previous = file.meta.sealed as { passes?: unknown } | undefined;
+  const sha256 = canonicalHash(file.entries);
+  const on = new Date().toISOString().slice(0, 10);
+  file.meta.sealed = { sha256, on, by: 'session', passes: previous?.passes ?? [] };
+  writeFileSync(TERMS_PATH, `${JSON.stringify(file, null, 2)}\n`);
+  console.log(
+    `lexicon: ${TERMS_PATH} sealed ${sha256.slice(0, 12)}… on ${on} — the decision of the day names it (D20.15)`,
+  );
+  return 0;
+}
+
 function main(): number {
   const args = process.argv.slice(2);
   if (args.includes('--places')) {
@@ -332,7 +476,11 @@ function main(): number {
   if (args.includes('--stems')) return stems();
   if (args.includes('--patterns')) return patterns();
   if (args.includes('--vocabulary')) return vocabulary();
-  console.error('lexicon: --places, --check, --stems, --patterns or --vocabulary');
+  if (args.includes('--attest')) return attest();
+  if (args.includes('--seal')) return seal();
+  console.error(
+    'lexicon: --places, --check, --stems, --patterns, --vocabulary, --attest or --seal',
+  );
   return 2;
 }
 

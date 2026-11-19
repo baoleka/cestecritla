@@ -15,6 +15,8 @@ import { test } from 'node:test';
 import type { PrivateItem } from './aec26-types.js';
 import {
   VOCABULARY_PATH,
+  attestationProblems,
+  closureProblems,
   coverageProblems,
   ACRONYM,
   INSTRUMENT,
@@ -221,10 +223,59 @@ void test('data/2026/vocabulary.json: every stem the site shows judged once — 
   );
   assert.deepEqual(coverageProblems(vocabulary, [...cards, ...entries]), []);
   const hard = new Set(Object.keys(vocabulary.explain));
-  const problems = texts.flatMap(({ where, text }) =>
-    uncoveredIn(text, hard, [...cards, ...entries]).map((stem) => `${where}: ${stem}`),
+  assert.deepEqual(closureProblems(texts, hard, [...cards, ...entries]), []);
+  // The book and our sentences are read on the machine that holds them (`--attest`): here, the
+  // attestation must have been made on these very words, cards and hard stems.
+  const manifest = JSON.parse(readFileSync('data/2026/manifest.json', 'utf8')) as {
+    meta: { corpus_version: string };
+  };
+  const attested = (
+    JSON.parse(readFileSync('data/2026/terms.json', 'utf8')) as { meta: { attested?: unknown } }
+  ).meta.attested;
+  assert.deepEqual(
+    attestationProblems(attested, {
+      corpus_version: manifest.meta.corpus_version,
+      wordings_sha256: wordingsFingerprint([...cards, ...entries]),
+      explain_sha256: vocabularyFingerprint(Object.keys(vocabulary.explain)),
+    }),
+    [],
   );
-  assert.deepEqual(problems, []);
+});
+
+void test('the attestation of the book holds only for the words, cards and hard stems it was made on', () => {
+  const hard = new Set(['moratoire', 't2a']);
+  assert.deepEqual(
+    closureProblems([{ where: 'p1c1-s01-m01', text: 'Sortir de la T2A, un moratoire.' }], hard, [
+      MORATOIRE,
+    ]),
+    ['p1c1-s01-m01: t2a'],
+  );
+  const now = { corpus_version: 'c1', wordings_sha256: 'w1', explain_sha256: 'e1' };
+  const made = {
+    on: '2026-11-19',
+    by: 'session',
+    ...now,
+    units: 1500,
+    sentences: 1069,
+    hard_stems: 660,
+    uncovered: 0,
+  };
+  assert.deepEqual(attestationProblems(made, now), []);
+  assert.deepEqual(attestationProblems(undefined, now), [
+    'no attestation: npm run lexicon -- --attest',
+  ]);
+  assert.match(
+    attestationProblems({ ...made, wordings_sha256: 'w0' }, now).join(),
+    /a word or a card changed/,
+  );
+  assert.match(
+    attestationProblems({ ...made, explain_sha256: 'e0' }, now).join(),
+    /hard stems changed/,
+  );
+  assert.match(attestationProblems({ ...made, corpus_version: 'c0' }, now).join(), /another state/);
+  assert.match(attestationProblems({ ...made, uncovered: 2 }, now).join(), /unheld/);
+  assert.match(attestationProblems({ ...made, by: 'someone' }, now).join(), /neither the session/);
+  assert.match(attestationProblems({ ...made, sentences: 0 }, now).join(), /sentences: none/);
 });
 
 void test('the inventory reads every text of the book, prose and points included, and the forms of each stem', () => {

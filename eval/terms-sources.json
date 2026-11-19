@@ -4,11 +4,371 @@
     "recheck_every_days": 90
   },
   "entries": {
+    "abandon-de-poste": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000046773104",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "accord-nucleaire-iranien": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.diplomatie.gouv.fr/fr/le-ministere-en-action/agir-pour-la-paix-et-le-respect-des-droits-de-l-homme/agir-pour-la-securite-le-desarmement-et-la-non-proliferation/crises-et-conflits/l-accord-de-vienne-sur-le-nucleaire-iranien-reperes-historiques",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "accord-ue-israel": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://trade.ec.europa.eu/access-to-markets/fr/content/accord-dassociation-ue-israel",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "accords-artemis": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.nasa.gov/artemis-accords/",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "amiante": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://sante.gouv.fr/sante-et-environnement/batiments/article/exposition-a-l-amiante-et-risque-pour-la-sante",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "asn": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://reperes.asnr.fr/temps-forts/creation-de-lautorite-de-surete-nucleaire-et-de-radioprotection-asnr",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
     "bareme": {
       "example": "illustrative"
     },
+    "broyage-des-oisillons": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://agriculture.gouv.fr/fin-de-lelimination-des-poussins-males-en-filiere-poules-pondeuses-au-1er-janvier-2023",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "chlordecone": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.senat.fr/rap/r08-487/r08-487_mono.html",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "chsct": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.service-public.fr/particuliers/vosdroits/F32085",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "ciivise": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.vie-publique.fr/en-bref/291852-inceste-et-violences-sexuelles-comment-mieux-proteger-les-enfants",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "code-des-marches-publics": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFSCTA000037695788",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "commandement-integre": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.defense.gouv.fr/dgris/enjeux-regionaux/otan",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "concordat": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.conseil-constitutionnel.fr/publications/titre-vii/le-regime-constitutionnel-des-cultes-d-alsace-et-de-moselle",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "conscription": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.senat.fr/leg/97-TA3.html",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "consentement-a-l-impot": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.conseil-constitutionnel.fr/la-constitution/la-declaration-des-droits-de-l-homme-et-du-citoyen-du-26-aout-1789",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "contrat-d-engagement-republicain": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://normandie.dreets.gouv.fr/Demandes-de-subvention-publique-ou-d-agrement-de-l-Etat-un-contrat-d-engagement",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "convention-citoyenne": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.gouvernement.fr/la-convention-citoyenne-pour-le-climat-un-exercice-democratique-inedit",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "cop-oceans": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.mer.gouv.fr/quel-bilan-pour-la-3e-conference-des-nations-unies-sur-locean",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "corps-prefectoral": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.vie-publique.fr/en-bref/284884-haute-fonction-publique-la-reforme-du-corps-diplomatique",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "cour-d-assises": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.cours-appel.justice.fr/limoges/cours-dassises-et-cours-criminelles-departementales",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "cours-criminelles": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.cours-appel.justice.fr/limoges/les-cours-criminelles-departementales",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "cse": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://travail-emploi.gouv.fr/la-definition-du-cse-et-cadre-de-mise-en-place",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "cultes-outre-mer": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.senat.fr/basile/visio.do?id=qSEQ220700394",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "cvae": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://entreprendre.service-public.fr/actualites/A18078",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "devoir-de-vigilance": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.economie.gouv.fr/node/3223374",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "edf": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.vie-publique.fr/loi/288132-edf-loi-du-11-avril-2024-visant-proteger-le-groupe-dun-demembrement",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
     "effet-de-levier": {
       "example": "illustrative"
+    },
+    "essais-nucleaires": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.memoiredeshommes.sga.defense.gouv.fr/fr/article.php?larub=371&titre=essais-nucleaires-en-polynesie-francaise",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "etat-de-palestine": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://uk.diplomatie.gouv.fr/en/france-recognizes-state-palestine",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "flat-tax": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.economie.gouv.fr/particuliers/prelevement-forfaitaire-unique-pfu",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "fonds-de-reserve-pour-les-retraites": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.cor-retraites.fr/sites/default/files/2019-06/doc-4310.pdf",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "francaise-des-jeux": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000039296589",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "france-travail": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://travail-emploi.gouv.fr/france-travail",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "fret-ferroviaire": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.groupe-sncf.com/en/group/about-us/companies/rle/new-companies-hexafret-technis",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "garantie-universelle-des-loyers": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.legifrance.gouv.fr/jorf/article_jo/JORFARTI000028772575",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "ge-vernova": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.ge.com/news/press-releases/ge-completes-acquisition-alstom-power-and-grid-businesses",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "genocide": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://unric.org/fr/wp-content/uploads/sites/2/2025/01/genocide-french.pdf",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "gilets-jaunes": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://questions.assemblee-nationale.fr/q15/15-14841QE.htm",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "glyphosate": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.efsa.europa.eu/en/topics/topic/glyphosate",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "haute-mer": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://news.un.org/fr/story/2023/06/1136227",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "ifi": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.economie.gouv.fr/particuliers/impot-fortune-immobiliere-ifi",
+          "consulted_on": "2026-11-19"
+        }
+      ]
     },
     "impot-progressif": {
       "example": "illustrative"
@@ -19,11 +379,263 @@
     "intervalle-de-confiance": {
       "example": "illustrative"
     },
+    "irsn": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://reperes.asnr.fr/temps-forts/creation-de-lautorite-de-surete-nucleaire-et-de-radioprotection-asnr",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "isf": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://bofip.impots.gouv.fr/export/pdf/16987",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "loi-cazeneuve": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.vie-publique.fr/loi/20990-securite-publique-policiers-usage-des-armes-feu-anonymat",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "loi-de-1905": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000006340314",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "loi-el-khomri": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000032983213",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "loi-elan": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.vie-publique.fr/dossierlegislatif/JORFDOLE000036769798",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "loi-kasbarian": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.assemblee-nationale.fr/dyn/opendata/PIONANR5L16B0360.html",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "loi-separatisme": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.vie-publique.fr/loi/277621-loi-separatisme-respect-des-principes-de-la-republique",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "loi-sru": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.legifrance.gouv.fr/loda/id/LEGITEXT000005630252",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "lru": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.legifrance.gouv.fr/loda/id/JORFTEXT000000824315",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "mourir-dans-la-dignite": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.vie-publique.fr/dossierlegislatif/JORFDOLE000051666413",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "non-alignee": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://press.un.org/fr/1996/19960924.sgsm6064.html",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "nouvelle-caledonie": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://gouv.nc/actualites/06-05-2018/les-actes-de-possession-remis-aux-caledoniens",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
     "oati": {
       "example": "illustrative"
     },
+    "observatoire-de-la-laicite": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000043604820",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "obsolescence-programmee": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000044330817",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "onu": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.un.org/fr/about-us/history-of-the-un/preparatory-years",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "ordonnances-penicaud": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.legifrance.gouv.fr/loda/id/JORFTEXT000035607388",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "pacte-migration-asile": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://home-affairs.ec.europa.eu/policies/migration-and-asylum/pact-migration-and-asylum_fr",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "peche-electrique": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://eur-lex.europa.eu/legal-content/FR/TXT/HTML/?uri=CELEX:32019R1241&rid=1",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "plaquage-ventral": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.assemblee-nationale.fr/dyn/15/questions/QANR5L15QE25978.pdf",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
     "point-d-indice": {
       "example": "illustrative"
+    },
+    "principe-de-faveur": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.legifrance.gouv.fr/juri/id/JURITEXT000046651746",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "quinquennat": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.vie-publique.fr/fiches/19599-le-quinquennat",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "reforme-des-retraites-de-2023": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000054047736",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "refugies-palestiniens": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.vie-publique.fr/fiches/271192-refugies-palestiniens-quest-ce-que-lunrwa",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "registre-des-cancers": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000051824503",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "regle-des-3": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.economie.gouv.fr/deficit-public-sous-3-pour-cent-en-2017",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "regles-budgetaires-europeennes": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.europarl.europa.eu/topics/fr/article/20240117STO16883/regles-budgetaires-post-covid-plus-de-controle-pour-les-etats",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "rgpd": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://eur-lex.europa.eu/FR/legal-content/summary/general-data-protection-regulation-gdpr.html",
+          "consulted_on": "2026-11-19"
+        }
+      ]
     },
     "salaire-reel": {
       "example": "illustrative"
@@ -31,11 +643,43 @@
     "scrutin-proportionnel": {
       "example": "illustrative"
     },
+    "securite-sociale": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.vie-publique.fr/lettre_essentiel/38",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
     "seuil-de-pauvrete": {
       "example": "fact",
       "sources": [
         {
           "url": "https://www.insee.fr/fr/statistiques/2408282",
+          "consulted_on": "2026-11-19"
+        },
+        {
+          "url": "https://www.insee.fr/fr/statistiques/5759045",
+          "consulted_on": "2026-11-19"
+        }
+      ],
+      "plain": "fact"
+    },
+    "smv": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.defense.gouv.fr/nous-rejoindre/service-national",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "snu": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.gendarmerie.interieur.gouv.fr/gendinfo/actualites/2019/lancement-du-service-national-universel-dans-treize-departements-prefigurateurs",
           "consulted_on": "2026-11-19"
         }
       ]
@@ -43,14 +687,122 @@
     "taux-d-interet": {
       "example": "illustrative"
     },
+    "taxe-d-habitation": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.economie.gouv.fr/particuliers/impots-et-fiscalite/gerer-mes-impots-locaux/la-taxe-dhabitation-sur-les-residences-secondaires-comment-ca-marche",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "territoires-palestiniens-occupes": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://news.un.org/fr/story/2024/07/1147211",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "tian": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://news.un.org/fr/story/2020/10/1080642",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "tirailleurs-senegalais": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.cheminsdememoire.gouv.fr/en/node/303",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
     "titre-de-dette": {
       "example": "illustrative"
+    },
+    "traite-commerce-armes": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://news.un.org/fr/story/2013/04/264142",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "traite-de-la-lune": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.unoosa.org/oosa/en/ourwork/spacelaw/treaties/travaux-preparatoires/moon-agreement.html",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "traite-de-lisbonne": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.senat.fr/rap/r07-188/r07-1882.html",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "traite-plastiques": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.vie-publique.fr/en-bref/299872-sommet-de-geneve-pollution-plastique-echec-des-negociations-inc-5-2",
+          "consulted_on": "2026-11-19"
+        }
+      ]
     },
     "transactions-financieres": {
       "example": "illustrative"
     },
     "tresorerie": {
       "example": "illustrative"
+    },
+    "tribunal-de-commerce": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.justice.gouv.fr/actualites/actualite/lancement-lexperimentation-du-tribunal-activites-economiques",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "ve-republique": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.conseil-constitutionnel.fr/les-revisions-constitutionnelles/loi-n-62-1292-du-6-novembre-1962",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "verrou-de-bercy": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.vie-publique.fr/fiches/24152-quappelle-t-le-verrou-de-bercy",
+          "consulted_on": "2026-11-19"
+        }
+      ]
+    },
+    "zan": {
+      "plain": "fact",
+      "sources": [
+        {
+          "url": "https://www.legifrance.gouv.fr/circulaire/id/45513",
+          "consulted_on": "2026-11-19"
+        }
+      ]
     }
   }
 }

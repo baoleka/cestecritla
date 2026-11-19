@@ -203,6 +203,70 @@ export function uncoveredIn(
   return [...used].filter(([stem, n]) => (covered.get(stem) ?? 0) < n).map(([stem]) => stem);
 }
 
+/**
+ * What `npm run lexicon -- --attest` writes in data/2026/terms.json, as `meta.attested`
+ * (PLAN-MOTS, lot 13). The closure the CI holds on our public texts, that every hard stem lies
+ * within the span of an entry or a card, is checked here on the whole book, prose included, and
+ * on our sentences. Only the machine that holds them can check it. The CI cannot read them, so
+ * it holds the attestation to the state of the book, the wordings and the vocabulary it was made on.
+ */
+export interface Attestation {
+  on: string;
+  /** The session, under its mandate (D20.3), or the editor. */
+  by: string;
+  corpus_version: string;
+  /** The wordings it read with: the words and the cards (`wordingsFingerprint`). */
+  wordings_sha256: string;
+  /** The stems the public vocabulary judges hard (`vocabularyFingerprint` of `explain`). */
+  explain_sha256: string;
+  /** What it read: the units of the book, and our sentences. */
+  units: number;
+  sentences: number;
+  /** The hard stems it held to account: the public ones, and those only the book uses. */
+  hard_stems: number;
+  /** Occurrences of a hard stem outside every wording. Never written unless zero. */
+  uncovered: number;
+}
+
+/** The occurrences of a hard stem outside every wording, one `where: stem` each. */
+export function closureProblems(
+  texts: readonly Placed[],
+  hard: ReadonlySet<string>,
+  wordings: readonly TermWording[],
+): string[] {
+  return texts.flatMap(({ where, text }) =>
+    uncoveredIn(text, hard, wordings).map((stem) => `${where}: ${stem}`),
+  );
+}
+
+/** Why an attestation does not vouch for the words as they stand — nothing, when it does. */
+export function attestationProblems(
+  attested: unknown,
+  now: Pick<Attestation, 'corpus_version' | 'wordings_sha256' | 'explain_sha256'>,
+): string[] {
+  if (typeof attested !== 'object' || attested === null) {
+    return ['no attestation: npm run lexicon -- --attest'];
+  }
+  const a = attested as Partial<Record<keyof Attestation, unknown>>;
+  const out: string[] = [];
+  if (typeof a.on !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(a.on)) out.push('attested on no day');
+  if (a.by !== 'session' && a.by !== 'editor')
+    out.push('attested by neither the session nor the editor');
+  if (a.corpus_version !== now.corpus_version) out.push('attested on another state of the book');
+  if (a.wordings_sha256 !== now.wordings_sha256) {
+    out.push('a word or a card changed since the attestation: attest again');
+  }
+  if (a.explain_sha256 !== now.explain_sha256) {
+    out.push('the hard stems changed since the attestation: attest again');
+  }
+  for (const key of ['units', 'sentences', 'hard_stems'] as const) {
+    const n = a[key];
+    if (typeof n !== 'number' || !Number.isInteger(n) || n <= 0) out.push(`attested ${key}: none`);
+  }
+  if (a.uncovered !== 0) out.push('the attestation leaves hard words unheld');
+  return out;
+}
+
 // ---------------------------------------------------------------------------------------------
 // The inventory (PLAN-MOTS, lot 9): what the book and our sentences use, counted on this
 // machine. Pure: the texts come in; what is written under the private folder is the caller's.

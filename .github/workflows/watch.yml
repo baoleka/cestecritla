@@ -101,3 +101,29 @@ jobs:
           if [ "$found" = "0" ]; then
             gh issue create --title "$title" --body-file /tmp/scrutin-body.md --label scrutin
           fi
+
+      # The facts the explained words state (a year, a share, a length of time) are read again
+      # every ninety days (PLAN-MOTS, lot 13; R70). This job reminds, once per due day. It is not
+      # a guard: a fact that changed stays on the site until someone rewrites it.
+      - name: Are facts of the explained words due for a reading?
+        id: words
+        run: |
+          set +e
+          npx tsx scripts/terms-recall.ts > /tmp/words.md
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+          cat /tmp/words.md
+
+      - name: Open the reminder, once per due day
+        if: steps.words.outputs.code == '3'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="$(head -n 1 /tmp/words.md)"
+          key="$(printf '%s' "$title" | cut -d']' -f1 | tr -d '[')"
+          tail -n +3 /tmp/words.md > /tmp/words-body.md
+          gh label create mots --force --color 4C0297 \
+            --description "Mots expliqués : relire les sources des faits datés"
+          found="$(gh issue list --state all --label mots --search "in:title $key" --json number --jq 'length')"
+          if [ "$found" = "0" ]; then
+            gh issue create --title "$title" --body-file /tmp/words-body.md --label mots
+          fi

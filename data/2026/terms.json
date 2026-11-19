@@ -1,14 +1,14 @@
 {
   "meta": {
-    "title_fr": "Des mots expliqués — sigles et termes techniques",
-    "version": "1.1.0",
-    "written_on": "2026-11-15",
+    "title_fr": "Des mots expliqués — les mots du livre et ceux du site",
+    "version": "2.0.0",
+    "written_on": "2026-11-19",
     "written_by": "session",
     "checked_by": "independent-model",
     "read_by_a_person": false,
-    "charter": 1,
+    "charter": 2,
     "sealed": {
-      "sha256": "e3885fde6128ab1c1322578bc3752cb281e75a4030479270744aac42c1fb9318",
+      "sha256": "fadf5f20aa4af2d5ad8d786cd867084a70e5c00680c1841dc2255b37ed148c9b",
       "on": "2026-11-19",
       "by": "session",
       "passes": [
@@ -26,10 +26,46 @@
           "what": "checked again",
           "on": "2026-11-15",
           "by": "independent-model"
+        },
+        {
+          "what": "written, domain by domain, from the words of the book",
+          "on": "2026-11-19",
+          "by": "session"
+        },
+        {
+          "what": "checked on primary sources, domain by domain",
+          "on": "2026-11-19",
+          "by": "independent-model"
+        },
+        {
+          "what": "read by two hostile readers, one of each side",
+          "on": "2026-11-19",
+          "by": "independent-model"
+        },
+        {
+          "what": "read by a panel of simulated readers",
+          "on": "2026-11-19",
+          "by": "independent-model"
+        },
+        {
+          "what": "checked a third time: the dated, the sensitive, 15 % drawn",
+          "on": "2026-11-19",
+          "by": "independent-model"
         }
       ]
     },
-    "note_fr": "Explications courtes des sigles et des termes techniques que la question ou les phrases de « Demander » emploient (D16.60, D16.62). Une IA les a écrites — la session —, à partir de connaissances générales, jamais du texte du livre ; un autre modèle, qui n'a lu que ce fichier, en a vérifié les faits le 15/11/2026 (257 entrées, 88 à reprendre), et la session a repris ce qu'il relevait : tout ce qu'il demandait de corriger avant de servir, et la plupart du reste. Deux entrées (« UE », « IA ») et les retouches faites après les relectures du 15/11 sont passées par une seconde vérification du même relecteur. Aucune personne ne les a relues une à une : la feuille le dit, « Explications écrites et vérifiées par une IA ». Aucune ne dit ce que le programme prévoit, aucune ne donne un avis, aucune ne porte un montant en euros ni une règle qui change d'une année à l'autre quand une formule durable suffit. Un sigle — un mot écrit avec une majuscule après sa première lettre, ou avec un chiffre — est reconnu tel quel, à la casse près ; « anyCase » l'admet aussi en minuscules, quand elles ne peuvent rien vouloir dire d'autre. Les autres termes sont reconnus sans tenir compte de la casse, des accents ni du pluriel."
+    "note_fr": "Explications courtes des mots que le site montre et que le livre emploie — sigles, termes techniques, institutions, lois, traités, notions (D16.62, amendée par D20.10). Les mots ont été relevés dans le livre lui-même, prose comprise, et dans nos phrases, par la session, une IA, seule à lire leur texte, hors du dépôt (D20.1) ; les explications, elles, viennent de connaissances générales, jamais du texte du livre. Chaque entrée porte un exemple — un cas concret d'adulte, inventé, aux montants ronds, jamais un barème ni une valeur légale de l'année (D20.2) — ou le code qui dit pourquoi elle n'en a pas (noExample : E évident, S sensible, N aucun cas neutre, D deux sens). Une IA les a écrites ; d'autres modèles en ont vérifié les faits sur des sources primaires, le 15/11/2026 puis, domaine par domaine, le 19/11/2026, et une troisième fois le 19/11/2026 pour les entrées datées, les sensibles et un tirage de 15 %. Aucune personne ne les a relues une à une : le site le dit, « Explications écrites et vérifiées par une IA ». Aucune ne dit ce que le programme prévoit ni ne donne un avis. Les faits qu'elles datent sont déclarés, avec la page qui les porte, dans eval/terms-sources.json, et relus tous les quatre-vingt-dix jours. Un sigle — un mot écrit avec une majuscule après sa première lettre, ou avec un chiffre — est reconnu tel quel, à la casse près ; « anyCase » l'admet aussi en minuscules, quand elles ne peuvent rien vouloir dire d'autre. Les autres termes sont reconnus sans tenir compte de la casse, des accents ni du pluriel.",
+    "attested": {
+      "on": "2026-11-19",
+      "by": "session",
+      "corpus_version": "27ee6e713fe25e7e",
+      "wordings_sha256": "db929eef524d503406a9aae2112aee2ee65a1eda2581e23da5f6f0a7e9b1ec7f",
+      "explain_sha256": "28ab0986b76f8a9d0bc7ded8c283f8a89e144826c9d4d028511a30cf52944cf0",
+      "units": 1360,
+      "sentences": 1069,
+      "hard_stems": 664,
+      "uncovered": 0
+    }
   },
   "entries": [
     {
@@ -481,7 +517,7 @@
       "id": "brav-m",
       "term": "BRAV-M",
       "anyCase": true,
-      "plain": "Les BRAV-M, brigades de répression de l'action violente motorisées, sont des équipes de policiers à moto créées à Paris en 2019. Elles interviennent surtout lors de manifestations.",
+      "plain": "Les BRAV-M, brigades de répression de l'action violente motorisées, sont des équipes de policiers à moto, à Paris. Elles interviennent surtout lors de manifestations.",
       "noExample": "E"
     },
     {
@@ -527,7 +563,7 @@
     {
       "id": "cours-criminelles",
       "term": "cours criminelles",
-      "plain": "Les cours criminelles départementales jugent certains crimes sans jurés tirés au sort. Elles existent dans tous les départements depuis 2023.",
+      "plain": "Les cours criminelles départementales jugent, sans citoyens tirés au sort, la plupart des crimes punis de quinze ou vingt ans de prison. Elles sont généralisées depuis 2023.",
       "noExample": "E"
     },
     {
@@ -545,13 +581,13 @@
     {
       "id": "regulation-carcerale",
       "term": "régulation carcérale",
-      "plain": "La régulation carcérale désigne tout mécanisme qui empêche une prison de compter plus de détenus que de places. Exemple : avancer la sortie de détenus en fin de peine.",
+      "plain": "La régulation carcérale désigne les moyens de réduire la surpopulation d'une prison pour qu'elle ne dépasse pas ses places. Par exemple, avancer la sortie de détenus en fin de peine.",
       "noExample": "E"
     },
     {
       "id": "verrou-de-bercy",
       "term": "verrou de Bercy",
-      "plain": "Le verrou de Bercy désigne le pouvoir de l'administration fiscale de décider si une fraude est poursuivie en justice. Depuis 2018, les fraudes les plus graves sont transmises d'office au procureur.",
+      "plain": "Le verrou de Bercy est le pouvoir du ministère des Finances, à Bercy, de décider si une fraude est poursuivie. Depuis 2018, au-delà de certains montants, le procureur la reçoit automatiquement.",
       "noExample": "E"
     },
     {
@@ -725,7 +761,7 @@
     {
       "id": "annuites",
       "term": "annuités",
-      "plain": "Pour la retraite, les annuités sont les années de cotisation exigées pour une pension complète ; on les compte aujourd'hui en trimestres. Pour un emprunt, c'est la somme remboursée chaque année.",
+      "plain": "Pour la retraite, les annuités sont les années d'assurance exigées pour une pension complète ; on compte aujourd'hui des trimestres validés. Pour un emprunt, c'est la somme remboursée chaque année.",
       "noExample": "D"
     },
     {
@@ -753,14 +789,14 @@
       "term": "CSG",
       "aliases": ["contribution sociale généralisée"],
       "anyCase": true,
-      "plain": "La CSG, contribution sociale généralisée, est un prélèvement sur presque tous les revenus : salaires, pensions, revenus du capital. Elle finance la protection sociale.",
+      "plain": "La CSG, contribution sociale généralisée, est un impôt sur presque tous les revenus : salaires, retraites, loyers, placements. Elle finance la protection contre les risques de la vie.",
       "noExample": "E"
     },
     {
       "id": "cades",
       "term": "Cades",
       "aliases": ["Caisse d'amortissement de la dette sociale"],
-      "plain": "La Cades, Caisse d'amortissement de la dette sociale, est l'organisme chargé de rembourser la dette de la Sécurité sociale.",
+      "plain": "La Cades, Caisse d'amortissement de la dette sociale, est l'organisme chargé de rembourser la dette de la Sécurité sociale que la loi lui transfère.",
       "noExample": "E"
     },
     {
@@ -809,7 +845,7 @@
       "id": "mdph",
       "term": "MDPH",
       "anyCase": true,
-      "plain": "La MDPH est la maison départementale des personnes handicapées. Elle ouvre les droits liés au handicap.",
+      "plain": "La MDPH, maison départementale des personnes handicapées, reçoit les demandes liées au handicap ; une commission en son sein décide des droits ouverts.",
       "noExample": "E"
     },
     {
@@ -832,7 +868,7 @@
       "term": "PMA",
       "aliases": ["procréation médicalement assistée"],
       "anyCase": true,
-      "plain": "La PMA, procréation médicalement assistée, regroupe les techniques médicales qui aident à avoir un enfant.",
+      "plain": "La PMA, procréation médicalement assistée, que la loi appelle assistance médicale à la procréation, regroupe les techniques médicales qui aident à avoir un enfant.",
       "noExample": "S"
     },
     {
@@ -1102,14 +1138,14 @@
       "term": "PIB",
       "aliases": ["produit intérieur brut"],
       "anyCase": true,
-      "plain": "Le PIB, produit intérieur brut, additionne les valeurs ajoutées de tous ceux qui produisent dans un pays en un an. C'est la richesse créée, sans compter deux fois ce qui sert à produire.",
+      "plain": "Le PIB, produit intérieur brut, est la richesse produite dans un pays en un an, sans compter deux fois ce qui sert à produire.",
       "noExample": "E"
     },
     {
       "id": "isf",
       "term": "ISF",
       "anyCase": true,
-      "plain": "L'ISF, impôt de solidarité sur la fortune, taxait chaque année les plus gros patrimoines. En 2018, il a été remplacé par l'IFI, qui ne porte que sur l'immobilier.",
+      "plain": "L'ISF, impôt de solidarité sur la fortune, taxait chaque année les plus gros patrimoines, jusqu'en 2017.",
       "noExample": "E"
     },
     {
@@ -1136,13 +1172,13 @@
       "id": "flat-tax",
       "term": "flat tax",
       "aliases": ["prélèvement forfaitaire unique"],
-      "plain": "Une flat tax est un impôt à taux unique. En France, le mot désigne le prélèvement forfaitaire unique sur les revenus du capital, créé en 2018 : le même taux, quels que soient les revenus.",
+      "plain": "Une flat tax est un impôt à taux unique. En France, le mot désigne le prélèvement forfaitaire unique, créé en 2018, sur les revenus des placements : un même taux, sauf si le foyer préfère le barème.",
       "example": "Deux personnes touchent chacune 1 000 euros de dividendes. Avec un taux unique, elles paient le même impôt dessus, quels que soient leurs autres revenus."
     },
     {
       "id": "quotient-conjugal",
       "term": "quotient conjugal",
-      "plain": "Avec le quotient conjugal, le revenu d'un couple marié ou pacsé est divisé en deux parts égales, et l'impôt est calculé sur chaque part. Il fait partie du quotient familial.",
+      "plain": "Le quotient conjugal est la part du quotient familial qui tient au couple. Le revenu d'un couple marié ou pacsé est divisé en deux parts ; l'impôt est calculé sur une part, puis doublé.",
       "example": "Une personne gagne 4 000 euros par mois, son conjoint rien : l'impôt est calculé sur deux parts de 2 000 euros, ce qui le rend plus bas. Avec deux revenus égaux, il ne change rien."
     },
     {
@@ -1180,8 +1216,8 @@
     {
       "id": "dividendes",
       "term": "dividendes",
-      "plain": "Les dividendes sont la part des bénéfices qu'une entreprise verse à ses actionnaires.",
-      "example": "Une entreprise fait 1 million d'euros de bénéfice. Elle en verse 400 000 euros à ses actionnaires : ce sont les dividendes."
+      "plain": "Les dividendes sont la part des bénéfices qu'une entreprise verse à ses propriétaires.",
+      "example": "Une entreprise fait 1 million d'euros de bénéfice. Elle en verse 400 000 euros à ses propriétaires : ce sont les dividendes."
     },
     {
       "id": "stock-options",
@@ -1205,7 +1241,7 @@
     {
       "id": "circuit-du-tresor",
       "term": "circuit du Trésor",
-      "plain": "Le circuit du Trésor désigne le système d'après-guerre où l'État se finançait hors des marchés, grâce aux fonds que lui confiaient banques et organismes publics. Il a été défait dès les années 1960.",
+      "plain": "Le circuit du Trésor est le système où l'État, après la guerre, se finançait sans les marchés financiers, grâce aux fonds des banques et des organismes publics.",
       "noExample": "E"
     },
     {
@@ -1271,7 +1307,7 @@
       "id": "scic",
       "term": "SCIC",
       "anyCase": true,
-      "plain": "Une SCIC est une coopérative qui associe salariés, usagers et partenaires autour d'un projet d'intérêt collectif.",
+      "plain": "Une SCIC est une coopérative d'intérêt collectif. Ses propriétaires, les associés, sont d'au moins trois sortes, dont ses salariés, ou à défaut ses producteurs, et ceux qui profitent de son activité.",
       "noExample": "E"
     },
     {
@@ -1365,7 +1401,7 @@
     {
       "id": "loi-elan",
       "term": "ELAN",
-      "plain": "La loi ELAN, votée en 2018, a modifié des règles du logement et de la construction.",
+      "plain": "La loi ELAN, du 23 novembre 2018, porte sur le logement, l'aménagement et le numérique : elle a modifié des règles de construction, d'urbanisme et du logement social.",
       "noExample": "E"
     },
     {
@@ -1499,7 +1535,7 @@
       "id": "asn",
       "term": "ASN",
       "aliases": ["ASNR"],
-      "plain": "L'ASN était l'autorité de sûreté nucléaire. Le 1er janvier 2025, elle a fusionné avec l'IRSN dans une nouvelle autorité, l'ASNR.",
+      "plain": "L'ASN était l'institution publique qui contrôlait la sécurité des installations nucléaires. En 2025, elle a été réunie avec les experts publics du nucléaire en une seule institution : l'ASNR.",
       "noExample": "E"
     },
     {
@@ -1616,7 +1652,7 @@
       "id": "agroecologie",
       "term": "agroécologique",
       "aliases": ["agroécologiques", "agroécologie"],
-      "plain": "L'agroécologie est une façon de cultiver qui s'appuie sur la nature et réduit les produits chimiques.",
+      "plain": "L'agroécologie est une façon de produire qui s'appuie sur le fonctionnement de la nature, comme la diversité des cultures ou les haies, pour réduire engrais et pesticides.",
       "noExample": "E"
     },
     {
@@ -1724,7 +1760,7 @@
     {
       "id": "conscription",
       "term": "conscription",
-      "plain": "La conscription est l'obligation, pour toute une classe d'âge, de faire un service, en général militaire. En France, le service militaire obligatoire est suspendu depuis 1997.",
+      "plain": "La conscription est l'obligation, pour toute une classe d'âge, de faire un service, en général militaire. En France, une loi l'a suspendue en 1997 ; les derniers appelés sont partis en 2001.",
       "noExample": "E"
     },
     {
@@ -1806,7 +1842,7 @@
     {
       "id": "impot-sur-le-revenu",
       "term": "impôt sur le revenu",
-      "plain": "L'impôt sur le revenu est payé chaque année par chaque foyer fiscal sur la plupart de ses revenus. Son taux augmente avec le revenu ; certains revenus du capital sont taxés à part, à taux unique.",
+      "plain": "L'impôt sur le revenu est calculé chaque année sur les revenus de chacun, seul ou en famille ; les plus modestes n'en paient pas. Plus on gagne, plus la part payée est forte.",
       "noExample": "E"
     },
     {
@@ -1848,7 +1884,7 @@
     {
       "id": "revenus-du-capital",
       "term": "revenus du capital",
-      "plain": "Les revenus du capital sont ce que rapporte ce qu'on possède : intérêts d'un placement, dividendes, loyers, gains à la revente d'un bien.",
+      "plain": "Les revenus du capital sont ce que rapporte ce qu'on possède : intérêts d'un placement, parts de bénéfices, loyers, gains à la revente d'un bien.",
       "example": "Une personne touche un salaire pour son travail et 500 euros par an de loyers : ces loyers sont un revenu du capital."
     },
     {
@@ -1885,7 +1921,7 @@
     {
       "id": "deficit-public",
       "term": "déficit public",
-      "plain": "Le déficit public est ce qui manque, sur une année, pour que les recettes publiques couvrent les dépenses publiques. Il est comblé par l'emprunt.",
+      "plain": "Le déficit public est ce qui manque, sur une année, pour que les recettes de l'État et des autres administrations couvrent leurs dépenses. Il est comblé par l'emprunt.",
       "example": "Des recettes de 100 milliards pour 120 milliards de dépenses font un déficit de 20 milliards, comblé par l'emprunt."
     },
     {
@@ -2098,13 +2134,13 @@
       "id": "securite-sociale",
       "term": "Sécurité sociale",
       "aliases": ["Sécu"],
-      "plain": "La Sécurité sociale, créée en 1945, protège contre les risques de la vie : maladie, accidents du travail, vieillesse, charges de famille. Elle est financée surtout par les cotisations et la CSG.",
+      "plain": "La Sécurité sociale, créée en 1945, protège contre les risques de la vie : maladie, risques du travail, vieillesse, famille. Elle est financée surtout par les salariés, les employeurs et l'impôt.",
       "noExample": "E"
     },
     {
       "id": "assurance-maladie",
       "term": "Assurance maladie",
-      "plain": "L'Assurance maladie est la branche de la Sécurité sociale qui rembourse les soins et verse des indemnités pendant les arrêts maladie.",
+      "plain": "L'Assurance maladie rembourse une partie des soins, et verse de l'argent à ceux qui doivent cesser de travailler parce qu'ils sont malades.",
       "noExample": "E"
     },
     {
@@ -2117,14 +2153,14 @@
       "id": "cotisation-sociale",
       "term": "cotisation sociale",
       "aliases": ["cotisation", "cotisant", "cotiser", "cotisé", "cotisée", "cotisés", "cotisées"],
-      "plain": "Une cotisation sociale est une somme versée sur les salaires, par l'employeur ou le salarié, à la Sécurité sociale ou à l'assurance chômage. Elle ouvre des droits : pension, soins, allocation.",
+      "plain": "Une cotisation sociale est une somme calculée sur le salaire et payée par l'employeur ou le salarié. Elle finance la retraite, les soins ou le chômage, et y ouvre des droits.",
       "noExample": "E"
     },
     {
       "id": "assurance-chomage",
       "term": "assurance chômage",
-      "plain": "L'assurance chômage verse une allocation aux salariés qui perdent leur emploi. Elle est financée surtout par des cotisations des employeurs et par une part de la CSG.",
-      "example": "Une salariée licenciée après plusieurs années de travail reçoit une allocation calculée sur ses anciens salaires, pendant une durée limitée."
+      "plain": "L'assurance chômage verse chaque mois une somme aux salariés qui perdent leur emploi. Elle est financée surtout par des cotisations des employeurs et par une part de la CSG.",
+      "example": "Une salariée licenciée après plusieurs années de travail reçoit chaque mois une somme calculée sur ses anciens salaires, pendant une durée limitée."
     },
     {
       "id": "revenu-de-remplacement",
@@ -2184,13 +2220,13 @@
     {
       "id": "reforme-des-retraites-de-2023",
       "term": "retraite à 64 ans",
-      "plain": "La réforme des retraites de 2023 a prévu de relever l'âge légal de départ de 62 à 64 ans, par étapes. Fin 2025, cette hausse a été suspendue.",
+      "plain": "La réforme des retraites de 2023 a prévu de relever l'âge légal de départ de 62 à 64 ans, par étapes. Fin 2025, cette hausse a été suspendue jusqu'au 1er janvier 2028.",
       "noExample": "E"
     },
     {
       "id": "fonds-de-reserve-pour-les-retraites",
       "term": "Fonds de réserve pour les retraites",
-      "plain": "Le Fonds de réserve pour les retraites est un fonds public créé en 1999. Il place de l'argent pour aider à payer les pensions des années à venir.",
+      "plain": "Le Fonds de réserve pour les retraites, établissement public depuis 2001, place de l'argent mis de côté pour financer les retraites.",
       "noExample": "E"
     },
     {
@@ -2222,7 +2258,7 @@
       "id": "loi-el-khomri",
       "term": "loi El Khomri",
       "aliases": ["El Khomri"],
-      "plain": "La loi El Khomri, ou loi Travail, a été adoptée en 2016 malgré une forte contestation. Les accords d'entreprise peuvent depuis l'emporter sur la branche dans plusieurs domaines, dont les horaires.",
+      "plain": "La loi El Khomri, ou loi Travail, de 2016, permet à un accord d'entreprise de l'emporter sur l'accord de branche, notamment pour le temps de travail.",
       "noExample": "E"
     },
     {
@@ -2316,7 +2352,7 @@
     {
       "id": "travailleur-independant",
       "term": "travailleurs indépendants",
-      "plain": "Un travailleur indépendant travaille à son compte, sans employeur : artisan, commerçant, médecin ou avocat installé, autoentrepreneur. Sa protection sociale diffère de celle d'un salarié.",
+      "plain": "Un travailleur indépendant travaille à son compte, sans employeur : artisan, commerçant, médecin ou avocat installé. Il n'a pas la même couverture sociale qu'un salarié.",
       "noExample": "E"
     },
     {
@@ -2334,7 +2370,7 @@
     {
       "id": "duree-legale-du-travail",
       "term": "durée légale",
-      "plain": "La durée légale du travail est le nombre d'heures par semaine au-delà duquel les heures travaillées comptent comme heures supplémentaires.",
+      "plain": "La durée légale du travail est le nombre d'heures par semaine au-delà duquel une heure de travail doit être payée plus cher, ou compensée par du repos.",
       "noExample": "E"
     },
     {
@@ -2543,7 +2579,7 @@
       "id": "famille-d-accueil",
       "term": "familles d'accueil",
       "aliases": ["lieux de placement"],
-      "plain": "Une famille d'accueil reçoit chez elle, contre rémunération, un enfant que la protection de l'enfance ne peut pas laisser chez ses parents.",
+      "plain": "Une famille d'accueil reçoit chez elle, contre rémunération, un enfant que les services sociaux ne peuvent pas laisser chez ses parents.",
       "noExample": "E"
     },
     {
@@ -2568,7 +2604,7 @@
       "id": "pension",
       "term": "pension",
       "aliases": ["pension de retraite"],
-      "plain": "Une pension de retraite est la somme versée chaque mois à une personne retraitée, selon ce qu'elle a cotisé pendant sa vie de travail.",
+      "plain": "Une pension de retraite est la somme versée chaque mois à une personne retraitée, selon ce qu'elle a gagné et versé pendant sa vie de travail.",
       "noExample": "E"
     },
     {
@@ -2666,7 +2702,7 @@
       "id": "cmp",
       "term": "centres médico-psychologiques",
       "aliases": ["centre médico-psychologique"],
-      "plain": "Un centre médico-psychologique offre des soins psychiatriques gratuits, près de chez soi, avec des psychiatres, des psychologues et des infirmiers.",
+      "plain": "Un centre médico-psychologique offre, près de chez soi, des soins psychiatriques sans avance de frais, avec des psychiatres, des psychologues et des infirmiers.",
       "noExample": "E"
     },
     {
@@ -2732,7 +2768,7 @@
     {
       "id": "mise-a-l-isolement",
       "term": "mise à l'isolement",
-      "plain": "En psychiatrie, la mise à l'isolement consiste à enfermer un patient seul dans une chambre, en principe pour sa sécurité ou celle des autres.",
+      "plain": "En psychiatrie, la mise à l'isolement enferme un patient seul dans une chambre. La loi en fait un dernier recours, décidé par un psychiatre face à un danger immédiat et contrôlé par un juge.",
       "noExample": "E"
     },
     {
@@ -2890,13 +2926,13 @@
     {
       "id": "mourir-dans-la-dignite",
       "term": "mourir dans la dignité",
-      "plain": "Mourir dans la dignité désigne la possibilité d'obtenir une aide médicale pour mourir, sous conditions. Ses opposants parlent de suicide assisté ou d'euthanasie. Une loi l'a créée en 2026.",
+      "plain": "Mourir dans la dignité est l'expression des partisans d'une aide médicale pour mourir, sous conditions. La loi de 2026 dit aide à mourir ; ses opposants parlent de suicide assisté ou d'euthanasie.",
       "noExample": "S"
     },
     {
       "id": "dispositif-medical",
       "term": "dispositifs médicaux",
-      "plain": "Un dispositif médical est un objet utilisé pour soigner ou compenser un handicap : fauteuil roulant, prothèse, appareil auditif, pansement.",
+      "plain": "Un dispositif médical est un objet ou un logiciel qui sert à prévenir, diagnostiquer ou soigner, ou à compenser un handicap : thermomètre, pansement, prothèse, fauteuil roulant.",
       "noExample": "E"
     },
     {
@@ -3255,7 +3291,7 @@
       "id": "protectionnisme-ecologique",
       "term": "protectionnisme écologique",
       "aliases": ["protectionnisme écologique et solidaire"],
-      "plain": "Le protectionnisme écologique est l'idée, débattue, de taxer ou limiter les importations produites en abîmant l'environnement. L'Union européenne taxe depuis 2026 le carbone de certaines importations.",
+      "plain": "Le protectionnisme écologique est l'idée, débattue, de taxer ou limiter les importations qui abîment l'environnement.",
       "noExample": "E"
     },
     {
@@ -3371,7 +3407,7 @@
     {
       "id": "ablation",
       "term": "ablation",
-      "plain": "Une ablation retire une partie du corps. En élevage, couper la queue des porcelets ou le bout du bec des volailles est une ablation ; la loi la limite, et l'interdit en routine pour les porcelets.",
+      "plain": "Une ablation retire une partie du corps. En élevage, couper la queue des porcelets ou le bout du bec des volailles sont des ablations.",
       "noExample": "E"
     },
     {
@@ -3632,7 +3668,7 @@
       "id": "garantie-legale",
       "term": "garantie légale",
       "aliases": ["durées de garantie légale"],
-      "plain": "La garantie légale oblige le vendeur à réparer ou remplacer un produit qui tombe en panne, pendant une durée fixée par la loi.",
+      "plain": "La garantie légale de conformité oblige le vendeur à réparer ou remplacer un produit défectueux, pendant deux ans pour un bien neuf. Sinon, il doit baisser son prix ou le rembourser.",
       "noExample": "E"
     },
     {
@@ -3825,7 +3861,7 @@
     {
       "id": "code-des-marches-publics",
       "term": "Code des marchés publics",
-      "plain": "Le Code des marchés publics fixait les règles des achats publics. Il a été remplacé en 2019 par le code de la commande publique.",
+      "plain": "Le code des marchés publics fixait les règles des achats publics. Remplacé en 2016 par de nouveaux textes, il a laissé place en 2019 au code de la commande publique.",
       "noExample": "E"
     },
     {
@@ -3853,7 +3889,7 @@
       "id": "entreprise-publique",
       "term": "entreprises publiques",
       "aliases": ["entreprise publique"],
-      "plain": "Une entreprise publique appartient en tout ou en majorité à l'État ou à une collectivité, comme la SNCF ou EDF.",
+      "plain": "Une entreprise publique appartient en tout ou en majorité à l'État, à une commune, un département ou une région.",
       "noExample": "E"
     },
     {
@@ -3944,7 +3980,7 @@
       "id": "bailleurs",
       "term": "bailleurs",
       "aliases": ["bailleur", "bailleurs sociaux", "bailleur social"],
-      "plain": "Un bailleur loue un logement : c'est le propriétaire. Un bailleur social, souvent un organisme HLM, loue des logements à loyer modéré.",
+      "plain": "Un bailleur loue un logement : c'est le propriétaire. Un bailleur social, souvent un organisme public, loue des logements à loyer modéré.",
       "noExample": "E"
     },
     {
@@ -4119,7 +4155,7 @@
       "id": "subventions",
       "term": "subventions",
       "aliases": ["subvention", "subventionner"],
-      "plain": "Une subvention est une aide en argent versée par l'État ou une collectivité à une entreprise, une association ou une activité.",
+      "plain": "Une subvention est une aide en argent versée par l'État, une commune, un département ou une région à une entreprise, une association ou une activité.",
       "noExample": "E"
     },
     {
@@ -4763,7 +4799,7 @@
       "id": "corps-prefectoral",
       "term": "corps préfectoral et diplomatique",
       "aliases": ["corps préfectoral", "corps diplomatique et préfectoral", "préfectoral"],
-      "plain": "Les préfets et les diplomates formaient chacun un corps de fonctionnaires. Une réforme décidée en 2021 les éteint peu à peu : ces postes reviennent surtout aux administrateurs de l'État.",
+      "plain": "Les préfets et les diplomates formaient chacun un corps, un groupe de fonctionnaires aux mêmes règles de carrière. Une réforme de 2021 a arrêté en 2023 tout recrutement dans ces corps.",
       "noExample": "E"
     },
     {
@@ -5192,7 +5228,7 @@
       "id": "genocide",
       "term": "génocide",
       "aliases": ["génocides"],
-      "plain": "Un génocide est un crime défini par une convention de l'ONU de 1948. Il est commis dans l'intention de détruire, en tout ou en partie, un groupe national, ethnique, racial ou religieux.",
+      "plain": "Un génocide est un crime défini par un texte international de 1948. Il est commis dans l'intention de détruire, en tout ou en partie, un groupe national, ethnique, racial ou religieux.",
       "noExample": "S"
     },
     {
@@ -5218,7 +5254,7 @@
     {
       "id": "refugies-palestiniens",
       "term": "réfugiés palestiniens",
-      "plain": "Les réfugiés palestiniens sont les Palestiniens qui ont fui ou ont été chassés de leurs terres en 1948, pendant la guerre qui a suivi la création d'Israël. Leurs descendants le sont aussi.",
+      "plain": "Les réfugiés palestiniens sont, selon l'ONU, les Palestiniens qui ont perdu leur foyer et leurs moyens de vivre lors de la guerre de 1948, et leurs descendants. L'ONU aide aussi ceux partis en 1967.",
       "noExample": "S"
     },
     {
@@ -5300,7 +5336,7 @@
       "id": "encapacitants",
       "term": "encapacitants",
       "aliases": ["encapacitant"],
-      "plain": "Dans le vocabulaire militaire, les encapacitants sont les moyens qui rendent une action possible : renseignement, satellites, transport, ravitaillement.",
+      "plain": "Les encapacitants, qu'on appelle aussi facilitateurs, sont les moyens militaires qui rendent une action possible : renseignement, satellites, transport, ravitaillement.",
       "noExample": "E"
     },
     {
@@ -5423,7 +5459,7 @@
     {
       "id": "assemblee-generale-onu",
       "term": "Assemblée générale de l'ONU",
-      "plain": "L'Assemblée générale de l'ONU réunit tous les États membres, chacun avec une voix ; ses résolutions sont, pour la plupart, des recommandations.",
+      "plain": "L'Assemblée générale de l'ONU réunit tous les États membres, chacun avec une voix ; les textes qu'elle vote sont, pour la plupart, des recommandations.",
       "noExample": "E"
     },
     {
@@ -5511,13 +5547,13 @@
     {
       "id": "mesures-conservatoires",
       "term": "mesures conservatoires",
-      "plain": "Ce sont des décisions urgentes d'un juge, prises avant son jugement final, pour éviter un préjudice irréparable.",
+      "plain": "Ce sont des décisions provisoires, prises avant un jugement, pour préserver un droit ou éviter une perte impossible à réparer. Par exemple, bloquer les biens d'une personne qui doit de l'argent.",
       "noExample": "E"
     },
     {
       "id": "mondialisation-heureuse",
       "term": "mondialisation heureuse",
-      "plain": "L'expression mondialisation heureuse, née dans les années 1990, présente l'ouverture des échanges entre pays comme profitable à tous ; elle est souvent reprise avec ironie.",
+      "plain": "L'expression mondialisation heureuse présente l'ouverture des échanges entre pays comme profitable à tous ; elle est souvent reprise avec ironie.",
       "noExample": "E"
     },
     {
@@ -5612,7 +5648,7 @@
       "id": "aides-d-etat",
       "term": "aides d'État",
       "aliases": ["aide d'État"],
-      "plain": "Une aide d'État est un soutien public à une entreprise, subvention ou avantage fiscal, que les règles européennes interdisent en principe, sauf exceptions.",
+      "plain": "Une aide d'État est un soutien public à une entreprise, en argent ou en baisse d'impôt, que les règles européennes interdisent en principe, sauf exceptions.",
       "noExample": "E"
     },
     {
@@ -5911,7 +5947,7 @@
     {
       "id": "tirailleurs-senegalais",
       "term": "tirailleurs sénégalais",
-      "plain": "Les tirailleurs sénégalais étaient des soldats des colonies d'Afrique. À Thiaroye, en 1944, l'armée française a tiré sur ceux qui réclamaient leur solde, parlant de mutinerie ; le bilan reste flou.",
+      "plain": "Les tirailleurs sénégalais étaient des soldats des colonies d'Afrique. À Thiaroye, en 1944, l'armée française a tiré sur ceux qui réclamaient leur paie : un massacre, reconnu par la France en 2024.",
       "noExample": "S"
     },
     {
@@ -6231,7 +6267,7 @@
     {
       "id": "orientation-sexuelle",
       "term": "orientation sexuelle",
-      "plain": "L'orientation sexuelle désigne le sexe des personnes qui attirent quelqu'un : du sexe opposé, du même sexe, ou des deux.",
+      "plain": "L'orientation sexuelle désigne vers qui se porte l'attirance sexuelle ou amoureuse d'une personne : l'autre sexe, le même sexe ou les deux.",
       "noExample": "S"
     },
     {

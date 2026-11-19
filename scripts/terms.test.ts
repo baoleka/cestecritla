@@ -763,9 +763,17 @@ void test('an example is an adult’s case, written as an explanation is written
 interface SourcesFile {
   entries: Record<
     string,
-    { example?: 'illustrative' | 'fact'; sources?: { url: string; consulted_on: string }[] }
+    {
+      example?: 'illustrative' | 'fact';
+      plain?: 'fact';
+      sources?: { url: string; consulted_on: string }[];
+    }
   >;
 }
+
+/** A source is a page of a site, read on a given day: the page, so that it can be read again. */
+const SOURCE_READ = (source: { url: string; consulted_on: string }): boolean =>
+  /^https:\/\/[^/\s]+\/\S+/.test(source.url) && /^\d{4}-\d{2}-\d{2}$/.test(source.consulted_on);
 
 void test('what an example states that can be checked is declared: an illustration, or a fact with its source', () => {
   const file = JSON.parse(readFileSync('eval/terms-sources.json', 'utf8')) as SourcesFile;
@@ -778,11 +786,7 @@ void test('what an example states that can be checked is declared: an illustrati
     );
     if (declared.example === 'fact') {
       assert.ok(
-        (declared.sources ?? []).length > 0 &&
-          (declared.sources ?? []).every(
-            (source) =>
-              /^https:\/\//.test(source.url) && /^\d{4}-\d{2}-\d{2}$/.test(source.consulted_on),
-          ),
+        (declared.sources ?? []).length > 0 && (declared.sources ?? []).every(SOURCE_READ),
         `${id}: a fact, and no source with the day it was read`,
       );
     }
@@ -791,6 +795,28 @@ void test('what an example states that can be checked is declared: an illustrati
     assert.ok(
       entries.some((entry) => entry.id === id),
       `eval/terms-sources.json: ${id} is no entry`,
+    );
+  }
+});
+
+void test('what an explanation states that may change is declared, with the page it rests on and the day it was read', () => {
+  // A year, a share, a length of time: read again every ninety days (scripts/terms-recall.ts).
+  const file = JSON.parse(readFileSync('eval/terms-sources.json', 'utf8')) as SourcesFile;
+  for (const { id, plain } of entries) {
+    const declared = file.entries[id];
+    if (!DECLARED.test(plain)) {
+      assert.notEqual(
+        declared?.plain,
+        'fact',
+        `${id}: declared a fact, and its explanation states none`,
+      );
+      continue;
+    }
+    assert.ok(
+      declared?.plain === 'fact' &&
+        (declared.sources ?? []).length > 0 &&
+        (declared.sources ?? []).every(SOURCE_READ),
+      `${id}: its explanation states a year, a share or a length of time, and eval/terms-sources.json gives no page read on a given day`,
     );
   }
 });
