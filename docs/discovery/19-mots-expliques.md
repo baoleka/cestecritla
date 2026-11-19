@@ -6,7 +6,7 @@
 > porte son statut : **VÉRIFIÉ** (constaté, avec sa preuve), **MESURÉ** (compté par un outil),
 > **HYPOTHÈSE** (des lecteurs simulés, pas des gens).
 >
-> **Tout ce qui suit a été fait par une IA** — la session, sous le mandat D20.3 de l'éditeur
+> **En production depuis le 20 novembre 2026, 0 h 16** (D20.22). **Tout ce qui suit a été fait par une IA** — la session, sous le mandat D20.3 de l'éditeur
 > (« Jusqu'à la production ») — et vérifié par d'autres modèles. **Aucune personne n'a relu
 > les explications une à une**, et le site le dit.
 
