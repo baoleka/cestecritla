@@ -1058,3 +1058,31 @@ void test('the apex takes no app build from main until the editor has dated his 
     /holding page until the launch is decided/,
   );
 });
+
+void test('the apex takes no app build while the explained words are held (D20.15)', () => {
+  const pages = ['index.html', 's/p1c1-s01/index.html'];
+  const waiting = ['data/2026/terms.json: the explained words changed since they were sealed'];
+  const held: DeployContext = {
+    ...VALIDATED,
+    launchBlockers: [],
+    homeBlockers: [],
+    wordsBlockers: waiting,
+  };
+  const refusal = String(deployRefusal('apex', 'app', pages, held));
+  assert.match(refusal, /production does not take these explained words yet \(D20\.15\)/);
+  assert.match(refusal, /changed since they were sealed/);
+  assert.match(refusal, /runbook sheet 15/);
+  // The scrutin build is an app build too.
+  assert.match(
+    String(deployRefusal('apex', 'app', pages, { ...held, scrutinBuild: true })),
+    /D20\.15/,
+  );
+  // What closes always may; the preview host is where the words are shown first; a dry run
+  // sends nothing; and once sealed and opened, nothing of this rule is left.
+  assert.equal(deployRefusal('apex', 'holding', [...HOLDING_PAGES], held), null);
+  assert.equal(deployRefusal('preview', 'app', pages, held), null);
+  assert.equal(deployRefusal('apex', 'app', pages, { ...held, dryRun: true }), null);
+  assert.equal(deployRefusal('apex', 'app', pages, { ...held, wordsBlockers: [] }), null);
+  // The script reads the committed files.
+  assert.match(readFileSync('scripts/deploy.ts', 'utf8'), /wordsBlockers: wordsBlockers\(\)/);
+});

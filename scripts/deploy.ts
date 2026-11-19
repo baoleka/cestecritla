@@ -50,7 +50,13 @@ import {
   wranglerDeployArgs,
   type AskDeploy,
 } from './build-mode.js';
-import { homeBlockers, launchBlockers, previewChatBlockers, readLaunchInputs } from './launch.js';
+import {
+  homeBlockers,
+  launchBlockers,
+  previewChatBlockers,
+  readLaunchInputs,
+  wordsBlockers,
+} from './launch.js';
 
 // A deploy reads the committed state of the site, never a test of it: two variables a shell may
 // still hold from a test build are dropped before anything is read (security review, 19/11/2026).
@@ -208,6 +214,7 @@ const refusal = deployRefusal(target, mode, pages, {
   distProblems: mode === 'app' ? distProblems(readDist('dist'), { gameFile, ask }) : [],
   gistsProblems: shownGists === null ? [] : gistsUnpublished(),
   homeBlockers: homeBlockers(),
+  wordsBlockers: wordsBlockers(),
 });
 if (refusal !== null) {
   console.error(`deploy refused (${target}, ${mode} build): ${refusal}`);

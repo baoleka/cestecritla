@@ -6,6 +6,17 @@
     "written_by": "session",
     "checked_by": "independent-model",
     "read_by_a_person": false,
+    "charter": 1,
+    "sealed": {
+      "sha256": "e3885fde6128ab1c1322578bc3752cb281e75a4030479270744aac42c1fb9318",
+      "on": "2026-11-19",
+      "by": "session",
+      "passes": [
+        { "what": "written", "on": "2026-11-15", "by": "session" },
+        { "what": "checked", "on": "2026-11-15", "by": "independent-model" },
+        { "what": "checked again", "on": "2026-11-15", "by": "independent-model" }
+      ]
+    },
     "note_fr": "Explications courtes des sigles et des termes techniques que la question ou les phrases de « Demander » emploient (D16.60, D16.62). Une IA les a écrites — la session —, à partir de connaissances générales, jamais du texte du livre ; un autre modèle, qui n'a lu que ce fichier, en a vérifié les faits le 15/11/2026 (257 entrées, 88 à reprendre), et la session a repris ce qu'il relevait : tout ce qu'il demandait de corriger avant de servir, et la plupart du reste. Deux entrées (« UE », « IA ») et les retouches faites après les relectures du 15/11 sont passées par une seconde vérification du même relecteur. Aucune personne ne les a relues une à une : la feuille le dit, « Explications écrites et vérifiées par une IA ». Aucune ne dit ce que le programme prévoit, aucune ne donne un avis, aucune ne porte un montant en euros ni une règle qui change d'une année à l'autre quand une formule durable suffit. Un sigle — un mot écrit avec une majuscule après sa première lettre, ou avec un chiffre — est reconnu tel quel, à la casse près ; « anyCase » l'admet aussi en minuscules, quand elles ne peuvent rien vouloir dire d'autre. Les autres termes sont reconnus sans tenir compte de la casse, des accents ni du pluriel."
   },
   "entries": [

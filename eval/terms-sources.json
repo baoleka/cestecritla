@@ -1,0 +1,7 @@
+{
+  "meta": {
+    "note_fr": "Ce que les exemples des mots expliqués (data/2026/terms.json) disent qui se vérifie : une part, une année, une durée. Chaque exemple qui en porte une est déclaré ici — « illustrative » (un cas inventé, aux montants ronds) ou « fact » (un fait, avec sa source primaire et le jour où elle a été lue). scripts/terms.test.ts l'exige. Les faits datés des explications elles-mêmes s'y ajoutent au lot 13 de PLAN-MOTS, avec un rappel tous les quatre-vingt-dix jours.",
+    "recheck_every_days": 90
+  },
+  "entries": {}
+}

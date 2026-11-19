@@ -637,10 +637,11 @@ export function readLaunchInputs(): LaunchInputs {
 
 function main(): void {
   const blockers = launchBlockers(readLaunchInputs());
-  // Apart from the launch: what keeps the code of main from production for now (D19.12).
-  const home = homeBlockers();
+  // Apart from the launch: what keeps the code of main from production for now — the home page
+  // (D19.12) and the explained words (D20.15).
+  const home = [...homeBlockers(), ...wordsBlockers()];
   if (blockers.length === 0 && home.length > 0) {
-    console.log('launch: nothing is missing — but production waits for the editor:');
+    console.log('launch: nothing is missing — but production waits:');
     for (const line of home) console.log(`  · ${line}`);
     process.exitCode = 1;
     return;
@@ -658,6 +659,109 @@ function main(): void {
   for (const line of decision) console.log(`  · ${line}`);
   for (const line of home) console.log(`  · ${line}`);
   process.exitCode = 1;
+}
+
+/** Where the explained words are, and where they are switched on (PLAN-MOTS). */
+export const TERMS_PATH = 'data/2026/terms.json';
+export const WORDS_SWITCH_PATH = 'data/2026/words.json';
+const DECISIONS_PATH = 'docs/discovery/decisions.md';
+/** The day « Aucun mot ne bloque » was decided (D20.1): no seal of its charter, nor opening, is older. */
+const WORDS_DECIDED_FROM = '2026-11-19';
+
+/** A day a seal or an opening can bear: a real date, not before the work began, not after today. */
+const wordsSaidSince = (value: unknown, today: Date): value is string =>
+  isDate(value) &&
+  !Number.isNaN(Date.parse(value)) &&
+  value >= WORDS_DECIDED_FROM &&
+  value <= today.toISOString().slice(0, 10);
+
+/**
+ * What keeps production from taking the explained words of main (PLAN-MOTS, D20.15) — empty when
+ * it may.
+ *
+ *   - the file of the words is the very one its seal was put on: what was checked is what goes
+ *     out, and a word changed since breaks the seal;
+ *   - a seal of the new charter (2: words taken from the book, examples) is written in
+ *     decisions.md on its day, with its first twelve characters — by the session under its
+ *     mandate (« D20.3 ») or by the editor (« DÉCISION (utilisateur) »);
+ *   - a file of the new charter, or a surface opened in production (data/2026/words.json), goes
+ *     out only once opened: on a day, by the session under D20.3 or by the editor, after the yes
+ *     of an independent reviewer on the preview host — the opening written in decisions.md on
+ *     its day, naming the file it opens.
+ *
+ * Like `homeBlockers`, it holds back app builds on the apex and nothing else: the preview host —
+ * where the words are shown first —, the holding page, a dry run are never concerned.
+ *
+ * Pure: the files are passed in, so the rule is tested without them.
+ */
+export function wordsBlockersOf(
+  terms: unknown,
+  words: unknown,
+  decisions: string,
+  today: Date = new Date(),
+): string[] {
+  const meta = field(terms, 'meta');
+  const sealed = field(meta, 'sealed');
+  const seal = field(sealed, 'sha256');
+  const sealedOn = field(sealed, 'on');
+  if (typeof seal !== 'string' || !isDate(sealedOn)) {
+    return [`${TERMS_PATH}: the explained words carry no seal — meta.sealed (D20.15)`];
+  }
+  const out: string[] = [];
+  if (canonicalHash(field(terms, 'entries')) !== seal) {
+    out.push(
+      `${TERMS_PATH}: the explained words changed since they were sealed — check them, then seal them again (D20.15)`,
+    );
+  }
+  const charter = field(meta, 'charter');
+  if (charter !== 1 && charter !== 2) out.push(`${TERMS_PATH}: meta.charter is 1 or 2`);
+  const rows = decisions.split('\n').filter((row) => /^\| D\d+\.\d+ \|/.test(row));
+  const written = (on: string, marks: readonly string[]): boolean =>
+    rows.some((row) => row.includes(`| ${on} |`) && marks.every((mark) => row.includes(mark)));
+  /** Who may seal or open: the session under its mandate, or the editor — each by its mark. */
+  const markOf = (who: unknown): string | null =>
+    who === 'session' ? 'D20.3' : who === 'editor' ? 'DÉCISION (utilisateur)' : null;
+  if (charter === 2) {
+    const mark = markOf(field(sealed, 'by'));
+    if (mark === null) {
+      out.push(`${TERMS_PATH}: meta.sealed.by is the session (D20.3) or the editor`);
+    } else if (!wordsSaidSince(sealedOn, today) || !written(sealedOn, [seal.slice(0, 12), mark])) {
+      out.push(
+        `docs/discovery/decisions.md: no decision on ${sealedOn} that names the seal of the explained words (${seal.slice(0, 12)}…)`,
+      );
+    }
+  }
+  const production = field(words, 'production');
+  const opened = ['pages', 'search', 'game'].some((surface) => field(production, surface) === 'on');
+  if (charter === 2 || opened) {
+    const on = field(words, 'decided_on');
+    const mark = markOf(field(words, 'decided_by'));
+    if (!wordsSaidSince(on, today) || mark === null) {
+      out.push(
+        `${WORDS_SWITCH_PATH}: production takes these explained words only once they are opened — decided_on, decided_by (D20.15)`,
+      );
+    } else if (!written(on, ['words.json', mark])) {
+      out.push(`docs/discovery/decisions.md: no decision on ${on} that opens ${WORDS_SWITCH_PATH}`);
+    }
+    if (!wordsSaidSince(field(words, 'reviewer_yes_on'), today)) {
+      out.push(
+        `${WORDS_SWITCH_PATH}: no independent reviewer has said yes on the preview host — reviewer_yes_on (D20.15)`,
+      );
+    }
+  }
+  return out;
+}
+
+/** The same, read from the committed files. Never throws: an unreadable file blocks. */
+export function wordsBlockers(root = '.', today: Date = new Date()): string[] {
+  const at = (path: string): string => (root === '.' ? path : `${root}/${path}`);
+  const decisions = existsSync(at(DECISIONS_PATH)) ? readFileSync(at(DECISIONS_PATH), 'utf8') : '';
+  return wordsBlockersOf(
+    readObject(at(TERMS_PATH)),
+    readObject(at(WORDS_SWITCH_PATH)),
+    decisions,
+    today,
+  );
 }
 
 if (process.argv[1] !== undefined && /launch\.ts$/.test(process.argv[1])) main();

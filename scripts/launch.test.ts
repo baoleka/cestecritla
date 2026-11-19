@@ -21,6 +21,7 @@ import {
   artefactBlockers,
   canonicalHash,
   STRINGS_PATH,
+  TERMS_PATH,
   homeBlockers,
   homeBlockersOf,
   isChatPrivacyKey,
@@ -31,6 +32,8 @@ import {
   privacyChatStringsHash,
   privacyMascotStringsHash,
   privacyStringsHash,
+  wordsBlockers,
+  wordsBlockersOf,
   type DatedGestures,
   type LaunchFile,
   type LaunchInputs,
@@ -727,4 +730,133 @@ void test("production takes the home page of main only on the editor's dated wor
     );
     assert.deepEqual(homeBlockers(), []);
   }
+});
+
+void test('production takes the explained words of main only sealed as they stand, and opened (D20.15)', () => {
+  const entries = [{ id: 'a', term: 'A', plain: 'Un texte.' }];
+  const seal = canonicalHash(entries);
+  const today = new Date('2026-11-25T09:00:00Z');
+  const sealedOne = {
+    meta: { charter: 1, sealed: { sha256: seal, on: '2026-11-15', by: 'session' } },
+    entries,
+  };
+  const closed = {
+    production: { pages: 'off', search: 'off', game: 'off' },
+    preview: { pages: 'on', search: 'on', game: 'on' },
+    decided_on: null,
+    decided_by: null,
+    reviewer_yes_on: null,
+  };
+  // The file of today: sealed as it stands, nothing opened in production — nothing waits.
+  assert.deepEqual(wordsBlockersOf(sealedOne, closed, '', today), []);
+  // No seal, or a word changed since it was sealed: held.
+  assert.match(
+    String(wordsBlockersOf({ meta: { charter: 1 }, entries }, closed, '', today)),
+    /carry no seal/,
+  );
+  const changed = { ...sealedOne, entries: [{ id: 'a', term: 'A', plain: 'Un autre texte.' }] };
+  assert.match(
+    String(wordsBlockersOf(changed, closed, '', today)),
+    /changed since they were sealed/,
+  );
+  // The new charter: its seal is written where decisions are, on its day, with its first
+  // twelve characters, by the session under its mandate…
+  const sealedTwo = {
+    meta: { charter: 2, sealed: { sha256: seal, on: '2026-11-21', by: 'session' } },
+    entries,
+  };
+  const opened = {
+    ...closed,
+    decided_on: '2026-11-23',
+    decided_by: 'session',
+    reviewer_yes_on: '2026-11-22',
+  };
+  const sealRow = `| D20.40 | 2026-11-21 | Le sceau ${seal.slice(0, 12)} | **DÉCISION (session, sur le mandat D20.3)** | — | — |`;
+  const openRow =
+    '| D20.41 | 2026-11-23 | data/2026/words.json ouvert | **DÉCISION (session, sur le mandat D20.3)** | — | — |';
+  assert.deepEqual(wordsBlockersOf(sealedTwo, opened, `${sealRow}\n${openRow}`, today), []);
+  assert.match(String(wordsBlockersOf(sealedTwo, opened, openRow, today)), /names the seal/);
+  // …a row of another day, or without the seal, is no such row.
+  assert.match(
+    String(
+      wordsBlockersOf(
+        sealedTwo,
+        opened,
+        `${sealRow.replace('2026-11-21', '2026-11-20')}\n${openRow}`,
+        today,
+      ),
+    ),
+    /names the seal/,
+  );
+  // …and it goes out only once opened: decided, by whom, and after the yes of a reviewer.
+  for (const missing of [
+    { ...opened, decided_on: null },
+    { ...opened, decided_by: null },
+    { ...opened, decided_by: 'quelqu’un' },
+    { ...opened, decided_on: '2026-11-30' },
+    { ...opened, decided_on: '2026-11-18' },
+  ]) {
+    assert.match(
+      String(wordsBlockersOf(sealedTwo, missing, `${sealRow}\n${openRow}`, today)),
+      /only once they are opened/,
+    );
+  }
+  assert.match(
+    String(
+      wordsBlockersOf(
+        sealedTwo,
+        { ...opened, reviewer_yes_on: null },
+        `${sealRow}\n${openRow}`,
+        today,
+      ),
+    ),
+    /no independent reviewer has said yes/,
+  );
+  assert.match(
+    String(wordsBlockersOf(sealedTwo, opened, sealRow, today)),
+    /opens data\/2026\/words\.json/,
+  );
+  // A surface opened in production asks for the same, whatever the charter.
+  const surface = { ...closed, production: { pages: 'on', search: 'off', game: 'off' } };
+  assert.match(String(wordsBlockersOf(sealedOne, surface, '', today)), /only once they are opened/);
+  assert.deepEqual(
+    wordsBlockersOf(
+      sealedOne,
+      {
+        ...surface,
+        decided_on: '2026-11-23',
+        decided_by: 'session',
+        reviewer_yes_on: '2026-11-22',
+      },
+      openRow,
+      today,
+    ),
+    [],
+  );
+  // The editor's own word counts, by its own mark.
+  const byHim = { ...opened, decided_by: 'editor' };
+  assert.match(
+    String(wordsBlockersOf(sealedTwo, byHim, `${sealRow}\n${openRow}`, today)),
+    /opens data\/2026\/words\.json/,
+  );
+  assert.deepEqual(
+    wordsBlockersOf(
+      sealedTwo,
+      byHim,
+      `${sealRow}\n${openRow.replace('**DÉCISION (session, sur le mandat D20.3)**', '**DÉCISION (utilisateur)**')}`,
+      today,
+    ),
+    [],
+  );
+  // The committed files, as the deploy guard reads them: while the words are being written the
+  // seal is broken and production is held (PLAN-MOTS, lot 10) — the rule says which, no more.
+  const committed = JSON.parse(readFileSync(TERMS_PATH, 'utf8')) as {
+    meta: { sealed: { sha256: string } };
+    entries: unknown;
+  };
+  const holds = committed.meta.sealed.sha256 === canonicalHash(committed.entries);
+  assert.equal(
+    wordsBlockers().some((line) => /changed since they were sealed/.test(line)),
+    !holds,
+  );
 });

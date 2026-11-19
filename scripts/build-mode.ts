@@ -523,6 +523,12 @@ export interface DeployContext {
    * (scripts/launch.ts, `homeBlockers`, D19.12): empty once the editor has dated his yes.
    */
   homeBlockers: readonly string[];
+  /**
+   * What keeps the explained words of main from production (scripts/launch.ts,
+   * `wordsBlockers`, D20.15): empty when the file is sealed as it stands, and opened when it
+   * must be.
+   */
+  wordsBlockers?: readonly string[];
 }
 
 /** True when the build in dist/ was made with `--scrutin` (the build deployed before each window). */
@@ -597,6 +603,18 @@ export function deployRefusal(
       `${context.homeBlockers.join(' · ')}. ` +
       'Show it on the preview host with `npm run build:preview && npm run deploy:preview -- --bench`; ' +
       'for an urgent fix of production, runbook sheet 14 (docs/discovery/09-architecture.md)'
+    );
+  }
+  // The explained words (PLAN-MOTS, D20.15): production takes them sealed as they stand — and,
+  // for the new charter or a surface opened there, opened after an independent reviewer's yes on
+  // the preview host. The preview host is where they are shown first; a dry run sends nothing.
+  const words = context.wordsBlockers ?? [];
+  if (target === 'apex' && mode === 'app' && !context.dryRun && words.length > 0) {
+    return (
+      'production does not take these explained words yet (D20.15): ' +
+      `${words.join(' · ')}. ` +
+      'Show them on the preview host first; for an urgent fix of production, runbook sheet 15 ' +
+      '(docs/discovery/09-architecture.md)'
     );
   }
   // L49 (D16.16): inside a window, and from the day before, nothing that OPENS is deployed.

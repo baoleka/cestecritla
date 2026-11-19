@@ -18,6 +18,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { explanationRefusals } from '../src/lib/ask-validate.js';
+import { normalize, terms as searchTerms } from '../src/lib/search-core.js';
 import { MAX_EXPLAIN_SENTENCES } from '../src/lib/chat-contract.js';
 import { notionsIn } from '../src/lib/notions.js';
 import {
@@ -333,6 +334,8 @@ interface TermsFile {
     checked_by: string;
     read_by_a_person: boolean;
     note_fr: string;
+    /** 1: the file of 15 November; 2: the words taken from the book, with examples (D20.10). */
+    charter?: number;
   };
   entries: unknown[];
 }
@@ -491,9 +494,13 @@ void test('no explained word is one of our cards: a person wrote those, and they
 /**
  * The rules of the control that were written for a sentence nobody re-reads before it is shown
  * (a live answer), and that a text written ahead and checked may break: a second sentence that
- * opens on « Elle », a negation, a contrast — and « on », which is how French defines a word.
+ * opens on « Elle », a negation, a contrast. « on », which is how French defines a word, is read
+ * as « il » (`withoutOn`): waiving the refusal it causes let the next person found through.
  */
 const WAIVED = new Set(['opener', 'negation', 'contrast']);
+/** « on » read as « il » by the control, so that nobody hides behind it. */
+const withoutOn = (text: string): string =>
+  text.replace(/(?<!\p{L})[Oo]n(?!\p{L})/gu, (on) => (on === 'On' ? 'Il' : 'il'));
 
 void test('no explanation speaks of the programme, of a party, of a vote or of itself — each passes the control', () => {
   const problems: string[] = [];
@@ -504,13 +511,10 @@ void test('no explanation speaks of the programme, of a party, of a vote or of i
       continue;
     }
     const refused = explanationRefusals(
-      JSON.stringify({ phrases }),
+      JSON.stringify({ phrases: phrases.map(withoutOn) }),
       { shown: [] },
       { withoutText: true },
-    ).filter(
-      (refusal) =>
-        !WAIVED.has(refusal.rule) && !(refusal.rule === 'person' && /^on$/i.test(refusal.detail)),
-    );
+    ).filter((refusal) => !WAIVED.has(refusal.rule));
     for (const refusal of refused)
       problems.push(`${entry.id}: ${refusal.rule} (${refusal.detail})`);
   }
@@ -571,4 +575,286 @@ void test('the identifiers are slugs in the order of the file, and the note says
   assert.match(file.meta.note_fr, /connaissances générales/);
   assert.match(file.meta.note_fr, /une IA/);
   assert.doesNotMatch(file.meta.note_fr, /relu(?:e|es|s)? par (?:l['’]éditeur|une personne)/);
+});
+
+// -------------------------------------------------------------------------------------------
+// The examples (D20.2, D20.9; PLAN-MOTS, « Charte de l'exemple »): a case of the thing defined,
+// never an image of it — an adult's case, which no reform, no party and no year changes.
+
+/**
+ * The rules of the control an example may break: a second sentence that opens on « Elle », a
+ * negation that states a rule. Not « contrast », which an explanation may break: where two cases
+ * meet, framing comes in.
+ */
+const EXAMPLE_WAIVED = new Set(['opener', 'negation']);
+/** What a child's world, or a teacher talking down, sounds like. */
+const CHILDISH =
+  /(?<!\p{L})(?:imagine[rsz]?|supposons|suppose[sz]?|en gros|tout simplement|bonbons?|g[âa]teaux?|tirelires?|argent de poche|ma[iî]tre(?:sse)?s?|r[ée]cr[ée]s?|cartables?|papa|maman|copains?|copines?|gentil(?:le)?s?|m[ée]chante?s?|magiques?)(?!\p{L})/iu;
+/** An image of the thing instead of a case of it. */
+const ANALOGY = /c[’']est (?:un peu )?comme|comme (?:si|quand)(?!\p{L})|un peu comme|ressembl/iu;
+/** A legal value of the year, said as one. */
+const LEGAL_VALUE = /(?:est|sont) fix[ée]e?s? [àa]|s[’']él[èe]ve(?:nt)? [àa]|plafonn[ée]e?s? [àa]/i;
+/** Allowances whose amount is set by law, each year: an example never gives one next to them. */
+const LEGAL_AMOUNTS = /(?<!\p{L})(?:SMIC|RSA|AAH|APL|ASS|ASF)(?!\p{L})/u;
+/** A change, and what it brings: an example shows how a thing works, never what a reform does. */
+const EFFECT =
+  /de plus par mois|de moins par mois|grâce à|désormais|à partir de maintenant|au lieu de/i;
+/** What an example states that may be checked: a share, a year, a length of time. */
+const DECLARED =
+  /%|(?<!\d)(?:1[5-9]|20)\d\d(?!\d)|\d+\s*(?:ans?|mois|jours?|heures?|semaines?|trimestres?)(?!\p{L})/u;
+/** Capitals an example may write away from the start of a sentence, besides the words of this file. */
+const PROPER: ReadonlySet<string> = new Set([
+  'France',
+  'Français',
+  'Française',
+  'Françaises',
+  'État',
+  'États',
+  'Europe',
+  'République',
+  'Parlement',
+  'Sénat',
+  'Assemblée',
+  'Constitution',
+  'Sécurité',
+  'Assurance',
+  'Union',
+  'Conseil',
+  'Cour',
+  'Trésor',
+  'Banque',
+  'Nations',
+]);
+/**
+ * Entries in a sensitive field that may hold an example all the same — each named, with why.
+ * Empty: in a sensitive field there is no example by default (PLAN-MOTS, « Neutralité »).
+ */
+const SENSITIVE_EXAMPLES: ReadonlyMap<string, string> = new Map();
+
+const withExample = entries.filter(
+  (entry): entry is TermEntry & { example: string } => entry.example !== undefined,
+);
+
+/** The digits of every amount in euros a text gives — in millions and billions too, decimals kept. */
+const amountsIn = (text: string): string[] =>
+  [
+    ...text.matchAll(
+      new RegExp(
+        `(\\d[\\d ${NBSP}]*(?:,\\d+)?)\\s*(?:(?:millions?|milliards?)\\s+d[’']\\s*)?(?:€|euros?(?!\\p{L}))`,
+        'gu',
+      ),
+    ),
+  ].map((found) => (found[1] ?? '').replace(/\D/g, ''));
+
+/** What an example is read against: the stems of the book, the capitals of this file. */
+interface ExampleReading {
+  index: ReadonlySet<string>;
+  capitalised: ReadonlySet<string>;
+}
+
+function exampleReading(): ExampleReading {
+  const index = (
+    JSON.parse(readFileSync('data/2026/search-index.json', 'utf8')) as {
+      index: { index: [string, unknown][] };
+    }
+  ).index.index.map(([stem]) => stem);
+  // The capitals the words of this file write: « SMIC », « Scop », « Conseil » (de sécurité).
+  const capitalised = entries
+    .flatMap(wordingsOf)
+    .flatMap((wording) => wording.split(/[\s’']+/))
+    .filter((token) => /^\p{Lu}/u.test(token));
+  return { index: new Set(index), capitalised: new Set(capitalised) };
+}
+
+/** Every rule of the charter an example breaks, each said with what breaks it. */
+function exampleProblems(example: string, reading: ExampleReading): string[] {
+  const problems: string[] = [];
+  const phrases = sentencesOf(example);
+  if (example.length > 240) problems.push(`${String(example.length)} characters`);
+  if (phrases.length === 0 || phrases.length > 3) {
+    problems.push(`${String(phrases.length)} sentences`);
+  }
+  if (!/^\p{Lu}/u.test(example) || !/\.$/.test(example)) {
+    problems.push('not a sentence that opens on a capital and ends on a full stop');
+  }
+  const refused = explanationRefusals(
+    JSON.stringify({ phrases: phrases.map(withoutOn) }),
+    { shown: [] },
+    { withoutText: true },
+  ).filter((refusal) => !EXAMPLE_WAIVED.has(refusal.rule));
+  for (const refusal of refused) problems.push(`${refusal.rule} (${refusal.detail})`);
+  for (const [what, pattern] of [
+    ['a word of a child’s world', CHILDISH],
+    ['an image instead of a case', ANALOGY],
+    ['a legal value of the year', LEGAL_VALUE],
+    ['a change and what it brings', EFFECT],
+    [
+      'the book, its movement or the site',
+      /programme|avenir en commun|insoumis|\bLFI\b|m[ée]lenchon|nouvelle france|ce site|cette page|c[’']est écrit là/i,
+    ],
+    ['an exclamation, a question, a suspension', /[!?…]/],
+    ['markup or an address', /[<>{}[\]*_`#|\\]|https?:|www\.|@/],
+  ] as const) {
+    if (pattern.test(example)) problems.push(what);
+  }
+  for (const digits of amountsIn(example)) {
+    if (digits.replace(/0+$/, '').length > 2) {
+      problems.push(`${digits} euros is no round amount (two significant digits at most)`);
+    }
+  }
+  for (const sentence of phrases) {
+    if (LEGAL_AMOUNTS.test(sentence) && amountsIn(sentence).length > 0) {
+      problems.push('an amount next to an allowance the law sets each year');
+    }
+    // A capital away from the start of a sentence: an institution, a place — or a word of this
+    // file. Never a person, never a brand.
+    for (const word of sentence.split(/[\s’']+/).slice(1)) {
+      const bare = word.replace(/[.,;:»«()]/g, '');
+      if (!/^\p{Lu}/u.test(bare) || PROPER.has(bare) || reading.capitalised.has(bare)) continue;
+      problems.push(`« ${bare} » — a capital no list knows`);
+    }
+  }
+  // A number of the book is no illustration: four digits or more that the index holds.
+  for (const number of normalize(example).match(/\d{4,}/g) ?? []) {
+    if (reading.index.has(number)) problems.push(`${number} is a number of the book`);
+  }
+  return problems;
+}
+
+/** The four examples the editor chose, as he saw them (D20.2): the charter's reference. */
+const REFERENCE_EXAMPLES: readonly string[] = [
+  'Une liste obtient 20 % des voix. Elle reçoit environ 20 sièges sur 100.',
+  'Si le niveau de vie médian est de 2 000 euros par mois, le seuil à 60 % est de 1 200 euros.',
+  'Une personne a droit au RSA. Elle ne dépose pas de dossier, faute de savoir qu’elle y a droit.',
+  'Les cotisations prélevées ce mois-ci sur les salaires paient les pensions versées ce mois-ci.',
+];
+
+void test('the charter of the example: the four the editor chose pass as they stand — and what it refuses, it refuses', () => {
+  const reading = exampleReading();
+  for (const example of REFERENCE_EXAMPLES) {
+    assert.deepEqual(exampleProblems(example, reading), [], example);
+  }
+  for (const [example, why] of [
+    ['Imagine une famille qui paie 1 000 euros.', /child/],
+    ['C’est comme une cagnotte commune.', /an image/],
+    ['Le SMIC est fixé à 1 800 euros par mois.', /a legal value/],
+    ['Un salarié qui touche le SMIC reçoit 1 800 euros.', /an allowance the law sets/],
+    ['Grâce à la réforme, un salarié reçoit 100 euros de plus par mois.', /a change/],
+    ['Le programme prévoit cette aide pour chaque famille.', /the book/],
+    ['Une famille paie 1 234 euros par an.', /no round amount/],
+    ['Une commune emprunte 12,5 millions d’euros.', /no round amount/],
+    ['Une famille, les Martin, paie 2 000 euros.', /a capital no list knows/],
+    ['Une entreprise paie cette taxe !', /an exclamation/],
+    ['Une entreprise paiera cette taxe.', /tense/],
+  ] as const) {
+    assert.match(String(exampleProblems(example, reading)), why, example);
+  }
+});
+
+void test('an example is an adult’s case, written as an explanation is written — and checked like one', () => {
+  const reading = exampleReading();
+  const problems = withExample.flatMap(({ id, example }) =>
+    exampleProblems(example, reading).map((problem) => `${id}: ${problem}`),
+  );
+  assert.deepEqual(problems, []);
+});
+
+interface SourcesFile {
+  entries: Record<
+    string,
+    { example?: 'illustrative' | 'fact'; sources?: { url: string; consulted_on: string }[] }
+  >;
+}
+
+void test('what an example states that can be checked is declared: an illustration, or a fact with its source', () => {
+  const file = JSON.parse(readFileSync('eval/terms-sources.json', 'utf8')) as SourcesFile;
+  for (const { id, example } of withExample) {
+    if (!DECLARED.test(example)) continue;
+    const declared = file.entries[id];
+    assert.ok(
+      declared?.example === 'illustrative' || declared?.example === 'fact',
+      `${id}: a share, a year or a length of time, and eval/terms-sources.json does not say whether it is an illustration or a fact`,
+    );
+    if (declared.example === 'fact') {
+      assert.ok(
+        (declared.sources ?? []).length > 0 &&
+          (declared.sources ?? []).every(
+            (source) =>
+              /^https:\/\//.test(source.url) && /^\d{4}-\d{2}-\d{2}$/.test(source.consulted_on),
+          ),
+        `${id}: a fact, and no source with the day it was read`,
+      );
+    }
+  }
+  for (const id of Object.keys(file.entries)) {
+    assert.ok(
+      entries.some((entry) => entry.id === id),
+      `eval/terms-sources.json: ${id} is no entry`,
+    );
+  }
+});
+
+void test('in a sensitive field, no example — unless the entry is named, with why', () => {
+  const sensitive = JSON.parse(readFileSync('data/2026/sensitive.json', 'utf8')) as {
+    groups: Record<string, string[]>;
+  };
+  const touchy = Object.values(sensitive.groups).flat();
+  const isTouchy = (stem: string): boolean =>
+    touchy.some((word) =>
+      word.endsWith('*') ? stem.startsWith(word.slice(0, -1)) : stem === word,
+    );
+  for (const { id, example, term, aliases } of withExample) {
+    const stems = [term, ...(aliases ?? [])].flatMap((wording) => searchTerms(wording));
+    if (!stems.some(isTouchy)) continue;
+    assert.ok(
+      SENSITIVE_EXAMPLES.has(id),
+      `${id}: an example in a sensitive field — « ${example.slice(0, 50)}… »`,
+    );
+  }
+});
+
+void test('an amount in euros is never in an explanation, written in any way', () => {
+  const EUROS =
+    /\d[\d\s]*(?:(?:millions?|milliards?)\s+d['’]\s*)?(?:€|euros?\b)|€|(?:millions?|milliards?)\s+d['’]euros/i;
+  for (const entry of entries) assert.doesNotMatch(entry.plain, EUROS, entry.id);
+  // What the rule catches, and what it lets through.
+  assert.match('Un budget de 10 millions d’euros.', EUROS);
+  assert.match('Un million d’euros.', EUROS);
+  assert.doesNotMatch('Le seuil retenu est 60 % du niveau de vie médian.', EUROS);
+});
+
+void test('the new charter: every entry has an example, or says why it has none', () => {
+  if (file.meta.charter !== 2) return;
+  const bare = entries.filter(
+    (entry) => entry.example === undefined && entry.noExample === undefined,
+  );
+  assert.deepEqual(
+    bare.map((entry) => entry.id),
+    [],
+    'entries with neither an example nor a reason to have none',
+  );
+});
+
+void test('the new charter: an explanation leans on another word at most twice deep, and never in a circle', () => {
+  if (file.meta.charter !== 2) return;
+  const deps = new Map(
+    entries.map((entry) => [
+      entry.id,
+      termsIn([entry.plain, entry.example ?? ''], entries, entries.length)
+        .map((used) => used.id)
+        .filter((id) => id !== entry.id),
+    ]),
+  );
+  const depth = (id: string, path: readonly string[]): number => {
+    let deepest = 0;
+    for (const next of deps.get(id) ?? []) {
+      assert.ok(!path.includes(next), `a circle: ${[...path, next].join(' > ')}`);
+      deepest = Math.max(deepest, 1 + depth(next, [...path, next]));
+    }
+    return deepest;
+  };
+  for (const entry of entries) {
+    const deep = depth(entry.id, [entry.id]);
+    assert.ok(deep <= 2, `${entry.id}: its explanation leans ${String(deep)} words deep`);
+  }
 });
