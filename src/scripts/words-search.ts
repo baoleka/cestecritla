@@ -33,22 +33,6 @@ if (form && input && row && results && list && stringsNode) {
   let kit: typeof Words | null = null;
   let wordings: TermWording[] | null = null;
   let asked = false;
-  const prepare = (): void => {
-    if (asked) return;
-    asked = true;
-    void import('./words.ts').then(
-      async (loaded) => {
-        kit = loaded;
-        wordings = await loaded.finder(form.dataset.words ?? '');
-        if (wordings === null) asked = false;
-      },
-      () => {
-        asked = false;
-      },
-    );
-  };
-  if (document.activeElement === input) prepare();
-  input.addEventListener('focus', prepare);
 
   /** The words the search reads: what the field holds, as the search trims it. */
   const typed = (): string => input.value.trim().slice(0, 200);
@@ -70,6 +54,28 @@ if (form && input && row && results && list && stringsNode) {
     link.href = card === null ? `/mot/#mot-${first.id}` : `/mot/${card}/`;
     row.append(link);
   };
+  /**
+   * How the words are found, fetched once at the first sign of a search. On a phone the search
+   * may draw before it arrives: then the line is drawn when it does — the search does not draw
+   * again by itself until the next key.
+   */
+  const prepare = (): void => {
+    if (asked) return;
+    asked = true;
+    void import('./words.ts').then(
+      async (loaded) => {
+        kit = loaded;
+        wordings = await loaded.finder(form.dataset.words ?? '');
+        if (wordings === null) asked = false;
+        else draw();
+      },
+      () => {
+        asked = false;
+      },
+    );
+  };
+  if (document.activeElement === input) prepare();
+  input.addEventListener('focus', prepare);
   new MutationObserver(draw).observe(results, {
     attributes: true,
     attributeFilter: ['hidden'],

@@ -348,12 +348,26 @@ async function searchChecks(
   await page.goto(`${origin}/sommaire/`);
   await page.focus('#q');
   await until(page, 'true');
-  const line = async (typed: string): Promise<{ shown: boolean; text: string; href: string }> => {
-    await page.fill('#q', typed);
-    await page.waitForTimeout(500);
-    return page.evaluate<{ shown: boolean; text: string; href: string }>(
+  const read = (): Promise<{ shown: boolean; text: string; href: string }> =>
+    page.evaluate<{ shown: boolean; text: string; href: string }>(
       "(() => { const row = document.querySelector('#search-word'); const a = row?.querySelector('a'); return { shown: !!row && !row.hidden, text: a?.textContent ?? '', href: a?.getAttribute('href') ?? '' }; })()",
     );
+  /**
+   * What the line says once the search has drawn. On a live host the file that finds the words
+   * may arrive after the results: a line that is due is then awaited a little (lot 16).
+   */
+  const line = async (
+    typed: string,
+    due = true,
+  ): Promise<{ shown: boolean; text: string; href: string }> => {
+    await page.fill('#q', typed);
+    await page.waitForTimeout(500);
+    let seen = await read();
+    for (let waited = 0; due && !seen.shown && waited < 3000; waited += 250) {
+      await page.waitForTimeout(250);
+      seen = await read();
+    }
+    return seen;
   };
   const smic = await line('smic');
   check(
@@ -373,7 +387,7 @@ async function searchChecks(
     card.shown && card.href === '/mot/regle-verte/',
     JSON.stringify(card),
   );
-  const plain = await line('les retraites à 60 ans');
+  const plain = await line('les retraites à 60 ans', false);
   check('a search for a subject: no line', !plain.shown, JSON.stringify(plain));
   const finders = requested.filter((url) => /\/data\/mots-[0-9a-f]{16}\.json$/.test(url));
   check(
