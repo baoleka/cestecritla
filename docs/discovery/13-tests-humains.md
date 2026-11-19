@@ -1284,7 +1284,7 @@ Deux sous-agents, sans `private/`, sur l'état du dépôt au commit `b29d890` et
 | M5 | fermer une carte rouverte pouvait laisser le focus sur la page (WebKit, non reproduit) | le focus revient au mot avant le retrait de la carte |
 | M6 | un fichier inapte échoue en silence : la build ne montre aucune phrase, sans rien dire | le déploiement dit ce que montrent les cartes, et pourquoi (`gameGistsSilence`) ; la notice ne dit plus qu'une build « refuse » |
 | M7 | `scripts/deploy.ts` lisait deux variables d'essai dans l'environnement de l'appelant | effacées avant tout calcul |
-| M8 | le fichier servi porte les phrases sans dire d'où elles viennent, et reste en cache | le fichier du jeu dit de lui-même qui les a écrites (`sentences.written_by` : « ai ») ; que l'ancien nom de fichier ne réponde plus après un retrait se vérifie sur l'aperçu, au lot 9 |
+| M8 | le fichier servi porte les phrases sans dire d'où elles viennent, et reste en cache | le fichier du jeu dit de lui-même qui les a écrites (`sentences.written_by` : « ai ») ; **vérifié sur l'aperçu au lot 9, le 19 novembre : après un retrait, l'ancien nom de fichier répond 404** |
 | M9 | l'aperçu n'a pas de garde mécanique | par conception (D19.12) : l'accord de l'éditeur, au moment de le faire |
 
 ### 9.8 Le face-à-face avec l'accueil en ligne (D19.16) — et l'entrée aux trois mots

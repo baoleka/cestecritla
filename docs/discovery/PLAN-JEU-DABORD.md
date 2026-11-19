@@ -774,3 +774,47 @@ copies des personas, qui montrent celle de « wagon », restent sous `private/`.
 
 **Ce qui attend encore l'éditeur** : le premier push du fichier des phrases et l'aperçu
 (lot 9), puis son « oui » daté pour la production (lot 10) ; à part, la phrase de « wagon ».
+
+### Lot 9, au 19 novembre 2026 — le fichier des phrases publié, la refonte sur l'aperçu
+
+Deux accords de l'éditeur, demandés au moment de le faire et donnés le 19 novembre :
+**D19.22 — « Oui, publie-le »** (le fichier des quarante-trois phrases, tel qu'il est, avec ce
+qui reste signalé sans être retiré) ; **D19.23 — « Oui, déploie l'aperçu »**.
+
+- **Le fichier des phrases** : `meta.validated` porte son accord (2026-11-19, « editor », le
+  sceau `994895a774da…`) ; la ligne qui le tenait hors de `git status` est retirée ;
+  `data/2026/game-gists.json` est dans le dépôt depuis le commit `1afd827`. `LICENSE` et la
+  notice disent qu'aucune licence de réutilisation n'est donnée sur lui. La porte du dépôt
+  trouve sa décision dans `decisions.md`, à sa date, avec le début du sceau ; la porte locale
+  tient les 1 026 autres phrases hors de tout fichier suivi. **Une build déployable montre
+  maintenant les phrases** : `e2e` 46 / 43 / 43 et `a11y` 225 contrôles sur elle.
+- **L'aperçu** — `beta.cestecritla.fr`, non indexé : essai à blanc, puis
+  `npm run build:preview && npm run deploy:preview -- --bench`, le 19 novembre à 9 h 26
+  (8 h 26 UTC). **Vérifié en ligne** : 1 153 fichiers sur 1 156 identiques à la build, les
+  trois écarts connus ; le fichier du jeu servi — 48 mots, 43 phrases, la ligne qui dit qui
+  les a écrites, `noindex` — ouvre sur « carburant », « cantine », « électricité » ; **le
+  jeu joué en ligne dans trois moteurs** (`e2e-game.ts --origin`) : 267 contrôles sous Chromium,
+  267 sous WebKit, 266 sur 267 sous Firefox — un contrôle de délai (« Garder ta tortue »
+  pressé pendant un passage : l'annonce au lecteur d'écran était déjà faite quand le second
+  geste est arrivé) tombé une fois, rejoué deux fois sans tomber ; la feuille de « Demander »
+  sondée en ligne dans trois moteurs : tout bon. Les Workers n'ont pas changé depuis la
+  production : celui des phrases n'a pas été redéployé.
+- **Le retrait des phrases, répété une fois sur l'aperçu** (D19.5, R51, R52) : le mode à
+  « off » dans la copie de travail seulement, build, déploiement — **33 secondes**, de
+  8 h 44 min 14 s à 8 h 44 min 47 s UTC. En ligne alors : le fichier du jeu sans phrase ni
+  ligne de provenance, **l'ancien nom de fichier répond 404**, l'accueil ne nomme aucune IA et
+  ne montre plus « Demander au programme », aucune page de faits ne parle des phrases du jeu ;
+  1 151 fichiers sur 1 154 identiques à la build. Puis le mode remis, build, déploiement —
+  23 secondes : les phrases sont revenues, sous le même nom de fichier. Ce que la répétition
+  ne ferme pas : un navigateur qui a déjà le fichier le garde un an (`immutable`) — mais la
+  page d'après le retrait en nomme un autre —, et l'historique du dépôt garde ce qui a été
+  poussé (R51).
+- **Ce que sert l'aperçu depuis 9 h 46 (8 h 46 UTC)** : la build du commit `1afd827`, Worker
+  `cestecritla-preview`, version `2bee578f` ; rejoué en ligne, la première visite et l'entrée :
+  92 contrôles dans chacun des trois moteurs.
+- **La production n'a pas bougé** : `cestecritla.fr` et `www` servent toujours la build du
+  15 novembre (`085a1bd`). `data/launch.json` (`home`) est vide ; `npm run deploy` refuse
+  toujours l'app sur l'apex.
+
+**Ce qui attend l'éditeur** : son « oui » daté pour la production (lot 10). À part : la phrase
+de « wagon » — la réécrire et la redéposer touche la base que sert la production.
