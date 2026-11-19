@@ -315,6 +315,29 @@ Le lilas `#C9ADFF` tombe dans la zone lavande de la porte de couleur (clarté 0,
 
 ---
 
+### 2.13 Décisions D19.7 à D19.13 (18 novembre 2026) : elle, dans un jeu qui ouvre l'accueil
+
+Le chantier « Le jeu d'abord » (`docs/discovery/PLAN-JEU-DABORD.md`) ne touche ni à son dessin,
+ni à sa feuille, ni à ses couleurs, ni à ses temps : **sa planche datée du 15 novembre tient**,
+et un test le prouve (son empreinte n'a pas bougé). Ce qu'il fixe autour d'elle :
+
+- **Elle garde sa taille pendant qu'on joue** — 80 à 96 px à côté du mot, 240 px sur la scène
+  de fin de manche et dans sa fiche (D19.13). La doubler nourrirait « enfantine » (cinq
+  personas sur sept), et son bond a été jugé à cette taille (D17.21).
+- **Elle reste dans le bloc du jeu** ; le champ et « Demander » sont dans une section à part,
+  un écran de téléphone plus bas (D19.9, qui précise D17.9) : elle n'est jamais entière à
+  l'écran à côté du champ, de 320 × 568 à 430 × 932 (`e2e:game`).
+- **« Un indice » vient d'elle dès le premier mot** (D19.7, qui amende D16.13) : elle regarde
+  les tuiles, puis trois disent « par ici ». Aucune n'est écartée, aucune ne change de taille.
+- **Ses trois signes sont dits quand ils paraissent** (lot 6) : ses ailes s'entrouvrent, elle
+  lève les yeux, une étoile paraît — la phrase est lue des mêmes arcs que le dessin
+  (`signAtRoundEnd`, `src/lib/game-goal.ts`). Une attitude, jamais une quantité (§2.12,
+  point 10) ; jamais à une manche où elle change ; jamais un mot sur le joueur.
+- **Rien d'elle ne bouge pour une carte rouverte** (« Tu te souviens ? », sa fiche) : son
+  petit bond dit un mot trouvé, pas une relecture.
+- **Ce que le plateau ne lui prend pas** : aucune couleur de partie sur une tuile (D17.12),
+  pas d'ombre « bloc » — le motif des affiches de la campagne (D19.13, `14-risques.md` R54).
+
 ## 3. Faire / ne pas faire
 
 | #   | Faire                                                                                                                                                                     | Ne pas faire                                                                                                                                                                                                   |

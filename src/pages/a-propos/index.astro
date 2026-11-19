@@ -6,12 +6,15 @@
  */
 import Base from '../../layouts/Base.astro';
 import { askSite } from '../../lib/ask-config.ts';
+import { gameShowsSentences } from '../../lib/facts.ts';
 import { t } from '../../lib/strings.ts';
 
 // What is true of this build (D16.4, D16.60): no question is asked at all; or sentences written
 // ahead answer, and no AI is live; or — closed, kept for its tests — a model also explains.
 const site = askSite();
 const model = site.modelName;
+/** The cards of the game show some of those sentences (D19.2): said where it is true. */
+const inGame = gameShowsSentences();
 ---
 
 <Base title={`${t('about.title')} — ${t('app.name')}`} description={t('home.tagline')}>
@@ -27,6 +30,7 @@ const model = site.modelName;
       <p>{model === null ? t('about.gists_line') : t('about.ai_line', { model })}</p>
     )
   }
+  {site.mode === 'chat' && inGame && <p>{t('about.gists_game')}</p>}
   {site.mode === 'chat' && <p>{t('about.ai_reviewed')}</p>}
   <p>{t('about.writing_method')}</p>
   <p>{t('about.method')} <a href="/exactitude/">{t('accuracy.title')}</a></p>

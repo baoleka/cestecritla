@@ -13,6 +13,7 @@ import type { VerificationFile } from '../../scripts/verify-2026.ts';
 import { cards, ripostes } from './editorial.ts';
 import { manifest, quotes } from './edition.ts';
 import { isLocatorDisplay, type LocatorDisplay } from './first-words.ts';
+import { builtGame } from './game-built.ts';
 import { gameSite, gameWords } from './game-data.ts';
 
 /** A published JSON file. The caller names the shape it expects: the cast is visible there. */
@@ -117,6 +118,15 @@ export interface GameFacts {
   words: number;
   /** Their share of the words of the propositions, as a percentage — computed, never typed. */
   share: string;
+  /**
+   * Sentences of ours the cards of THIS build show (D19.2, D19.5): counted in the game the
+   * build publishes, so the page and the file of the game cannot disagree. 0 where the build
+   * may show none — the site does not ask, the campaign rule cut them, their file is not
+   * validated.
+   */
+  sentences: number;
+  /** Cards that keep their link alone, in a build that shows sentences on the others. */
+  linkOnly: number;
 }
 
 /**
@@ -128,5 +138,18 @@ export function gameFacts(): GameFacts | null {
   if (!gameSite().on) return null;
   const words = gameWords().words.length;
   const total = manifest().meta.exposure.proposition_words;
-  return { words, share: `${percent(words / total, 3)}\u00a0%` };
+  const sentences = builtGame().data.words.filter((word) => word.gist !== undefined).length;
+  return {
+    words,
+    share: `${percent(words / total, 3)}\u00a0%`,
+    sentences,
+    linkOnly: sentences === 0 ? 0 : words - sentences,
+  };
 }
+
+/**
+ * True where the cards of the game of this build show sentences of ours: the pages of facts
+ * then say so — and say nothing of it anywhere else (a page never describes what its build
+ * does not do).
+ */
+export const gameShowsSentences = (): boolean => (gameFacts()?.sentences ?? 0) > 0;

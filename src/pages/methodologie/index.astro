@@ -5,11 +5,14 @@
 import Base from '../../layouts/Base.astro';
 import { askSite } from '../../lib/ask-config.ts';
 import { manifest } from '../../lib/edition.ts';
+import { gameShowsSentences } from '../../lib/facts.ts';
 import { fr, t } from '../../lib/strings.ts';
 
 const site = askSite();
 /** The model that explains — null since D16.60: sentences written ahead, and no live AI. */
 const model = site.modelName;
+/** The cards of the game show some of those sentences (D19.2): how they get there is said. */
+const inGame = gameShowsSentences();
 
 const counts = manifest().meta.counts;
 // One request per page the table of contents publishes (introduction, parts, chapters), plus
@@ -39,6 +42,7 @@ const requests = 1 + counts.parts + counts.chapters + 5;
       <>
         <h2 id="demander">{t('method.ask_title')}</h2>
         <p>{model === null ? t('about.gists_method') : t('about.ai_method', { model })}</p>
+        {inGame && <p>{t('about.gists_game_method')}</p>}
         <p>{model === null ? t('about.gists_limits') : t('about.ai_limits')}</p>
         <p>{t('about.gists_terms')}</p>
         <p>{t('about.ai_reviewed')}</p>

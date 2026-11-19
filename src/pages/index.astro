@@ -52,7 +52,12 @@ const guard = __CEL_GAME__ ? silenceGuardScript() : null;
 if (guard !== null) Astro.csp.insertScriptHash(silenceGuardHash());
 ---
 
-<Base title={t('app.name')} description={t('home.tagline')} home word={Game !== null}>
+<Base
+  title={t('app.name')}
+  description={Game !== null ? t('home.description') : t('home.tagline')}
+  home
+  word={Game !== null}
+>
   {guard !== null && <script is:inline slot="head" set:html={guard} />}
   {/* Whose programme, and whose site: the first line of the page, small — never its hero. */}
   <p class="what">{t('home.what')}</p>

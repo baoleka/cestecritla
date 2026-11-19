@@ -486,3 +486,40 @@ npx tsx scripts/perf-probe.ts
   mêmes fichiers avant que le lot 5 soit enregistré. Les portes du lot 5 avaient passé sur son
   état propre (journal ci-dessus) ; celles du lot 6 ont passé sur l'état enregistré.
 - Rien de servi n'a changé.
+
+### Lot 7, au 19 novembre 2026 — les textes, les pages de faits, le dossier
+
+- **Les textes** : `docs/discovery/TEXTES-JEU-DABORD.md` — dix-neuf textes, tous proposés par la
+  session : onze dans le jeu (l'étiquette de la phrase, l'annonce de profondeur, le rappel,
+  « Les prochains mots », « Les mêmes mots pour tout le monde. », le bouton de « Garder », ses
+  trois signes, sa fiche), sept sur les pages de faits, et la description de l'accueil.
+  **Aucun n'est validé.** Écart au plan, qui plaçait ici le dialogue avec l'éditeur : il vient
+  après les relectures du lot 8, qui peuvent encore faire changer un mot — on ne lui fait pas
+  valider deux fois.
+- **Les pages de faits disent ce que fait LEUR build**, et rien de plus. `gameFacts()`
+  (`src/lib/facts.ts`) compte les phrases dans le jeu que la build publie ; À propos,
+  Exactitude, Méthode et Licence ne parlent des phrases du jeu que là où il en montre. Exactitude
+  donne leur nombre et celui des cartes à leur lien seul — lus, jamais tapés. Tenu sur quatre
+  builds par `scripts/game-page.test.ts` : `dist/` 0 phrase (le fichier n'est pas validé),
+  `dist-ask/` et `dist-gists/` 47 phrases et une carte à son lien seul, `dist-scrutin/` aucun
+  jeu.
+- **La description de l'accueil** dit le jeu là où il l'ouvre (`home.description`) ; les autres
+  pages et la build « scrutin » gardent la phrase d'aujourd'hui.
+- **Le dossier** : `14-risques.md`, R50 à R60, avec ce qui tient chacun tel que construit
+  (R58 écarté avant d'exister ; R51 et R60 ne se ferment pas et sont acceptés par D19.2) ;
+  `11-conformite.md` §6.2 octies et la note du 19 novembre au §7 (des phrases d'IA montrées
+  sans qu'on les ait demandées) ; la note en tête de `18-dossier-chat.md` ;
+  `data/2026/NOTICE.md` (« Les phrases du jeu ») ; `design/perf-budget.md` (D19.8, mesures) ;
+  `design/illustration-rules.md` §2.13 ; `README.md` et `docs/discovery/README.md` ;
+  `CLAUDE.md`.
+- **Sous quels termes le fichier des phrases est publié** : le régime du dossier `data/2026/`,
+  sans décision nouvelle — ni la licence MIT du code, ni Creative Commons, aucune licence de
+  réutilisation. Écrit dans la notice ; à dire à l'éditeur avec le push (lot 9).
+- **Ce que le lot n'a pas touché, exprès** : `LICENSE` — il décrit ce que le dépôt contient, et
+  le fichier des phrases n'y est pas ; sa ligne viendra avec lui. La page Confidentialité : rien
+  de plus ne part ni ne s'écrit, ses lignes et leurs trois empreintes datées tiennent.
+- **Portes** : 653 tests (652 passent, 1 sauté depuis toujours) — quatre de plus : les pages de
+  faits de chaque build ; types, lint, contraste ; `a11y` ; `e2e` 46 / 43 / 43 ; `e2e:ask`
+  109 / 102 / 102 ; `e2e:sheet` 102 / 96 / 96 ; la build « scrutin ». Le jeu lui-même n'a pas
+  bougé depuis le lot 6 (`e2e:game` 293 / 257 / 257).
+- Rien de servi n'a changé.

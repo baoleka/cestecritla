@@ -435,6 +435,42 @@ En bref :
   exception : le site le dit partout où il les montre (D16.59, D16.62).
 - **Code électoral, L163-2** : voir §7, note du 15 novembre.
 
+### 6.2 octies Les phrases dans le jeu : rien de plus ne part, un fichier public — 19/11/2026 (D19.2, D19.5, D19.6)
+
+Depuis le chantier « Le jeu d'abord » (`PLAN-JEU-DABORD.md`), chaque carte du jeu peut montrer
+la phrase écrite d'avance de la mesure où son mot est épinglé. **Rien de servi n'a changé au
+19 novembre** : ce qui suit vaut pour la build qui le portera.
+
+- **Ce qui part** : rien de plus. Les phrases du jeu sont **dans le fichier du jeu**, demandé
+  comme avant quand le bloc approche de l'écran ; jouer une manche n'envoie rien, rouvrir une
+  carte (« Tu te souviens ? », sa fiche) non plus — tenu dans trois moteurs (`e2e:game` : « a
+  round sent nothing »). Aucun identifiant de mesure ne part : la route `/api/gists` ne sert
+  pas le jeu.
+- **Article 82 (le terminal)** : aucun champ de plus n'est écrit. Le rappel de fin de manche
+  ne garde ni réponse ni date : il se calcule de la liste des mots déjà vus
+  (`src/lib/game-recall.ts`). La carte des écritures et les lignes `privacy.*` n'ont pas
+  bougé ; leurs trois empreintes datées tiennent.
+- **Article 9** : inchangé. Aucun choix n'est gardé, montré ni envoyé ; une carte rouverte
+  n'écrit rien.
+- **Règlement sur l'IA, art. 50 § 4** : la phrase d'une carte est un texte généré, publié pour
+  informer, qu'aucune personne n'a relu. Elle porte son étiquette **sur la carte** (« Phrase
+  écrite et vérifiée par une IA »), dans un cadre à elle, après le lieu et après le lien
+  officiel (D19.10, D16.64) ; les pages À propos, Exactitude, Méthode et Licence le disent là
+  où la build en montre, et seulement là (`scripts/game-page.test.ts`). **Elle n'est dans le
+  HTML d'aucune page** (D19.6) : la manche sans script garde la carte d'avant, et `/data/*`
+  répond `noindex`.
+- **Le mode du site décide** (D19.5) : « off », campagne non décidée ou fichier non validé →
+  aucune phrase dans le jeu, et aucune page ne nomme d'IA à son propos. **L'interrupteur de la
+  base ne coupe pas ces phrases** : les retirer demande une build et un déploiement ; les
+  navigateurs gardent le fichier le temps de leur cache (`14-risques.md` R51, R52).
+- **Droit d'auteur** : « jamais publiées en fichier » ne vaut plus pour ces mesures-là — au
+  plus quarante-huit sur 1 069, dans un fichier servi et dans le dépôt public (D19.2 ; R35,
+  R60). Aucune n'est un extrait ; `data/2026/NOTICE.md` dit ce qu'est le fichier.
+- **Code électoral, L163-2** : voir §7, note du 19 novembre.
+- **Ce que la session a écrit seule** : cette section, les phrases des pages de faits et la
+  notice. L'éditeur valide les textes (lot 7) ; il n'a relu ni cette section ni le dossier du
+  chat (D16.81 : « Rien pour l'instant »).
+
 ### 6.3 La politique en dix lignes — texte final
 
 Route `/confidentialite` (D5.10). Titre `privacy.title` = « Confidentialité », chapeau `privacy.lead` = « Dix lignes, toutes vraies, vérifiées contre la carte des données de l'app. » Chaque ligne est confrontée ligne à ligne au tableau §6 de `09-architecture.md`.
@@ -494,6 +530,18 @@ montrée avec le lien vers la page officielle ; un interrupteur les retire sans 
 Ce n'est pas la défense du verbatim prouvé par empreinte. La fenêtre de L163-2 s'ouvre le
 1er janvier 2027 : garder ou non ces phrases pendant la campagne est une décision de
 l'éditeur (`14-risques.md` R38), que la session ne prend pas.
+
+**Note du 19 novembre 2026 (D19.2, D19.5) : des phrases d'IA montrées sans qu'on les ait
+demandées.** L'éditeur a tranché le 15 novembre que les phrases de « Demander » restent
+servies pendant la campagne (D16.78), puis, le 18, que cette décision vaut pour celles du jeu
+(D19.5). Ce qui diffère, et qu'il faut avoir lu : dans « Demander » une phrase répond à un
+geste ; dans le jeu elle vient avec chaque carte, à qui joue, depuis la page d'accueil — au
+plus quarante-huit phrases, toujours les mêmes. Ce qui les tient : les mêmes garde-fous que
+les autres (épinglées à l'empreinte de leur mesure, passées au contrôle, étiquetées, à côté du
+lien officiel) ; une lecture une à une par la session contre le texte (une IA : PROBABLE) ;
+hors du HTML et hors des moteurs de recherche ; un retrait en une build, répété sur l'aperçu
+avant la production. Ce n'est toujours pas la défense du verbatim prouvé par empreinte
+(`14-risques.md` R53).
 
 ## 8. Marques (INPI / TMview)
 

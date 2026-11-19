@@ -224,6 +224,63 @@ void test(
   },
 );
 
+/**
+ * The pages of facts say what THIS build does with sentences in the game (D19.2, D19.5; lot 7
+ * of docs/discovery/PLAN-JEU-DABORD.md) — and nothing of it where the build shows none: a page
+ * never describes what its build does not do. Read in the file of the game the build
+ * publishes: `dist/` shows no sentence until their file carries the editor's dated word, the
+ * test builds show them, the « scrutin » build has no game at all.
+ */
+for (const root of ['dist', 'dist-ask', 'dist-gists', 'dist-scrutin']) {
+  const built =
+    root === 'dist' ? appBuilt && site.on : existsSync(join(root, 'a-propos', 'index.html'));
+  void test(
+    `${root}: the pages of facts say that the cards of the game show sentences where they do, and only there`,
+    { skip: !built },
+    () => {
+      const name = gameFile(root);
+      const published =
+        name === undefined
+          ? null
+          : (JSON.parse(readFileSync(join(root, 'data', name), 'utf8')) as GameData);
+      const count = (published?.words ?? []).filter((word) => word.gist !== undefined).length;
+      const linkOnly = count === 0 ? 0 : (published?.words.length ?? 0) - count;
+      const shows = count > 0;
+      const page = (path: string): string =>
+        flat(readFileSync(join(root, path, 'index.html'), 'utf8'));
+      const says = (path: string, key: string, n?: number): boolean =>
+        page(path).includes(printed(said(key).replace('{count}', String(n))));
+      console.log(
+        `  ${root}: ${String(count)} sentence(s) on the cards, ${String(linkOnly)} card(s) at their link alone`,
+      );
+      // À propos, Exactitude: the game shows some of the sentences written ahead.
+      assert.equal(says('a-propos', 'about.gists_game'), shows, 'a-propos');
+      assert.equal(says('exactitude', 'about.gists_game'), shows, 'exactitude');
+      // Exactitude, « Les mots du jeu »: how many — the number of the file, never a typed one —
+      // and the cards that keep their link alone, when there are any.
+      assert.equal(says('exactitude', 'accuracy.game.sentences', count), shows, 'the count');
+      assert.equal(says('exactitude', 'accuracy.game.link_only', linkOnly), linkOnly > 0);
+      // Exactitude, « Nos propres textes »: nobody re-read them one by one — said of the game's
+      // too, in the paragraph that speaks of re-reading; never both wordings.
+      const alone = printed(said('accuracy.review.sentences').split('.')[0] ?? '');
+      assert.equal(says('exactitude', 'accuracy.review.sentences_game'), shows);
+      if (shows) assert.ok(!page('exactitude').includes(`${alone}.`), 'both wordings');
+      // Méthode: how they reach the page — with the game, in a file; playing sends nothing.
+      assert.equal(says('methodologie', 'about.gists_game_method'), shows, 'methodologie');
+      // Licence: they are no extracts of the book, and those of the game are in a public file.
+      assert.equal(says('licence', 'legal.license.sentences_game'), shows, 'licence');
+      assert.equal(says('licence', 'legal.license.game_file'), shows, 'licence, the file');
+      if (shows) assert.ok(!says('licence', 'legal.license.sentences'), 'both wordings');
+      // The home page says what it opens on: the game where there is one (D19.1), and the
+      // sentence of every other page where there is none.
+      const home = readFileSync(join(root, 'index.html'), 'utf8');
+      const described = /<meta name="description" content="([^"]*)"/.exec(home)?.[1] ?? '';
+      const wanted = published === null ? 'home.tagline' : 'home.description';
+      assert.equal(flat(described), printed(said(wanted)), `${root}: its description`);
+    },
+  );
+}
+
 for (const root of ['dist', 'dist-ask']) {
   const shows = root === 'dist' ? appBuilt && site.on : existsSync('dist-ask/index.html');
   void test(

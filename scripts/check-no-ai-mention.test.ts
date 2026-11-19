@@ -450,7 +450,11 @@ void test('every string naming an absent component has a local fallback or is ex
     // A v3-only surface (the chat itself) needs no fallback: it is simply not built.
     if (key.startsWith('chat.') || key.startsWith('about.ai_')) continue;
     // …like what the pages say of the sentences where the sheet opens without a live AI.
-    if (key.startsWith('about.gists_') || /^accuracy\.review\.(?:sentences|terms)$/.test(key)) {
+    // (`sentences_game`: the same paragraph where the cards of the game show sentences too.)
+    if (
+      key.startsWith('about.gists_') ||
+      /^accuracy\.review\.(?:sentences|sentences_game|terms)$/.test(key)
+    ) {
       continue;
     }
     // …and so does the section of the privacy page that says what asking does.

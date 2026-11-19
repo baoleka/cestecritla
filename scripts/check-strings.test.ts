@@ -368,6 +368,8 @@ const RUNTIME_AI_KEYS: Readonly<Record<string, string | null>> = {
   'about.gists_method': 'about.no_ai',
   'about.gists_terms': null,
   'accuracy.review.sentences': null,
+  // The same paragraph where the cards of the game show sentences too (D19.2, lot 7).
+  'accuracy.review.sentences_game': null,
   'accuracy.review.terms': null,
   'chat.about.live': null,
   'chat.ai.start': null,

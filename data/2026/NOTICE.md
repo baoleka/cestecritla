@@ -21,6 +21,8 @@ ses pages et admettent de courts extraits, avec l'auteur et un lien vers la page
 | `riposte.json`, `glossary.json` | Nos réponses aux objections et nos cartes-concept. Chaque appui est épinglé `{id, sha256}` ; `review` dit si le texte a été relu | à la main |
 | `verification.json` | Ce que trois navigateurs ont trouvé en relisant les pages officielles et en suivant chaque lien | `scripts/verify-2026.ts --write` |
 | `search-eval.json` | La qualité mesurée de la recherche sur le jeu de questions | `scripts/eval-2026.ts --write` |
+| `game-words.json`, `word-links.json` | Les mots du jeu « Où est-ce écrit ? », et où trois navigateurs ont vu chacun surligné (voir « Les mots du jeu ») | la liste à la main, attestée par `scripts/words-2026.ts --attest` ; `scripts/verify-2026.ts --words --write` |
+| `game-gists.json` | Les phrases du jeu : une phrase **de nous** par mesure où un mot du jeu est épinglé (voir « Les phrases du jeu »). **Absent de ce dépôt tant que l'éditeur n'a pas daté son accord** | `npm run gists -- --game` |
 
 ## Vérifier une citation
 
@@ -100,6 +102,38 @@ l'éditeur a écartées ; une section sans ancêtre ne prête un mot qu'une fois
 
 La liste est aussi longue que ces critères le permettent, pas plus (D16.31) : des chapitres
 entiers n'ont aucun mot, et leurs sections restent des tuiles.
+
+## Les phrases du jeu
+
+Depuis le 18 novembre 2026 (D19.2), une carte du jeu peut montrer, sous le lieu où son mot est
+écrit, **une phrase qui dit avec nos mots ce que prévoit la mesure**. Ces phrases sont dans
+`game-gists.json`.
+
+- **Ce qu'elles sont.** Des phrases écrites d'avance et vérifiées par une IA, qu'aucune
+  personne n'a relues une à une — les mêmes, octet pour octet, que celles que « Demander » sert
+  pour ces mesures. Le fichier le dit de lui-même (`meta.written_by`,
+  `meta.read_by_a_person`), et le site les étiquette : « Phrase écrite et vérifiée par une
+  IA ».
+- **Ce qu'elles ne sont pas.** Des extraits : aucune ne recopie le livre, dont le texte n'est
+  pas dans ce dépôt. Elles ne disent pas non plus « le programme » à sa place : chacune mène à
+  la page officielle, qui seule fait foi.
+- **Combien.** Au plus une par mot du jeu — quarante-huit au plus, sur 1 069 mesures. Toutes
+  les autres phrases restent dans une base privée et ne sont publiées dans aucun fichier.
+  Une carte peut garder son lien seul (`meta.link_only`).
+- **Comment le fichier est fait.** `npm run gists -- --game` l'écrit, en local, à partir du
+  dépôt de phrases que `ask.json` nomme, et le scelle (`meta.sha256`). **On n'y écrit jamais
+  une phrase à la main** : une build refuse un fichier retouché, fait pour une autre liste de
+  mots, une autre version du livre ou un autre dépôt de phrases
+  (`src/lib/game-gists.ts`, `scripts/game-gists.test.ts`).
+- **Quand il est montré.** Seulement si l'éditeur l'a validé tel quel (`meta.validated`, un
+  mot daté de lui), si le site répond aux questions (`ask.json` : « chat ») et si la décision
+  de campagne le permet (D19.5). Sinon la carte montre le lieu et son lien, comme avant.
+- **Sous quels termes.** Comme le reste de ce dossier, ce fichier n'est ni sous la licence MIT
+  du code ni sous Creative Commons : ce dépôt ne donne sur ces phrases aucune licence de
+  réutilisation. Elles disent les mesures d'un livre dont tous les droits sont réservés.
+
+Ce qui a été publié reste dans l'historique de ce dépôt : retirer une phrase du site se fait
+par une build ; la retirer d'ici ne la rappelle pas.
 
 ## Attribution
 

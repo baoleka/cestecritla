@@ -34,6 +34,8 @@ const pending = pendingReviewCount();
 const unread = unreadReviewCount();
 // What the game shows of the book: only in a build of a site that plays.
 const game = gameFacts();
+/** Its cards show sentences of ours (D19.2): the page says so where this build does it. */
+const inGame = (game?.sentences ?? 0) > 0;
 const located = checked.locators;
 /** The engines by the names their makers give them. */
 const ENGINE_NAMES: Record<string, string> = {
@@ -63,6 +65,7 @@ const ENGINE_NAMES: Record<string, string> = {
       <>
         <h2 id="reponse">{t('accuracy.ask.title')}</h2>
         <p>{model === null ? t('about.gists_line') : t('about.ai_line', { model })}</p>
+        {inGame && <p>{t('about.gists_game')}</p>}
         <p>{model === null ? t('about.gists_limits') : t('about.ai_limits')}</p>
         <p>
           {t('about.ai_reviewed')} <a href="/methodologie/">{t('accuracy.method_link')}</a>
@@ -129,6 +132,18 @@ const ENGINE_NAMES: Record<string, string> = {
         <h2 id="mots-du-jeu">{t('accuracy.game.title')}</h2>
         <p>{t('accuracy.game.words', { count: fr(game.words), total: game.share })}</p>
         <p>{t('accuracy.game.proof')}</p>
+        {
+          /* The sentences on its cards (D19.2), counted in the game this build publishes —
+             and the cards that keep their link alone, when there are any. */
+          game.sentences > 0 && (
+            <p>{t('accuracy.game.sentences', { count: fr(game.sentences) })}</p>
+          )
+        }
+        {
+          game.linkOnly > 0 && (
+            <p>{t('accuracy.game.link_only', { count: fr(game.linkOnly) })}</p>
+          )
+        }
       </>
     )
   }
@@ -152,7 +167,8 @@ const ENGINE_NAMES: Record<string, string> = {
        the page says so in the very paragraph that speaks of re-reading. */
     site.mode === 'chat' && (
       <p>
-        {t('accuracy.review.sentences')} {t('accuracy.review.terms')}
+        {inGame ? t('accuracy.review.sentences_game') : t('accuracy.review.sentences')}
+        {t('accuracy.review.terms')}
       </p>
     )
   }

@@ -9,10 +9,13 @@
 import Base from '../../layouts/Base.astro';
 import { askSite } from '../../lib/ask-config.ts';
 import { LEGAL_URL } from '../../lib/edition.ts';
+import { gameShowsSentences } from '../../lib/facts.ts';
 import { t } from '../../lib/strings.ts';
 
 /** Where the field asks, sentences of ours say each measure: the page says they are no extracts. */
 const asking = askSite().mode === 'chat';
+/** …and where the cards of the game show some of them (D19.2), in a file that is public. */
+const inGame = gameShowsSentences();
 ---
 
 <Base title={`${t('legal.license')} — ${t('app.name')}`} description={t('legal.license.text')}>
@@ -22,7 +25,12 @@ const asking = askSite().mode === 'chat';
   <p><a href={LEGAL_URL} rel="noopener noreferrer">{t('legal.license.source_link')}</a></p>
   <p>{t('attribution.unmodified')} {t('attribution.warranty')}</p>
   <p>{t('legal.license.derived')}</p>
-  {asking && <p>{t('legal.license.sentences')}</p>}
+  {
+    asking && (
+      <p>{inGame ? t('legal.license.sentences_game') : t('legal.license.sentences')}</p>
+    )
+  }
+  {asking && inGame && <p>{t('legal.license.game_file')}</p>}
   <p>{t('legal.license.archive')}</p>
   <p>{t('legal.license.code')}</p>
   <p>{t('legal.license.fonts')}</p>

@@ -4,7 +4,9 @@
 
 **« C'est écrit là »** (`cestecritla.fr`) est un projet militant **indépendant** pour retrouver où une mesure est écrite dans *L'Avenir en commun* (programme de La France insoumise pour la présidentielle 2027) et renvoyer à la page officielle. Cloudflare, plan gratuit, 0 € d'exploitation, zéro compte, zéro donnée. Ce projet n'est pas édité par La France insoumise et n'engage pas le mouvement.
 
-## Où en est le projet (15 novembre 2026)
+## Où en est le projet (19 novembre 2026)
+
+**Un chantier est ouvert depuis le 18 novembre 2026 : « Le jeu d'abord »** (D19.1 à D19.14, plan et journal dans `docs/discovery/PLAN-JEU-DABORD.md`). Le jeu « Où est-ce écrit ? » ouvre la page d'accueil ; chercher et demander restent sur la même page, dessous. Chaque carte du jeu peut montrer la phrase écrite d'avance de la mesure où son mot est écrit, sous son étiquette — « Phrase écrite et vérifiée par une IA » —, et la fin d'une manche propose de se souvenir de deux mots déjà vus. **Rien de tout cela n'est en ligne** : la branche `main` de ce dépôt est en avance sur ce que sert `cestecritla.fr`, et le déploiement de la production attend la décision datée de l'éditeur (`data/launch.json`, `home`). Le fichier des phrases du jeu (`data/2026/game-gists.json`) n'est pas dans ce dépôt tant qu'il ne l'a pas accordé. Ce qui suit décrit ce qui est en ligne.
 
 **Le programme a été réédité le 5 novembre 2026.** La nouvelle édition — « L'Avenir en commun — Le programme de la Nouvelle France », 6 parties, 23 chapitres, 111 sections, 1 069 mesures — remplace l'édition 2025 sur laquelle ce dépôt a été construit. Son texte est réécrit, et il **n'est plus sous licence Creative Commons** : « © La France insoumise, tous droits réservés », le partage de liens étant « autorisé (et encouragé) » et les courts extraits admis avec l'auteur et un lien vers la page d'origine.
 
@@ -26,7 +28,7 @@ La recherche est **locale et extractive**, et **rien de ce qui est tapé ne quit
 
 ## Dossier
 
-Point d'entrée : `docs/discovery/README.md`. À lire d'abord : `PLAN-CHAT.md` (le plan du chatbot, approuvé le 14 novembre 2026 et exécuté jusqu'à l'ouverture en production du 15 ; son journal dit ce que douze relectures indépendantes ont trouvé et changé), `PLAN-JEU.md` (le précédent, approuvé le 13 novembre et exécuté jusqu'au lancement), `PLAN-EDITION-2026.md` (le plan précédent et son journal), `decisions.md` (273 décisions, D0-D16), `14-risques.md` et `16-hypotheses.md`. Le dossier de découverte des 7-10 septembre 2026 (`00-resume-executif.md`, `prompt-final.md`, `PLAN-IMPLEMENTATION.md`) décrit le produit d'avant la réédition ; il reste la référence pour tout ce que D15 ne touche pas.
+Point d'entrée : `docs/discovery/README.md`. À lire d'abord : `PLAN-JEU-DABORD.md` (le plan en cours, approuvé le 18 novembre 2026 : le jeu ouvre l'accueil ; son journal dit ce qui est fait, lot par lot), `PLAN-TORTUE.md` (la refonte de la mascotte, exécutée du 15 au 16 novembre), `PLAN-CHAT.md` (le plan du chatbot, approuvé le 14 novembre 2026 et exécuté jusqu'à l'ouverture en production du 15 ; son journal dit ce que douze relectures indépendantes ont trouvé et changé), `PLAN-JEU.md` (le précédent, approuvé le 13 novembre et exécuté jusqu'au lancement), `PLAN-EDITION-2026.md` (le plan précédent et son journal), `decisions.md` (273 décisions, D0-D16), `14-risques.md` et `16-hypotheses.md`. Le dossier de découverte des 7-10 septembre 2026 (`00-resume-executif.md`, `prompt-final.md`, `PLAN-IMPLEMENTATION.md`) décrit le produit d'avant la réédition ; il reste la référence pour tout ce que D15 ne touche pas.
 
 ## Licences
 

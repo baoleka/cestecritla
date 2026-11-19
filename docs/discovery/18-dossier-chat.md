@@ -16,6 +16,23 @@
 > direct**, et **personne n'a relu les phrases une à une** — une IA les a écrites et vérifiées.
 > Ce que les sections 1 à 5 disent d'une IA qui explique vaut pour une variante **fermée**,
 > gardée dans le code ; ce qui change pour ce qui ouvre est dit dans chaque section, daté.
+>
+> **Note du 19 novembre 2026 — le jeu montre de ces phrases (D19.2, D19.5, D19.6).** Ce dossier
+> écrit que les phrases vivent dans une base privée, servies trois au plus par requête, jamais
+> publiées en fichier. **Depuis le chantier « Le jeu d'abord », ce n'est plus vrai pour au plus
+> quarante-huit d'entre elles** : celles des mesures où les mots du jeu sont épinglés sont
+> aussi dans le fichier du jeu — sur le site et dans le dépôt public —, montrées une par carte,
+> sous leur étiquette. Ce que cela change ici, section par section :
+> **§1, le geste** — rien : le jeu n'envoie rien, ses phrases arrivent avec son fichier.
+> **§2, le registre** — aucun traitement de plus : aucune donnée de personne n'est en jeu, et
+> rien de plus n'est écrit sur le téléphone. **§3, l'analyse d'impact** — inchangée, sauf la
+> mesure « un interrupteur les retire en une minute » : elle ne vaut pas pour les phrases du
+> jeu, qu'une build et un déploiement retirent, et que caches et historique git gardent
+> (`14-risques.md` R51, R52). **§4.2, article 50** — l'étiquette est sur la carte elle-même,
+> avant la phrase ; les pages de faits le disent où la build en montre. **L163-2 et le droit
+> d'auteur** : `11-conformite.md` §6.2 octies et §7 (note du 19 novembre) ; R53, R60.
+> Écrite par la session ; l'éditeur ne l'a pas relue, pas plus que le reste de ce dossier
+> (D16.63, D16.81).
 
 ## 0. Ce que le mandat du 14 novembre change à ce dossier (D16.57 à D16.62)
 
