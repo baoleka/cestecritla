@@ -1336,3 +1336,19 @@ Dix face-à-face, cent trente lectures. (La troisième lecture de l'écran aux m
 3. Ce que le §9.6 lui laissait déjà : la tortue sur le premier écran, la ligne « de qui est le programme ».
 
 **Limites.** Treize lecteurs simulés, deux images fixes, une réponse chacun ; relu, le même écran donne un compte voisin (9, 9, 10 ; 11, 12) mais pas les mêmes voix : une à deux voix sont du bruit. Les lecteurs sans fiche sont des modèles sans consigne de rôle : ni des militants, ni des indécis. **Ce que les lecteurs disent avoir reçu** (la dernière question, hors rôle) : dans deux lectures sur trois environ — celles d'Opus surtout —, le fichier de préférences générales de l'utilisateur (méthode et style de code, rien sur le site), l'adresse du compte (non recopiée), le chemin du dossier de travail, où se lit l'ancien nom du projet, et le nom d'un dossier de greffon ; dans aucune des cent trente lectures, quoi que ce soit sur le site ou sur ce qu'on en attend. Les maquettes ont été faites en réarrangeant la page d'une build dans le navigateur ; les écrans « construits » sont des captures de la build. **HYPOTHÈSE (lecteurs simulés)** ; les réponses brutes sont gardées hors du dépôt.
+
+### 9.9 Les lectures à l'aveugle, refaites sur le nouveau premier écran (19 novembre 2026)
+
+Les trois comparaisons du §9.2 avaient été lues sur le premier écran d'avant l'entrée. Elles sont refaites le 19 novembre, **après le déploiement de l'aperçu et avant toute question sur la production**, sur l'écran aux trois mots (« carburant », « cantine », « électricité ») : mêmes questions, mêmes cinq lecteurs sans fiche (Opus deux fois, Sonnet deux fois, Haiku une fois), lancés hors du dépôt.
+
+| Ce qu'on montre | La question | Sur l'ancien écran (§9.2) | Sur le nouveau |
+|---|---|---|---|
+| Notre premier écran, à côté de cinq affiches de la campagne | « Même équipe ? » | non 4, ne sait pas 1 | **non 4, ne sait pas 1** |
+| | « Un site officiel ? » | non 5 | **non 5** |
+| Notre premier écran, à côté de l'en-tête du site de la campagne | « Même équipe ? » | non 2, ne sait pas 3, oui 0 | **non 2, ne sait pas 3, oui 0** — « la même palette », et, nouveau : « le même lavande clair en décoration », dit deux fois du trait de surligneur sous les trois mots |
+| | « Un site officiel ? » | non 5 | **non 5** |
+| Le premier écran et une fin de manche (le flamant) | « Un site pour enfants ? » | non 5, dont deux « le style peut tromper » | **non 3, ne sait pas 2** |
+
+- **R54 ne bouge pas** : personne ne dit « même équipe », personne ne prend le site pour officiel ; le « ne sait pas » tient à la palette, qui est celle de la charte par décision. Le trait de surligneur, de la couleur de sa carapace, s'ajoute à ce que deux lecteurs rapprochent du site de la campagne.
+- **R55 se dégrade.** Les deux lecteurs Opus ne tranchent plus : « l'habillage reprend des codes enfantins : tortue et flamant rose, « Choisir sa couleur », « Elle s'envolera quand tu auras trouvé un mot… », mots à collectionner » ; « un parent ou un enseignant pourrait le prendre pour un site jeunesse » ; l'un d'eux situe le public à « 15-25 ans, des primo-votants ». Les trois autres disent non : « le contenu est politique », « des thèmes d'adultes ». Ce qui a changé entre les deux lectures est la première image : le plateau des six titres officiels — du texte d'adulte — a laissé la place à trois mots du quotidien. **Aucun ne dit oui** ; mais le « non » unanime n'y est plus. Cinq lecteurs simulés, une réponse chacun : HYPOTHÈSE.
+- **Dit à l'éditeur avec la question de la production** : c'est le risque qu'il a accepté avec D19.1, et il lui revient de dire s'il l'accepte encore tel que mesuré.
