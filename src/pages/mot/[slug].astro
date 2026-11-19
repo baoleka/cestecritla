@@ -11,6 +11,7 @@ import Base from '../../layouts/Base.astro';
 import Supports from '../../components/Supports.astro';
 import { cards, prose, resolve, type Card } from '../../lib/editorial.ts';
 import { t } from '../../lib/strings.ts';
+import { pageWordsFile } from '../../lib/words-data.ts';
 
 export function getStaticPaths() {
   return cards().map((card: Card) => ({ params: { slug: card.id }, props: { card } }));
@@ -23,6 +24,9 @@ const related = card.related
   .map((id) => all.find((c) => c.id === id))
   .filter((c): c is Card => c !== undefined);
 const term = prose(card.term);
+// The explained words of the card (PLAN-MOTS, lot 4), where the build shows them on its pages.
+const Words = __CEL_WORDS_PAGES__ ? (await import('../../components/Words.astro')).default : null;
+const wordsFile = Words === null ? null : pageWordsFile('c', card.id);
 const title = term.charAt(0).toUpperCase() + term.slice(1);
 ---
 
@@ -45,6 +49,8 @@ const title = term.charAt(0).toUpperCase() + term.slice(1);
   <p>{prose(card.objection.answer)}</p>
 
   <Supports supports={supports} />
+
+  {Words !== null && wordsFile !== null && <Words file={wordsFile} title="words.page.title" />}
 
   {
     related.length > 0 && (

@@ -1,0 +1,51 @@
+/* The explained words of a page (src/components/Words.astro; PLAN-MOTS, lot 4): a folded line,
+   filled by script the first time it is opened. The same marks as in the sheet of « Demander »
+   (src/styles/chat.css): a dashed rule for what explains a word and says nothing of the
+   programme, one line to press per word. */
+
+/* Without script the line would open on nothing: it is not shown. */
+@media (scripting: none) {
+  details.words {
+    display: none;
+  }
+}
+
+details.words {
+  margin-block: var(--space-5) 0;
+}
+details.words > summary {
+  min-block-size: var(--tap-comfortable);
+  padding-block: var(--space-2);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+details.words > summary:focus-visible,
+.words .c-term summary:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.words .c-block {
+  margin-block: var(--space-2) 0;
+  padding-inline-start: var(--space-3);
+  border-inline-start: 4px dashed var(--action);
+}
+.words .c-badge {
+  margin: 0;
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+.words .c-term {
+  margin-block-start: var(--space-1);
+}
+.words .c-term summary {
+  min-block-size: var(--tap-comfortable);
+  padding-block: var(--space-2);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+.words .c-term p {
+  margin-block: 0 var(--space-2);
+}
+.words .c-example-label {
+  font-weight: var(--font-weight-bold);
+}

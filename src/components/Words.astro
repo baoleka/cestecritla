@@ -1,0 +1,33 @@
+---
+/**
+ * A folded line under the text of a page — « Des mots de cette section, expliqués » — that
+ * shows, once opened, the explained words the page uses (PLAN-MOTS, lot 4; D20.11, D20.13).
+ *
+ * In the HTML: the line, its title, and the address of one file. Neither a word nor an
+ * explanation: those are texts an AI wrote, and they come by script, with the label that says
+ * so (D19.6, D20.11) — a page a search engine reads carries none. Nothing is fetched until the
+ * line is opened, and its address names the page, never a word.
+ *
+ * Without script the line is not shown (`scripting: none`, src/styles/words.css): it would open
+ * on nothing. Imported only by a build that shows the explained words on its pages
+ * (`__CEL_WORDS_PAGES__`, astro.config.ts): elsewhere neither it nor its styles exist.
+ */
+import '../styles/words.css';
+import { t, type StringKey } from '../lib/strings.ts';
+
+interface Props {
+  /** The address of the page's file of words, under /data/. */
+  file: string;
+  /** What the line says: of this section, or of this page. */
+  title: StringKey;
+}
+const { file, title } = Astro.props;
+---
+
+<details class="words" id="mots" data-words={file}>
+  <summary>{t(title)}</summary>
+</details>
+
+<script>
+  import '../scripts/words-shell.ts';
+</script>

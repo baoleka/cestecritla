@@ -15,6 +15,7 @@ import Base from '../../layouts/Base.astro';
 import Supports from '../../components/Supports.astro';
 import { prose, resolve, ripostes, type Riposte } from '../../lib/editorial.ts';
 import { t } from '../../lib/strings.ts';
+import { pageWordsFile } from '../../lib/words-data.ts';
 
 export function getStaticPaths() {
   const entries = ripostes();
@@ -32,6 +33,9 @@ export function getStaticPaths() {
 
 const { entry, next, moved } = Astro.props;
 const supports = moved ? [] : resolve(`riposte:${entry.id}`, entry.supports);
+// The explained words of the answer (PLAN-MOTS, lot 4), where the build shows them on its pages.
+const Words = __CEL_WORDS_PAGES__ ? (await import('../../components/Words.astro')).default : null;
+const wordsFile = Words === null || moved ? null : pageWordsFile('r', entry.slug);
 ---
 
 {
@@ -61,6 +65,8 @@ const supports = moved ? [] : resolve(`riposte:${entry.id}`, entry.supports);
 
       <h2>{t('riposte.reversal_label')}</h2>
       <p>{prose(entry.avoid)}</p>
+
+      {Words !== null && wordsFile !== null && <Words file={wordsFile} title="words.page.title" />}
 
       <Authorship review={entry.review} />
 

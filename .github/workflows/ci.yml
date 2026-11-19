@@ -175,6 +175,11 @@ jobs:
       - name: End to end of the sheet without a live AI (test build, simulated Worker)
         run: npm run build:gists && npx tsx scripts/e2e-sheet.ts --engines chromium
 
+      # The explained words outside the sheet (PLAN-MOTS, D20.11, D20.13), on the same test build:
+      # a folded line that fetches nothing until it is opened, then one file, under its label.
+      - name: End to end of the explained words (test build)
+        run: npx tsx scripts/e2e-words.ts --engines chromium
+
       # « Où est-ce écrit ? », on the same test build: without script, then with it — a choice is
       # never wrong, a round sends nothing and writes nothing, and the mascot (D17.1 to D17.36)
       # changes at the end of a round only: her four passages beat by beat, « Passer », less
@@ -188,7 +193,7 @@ jobs:
       # dist-ask/ when it is there: replayed now that it is, so that the half of each that needs
       # the screen to exist is exercised too — her place in the game block among them.
       - name: Notices, policy and words of the test build
-        run: npm run build:scrutin:test && npx tsx --test scripts/check-no-ai-mention.test.ts scripts/check-build.test.ts scripts/game-page.test.ts
+        run: npm run build:scrutin:test && npx tsx --test scripts/check-no-ai-mention.test.ts scripts/check-build.test.ts scripts/game-page.test.ts scripts/words-page.test.ts
 
       # The parser's second opinion (D15.6): the synthetic official site — 2026 markup around the
       # 2025 text — re-read by a real DOM, and a sample of deep links followed.

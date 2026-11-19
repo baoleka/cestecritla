@@ -17,6 +17,10 @@
  *                                the explained words: how they are found, what they mean,
  *                                their examples (src/lib/words-data.ts) — only in a build
  *                                whose field asks (D20.11). No name depends on a word (D20.13).
+ *   /data/mots-<fingerprint>-<s|c|r>-<page>.json
+ *                                the words of one page — a section, a card, an answer —, each
+ *                                with what it means and its example, and the labels that go
+ *                                with them: only in a build that explains words on its pages.
  *
  * The corpus version is in the file name, so the files can be cached for a year
  * (public/_headers): a new edition of the book gets new names, not stale bytes.
@@ -35,7 +39,15 @@ import {
 } from '../../lib/edition.ts';
 import { askSite } from '../../lib/ask-config.ts';
 import { chatPlain } from '../../lib/chat-data.ts';
-import { builtWords, wordsNames } from '../../lib/words-data.ts';
+import { wordsSite } from '../../lib/words-config.ts';
+import {
+  builtWords,
+  explainedTerms,
+  pageWords,
+  pageWordsName,
+  wordsNames,
+  wordsPages,
+} from '../../lib/words-data.ts';
 import { builtGame } from '../../lib/game-built.ts';
 import { gameSite } from '../../lib/game-data.ts';
 import { t } from '../../lib/strings.ts';
@@ -49,6 +61,11 @@ const plain = askSite().mode === 'chat' ? chatPlain() : null;
 /** So do the explained words: they follow the mode of the site (D20.11). */
 const words = askSite().mode === 'chat' ? builtWords() : null;
 const wordFiles = words === null ? null : wordsNames(words.fingerprint);
+/** The file of each page that explains words, where the build shows them on its pages. */
+const pageFiles =
+  words !== null && wordsSite().pages
+    ? wordsPages().map((page) => ({ name: pageWordsName(words.fingerprint, page), ids: page.ids }))
+    : [];
 
 export function getStaticPaths() {
   return [
@@ -61,6 +78,7 @@ export function getStaticPaths() {
       : [wordFiles.finder, wordFiles.meanings, wordFiles.examples].map((name) => ({
           params: { name },
         }))),
+    ...pageFiles.map(({ name }) => ({ params: { name } })),
   ];
 }
 
@@ -102,6 +120,16 @@ function body(name: string | undefined): string {
     if (name === wordFiles.finder) return JSON.stringify(words.finder);
     if (name === wordFiles.meanings) return JSON.stringify(words.meanings);
     if (name === wordFiles.examples) return JSON.stringify(words.examples);
+  }
+  const page = pageFiles.find((file) => file.name === name);
+  if (page !== undefined) {
+    return JSON.stringify(
+      pageWords(page.ids, explainedTerms(), {
+        badge: t('chat.terms.badge'),
+        how: t('chat.method_link'),
+        example: t('words.example'),
+      }),
+    );
   }
   return meta();
 }

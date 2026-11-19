@@ -46,7 +46,9 @@
     "index:2026": "tsx scripts/index-2026.ts",
     "eval:2026": "tsx scripts/eval-2026.ts",
     "gists": "tsx scripts/gists-2026.ts",
-    "e2e:gists": "tsx scripts/e2e-gists.ts"
+    "e2e:gists": "tsx scripts/e2e-gists.ts",
+    "e2e:words": "tsx scripts/e2e-words.ts",
+    "lexicon": "tsx scripts/lexicon-2026.ts"
   },
   "license": "MIT",
   "devDependencies": {

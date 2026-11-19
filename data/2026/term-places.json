@@ -1,0 +1,620 @@
+{
+  "meta": {
+    "corpus_version": "27ee6e713fe25e7e",
+    "wordings_sha256": "4556c7a0d9b3fe1be97ba3ab186bd1aac2501ae3bd65d635b19e8ccab89a33d0",
+    "note_fr": "Où chaque mot expliqué est écrit dans le livre : pour chaque section, les identifiants des mots de data/2026/terms.json que son texte emploie (son titre, ses mesures et leurs points, les paragraphes entre eux), triés. Les sections qui n'en emploient aucun n'y sont pas. Écrit par scripts/lexicon-2026.ts --places, sur la machine qui tient le texte du livre, par la session seule (D20.1) : aucun mot du livre, seulement des identifiants de sections et de mots. Il ne dit ni où dans la section, ni combien de fois. La fiche de chaque section montre ces mots, expliqués, sous une ligne qu'on ouvre (PLAN-MOTS, lot 4). À refaire après tout changement des formulations de terms.json : wordings_sha256 dit sur lesquelles il a été calculé."
+  },
+  "sections": {
+    "p1c1-s01": [
+      "ges",
+      "moratoire",
+      "onf"
+    ],
+    "p1c1-s02": [
+      "circuits-courts"
+    ],
+    "p1c2-s01": [
+      "dividendes",
+      "droit-de-preemption"
+    ],
+    "p1c2-s02": [
+      "agroecologie",
+      "cnes"
+    ],
+    "p1c2-s03": [
+      "droits-de-douane",
+      "libre-echange",
+      "niches-fiscales",
+      "omc",
+      "requisition"
+    ],
+    "p1c3-s01": [
+      "ehpad"
+    ],
+    "p1c3-s02": [
+      "orsec"
+    ],
+    "p1c3-s03": [
+      "ferroutage",
+      "leasing-social",
+      "moratoire",
+      "nationaliser",
+      "suv",
+      "wagon-isole",
+      "zfe"
+    ],
+    "p1c3-s04": [
+      "abroger",
+      "asn",
+      "epr2",
+      "ges",
+      "irsn",
+      "privatisation",
+      "tarifs-reglementes"
+    ],
+    "p1c3-s05": [
+      "ges",
+      "passoires-thermiques",
+      "precarite-energetique"
+    ],
+    "p1c3-s06": [
+      "ges",
+      "moratoire",
+      "zoonoses"
+    ],
+    "p1c3-s07": [
+      "ademe",
+      "ecoconception",
+      "ges",
+      "low-tech",
+      "moratoire",
+      "obsolescence-programmee",
+      "pfas"
+    ],
+    "p1c3-s08": [
+      "agroecologie",
+      "aop",
+      "caisse-de-defaisance",
+      "circuits-courts",
+      "clause-de-sauvegarde",
+      "coefficients-multiplicateurs",
+      "droit-de-preemption",
+      "igp",
+      "inao",
+      "pac",
+      "prix-planchers",
+      "protectionnisme",
+      "zan"
+    ],
+    "p2c1-s01": [
+      "abroger",
+      "moratoire",
+      "ppp",
+      "privatisation",
+      "requisition"
+    ],
+    "p2c1-s03": [
+      "droit-de-preemption"
+    ],
+    "p2c1-s04": [
+      "cae",
+      "ess",
+      "scic",
+      "scop"
+    ],
+    "p2c2-s01": [
+      "apl",
+      "minima-sociaux",
+      "point-d-indice",
+      "reduflation",
+      "smic"
+    ],
+    "p2c2-s02": [
+      "convention-judiciaire-d-interet-public",
+      "cvae",
+      "dividendes",
+      "evasion-fiscale",
+      "exit-tax",
+      "flat-tax",
+      "isf",
+      "niches-fiscales",
+      "pme",
+      "privatisation",
+      "quotient-conjugal",
+      "taxe-zucman",
+      "tva"
+    ],
+    "p2c2-s03": [
+      "seuil-de-pauvrete",
+      "smic",
+      "stock-options"
+    ],
+    "p2c3-s01": [
+      "lbo"
+    ],
+    "p2c3-s02": [
+      "bpi",
+      "tpe"
+    ],
+    "p2c3-s03": [
+      "dividendes"
+    ],
+    "p2c3-s04": [
+      "bce",
+      "cades",
+      "circuit-du-tresor",
+      "oati",
+      "privatisation",
+      "tfue",
+      "ue"
+    ],
+    "p2c3-s05": [
+      "ess",
+      "pme",
+      "taxe-fonciere",
+      "tpe"
+    ],
+    "p3c1-s01": [
+      "logement-d-abord",
+      "non-recours",
+      "reduflation",
+      "seuil-de-pauvrete"
+    ],
+    "p3c1-s02": [
+      "smic"
+    ],
+    "p3c1-s03": [
+      "abroger",
+      "cdi",
+      "pme"
+    ],
+    "p3c1-s05": [
+      "abroger",
+      "ass",
+      "cdd",
+      "cdi",
+      "rsa",
+      "unedic"
+    ],
+    "p3c1-s06": [
+      "chsct",
+      "circ"
+    ],
+    "p3c1-s07": [
+      "abroger",
+      "annuites",
+      "decote",
+      "retraite-par-capitalisation",
+      "retraite-par-repartition",
+      "rsa",
+      "seuil-de-pauvrete",
+      "smic"
+    ],
+    "p3c1-s08": [
+      "abroger",
+      "ame",
+      "csg",
+      "depassements-d-honoraires",
+      "franchises-medicales",
+      "jours-de-carence",
+      "privatisation",
+      "reste-a-charge"
+    ],
+    "p3c2-s01": [
+      "defenseur-des-droits",
+      "gpa",
+      "ivg"
+    ],
+    "p3c2-s02": [
+      "ase",
+      "pjj"
+    ],
+    "p3c2-s03": [
+      "cdd",
+      "crous",
+      "seuil-de-pauvrete"
+    ],
+    "p3c2-s04": [
+      "ehpad"
+    ],
+    "p3c2-s05": [
+      "aah",
+      "aesh",
+      "esat",
+      "loi-elan",
+      "mdph",
+      "smic"
+    ],
+    "p3c2-s06": [
+      "ald",
+      "lgbti",
+      "pma"
+    ],
+    "p3c2-s07": [
+      "asf",
+      "pma"
+    ],
+    "p3c2-s08": [
+      "conscription",
+      "privatisation"
+    ],
+    "p3c3-s02": [
+      "soumission-chimique"
+    ],
+    "p3c3-s03": [
+      "clause-de-conscience",
+      "ivg",
+      "lgbti"
+    ],
+    "p3c3-s04": [
+      "pmi"
+    ],
+    "p3c4-s01": [
+      "arcom",
+      "ia",
+      "testing"
+    ],
+    "p3c4-s02": [
+      "abroger",
+      "droit-du-sol"
+    ],
+    "p3c4-s04": [
+      "abroger",
+      "amende-forfaitaire-delictuelle"
+    ],
+    "p4c1-s01": [
+      "cadmium",
+      "chlordecone",
+      "glyphosate",
+      "icpe",
+      "neonicotinoides",
+      "pfas"
+    ],
+    "p4c1-s02": [
+      "mega-bassines",
+      "moratoire",
+      "pfas"
+    ],
+    "p4c1-s03": [
+      "circuits-courts",
+      "coupes-rases",
+      "droit-de-preemption",
+      "mercosur",
+      "onf",
+      "orpaillage",
+      "privatisation",
+      "travailleurs-detaches"
+    ],
+    "p4c1-s04": [
+      "moratoire",
+      "ogm"
+    ],
+    "p4c2-s02": [
+      "abroger",
+      "rep"
+    ],
+    "p4c2-s03": [
+      "aesh",
+      "cap",
+      "evars",
+      "point-d-indice"
+    ],
+    "p4c2-s04": [
+      "abroger",
+      "bts",
+      "but",
+      "cfa",
+      "lobbys"
+    ],
+    "p4c2-s05": [
+      "anr",
+      "cnrs",
+      "inrae",
+      "inserm",
+      "ird",
+      "lobbys"
+    ],
+    "p4c2-s06": [
+      "abroger",
+      "crous",
+      "cvec",
+      "hceres",
+      "lru",
+      "parcoursup"
+    ],
+    "p4c2-s07": [
+      "abroger",
+      "conscription",
+      "smic"
+    ],
+    "p4c3-s01": [
+      "cnl",
+      "ia",
+      "intermittents",
+      "mecenat",
+      "pib"
+    ],
+    "p4c3-s03": [
+      "staps"
+    ],
+    "p4c4-s01": [
+      "chlordecone",
+      "perturbateurs-endocriniens",
+      "pfas",
+      "zoonoses"
+    ],
+    "p4c4-s02": [
+      "antibioresistance",
+      "biomedicaments",
+      "licence-d-office",
+      "nationaliser",
+      "requisition",
+      "vih",
+      "zoonoses"
+    ],
+    "p4c4-s03": [
+      "nutri-score"
+    ],
+    "p4c4-s04": [
+      "deserts-medicaux",
+      "ehpad",
+      "ondam",
+      "t2a"
+    ],
+    "p4c4-s05": [
+      "contention",
+      "privatisation"
+    ],
+    "p4c5-s01": [
+      "aires-marines-protegees",
+      "cop",
+      "moratoire",
+      "sargasses"
+    ],
+    "p4c5-s02": [
+      "dumping-social",
+      "hydrolien",
+      "nationaliser",
+      "omi",
+      "pavillon",
+      "plateau-continental",
+      "propulsion-velique",
+      "shom",
+      "taxe-au-tonnage"
+    ],
+    "p4c5-s03": [
+      "onu"
+    ],
+    "p4c6-s01": [
+      "galileo",
+      "nationaliser",
+      "otan"
+    ],
+    "p4c6-s02": [
+      "cnes"
+    ],
+    "p4c6-s03": [
+      "accords-artemis",
+      "onu",
+      "traite-de-la-lune"
+    ],
+    "p4c7-s01": [
+      "cnil",
+      "cryptographie-post-quantique",
+      "rgpd"
+    ],
+    "p4c7-s02": [
+      "centres-de-donnees",
+      "cloud",
+      "ecoconception",
+      "gafam",
+      "interoperabilite",
+      "logiciels-libres",
+      "moratoire",
+      "nationaliser",
+      "obsolescence-programmee"
+    ],
+    "p4c7-s03": [
+      "ia"
+    ],
+    "p5c1-s01": [
+      "abroger",
+      "amnistie",
+      "intercommunalites",
+      "moratoire",
+      "referendum",
+      "ric"
+    ],
+    "p5c1-s02": [
+      "constituante",
+      "referendum"
+    ],
+    "p5c1-s03": [
+      "article-49-3",
+      "constituante",
+      "scrutin-proportionnel"
+    ],
+    "p5c1-s04": [
+      "conflit-d-interets",
+      "ineligible",
+      "lobbys",
+      "pantouflage"
+    ],
+    "p5c1-s05": [
+      "abroger",
+      "concordat",
+      "laicite",
+      "miviludes"
+    ],
+    "p5c1-s06": [
+      "arcom",
+      "droit-de-preemption"
+    ],
+    "p5c2-s01": [
+      "abroger",
+      "pharos"
+    ],
+    "p5c2-s02": [
+      "abroger",
+      "defenseur-des-droits",
+      "desescalade",
+      "iggn",
+      "igpn",
+      "lbd",
+      "rio"
+    ],
+    "p5c2-s03": [
+      "bac-police",
+      "brav-m"
+    ],
+    "p5c2-s04": [
+      "constituante",
+      "convention-judiciaire-d-interet-public",
+      "pollueur-payeur",
+      "regulation-carcerale",
+      "verrou-de-bercy"
+    ],
+    "p5c2-s05": [
+      "aide-juridictionnelle",
+      "cours-criminelles",
+      "jures-populaires"
+    ],
+    "p5c3-s01": [
+      "dotation-globale-de-fonctionnement",
+      "taxe-d-habitation"
+    ],
+    "p5c3-s03": [
+      "moratoire"
+    ],
+    "p5c3-s04": [
+      "abroger",
+      "anru",
+      "encadrement-des-loyers",
+      "hlm",
+      "loi-sru",
+      "niches-fiscales",
+      "organismes-de-foncier-solidaire",
+      "passoires-thermiques",
+      "permis-de-louer",
+      "requisition",
+      "taxe-fonciere"
+    ],
+    "p5c3-s05": [
+      "chlordecone",
+      "minima-sociaux",
+      "seuil-de-pauvrete",
+      "tarifs-reglementes"
+    ],
+    "p6c1-s01": [
+      "constituante",
+      "niches-fiscales",
+      "travailleurs-detaches"
+    ],
+    "p6c1-s02": [
+      "clause-de-sauvegarde",
+      "libre-echange",
+      "moratoire",
+      "otan",
+      "semestre-europeen",
+      "ue"
+    ],
+    "p6c1-s03": [
+      "bce",
+      "pac",
+      "ue"
+    ],
+    "p6c1-s04": [
+      "bce",
+      "conflit-d-interets",
+      "demandeurs-d-asile",
+      "paradis-fiscaux",
+      "protectionnisme",
+      "referendum",
+      "ue"
+    ],
+    "p6c2-s01": [
+      "altermondialiste",
+      "commandement-integre",
+      "conseil-de-securite",
+      "non-alignee",
+      "otan",
+      "pib",
+      "ue"
+    ],
+    "p6c2-s02": [
+      "aiea",
+      "athos",
+      "biens-a-double-usage",
+      "cloud",
+      "ia",
+      "onu",
+      "otan",
+      "sala",
+      "starlink",
+      "tian"
+    ],
+    "p6c2-s03": [
+      "conseil-de-securite",
+      "fao",
+      "oms",
+      "onu",
+      "unesco",
+      "unrwa"
+    ],
+    "p6c2-s04": [
+      "biens-a-double-usage",
+      "cij",
+      "cpi",
+      "embargo",
+      "onu",
+      "osce",
+      "ue"
+    ],
+    "p6c2-s05": [
+      "ia",
+      "licence-d-office",
+      "onu"
+    ],
+    "p6c3-s01": [
+      "cnuced",
+      "droits-de-douane",
+      "fmi",
+      "libre-echange",
+      "oit",
+      "omc",
+      "onu",
+      "protectionnisme"
+    ],
+    "p6c3-s02": [
+      "abroger",
+      "ame",
+      "apatrides",
+      "cra",
+      "demandeurs-d-asile",
+      "hcr",
+      "ofpra",
+      "onu",
+      "pays-d-origine-surs",
+      "titre-de-sejour"
+    ],
+    "p6c3-s03": [
+      "altermondialiste",
+      "cdaa",
+      "celac",
+      "iora"
+    ],
+    "p6c3-s04": [
+      "afd",
+      "aide-publique-au-developpement",
+      "altermondialiste",
+      "ppp"
+    ],
+    "p6c3-s06": [
+      "cfa"
+    ],
+    "p6c3-s07": [
+      "creolisation",
+      "onu"
+    ]
+  }
+}

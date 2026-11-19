@@ -20,6 +20,8 @@
  */
 import Base from '../../layouts/Base.astro';
 import Bridge from '../../components/Bridge.astro';
+import { cards, prose } from '../../lib/editorial.ts';
+import { pageWordsFile } from '../../lib/words-data.ts';
 import DeepLinks from '../../components/DeepLinks.astro';
 import Quote from '../../components/Quote.astro';
 import { oldSections } from '../../lib/archive-2025.ts';
@@ -52,6 +54,18 @@ export function getStaticPaths() {
 
 const { section, bridgeFor } = Astro.props;
 const meta = manifest().meta;
+
+// The explained words of the section, and the cards whose measures it holds (PLAN-MOTS, lot 4):
+// only in a build that shows them on its pages (`__CEL_WORDS_PAGES__`) — elsewhere the folded
+// line is not even imported, and the page is the page of before.
+const Words = __CEL_WORDS_PAGES__ ? (await import('../../components/Words.astro')).default : null;
+const wordsFile = Words !== null && section !== undefined ? pageWordsFile('s', section.id) : null;
+const ideas =
+  __CEL_WORDS_PAGES__ && section !== undefined
+    ? cards().filter((card) =>
+        card.supports.some((support) => support.id.startsWith(`${section.id}-`)),
+      )
+    : [];
 
 const chapter = section && chapterOf(section);
 const part = section && partOf(section);
@@ -107,6 +121,21 @@ const jsonLd = section && {
           <a class="cta" href={section.url} rel="noopener noreferrer">{t('pointer.cta')}</a>
         </p>
       </section>
+
+      {Words !== null && wordsFile !== null && <Words file={wordsFile} title="words.section.title" />}
+
+      {ideas.length > 0 && (
+        <section aria-labelledby="ideas-title">
+          <h2 id="ideas-title">{t('words.section.ideas')}</h2>
+          <ul class="toc">
+            {ideas.map((card) => (
+              <li>
+                <a href={`/mot/${card.id}/`}>{prose(card.term)}</a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <section aria-labelledby="inside-title">
         <h2 id="inside-title">{t('section.inside')}</h2>

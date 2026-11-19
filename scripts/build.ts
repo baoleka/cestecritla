@@ -67,6 +67,7 @@ const EDITION_INPUTS: readonly string[] = [
   'data/2026/id-map-2025.json',
   'data/2026/search-index.json',
   'data/2026/synonyms.json',
+  'data/2026/term-places.json',
   'data/aec-2025.json',
 ];
 
@@ -88,6 +89,10 @@ function checkEdition(root: string): string {
     [
       'data/2026/search-index.json',
       version('data/2026/search-index.json', (f) => meta(f)['corpus_version']),
+    ],
+    [
+      'data/2026/term-places.json',
+      version('data/2026/term-places.json', (f) => meta(f)['corpus_version']),
     ],
     [
       'data/2026/id-map-2025.json',

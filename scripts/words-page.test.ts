@@ -15,8 +15,17 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
-import { builtWords, wordsNames } from '../src/lib/words-data.js';
-import { builtAskMode } from './build-mode.js';
+import {
+  builtWords,
+  explainedTerms,
+  pageWords,
+  pageWordsName,
+  wordsNames,
+  wordsPages,
+  type PageLabels,
+} from '../src/lib/words-data.js';
+import { wordsFor } from '../src/lib/words-switch.js';
+import { builtAskMode, readBuildHost } from './build-mode.js';
 
 const built = builtWords();
 const names = wordsNames(built.fingerprint);
@@ -45,7 +54,10 @@ for (const [root, asks] of BUILDS) {
       skip: !there && `no ${root}/ — build it first`,
     },
     () => {
-      const words = readdirSync(join(root, 'data')).filter((name) => name.startsWith('mots-'));
+      // The three files of the sheet; the files of the pages are below.
+      const words = readdirSync(join(root, 'data')).filter((name) =>
+        /^mots-[0-9a-f]{16}(?:-sens|-exemples)?\.json$/.test(name),
+      );
       if (!asks()) {
         assert.deepEqual(words, [], `${root} ships words, and its field asks nothing`);
         assert.equal(sheetWords(root), null);
@@ -80,3 +92,81 @@ void test('the texts of « En clair » no longer carry the explained words', () 
   >;
   assert.deepEqual(Object.keys(file).sort(), ['cards', 'objections', 'words']);
 });
+
+/** The labels a page's file carries — the strings of the kit, as the pages print them. */
+function labels(): PageLabels {
+  const kit = JSON.parse(readFileSync('design/strings.json', 'utf8')) as Record<string, string>;
+  const printed = (key: string): string => (kit[key] ?? '').replace(/'/g, '’');
+  return {
+    badge: printed('chat.terms.badge'),
+    how: printed('chat.method_link'),
+    example: printed('words.example'),
+  };
+}
+
+/** The builds that explain words on their pages: the test builds; production, if its switch says so. */
+const PAGE_BUILDS: readonly (readonly [string, () => boolean])[] = [
+  [
+    'dist',
+    () =>
+      builtAskMode() === 'chat' &&
+      wordsFor(
+        JSON.parse(readFileSync('data/2026/words.json', 'utf8')) as unknown,
+        readBuildHost() === 'preview' ? 'preview' : 'apex',
+      ).pages,
+  ],
+  ['dist-ask', () => true],
+  ['dist-gists', () => true],
+  ['dist-scrutin', () => false],
+];
+
+for (const [root, shows] of PAGE_BUILDS) {
+  const there = existsSync(join(root, 'sommaire', 'index.html'));
+  void test(
+    `${root}: a page explains its words exactly where the build shows them, and its HTML names none`,
+    {
+      skip: !there && `no ${root}/ — build it first`,
+    },
+    () => {
+      const files = readdirSync(join(root, 'data')).filter((name) =>
+        /^mots-[0-9a-f]{16}-[scr]-/.test(name),
+      );
+      const pages = wordsPages();
+      if (!shows()) {
+        assert.deepEqual(files, [], `${root} ships the words of its pages, and shows none`);
+        const section = readFileSync(join(root, 's', 'p1c1-s01', 'index.html'), 'utf8');
+        assert.doesNotMatch(section, /data-words|class="words"/);
+        return;
+      }
+      assert.deepEqual(
+        files.sort(),
+        pages.map((page) => `${pageWordsName(built.fingerprint, page)}.json`).sort(),
+      );
+      const entries = explainedTerms();
+      for (const page of pages) {
+        const name = pageWordsName(built.fingerprint, page);
+        const file = JSON.parse(
+          readFileSync(join(root, 'data', `${name}.json`), 'utf8'),
+        ) as unknown;
+        assert.deepEqual(file, pageWords(page.ids, entries, labels()), name);
+        const where =
+          page.kind === 's'
+            ? join(root, 's', page.key, 'index.html')
+            : page.kind === 'c'
+              ? join(root, 'mot', page.key, 'index.html')
+              : join(root, 'r', page.key, 'index.html');
+        const html = readFileSync(where, 'utf8');
+        assert.ok(html.includes(`data-words="/data/${name}.json"`), `${where}: no folded line`);
+        // The HTML holds the line and its address: no word of the file, no text an AI wrote.
+        const words = file as { terms: string[][] };
+        for (const [, , plain] of words.terms) {
+          assert.ok(
+            !html.includes((plain ?? '').slice(0, 40)),
+            `${where}: an explanation in the HTML`,
+          );
+        }
+        assert.doesNotMatch(html, /Explications écrites et vérifiées par une IA/);
+      }
+    },
+  );
+}

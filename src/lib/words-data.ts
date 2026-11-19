@@ -21,7 +21,7 @@
 import { readFileSync } from 'node:fs';
 import { canonicalHash } from './fingerprint.js';
 import { notionsIn, type NotionEntry } from './notions.js';
-import { parseTerms, type TermEntry, type TermWording } from './terms.js';
+import { parseTerms, termsIn, type TermEntry, type TermWording } from './terms.js';
 
 export const TERMS_PATH = 'data/2026/terms.json';
 const CARDS_PATH = 'data/2026/glossary.json';
@@ -136,3 +136,149 @@ export const wordsNames = (fingerprint: string): WordsNames => ({
   meanings: `mots-${fingerprint}-sens`,
   examples: `mots-${fingerprint}-exemples`,
 });
+
+/** Where each section's words are written: the map of the book, identifiers only (lot 4). */
+export const TERM_PLACES_PATH = 'data/2026/term-places.json';
+
+/**
+ * The fingerprint of how the words are found — their identifiers and their wordings, never
+ * what they say: what the map of the book was computed on (scripts/lexicon-2026.ts).
+ */
+export function wordingsFingerprint(wordings: readonly TermWording[]): string {
+  return canonicalHash(
+    wordings.map(({ id, term, aliases, anyCase }) => ({
+      id,
+      term,
+      aliases: aliases ?? [],
+      anyCase: anyCase === true,
+    })),
+  );
+}
+
+/** What a page's file says of its words, so that no text travels without it. */
+export interface PageLabels {
+  /** Who wrote and checked them: an AI. */
+  badge: string;
+  /** The link to how it is made. */
+  how: string;
+  /** The word that precedes an example. */
+  example: string;
+}
+
+/** The file of a page's words (PLAN-MOTS, lot 4). */
+export interface PageWordsFile extends WordsProvenance {
+  labels: PageLabels;
+  /** Each word — identifier, as shown, what it means, its example if any — as a dictionary orders them. */
+  terms: string[][];
+}
+
+/** A page that explains words: a section, one of our cards, one of our answers. */
+export interface WordsPage {
+  kind: 's' | 'c' | 'r';
+  /** The section's identifier, the card's, the answer's slug. */
+  key: string;
+  /** The explained words the page uses, sorted. */
+  ids: string[];
+}
+
+interface Supported {
+  supports: readonly { id: string; quote?: boolean }[];
+}
+
+/**
+ * Every page that has words to explain. A section: the words the map of the book says its text
+ * uses. One of our cards, one of our answers: the words its texts use — and the measures it
+ * quotes whole (data/2026/quotes.json), which the page shows.
+ */
+export function wordsPages(entries: readonly TermEntry[] = explainedTerms()): WordsPage[] {
+  const read = (path: string): unknown => JSON.parse(readFileSync(path, 'utf8'));
+  const places = read(TERM_PLACES_PATH) as { sections: Record<string, string[]> };
+  const quotes = new Map(
+    (read('data/2026/quotes.json') as { quotes: { id: string; text: string }[] }).quotes.map(
+      (quote) => [quote.id, quote.text],
+    ),
+  );
+  const quoted = (entry: Supported): string[] =>
+    entry.supports.filter((s) => s.quote === true).map((s) => quotes.get(s.id) ?? '');
+  const idsIn = (texts: readonly string[]): string[] =>
+    termsIn(texts, entries, entries.length)
+      .map((entry) => entry.id)
+      .sort();
+  const out: WordsPage[] = Object.entries(places.sections).map(([key, ids]) => ({
+    kind: 's',
+    key,
+    ids: [...ids],
+  }));
+  const cardsFile = read(CARDS_PATH) as {
+    entries: (Supported & {
+      id: string;
+      term: string;
+      plain: string;
+      why?: string;
+      objection?: { text: string; answer: string };
+    })[];
+  };
+  for (const card of cardsFile.entries) {
+    const ids = idsIn([
+      card.term,
+      card.plain,
+      card.why ?? '',
+      card.objection?.text ?? '',
+      card.objection?.answer ?? '',
+      ...quoted(card),
+    ]);
+    if (ids.length > 0) out.push({ kind: 'c', key: card.id, ids });
+  }
+  const answers = read('data/2026/riposte.json') as {
+    entries: (Supported & { slug: string; objection: string; answer: string; avoid: string })[];
+  };
+  for (const answer of answers.entries) {
+    const ids = idsIn([answer.objection, answer.answer, answer.avoid, ...quoted(answer)]);
+    if (ids.length > 0) out.push({ kind: 'r', key: answer.slug, ids });
+  }
+  return out;
+}
+
+/** The name of a page's file of words, under /data/, without « .json ». */
+export const pageWordsName = (fingerprint: string, page: Pick<WordsPage, 'kind' | 'key'>): string =>
+  `mots-${fingerprint}-${page.kind}-${page.key}`;
+
+/** The file of a page's words: who wrote them, the labels, each word as a dictionary orders them. */
+export function pageWords(
+  ids: readonly string[],
+  entries: readonly TermEntry[],
+  labels: PageLabels,
+): PageWordsFile {
+  const wanted = new Set(ids);
+  const chosen = entries
+    .filter((entry) => wanted.has(entry.id))
+    .sort(
+      (a, b) =>
+        a.term.localeCompare(b.term, 'fr', { sensitivity: 'base' }) || a.id.localeCompare(b.id),
+    );
+  return {
+    ...provenance(),
+    labels,
+    terms: chosen.map((entry) =>
+      entry.example === undefined
+        ? [entry.id, entry.term, prose(entry.plain)]
+        : [entry.id, entry.term, prose(entry.plain), prose(entry.example)],
+    ),
+  };
+}
+
+let builtPages: Map<string, string> | null = null;
+/**
+ * The address of a page's file of words, or null when the page has none to explain — computed
+ * once per build: 111 sections, our cards and our answers ask for it.
+ */
+export function pageWordsFile(kind: WordsPage['kind'], key: string): string | null {
+  if (builtPages === null) {
+    const fingerprint = builtWords().fingerprint;
+    builtPages = new Map(
+      wordsPages().map((page) => [`${page.kind}:${page.key}`, pageWordsName(fingerprint, page)]),
+    );
+  }
+  const name = builtPages.get(`${kind}:${key}`);
+  return name === undefined ? null : `/data/${name}.json`;
+}

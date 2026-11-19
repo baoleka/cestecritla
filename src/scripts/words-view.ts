@@ -82,3 +82,64 @@ export function wordItem(
   });
   return item;
 }
+
+/** What the file of a page's words holds (src/lib/words-data.ts, `pageWords`). */
+interface PageWords {
+  labels: { badge: string; how: string; example: string };
+  /** Each word: its identifier, the word as shown, what it means, its example if it has one. */
+  terms: (readonly [string, string, string, string | null])[];
+}
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+const isText = (value: unknown): value is string => typeof value === 'string' && value !== '';
+
+/** The words of a page, if the file is one — and says an AI wrote them, as its label will. */
+function pageWordsOf(file: unknown): PageWords | null {
+  if (!isRecord(file) || file['written_by'] !== 'ai' || !isRecord(file['labels'])) return null;
+  const { badge, how, example } = file['labels'];
+  if (!isText(badge) || !isText(how) || !isText(example) || !Array.isArray(file['terms'])) {
+    return null;
+  }
+  const terms: PageWords['terms'] = [];
+  for (const row of file['terms'] as unknown[]) {
+    if (!Array.isArray(row)) return null;
+    const [id, term, plain, ex] = row as unknown[];
+    if (!isText(id) || !isText(term) || !isText(plain)) return null;
+    terms.push([id, term, plain, isText(ex) ? ex : null]);
+  }
+  return { labels: { badge, how, example }, terms };
+}
+
+/**
+ * Fills a folded line of a page with its words, the first time it is opened: the label that
+ * says who wrote them — and how, one tap away —, then one line per word, closed. Nothing comes:
+ * the line stays as it was, and the next opening asks again. Nothing says « failure ».
+ */
+export async function fillShell(shell: HTMLDetailsElement): Promise<void> {
+  let file: unknown = null;
+  try {
+    const response = await fetch(shell.dataset.words ?? '', { credentials: 'omit' });
+    file = response.ok ? ((await response.json()) as unknown) : null;
+  } catch {
+    file = null;
+  }
+  const words = pageWordsOf(file);
+  if (words === null) {
+    delete shell.dataset.asked;
+    return;
+  }
+  const part = el('div', undefined, 'c-block c-terms');
+  const badge = el('p', words.labels.badge, 'c-badge ref');
+  const how = el('a', words.labels.how);
+  how.href = '/methodologie/#demander';
+  badge.append(' — ', how);
+  part.append(badge);
+  for (const [id, term, plain, example] of words.terms) {
+    part.append(
+      wordItem(id, term, { plain, example }, false, () => undefined, words.labels.example),
+    );
+  }
+  shell.append(part);
+  shell.dataset.filled = '';
+}

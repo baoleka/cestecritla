@@ -75,7 +75,12 @@ export const ROUTES: readonly Route[] = [
     object: 'pont : chiffre « À savoir » de l’édition 2025',
     sample: 'a/c13-s02-a01/index.html',
   },
-  { prefix: '/data/', status: 'built', object: 'index et titres de la recherche, versionnés' },
+  {
+    prefix: '/data/',
+    status: 'built',
+    object:
+      'index et titres de la recherche, jeu, textes de la feuille, mots expliqués — versionnés',
+  },
   { prefix: '/c/', status: 'planned', object: 'carte-concept (remplacée par /mot/)' },
   {
     prefix: '/r/',
