@@ -383,6 +383,8 @@ const RUNTIME_AI_KEYS: Readonly<Record<string, string | null>> = {
   'chat.offer.notice': null,
   'chat.offer.title': null,
   'chat.terms.badge': null,
+  // The label of a sentence on a card of the game (D19.2): built only where the site asks.
+  'game.gist.badge': null,
   'offline.chat': 'offline.chat.local',
   'privacy.chat.budget': null,
   'privacy.chat.choice': null,
@@ -463,6 +465,23 @@ void test('the label of the sentences says an AI wrote and checked them (D16.59)
     'it names no model: none is called',
   );
   assert.ok(hint.length <= MAX_AI_NOTICE_CHARS, `${String(hint.length)} characters`);
+});
+
+/**
+ * The sentence a card of the game shows is one of those very sentences (D19.2): its label says
+ * the same thing, of ONE sentence — and nothing more than the file of the game records of
+ * itself (data/2026/game-gists.json: written by the session, read by no person).
+ */
+void test('the label of the sentence of a card says an AI wrote and checked it (D19.2)', () => {
+  const label = strings.get('game.gist.badge') ?? '';
+  assert.equal(label, 'Phrase écrite et vérifiée par une IA');
+  // The singular of the sheet's label, word for word: one voice for the same sentences.
+  assert.equal(
+    label.replace('Phrase écrite et vérifiée', 'Phrases écrites et vérifiées'),
+    strings.get('chat.gists.badge'),
+  );
+  assert.ok(label.length <= 48, `${String(label.length)} characters: two lines on a phone`);
+  assert.ok(!/relu|lue? par|humain|personne/i.test(label), 'it claims no reading by a person');
 });
 
 /**

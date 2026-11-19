@@ -47,11 +47,13 @@ import {
   givenFor,
   hintFor,
   isLongWord,
+  isShortWord,
   judge,
   otherParts,
   placeOf,
   resume,
   tilesFor,
+  titleLead,
   type Ask,
   type GameData,
   type Play,
@@ -63,8 +65,11 @@ import {
   lineAtRoundEnd,
   lineAtStart,
   nextRoundChangesHer,
+  signAtRoundEnd,
   type GoalKey,
+  type SignKey,
 } from '../lib/game-goal.ts';
+import { recallFor } from '../lib/game-recall.ts';
 import type { TabState2 } from '../lib/game-state2.ts';
 import {
   STATE_ARCS,
@@ -89,6 +94,11 @@ interface Sentences {
 interface Config {
   data: string;
   strings: {
+    /**
+     * The label of a sentence of ours on a card (D19.2) — there only in a build that shows
+     * sentences (src/components/Game2.astro): without it, no card shows one.
+     */
+    gist?: string;
     kicker: string;
     ask: Record<Ask, string>;
     reveal: Record<Ask, Sentences>;
@@ -103,8 +113,14 @@ interface Config {
     next: string;
     done: string;
     again: string;
+    /** « Les prochains mots »: what stands before the three words of the round to come. */
+    ahead: string;
     share: string;
+    /** Said under the way to send the game: the list is the same for everybody. */
+    shareSame: string;
     copied: string;
+    /** « Tu te souviens ? »: its title, and what to do with the words under it. */
+    recall: { title: string; lead: string };
     depth: Record<string, string>;
     keep: {
       what: string;
@@ -114,6 +130,8 @@ interface Config {
       seen: string;
       safari: string;
       erase: string;
+      /** The quiet button that opens the card of « Garder ta tortue » (D19.11). */
+      open: string;
       cta: string;
       decline: string;
       done: string;
@@ -128,8 +146,12 @@ interface Config {
       erased: string;
       replay: string;
       skip: string;
+      /** Above what she has found: each word opens its card again. */
+      foundLead: string;
     };
     goal: Record<GoalKey, string>;
+    /** A sign she has just shown, named: an attitude, never a quantity. */
+    sign: Record<SignKey, string>;
     /** By the state a passage leads to, by her state, by the colour: the keys of a JSON file. */
     passage: Record<string, string>;
     figure: Record<string, string>;
@@ -350,6 +372,8 @@ function start(parts: Block, config: Config, data: GameData): void {
   let carried = '';
   let carrying = false;
   let saying = 0;
+  /** What `saying` waits to say: held until the focus of what was just drawn has been heard. */
+  let later = '';
   /** When « Passer » last gave its place to « Sa fiche » under a finger, or the passage ended. */
   let handedOver = -Infinity;
   /** Her state when the end of the round on screen was drawn: what its line speaks of. */
@@ -412,8 +436,19 @@ function start(parts: Block, config: Config, data: GameData): void {
     node.addEventListener('click', onPress);
     return node;
   }
-  function titled<K extends 'li' | 'span'>(tag: K, title: string): HTMLElementTagNameMap[K] {
-    const node = el(tag, title);
+  /**
+   * An official title, marked as the book's and whole. `numbered`: its number — « Partie 4 – »,
+   * « Chapitre 2 : » — is set in bold, as on the board of the page without script; the rest
+   * follows as it is, so the element still reads the title character for character.
+   */
+  function titled<K extends 'li' | 'span'>(
+    tag: K,
+    title: string,
+    numbered = false,
+  ): HTMLElementTagNameMap[K] {
+    const lead = numbered ? titleLead(title) : 0;
+    const node = el(tag, lead === 0 ? title : undefined);
+    if (lead > 0) node.append(el('b', title.slice(0, lead)), title.slice(lead));
     node.dataset.programme = 'title';
     return node;
   }
@@ -436,18 +471,25 @@ function start(parts: Block, config: Config, data: GameData): void {
   function show(panel: HTMLElement, heading: HTMLElement, focus: boolean): void {
     heading.tabIndex = -1;
     live.replaceChildren(panel);
+    if (focus) heading.focus();
+    sayLater();
+  }
+
+  /**
+   * A passage cut short by the press that drew what has just taken the focus — a screen, the
+   * card of « Garder ta tortue »: what happened to her is said here, once that focus has been
+   * heard. Said at once, it would be lost under it.
+   */
+  function sayLater(): void {
     window.clearTimeout(saying);
     status.textContent = '';
-    if (focus) heading.focus();
-    // A passage cut short by the press that drew this screen: what happened to her is said
-    // here, once the focus has been heard.
-    if (carried !== '') {
-      const said = carried;
-      carried = '';
-      saying = window.setTimeout(() => {
-        status.textContent = said;
-      }, SAY_LATER_MS);
-    }
+    later = carried;
+    carried = '';
+    if (later === '') return;
+    saying = window.setTimeout(() => {
+      status.textContent = later;
+      later = '';
+    }, SAY_LATER_MS);
   }
 
   /**
@@ -486,6 +528,7 @@ function start(parts: Block, config: Config, data: GameData): void {
     const shown = el('p', word, 'g-the-word');
     shown.dataset.programme = 'word';
     if (isLongWord(word)) shown.dataset.long = '';
+    if (isShortWord(word)) shown.dataset.short = '';
     return shown;
   }
   /**
@@ -543,14 +586,16 @@ function start(parts: Block, config: Config, data: GameData): void {
         act(choose(data, session.play, null));
       }),
     );
-    const tiles = el('ul', undefined, 'g-tiles');
+    // The six parts are a board — two tiles a row where two fit, the same six places every
+    // time; the chapters of a part and the sections of a chapter are lists, as long as they are.
+    const tiles = el('ul', undefined, ask === 'part' ? 'g-tiles g-board' : 'g-tiles');
     for (const tile of tilesFor(data, wordId, ask)) {
       const item = el('li');
       const press = button('', 'g-tile', () => {
         act(choose(data, session.play, tile.id));
       });
       press.dataset.tile = tile.id;
-      press.append(titled('span', tile.title));
+      press.append(titled('span', tile.title, true));
       item.append(press);
       tiles.append(item);
     }
@@ -588,6 +633,105 @@ function start(parts: Block, config: Config, data: GameData): void {
     show(panel, heading, focus);
   }
 
+  /**
+   * What a card says of a word, whoever shows it — the card of a round, « Tu te souviens ? »,
+   * her sheet: where it is written, in official titles; the way to the book, attached to that
+   * place (D19.10); then, in a build that may show one, what the measure provides.
+   *
+   * That last part is ONE sentence of OURS (D19.2), in a frame of its own, its label first: an
+   * AI wrote it, and nothing lets it be read as the book's — never `data-programme`, never the
+   * face of the book, never under « C'est écrit là » (D16.64). Built with `textContent`, like
+   * everything the page shows. The same whatever was chosen; no sentence where the build may
+   * show none. Empty for a word the list no longer holds.
+   */
+  function cardBody(wordId: string): HTMLElement[] {
+    const entry = entryOf(data, wordId);
+    const place = placeOf(data, wordId);
+    if (entry === null || place === null) return [];
+    const out: HTMLElement[] = [];
+    const where = el('ul', undefined, 'g-where');
+    where.append(
+      titled('li', place.part.title),
+      titled('li', place.chapter.title),
+      titled('li', place.section.title),
+    );
+    out.push(where);
+    const also = otherParts(data, wordId);
+    if (also.length === 1) out.push(el('p', fill(s.alsoOne, { n: also[0] ?? '' })));
+    if (also.length > 1) out.push(el('p', fill(s.also, { parts: list(also) })));
+    // A count only when it says something: from three sections on.
+    if (entry.places.length >= 3) out.push(el('p', fill(s.count, { count: entry.places.length })));
+    const there = el('a', s.cta, 'cta');
+    there.href = entry.url;
+    there.rel = 'noopener noreferrer';
+    if (entry.fragment !== '') there.dataset.fragment = entry.fragment;
+    const official = el('p', undefined, 'g-official');
+    official.append(there);
+    out.push(official);
+    if (s.gist !== undefined && entry.gist !== undefined) {
+      const ours = el('div', undefined, 'g-gist');
+      const sentence = el('p', entry.gist.replace(/'/g, '’'), 'g-gist-text');
+      sentence.dataset.generatedBy = 'ai';
+      ours.append(el('p', s.gist, 'g-gist-badge'), sentence);
+      out.push(ours);
+    }
+    return out;
+  }
+
+  /**
+   * Words whose card can be opened again — the end of a round, her sheet: each word is a
+   * button, and the card of the one pressed opens in the list itself, right after its word,
+   * one at a time. Pressed again, it closes. Nothing is chosen among, so nothing is judged; and
+   * nothing of it is written anywhere: a card opened here is a card read again, not a word
+   * found.
+   *
+   * The card is built when it is asked for, not before: a list of fifty words holds fifty
+   * buttons, not fifty cards. The word pressed does not move — the row is cut after it — and
+   * the focus stays on it: the button says that it is open (`aria-expanded`), and what it
+   * opened is the very next thing in the page.
+   */
+  function reopenable(ids: readonly string[], listClass: string): HTMLElement {
+    const words = el('ul', undefined, listClass);
+    const shown = el('li', undefined, 'g-again');
+    let open: HTMLButtonElement | null = null;
+    for (const wordId of ids) {
+      const entry = entryOf(data, wordId);
+      if (entry === null) continue;
+      const item = el('li');
+      const press = button('', 'g-quiet g-reopen', () => {
+        // A freeze that starts while the page is open: the game says nothing more, a card
+        // read again included — the gesture does nothing, the block leaves.
+        if (frozen()) return;
+        const closing = open === press;
+        if (open !== null) open.setAttribute('aria-expanded', 'false');
+        shown.remove();
+        open = null;
+        if (closing) return;
+        const card = el('div', undefined, 'g-place g-new');
+        card.append(el('p', sentence(wordId, 'part', null), 'g-said'), ...cardBody(wordId));
+        enhanceOfficialLinks(card);
+        shown.replaceChildren(card);
+        item.after(shown);
+        press.setAttribute('aria-expanded', 'true');
+        open = press;
+        // Brought into view down to its foot, its word still above it: in her sheet, which
+        // scrolls by itself, as in the page. Where both do not fit, the word wins.
+        if (press.closest('dialog') === null) intoView(press, card);
+        else {
+          card.scrollIntoView({ block: 'nearest' });
+          press.scrollIntoView({ block: 'nearest' });
+        }
+      });
+      press.setAttribute('aria-expanded', 'false');
+      const word = el('span', entry.word);
+      word.dataset.programme = 'word';
+      press.append(word);
+      item.append(press);
+      words.append(item);
+    }
+    return words;
+  }
+
   function renderPlace(wordId: string, word: string, focus: boolean): void {
     if (session.play.screen.kind !== 'place') return;
     const entry = entryOf(data, wordId);
@@ -600,28 +744,11 @@ function start(parts: Block, config: Config, data: GameData): void {
       'h3',
       sentence(wordId, session.play.screen.ask, session.play.screen.verdict),
     );
-    const where = el('ul', undefined, 'g-where');
-    where.append(
-      titled('li', place.part.title),
-      titled('li', place.chapter.title),
-      titled('li', place.section.title),
-    );
-    card.append(heading, where);
-    const also = otherParts(data, wordId);
-    if (also.length === 1) card.append(el('p', fill(s.alsoOne, { n: also[0] ?? '' })));
-    if (also.length > 1) card.append(el('p', fill(s.also, { parts: list(also) })));
-    // A count only when it says something: from three sections on.
-    if (entry.places.length >= 3) {
-      card.append(el('p', fill(s.count, { count: entry.places.length })));
-    }
-    const there = el('a', s.cta, 'cta');
-    there.href = entry.url;
-    there.rel = 'noopener noreferrer';
-    if (entry.fragment !== '') there.dataset.fragment = entry.fragment;
+    card.append(heading, ...cardBody(wordId));
+    // The way on, alone at the foot of the card and of the same weight as the way to the book.
     const actions = el('p', undefined, 'g-actions');
     actions.append(
-      there,
-      button(s.next, 'g-quiet', () => {
+      button(s.next, 'g-next', () => {
         act(advance(session.play, session.depth));
       }),
     );
@@ -629,6 +756,14 @@ function start(parts: Block, config: Config, data: GameData): void {
     enhanceOfficialLinks(card);
     panel.append(card);
     show(panel, heading, focus);
+    // The card is taller than the tiles it replaces — it holds a sentence now: after the gesture
+    // that asked for it, it is brought into view down to « Mot suivant », the word still above
+    // it. Where both do not fit one screen, the word wins and the card is read by scrolling.
+    // Never on arrival: a page found again does not move by itself — nor does its card come in.
+    if (focus) {
+      card.classList.add('g-new');
+      intoView(panel.querySelector('.g-kicker') ?? panel, card);
+    }
   }
 
   /**
@@ -649,7 +784,16 @@ function start(parts: Block, config: Config, data: GameData): void {
     // One line about her, two sentences at most: what has just happened to her, and her goal
     // — in words, never a number (D17.5). Nothing in it is about the player.
     const line = lineAtRoundEnd(end, nextRoundChangesHer(data, end, session.seen, last));
-    const passed = line.passage === null ? '' : (s.passage[String(line.passage)] ?? '');
+    // What has just happened to her: a passage — or, at a round that changes nothing else, a
+    // sign she has just shown (her wings ajar, her eyes up, a first star). Never both: a passage
+    // has its own sentence.
+    const sign = signAtRoundEnd(before, end);
+    const passed =
+      line.passage !== null
+        ? (s.passage[String(line.passage)] ?? '')
+        : sign !== null
+          ? s.sign[sign]
+          : '';
     const goal = line.goal === null ? '' : s.goal[line.goal];
     const about = el('p', undefined, 'g-line');
     if (passed !== '') about.append(el('span', passed, 'g-passage'));
@@ -658,44 +802,95 @@ function start(parts: Block, config: Config, data: GameData): void {
     panel.append(heading, about);
     const deeper = end.opened === null ? undefined : s.depth[String(end.opened)];
     if (deeper !== undefined) panel.append(el('p', deeper));
+    // « Tu te souviens ? » (src/lib/game-recall.ts): the first word of this round, and one of
+    // an earlier round whose distance grows. One thinks, then opens the card again. It stands
+    // before the way on and never in its way: « Trois autres mots » waits for nothing.
+    const recalled = recallFor(data, session.seen, session.play.words);
+    const toRecall = [recalled.fresh, recalled.old].filter((id): id is string => id !== null);
+    if (toRecall.length > 0) {
+      const recall = el('div', undefined, 'g-recall');
+      recall.append(
+        el('h4', s.recall.title),
+        el('p', s.recall.lead),
+        reopenable(toRecall, 'g-reopens'),
+      );
+      panel.append(recall);
+    }
     const again = button(s.again, '', () => {
       act(begin(draw(data, session.seen, last), session.depth));
     });
-    // « Garder ta tortue »: asked here, in the page, until answered — two gestures of the same
-    // weight, and every consequence said before either. Nothing is on the phone before « Garder ».
+    // What comes next, in words: the three of the round to come — the list is the game's, the
+    // same for everybody, so it can be said. What is next, never how much is left. Under the
+    // way on, as its caption: above it, on a small phone, it kept « Trois autres mots » under
+    // the fold.
+    const coming = draw(data, session.seen, last).flatMap((id) => {
+      const entry = entryOf(data, id);
+      return entry === null ? [] : [entry.word];
+    });
+    const ahead = coming.length === 0 ? null : el('p', `${s.ahead}\u00a0: `, 'g-ahead');
+    coming.forEach((word, index) => {
+      const shown = el('span', word, 'g-word-in');
+      shown.dataset.programme = 'word';
+      ahead?.append(shown, index + 1 < coming.length ? ', ' : '.');
+    });
+    // « Garder ta tortue » (D19.11): asked at every round end until answered — but no longer
+    // as a card above the way on: one line says that nothing is kept, and a quiet button opens
+    // the card. That card is the card of before, to the word: every consequence said before
+    // either gesture, two gestures of the same weight. Nothing is on the phone before « Garder ».
+    let keeping: HTMLElement | null = null;
     if (!store.kept() && !session.declined) {
-      const card = el('div', undefined, 'g-keep');
-      const lines = [`${s.keep.what} ${s.keep.tint}`, s.keep.notKept, s.keep.otherwise];
-      for (const text of [...lines, s.keep.seen]) card.append(el('p', text));
-      if (onIos()) card.append(el('p', s.keep.safari));
-      // How to take it back, said before the gesture: none of the seven personas could say how
-      // to erase from this card — the button lives in her sheet (session of 14/11/2026).
-      card.append(el('p', s.keep.erase));
-      const choice = el('p', undefined, 'g-actions');
-      const answered = (said: string): void => {
-        card.remove();
-        // A passage cut short by this very press: what happened to her is said first.
-        status.textContent = [carried, said].filter((text) => text !== '').join(' ');
-        carried = '';
-        again.focus();
-      };
-      choice.append(
-        button(s.keep.cta, 'g-quiet', () => {
-          if (frozen()) return;
-          store.keep(memory());
-          answered(s.keep.done);
-        }),
-        button(s.keep.decline, 'g-quiet', () => {
-          session.declined = true;
-          store.save(memory());
-          answered('');
-        }),
-      );
-      card.append(choice);
-      panel.append(card);
+      const asked = el('div', undefined, 'g-keep-ask');
+      keeping = asked;
+      const opener = button(s.keep.open, 'g-quiet', () => {
+        if (frozen()) return;
+        const card = el('div', undefined, 'g-keep');
+        const lines = [`${s.keep.what} ${s.keep.tint}`, s.keep.notKept, s.keep.otherwise];
+        for (const text of [...lines, s.keep.seen]) card.append(el('p', text));
+        if (onIos()) card.append(el('p', s.keep.safari));
+        // How to take it back, said before the gesture: none of the seven personas could say
+        // how to erase from this card — the button lives in her sheet (session of 14/11/2026).
+        card.append(el('p', s.keep.erase));
+        const choice = el('p', undefined, 'g-actions');
+        const answered = (said: string): void => {
+          asked.remove();
+          // A passage cut short by this very press, or by the one that opened this card and
+          // not said yet: what happened to her is said first.
+          window.clearTimeout(saying);
+          status.textContent = [carried || later, said].filter((text) => text !== '').join(' ');
+          carried = '';
+          later = '';
+          again.focus();
+        };
+        choice.append(
+          button(s.keep.cta, 'g-quiet', () => {
+            if (frozen()) return;
+            store.keep(memory());
+            answered(s.keep.done);
+          }),
+          button(s.keep.decline, 'g-quiet', () => {
+            session.declined = true;
+            store.save(memory());
+            answered('');
+          }),
+        );
+        card.append(choice);
+        asked.replaceChildren(card);
+        // The card is read from its first sentence, and brought into view whole where it fits.
+        const first = card.querySelector('p');
+        if (first !== null) {
+          first.tabIndex = -1;
+          first.focus({ preventScroll: true });
+        }
+        // A passage this very press cut short is said once that sentence has been heard.
+        if (carried !== '') sayLater();
+        intoView(card);
+      });
+      asked.append(el('p', s.sheet.tabOnly), opener);
     }
     const actions = el('p', undefined, 'g-actions');
     actions.append(again);
+    panel.append(actions);
+    if (ahead !== null) panel.append(ahead);
     // « Envoyer le lien du jeu » (D16.17, D17.10): the bare address of the site, and nothing
     // else — no text, no word, no answer, nothing of her, not her colour. Where the phone has
     // no share sheet the address is copied; where it can do neither, the button is not there.
@@ -704,7 +899,8 @@ function start(parts: Block, config: Config, data: GameData): void {
     // The clipboard exists only on a secure origin: absent, the property is simply not there.
     const canCopy = 'clipboard' in window.navigator;
     if (canShare || canCopy) {
-      actions.append(
+      const send = el('p', undefined, 'g-actions');
+      send.append(
         button(s.share, 'g-quiet', () => {
           // Sharing is one of the three things a freeze silences: checked at the gesture.
           if (frozen()) return;
@@ -719,8 +915,11 @@ function start(parts: Block, config: Config, data: GameData): void {
           sent.catch(() => undefined);
         }),
       );
+      // The list is the game's: everyone who follows the link plays the same words, in the
+      // same order. Said under the way to send it — a thing to talk about that is no score.
+      panel.append(send, el('p', s.shareSame, 'g-same'));
     }
-    panel.append(actions);
+    if (keeping !== null) panel.append(keeping);
     show(panel, heading, earned);
 
     tintLink.hidden = !pale();
@@ -762,8 +961,13 @@ function start(parts: Block, config: Config, data: GameData): void {
       }
     });
     // She is at the top of the panel, « Passer » under her: both brought into view, whichever
-    // way the page was scrolled — a page left at its top kept « Passer » under the fold.
-    intoView(herBox, herWith);
+    // way the page was scrolled — a page left at its top kept « Passer » under the fold. And
+    // the end of a round holds more than it did (what to remember, what comes next): the page
+    // is brought down to the way on, « Trois autres mots », and to what it leads to, where
+    // that fits one screen with her. Where it does not, she wins — this is the moment she
+    // changes — and « Passer » with her. Only after the gesture that ended the round: a page
+    // found again does not move.
+    intoView(herBox, ahead ?? again);
   }
 
   /** Draws the screen the game is on, and says which: a question, a card, the end of a round. */
@@ -960,8 +1164,10 @@ function start(parts: Block, config: Config, data: GameData): void {
   }
 
   /**
-   * What she has found — the words, and from the third depth where each is written, in the
-   * order of the book. Never a total: nothing here says what is left.
+   * What she has found — the words, each a card one can open again: where it is written, the
+   * way there, and the sentence of its measure where the build shows one. In the order they
+   * were found; from the third depth, in the order of the book. Never a total: nothing here
+   * says what is left.
    */
   function fillFound(): void {
     const entries = session.seen.flatMap((id) => {
@@ -972,29 +1178,16 @@ function start(parts: Block, config: Config, data: GameData): void {
       sheetFound.replaceChildren(el('p', s.sheet.none));
       return;
     }
-    const byPlace = session.depth >= 3;
-    const items = el('ul', undefined, byPlace ? 't-found t-by-place' : 't-found');
-    if (byPlace) {
+    if (session.depth >= 3) {
       entries.sort((a, b) => (position.get(a.section) ?? 0) - (position.get(b.section) ?? 0));
     }
-    for (const entry of entries) {
-      const item = el('li');
-      const word = el('span', entry.word);
-      word.dataset.programme = 'word';
-      item.append(word);
-      const place = byPlace ? placeOf(data, entry.id) : null;
-      if (place !== null) {
-        const there = el('a');
-        there.href = entry.url;
-        there.rel = 'noopener noreferrer';
-        if (entry.fragment !== '') there.dataset.fragment = entry.fragment;
-        there.append(titled('span', place.section.title));
-        item.append(' — ', there);
-      }
-      items.append(item);
-    }
-    enhanceOfficialLinks(items);
-    sheetFound.replaceChildren(items);
+    sheetFound.replaceChildren(
+      el('p', s.sheet.foundLead),
+      reopenable(
+        entries.map((entry) => entry.id),
+        't-found',
+      ),
+    );
   }
 
   /**

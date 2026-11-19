@@ -455,6 +455,10 @@ void test('every string naming an absent component has a local fallback or is ex
     }
     // …and so does the section of the privacy page that says what asking does.
     if (key.startsWith('privacy.chat.')) continue;
+    // …and the label of the sentence a card of the game shows (D19.2): it is built only in a
+    // build that shows such sentences — where the site asks (src/lib/game-gists.ts). Without
+    // them there is no sentence to label, and the card says where, as before: no fallback.
+    if (key === 'game.gist.badge') continue;
     if (typeof strings[`${key}.local`] !== 'string') missing.push(key);
   }
   assert.deepEqual(

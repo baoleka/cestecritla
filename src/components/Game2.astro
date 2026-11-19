@@ -25,13 +25,31 @@
  * What a visitor reads here that is the book's: the word (`data-programme="word"`) and the
  * official titles (`data-programme="title"`), whole, never cut. Everything else is ours, and
  * every number shown is computed from the list — none is typed, and none is about her.
+ *
+ * Since 18 November 2026 (docs/discovery/PLAN-JEU-DABORD.md) the block opens the home page
+ * (D19.1), and its two screens changed shape:
+ *
+ *   - the six parts are a board, two tiles a row where two fit, each title whole with its
+ *     number in bold — the same six places every time, so that one learns where they are;
+ *   - the card says where, gives the way there, and — in a build that may (src/lib/game-gists.ts)
+ *     — says what the measure provides, in ONE sentence of ours, under its own label: written
+ *     and checked by an AI (D19.2). That sentence comes with the file of the game, by script:
+ *     the round below, played without script, keeps the card without it (D19.6), and not a
+ *     sentence of an AI is written in this page.
  */
 import '../styles/game.css';
 import '../styles/game2.css';
 import Mascot2 from './Mascot2.astro';
 import { pausedKey } from '../lib/ask-config.ts';
 import { builtGame } from '../lib/game-built.ts';
-import { ROUND, isLongWord, locate, otherParts } from '../lib/game-engine.ts';
+import {
+  ROUND,
+  isLongWord,
+  isShortWord,
+  locate,
+  otherParts,
+  titleLead,
+} from '../lib/game-engine.ts';
 import { safeJson, t } from '../lib/strings.ts';
 
 const { data, fingerprint } = builtGame();
@@ -72,9 +90,21 @@ const reveal = (ask: 'part' | 'chapter' | 'section') => ({
   neutral: ask === 'part' ? t('game.reveal.neutral', { n: '{n}' }) : ask === 'chapter' ? t('game.reveal.chapter.neutral', { n: '{n}' }) : t('game.reveal.section.neutral'),
 });
 
+/** This build puts our sentences on its cards (src/lib/game-gists.ts) — or none at all. */
+const sentences = data.words.some((word) => word.gist !== undefined);
+
+/** An official title, whole: its number in bold where it has one (`titleLead`). */
+const titled = (title: string): [string, string] => [
+  title.slice(0, titleLead(title)),
+  title.slice(titleLead(title)),
+];
+
 const config = {
   data: `/data/jeu-${fingerprint}.json`,
   strings: {
+    // The label of a sentence, in a build that shows sentences — and only there: a page of a
+    // site that asks nothing names no AI (scripts/check-no-ai-mention.test.ts).
+    ...(sentences ? { gist: t('game.gist.badge') } : {}),
     kicker: t('game.kicker'),
     ask: {
       part: t('game.question.part'),
@@ -93,8 +123,12 @@ const config = {
     next: t('game.next_word'),
     done: t('game.round.done'),
     again: t('game.round.again'),
+    ahead: t('game.round.ahead'),
     share: t('game.share'),
+    shareSame: t('game.share.same'),
     copied: t('share.toast_copied'),
+    // « Tu te souviens ? » (lot 6): two words already found, whose card one opens again.
+    recall: { title: t('game.recall.title'), lead: t('game.recall.lead') },
     depth: { 2: t('game.depth.chapter'), 3: t('game.depth.section') },
     keep: {
       what: t('turtle.keep.what'),
@@ -105,6 +139,7 @@ const config = {
       seen: t('turtle.keep.seen'),
       safari: t('turtle.keep.safari'),
       erase: t('turtle.keep.erase'),
+      open: t('turtle.keep.open'),
       cta: t('turtle.keep.cta'),
       decline: t('turtle.keep.decline'),
       done: t('turtle.keep.done'),
@@ -119,6 +154,13 @@ const config = {
       erased: t('turtle.erased'),
       replay: t('turtle.sheet.replay'),
       skip: t('turtle.skip'),
+      foundLead: t('turtle.found.lead'),
+    },
+    // A sign she has just shown, named when it appears: an attitude, never a quantity.
+    sign: {
+      ajar: t('turtle.sign.ajar'),
+      up: t('turtle.sign.up'),
+      star: t('turtle.sign.star'),
     },
     // Her goal, in words (D17.5): the sentence the game says is picked by src/lib/game-goal.ts.
     goal: {
@@ -232,25 +274,30 @@ const config = {
               does not change, and the page must not say that she will. */}
           <p class="g-goal" data-wait>{t('turtle.goal.start')}</p>
           <p class="g-kicker">{t('game.kicker')}</p>
+          {/* The word and nothing around it, not even a space: its guillemets are drawn by the
+              stylesheet, and the script writes the same element without one — at the size the
+              word now has, a space on each side was a gap the eye could see close. */}
           <p
             class="g-the-word"
             data-programme="word"
             data-long={isLongWord(word.word) ? '' : undefined}
-          >
-            {word.word}
-          </p>
+            data-short={isShortWord(word.word) ? '' : undefined}
+          >{word.word}</p>
           <div class="g-question">
             <h3 class="g-ask">{t('game.question.part')}</h3>
             <p class="g-with">
               <a class="g-quiet" href={`#m${String(word.n)}-0`}>
                 {t('game.dont_know')}
               </a>
+              {/* The room of « Un indice », which only the script can offer (D19.7): kept from
+                  the first paint, so that nothing moves when the script takes the block. */}
+              <span class="g-quiet" data-wait>{t('game.hint.cta')}</span>
             </p>
-            <ul class="g-tiles">
+            <ul class="g-tiles g-board">
               {data.parts.map((part) => (
                 <li>
                   <a class="g-tile" href={`#m${String(word.n)}-${String(part.number)}`}>
-                    <span data-programme="title">{part.title}</span>
+                    <span data-programme="title"><b>{titled(part.title)[0]}</b>{titled(part.title)[1]}</span>
                   </a>
                 </li>
               ))}
@@ -267,7 +314,10 @@ const config = {
             </ul>
             {word.alsoLine !== null && <p>{word.alsoLine}</p>}
             {word.countLine !== null && <p>{word.countLine}</p>}
-            <p class="g-actions">
+            {/* The way to the book, attached to the place (D19.10) — then, alone at the foot of
+                the card, the way on. With script, the sentence of the measure stands between
+                the two, under its own label: never under « C'est écrit là » (D16.64). */}
+            <p class="g-official">
               <a
                 class="cta"
                 href={word.url}
@@ -276,7 +326,9 @@ const config = {
               >
                 {t('game.reveal.cta')}
               </a>
-              <a class="g-quiet" href={word.next}>
+            </p>
+            <p class="g-actions">
+              <a class="g-next" href={word.next}>
                 {t('game.next_word')}
               </a>
             </p>

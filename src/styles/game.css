@@ -29,26 +29,6 @@ html[data-silence] .g-silence {
 html[data-silence] .game {
   display: none;
 }
-/* The three rules below — and `--turtle-size` in `.t-sheet-her` — were the first generation's:
-   no element of the block carries these classes since she was replaced (D17.36). They were left
-   in place by her removal (lot F of docs/discovery/PLAN-TORTUE.md) because removing them changes
-   the page production serves, and lot F changed nothing there: they go with the next deployment
-   that changes the home page anyway. */
-.g-head {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: var(--space-4);
-}
-.g-head h2 {
-  margin-block: 0;
-}
-/* She keeps her place whatever the screen of the game: the block never jumps around her. */
-.g-turtle {
-  flex: none;
-  --turtle-size: 4.5rem;
-}
-
 /* Whose word it is, right above it and at the size of the text: a capture that holds the word
    holds this line. */
 .g-kicker {
@@ -139,6 +119,52 @@ html[data-silence] .game {
   font-weight: 400;
   text-align: start;
   text-decoration: none;
+  /* It gives under the finger (design/motion-spec.md, « press »): a transform, nothing else —
+     and nothing where less motion is asked (src/styles/base.css sets every duration to zero). */
+  transition: transform var(--duration-fast) var(--easing-standard);
+}
+.g-tile:active {
+  transform: scale(0.96);
+}
+@media (prefers-reduced-motion: reduce) {
+  .g-tile:active {
+    transform: none;
+  }
+}
+/* The number of a part or of a chapter, in bold: the title is whole, its number easier to find. */
+.g-tile b {
+  font-weight: 700;
+}
+/* The six parts are a board (D19.1): two tiles a row where two fit — from 360 px —, three on a
+   wide screen, one where the reader's text is large. The same six places at every word: one
+   learns where they are. Tiles of a row share its height, and each title starts at its top,
+   its number on a line of its own. No colour of a part on any of them (D17.12). */
+.g-board {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, max(9.5rem, 30%)), 1fr));
+}
+.g-board li {
+  display: flex;
+}
+.g-board .g-tile {
+  align-items: flex-start;
+  padding: var(--space-3);
+}
+.g-board .g-tile b {
+  display: block;
+}
+/* On the board her hint stands beside the number, at the top of the tile: said there, it adds
+   no line — the three tiles she looks at keep their height, and the board does not move. They
+   also take the faint ground of what is pointed at; no tile is ruled out, none changes shape. */
+.g-board .g-tile {
+  position: relative;
+}
+.g-board .g-mark {
+  position: absolute;
+  inset-block-start: var(--space-3);
+  inset-inline-end: var(--space-3);
+}
+.game .g-tile:has(.g-mark) {
+  background: var(--bg-elevated);
 }
 /* « par ici »: where she looks when asked for a hint. Said in words, on the tile itself; no
    other tile changes — nothing is ruled out. */
@@ -153,6 +179,7 @@ html[data-silence] .game {
    would read as a verdict (PLAN-JEU §4.1). The one thing of the block that takes the accent
    colour is the turtle's dot, at a passage, and never because of a choice (§4.3). */
 .game .cta,
+.game .g-next,
 .game button {
   background: var(--brand);
   color: var(--brand-on);
@@ -164,39 +191,105 @@ html[data-silence] .game {
 }
 /* A link of the game is underlined, in the colour of the text: the site's links are in the
    colour of action, and nothing here is. */
-.game a:not(.cta) {
+.game a:not(.cta, .g-next) {
   color: var(--text);
 }
 
-/* The card of the place: where the word is written, and the way there. */
+/* The card of the place: where the word is written, the way there, and — where the build may
+   show it — what the measure provides, in a sentence of ours (D19.2). Three voices that do not
+   mix: the book's titles, small then large, the last in the face of the book; our own lines;
+   and the sentence an AI wrote, in a frame of its own under its label. */
 .g-place {
   margin-block-start: var(--space-3);
   padding: var(--space-4);
   border: 2px solid var(--brand);
-  border-radius: var(--radius-m);
+  border-radius: var(--radius-l);
 }
 .g-place h3 {
   margin-block-start: 0;
 }
+/* Where: the part and the chapter, small — the address —, then the section, which is what the
+   word was found in, in the face every word of the book is set in. All three whole. */
 .g-where {
-  margin: 0 0 var(--space-3);
+  margin: 0 0 var(--space-2);
   padding: 0;
   list-style: none;
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
 }
 .g-where li + li {
   margin-block-start: var(--space-1);
 }
 .g-where li:last-child {
+  margin-block-start: var(--space-2);
+  font-family: var(--font-family-verbatim);
+  font-size: var(--font-size-h3);
+  line-height: var(--line-height-h3);
   font-weight: 700;
+  hyphens: manual;
 }
 .g-place p {
   margin-block: var(--space-2);
+}
+/* The way to the book: attached to the place, before anything of ours (D19.10, D16.64). */
+.g-place .g-official {
+  /* A row, like the row of the way on: laid out as one, the link keeps its 44 px to the pixel
+     on every screen density (alone in a line of text it was drawn a fraction short of it). */
+  display: flex;
+  flex-wrap: wrap;
+  margin-block: var(--space-3) 0;
+}
+/* The sentence of the measure: OURS. A ground of its own, its label first, the face of the
+   interface — never the book's. One sentence, a little larger than a note: it is what the
+   card is read for. */
+.g-gist {
+  margin-block-start: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-m);
+  background: var(--bg-elevated);
+}
+.g-place .g-gist p {
+  margin: 0;
+}
+.g-place .g-gist .g-gist-badge {
+  margin-block-end: var(--space-1);
+  color: var(--brand);
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+  font-weight: 700;
 }
 .g-actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
   margin-block: var(--space-4) 0;
+}
+/* The way on: alone at the foot of the card, as wide as it, of the weight of the way to the
+   book — a link without script, a button with it, and the same to the eye. */
+.g-next {
+  display: inline-flex;
+  flex: 1 1 100%;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--tap-comfortable);
+  padding-inline: var(--space-4);
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  text-decoration: none;
+}
+/* The card comes in once, after the gesture that asked for it (`g-new`, src/scripts/game2.ts):
+   opacity and a short rise, the reveal of design/motion-spec.md. A card found again when the
+   page is opened does not move — nothing of the page moves that no gesture asked for — and
+   neither does the card of the page without script, shown by an anchor. */
+@keyframes g-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}
+.g-live .g-place.g-new,
+.g-again .g-place.g-new {
+  animation: g-rise var(--duration-reveal) var(--easing-enter);
 }
 .game h3:focus-visible {
   outline-offset: 4px;
@@ -262,6 +355,87 @@ html[data-silence] .game {
   display: none;
 }
 
+/* The end of a round, under what is said of her (lot 6 of docs/discovery/PLAN-JEU-DABORD.md).
+
+   « Tu te souviens ? »: two words already found, each a button — one thinks of what its card
+   said, then opens it again. The card comes under the words, one at a time; nothing is chosen
+   among, nothing is judged. A word of the book in the face of the book, on a button that looks
+   like every other quiet gesture of the game. */
+.g-recall {
+  margin-block: var(--space-4) var(--space-3);
+}
+.g-recall h4 {
+  margin-block: 0 var(--space-1);
+  font-size: var(--font-size-h3);
+  line-height: var(--line-height-h3);
+}
+.g-recall p {
+  margin-block: 0 var(--space-2);
+}
+.g-reopens,
+.t-found {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.g-reopen [data-programme='word'] {
+  font-family: var(--font-family-verbatim);
+  font-weight: 700;
+  hyphens: manual;
+}
+.g-reopen [data-programme='word']::before {
+  content: '«\00a0';
+}
+.g-reopen [data-programme='word']::after {
+  content: '\00a0»';
+}
+/* The word whose card is open says so by its ground, and by `aria-expanded`. */
+.game .g-reopen[aria-expanded='true'] {
+  background: var(--bg-elevated);
+}
+/* A card opened again: the card of a round, without a way on — in the list itself, right after
+   its word, on a row of its own. The word pressed does not move: the row is cut after it. */
+.g-again {
+  flex-basis: 100%;
+}
+.g-again .g-place {
+  margin-block: 0;
+}
+.g-again .g-said {
+  margin-block: 0 var(--space-2);
+}
+/* Under a way on, what it leads to — small, as a caption: the three words of the round to come
+   under « Trois autres mots », each with its guillemets, in the face of the book; and under the
+   way to send the game, that the list is the same for everybody. */
+.g-ahead,
+.g-same {
+  margin-block: var(--space-2) var(--space-4);
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+.g-word-in {
+  font-family: var(--font-family-verbatim);
+  font-weight: 700;
+  hyphens: manual;
+  white-space: nowrap;
+}
+.g-word-in::before {
+  content: '«\00a0';
+}
+.g-word-in::after {
+  content: '\00a0»';
+}
+/* Keeping: one line that says nothing is kept, and the quiet button that opens the card. */
+.g-keep-ask {
+  margin-block-start: var(--space-4);
+}
+.g-keep-ask > p {
+  margin-block: 0 var(--space-2);
+}
+
 /* « Garder ta tortue »: what keeping means, said before the two gestures — which weigh the same. */
 .g-keep {
   margin-block: var(--space-4);
@@ -312,37 +486,22 @@ html[data-silence] .game {
 .t-sheet-her {
   display: flex;
   justify-content: center;
-  --turtle-size: 10.5rem;
 }
 .t-sheet-said {
   min-block-size: calc(var(--font-size-body) * var(--line-height-body));
   margin-block: var(--space-1) 0;
   text-align: center;
 }
-.t-found {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1) var(--space-3);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.t-found.t-by-place {
-  display: block;
-}
-.t-found [data-programme='word'] {
-  font-family: var(--font-family-verbatim);
-  font-weight: 700;
-}
-.t-found a {
-  display: inline-flex;
-  align-items: center;
-  min-block-size: var(--tap-min);
+/* What she has found, in her sheet: the same buttons as « Tu te souviens ? » (above) — each
+   word opens its card again, under the list. */
+.t-sheet .g-again .g-place {
+  padding: var(--space-3);
 }
 
 /* With script: one screen at a time, built by src/scripts/game2.ts. */
 .g-live .g-word,
 .g-live .g-place,
-.g-live .g-end {
+.g-live .g-end,
+.g-again .g-place {
   display: block;
 }

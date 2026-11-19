@@ -378,3 +378,111 @@ npx tsx scripts/perf-probe.ts
   lus) ; `e2e:game` 256 / 220 / 220 ; `e2e:ask` 109 / 102 / 102 ; `e2e:sheet` 102 / 96 / 96 ;
   `e2e` 46 / 43 / 43 — tous verts.
 - Rien de servi n'a changé, et aucune phrase n'est dans le dépôt.
+
+### Lot 5, au 18 novembre 2026 (nuit) — l'écran de jeu et la carte
+
+- **Les six parties sont un plateau** : deux tuiles par rangée dès 360 px de large, trois sur un
+  grand écran, une seule sous 360 px ou quand le texte du lecteur est grand. Chaque titre est
+  entier ; son numéro — « Partie 4 – », « Chapitre 2 : » — est en gras, sur sa ligne dans le
+  plateau (`titleLead`, `src/lib/game-engine.ts` : les deux moitiés font le titre, au caractère
+  près). Aucune couleur de partie sur une tuile (D17.12). Les chapitres et les sections restent
+  des listes.
+- **Le mot est le sujet du premier écran** : sur sa propre ligne, sous elle et sous ce qui est
+  dit de lui ; les mots de huit lettres ou moins — 28 des 48 — un cran plus grands
+  (`data-short`). À 390 × 844 tout l'écran de jeu tient sans défiler, les six tuiles comprises.
+- **« Un indice » ne déplace plus rien** : sur le plateau, « par ici » se dit à côté du numéro,
+  et les trois tuiles qu'elle regarde prennent un fond léger ; aucune ne change de taille,
+  aucune n'est écartée. Sa place est gardée dans la manche sans script, pour que rien ne bouge
+  quand le script prend le bloc.
+- **La carte a ses trois voix, dans cet ordre** : le lieu (partie et chapitre en petit, section
+  dans la police du livre), « C'est écrit là » attaché à ce lieu, puis — dans une build qui peut
+  la montrer — **la phrase de la mesure, dans un cadre à elle, son étiquette d'abord** (« Phrase
+  écrite et vérifiée par une IA », `data-generated-by="ai"`, jamais `data-programme`, jamais la
+  police du livre), et « Mot suivant » seul au pied de la carte, du même poids que le lien
+  (D19.10). La même carte quel que soit le choix. Après le geste, la carte est amenée à l'écran
+  jusqu'à « Mot suivant », le mot toujours au-dessus ; jamais à l'arrivée sur la page.
+- **Ce qui bouge** : la tuile cède sous le doigt (`scale(0.96)`, 120 ms) ; la carte entre une
+  fois, après le geste qui l'a demandée (240 ms). Rien en mouvement réduit. Une carte retrouvée
+  à l'ouverture de la page n'entre pas : rien ne bouge qu'aucun geste n'a demandé.
+- **La manche sans script garde sa carte** — le lieu, le lien, « Mot suivant » — dans le nouvel
+  ordre et sans phrase (D19.6). L'étiquette de la phrase n'est dans la page que si la build
+  montre des phrases : en mode « off », aucune page ne nomme d'IA pour le jeu.
+- **Les trois règles mortes de la génération 1 sont parties** de `src/styles/game.css`, comme
+  `CLAUDE.md` le prévoyait « au prochain déploiement qui change la page d'accueil ».
+- **Mesuré** : accueil 17 392 octets gzip pour 20 480 ; script du jeu 9 714 pour 10 240 ; à
+  390 × 844, « Mot suivant » est à l'écran sur la carte du premier mot ; à 320 × 640 la carte
+  dépasse de 125 px et se lit en défilant (le mot reste en haut).
+- **Écarts au plan** : le plan demandait un numéro décoratif devant chaque tuile ; la relecture
+  d'expérience a montré qu'il répétait « Partie 4 » — c'est le numéro du titre lui-même qui est
+  en gras. La ligne de fond des tuiles désignées par l'indice n'était pas au plan.
+- **Portes** : 643 tests, plus les 4 du rappel écrits pour le lot 6 ; `e2e:game` 258 / 222 /
+  222 ; `e2e` 46 / 43 / 43 ; `e2e:ask` 109 / 102 / 102 ; `e2e:sheet` 102 / 96 / 96 ; `a11y` 225
+  contrôles — tous verts. Le parcours du jeu vérifie désormais la phrase de la carte : son
+  étiquette, son marquage, sa place après le lieu et son lien, et qu'elle n'est jamais habillée
+  comme le livre.
+- Rien de servi n'a changé.
+
+### Lot 6, au 19 novembre 2026 — la fin de manche, le rappel, sa fiche
+
+- **« Tu te souviens ? »**, sous sa ligne : deux mots à rouvrir (un seul à la première manche) —
+  le premier de la manche qui finit, et un mot d'une manche d'avant **dont l'écart grandit**
+  (`recallFor`, `src/lib/game-recall.ts` : une manche d'écart à la deuxième manche, six à la
+  seizième). La fonction lit l'ordre de la liste, jamais l'ordre des trouvailles : deux onglets
+  fusionnés, un téléphone qui garde le jeu, un lien suivi vers un mot donnent les mêmes deux
+  mots, à tout le monde. On y pense, on touche le mot : **sa carte s'ouvre dans la liste, juste
+  sous lui** — où c'est écrit, dit sans verdict (« C'est écrit dans la partie 4. »), ses trois
+  titres officiels, « C'est écrit là », puis la phrase de sa mesure sous son étiquette. Une carte
+  à la fois ; touché de nouveau, le mot la referme. Aucune tuile, donc aucun leurre et aucun
+  verdict ; rien n'est écrit, rien n'est envoyé, rien n'est dit d'elle et elle ne bouge pas. Le
+  mot touché ne se déplace pas, et le focus reste sur lui (`aria-expanded`).
+- **Sous « Trois autres mots », les trois mots de la manche suivante** (« Les prochains mots :
+  … ») : ce qui vient, jamais ce qui reste. **Sous « Envoyer le lien du jeu »** : « Les mêmes
+  mots pour tout le monde. »
+- **« Garder ta tortue » ne coupe plus le chemin** (D19.11) : une ligne — « Rien n'est gardé une
+  fois cette page fermée. » — et un bouton discret, « Retrouver ta tortue plus tard », qui ouvre
+  la carte d'avant, au mot près : ses phrases, leur ordre, comment tout effacer, ses deux gestes
+  du même poids. Ouvrir la carte n'écrit rien. Un passage qu'une de ces pressions abrège est dit
+  une fois, après la première phrase de la carte ou avec « Elle est gardée sur ce téléphone. ».
+- **Ses trois signes sont dits quand ils paraissent** (`signAtRoundEnd`, `src/lib/game-goal.ts`,
+  lu des mêmes arcs que son dessin) : « Ses ailes s'entrouvrent. » à la manche 5, « Elle lève
+  les yeux. » à la 10, « Une étoile paraît au-dessus d'elle. » à la 13 — trois fins de manche où
+  rien d'autre ne lui arrivait. Une attitude, jamais une quantité ; jamais à une manche où elle
+  change (sa ligne reste d'une phrase, deux au plus).
+- **Sa fiche — « Ce qu'elle a trouvé »** : chaque mot est un bouton qui rouvre sa carte, sous
+  lui, dans la fiche qui défile seule. La carte n'est construite qu'à la demande : quarante-huit
+  mots font quarante-huit boutons, pas quarante-huit cartes.
+- **Après le geste qui finit une manche, la page descend jusqu'à « Trois autres mots »** et aux
+  mots qui viennent, là où cela tient à l'écran avec elle ; sinon c'est elle qui reste entière,
+  en haut — c'est le moment où elle change. Jamais à l'arrivée sur la page.
+- **Un gel qui commence pendant que la page est ouverte** : un mot touché n'ouvre aucune carte,
+  le bloc du jeu part (comme tout autre geste du jeu).
+- **Mesuré** : script du jeu 10 371 octets gzip pour 14 336 (plafond relevé de 10 à 14 Ko,
+  D19.8, `scripts/game-page.test.ts`) ; accueil 17 682 octets pour 20 480 ; données du jeu
+  6 850 (build normale, sans phrase) et 10 002 (builds d'essai, 47 phrases) pour 12 288. À la
+  fin des manches 1, 2, 5, 10, 13 et 16, « Trois autres mots » est entier à l'écran à
+  390 × 844, 390 × 664 et 360 × 640 ; à 320 × 640 il l'est aussi, sauf aux manches 5 et 13 où
+  il dépasse de 21 px.
+- **Écarts au plan** : (1) « Les prochains mots » est **sous** « Trois autres mots », en
+  légende, et non au-dessus : au-dessus, le bouton passait sous le bas de l'écran à 390 × 664
+  (jusqu'à 30 px), 360 × 640 (43 px) et 320 × 640 (86 px) — mesuré, puis déplacé. (2) La carte
+  rouverte s'ouvre sous son mot et non sous la liste : dans sa fiche, sous quarante-huit mots,
+  elle s'ouvrait hors de l'écran. (3) Le contrôle des cibles de 44 px du parcours laisse passer
+  un centième de pixel : une cible d'exactement 44 px, mesurée entre deux bords tombés sur une
+  fraction, se lisait 43,99999999999994.
+- **Ce que le lot laisse** : ses neuf phrases sont des propositions de la session — à valider
+  par l'éditeur avec les autres textes (lot 7), et rien n'est servi avant. Dans sa fiche, chaque
+  mot trouvé est un arrêt de tabulation de plus (quarante-huit à la fin du jeu) : Échap ferme
+  la fiche, les titres permettent de sauter la liste.
+- **Portes** : 649 tests (648 passent, 1 sauté depuis toujours), types, lint, contraste ;
+  `e2e:game` 293 / 257 / 257 (Chromium, Firefox, WebKit — 35 vérifications de plus qu'au lot 5 :
+  l'ordre de la fin de manche, le rappel aux manches 1, 2, 5, 10 et 13, les mots qui viennent,
+  ses signes dits comme son dessin les montre, la carte rouverte et ce qu'elle n'écrit pas, sa
+  fiche, le clavier, le mouvement réduit, le gel) ; ses évolutions filmées sous Chromium : aucun
+  éclair, 33 ms d'intervalle médian à processeur ralenti ; `e2e` 46 / 43 / 43 ; `e2e:ask`
+  109 / 102 / 102 ; `e2e:sheet` 102 / 96 / 96 ; `a11y`, la build « scrutin » — tous verts. Les
+  deux portes de sa planche (`e2e:mascot2`, `e2e:mascot2:motion`) ont passé après le lot 5 ; le
+  lot 6 ne touche à rien de ce qu'elles lisent.
+- **Les lots 5 et 6 sont dans un seul commit** : le travail du lot 6 avait commencé dans les
+  mêmes fichiers avant que le lot 5 soit enregistré. Les portes du lot 5 avaient passé sur son
+  état propre (journal ci-dessus) ; celles du lot 6 ont passé sur l'état enregistré.
+- Rien de servi n'a changé.

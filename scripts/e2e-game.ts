@@ -52,6 +52,7 @@ import {
   depthOf,
   draw,
   isLongWord,
+  isShortWord,
   endOfRound,
   locate,
   otherParts,
@@ -59,7 +60,8 @@ import {
   type RoundEnd,
   type Standing,
 } from '../src/lib/game-engine.js';
-import { lineAtRoundEnd, nextRoundChangesHer } from '../src/lib/game-goal.js';
+import { lineAtRoundEnd, nextRoundChangesHer, signAtRoundEnd } from '../src/lib/game-goal.js';
+import { recallFor } from '../src/lib/game-recall.js';
 import { KEPT_FIELDS, TAB_FIELDS, serialiseTab } from '../src/lib/game-state.js';
 import { KEPT_FIELDS2, STORAGE_KEY, TAB_FIELDS2 } from '../src/lib/game-state2.js';
 import {
@@ -70,6 +72,7 @@ import {
   evolutionLasts,
   lookOf,
   passageTo,
+  signOf,
   type MascotLook,
   type MascotTint,
   type Passage,
@@ -109,11 +112,97 @@ interface ServerState {
 const NEVER =
   /\b(?:faux|fausse|perdu|perdue|raté|ratée|erreur|mauvais|mauvaise|bravo|félicitations?|score|niveau|classement|points?)\b|%|\d\s*(?:\/|sur)\s*\d/i;
 
-/** The text of the block that is ours: the word and the official titles removed. */
+/**
+ * The text of the block that is the INTERFACE's: the word and the official titles removed —
+ * and the sentence of a measure (D19.2), which is ours but not the game speaking: it says what a
+ * measure provides, numbers and all, and is held to its own checks (its label, its marking,
+ * the file it comes from).
+ */
 const OWN_VOICE = `(() => {
   const copy = document.querySelector('#jeu').cloneNode(true);
-  for (const node of copy.querySelectorAll('[data-programme], script, [hidden]')) node.remove();
+  for (const node of copy.querySelectorAll('[data-programme], [data-generated-by], script, [hidden]')) node.remove();
   return copy.textContent.replace(/\\s+/g, ' ').trim();
+})()`;
+
+/** What the end of a round holds under its title (lot 6), as the page shows it. */
+interface EndPanel {
+  /** Its children, in order: the first class of each, or its tag. */
+  order: string[];
+  line: string;
+  title: string;
+  lead: string;
+  /** The words of « Tu te souviens ? », and whether each is open. */
+  words: string[];
+  expanded: string[];
+  cards: number;
+  ahead: string;
+  aheadWords: string[];
+  same: string;
+  keep: string;
+}
+const END_PANEL = `(() => {
+  const flat = (node) => (node ? node.textContent.replace(/\\s+/g, ' ').trim() : '');
+  const panel = document.querySelector('#game-live .g-end');
+  const recall = panel.querySelector('.g-recall');
+  return {
+    order: [...panel.children].map((node) => node.classList[0] || node.tagName.toLowerCase()),
+    line: flat(panel.querySelector('.g-line')),
+    title: flat(recall && recall.querySelector('h4')),
+    lead: flat(recall && recall.querySelector('p')),
+    words: recall ? [...recall.querySelectorAll('button [data-programme="word"]')].map(flat) : [],
+    expanded: recall ? [...recall.querySelectorAll('button')].map((b) => b.getAttribute('aria-expanded')) : [],
+    cards: panel.querySelectorAll('.g-recall .g-place').length,
+    ahead: flat(panel.querySelector('.g-ahead')),
+    aheadWords: [...panel.querySelectorAll('.g-ahead [data-programme="word"]')].map(flat),
+    same: flat(panel.querySelector('.g-same')),
+    keep: flat(panel.querySelector('.g-keep-ask')),
+  };
+})()`;
+
+/** A list of words whose card opens again (« Tu te souviens ? », her sheet): what is open. */
+interface Reopened {
+  cards: number;
+  /** The card is the very next item after the word that opened it. */
+  next: boolean;
+  /** The focus is on a word that says it is open — or, nothing being open, on a word. */
+  focus: boolean;
+  /** The card's top is in view: in the window, and in her sheet when it is there. */
+  inView: boolean;
+  said: string;
+  where: string[];
+  href: string;
+  gist: string;
+  badge: string;
+  /** Ways on in the card (« Mot suivant »): none. */
+  ways: number;
+  titles: number;
+  gistAsProgramme: number;
+  expanded: string[];
+}
+const reopenedIn = (selector: string): string => `(() => {
+  const box = document.querySelector(${JSON.stringify(selector)});
+  const flat = (node) => (node ? node.textContent.replace(/\\s+/g, ' ').trim() : '');
+  const card = box.querySelector('.g-again .g-place');
+  const open = [...box.querySelectorAll('button[aria-expanded="true"]')];
+  const active = document.activeElement;
+  const sheet = box.closest('dialog');
+  const frame = sheet ? sheet.getBoundingClientRect() : { top: 0, bottom: innerHeight };
+  const top = card ? card.getBoundingClientRect().top : -1;
+  return {
+    cards: box.querySelectorAll('.g-place').length,
+    next: card !== null && open.length === 1 && open[0].closest('li').nextElementSibling === card.closest('li'),
+    focus: active !== null && active.matches('button.g-reopen') && box.contains(active) && (open.length === 0 || active === open[0]),
+    inView: card !== null && top >= Math.max(0, frame.top) && top < Math.min(innerHeight, frame.bottom),
+    said: flat(card && card.querySelector('.g-said')),
+    where: card ? [...card.querySelectorAll('.g-where li')].map(flat) : [],
+    href: card ? card.querySelector('a.cta').getAttribute('href') : '',
+    gist: flat(card && card.querySelector('[data-generated-by="ai"]')),
+    badge: flat(card && card.querySelector('.g-gist-badge')),
+    ways: card ? card.querySelectorAll('.g-next, .g-actions').length : 0,
+    titles: card ? card.querySelectorAll('.g-where [data-programme="title"]').length : 0,
+    gistAsProgramme: card ? card.querySelectorAll('.g-gist [data-programme], .g-gist[data-programme]').length : 0,
+    expanded: open.map(flat),
+  };
 })()`;
 
 /** Everything the two storages of the page hold, key by key: what a test reads of a phone. */
@@ -260,6 +349,8 @@ const EARLY_MS = 5;
 const HANDOVER_MS = 500;
 /** A sentence carried past a passage is said this long after the new screen is up. */
 const SAY_LATER_MS = 150;
+/** A card comes in over this long, after the gesture that asked for it (`--duration-reveal`). */
+const REVEAL_MS = 240;
 /** Her drawings swap their form or colour at most once this long, at a press. */
 const SWAP_GAP_MS = 350;
 /** How long she looks at the tiles before a hint marks them. */
@@ -290,6 +381,9 @@ interface Ending {
   /** The sentences said of her under the title, in order. */
   said: string[];
   passage: Passage | null;
+  /** The words of the round, and everything found once it has ended. */
+  words: string[];
+  seen: string[];
 }
 function ending(
   data: GameData,
@@ -302,8 +396,11 @@ function ending(
   const seen = [...seenBefore, ...words.filter((id) => !seenBefore.includes(id))];
   const end = endOfRound(data, before, seen);
   const line = lineAtRoundEnd(end, nextRoundChangesHer(data, end, seen, words.at(-1) ?? null));
+  // A sign she has just shown is named where no passage is (lot 6): never both.
+  const sign = signAtRoundEnd(before, end);
   const said = [
     ...(line.passage === null ? [] : [kit[`turtle.passage.${String(line.passage)}`] ?? '']),
+    ...(line.passage !== null || sign === null ? [] : [kit[`turtle.sign.${sign}`] ?? '']),
     ...(line.goal === null ? [] : [kit[`turtle.goal.${line.goal}`] ?? '']),
   ];
   const stored = {
@@ -322,6 +419,8 @@ function ending(
     stored: JSON.stringify(stored),
     said,
     passage: end.passage && end.state === before.state + 1 ? passageTo(end.state) : null,
+    words,
+    seen,
   };
 }
 
@@ -379,6 +478,9 @@ async function runEngine(
     .sort((a, b) => a.order - b.order)
     .map((p) => p.title);
   const sectionUrl = (id: string): string => manifest.sections.find((s) => s.id === id)?.url ?? '';
+  /** A word of the game by its identifier, as the page writes it. */
+  const wordOf = (id: string | null): string =>
+    data.words.find((w) => w.id === id)?.word ?? '(none)';
   const visibleHeadings = async (page: Page): Promise<string[]> =>
     (await page.locator('#jeu h3:visible').allTextContents()).map(text);
   const phone = { viewport: { width: 390, height: 844 } };
@@ -426,6 +528,10 @@ async function runEngine(
     view.evaluate<Logged[]>(`window.__seen[${JSON.stringify(which)}].log`);
   const moving = (view: Page): Promise<number> =>
     view.evaluate<number>('document.getAnimations().length');
+  /** The card of « Garder ta tortue », opened by its quiet button (D19.11). */
+  const openKeep = async (view: Page): Promise<void> => {
+    await view.getByRole('button', { name: says('turtle.keep.open') }).click();
+  };
   const playRound = async (view: Page): Promise<void> => {
     for (let i = 0; i < ROUND; i += 1) {
       await view.getByRole('button', { name: 'Je ne sais pas' }).click();
@@ -657,6 +763,7 @@ async function runEngine(
       const { context, view } = await visitor(asked.stored);
       await press(view, 'Mot suivant');
       await view.waitForTimeout(600);
+      await openKeep(view);
       await view.getByRole('button', { name: 'Garder ta tortue' }).click();
       const held: Stores = await view.evaluate(stores);
       const onPhone = JSON.parse(held.phone[STORAGE_KEY] ?? '{}') as { turtle?: number };
@@ -904,6 +1011,29 @@ async function runEngine(
           await view.getByRole('button', { name: 'Je ne sais pas' }).click();
           await view.getByRole('button', { name: 'Mot suivant' }).click();
         }
+        // The card is behind a quiet button since D19.11: one line says nothing is kept, the
+        // button opens the card — whose sentences and two gestures are those of before.
+        const ask = view.locator('#game-live .g-keep-ask');
+        const closed = {
+          said: (await ask.locator('p').allTextContents()).map(text),
+          buttons: (await ask.locator('button').allTextContents()).map(text),
+          cards: await view.locator('#game-live .g-keep').count(),
+          phone: Object.keys((await view.evaluate<Stores>(stores)).phone).length,
+        };
+        check(
+          'the end of the round says that nothing is kept, and offers the way to keep her — quietly: one outlined button, the card not shown yet',
+          JSON.stringify(closed.said) === JSON.stringify([says('turtle.sheet.tab_only')]) &&
+            JSON.stringify(closed.buttons) === JSON.stringify([says('turtle.keep.open')]) &&
+            closed.cards === 0 &&
+            closed.phone === 0 &&
+            (await ask.locator('button').evaluate((b) => b.classList.contains('g-quiet'))),
+          JSON.stringify(closed),
+        );
+        await openKeep(view);
+        check(
+          'opening the card writes nothing: the phone is still empty',
+          Object.keys((await view.evaluate<Stores>(stores)).phone).length === 0,
+        );
         const card = view.locator('#game-live .g-keep');
         const lines = (await card.locator('p:not(.g-actions)').allTextContents()).map(text);
         check(
@@ -962,6 +1092,7 @@ async function runEngine(
     const tab = await pocket.newPage();
     await arrive(tab);
     await playRound(tab);
+    await openKeep(tab);
     await tab.getByRole('button', { name: 'Garder ta tortue' }).click();
     const held: Stores = await tab.evaluate(stores);
     const onPhone = JSON.parse(held.phone[STORAGE_KEY] ?? '{}') as Record<string, unknown>;
@@ -1210,6 +1341,7 @@ async function runEngine(
     strict.on('pageerror', (e) => broken.push(String(e)));
     await arrive(strict);
     await playRound(strict);
+    await openKeep(strict);
     await strict.getByRole('button', { name: 'Garder ta tortue' }).click();
     await strict.getByRole('button', { name: 'Trois autres mots' }).click();
     check(
@@ -1661,35 +1793,149 @@ async function runEngine(
         }),
       );
       await flying.view.getByRole('button', { name: 'Ta tortue', exact: true }).click();
-      const listed: string[][] = await flying.view
-        .locator('#turtle-sheet-found li')
-        .evaluateAll((items) =>
-          items.map((li) => [
-            li.querySelector('[data-programme="word"]')?.textContent ?? '',
-            li.querySelector('a')?.getAttribute('href') ?? '',
-            li.querySelector('a [data-programme="title"]')?.textContent ?? '',
-          ]),
-        );
+      const found = flying.view.locator('#turtle-sheet-found');
+      const listed = (await found.locator('li [data-programme="word"]').allTextContents()).map(
+        text,
+      );
       const order = new Map<string, number>();
       for (const part of data.parts) {
         for (const chapter of part.chapters) {
           for (const section of chapter.sections) order.set(section.id, order.size);
         }
       }
-      const expected = [...data.words]
-        .sort((a, b) => (order.get(a.section) ?? 0) - (order.get(b.section) ?? 0))
-        .map((w) => [w.word, sectionUrl(w.section), locate(data, w.section)?.section.title ?? '']);
+      const sorted = [...data.words].sort(
+        (a, b) => (order.get(a.section) ?? 0) - (order.get(b.section) ?? 0),
+      );
       check(
-        'at the third depth her sheet lists where each word is written, in the order of the book',
-        listed.length === expected.length &&
-          listed.every((row, i) => {
-            const [word = '', href = '', title = ''] = row;
-            const [wantWord = '', wantUrl = '-', wantTitle = ''] = expected[i] ?? [];
-            return word === wantWord && href.startsWith(wantUrl) && text(title) === wantTitle;
-          }),
-        listed.map((l) => l[0]).join(','),
+        'at the third depth her sheet lists what she found in the order of the book — each word a button, no card open, no total',
+        JSON.stringify(listed) === JSON.stringify(sorted.map((w) => w.word)) &&
+          (await found.locator('li button[aria-expanded="false"]').count()) === sorted.length &&
+          (await found.locator('.g-place').count()) === 0 &&
+          text(await found.locator('p').first().textContent()) === says('turtle.found.lead') &&
+          !/\d/.test(text(await found.textContent())),
+        listed.join(','),
+      );
+      // A word pressed: its card opens under the list — where it is written, the way there, and
+      // the sentence of its measure where this build shows one. Pressed again, it closes.
+      const third = sorted[2];
+      if (third === undefined) throw new Error('the list holds fewer than three words');
+      const place = locate(data, third.section);
+      const before: Stores = await flying.view.evaluate<Stores>(stores);
+      await found.locator('li button').nth(2).click();
+      const opened = await flying.view.evaluate<Reopened>(reopenedIn('#turtle-sheet-found'));
+      check(
+        'a word of her sheet opens its card again, right after it: its three titles, the way to the book, its sentence under its label',
+        opened.cards === 1 &&
+          opened.next &&
+          JSON.stringify(opened.where) ===
+            JSON.stringify([place?.part.title, place?.chapter.title, place?.section.title]) &&
+          opened.href.startsWith(sectionUrl(third.section)) &&
+          opened.gist === (third.gist === undefined ? '' : shown(third.gist)) &&
+          opened.badge === (third.gist === undefined ? '' : says('game.gist.badge')) &&
+          opened.ways === 0 &&
+          JSON.stringify(opened.expanded) === JSON.stringify([third.word]),
+        JSON.stringify(opened),
+      );
+      check(
+        '…the focus stays on the word, and the card is in view inside her sheet — which scrolls by itself',
+        opened.focus && opened.inView,
+        JSON.stringify(opened),
+      );
+      // A word far down the list: its card opens under it all the same, and is brought there.
+      const far = sorted.length - 2;
+      await found.locator('li button').nth(far).click();
+      const farther = await flying.view.evaluate<Reopened>(reopenedIn('#turtle-sheet-found'));
+      check(
+        '…one card at a time: another word pressed — the last but one of the list — takes its place, in view under its own word',
+        farther.cards === 1 &&
+          farther.next &&
+          farther.inView &&
+          farther.focus &&
+          JSON.stringify(farther.expanded) === JSON.stringify([sorted[far]?.word]),
+        JSON.stringify(farther),
+      );
+      await found.locator('li button').nth(far).click();
+      const shut = await flying.view.evaluate<Reopened>(reopenedIn('#turtle-sheet-found'));
+      check(
+        '…pressed again, it closes — and a card read again is not a word found: nothing was written for it',
+        shut.cards === 0 &&
+          shut.expanded.length === 0 &&
+          JSON.stringify(await flying.view.evaluate<Stores>(stores)) === JSON.stringify(before),
+        JSON.stringify(shut),
       );
       await flying.context.close();
+    }
+
+    // The ends of later rounds (lot 6): « Tu te souviens ? » offers the round's first word and
+    // an earlier one; and where she has just shown a sign — her wings ajar, her eyes up, a
+    // first star — the sign is named, with her goal, as her drawing shows it.
+    for (const [round, sign] of [
+      [2, null],
+      [5, 'ajar'],
+      [10, 'up'],
+      [13, 'star'],
+    ] as const) {
+      const at = ending(data, kit, round);
+      const { context, view } = await visitor(at.stored);
+      await press(view, 'Mot suivant');
+      // What is said of her waits for the end of her passage, where there is one.
+      await until(
+        view,
+        "(() => { const line = document.querySelector('#game-live .g-line'); return line !== null && !line.hasAttribute('data-wait'); })()",
+      );
+      const under = await view.evaluate<EndPanel>(END_PANEL);
+      const recalled = recallFor(data, at.seen, at.words);
+      check(
+        `round ${String(round)}: « Tu te souviens ? » offers the first word of the round and one of an earlier round — two buttons, closed`,
+        recalled.old !== null &&
+          !at.words.includes(recalled.old) &&
+          JSON.stringify(under.words) ===
+            JSON.stringify([wordOf(recalled.fresh), wordOf(recalled.old)]) &&
+          JSON.stringify(under.expanded) === JSON.stringify(['false', 'false']) &&
+          under.cards === 0,
+        JSON.stringify(under.words),
+      );
+      const coming = draw(data, at.seen, at.words.at(-1) ?? null).map(wordOf);
+      check(
+        `round ${String(round)}: the next words are those the next round deals`,
+        JSON.stringify(under.aheadWords) === JSON.stringify(coming) && coming.length === ROUND,
+        under.ahead,
+      );
+      check(
+        `round ${String(round)}: what is said of her is what the game computes — ${at.said.length === 1 ? 'one sentence' : 'two sentences'}`,
+        under.line === at.said.map(shown).join(' ') && at.said.length <= 2,
+        under.line,
+      );
+      if (sign !== null) {
+        await until(view, "document.querySelector('#game-status').textContent.trim() !== ''");
+        const drawn = await her(view);
+        const expected = signOf(at.end.state, at.end.arcs);
+        check(
+          `round ${String(round)}: the sign she has just shown is named first — « ${says(`turtle.sign.${sign}`)} » — as her drawing shows it, and said to a screen reader`,
+          at.said[0] === kit[`turtle.sign.${sign}`] &&
+            !at.end.passage &&
+            expected > 0 &&
+            drawn?.sign === String(expected) &&
+            text(await view.locator('#game-status').textContent()) === under.line,
+          JSON.stringify({ line: under.line, sign: drawn?.sign }),
+        );
+        // The second of the two words, pressed: its card — the card of an earlier round.
+        await view.locator('#game-live .g-recall button').nth(1).click();
+        const again = await view.evaluate<Reopened>(reopenedIn('#game-live .g-recall'));
+        const old = data.words.find((w) => w.id === recalled.old);
+        check(
+          `round ${String(round)}: the earlier word opens its own card, under the two words`,
+          again.cards === 1 &&
+            again.next &&
+            again.focus &&
+            again.inView &&
+            old !== undefined &&
+            again.href.startsWith(sectionUrl(old.section)) &&
+            JSON.stringify(again.expanded) === JSON.stringify([old.word]),
+          JSON.stringify(again),
+        );
+      }
+      await context.close();
     }
 
     // Less motion asked: her sheet opens, and nothing starts.
@@ -1739,6 +1985,13 @@ async function runEngine(
           calmSheet.path[2]?.said === says('turtle.passage.2'),
         JSON.stringify(calmSheet.path),
       );
+      await still.locator('#turtle-sheet-found li button').first().click();
+      check(
+        'less motion: a word of her sheet opens its card at once — the card does not come in',
+        (await still.locator('#turtle-sheet-found .g-place').count()) === 1 &&
+          (await moving(still)) === 0,
+      );
+      await still.locator('#turtle-sheet-found li button').first().click();
       await still
         .locator('#turtle-sheet')
         .getByRole('button', { name: 'Violet', exact: true })
@@ -1865,16 +2118,17 @@ async function runEngine(
       (await sheetOpen(view)) && (await inSheet()) && (await her(view, LARGE))?.pose === 'trick',
       await focused(),
     );
-    // Tab goes through her sheet in the order it reads, and stays in it.
+    // Tab goes through her sheet in the order it reads, and stays in it. What she has found
+    // is on the way since lot 6: each word is a button that opens its card again.
     const stops: string[] = [];
     let stayed = true;
-    for (let step = 0; step < 13; step += 1) {
+    for (let step = 0; step < 13 + at.seen.length; step += 1) {
       await view.keyboard.press('Tab');
       stops.push(await focused());
       stayed &&= await inSheet();
     }
     check(
-      'Tab goes through her sheet in the order it reads — « Revoir », her colours, what is kept, the way out — and stays in it',
+      'Tab goes through her sheet in the order it reads — « Revoir », her colours, the words she has found, what is kept, the way out — and stays in it',
       stayed &&
         JSON.stringify(stops) ===
           JSON.stringify([
@@ -1887,6 +2141,7 @@ async function runEngine(
             'Rouge',
             'Violet',
             'Sans couleur',
+            ...at.seen.map(wordOf),
             'turtle-sheet-keep',
             'turtle-sheet-erase',
             'Tout le détail, page Confidentialité',
@@ -1895,7 +2150,7 @@ async function runEngine(
       stops.join(' → '),
     );
     // A colour is given with a key, and the focus stays on it.
-    for (let step = 0; step < 7; step += 1) await view.keyboard.press('Shift+Tab');
+    for (let step = 0; step < 7 + at.seen.length; step += 1) await view.keyboard.press('Shift+Tab');
     const on = await focused();
     await view.keyboard.press('Space');
     check(
@@ -1928,7 +2183,9 @@ async function runEngine(
     // The word of the programme is never cut, and never under her drawing: every word of the
     // list, written in turn in the panel of a question that follows a gesture — beside her, at
     // the widths of real phones, in her first form and once she is a flamingo.
-    const words = JSON.stringify(data.words.map((w) => [w.word, isLongWord(w.word)]));
+    const words = JSON.stringify(
+      data.words.map((w) => [w.word, isLongWord(w.word), isShortWord(w.word)]),
+    );
     const cut: string[] = [];
     for (const width of [320, 360, 390]) {
       for (const rounds of [0, 2]) {
@@ -1941,9 +2198,10 @@ async function runEngine(
           const node = document.querySelector('#game-live .g-the-word');
           const her = document.querySelector('${HER}').getBoundingClientRect();
           const out = [];
-          for (const [word, long] of ${words}) {
+          for (const [word, long, short] of ${words}) {
             node.textContent = word;
             node.toggleAttribute('data-long', long);
+            node.toggleAttribute('data-short', short);
             const box = node.getBoundingClientRect();
             const lines = Math.round(box.height / parseFloat(getComputedStyle(node).lineHeight));
             const range = document.createRange();
@@ -2103,6 +2361,9 @@ async function runEngine(
       const { context, view } = await visitor(at.stored);
       await press(view, 'Mot suivant');
       await view.waitForTimeout(900);
+      // « Ne pas garder » is on the card the quiet button opens: that press is the one that
+      // falls while she passes.
+      if (gesture === 'Ne pas garder') await openKeep(view);
       await view.getByRole('button', { name: gesture }).click();
       await view.waitForTimeout(SAY_LATER_MS + 200);
       const said = text(await view.locator('#game-status').textContent());
@@ -2148,6 +2409,7 @@ async function runEngine(
       const tab = await pocket.newPage();
       await arrive(tab);
       await playRound(tab);
+      await openKeep(tab);
       await tab.getByRole('button', { name: 'Garder ta tortue' }).click();
       const other = await pocket.newPage();
       await arrive(other);
@@ -2328,6 +2590,7 @@ async function runEngine(
       await arrive(one);
       await press(one, 'Mot suivant');
       await one.waitForTimeout(evolutionLasts('01') + LATE_MS);
+      await openKeep(one);
       await one.getByRole('button', { name: 'Garder ta tortue' }).click();
       const before = text(await one.locator('#game-live .g-line').textContent());
       const two = await pocket.newPage();
@@ -2674,6 +2937,29 @@ async function runEngine(
     );
     await seen.close();
 
+    // A freeze that starts at the end of a round: a card read again is the game speaking too.
+    {
+      const over = ending(data, kit, 3);
+      seen = await visit(eve, { date: eve }, async (context) => {
+        await context.addInitScript(seedTab(over.stored));
+      });
+      await until(seen.view, "!document.querySelector('#game-live').hidden");
+      await seen.view.getByRole('button', { name: 'Mot suivant' }).click();
+      const offered = await seen.view.locator('#game-live .g-recall button').count();
+      await seen.view.clock.setFixedTime(midnight);
+      await seen.view.locator('#game-live .g-recall button').first().click();
+      now = await state(seen.view);
+      check(
+        'a freeze that starts at the end of a round: a word of « Tu te souviens ? » opens no card, the game leaves',
+        offered === 2 &&
+          now.attr &&
+          !now.game &&
+          (await seen.view.locator('#game-live .g-place').count()) === 0,
+        JSON.stringify(now),
+      );
+      await seen.close();
+    }
+
     // A freeze that starts while she passes: everything of hers stops, on what she became.
     const at = ending(data, kit, passageRound.get('12') ?? 2);
     seen = await visit(eve, { date: eve }, async (context) => {
@@ -2739,8 +3025,11 @@ async function runEngine(
           await view.evaluate(`({
           sw: document.documentElement.scrollWidth,
           cw: document.documentElement.clientWidth,
-          // Every target one can press: 44 px high at least.
-          small: [...document.querySelectorAll('#jeu button, #game-live a')].filter((n) => n.getClientRects().length > 0 && getComputedStyle(n).visibility === 'visible' && (document.querySelector('#turtle-sheet').open ? n.closest('#turtle-sheet') !== null : n.closest('#turtle-sheet') === null) && n.getBoundingClientRect().height < 44).map((n) => (n.textContent.trim() || n.getAttribute('aria-label')) + ' ' + n.getBoundingClientRect().height.toFixed(0)),
+          // Every target one can press: 44 px high at least. A hundredth of a pixel is let
+          // go: a box is measured as the difference of two edges, and where they fall on a
+          // fraction — a card that has just come in, a page scrolled to a line of 24.8 px — a
+          // target of exactly 44 px was read as 43.99999999999994 (found on 19/11/2026).
+          small: [...document.querySelectorAll('#jeu button, #game-live a')].filter((n) => n.getClientRects().length > 0 && getComputedStyle(n).visibility === 'visible' && (document.querySelector('#turtle-sheet').open ? n.closest('#turtle-sheet') !== null : n.closest('#turtle-sheet') === null) && n.getBoundingClientRect().height < 43.99).map((n) => (n.textContent.trim() || n.getAttribute('aria-label')) + ' ' + n.getBoundingClientRect().height.toFixed(2)),
           // A title is never cut: nothing of the game hides what overflows it.
           cut: [...document.querySelectorAll('#game-live [data-programme], #turtle-sheet[open] [data-programme]')].filter((n) => n.scrollWidth > n.clientWidth + 1 && getComputedStyle(n).overflow !== 'visible').length,
           // Every button says what it is, in words.
@@ -3135,12 +3424,12 @@ async function runEngine(
         JSON.stringify(beside),
       );
       // The whole round, link by link.
-      await page.locator('.g-word-1 .g-place a.g-quiet').click();
+      await page.locator('.g-word-1 .g-place a.g-next').click();
       const second = text(await page.locator('[data-programme="word"]:visible').textContent());
       await page.locator('.g-word-2 .g-with a').click();
-      await page.locator('.g-word-2 .g-place a.g-quiet').click();
+      await page.locator('.g-word-2 .g-place a.g-next').click();
       await page.locator('.g-word-3 .g-tile').first().click();
-      await page.locator('.g-word-3 .g-place a.g-quiet').click();
+      await page.locator('.g-word-3 .g-place a.g-next').click();
       check(
         'the round is played to its end with links alone',
         second === first[1]?.word &&
@@ -3265,6 +3554,73 @@ async function runEngine(
         "document.activeElement === document.querySelector('#game-live .g-place h3')",
       ),
     );
+    // What the measure provides, in one sentence of OURS (D19.2) — where this build may show
+    // sentences. Under its own label, after the place and its link, never dressed as the book.
+    {
+      const entry = data.words[0];
+      const card = await page.evaluate<{
+        blocks: number;
+        badge: string;
+        sentence: string;
+        marked: boolean;
+        order: string[];
+        book: number;
+        face: string;
+        ui: string;
+        voice: string;
+      }>(`(() => {
+        const card = document.querySelector('#game-live .g-place');
+        const block = card.querySelector('.g-gist');
+        const flat = (node) => (node ? node.textContent.replace(/\\s+/g, ' ').trim() : '');
+        const kinds = [...card.children].map((child) =>
+          child.matches('h3') ? 'heading'
+          : child.matches('.g-where') ? 'where'
+          : child.matches('.g-official') ? 'official'
+          : child.matches('.g-gist') ? 'gist'
+          : child.matches('.g-actions') ? 'next'
+          : 'line');
+        const sentence = block ? block.querySelector('[data-generated-by]') : null;
+        return {
+          blocks: card.querySelectorAll('.g-gist').length,
+          badge: block ? flat(block.firstElementChild) : '',
+          sentence: flat(sentence),
+          marked: sentence !== null && sentence.getAttribute('data-generated-by') === 'ai',
+          order: kinds,
+          book: block ? block.querySelectorAll('[data-programme]').length : 0,
+          face: sentence ? getComputedStyle(sentence).fontFamily : '',
+          ui: getComputedStyle(card.querySelector('h3')).fontFamily,
+          voice: flat(card),
+        };
+      })()`);
+      if (entry?.gist === undefined) {
+        check(
+          'a build that may show no sentence shows none: the card names no AI',
+          card.blocks === 0 && !/\bIA\b/.test(card.voice),
+          card.voice,
+        );
+      } else {
+        check(
+          'the card says what the measure provides in one sentence of ours, under its label: an AI wrote it',
+          card.blocks === 1 &&
+            card.badge === says('game.gist.badge') &&
+            card.sentence === shown(entry.gist) &&
+            card.marked,
+          `${card.badge} | ${card.sentence}`,
+        );
+        const at = (kind: string): number => card.order.indexOf(kind);
+        check(
+          '…after the place and its link, before the way on — never under « C’est écrit là », never dressed as the book',
+          at('heading') === 0 &&
+            at('where') < at('official') &&
+            at('official') < at('gist') &&
+            at('gist') < at('next') &&
+            at('next') === card.order.length - 1 &&
+            card.book === 0 &&
+            card.face === card.ui,
+          `${card.order.join(' > ')} | ${card.face}`,
+        );
+      }
+    }
     const pulsing = await her(page);
     check(
       'a word found: she makes her small move, at once',
@@ -3413,6 +3769,108 @@ async function runEngine(
       (await moving(page)) === 0,
       String(await moving(page)),
     );
+    // --- 4 bis. what the end of a round holds under her line (lot 6): « Tu te souviens ? », the
+    // way on and what it leads to, the way to send the game, the way to keep her.
+    {
+      const sends =
+        (await page.getByRole('button', { name: 'Envoyer le lien du jeu' }).count()) > 0;
+      const under = await page.evaluate<EndPanel>(END_PANEL);
+      check(
+        'under her line, in this order: « Tu te souviens ? », the way on and the next words, the way to send the game and whose words they are, the way to keep her',
+        JSON.stringify(under.order) ===
+          JSON.stringify([
+            'h3',
+            'g-line',
+            'g-recall',
+            'g-actions',
+            'g-ahead',
+            ...(sends ? ['g-actions', 'g-same'] : []),
+            'g-keep-ask',
+          ]),
+        under.order.join(' > '),
+      );
+      const recalled = recallFor(data, one.seen, one.words);
+      check(
+        '« Tu te souviens ? » at the first round: its first word, alone — a button, closed, and no card yet',
+        under.title === says('game.recall.title') &&
+          under.lead === says('game.recall.lead') &&
+          recalled.old === null &&
+          JSON.stringify(under.words) === JSON.stringify([wordOf(recalled.fresh)]) &&
+          under.words[0] === data.words[0]?.word &&
+          JSON.stringify(under.expanded) === JSON.stringify(['false']) &&
+          under.cards === 0,
+        JSON.stringify(under),
+      );
+      const next = data.words.slice(ROUND, 2 * ROUND).map((w) => w.word);
+      check(
+        'under « Trois autres mots »: the three words of the round to come, each marked as a word of the programme — and under the way to send it, that the words are the same for everybody',
+        under.ahead === `${says('game.round.ahead')} : ${next.join(', ')}.` &&
+          JSON.stringify(under.aheadWords) === JSON.stringify(next) &&
+          under.same === (sends ? says('game.share.same') : ''),
+        `${under.ahead} | ${under.same}`,
+      );
+      check(
+        'what is said there holds no number: what comes next, never what is left',
+        !/\d/.test([under.title, under.lead, under.same, under.keep].join(' ')) &&
+          !/\d/.test(says('game.round.ahead')),
+        [under.title, under.lead, under.same, under.keep].join(' | '),
+      );
+      // The word pressed: its card opens right after it — and nothing else happens.
+      const first = data.words[0];
+      const firstPlace = first === undefined ? null : locate(data, first.section);
+      if (first === undefined || firstPlace === null) throw new Error('no first word');
+      const herBefore = (await logOf(page)).length;
+      const heldBefore = JSON.stringify(await page.evaluate<Stores>(stores));
+      const statusBefore = text(await page.locator('#game-status').textContent());
+      await page.locator('#game-live .g-recall button').first().click();
+      const again = await page.evaluate<Reopened>(reopenedIn('#game-live .g-recall'));
+      check(
+        'a word of « Tu te souviens ? » opens its card again, right after it: where it is written, neutrally, its three titles, the way to the book, its sentence under its label — and no way on',
+        again.cards === 1 &&
+          again.next &&
+          again.said === `C’est écrit dans la partie ${String(firstPlace.part.number)}.` &&
+          JSON.stringify(again.where) ===
+            JSON.stringify([
+              firstPlace.part.title,
+              firstPlace.chapter.title,
+              firstPlace.section.title,
+            ]) &&
+          again.href.startsWith(sectionUrl(first.section)) &&
+          again.gist === (first.gist === undefined ? '' : shown(first.gist)) &&
+          again.badge === (first.gist === undefined ? '' : says('game.gist.badge')) &&
+          again.ways === 0 &&
+          JSON.stringify(again.expanded) === JSON.stringify([first.word]),
+        JSON.stringify(again),
+      );
+      check(
+        '…the focus stays on the word, which says that it is open; the card is in view under it',
+        again.focus && again.inView,
+        JSON.stringify(again),
+      );
+      check(
+        '…the sentence of the card is marked as an AI’s and never as the programme’s; its titles are the programme’s',
+        again.titles === 3 && again.gistAsProgramme === 0,
+        JSON.stringify(again),
+      );
+      // The card comes in, and nothing else moves: she is given no beat — and once the card
+      // is in, nothing moves at all.
+      await page.waitForTimeout(REVEAL_MS + LATE_MS);
+      check(
+        '…and a card read again is not a word found: nothing is written, nothing is said of her, she does not move',
+        JSON.stringify(await page.evaluate<Stores>(stores)) === heldBefore &&
+          text(await page.locator('#game-status').textContent()) === statusBefore &&
+          (await logOf(page)).length === herBefore &&
+          (await moving(page)) === 0,
+        String(await moving(page)),
+      );
+      await page.locator('#game-live .g-recall button').first().click();
+      const closed = await page.evaluate<Reopened>(reopenedIn('#game-live .g-recall'));
+      check(
+        'pressed again, the card closes; the focus has not left the word',
+        closed.cards === 0 && closed.expanded.length === 0 && closed.focus,
+        JSON.stringify(closed),
+      );
+    }
     check(
       'a round sent nothing',
       requests.length === seenBefore,

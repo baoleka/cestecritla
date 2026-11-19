@@ -83,6 +83,24 @@ export const ROUND = 3;
  */
 export const LONG_WORD = 15;
 export const isLongWord = (word: string): boolean => word.normalize('NFC').length >= LONG_WORD;
+
+/**
+ * A word this short stands on one line at 320 px one step LARGER than the others: since the
+ * game opens the page (D19.1) the word is the first thing a visitor reads, and most words of
+ * the list are short (`data-short`, src/styles/game2.css). Counted in letters, like `LONG_WORD`.
+ */
+export const SHORT_WORD = 8;
+export const isShortWord = (word: string): boolean => word.normalize('NFC').length <= SHORT_WORD;
+
+/**
+ * How many characters of an official title are its number — « Partie 4 – », « Chapitre 2 : » —
+ * or 0 for a title that has none (a section). The page sets that much in bold and the rest as
+ * it is: the title stays whole, character for character; only its number is easier to find on a
+ * board of six. Never a rewriting: nothing is cut, moved or added.
+ */
+export function titleLead(title: string): number {
+  return /^(?:Partie \d+ [–-]|Chapitre \d+ :)(?= )/u.exec(title)?.[0].length ?? 0;
+}
 const ASKS: readonly Ask[] = ['part', 'chapter', 'section'];
 
 export interface Place {

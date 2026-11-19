@@ -37,6 +37,16 @@
   inline-size: max-content;
   max-inline-size: 100%;
   hyphens: manual;
+  /* On a line of its own, under her and under what is said of it (D19.1): the word is the
+     subject of the first screen, and stands at the same place whatever its length. */
+  clear: both;
+}
+/* Eight letters or fewer (SHORT_WORD, src/lib/game-engine.ts) — most words of the list: one
+   step larger, since such a word still stands on one line at 320 px. Nothing in the scale of
+   the kit is that large: the size is said from it, not typed. */
+.g-the-word[data-short] {
+  font-size: calc(var(--font-size-display) * 1.4);
+  line-height: 1.1;
 }
 /* What will make her change, said beside her before a first word is found (D17.5). */
 .g-goal {

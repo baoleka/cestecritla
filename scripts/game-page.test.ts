@@ -77,7 +77,7 @@ const printed = (text: string): string =>
 const flat = (html: string): string => html.replace(/&#39;/g, '’').replace(/\s+/g, ' ');
 /** The keys of the kit that are said of her, the mascot of the second generation. */
 const HERS =
-  /^(?:turtle\.(?:goal|passage|tint|figure)\.|turtle\.(?:skip|keep\.tint|keep\.not_kept\.tint)$|turtle\.sheet\.(?:link|path|replay|on_phone_tint)$|privacy\.(?:game\.field|never\.05)\.tint$|accuracy\.unverified\.06$)/;
+  /^(?:turtle\.(?:goal|passage|tint|figure|sign)\.|turtle\.(?:skip|keep\.tint|keep\.not_kept\.tint)$|turtle\.sheet\.(?:link|path|replay|on_phone_tint)$|privacy\.(?:game\.field|never\.05)\.tint$|accuracy\.unverified\.06$)/;
 const hers = Object.keys(kit).filter((key) => HERS.test(key));
 
 const manifestWords = (
@@ -401,7 +401,10 @@ for (const root of ['dist', 'dist-ask']) {
     const js = gzipSync(readFileSync(join(root, '_astro', scripts[0] ?? '')), {
       level: 9,
     }).byteLength;
-    assert.ok(js <= 10 * 1024, `the game’s script: ${String(js)} B gzip`);
+    // 14 KB since 18 November 2026 (D19.8, which amends D17.13's 10 KB): the card that holds a
+    // sentence, « Tu te souviens ? », the next words, her signs named. Still ONE file — a second
+    // one would be asked for during a round, and a round sends nothing.
+    assert.ok(js <= 14 * 1024, `the game’s script: ${String(js)} B gzip`);
     // The home page, her drawing and her two stylesheets in it: the ceiling of D17.13 (20 KB).
     const home = gzipSync(readFileSync(join(root, 'index.html')), { level: 9 }).byteLength;
     assert.ok(home <= 20 * 1024, `the home page: ${String(home)} B gzip`);

@@ -11,6 +11,7 @@ import {
   LONG_WORD,
   QUESTIONS,
   ROUND,
+  SHORT_WORD,
   advance,
   askAt,
   begin,
@@ -25,6 +26,7 @@ import {
   givenFor,
   hintFor,
   isLongWord,
+  isShortWord,
   judge,
   locate,
   otherParts,
@@ -33,6 +35,7 @@ import {
   resume,
   rightTile,
   tilesFor,
+  titleLead,
   turtleOf,
   type GameData,
   type GameEntry,
@@ -519,4 +522,37 @@ void test('a long word is set smaller rather than cut: fifteen letters and more'
   assert.equal(decomposed.length, 14);
   assert.equal(isLongWord(decomposed + 'ab'), true);
   assert.equal(isLongWord(decomposed + 'a'), false);
+});
+
+void test('a short word is set larger, and the number of a title is found without touching the title', () => {
+  assert.equal(SHORT_WORD, 8);
+  assert.equal(isShortWord('wagon'), true);
+  assert.equal(isShortWord('barrages'), true);
+  assert.equal(isShortWord('fontaines'), false);
+  // Letters, not bytes: an accent is one letter, composed or not.
+  assert.equal(isShortWord('légumes'), true);
+  assert.equal(isShortWord('le\u0301gumes'), true);
+  assert.equal(isShortWord('électricité'), false);
+  // No word is both: the two sizes never fight over one word.
+  for (const word of ['wagon', 'bibliothèques', 'microprocesseurs']) {
+    assert.ok(!(isShortWord(word) && isLongWord(word)), word);
+  }
+
+  // The number of a part or of a chapter, as the book prints it — and nothing of a section.
+  const cases: [string, string][] = [
+    ['Partie 4 – Le goût du futur : aux nouvelles frontières de l’humanité', 'Partie 4 –'],
+    ['Partie 12 - Un titre inventé', 'Partie 12 -'],
+    ['Chapitre 2 : Élever le niveau d’éducation et de savoirs', 'Chapitre 2 :'],
+    ['L’eau, enjeu central pour l’humanité', ''],
+    ['Partie de campagne', ''],
+    ['Chapitre premier', ''],
+    ['', ''],
+  ];
+  for (const [title, lead] of cases) {
+    assert.equal(title.slice(0, titleLead(title)), lead, title);
+    // Whatever is set in bold, the two halves are the title, to the character.
+    assert.equal(title.slice(0, titleLead(title)) + title.slice(titleLead(title)), title);
+  }
+  // Every tile of the invented book is whole too.
+  for (const part of BOOK.parts) assert.equal(titleLead(part.title), 0, part.title);
 });
