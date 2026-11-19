@@ -55,6 +55,14 @@ does not contain its text. Neither the MIT license above nor data/LICENSE grants
 it. What the repository does publish about that edition — structure, titles, anchors and
 SHA-256 fingerprints — is there so that a quotation can be checked without being republished.
 
+SENTENCES OF OUR OWN ABOUT THAT EDITION ARE NOT LICENSED FOR REUSE
+
+data/2026/game-gists.json holds forty-three sentences of ours, written and checked by an AI
+and read one by one by no person: each says, in our words, what one measure of the 2026
+edition provides (data/2026/NOTICE.md, "Les phrases du jeu"). They are not extracts of the
+book. They are published here so that the game can show them; neither the MIT license above
+nor data/LICENSE applies to that file, and no licence to reuse it is given.
+
 Fonts under design/fonts/ are under the SIL Open Font License 1.1 (design/fonts/OFL-*.txt).
 The logos, posters and illustrations of La France insoumise and of the campaign are NOT
 included in this repository and are not licensed here.

@@ -1,0 +1,242 @@
+{
+  "meta": {
+    "title": "Les phrases du jeu « Où est-ce écrit ? » — édition 2026",
+    "corpus_version": "27ee6e713fe25e7e",
+    "words_sha256": "d1748941a7cd5dcd64f46156e25b6383198e543a93d507258f5c55d4f8d7d304",
+    "deposit_sha256": "e072f3b06cf020ab2e866e831e1f8d606299853aef833f623b20204a0b7e86fe",
+    "written_by": "session",
+    "read_by_a_person": false,
+    "sha256": "994895a774da58f3db307ee76dc1f0cc39f53fb6ab96f415729db038254bb9ea",
+    "validated": {
+      "on": "2026-11-19",
+      "by": "editor",
+      "sha256": "994895a774da58f3db307ee76dc1f0cc39f53fb6ab96f415729db038254bb9ea"
+    },
+    "link_only": [
+      "w000",
+      "w005",
+      "w026",
+      "w037",
+      "w047"
+    ],
+    "note_fr": "Une phrase par mot du jeu : celle de la mesure où le mot est épinglé, telle que déposée dans la base privée (D16.49) et servie par « Demander ». Ce sont nos mots — écrits et vérifiés par une IA (« written_by » : « session », la session de travail d’une IA), lus par aucune personne une à une — jamais des extraits du livre. Le livre est « L’Avenir en commun », édition 2026, de La France insoumise, tous droits réservés : ce site n’est pas le sien, et chaque phrase peut être incomplète ou imprécise — la page officielle de la mesure fait foi. Seules ces phrases-là sont publiées en fichier (D19.2) ; les autres restent dans la base. Fichier écrit par « npm run gists -- --game », jamais à la main : une phrase changée ici ne serait plus celle du dépôt, et la build ne la montrerait pas. « validated » est l'accord de l'éditeur pour publier ce fichier tel qu'il est : une session ne l'écrit jamais sans un mot daté de lui (decisions.md). « link_only », quand il existe, nomme les mots dont la carte garde son lien seul, par choix : leur phrase reste dans la base."
+  },
+  "gists": [
+    {
+      "id": "p2c2-s01-k01",
+      "sha256": "9330bf10c11a0f6c5a5d2fb0679e1bac51f4d51e2e1c204b94cb8503cdec3e77",
+      "text": "Le programme prévoit des prix bloqués et encadrés pour les produits de première nécessité, comme l'énergie, le carburant et l'alimentation, et l'interdiction de la réduflation : moins de quantité pour le même prix."
+    },
+    {
+      "id": "p4c2-s02-k01",
+      "sha256": "2acb6de95b3cf5e4958fb114cfcdbbe76f258ee9e779a59e1c03b0398e31e2f3",
+      "text": "Le programme prévoit une éducation publique réellement gratuite : cantine, transport, manuels, fournitures et activités périscolaires compris."
+    },
+    {
+      "id": "p3c1-s01-m03",
+      "sha256": "58bb9258f2d1209cf25455168882f3e337469b8c9dfa321adb25c51f88e54aca",
+      "text": "Le programme prévoit la gratuité d'une première tranche de consommation pour l'eau, le gaz, la chaleur et l'électricité."
+    },
+    {
+      "id": "p5c3-s01-m06",
+      "sha256": "da7e613edf5822f042f00434f81801399919ed674e3c290b0b165f37d7c8f281",
+      "text": "Le programme prévoit de valoriser le métier de secrétaire de mairie, en favorisant les recrutements à temps complet et en créant des formations adaptées."
+    },
+    {
+      "id": "p3c2-s05-m06.s2",
+      "sha256": "183553aea372dd1cf638199668f2367dbb8e9cbc9de9031a0c1a6d3a4acd75f9",
+      "lead_sha256": "0e0346dfa14b5382c8140b71c22ac9023bb028a1152a2b02c49b6effa0fca716",
+      "text": "Le programme prévoit, pour l'école pour tous, assez de supports pédagogiques adaptés aux enfants en situation de handicap : enseignement bilingue en langue des signes française, braille, communication alternative et augmentée."
+    },
+    {
+      "id": "p4c1-s02-m06",
+      "sha256": "606dfc55e2bd153b8025547e99ad716c92c9d30bd44bce6c77eb14b9b4545e2c",
+      "text": "Le programme prévoit de garantir à tous l'accès à l'eau : fin des coupures illégales, et réseau de fontaines, de douches et de sanitaires publics gratuits."
+    },
+    {
+      "id": "p1c3-s01-m06",
+      "sha256": "4768b7c12ed29942c47635f44d5ea8a029edd2f34c84884141afee406493c9ed",
+      "text": "Le programme prévoit un diagnostic, à l'échelle nationale, des ouvrages d'art, c'est-à-dire barrages, digues, viaducs et ponts, puis leur consolidation."
+    },
+    {
+      "id": "p5c3-s03-k01",
+      "sha256": "530416a5ca4aa2a03a654214306e8bf9ecd2681de8df8fbdf0cd1df69ec26e5d",
+      "text": "Le programme prévoit de reconstruire un maillage dense de transports et de services publics, notamment en départements ruraux, quartiers populaires et Outre-mer : école, gare, hôpital, poste sous 15 à 30 minutes de tout logement."
+    },
+    {
+      "id": "p1c1-s01-m10",
+      "sha256": "d9e5700edd0b3a241423def6ea44f87cad80a1c41d28a0c73022e94b7334734f",
+      "text": "Le programme prévoit une logistique verte : sortir des flux tendus, développer les transports propres et organiser la logistique par territoire, avec plus de train et de fluvial et des flux du dernier kilomètre mutualisés."
+    },
+    {
+      "id": "p4c4-s03-m06",
+      "sha256": "647fae2e6e4e5a73cacde34192bc826f4c7ccbdcc492fb199ef6539b5e4af54b",
+      "text": "Le programme prévoit de garantir en permanence un accès à cinq légumes et fruits de saison, à prix bloqués."
+    },
+    {
+      "id": "p2c1-s01-k01",
+      "sha256": "cfac8c5779b60b63ec733757a3d563768dc9cf27e6ed843c5197e681548f255d",
+      "text": "Le programme prévoit d'annuler les privatisations, par exemple celles des autoroutes, des aéroports ou de la Française des jeux."
+    },
+    {
+      "id": "p4c3-s01-m04",
+      "sha256": "64974260bd6537fb5b8d9c6ef5aa39b2063c08d94b9a99e9aedccf30a5c7cb45",
+      "text": "Le programme prévoit des musées et bibliothèques tous gratuits, des institutions publiques aux tarifs abordables, et un encadrement des tarifs qu'il juge abusifs dans les cinémas et d'autres lieux privés, comme les salles de concert."
+    },
+    {
+      "id": "p5c1-s01-m06",
+      "sha256": "127553d26ae795b0b104304e019d12af8127d3ff052de928aef99cd5f4c15652",
+      "text": "Le programme prévoit que l'Assemblée nationale soit tenue de débattre des pétitions qui dépassent 500 000 signatures."
+    },
+    {
+      "id": "p1c2-s02-m05",
+      "sha256": "187cd7bbf134b6d37f2b8ae87211249c87b48614ecec92a0badc404cbdff2e66",
+      "text": "Le programme prévoit de planifier la fabrication de voitures électriques abordables et légères."
+    },
+    {
+      "id": "p4c5-s03-m03",
+      "sha256": "7208de48f00b6c4bc95cd8956579504c027fd1c7cf7f5ec0a18b6a55e91824d1",
+      "text": "Le programme prévoit un lycée de la mer par département maritime, Outre-mer compris."
+    },
+    {
+      "id": "p4c6-s01-m03",
+      "sha256": "fbb46e7acdda4ef6293d5e6ca19c68a618b54f95504164717101db61e408981d",
+      "text": "Le programme prévoit de nationaliser ArianeGroup et de créer un pôle public du satellite."
+    },
+    {
+      "id": "p4c7-s01-m04",
+      "sha256": "3b183ca91b4cee428f7fadd5560146c33452a9d2fa460f1f766c1ec663bb4188",
+      "text": "Le programme prévoit de garantir que des guichets physiques et des formulaires papier restent accessibles, même quand les services publics sont dématérialisés."
+    },
+    {
+      "id": "p6c3-s07-m08",
+      "sha256": "d11347cf7c6d0aa21df0a9a0f4054f0495fdb5a6401f5763b38ccb315625afc6",
+      "text": "Le programme prévoit une université francophone consacrée à l'espace, avec un cursus universitaire commun qui ouvre à tous les métiers du secteur aérospatial."
+    },
+    {
+      "id": "p1c3-s07-m04",
+      "sha256": "a57103b0199b7b10d336e7d1d2fba7bd2059e4d93d4422d59db3225ededcdd07",
+      "text": "Le programme prévoit le retour de la consigne pour les bocaux et les bouteilles en verre."
+    },
+    {
+      "id": "p4c3-s02-m07",
+      "sha256": "c63149134d2deaa7fe38ca9fc5888d976be447e0ed09302b2e64d9f6bdb86275",
+      "text": "Le programme prévoit un plan national d'urgence pour construire et rénover les équipements sportifs, notamment les équipements publics de proximité pour la pratique libre : piscines, pistes de skate, salles d'escalade ou de remise en forme."
+    },
+    {
+      "id": "p3c1-s08-m03",
+      "sha256": "bea06131395ff85633e0d13c3b805f04fffb2bae4eacdf376c215941f18e9a86",
+      "text": "Le programme prévoit le zéro reste à charge : suppression des franchises médicales, des participations forfaitaires et des frais annexes, comme le parking payant de l'hôpital."
+    },
+    {
+      "id": "p2c1-s04-m03",
+      "sha256": "eb2472469f1e07ae4e029797cc90a7a54bc4cf178ea5216aa0384c4f714c01c9",
+      "text": "Le programme prévoit de favoriser les SCIC et les Scop, des sociétés coopératives, ainsi que des services communs gouvernés ensemble par les usagers et citoyens, les salariés et des partenaires publics et privés."
+    },
+    {
+      "id": "p4c2-s04-m09",
+      "sha256": "f68f6a5fa1998fc25f24ceb0d9ec54bb178de5a4ce49a43042e82380d5e003ea",
+      "text": "Le programme prévoit des places d'internat accessibles et gratuites pour les étudiants et les apprentis mineurs, selon leurs ressources, et pour ceux qui vivent le plus loin de leur lieu d'apprentissage."
+    },
+    {
+      "id": "p1c3-s02-m04",
+      "sha256": "5bb23ae37df671ad01c773841522fa4e93db59c53cb29dd79b82dbd5b0fb5288",
+      "text": "Le programme prévoit, en Outre-mer et en cas de pénurie, un plan ORSEC-eau : distribuer des bouteilles d'eau à prix plafonné partout où défaille le service public d'eau potable et d'assainissement."
+    },
+    {
+      "id": "p6c3-s05-m05",
+      "sha256": "538ce8b01d10e4360b1c664e96d1353207deacbcc3f3e86bbd11fba9f273951b",
+      "text": "Le programme prévoit une chaîne de télévision méditerranéenne en plusieurs langues, diffusée sur Internet et sur les deux rives méditerranéennes, à l'image d'Arte, chaîne franco-allemande."
+    },
+    {
+      "id": "p3c2-s03-m02",
+      "sha256": "3dac811c3706b1ef2f68ce0149279a3afa27b5a09dfcf05b3e1bbb31376a2103",
+      "text": "Le programme prévoit que le repas à un euro des Crous devienne réel pour tous les étudiants, avec le financement d'un repas de qualité et au moins un restaurant universitaire obligatoire près de chaque campus."
+    },
+    {
+      "id": "p4c1-s03-m10",
+      "sha256": "6802788e369744497b4079c50c3e29cb89447a83dd2255cf093600b2f731daa1",
+      "text": "Le programme prévoit de recréer un réseau de scieries et d'entreprises qui transforment le bois, en s'appuyant sur le développement des circuits courts."
+    },
+    {
+      "id": "p1c3-s05-m03",
+      "sha256": "f914b8c624814fbefedf4b85724f61042b5d61852516d06009d02052e076ab6b",
+      "text": "Le programme prévoit un droit opposable à être protégé des fortes chaleurs : les bailleurs doivent équiper les logements exposés à la surchauffe, avec stores, volets, films solaires ou brasseurs d'air, pour qu'ils restent habitables."
+    },
+    {
+      "id": "p4c3-s03-m03",
+      "sha256": "ab4c59bb0e70c8f2329f79b77d5bf8a76628adf7020ab45e7c40797971c38dac",
+      "text": "Le programme prévoit de rendre obligatoire à l'école l'apprentissage de la natation, et de remédier au manque d'infrastructures."
+    },
+    {
+      "id": "p3c1-s06-m03",
+      "sha256": "2b5a664f078697b34aef6ea8a4d8fff5f2ea40aa85af318391b00c882e87cfe9",
+      "text": "Le programme prévoit des seuils thermiques, maximaux et minimaux, dans les locaux de travail intérieurs, et des pauses obligatoires quand la température est extrême."
+    },
+    {
+      "id": "p6c3-s04-m03",
+      "sha256": "37370ead1ef9655046225366f4b08eb496da848aa969bd5a2793152bd86c0c8f",
+      "text": "Le programme prévoit de soutenir le projet d'une monnaie mondiale commune, face au dollar."
+    },
+    {
+      "id": "p1c3-s04-m08",
+      "sha256": "77ec5b307fc04582d2a1432789ed2ef742282338bcc3dfc975e82804b81c79c4",
+      "text": "Le programme prévoit d'annuler la libéralisation du marché du gaz et de l'électricité : arrêt de la privatisation des barrages hydroélectriques, pôle public de l'énergie lié à EDF et à des coopératives locales, renationalisation d'Engie."
+    },
+    {
+      "id": "p4c5-s01-m09",
+      "sha256": "f30dcff9968cf85c97c13941551891d7679bcd2b1beae71cd0387e867edd8cbe",
+      "text": "Le programme prévoit un plan contre les marées de sargasses aux Antilles, et de contribuer à un plan d'action international qui s'attaque à la source du problème."
+    },
+    {
+      "id": "p3c1-s07-m02",
+      "sha256": "b7a4f51790034f78345ab66b489cd520304854668c0b1093cf96c4f017128148",
+      "text": "Le programme prévoit que les périodes de RSA comptent pour valider des trimestres de retraite."
+    },
+    {
+      "id": "p4c2-s06-m10",
+      "sha256": "0d006b15c79b51a8eaec409dfaa89951afc24ae33f33b907c9f237e0ecb37b94",
+      "text": "Le programme prévoit un grand plan immobilier pour les universités : construire, rénover et rendre accessibles des laboratoires, des amphithéâtres et des lieux de vie sociale, étudiante et citoyenne."
+    },
+    {
+      "id": "p1c1-s02-m08",
+      "sha256": "e41597641056e36991d7eb5882b9402656073d8b418424e90e947888687ebd1a",
+      "text": "Le programme prévoit de généraliser et de simplifier les prélèvements et les analyses de sol dans les jardins créoles des particuliers, en Guadeloupe et en Martinique notamment, pour encourager les pratiques agroécologiques existantes."
+    },
+    {
+      "id": "p4c4-s02-m02",
+      "sha256": "bef04d27dd8d536bf342f7198e6802180d4153d9eb12e4dd5e75f7128061813a",
+      "text": "Le programme prévoit de réquisitionner, en cas de pandémie, les entreprises indispensables pour produire le matériel sanitaire : tests, masques, purificateurs."
+    },
+    {
+      "id": "p3c1-s09-m03",
+      "sha256": "18d9d5f9bde367774f96b093def1f7d6747c7acb3bec1bc84a0a863565c87b7d",
+      "text": "Le programme prévoit que les périodes d'apprentissage et de stages comptent dans la Sécurité sociale professionnelle : congés, ancienneté, formation, retraite."
+    },
+    {
+      "id": "p4c5-s02-k01",
+      "sha256": "46e69a79a68d3a232867e2400ed1583470a9f145417168a4793d50da56f89490",
+      "text": "Le programme prévoit, dans son plan de bifurcation énergétique, de déployer en mer l'éolien, flottant ou posé, pour au moins 45 gigawatts installés en 2050, et les énergies marines renouvelables, dont l'hydrolien et la houle."
+    },
+    {
+      "id": "p1c3-s06-m06",
+      "sha256": "65d21675187854b4212e586c84294fdd1e8168023d11dbe00c6d515913e607a5",
+      "text": "Le programme prévoit de nouvelles normes d'élevage pour de meilleures conditions : pâturage, accès à l'air libre, surface minimale, densité."
+    },
+    {
+      "id": "p4c6-s02-m01",
+      "sha256": "7bfefd75914dd2f019a76e218d6b0859c7310fdf15b5b385c2f115ce71c7ffef",
+      "text": "Le programme prévoit d'intensifier la recherche en météorologie de l'espace, c'est-à-dire la prévision des tempêtes solaires."
+    },
+    {
+      "id": "p1c3-s08-m09",
+      "sha256": "d1b3c40e436c560c803c417a95698ef2e00b8ddeb51ad9c3d098fa148353fd32",
+      "text": "Le programme prévoit de protéger les produits du terroir face à la concurrence internationale, en garantissant durablement les moyens de l'INAO, l'institut qui délivre l'AOP et l'IGP."
+    },
+    {
+      "id": "p4c7-s02-m08",
+      "sha256": "20a4ade1ec727bffe5dd831b3131141a9e226e20f9a50e150dff83059ab08e91",
+      "text": "Le programme prévoit de structurer une filière nationale et industrielle des technologies numériques, pour tous les composants matériels critiques (stockage, connectivité, semi-conducteurs), avec notamment une fonderie de microprocesseurs créée sur le territoire français."
+    }
+  ]
+}

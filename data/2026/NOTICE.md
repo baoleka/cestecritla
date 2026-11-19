@@ -22,7 +22,7 @@ ses pages et admettent de courts extraits, avec l'auteur et un lien vers la page
 | `verification.json` | Ce que trois navigateurs ont trouvé en relisant les pages officielles et en suivant chaque lien | `scripts/verify-2026.ts --write` |
 | `search-eval.json` | La qualité mesurée de la recherche sur le jeu de questions | `scripts/eval-2026.ts --write` |
 | `game-words.json`, `word-links.json` | Les mots du jeu « Où est-ce écrit ? », et où trois navigateurs ont vu chacun surligné (voir « Les mots du jeu ») | la liste à la main, attestée par `scripts/words-2026.ts --attest` ; `scripts/verify-2026.ts --words --write` |
-| `game-gists.json` | Les phrases du jeu : une phrase **de nous** par mesure où un mot du jeu est épinglé (voir « Les phrases du jeu »). **Absent de ce dépôt tant que l'éditeur n'a pas daté son accord** | `npm run gists -- --game` |
+| `game-gists.json` | Les phrases du jeu : une phrase **de nous** par mesure où un mot du jeu est épinglé (voir « Les phrases du jeu »). **Dans ce dépôt depuis le 19 novembre 2026, sur l'accord daté de l'éditeur : quarante-trois phrases ; cinq cartes gardent leur lien seul** | `npm run gists -- --game --link-only …` |
 
 ## Vérifier une citation
 
@@ -118,9 +118,12 @@ Depuis le 18 novembre 2026 (D19.2), une carte du jeu peut montrer, sous le lieu 
   pas dans ce dépôt. Ni la parole du programme : chacune commence par « Le programme
   prévoit », et c'est pourtant notre résumé — une phrase pour une mesure, qui peut être
   incomplète ou imprécise. Chacune mène à la page officielle, qui seule fait foi.
-- **Combien.** Au plus une par mot du jeu — quarante-huit au plus, sur 1 069 mesures. Toutes
-  les autres phrases restent dans une base privée et ne sont publiées dans aucun fichier.
-  Une carte peut garder son lien seul (`meta.link_only`).
+- **Combien.** Au plus une par mot du jeu — quarante-huit au plus, sur 1 069 mesures ;
+  **quarante-trois aujourd'hui**. Toutes les autres phrases restent dans une base privée et
+  ne sont publiées dans aucun fichier — une porte locale le tient (`scripts/leak.test.ts`).
+  Une carte peut garder son lien seul (`meta.link_only`) : l'éditeur en a décidé ainsi pour
+  cinq, le 19 novembre 2026 — une phrase lue à contresens, et quatre fidèles à leur mesure
+  mais sur des sujets lourds à côté d'une mascotte.
 - **Comment le fichier est fait.** `npm run gists -- --game` l'écrit, en local, à partir du
   dépôt de phrases que `ask.json` nomme, et le scelle (`meta.sha256` : les phrases **et** ce
   que le fichier dit d'elles — qui les a écrites, le livre, la liste, le dépôt, les cartes
