@@ -218,16 +218,54 @@ void test('media queries use em or rem, never px (A2)', () => {
   assert.deepEqual(offenders, [], `px breakpoints:\n${offenders.join('\n')}`);
 });
 
-void test('what the search downloads stays small enough for a phone on a slow network', () => {
+void test('what a visit downloads stays small enough for a phone on a slow network — gesture by gesture (D20.12)', () => {
   if (skip) return;
   const data = files.filter((f) => /dist\/data\/.*\.json$/.test(f));
   if (data.length === 0) return; // holding build: no search
-  const total = data.reduce((n, f) => n + gzipSync(readFileSync(f), { level: 9 }).byteLength, 0);
-  // Measured 12/11/2026: index 64 KB + titles and locators 33 KB, gzip. Fetched once, on the
-  // first search, then cached for a year under a versioned name.
+  const gz = (file: string): number => gzipSync(readFileSync(file), { level: 9 }).byteLength;
+  const nameOf = (file: string): string => file.slice(file.lastIndexOf('/') + 1);
+  const sum = (list: readonly string[]): number => list.reduce((n, f) => n + gz(f), 0);
+  // What a visit fetches before it opens any explanation: the index and the titles (the first
+  // search), the game, the texts of « En clair » and how the explained words are found (the
+  // first question). Measured 12/11/2026: index 64 KB + titles and locators 33 KB, gzip. Each
+  // is fetched once, then cached for a year under a versioned name. The ceiling has not moved
+  // since; on 19/11/2026 the texts of the explained words left it for files of their own,
+  // fetched the first time one is opened, each with a ceiling of its own (PLAN-MOTS, D20.12).
+  const firstUse = data.filter((f) =>
+    /^(?:(?:index|meta|jeu|clair)-[0-9a-f]{16}|mots-[0-9a-f]{16})\.json$/.test(nameOf(f)),
+  );
+  const meanings = data.filter((f) => /^mots-[0-9a-f]{16}-sens\.json$/.test(nameOf(f)));
+  const examples = data.filter((f) => /^mots-[0-9a-f]{16}-exemples\.json$/.test(nameOf(f)));
+  const pages = data.filter((f) => /^mots-[0-9a-f]{16}-[scr]-[a-z0-9-]+\.json$/.test(nameOf(f)));
+  const known = new Set([...firstUse, ...meanings, ...examples, ...pages]);
+  assert.deepEqual(
+    data.filter((f) => !known.has(f)),
+    [],
+    'a file of data that no budget knows',
+  );
   const budget = 130 * 1024;
-  assert.ok(total <= budget, `search data ${String(total)} B gzip > ${String(budget)} B`);
-  console.log(`  search data: ${String(total)} B gzip of ${String(budget)} B`);
+  const total = sum(firstUse);
+  assert.ok(
+    total <= budget,
+    `data before any explanation ${String(total)} B gzip > ${String(budget)} B`,
+  );
+  console.log(`  data before any explanation: ${String(total)} B gzip of ${String(budget)} B`);
+  for (const [list, ceiling, what] of [
+    [meanings, 52 * 1024, 'what the words mean'],
+    [examples, 44 * 1024, 'the examples of the words'],
+    [pages, 6 * 1024, 'the words of a page'],
+  ] as const) {
+    for (const file of list) {
+      const weight = gz(file);
+      assert.ok(
+        weight <= ceiling,
+        `${what}, ${nameOf(file)}: ${String(weight)} B gzip > ${String(ceiling)} B`,
+      );
+    }
+    if (list.length > 0 && list !== pages) {
+      console.log(`  ${what}: ${String(sum(list))} B gzip of ${String(ceiling)} B`);
+    }
+  }
 });
 
 void test('initial JS stays under the P2 budget of 100 KB gzip', () => {
@@ -353,10 +391,10 @@ void test('the explained words are a module of their own, asked for by the sheet
   const [script = ''] = found;
   const gz = gzipSync(readFileSync(script), { level: 9 }).byteLength;
   // PLAN-MOTS, lot 1 (19/11/2026): how the terms are found and drawn left the sheet's script,
-  // which asks for this module as soon as it runs. Measured then: 1 536 B. Its ceiling is set
-  // in lot 3 (D20.12: its measure plus a fifth), once it also fetches the texts on demand;
-  // until then, a provisional one.
-  const budget = 2 * 1024;
+  // which asks for this module as soon as it runs. Lot 3 gave it the fetching of the files of
+  // the words — how they are found, then their texts on demand — and its ceiling (D20.12): its
+  // measure then, 2 234 B, plus a fifth.
+  const budget = 2_681;
   assert.ok(gz <= budget, `the explained words: ${String(gz)} B gzip > ${String(budget)} B`);
   console.log(`  explained words: ${String(gz)} B gzip of ${String(budget)} B`);
   const name = script.slice(script.lastIndexOf('/') + 1);

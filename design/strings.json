@@ -1,9 +1,9 @@
 {
   "$meta": {
     "name": "C'est écrit là — kit de chaînes d'interface",
-    "version": "0.14.0",
+    "version": "0.15.0",
     "date": "2026-11-19",
-    "supersedes": "0.13.0",
+    "supersedes": "0.14.0",
     "decisions": [
       "D0.1",
       "D0.22",
@@ -44,6 +44,7 @@
       "D17.35",
       "D17.5",
       "D2.4",
+      "D20.10",
       "D3.10",
       "D3.11",
       "D3.12",
@@ -147,7 +148,8 @@
       "v0.14.0, suite (19/11/2026, lot 8, après la relecture hostile et la revue de sécurité) : cinq corrections de propositions de la session, avant d'avoir été montrées à l'éditeur. about.gists_game dit « une mesure où le mot est écrit » (un mot peut l'être dans plusieurs). accuracy.game.sentences dit qui a écrit ces phrases (une IA) et ce que l'empreinte prouve — que la mesure n'a pas changé depuis, pas que la phrase est juste ; elle nomme une IA, et n'est rendue que là où le jeu montre des phrases. accuracy.game.link_only est retirée : un nombre de cartes sans phrase, sur la page des faits, disait ce qui manque sans dire pourquoi. legal.license.game_file ne dit plus « avec le code » (lu comme « sous la licence du code ») et dit qu'aucune licence de réutilisation n'est donnée. home.description commence par « Site non officiel. » : c'est ce que montrent un moteur de recherche et l'aperçu d'un lien, où l'en-tête du site n'est pas.",
       "v0.14.0, suite (19/11/2026, D19.16 : « Le premier écran doit donner bien plus envie que le premier écran actuellement en ligne. C'est non négociable. ») : l'entrée du jeu est reprise. Mesurée en face-à-face avec l'accueil en ligne (treize lecteurs simulés, les deux images côte à côte), l'entrée à un seul mot perdait 6 à 7 ; trois mots à toucher gagnent 11 à 2. game.start.hook devient « Trois mots du programme. Que prévoit-il ? » ; game.start.source, « Touche un mot pour voir sa mesure. Chaque carte mène à la page officielle. » ; game.start.cta (« Voir la mesure ») n'est plus un bouton : elle complète, pour un lecteur d'écran, le nom de chacun des trois mots ; game.start.find (« Tu cherches autre chose ? ») s'ajoute, au-dessus de « Chercher dans le programme » et des six thèmes. Proposées par la session, à valider par l'éditeur (13-tests-humains.md §9.8).",
       "v0.14.0, VALIDÉE PAR L'ÉDITEUR (19/11/2026, D19.19) : à la question « Les dix-huit textes nouveaux du chantier : tu les valides ? », posée avec docs/discovery/TEXTES-JEU-DABORD.md, il a répondu « Je valide les dix-huit ». game.gist.badge reste « Phrase écrite et vérifiée par une IA ». Les dix-huit : game.start.hook, game.start.source, game.start.cta, game.start.find ; game.gist.badge, game.depth.chapter, game.recall.title, game.recall.lead, game.round.ahead, turtle.keep.open, turtle.found.lead ; about.gists_game, about.gists_game_method, accuracy.game.sentences, accuracy.review.sentences_game, legal.license.sentences_game, legal.license.game_file ; home.description. Rien n'est servi : la production attend son « oui » daté.",
-      "v0.14.0, EN PRODUCTION (19/11/2026, D19.24) : sur le « oui » daté de l'éditeur, cestecritla.fr et www servent la refonte « le jeu d'abord » depuis 9 h 54 ; les dix-huit textes validés le même jour (D19.19) y sont rendus."
+      "v0.14.0, EN PRODUCTION (19/11/2026, D19.24) : sur le « oui » daté de l'éditeur, cestecritla.fr et www servent la refonte « le jeu d'abord » depuis 9 h 54 ; les dix-huit textes validés le même jour (D19.19) y sont rendus.",
+      "v0.15.0 (19/11/2026, chantier « Aucun mot ne bloque », D20.10, PLAN-MOTS lot 3, sous le mandat D20.3) : words.example (« Exemple ») — le mot qui précède l'exemple d'un mot expliqué, quand il en a un. Ce mot est de nous ; l'exemple, écrit par une IA, porte la marque data-generated-by comme l'explication, sous l'étiquette du bloc (chat.terms.badge, inchangée). Les explications quittent le fichier de « En clair » pour trois fichiers à elles — comment on trouve les mots, ce qu'ils veulent dire, leurs exemples ; aucune autre chaîne ne change."
     ],
     "status_fr": "v0.8 : les familles chat.*, game.* et turtle.* existent dans le kit avant leurs écrans ; elles sont relues à la construction de chacun (lots H, I, L, M), puis par l'éditeur sur l'aperçu. Les chaînes chat.* ne sont rendues que si data/2026/ask.json dit « chat » (D16.4, D16.51) ; easter.strawberry_milk, confirmée par l'éditeur le 13 novembre, a été retirée par lui le 14 après la session des personas (D16.37)."
   },
@@ -789,5 +791,6 @@
   "verify.lead": "Colle une phrase. L'app dit si elle est dans l'édition 2025, et où.",
   "verify.placeholder": "Colle ici la phrase à vérifier",
   "verify.submit": "Vérifier",
-  "verify.title": "Vérifier une citation"
+  "verify.title": "Vérifier une citation",
+  "words.example": "Exemple"
 }

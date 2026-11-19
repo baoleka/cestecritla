@@ -17,12 +17,14 @@
  * small buttons, nor a word about a live AI is in the page. The sheet shows the sentences
  * written ahead, under a label that says who wrote and checked them — an AI (D16.59) — and,
  * under them, the acronyms and technical terms they use, each with a short explanation written
- * ahead too, under its own label (src/lib/terms.ts).
+ * ahead too, under its own label (src/lib/terms.ts) — from three files of their own, whose
+ * addresses the sheet is given here (src/lib/words-data.ts).
  *
  * Rendered only in a build whose field asks: in mode "off" this file is not even imported.
  */
 import '../styles/chat.css';
 import { chatPlain, recognisable } from '../lib/chat-data.ts';
+import { builtWords, wordsNames } from '../lib/words-data.ts';
 import { manifest } from '../lib/edition.ts';
 import { safeJson, t } from '../lib/strings.ts';
 
@@ -35,9 +37,15 @@ const { model } = Astro.props;
 const ai = (key: Parameters<typeof t>[0]): string =>
   model === null ? '' : t(key, { model });
 
+const words = wordsNames(builtWords().fingerprint);
 const config = {
   corpus: manifest().meta.corpus_version,
   plain: `/data/clair-${chatPlain().fingerprint}.json`,
+  words: {
+    finder: `/data/${words.finder}.json`,
+    meanings: `/data/${words.meanings}.json`,
+    examples: `/data/${words.examples}.json`,
+  },
   ...recognisable(),
   strings: {
     question: t('chat.question_label'),
@@ -77,6 +85,7 @@ const config = {
     cleared: t('chat.cleared'),
     simpler: t('chat.follow.simpler'),
     example: t('chat.follow.example'),
+    exampleLabel: t('words.example'),
   },
 };
 ---

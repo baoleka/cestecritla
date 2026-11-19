@@ -24,16 +24,18 @@
  *   5. every other state is a normal one: the route closed, the Worker broken, another state
  *      of the book, electoral silence — none says a word of failure;
  *   6. a sentence of the base is text: markup in it creates no element;
- *   7. the explained words (D16.62): the acronyms and technical terms of the question and of
- *      the sentences on the screen, found on the phone in a file fetched whole — nothing is
- *      sent to find a word; each opens on a short text under a label that says an AI wrote and
- *      checked it; what the question names is open; a freeze or a request for a vote shows
- *      none; every text an AI wrote carries a mark a machine can read;
+ *   7. the explained words (D16.62, D20.10): the acronyms and technical terms of the question
+ *      and of the sentences on the screen, found on the phone by their wordings — one file,
+ *      fetched with the sheet; nothing is sent to find a word. Their texts come the first time
+ *      one is opened: two more files, the same whatever the word (D20.13), and nothing more
+ *      after. Each opens on a short text under a label that says an AI wrote and checked it;
+ *      what the question names is open; a freeze or a request for a vote shows none; every
+ *      text an AI wrote carries a mark a machine can read;
  *   8. nothing is written on the phone, nothing in the address; the thread empties;
  *   9. the policy of the page names nobody but us; the sheet passes the accessibility audit
  *      at 390 and 320 px — an explained word open — and does not overflow.
  */
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import type { Page, Route } from 'playwright';
 import type { Manifest } from './aec26-types.js';
@@ -43,6 +45,23 @@ import { QUIET_QUESTION, plainSentence, sheetCase, wordySentence } from './terms
 import type { Outcome } from './e2e-kit.js';
 
 const ROOT = 'dist-gists';
+
+/**
+ * What the build says its words mean, and their examples (src/lib/words-data.ts): the texts the
+ * sheet must show, read in the very files it fetches.
+ */
+function builtTexts(): { meanings: Record<string, string>; examples: Record<string, string> } {
+  const dir = join(ROOT, 'data');
+  const texts = (suffix: string): Record<string, string> => {
+    const name = readdirSync(dir).find((file) => file.startsWith('mots-') && file.endsWith(suffix));
+    if (name === undefined) throw new Error(`${ROOT}: no file of words ending in ${suffix}`);
+    const file = JSON.parse(readFileSync(join(dir, name), 'utf8')) as {
+      texts: Record<string, string>;
+    };
+    return file.texts;
+  };
+  return { meanings: texts('-sens.json'), examples: texts('-exemples.json') };
+}
 const OFFICIAL = 'https://melenchon2027.fr';
 /** Words a page must never show when something did not come: every state is a normal one. */
 const FAILURE = /erreur|panne|indisponible|désolé|malheureusement|réessa|error|undefined|\bnull\b/i;
@@ -388,11 +407,16 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         `(() => { const turn = document.querySelector(${JSON.stringify(LAST)}); const a = turn?.querySelector(${JSON.stringify(first)}); const b = turn?.querySelector(${JSON.stringify(second)}); return !!a && !!b && (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0; })()`,
       );
     const plainFiles = (): string[] => requested.filter((url) => /\/data\/clair-/.test(url));
+    const wordFiles = (): string[] => requested.filter((url) => /\/data\/mots-/.test(url));
     check(
-      'the file of explanations is fetched whole, once, by its name alone',
-      plainFiles().length === 1 && /\/data\/clair-[0-9a-f]{16}\.json$/.test(plainFiles()[0] ?? ''),
-      plainFiles().join(' '),
+      'the texts of « En clair » and the wordings of the words are each fetched once, by their names alone',
+      plainFiles().length === 1 &&
+        /\/data\/clair-[0-9a-f]{16}\.json$/.test(plainFiles()[0] ?? '') &&
+        wordFiles().length === 1 &&
+        /\/data\/mots-[0-9a-f]{16}\.json$/.test(wordFiles()[0] ?? ''),
+      [...plainFiles(), ...wordFiles()].join(' '),
     );
+    const built = builtTexts();
     check(
       'a turn whose question and sentences use no explained word shows no block of words',
       (await count('#chat-thread .c-terms')) === 0,
@@ -424,26 +448,55 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       page,
       `document.querySelector(${JSON.stringify(`${TERMS} details`)})?.open === true`,
     );
+    // Its text comes with the first word opened: in place, under the line just pressed.
+    await until(
+      page,
+      `document.querySelector(${JSON.stringify(`${TERMS} details`)})?.dataset.filled !== undefined`,
+    );
     const explanation = await text(`${TERMS} details:first-of-type p`);
+    const moratoire = built.meanings['moratoire'] ?? '';
     check(
       'pressing a word opens its explanation: a short text, general, with a mark a machine can read',
-      /^Un moratoire suspend/.test(explanation) &&
+      moratoire !== '' &&
+        explanation === moratoire &&
         explanation.length <= 200 &&
         !/programme/i.test(explanation) &&
-        (await count(`${TERMS} details:first-of-type p[data-generated-by="ai"]`)) === 1,
+        (await count(`${TERMS} details:first-of-type p[data-generated-by="ai"]`)) ===
+          (built.examples['moratoire'] === undefined ? 1 : 2),
       explanation,
     );
     await page.waitForTimeout(300);
+    const textFiles = requested.slice(asked);
     check(
-      'opening a word sends nothing to anyone',
-      requested.length === asked && posted.chat.length === 0,
-      requested.slice(asked).join(' '),
+      'the first word opened asks for the texts of the words — two files, the same whatever the word — and for nothing else',
+      textFiles.length === 2 &&
+        textFiles.every((url) => /\/data\/mots-[0-9a-f]{16}-(?:sens|exemples)\.json$/.test(url)) &&
+        new Set(textFiles).size === 2 &&
+        posted.chat.length === 0,
+      textFiles.join(' '),
     );
     check(
       'finding the words sent nothing but the measures: one request for the whole turn',
-      requested.slice(sentBefore).length === 1 && /\/api\/gists$/.test(requested[sentBefore] ?? ''),
-      requested.slice(sentBefore).join(' '),
+      requested.slice(sentBefore, asked).length === 1 &&
+        /\/api\/gists$/.test(requested[sentBefore] ?? ''),
+      requested.slice(sentBefore, asked).join(' '),
     );
+    // A second word: its text is already here, and nothing is asked of anyone.
+    const opened = requested.length;
+    const SECOND = `${TERMS} details:nth-of-type(2)`;
+    await page.click(`${SECOND} summary`);
+    await until(
+      page,
+      `(() => { const item = document.querySelector(${JSON.stringify(SECOND)}); return !!item && item.open && item.dataset.filled !== undefined; })()`,
+    );
+    await page.waitForTimeout(300);
+    check(
+      'a second word opened asks for nothing: its text was already on the phone',
+      requested.length === opened && posted.chat.length === 0,
+      requested.slice(opened).join(' '),
+    );
+    await page.click(`${SECOND} summary`);
+    await until(page, `document.querySelector(${JSON.stringify(SECOND)})?.open === false`);
     check(
       'every sentence written ahead carries the mark a machine can read — and no link does',
       (await count(`${LAST} .c-gists .c-row > p[data-generated-by="ai"]`)) ===
@@ -882,6 +935,10 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         await until(view, "document.querySelector('#chat-thread .c-terms details') !== null");
         await view.click('#chat-thread .c-terms details summary');
         await until(view, "document.querySelector('#chat-thread .c-terms details').open");
+        await until(
+          view,
+          "document.querySelector('#chat-thread .c-terms details[data-filled]') !== null",
+        );
         await view.addScriptTag({ content: axe });
         // The sheet rises in 180 ms, from transparent: it is judged as it stands (see e2e-ask).
         await view.evaluate(

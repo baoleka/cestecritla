@@ -168,6 +168,10 @@
 .c-block .c-term p {
   margin-block: 0 var(--space-2);
 }
+/* An example, under what a word means (D20.2): the word « Exemple » is ours, and set apart. */
+.c-example-label {
+  font-weight: var(--font-weight-bold);
+}
 .c-ai-mark {
   font-weight: var(--font-weight-bold);
 }

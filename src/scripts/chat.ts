@@ -11,11 +11,12 @@
  *   4. the identifiers of those measures go to /api/gists — nothing typed — and the sentences
  *      written ahead come back, one per measure that has one;
  *   5. the acronyms and technical terms that the question or these sentences use are found
- *      on the phone, in a file fetched whole with the sheet, and shown with a short explanation
- *      written ahead — general knowledge, labelled as written by an AI; nothing is sent. A
+ *      on the phone, by their wordings — a file fetched at the first question —, and shown with
+ *      a short explanation written ahead — general knowledge, labelled as written by an AI. A
  *      question that asks what a word means gets it first, open; the others come under the
- *      measures, closed. Finding and drawing them is a module of its own (src/scripts/words.ts),
- *      asked for as soon as this script runs;
+ *      measures, closed, and their texts come the first time one is opened: two more files,
+ *      the same for everyone, whichever the word (D20.13). Finding and drawing them is a module
+ *      of its own (src/scripts/words.ts), asked for as soon as this script runs;
  *   6. only then, only if the Worker says a model may be asked, only once the visitor pressed
  *      « Expliquer avec l'IA »: /api/chat is sent the measures whose sentence is on the screen
  *      and the words of those sentences that the question uses — NEVER THE QUESTION (D16.53) —
@@ -49,7 +50,7 @@ import {
   type Turn,
 } from '../lib/chat-view.ts';
 import { recognise } from '../lib/notions.ts';
-import type { Explained } from '../lib/terms.ts';
+import type { Explained, TermWording } from '../lib/terms.ts';
 import { formatReopenTimeFr } from '../lib/silence.ts';
 import { enhanceOfficialLinks } from './deep-links.ts';
 import {
@@ -72,6 +73,8 @@ interface Config {
   /** Our fifteen answers: what each is recognised by, and the measures it rests on. */
   objections: { slug: string; objection: string; supports: string[] }[];
   cards: { id: string; term: string }[];
+  /** Where the explained words are: how they are found, what they mean, their examples. */
+  words: { finder: string; meanings: string; examples: string };
   strings: {
     question: string;
     searching: string;
@@ -106,6 +109,7 @@ interface Config {
     cleared: string;
     simpler: string;
     example: string;
+    exampleLabel: string;
   };
 }
 
@@ -164,6 +168,16 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     (loaded) => (explainer = loaded),
     () => null,
   );
+  /**
+   * How the explained words are found — their wordings, nothing of what they say —, fetched at
+   * the first question with the texts of « En clair » (src/lib/words-data.ts). What they mean
+   * comes later, the first time one is needed.
+   */
+  let wordings: TermWording[] | null = null;
+  const finderReady = async (): Promise<void> => {
+    const kit = await explainerReady;
+    if (kit !== null && wordings === null) wordings = await kit.finder(config.words.finder);
+  };
   /**
    * The explained words a visitor opened or closed, by turn and by term: a turn is drawn again
    * when the thread moves on, and it must come back as it was left. In memory, like the rest.
@@ -252,7 +266,7 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
   const words = (
     kit: typeof Explainer,
     title: string,
-    list: readonly Explained[],
+    list: readonly Explained<TermWording>[],
     index: number,
     className: string,
     open: boolean,
@@ -260,11 +274,19 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     const part = block(title, s.termsBadge, className);
     for (const { entry } of list) {
       const key = `${String(index)}:${entry.id}`;
-      part.append(
-        kit.wordItem(entry.term, entry.plain, toggled.get(key) ?? open, (isOpen) => {
-          toggled.set(key, isOpen);
-        }),
-      );
+      const opened = (isOpen: boolean): void => {
+        toggled.set(key, isOpen);
+        // The first word opened asks for the texts of all of them — two files, the same for
+        // everyone (D20.13) — and they go under every line drawn without them, in place.
+        if (isOpen) {
+          void kit.loadTexts(config.words).then(() => {
+            kit.fillAll(thread, s.exampleLabel);
+          });
+        }
+      };
+      const text = kit.textOf(entry.id);
+      const startsOpen = toggled.get(key) ?? open;
+      part.append(kit.wordItem(entry.id, entry.term, text, startsOpen, opened, s.exampleLabel));
     }
     return part;
   };
@@ -338,12 +360,14 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     // sentences on the screen. Found here, on the phone — nothing is sent to find a word.
     const kit = explainer;
     const explained =
-      view.wording === null || plain === null || kit === null
+      view.wording === null || kit === null || wordings === null
         ? []
-        : kit.explain(view.wording.question, view.wording.sentences ?? [], plain.terms);
+        : kit.explain(view.wording.question, view.wording.sentences ?? [], wordings);
     // A question that asks what a word means gets that word first, open: it is what was asked.
-    // It depends on the question alone, so it is there from the first paint and moves nothing.
-    const named = explained.filter((e) => e.top);
+    // It depends on the question alone, and comes with its text — `ask` fetches it first: an
+    // open line that waited for its text would grow under its reader.
+    const named =
+      kit === null ? [] : explained.filter((e) => e.top && kit.textOf(e.entry.id) !== null);
     if (kit !== null && named.length > 0) {
       node.append(words(kit, s.askedTitle, named, index, 'c-terms c-asked', true));
     }
@@ -527,7 +551,20 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     for (const gone of before.slice(after.length)) gone.remove();
   };
   /** Draws one turn again in its place: the others keep their scroll and their focus. */
+  /**
+   * What the reader opened or closed in a turn, read where it is — on the page. The event that
+   * says so comes a little later, and a question asked at once must not draw a word back as it
+   * was before (found on 19/11/2026: a word closed, a question sent in the same instant, the word
+   * open again).
+   */
+  const remember = (index: number): void => {
+    for (const item of nodes[index]?.querySelectorAll<HTMLDetailsElement>('details.c-term') ?? []) {
+      if (item.dataset.term !== undefined)
+        toggled.set(`${String(index)}:${item.dataset.term}`, item.open);
+    }
+  };
   const update = (index: number): void => {
+    remember(index);
     const node = draw(index);
     const old = nodes[index];
     if (old === undefined) {
@@ -539,6 +576,9 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     old.style.minBlockSize = node.style.minBlockSize;
   };
   const redraw = (): void => {
+    turns.forEach((_, index) => {
+      remember(index);
+    });
     nodes = [];
     thread.replaceChildren();
     turns.forEach((_, index) => {
@@ -656,7 +696,17 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     // The new question goes to the top of what scrolls: its answer builds under it. Only the
     // thread is moved — `scrollIntoView` would move the sheet and the page behind it too.
     scroller.scrollTop = nodes[index]?.offsetTop ?? 0;
-    const [loaded] = await Promise.all([engine(), texts(), explainerReady]);
+    const [loaded] = await Promise.all([engine(), texts(), finderReady()]);
+    // A question that asks what a word means shows that word open, above the measures: its
+    // text is fetched first — the two files of texts, the same for everyone (D20.13).
+    const kit = explainer;
+    if (
+      kit !== null &&
+      wordings !== null &&
+      kit.explain(question, [], wordings).some((e) => e.top)
+    ) {
+      await kit.loadTexts(config.words);
+    }
     const turn = turns[index];
     if (asked !== epoch || turn === undefined) return;
     // A recognised objection shows the measures its written answer rests on; any other

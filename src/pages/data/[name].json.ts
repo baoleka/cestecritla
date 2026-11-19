@@ -13,6 +13,10 @@
  *                                texts a person re-read — only in a build whose field asks
  *                                (src/lib/chat-data.ts). Fetched with the sheet, never with
  *                                the page.
+ *   /data/mots-<fingerprint>.json, -sens.json, -exemples.json
+ *                                the explained words: how they are found, what they mean,
+ *                                their examples (src/lib/words-data.ts) — only in a build
+ *                                whose field asks (D20.11). No name depends on a word (D20.13).
  *
  * The corpus version is in the file name, so the files can be cached for a year
  * (public/_headers): a new edition of the book gets new names, not stale bytes.
@@ -31,6 +35,7 @@ import {
 } from '../../lib/edition.ts';
 import { askSite } from '../../lib/ask-config.ts';
 import { chatPlain } from '../../lib/chat-data.ts';
+import { builtWords, wordsNames } from '../../lib/words-data.ts';
 import { builtGame } from '../../lib/game-built.ts';
 import { gameSite } from '../../lib/game-data.ts';
 import { t } from '../../lib/strings.ts';
@@ -41,6 +46,9 @@ const version = manifest().meta.corpus_version;
 const game = gameSite().on ? builtGame() : null;
 /** The texts of « En clair » exist only in a build whose field opens the sheet. */
 const plain = askSite().mode === 'chat' ? chatPlain() : null;
+/** So do the explained words: they follow the mode of the site (D20.11). */
+const words = askSite().mode === 'chat' ? builtWords() : null;
+const wordFiles = words === null ? null : wordsNames(words.fingerprint);
 
 export function getStaticPaths() {
   return [
@@ -48,6 +56,11 @@ export function getStaticPaths() {
     { params: { name: `meta-${version}` } },
     ...(game === null ? [] : [{ params: { name: `jeu-${game.fingerprint}` } }]),
     ...(plain === null ? [] : [{ params: { name: `clair-${plain.fingerprint}` } }]),
+    ...(wordFiles === null
+      ? []
+      : [wordFiles.finder, wordFiles.meanings, wordFiles.examples].map((name) => ({
+          params: { name },
+        }))),
   ];
 }
 
@@ -85,6 +98,11 @@ function body(name: string | undefined): string {
   if (name?.startsWith('index-') === true) return index();
   if (name?.startsWith('jeu-') === true && game !== null) return JSON.stringify(game.data);
   if (name?.startsWith('clair-') === true && plain !== null) return JSON.stringify(plain.data);
+  if (words !== null && wordFiles !== null) {
+    if (name === wordFiles.finder) return JSON.stringify(words.finder);
+    if (name === wordFiles.meanings) return JSON.stringify(words.meanings);
+    if (name === wordFiles.examples) return JSON.stringify(words.examples);
+  }
   return meta();
 }
 
