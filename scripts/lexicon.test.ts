@@ -16,8 +16,19 @@ import type { PrivateItem } from './aec26-types.js';
 import {
   VOCABULARY_PATH,
   coverageProblems,
+  ACRONYM,
+  INSTRUMENT,
+  LATIN,
+  UNIT,
+  bookTexts,
+  findAll,
+  formsOf,
+  pairsIn,
   partitionProblems,
   placesOf,
+  publicTexts,
+  stemCounts,
+  stemRows,
   placesSummary,
   uncoveredIn,
   unitTexts,
@@ -174,55 +185,6 @@ void test('the judged vocabulary: each stem in one class, each hard stem held by
   assert.equal(vocabularyFingerprint(['b', 'a']), vocabularyFingerprint(['a', 'b']));
 });
 
-/**
- * What the site shows in our own words, and the official titles: the explanations and their
- * examples, our cards, our answers, the sentences of the game, the titles of the book. Read
- * against the judged vocabulary, each must explain the hard words it uses — where a reader meets
- * them, a line explains them.
- */
-function ourTexts(): { where: string; text: string }[] {
-  const read = (path: string): unknown => JSON.parse(readFileSync(path, 'utf8'));
-  const out: { where: string; text: string }[] = [];
-  for (const entry of explainedTerms()) {
-    out.push({ where: `terms:${entry.id}`, text: entry.plain });
-    if (entry.example !== undefined) {
-      out.push({ where: `terms:${entry.id} (example)`, text: entry.example });
-    }
-  }
-  const glossary = read('data/2026/glossary.json') as {
-    entries: {
-      id: string;
-      term: string;
-      plain: string;
-      why?: string;
-      objection?: { text: string; answer: string };
-    }[];
-  };
-  for (const card of glossary.entries) {
-    const texts = [card.plain, card.why, card.objection?.text, card.objection?.answer];
-    for (const text of texts) if (text !== undefined) out.push({ where: `mot:${card.id}`, text });
-  }
-  const riposte = read('data/2026/riposte.json') as {
-    entries: { slug: string; objection: string; answer: string; avoid: string }[];
-  };
-  for (const answer of riposte.entries) {
-    for (const text of [answer.objection, answer.answer, answer.avoid]) {
-      out.push({ where: `r:${answer.slug}`, text });
-    }
-  }
-  const gists = read('data/2026/game-gists.json') as { gists: { id: string; text: string }[] };
-  for (const gist of gists.gists) out.push({ where: `jeu:${gist.id}`, text: gist.text });
-  const manifest = read('data/2026/manifest.json') as {
-    parts: { id: string; title: string }[];
-    chapters: { id: string; title: string }[];
-    sections: { id: string; title: string }[];
-  };
-  for (const unit of [...manifest.parts, ...manifest.chapters, ...manifest.sections]) {
-    out.push({ where: `titre:${unit.id}`, text: unit.title });
-  }
-  return out;
-}
-
 void test('data/2026/vocabulary.json: every stem the site shows judged once — and, for the new charter, every hard word of our texts explained', () => {
   const charter = (
     JSON.parse(readFileSync('data/2026/terms.json', 'utf8')) as { meta: { charter?: number } }
@@ -244,7 +206,7 @@ void test('data/2026/vocabulary.json: every stem the site shows judged once — 
     vocabularyFingerprint(index),
     'the vocabulary of the index changed: judge its new stems (npm run lexicon -- --stems)',
   );
-  const texts = ourTexts();
+  const texts = publicTexts();
   const stems = new Set([...index, ...texts.flatMap(({ text }) => terms(text))]);
   assert.deepEqual(partitionProblems(vocabulary, stems), []);
   if (charter !== 2) return;
@@ -262,4 +224,98 @@ void test('data/2026/vocabulary.json: every stem the site shows judged once — 
     uncoveredIn(text, hard, [...cards, ...entries]).map((stem) => `${where}: ${stem}`),
   );
   assert.deepEqual(problems, []);
+});
+
+void test('the inventory reads every text of the book, prose and points included, and the forms of each stem', () => {
+  const unit = (id: string, title: string, items: PrivateItem[]) => ({ id, title, items });
+  const book = {
+    introduction: unit('p0', 'Introduction', [item('p0-k01', 'Un préambule.')]),
+    parts: [unit('p1', 'Une partie', [])],
+    chapters: [unit('p1c1', 'Un chapitre', [item('p1c1-k01', 'Les moratoires.')])],
+    sections: [
+      unit('p1c1-s01', 'Un moratoire', [
+        item('p1c1-s01-m01', 'Sortir de la T2A.', [item('p1c1-s01-m01.s1', 'Un CAP.')]),
+      ]),
+    ],
+  };
+  const placed = bookTexts(book);
+  assert.deepEqual(
+    placed.map((p) => p.where),
+    ['p0', 'p0-k01', 'p1', 'p1c1', 'p1c1-k01', 'p1c1-s01', 'p1c1-s01-m01', 'p1c1-s01-m01.s1'],
+  );
+  const texts = placed.map((p) => p.text);
+  assert.deepEqual(
+    [...(formsOf(texts).get('moratoire') ?? [])],
+    [
+      ['moratoires', 1],
+      ['moratoire', 1],
+    ],
+  );
+  const rows = stemRows({
+    measures: new Map([['moratoire', 2]]),
+    book: stemCounts(texts),
+    sentences: stemCounts(['Un moratoire sur la T2A.']),
+    ours: new Map(),
+    forms: formsOf(texts),
+  });
+  const moratoire = rows.find((row) => row.stem === 'moratoire');
+  assert.deepEqual(moratoire, {
+    stem: 'moratoire',
+    public: true,
+    measures: 2,
+    inBook: 2,
+    inSentences: 1,
+    inOurs: 0,
+    forms: ['moratoire', 'moratoires'],
+  });
+  // A stem the index does not hold, nor our public texts, is private: judged, never published.
+  assert.equal(rows.find((row) => row.stem === 'preambule')?.public, false);
+  // Numbers are judged by nobody.
+  assert.equal(
+    stemRows({
+      measures: new Map([['2050', 1]]),
+      book: new Map(),
+      sentences: new Map(),
+      ours: new Map(),
+      forms: new Map(),
+    }).length,
+    0,
+  );
+});
+
+void test('the patterns of the inventory: acronyms, instruments, units, Latin, expressions', () => {
+  const texts = [
+    {
+      where: 'a',
+      text: 'La CSG et la COP28 : un moratoire de facto sur 40 TWh, selon la loi Évin de 1991.',
+    },
+    { where: 'b', text: 'Le principe de faveur, et les fonds vautours.' },
+  ];
+  assert.deepEqual(
+    findAll(texts, ACRONYM).map((f) => f.text),
+    ['COP28', 'CSG'],
+  );
+  assert.deepEqual(
+    findAll(texts, UNIT, (m) => m[1] ?? m[0]).map((f) => f.text),
+    ['TWh'],
+  );
+  const lower = (m: RegExpMatchArray): string => m[0].toLowerCase();
+  assert.deepEqual(
+    findAll(texts, LATIN, lower).map((f) => f.text),
+    ['de facto'],
+  );
+  assert.ok(findAll(texts, INSTRUMENT, lower).some((f) => f.text === 'loi évin de 1991'));
+  const pairs = pairsIn(texts, (stem) => ['faveur', 'vautour'].includes(stem)).map((f) => f.text);
+  assert.ok(pairs.includes('principe de faveur'), pairs.join(' | '));
+  assert.ok(pairs.includes('fonds vautours'), pairs.join(' | '));
+  // A comma breaks a pair; where it stands is kept.
+  assert.ok(!pairs.includes('faveur et'));
+  assert.deepEqual(findAll(texts, ACRONYM).find((f) => f.text === 'CSG')?.where, ['a']);
+});
+
+void test('our public texts: every explanation, card, answer, sentence of the game and title', () => {
+  const texts = publicTexts();
+  const kinds = new Set(texts.map((placed) => placed.where.split(':')[0]));
+  assert.deepEqual([...kinds].sort(), ['jeu', 'mot', 'r', 'terms', 'titre']);
+  assert.ok(texts.every((placed) => placed.text.trim() !== ''));
 });

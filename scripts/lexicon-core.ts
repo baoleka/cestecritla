@@ -9,8 +9,10 @@
  * uses, never where, never how often, never next to what.
  */
 import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import type { PrivateItem } from './aec26-types.js';
 import { terms } from '../src/lib/search-core.js';
+import { explainedTerms } from '../src/lib/words-data.js';
 import { CARD_PREFIX, spansIn, type TermWording } from '../src/lib/terms.js';
 
 /** The texts of a unit of the book, in order: its title, then each item and its points. */
@@ -191,4 +193,302 @@ export function uncoveredIn(
     spansIn(nfc, wordings).flatMap((span) => terms(nfc.slice(span.at, span.end))),
   );
   return [...used].filter(([stem, n]) => (covered.get(stem) ?? 0) < n).map(([stem]) => stem);
+}
+
+// ---------------------------------------------------------------------------------------------
+// The inventory (PLAN-MOTS, lot 9): what the book and our sentences use, counted on this
+// machine. Pure: the texts come in; what is written under the private folder is the caller's.
+// ---------------------------------------------------------------------------------------------
+
+/** A text with where it stands: a unit of the book (its id) or one of our sentences. */
+export interface Placed {
+  where: string;
+  text: string;
+}
+
+interface Unit {
+  id: string;
+  title: string;
+  items: readonly PrivateItem[];
+}
+
+/** The book as the inventory reads it: every unit, prose included. */
+export interface BookUnits {
+  introduction: Unit;
+  parts: readonly Unit[];
+  chapters: readonly Unit[];
+  sections: readonly Unit[];
+}
+
+/** The items of a unit and their points, each with its id. */
+const placedItems = (items: readonly PrivateItem[]): Placed[] =>
+  items.flatMap((item) => [
+    { where: item.id, text: item.text },
+    ...placedItems(item.subMeasures ?? []),
+  ]);
+
+/** Every text of the book — titles, measures, points, paragraphs — with the id of what holds it. */
+export function bookTexts(book: BookUnits): Placed[] {
+  return [book.introduction, ...book.parts, ...book.chapters, ...book.sections].flatMap((unit) => [
+    { where: unit.id, text: unit.title },
+    ...placedItems(unit.items),
+  ]);
+}
+
+/** The words of a text as written: letters and digits, with the apostrophes and hyphens inside. */
+const WORD = /[\p{L}\p{N}]+(?:[’'-][\p{L}\p{N}]+)*/gu;
+
+/** For each stem, the forms that yield it, counted — how a judge reads a stem. */
+export function formsOf(texts: Iterable<string>): Map<string, Map<string, number>> {
+  const out = new Map<string, Map<string, number>>();
+  for (const text of texts) {
+    for (const [form] of text.normalize('NFC').matchAll(WORD)) {
+      for (const stem of terms(form)) {
+        const forms = out.get(stem) ?? new Map<string, number>();
+        forms.set(form, (forms.get(form) ?? 0) + 1);
+        out.set(stem, forms);
+      }
+    }
+  }
+  return out;
+}
+
+/** The number of times each stem stands in some texts. */
+export function stemCounts(texts: Iterable<string>): Map<string, number> {
+  const out = new Map<string, number>();
+  for (const text of texts) for (const stem of terms(text)) out.set(stem, (out.get(stem) ?? 0) + 1);
+  return out;
+}
+
+/** One line of the table of stems a judge reads: where the stem stands, how often, its forms. */
+export interface StemRow {
+  stem: string;
+  /** In the public index (and so in the public file of the vocabulary), or only in private texts. */
+  public: boolean;
+  /** Measures of the index that hold it. */
+  measures: number;
+  inBook: number;
+  inSentences: number;
+  inOurs: number;
+  /** Its most frequent forms, as written. */
+  forms: string[];
+}
+
+export function stemRows(input: {
+  measures: ReadonlyMap<string, number>;
+  book: ReadonlyMap<string, number>;
+  sentences: ReadonlyMap<string, number>;
+  ours: ReadonlyMap<string, number>;
+  forms: ReadonlyMap<string, ReadonlyMap<string, number>>;
+}): StemRow[] {
+  const stems = new Set([
+    ...input.measures.keys(),
+    ...input.book.keys(),
+    ...input.sentences.keys(),
+    ...input.ours.keys(),
+  ]);
+  return [...stems]
+    .filter((stem) => !/^\d+$/.test(stem))
+    .sort((a, b) => a.localeCompare(b, 'fr'))
+    .map((stem) => ({
+      stem,
+      public: input.measures.has(stem) || input.ours.has(stem),
+      measures: input.measures.get(stem) ?? 0,
+      inBook: input.book.get(stem) ?? 0,
+      inSentences: input.sentences.get(stem) ?? 0,
+      inOurs: input.ours.get(stem) ?? 0,
+      forms: [...(input.forms.get(stem) ?? new Map<string, number>())]
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'fr'))
+        .slice(0, 3)
+        .map(([form]) => form),
+    }));
+}
+
+/** What a pattern of the inventory finds: as written, how often, and where. */
+export interface Found {
+  text: string;
+  count: number;
+  where: string[];
+}
+
+/** Every match of a pattern in some texts, counted by what `key` makes of it. */
+export function findAll(
+  texts: readonly Placed[],
+  pattern: RegExp,
+  key: (match: RegExpMatchArray) => string = (match) => match[0],
+): Found[] {
+  const by = new Map<string, Found>();
+  for (const { where, text } of texts) {
+    for (const match of text.normalize('NFC').matchAll(pattern)) {
+      const found = by.get(key(match)) ?? { text: key(match), count: 0, where: [] };
+      found.count += 1;
+      if (!found.where.includes(where)) found.where.push(where);
+      by.set(found.text, found);
+    }
+  }
+  return [...by.values()].sort((a, b) => b.count - a.count || a.text.localeCompare(b.text, 'fr'));
+}
+
+/** Two capitals or more in a word, digits and hyphens allowed: « CSG », « COP28 », « RN-1 ». */
+export const ACRONYM =
+  /(?<![\p{L}\p{N}])\p{Lu}[\p{Lu}\p{N}&]*\p{Lu}[\p{Lu}\p{N}&]*(?:-\p{Lu}[\p{Lu}\p{N}]*)*(?![\p{L}\p{N}])/gu;
+
+/** What names an instrument, a body or a device — read with the five words that follow it. */
+const HEADS = [
+  'loi',
+  'lois',
+  'traité',
+  'traités',
+  'accord',
+  'accords',
+  'directive',
+  'directives',
+  'règlement',
+  'code',
+  'charte',
+  'convention',
+  'pacte',
+  'protocole',
+  'ordonnance',
+  'décret',
+  'article',
+  'plan',
+  'fonds',
+  'agence',
+  'autorité',
+  'conseil',
+  'cour',
+  'haut',
+  'institut',
+  'office',
+  'observatoire',
+  'commission',
+  'comité',
+  'mécanisme',
+  'bouclier',
+  'régime',
+  'statut',
+  'label',
+];
+export const INSTRUMENT = new RegExp(
+  `(?<![\\p{L}])(?:${HEADS.join('|')})(?:[\\s ]+[\\p{L}\\p{N}’'-]+){1,5}`,
+  'giu',
+);
+
+/** A number and its unit, the unit kept: « 40 TWh », « 1,5 °C », « 300 000 hectares ». */
+export const UNIT =
+  /\d[\d\s ,.]*\s*(TWh|GWh|MWh|kWh|GW|MW|kW|Mt|Gt|kt|ppm|ppb|km²|km2|km|m²|m2|m³|m3|ha|hectares?|°C|‰|dB|µg|mg|Md€|M€|k€|teqCO2|CO2e|équivalent CO2|ETP|équivalents? temps plein)(?![\p{L}])/gu;
+
+/** Latin locutions, and a few words of Latin the French uses as they are. */
+export const LATIN =
+  /(?<![\p{L}])(?:a priori|a posteriori|ad hoc|de facto|de jure|erga omnes|ex ante|ex post|ex nihilo|in fine|in situ|in extremis|intra-muros|extra-muros|per capita|prorata|pro rata|quorum|statu quo|sine qua non|vice versa|mutatis mutandis|ipso facto|sui generis|numerus clausus|habeas corpus|modus operandi|manu militari|ad vitam|ad nauseam|stricto sensu|lato sensu|a fortiori|bis|ter|nota bene|alias|agenda|memorandum|moratorium|ultimatum|consortium|critérium|maximum|minimum|optimum|quantum|référendum|referendum)(?![\p{L}])/giu;
+
+/** The small words that bind two words into one name: « principe de faveur », « fonds vautours ». */
+const LINKS = new Set([
+  'de',
+  'du',
+  'des',
+  'à',
+  'au',
+  'aux',
+  'en',
+  'sur',
+  'pour',
+  'par',
+  'sans',
+  'sous',
+]);
+
+/**
+ * Two words side by side, or two words and the small word that binds them, where one of the two
+ * is rare — the shape of an expression a dictionary lists: « fonds vautours », « principe de
+ * faveur », « prix plancher ». Counted as written, in lower case; a comma, a full stop or a
+ * bracket between them breaks the pair.
+ */
+export function pairsIn(texts: readonly Placed[], rare: (stem: string) => boolean): Found[] {
+  const pairs: Placed[] = [];
+  for (const { where, text } of texts) {
+    for (const run of text.normalize('NFC').split(/[.,;:!?()«»"“”[\]—–]+/u)) {
+      const words = run
+        .split(/\s+/u)
+        .map((word) => word.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, ''))
+        .filter((word) => word !== '');
+      for (let at = 0; at + 1 < words.length; at += 1) {
+        const first = words[at] ?? '';
+        const next = words[at + 1] ?? '';
+        const third = words[at + 2];
+        const stemOf = (word: string): string | null => terms(word)[0] ?? null;
+        const a = stemOf(first);
+        if (a === null) continue;
+        // « d'égalité » is a link and a word at once.
+        const elided = /^[dl][’'](.+)$/u.exec(next);
+        if (elided !== null) {
+          const b = stemOf(elided[1] ?? '');
+          if (b !== null && (rare(a) || rare(b))) pairs.push({ where, text: `${first} ${next}` });
+          continue;
+        }
+        const b = stemOf(next);
+        if (b !== null) {
+          if (rare(a) || rare(b)) pairs.push({ where, text: `${first} ${next}` });
+          continue;
+        }
+        if (LINKS.has(next.toLowerCase()) && third !== undefined) {
+          const c = stemOf(third);
+          if (c !== null && (rare(a) || rare(c))) {
+            pairs.push({ where, text: `${first} ${next} ${third}` });
+          }
+        }
+      }
+    }
+  }
+  return findAll(pairs, /^.+$/gu, (match) => match[0].toLowerCase());
+}
+
+/**
+ * What the site shows in our own words, and the official titles: the explanations and their
+ * examples, our cards, our answers, the sentences of the game, the titles of the book — public
+ * files all. Read against the judged vocabulary (scripts/lexicon.test.ts), each must explain
+ * the hard words it uses; the inventory counts their stems (scripts/lexicon-2026.ts).
+ */
+export function publicTexts(): Placed[] {
+  const read = (path: string): unknown => JSON.parse(readFileSync(path, 'utf8'));
+  const out: Placed[] = [];
+  for (const entry of explainedTerms()) {
+    out.push({ where: `terms:${entry.id}`, text: entry.plain });
+    if (entry.example !== undefined) {
+      out.push({ where: `terms:${entry.id} (example)`, text: entry.example });
+    }
+  }
+  const glossary = read('data/2026/glossary.json') as {
+    entries: {
+      id: string;
+      term: string;
+      plain: string;
+      why?: string;
+      objection?: { text: string; answer: string };
+    }[];
+  };
+  for (const card of glossary.entries) {
+    const texts = [card.plain, card.why, card.objection?.text, card.objection?.answer];
+    for (const text of texts) if (text !== undefined) out.push({ where: `mot:${card.id}`, text });
+  }
+  const riposte = read('data/2026/riposte.json') as {
+    entries: { slug: string; objection: string; answer: string; avoid: string }[];
+  };
+  for (const answer of riposte.entries) {
+    for (const text of [answer.objection, answer.answer, answer.avoid]) {
+      out.push({ where: `r:${answer.slug}`, text });
+    }
+  }
+  const gists = read('data/2026/game-gists.json') as { gists: { id: string; text: string }[] };
+  for (const gist of gists.gists) out.push({ where: `jeu:${gist.id}`, text: gist.text });
+  const manifest = read('data/2026/manifest.json') as {
+    parts: { id: string; title: string }[];
+    chapters: { id: string; title: string }[];
+    sections: { id: string; title: string }[];
+  };
+  for (const unit of [...manifest.parts, ...manifest.chapters, ...manifest.sections]) {
+    out.push({ where: `titre:${unit.id}`, text: unit.title });
+  }
+  return out;
 }
