@@ -27,7 +27,9 @@
  */
 import { askSite } from '../lib/ask-config.ts';
 import { manifest } from '../lib/edition.ts';
+import { cards } from '../lib/editorial.ts';
 import { locatorDisplay } from '../lib/facts.ts';
+import { builtWords, wordsNames } from '../lib/words-data.ts';
 import { safeJson, t } from '../lib/strings.ts';
 
 interface Props {
@@ -46,6 +48,12 @@ const model = site.modelName;
 // Imported only by a build whose field asks (astro.config.ts): a condition the bundler can
 // fold removes the import itself — and with it the sheet's stylesheet and its script.
 const ChatSheet = __CEL_CHAT__ ? (await import('./ChatSheet.astro')).default : null;
+// Where the search says that what is typed is an explained word (PLAN-MOTS, lot 6): how the
+// words are found — one file, fetched with the index —, our cards by their terms, and the line.
+// Folded away by a build that does not show it: its page is then the page of before.
+const wordsFinder = __CEL_WORDS_SEARCH__
+  ? `/data/${wordsNames(builtWords().fingerprint).finder}.json`
+  : null;
 const strings = {
   opening: t('search.opening'),
   one: t('search.results_count_one'),
@@ -56,6 +64,12 @@ const strings = {
   incipit: t('quote.incipit_label'),
   firstWords: t('quote.first_words_label'),
   missing: `${t('error.data.title')} ${t('error.data.lead')}`,
+  ...(__CEL_WORDS_SEARCH__
+    ? {
+        wordRow: t('words.search.row', { term: '{term}' }),
+        cards: cards().map(({ id, term }) => ({ id, term })),
+      }
+    : {}),
 };
 ---
 
@@ -79,6 +93,7 @@ const strings = {
   data-index={`/data/index-${version}.json`}
   data-meta={`/data/meta-${version}.json`}
   data-first-words={locatorDisplay()}
+  data-words={wordsFinder}
 >
   <label for="q">{asking ? t('chat.label') : t('search.label')}</label>
   <input
@@ -115,7 +130,11 @@ const strings = {
   }
 </form>
 {asking && ChatSheet !== null && <ChatSheet model={model} />}
-<p id="search-status" role="status" class="ref"></p>
+<p id="search-status" role="status" class="ref"></p>{
+  /* The line of an explained word (PLAN-MOTS, lot 6): on this line, so that a build without it
+     keeps every byte of the page — a line of its own would leave a space. */
+  __CEL_WORDS_SEARCH__ && <p id="search-word" hidden></p>
+}
 <section id="search-results" aria-labelledby="search-results-title" hidden>
   <h2 id="search-results-title" tabindex="-1">{t('search.results_title')}</h2>
   <ol id="search-list"></ol>
@@ -156,6 +175,11 @@ const strings = {
         if (hint?.dataset.local !== undefined) hint.textContent = hint.dataset.local;
       }
     }
+  }
+  // The line that says what is typed is an explained word (PLAN-MOTS, lot 6): only where the
+  // build shows it — elsewhere the constant folds this away, and the script is the one of before.
+  if (__CEL_WORDS_SEARCH__) {
+    void import('../scripts/words-search.ts');
   }
   // The scrutin build's note (home page only): fetched the same way, for the same reason.
   if (document.querySelector('#scrutin-reopen') !== null) {

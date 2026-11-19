@@ -143,6 +143,9 @@ async function runEngine(name: string, origin: string): Promise<Outcome> {
     // --- the page « Mots du programme » (lot 5)
     await hubChecks(browser, origin, check);
 
+    // --- the line of the search (lot 6)
+    await searchChecks(browser, origin, check);
+
     // --- 4. a link to « #mots » arrives on the line open; without script it is not shown
     const first = pages[0];
     if (first !== undefined) {
@@ -311,6 +314,66 @@ async function hubChecks(
     await view.evaluate<boolean>("document.querySelector('#mot-moratoire').open"),
   );
   await arriving.close();
+}
+
+/**
+ * The search (lot 6): typing an explained word — or asking what one means — puts one line above
+ * the results, leading to its explanation, or to our card; anything else, no line. How the words
+ * are found is fetched once, at the first sign of a search, and nothing typed leaves the phone.
+ */
+async function searchChecks(
+  browser: Browser,
+  origin: string,
+  check: (label: string, ok: boolean, detail?: string) => void,
+): Promise<void> {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const page = await context.newPage();
+  const requested: string[] = [];
+  await page.route('**/*', async (route: Route) => {
+    requested.push(route.request().url());
+    await route.continue();
+  });
+  await page.goto(`${origin}/sommaire/`);
+  await page.focus('#q');
+  await until(page, 'true');
+  const line = async (typed: string): Promise<{ shown: boolean; text: string; href: string }> => {
+    await page.fill('#q', typed);
+    await page.waitForTimeout(500);
+    return page.evaluate<{ shown: boolean; text: string; href: string }>(
+      "(() => { const row = document.querySelector('#search-word'); const a = row?.querySelector('a'); return { shown: !!row && !row.hidden, text: a?.textContent ?? '', href: a?.getAttribute('href') ?? '' }; })()",
+    );
+  };
+  const smic = await line('smic');
+  check(
+    'an explained word typed alone: one line leads to what it means',
+    smic.shown && smic.text.includes('SMIC') && smic.href === '/mot/#mot-smic',
+    JSON.stringify(smic),
+  );
+  const asked = await line('c’est quoi la t2a');
+  check(
+    'a question that asks what a word means: the same line',
+    asked.shown && asked.href === '/mot/#mot-t2a',
+    JSON.stringify(asked),
+  );
+  const card = await line('la règle verte');
+  check(
+    'the term of one of our cards: the line leads to the card',
+    card.shown && card.href === '/mot/regle-verte/',
+    JSON.stringify(card),
+  );
+  const plain = await line('les retraites à 60 ans');
+  check('a search for a subject: no line', !plain.shown, JSON.stringify(plain));
+  const finders = requested.filter((url) => /\/data\/mots-[0-9a-f]{16}\.json$/.test(url));
+  check(
+    'how the words are found is fetched once, by its name alone — nothing typed leaves',
+    finders.length === 1 &&
+      !requested.some((url) =>
+        /smic|t2a|verte|retraite/i.test(decodeURIComponent(url.split('#')[0] ?? '')),
+      ) &&
+      !requested.some((url) => /\/data\/mots-[0-9a-f]{16}-/.test(url)),
+    requested.filter((url) => /mots|smic|t2a/.test(url)).join(' '),
+  );
+  await context.close();
 }
 
 async function main(): Promise<void> {

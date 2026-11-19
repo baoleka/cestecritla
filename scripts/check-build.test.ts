@@ -401,9 +401,18 @@ void test('the explained words are a module of their own, asked for by the sheet
   for (const page of walk('dist-ask').filter((f) => f.endsWith('.html'))) {
     assert.ok(!read(page).includes(name), `${relative('dist-ask', page)} names ${name}`);
   }
+  // The sheet's script asks for it — and, since lot 6, the line of the search
+  // (src/scripts/words-search.ts), where the build says when what is typed is an explained word.
+  // No other script, and no page.
   const importers = walk('dist-ask/_astro').filter((f) => f !== script && read(f).includes(name));
-  assert.equal(importers.length, 1, importers.join(', '));
-  assert.match(importers[0] ?? '', /\/chat\.[^/]+\.js$/);
+  assert.ok(
+    importers.length >= 1 && importers.every((f) => /\/(?:chat|words-search)\.[^/]*\.js$/.test(f)),
+    importers.join(', '),
+  );
+  assert.ok(
+    importers.some((f) => /\/chat\.[^/]+\.js$/.test(f)),
+    'the sheet does not ask for it',
+  );
 });
 
 void test('the sheet is told, for each of our fifteen answers, the measures it rests on', () => {
