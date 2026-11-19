@@ -22,13 +22,18 @@ import { MAX_EXPLAIN_SENTENCES } from '../src/lib/chat-contract.js';
 import { notionsIn } from '../src/lib/notions.js';
 import {
   MAX_TERMS,
+  NO_EXAMPLE_CODES,
   asksMeaning,
   explainedFor,
+  folded,
   parseTerms,
   readAsWritten,
+  readingOf,
+  spansIn,
   termsIn,
   type TermEntry,
 } from '../src/lib/terms.js';
+import { SAMPLE_IDS, SHEET_CASES, plainSentence, wordySentence } from './terms-fixtures.js';
 
 const NBSP = String.fromCodePoint(0xa0);
 
@@ -210,14 +215,80 @@ void test('a term the question merely holds, and that no sentence on the screen 
     'cap',
     'moratoire',
   ]);
-  // Four at most, what was asked for first.
+  // Under the measures, every word the sentences use (D20.10): until 19 November 2026 four
+  // was the ceiling of the whole sheet; it is now that of the words a question asks about.
   const many = ['Le SMIC, la T2A, un moratoire, un CAP, une licence d’office.'];
   assert.deepEqual(shown('c’est quoi un conflit d’intérêts ?', many), [
     'conflits',
     'smic',
     't2a',
     'moratoire',
+    'cap',
+    'licence',
   ]);
+  // …and four at most above them, in the order the question names them.
+  assert.deepEqual(
+    explainedFor(
+      'c’est quoi le SMIC, la T2A, un CAP, un moratoire et une licence d’office ?',
+      [],
+      ALL,
+    ).map(({ entry, top }) => [entry.id, top]),
+    [
+      ['smic', true],
+      ['t2a', true],
+      ['cap', true],
+      ['moratoire', true],
+    ],
+  );
+  assert.equal(MAX_TERMS, 4);
+});
+
+void test('every place a term stands, in the order of the text — a wording inside a longer one is the longer one’s', () => {
+  const REF: TermEntry = { id: 'referendum', term: 'référendum', plain: 'Un vote.' };
+  const RIC: TermEntry = {
+    id: 'ric',
+    term: 'RIC',
+    aliases: ['référendum d’initiative citoyenne'],
+    plain: 'Un vote demandé.',
+  };
+  const text = 'Un référendum, puis un référendum d’initiative citoyenne, puis le RIC.';
+  const found = spansIn(text, [REF, RIC]).map(({ entry, at, end }) => [
+    entry.id,
+    text.slice(at, end),
+  ]);
+  assert.deepEqual(found, [
+    ['referendum', 'référendum'],
+    ['ric', 'référendum d’initiative citoyenne'],
+    ['ric', 'RIC'],
+  ]);
+  assert.deepEqual(spansIn('', [REF, RIC]), []);
+  // A character outside the basic plane before a term does not move its place.
+  const emoji = '😀 un moratoire';
+  const [first] = spansIn(emoji, ALL);
+  assert.equal(first === undefined ? '' : emoji.slice(first.at, first.end), 'moratoire');
+});
+
+void test('an entry may hold an example, or the reason it has none — never both', () => {
+  const read = (extra: Record<string, unknown>): TermEntry[] =>
+    parseTerms({ entries: [{ id: 'a', term: 'A', plain: 'Un texte.', ...extra }] });
+  assert.deepEqual(read({ example: 'Un cas.' }), [
+    { id: 'a', term: 'A', plain: 'Un texte.', example: 'Un cas.' },
+  ]);
+  for (const code of NO_EXAMPLE_CODES) {
+    assert.deepEqual(read({ noExample: code }), [
+      { id: 'a', term: 'A', plain: 'Un texte.', noExample: code },
+    ]);
+  }
+  for (const bad of [
+    { example: '' },
+    { example: ' ' },
+    { example: 3 },
+    { noExample: 'X' },
+    { noExample: '' },
+    { example: 'Un cas.', noExample: 'E' },
+  ]) {
+    assert.throws(() => read(bad), /example|noExample/, JSON.stringify(bad));
+  }
 });
 
 void test('a file that is not the expected one is refused, with what does not read', () => {
@@ -297,6 +368,77 @@ void test('every wording finds its entry, and no other one', () => {
       );
     }
     assert.equal(new Set(wordingsOf(entry)).size, wordingsOf(entry).length, `${entry.id}: twice`);
+  }
+});
+
+/**
+ * Texts the site shows, of every kind, that no entry was written for: the sentences of the game,
+ * our cards and our answers, the explanations themselves. Public files only.
+ */
+function naturalTexts(): string[] {
+  const out: string[] = entries.flatMap((entry) => [entry.plain, entry.example ?? '']);
+  const walk = (value: unknown): void => {
+    if (typeof value === 'string') {
+      if (value.includes(' ')) out.push(value);
+    } else if (Array.isArray(value)) value.forEach(walk);
+    else if (typeof value === 'object' && value !== null) {
+      for (const [key, inner] of Object.entries(value)) if (key !== 'meta') walk(inner);
+    }
+  };
+  for (const path of [
+    'data/2026/game-gists.json',
+    'data/2026/glossary.json',
+    'data/2026/riposte.json',
+  ]) {
+    walk(JSON.parse(readFileSync(path, 'utf8')) as unknown);
+  }
+  return out.filter((text) => text !== '');
+}
+
+void test('the needle never hides a match: wherever the pattern of a wording matches, its needle stands', () => {
+  // The proof that reading a wording only where its needle stands changes no result
+  // (src/lib/terms.ts, « the needle »): a pattern that matches a text where its needle is
+  // absent would be a term the prefilter hides.
+  const natural = naturalTexts();
+  let matched = 0;
+  for (const entry of entries) {
+    for (const wording of wordingsOf(entry)) {
+      const reading = readingOf(wording, entry.anyCase === true);
+      const own = [wording, wording.toUpperCase(), wording.toLowerCase()].flatMap((form) => [
+        form,
+        `Voici ${form}, puis autre chose.`,
+        `Des ${form}s et des ${form}x.`,
+      ]);
+      for (const text of [...own, ...natural]) {
+        const hay = reading.asWritten ? text.normalize('NFC') : folded(text);
+        if ([...hay.matchAll(reading.pattern())].length === 0) continue;
+        matched += 1;
+        assert.ok(hay.includes(reading.needle), `« ${wording} » in « ${text.slice(0, 80)} »`);
+      }
+    }
+  }
+  assert.ok(matched > 1000, `${String(matched)} matches read`);
+});
+
+void test('the words the end-to-end test of the sheet expects are those this file gives (scripts/terms-fixtures.ts)', () => {
+  // scripts/e2e-sheet.ts §7 shows these sentences under these questions and expects these words.
+  // Read here against the file as it stands: an entry that would change them fails in a second.
+  for (const sheet of SHEET_CASES) {
+    const sentences =
+      sheet.sentences === 'none'
+        ? []
+        : SAMPLE_IDS.map(sheet.sentences === 'plain' ? plainSentence : wordySentence);
+    const got = explainedFor(sheet.question, sentences, entries);
+    assert.deepEqual(
+      got.filter((found) => found.top).map((found) => found.entry.term),
+      sheet.asked,
+      `${sheet.question}: the words of the question`,
+    );
+    assert.deepEqual(
+      got.filter((found) => !found.top).map((found) => found.entry.term),
+      sheet.below,
+      `${sheet.question}: the words of the sentences`,
+    );
   }
 });
 

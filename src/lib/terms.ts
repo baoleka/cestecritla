@@ -6,6 +6,8 @@
  * — the words of the sentences — is explained by texts written ahead instead. An AI wrote
  * them and another checked them, from general knowledge and never from the book; the sheet
  * says so above them (D16.59, D16.62), and none of them says what the programme provides.
+ * Since 19 November 2026 (D20.10) the words are taken from the book itself, an entry may hold
+ * an example — a concrete case of an adult's life — and they are explained outside the sheet.
  *
  * Pure, and run on the phone: nothing is sent to find a word, and nothing is kept. The texts
  * it reads are our own sentences on the screen and the question as typed — which, here too,
@@ -22,9 +24,17 @@
  *
  * A wording that stands inside a longer wording of another entry belongs to that entry: in
  * « un référendum d'initiative citoyenne », what is explained is that, not « référendum ».
+ *
+ * Learning note — the needle. Every pattern below holds a literal that any text it matches must
+ * contain: the acronym itself, or the longest word of a phrase. Looking for that literal with
+ * `includes` costs next to nothing; building and running a pattern costs a great deal more. So a
+ * wording is read with its pattern only where its needle stands — and the pattern is built the
+ * first time that happens. With hundreds of entries, almost none get that far for a given
+ * sentence (scripts/terms.test.ts proves the needle never hides a match).
  */
 
-export interface TermEntry {
+/** What finds a term: its identifier and its wordings — nothing of what it says. */
+export interface TermWording {
   id: string;
   /** The term as it is shown: « T2A », « licence d'office ». */
   term: string;
@@ -32,11 +42,25 @@ export interface TermEntry {
   aliases?: readonly string[];
   /** An acronym also found in small letters, or with one capital: « smic », « Ehpad ». */
   anyCase?: true;
-  /** One to three short sentences, in plain words. */
-  plain: string;
 }
 
-/** How many terms one answer explains: more would bury the sentences they serve. */
+/**
+ * Why an entry has no example (PLAN-MOTS, D20.9): E, evident once explained (a body, a
+ * place); S, sensitive; N, no neutral case to give; D, two senses in one entry.
+ */
+export type NoExample = 'E' | 'S' | 'N' | 'D';
+export const NO_EXAMPLE_CODES: readonly NoExample[] = ['E', 'S', 'N', 'D'];
+
+export interface TermEntry extends TermWording {
+  /** One to three short sentences, in plain words. */
+  plain: string;
+  /** A concrete case of an adult's life, for a term judged hard (D20.2, D20.9). */
+  example?: string;
+  /** Why a term has no example, when the file says so. */
+  noExample?: NoExample;
+}
+
+/** How many terms a question may ask about at once: more would bury the sentences they serve. */
 export const MAX_TERMS = 4;
 
 /** A letter or a digit as French writes them (see src/lib/notions.ts for why it is spelled out). */
@@ -63,7 +87,7 @@ export const readAsWritten = (wording: string): boolean =>
  * One spelling for a comparison that ignores case and accents — letter for letter, so that a
  * place found in the folded text is the same place in the text itself.
  */
-function folded(text: string): string {
+export function folded(text: string): string {
   let out = '';
   for (const char of text.normalize('NFC')) {
     // A character outside the basic plane is kept whole: two units in, two units out.
@@ -73,45 +97,57 @@ function folded(text: string): string {
   return out;
 }
 
-/** A phrase as a pattern: its words in a row, each with or without the mark of a plural. */
-function phrasePattern(wording: string): string {
-  const words = folded(wording)
+/** The words of a phrase, folded, each without the mark of a plural when it is long enough. */
+function stemsOf(wording: string): string[] {
+  return folded(wording)
     .split(/[ ]+/)
     .filter((word) => word !== '')
-    .map((word) => {
-      const stem = word.length > 3 ? word.replace(/[sx]$/, '') : word;
-      return `${escaped(stem)}(?:s|x)?`;
-    });
-  return words.join('[ ]+');
+    .map((word) => (word.length > 3 ? word.replace(/[sx]$/, '') : word));
 }
 
 /** How a wording is looked for: in the text as it is, or in its folded spelling. */
-interface Reading {
-  pattern: RegExp;
+export interface Reading {
+  /** A literal every place this wording matches holds: a text without it is not read further. */
+  needle: string;
   /** True when the text is read as written: to the case and to the accent. */
   asWritten: boolean;
+  /** The pattern itself, built the first time it is needed. */
+  pattern: () => RegExp;
 }
 
 /**
- * One pattern per wording, built once: the sheet draws a turn several times, and each drawing
+ * One reading per wording, built once: the sheet draws a turn several times, and each drawing
  * reads every wording of the file.
  */
 const readings = new Map<string, Reading>();
-function readingOf(wording: string, anyCase: boolean): Reading {
+export function readingOf(wording: string, anyCase: boolean): Reading {
   const key = `${anyCase ? '~' : '='}${wording}`;
-  let reading = readings.get(key);
-  if (reading === undefined) {
-    const acronym = readAsWritten(wording);
-    const asWritten = acronym && !anyCase;
-    const source = asWritten
-      ? escaped(wording.normalize('NFC').trim())
-      : acronym
-        ? // Small letters or capitals, and nothing else: no plural is guessed for an acronym.
-          escaped(folded(wording.trim()))
-        : phrasePattern(wording);
-    reading = { pattern: new RegExp(`${EDGE_BEFORE}${source}${EDGE_AFTER}`, 'gu'), asWritten };
-    readings.set(key, reading);
+  const known = readings.get(key);
+  if (known !== undefined) return known;
+  const acronym = readAsWritten(wording);
+  const asWritten = acronym && !anyCase;
+  let source: string;
+  let needle: string;
+  if (asWritten) {
+    needle = wording.normalize('NFC').trim();
+    source = escaped(needle);
+  } else if (acronym) {
+    // Small letters or capitals, and nothing else: no plural is guessed for an acronym.
+    needle = folded(wording.trim());
+    source = escaped(needle);
+  } else {
+    // A phrase: its words in a row, each with or without the mark of a plural.
+    const stems = stemsOf(wording);
+    needle = stems.reduce((longest, stem) => (stem.length > longest.length ? stem : longest), '');
+    source = stems.map((stem) => `${escaped(stem)}(?:s|x)?`).join('[ ]+');
   }
+  let built: RegExp | null = null;
+  const reading: Reading = {
+    needle,
+    asWritten,
+    pattern: () => (built ??= new RegExp(`${EDGE_BEFORE}${source}${EDGE_AFTER}`, 'gu')),
+  };
+  readings.set(key, reading);
   return reading;
 }
 
@@ -132,15 +168,17 @@ const shouted = (text: string): boolean =>
 const LETTERS_ALONE = /^[A-Za-zÀ-ÖØ-öø-ÿ]+$/;
 
 /** Every place where one of the wordings of an entry stands in a text. */
-function spansOf(entry: TermEntry, text: string, foldedText: string, loud: boolean): Span[] {
+function spansOf(entry: TermWording, text: string, foldedText: string, loud: boolean): Span[] {
   const spans: Span[] = [];
   for (const wording of [entry.term, ...(entry.aliases ?? [])]) {
     if (wording.trim() === '') continue;
-    const { pattern, asWritten } = readingOf(wording, entry.anyCase === true);
+    const reading = readingOf(wording, entry.anyCase === true);
     // In capitals throughout, a word of letters alone is found only where any case finds it:
     // « T2A » and « 49.3 » are still themselves.
-    if (asWritten && loud && LETTERS_ALONE.test(wording)) continue;
-    for (const found of (asWritten ? text : foldedText).matchAll(pattern)) {
+    if (reading.asWritten && loud && LETTERS_ALONE.test(wording)) continue;
+    const hay = reading.asWritten ? text : foldedText;
+    if (!hay.includes(reading.needle)) continue;
+    for (const found of hay.matchAll(reading.pattern())) {
       // The first group is what stands before the word: the word starts after it.
       const at = found.index + (found[1] ?? '').length;
       spans.push({ at, end: found.index + found[0].length });
@@ -153,50 +191,60 @@ function spansOf(entry: TermEntry, text: string, foldedText: string, loud: boole
 const within = (span: Span, other: Span): boolean =>
   other.at <= span.at && span.end <= other.end && other.end - other.at > span.end - span.at;
 
-/** A term found in a text: where it first stands there, and where that wording ends. */
-interface Located {
-  entry: TermEntry;
+/** A place where an entry's own wording stands in a text (normalised to NFC). */
+export interface TermSpan<T extends TermWording = TermWording> {
+  entry: T;
   at: number;
   end: number;
 }
 
 /**
- * The terms one text uses, each once, with the first place where a wording of its own stands
- * — a wording inside a longer wording of another entry is that entry's.
+ * Every place where an entry's own wording stands in a text, in the order of the text — a
+ * wording inside a longer wording of another entry is that entry's, not its own.
  */
-function locate(raw: string, entries: readonly TermEntry[]): Located[] {
+export function spansIn<T extends TermWording>(raw: string, entries: readonly T[]): TermSpan<T>[] {
   const text = raw.normalize('NFC');
   const lower = folded(text);
   const loud = shouted(text);
   const hits = entries
     .map((entry) => ({ entry, spans: spansOf(entry, text, lower, loud) }))
     .filter((hit) => hit.spans.length > 0);
-  const found: Located[] = [];
+  const out: TermSpan<T>[] = [];
   for (const hit of hits) {
-    const own = hit.spans
-      .filter(
-        (span) =>
-          !hits.some(
-            (other) => other !== hit && other.spans.some((longer) => within(span, longer)),
-          ),
-      )
-      .sort((a, b) => a.at - b.at);
-    const first = own[0];
-    if (first !== undefined) found.push({ entry: hit.entry, at: first.at, end: first.end });
+    for (const span of hit.spans) {
+      const inLonger = hits.some(
+        (other) => other !== hit && other.spans.some((longer) => within(span, longer)),
+      );
+      if (!inLonger) out.push({ entry: hit.entry, at: span.at, end: span.end });
+    }
   }
-  return found.sort((a, b) => a.at - b.at);
+  // In the order of the text; where two start together, the longer first. Stable otherwise:
+  // entries keep the order of the file.
+  return out.sort((a, b) => a.at - b.at || b.end - a.end);
+}
+
+/**
+ * The terms one text uses, each once, with the first place where a wording of its own stands
+ * — a wording inside a longer wording of another entry is that entry's.
+ */
+function locate<T extends TermWording>(raw: string, entries: readonly T[]): TermSpan<T>[] {
+  const found: TermSpan<T>[] = [];
+  for (const span of spansIn(raw, entries)) {
+    if (!found.some((seen) => seen.entry === span.entry)) found.push(span);
+  }
+  return found;
 }
 
 /**
  * The terms a set of texts uses, in the order they first appear — `max` at most, each once.
  * The texts are read in the order given.
  */
-export function termsIn(
+export function termsIn<T extends TermWording>(
   texts: readonly string[],
-  entries: readonly TermEntry[],
+  entries: readonly T[],
   max: number = MAX_TERMS,
-): TermEntry[] {
-  const found: TermEntry[] = [];
+): T[] {
+  const found: T[] = [];
   for (const text of texts) {
     for (const { entry } of locate(text, entries)) {
       if (!found.includes(entry)) found.push(entry);
@@ -222,7 +270,7 @@ const BEFORE_A_TERM = /^[^a-z0-9]*(?:(?:le|la|les|un|une|des|du|de|au|aux) +|[ld
 const AFTER_A_TERM = /[^a-z0-9]*$/;
 
 /** True when the question is the term and nothing else: « T2A », « le smic ? », « L'ONDAM ». */
-function isWholeQuestion(question: string, found: Located): boolean {
+function isWholeQuestion(question: string, found: Span): boolean {
   const lower = folded(question.normalize('NFC'));
   const from = BEFORE_A_TERM.exec(lower)?.[0].length ?? 0;
   const to = lower.length - (AFTER_A_TERM.exec(lower)?.[0].length ?? 0);
@@ -230,8 +278,8 @@ function isWholeQuestion(question: string, found: Located): boolean {
 }
 
 /** A term the sheet explains, and where. */
-export interface Explained {
-  entry: TermEntry;
+export interface Explained<T extends TermWording = TermEntry> {
+  entry: T;
   /**
    * True when the explanation is what was asked for — the question asks what the word means,
    * or is the word alone: it is shown first, open. False: the word is one the sentences on
@@ -241,27 +289,28 @@ export interface Explained {
 }
 
 /**
- * What the sheet explains for a turn — `max` terms at most.
+ * What the sheet explains for a turn.
  *
  *   first, open   the terms of the question, when it asks what a word means (« c'est quoi la
- *                 T2A ? ») or is the word itself (« T2A »);
- *   then, closed  the terms the sentences on the screen use — those the question holds too
- *                 come first among them.
+ *                 T2A ? ») or is the word itself (« T2A ») — `max` at most;
+ *   then, closed  every term the sentences on the screen use — those the question holds too
+ *                 come first among them (D20.10: no ceiling there since 19 November 2026; it
+ *                 was four in all).
  *
  * A term the question merely holds, and that no sentence on the screen uses, is NOT explained:
  * a word of a question has the sense its writer gave it, and « la réforme du BAC » is not about
  * a police brigade. On the screen, a term has the sense of the sentence next to it.
  */
-export function explainedFor(
+export function explainedFor<T extends TermWording>(
   question: string,
   sentences: readonly string[],
-  entries: readonly TermEntry[],
+  entries: readonly T[],
   max: number = MAX_TERMS,
-): Explained[] {
+): Explained<T>[] {
   const named = locate(question, entries);
   const meaning = asksMeaning(question);
   const top = named.filter((found) => meaning || isWholeQuestion(question, found));
-  const first = top.map((found) => found.entry);
+  const first = top.map((found) => found.entry).slice(0, Math.max(0, max));
   const used = termsIn(sentences, entries, entries.length).filter(
     (entry) => !first.includes(entry),
   );
@@ -274,11 +323,13 @@ export function explainedFor(
   return [
     ...first.map((entry) => ({ entry, top: true })),
     ...below.map((entry) => ({ entry, top: false })),
-  ].slice(0, Math.max(0, max));
+  ];
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
+const isNoExample = (value: unknown): value is NoExample =>
+  typeof value === 'string' && (NO_EXAMPLE_CODES as readonly string[]).includes(value);
 
 /** The entries of data/2026/terms.json, or an error that names what does not read. */
 export function parseTerms(file: unknown): TermEntry[] {
@@ -290,7 +341,7 @@ export function parseTerms(file: unknown): TermEntry[] {
   for (const [index, value] of (file['entries'] as unknown[]).entries()) {
     const where = `terms: entry ${String(index + 1)}`;
     if (!isRecord(value)) throw new Error(`${where} is not an entry`);
-    const { id, term, aliases, anyCase, plain } = value;
+    const { id, term, aliases, anyCase, plain, example, noExample } = value;
     if (typeof id !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id) || id.length > 60) {
       throw new Error(`${where}: its id is not a slug`);
     }
@@ -300,6 +351,15 @@ export function parseTerms(file: unknown): TermEntry[] {
     if (typeof plain !== 'string' || plain.trim() === '') throw new Error(`${id}: no text`);
     if (anyCase !== undefined && anyCase !== true) {
       throw new Error(`${id}: anyCase is true, or is not written`);
+    }
+    if (example !== undefined && (typeof example !== 'string' || example.trim() === '')) {
+      throw new Error(`${id}: an example is a text, or is not written`);
+    }
+    if (noExample !== undefined && !isNoExample(noExample)) {
+      throw new Error(`${id}: noExample is one of ${NO_EXAMPLE_CODES.join(', ')}`);
+    }
+    if (example !== undefined && noExample !== undefined) {
+      throw new Error(`${id}: an example, and a reason to have none`);
     }
     const others: string[] = [];
     if (aliases !== undefined) {
@@ -317,6 +377,8 @@ export function parseTerms(file: unknown): TermEntry[] {
       ...(others.length === 0 ? {} : { aliases: others }),
       ...(anyCase === true ? { anyCase: true as const } : {}),
       plain,
+      ...(typeof example === 'string' ? { example } : {}),
+      ...(isNoExample(noExample) ? { noExample } : {}),
     });
   }
   return out;

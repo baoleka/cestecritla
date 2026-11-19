@@ -39,6 +39,7 @@ import type { Page, Route } from 'playwright';
 import type { Manifest } from './aec26-types.js';
 import { loadPage } from './ask-page.js';
 import { ENGINES, checker, report, serve, until } from './e2e-kit.js';
+import { QUIET_QUESTION, plainSentence, sheetCase, wordySentence } from './terms-fixtures.js';
 import type { Outcome } from './e2e-kit.js';
 
 const ROOT = 'dist-gists';
@@ -60,7 +61,9 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
   const pageInNode = loadPage();
 
   const sim: { gists: Scenario } = { gists: 'deux' };
-  const inBase = (id: string): string => `Le programme prévoit une phrase d'essai, pour ${id}.`;
+  // The sentences the sheet is shown, and the words they hold: shared with the unit tests of the
+  // words (scripts/terms-fixtures.ts), which read them against data/2026/terms.json as it stands.
+  const inBase = plainSentence;
   const sentence = (id: string): string => `Le programme prévoit une phrase d’essai, pour ${id}.`;
   const gistsAnswer = (ids: readonly string[]): { status?: number; body: unknown } => {
     const all = ids.map((id) => ({ id, text: inBase(id) }));
@@ -88,7 +91,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
             corpus,
             gists: all.map((gist) => ({
               ...gist,
-              text: `Le programme prévoit un moratoire d'essai sur la T2A, pour ${gist.id}.`,
+              text: wordySentence(gist.id),
             })),
             ai: false,
           },
@@ -234,7 +237,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     // --- 2. typing sends nothing; the gesture sends identifiers — not the sentence
     // Three measures stand close enough to the best one for this question (src/lib/chat-local.ts,
     // `MIN_SHARE_OF_BEST`), and none of its words is one the sheet explains.
-    const QUESTION = 'et l’hôpital, moi infirmière de nuit';
+    const QUESTION = QUIET_QUESTION;
     await page.locator('#q').pressSequentially(QUESTION, { delay: 20 });
     await page.waitForTimeout(900);
     const carrying = (): string[] =>
@@ -370,6 +373,11 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     // --- 7. the explained words: found on the phone, written ahead, labelled
     const TERMS = `${LAST} .c-terms:not(.c-asked)`;
     const ASKED = `${LAST} .c-terms.c-asked`;
+    /** What a block of words is expected to show: these terms, all open, or all closed. */
+    const openAs = (terms: readonly string[]): { term: string; open: boolean }[] =>
+      terms.map((term) => ({ term, open: true }));
+    const closedAs = (terms: readonly string[]): { term: string; open: boolean }[] =>
+      terms.map((term) => ({ term, open: false }));
     const termsShown = (scope: string): Promise<{ term: string; open: boolean }[]> =>
       page.evaluate<{ term: string; open: boolean }[]>(
         `Array.from(document.querySelectorAll(${JSON.stringify(`${scope} details`)})).map((d) => ({ term: d.querySelector('summary')?.textContent ?? '', open: d.open }))`,
@@ -401,11 +409,8 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     const closed = await termsShown(TERMS);
     check(
       'each term of the sentences is there once, in the order they use them, closed',
-      JSON.stringify(closed) ===
-        JSON.stringify([
-          { term: 'moratoire', open: false },
-          { term: 'T2A', open: false },
-        ]) && (await count(ASKED)) === 0,
+      JSON.stringify(closed) === JSON.stringify(closedAs(sheetCase('et l’hôpital ?').below)) &&
+        (await count(ASKED)) === 0,
       JSON.stringify(closed),
     );
     check(
@@ -452,10 +457,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     check(
       'a term the question merely holds comes first among the words, under the measures, closed',
       JSON.stringify(held) ===
-        JSON.stringify([
-          { term: 'T2A', open: false },
-          { term: 'moratoire', open: false },
-        ]) &&
+        JSON.stringify(closedAs(sheetCase('et la t2a à l’hôpital ?').below)) &&
         (await count(ASKED)) === 0 &&
         (await before('.c-gists', '.c-terms:not(.c-asked)')),
       JSON.stringify(held),
@@ -508,13 +510,15 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       'a word the question asks about stands above the measures, under its own title, open',
       (await text(`${ASKED} h3`)) === 'Les mots de ta question' &&
         (await text(`${ASKED} .c-badge`)) === 'Explications écrites et vérifiées par une IA' &&
-        JSON.stringify(named) === JSON.stringify([{ term: 'T2A', open: true }]) &&
+        JSON.stringify(named) ===
+          JSON.stringify(openAs(sheetCase('c’est quoi la t2a à l’hôpital ?').asked)) &&
         (await before('.c-terms.c-asked', '.c-gists')),
       JSON.stringify(named),
     );
     check(
       '…and it is not explained twice: the other words stay under the measures, closed',
-      JSON.stringify(rest) === JSON.stringify([{ term: 'moratoire', open: false }]) &&
+      JSON.stringify(rest) ===
+        JSON.stringify(closedAs(sheetCase('c’est quoi la t2a à l’hôpital ?').below)) &&
         (await before('.c-gists', '.c-terms:not(.c-asked)')),
       JSON.stringify(rest),
     );
@@ -525,7 +529,8 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     check(
       'the route closed: the links stand alone, and the word of the question is still explained',
       (await count(`${LAST} .c-gists .c-row > p:not(.sources)`)) === 0 &&
-        JSON.stringify(alone) === JSON.stringify([{ term: 'moratoire', open: true }]) &&
+        JSON.stringify(alone) ===
+          JSON.stringify(openAs(sheetCase('c’est quoi un moratoire à l’hôpital ?').asked)) &&
         (await count(TERMS)) === 0,
       JSON.stringify(alone),
     );
