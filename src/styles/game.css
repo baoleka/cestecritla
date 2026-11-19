@@ -420,6 +420,40 @@ html[data-silence] .game {
   gap: var(--space-2);
   margin-block: var(--space-4) 0;
 }
+/* Under the card, out of its frame, after « Mot suivant » (PLAN-MOTS, lot 14; D20.4): the
+   explained words of its sentence, in a line that opens — the marks of the sheet and of the
+   pages: a dashed rule for what explains a word and says nothing of the programme. */
+.g-expl {
+  margin-block: var(--space-4) 0;
+}
+.g-expl > summary,
+.g-expl-term > summary {
+  min-block-size: var(--tap-comfortable);
+  padding-block: var(--space-2);
+  font-weight: 700;
+  cursor: pointer;
+}
+.g-expl > summary:focus-visible,
+.g-expl-term > summary:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.g-expl-badge {
+  margin: 0;
+  color: var(--brand);
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+  font-weight: 700;
+}
+.g-expl-list {
+  margin: var(--space-2) 0 0;
+  padding-inline-start: var(--space-3);
+  border-inline-start: 4px dashed var(--action);
+  list-style: none;
+}
+.g-expl-term p {
+  margin-block: 0 var(--space-2);
+}
 /* The way on: alone at the foot of the card, as wide as it, of the weight of the way to the
    book — a link without script, a button with it, and the same to the eye. */
 .g-next {

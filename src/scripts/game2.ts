@@ -798,6 +798,36 @@ function start(parts: Block, config: Config, data: GameData): void {
     return words;
   }
 
+  /**
+   * Under the card, out of its frame, after « Mot suivant » (D20.4): the explained words its
+   * sentence uses, in a line that opens. Closed, it is one line; opened, the label first — it
+   * travels with the explanations, in the file of the game, never in the page (D20.11) — then
+   * each word, which opens on what it means. Nothing is asked for: the file holds it already.
+   * None where the build explains nothing, or the sentence uses no such word.
+   */
+  function explainedLine(wordId: string): HTMLElement | null {
+    const explained = data.explained;
+    const ids = entryOf(data, wordId)?.terms ?? [];
+    if (explained === undefined || ids.length === 0) return null;
+    const line = el('details', undefined, 'g-expl');
+    line.append(el('summary', explained.labels.title));
+    const badge = el('p', explained.labels.badge, 'g-expl-badge');
+    const list = el('ul', undefined, 'g-expl-list');
+    for (const id of ids) {
+      const term = explained.terms[id];
+      if (term === undefined) continue;
+      const item = el('details', undefined, 'g-expl-term');
+      const meaning = el('p', term[1]);
+      meaning.dataset.generatedBy = 'ai';
+      item.append(el('summary', term[0]), meaning);
+      const row = el('li');
+      row.append(item);
+      list.append(row);
+    }
+    line.append(badge, list);
+    return line;
+  }
+
   function renderPlace(wordId: string, word: string, focus: boolean): void {
     if (session.play.screen.kind !== 'place') return;
     const entry = entryOf(data, wordId);
@@ -821,6 +851,8 @@ function start(parts: Block, config: Config, data: GameData): void {
     card.append(actions);
     enhanceOfficialLinks(card);
     panel.append(card);
+    const words = explainedLine(wordId);
+    if (words !== null) panel.append(words);
     show(panel, heading, focus);
     // The card is taller than the tiles it replaces — it holds a sentence now: after the gesture
     // that asked for it, it is brought into view down to « Mot suivant », the word still above

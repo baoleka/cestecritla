@@ -54,6 +54,25 @@ export interface GameEntry {
    * (src/lib/game-gists.ts): the card then says where, and gives the link, as before.
    */
   gist?: string;
+  /**
+   * The explained words its sentence uses (PLAN-MOTS, lot 14; D20.4): identifiers in
+   * `GameData.explained.terms`, as a dictionary orders them. Absent where the build explains none,
+   * and where the sentence uses none.
+   */
+  terms?: string[];
+}
+
+/**
+ * The words the sentences of the cards use, explained (D20.4). Written ahead by an AI, like the
+ * sentences, and said so by the file: their label travels with them, never in the page (D20.11).
+ */
+export interface GameExplained {
+  written_by: 'ai';
+  read_by_a_person: false;
+  /** The line under the card, and the label of what it opens on. */
+  labels: { title: string; badge: string };
+  /** By identifier: the word as shown, and what it means. Never its example (D20.4). */
+  terms: Record<string, [string, string]>;
 }
 
 /**
@@ -73,6 +92,11 @@ export interface GameData {
    * file without sentences.
    */
   sentences?: { written_by: 'ai'; read_by_a_person: false };
+  /**
+   * The words those sentences use, explained (D20.4). Absent from a build that explains none:
+   * the file, and its name, stay those of the build before (src/lib/game-data.ts).
+   */
+  explained?: GameExplained;
 }
 
 export type Depth = 1 | 2 | 3;

@@ -26,8 +26,16 @@
  * is running unattended and skip the question, which is exactly the behaviour described above.
  */
 import { spawnSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
-import { buildGame, gameSite, gameSources, gameWords, wordLinks } from '../src/lib/game-data.js';
+import { existsSync, readFileSync } from 'node:fs';
+import {
+  buildGame,
+  gameExplaining,
+  gameSite,
+  gameSources,
+  gameWords,
+  wordLinks,
+} from '../src/lib/game-data.js';
+import { wordsFor } from '../src/lib/words-switch.js';
 import { GAME_GISTS_PATH, gameGists, gameGistsWhyNot } from '../src/lib/game-gists.js';
 import {
   chatDeployArgs,
@@ -51,6 +59,7 @@ import {
   type AskDeploy,
 } from './build-mode.js';
 import {
+  WORDS_SWITCH_PATH,
   homeBlockers,
   launchBlockers,
   previewChatBlockers,
@@ -183,9 +192,26 @@ const shownGists =
         test: false,
       })
     : null;
+// …and with the words of those sentences explained under the card, where data/2026/words.json
+// opens the game for THIS host (D20.4) — never in a build whose field asks nothing.
+const explainsGame =
+  shownGists !== null &&
+  hostAsk !== 'off' &&
+  wordsFor(
+    JSON.parse(readFileSync(WORDS_SWITCH_PATH, 'utf8')) as unknown,
+    target === 'preview' ? 'preview' : 'apex',
+  ).game;
 const gameFile =
   mode === 'app' && !scrutinBuild && gameSite().on
-    ? `jeu-${buildGame(gameWords(), gameSources(), wordLinks(), shownGists).fingerprint}.json`
+    ? `jeu-${
+        buildGame(
+          gameWords(),
+          gameSources(),
+          wordLinks(),
+          shownGists,
+          explainsGame ? gameExplaining() : null,
+        ).fingerprint
+      }.json`
     : null;
 /**
  * Why the file of the sentences is not the one of the repository: untracked (it was kept out of

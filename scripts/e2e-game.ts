@@ -4138,6 +4138,84 @@ async function runEngine(
         (await page.locator('#game-live .g-goal').isVisible()),
       text(await page.locator('#game-live .g-goal').textContent()),
     );
+    // Under the card, out of its frame, after « Mot suivant » (D20.4): the explained words of
+    // its sentence, in a line that opens — where this build explains them. Nothing is asked for:
+    // the file of the game holds them (the requests of the round are counted below).
+    {
+      const ids = data.words[0]?.terms ?? [];
+      const read = (): Promise<{
+        count: number;
+        inCard: number;
+        afterCard: boolean;
+        open: boolean;
+        title: string;
+        badge: string;
+        badgeShown: boolean;
+        terms: string[];
+        marked: number;
+        meaningShown: boolean;
+      }> =>
+        page.evaluate(`(() => {
+          const card = document.querySelector('#game-live .g-place');
+          const line = document.querySelector('#game-live .g-expl');
+          const flat = (node) => (node ? node.textContent.replace(/\\s+/g, ' ').trim() : '');
+          // What a closed <details> holds besides its summary is not shown (HTML): read so,
+          // rather than by boxes, which some engines still give to that content.
+          const shown = (node) => node !== null && node.closest('details:not([open])') === null;
+          const first = line ? line.querySelector('.g-expl-term p') : null;
+          return {
+            count: document.querySelectorAll('#game-live .g-expl').length,
+            inCard: card.querySelectorAll('.g-expl').length,
+            afterCard: line !== null && card.nextElementSibling === line,
+            open: line !== null && line.open,
+            title: line ? flat(line.querySelector('summary')) : '',
+            badge: line ? flat(line.querySelector('.g-expl-badge')) : '',
+            badgeShown: line ? shown(line.querySelector('.g-expl-badge')) : false,
+            terms: line ? [...line.querySelectorAll('.g-expl-term > summary')].map(flat) : [],
+            marked: line ? line.querySelectorAll('.g-expl-term p[data-generated-by="ai"]').length : 0,
+            meaningShown: shown(first),
+          };
+        })()`);
+      const before = await read();
+      if (data.explained === undefined || ids.length === 0) {
+        check(
+          'a card whose sentence uses no explained word, or a build that explains none: no line under it',
+          before.count === 0,
+          String(before.count),
+        );
+      } else {
+        const wanted = ids.map((id) => data.explained?.terms[id]?.[0] ?? '');
+        check(
+          'under the card, out of its frame, after « Mot suivant »: one closed line for the words of its sentence',
+          before.count === 1 &&
+            before.inCard === 0 &&
+            before.afterCard &&
+            !before.open &&
+            before.title === says('words.game.title') &&
+            !before.badgeShown,
+          JSON.stringify(before),
+        );
+        await page.locator('#game-live .g-expl > summary').click();
+        const opened = await read();
+        check(
+          '…opened: the label first, an AI wrote them, then each word of the sentence, closed',
+          opened.open &&
+            opened.badge === says('chat.terms.badge') &&
+            opened.badgeShown &&
+            JSON.stringify(opened.terms) === JSON.stringify(wanted) &&
+            opened.marked === ids.length &&
+            !opened.meaningShown,
+          JSON.stringify(opened),
+        );
+        await page.locator('#game-live .g-expl-term > summary').first().click();
+        const meaning = await read();
+        check(
+          '…and a word opens on what it means, written by an AI, never on an example',
+          meaning.meaningShown,
+          JSON.stringify(meaning),
+        );
+      }
+    }
     await page.getByRole('button', { name: 'Mot suivant' }).click();
     check(
       'the next word, and the focus on its question: the question starts at the second word',

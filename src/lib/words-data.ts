@@ -43,8 +43,11 @@ const ourCards = (): NotionEntry[] =>
     ({ id, term }) => ({ id, term }),
   );
 
+/** Our cards as wordings, which the words they hold belong to (D20.14): read before the words. */
+export const cardBlockers = (): TermWording[] => cardWordings(ourCards());
+
 /** Our texts are typed with straight apostrophes; the pages show typographic ones. */
-const prose = (text: string): string => text.replace(/'/g, '’');
+export const prose = (text: string): string => text.replace(/'/g, '’');
 
 /** Who wrote the texts a file holds: an AI, and no person read them one by one (D16.59). */
 export interface WordsProvenance {

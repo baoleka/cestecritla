@@ -16,7 +16,7 @@
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { canonicalHash, listFingerprint } from './fingerprint.js';
-import { ROUND, type GameData, type GamePart } from './game-engine.js';
+import { ROUND, type GameData, type GameEntry, type GamePart } from './game-engine.js';
 import {
   LOCAL_CHECKS,
   proveWords,
@@ -25,6 +25,8 @@ import {
   type ProvenWord,
 } from './game.js';
 import { WORD_LINKS_PATH, highlightedWords, wordFragment, wordsFingerprint } from './word-links.js';
+import { termsIn, withoutCards, type TermEntry, type TermWording } from './terms.js';
+import { cardBlockers, explainedTerms, prose } from './words-data.js';
 
 export const GAME_WORDS_PATH = 'data/2026/game-words.json';
 
@@ -128,6 +130,85 @@ function tiles(sources: GameSources): GamePart[] {
     }));
 }
 
+/**
+ * What the cards of the game explain (PLAN-MOTS, lot 14; D20.4): the words of their sentences,
+ * read with our cards — a word inside the name of a card is the card's, never explained here
+ * (D20.14) — and the labels that travel with them in the file (D20.11).
+ */
+export interface GameExplaining {
+  entries: readonly TermEntry[];
+  blockers: readonly TermWording[];
+  labels: { title: string; badge: string };
+}
+
+/**
+ * The explaining of this state of the files. The build passes it where data/2026/words.json
+ * opens the game for its host (src/lib/game-built.ts); the deploy guard, where it opens it for
+ * the host it deploys to (scripts/deploy.ts): both compute the same file, and the same name.
+ */
+export function gameExplaining(): GameExplaining {
+  // Read from the file rather than through src/lib/strings.ts: the gates read this module too,
+  // outside the build. The two strings have no parameter: what the file holds is what is shown.
+  const strings = read('design/strings.json') as Record<string, unknown>;
+  const label = (key: string): string => {
+    const value = strings[key];
+    if (typeof value !== 'string') throw new Error(`design/strings.json: no string ${key}`);
+    return prose(value);
+  };
+  return {
+    entries: explainedTerms(),
+    blockers: cardBlockers(),
+    labels: { title: label('words.game.title'), badge: label('chat.terms.badge') },
+  };
+}
+
+/** The explained words a sentence uses, as a dictionary orders them: identifiers. */
+function wordsOfSentence(gist: string, explaining: GameExplaining): string[] {
+  const { entries, blockers } = explaining;
+  const all = [...blockers, ...entries];
+  const known = new Map(entries.map((entry) => [entry.id, entry]));
+  return withoutCards(termsIn([gist], all, all.length))
+    .flatMap((found) => {
+      const entry = known.get(found.id);
+      return entry === undefined ? [] : [entry];
+    })
+    .sort(
+      (a, b) =>
+        a.term.localeCompare(b.term, 'fr', { sensitivity: 'base' }) || a.id.localeCompare(b.id),
+    )
+    .map((entry) => entry.id);
+}
+
+/**
+ * The file with the words of its sentences explained (D20.4) — or as it was, where none is: a
+ * build that explains nothing keeps, byte for byte, the file and the name it had before.
+ */
+function withExplained(data: GameData, explaining: GameExplaining | null): GameData {
+  if (explaining === null) return data;
+  const used = new Map<string, [string, string]>();
+  const byId = new Map(explaining.entries.map((entry) => [entry.id, entry]));
+  const words: GameEntry[] = data.words.map((word) => {
+    if (word.gist === undefined) return word;
+    const ids = wordsOfSentence(word.gist, explaining);
+    for (const id of ids) {
+      const entry = byId.get(id);
+      if (entry !== undefined) used.set(id, [entry.term, prose(entry.plain)]);
+    }
+    return ids.length === 0 ? word : { ...word, terms: ids };
+  });
+  if (used.size === 0) return data;
+  return {
+    ...data,
+    words,
+    explained: {
+      written_by: 'ai',
+      read_by_a_person: false,
+      labels: explaining.labels,
+      terms: Object.fromEntries([...used].sort(([a], [b]) => a.localeCompare(b))),
+    },
+  };
+}
+
 export interface BuiltGame {
   data: GameData;
   proven: ProvenWord[];
@@ -142,13 +223,15 @@ export interface BuiltGame {
  * src/lib/game-gists.ts) — none by default. Whoever builds a page passes them
  * (src/lib/game-built.ts); whoever looks at a build from outside it — scripts/deploy.ts, the
  * gates — passes the sentences of that build, so that the file name computed here is the one
- * it holds.
+ * it holds. `explaining`: likewise, the words of those sentences explained (D20.4) — none by
+ * default.
  */
 export function buildGame(
   file: GameWordsFile = gameWords(),
   sources: GamePublicSources = gameSources(),
   links: unknown = wordLinks(),
   gists: ReadonlyMap<string, string> | null = null,
+  explaining: GameExplaining | null = null,
 ): BuiltGame {
   const { proven, problems } = proveWords(file, sources);
   if (problems.length > 0) {
@@ -191,5 +274,6 @@ export function buildGame(
   if (data.words.some((word) => word.gist !== undefined)) {
     data.sentences = { written_by: 'ai', read_by_a_person: false };
   }
-  return { data, proven, fingerprint: canonicalHash(data).slice(0, 16) };
+  const shown = withExplained(data, explaining);
+  return { data: shown, proven, fingerprint: canonicalHash(shown).slice(0, 16) };
 }

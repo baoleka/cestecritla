@@ -26,6 +26,7 @@ import { test } from 'node:test';
 import { gzipSync } from 'node:zlib';
 import {
   buildGame,
+  gameExplaining,
   gameSite,
   gameSources,
   gameWords,
@@ -40,7 +41,9 @@ import { ROUND, type GameData } from '../src/lib/game-engine.js';
 import { KEPT_FIELDS2, STORAGE_KEY, TAB_FIELDS2 } from '../src/lib/game-state2.js';
 import { mascotMarkup } from '../src/lib/mascot2.js';
 import { STORAGE_MAP, STORAGE_STRINGS, TINT_LABEL } from '../src/lib/storage-map.js';
-import { BUILD_MARKER, builtAskMode } from './build-mode.js';
+import { BUILD_MARKER, builtAskMode, readBuildHost } from './build-mode.js';
+import { wordsFor } from '../src/lib/words-switch.js';
+import { explainedTerms } from '../src/lib/words-data.js';
 import { MASCOT2_SVG_PATH } from './mascot2-kit.js';
 
 /** Every HTML page of a build, as paths relative to its root. */
@@ -350,7 +353,22 @@ for (const root of ['dist', 'dist-ask']) {
         gameSources().manifest.meta.corpus_version,
         root === 'dist' ? { mode: builtAskMode(), test: false } : { mode: 'chat', test: true },
       );
-      const { data, fingerprint } = buildGame(gameWords(), gameSources(), wordLinks(), gists);
+      // …and the words of those sentences, explained (D20.4): where data/2026/words.json opens
+      // the game for the host dist/ was built for — and always in the test build.
+      const explains =
+        root === 'dist-ask' ||
+        (builtAskMode() === 'chat' &&
+          wordsFor(
+            JSON.parse(readFileSync('data/2026/words.json', 'utf8')) as unknown,
+            readBuildHost(),
+          ).game);
+      const { data, fingerprint } = buildGame(
+        gameWords(),
+        gameSources(),
+        wordLinks(),
+        gists,
+        explains ? gameExplaining() : null,
+      );
       const name = gameFile(root);
       // The file is the list, proven, under the name of its own fingerprint: never stale bytes.
       assert.equal(name, `jeu-${fingerprint}.json`);
@@ -451,6 +469,8 @@ for (const root of ['dist', 'dist-ask']) {
         manifest.meta.corpus_version,
         // Our sentences, where this build may show them: a public file holds them (D19.2).
         ...(gists === null ? [] : gists.values()),
+        // The identifiers of the explained words a sentence uses (D20.4): data/2026/terms.json.
+        ...explainedTerms().map((entry) => entry.id),
         ...gameWords().words.flatMap((w) => [w.id, w.word]),
         ...manifest.parts.map((p) => p.title),
         ...manifest.chapters.flatMap((c) => [c.id, c.title]),
@@ -479,7 +499,7 @@ for (const root of ['dist', 'dist-ask']) {
       };
       // What the file says of its own sentences is not walked with the rest: it is checked on
       // its own, to the letter — there where sentences are, and nowhere else (below).
-      const { sentences: provenance, ...rest } = published;
+      const { sentences: provenance, explained, ...rest } = published;
       walk(rest);
       const strangers = [...new Set(strings.filter((s) => !known.has(s)))];
       assert.deepEqual(strangers, [], 'strings no public file accounts for');
@@ -493,6 +513,31 @@ for (const root of ['dist', 'dist-ask']) {
           : undefined,
         'the file of the game does not say who wrote its sentences — or says it of none',
       );
+      // The words of the sentences, explained (D20.4): each as data/2026/terms.json writes it,
+      // never its example, under the labels of the strings — and only where a sentence uses one.
+      const usedTerms = new Set(published.words.flatMap((word) => word.terms ?? []));
+      if (explained === undefined) {
+        assert.equal(usedTerms.size, 0, 'words of sentences named, and none explained');
+      } else {
+        assert.equal(explained.written_by, 'ai');
+        assert.equal(explained.read_by_a_person, false);
+        assert.deepEqual(explained.labels, {
+          title: 'Des mots de cette phrase, expliqués',
+          badge: 'Explications écrites et vérifiées par une IA',
+        });
+        const terms = new Map(explainedTerms().map((entry) => [entry.id, entry]));
+        assert.deepEqual(Object.keys(explained.terms).sort(), [...usedTerms].sort());
+        for (const [id, [term, plain]] of Object.entries(explained.terms)) {
+          const entry = terms.get(id);
+          assert.ok(entry !== undefined, `${id}: no explained word`);
+          assert.equal(term, entry.term, id);
+          assert.equal(plain, entry.plain.replace(/'/g, '’'), id);
+        }
+        for (const word of published.words) {
+          if (word.terms !== undefined)
+            assert.ok(word.gist !== undefined, `${word.id}: no sentence`);
+        }
+      }
       // Every word leads somewhere a link can land.
       for (const word of published.words) {
         assert.match(word.url, /^https:\/\/melenchon2027\.fr\/programme\/livre\/[^#]+#.+/, word.id);
@@ -521,8 +566,9 @@ for (const root of ['dist', 'dist-ask']) {
     assert.ok(name !== undefined);
     const data = gzipSync(readFileSync(join(root, 'data', name)), { level: 9 }).byteLength;
     // Measured 13/11/2026: 3.8 KB with nine words, most of it the titles of the tiles; 7 KB with
-    // the whole list of 48 (D16.31).
-    assert.ok(data <= 12 * 1024, `the game’s data: ${String(data)} B gzip`);
+    // the whole list of 48 (D16.31). 14 KB since 19 November 2026 (D20.4, which amends the 12 KB
+    // of D17.13): the words of the sentences, explained, travel in this file.
+    assert.ok(data <= 14 * 1024, `the game’s data: ${String(data)} B gzip`);
     const scripts = readdirSync(join(root, '_astro')).filter((f) => f.startsWith(GAME_SCRIPT));
     assert.equal(scripts.length, 1, 'the script of the game is missing, or there are two');
     const js = gzipSync(readFileSync(join(root, '_astro', scripts[0] ?? '')), {
