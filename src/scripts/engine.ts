@@ -11,9 +11,12 @@ import type { Ranked } from '../lib/chat-local.ts';
 import {
   INDEX_OPTIONS,
   buildQuery,
+  credited,
   expand,
   groupBySection,
+  inBookWords,
   searchOptions,
+  type BookWording,
   type SearchDoc,
   type SectionHit,
   type SynonymGroup,
@@ -32,6 +35,8 @@ export interface Meta {
   /** Proposition id → [label ("Mesure clé", "Mesure 7.2"), text directive or "", incipit or ""]. */
   items: Record<string, [string, string, string]>;
   synonyms: SynonymGroup[];
+  /** Phrases the book writes in other words, searched in its words (D21.8). */
+  book_words: BookWording[];
 }
 
 export interface Engine {
@@ -68,7 +73,8 @@ export function loadEngine(indexUrl: string, metaUrl: string): Promise<Engine> {
 
 /** The sections where a question is written, best first, each with its measures. */
 export function findSections(engine: Engine, question: string, max: number): SectionHit[] {
-  const query = buildQuery(question, expand(question, engine.meta.synonyms));
+  const searched = inBookWords(question, engine.meta.book_words).text;
+  const query = buildQuery(searched, expand(searched, engine.meta.synonyms));
   const hits = engine.index
     .search(query as Parameters<typeof engine.index.search>[0], searchOptions())
     .map((r) => ({ id: String(r.id), score: r.score }));
@@ -81,11 +87,14 @@ export function findSections(engine: Engine, question: string, max: number): Sec
  */
 export function findRanked(engine: Engine, asked: string): Ranked[] {
   // Letters typed apart are one word: « R.S.A. » is searched as « rsa ».
-  const question = spelled(asked).join(' ');
+  // A phrase the book writes in other words is searched in its words (D21.8): « exil fiscal ».
+  const book = inBookWords(spelled(asked).join(' '), engine.meta.book_words);
+  const question = book.text;
   const query = buildQuery(question, expand(question, engine.meta.synonyms));
   // The words of the question as the index cuts them: a word that found no measure AS WRITTEN
   // is one the book does not hold — a name, often (src/lib/chat-local.ts, `strangersIn`). A
   // look-alike does not count: « françois » finds « français », « martin » finds « matin ».
+  // A word replaced by the book's words found what they found.
   const typed = terms(question);
   const written = new Set(typed);
   return engine.index
@@ -95,7 +104,10 @@ export function findRanked(engine: Engine, asked: string): Ranked[] {
       score: r.score,
       near: lookAlikeOnly(r.terms, r.queryTerms),
       weak: fillerOnly(r.queryTerms),
-      by: r.queryTerms.filter((term) => written.has(term) && asWritten(term, r.terms)),
+      by: credited(
+        r.queryTerms.filter((term) => written.has(term) && asWritten(term, r.terms)),
+        book.credit,
+      ),
       via: r.queryTerms.filter((term) => asWritten(term, r.terms)),
       on: r.terms.filter((found) => typed.some((term) => asWritten(term, [found]))),
     }));

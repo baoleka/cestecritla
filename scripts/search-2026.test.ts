@@ -10,8 +10,10 @@ import { test } from 'node:test';
 import * as bench from '../eval/retrieval-core.js';
 import {
   STOPWORDS,
+  credited,
   expand,
   groupBySection,
+  inBookWords,
   processTerm,
   sectionOf,
   spelled,
@@ -94,6 +96,63 @@ void test('synonyms: a phrase of a group brings the others, and only then', () =
   assert.equal(expand('Et les retraites ?', groups), '');
   // Words already in the question are not added twice.
   assert.equal(expand('bac ou baccalauréat ?', groups), '');
+});
+
+void test('a phrase the book writes in other words is searched in its words, and nothing else moves (D21.8)', () => {
+  const wordings = [{ said: ['exil fiscal', 'exilés fiscaux'], searched: 'évasion fiscale' }];
+  // The phrase, wherever it stands and however it is written, gives way to the book's words.
+  for (const asked of [
+    'exil fiscal',
+    'Que dit le programme de l’exil fiscal ?',
+    'les EXILÉS FISCAUX et la taxe',
+  ]) {
+    const searched = terms(inBookWords(asked, wordings).text);
+    assert.ok(!searched.includes('exil') && !searched.includes('exile'), asked);
+    assert.ok(searched.includes('evasion') && searched.includes('fiscale'), asked);
+  }
+  assert.deepEqual(terms(inBookWords('les exilés fiscaux et la taxe', wordings).text), [
+    'taxe',
+    'evasion',
+    'fiscale',
+  ]);
+  // Without the phrase, the question is searched as it came: « exil » alone is the book's word.
+  for (const asked of ['exil', 'l’exil des réfugiés', 'fiscal', 'exil et fiscalité']) {
+    assert.equal(inBookWords(asked, wordings).text, asked);
+  }
+  // The words replaced are answered for by the words that replaced them (`strangersIn`).
+  const book = inBookWords('exil fiscal', wordings);
+  assert.deepEqual([...(book.credit.get('evasion') ?? [])].sort(), ['exil', 'fiscal']);
+  assert.deepEqual(credited(['evasion', 'taxe'], book.credit).sort(), [
+    'evasion',
+    'exil',
+    'fiscal',
+    'taxe',
+  ]);
+  assert.deepEqual(credited(['taxe'], book.credit), ['taxe']);
+});
+
+void test('the phrases the book writes in other words: a closed list, each with its reason, each finding the book', () => {
+  const file = json('data/2026/synonyms.json') as SynonymsFile;
+  const index = new Set(
+    (
+      json('data/2026/search-index.json') as { index: { index: [string, unknown][] } }
+    ).index.index.map(([stem]) => stem),
+  );
+  const wordings = file.book_words ?? [];
+  assert.ok(wordings.length <= 5, 'a closed list: each phrase is one the book would mislead');
+  for (const wording of wordings) {
+    assert.ok(wording.why_fr.length > 40, `${wording.searched}: no reason given`);
+    assert.ok(wording.said.length > 0);
+    for (const phrase of wording.said) {
+      // A phrase, never a lone word: a word alone is the book's own (« exil »).
+      assert.ok(terms(phrase).length >= 2, `${phrase}: a phrase has two words at least`);
+      assert.ok(phrase.split(/\s+/).length <= 4, `${phrase}: too long`);
+    }
+    // The book's words are words the index holds: what replaces finds something.
+    for (const term of terms(wording.searched)) {
+      assert.ok(index.has(term), `${wording.searched}: « ${term} » is not in the index`);
+    }
+  }
 });
 
 void test('ranked propositions are grouped by section, the best proposition first', () => {

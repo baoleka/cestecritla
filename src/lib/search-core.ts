@@ -227,6 +227,71 @@ export function expand(question: string, groups: readonly SynonymGroup[]): strin
   return phrases.join(' ');
 }
 
+/**
+ * A phrase people say that the book writes in other words — and whose own words, searched as
+ * written, find what the phrase does not mean. « exil fiscal »: the book writes « exil » only of
+ * people who flee their country (p6c3-s02), and says « évasion fiscale », « exit tax » of the
+ * tax (D21.8, 23/11/2026). A closed list (data/2026/synonyms.json, `book_words`), each with its
+ * reason (`why_fr`, in the file, not served): a synonym adds words to a search, this replaces
+ * the words that would mislead it.
+ */
+export interface BookWording {
+  /** The phrases as people say them, matched as runs of processed words. */
+  said: readonly string[];
+  /** The book's words for them, searched in their place. */
+  searched: string;
+}
+
+/** A question as it is searched, and who answers for the words it no longer holds. */
+export interface InBookWords {
+  /** The question, each phrase of the list replaced by the book's words for it. */
+  text: string;
+  /** Each word of the book's wording → the words typed that it stands for. */
+  credit: ReadonlyMap<string, readonly string[]>;
+}
+
+/**
+ * The question in the book's words: each phrase of the list, found as a run of processed words
+ * (stop words between them skipped, as the index skips them), is taken out and the book's words
+ * for it are added. A question without such a phrase is returned as it came.
+ */
+export function inBookWords(question: string, wordings: readonly BookWording[]): InBookWords {
+  const tokens = tokenize(question);
+  const runs = tokens
+    .map((token, at) => ({ at, term: processTerm(token) }))
+    .filter((word): word is { at: number; term: string } => word.term !== null);
+  const dropped = new Set<number>();
+  const added: string[] = [];
+  const credit = new Map<string, string[]>();
+  for (const wording of wordings) {
+    let found = false;
+    for (const phrase of wording.said) {
+      const needle = terms(phrase);
+      if (needle.length === 0) continue;
+      for (let i = 0; i + needle.length <= runs.length; i += 1) {
+        const run = runs.slice(i, i + needle.length);
+        if (!needle.every((term, j) => run[j]?.term === term)) continue;
+        if (run.some((word) => dropped.has(word.at))) continue;
+        for (const word of run) dropped.add(word.at);
+        for (const term of terms(wording.searched)) {
+          credit.set(term, [...new Set([...(credit.get(term) ?? []), ...needle])]);
+        }
+        found = true;
+      }
+    }
+    if (found) added.push(wording.searched);
+  }
+  if (added.length === 0) return { text: question, credit };
+  const kept = tokens.filter((_token, at) => !dropped.has(at));
+  return { text: [...kept, ...added].join(' '), credit };
+}
+
+/** The words that found a proposition, with the words typed that the book's words stand for. */
+export const credited = (
+  found: readonly string[],
+  credit: ReadonlyMap<string, readonly string[]>,
+): string[] => [...new Set([...found, ...found.flatMap((term) => credit.get(term) ?? [])])];
+
 /** The MiniSearch query for a question and its expansion. */
 export function buildQuery(question: string, expansion: string): unknown {
   if (expansion.length === 0) return question;

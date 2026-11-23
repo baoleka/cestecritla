@@ -28,6 +28,7 @@ import {
   INDEX_OPTIONS,
   buildQuery,
   expand,
+  inBookWords,
   groupBySection,
   searchOptions,
   type SearchDoc,
@@ -89,6 +90,8 @@ export interface Questions2026 {
 export interface SynonymsFile {
   meta: { note_fr: string };
   groups: string[][];
+  /** Phrases the book writes in other words, each with its reason (D21.8). */
+  book_words?: { said: string[]; searched: string; why_fr: string }[];
 }
 
 export interface EvalResult {
@@ -108,8 +111,11 @@ export function loadSearch(): (question: string) => string[] {
     file.index as Parameters<typeof MiniSearch.loadJS>[0],
     INDEX_OPTIONS,
   );
-  const groups: SynonymGroup[] = (json(SYNONYMS_PATH) as SynonymsFile).groups;
-  return (question) => {
+  const synonyms = json(SYNONYMS_PATH) as SynonymsFile;
+  const groups: SynonymGroup[] = synonyms.groups;
+  const bookWords = synonyms.book_words ?? [];
+  return (asked) => {
+    const question = inBookWords(asked, bookWords).text;
     const query = buildQuery(question, expand(question, groups));
     const hits = index
       .search(query as Parameters<typeof index.search>[0], searchOptions())

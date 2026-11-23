@@ -1,6 +1,6 @@
 {
   "meta": {
-    "note_fr": "Mots des gens à côté des mots du livre. Chaque groupe réunit des expressions qui désignent le même sujet ; quand l'une apparaît dans une recherche, les autres sont cherchées aussi, avec un poids quatre fois moindre. Rédigé par nous : alias des cartes-concept et de la FAQ de septembre 2026, complétés pour le vocabulaire de l'édition 2026. Aucun mot ici n'est une citation."
+    "note_fr": "Mots des gens à côté des mots du livre. Chaque groupe réunit des expressions qui désignent le même sujet ; quand l'une apparaît dans une recherche, les autres sont cherchées aussi, avec un poids quatre fois moindre. Rédigé par nous : alias des cartes-concept et de la FAQ de septembre 2026, complétés pour le vocabulaire de l'édition 2026. Aucun mot ici n'est une citation. « book_words » : quelques expressions que le livre écrit autrement, et dont les mots, cherchés tels quels, trouveraient ce qu'elles ne veulent pas dire ; elles sont cherchées dans les mots du livre à leur place, chacune avec sa raison (D21.8)."
   },
   "groups": [
     [
@@ -684,5 +684,19 @@
       "lobbyistes",
       "groupes de pression"
     ]
+  ],
+  "book_words": [
+    {
+      "said": [
+        "exil fiscal",
+        "exils fiscaux",
+        "exilé fiscal",
+        "exilés fiscaux",
+        "exilée fiscale",
+        "exilées fiscales"
+      ],
+      "searched": "évasion fiscale",
+      "why_fr": "Le livre n'écrit « exil » que pour les personnes qui fuient leur pays (p6c3-s02, politique migratoire) ; de l'impôt, il dit « évasion fiscale » et « exit tax » (p2c2-s02)."
+    }
   ]
 }

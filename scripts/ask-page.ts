@@ -21,13 +21,16 @@ import {
   INDEX_OPTIONS,
   asWritten,
   buildQuery,
+  credited,
   expand,
   fillerOnly,
   groupBySection,
+  inBookWords,
   lookAlikeOnly,
   searchOptions,
   spelled,
   terms,
+  type BookWording,
   type SearchDoc,
   type SynonymGroup,
 } from '../src/lib/search-core.js';
@@ -56,7 +59,12 @@ export function loadPage(): (question: string) => PageAsk {
     file.index as Parameters<typeof MiniSearch.loadJS>[0],
     INDEX_OPTIONS,
   );
-  const groups = (json('data/2026/synonyms.json') as { groups: SynonymGroup[] }).groups;
+  const synonyms = json('data/2026/synonyms.json') as {
+    groups: SynonymGroup[];
+    book_words?: BookWording[];
+  };
+  const groups = synonyms.groups;
+  const bookWords = synonyms.book_words ?? [];
   // What the sheet knows of words, as its own file gives it (src/lib/chat-data.ts).
   const lexicon = lexiconOf(wordLists(), (word) => terms(expand(word, groups)));
   // The order of the book, as the titles file of the page lists it: propositions only.
@@ -67,7 +75,9 @@ export function loadPage(): (question: string) => PageAsk {
   // What the search finds for a question, as the sheet reads it.
   const find = (asked: string) => {
     // Letters typed apart are one word, for the search as for the rules (`spelled`).
-    const question = spelled(asked).join(' ');
+    // A phrase the book writes in other words is searched in its words (D21.8).
+    const book = inBookWords(spelled(asked).join(' '), bookWords);
+    const question = book.text;
     const query = buildQuery(question, expand(question, groups));
     const typed = new Set(terms(question));
     return index.search(query as Parameters<typeof index.search>[0], searchOptions()).map((r) => ({
@@ -76,7 +86,10 @@ export function loadPage(): (question: string) => PageAsk {
       terms: r.terms,
       near: lookAlikeOnly(r.terms, r.queryTerms),
       weak: fillerOnly(r.queryTerms),
-      by: r.queryTerms.filter((term) => typed.has(term) && asWritten(term, r.terms)),
+      by: credited(
+        r.queryTerms.filter((term) => typed.has(term) && asWritten(term, r.terms)),
+        book.credit,
+      ),
       via: r.queryTerms.filter((term) => asWritten(term, r.terms)),
       on: r.terms.filter((found) => [...typed].some((term) => asWritten(term, [found]))),
     }));

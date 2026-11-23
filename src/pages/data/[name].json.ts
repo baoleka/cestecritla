@@ -106,10 +106,18 @@ function meta(): string {
       items[item.id] = [label, item.locator ?? '', item.incipit ?? ''];
     }
   }
-  const synonyms = (
-    JSON.parse(readFileSync('data/2026/synonyms.json', 'utf8')) as { groups: string[][] }
-  ).groups;
-  return JSON.stringify({ sections: sectionEntries, items, synonyms });
+  const file = JSON.parse(readFileSync('data/2026/synonyms.json', 'utf8')) as {
+    groups: string[][];
+    book_words?: { said: string[]; searched: string; why_fr: string }[];
+  };
+  // The phrases the book writes in other words travel without their reason: the page searches.
+  const bookWords = (file.book_words ?? []).map(({ said, searched }) => ({ said, searched }));
+  return JSON.stringify({
+    sections: sectionEntries,
+    items,
+    synonyms: file.groups,
+    book_words: bookWords,
+  });
 }
 
 function body(name: string | undefined): string {

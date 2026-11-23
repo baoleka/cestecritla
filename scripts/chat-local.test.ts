@@ -921,6 +921,32 @@ void test('a coded phrase, a slur: the measures of the subject to ask in its pla
   assert.equal(measuresFor('le contrôle des prix', [], HELD, all, NOTHING).sentences, false);
 });
 
+void test('on the index of the book: « exil fiscal » finds the tax, never the people who flee their country (D21.8)', () => {
+  const page = loadPage();
+  const tax = page('évasion fiscale');
+  assert.ok(tax.rows.length > 0 && tax.rows.every((id) => id.startsWith('p2c2-s02-')));
+  for (const question of [
+    'exil fiscal',
+    'l’exil fiscal',
+    'les exilés fiscaux',
+    'Que propose le programme contre l’exil fiscal ?',
+  ]) {
+    const { rows, shown } = page(question);
+    assert.deepEqual(rows, tax.rows, question);
+    // The words replaced are not strangers: the sentences come, as for « évasion fiscale ».
+    assert.equal(shown.sentences, true, question);
+    assert.ok(!rows.some((id) => id.startsWith('p6c3-')), question);
+  }
+  // A name next to it is still a name: links, as before.
+  assert.equal(page('Mélenchon exil fiscal ?').shown.sentences, false);
+  // « exil » alone, and the exile of people, are the book's own words: nothing moves.
+  for (const question of ['exil', 'l’exil des réfugiés']) {
+    assert.equal(page(question).rows[0], 'p6c3-s02-m02', question);
+  }
+  assert.deepEqual(page('taxe Zucman').rows, ['p2c2-s02-m02', 'p2c2-s02-m03']);
+  assert.deepEqual(page('exit tax').rows, ['p2c2-s02-m03']);
+});
+
 void test('on the index of the book: what the sixth and seventh reviews typed gets no sentence, and a subject asked alone keeps its sentences', () => {
   const page = loadPage();
   /** No sentence of ours under it: refused, nothing found, or links. */
