@@ -175,7 +175,7 @@ L'approbation de ce plan vaut aussi son accord pour deux gestes, qui seront cons
     - feuille : 104 / 98 / 98, avec un contrôle de plus — l'objection exacte, son « En clair » et le lien vers `/r/exil-fiscal/` ;
     - la porte anti-fuite (17 / 17) ; aucun échec.
   - **Commits** : quatre, signés (`5d229a9`, `dd6a997`, `44c2540`, `6a09927`). Les deux corrections tiennent seules : chacune a passé les types et les tests dans une copie de travail à part.
-  - **Le push sur `origin main`** a buté sur la clé SSH, absente de l'agent de cette session : il attend que l'éditeur la charge.
+  - **Le push sur `origin main`** a buté sur la clé SSH, verrouillée dans l'agent du bureau et que cette session ne pouvait pas déverrouiller : l'éditeur a poussé les cinq commits lui-même, le 23/11/2026 (`origin/main` = `c2473da`, vérifié).
 - **Lot 6, l'aperçu.** `npm run build:preview && npm run deploy:preview -- --bench`, Worker `cestecritla-preview`, version `a85c7984`. Vérifié en ligne :
   - **1 312 fichiers sur 1 315 identiques à la build**, les trois écarts connus ;
   - dans les trois moteurs : la page et ses trois sources liées, la ligne du pied de page, la puce, l'objection reconnue avec son « En clair » ; « Taxe Zucman : partir ou payer ? » accepté, « Zucman doit partir » refusé ; « exil fiscal » qui montre les trois mesures de l'impôt avec leurs phrases ;
@@ -190,6 +190,5 @@ L'approbation de ce plan vaut aussi son accord pour deux gestes, qui seront cons
   - La sonde de la feuille : 257 « ok », aucun échec.
 - **Écrit.** `data/launch.json` : `home.serving` nomme `6a09927`. L'état du projet est dans `CLAUDE.md`, R72 au registre, une ligne dans `data/2026/NOTICE.md`.
 - **Ce qui reste.**
-  - **Le push** des cinq commits sur `origin main` : la clé SSH de l'éditeur n'était pas chargée dans cette session.
   - **Le chiffre de 2013**, proposé et non retenu (D21.10) : « En 2013, la hausse de l'impôt sur les revenus du capital a fait partir moins de 350 foyers de plus par an, sur les 385 000 du 1 % le plus riche » (communiqué du CAE du 25/07/2025). C'est la meilleure réponse au point le plus fort du lecteur hostile ; à reproposer à part.
   - **Ce qu'aucune vérification ne couvre** : de vrais lecteurs, de vrais téléphones, la réaction d'un économiste hostile en chair et en os. HYPOTHÈSE.
