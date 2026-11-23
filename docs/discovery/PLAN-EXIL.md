@@ -192,3 +192,25 @@ L'approbation de ce plan vaut aussi son accord pour deux gestes, qui seront cons
 - **Ce qui reste.**
   - **Le chiffre de 2013**, proposé et non retenu (D21.10) : « En 2013, la hausse de l'impôt sur les revenus du capital a fait partir moins de 350 foyers de plus par an, sur les 385 000 du 1 % le plus riche » (communiqué du CAE du 25/07/2025). C'est la meilleure réponse au point le plus fort du lecteur hostile ; à reproposer à part.
   - **Ce qu'aucune vérification ne couvre** : de vrais lecteurs, de vrais téléphones, la réaction d'un économiste hostile en chair et en os. HYPOTHÈSE.
+
+### 23 novembre 2026, au soir — « On cherche dans le programme… » sans fin (R73)
+- **Signalé par l'éditeur** : « J'obtiens "On cherche dans le programme..." indéfiniment. Résout le problème. »
+- **La cause.**
+  - Les fichiers de `/data/` sont gardés un an, `immutable`. L'index et les titres de la recherche portaient la version du livre (`meta-27ee6e713fe25e7e.json`), pas une empreinte de leur contenu.
+  - Le lot 2 (D21.8) a ajouté `book_words` aux titres sous ce même nom. Tout navigateur qui avait cherché sur le site depuis le 14 novembre gardait l'ancien fichier, et le nouveau script levait `TypeError` dans `inBookWords`, après le premier dessin du tour. Rien ne rattrapait l'erreur : la feuille restait sur « On cherche dans le programme… ».
+  - Un navigateur neuf n'avait rien. La sonde du lot 7 (257 « ok », navigateurs vierges) ne pouvait pas le voir.
+  - **Reproduit** avec un vrai cache de navigateur, dans les trois moteurs. Un serveur local appliquait les règles de `_headers` ; le profil gardait les titres d'avant, puis on posait une question à la build de la production.
+- **Le correctif** (commits `66149ad` et `7558828`).
+  - Chaque fichier de `/data/` porte dans son nom l'empreinte de ce qu'il contient (`src/lib/search-data.ts`), comme le jeu, « En clair » et les mots de la feuille le faisaient déjà, et comme `09-architecture.md` le prévoyait. Les 137 fichiers de mots par page aussi : ils portaient l'empreinte des fichiers de la feuille, pas la leur (`src/lib/words-built.ts`).
+  - Une porte (`scripts/check-build.test.ts`) refuse tout fichier dont le nom ne changerait pas avec son contenu : elle refusait la build qui était en ligne.
+  - La feuille rend un tour entier quand la recherche échoue : « Rien trouvé avec ces mots. », rien de nous, l'erreur à la console seulement. `scripts/e2e-sheet.ts` §5 bis le tient ; avec le code d'avant, ce contrôle échoue.
+  - Les octets des fichiers déplacés n'ont pas changé.
+- **Les portes** : 704 tests (703 bons, un sauté), a11y (252 vérifications), e2e, « Demander », jeu (322, 286, 286), feuille (106, 100, 100), mots — aucun échec.
+- **En ligne, sur sa réponse « Aperçu puis production » (D21.13).**
+  - Aperçu : version `190ae295`, à 21 h 47.
+  - Production : commit `7558828`, Worker `cestecritla` version `987a5e38`, à 21 h 53 (20 h 53 UTC).
+  - Sur les trois hôtes : 1 312 fichiers sur 1 315 identiques à la build, les trois écarts connus. Les pages nomment `index-280f664e2db0ab61` et `meta-39139d2fef6dc206` ; l'ancien nom répond 404.
+  - La sonde de la feuille : 257 « ok » sur l'aperçu et sur `cestecritla.fr`, 93 sur `www` (Chromium).
+- **Chez les visiteurs touchés**, le correctif s'applique seul au chargement suivant de la page (HTML à `max-age=300`) : la page nomme des fichiers qu'aucun navigateur n'a pu garder. Rien à faire pour eux.
+- **Retour arrière** : l'étiquette locale `prod-avant-r73` (`6a09927`), fiche 14 du runbook.
+- **Leçon** : une sonde lancée sur des navigateurs vierges ne voit pas ce que gardent ceux qui sont déjà venus. La porte des noms le tient désormais à la build.
