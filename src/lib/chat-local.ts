@@ -322,21 +322,33 @@ const CHARGED: readonly RegExp[] = [
   ),
 ];
 /** What is asked of a person and is nobody's programme: money, health, the courts, bad company. */
-const PERSONAL: readonly RegExp[] = [
+/**
+ * What is said OF a person — « la fortune de X », « perquisition chez X », « X et l'affaire »,
+ * « X a 75 ans », « X soutient… »: read as typed, whatever labels the name elsewhere in the
+ * question (« les taxes et le salaire de Macron » is about the man: independent review of
+ * D21.7, 23/11/2026).
+ */
+const PERSONAL_OF: readonly RegExp[] = [
   new RegExp(
     `\\b(?:patrimoine|fortune|salaire|casier|sante|vie privee|proces|perquisitions?|comptes?|appartement|maison|argent) (?:judiciaire )?(?:de |d |du |des )(?:la |le |les |l )?${PERSON}\\b`,
-  ),
-  new RegExp(
-    `\\b${PERSON}(?: ${GLUE}){0,3} (?:casier|perquisition[a-z]*|proces|mis en examen|mise en examen|garde a vue|condamne[a-z]*|comptes? en suisse|evade fiscal|evasion fiscale|fraude fiscale|demission[a-z]*|degage|dehors|mort|morte|malade|vieux|vieille|fatigue|fatiguee|riche|millionnaire)\\b`,
   ),
   new RegExp(`\\bperquisition[a-z]* (?:chez |de |d )?${NAMED}\\b`),
   new RegExp(`\\b${NAMED} (?:et )?(?:l )?affaires?\\b`),
   new RegExp(`\\b${PERSON} a (?:t il |t elle )?(?:\\d+ ans|quel age)\\b`),
   new RegExp(
-    `\\b${PERSON} (?:va |doit |devrait )?(?:mourir|prendre sa retraite|demissionner|partir|se taire)\\b`,
+    `\\b${NAMED} (?:[a-z]+ )?(?:soutient|soutiennent|a soutenu|ont soutenu|cautionne|cautionnent|finance par|financee? par|aime|adore|hait|deteste) (?:le |la |les |l |par )?(?:hamas|hezbollah|poutine|russie|iran|chavez|maduro|qatar|algerie|casseurs|emeutiers|emeutes|terroris[a-z]*|islamis[a-z]*|freres musulmans|dictat[a-z]*|juifs|musulmans|arabes|france)\\b`,
+  ),
+];
+/**
+ * What is said AFTER a name — « X doit partir », « X mort », « X évasion fiscale »: a law that
+ * bears the name takes these words too, and they are then the law's (D21.7) — see `LAW_LABEL`.
+ */
+const PERSONAL_AFTER: readonly RegExp[] = [
+  new RegExp(
+    `\\b${PERSON}(?: ${GLUE}){0,3} (?:casier|perquisition[a-z]*|proces|mis en examen|mise en examen|garde a vue|condamne[a-z]*|comptes? en suisse|evade fiscal|evasion fiscale|fraude fiscale|demission[a-z]*|degage|dehors|mort|morte|malade|vieux|vieille|fatigue|fatiguee|riche|millionnaire)\\b`,
   ),
   new RegExp(
-    `\\b${NAMED} (?:[a-z]+ )?(?:soutient|soutiennent|a soutenu|ont soutenu|cautionne|cautionnent|finance par|financee? par|aime|adore|hait|deteste) (?:le |la |les |l |par )?(?:hamas|hezbollah|poutine|russie|iran|chavez|maduro|qatar|algerie|casseurs|emeutiers|emeutes|terroris[a-z]*|islamis[a-z]*|freres musulmans|dictat[a-z]*|juifs|musulmans|arabes|france)\\b`,
+    `\\b${PERSON} (?:va |doit |devrait )?(?:mourir|prendre sa retraite|demissionner|partir|se taire)\\b`,
   ),
 ];
 /** A name that labels a text of law — « la réforme Macron », « la loi immigration de Darmanin » — is the law's. */
@@ -344,6 +356,17 @@ const LABELS =
   '(?:(?:contre )?reformes?|lois?|circulaires?|ordonnances?|decrets?|taxes?|plans?|pactes?|gouvernements?|quinquennats?|annees|politiques?)';
 const LABEL = new RegExp(
   `\\b(${LABELS})(?: [a-z0-9]+){0,3}? (?:de |d |du |des )?(?:la |le |les |l )?${PERSON_OTHER}\\b`,
+  'g',
+);
+/**
+ * A law that bears a name, the name right after its label — « la taxe Zucman », « la loi
+ * Kasbarian », « la réforme Macron », « le décret de Darmanin »: what is said after it may be
+ * the law's (D21.7). Narrower than `LABEL`: no word between label and name, and none of
+ * « politique », « gouvernement », « quinquennat », « années », « plan » — a person's record is
+ * the person's (« la politique de Macron malade »: independent review, 23/11/2026).
+ */
+const LAW_LABEL = new RegExp(
+  `\\b((?:contre )?reformes?|lois?|circulaires?|ordonnances?|decrets?|taxes?|pactes?) (?:(?:de |d |du |des )(?:la |le |les |l )?)?${PERSON_OTHER}\\b`,
   'g',
 );
 const BOOK = /\b(?:programme|avenir en commun|aec|livre)\b/;
@@ -394,10 +417,16 @@ export function asksOffTopic(question: string): boolean {
   const folded = fold(question);
   if (INSULT.some((pattern) => pattern.test(folded))) return true;
   if (!ANY_NAMED.test(folded)) return false;
-  if ([...CHARGED, ...PERSONAL, ...JUDGED].some((pattern) => pattern.test(folded))) return true;
+  if ([...CHARGED, ...JUDGED, ...PERSONAL_OF].some((pattern) => pattern.test(folded))) return true;
+  // What is said after a name — leaving, dying, a fortune hidden abroad — belongs to a person,
+  // never to a law: « Taxe Zucman : partir ou payer ? » asks about the tax (D21.7, 23/11/2026).
+  // A law's name, right after its label, is folded into the law first; the person named apart
+  // stays a person (« la taxe Zucman, Zucman doit partir »).
+  const asLaw = folded.replace(LAW_LABEL, '$1');
+  if (PERSONAL_AFTER.some((pattern) => pattern.test(asLaw))) return true;
+  const left = folded.replace(LABEL, '$1');
   // Two persons set side by side and nothing else — « X ou Y ? », « X aime Y ? ». With a
   // subject next to them (« Mélenchon et Trump : les droits de douane ») it is a search.
-  const left = folded.replace(LABEL, '$1');
   const persons = new Set((left.match(EACH_PERSON) ?? []).map(personOf));
   if (persons.size < 2 || BOOK.test(left)) return false;
   const rest = left

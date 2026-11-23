@@ -1331,6 +1331,53 @@ void test('a charge needs no verb to be refused — and a name, a position, a sw
   }
 });
 
+void test('a law that bears a name is the law, for what a life is made of: « taxe Zucman » neither leaves nor dies (D21.7)', () => {
+  // Questions about the tax, refused until 23/11/2026 as if they spoke of the man's life.
+  for (const question of [
+    'Taxe Zucman : partir ou payer ?',
+    'La taxe Zucman, la mort de l’économie',
+    'Avec la taxe Zucman, évasion fiscale garantie',
+    'Avec la taxe Zucman, les riches vont tous partir',
+    'la taxe Zucman va faire partir les riches ?',
+    'La loi Kasbarian, la mort des locataires ?',
+    'la réforme Macron, la mort de la retraite à 60 ans',
+    'taxe Zucman comptes en suisse',
+  ]) {
+    assert.equal(asksOffTopic(question), false, question);
+  }
+  // The person, named apart from the law — or with no law at all — stays a person. And what is
+  // said OF a person is read as typed, whatever labels the name; a person's record — « la
+  // politique de », « le plan », « le gouvernement » — is not a law (independent review of
+  // D21.7, 23/11/2026: each of these showed our sentences under a first version of the fold).
+  for (const question of [
+    'les taxes et le salaire de Macron',
+    'la politique et le patrimoine de Macron',
+    'la loi sur la fortune de Macron',
+    'la loi et la santé de Macron',
+    'le quinquennat : la maison de Macron',
+    'la loi : les comptes de Macron',
+    'taxe et fortune de Zucman',
+    'la politique de Macron malade',
+    'la politique de Macron, il est mort',
+    'le plan Macron riche',
+    'la politique Macron dehors',
+    'le gouvernement Macron condamné',
+    'la loi Macron, Macron mort',
+    'la réforme Macron : Macron est mis en examen',
+    'Zucman doit partir',
+    'La taxe Zucman, Zucman doit partir',
+    'Zucman, évasion fiscale',
+    'Zucman est riche ?',
+    'Le patrimoine de Zucman',
+    'Macron doit partir',
+    'La réforme Macron, Macron démission',
+    'Kasbarian condamné ?',
+    'la loi Kasbarian, Kasbarian garde à vue',
+  ]) {
+    assert.ok(asksOffTopic(question), question);
+  }
+});
+
 void test('what a third review found, both ways: questions about the book refused, charges in other words let through', () => {
   const verdict = (question: string): string =>
     asksForVote(question)
