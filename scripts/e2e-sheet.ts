@@ -22,7 +22,8 @@
  *   4. NO REQUEST EVER GOES TO `/api/chat`, whatever the Worker answers — even a Worker that
  *      says an AI is available — and no gesture of the sheet offers one;
  *   5. every other state is a normal one: the route closed, the Worker broken, another state
- *      of the book, electoral silence — none says a word of failure;
+ *      of the book, electoral silence — none says a word of failure; and a file of titles the
+ *      script cannot read never leaves a question searching for ever (R73);
  *   6. a sentence of the base is text: markup in it creates no element;
  *   7. the explained words (D16.62, D20.10): the acronyms and technical terms of the question
  *      and of the sentences on the screen, found on the phone by their wordings — one file,
@@ -379,6 +380,71 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         (await count(`${LAST} .c-gists .c-row > p:not(.sources)`)) === 0,
       silent.slice(0, 200),
     );
+
+    // --- 5 bis. a file of titles the script cannot read: the question never searches for ever.
+    // A browser that had searched before 23/11/2026 kept the titles of then for a year, without
+    // `book_words`, and « Demander » showed « On cherche dans le programme… » for ever (R73). The
+    // files are named by what they hold now — such a file is never asked for again —, and
+    // whatever fails once the question is on the screen leaves the turn whole: nothing found,
+    // nothing of ours, no word of failure. The error is reported to the console, and only there.
+    {
+      const stale = await browser.newContext({ viewport: { width: 390, height: 844 } });
+      const kept = await stale.newPage();
+      const reported: string[] = [];
+      kept.on('pageerror', (error) => reported.push(error.message));
+      await kept.route('**/*', async (route: Route) => {
+        const url = route.request().url();
+        if (/\/data\/meta-[0-9a-f]{16}\.json$/.test(url)) {
+          const titles = JSON.parse(
+            readFileSync(join(ROOT, new URL(url).pathname), 'utf8'),
+          ) as Record<string, unknown>;
+          delete titles['book_words'];
+          return route.fulfill({
+            status: 200,
+            contentType: 'application/json; charset=utf-8',
+            body: JSON.stringify(titles),
+          });
+        }
+        if (url === `${origin}/api/gists` || url === `${origin}/api/chat`) {
+          return route.fulfill({
+            status: 200,
+            contentType: 'application/json; charset=utf-8',
+            body: JSON.stringify({ kind: 'local' }),
+          });
+        }
+        if (url.startsWith(origin)) return route.continue();
+        return route.abort();
+      });
+      await kept.goto(`${origin}/`);
+      await until(kept, "!document.querySelector('#ask').disabled");
+      await kept.fill('#q', 'et les retraites ?');
+      await kept.click('#ask');
+      const whole = `document.querySelector(${JSON.stringify(LAST)})?.getAttribute('aria-busy') === 'false'`;
+      let settledThere = true;
+      try {
+        await until(kept, whole, 8_000);
+      } catch {
+        settledThere = false;
+      }
+      const shownThere = await kept.evaluate<string>(
+        `document.querySelector(${JSON.stringify(LAST)})?.textContent ?? ''`,
+      );
+      check(
+        'a file of titles the script cannot read: the turn settles, nothing found, no word of failure',
+        settledThere &&
+          !/On cherche dans le programme/.test(shownThere) &&
+          FOUND_NOTHING.test(shownThere) &&
+          (await kept.locator(`${LAST} .c-plain, ${LAST} .c-gists`).count()) === 0 &&
+          !FAILURE.test(shownThere),
+        shownThere.slice(0, 200),
+      );
+      check(
+        '…and the error is reported to the console, not to the reader',
+        reported.some((message) => /iterable|undefined/i.test(message)),
+        reported.join(' | ').slice(0, 200),
+      );
+      await stale.close();
+    }
 
     // --- 6. a sentence of the base is text
     sim.gists = 'balise';

@@ -681,21 +681,11 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     update(index);
   };
 
-  const ask = async (raw: string): Promise<void> => {
-    const question = cleanQuestion(raw);
-    if (question === null) return;
-    const asked = epoch;
-    await flagsRead;
-    if (asked !== epoch) return;
-    const index = turns.length;
-    if (status !== null) status.textContent = '';
-    turns.push(newTurn(question, recognise(question, config), frozen()));
-    // The turn above is no longer the last one: its agreement, if it showed one, moves down.
-    if (index > 0) update(index - 1);
-    update(index);
-    // The new question goes to the top of what scrolls: its answer builds under it. Only the
-    // thread is moved — `scrollIntoView` would move the sheet and the page behind it too.
-    scroller.scrollTop = nodes[index]?.offsetTop ?? 0;
+  /**
+   * The search of a turn already on the screen: its measures — and what a person wrote about
+   * the question, once it is known that the question is that and nothing more.
+   */
+  const search = async (index: number, question: string, asked: number): Promise<void> => {
     const [loaded] = await Promise.all([engine(), texts(), finderReady()]);
     // A question that asks what a word means shows that word open, above the measures: its
     // text is fetched first — the two files of texts, the same for everyone (D20.13).
@@ -745,6 +735,46 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     turns[index] = found !== null && !found.sentences ? withGists(searched, null) : searched;
     update(index);
     advance(index);
+  };
+
+  const ask = async (raw: string): Promise<void> => {
+    const question = cleanQuestion(raw);
+    if (question === null) return;
+    const asked = epoch;
+    await flagsRead;
+    if (asked !== epoch) return;
+    const index = turns.length;
+    if (status !== null) status.textContent = '';
+    turns.push(newTurn(question, recognise(question, config), frozen()));
+    // The turn above is no longer the last one: its agreement, if it showed one, moves down.
+    if (index > 0) update(index - 1);
+    update(index);
+    // The new question goes to the top of what scrolls: its answer builds under it. Only the
+    // thread is moved — `scrollIntoView` would move the sheet and the page behind it too.
+    scroller.scrollTop = nodes[index]?.offsetTop ?? 0;
+    try {
+      await search(index, question, asked);
+    } catch (error) {
+      // Whatever fails once the question is on the screen — a file the script cannot read, a
+      // rule that trips — the turn is made whole as if the index had not come: « Rien trouvé
+      // avec ces mots. », no sentence, nothing of ours (it is not known that nobody is named or
+      // charged in the question), no word of failure. It searched for ever instead: a browser
+      // that had kept the titles of before 23/11/2026 could not read them, and nothing caught
+      // the error (R73). The error still reaches the console of this phone, as an uncaught one
+      // did — where a test sees it — and goes nowhere else.
+      const turn = turnAt(index);
+      if (asked === epoch && turn !== undefined) {
+        turns[index] = {
+          ...turn,
+          recognised: { objection: null, cards: [] },
+          rows: [],
+          linksOnly: false,
+          gists: null,
+        };
+        update(index);
+      }
+      if ('reportError' in globalThis) reportError(error);
+    }
   };
 
   const empty = (): void => {
