@@ -44,6 +44,10 @@ const MIME: Record<string, string> = {
   '.svg': 'image/svg+xml',
 };
 const OFFICIAL = 'https://melenchon2027.fr';
+/** Our answers to objections: one chip each under the field, as many as the file holds (D21.4). */
+const OBJECTIONS = (
+  JSON.parse(readFileSync('data/2026/riposte.json', 'utf8')) as { entries: unknown[] }
+).entries.length;
 
 function serve(root: string): Promise<{ server: Server; origin: string }> {
   const server = createServer((req, res) => {
@@ -179,8 +183,8 @@ async function runEngine(
           (await toSommaire.isVisible()),
       );
       check(
-        'no JS: the fifteen re-read answers are one tap away',
-        (await page.locator('.chips a').count()) === 15,
+        'no JS: every one of our answers to objections is one tap away',
+        (await page.locator('.chips a').count()) === OBJECTIONS,
       );
       await page.goto(`${origin}/sommaire/`);
       const links = await page.locator('.toc a').count();

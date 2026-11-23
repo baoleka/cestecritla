@@ -7,6 +7,9 @@
  *   locally      (where the private corpus is) every figure one of our sentences states is in
  *                the text of one of its supports. A number is the easiest thing to get wrong
  *                from memory and the first thing a hostile reader checks.
+ *   studies      (D21.1) a figure of a study is never held to the book: every one of them is
+ *                written in the excerpt of its own document (eval/riposte-sources.json), whose
+ *                page is named, and a quotation in the close is in an excerpt word for word.
  *
  * Run: npx tsx --test scripts/editorial.test.ts
  */
@@ -43,6 +46,18 @@ const manifest = json('data/2026/manifest.json') as Manifest;
 const quotes = json('data/2026/quotes.json') as QuotesFile;
 const policy = json('data/2026/exposure-policy.json') as ExposurePolicy;
 
+interface StudySource {
+  by: string;
+  title: string;
+  on: string;
+  url: string;
+  where?: string;
+}
+interface Studies {
+  lead: string;
+  items: { text: string; source: StudySource }[];
+  close: string;
+}
 interface RiposteFile {
   entries: (Omit<Entry, 'texts'> & {
     slug: string;
@@ -50,8 +65,22 @@ interface RiposteFile {
     objection: string;
     answer: string;
     avoid: string;
+    studies?: Studies;
   })[];
 }
+/** eval/riposte-sources.json: the excerpts behind the figures of our blocks of studies. */
+interface SourcesFile {
+  entries: Record<
+    string,
+    { for: string; url: string; where: string; excerpt: string; consulted_on: string }[]
+  >;
+  verified: Record<string, { by: string; on: string; verdict: string }>;
+}
+const studyTexts = (studies: Studies): string[] => [
+  studies.lead,
+  ...studies.items.map((item) => item.text),
+  studies.close,
+];
 interface GlossaryFile {
   entries: (Omit<Entry, 'texts' | 'ours' | 'short'> & {
     term: string;
@@ -69,7 +98,14 @@ const entries: Entry[] = [
   ...riposte.entries.map((e) => ({
     ...e,
     id: `riposte:${e.id}`,
-    texts: [e.objection, e.answer, e.avoid],
+    // The sentences of a block of studies obey the voice too; their figures are held to their
+    // documents, not to the book (`ours` is what the book must carry).
+    texts: [
+      e.objection,
+      e.answer,
+      e.avoid,
+      ...(e.studies === undefined ? [] : studyTexts(e.studies)),
+    ],
     ours: [e.answer, e.avoid],
     short: false,
   })),
@@ -272,6 +308,76 @@ void test('every figure we state is written in one of the supports', { skip }, (
   assert.deepEqual(unsupported, [], 'figures stated by us and written in none of the supports');
 });
 
+void test('a figure of a study is written in the excerpt of its document, named, dated and paged (D21.1)', () => {
+  const sources = json('eval/riposte-sources.json') as SourcesFile;
+  const today = new Date().toISOString().slice(0, 10);
+  const studied = riposte.entries.filter((e) => e.studies !== undefined);
+  // An excerpt is for an answer that cites it, and for one of its parts.
+  assert.deepEqual(
+    Object.keys(sources.entries).sort(),
+    studied.map((e) => e.id).sort(),
+    'eval/riposte-sources.json and the answers that cite studies',
+  );
+  for (const entry of studied) {
+    const studies = entry.studies as Studies;
+    const records = sources.entries[entry.id] ?? [];
+    const parts = new Set(['close', ...studies.items.map((_item, i) => `items.${String(i)}`)]);
+    for (const record of records) {
+      assert.ok(parts.has(record.for), `${entry.id}: an excerpt for « ${record.for} »`);
+      assert.match(record.url, /^https:\/\/[^\s/]+\/\S+$/, `${entry.id}: ${record.url}`);
+      assert.match(record.consulted_on, /^\d{4}-\d{2}-\d{2}$/);
+      assert.ok(record.consulted_on <= today, `${entry.id}: read in the future`);
+      assert.ok(
+        record.where.length > 0 && record.excerpt.length > 20,
+        `${entry.id}: ${record.for}`,
+      );
+    }
+    assert.ok(studies.items.length >= 1 && studies.items.length <= 4, `${entry.id}: figures`);
+    for (const text of [studies.lead, studies.close]) {
+      // Our sentence and the authors' conclusion carry no figure of their own.
+      assert.deepEqual(figures(text), [], `${entry.id}: a figure outside a figure of a study`);
+    }
+    studies.items.forEach((item, i) => {
+      const where = `${entry.id}, figure ${String(i + 1)}`;
+      const { source } = item;
+      assert.ok(source.by.length > 0 && source.title.length > 0, `${where}: who, what`);
+      assert.match(source.on, /^\d{4}-\d{2}(?:-\d{2})?$/, `${where}: when`);
+      assert.match(source.url, /^https:\/\/[^\s/]+\/\S+$/, `${where}: ${source.url}`);
+      const mine = records.filter((record) => record.for === `items.${String(i)}`);
+      assert.ok(mine.length > 0, `${where}: no excerpt of its document`);
+      for (const record of mine) assert.equal(record.url, source.url, `${where}: another document`);
+      const excerpt = mine.map((record) => record.excerpt).join(' \n ');
+      const written = new Set(figures(excerpt));
+      for (const figure of figures(item.text)) {
+        assert.ok(written.has(figure), `${where}: ${figure} is in no excerpt`);
+      }
+      for (const word of NUMBER_WORDS) {
+        if (new RegExp(`\\b${word}\\b`, 'i').test(item.text)) {
+          assert.ok(new RegExp(`\\b${word}\\b`, 'i').test(excerpt), `${where}: « ${word} »`);
+        }
+      }
+    });
+    // A quotation in the close is the document's own words.
+    const closing = records.filter((record) => record.for === 'close');
+    for (const match of studies.close.matchAll(new RegExp(`«${NBSP}([^»]+?)${NBSP}»`, 'g'))) {
+      const quoted = (match[1] ?? '').replace(/'/g, '’');
+      assert.ok(
+        closing.some((record) => record.excerpt.includes(quoted)),
+        `${entry.id}: « ${quoted} » is in no excerpt of the close`,
+      );
+    }
+    // Published, its figures were read again on their documents by another model than the one
+    // that wrote them — what « vérifiés contre leurs documents » says on the page.
+    if (entry.review.status !== 'pending') {
+      const check = sources.verified[entry.id];
+      assert.ok(check, `${entry.id}: published with figures nobody else checked`);
+      assert.notEqual(check.by, 'session', `${entry.id}: checked by the one who wrote it`);
+      assert.match(check.on, /^\d{4}-\d{2}-\d{2}$/);
+      assert.equal(check.verdict, 'ok', `${entry.id}: ${check.verdict}`);
+    }
+  }
+});
+
 void test('a card accepted under the mandate is written in decisions.md, on its day, by its name (D20.14)', () => {
   // « accepted » is published on the editor's word without a re-reading (D16.79); since
   // 19 November 2026 that word is his mandate (D20.3): each card it publishes is named in a
@@ -287,6 +393,28 @@ void test('a card accepted under the mandate is written in decisions.md, on its 
         (row) => row.includes(`| ${on} |`) && row.includes(card.id) && row.includes('D20.3'),
       ),
       `mot:${card.id}: accepted on ${on}, and no decision of that day names it under D20.3`,
+    );
+  }
+});
+
+void test('an answer accepted since 23 November 2026 is named in a decision of its day, by the editor (D21.10)', () => {
+  // « accepted » is published on the editor's word without a re-reading (D16.79); no mandate
+  // covers the answers since D20.22: his word is a decision of the day, which names the entry —
+  // a session never publishes an answer in silence.
+  const rows = readFileSync('docs/discovery/decisions.md', 'utf8')
+    .split('\n')
+    .filter((row) => /^\| D\d+\.\d+ \|/.test(row));
+  for (const entry of riposte.entries) {
+    const on = entry.review.on ?? '';
+    if (entry.review.status !== 'accepted' || on < '2026-11-23') continue;
+    assert.ok(
+      rows.some(
+        (row) =>
+          row.includes(`| ${on} |`) &&
+          row.includes(entry.id) &&
+          row.includes('DÉCISION (utilisateur)'),
+      ),
+      `riposte:${entry.id}: accepted on ${on}, and no decision of the editor that day names it`,
     );
   }
 });

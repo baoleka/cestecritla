@@ -799,6 +799,21 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         JSON.stringify(objected.ids) === JSON.stringify(rests.slice(0, 3)),
       `${JSON.stringify(objected.ids)} / ${JSON.stringify(rests)}`,
     );
+    // The sixteenth answer (D21.4): the same, and its link leads to the page of the studies.
+    const beforeExile = posted.gists.length;
+    await ask('Avec la taxe Zucman, les riches vont tous partir');
+    const exiled = JSON.parse(posted.gists[beforeExile] ?? '{}') as { ids?: string[] };
+    const exileRests = await page.evaluate<string[]>(
+      "JSON.parse(document.querySelector('#chat-config').textContent).objections.find((o) => o.slug === 'exil-fiscal').supports",
+    );
+    check(
+      'the objection on tax exile: « En clair », its measures, and the link to its page (D21.4)',
+      (await count(`${LAST} .c-plain`)) === 1 &&
+        (await count(`${LAST} .c-plain a[href="/r/exil-fiscal/"]`)) === 1 &&
+        exileRests.length >= 2 &&
+        JSON.stringify(exiled.ids) === JSON.stringify(exileRests.slice(0, 3)),
+      `${JSON.stringify(exiled.ids)} / ${JSON.stringify(exileRests)}`,
+    );
     // …when the question is the objection and nothing more. With a charge that rides along it
     // is a question like another: neither our written answer nor a sentence — and nothing sent.
     const afterObjection = posted.gists.length;

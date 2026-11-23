@@ -614,6 +614,23 @@ button.quiet {
   margin-block-start: var(--space-6);
 }
 
+/* What studies measured (D21.1): our sentence, then its source, linked, as a supports line. */
+.studies ul {
+  margin: 0;
+  padding-inline-start: var(--space-5);
+}
+.studies li {
+  margin-block-end: var(--space-3);
+}
+.studies li p {
+  margin-block: 0;
+}
+.studies .ref a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--tap-comfortable);
+}
+
 /* Seen on the first screenshots of the complete site (12/11/2026). */
 
 /* A <figure> comes with 40 px of side margin from the browser: on a 390 px screen that is a

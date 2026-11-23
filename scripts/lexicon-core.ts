@@ -545,10 +545,25 @@ export function publicTexts(): Placed[] {
     for (const text of texts) if (text !== undefined) out.push({ where: `mot:${card.id}`, text });
   }
   const riposte = read('data/2026/riposte.json') as {
-    entries: { slug: string; objection: string; answer: string; avoid: string }[];
+    entries: {
+      slug: string;
+      objection: string;
+      answer: string;
+      avoid: string;
+      studies?: { lead: string; items: { text: string }[]; close: string };
+    }[];
   };
   for (const answer of riposte.entries) {
-    for (const text of [answer.objection, answer.answer, answer.avoid]) {
+    // A block of studies is our prose too (D21.1); its sources are signatures, not prose.
+    const studies =
+      answer.studies === undefined
+        ? []
+        : [
+            answer.studies.lead,
+            ...answer.studies.items.map((item) => item.text),
+            answer.studies.close,
+          ];
+    for (const text of [answer.objection, answer.answer, answer.avoid, ...studies]) {
       out.push({ where: `r:${answer.slug}`, text });
     }
   }

@@ -38,6 +38,38 @@ export interface Review {
   by: string | null;
   on: string | null;
 }
+/**
+ * Where a study's figure comes from: a public document, named as it signs, dated, linked —
+ * and the page in it, so that anyone can find the sentence (D21.1).
+ */
+export interface StudySource {
+  /** Who published or said it: « Conseil d'analyse économique », « Camille Landais ». */
+  by: string;
+  /** What it is: « Focus n° 118 », « audition à l'Assemblée nationale ». */
+  title: string;
+  /** When: an ISO day, or an ISO month. */
+  on: string;
+  /** The public document. */
+  url: string;
+  /** Where in it: « p. 3 ». */
+  where?: string;
+}
+/** One figure of a study, in our words. */
+export interface Study {
+  text: string;
+  source: StudySource;
+}
+/**
+ * « Ce que disent les études » (D21.1, 23/11/2026): a fourth voice, under the measures and never
+ * under « Ce que dit le texte » (design/voice.md §0). Our sentence on what the figures say
+ * together, the figures, and what their authors conclude. Each figure is held to the excerpt of
+ * its document (eval/riposte-sources.json, scripts/editorial.test.ts), never to the book.
+ */
+export interface Studies {
+  lead: string;
+  items: Study[];
+  close: string;
+}
 export interface Riposte {
   id: string;
   slug: string;
@@ -46,8 +78,17 @@ export interface Riposte {
   answer: string;
   avoid: string;
   supports: Support[];
+  /** Figures of public studies, in a block of their own (D21.1) — only where an answer needs them. */
+  studies?: Studies;
   review: Review;
 }
+
+/** Every sentence of ours in a block of studies, in the order the page shows them. */
+export const studyTexts = (studies: Studies): string[] => [
+  studies.lead,
+  ...studies.items.map((item) => item.text),
+  studies.close,
+];
 export interface Card {
   id: string;
   term: string;

@@ -4,7 +4,7 @@
    "terms": 3741,
    "sha256": "4d18a943a7d2d38d59bfdc1f2d4831c8fa0efd3c6db091517e54e1b36966504e"
   },
-  "judged_on": "2026-11-19",
+  "judged_on": "2026-11-23",
   "judged_by": "session",
   "second_judge": "another model, on the index stems",
   "note_fr": "Chaque racine de ce que le site montre — l'index du livre et nos propres textes —, jugée une fois pour un élève qui entre en seconde générale (D20.9) : claire (plain), à expliquer (explain : les entrées qui la tiennent), à surveiller (watch : un mot courant qui peut avoir un sens technique, et les entrées qui couvrent ce sens), ou nom propre (names : ce qu'il est quand rien n'est à expliquer). Jugé par la session, une IA, et à part, pour les racines de l'index, par un autre modèle sur la seule liste ; leur désaccord a été arbitré par la session. Aucune personne ne l'a relu. Les racines que seuls la prose du livre ou nos phrases emploient se jugent hors du dépôt, et ne sont jamais publiées. Écrit par scripts/lexicon-2026.ts --vocabulary ; scripts/lexicon.test.ts en tient la partition, et, pour la charte 2, la couverture et la fermeture."
@@ -1225,6 +1225,7 @@
   "doubler",
   "douche",
   "douleur",
+  "doute",
   "douze",
   "drastiqu",
   "dressant",
@@ -3823,6 +3824,7 @@
   "troi",
   "troisieme",
   "tromp",
+  "trompe",
   "tromperie",
   "trompeuse",
   "tronc",

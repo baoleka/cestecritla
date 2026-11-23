@@ -17,8 +17,8 @@ ses pages et admettent de courts extraits, avec l'auteur et un lien vers la page
 | `id-map-2025.json` | Section de l'édition 2025 → section(s) de l'édition 2026, pour les anciennes adresses | `scripts/id-map.ts` |
 | `watch.json` | Les six signaux de veille de la source | `scripts/watch-source.ts --write` |
 | `search-index.json` | L'index de recherche : les racines des mots de chaque proposition, sans ordre, sans mots-outils, aucun champ stocké | `scripts/index-2026.ts` |
-| `synonyms.json` | Les mots des gens à côté des mots du livre, pour la recherche. Rédigé par nous | à la main |
-| `riposte.json`, `glossary.json` | Nos réponses aux objections et nos cartes-concept. Chaque appui est épinglé `{id, sha256}` ; `review` dit si le texte a été relu | à la main |
+| `synonyms.json` | Les mots des gens à côté des mots du livre, pour la recherche ; et, sous `book_words`, quelques expressions que le livre écrit autrement, cherchées dans ses mots (D21.8). Rédigé par nous | à la main |
+| `riposte.json`, `glossary.json` | Nos réponses aux objections et nos cartes-concept. Chaque appui est épinglé `{id, sha256}` ; `review` dit si le texte a été relu. Une réponse peut porter `studies` : des chiffres d'études publiques, chacun avec sa source, dont les extraits sont dans `eval/riposte-sources.json` (D21.1) — ce ne sont pas des textes du programme | à la main |
 | `verification.json` | Ce que trois navigateurs ont trouvé en relisant les pages officielles et en suivant chaque lien | `scripts/verify-2026.ts --write` |
 | `search-eval.json` | La qualité mesurée de la recherche sur le jeu de questions | `scripts/eval-2026.ts --write` |
 | `game-words.json`, `word-links.json` | Les mots du jeu « Où est-ce écrit ? », et où trois navigateurs ont vu chacun surligné (voir « Les mots du jeu ») | la liste à la main, attestée par `scripts/words-2026.ts --attest` ; `scripts/verify-2026.ts --words --write` |

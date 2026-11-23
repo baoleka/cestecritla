@@ -1,0 +1,47 @@
+---
+/**
+ * « Ce que disent les études » — what public studies measured, in our words (D21.1, 23/11/2026).
+ *
+ * A fourth voice, under the measures and never under « Ce que dit le texte » (design/voice.md §0):
+ * the book speaks above, attributed and linked; here speak studies, which are not the book. Each
+ * figure names who published it, when, and links to the document it comes from, with the page:
+ * the reader is never asked to take our sentence on trust (Supports.astro says the same of the
+ * measures). Each figure is held by a gate to the excerpt of its document
+ * (scripts/editorial.test.ts, eval/riposte-sources.json) — not to the book.
+ *
+ * A source that repeats the one above it is « Même étude », with its own page.
+ */
+import { prose, type StudySource, type Studies } from '../lib/editorial.ts';
+import { frWhen, t } from '../lib/strings.ts';
+
+interface Props {
+  studies: Studies;
+}
+const { studies } = Astro.props;
+
+const nameOf = (source: StudySource, before: StudySource | undefined): string => {
+  const where = source.where === undefined ? [] : [source.where];
+  if (before?.url === source.url) return [t('riposte.studies_same'), ...where].join(', ');
+  return [source.by, source.title, frWhen(source.on), ...where].map(prose).join(', ');
+};
+---
+
+<section class="studies" aria-labelledby="studies-title">
+  <h2 id="studies-title">{t('riposte.studies_label')}</h2>
+  <p>{prose(studies.lead)}</p>
+  <ul>
+    {
+      studies.items.map((item, index) => (
+        <li>
+          <p>{prose(item.text)}</p>
+          <p class="ref">
+            <a href={item.source.url} rel="noopener noreferrer">
+              {nameOf(item.source, studies.items[index - 1]?.source)}
+            </a>
+          </p>
+        </li>
+      ))
+    }
+  </ul>
+  <p>{prose(studies.close)}</p>
+</section>

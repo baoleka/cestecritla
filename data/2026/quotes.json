@@ -1,8 +1,8 @@
 {
   "meta": {
     "corpus_version": "27ee6e713fe25e7e",
-    "count": 33,
-    "words": 646
+    "count": 34,
+    "words": 674
   },
   "quotes": [
     {
@@ -123,6 +123,16 @@
       "url": "https://melenchon2027.fr/programme/livre/une-economie-au-service-des-besoins/chapitre2/#faire-la-revolution-fiscale:~:text=Rendre%20l%E2%80%99imp%C3%B4t%20sur%20le",
       "used_by": [
         "riposte:rip-01"
+      ]
+    },
+    {
+      "id": "p2c2-s02-m03",
+      "text": "Introduire une garantie d’impôt de 2 % sur le patrimoine des centimillionaires, dite « taxe Zucman », et rétablir une exit tax renforcée pour lutter contre l’évasion fiscale",
+      "words": 28,
+      "sha256": "981ac90cfe74af84f8435e43d11f26b42c9db7d5e1e3ed92b5b448893cdd35a3",
+      "url": "https://melenchon2027.fr/programme/livre/une-economie-au-service-des-besoins/chapitre2/#faire-la-revolution-fiscale:~:text=Introduire%20une%20garantie%20d%E2%80%99imp%C3%B4t",
+      "used_by": [
+        "riposte:rip-16"
       ]
     },
     {

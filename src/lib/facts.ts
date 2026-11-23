@@ -98,6 +98,13 @@ export function pendingReviewCount(): number {
   return [...ripostes(), ...cards()].filter((entry) => entry.review.status === 'pending').length;
 }
 
+/** How many published answers cite studies, whose figures are checked against their documents (D21.1). */
+export function studiedCount(): number {
+  return ripostes().filter(
+    (entry) => entry.studies !== undefined && entry.review.status !== 'pending',
+  ).length;
+}
+
 /** How many are published without a person having re-read them line by line (D16.79). */
 export function unreadReviewCount(): number {
   return [...ripostes(), ...cards()].filter((entry) => entry.review.status === 'accepted').length;

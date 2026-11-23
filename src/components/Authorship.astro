@@ -9,14 +9,19 @@
  * names one. The site does not lean on the exception of art. 50 § 4 for a review that did
  * not take place: it says the AI (as the sentences do since D16.56). A pending entry is not
  * published on the public site (scripts/launch.ts).
+ *
+ * A page that cites studies says one thing more: their figures are checked against their own
+ * documents, linked under each — not against the book (D21.1).
  */
 import type { Review } from '../lib/editorial.ts';
 import { t } from '../lib/strings.ts';
 
 interface Props {
   review: Review;
+  /** The page cites studies (D21.1). */
+  studies?: boolean;
 }
-const { review } = Astro.props;
+const { review, studies = false } = Astro.props;
 ---
 
 <p class="ref authorship" data-review={review.status}>
@@ -27,4 +32,5 @@ const { review } = Astro.props;
         ? t('concept.authorship.accepted')
         : t('concept.authorship.pending')
   }
+  {studies && review.status !== 'pending' && ` ${t('concept.authorship.studies')}`}
 </p>

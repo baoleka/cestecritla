@@ -16,6 +16,7 @@ import {
   gameFacts,
   locatorDisplay,
   pendingReviewCount,
+  studiedCount,
   quoteFacts,
   searchFacts,
   unreadReviewCount,
@@ -32,6 +33,7 @@ const checked = verification();
 const cited = quoteFacts();
 const pending = pendingReviewCount();
 const unread = unreadReviewCount();
+const studied = studiedCount();
 // What the game shows of the book: only in a build of a site that plays.
 const game = gameFacts();
 /** Its cards show sentences of ours (D19.2): the page says so where this build does it. */
@@ -156,6 +158,10 @@ const ENGINE_NAMES: Record<string, string> = {
           : t('accuracy.review.done')
     }
   </p>
+  {
+    /* Studies are not the book: their figures are checked against their own documents (D21.1). */
+    studied > 0 && <p>{t('accuracy.studies')}</p>
+  }
   {
     /* The sentences of « Demander » are not among the texts a person re-read (D16.59), nor
        are the explanations of words shown under them (D16.62): where the site shows them,

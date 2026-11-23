@@ -33,6 +33,19 @@ import {
 export const TERMS_PATH = 'data/2026/terms.json';
 const CARDS_PATH = 'data/2026/glossary.json';
 
+/** A block of studies of an answer (D21.1), as data/2026/riposte.json holds it. */
+interface Studies {
+  lead: string;
+  items: { text: string }[];
+  close: string;
+}
+/** Its sentences — its sources are signatures, not prose. Kept here: see `cardsOf` below. */
+const studyTexts = (studies: Studies): string[] => [
+  studies.lead,
+  ...studies.items.map((item) => item.text),
+  studies.close,
+];
+
 /**
  * Our cards, by their terms (data/2026/glossary.json). Read here rather than through
  * src/lib/editorial.ts: this file is read by the gates too, outside the build, and that one is
@@ -242,10 +255,24 @@ export function wordsPages(entries: readonly TermEntry[] = explainedTerms()): Wo
     if (ids.length > 0) out.push({ kind: 'c', key: card.id, ids });
   }
   const answers = read('data/2026/riposte.json') as {
-    entries: (Supported & { slug: string; objection: string; answer: string; avoid: string })[];
+    entries: (Supported & {
+      slug: string;
+      objection: string;
+      answer: string;
+      avoid: string;
+      studies?: Studies;
+    })[];
   };
   for (const answer of answers.entries) {
-    const ids = idsIn([answer.objection, answer.answer, answer.avoid, ...quoted(answer)]);
+    // The words of a block of studies are explained under the page too (D21.1).
+    const studies = answer.studies === undefined ? [] : studyTexts(answer.studies);
+    const ids = idsIn([
+      answer.objection,
+      answer.answer,
+      answer.avoid,
+      ...studies,
+      ...quoted(answer),
+    ]);
     if (ids.length > 0) out.push({ kind: 'r', key: answer.slug, ids });
   }
   return out;

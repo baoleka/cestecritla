@@ -3,7 +3,7 @@
     "title_fr": "Réponses aux objections — édition 2026",
     "version": "1.0.0",
     "corpus_version": "27ee6e713fe25e7e",
-    "note_fr": "Quinze objections de terrain. Chaque réponse est rédigée par nous et ne dit que ce que portent ses appuis, cités par identifiant et épinglés par empreinte. « quote » : la proposition est citée en entier sur la page, avec son auteur et son lien. Réécrit le 12/11/2026 sur le texte de l'édition 2026, avec un outil d'IA. « review.status » dit où en est chaque entrée, et le site ne dit jamais plus qu'elle : « pending » (pas publiée), « accepted » (publiée sur la parole de l'éditeur, nommé par « by » et datée par « on », sans qu'il l'ait relue ligne à ligne : D16.34, D16.79) ou « reviewed » (relue par une personne). Les quinze entrées disaient « reviewed » jusqu'au 15/11/2026, sur des dates écrites par défaut ; l'éditeur a choisi ce jour-là de ne pas les relire et de le faire dire au site."
+    "note_fr": "Seize objections de terrain. Chaque réponse est rédigée par nous et ne dit que ce que portent ses appuis, cités par identifiant et épinglés par empreinte. « quote » : la proposition est citée en entier sur la page, avec son auteur et son lien. Réécrit le 12/11/2026 sur le texte de l'édition 2026, avec un outil d'IA. « review.status » dit où en est chaque entrée, et le site ne dit jamais plus qu'elle : « pending » (pas publiée), « accepted » (publiée sur la parole de l'éditeur, nommé par « by » et datée par « on », sans qu'il l'ait relue ligne à ligne : D16.34, D16.79) ou « reviewed » (relue par une personne). Les quinze entrées disaient « reviewed » jusqu'au 15/11/2026, sur des dates écrites par défaut ; l'éditeur a choisi ce jour-là de ne pas les relire et de le faire dire au site. « studies » (D21.1, 23/11/2026) : les chiffres d'études publiques qu'une réponse cite, dans nos mots, chacun avec qui l'a publié, sa date, son lien et sa page ; ils sont vérifiés contre l'extrait de leur document (eval/riposte-sources.json), jamais contre le livre."
   },
   "entries": [
     {
@@ -473,6 +473,69 @@
         "status": "accepted",
         "by": "Baoleka",
         "on": "2026-11-14"
+      }
+    },
+    {
+      "id": "rip-16",
+      "slug": "exil-fiscal",
+      "theme": "Exil fiscal",
+      "objection": "« Avec la taxe Zucman, les riches vont tous partir »",
+      "answer": "Le programme crée la taxe Zucman : une garantie d'impôt de 2 % sur le patrimoine de chaque centimillionnaire. Il rétablit et renforce l'ISF. Contre l'évasion fiscale, il rétablit aussi une exit tax renforcée et instaure un impôt universel, sur les entreprises comme sur les revenus des particuliers.",
+      "avoid": "Ne pas dire « personne ne part » : l'exil existe, il est faible. Ne pas dire que ces études mesurent la taxe Zucman ou les centimillionnaires. Leurs auteurs jugent difficile d'étendre leurs résultats à une réforme très différente, visant les très hauts patrimoines. Ne pas avancer de recette : la mesure n'en chiffre pas.",
+      "supports": [
+        {
+          "id": "p2c2-s02-m03",
+          "sha256": "981ac90cfe74af84f8435e43d11f26b42c9db7d5e1e3ed92b5b448893cdd35a3",
+          "quote": true
+        },
+        {
+          "id": "p2c2-s02-m09",
+          "sha256": "2504d4b770eb9c5d93162a53c657f1841f43f42b45072bcca1e7dccf3fb9e08c"
+        },
+        {
+          "id": "p2c2-s02-m02",
+          "sha256": "3701e770bc2839b843965abfc400937a7befc547d46c1bf07e89c13290766cc0"
+        }
+      ],
+      "studies": {
+        "lead": "L'étude ne montre aucun départ massif : l'exil existe, mais il est faible.",
+        "items": [
+          {
+            "text": "Chaque année, 0,2 % du 1 % le plus riche en revenus du capital quitte la France : deux fois moins que l'ensemble des Français (0,38 %).",
+            "source": {
+              "by": "Conseil d'analyse économique",
+              "title": "Focus n° 118",
+              "on": "2025-07",
+              "url": "https://cae-eco.fr/static/pdf/Focus_118_emigration_fiscale_250725_v2.pdf",
+              "where": "p. 3"
+            }
+          },
+          {
+            "text": "L'étude prend le cas de 4 milliards d'euros d'impôt en plus pour ce 1 %. Au bout de 15 à 20 ans, les départs provoqués réduisent la valeur ajoutée du pays de 0 à 0,05 %.",
+            "source": {
+              "by": "Conseil d'analyse économique",
+              "title": "Focus n° 118",
+              "on": "2025-07",
+              "url": "https://cae-eco.fr/static/pdf/Focus_118_emigration_fiscale_250725_v2.pdf",
+              "where": "p. 15"
+            }
+          },
+          {
+            "text": "De l'ordre de 50 à 60 % de ceux qui quittent la France y reviennent après cinq à six ans ; les données françaises restent rares.",
+            "source": {
+              "by": "Camille Landais, économiste",
+              "title": "audition devant la commission d'enquête de l'Assemblée nationale",
+              "on": "2026-04-08",
+              "url": "https://www.assemblee-nationale.fr/dyn/opendata/CRCANR5L17S2026PO878968N011.html"
+            }
+          }
+        ],
+        "close": "Pour les auteurs de l'étude, le débat sur l'exil « se trompe donc sans doute de cible ». Ils jugent essentiel de porter aussi le débat sur les stratégies pour échapper à l'impôt."
+      },
+      "review": {
+        "status": "accepted",
+        "by": "Baoleka",
+        "on": "2026-11-23"
       }
     }
   ]

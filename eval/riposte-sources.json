@@ -1,0 +1,59 @@
+{
+  "meta": {
+    "note_fr": "Les extraits des documents publics d'où viennent les chiffres de nos blocs « Ce que disent les études » (D21.1, data/2026/riposte.json, `studies`). Un extrait est recopié tel que le document l'écrit, avec sa page ; « for » nomme ce qu'il appuie (« items.0 », le premier chiffre ; « close », la citation de la clôture). La porte (scripts/editorial.test.ts) exige que chaque chiffre et chaque nombre en lettres d'un de nos chiffres d'étude soit écrit dans un extrait de ce chiffre, et que toute citation de la clôture soit dans un extrait. « verified » dit qui, d'un autre modèle que celui qui a écrit, a relu chaque extrait et chaque phrase sur le document lui-même. Ce ne sont pas des textes du programme.",
+    "recheck": "Ces documents sont datés et ne changent pas ; une étude plus récente ne les rend pas faux, elle se cite à part."
+  },
+  "entries": {
+    "rip-16": [
+      {
+        "for": "items.0",
+        "url": "https://cae-eco.fr/static/pdf/Focus_118_emigration_fiscale_250725_v2.pdf",
+        "where": "p. 3",
+        "excerpt": "seulement 0,2 % du top 1 % français s’expatrie chaque année, soit deux fois moins que lorsqu’on considère l’ensemble de la population française (0,38 %).",
+        "consulted_on": "2026-11-23"
+      },
+      {
+        "for": "items.1",
+        "url": "https://cae-eco.fr/static/pdf/Focus_118_emigration_fiscale_250725_v2.pdf",
+        "where": "p. 15",
+        "excerpt": "Une réforme qui augmenterait le taux effectif d’imposition du top 1 % des revenus du capital de 5,2 points de pourcentage, et générerait un surplus de recettes fiscales de 4 milliards d’euros",
+        "consulted_on": "2026-11-23"
+      },
+      {
+        "for": "items.1",
+        "url": "https://cae-eco.fr/static/pdf/Focus_118_emigration_fiscale_250725_v2.pdf",
+        "where": "p. 15",
+        "excerpt": "en considérant une réforme fiscale de +4 milliards de recettes (0,15 % du PIB), les effets agrégés sur l’activité économique à long terme restent faibles : l’exil fiscal entraînerait au plus une baisse de -0,03 % de chiffre d’affaires, -0,05 % de valeur ajoutée totale de l’économie française, et -0,04 % de l’emploi total.",
+        "consulted_on": "2026-11-23"
+      },
+      {
+        "for": "items.1",
+        "url": "https://cae-eco.fr/static/pdf/Focus_118_emigration_fiscale_250725_v2.pdf",
+        "where": "p. 15",
+        "excerpt": "il faut donc interpréter le Tableau 1 de la façon suivante : les effets attendus de l’exil fiscal à la suite de la réforme se situent entre 0 et le résultat indiqué dans le tableau. Enfin, il faut rappeler que les effets reportés sont des effets à moyen, voire à long terme (au bout d’environ 15 à 20 ans). Les effets immédiats sont beaucoup plus faibles.",
+        "consulted_on": "2026-11-23"
+      },
+      {
+        "for": "items.2",
+        "url": "https://www.assemblee-nationale.fr/dyn/opendata/CRCANR5L17S2026PO878968N011.html",
+        "where": "compte rendu n° 011, mercredi 8 avril 2026",
+        "excerpt": "Il nous est assez difficile de répondre précisément à cette question, faute de données. Sur la base des données scandinaves et des données françaises disponibles, lesquelles sont très parcellaires, je vous répondrais toutefois positivement. En effet, beaucoup de ceux qui s’expatrient finissent par revenir. Ainsi, les expatriations sont rarement définitives. Les taux de retour associés sont de l’ordre de 50 à 60 % après cinq à six ans, tant en France qu’en Scandinavie.",
+        "consulted_on": "2026-11-23"
+      },
+      {
+        "for": "close",
+        "url": "https://cae-eco.fr/static/pdf/Focus_118_emigration_fiscale_250725_v2.pdf",
+        "where": "p. 16",
+        "excerpt": "Le débat public, en se focalisant sur l’exil fiscal, se trompe donc sans doute de cible. Au-delà de la question de l’expatriation, il nous semble essentiel de recentrer le débat sur les autres marges de réponse des hauts patrimoines à la fiscalité, notamment sur les stratégies d’optimisation pour échapper à l’impôt.",
+        "consulted_on": "2026-11-23"
+      }
+    ]
+  },
+  "verified": {
+    "rip-16": {
+      "by": "claude-sonnet-5-5",
+      "on": "2026-11-23",
+      "verdict": "ok"
+    }
+  }
+}

@@ -1,9 +1,9 @@
 {
   "$meta": {
     "name": "C'est écrit là — kit de chaînes d'interface",
-    "version": "0.15.0",
-    "date": "2026-11-19",
-    "supersedes": "0.14.0",
+    "version": "0.16.0",
+    "date": "2026-11-23",
+    "supersedes": "0.15.0",
     "decisions": [
       "D0.1",
       "D0.22",
@@ -63,7 +63,8 @@
       "D9.15",
       "D9.16",
       "D9.5",
-      "D9.9"
+      "D9.9",
+      "D21.1"
     ],
     "conventions_fr": "Clés anglaises en snake_case, triées par ordre de code, uniques. Valeurs françaises au tu, sauf les écrans atteints par un lien (home.link.*, link.*, q.link.*, play.link.*, mention IA), à l'impersonnel (D3.12). Espace insécable U+00A0 avant : ; ! ? » % et après « ; apostrophe droite convertie en ’ au rendu ; « … » en un caractère ; l'italique du titre du livre et du nom de l'app est posée par CSS. Chaque phrase fait 15 mots au plus (placeholder = un mot), sauf les clés de l'allowlist de scripts/check-strings.test.ts. Aucun emoji, sans exception (la clé easter et ses deux emojis sont retirées, D16.37).strawberry_milk (D16.20). Le mot « tortue » ne paraît que sous turtle.* et privacy.* (D16.11) ; aucune chaîne ne dit que le programme ne contient pas quelque chose. Aucun disclaimer de contenu (D0.1) : une mention décrit un mécanisme, jamais une réserve.",
     "placeholders_rule_fr": "Règle unique, appliquée clé par clé depuis la v0.5. Une valeur figée par une décision et qu'aucune porte de dépôt n'interdit d'écrire en clair EST écrite en clair : le pseudonyme « Baoleka » (about.who, concept.authorship.reviewed) et l'URL du dépôt (legal.license.code). Une valeur reste un placeholder dans deux cas seulement : elle est calculée au rendu ou au build (chapter, count, date, dates, model, n, nextChapter, parts, pollSponsor, pollster, read, reopenTime, section, term, title, topic, total, url, version), ou une porte de CI interdit sa forme littérale dans un fichier suivi — c'est le cas de {contactEmail}, que la porte « adresse e-mail dans un fichier suivi » (prompt-final.md §6, H-CNF-17c) ne tolère que sous forme de placeholder, et qui est résolu au build en contact@cestecritla.fr. Toute clé listée ici doit être réellement utilisée, et toute clé utilisée doit être listée : scripts/check-strings.test.ts échoue dans les deux sens.",
@@ -154,7 +155,8 @@
       "v0.15.0, suite (19/11/2026, PLAN-MOTS lot 5, D20.11) : la page « Mots du programme » montre, sous nos cartes (words.hub.ideas, « Les idées du programme »), tous les mots expliqués de A à Z (words.hub.title, words.hub.lead), un champ qui les filtre sur le téléphone (words.hub.filter), et, quand aucun ne correspond, words.hub.none — qui ne dit jamais qu'un mot manque au programme, seulement qu'aucun mot expliqué ne correspond, avec le lien de la recherche (search.label). L'étiquette chat.terms.badge est dans son HTML : c'est une des pages qui parlent de l'IA qui a écrit ces explications.",
       "v0.15.0, suite (19/11/2026, PLAN-MOTS lot 6) : words.search.row (« Ce que veut dire « {term} » ») — une ligne au-dessus des résultats de la recherche quand ce qui est tapé est un mot expliqué, ou demande ce qu'il veut dire ; elle mène à son explication sur la page « Mots du programme », ou à notre carte. Rendue seulement là où data/2026/words.json ouvre la recherche.",
       "v0.15.0, suite (19/11/2026, PLAN-MOTS lot 14, D20.4) : words.game.title (« Des mots de cette phrase, expliqués ») — sous la carte du jeu, hors de son cadre, après « Mot suivant », une ligne repliée : ouverte, elle montre les mots expliqués de la phrase de la carte, sans exemple, sous l'étiquette chat.terms.badge. Le titre et l'étiquette arrivent avec les explications, dans le fichier du jeu : la page n'en porte aucun (D20.11). Rendue seulement là où data/2026/words.json ouvre le jeu.",
-      "v0.15.0, suite (19/11/2026, PLAN-MOTS lot 15, sous le mandat D20.3) : about.gists_terms dit que les mots expliqués sont partout sur le site, qu'une IA les a relevés en lisant le livre, et que leurs exemples sont des cas inventés, aux montants ronds — en gardant, mot pour mot, les phrases que la porte épingle (connaissances générales, jamais ce que prévoit le programme, personne ne les a relues une à une) ; accuracy.review.terms ajoute que les exemples sont inventés ; accuracy.unverified.07 (« Les mots expliqués aident-ils un lycéen, sans le prendre de haut ? ») rejoint, là où le site les montre, les questions que seules de vraies personnes peuvent trancher ; concept.index_lead dit des notions du programme qu'elles sont « décrites », et non « expliquées » : deux lecteurs à l'aveugle lisaient « expliquées en clair » comme l'adoption du point de vue du parti ; « avec leurs mesures » remplace « avec le texte » — nos cartes nouvelles ne citent aucune mesure en entier ; words.hub.lead nomme ce que la page « Mots du programme » tient désormais : sigles, lois, institutions, notions. privacy.chat.terms n'est pas touchée. Toutes dans docs/discovery/TEXTES-MOTS.md."
+      "v0.15.0, suite (19/11/2026, PLAN-MOTS lot 15, sous le mandat D20.3) : about.gists_terms dit que les mots expliqués sont partout sur le site, qu'une IA les a relevés en lisant le livre, et que leurs exemples sont des cas inventés, aux montants ronds — en gardant, mot pour mot, les phrases que la porte épingle (connaissances générales, jamais ce que prévoit le programme, personne ne les a relues une à une) ; accuracy.review.terms ajoute que les exemples sont inventés ; accuracy.unverified.07 (« Les mots expliqués aident-ils un lycéen, sans le prendre de haut ? ») rejoint, là où le site les montre, les questions que seules de vraies personnes peuvent trancher ; concept.index_lead dit des notions du programme qu'elles sont « décrites », et non « expliquées » : deux lecteurs à l'aveugle lisaient « expliquées en clair » comme l'adoption du point de vue du parti ; « avec leurs mesures » remplace « avec le texte » — nos cartes nouvelles ne citent aucune mesure en entier ; words.hub.lead nomme ce que la page « Mots du programme » tient désormais : sigles, lois, institutions, notions. privacy.chat.terms n'est pas touchée. Toutes dans docs/discovery/TEXTES-MOTS.md.",
+      "v0.16.0 (23/11/2026, PLAN-EXIL, D21.1) : une réponse aux objections peut citer des études, dans un bloc à part. riposte.studies_label (« Ce que disent les études : ») titre le bloc, sous les mesures citées ; riposte.studies_same (« Même étude ») remplace le nom d'une source qui se répète ; concept.authorship.studies dit, sous la page qui en cite, que leurs chiffres sont vérifiés contre leurs documents ; accuracy.studies le dit sur la page Exactitude. about.ai_reviewed passe de « Quinze » à « Seize », avec la seizième réponse (D21.4)."
     ],
     "status_fr": "v0.8 : les familles chat.*, game.* et turtle.* existent dans le kit avant leurs écrans ; elles sont relues à la construction de chacun (lots H, I, L, M), puis par l'éditeur sur l'aperçu. Les chaînes chat.* ne sont rendues que si data/2026/ask.json dit « chat » (D16.4, D16.51) ; easter.strawberry_milk, confirmée par l'éditeur le 13 novembre, a été retirée par lui le 14 après la session des personas (D16.37)."
   },
@@ -162,7 +164,7 @@
   "about.ai_limits": "L'IA peut se tromper sur un mot : ses phrases portent toujours la mention IA. Ce que prévoit le programme, les phrases écrites d'avance et le livre le disent.",
   "about.ai_line": "Quand tu demandes, des phrases écrites d'avance répondent. Une IA les a écrites et vérifiées. Si tu le demandes, une IA ({model}), hébergée chez Cloudflare, explique leurs mots.",
   "about.ai_method": "Chercher se fait sur ton téléphone. Quand tu demandes, la page envoie seulement les numéros des mesures trouvées. Notre serveur, chez Cloudflare, renvoie une phrase par mesure. Une IA a écrit chaque phrase d'avance, en lisant la mesure, puis l'a relue. Si tu le demandes, une IA ({model}) explique les mots de ces phrases. Elle reçoit ces phrases et les mots à expliquer, jamais ta question. Elle ne lit jamais le livre. Un contrôle relit ce qu'elle écrit : rien ne doit parler à la place du programme. Une seule phrase refusée, et aucune explication ne s'affiche.",
-  "about.ai_reviewed": "Quinze objections ont une réponse préparée d'avance. La feuille la montre d'abord, sous « En clair ».",
+  "about.ai_reviewed": "Seize objections ont une réponse préparée d'avance. La feuille la montre d'abord, sous « En clair ».",
   "about.contact_lead": "Une question, une erreur repérée : écris-nous.",
   "about.corpus_version": "Texte à jour au {date}, vérifié section par section.",
   "about.gists_game": "Le jeu montre aussi de ces phrases, sur ses cartes. Chacune dit une mesure où le mot est écrit.",
@@ -211,6 +213,7 @@
   "accuracy.search.miss": "Objectif manqué : toutes les sections attendues dans les trois premières. Résultat : {count} %, pour 90 visés.",
   "accuracy.search.text": "Sur {total} questions, la bonne section arrive dans les cinq premières {count} fois.",
   "accuracy.search.title": "La recherche, mesurée",
+  "accuracy.studies": "Une réponse cite aussi des études. Leurs chiffres sont vérifiés contre les documents publiés, liés sous chacun.",
   "accuracy.title": "Exactitude",
   "accuracy.unverified.01": "Comprend-on au premier regard que le site n'est pas officiel ?",
   "accuracy.unverified.02": "Distingue-t-on notre nom de celui de la campagne, en deux secondes ?",
@@ -297,6 +300,7 @@
   "concept.authorship.accepted": "Préparé avec une IA. Mesures citées et chiffres vérifiés contre le livre.",
   "concept.authorship.pending": "Pas encore validé pour publication",
   "concept.authorship.reviewed": "Rédigé par nous, relu par Baoleka",
+  "concept.authorship.studies": "Chiffres des études vérifiés contre leurs documents, liés sous chacun.",
   "concept.explorable.hint": "Le curseur n'a pas d'unité : il montre le principe, pas des chiffres.",
   "concept.explorable.less": "moins",
   "concept.explorable.more": "plus",
@@ -654,6 +658,8 @@
   "riposte.restart": "Recommencer",
   "riposte.reversal_label": "Ce qu'il vaut mieux ne pas dire",
   "riposte.share": "Envoyer cette réponse",
+  "riposte.studies_label": "Ce que disent les études :",
+  "riposte.studies_same": "Même étude",
   "riposte.themes": "Thèmes",
   "riposte.timer_done": "Dix secondes. Retourne la carte.",
   "riposte.title": "Réponses aux objections",

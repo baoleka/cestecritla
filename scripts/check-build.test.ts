@@ -415,7 +415,7 @@ void test('the explained words are a module of their own, asked for by the sheet
   );
 });
 
-void test('the sheet is told, for each of our fifteen answers, the measures it rests on', () => {
+void test('the sheet is told, for each of our published answers, the measures it rests on', () => {
   // A recognised objection shows these measures, not what its words find (src/lib/chat-local.ts,
   // `measuresFor`). Read in the test build of the sheet, where the configuration is in the page.
   const home = 'dist-gists/index.html';
@@ -433,7 +433,11 @@ void test('the sheet is told, for each of our fifteen answers, the measures it r
       section.items.filter((item) => item.kind !== 'paragraph').map((item) => item.id),
     ),
   );
-  assert.equal(config.objections.length, 15);
+  // Every answer the editor accepted, and none other (src/lib/notions.ts, `knownOf`).
+  const accepted = (
+    JSON.parse(read('data/2026/riposte.json')) as { entries: { review: { status: string } }[] }
+  ).entries.filter((entry) => entry.review.status !== 'pending');
+  assert.equal(config.objections.length, accepted.length);
   for (const { slug, supports } of config.objections) {
     assert.ok(supports.length >= 2, `${slug}: ${String(supports.length)} measure(s)`);
     for (const id of supports) assert.ok(measures.has(id), `${slug}: ${id} is not a measure`);

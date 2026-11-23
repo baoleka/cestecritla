@@ -50,7 +50,7 @@ void test('the rules catch what they are for', () => {
     /an absent subject admits every page of the site/,
     /pattern is not folded: Sénat/,
     /pattern keeps an elision: sortie de l\.euro/,
-    /not the fifteen of data\/2026\/riposte\.json/,
+    /not the objections of data\/2026\/riposte\.json/,
     /identifier used twice/,
     /counts\.total says/,
   ]) {

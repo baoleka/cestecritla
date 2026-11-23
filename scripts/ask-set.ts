@@ -32,7 +32,7 @@ export interface AskSetItem {
   expect: PageKind[];
   /** A written or selected page must cite at least one measure of one of these sections. */
   sections?: string[];
-  /** Which of the fifteen re-read answers `reviewed` means. */
+  /** Which of our answers to objections `reviewed` means. */
   slug?: string;
   /** Measures that must never be cited for this item: homonyms. */
   forbidden?: string[];
@@ -103,7 +103,7 @@ export function breaksNever(item: AskSetItem, sentences: readonly string[]): str
 }
 
 /**
- * Everything wrong with the set, read against the public manifest and the fifteen objections.
+ * Everything wrong with the set, read against the public manifest and our objections.
  * Empty when the set may be used.
  */
 export function askSetProblems(
@@ -224,7 +224,7 @@ export function askSetProblems(
       say('meta', `counts.${group} says ${String(expected)}, the file holds ${String(actual)}`);
   }
 
-  // The fifteen objections, word for word and in order; every one of them also as a variant.
+  // Our objections, word for word and in order; every one of them also as a variant.
   const listed = set.items.filter((i) => i.group === 'objection');
   if (
     !same(
@@ -232,7 +232,7 @@ export function askSetProblems(
       objections.map((o) => `${o.slug}|${o.objection}`),
     )
   ) {
-    say('objections', 'not the fifteen of data/2026/riposte.json, in its order');
+    say('objections', 'not the objections of data/2026/riposte.json, in its order');
   }
   const varied = new Set(set.items.filter((i) => i.group === 'variant').map((i) => i.slug));
   for (const slug of slugs) if (!varied.has(slug)) say('variants', `no variant of ${slug}`);

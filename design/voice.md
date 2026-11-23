@@ -1,5 +1,7 @@
 # Voix et ton — « C'est écrit là » (v0, T3)
 
+> **Mise à jour du 23 novembre 2026 (D21.1, kit v0.16.0).** Une quatrième voix : **les études**. Une réponse aux objections peut citer des chiffres d'études publiques, dans un bloc à part, « Ce que disent les études : », sous les mesures citées et jamais sous « Ce que dit le texte : ». Chaque chiffre est écrit dans nos mots, avec qui l'a publié, sa date, sa page et un lien vers le document d'origine ; il est vérifié contre l'extrait de ce document (`eval/riposte-sources.json`), jamais contre le livre. La règle 8 tient pour tout le reste : hors de ce bloc, aucun chiffre qui ne soit dans le livre. Le ton reste celui du §1 : on frappe l'argument, chiffres à l'appui, jamais une personne (D21.2).
+
 > **Mise à jour du 13 novembre 2026 (D16, kit v0.7.0).** Ce guide a été écrit pour l'app de septembre ; quatre de ses points ont changé, et `scripts/check-strings.test.ts` tient la version en vigueur.
 >
 > 1. **Un modèle rédige la réponse, sous portes** (D16.2, D16.4). Le « liant » n'est plus calculé par règles : une réponse s'ouvre par `chat.liant.voici` (réponse écrite) ou `chat.liant.where` (sélection seule), et par rien d'autre. Elle ne confirme, ne corrige ni ne nuance : les quatre liants de posture sont retirés (D16.5).
@@ -13,13 +15,14 @@
 
 ## 0. La voix en une phrase
 
-On parle comme quelqu'un de calme qui a le livre sous la main : on cite, on explique, on montre. Trois voix cohabitent et ne se mélangent jamais :
+On parle comme quelqu'un de calme qui a le livre sous la main : on cite, on explique, on montre. Trois voix cohabitent et ne se mélangent jamais — quatre depuis le 23 novembre 2026, avec les études (D21.1) :
 
 | Voix | Qui parle | Typographie (D3.2) | Exemple |
 |---|---|---|---|
 | Le programme | *L'Avenir en commun*, mot pour mot | Gowun Batang, fond #FDEDFF, filet Violet, étiquette « Texte du programme » | « Inscrire dans la Constitution le principe de la « règle verte », selon laquelle on ne prélève pas davantage à la nature… » |
 | L'app (« on ») | Nous, qui avons rédigé et relu | Public Sans | « En clair », « Pourquoi ça compte », « Rédigé par nous, relu par … » |
 | Le liant IA (v2) | Mistral, ≤ 2 phrases, jamais une mesure | Public Sans + badge « IA · Mistral » | « Deux mesures du chapitre 12 répondent à ta question. » |
+| Les études (D21.1) | Un chiffre d'une étude publique, dans nos mots, avec son auteur, sa date, sa page et son lien ; jamais sous « Ce que dit le texte » | Public Sans, sous le titre « Ce que disent les études : », la source en lien sous chaque chiffre | « Chaque année, 0,2 % du 1 % le plus riche en revenus du capital quitte la France. » — Conseil d'analyse économique, Focus n° 118, juillet 2025, p. 3 |
 
 Le lecteur, lui, est toujours « tu ».
 

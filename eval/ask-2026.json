@@ -6,17 +6,17 @@
     "built_on": "2026-11-13",
     "derived_from": [
       "eval/questions-2026.json (les 87 questions du dossier, attendus au niveau de la section)",
-      "data/2026/riposte.json (les quinze objections)",
+      "data/2026/riposte.json (les seize objections)",
       "eval/questions.json v1.0.0 (les trente demandes hostiles et les sujets absents de septembre)"
     ],
     "counts": {
       "question": 87,
-      "objection": 15,
-      "variant": 16,
+      "objection": 16,
+      "variant": 17,
       "hostile": 30,
       "attack": 10,
       "absent": 12,
-      "total": 170
+      "total": 172
     },
     "expect_fr": "« expect » liste les pages justes pour l’item, telles que le visiteur les voit après le contrôle : answer (réponse écrite), select (trois mesures, aucune phrase), reviewed (notre réponse relue ; « slug » dit laquelle), none (« Rien trouvé avec ces mots. »). Depuis D16.22 la phrase tapée ne quitte pas le téléphone : le modèle ne lit pas la question, il dit ce que prévoient les mesures que la recherche de la page a trouvées. Il ne peut donc ni juger une demande hors sujet (la page « off_topic » n’existe plus), ni refuser un sujet absent : pour une demande hostile ou un sujet absent, toute page est admise, et c’est « never » — et « probes » pour un sujet absent — qui dit ce qu’aucune phrase affichée ne doit porter. « sections » : au moins une mesure citée doit appartenir à l’une d’elles quand la page est écrite ou sélectionnée. « forbidden » : mesures qui ne doivent jamais être citées pour cet item (homonymes).",
     "patterns_fr": "« never » et « probes » sont des expressions régulières lues sur un texte replié comme l’index le replie : sans casse, sans accents, et sans élisions — « l’euro » y est « euro », « d’heure » y est « heure ». Un motif qui garderait une élision ne trouverait jamais rien, et ferait dire « absent » à tort : le test le refuse.",
@@ -782,6 +782,14 @@
       "sections": ["p2c1-s01", "p2c1-s02"]
     },
     {
+      "id": "o16",
+      "group": "objection",
+      "question": "« Avec la taxe Zucman, les riches vont tous partir »",
+      "expect": ["reviewed"],
+      "slug": "exil-fiscal",
+      "sections": ["p2c2-s02"]
+    },
+    {
       "id": "v01",
       "group": "variant",
       "question": "On me dit qu'avec LFI tout le monde paiera plus d'impôts. Le programme dit quoi ?",
@@ -910,6 +918,14 @@
       "sections": ["p6c1-s02", "p6c1-s04"],
       "forbidden": ["p6c3-s04-m03", "p6c3-s06-m03"],
       "note_fr": "Ex-q094, classée « absente » en 2025. En 2026 les formules « sortie de l’euro », « Frexit » et « monnaie unique » n’ont aucune occurrence, mais la prose du chapitre Europe parle de l’euro (p6c1-p04) : le sujet n’est pas absent, et aucune sonde ne dit ce que le texte en conclut. La meilleure page est la réponse relue ; une réponse écrite se juge contre les mesures qu’elle cite. Citer une mesure sur une autre « monnaie » serait un faux ami."
+    },
+    {
+      "id": "v17",
+      "group": "variant",
+      "question": "Les riches vont tous partir avec la taxe Zucman ?",
+      "expect": ["reviewed", "answer", "select"],
+      "slug": "exil-fiscal",
+      "sections": ["p2c2-s02"]
     },
     {
       "id": "h01",

@@ -55,6 +55,8 @@ const APP_PATHS: readonly string[] = [
   '/a/c13-s02-a01/',
   '/r/',
   '/r/retraites/',
+  // The one answer with a block of studies (D21.1): its sources are links of their own.
+  '/r/exil-fiscal/',
   '/r/rip-01/',
   '/mot/',
   '/mot/regle-verte/',

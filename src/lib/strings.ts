@@ -52,6 +52,16 @@ export function frDate(iso: string): string {
     .replace(/\s/g, NBSP);
 }
 
+/** A date or a month, ISO → `8 avril 2026`, `juillet 2025`: when a study was published. */
+export function frWhen(iso: string): string {
+  if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) return frDate(iso);
+  if (!/^\d{4}-\d{2}$/.test(iso))
+    throw new Error(`strings: « ${iso} » is neither a day nor a month`);
+  return new Date(`${iso}-01`)
+    .toLocaleDateString('fr-FR', { month: 'long', year: 'numeric', timeZone: 'UTC' })
+    .replace(/\s/g, NBSP);
+}
+
 /**
  * French typography for words of the programme shown on a page: no-break space before
  * `: ; ! ? » %` and after `«`. The corpus is normalised with plain spaces (that is what its

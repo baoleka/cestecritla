@@ -4,14 +4,16 @@
  *
  * Three voices, never mixed (design/voice.md §0): the objection is someone else's, in quotation
  * marks; the answer is ours, and says only what its supports carry; the programme speaks in its
- * own block, attributed and linked. What it is better not to say is part of the answer: an
- * honest answer knows where it stops.
+ * own block, attributed and linked. Where an answer needs them, public studies speak in a block
+ * of their own, under the measures, each figure linked to its document (D21.1). What it is
+ * better not to say is part of the answer: an honest answer knows where it stops.
  *
  * `/r/rip-01/` — the identifiers the September prototype used in the links it sent — answers
  * too, with a signpost to the page that replaced it.
  */
 import Authorship from '../../components/Authorship.astro';
 import Base from '../../layouts/Base.astro';
+import Studies from '../../components/Studies.astro';
 import Supports from '../../components/Supports.astro';
 import { prose, resolve, ripostes, type Riposte } from '../../lib/editorial.ts';
 import { t } from '../../lib/strings.ts';
@@ -63,12 +65,14 @@ const wordsFile = Words === null || moved ? null : pageWordsFile('r', entry.slug
 
       <Supports supports={supports} />
 
+      {entry.studies !== undefined && <Studies studies={entry.studies} />}
+
       <h2>{t('riposte.reversal_label')}</h2>
       <p>{prose(entry.avoid)}</p>
 
       {Words !== null && wordsFile !== null && <Words file={wordsFile} title="words.page.title" />}
 
-      <Authorship review={entry.review} />
+      <Authorship review={entry.review} studies={entry.studies !== undefined} />
 
       <nav class="around" aria-label={t('riposte.all')}>
         <ul>
