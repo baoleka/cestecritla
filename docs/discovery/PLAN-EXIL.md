@@ -164,3 +164,32 @@ L'approbation de ce plan vaut aussi son accord pour deux gestes, qui seront cons
   - Deux lecteurs hostiles, lancés hors du dépôt (`claude -p … --setting-sources local`, Sonnet et Haiku ; ni l'un ni l'autre n'a reçu d'information sur le projet hors des fichiers, l'adresse du compte restant jointe d'office au contexte — R49) : aucun chiffre faux ; trois formulations plus fortes que les études (l'ouverture « la menace ne tient pas », le chiffre des 4 milliards lisible comme la taxe Zucman, « ménages aisés ») — corrigées. HYPOTHÈSE (lecteurs simulés).
   - Le vérificateur (Sonnet), sur le Focus, le compte rendu et la page officielle du chapitre (un chargement, supprimé ensuite) : « ok après corrections » — « impôt minimum » n'est pas le mot du programme (« garantie d'impôt ») ; la mesure de l'ISF, citée en appui, absente du paragraphe ; « au bout de 15 à 20 ans » et « de 0 à 0,05 % » (le Focus : « entre 0 et le résultat indiqué ») ; « ménages aisés » n'est pas le mot de Landais, qui dit ses données françaises « très parcellaires » ; « d'abord » inventé dans la clôture ; la limite des auteurs porte sur « une réforme très différente ». Toutes appliquées ; puis « ok », deux fois, sur le texte final.
 - **Lot 4, l'éditeur valide** le texte et les textes d'interface, mot pour mot, avec deux captures (D21.10) ; il donne son accord pour pousser et déployer l'aperçu (D21.11).
+
+### 23 novembre 2026 — lots 5 et 6
+- **Lot 5, portes et commits.**
+  - **Portes**, mode « app », sur l'état final :
+    - 702 tests ; types, lint, contraste ;
+    - a11y : 252 contrôles, dont `/r/exil-fiscal/` sous ses neuf conditions ;
+    - e2e : 46 / 43 / 43 ; e2e-ask : 109 / 102 / 102 ;
+    - jeu : 322 / 286 / 286, mesures de laboratoire comprises ;
+    - feuille : 104 / 98 / 98, avec un contrôle de plus — l'objection exacte, son « En clair » et le lien vers `/r/exil-fiscal/` ;
+    - la porte anti-fuite (17 / 17) ; aucun échec.
+  - **Commits** : quatre, signés (`5d229a9`, `dd6a997`, `44c2540`, `6a09927`). Les deux corrections tiennent seules : chacune a passé les types et les tests dans une copie de travail à part.
+  - **Le push sur `origin main`** a buté sur la clé SSH, absente de l'agent de cette session : il attend que l'éditeur la charge.
+- **Lot 6, l'aperçu.** `npm run build:preview && npm run deploy:preview -- --bench`, Worker `cestecritla-preview`, version `a85c7984`. Vérifié en ligne :
+  - **1 312 fichiers sur 1 315 identiques à la build**, les trois écarts connus ;
+  - dans les trois moteurs : la page et ses trois sources liées, la ligne du pied de page, la puce, l'objection reconnue avec son « En clair » ; « Taxe Zucman : partir ou payer ? » accepté, « Zucman doit partir » refusé ; « exil fiscal » qui montre les trois mesures de l'impôt avec leurs phrases ;
+  - la sonde habituelle de la feuille : 257 « ok », aucun échec.
+
+### 23 novembre 2026 — lot 7, la production
+- **Le « oui » de l'éditeur** (D21.12) : « Oui, en production ».
+- **Déployé.** `npm run build && npm run deploy` : commit `6a09927`, Worker `cestecritla` version `b16fae32`, à 11 h 46 (10 h 46 UTC). L'aperçu (version `a85c7984`) servait la même build depuis 11 h 35.
+- **Vérifié en ligne.**
+  - **Sur `cestecritla.fr` et `www` : 1 312 fichiers sur 1 315 identiques à la build**, les trois écarts connus (`404.html` redirigé, `_headers` et `_redirects` non servis comme fichiers).
+  - Sur `cestecritla.fr`, dans les trois moteurs (Chromium seul sur `www`) : la page et ses trois sources liées, la ligne du pied de page, la puce, l'objection reconnue ; « Taxe Zucman : partir ou payer ? » accepté, « Zucman doit partir » refusé ; « exil fiscal » qui montre les trois mesures de l'impôt avec leurs phrases.
+  - La sonde de la feuille : 257 « ok », aucun échec.
+- **Écrit.** `data/launch.json` : `home.serving` nomme `6a09927`. L'état du projet est dans `CLAUDE.md`, R72 au registre, une ligne dans `data/2026/NOTICE.md`.
+- **Ce qui reste.**
+  - **Le push** des cinq commits sur `origin main` : la clé SSH de l'éditeur n'était pas chargée dans cette session.
+  - **Le chiffre de 2013**, proposé et non retenu (D21.10) : « En 2013, la hausse de l'impôt sur les revenus du capital a fait partir moins de 350 foyers de plus par an, sur les 385 000 du 1 % le plus riche » (communiqué du CAE du 25/07/2025). C'est la meilleure réponse au point le plus fort du lecteur hostile ; à reproposer à part.
+  - **Ce qu'aucune vérification ne couvre** : de vrais lecteurs, de vrais téléphones, la réaction d'un économiste hostile en chair et en os. HYPOTHÈSE.
