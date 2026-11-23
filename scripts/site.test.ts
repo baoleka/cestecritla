@@ -197,8 +197,16 @@ void test(
 
 void test('the search data is the manifest, projected: nothing more', { skip }, () => {
   const name = readdirSync('dist/data').find((f) => f.startsWith('meta-'));
-  assert.ok(name?.includes(manifest.meta.corpus_version), 'meta file is not versioned by corpus');
-  const meta = json(`dist/data/${name ?? ''}`) as {
+  assert.ok(name !== undefined, 'no file of titles');
+  // The pages that search name the files the build wrote. Their names say what they hold, not
+  // the version of the book (scripts/check-build.test.ts, R73).
+  const index = readdirSync('dist/data').find((f) => f.startsWith('index-'));
+  for (const page of ['index.html', 'sommaire/index.html']) {
+    const html = read(page);
+    assert.ok(html.includes(`data-meta="/data/${name}"`), `${page}: names no file of titles`);
+    assert.ok(html.includes(`data-index="/data/${index ?? ''}"`), `${page}: names no index`);
+  }
+  const meta = json(`dist/data/${name}`) as {
     sections: Record<string, [string, string, string]>;
     items: Record<string, [string, string, string]>;
   };

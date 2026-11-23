@@ -13,6 +13,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { gzipSync } from 'node:zlib';
 import { join, extname, relative } from 'node:path';
 import { test } from 'node:test';
+import { canonicalHash } from '../src/lib/fingerprint.js';
 import { appVoiceOnly } from './app-voice.js';
 import { builtAskMode } from './build-mode.js';
 
@@ -228,7 +229,8 @@ void test('what a visit downloads stays small enough for a phone on a slow netwo
   // What a visit fetches before it opens any explanation: the index and the titles (the first
   // search), the game, the texts of « En clair » and how the explained words are found (the
   // first question). Measured 12/11/2026: index 64 KB + titles and locators 33 KB, gzip. Each
-  // is fetched once, then cached for a year under a versioned name. The ceiling has not moved
+  // is fetched once, then cached for a year under a name that says what it holds (the test
+  // below). The ceiling has not moved
   // since; on 19/11/2026 the texts of the explained words left it for files of their own,
   // fetched the first time one is opened, each with a ceiling of its own (PLAN-MOTS, D20.12).
   const firstUse = data.filter((f) =>
@@ -266,6 +268,48 @@ void test('what a visit downloads stays small enough for a phone on a slow netwo
       console.log(`  ${what}: ${String(sum(list))} B gzip of ${String(ceiling)} B`);
     }
   }
+});
+
+void test('every file of data is named by what it holds: a browser keeps it a year (R73)', () => {
+  // public/_headers freezes /data/ for a year, `immutable`: a browser that fetched a file never
+  // asks for it again. A file whose bytes change under the name it had is never seen by those
+  // who came before — the titles of the search gained a field on 23/11/2026 under the name they
+  // had since 12/11, the new script could not read the old file those browsers kept, and
+  // « Demander » searched for ever. So every name carries the fingerprint of what its file
+  // holds (src/lib/fingerprint.ts), and a name that says nothing of it is refused.
+  if (skip) return;
+  const data = files.filter((f) => /dist\/data\/[^/]+\.json$/.test(f));
+  const nameOf = (file: string): string => file.slice(file.lastIndexOf('/') + 1);
+  const held = (name: string): unknown => JSON.parse(read(join('dist', 'data', name)));
+  const fingerprint = (value: unknown): string => canonicalHash(value).slice(0, 16);
+  const wrong: string[] = [];
+  for (const name of data.map(nameOf)) {
+    // The search, the game, « En clair », the words of one page: each file, its own fingerprint.
+    const own =
+      /^(?:index|meta|jeu|clair)-([0-9a-f]{16})\.json$/.exec(name) ??
+      /^mots-([0-9a-f]{16})-[scr]-[a-z0-9-]+\.json$/.exec(name);
+    if (own !== null) {
+      if (fingerprint(held(name)) !== own[1]) wrong.push(name);
+      continue;
+    }
+    // The three files of the sheet's words go together, under one fingerprint (words-data.ts).
+    const words = /^mots-([0-9a-f]{16})(?:-sens|-exemples)?\.json$/.exec(name)?.[1];
+    if (words !== undefined) {
+      const three = [`mots-${words}.json`, `mots-${words}-sens.json`, `mots-${words}-exemples.json`];
+      const together = three.every((file) => existsSync(join('dist', 'data', file)))
+        ? fingerprint({
+            finder: held(three[0] ?? ''),
+            meanings: held(three[1] ?? ''),
+            examples: held(three[2] ?? ''),
+          })
+        : null;
+      if (together !== words) wrong.push(name);
+      continue;
+    }
+    wrong.push(`${name} (a name that says nothing of what the file holds)`);
+  }
+  assert.ok(data.length === 0 || data.some((f) => /\/meta-/.test(f)), 'no file of titles');
+  assert.deepEqual(wrong, [], 'files of data whose name would not change with what they hold');
 });
 
 void test('initial JS stays under the P2 budget of 100 KB gzip', () => {

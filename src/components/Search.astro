@@ -26,9 +26,9 @@
  * the search is local, which is then the whole truth.
  */
 import { askSite } from '../lib/ask-config.ts';
-import { manifest } from '../lib/edition.ts';
 import { cards } from '../lib/editorial.ts';
 import { locatorDisplay } from '../lib/facts.ts';
+import { searchFiles } from '../lib/search-data.ts';
 import { builtWords, wordsNames } from '../lib/words-data.ts';
 import { safeJson, t } from '../lib/strings.ts';
 
@@ -40,7 +40,8 @@ interface Props {
 }
 const { toc = false, ask = false } = Astro.props;
 
-const version = manifest().meta.corpus_version;
+// The index and the titles, named by what they hold: a browser keeps them a year (R73).
+const search = searchFiles();
 const site = askSite();
 const asking = ask && site.mode === 'chat';
 /** The model that explains — null since D16.60: the sheet opens without a live AI. */
@@ -90,8 +91,8 @@ const strings = {
 <form
   id="search"
   role="search"
-  data-index={`/data/index-${version}.json`}
-  data-meta={`/data/meta-${version}.json`}
+  data-index={`/data/${search.index.name}.json`}
+  data-meta={`/data/${search.meta.name}.json`}
   data-first-words={locatorDisplay()}
   data-words={wordsFinder}
 >

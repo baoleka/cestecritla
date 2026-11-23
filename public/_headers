@@ -44,8 +44,12 @@ https://beta.cestecritla.fr/*
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
-# The search index and its titles carry the corpus version in their name (D15.7): a new state of
-# the book gets new files, so these can be frozen too.
+# Every file here carries in its name the fingerprint of what it holds (src/lib/search-data.ts,
+# src/lib/words-data.ts, src/lib/fingerprint.ts): a file that changes gets a new name, never new
+# bytes under an old one, so these can be frozen too — scripts/check-build.test.ts holds it. NOT
+# the version of the book: the index and its titles carried it until 23/11/2026, the titles
+# changed under it, every browser that had searched kept the old file, and « Demander » searched
+# for ever (R73).
 #
 # Never indexed (D19.6): these are the files pages download, not pages. Since 18 November 2026
 # the file of the game may hold OUR sentences about measures — written and checked by an AI,

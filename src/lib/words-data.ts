@@ -278,9 +278,16 @@ export function wordsPages(entries: readonly TermEntry[] = explainedTerms()): Wo
   return out;
 }
 
-/** The name of a page's file of words, under /data/, without « .json ». */
-export const pageWordsName = (fingerprint: string, page: Pick<WordsPage, 'kind' | 'key'>): string =>
-  `mots-${fingerprint}-${page.kind}-${page.key}`;
+/**
+ * The name of a page's file of words, under /data/, without « .json »: the fingerprint of what
+ * the file holds, then the page. A browser keeps it a year (public/_headers): its labels, or the
+ * words of its page, cannot change under the name it had (R73) — the fingerprint of the three
+ * files of the sheet did not cover them. The page is in the name, never a word (D20.13).
+ */
+export const pageWordsName = (
+  file: PageWordsFile,
+  page: Pick<WordsPage, 'kind' | 'key'>,
+): string => `mots-${canonicalHash(file).slice(0, 16)}-${page.kind}-${page.key}`;
 
 /** The file of a page's words: who wrote them, the labels, each word as a dictionary orders them. */
 export function pageWords(
@@ -304,20 +311,4 @@ export function pageWords(
         : [entry.id, entry.term, prose(entry.plain), prose(entry.example)],
     ),
   };
-}
-
-let builtPages: Map<string, string> | null = null;
-/**
- * The address of a page's file of words, or null when the page has none to explain — computed
- * once per build: 111 sections, our cards and our answers ask for it.
- */
-export function pageWordsFile(kind: WordsPage['kind'], key: string): string | null {
-  if (builtPages === null) {
-    const fingerprint = builtWords().fingerprint;
-    builtPages = new Map(
-      wordsPages().map((page) => [`${page.kind}:${page.key}`, pageWordsName(fingerprint, page)]),
-    );
-  }
-  const name = builtPages.get(`${kind}:${key}`);
-  return name === undefined ? null : `/data/${name}.json`;
 }

@@ -17,7 +17,7 @@ import Studies from '../../components/Studies.astro';
 import Supports from '../../components/Supports.astro';
 import { prose, resolve, ripostes, type Riposte } from '../../lib/editorial.ts';
 import { t } from '../../lib/strings.ts';
-import { pageWordsFile } from '../../lib/words-data.ts';
+import { pageWordsFile } from '../../lib/words-built.ts';
 
 export function getStaticPaths() {
   const entries = ripostes();

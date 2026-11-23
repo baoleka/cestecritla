@@ -28,7 +28,11 @@ import {
 } from '../lib/search-core.ts';
 import { firstWordsOf, isLocatorDisplay, quoted, type LocatorDisplay } from '../lib/first-words.ts';
 
-/** /data/meta-<version>.json — built from the public manifest (src/pages/data/[name].json.ts). */
+/**
+ * /data/meta-<fingerprint>.json — built from the public manifest (src/lib/search-data.ts). Its
+ * name changes with what it holds: a browser that kept the titles of another build never hands
+ * them to this script (R73).
+ */
 export interface Meta {
   /** Section id → [title, where ("Partie 2 · chapitre 2"), official URL]. */
   sections: Record<string, [string, string, string]>;

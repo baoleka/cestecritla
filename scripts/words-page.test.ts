@@ -138,17 +138,19 @@ for (const [root, shows] of PAGE_BUILDS) {
         assert.doesNotMatch(section, /data-words|class="words"/);
         return;
       }
-      assert.deepEqual(
-        files.sort(),
-        pages.map((page) => `${pageWordsName(built.fingerprint, page)}.json`).sort(),
-      );
+      // Each file is named by what it holds (R73): what the page's file should hold, then its name.
       const entries = explainedTerms();
+      const expected = (page: (typeof pages)[number]): unknown =>
+        pageWords(page.ids, entries, labels());
+      const nameOf = (page: (typeof pages)[number]): string =>
+        pageWordsName(pageWords(page.ids, entries, labels()), page);
+      assert.deepEqual(files.sort(), pages.map((page) => `${nameOf(page)}.json`).sort());
       for (const page of pages) {
-        const name = pageWordsName(built.fingerprint, page);
+        const name = nameOf(page);
         const file = JSON.parse(
           readFileSync(join(root, 'data', `${name}.json`), 'utf8'),
         ) as unknown;
-        assert.deepEqual(file, pageWords(page.ids, entries, labels()), name);
+        assert.deepEqual(file, expected(page), name);
         const where =
           page.kind === 's'
             ? join(root, 's', page.key, 'index.html')
