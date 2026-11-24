@@ -8,8 +8,9 @@
   // on two exact addresses, and a route wins over a custom domain on the same host (Cloudflare
   // docs, « Routes … take precedence if configured on the same hostname », read on 14/11/2026).
   // Take this Worker away and, on the apex, the two addresses answer like any page that is not
-  // there — the site never knew. NOT on the preview host: there the Worker that serves the
-  // pages runs the same script and answers `/api/gists` itself (wrangler.jsonc). What closes
+  // there — the site never knew. On the preview host this same script is deployed apart, as
+  // « cestecritla-chat-preview », on the preview's two addresses (`env.preview` below); the
+  // Worker of the pages there runs it too, behind them (wrangler.jsonc). What closes
   // the sentences on every host at once is the switch of the base
   // (`seed-ask-2026.ts --switch stopped --what gists`) — security review of 15/11/2026.
   //

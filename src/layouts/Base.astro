@@ -37,6 +37,12 @@ interface Props {
    * 2025 edition stay out of indexes for good: they are signposts, not pages.
    */
   noindex?: boolean | undefined;
+  /**
+   * The page of an address that does not exist: never indexed, and it names no address of its
+   * own — served at every missing address, it declared « /404/ » canonical for all of them, and
+   * « /404 » answered 200 without `noindex` (review of 24/11/2026, P14, L3, U14).
+   */
+  notFound?: boolean | undefined;
   /** On the home page the name in the header is the <h1>; elsewhere it is the way back. */
   home?: boolean | undefined;
   /** The table of contents: the header link then names the current page instead of leading to it. */
@@ -48,6 +54,7 @@ const {
   verbatim = false,
   word = false,
   noindex = false,
+  notFound = false,
   home = false,
   toc = false,
 } = Astro.props;
@@ -82,20 +89,20 @@ const footer: readonly { href: string; label: string }[] = [
     <meta name="theme-color" content="#212320" media="(prefers-color-scheme: dark)" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
-    {noindex && <meta name="robots" content="noindex" />}
+    {(noindex || notFound) && <meta name="robots" content="noindex" />}
     {
       !holding && (
         <>
           {/* Our own address, never the official one: a cross-domain canonical would declare
               that the official site owns this page and ask for ours to be de-indexed. */}
           <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-          <link rel="canonical" href={canonical} />
+          {!notFound && <link rel="canonical" href={canonical} />}
           {/* Link previews carry our words only — never an extract of the programme (D15.7). */}
           <meta property="og:site_name" content={t('app.name')} />
           <meta property="og:title" content={title} />
           {description && <meta property="og:description" content={description} />}
           <meta property="og:type" content="website" />
-          <meta property="og:url" content={canonical} />
+          {!notFound && <meta property="og:url" content={canonical} />}
           <meta property="og:locale" content="fr_FR" />
           <meta property="og:image" content={new URL('/og/cestecritla-v1.png', Astro.site).href} />
           <meta property="og:image:width" content="1200" />
@@ -184,7 +191,13 @@ const footer: readonly { href: string; label: string }[] = [
             <ul>
               {footer.map((link) => (
                 <li>
-                  <a href={link.href}>{link.label}</a>
+                  {/* The page one is on says so (review of 24/11/2026, L22). */}
+                  <a
+                    href={link.href}
+                    aria-current={Astro.url.pathname === link.href ? 'page' : null}
+                  >
+                    {link.label}
+                  </a>
                 </li>
               ))}
             </ul>

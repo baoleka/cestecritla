@@ -332,3 +332,29 @@ Chaque revue : `/code-review max <cible> --max-findings all`, rapport seulement 
 - **Au registre** : R74 (une retouche des règles rouvre une capture fermée — réalisé du 23/11 au 24/11).
 - **Retour arrière** : l'étiquette locale `prod-avant-revues` (`7558828`).
 - **Restent** : les revues 10 à 19 (dont 10 et 11 en cours), le lot des « rails », le lot des pages (écrit dans la copie de travail, pas encore testé), les questions pour l'éditeur.
+
+### 24 novembre 2026, au soir — revue 11 : `scripts/build-mode.ts`
+- **33 constats** (15 importants, 6 hors du fichier, 12 mineurs), reproduits sur des copies de l'arbre ; rien construit ni déployé dans la copie de travail, wrangler jamais lancé. Beaucoup recoupent D (revue 9), C, L et U ; **le neuf** (M = `build-mode.ts`) :
+
+| # | Où | Constat | Gravité |
+|---|---|---|---|
+| M1 | `scripts/build-mode.ts:589` | Après le lancement, un blocage revenu fait dire à `npm run deploy` de construire la page de retrait : le message pousse à retirer tout le site | important |
+| M2 | `scripts/build-mode.ts:612` | La règle des mots expliqués (D20.15) refuse la build « scrutin » et une build en mode « off », qui n'en montrent aucun | important |
+| M3 | `scripts/build-mode.ts:299` | Déployer le Worker des phrases ne vérifie jamais le nom que la configuration donne (le retrait, si) : il pourrait remplacer le Worker des pages | important |
+| M4 | `scripts/build-mode.ts:313` | La production n'est pas tenue au dossier légal du chat (`preview_legal_on`), l'aperçu si | important |
+| M5 | `scripts/build-mode.ts:476` | Le retrait meurt sur un `exposure-policy.json` mal formé, que la build de retrait n'utilise pas (avec D5) | important |
+| M6 | `scripts/build-mode.ts:426` | Deux des huit liens envoyés le 9/9/2026 (`/r/c6-s01-k01`, `/r/c8-s02-k01`) répondent 404 en production | important |
+| M7 | `scripts/build-mode.ts:449` | Le rebrand neutre est défait par le déploiement suivant, sans que rien le refuse (avec U3, U11) | important |
+| M8 | `scripts/deploy.ts:231` | Rien ne lie le `dist/` déployé à l'arbre commité : une retouche non commitée d'un texte validé part en production | antérieur |
+| M9 | `scripts/deploy.ts:269` | PLAUSIBLE : une build lancée pendant un déploiement part sans qu'aucune porte l'ait vue | antérieur |
+| M10 | `scripts/build-mode.ts:62` | `wrangler rollback` pendant une fenêtre de silence rendrait la build normale, sans porte (à écrire dans R41 et les fiches) | antérieur |
+| M11 | `scripts/build-mode.ts:397` | Un `dist/` sans le jeu passe la garde alors qu'une build d'aujourd'hui le publierait | mineur |
+| M12 | `scripts/build-mode.ts:400` | Des refus disent la mauvaise raison ou le mauvais remède | mineur |
+| M13 | `scripts/build-mode.ts:9` | Commentaires d'avant le lancement (dont « runbook sheet 9 ») | mineur |
+| M14 | `scripts/build-mode.ts:328` | Le commentaire de `refusedArguments` décrit mal wrangler 4.130 | mineur |
+| M15 | `scripts/build-mode.ts:73` | `guardedEnv` passe tout l'environnement à wrangler, qui lit aussi les `.env` : `WRANGLER_CI_OVERRIDE_NAME` renomme la cible, un `.env` peut ouvrir la garde | mineur |
+| M16 | `scripts/build-mode.ts:136` | La build de retrait part sur l'aperçu en fichiers statiques sans prévenir de R27 | mineur |
+| M17 | `scripts/build-mode.ts:168` | `database_id: ""` accepté ; deux versions absentes se valent | mineur |
+| M18 | `scripts/build-mode.ts:227` | Un BOM en tête de `wrangler.chat.jsonc` fait refuser le retrait avec un message faux | mineur |
+| M19 | `scripts/build-mode.ts:482` | La politique de citation « validée » sur la forme d'une date, sans lien avec ce qui a été validé | mineur |
+- **Recensés ailleurs** : D2, D3/C6, D4, D7, D8, D9, D11/C7, D12, D13, D14, C4/D6, C5, L5, U8.

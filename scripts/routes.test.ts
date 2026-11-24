@@ -149,7 +149,7 @@ export const ROUTES: readonly Route[] = [
     object: '« La carte des 89 » (écartée)',
     sample: 'carte/index.html',
   },
-  { prefix: '/api/', status: 'worker', object: 'une question : /api/ask (D16.7)' },
+  { prefix: '/api/', status: 'worker', object: 'les phrases : /api/gists et /api/chat (D16.60)' },
 ];
 
 const built = existsSync('dist');

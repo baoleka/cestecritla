@@ -1,7 +1,9 @@
 # Security and cache headers for Static Assets (security §14, D12.8).
 #
-# The CSP here carries ONLY the directives a <meta> tag cannot express: frame-ancestors is
-# ignored in meta, and base-uri / form-action belong with it. Everything about scripts, styles,
+# The CSP here carries the directives a <meta> tag cannot express — frame-ancestors is ignored
+# in meta, and base-uri / form-action belong with it — and upgrade-insecure-requests, which a
+# meta could carry but which belongs to the response, like the others (review of 24/11/2026,
+# U17). Everything about scripts, styles,
 # images and fonts is emitted by Astro as a meta CSP with per-file SHA-256 hashes
 # (astro.config.ts, experimental.csp). The two policies are enforced independently, so no
 # directive may appear in both — a header "style-src 'self'" would intersect with the meta
@@ -40,6 +42,9 @@ https://beta.cestecritla.fr/*
 /_astro/*
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
+# NOT content-addressed: three fixed names, copied as they are (scripts/build-fonts.ts). Frozen
+# for a year all the same, so their bytes never change under the same name — a gate holds them
+# (scripts/check-build.test.ts): a new subset is a new name (review of 24/11/2026, U15).
 /fonts/*
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
@@ -61,8 +66,9 @@ https://beta.cestecritla.fr/*
   Cache-Control: public, max-age=31536000, immutable
   X-Robots-Tag: noindex
 
-# Share previews are versioned by corpus_version in their path (D13.2), so a re-crawl changes
-# the URL rather than the bytes: a permanent link never breaks and caches renew on their own.
+# The share preview has a fixed name, /og/cestecritla-v1.png, drawn once by a local tool
+# (scripts/og-image.ts) — not versioned by the build. Frozen for a year, so its bytes never
+# change under that name: a gate holds them, and a new drawing is a new name (U15).
 /og/*
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
@@ -75,9 +81,12 @@ https://beta.cestecritla.fr/*
   Cache-Control: no-cache
   Content-Type: application/json; charset=utf-8
 
-# `/api/ask` is the only server route (D16.7), and only when the site answers questions. The
-# Worker sets these itself (this file is not applied to a Worker's own responses); repeated here
-# so an asset can never be served under /api/ with a cacheable or referrer-leaking policy.
+# The server routes are `/api/gists` and `/api/chat`, answered on the exact addresses by the
+# Worker of the sentences (wrangler.chat.jsonc), and on the preview `/api/bench`, by the Worker
+# of the pages (wrangler.jsonc, `run_worker_first`). Those Workers set these headers themselves
+# — this file is not applied to a Worker's own responses. Here they shape what the files answer
+# under /api/ on the apex (a 404, a 405), and the two addresses if their Worker were withdrawn:
+# never cacheable, never referrer-leaking (review of 24/11/2026, U16).
 /api/*
   ! Cache-Control
   ! Referrer-Policy

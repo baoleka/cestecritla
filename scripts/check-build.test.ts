@@ -10,6 +10,7 @@
  */
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { gzipSync } from 'node:zlib';
 import { join, extname, relative } from 'node:path';
 import { test } from 'node:test';
@@ -510,6 +511,38 @@ void test('fonts delivered stay under the P8 budget of 75 KB', () => {
   const budget = 75 * 1024;
   assert.ok(total <= budget, `fonts ${String(total)} B > ${String(budget)} B`);
   console.log(`  fonts: ${String(total)} B of ${String(budget)} B (${String(fonts.length)} files)`);
+});
+
+void test('what is frozen for a year under a fixed name keeps its bytes: the fonts and the share image (review of 24/11/2026, U15)', () => {
+  // /fonts/* and /og/* are served `immutable` for a year (public/_headers) under names that do
+  // not change with their bytes: a browser that holds one keeps it, reload included — R73 with
+  // other files. A new subset or a new drawing is a new name, and this list moves with it.
+  const FROZEN: Readonly<Record<string, string>> = {
+    'design/fonts/PublicSans-Variable-latin.woff2':
+      'b4627ea445775deadef769d0c83465691c98b02a9aa41c8ee0b2729d13fc63d6',
+    'design/fonts/GowunBatang-Regular-latin.woff2':
+      'b383c6e58c10276e7d0f800568b105962dc590be34b6993ce53e71e5e3480a50',
+    'design/fonts/GowunBatang-Bold-latin.woff2':
+      '5937df3310489328a6e64fdde5340e73072345e7535f9bdf4cb9adee28184097',
+    'public/og/cestecritla-v1.png':
+      '9599beeac4f89875bc5d67cb883307e9d0a854fd9d8185c9e20b6aad34ac7e26',
+  };
+  for (const [path, sha] of Object.entries(FROZEN)) {
+    assert.equal(
+      createHash('sha256').update(readFileSync(path)).digest('hex'),
+      sha,
+      `${path}: its bytes changed under a name served for a year — give it a new name`,
+    );
+  }
+  // …and these are all the files served under those two prefixes.
+  assert.deepEqual(readdirSync('public/og').sort(), ['cestecritla-v1.png']);
+  const shipped = read('scripts/build-fonts.ts').match(/'[A-Za-z-]+-latin\.woff2'/g) ?? [];
+  assert.deepEqual(
+    shipped.map((name) => `design/fonts/${name.slice(1, -1)}`).sort(),
+    Object.keys(FROZEN)
+      .filter((path) => path.startsWith('design/fonts/'))
+      .sort(),
+  );
 });
 
 void test('a section page stays under the P3 critical-path budget', () => {

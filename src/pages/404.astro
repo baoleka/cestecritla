@@ -1,9 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
 import { t } from '../lib/strings.ts';
+
+// The holding site has no header, the one place this page said whose it is not: it says it
+// itself there, as the holding page does (« Site non officiel. » in every screen; review of
+// 24/11/2026, P3, L1).
+const holding = process.env.CEL_BUILD === 'holding';
 ---
 
-<Base title={`${t('error.404.title')} — ${t('app.name')}`}>
+<Base title={`${t('error.404.title')} — ${t('app.name')}`} notFound>
+  {holding && <p class="unofficial">{t('independence.unofficial')}</p>}
   <h1>{t('error.404.title')}</h1>
   <p>{t('error.404.lead')}</p>
   <p><a class="cta" href="/">{t('error.404.cta')}</a></p>
