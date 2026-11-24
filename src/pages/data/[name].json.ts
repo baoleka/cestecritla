@@ -10,8 +10,9 @@
  *                                of the tiles — only in a build that shows the game. Where the
  *                                site asks questions, also OUR sentence for the measure of each
  *                                word (D19.2: src/lib/game-gists.ts) — ours, never the book's.
- *   /data/clair-<fingerprint>.json  « En clair »: our cards and our answers to objections, the
- *                                texts a person re-read — only in a build whose field asks
+ *   /data/clair-<fingerprint>.json  « En clair »: our cards and our answers to objections —
+ *                                prepared with an AI and published on the editor's word, none
+ *                                re-read by a person (D16.79) — only in a build whose field asks
  *                                (src/lib/chat-data.ts). Fetched with the sheet, never with
  *                                the page.
  *   /data/mots-<fingerprint>.json, -sens.json, -exemples.json

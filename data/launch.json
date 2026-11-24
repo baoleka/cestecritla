@@ -9,7 +9,7 @@
   "phones_tried_on": "2026-11-14",
   "personas_session_on": "2026-11-19",
   "hostile_review_on": "2026-11-19",
-  "privacy_page": { "reviewed_on": "2026-11-14", "sha256": "3afcddda81f432fb61dd57661b0004cb11522a30b0bdf7f25c4a64b2ed51964c" },
+  "privacy_page": { "reviewed_on": "2026-11-24", "sha256": "a3f0a458e98085bb5f2e03cc479316bcf56950f11df320cdea3d6e70110d57e8" },
   "privacy_chat": { "reviewed_on": "2026-11-15", "reviewed_by": "session", "sha256": "8bbf8e73fab7bd7b172b6dc92852898332269e45ee4eac999f1c96cad83b5334" },
   "privacy_mascot": { "reviewed_on": "2026-11-15", "reviewed_by": "editor", "sha256": "f9e928769d6af11b367ba85e2eef8292fd8846bb7fdee5c9bd8f68b4842b7b11" },
   "home": { "opens_on": "game", "decided_on": "2026-11-19", "decided_by": "editor", "serving": "79ea2bf" },

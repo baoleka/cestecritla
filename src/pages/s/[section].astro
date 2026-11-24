@@ -141,11 +141,14 @@ const jsonLd = section && {
         <h2 id="inside-title">{t('section.inside')}</h2>
         <ul class="counts">
           {counts.key > 0 && <li>{t('section.key_count_one')}</li>}
-          <li>
-            {counts.measures === 1
-              ? t('section.measure_count_one')
-              : t('section.measures_count', { count: fr(counts.measures) })}
-          </li>
+          {/* A section made of its key measure alone counts no « 0 mesures » (review, P11). */}
+          {counts.measures > 0 && (
+            <li>
+              {counts.measures === 1
+                ? t('section.measure_count_one')
+                : t('section.measures_count', { count: fr(counts.measures) })}
+            </li>
+          )}
           {counts.subs > 0 && (
             <li>
               {counts.subs === 1

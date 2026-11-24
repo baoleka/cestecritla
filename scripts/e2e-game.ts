@@ -1837,7 +1837,7 @@ async function runEngine(
     const keptLines = async (): Promise<string[]> =>
       (await view.locator('#turtle-sheet-kept p').allTextContents()).map(text);
     const BEFORE_KEEPING = [
-      'Rien n’est gardé une fois cette page fermée.',
+      says('turtle.sheet.tab_only'),
       `${says('turtle.keep.what')} ${says('turtle.keep.tint')}`,
       says('turtle.keep.not_kept.tint'),
       'Qui ouvre le site dans ce navigateur la verra.',

@@ -7,6 +7,7 @@
  * gets the bare shell — no site header, no footer navigation, no social tags — because none of
  * the pages those would point at exist in that build.
  */
+import { createHash } from 'node:crypto';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import { t } from '../lib/strings.ts';
@@ -43,6 +44,8 @@ interface Props {
    * « /404 » answered 200 without `noindex` (review of 24/11/2026, P14, L3, U14).
    */
   notFound?: boolean | undefined;
+  /** A page that carries no logic of its own (D14.7, the reserved pages): not even the frame's. */
+  still?: boolean | undefined;
   /** On the home page the name in the header is the <h1>; elsewhere it is the way back. */
   home?: boolean | undefined;
   /** The table of contents: the header link then names the current page instead of leading to it. */
@@ -55,12 +58,20 @@ const {
   word = false,
   noindex = false,
   notFound = false,
+  still = false,
   home = false,
   toc = false,
 } = Astro.props;
 
 const holding = process.env.CEL_BUILD === 'holding';
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+/** See the script at the foot of the page: the height of the header, as the room kept under it. */
+const HEADER_ROOM =
+  "(()=>{const h=document.querySelector('header.site');if(h===null)return;let moved=false;for(const e of['wheel','touchstart','keydown','mousedown'])addEventListener(e,()=>{moved=true},{once:true,passive:true});const keep=()=>{if(moved)return;const id=decodeURIComponent(location.hash.slice(1));const t=id===''?null:document.getElementById(id);if(t===null)return;const r=t.getBoundingClientRect();if(r.bottom>0&&r.top<h.getBoundingClientRect().bottom)t.scrollIntoView()};const set=()=>{document.documentElement.style.setProperty('--header-room',String(h.getBoundingClientRect().height+12)+'px');keep()};set();if('ResizeObserver'in window)new ResizeObserver(set).observe(h);addEventListener('load',keep,{once:true})})();";
+const roomed = !holding && !still;
+if (roomed) {
+  Astro.csp.insertScriptHash(`sha256-${createHash('sha256').update(HEADER_ROOM).digest('base64')}`);
+}
 
 const footer: readonly { href: string; label: string }[] = [
   { href: '/sommaire/', label: t('nav.toc') },
@@ -107,7 +118,10 @@ const footer: readonly { href: string; label: string }[] = [
           <meta property="og:image" content={new URL('/og/cestecritla-v1.png', Astro.site).href} />
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:height" content="630" />
+          {/* What the image says, for whoever does not see it (D21.24). */}
+          <meta property="og:image:alt" content={t('meta.image_alt')} />
           <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:image:alt" content={t('meta.image_alt')} />
         </>
       )
     }
@@ -180,6 +194,15 @@ const footer: readonly { href: string; label: string }[] = [
           </div>
         </header>
       )
+    }
+    {
+      /* The room the page keeps under the sticky header is the header's own height: at 200 %
+         text on a phone it wraps to three lines and more, and an anchored heading or a focused
+         link went under it (WCAG 2.4.11; review of 24/11/2026, L25). Right after the header, so
+         that the room is kept before the browser scrolls to an anchor; without script, the 5rem
+         of the stylesheet. Inline, and only where there is a header: the holding page runs no
+         code. */
+      roomed && <script is:inline set:html={HEADER_ROOM} />
     }
     <main>
       <slot />

@@ -21,15 +21,24 @@ import { pageWordsFile } from '../../lib/words-built.ts';
 
 export function getStaticPaths() {
   const entries = ripostes();
+  /**
+   * The answers that had an address of their own before they were named — `/r/rip-01/` to
+   * `/r/rip-15/` (lot E, 12/11/2026): those addresses lead to the named page. The sixteenth was
+   * named from the start (D21.10): its page never moved, and « a changé d'adresse » would be
+   * false of it (review of 24/11/2026, P17).
+   */
+  const onceAddressed = (id: string): boolean => /^rip-(?:0[1-9]|1[0-5])$/.test(id);
   return [
     ...entries.map((entry: Riposte, index: number) => ({
       params: { slug: entry.slug },
       props: { entry, next: entries[(index + 1) % entries.length], moved: false },
     })),
-    ...entries.map((entry: Riposte) => ({
-      params: { slug: entry.id },
-      props: { entry, next: undefined, moved: true },
-    })),
+    ...entries
+      .filter((entry: Riposte) => onceAddressed(entry.id))
+      .map((entry: Riposte) => ({
+        params: { slug: entry.id },
+        props: { entry, next: undefined, moved: true },
+      })),
   ];
 }
 
@@ -53,8 +62,8 @@ const wordsFile = Words === null || moved ? null : pageWordsFile('r', entry.slug
     </Base>
   ) : (
     <Base
-      title={`${prose(entry.objection)} — ${t('app.name')}`}
-      description={prose(entry.answer)}
+      title={`${t('riposte.heard_label')}\u00a0: ${prose(entry.objection)} — ${t('app.name')}`}
+      description={`${t('meta.ai_prepared')} ${prose(entry.answer)}`}
       verbatim={supports.some((s) => s.quote !== null)}
     >
       <p class="where">{t('riposte.heard_label')}</p>

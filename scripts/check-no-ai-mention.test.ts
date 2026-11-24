@@ -63,6 +63,8 @@ const EXEMPT = new Set([
   'about.writing_method',
   'concept.authorship.accepted',
   'accuracy.review.accepted',
+  // The same fact, at the head of the description and preview of our texts (D21.23).
+  'meta.ai_prepared',
 ]);
 
 /** Whether a configuration binds a model — read in the file, not in the sketch of 09-architecture.md §2. */

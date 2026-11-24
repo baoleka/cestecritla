@@ -27,9 +27,10 @@ const holding = process.env.CEL_BUILD === 'holding';
 // the bundler can fold removes the import itself.
 const site = holding ? { on: false, writes: false } : gameSite();
 const game = site.on;
-// The privacy page of a site that plays outside silence names what the game writes and offers
-// to erase it — in the "scrutin" build too, where the game itself is not shown (D16.16).
-const gameWrites = site.writes;
+// The privacy page names what the game writes and offers to erase it — in every build of the
+// app, the game shown or not: in the "scrutin" build (D16.16), and in one whose list of words is
+// no longer validated, where phones may still keep a turtle (D21.32).
+const gameWrites = !holding;
 /** The build deployed before each electoral silence window: neither question nor game. */
 const scrutin = process.env.CEL_SCRUTIN === '1';
 // Does the field of this build open the sheet of « Demander »? A constant the bundler can see,

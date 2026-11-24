@@ -320,6 +320,31 @@ void test('content: nothing added since the freeze holds the 2026 text', { skip 
   for (const hit of scanForLeaks(git('log', '--format=%B', `${FREEZE}..HEAD`), index)) {
     findings.push(`a commit message: ${hit.id} (${String(hit.windows)} window(s))`);
   }
+  // A page's title and its link previews hold no text of the book at all (D15.7) — not even
+  // what the 2025 edition already wrote, which the scan above subtracts, nor a quoted measure,
+  // which it lets pass on a page: three answers put 9 to 14 words of the book in their previews
+  // (review of 24/11/2026, L11; reworded on the editor's word, D21.21).
+  const headIndex = buildLeakIndex(items, [
+    ...corpus.parts.map((p) => p.title),
+    ...corpus.chapters.map((c) => c.title),
+    ...corpus.sections.map((s) => s.title),
+  ]);
+  const shared = [...headIndex.shingles.keys()].find((window) => !index.shingles.has(window));
+  assert.ok(
+    shared !== undefined &&
+      scanForLeaks(`<meta name="description" content="${shared}">`, headIndex).length === 1,
+    'the control of the previews was not detected',
+  );
+  const HEAD =
+    /<title>([^<]*)<\/title>|<meta (?:name|property)="(?:description|og:title|og:description|twitter:title|twitter:description)" content="([^"]*)"/g;
+  for (const file of built.filter((f) => f.endsWith('.html'))) {
+    const head = [...readFileSync(file, 'utf8').matchAll(HEAD)]
+      .map((match) => match[1] ?? match[2] ?? '')
+      .join('\n');
+    for (const hit of scanForLeaks(head, headIndex)) {
+      findings.push(`${file}, its title or a preview: ${hit.id} (${String(hit.windows)} window(s))`);
+    }
+  }
   assert.deepEqual(
     findings,
     [],

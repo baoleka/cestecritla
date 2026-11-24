@@ -48,6 +48,12 @@ const REPO_URL = 'https://github.com/baoleka/cestecritla';
 const ALLOWLIST: Readonly<Record<string, string>> = {
   'daily.method':
     'explication de la méthode de tirage, lue derrière un lien « Comment le tirage fonctionne »',
+  'about.writing_method':
+    "la phrase de l'éditeur, validée telle quelle le 24/11/2026 (D21.19) : un point-virgule la tient en une",
+  'privacy.outbound':
+    "la phrase de l'éditeur, validée telle quelle le 24/11/2026 (D21.28) : les deux destinations des liens dites dans la phrase",
+  'pointer.items_lead':
+    "la phrase de l'éditeur, validée telle quelle le 24/11/2026 (D21.29) : « au plus près » dit le vrai des 55 liens",
 };
 
 /** Keys allowed to be empty. */
@@ -406,6 +412,8 @@ const AI_EXEMPT = new Set([
   'about.writing_method',
   'concept.authorship.accepted',
   'accuracy.review.accepted',
+  // The same fact, at the head of the description of our texts (D21.23).
+  'meta.ai_prepared',
 ]);
 const AI_PATTERN = /\bIA\b|intelligence artificielle|Mistral|assistant|modèle|\{model\}/i;
 

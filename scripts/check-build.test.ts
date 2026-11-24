@@ -545,6 +545,21 @@ void test('what is frozen for a year under a fixed name keeps its bytes: the fon
   );
 });
 
+void test('every page that has a share image says what it shows: « Site non officiel. » (D21.24)', () => {
+  if (skip) return;
+  const missing = files
+    .filter((f) => f.endsWith('.html'))
+    .filter((f) => read(f).includes('property="og:image"'))
+    .filter((f) => {
+      const html = read(f);
+      return !(
+        /<meta property="og:image:alt" content="[^"]*Site non officiel\.[^"]*"/.test(html) &&
+        /<meta name="twitter:image:alt" content="[^"]*Site non officiel\.[^"]*"/.test(html)
+      );
+    });
+  assert.deepEqual(missing.slice(0, 5), [], `${String(missing.length)} page(s) without it`);
+});
+
 void test('a section page stays under the P3 critical-path budget', () => {
   if (skip) return;
   const page = 'dist/s/p1c1-s01/index.html';

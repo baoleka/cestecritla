@@ -51,8 +51,10 @@ html {
   /* A2: everything in rem so the system font size is honoured. */
   font-size: 100%;
   /* 2.4.11: an anchored heading, or a link reached with Tab, is never hidden under the sticky
-     header — its height (two lines and their padding) plus a little air. */
-  scroll-padding-block-start: 5rem;
+     header — its height plus a little air. Two lines and their padding are 5rem; at 200 % text
+     on a phone the header wraps to more, and the frame writes its real height into
+     `--header-room` (src/layouts/Base.astro; review of 24/11/2026, L25). */
+  scroll-padding-block-start: var(--header-room, 5rem);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -230,17 +232,24 @@ header.site {
 }
 .site-bar {
   display: flex;
+  /* At 320 px and 200 % text the name and the label were cut inside their words to leave room
+     to the link beside them: the link goes under them instead (review of 24/11/2026, L26). */
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--space-1) var(--space-4);
   max-width: 42rem;
   margin-inline: auto;
   padding: var(--space-1) var(--space-4);
 }
-/* The name and the label under it are one target: the link stretches over both. */
+/* The name and the label under it are one target: the link stretches over both — and it is
+   never under the comfortable size of a target (43 px measured: review of 24/11/2026, L14). */
 .site-id {
   position: relative;
+  min-block-size: var(--tap-comfortable);
   padding-block: var(--space-1);
+  box-sizing: border-box;
+  overflow-wrap: normal;
 }
 .wordmark {
   display: block;

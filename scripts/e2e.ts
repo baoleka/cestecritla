@@ -30,6 +30,7 @@ import { firstWordsOf, isLocatorDisplay, quoted } from '../src/lib/first-words.j
 import { gameSite } from '../src/lib/game-data.js';
 import { CRAWL_ROOT, type FetchLog } from './aec26-source.js';
 import type { Manifest } from './aec26-types.js';
+import { rootFontScript } from './a11y-conditions.js';
 import { builtAskMode } from './build-mode.js';
 import { STILL, lateLayoutShift } from './e2e-kit.js';
 
@@ -236,6 +237,39 @@ async function runEngine(
       (await page.evaluate<number>('window.scrollY')) > 2000 &&
         (await page.evaluate<boolean>(framed)),
     );
+
+    // --- 1 ter. 200 % text on a phone: an anchor lands below the sticky header, which then
+    // wraps to three lines and more — the room kept under it follows its height (WCAG 2.4.11;
+    // review of 24/11/2026, L25)
+    {
+      for (const width of [390, 320]) {
+        const context = await browser.newContext({ viewport: { width, height: 844 } });
+        await context.addInitScript(rootFontScript(200));
+        const large = await context.newPage();
+        await guard(large);
+        for (const [path, target] of [
+          ['/methodologie/#demander', 'demander'],
+          ['/sommaire/#p4', 'p4'],
+        ] as const) {
+          await large.goto(`${origin}${path}`, { waitUntil: 'load' });
+          await large.waitForTimeout(400);
+          const seen = await large.evaluate<{ header: number; top: number }>(`(() => {
+            const target = document.getElementById(${JSON.stringify(target)});
+            const heading = target.matches('h1, h2, h3') ? target : target.querySelector('h1, h2, h3') ?? target;
+            return {
+              header: document.querySelector('header.site').getBoundingClientRect().bottom,
+              top: heading.getBoundingClientRect().top,
+            };
+          })()`);
+          check(
+            `200 % text at ${String(width)} px: ${path} lands below the frame`,
+            seen.top >= seen.header - 0.5,
+            JSON.stringify(seen),
+          );
+        }
+        await context.close();
+      }
+    }
 
     // --- 2. a search
     await page.goto(`${origin}/`);
