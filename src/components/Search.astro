@@ -3,12 +3,13 @@
  * The search island: one field, and results while one types (D16.9).
  *
  * Contract with the page around it:
- *   - without JavaScript it does not exist: the form is `hidden` until the script shows it, and
- *     the table of contents is the navigation — below the field on /sommaire/, one link away
- *     everywhere else;
+ *   - without JavaScript it does not exist: a style hides the form where no script runs
+ *     (`@media (scripting: none)`, src/styles/base.css), and the table of contents is the
+ *     navigation — below the field on /sommaire/, one link away everywhere else;
  *   - the words typed never leave the device. The index (stems, no sentence) and the list of
- *     titles are two static files fetched once; the query runs here. The address bar keeps the
- *     query after `#`, the one part of a URL a browser does not send to a server;
+ *     titles are two static files fetched once; the query runs here. Nothing typed is written
+ *     into the address: a link may arrive with a query after `#q=` — the one part of a URL a
+ *     browser does not send to a server —, which the script reads once and removes;
  *   - a result never prints a measure. It names the section, numbers the measures that match,
  *     and each number is a link into the official page (D15.2);
  *   - there is no button: results follow the typing, and Enter — the « Rechercher » key of a
@@ -96,7 +97,9 @@ const strings = {
   data-first-words={locatorDisplay()}
   data-words={wordsFinder}
 >
-  <label for="q">{asking ? t('chat.label') : t('search.label')}</label>
+  <label for="q" data-local={asking ? t('search.label') : undefined}>
+    {asking ? t('chat.label') : t('search.label')}
+  </label>
   <input
     id="q"
     type="search"
@@ -161,19 +164,39 @@ const strings = {
   if (__CEL_CHAT__) {
     const opener = document.querySelector<HTMLButtonElement>('#ask');
     if (opener !== null && document.querySelector('#chat-sheet') !== null) {
-      // The sheet is a <dialog>: a browser that cannot open one (Safari before 15.4) gets no
-      // button, and the notice of a page that only searches — never a button that does nothing.
-      if ('showModal' in HTMLDialogElement.prototype) {
+      /** The page of a field that only searches: no button, its notice and its label. */
+      const searchOnly = (): void => {
+        opener.hidden = true;
+        for (const node of document.querySelectorAll<HTMLElement>('#search-hint, label[for="q"]')) {
+          if (node.dataset.local !== undefined) node.textContent = node.dataset.local;
+        }
+      };
+      // The sheet is a <dialog>: a browser that cannot open one (Safari before 15.4, Firefox
+      // before 98) gets the page of a field that only searches — never a button that does
+      // nothing. There the very name of the element is unknown: asked of it, the test threw,
+      // and the button stayed grey and dead (review of 24/11/2026, K1).
+      if (typeof HTMLDialogElement === 'function' && 'showModal' in HTMLDialogElement.prototype) {
         opener.disabled = false;
+        // One import at a time: a second press while the script of the sheet is on its way
+        // gave the focus to its own field, whose keyboard covered the answer (K10).
+        let loading: Promise<void> | null = null;
         opener.addEventListener('click', () => {
-          void import('../scripts/chat.ts').then((sheet) => {
-            sheet.open();
-          });
+          loading ??= import('../scripts/chat.ts')
+            .then((sheet) => {
+              sheet.open();
+            })
+            .catch(() => {
+              // The script of the sheet cannot be fetched — the network dropped, or a page from
+              // before a deploy names a file that is gone: the page becomes one that searches,
+              // never a button that does nothing (K2; review of public/, U2).
+              searchOnly();
+            })
+            .finally(() => {
+              loading = null;
+            });
         });
       } else {
-        opener.hidden = true;
-        const hint = document.querySelector<HTMLElement>('#search-hint');
-        if (hint?.dataset.local !== undefined) hint.textContent = hint.dataset.local;
+        searchOnly();
       }
     }
   }
@@ -186,6 +209,6 @@ const strings = {
   }
   // The scrutin build's note (home page only): fetched the same way, for the same reason.
   if (document.querySelector('#scrutin-reopen') !== null) {
-    void import('../scripts/scrutin-note.ts');
+    import('../scripts/scrutin-note.ts').catch(() => undefined);
   }
 </script>

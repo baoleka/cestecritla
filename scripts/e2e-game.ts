@@ -1545,8 +1545,11 @@ async function runEngine(
       if (large?.pose !== 'trick' || large.state !== String(state) || large.tint !== String(tint)) {
         wrong.push(`${String(state)}: no figure (${JSON.stringify(large)})`);
       }
-      if (sheet.said !== says(FIGURES[state] ?? ''))
-        wrong.push(`${String(state)}: « ${sheet.said} »`);
+      // Its line is said once the focus the touch moved has been heard (review of 24/11/2026,
+      // K20).
+      await view.waitForTimeout(SAY_LATER_MS + 200);
+      const said = text(await view.locator('#turtle-sheet-said').textContent());
+      if (said !== says(FIGURES[state] ?? '')) wrong.push(`${String(state)}: « ${said} »`);
       if (!isLook(await her(view), as)) wrong.push(`${String(state)}: she moved in the block`);
       if (Math.abs(sheet.width - 240) > 1)
         wrong.push(`${String(state)}: ${String(sheet.width)} px`);

@@ -11,15 +11,15 @@
  * word is missing from the programme — only that none of these explained words matches, and
  * where the whole programme is searched.
  */
+import { foldName } from '../lib/words-fold.ts';
 import { fillItem, type WordText } from './words-view.ts';
 
 const hub = document.querySelector<HTMLElement>('#mots-az');
 const field = document.querySelector<HTMLInputElement>('#mots-filtre');
 const none = document.querySelector<HTMLElement>('#mots-aucun');
 
-/** One spelling for a comparison: no case, no accent, apostrophes alike. */
-const folded = (text: string): string =>
-  text.normalize('NFD').replace(/\p{M}/gu, '').replace(/[’‘]/g, "'").toLowerCase().trim();
+/** What is typed, in the spelling the page gave each word (src/lib/words-fold.ts). */
+const folded = (text: string): string => foldName(text).replace(/ +/g, ' ').trim();
 
 if (hub !== null) {
   const meanings = hub.dataset.meanings ?? '';
@@ -35,7 +35,12 @@ if (hub !== null) {
       if (file.written_by !== 'ai' || typeof file.texts !== 'object' || file.texts === null) {
         return null;
       }
-      return file.texts as Record<string, string>;
+      // A text that is not a string is no text: it is left out (review of 23/11/2026, S27).
+      return Object.fromEntries(
+        Object.entries(file.texts as Record<string, unknown>).filter(
+          (entry): entry is [string, string] => typeof entry[1] === 'string',
+        ),
+      );
     } catch {
       return null;
     }
@@ -72,6 +77,9 @@ if (hub !== null) {
       if (item.open) fill();
     });
   }
+  // A word opened before this script ran — the page is long, and its lines answer at once —
+  // heard no toggle: it is filled now (review of 24/11/2026, K5).
+  if (hub.querySelector('details.c-term[open]') !== null) fill();
 
   // A link to « #mot-… » opens that word, and brings it into view — on arrival, and when the
   // address changes on this very page (a link from the same page does not load it again). The

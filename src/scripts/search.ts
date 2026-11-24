@@ -44,6 +44,8 @@ interface Strings {
 const MAX_SECTIONS = 8;
 /** The event said on the form once a search has answered (src/scripts/words-search.ts listens). */
 const SEARCHED = 'cel:searched';
+/** Told by the sheet when the page is left with a conversation: the field forgets its words. */
+const FORGET = 'cel:forget';
 const MAX_QUERY = 200;
 /** Nothing is searched under two letters: one letter matches a tenth of the book. */
 const MIN_LETTERS = 2;
@@ -228,6 +230,17 @@ if (form && input && status && results && heading && list && stringsNode) {
       },
       longEnough(question) ? TYPING_DELAY_MS : 0,
     );
+  });
+
+  // The sheet's conversation goes when the page is left, and the question that opened it with it
+  // (src/scripts/chat.ts): the field, its results and its count are emptied at once — a timer
+  // would only run once the page came back (review of 24/11/2026, K3).
+  form.addEventListener(FORGET, () => {
+    cancelTimers();
+    latest += 1;
+    input.value = '';
+    empty();
+    status.textContent = '';
   });
 
   form.addEventListener('submit', (event) => {

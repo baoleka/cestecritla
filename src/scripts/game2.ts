@@ -507,7 +507,10 @@ function start(parts: Block, config: Config, data: GameData): void {
     if (next === session.play) return;
     session.play = next;
     const found = foundNow(next);
-    if (found !== null && !session.seen.includes(found)) session.seen.push(found);
+    // A word found again — once everything has been — moves to the end: the game opened again
+    // goes on from there, round and round (`draw`). Kept where it was, the last word found
+    // stopped moving, and every visit dealt the same round (review of 24/11/2026).
+    if (found !== null) session.seen = [...session.seen.filter((id) => id !== found), found];
     const drawn = render(true);
     // The card of a place: a word is found, and she makes her small move — the same whatever
     // was chosen. A question: she is as the game has her (a pose is kept until the next
@@ -1139,10 +1142,22 @@ function start(parts: Block, config: Config, data: GameData): void {
   }
 
   /** Her figure, on the large copy: from as she is now, whatever the copy was showing. */
-  function figure(): void {
+  /** `opened`: the touch that does it has just opened her sheet, and moved the focus there. */
+  function figure(opened = false): void {
     if (large === null || lessMotion()) return;
     large.settle(look());
-    sheetSaid.textContent = s.figure[String(session.state)] ?? '';
+    const said = s.figure[String(session.state)] ?? '';
+    // Written in the very task that opened the sheet and moved the focus, a screen reader may
+    // drop it: it is said once that focus has been heard, as `sayLater` does (review of
+    // 24/11/2026, K20 — the family of S15).
+    if (opened) {
+      sheetSaid.textContent = '';
+      window.setTimeout(() => {
+        if (sheet.open) sheetSaid.textContent = said;
+      }, SAY_LATER_MS);
+    } else {
+      sheetSaid.textContent = said;
+    }
     large.play(trick(look()));
   }
 
@@ -1364,6 +1379,8 @@ function start(parts: Block, config: Config, data: GameData): void {
   /** `touched`: she does her figure; `toTint`: the sheet opens on the choice of her colour. */
   function openSheet(touched: boolean, toTint = false): void {
     if (frozen()) return;
+    // A browser that cannot open a <dialog> (Firefox before 98) keeps her sheet closed.
+    if (typeof sheet.showModal !== 'function') return;
     fillSheet();
     sheet.showModal();
     // Where the focus starts is said here, for every engine — left to them, they differ (the
@@ -1372,7 +1389,7 @@ function start(parts: Block, config: Config, data: GameData): void {
     if (toTint) sheetTints.querySelector('button')?.focus();
     else if (lessMotion()) parts.sheetTitle.focus();
     else sheetHer.querySelector('button')?.focus();
-    if (touched) figure();
+    if (touched) figure(true);
   }
 
   const press = button('', 'g-press', () => {

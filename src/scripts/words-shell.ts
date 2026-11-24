@@ -7,7 +7,7 @@
  * comes only when a line is opened. A link to « #mots » opens the line it points to.
  */
 for (const shell of document.querySelectorAll<HTMLDetailsElement>('details.words[data-words]')) {
-  shell.addEventListener('toggle', () => {
+  const opened = (): void => {
     if (!shell.open || shell.dataset.asked !== undefined) return;
     shell.dataset.asked = '';
     void import('./words-view.ts').then(
@@ -17,7 +17,11 @@ for (const shell of document.querySelectorAll<HTMLDetailsElement>('details.words
         delete shell.dataset.asked;
       },
     );
-  });
+  };
+  shell.addEventListener('toggle', opened);
+  // A line opened before this script ran heard no toggle: it is filled now (review of
+  // 24/11/2026, K5).
+  opened();
 }
 
 /** A link to « #mots » opens the line — on arrival, and when the address changes on this page. */

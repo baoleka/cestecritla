@@ -22,15 +22,18 @@ interface Props {
   studies?: boolean;
 }
 const { review, studies = false } = Astro.props;
+const status =
+  review.status === 'reviewed'
+    ? t('concept.authorship.reviewed')
+    : review.status === 'accepted'
+      ? t('concept.authorship.accepted')
+      : t('concept.authorship.pending');
+// Two sentences, each ended: the line of a re-read text has no full stop of its own, and the
+// sentence on the studies would run into it (review of 24/11/2026, K23).
+const line =
+  studies && review.status !== 'pending'
+    ? `${/[.!?…]$/.test(status) ? status : `${status}.`} ${t('concept.authorship.studies')}`
+    : status;
 ---
 
-<p class="ref authorship" data-review={review.status}>
-  {
-    review.status === 'reviewed'
-      ? t('concept.authorship.reviewed')
-      : review.status === 'accepted'
-        ? t('concept.authorship.accepted')
-        : t('concept.authorship.pending')
-  }
-  {studies && review.status !== 'pending' && ` ${t('concept.authorship.studies')}`}
-</p>
+<p class="ref authorship" data-review={review.status}>{line}</p>

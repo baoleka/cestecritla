@@ -16,6 +16,7 @@
 import '../styles/words.css';
 import { t } from '../lib/strings.ts';
 import { builtWords, explainedTerms, wordsNames } from '../lib/words-data.ts';
+import { foldName } from '../lib/words-fold.ts';
 
 const names = wordsNames(builtWords().fingerprint);
 /** One spelling for the filter and for the letters: no case, no accent. */
@@ -73,11 +74,11 @@ const anchor = (letter: string): string => (letter === '0–9' ? 'lettre-0' : `l
   >
     {
       letters.map((letter) => (
-        <section data-letter={letter} aria-labelledby={anchor(letter)}>
+        <section data-letter={letter}>
           <h3 id={anchor(letter)}>{letter}</h3>
           <ul class="words-list">
             {(groups.get(letter) ?? []).map((entry) => (
-              <li data-name={fold([entry.term, ...(entry.aliases ?? [])].join(' | '))}>
+              <li data-name={foldName([entry.term, ...(entry.aliases ?? [])].join(' | '))}>
                 <details class="c-term" id={`mot-${entry.id}`} data-term={entry.id}>
                   <summary>{typeset(entry.term)}</summary>
                 </details>

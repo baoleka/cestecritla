@@ -129,6 +129,8 @@ export function open(): void {
 
 const form = document.querySelector<HTMLFormElement>('#search');
 const field = document.querySelector<HTMLInputElement>('#q');
+/** What src/scripts/search.ts hears on its form: forget the words of the field. */
+const FORGET = 'cel:forget';
 const sheet = document.querySelector<HTMLDialogElement>('#chat-sheet');
 const thread = sheet?.querySelector<HTMLElement>('#chat-thread') ?? null;
 const scroller = sheet?.querySelector<HTMLElement>('#chat-scroll') ?? null;
@@ -776,6 +778,8 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
       rows: found?.rows ?? [],
       linksOnly,
       example: found?.example ?? null,
+      // Charged — or not known not to be, without the index: none of our words above it.
+      charged: found === null || found.charged === true,
     };
     // Links only: the turn is whole as it is, and nothing is asked of the base.
     turns[index] = found !== null && !found.sentences ? withGists(searched, null) : searched;
@@ -815,6 +819,7 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
           recognised: { objection: null, cards: [] },
           rows: [],
           linksOnly: false,
+          charged: true,
           gists: null,
         };
         try {
@@ -900,6 +905,10 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
   // the AI is only offered again. A browser may bring the page back as it left it, memory
   // included; what the privacy page says of a visit has to hold there too.
   window.addEventListener('pagehide', () => {
+    // The question that opened the conversation is in the field of the page, with its results:
+    // it goes with the conversation — brought back by « précédent », one press of « Demander »
+    // gave the turn back (review of 24/11/2026, K3). Nothing of it was written anywhere.
+    if (turns.length > 0) form.dispatchEvent(new Event(FORGET));
     page.ai = 'offered';
     empty();
     if (sheet.open) sheet.close();

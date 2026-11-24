@@ -609,6 +609,20 @@ html[data-silence] .game {
 .g-ahead {
   margin-block: var(--space-2) var(--space-4);
 }
+/* Its words, as every word of the programme in the game: the rules went with the rail of words
+   (2a5279a), the words stayed (review of 24/11/2026, K8). */
+.g-ahead [data-programme='word'] {
+  font-family: var(--font-family-verbatim);
+  font-weight: 700;
+  hyphens: manual;
+  white-space: nowrap;
+}
+.g-ahead [data-programme='word']::before {
+  content: '«\00a0';
+}
+.g-ahead [data-programme='word']::after {
+  content: '\00a0»';
+}
 /* Keeping: one line that says nothing is kept, and the quiet button that opens the card. */
 .g-keep-ask {
   margin-block-start: var(--space-4);
@@ -654,6 +668,12 @@ html[data-silence] .game {
 }
 .t-sheet::backdrop {
   background: color-mix(in srgb, var(--text) 55%, transparent);
+}
+/* Closed, her sheet is not drawn — whatever a browser makes of a <dialog> it does not know
+   (Safari before 15.4, Firefox before 98): there it stood in the block, with a « Tout
+   effacer » that did nothing (review of 24/11/2026, K7). */
+.t-sheet:not([open]) {
+  display: none;
 }
 .t-sheet h3 {
   margin-block: 0 var(--space-2);

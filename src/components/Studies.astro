@@ -24,6 +24,15 @@ const nameOf = (source: StudySource, before: StudySource | undefined): string =>
   if (before?.url === source.url) return [t('riposte.studies_same'), ...where].join(', ');
   return [source.by, source.title, frWhen(source.on), ...where].map(prose).join(', ');
 };
+/**
+ * What a link to the same study says to whoever lists the links of the page, beyond « Même
+ * étude » — the study it is (WCAG 2.4.4; review of 24/11/2026, K22). Its own words, from the
+ * file: nothing new is written.
+ */
+const sameOf = (source: StudySource, before: StudySource | undefined): string | null =>
+  before?.url === source.url
+    ? `, ${[source.by, source.title, frWhen(source.on)].map(prose).join(', ')}`
+    : null;
 ---
 
 <section class="studies" aria-labelledby="studies-title">
@@ -37,6 +46,9 @@ const nameOf = (source: StudySource, before: StudySource | undefined): string =>
           <p class="ref">
             <a href={item.source.url} rel="noopener noreferrer">
               {nameOf(item.source, studies.items[index - 1]?.source)}
+              {sameOf(item.source, studies.items[index - 1]?.source) !== null && (
+                <span class="sr-only">{sameOf(item.source, studies.items[index - 1]?.source)}</span>
+              )}
             </a>
           </p>
         </li>
