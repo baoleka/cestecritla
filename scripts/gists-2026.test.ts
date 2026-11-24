@@ -112,6 +112,7 @@ import {
   seedSql,
   shownTexts,
   switchSql,
+  switchedRows,
   textWithdrawalSql,
 } from './seed-ask-2026.js';
 
@@ -2017,7 +2018,10 @@ void test('the deposit of the sentences: its own rows, its own keys, stopped —
   const ids = ROWS.map((line) => line.id);
   assert.deepEqual((await loadGists(db, ids, CORPUS)).gists, []);
   // …and, once the editor opens them, the sentences read — in the order asked.
-  assert.equal(switchSql('open', 'gists'), "UPDATE meta SET value = 'open' WHERE key = 'gists'");
+  assert.equal(
+    switchSql('open', 'gists'),
+    "UPDATE meta SET value = 'open' WHERE key = 'gists' RETURNING key",
+  );
   db.exec(switchSql('open', 'gists') ?? '');
   assert.deepEqual((await loadGists(db, [TREES, ORCHARDS, LIBRARY], CORPUS)).gists, [
     { id: TREES, text: said(TREES) },
@@ -2063,7 +2067,7 @@ void test('each deposit owns its rows and its keys: the text does not erase the 
   // The text alone: the base is the one the manifest publishes the fingerprints of.
   assert.deepEqual(baseProblems(db, MANIFEST), []);
   assert.deepEqual(metaOf(db), { ask: 'stopped', corpus_version: CORPUS, propositions: '6' });
-  db.exec(switchSql('open') ?? '');
+  db.exec(switchSql('open', 'ask') ?? '');
   db.exec(gistsSql(ROWS, CORPUS, SCHEMA));
   db.exec(switchSql('open', 'gists') ?? '');
   const both = {
@@ -2086,7 +2090,7 @@ void test('each deposit owns its rows and its keys: the text does not erase the 
   assert.deepEqual(baseProblems(db, MANIFEST), []);
 
   // The sentences are deposited again, one fewer: they start stopped, and the text stays.
-  db.exec(switchSql('open') ?? '');
+  db.exec(switchSql('open', 'ask') ?? '');
   db.exec(gistsSql(ROWS.slice(0, 3), CORPUS, SCHEMA));
   assert.deepEqual(metaOf(db), {
     ...both,
@@ -2098,10 +2102,16 @@ void test('each deposit owns its rows and its keys: the text does not erase the 
   assert.deepEqual(baseProblems(db, MANIFEST), []);
   assert.deepEqual(gistsBaseProblems(db, ROWS.slice(0, 3), MANIFEST), []);
 
-  // Each switch moves alone, and only between its two positions.
-  assert.equal(switchSql('stopped'), "UPDATE meta SET value = 'stopped' WHERE key = 'ask'");
-  assert.equal(switchSql('open', 'ask'), "UPDATE meta SET value = 'open' WHERE key = 'ask'");
-  db.exec(switchSql('stopped') ?? '');
+  // Each switch moves alone, and only between its two positions — always named (W2).
+  assert.equal(
+    switchSql('stopped', 'ask'),
+    "UPDATE meta SET value = 'stopped' WHERE key = 'ask' RETURNING key",
+  );
+  assert.equal(
+    switchSql('open', 'ask'),
+    "UPDATE meta SET value = 'open' WHERE key = 'ask' RETURNING key",
+  );
+  db.exec(switchSql('stopped', 'ask') ?? '');
   db.exec(switchSql('open', 'gists') ?? '');
   assert.deepEqual([metaOf(db)['ask'], metaOf(db)['gists']], ['stopped', 'open']);
   for (const [flip, what] of [
@@ -2110,9 +2120,16 @@ void test('each deposit owns its rows and its keys: the text does not erase the 
     ['open', "ask' OR 1=1 --"],
     ["open' --", 'gists'],
     ['', 'gists'],
+    // Never assumed: the command of runbook sheet 8 without `--what` moved a switch the base no
+    // longer held, and said nothing (review of 23/11/2026, W2).
+    ['stopped', undefined],
   ] as const) {
-    assert.equal(switchSql(flip, what), null, `${flip} ${what}`);
+    assert.equal(switchSql(flip, what), null, `${flip} ${String(what)}`);
   }
+  // What the base answers is counted: a switch it does not hold moves nothing, and that is said.
+  assert.equal(switchedRows('[{"results":[{"key":"gists"}],"success":true,"meta":{}}]'), 1);
+  assert.equal(switchedRows('[{"results":[],"success":true,"meta":{"changes":0}}]'), 0);
+  assert.equal(switchedRows('not json'), -1);
   // The text of the deposit says what it deletes: its keys by name, never the table.
   for (const deposit of [seedSql(PRIVATE, SCHEMA, 'stopped'), gistsSql(ROWS, CORPUS, SCHEMA)]) {
     assert.doesNotMatch(deposit, /DELETE FROM meta;/);
@@ -2123,7 +2140,7 @@ void test('each deposit owns its rows and its keys: the text does not erase the 
 void test('the text is taken out of a base: its rows and its keys go — the sentences stay, and are still served', async () => {
   const db = new LocalD1();
   db.exec(seedSql(PRIVATE, SCHEMA, 'stopped'));
-  db.exec(switchSql('open') ?? '');
+  db.exec(switchSql('open', 'ask') ?? '');
   db.exec(gistsSql(ROWS, CORPUS, SCHEMA));
   db.exec(switchSql('open', 'gists') ?? '');
   assert.deepEqual([countOf(db, 'propositions'), countOf(db, 'gists')], [6, 4]);

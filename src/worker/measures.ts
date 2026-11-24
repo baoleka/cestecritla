@@ -9,8 +9,9 @@
  * derived copy of the text less at Cloudflare.
  *
  * The same base holds what may be handed out in place of a model's writing: the sentences
- * written ahead, one per measure, each read by the editor (`loadGists`, at the end of this
- * file). They are read the same way — by identifier, one round trip — under a switch of their
+ * written ahead, one per measure — written and checked by an AI, the session, read by no person
+ * one by one (D16.57 to D16.59; `gists.read_by` in data/2026/ask.json) — (`loadGists`, at the end
+ * of this file). They are read the same way — by identifier, one round trip — under a switch of their
  * own.
  *
  * Typed against the two methods of D1 it uses, so that the same code runs on Node's SQLite in
@@ -114,9 +115,10 @@ export async function loadMeasures(db: AskDb, ids: readonly string[]): Promise<L
 }
 
 /**
- * The sentences written ahead (PLAN-CHAT §3): one sentence of ours per measure, written by a
- * model before any visitor came, read by the editor one by one, and kept in the base next to
- * the fingerprint of the measure it was read against. Reading them calls no model and costs no
+ * The sentences written ahead (PLAN-CHAT §3): one sentence of ours per measure, written before
+ * any visitor came and checked against its measure by an AI, the session (D16.57) — no person
+ * read them one by one (D16.59) — and kept in the base next to the fingerprint of the measure it
+ * was checked against. Reading them calls no model and costs no
  * neuron — and none of them is a word of the book.
  */
 export interface Gist {

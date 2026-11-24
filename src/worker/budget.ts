@@ -1,6 +1,11 @@
 /**
- * The allowance, kept (D7.4): one Durable Object for the whole site — the thing to coordinate
- * is one account-wide counter, so one object is the point, not an accident.
+ * The allowance, kept (D7.4): one Durable Object per Worker that binds it — the Worker of the
+ * preview (`cestecritla-preview`, the bench) and the two Workers of the sentences
+ * (`cestecritla-chat`, `cestecritla-chat-preview`) each hold their own, and each stops at its
+ * own hard stop of the one allowance of the account. That is chosen (PLAN-CHAT, R37), not one
+ * counter for the whole site as this line used to say: should a model ever answer again, the
+ * stops would have to be split so that together they stay under the allowance (review of
+ * 23/11/2026, W12).
  *
  * It stores numbers about the site, and nothing about anyone: how many neurons were counted in
  * each of the last hours, one row an hour; and, once the platform has said the allowance is

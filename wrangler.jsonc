@@ -23,9 +23,11 @@
   // What it binds, and nothing else (the list of 09-architecture.md predates D13.1 and D16):
   //   AI      Workers AI — through the AI Gateway "aec" for the bench (cache of 30 days, logs
   //           off), and directly for the chat: no gateway, no cache (D16.51)
-  //   DB      the private base: the text of the 2026 edition, read by identifier, never
-  //           served and never searched (D16.6, D16.22)
-  //   BUDGET  the daily allowance, one Durable Object for the whole site (D7.4)
+  //   DB      the private base: our sentences written ahead; the text of the 2026 edition it
+  //           held, read by identifier, never served nor searched (D16.6, D16.22), was
+  //           withdrawn on 15/11/2026
+  //   BUDGET  the allowance over twenty-four hours, one Durable Object of this Worker's own —
+  //           the two Workers of the sentences hold one each too (D7.4; budget.ts)
   //   RATE    the rate limiter, on a key that says nothing of an address (D7.5)
   // No KV, no Analytics Engine, no cron, no queue — and no bot check: there is no Turnstile
   // (D16.23). Two secrets are set in the editor's terminal with `wrangler secret put`, never

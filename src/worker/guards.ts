@@ -3,7 +3,10 @@
  * which key it is counted. Nothing here touches the platform, so that all of it runs in a test.
  */
 
-/** A question, a token and a version: more than this is not a request of the page. */
+/**
+ * What a request of the page holds — a state of the book, a few identifiers, at most a few words
+ * of our own sentences (never a question, D16.53): more than this is not a request of the page.
+ */
 export const MAX_BODY_BYTES = 6_144;
 
 /**

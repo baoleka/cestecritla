@@ -13,8 +13,12 @@
  * The allowance does not come back at 00:00 UTC: what was spent before and after midnight
  * counted together, and the account stayed exhausted for more than ten hours. So nothing here
  * knows a calendar day. Neurons are counted under the hour they were reserved in, and an hour
- * weighs until all of it is twenty-four hours old — for twenty-four to twenty-five hours,
- * never less: the ledger may hold a neuron too long, it never lets one go too early.
+ * weighs until all of it is twenty-four hours old — for twenty-four to twenty-five hours.
+ * One case lets a few go early: a reservation settled or released just after the hour turned is
+ * given back from the newest hour (`takeBack`), which may hold another request's neurons — at
+ * most one reservation (400 neurons) for a few seconds, inside the margin of the stop. Only two
+ * clients of the bench running at once can meet it; it is left so on purpose, since the fix
+ * would change what the object's methods take (review of 23/11/2026, W10).
  *
  * And the ledger is not the platform: neurons are spent on the same account outside this
  * Worker, and an estimate is not a bill. When the platform itself says the allowance is used

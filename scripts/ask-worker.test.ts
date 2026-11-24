@@ -52,6 +52,7 @@ import {
   userMessage,
 } from '../src/worker/prompt.js';
 import { LocalD1 } from './d1-local.js';
+import { codeOf } from './source-code.js';
 
 const CORPUS = '27ee6e713fe25e7e';
 const SCHEMA = readFileSync('src/worker/sql/schema.sql', 'utf8');
@@ -695,6 +696,21 @@ void test('the bench is handed no copied text: a marker and a count instead', ()
   const inPieces = marked(pieces);
   assert.equal(inPieces.withheld, 'copy');
   assert.ok(inPieces.longest < 6 && inPieces.share > 0.5, JSON.stringify(inPieces));
+  // The same pieces in any other shape than a well-formed answer — cut at its last token, an
+  // extra key, prose, a selection with a note: the control's own rule reads none of them, and
+  // they used to be returned as they came (review of 23/11/2026, W3).
+  const text = pieces.phrases[0]?.texte ?? '';
+  for (const shape of [
+    JSON.stringify(pieces).slice(0, -12),
+    { phrases: [{ texte: text, ids: ['p1c1-s01-k01'], note: text }], hors_programme: false },
+    { phrases: [], commentaire: text },
+    { ids: ['p1c1-s01-k01'], note: text },
+    `Voici : ${text}`,
+  ]) {
+    const out = marked(shape);
+    assert.equal(out.withheld, 'copy', JSON.stringify(shape).slice(0, 80));
+    assert.doesNotMatch(JSON.stringify(out), /biblioth/i);
+  }
   // Numbers, and not a word: nothing a marker holds is text of what the model was shown.
   for (const output of [copied, JSON.stringify(copied), pieces]) {
     const out = marked(output);
@@ -817,7 +833,8 @@ void test('what the Worker does not contain: a log, a write about a visitor, an 
     .map((name) => [name, readFileSync(`src/worker/${name}`, 'utf8')] as const);
   assert.ok(sources.length >= 6);
   for (const [name, source] of sources) {
-    const code = source.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
+    // Comments go, strings stay: an address written in a string is what this looks for (W5).
+    const code = codeOf(source);
     // No log on any path: a logged question is a kept question (D7.8, D16.8).
     assert.doesNotMatch(code, /console\s*\./, `${name} logs`);
     // The Worker calls nobody by name: no address is written in it. Its model and its base are
@@ -876,7 +893,7 @@ void test('what the Worker does not contain: a log, a write about a visitor, an 
   assert.match(bench, /parseAskRequest\(/);
   for (const [name, source] of sources) {
     if (name === 'chat.ts') continue;
-    let code = source.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
+    let code = codeOf(source);
     // The bench's own mode for an explanation reads a question too — one of the bench's set,
     // behind its key, on the preview: that function is set aside, and nothing else is.
     const explain = code.indexOf('async function benchExplain');

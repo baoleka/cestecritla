@@ -16,9 +16,10 @@
  *       a file of its own, private/ask/gists-<corpus>.sql, that touches nothing of the text
  *   npx tsx scripts/seed-ask-2026.ts --remote <database> --gists --accord <YYYY-MM-DD> [--env preview]
  *       uploads that one
- *   npx tsx scripts/seed-ask-2026.ts --remote <database> --switch open|stopped [--what ask|gists] [--env preview]
- *       opens or stops the answers — or, with `--what gists`, the sentences written ahead —
- *       with no deployment (runbook: « arrêt »)
+ *   npx tsx scripts/seed-ask-2026.ts --remote <database> --switch open|stopped --what gists|ask [--env preview]
+ *       opens or stops the sentences written ahead (`gists`) — or the written answers of the
+ *       closed `/api/ask` (`ask`) — with no deployment (runbook sheets 6 and 8). `--what` is
+ *       required, and the command fails when the base holds no such switch
  *   npx tsx scripts/seed-ask-2026.ts --remote <database> --withdraw-text --accord <YYYY-MM-DD> [--env preview]
  *       takes the text of the book OUT of the base, and leaves the sentences as they are:
  *       once they are written nothing reads the text there any more (PLAN-CHAT §7). The text
@@ -673,19 +674,56 @@ export function prepareGameGists(check: boolean, linkOnly: readonly string[] = [
 // ---------------------------------------------------------------------------------------------
 
 /**
- * The one statement that opens or stops what the base hands out: the written answers, as
- * always — or, when they are named, the sentences written ahead. Each switch moves alone.
+ * The one statement that opens or stops what the base hands out: the written answers of
+ * `/api/ask` (`ask`) or the sentences written ahead (`gists`) — always named, never assumed.
+ * Each switch moves alone, and the statement returns the key it moved: a switch the base does
+ * not hold moves nothing, and that must be said, not passed over. Since the text left the base
+ * (15/11/2026) its row `ask` is gone with it, and the command of runbook sheet 8 without
+ * `--what` changed 0 rows and exited 0 (review of 23/11/2026, W2).
  * Null for anything that is not one of the two switches, or not one of the two positions.
  */
-export function switchSql(flip: string, what = 'ask'): string | null {
+export function switchSql(flip: string, what: string | undefined): string | null {
   if ((flip !== 'open' && flip !== 'stopped') || (what !== 'ask' && what !== 'gists')) return null;
-  return `UPDATE meta SET value = '${flip}' WHERE key = '${what}'`;
+  return `UPDATE meta SET value = '${flip}' WHERE key = '${what}' RETURNING key`;
+}
+
+/**
+ * How many switches an answer of `wrangler d1 execute --json` says were moved: the rows the
+ * statement returned. -1 when the answer cannot be read.
+ */
+export function switchedRows(stdout: string): number {
+  try {
+    const parsed: unknown = JSON.parse(stdout);
+    const answers: unknown[] = Array.isArray(parsed) ? parsed : [parsed];
+    return answers.reduce<number>((count, answer) => {
+      const rows =
+        typeof answer === 'object' && answer !== null
+          ? (answer as Record<string, unknown>)['results']
+          : undefined;
+      return count + (Array.isArray(rows) ? rows.length : 0);
+    }, 0);
+  } catch {
+    return -1;
+  }
 }
 
 function wrangler(database: string, env: string | undefined, extra: readonly string[]): number {
   const args = ['--no-install', 'wrangler', 'd1', 'execute', database, '--remote', ...extra];
   if (env !== undefined) args.push('--env', env);
   return spawnSync('npx', args, { stdio: 'inherit' }).status ?? 1;
+}
+
+/** The same, answered as JSON on stdout: null when wrangler failed. */
+function wranglerJson(
+  database: string,
+  env: string | undefined,
+  extra: readonly string[],
+): string | null {
+  const args = ['--no-install', 'wrangler', 'd1', 'execute', database, '--remote', '--json'];
+  args.push(...extra);
+  if (env !== undefined) args.push('--env', env);
+  const run = spawnSync('npx', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'] });
+  return run.status === 0 ? run.stdout : null;
 }
 
 /** Sends a file to the base — with the editor's accord, given today on the command line. */
@@ -719,13 +757,26 @@ function main(): void {
 
   const flip = value('--switch');
   if (flip !== undefined) {
-    const command = switchSql(flip, value('--what'));
+    const what = value('--what');
+    const command = switchSql(flip, what);
     if (remote === undefined || command === null) {
-      console.error('usage: --remote <database> --switch open|stopped [--what ask|gists]');
+      console.error('usage: --remote <database> --switch open|stopped --what gists|ask');
       process.exitCode = 2;
       return;
     }
-    process.exitCode = wrangler(remote, env, ['--command', command]);
+    const answer = wranglerJson(remote, env, ['--command', command]);
+    const moved = answer === null ? -1 : switchedRows(answer);
+    if (moved === 1) {
+      console.log(`the switch "${what ?? ''}" of the base is now ${flip}`);
+      return;
+    }
+    console.error(
+      moved === 0
+        ? `the base holds no switch "${what ?? ''}": nothing changed`
+        : 'the answer of the base could not be read: check the switch by hand ' +
+            '(wrangler d1 execute … --command "SELECT key, value FROM meta")',
+    );
+    process.exitCode = 1;
     return;
   }
 

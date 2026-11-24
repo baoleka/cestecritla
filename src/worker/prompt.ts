@@ -12,9 +12,10 @@
  * order the page's search ranked them, and words of the book that search matched — nothing a
  * visitor wrote. So there is no message to mistake for an instruction there.
  *
- * One request does carry a question: the explanation of the chat (D16.46, `explainRequest` at
- * the end of this file). It is the reverse of the others: the model reads the question and NO
- * text of the book — sentences of ours, cards of ours, and what the visitor asked.
+ * The explanation of the chat (D16.46, `explainRequest` at the end of this file) is the reverse
+ * of the others: the model reads NO text of the book — sentences of ours, cards of ours — and,
+ * since D16.53, no word a visitor typed either: only the words of our sentences that the
+ * question pointed at, each as our sentence writes it. Its route is closed (D16.60).
  */
 import {
   MAX_SELECTED,
@@ -241,8 +242,8 @@ export function readJudgement(output: unknown): JudgeVerdict | null {
 const EXPLAIN_WORDS = 24;
 
 /**
- * The model of the chat reads nothing a visitor typed (D16.53): the sentences the editor read,
- * the cards a person wrote, and — when the visitor's words pointed at some — the WORDS of those
+ * The model of the chat reads nothing a visitor typed (D16.53): our sentences, written and
+ * checked by an AI (D16.59), our cards, accepted by the editor (D16.79), and — when the visitor's words pointed at some — the WORDS of those
  * sentences to explain first, each as our sentence writes it. An instruction has no way in.
  * What comes back still goes through the control (src/lib/ask-validate.ts), which shows an
  * explanation whole or not at all: a model needs no one's help to be wrong.

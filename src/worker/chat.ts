@@ -141,9 +141,14 @@ export function campaignAllows(config: unknown, now: Date): boolean {
   return serve === true && by === 'editor' && typeof on === 'string' && isDay(on);
 }
 
-/** A day as the files of the project write it — and one that exists. */
+/**
+ * A day as the files of the project write it — and one that exists: a parser rolls « 2026-11-31 »
+ * over into the 1st of December, so the day is read back and compared (review of 23/11/2026, W9).
+ */
 function isDay(value: string): boolean {
-  return /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(Date.parse(`${value}T00:00:00Z`));
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const ms = Date.parse(`${value}T00:00:00Z`);
+  return !Number.isNaN(ms) && new Date(ms).toISOString().slice(0, 10) === value;
 }
 
 export interface GistsDeps extends ChatSite {
@@ -212,7 +217,7 @@ export async function answerGists(request: GistsRequest, deps: GistsDeps): Promi
 }
 
 export interface ChatDeps extends ChatSite {
-  /** The cards a person wrote and re-read: those a request may name. */
+  /** Our cards, accepted by the editor (D16.79): those a request may name. */
   cards: readonly KnownCard[];
   /** The threshold of the control, from data/2026/ask.json once the bench has fixed it. */
   minShared?: number | undefined;
@@ -229,7 +234,7 @@ const SPENT: ChatResponse = { kind: 'quiet', why: 'spent' };
 
 /**
  * What `/api/chat` answers whatever it is sent: during a freeze, where the site asks nothing,
- * where no model was retained. Null when the route is open — and only then is a question read
+ * where no model was retained. Null when the route is open — and only then is a request read
  * at all: the wiring asks this before it opens a body (src/worker/index.ts).
  */
 export function closedChat(

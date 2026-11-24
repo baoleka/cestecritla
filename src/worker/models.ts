@@ -15,8 +15,9 @@
  *
  * `keeps` says what the host writes it keeps of a call (PLAN-CHAT §4, read on 14/11/2026 in
  * the documentation of Workers AI): "nothing" for the models whose page states that neither
- * the input nor the output is stored or used for training. Only those may read a question
- * (`keepsNothing`); the others stay candidates of the bench, which sends no visitor's words.
+ * the input nor the output is stored or used for training. Only those may be asked by the
+ * chat's explanation (`keepsNothing`) — which, since D16.53, is sent no word a visitor typed;
+ * the others stay candidates of the bench, which sends none either.
  */
 import type { ModelSpec } from './prompt.js';
 
@@ -69,5 +70,5 @@ export type ModelKey = keyof typeof MODELS;
 export const isModelKey = (value: unknown): value is ModelKey =>
   typeof value === 'string' && Object.hasOwn(MODELS, value);
 
-/** True for a model that may read a visitor's question: its host writes that it keeps nothing. */
+/** True for a model the chat's explanation may call: its host writes that it keeps nothing. */
 export const keepsNothing = (key: ModelKey): boolean => MODELS[key].keeps === 'nothing';

@@ -45,6 +45,7 @@ import {
   explainRequest,
 } from '../src/worker/prompt.js';
 import { LocalD1 } from './d1-local.js';
+import { codeOf } from './source-code.js';
 
 const CORPUS = '27ee6e713fe25e7e';
 const SCHEMA = readFileSync('src/worker/sql/schema.sql', 'utf8');
@@ -610,6 +611,9 @@ void test('from 1 January 2027 the sentences are served only if the editor decid
     { ...decided, decided_on: null },
     { ...decided, decided_on: 'bientôt' },
     { ...decided, decided_on: '2026-13-45' },
+    // Days a parser rolls over into the next month: they never existed (W9).
+    { ...decided, decided_on: '2026-11-31' },
+    { ...decided, decided_on: '2027-02-30' },
   ]) {
     assert.equal(campaignAllows({ campaign }, firstHour), false, JSON.stringify(campaign));
     // Before the campaign months the question is not even asked.
@@ -642,7 +646,8 @@ void test('from 1 January 2027 the sentences are served only if the editor decid
 });
 
 void test('what the routes of the chat do not contain: the reader of the book, a gateway, a log', () => {
-  const strip = (source: string): string => source.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
+  // Comments go, strings stay: « gateway » written in an address is what this looks for (W5).
+  const strip = codeOf;
   const chat = strip(readFileSync('src/worker/chat.ts', 'utf8'));
   // The path of a question cannot read a measure: it does not import what reads them.
   assert.doesNotMatch(chat, /loadMeasures|propositions|Candidate\b/);
@@ -729,7 +734,7 @@ void test('the first explanation of a Worker that has just woken costs what the 
   // 1. No pattern stands on the Unicode properties at the edge of a word: each such pattern
   //    costs the engine about half a millisecond at its first use, and there were 120.
   for (const file of ['src/lib/ask-validate.ts', 'src/lib/notions.ts']) {
-    const code = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
+    const code = codeOf(readFileSync(file, 'utf8'));
     assert.doesNotMatch(code, /\(\?<?!\[\\{1,2}p\{/u, `${file}: an edge built on \\p{…}`);
   }
   // 2. The control and the notions run once while the Worker loads, on an invented sentence:

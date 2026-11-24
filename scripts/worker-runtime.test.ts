@@ -83,8 +83,18 @@ const base = only(declared.d1_databases, 'base');
 const object = only(declared.durable_objects.bindings, 'Durable Object');
 const limiter = only(declared.ratelimits, 'limiter');
 
-/** The Worker as one module, with the file of the mode replaced by the one a test wants. */
-async function bundle(ask: Record<string, unknown>): Promise<string> {
+/**
+ * The Worker as one module, with the file of the mode replaced by the one a test wants — and the
+ * switch of public/flags.json too: the Worker in workerd reads the real clock, and with the
+ * committed « auto » every test below would fail for the whole of both freezes of 2027, when the
+ * scrutin build or an urgent fix may have to ship (review of 23/11/2026, W4). « off » keeps the
+ * calendar out of what these tests prove; the calendar itself is held by scripts/silence.test.ts
+ * and the manual stop by its own test below.
+ */
+async function bundle(
+  ask: Record<string, unknown>,
+  flags: { silence_override: 'on' | 'off' | 'auto' } = { silence_override: 'off' },
+): Promise<string> {
   const out = await build({
     entryPoints: ['src/worker/index.ts'],
     bundle: true,
@@ -99,6 +109,10 @@ async function bundle(ask: Record<string, unknown>): Promise<string> {
         setup(plugin) {
           plugin.onLoad({ filter: /data[\\/]2026[\\/]ask\.json$/ }, () => ({
             contents: JSON.stringify(ask),
+            loader: 'json',
+          }));
+          plugin.onLoad({ filter: /public[\\/]flags\.json$/ }, () => ({
+            contents: JSON.stringify(flags),
             loader: 'json',
           }));
         },
@@ -241,11 +255,32 @@ void test('a sheet without a model: the Worker serves the sentences, and calls n
   assert.deepEqual((await worker.post('/api/gists', asked)).body, LOCAL);
 });
 
+void test('the manual stop this Worker was built with closes its sentences, whatever the base says', async () => {
+  // « silence_override: on » built into THIS Worker: the base open, nothing is served — and no
+  // hour is announced for a stop made by hand. Only a deployment of this Worker carries it: the
+  // pages' deployment does not (runbook sheet 6, review of 23/11/2026, W1).
+  const worker = await start(await bundle(sheet, { silence_override: 'on' }), 'preview', {
+    salt: SALT,
+  });
+  await worker.sql(OPEN);
+  const asked = { corpus: CORPUS, ids: [IDS[0]] };
+  assert.deepEqual((await worker.post('/api/gists', asked)).body, LOCAL);
+  assert.deepEqual(
+    (await worker.post('/api/chat', { corpus: CORPUS, ids: [IDS[0]], words: ['phrase'] })).body,
+    QUIET,
+  );
+});
+
 void test('the guards, as the platform sees them: origin, method, shape, book, secret, rate', async () => {
   const code = await bundle(sheet);
   const worker = await start(code, 'preview', { salt: SALT });
   await worker.sql(OPEN);
   const asked = { corpus: CORPUS, ids: [IDS[0]] };
+  // The local limiter counts in windows aligned on the minute of the clock: a burst that crosses
+  // :00 starts a new count, and the seventh sending is let through — about one run in a hundred
+  // failed so (review of 23/11/2026, W7). The burst starts with a whole minute's room.
+  const left = 60_000 - (Date.now() % 60_000);
+  if (left < 20_000) await new Promise((done) => setTimeout(done, left + 250));
   // Before anything is counted or read: the page of another site, another method.
   assert.equal(
     (await worker.post('/api/gists', asked, { origin: 'https://example.org' })).status,

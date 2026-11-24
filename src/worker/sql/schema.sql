@@ -1,6 +1,8 @@
 -- The private base of « Demander » (D16.6): the text of the 2026 edition, where only the Worker
--- reads it — and, since the plan of 14 November 2026 (PLAN-CHAT §3), the sentences written
--- ahead about it, one per measure, each read by the editor. Cloudflare D1 (SQLite), free plan.
+-- read it — withdrawn on 15 November 2026 (`--withdraw-text`), no line of it since — and, since
+-- the plan of 14 November 2026 (PLAN-CHAT §3), the sentences written ahead about it, one per
+-- measure, written and checked by an AI, the session, read by no person one by one (D16.57 to
+-- D16.59). Cloudflare D1 (SQLite), free plan.
 -- Filled from the editor's machine by scripts/seed-ask-2026.ts, with the editor's accord each
 -- time; emptied when the site is withdrawn.
 --
@@ -18,8 +20,10 @@
 --   corpus_version  the state of the book it holds; the Worker answers "local" when it is not
 --                   the one the site was built from
 --   propositions    how many rows it should hold
---   ask             'open' or 'stopped' — read at every request, so that written answers can
---                   be cut within the minute, with no deployment (runbook: « arrêt »)
+--   ask             'open' or 'stopped' — the switch of the written answers of `/api/ask`,
+--                   closed since D16.33; it stops no model of the chat. Its row left the base
+--                   with the text on 15/11/2026: `--switch … --what ask` now changes nothing,
+--                   and the tool says so (scripts/seed-ask-2026.ts; runbook sheet 8)
 --   gists           'open' or 'stopped' — the switch of the sentences written ahead, separate
 --                   from `ask`: either can be cut without the other
 --   gists_corpus    the state of the book those sentences were read against
@@ -41,11 +45,11 @@ CREATE TABLE IF NOT EXISTS propositions (
   lead TEXT NOT NULL            -- for a sub-measure, the measure it details; '' otherwise
 ) WITHOUT ROWID;
 
--- One row per measure that has a sentence of ours the editor read and kept — never a word of
--- the book. A measure with no row keeps its link alone: that is a verdict, not a gap.
+-- One row per measure that has a sentence of ours, checked against its measure and kept — never
+-- a word of the book. A measure with no row keeps its link alone: that is a verdict, not a gap.
 CREATE TABLE IF NOT EXISTS gists (
   id TEXT PRIMARY KEY,          -- the measure the sentence is about
   text TEXT NOT NULL,           -- one sentence, in our words, 300 characters at most
   measure_sha256 TEXT NOT NULL, -- the fingerprint of the measure it was read against
-  read_on TEXT NOT NULL         -- the day the editor read it, YYYY-MM-DD
+  read_on TEXT NOT NULL         -- the day it was read against its measure (D16.57), YYYY-MM-DD
 ) WITHOUT ROWID;

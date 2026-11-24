@@ -9,7 +9,9 @@
  */
 import { parseModelAnswer, type Candidate } from '../lib/ask-contract.js';
 import {
+  PROVISIONAL_MAX_COPIED_SHARE,
   carriesCopy,
+  copiedShare,
   copyMeasure,
   refusals,
   validateAnswer,
@@ -125,21 +127,39 @@ export function control(
 }
 
 /**
+ * The strings an output written as text quotes — JSON cut at its last token included: read as
+ * one text, its keys and identifiers would hide that most of a sentence stands in pieces.
+ */
+function quotedIn(output: unknown): string[] {
+  if (typeof output !== 'string') return [];
+  return [...output.matchAll(/"((?:[^"\\]|\\.)*)(?:"|$)/g)].map((quoted) => quoted[1] ?? '');
+}
+
+/**
  * What `/api/bench` returns of an output: the output — unless the model copied what it was
  * shown. An answer of the Worker holds no more of the book than a page would, the bench's
  * included (D16.6): then a marker and numbers leave, never the text — how many sentences, the
  * longest run of copied words, the largest copied share. The bench counts the marker under its
  * gate "copied sequence"; nobody needs to read what it stands for, and the numbers say by how
  * much the instruction was missed.
+ *
+ * The share in runs of four is measured on every text of the output, whatever its shape: the
+ * control's own rule reads only the sentences of an answer that parses, and an output cut at its
+ * last token, with an extra key or in prose, held most of a measure in pieces of four or five
+ * words and was returned as it came (review of 23/11/2026, W3).
  */
 export function benchOutput(output: unknown, candidates: readonly Candidate[]): unknown {
+  const measured = copyMeasure(output, candidates);
+  const shown = candidates.map((candidate) => candidate.text);
   const copied =
     carriesCopy(output, candidates) ||
+    measured.share > PROVISIONAL_MAX_COPIED_SHARE ||
+    quotedIn(output).some((text) => copiedShare(text, shown) > PROVISIONAL_MAX_COPIED_SHARE) ||
     refusals(output, candidates, { minOverlap: 0 }).some((refusal) => refusal.rule === 'copy');
   if (!copied) return output;
   return {
     withheld: 'copy',
     sentences: parseModelAnswer(output)?.phrases.length ?? 0,
-    ...copyMeasure(output, candidates),
+    ...measured,
   };
 }

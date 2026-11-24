@@ -81,7 +81,10 @@ import {
 
 export { NeuronBudget } from './budget.js';
 
-/** The AI Gateway every call goes through: thirty days of cache, and no log of any request. */
+/**
+ * The AI Gateway the bench's calls go through: thirty days of cache, and no log of any request.
+ * The chat's explanation calls its model directly, never through it (src/worker/chat.ts).
+ */
 const GATEWAY = { id: 'aec', cacheTtl: 2_592_000, collectLog: false } as const;
 const MODEL_TIMEOUT_MS = 6_000;
 
@@ -96,10 +99,13 @@ const HEADERS: Record<string, string> = {
 };
 
 /**
- * The switch the page reads (public/flags.json), read here too — built into the Worker, so that
- * the deployment that closes the page closes the questions with it. Without this the sentence
- * of the runbook was false: « silence_override: on » hid the block, and `/api/ask` still
- * answered whoever asked it directly.
+ * The switch the page reads (public/flags.json), read here too — built into the Worker as it
+ * stood when THIS Worker was deployed. While one Worker served the pages and the questions, the
+ * deployment that closed the page closed the questions with it. Since lot C10 of PLAN-CHAT the
+ * sentences are answered by a Worker of their own (`cestecritla-chat`, wrangler.chat.jsonc),
+ * deployed apart (`npm run deploy:chat`): `npm run deploy` does not reach it, and it keeps the
+ * switch of its last deployment. What stops the sentences at once, on every host, is the switch
+ * of the base (runbook sheets 6 and 8: `--switch stopped --what gists`) — review of 23/11/2026, W1.
  */
 const OVERRIDE: SilenceOverride =
   flags.silence_override === 'on' || flags.silence_override === 'off'
@@ -121,7 +127,8 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 /**
  * Our own texts, as far as the editor accepted them (data/2026/glossary.json, riposte.json;
  * `review.status`, D16.79), built into the
- * Worker: the objections that never reach a model, the cards handed to it with a question.
+ * Worker: the objections that never reach a model, the cards handed to it with a turn — never
+ * with a question (D16.53).
  */
 const KNOWN = knownOf(glossary.entries, riposte.entries);
 
@@ -255,10 +262,10 @@ async function handleGists(request: Request, env: Env, origin: string): Promise<
 
 async function handleChat(request: Request, env: Env, origin: string): Promise<Response> {
   if (request.method !== 'POST') return empty(405);
-  // Same origin only: a form on another site cannot spend our allowance, nor send a question.
+  // Same origin only: a form on another site cannot spend our allowance.
   if (request.headers.get('origin') !== origin) return empty(403);
-  // A closed route reads nothing — least of all a question: during a freeze, where the site
-  // asks nothing, where no model was retained, the body is not even opened.
+  // A closed route reads nothing: during a freeze, where the site asks nothing, where no model
+  // was retained, the body is not even opened.
   const silence = silenceNow();
   const config = chatConfigured(env);
   const closed = closedChat({ mode: config.mode, silence, model: config.model });
@@ -307,8 +314,8 @@ async function keyMatches(given: unknown, expected: unknown): Promise<boolean> {
  * the bench and production cannot disagree.
  *
  * Two things hold even for whoever has the key. An output in which the model copied what it
- * was shown leaves as a marker (`benchOutput`). And the route is counted by the same limiter
- * as the questions — 429 beyond it, which the bench waits out.
+ * was shown leaves as a marker (`benchOutput`). And the route is counted by the limiter, on a
+ * lane of its own — 429 beyond it, which the bench waits out.
  */
 /**
  * At most three judges, each a model of our own list, none twice — and never the writer: a
