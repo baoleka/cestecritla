@@ -154,7 +154,7 @@ export const ROUTES: readonly Route[] = [
 
 const built = existsSync('dist');
 /**
- * A holding dist/ (D15.4) is judged as what it is: two pages and a redirect file. Read against
+ * A holding dist/ (D15.4) is judged as what it is: three pages and a redirect file. Read against
  * the table above it would look like an app with every route missing.
  */
 const holding = built && readBuildMode() === 'holding';
@@ -189,8 +189,9 @@ void test('every built or reserved route actually answers', () => {
     return;
   }
   if (holding) {
-    // The whole point of the holding build: nothing of the app, so nothing of the programme.
-    assert.deepEqual(htmlPages('dist'), [...HOLDING_PAGES], 'a holding build is its two pages');
+    // The whole point of the holding build: nothing of the app, so nothing of the programme —
+    // but its legal notice, which stays published during a withdrawal (D21.18).
+    assert.deepEqual(htmlPages('dist'), [...HOLDING_PAGES], 'a holding build is its three pages');
     return;
   }
   const missing = ROUTES.filter(
@@ -262,7 +263,7 @@ void test('no page links to the address of the 2025 edition, which its publisher
   );
 });
 
-void test('the holding build redirects every old prefix and says only what is true (D15.4)', () => {
+void test('the holding build redirects every old prefix and says only what is true of a withdrawal (D15.4, D21.17, D21.18)', () => {
   if (!holding) return;
   assert.equal(readFileSync('dist/_redirects', 'utf8'), holdingRedirects());
 
@@ -278,8 +279,16 @@ void test('the holding build redirects every old prefix and says only what is tr
   }
   assert.match(html, /Site non officiel\./, 'the independence label is never cut');
   assert.match(html, /href="https:\/\/melenchon2027\.fr\/programme\/livre\/"/, 'official link');
-  // It announces a fact with its date, and promises none of its own.
-  assert.match(html, /réédité le 5 novembre 2026/);
+  // The editor's text of a withdrawal, and nothing of the holding page of September (D21.17):
+  // a withdrawn site does not say it is updating.
+  assert.match(html, /Ce site est retiré\./);
+  assert.doesNotMatch(html, /se met à jour|pour l’instant|édition 2025/);
+  // The legal notice stays served, and the page leads to it (D21.18) — with the label too.
+  assert.match(html, /href="\/mentions-legales\/"/);
+  const notice = readFileSync('dist/mentions-legales/index.html', 'utf8');
+  assert.match(notice, /Site non officiel\./);
+  // Every screen of the withdrawal says whose site it is not (the 404 too: review, P3).
+  assert.match(readFileSync('dist/404.html', 'utf8'), /Site non officiel\./);
 });
 
 void test('the holding page is not indexed (playbook: indexing opens at J-3)', () => {

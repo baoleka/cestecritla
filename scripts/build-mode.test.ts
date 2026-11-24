@@ -120,7 +120,7 @@ void test('the apex refuses an app build until launch day', () => {
   assert.match(String(refusal), /holding page until the launch is decided/);
 });
 
-void test('the apex accepts a holding build made of exactly its two pages', () => {
+void test('the apex accepts a holding build made of exactly its pages', () => {
   assert.equal(deployRefusal('apex', 'holding', [...HOLDING_PAGES], VALIDATED), null);
 });
 

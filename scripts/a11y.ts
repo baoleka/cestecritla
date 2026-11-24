@@ -78,7 +78,7 @@ const APP_PATHS: readonly string[] = [
 ];
 
 /** The holding build (D15.4) is the page the apex serves: it is audited like any other. */
-const HOLDING_PATHS: readonly string[] = ['/', '/404.html'];
+const HOLDING_PATHS: readonly string[] = ['/', '/404.html', '/mentions-legales/'];
 
 export const AUDITED_PATHS: readonly string[] =
   readBuildMode() === 'holding' ? HOLDING_PATHS : APP_PATHS;

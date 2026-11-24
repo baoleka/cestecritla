@@ -405,8 +405,11 @@ export function distProblems(
   return out;
 }
 
-/** Every HTML file a holding build may contain. Anything else is a leak of the app into it. */
-export const HOLDING_PAGES: readonly string[] = ['404.html', 'index.html'];
+/**
+ * Every HTML file a holding build may contain. Anything else is a leak of the app into it. The
+ * legal notice stays served during a withdrawal (D21.18).
+ */
+export const HOLDING_PAGES: readonly string[] = ['404.html', 'index.html', 'mentions-legales/index.html'];
 
 /**
  * Old public paths that must land on the holding page instead of breaking (D15.4).

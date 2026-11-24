@@ -13,9 +13,12 @@ import { launchFacts } from '../../lib/facts.ts';
 import { t } from '../../lib/strings.ts';
 
 const { lcenDeclared } = launchFacts();
+// Served by the withdrawal too (D21.18), where no header says whose page it is not: it says it.
+const holding = process.env.CEL_BUILD === 'holding';
 ---
 
 <Base title={`${t('legal.notice.title')} — ${t('app.name')}`} description={t('independence.line')}>
+  {holding && <p class="unofficial">{t('independence.unofficial')}</p>}
   <h1>{t('legal.notice.title')}</h1>
   <p>{t('legal.notice.editor')}</p>
   {lcenDeclared && <p>{t('legal.notice.editor_identity')}</p>}
