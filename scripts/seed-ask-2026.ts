@@ -5,25 +5,34 @@
  * holds the sentences written ahead, one per measure, each read by the editor: those are ours,
  * and they are what a route may hand out.
  *
- *   npx tsx scripts/seed-ask-2026.ts
- *       writes private/ask/seed-<corpus>.sql and prints what it holds (numbers only)
- *   npx tsx scripts/seed-ask-2026.ts --check
- *       loads it into Node's SQLite and checks every row against the public manifest
- *   npx tsx scripts/seed-ask-2026.ts --remote <database> --accord <YYYY-MM-DD> [--env preview]
- *       uploads it with wrangler
- *   npx tsx scripts/seed-ask-2026.ts --gists [--check]
- *       the same for the sentences the editor read and kept (private/gists/verdicts.jsonl):
- *       a file of its own, private/ask/gists-<corpus>.sql, that touches nothing of the text
- *   npx tsx scripts/seed-ask-2026.ts --remote <database> --gists --accord <YYYY-MM-DD> [--env preview]
+ *   npx tsx scripts/seed-ask-2026.ts --text [--check]
+ *       writes private/ask/seed-<corpus>.sql and prints what it holds (numbers only); with
+ *       `--check`, loads it into Node's SQLite and checks every row against the public manifest
+ *   npx tsx scripts/seed-ask-2026.ts --text --remote <database> --accord <YYYY-MM-DD>
+ *       uploads the text of the book — its own mode, named on the line: no other command, nor a
+ *       mistyped one, ever falls back to it (review 14, E1)
+ *   npx tsx scripts/seed-ask-2026.ts --gists [--check] [--fewer]
+ *       the same for the sentences read and kept (private/gists/verdicts.jsonl — the session's
+ *       verdicts, or the editor's at the reading desk): a file of its own,
+ *       private/ask/gists-<corpus>.sql, that touches nothing of the text. It replaces every
+ *       sentence of the base: fewer than the deposit data/2026/ask.json records is refused
+ *       unless `--fewer` says so (E2)
+ *   npx tsx scripts/seed-ask-2026.ts --gists --remote <database> --accord <YYYY-MM-DD>
  *       uploads that one
- *   npx tsx scripts/seed-ask-2026.ts --remote <database> --switch open|stopped --what gists|ask [--env preview]
+ *   npx tsx scripts/seed-ask-2026.ts --switch open|stopped --what gists|ask --remote <database> [--accord <YYYY-MM-DD>]
  *       opens or stops the sentences written ahead (`gists`) — or the written answers of the
  *       closed `/api/ask` (`ask`) — with no deployment (runbook sheets 6 and 8). `--what` is
- *       required, and the command fails when the base holds no such switch
- *   npx tsx scripts/seed-ask-2026.ts --remote <database> --withdraw-text --accord <YYYY-MM-DD> [--env preview]
+ *       required, and the command fails when the base holds no such switch. Stopping needs
+ *       nothing more: what closes always may. Opening needs today's accord (E4)
+ *   npx tsx scripts/seed-ask-2026.ts --withdraw-text --remote <database> --accord <YYYY-MM-DD>
  *       takes the text of the book OUT of the base, and leaves the sentences as they are:
  *       once they are written nothing reads the text there any more (PLAN-CHAT §7). The text
- *       stays on this machine; depositing it again is the first command above.
+ *       stays on this machine; depositing it again is `--text`.
+ *
+ * One mode per command, and nothing else on the line: a flag the tool does not know, a flag
+ * without its value, `--flag=value`, a word alone, a flag written twice, or two modes at once
+ * stop it before anything is read (E3, E6). `--env preview` is accepted and changes nothing:
+ * every host reads the same base (E8).
  *
  * Sending anything is the editor's decision, each time (CLAUDE.md): `--accord` must carry
  * today's date, so that the command line itself says when the accord was given. Without it
@@ -48,6 +57,7 @@ import {
 import { wordsFingerprint } from '../src/lib/word-links.js';
 import type { Manifest, PrivateCorpus } from './aec26-types.js';
 import { LocalD1 } from './d1-local.js';
+import { quietEnv } from './quiet-env.js';
 import {
   ASK_CONFIG_PATH,
   DAY,
@@ -60,6 +70,7 @@ import {
   readMinOverlap,
   readVerdicts,
   recheckWith,
+  VERDICTS_PATH,
   shownText,
   unservable,
   validated,
@@ -97,6 +108,11 @@ export interface SeedRow {
 export function seedRows(corpus: PrivateCorpus): SeedRow[] {
   const rows: SeedRow[] = [];
   const push = (id: string, sectionId: string, kind: string, text: string, lead: string): void => {
+    // SQLite stops a statement at U+0000 and its error then quotes what came before it — a
+    // stretch of the book, printed (review 14, E14). Refused here, by its id alone.
+    if (text.includes('\u0000') || lead.includes('\u0000')) {
+      throw new Error(`seed: ${id} holds a NUL character — fix the ingestion, nothing is written`);
+    }
     rows.push({ id, sectionId, kind, ord: rows.length, text, lead });
   };
   for (const section of corpus.sections) {
@@ -462,10 +478,45 @@ function standing(): Standing | null {
   return { corpus, manifest, version, measures, minOverlap, texts, set };
 }
 
-export function prepareGists(check: boolean): { code: number; file: string | null } {
+/** How many verdicts the deposit in the base holds, as data/2026/ask.json records it. */
+function depositCount(): number | null {
+  try {
+    const ask = JSON.parse(readFileSync(ASK_CONFIG_PATH, 'utf8')) as {
+      gists?: { verdicts?: unknown };
+    };
+    const count = ask.gists?.verdicts;
+    return typeof count === 'number' && Number.isInteger(count) && count > 0 ? count : null;
+  } catch {
+    return null;
+  }
+}
+
+export function prepareGists(
+  check: boolean,
+  options: { allowFewer?: boolean } = {},
+): { code: number; file: string | null } {
   const found = standing();
   if (found === null) return { code: 1, file: null };
   const { corpus, manifest, version, measures, minOverlap, texts, set } = found;
+  // A deposit replaces every sentence of the base (`DELETE FROM gists`). Made from a copy that
+  // lacks the verdicts, or that holds fewer than the deposit data/2026/ask.json records, it
+  // would erase what « Demander » serves while every check passed on nothing (review 14, E2).
+  const recorded = depositCount();
+  const here = set.rows.length + set.linkOnly;
+  if (!existsSync(VERDICTS_PATH) || set.rows.length === 0) {
+    console.error(
+      `sentences: no verdict to deposit (${VERDICTS_PATH} is missing or holds no kept sentence) — ` +
+        'a deposit would empty the base: nothing is written',
+    );
+    return { code: 1, file: null };
+  }
+  if (recorded !== null && here < recorded && options.allowFewer !== true) {
+    console.error(
+      `sentences: ${String(here)} verdict(s) here, ${String(recorded)} in the deposit ` +
+        `${ASK_CONFIG_PATH} records — the base would lose sentences: say so with --fewer`,
+    );
+    return { code: 1, file: null };
+  }
   console.log(
     `sentences of corpus ${version}: ${String(set.rows.length)} read and kept, ` +
       `${String(set.linkOnly)} link only, ${String(set.waiting)} without a verdict, of ` +
@@ -551,9 +602,19 @@ function writesWord(sentence: string, word: string): boolean {
  *
  * Identifiers and numbers only: never a sentence, never a word of a measure.
  */
-export function prepareGameGists(check: boolean, linkOnly: readonly string[] = []): number {
+export function prepareGameGists(check: boolean, named: readonly string[] | null = null): number {
   const found = standing();
   if (found === null) return 1;
+  const before = readGameGists();
+  // The words whose card keeps its link alone are the editor's decisions, word by word (D19.20,
+  // D19.21). Not named on the line, they are those the file already names — never none: an
+  // export without `--link-only` undid five of his choices and dropped his validation (review
+  // 14, E9). Named twice, one of them changed the seal for nothing (E10).
+  const linkOnly = named ?? before?.meta.link_only ?? [];
+  if (new Set(linkOnly).size !== linkOnly.length) {
+    console.error('game: --link-only names a word twice');
+    return 1;
+  }
   const { corpus, manifest, version, minOverlap, texts, set } = found;
   const ask = JSON.parse(readFileSync(ASK_CONFIG_PATH, 'utf8')) as Record<string, unknown>;
   const deposit = depositOf(ask);
@@ -598,14 +659,14 @@ export function prepareGameGists(check: boolean, linkOnly: readonly string[] = [
     ...(linkOnly.length === 0 ? {} : { link_only: [...linkOnly].sort() }),
   };
   const sha256 = gameGistsFingerprint(claims, draft.gists);
-  const before = readGameGists();
   const kept =
     before !== null && before.meta.sha256 === sha256 && before.meta.validated.sha256 === sha256
       ? before.meta.validated
       : { on: null, by: null, sha256: null };
+  const title = 'Les phrases du jeu « Où est-ce écrit ? » — édition 2026';
   const file: GameGistsFile = {
     meta: {
-      title: 'Les phrases du jeu « Où est-ce écrit ? » — édition 2026',
+      title,
       corpus_version: claims.corpus_version,
       words_sha256: claims.words_sha256,
       deposit_sha256: claims.deposit_sha256,
@@ -631,6 +692,19 @@ export function prepareGameGists(check: boolean, linkOnly: readonly string[] = [
     },
     gists: draft.gists,
   };
+  // His validation was given on the file as it reads, its title and its note with it: kept only
+  // while they are the ones he saw (D19.22; review 14, E13).
+  if (
+    kept.sha256 !== null &&
+    before !== null &&
+    (before.meta.title !== file.meta.title || before.meta.note_fr !== file.meta.note_fr)
+  ) {
+    console.error(
+      'game: the title or the note of the file changed since the editor validated it — his ' +
+        'accord is asked again (D19.22): nothing is written',
+    );
+    return 1;
+  }
   const text = `${JSON.stringify(file, null, 2)}\n`;
   const holding = draft.gists.filter((gist) => {
     const word = words.find((entry) => entry.pin.id === gist.id);
@@ -710,7 +784,7 @@ export function switchedRows(stdout: string): number {
 function wrangler(database: string, env: string | undefined, extra: readonly string[]): number {
   const args = ['--no-install', 'wrangler', 'd1', 'execute', database, '--remote', ...extra];
   if (env !== undefined) args.push('--env', env);
-  return spawnSync('npx', args, { stdio: 'inherit' }).status ?? 1;
+  return spawnSync('npx', args, { stdio: 'inherit', env: quietEnv() }).status ?? 1;
 }
 
 /** The same, answered as JSON on stdout: null when wrangler failed. */
@@ -722,8 +796,18 @@ function wranglerJson(
   const args = ['--no-install', 'wrangler', 'd1', 'execute', database, '--remote', '--json'];
   args.push(...extra);
   if (env !== undefined) args.push('--env', env);
-  const run = spawnSync('npx', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'] });
-  return run.status === 0 ? run.stdout : null;
+  const run = spawnSync('npx', args, {
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'inherit'],
+    env: quietEnv(),
+  });
+  if (run.status === 0) return run.stdout;
+  // With `--json`, wrangler writes its errors to stdout: said here, or the operator of an
+  // emergency stop learns nothing of why it failed (review 14, E5). An answer of the base,
+  // not a word of the book: the switch's command reads and writes `meta` only.
+  const said = run.stdout.trim();
+  if (said !== '') console.error(said);
+  return null;
 }
 
 /** Sends a file to the base — with the editor's accord, given today on the command line. */
@@ -742,26 +826,98 @@ function send(
     );
     return 1;
   }
-  console.log(`sending to the D1 database "${remote}"${env === undefined ? '' : ` (${env})`}…`);
+  console.log(`sending to the D1 database "${remote}" — the one base every host reads…`);
   return wrangler(remote, env, ['--file', file, '--yes']);
 }
 
+/** The flags of the tool: those that take a value, and those that stand alone. */
+const VALUED = ['--remote', '--env', '--accord', '--switch', '--what'] as const;
+const ALONE = ['--text', '--gists', '--withdraw-text', '--check', '--fewer'] as const;
+const MODES = ['--text', '--gists', '--withdraw-text', '--switch'] as const;
+
+/**
+ * The command line, read strictly (review 14, E1, E3, E6): what it cannot read is said, and
+ * nothing is read or sent. Returns the flags it holds, or the reason it was refused.
+ */
+export function readCommand(
+  args: readonly string[],
+): { flags: Map<string, string | true>; mode: (typeof MODES)[number] | null } | string {
+  const flags = new Map<string, string | true>();
+  for (let i = 0; i < args.length; i += 1) {
+    const arg = args[i] ?? '';
+    if (flags.has(arg)) return `${arg} is written twice`;
+    if ((VALUED as readonly string[]).includes(arg)) {
+      const value = args[i + 1];
+      if (value === undefined || value.startsWith('-')) return `${arg} takes a value`;
+      flags.set(arg, value);
+      i += 1;
+    } else if ((ALONE as readonly string[]).includes(arg)) {
+      flags.set(arg, true);
+    } else {
+      return arg.startsWith('-')
+        ? `${arg} is not a flag of this tool (write « --flag value », never « --flag=value »)`
+        : `« ${arg} » stands alone on the line`;
+    }
+  }
+  const modes = MODES.filter((mode) => flags.has(mode));
+  if (modes.length > 1) return `one mode per command, not ${modes.join(' and ')}`;
+  const mode = modes[0] ?? null;
+  const check = flags.has('--check');
+  if (check && mode !== '--text' && mode !== '--gists')
+    return '--check goes with --text or --gists';
+  if (flags.has('--fewer') && mode !== '--gists') return '--fewer goes with --gists';
+  if (flags.has('--what') && mode !== '--switch') return '--what goes with --switch';
+  if (flags.has('--remote') && check) return '--check sends nothing: drop --remote';
+  if (flags.has('--remote') && mode === null) {
+    return 'name what to send: --text, --gists, --withdraw-text or --switch';
+  }
+  if ((mode === '--switch' || mode === '--withdraw-text') && !flags.has('--remote')) {
+    return `${mode} acts on the base: --remote <database>`;
+  }
+  return { flags, mode };
+}
+
 function main(): void {
-  const args = process.argv.slice(2);
+  const read = readCommand(process.argv.slice(2));
+  if (typeof read === 'string') {
+    console.error(`seed: ${read} — nothing was read or sent (see the head of this file)`);
+    process.exitCode = 2;
+    return;
+  }
   const value = (flag: string): string | undefined => {
-    const at = args.indexOf(flag);
-    return at === -1 ? undefined : args[at + 1];
+    const given = read.flags.get(flag);
+    return typeof given === 'string' ? given : undefined;
   };
+  const args = [...read.flags.keys()];
   const remote = value('--remote');
   const env = value('--env');
+
+  if (read.mode === null) {
+    console.error(
+      'seed: name the mode — --text [--check], --gists [--check], --withdraw-text or --switch ' +
+        '(see the head of this file)',
+    );
+    process.exitCode = 2;
+    return;
+  }
 
   const flip = value('--switch');
   if (flip !== undefined) {
     const what = value('--what');
     const command = switchSql(flip, what);
     if (remote === undefined || command === null) {
-      console.error('usage: --remote <database> --switch open|stopped --what gists|ask');
+      console.error('usage: --switch open|stopped --what gists|ask --remote <database>');
       process.exitCode = 2;
+      return;
+    }
+    // What closes always may; what opens is the editor's, given today (review 14, E4).
+    const today = new Date().toISOString().slice(0, 10);
+    if (flip === 'open' && value('--accord') !== today) {
+      console.error(
+        `seed: nothing was sent. Opening the switch "${what ?? ''}" needs the editor's accord, ` +
+          `given today: --accord ${today}`,
+      );
+      process.exitCode = 1;
       return;
     }
     const answer = wranglerJson(remote, env, ['--command', command]);
@@ -773,8 +929,9 @@ function main(): void {
     console.error(
       moved === 0
         ? `the base holds no switch "${what ?? ''}": nothing changed`
-        : 'the answer of the base could not be read: check the switch by hand ' +
-            '(wrangler d1 execute … --command "SELECT key, value FROM meta")',
+        : 'the switch did not move, or its answer could not be read (what wrangler said is ' +
+            'above): check it by hand — wrangler d1 execute <database> --remote --command ' +
+            '"SELECT key, value FROM meta"',
     );
     process.exitCode = 1;
     return;
@@ -795,7 +952,9 @@ function main(): void {
   }
 
   if (args.includes('--gists')) {
-    const prepared = prepareGists(args.includes('--check'));
+    const prepared = prepareGists(args.includes('--check'), {
+      allowFewer: args.includes('--fewer'),
+    });
     process.exitCode =
       prepared.file === null || remote === undefined
         ? prepared.code
@@ -835,4 +994,6 @@ function main(): void {
   process.exitCode = send(file, 'the text', remote, env, value('--accord'));
 }
 
-if (process.argv[1] !== undefined && /seed-ask-2026\.ts$/.test(process.argv[1])) main();
+// Typed with or without its extension: `npx tsx scripts/seed-ask-2026` runs it too, where it
+// used to run nothing and exit 0 — the emergency stop included (review 14, E7).
+if (process.argv[1] !== undefined && /seed-ask-2026(?:\.ts|\.js)?$/.test(process.argv[1])) main();

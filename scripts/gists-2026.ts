@@ -1703,7 +1703,8 @@ async function main(args: readonly string[]): Promise<number> {
     if (named !== undefined && !/^w\d{3}(?:,w\d{3})*$/.test(named)) {
       throw new UsageError('--link-only takes word ids of the game: w037 or w037,w012');
     }
-    return prepareGameGists(has('--check'), named === undefined ? [] : named.split(','));
+    // Not named, the words left to their link are those the file already names (review 14, E9).
+    return prepareGameGists(has('--check'), named === undefined ? null : named.split(','));
   }
 
   const manifest = JSON.parse(readFileSync(MANIFEST_PATH, 'utf8')) as Manifest;
