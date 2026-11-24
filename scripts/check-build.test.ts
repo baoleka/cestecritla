@@ -162,16 +162,28 @@ void test('no page says a person re-read our own texts unless their files say on
   // glossary.json): « accepted » is published on the editor's word, without a line-by-line
   // re-reading. While one of them is not « reviewed », no page names a reader — the site said
   // « relu par Baoleka » until 15/11/2026, on dates written by default (14-risques.md, R44).
-  const states = ['data/2026/riposte.json', 'data/2026/glossary.json'].flatMap((path) =>
-    (JSON.parse(read(path)) as { entries: { review: { status: string } }[] }).entries.map(
-      (entry) => entry.review.status,
-    ),
+  // Page by page: the day the editor re-reads ONE text, its own page truthfully names him
+  // (src/components/Authorship.astro), while every other page still names no reader. The rule
+  // used to be global, and would have refused that first re-reading (review of 23/11/2026, P8).
+  interface Stated {
+    review: { status: string };
+  }
+  const answers = (
+    JSON.parse(read('data/2026/riposte.json')) as { entries: (Stated & { slug: string })[] }
+  ).entries.map((entry) => ({ page: `r/${entry.slug}/index.html`, status: entry.review.status }));
+  const cardPages = (
+    JSON.parse(read('data/2026/glossary.json')) as { entries: (Stated & { id: string })[] }
+  ).entries.map((entry) => ({ page: `mot/${entry.id}/index.html`, status: entry.review.status }));
+  const entries = [...answers, ...cardPages];
+  assert.ok(entries.length > 0);
+  const everyone = entries.every((entry) => entry.status === 'reviewed');
+  const reviewed = new Set(
+    entries.filter((entry) => entry.status === 'reviewed').map((entry) => entry.page),
   );
-  assert.ok(states.length > 0);
-  if (states.every((status) => status === 'reviewed')) return;
   const CLAIM = /relu(?:e|es|s)? par (?:Baoleka|l['’]éditeur|une personne|un humain)/i;
   for (const root of ['dist', 'dist-ask']) {
     for (const file of walk(root).filter((f) => f.endsWith('.html'))) {
+      if (everyone || reviewed.has(relative(root, file))) continue;
       assert.doesNotMatch(read(file), CLAIM, `${file}: claims a re-reading by a person`);
     }
   }

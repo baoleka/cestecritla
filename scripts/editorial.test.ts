@@ -418,3 +418,42 @@ void test('an answer accepted since 23 November 2026 is named in a decision of i
     );
   }
 });
+
+void test('the counts our pages type in words are the counts of the file (review of 23/11/2026, P6)', () => {
+  // « Seize objections… » (about.ai_reviewed) and « Une réponse cite aussi des études »
+  // (accuracy.studies) are typed in the kit, and the pages print them as they are. Rolling an
+  // answer back, or adding one, left them false with every gate green: this holds them to the
+  // file. Changing the words is the editor's, whose texts they are (D21.10).
+  const kit = JSON.parse(readFileSync('design/strings.json', 'utf8')) as Record<string, unknown>;
+  const text = (key: string): string => {
+    const value = kit[key];
+    return typeof value === 'string' ? value : '';
+  };
+  const shown = riposte.entries.filter(
+    (entry) => entry.review.status === 'accepted' || entry.review.status === 'reviewed',
+  );
+  const WORDS: Record<number, string> = {
+    14: 'Quatorze',
+    15: 'Quinze',
+    16: 'Seize',
+    17: 'Dix-sept',
+    18: 'Dix-huit',
+    19: 'Dix-neuf',
+    20: 'Vingt',
+  };
+  const said = text('about.ai_reviewed').split(' ')[0] ?? '';
+  assert.equal(
+    said,
+    WORDS[shown.length],
+    `about.ai_reviewed says « ${said} » for ${String(shown.length)} published answers`,
+  );
+  const studied = shown.filter((entry) => entry.studies !== undefined).length;
+  assert.ok(
+    studied > 0,
+    'accuracy.studies is printed only when an answer cites studies: the test lost its object',
+  );
+  assert.ok(
+    studied === 1 || !/^Une réponse /.test(text('accuracy.studies')),
+    `accuracy.studies says « Une réponse » for ${String(studied)} answers citing studies`,
+  );
+});

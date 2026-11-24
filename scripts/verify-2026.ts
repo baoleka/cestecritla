@@ -822,9 +822,18 @@ async function main(): Promise<void> {
   }
   if (failed) process.exit(1);
   if (args.includes('--write')) {
-    // Only a complete, clean run on the real pages is worth publishing as a result.
+    // Only a complete, clean run on the real pages is worth publishing as a result — in the three
+    // engines /exactitude/ names: a record of Chromium alone printed « Relu par trois
+    // navigateurs » over a list of one (review of 23/11/2026, P4).
     if (synthetic || sample !== null)
       throw new Error('--write needs the real pages and every link');
+    const missing = WORD_LINK_ENGINES.filter((name) => !engines.includes(name));
+    if (missing.length > 0) {
+      throw new Error(
+        `--write needs ${WORD_LINK_ENGINES.join(', ')} (missing: ${missing.join(', ')}): ` +
+          `add --engines ${WORD_LINK_ENGINES.join(',')}`,
+      );
+    }
     writeFileSync(VERIFICATION_PATH, `${JSON.stringify(record, null, 2)}\n`);
     console.log(`written: ${VERIFICATION_PATH}`);
   }

@@ -226,6 +226,14 @@ void test('search quality on the evaluation set does not regress', () => {
   assert.ok(result.hit3 >= 0.94, `hit@3 ${String(result.hit3)}`);
   assert.ok(result.hit1 >= 0.79, `hit@1 ${String(result.hit1)}`);
   assert.ok(result.recall3 >= 0.86, `recall@3 ${String(result.recall3)}`);
+  // …and below the target, for as long as /exactitude/ prints the target as missed
+  // (accuracy.search.miss, « Objectif manqué … pour 90 visés »): the day the search reaches it,
+  // this fails, and the page needs the sentence of a met target — a text for the editor
+  // (review of 23/11/2026, P5).
+  assert.ok(
+    result.recall3 < 0.9,
+    `recall@3 ${String(result.recall3)} meets its target: /exactitude/ still says « Objectif manqué »`,
+  );
 });
 
 void test('the figures /exactitude publishes are the ones a fresh evaluation gives', () => {
