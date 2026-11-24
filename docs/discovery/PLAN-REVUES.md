@@ -358,3 +358,24 @@ Chaque revue : `/code-review max <cible> --max-findings all`, rapport seulement 
 | M18 | `scripts/build-mode.ts:227` | Un BOM en tête de `wrangler.chat.jsonc` fait refuser le retrait avec un message faux | mineur |
 | M19 | `scripts/build-mode.ts:482` | La politique de citation « validée » sur la forme d'une date, sans lien avec ce qui a été validé | mineur |
 - **Recensés ailleurs** : D2, D3/C6, D4, D7, D8, D9, D11/C7, D12, D13, D14, C4/D6, C5, L5, U8.
+
+### 24 novembre 2026, dans la nuit — premières questions à l'éditeur ; le gabarit et la page de retrait
+- **Ses réponses** (D21.17 à D21.21) : la page de retrait dit « Ce site est retiré. » (texte proposé, retenu tel quel) ; la build de retrait garde `/mentions-legales/`, et la page y mène ; `/a-propos/` ajoute « les chiffres d'études, contre leurs propres documents » ; les débuts de trois réponses (`rip-02`, `rip-11`, `rip-05`) sont reformulés, et il en a validé les mots.
+- **Fait en conséquence** :
+  - page de retrait réécrite (`src/holding/pages/index.astro`), sa page des mentions (`src/holding/pages/mentions-legales/`), « Site non officiel. » sur chacune de ses trois pages ; la fiche 9 de `14-risques.md` §4 et `CLAUDE.md` disent les **deux** gestes du retrait (la build de retrait, puis l'arrêt des phrases, que la première ne touche pas) ;
+  - les trois débuts dans `data/2026/riposte.json` ; une porte dans `scripts/leak.test.ts` refuse désormais neuf mots du livre de suite dans le titre et les aperçus de chaque page construite, même ceux que l'édition 2025 avait déjà écrits (là où tourne l'anti-fuite : le dépôt principal).
+- **Gabarit** : L14 (cible de l'en-tête à 44 px), L25 et L26 (à 200 % de texte, la place gardée sous l'en-tête suit sa hauteur, et une ancre n'est plus cachée dessous : mesuré dans les trois moteurs à 390 et 320 px, contrôle ajouté à `scripts/e2e.ts` ; l'en-tête passe à la ligne au lieu de couper les mots), un script en ligne, absent de la page de retrait et des pages réservées (D14.7) ; P11 (« 0 mesures »), P17 (`/r/rip-16/` n'a jamais changé d'adresse), P18 et deux commentaires (« relus par une personne », « quinze »).
+- **Laissé** : L27 (l'impression).
+- **Deuxième, troisième et quatrième lots de questions** (D21.22 à D21.33), chacun pris sur l'option recommandée :
+  - titres des réponses : « Ce qu'on entend souvent : « … » — C'est écrit là » (D21.22, L9) ;
+  - « Préparé avec une IA. » en tête de la description et de l'aperçu des réponses et des cartes (D21.23, L12, P4) ;
+  - l'image de partage dit « C'est écrit là — Site non officiel. » à qui ne la voit pas, et une porte le tient (D21.24, L21, U19) ;
+  - `/methodologie` : « On en publie les empreintes et de courtes citations, chacune liée à sa page. » (D21.25, P10) ;
+  - l'heure de réouverture dit « (heure de Paris) » (D21.26, B44) ;
+  - « ₪ » et « † » sont des signes visés, et « 1488 » une expression codée, en liens (D21.27, B6) ;
+  - la page Confidentialité dit que les liens mènent aussi aux documents d'études (D21.28, P12) et qu'un navigateur peut rouvrir un onglet fermé avec sa manche (D21.30, K6), et elle est **datée de ses réponses** (`privacy_page`, 24/11/2026) ;
+  - la fiche de section dit « au plus près de la mesure » (D21.29, P9) ;
+  - la licence MIT nomme `src/` et `public/` (D21.31, P2) ;
+  - « Tout effacer » reste sur la page Confidentialité dans toute build de l'app (D21.32, C2) ;
+  - l'exception des clés `texte` et `phrases` est écrite dans `CLAUDE.md` (D21.33, B52).
+- **Ce que ces textes ont demandé aux portes** : trois phrases validées dépassent quinze mots ; elles sont à la liste d'exceptions de `scripts/check-strings.test.ts`, avec sa décision pour raison. « Préparé avec une IA. » est une mention de l'outil qui a écrit nos textes, pas d'une IA en direct (exemptée comme `concept.authorship.accepted`). « restaure » a quitté le vocabulaire jugé (`data/2026/vocabulary.json`), à la main, comme l'outil l'aurait fait : l'outil lit `private/`, absent de la copie de travail ; il sera rejoué dans le dépôt principal.
