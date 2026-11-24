@@ -177,7 +177,8 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 /** What `/api/bench` answered for an explanation, read strictly. */
 export type Reply =
   | { kind: 'spent' }
-  | { kind: 'silent'; ms: number | null }
+  /** No answer — and its reservation, which the Worker keeps in its ledger: it was spent. */
+  | { kind: 'silent'; ms: number | null; neurons: number }
   | {
       kind: 'ran';
       verdict: 'explain' | 'quiet';
@@ -191,8 +192,11 @@ export type Reply =
 export function readReply(body: unknown): Reply {
   if (!isRecord(body)) return { kind: 'unreadable' };
   const ms = typeof body['model_ms'] === 'number' ? body['model_ms'] : null;
+  const kept = typeof body['reserved'] === 'number' ? body['reserved'] : 0;
   if (body['ran'] !== true) {
-    return body['budget'] === 'spent' ? { kind: 'spent' } : { kind: 'silent', ms };
+    // The Worker keeps what it reserved for a call that brought nothing back (src/worker/index.ts,
+    // `benchExplain`): counted here as it is there, or `--budget` is overrun (review, W6).
+    return body['budget'] === 'spent' ? { kind: 'spent' } : { kind: 'silent', ms, neurons: kept };
   }
   const verdict = body['verdict'];
   if (!isRecord(verdict) || (verdict['kind'] !== 'explain' && verdict['kind'] !== 'quiet')) {
@@ -582,7 +586,7 @@ async function live(args: readonly string[]): Promise<number> {
       }
       row =
         reply.kind === 'silent'
-          ? { ...base, ...quiet, ids, unread, ms: reply.ms }
+          ? { ...base, ...quiet, ids, unread, ms: reply.ms, neurons: reply.neurons }
           : {
               ...base,
               ids,

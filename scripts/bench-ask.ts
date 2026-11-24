@@ -478,6 +478,8 @@ interface BenchAnswer {
   ran?: boolean;
   output?: unknown;
   neurons?: number | null;
+  /** What the Worker reserved for the call: kept in its ledger when the model said nothing. */
+  reserved?: number;
   cached?: boolean;
   load_ms?: number;
   model_ms?: number;
@@ -585,7 +587,14 @@ async function live(args: readonly string[]): Promise<void> {
         load_ms: answer.load_ms ?? 0,
         model_ms: answer.model_ms ?? null,
       };
-      spent += row.cached ? 0 : (row.neurons ?? 0);
+      // Counted as the Worker settles it (src/worker/index.ts, `handleBench`): a call without a
+      // count of neurons at what was reserved, a call that brought nothing back at its
+      // reservation, which the Worker keeps — 5 962 logged against 8 500 counted on 13/11 (W6).
+      spent += row.cached
+        ? 0
+        : answer.ran === true
+          ? (answer.neurons ?? answer.reserved ?? 0)
+          : (answer.reserved ?? 0);
     }
     // The untouched output stays private; the tracked record never holds the text of the book.
     appendFileSync(`${PRIVATE_RAW_DIR}/ask-raw.jsonl`, `${JSON.stringify(row)}\n`);

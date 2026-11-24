@@ -180,9 +180,12 @@ void test('what a run would do is counted without asking anything: routes, group
 
 void test('an answer of the bench route is read strictly: spent, silent, explained, refused', () => {
   assert.deepEqual(readReply({ ran: false, budget: 'spent', used: 8500 }), { kind: 'spent' });
+  // A call that brought nothing back keeps its reservation in the Worker's ledger: the bench
+  // counts it too, or `--budget` runs over and the neurons log under-reports (W6).
   assert.deepEqual(readReply({ ran: false, model_ms: 6001, reserved: 30 }), {
     kind: 'silent',
     ms: 6001,
+    neurons: 30,
   });
   assert.deepEqual(
     readReply({
