@@ -82,8 +82,17 @@ export interface GameStore2 {
   kept(): boolean;
   /** The colour the phone holds of her: 0 when it holds none, or keeps nothing. */
   phoneTint(): MascotTint;
-  /** « Garder ta tortue ». */
-  keep(state: TabState2): void;
+  /**
+   * « Garder ta tortue ». True when the phone holds her afterwards: a storage that refuses —
+   * site data blocked, or full — keeps nothing, and that must not be said as kept (review of
+   * 23/11/2026, S6).
+   */
+  keep(state: TabState2): boolean;
+  /**
+   * What the tab and the phone hold, as one string: to tell, when the page comes back from the
+   * browser's cache, whether anything was changed meanwhile by another page (S7).
+   */
+  stamp(): string;
   /** « Ne plus garder sur ce téléphone »: the phone forgets, the tab goes on until it closes. */
   release(): void;
   /** « Tout effacer »: the tab and the phone, at once. */
@@ -130,7 +139,9 @@ export function gameStore2(data: GameData): GameStore2 {
     phoneTint: () => onPhone().tint,
     keep: (state) => {
       write('phone', serialiseKept2(ontoPhone(keptPart2(state), onPhone())));
+      return kept();
     },
+    stamp: () => `${read('tab') ?? ''}\u0000${read('phone') ?? ''}`,
     // The key is removed and nothing else: the other tabs hear that the phone keeps nothing
     // any more, and each goes on with its own round.
     release: () => {

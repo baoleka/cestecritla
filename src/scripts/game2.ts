@@ -562,8 +562,11 @@ function start(parts: Block, config: Config, data: GameData): void {
    *
    * Only before anything is found: who comes back with a game finds the question.
    */
+  // A newcomer: nothing seen — and no depth nor turtle grown either. A player whose words all
+  // left the list keeps both, and gets the question, not the newcomer's door (S20, latent).
   const entering = (): boolean =>
     session.seen.length === 0 &&
+    session.state === 0 &&
     !direct &&
     session.play.at === 0 &&
     session.play.screen.kind === 'ask';
@@ -668,10 +671,17 @@ function start(parts: Block, config: Config, data: GameData): void {
       const hint = button(s.hint, 'g-quiet', () => {
         // A freeze that starts while the page is open: she gives no hint, the block leaves.
         if (frozen()) return;
-        // The button leaves: a focus left on it goes to the question it was a help for.
-        if (document.activeElement === hint) heading.focus();
+        // The button leaves: a focus left on it goes to the question it was a help for — and
+        // then the sentence is said once that focus has been heard, not under it (S15).
+        const said = fill(s.hintSaid, { parts: list(hinted) });
+        if (document.activeElement === hint) {
+          heading.focus();
+          carried = said;
+          sayLater();
+        } else {
+          status.textContent = said;
+        }
         hint.remove();
-        status.textContent = fill(s.hintSaid, { parts: list(hinted) });
         const mark = (): void => {
           for (const press of tiles.querySelectorAll<HTMLElement>('.g-tile')) {
             if (hinted.includes(press.dataset.tile ?? ''))
@@ -937,6 +947,11 @@ function start(parts: Block, config: Config, data: GameData): void {
       keeping = asked;
       const opener = button(s.keep.open, 'g-quiet', () => {
         if (frozen()) return;
+        // Kept meanwhile — from her sheet, or another tab: the offer is answered already (S4).
+        if (store.kept()) {
+          asked.remove();
+          return;
+        }
         const card = el('div', undefined, 'g-keep');
         const lines = [`${s.keep.what} ${s.keep.tint}`, s.keep.notKept, s.keep.otherwise];
         for (const text of [...lines, s.keep.seen]) card.append(el('p', text));
@@ -958,12 +973,14 @@ function start(parts: Block, config: Config, data: GameData): void {
         choice.append(
           button(s.keep.cta, 'g-quiet', () => {
             if (frozen()) return;
-            store.keep(memory());
-            answered(s.keep.done);
+            // A storage that refused kept nothing: then nothing is said (PLAN-JEU, S6).
+            answered(store.keep(memory()) ? s.keep.done : '');
           }),
           button(s.keep.decline, 'g-quiet', () => {
             session.declined = true;
-            store.save(memory());
+            // « Ne pas garder » never writes the phone: kept elsewhere meanwhile, it saves nothing
+            // here — the phone's game is the other gesture's (S4).
+            if (!store.kept()) store.save(memory());
             answered('');
           }),
         );
@@ -1032,7 +1049,11 @@ function start(parts: Block, config: Config, data: GameData): void {
       parts.sheetLink.setAttribute('data-wait', '');
       parts.skip.removeAttribute('data-wait');
     }
+    // True while the press that ended the round is still running: a passage played at once —
+    // less motion asked, or two states in one — ends inside it, right after the focus moved.
+    let pressing = true;
     her.play(frames, () => {
+      let moved = pressing;
       if (evolving) {
         evolving = false;
         handedOver = performance.now();
@@ -1043,15 +1064,26 @@ function start(parts: Block, config: Config, data: GameData): void {
         // not to the title further down, whose focus would scroll the page under the finger.
         const held = document.activeElement === parts.skip;
         parts.skip.setAttribute('data-wait', '');
-        if (held) parts.sheetLink.focus();
+        if (held) {
+          parts.sheetLink.focus();
+          moved = true;
+        }
       }
-      // To who cannot see it, a passage is its sentence — said when it can be seen.
+      // To who cannot see it, a passage is its sentence — said when it can be seen. Written in
+      // the very task that moved the focus, a screen reader may drop it: then it is said once
+      // that focus has been heard, as `sayLater` does for the rest (review, S15).
       if (passed !== '') {
         const said = goal === '' ? passed : `${passed} ${goal}`;
-        status.textContent = said;
-        if (carrying) carried = said;
+        if (moved) {
+          carried = [later, said].filter((text) => text !== '').join(' ');
+          sayLater();
+        } else {
+          status.textContent = said;
+          if (carrying) carried = said;
+        }
       }
     });
+    pressing = false;
     // She is at the top of the panel, « Passer » under her: both brought into view, whichever
     // way the page was scrolled — a page left at its top kept « Passer » under the fold. And
     // the end of a round holds more than it did (what to remember, what comes next): the page
@@ -1218,6 +1250,9 @@ function start(parts: Block, config: Config, data: GameData): void {
     // kept as chosen, and she wears the last one when the gap is over — never a flash.
     const wear = (): void => {
       swappedAt = performance.now();
+      // A passage still playing ends first, as in `follow`: settled over it, she dropped its
+      // ending — her sheet stayed hidden and « Passer » dead (review of 23/11/2026, S24).
+      if (evolving) her.skip();
       her.settle(look());
       if (replaying !== null) large?.skip();
       large?.settle(look());
@@ -1307,6 +1342,14 @@ function start(parts: Block, config: Config, data: GameData): void {
     sheetKeep.hidden = kept || session.seen.length === 0;
     // What was asked of the phone can be taken back as simply as it was asked.
     sheetRelease.hidden = !kept;
+  }
+
+  /**
+   * The phone keeps her now — from her sheet, or from another tab: the end screen's offer to keep
+   * goes. Left there, its « Ne pas garder » ended in a write to the phone (review, S4).
+   */
+  function keepOfferAnswered(): void {
+    for (const offer of document.querySelectorAll('.g-keep-ask')) offer.remove();
   }
 
   function fillSheet(): void {
@@ -1414,9 +1457,16 @@ function start(parts: Block, config: Config, data: GameData): void {
   });
   sheetKeep.addEventListener('click', () => {
     if (frozen()) return;
-    store.keep(memory());
+    // A storage that refused kept nothing: her sheet goes on saying so, and nothing is announced
+    // (PLAN-JEU; review of 23/11/2026, S6).
+    if (!store.keep(memory())) {
+      fillKept();
+      return;
+    }
     fillKept();
     sheetSaid.textContent = s.keep.done;
+    // The end screen's offer is answered: it goes, and its « Ne pas garder » with it (S4).
+    keepOfferAnswered();
     // The button that had the focus is gone: the one that undoes it takes its place.
     sheetRelease.focus();
   });
@@ -1451,7 +1501,9 @@ function start(parts: Block, config: Config, data: GameData): void {
   if (anchor !== null || /^#(?:fin|m[1-3](?:-[0-6])?)$/.test(window.location.hash)) {
     window.history.replaceState(null, '', window.location.pathname + window.location.search);
   }
-  if (anchor !== null && arrived.seen.length === 0) {
+  // A newcomer only, as `entering` says it: a player whose words all left the list keeps her
+  // grown turtle and the depth she reached, which the HTML round's depth would reset (S20).
+  if (anchor !== null && arrived.seen.length === 0 && arrived.turtle === 0) {
     const drawn = session.play.words;
     const wordId = drawn[Math.min(Number(anchor[2]) - 1, drawn.length - 1)];
     const given = anchor[1] === 'a';
@@ -1499,9 +1551,17 @@ function start(parts: Block, config: Config, data: GameData): void {
 
   // The page comes back from the browser's own cache (« précédent ») with what it remembered
   // when it was left: what the tab and the phone hold now is read again — « Tout effacer »
-  // may have been pressed on another page in between.
+  // may have been pressed on another page in between. Only then: the game in memory is the
+  // whole of it, and storage is not — an end screen is stored as no round, a verdict not at
+  // all, a refusing storage holds nothing. Rebuilt every time, the end screen came back as
+  // the next round's question, a card lost its verdict (review of 23/11/2026, S7).
+  let leftWith: string | null = null;
+  window.addEventListener('pagehide', () => {
+    leftWith = store.stamp();
+  });
   window.addEventListener('pageshow', (event) => {
     if (!event.persisted) return;
+    if (leftWith !== null && store.stamp() === leftWith) return;
     if (evolving) her.skip();
     session = remembered(store.load());
     direct = false;
@@ -1514,6 +1574,8 @@ function start(parts: Block, config: Config, data: GameData): void {
   store.watch(memory, {
     kept: (merged) => {
       session = { ...remembered(merged), play: session.play };
+      // Kept in another tab: this end screen's offer is answered too (S4).
+      keepOfferAnswered();
       follow();
     },
     // The game of this tab is untouched; only what her sheet says of the phone has changed.
@@ -1581,6 +1643,7 @@ if (parts !== null && raw != null) {
     window.location.replace(to);
   });
   let asked = false;
+  let started = false;
   const open = (): void => {
     if (asked) return;
     asked = true;
@@ -1597,10 +1660,19 @@ if (parts !== null && raw != null) {
         );
       })
       .then((data) => {
-        if (data !== null && data.words.length > 0) start(parts, config, data);
+        if (data !== null && data.words.length > 0) {
+          started = true;
+          start(parts, config, data);
+        } else {
+          asked = false;
+        }
       })
-      // No data, no takeover: the round of the HTML goes on working by itself.
-      .catch(() => undefined);
+      // No data, no takeover: the round of the HTML goes on working by itself — and the file is
+      // asked for again the next time the tab is looked at, once the network is back (review of
+      // 23/11/2026, S18: a failure used to be final for the life of the page).
+      .catch(() => {
+        if (!started) asked = false;
+      });
   };
   // The guard of the <head> has already hidden the game, on the device's clock alone: a block
   // that is not displayed never comes "near the screen", so the hour of our server is asked for
@@ -1622,7 +1694,11 @@ if (parts !== null && raw != null) {
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') lookedAtAgain();
   });
-  window.addEventListener('pageshow', lookedAtAgain);
+  // Only when the page comes back from the browser's cache: `pageshow` fires on every first load
+  // too, and asked the hour and took the block over at arrival, wherever it stood (S19).
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) lookedAtAgain();
+  });
   // Near the screen, or touched: not before. The block opens the home page (D19.1), so for most
   // visitors that is on arrival — its one file is then the first thing the page asks for.
   // A page whose game is hidden (a freeze) asks for nothing.

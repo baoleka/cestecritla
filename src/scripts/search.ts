@@ -42,6 +42,8 @@ interface Strings {
 }
 
 const MAX_SECTIONS = 8;
+/** The event said on the form once a search has answered (src/scripts/words-search.ts listens). */
+const SEARCHED = 'cel:searched';
 const MAX_QUERY = 200;
 /** Nothing is searched under two letters: one letter matches a tenth of the book. */
 const MIN_LETTERS = 2;
@@ -114,10 +116,19 @@ if (form && input && status && results && heading && list && stringsNode) {
    * `null` when a newer search started while this one was loading: its result is not wanted.
    */
   let latest = 0;
+  /**
+   * Said on the form after every search that answered, its sections changed or not: the line of
+   * an explained word reads the words typed, which change while the sections stay
+   * (src/scripts/words-search.ts; review of 23/11/2026, S9).
+   */
+  const searched = (): void => {
+    form.dispatchEvent(new Event(SEARCHED));
+  };
   const run = async (question: string): Promise<string | null> => {
     const turn = (latest += 1);
     if (!longEnough(question)) {
       empty();
+      searched();
       return '';
     }
     if (!engineReady()) status.textContent = strings.opening;
@@ -132,6 +143,7 @@ if (form && input && status && results && heading && list && stringsNode) {
         results.hidden = groups.length === 0;
         shown = signature;
       }
+      searched();
       return groups.length === 0
         ? `${strings.none} ${strings.noneHint}`
         : groups.length === 1
@@ -140,6 +152,7 @@ if (form && input && status && results && heading && list && stringsNode) {
     } catch {
       if (turn !== latest) return null;
       empty();
+      searched();
       return strings.missing;
     }
   };
@@ -178,12 +191,17 @@ if (form && input && status && results && heading && list && stringsNode) {
     window.clearTimeout(settling);
   };
 
-  /** A search whose answer is wanted now: Enter, or a link carrying `#q=`. */
-  const searchNow = async (question: string): Promise<void> => {
+  /**
+   * A search whose answer is wanted now: Enter, or a link carrying `#q=`. Resolves true when its
+   * own result is the one shown: a search overtaken by newer typing must not take the focus out
+   * of the field nor move the page (review of 23/11/2026, S12).
+   */
+  const searchNow = async (question: string): Promise<boolean> => {
     cancelTimers();
     const sentence = await run(question);
-    if (sentence === null) return;
+    if (sentence === null) return false;
     status.textContent = sentence;
+    return true;
   };
 
   // The field was in the page before this script: someone may already be in it.
@@ -192,6 +210,9 @@ if (form && input && status && results && heading && list && stringsNode) {
 
   input.addEventListener('input', () => {
     cancelTimers();
+    // A key overtakes every search still waiting for the index: theirs is no longer the answer,
+    // and must neither be counted aloud nor take the focus (review of 23/11/2026, S11, S12).
+    latest += 1;
     const question = clean(input.value);
     typing = window.setTimeout(
       () => {
@@ -199,6 +220,7 @@ if (form && input && status && results && heading && list && stringsNode) {
           if (sentence === null) return;
           // The count of a moment ago is no longer true: it goes now, the new one comes at rest.
           if (status.textContent !== sentence) status.textContent = '';
+          window.clearTimeout(settling);
           settling = window.setTimeout(() => {
             status.textContent = sentence;
           }, SETTLE_DELAY_MS - TYPING_DELAY_MS);
@@ -211,10 +233,11 @@ if (form && input && status && results && heading && list && stringsNode) {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     const question = clean(input.value);
-    void searchNow(question).then(() => {
+    void searchNow(question).then((answered) => {
       // Enter means "I have finished typing": the results take the focus, which also folds the
-      // keyboard of a phone away from them. With nothing found the field keeps it.
-      if (!results.hidden) heading.focus();
+      // keyboard of a phone away from them. With nothing found the field keeps it — and so it
+      // does when typing went on meanwhile (S12).
+      if (answered && !results.hidden) heading.focus();
     });
   });
 
@@ -224,7 +247,9 @@ if (form && input && status && results && heading && list && stringsNode) {
    * which `scroll-padding` keeps room for — and the results take the focus; with nothing found,
    * the field does. Where the field is already at the top of its page, nothing moves.
    */
-  const reach = (): void => {
+  const reach = (answered: boolean): void => {
+    // Typing that went on while the index came keeps the field, and the page stays (S12).
+    if (!answered) return;
     form.scrollIntoView({ block: 'start' });
     (results.hidden ? input : heading).focus({ preventScroll: true });
   };

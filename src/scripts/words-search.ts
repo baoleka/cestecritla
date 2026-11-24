@@ -38,6 +38,9 @@ if (form && input && row && results && list && stringsNode) {
   const typed = (): string => input.value.trim().slice(0, 200);
   const draw = (): void => {
     const question = results.hidden && list.childElementCount === 0 ? '' : typed();
+    // Results shown with words in the field, and nothing yet to read them with: an arrival by a
+    // link that carries `#q=` never focuses the field, and the line never came (S10).
+    if (question !== '' && (kit === null || wordings === null)) prepare();
     const found =
       kit === null || wordings === null || question === ''
         ? []
@@ -82,4 +85,9 @@ if (form && input && row && results && list && stringsNode) {
     childList: true,
     subtree: true,
   });
+  // …and after every search the field ran, whether its sections changed or not: the line reads
+  // the words typed, and those change while the sections stay — « eau PFAS » then « eau PFAS
+  // c'est quoi » kept the line of before (review of 23/11/2026, S9). The search says when it
+  // has answered (src/scripts/search.ts, `SEARCHED`).
+  form.addEventListener('cel:searched', draw);
 }

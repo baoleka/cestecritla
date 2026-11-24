@@ -855,6 +855,10 @@ async function runEngine(
       await press(view, 'Mot suivant');
       const end = await staged(view);
       const log = await logOf(view);
+      // Its sentence is said once the focus the press moved has been heard — written in that
+      // very task, a screen reader may drop it (review of 23/11/2026, S15).
+      await view.waitForTimeout(SAY_LATER_MS + 200);
+      const said = text(await view.locator('#game-status').textContent());
       check(
         'less motion: what she became shows at once, with its sentence, and no beat is played',
         isLook(await her(view), became) &&
@@ -864,8 +868,8 @@ async function runEngine(
           end.stage &&
           end.lineSeen &&
           end.line === at.said.map(shown).join(' ') &&
-          end.status === end.line,
-        JSON.stringify(log),
+          said === end.line,
+        `${JSON.stringify(log)} | ${said}`,
       );
       check(
         'less motion: « Passer » is never there, « Sa fiche » and « Choisir sa couleur » are',
@@ -2059,10 +2063,15 @@ async function runEngine(
       // The hint lives where the part is asked — the first depth (D19.4, D19.7).
       const early = await visitor(resting(data, 1), { ...phone, reducedMotion: 'reduce' });
       await early.view.getByRole('button', { name: 'Un indice' }).click();
+      const marks = await early.view.locator('#game-live .g-mark').count();
+      const pose = (await her(early.view))?.pose;
+      // The button left and gave the focus to the question: the hint is said once that focus
+      // has been heard (review of 23/11/2026, S15).
+      await early.view.waitForTimeout(SAY_LATER_MS + 200);
       const hinted = {
-        marks: await early.view.locator('#game-live .g-mark').count(),
+        marks,
         said: text(await early.view.locator('#game-status').textContent()),
-        pose: (await her(early.view))?.pose,
+        pose,
       };
       check(
         'less motion: the hint marks its tiles at once and is said, and she does not move',
@@ -4525,6 +4534,9 @@ async function runEngine(
       await page.getByRole('button', { name: says('turtle.skip') }).click();
       const two = ending(data, kit, deepAfter);
       const skipped = await her(page);
+      // « Passer » gave the focus to « Sa fiche »: her sentence is said once that focus has been
+      // heard (review of 23/11/2026, S15).
+      await page.waitForTimeout(SAY_LATER_MS + 200);
       const afterSkip = await staged(page);
       check(
         '« Passer »: she is what she became, at once — a flamingo —, and nothing moves',

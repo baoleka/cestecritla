@@ -164,10 +164,12 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
    * address is the same for everyone. Without it, no word is explained, and nothing says so.
    */
   let explainer: typeof Explainer | null = null;
-  const explainerReady = import('./words.ts').then(
-    (loaded) => (explainer = loaded),
-    () => null,
-  );
+  const loadExplainer = (): Promise<typeof Explainer | null> =>
+    import('./words.ts').then(
+      (loaded) => (explainer = loaded),
+      () => null,
+    );
+  let explainerReady = loadExplainer();
   /**
    * How the explained words are found — their wordings, nothing of what they say —, fetched at
    * the first question with the texts of « En clair » (src/lib/words-data.ts). What they mean
@@ -175,7 +177,14 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
    */
   let wordings: TermWording[] | null = null;
   const finderReady = async (): Promise<void> => {
-    const kit = await explainerReady;
+    let kit = await explainerReady;
+    // A module that failed once is asked again at the next question: Firefox fetches it again
+    // and recovers once the network is back; the others answer at once from what they kept
+    // (review of 23/11/2026, S23).
+    if (kit === null) {
+      explainerReady = loadExplainer();
+      kit = await explainerReady;
+    }
     if (kit !== null && wordings === null) wordings = await kit.finder(config.words.finder);
   };
   /**
@@ -209,7 +218,20 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
 
   // --- electoral silence: decided here before anything is sent (src/scripts/silence-now.ts)
   const silence = silenceReading();
-  const flagsRead = silence.refresh();
+  let flagsRead = silence.refresh();
+  // The hour is asked again whenever the page is looked at again, as the game does. Read once, a
+  // phone that slept across a window kept its reading of before — « en pause » to every
+  // question until a reload, while the game on the same page was open again — and a stop set by
+  // hand since was never seen (review of 23/11/2026, S5). A question waits for the latest one.
+  const readAgain = (): void => {
+    flagsRead = silence.refresh();
+  };
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') readAgain();
+  });
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) readAgain();
+  });
   const frozen = (): string | null => {
     const reading = silence.now();
     if (!reading.silence) return null;
@@ -437,9 +459,11 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     }
 
     // The other words — of the question, of the sentences — under the measures, closed, once
-    // the sentences are all there: a block that grew would move what is being read.
+    // the sentences are all there: a block that grew would move what is being read. A word the
+    // question asked about whose text did not come joins them, closed: its line fetches the
+    // text when opened, instead of the word vanishing (review of 23/11/2026, S17).
     const shown = view.wording?.sentences ?? null;
-    const others = shown === null ? [] : explained.filter((e) => !e.top);
+    const others = shown === null ? [] : explained.filter((e) => !named.includes(e));
     if (kit !== null && others.length > 0) {
       node.append(words(kit, s.termsTitle, others, index, 'c-terms', false));
     }
@@ -550,7 +574,6 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     });
     for (const gone of before.slice(after.length)) gone.remove();
   };
-  /** Draws one turn again in its place: the others keep their scroll and their focus. */
   /**
    * What the reader opened or closed in a turn, read where it is — on the page. The event that
    * says so comes a little later, and a question asked at once must not draw a word back as it
@@ -563,6 +586,7 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
         toggled.set(`${String(index)}:${item.dataset.term}`, item.open);
     }
   };
+  /** Draws one turn again in its place: the others keep their scroll and their focus. */
   const update = (index: number): void => {
     remember(index);
     const node = draw(index);
@@ -632,6 +656,26 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     else if (step === 'explain') void explain(index, null);
   };
 
+  /**
+   * A turn whose answer came, drawn — or, should that drawing fail, the turn without the answer:
+   * never a turn left busy for ever (review of 23/11/2026, S25, after R73). The error goes to the
+   * console of this phone, and nowhere else.
+   */
+  const settleWith = (index: number, answered: Turn, without: Turn): void => {
+    turns[index] = answered;
+    try {
+      update(index);
+    } catch (error) {
+      turns[index] = without;
+      try {
+        update(index);
+      } catch {
+        // The drawing of before stays: nothing better can be shown.
+      }
+      if ('reportError' in globalThis) reportError(error);
+    }
+  };
+
   const gists = async (index: number): Promise<void> => {
     const turn = turns[index];
     const request = turn === undefined ? null : gistsRequestOf(config.corpus, turn.rows ?? []);
@@ -641,8 +685,7 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     const answer = parseGistsResponse(await post('/api/gists', request, GISTS_TIMEOUT_MS));
     const now = turnAt(index);
     if (asked !== epoch || now === undefined) return;
-    turns[index] = withGists(now, answer);
-    update(index);
+    settleWith(index, withGists(now, answer), withGists(now, null));
     advance(index);
   };
 
@@ -676,9 +719,8 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     const now = turnAt(index);
     if (asked !== epoch || now === undefined) return;
     const result = withExplanation(now, follow, answer, page);
-    turns[index] = result.turn;
     if (result.closed) page.closed = true;
-    update(index);
+    settleWith(index, result.turn, withExplanation(now, follow, null, page).turn);
   };
 
   /**
@@ -721,11 +763,15 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
     const searched: Turn = {
       ...turn,
       // Our written answer stands when the question is the objection and nothing more; the
-      // card of a word, when nobody is named or charged next to it.
+      // card of a word, when nobody is named or charged next to it. Without the index nothing
+      // says so — the card goes too, as in the catch of `ask` (review of 23/11/2026, S3).
       recognised:
         found?.reviewed === true
           ? turn.recognised
-          : { objection: null, cards: found?.charged === true ? [] : turn.recognised.cards },
+          : {
+              objection: null,
+              cards: found === null || found.charged === true ? [] : turn.recognised.cards,
+            },
       refused: found?.refused === true,
       rows: found?.rows ?? [],
       linksOnly,
@@ -771,7 +817,11 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
           linksOnly: false,
           gists: null,
         };
-        update(index);
+        try {
+          update(index);
+        } catch {
+          // A drawing that fails even with nothing found: the drawing of before stays (S25).
+        }
       }
       if ('reportError' in globalThis) reportError(error);
     }

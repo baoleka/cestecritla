@@ -66,8 +66,11 @@ export function loadEngine(indexUrl: string, metaUrl: string): Promise<Engine> {
       return r.json() as Promise<Meta>;
     }),
   ]).then(([serialised, meta]) => {
+    // Ready once the index is built, not before: an index that cannot be read leaves the next
+    // search saying again that it opens the files (review of 23/11/2026, S26).
+    const index = MiniSearch.loadJS<SearchDoc>(serialised, INDEX_OPTIONS);
     ready = true;
-    return { index: MiniSearch.loadJS<SearchDoc>(serialised, INDEX_OPTIONS), meta };
+    return { index, meta };
   });
   pending.catch(() => {
     pending = undefined;
@@ -75,9 +78,13 @@ export function loadEngine(indexUrl: string, metaUrl: string): Promise<Engine> {
   return pending;
 }
 
-/** The sections where a question is written, best first, each with its measures. */
+/**
+ * The sections where a question is written, best first, each with its measures. Letters typed
+ * apart are one word here too, as in `findRanked`: « S.M.I.C. » found nothing in the field and its
+ * measures in the sheet (review of 23/11/2026, S8).
+ */
 export function findSections(engine: Engine, question: string, max: number): SectionHit[] {
-  const searched = inBookWords(question, engine.meta.book_words).text;
+  const searched = inBookWords(spelled(question).join(' '), engine.meta.book_words).text;
   const query = buildQuery(searched, expand(searched, engine.meta.synonyms));
   const hits = engine.index
     .search(query as Parameters<typeof engine.index.search>[0], searchOptions())
