@@ -116,7 +116,23 @@ export interface LaunchFacts {
   lcenDeclared: boolean;
 }
 
-export function launchFacts(): LaunchFacts {
+/**
+ * What the legal notice may say of the launch. In the withdrawal build (`tolerant`) the date
+ * is read off the text of the file, whatever else it holds: the page that stands in for the app
+ * must not depend on what the app depends on (wrangler.static.jsonc), and a comma left in this
+ * very file by the edit that withdraws must not stop the withdrawal (review 12, T5). With no
+ * file, no declaration is said.
+ */
+export function launchFacts(options: { tolerant?: boolean } = {}): LaunchFacts {
+  if (options.tolerant === true) {
+    let text = '';
+    try {
+      text = readFileSync('data/launch.json', 'utf8');
+    } catch {
+      // No file: nothing to say.
+    }
+    return { lcenDeclared: isDay(/"lcen_declared_on"\s*:\s*"([^"]*)"/.exec(text)?.[1]) };
+  }
   const launch = read('data/launch.json') as { lcen_declared_on?: unknown };
   // A day, as the launch gate reads it (scripts/launch.ts): a missing key, '' or « bientôt » is
   // no declaration, and the notice says no more than the gate (review of 24/11/2026).

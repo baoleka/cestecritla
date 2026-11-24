@@ -45,15 +45,17 @@ import {
   chatWorkerName,
   citationPolicyValidated,
   deployRefusal,
+  distLeftovers,
   distProblems,
   guardedEnv,
   htmlPages,
   nearSilenceWindow,
   readAskMode,
-  readBuildMode,
-  readBuildScrutin,
+  readBuildMarker,
   readDist,
   refusedArguments,
+  swallowedFlags,
+  withdrawalContext,
   workerProblems,
   wranglerDeployArgs,
   type AskDeploy,
@@ -78,6 +80,23 @@ if (target !== 'apex' && target !== 'preview') {
     'usage: tsx scripts/deploy.ts apex|preview [--bench] [--dry-run] [--outdir <dir>]\n' +
       '       tsx scripts/deploy.ts apex|preview --chat --accord <YYYY-MM-DD> | --chat --dry-run\n' +
       '       tsx scripts/deploy.ts apex|preview --chat --withdraw --accord <YYYY-MM-DD>',
+  );
+  process.exit(2);
+}
+// A flag npm took for itself never reached us: `npm run deploy --dry-run` would deploy for real
+// (review 9, D1). Flags go after `--`.
+const swallowed = swallowedFlags([
+  '--dry-run',
+  '--bench',
+  '--chat',
+  '--withdraw',
+  '--accord',
+  '--outdir',
+]);
+if (swallowed.length > 0) {
+  console.error(
+    `deploy refused: npm took ${swallowed.join(' ')} for itself — write the flags after \`--\`, ` +
+      'as in `npm run deploy -- --dry-run`',
   );
   process.exit(2);
 }
@@ -178,11 +197,22 @@ if (!existsSync('dist')) {
   process.exit(1);
 }
 
-const mode = readBuildMode();
+// A build removes the last marker when it begins and writes its own when it is done: without a
+// finished one, dist/ is a build that stopped half-way (review 9, D2; review 12, T1).
+const marker = readBuildMarker();
+if (marker === null || !marker.complete) {
+  console.error(
+    'deploy refused: dist/ holds no finished build — build/last-build.json is missing or ' +
+      'unfinished (a build that stopped half-way leaves none): build again',
+  );
+  process.exit(1);
+}
+const mode = marker.mode;
 const pages = htmlPages('dist');
+const leftovers = distLeftovers('dist');
 // What a build of today would publish of the game: its one file, or nothing — while the editor
 // has not validated the list as it stands, and in the build served during a silence window.
-const scrutinBuild = readBuildScrutin();
+const scrutinBuild = marker.scrutin;
 // …with the sentences a build made for THIS host may show (D19.5: they follow the host's mode —
 // src/lib/game-gists.ts): the name computed here is then the name of the file that build holds.
 const shownGists =
@@ -228,20 +258,32 @@ function gistsUnpublished(): string[] {
   }
   return [];
 }
-const refusal = deployRefusal(target, mode, pages, {
-  policyValidated: citationPolicyValidated(),
-  dryRun: passthrough.includes('--dry-run'),
-  launchBlockers: launchBlockers(readLaunchInputs()),
-  insideSilenceWindow: nearSilenceWindow(new Date()),
-  scrutinBuild,
-  ask,
-  workerProblems: workerProblems(),
-  previewBlockers: previewChatBlockers(),
-  distProblems: mode === 'app' ? distProblems(readDist('dist'), { gameFile, ask }) : [],
-  gistsProblems: shownGists === null ? [] : gistsUnpublished(),
-  homeBlockers: homeBlockers(),
-  wordsBlockers: wordsBlockers(),
-});
+// The withdrawal reads nothing of the app: its pages are its one rule (`withdrawalContext`).
+// Every reader below is for an app build only — none of them may stand between the editor and
+// the holding page (review 9, D5; review 10, A1; review 11, M5).
+const refusal = deployRefusal(
+  target,
+  mode,
+  pages,
+  mode === 'holding'
+    ? withdrawalContext(passthrough.includes('--dry-run'), ask, leftovers)
+    : {
+        leftovers,
+        builtFor: marker.host,
+        policyValidated: citationPolicyValidated(),
+        dryRun: passthrough.includes('--dry-run'),
+        launchBlockers: launchBlockers(readLaunchInputs()),
+        insideSilenceWindow: nearSilenceWindow(new Date()),
+        scrutinBuild,
+        ask,
+        workerProblems: workerProblems(),
+        previewBlockers: previewChatBlockers(),
+        distProblems: distProblems(readDist('dist'), { gameFile, ask }),
+        gistsProblems: shownGists === null ? [] : gistsUnpublished(),
+        homeBlockers: homeBlockers(),
+        wordsBlockers: wordsBlockers(),
+      },
+);
 if (refusal !== null) {
   console.error(`deploy refused (${target}, ${mode} build): ${refusal}`);
   process.exit(1);

@@ -416,7 +416,10 @@ void test('every wrangler configuration stops a deploy that scripts/deploy.ts di
     if (!script.includes(DEPLOY_GUARD.variable)) continue;
     assert.match(
       script,
-      new RegExp(`^${DEPLOY_GUARD.variable}=${DEPLOY_GUARD.readsOnly} wrangler types\\b`),
+      // Other variables may stand with it — the usage report off (scripts/quiet-env.ts).
+      new RegExp(
+        `^${DEPLOY_GUARD.variable}=${DEPLOY_GUARD.readsOnly} (?:[A-Z_]+=\\S+ )*wrangler types\\b`,
+      ),
       `${name}: only what sends nothing may speak to the guard from package.json`,
     );
   }

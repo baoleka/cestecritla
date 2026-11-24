@@ -19,10 +19,12 @@
  * re-edition of the programme: one command, two static files, nothing to decide in a hurry.
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { join, relative } from 'node:path';
 import { modeFor } from '../src/lib/ask-mode.js';
 import { SILENCE_APPROACH_MS, silenceWindows, type SilenceWindow } from '../src/lib/silence.js';
 import { parseJsonc } from './jsonc.js';
+import { quietEnv } from './quiet-env.js';
 
 export type BuildMode = 'app' | 'holding';
 export type DeployTarget = 'apex' | 'preview';
@@ -68,9 +70,12 @@ export const DEPLOY_GUARD = {
   readsOnly: 'nothing-is-sent',
 } as const;
 
-/** The environment scripts/deploy.ts hands wrangler: ours, plus the word the guard waits for. */
+/**
+ * The environment scripts/deploy.ts hands wrangler: ours, with its usage reports off
+ * (scripts/quiet-env.ts), plus the word the guard waits for.
+ */
 export function guardedEnv(env: NodeJS.ProcessEnv = process.env): NodeJS.ProcessEnv {
-  return { ...env, [DEPLOY_GUARD.variable]: DEPLOY_GUARD.caller };
+  return { ...quietEnv(env), [DEPLOY_GUARD.variable]: DEPLOY_GUARD.caller };
 }
 
 /**
@@ -323,6 +328,23 @@ export function chatDeployRefusal(target: DeployTarget, context: ChatDeployConte
 }
 
 /**
+ * Flags of ours that npm took for its own: written before `--` (`npm run deploy --dry-run`,
+ * `npm run build --holding`), a flag goes to npm and never reaches the script. npm 11 keeps the
+ * ones it knows as `npm_config_*` (`--dry-run` among them: the deploy then went out for real,
+ * review 9, D1) and drops the others with a warning; npm 10 kept them all. What it kept is
+ * refused here; what it dropped leaves its value behind as a lone word, which the strict
+ * reading of the arguments refuses.
+ */
+export function swallowedFlags(
+  flags: readonly string[],
+  env: NodeJS.ProcessEnv = process.env,
+): string[] {
+  return flags.filter(
+    (flag) => env[`npm_config_${flag.replace(/^--/, '').replace(/-/g, '_')}`] !== undefined,
+  );
+}
+
+/**
  * What `scripts/deploy.ts` hands on to wrangler: `--dry-run`, and `--outdir <dir>` for the
  * bundle of a dry run. Nothing else — `--config`, `--env`, `--name`, `--assets` or `--route`
  * would each undo a choice the guard has just made, and wrangler reads the last one it is given.
@@ -409,7 +431,11 @@ export function distProblems(
  * Every HTML file a holding build may contain. Anything else is a leak of the app into it. The
  * legal notice stays served during a withdrawal (D21.18).
  */
-export const HOLDING_PAGES: readonly string[] = ['404.html', 'index.html', 'mentions-legales/index.html'];
+export const HOLDING_PAGES: readonly string[] = [
+  '404.html',
+  'index.html',
+  'mentions-legales/index.html',
+];
 
 /**
  * Old public paths that must land on the holding page instead of breaking (D15.4).
@@ -532,6 +558,114 @@ export interface DeployContext {
    * must be.
    */
   wordsBlockers?: readonly string[];
+  /**
+   * What dist/ holds that no finished static build ships (`distLeftovers`): server files of a
+   * build that stopped half-way, a path of this machine. Empty for a build that went to its end.
+   */
+  leftovers?: readonly string[];
+  /** The host the app build in dist/ was made for (its marker): it goes to that host only. */
+  builtFor?: DeployTarget;
+}
+
+/**
+ * The context a holding build is judged in: nothing of the app is read for it (D14.10). The
+ * withdrawal goes out whatever state the app's own files are in — a draft answer, a field left
+ * at null, a comma left in data/launch.json by the very edit that withdraws (review 9, D5;
+ * review 10, A1; review 11, M5). Its one rule is the list of its pages (`deployRefusal`).
+ */
+export function withdrawalContext(
+  dryRun: boolean,
+  ask: AskDeploy,
+  leftovers: readonly string[] = [],
+): DeployContext {
+  return {
+    leftovers,
+    policyValidated: true,
+    dryRun,
+    launchBlockers: [],
+    insideSilenceWindow: false,
+    scrutinBuild: false,
+    ask,
+    workerProblems: [],
+    previewBlockers: [],
+    distProblems: [],
+    gistsProblems: [],
+    homeBlockers: [],
+    wordsBlockers: [],
+  };
+}
+
+/** What build/last-build.json says of the build in dist/. */
+export interface BuildMarker {
+  mode: BuildMode;
+  scrutin: boolean;
+  /** The host it was made for (`--host preview`), production's without the flag. */
+  host: DeployTarget;
+  /** Written by a build whose every step succeeded (scripts/build.ts): its last act. */
+  complete: boolean;
+}
+
+/**
+ * The marker of the build in dist/, or null when there is none to read: no file (a build that
+ * stopped half-way removed it and never wrote its own), or one that does not parse or names no
+ * mode. Never throws: the withdrawal reads it too.
+ */
+export function readBuildMarker(marker: string = BUILD_MARKER): BuildMarker | null {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(readFileSync(marker, 'utf8'));
+  } catch {
+    return null;
+  }
+  if (typeof parsed !== 'object' || parsed === null) return null;
+  const record = parsed as Record<string, unknown>;
+  const mode = record['mode'];
+  if (mode !== 'app' && mode !== 'holding') return null;
+  return {
+    mode,
+    scrutin: record['scrutin'] === true,
+    host: record['host'] === 'preview' ? 'preview' : 'apex',
+    complete: record['complete'] === true,
+  };
+}
+
+/** Files of a server build: a static site never serves them, a build that stopped leaves them. */
+const SERVER_FILE = /(?:^|\/)(?:chunks|pages)\/|\.mjs$|(?:^|\/)(?:manifest_[^/]*|renderers)\.m?js$/;
+/** Files read as text when looking for a path of this machine. */
+const TEXT_FILE =
+  /\.(?:html|js|mjs|css|json|txt|xml|svg|webmanifest|map|md)$|(?:^|\/)_(?:headers|redirects)$/;
+
+/**
+ * What dist/ holds that no finished static build ships: the server files Astro writes while it
+ * renders and removes when it is done — they carry the absolute path of the checkout — and any
+ * text that names a path of this machine (D0.15: no absolute path, no personal address in what
+ * goes out; review 12, T1). Read for every deploy, the withdrawal included: it reads dist/ only.
+ */
+export function distLeftovers(
+  dir = 'dist',
+  paths: readonly string[] = [process.cwd(), homedir()],
+): string[] {
+  const named = paths.filter((path) => path.length > 1);
+  const found: string[] = [];
+  const walk = (current: string): void => {
+    for (const entry of readdirSync(current, { withFileTypes: true })) {
+      const path = join(current, entry.name);
+      if (entry.isDirectory()) {
+        walk(path);
+        continue;
+      }
+      const rel = relative(dir, path);
+      if (SERVER_FILE.test(rel)) {
+        found.push(`a server file: ${rel}`);
+        continue;
+      }
+      if (!TEXT_FILE.test(rel)) continue;
+      const text = readFileSync(path, 'utf8');
+      if (named.some((name) => text.includes(name))) found.push(`a path of this machine in ${rel}`);
+    }
+  };
+  if (existsSync(dir)) walk(dir);
+  return found;
 }
 
 /** True when the build in dist/ was made with `--scrutin` (the build deployed before each window). */
@@ -587,6 +721,28 @@ export function deployRefusal(
   pages: readonly string[],
   context: DeployContext,
 ): string | null {
+  // What no finished build ships goes nowhere — dry run or not, the withdrawal included: a
+  // server file carries the absolute path of the checkout (D0.15; review 12, T1).
+  const left = context.leftovers ?? [];
+  if (left.length > 0) {
+    return (
+      `dist/ holds what no finished build ships — ${left.slice(0, 5).join(' · ')}` +
+      `${left.length > 5 ? ` (+${String(left.length - 5)} more)` : ''}: build again`
+    );
+  }
+  // An app build is made for one host (review 9, D11; review 7, C7): what its pages ask and the
+  // words they explain may differ between the two. A dry run sends nothing.
+  if (
+    mode === 'app' &&
+    !context.dryRun &&
+    context.builtFor !== undefined &&
+    context.builtFor !== target
+  ) {
+    return (
+      `this build was made for the ${context.builtFor === 'preview' ? 'preview host' : 'apex'} — ` +
+      `build it for this one: ${target === 'preview' ? '`npm run build:preview`' : '`npm run build`'}`
+    );
+  }
   if (target === 'apex' && mode !== 'holding' && context.launchBlockers.length > 0) {
     return (
       'the apex serves the holding page until the launch is decided (D15.15): ' +

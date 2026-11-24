@@ -12,9 +12,10 @@ import Base from '../../layouts/Base.astro';
 import { launchFacts } from '../../lib/facts.ts';
 import { t } from '../../lib/strings.ts';
 
-const { lcenDeclared } = launchFacts();
 // Served by the withdrawal too (D21.18), where no header says whose page it is not: it says it.
 const holding = process.env.CEL_BUILD === 'holding';
+// …and where it must not stop on a file the app reads (review 12, T5).
+const { lcenDeclared } = launchFacts({ tolerant: holding });
 ---
 
 <Base title={`${t('legal.notice.title')} — ${t('app.name')}`} description={t('independence.line')}>

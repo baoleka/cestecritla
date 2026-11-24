@@ -3,8 +3,10 @@
 # Until now .github/workflows/ held only recrawl.yml: nothing checked a pull request, and none
 # of the conformity gates the dossier describes existed anywhere but on paper.
 #
-# Everything here runs at ZERO neurons and makes no outbound network call beyond `npm ci`
-# (D6.7: AI_MODE stays off; the corpus, the evaluation set and the fixtures are all in the repo).
+# Everything here runs at ZERO neurons (D6.7: AI_MODE stays off; the corpus, the evaluation set
+# and the fixtures are all in the repo). What leaves the runner: `npm ci`, the browsers and
+# system packages Playwright installs, and wrangler's look for a newer version of itself. The
+# usage reports of wrangler and Astro are turned off for every step below (review 13, G12).
 name: CI
 
 on:
@@ -14,6 +16,12 @@ on:
 
 permissions:
   contents: read
+
+# No usage report from the tools (scripts/quiet-env.ts says the same for the commands our
+# scripts start). wrangler refuses « 0 »: its word is « false ».
+env:
+  ASTRO_TELEMETRY_DISABLED: '1'
+  WRANGLER_SEND_METRICS: 'false'
 
 concurrency:
   group: ci-${{ github.ref }}
