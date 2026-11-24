@@ -322,3 +322,13 @@ Chaque revue : `/code-review max <cible> --max-findings all`, rapport seulement 
   - jeu : K7 (sa fiche fermée n'est plus dessinée sans `<dialog>`), K8 (les « prochains mots » retrouvent guillemets et police du livre, règles perdues en `2a5279a`), K20 (la phrase de sa figure dite après le focus, comme S15) ;
   - K22 (« Même étude » nomme sa source aux lecteurs d'écran, avec les mots du fichier), K23 (= V5-a : deux phrases terminées), K16 et deux autres commentaires (« quinze… relues par une personne »).
   - **Laissés** : K12 (= P16, 0,7 Ko), K13, K14, K17, K19, K21, K24, K25 (mineurs, ou un texte ou une mise en page à montrer). **Pour l'éditeur** : K6 et K9 (un onglet fermé, l'historique : ses textes de la page Confidentialité).
+
+### 24 novembre 2026, 21 h 28 — les corrections des revues 1 à 8 en production (D21.16)
+- **Ses deux réponses** : le plafond du script de la feuille relevé à 17 Ko (D21.15) ; « Aperçu puis production » (D21.16).
+- **Commits** : `eb23dea` (règles de « Demander » et `src/lib`), `731e714` (composants), `79ea2bf` (ce journal et les décisions), fusionnés en avance rapide dans `main` avec `63dcbd2`, `9a06de8`, `052e52b`, `f436d29`.
+- **Portes** : dans la copie de travail, la suite unitaire, les types, le lint, les contrastes, l'accessibilité (252 contrôles), les cinq suites de navigateur dans les trois moteurs et le balayage du jeu ; dans le dépôt principal, sur le même arbre, 716 tests dont l'anti-fuite complète, le lint, les contrastes, les types, les quatre builds.
+- **Déployé** : aperçu, Worker `cestecritla-preview` version `bbc7072f` ; production, Worker `cestecritla` version `d2debbe5`, commit `79ea2bf`. Le Worker des phrases n'est pas touché.
+- **Vérifié en ligne** : sur les trois hôtes, 1 312 fichiers sur 1 315 identiques à la build (au premier passage, le cache de bord servait encore quelques pages d'avant, pour cinq minutes au plus) ; une sonde de « Demander » écrite dans le scratchpad (sans `private/`), dans les trois moteurs, sur l'aperçu et sur `cestecritla.fr` : 33 « ok » chacun — dont « La loi : Macron mis en examen » refusée, aucune requête vers un autre hôte, `/api/gists` ne recevant que `corpus` et `ids`, aucun mot tapé dans aucune requête.
+- **Au registre** : R74 (une retouche des règles rouvre une capture fermée — réalisé du 23/11 au 24/11).
+- **Retour arrière** : l'étiquette locale `prod-avant-revues` (`7558828`).
+- **Restent** : les revues 10 à 19 (dont 10 et 11 en cours), le lot des « rails », le lot des pages (écrit dans la copie de travail, pas encore testé), les questions pour l'éditeur.
