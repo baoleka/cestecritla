@@ -34,6 +34,7 @@
  * are already public.
  */
 import { PROPOSITION_ID } from './ask-contract.js';
+import { isInstant } from './days.js';
 
 /**
  * How many measures one request may ask the sentences of: what a sheet shows (`SHOWN_MEASURES`,
@@ -180,7 +181,9 @@ export function parseGistsResponse(value: unknown): GistsResponse | null {
     }
     case 'silence': {
       const { reopen } = value;
-      if (typeof reopen !== 'string' || !ISO_INSTANT.test(reopen)) return null;
+      if (typeof reopen !== 'string' || !ISO_INSTANT.test(reopen) || !isInstant(reopen)) {
+        return null;
+      }
       return { kind: 'silence', reopen };
     }
     case 'local':
@@ -276,7 +279,9 @@ export function parseChatResponse(value: unknown): ChatResponse | null {
     }
     case 'silence': {
       const { reopen } = value;
-      if (typeof reopen !== 'string' || !ISO_INSTANT.test(reopen)) return null;
+      if (typeof reopen !== 'string' || !ISO_INSTANT.test(reopen) || !isInstant(reopen)) {
+        return null;
+      }
       return { kind: 'silence', reopen };
     }
     default:

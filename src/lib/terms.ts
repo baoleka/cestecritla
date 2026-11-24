@@ -74,6 +74,14 @@ const EDGE_BEFORE = `(^|[^${WORD}])`;
 const EDGE_AFTER = `(?![${WORD}])`;
 
 const escaped = (text: string): string => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+/**
+ * A ligature of a wording, as a phone types it too: « œ » or « oe », « æ » or « ae » — « c'est
+ * quoi le bois d'oeuvre ? » explained nothing (review of 24/11/2026). The folded text keeps its
+ * length, so the pattern takes both spellings.
+ */
+const LIGATURES: Readonly<Record<string, string>> = { œ: '(?:œ|oe)', æ: '(?:æ|ae)' };
+const spelledBoth = (text: string): string =>
+  escaped(text).replace(/[œæ]/g, (ligature) => LIGATURES[ligature] ?? ligature);
 
 /**
  * An acronym: one word, with a digit or a capital after its first letter — read to the letter.
@@ -138,8 +146,11 @@ export function readingOf(wording: string, anyCase: boolean): Reading {
   } else {
     // A phrase: its words in a row, each with or without the mark of a plural.
     const stems = stemsOf(wording);
-    needle = stems.reduce((longest, stem) => (stem.length > longest.length ? stem : longest), '');
-    source = stems.map((stem) => `${escaped(stem)}(?:s|x)?`).join('[ ]+');
+    // The longest piece every match holds, whichever way its ligatures were typed.
+    needle = stems
+      .flatMap((stem) => stem.split(/[œæ]/))
+      .reduce((longest, piece) => (piece.length > longest.length ? piece : longest), '');
+    source = stems.map((stem) => `${spelledBoth(stem)}(?:s|x)?`).join('[ ]+');
   }
   let built: RegExp | null = null;
   const reading: Reading = {
@@ -258,7 +269,7 @@ export function termsIn<T extends TermWording>(
  * « c'est quoi », « c koi », « ça veut dire quoi », « définition », « késako ».
  */
 const MEANING =
-  /c ?'? ?est (?:quoi|koi)|(?:^|[^a-z])c ?(?:quoi|koi)(?![a-z])|ckoi|k[e]?[sz]a[ck]o|que[sz]a[ck]o|qu ?'? ?est[- ]ce qu|veut dire|signifi|definition|expli(?:que|cation)|compren(?:ds?|d) (?:pas|rien)/;
+  /c ?'? ?est (?:quoi|koi)|(?:^|[^a-z])c ?(?:quoi|koi)(?![a-z])|ckoi|k[e]?[sz]a[ck]o|que[sz]a[ck]o|qu ?'? ?est[- ]ce qu(?:e|') ?(?:c ?'? ?est ?)?(?:(?:le|la|les|un|une|des|du) |l ?'? ?)?[^ ?!.]+(?: [^ ?!.]+){0,3}[ ?!.]*$|veut dire(?! que(?![a-z])| qu ?')|signifi(?:e|es|ent|er|cation)(?![a-z])|definition|expli(?:que|cation)|compren(?:ds?|d) (?:pas|rien)/;
 
 /** True when a question asks, in so many words, what a word means. */
 export function asksMeaning(question: string): boolean {

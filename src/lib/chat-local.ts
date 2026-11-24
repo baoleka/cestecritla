@@ -26,9 +26,11 @@ import {
 import { MAX_CHAT_WORDS, sentenceWords } from './chat-words.js';
 import {
   fillerOnly,
+  normalize,
   processTerm,
   sameWord,
   spelled,
+  spelledClauses,
   stem,
   terms,
   tokenize,
@@ -207,7 +209,7 @@ export function chatRequestOf(asking: Asking): ChatRequest | null {
  * Every person the index of the book holds is here — « la loi Kasbarian », « la taxe Zucman »
  * (read on 15/11/2026, with the whole vocabulary: data/2026/sensitive.json): a name the book
  * writes is a word the search knows, and nothing else would see it. The law that carries the
- * name stays the law's (`LABEL`).
+ * name stays the law's (`LAW_NAME`).
  */
 const PERSON_OWN = '(?:(?:jean luc )?mel[ae]n(?:ch|c|sh)i?on[a-z]*|meluche|jlm)';
 const PARTY_OWN =
@@ -226,6 +228,15 @@ const NAMED = `(?:${PERSON}|${PARTY_OWN}|${PARTY_OTHER})`;
  */
 const wordsOf = spelled;
 const fold = (question: string): string => wordsOf(question).join(' ');
+/** An elided word that a pattern names: « l'élu », « d'Attal », « parce qu'on », « puisqu'on ». */
+const ELIDED = /\b(l|d|qu|jusqu|lorsqu|puisqu)['’](?=\p{L})/giu;
+/**
+ * The question as `fold` reads it, but with these elided words kept as words — « l elu », « d
+ * attal », « qu on »: the search drops them, and the patterns written with them never matched
+ * (review of 24/11/2026: « l'élu » was no title, « Que penser d'Attal ? » no opinion asked, and
+ * « parce qu'on vote LFI » a request for a vote). Read by those patterns only.
+ */
+const foldKept = (question: string): string => fold(question.replace(ELIDED, '$1 '));
 
 /**
  * Asking whom to vote for, or who will win: the one kind of question the sheet answers by
@@ -264,12 +275,16 @@ const VOTE_ADVICE: readonly RegExp[] = [
  * « on me traite de… parce que je vote X » says how one votes: it asks nobody whom to vote for.
  */
 const IF_I_VOTE =
-  /\b(?:si|parce que|car|puisque|comme|vu que|quand) (?:je|on|tu|nous|vous|les gens) (?:[a-z]+ )?vot(?:e|es|ons|ez|ent)\b/;
+  /\b(?:si|parce que|parce qu|car|puisque|puisqu|comme|vu que|vu qu|quand|lorsque|lorsqu) (?:je|on|tu|nous|vous|les gens) (?:[a-z]+ )?(vot(?:e|es|ons|ez|ent))\b/g;
 
 /** True when the question asks for voting advice or a forecast: it is answered on the phone. */
 export function asksForVote(question: string): boolean {
-  const folded = fold(question);
-  return !IF_I_VOTE.test(folded) && VOTE_ADVICE.some((pattern) => pattern.test(folded));
+  // The condition is taken out of the question, not laid over it: its verb stays, and nothing
+  // before it says who votes. « Si je vote X, mes impôts baissent ? » asks nobody whom to vote
+  // for; « Pour qui voter si on vote utile ? » and « si je vote, pour qui ? » still do (review
+  // of 24/11/2026: one « si on vote » let every request for a vote through).
+  const folded = foldKept(question).replace(IF_I_VOTE, ' $1');
+  return VOTE_ADVICE.some((pattern) => pattern.test(folded));
 }
 
 /**
@@ -296,7 +311,7 @@ export function asksForVote(question: string): boolean {
  *   - an opinion asked about it; two persons set side by side and nothing else.
  */
 const INSULT: readonly RegExp[] = [
-  /\b(?:connard|connards|connasse|connasses|couillon|couillons|abruti|abrutie|abrutis|debile|debiles|cretin|cretine|cretins|imbecile|imbeciles|bouffon|bouffons|batard|batards|encule|encules|fdp|ntm|pute|putes|salope|salopes|salaud|salauds|ducon|trouduc|clown|clowns|guignol|guignols|charlatan|charlatans|tocard|tocards|gauchiasse|gauchiasses)\b/,
+  /\b(?:connard|connards|connasse|connasses|couillon|couillons|abruti|abrutie|abrutis|cretin|cretine|cretins|imbecile|imbeciles|batard|batards|encule|encules|fdp|ntm|pute|putes|salope|salopes|salaud|salauds|ducon|trouduc|tocard|tocards|gauchiasse|gauchiasses)\b/,
   /\b(?:ta gueule|va te faire|va chier|nique|a chier)\b/,
   // « merde » alone is no insult to anyone: « c'est la merde pour payer mon loyer » is a question
   /\b(?:site|appli|application|programme|truc|reponses?|ia|bot|chatbot|parti|candidat) (?:de merde|de fous?|pourri|pourrie|pourris|a la con|est nul|est bidon)\b/,
@@ -312,13 +327,20 @@ const EPITHET =
   '(?:antisemites?|racistes?|islamophobes?|islamo ?gauchistes?|islamistes?|dictateurs?|fachos?|fascistes?|nazis?|neo ?nazis?|extremistes?|populistes?|complotistes?|menteurs?|menteuse|voleurs?|corrompus?|corrompue|traitres?|poutinistes?|pro ?russes?|pro ?iran|pro ?hamas|chavistes?|communistes?|staliniens?|gourou|secte|sectaires?|terroristes?|wokistes?|woke|gauchistes?|fou|folle|dingue|cingle|violente?s?|sexistes?|misogynes?|homophobes?|transphobes?|pedophiles?|violeurs?|escrocs?|voyous?|delinquants?|dealers?|fraudeurs?|hypocrites?|demagogues?|demago|manipulateurs?|incompetente?s?|ridicules?|haineux|haineuse|dangereux|dangereuse|autoritaires?|coleriques?|communautaristes?|antisionistes?|complices?|anti ?france|ultra ?gauche|staline|hitler|mussolini|robespierre|lenine|khmers? rouges?|rouge brun|delirant|laxistes?|vendus?|laches?|tricheurs?)';
 /** A subject thrown as a charge — next to a name only: alone, « corruption » is a subject of the book. */
 const CHARGE_NOUN = '(?:corruption|mensonges?|delire)';
+/**
+ * Mockery — next to a name only. Alone, each is a word of a question about the programme: « le
+ * statut des clowns et des artistes de cirque », « les charlatans des thérapies alternatives »,
+ * « la réforme est débile, que propose le programme ? » (review of 24/11/2026: a bare word
+ * refused them all).
+ */
+const MOCKERY = '(?:clowns?|charlatans?|guignols?|bouffons?|debiles?)';
 /** Between a name and what is thrown at it: « est », « un », « des » — never a word of its own. */
 const GLUE =
   '(?:est|sont|etait|serait|c|un|une|des|le|la|les|l|tres|trop|vraiment|si|aussi|plutot|encore|toujours|donc|qu|que|il|elle|ils|elles|bien|tous|toutes|comme|vrai|vraie|gros|sale|grand|pur|tellement|completement|totalement|devenu|devenue|parait|semble|a|ont|ete)';
 const CHARGED: readonly RegExp[] = [
-  new RegExp(`\\b${NAMED}(?: ${GLUE}){0,4} (?:${EPITHET}|${CHARGE_NOUN})\\b`),
+  new RegExp(`\\b${NAMED}(?: ${GLUE}){0,4} (?:${EPITHET}|${CHARGE_NOUN}|${MOCKERY})\\b`),
   new RegExp(
-    `\\b(?:${EPITHET}|${CHARGE_NOUN}) (?:de |d |du |des )?(?:la |le |les |l )?${NAMED}\\b`,
+    `\\b(?:${EPITHET}|${CHARGE_NOUN}|${MOCKERY}) (?:de |d |du |des )?(?:la |le |les |l )?${NAMED}\\b`,
   ),
 ];
 /** What is asked of a person and is nobody's programme: money, health, the courts, bad company. */
@@ -351,7 +373,12 @@ const PERSONAL_AFTER: readonly RegExp[] = [
     `\\b${PERSON} (?:va |doit |devrait )?(?:mourir|prendre sa retraite|demissionner|partir|se taire)\\b`,
   ),
 ];
-/** A name that labels a text of law — « la réforme Macron », « la loi immigration de Darmanin » — is the law's. */
+/**
+ * A name after a label — of a law, or of a person's record (« la politique de », « le
+ * quinquennat »): two persons set side by side are not two when one of them only labels
+ * something (`asksOffTopic`). Wide on purpose — there, wide means fewer refusals. Never what
+ * lets a name go (`namesSomeone`): that is `LAW_NAME`.
+ */
 const LABELS =
   '(?:(?:contre )?reformes?|lois?|circulaires?|ordonnances?|decrets?|taxes?|plans?|pactes?|gouvernements?|quinquennats?|annees|politiques?)';
 const LABEL = new RegExp(
@@ -369,6 +396,31 @@ const LAW_LABEL = new RegExp(
   `\\b((?:contre )?reformes?|lois?|circulaires?|ordonnances?|decrets?|taxes?|pactes?) (?:(?:de |d |du |des )(?:la |le |les |l )?)?${PERSON_OTHER}\\b`,
   'g',
 );
+/** Words that are no subject of a law: what stands between a label and a name of the sentence. */
+const LINK_WORD =
+  '(?:et|ou|ni|mais|donc|car|or|puis|avec|sans|pour|contre|sur|sous|par|chez|selon|comme|apres|avant|que|qui|quoi|dont|a|au|aux|en|dans|un|une|la|le|les|l|de|d|du|des|son|sa|ses|leur|leurs|ce|cet|cette|ces|mon|ma|mes|ton|ta|tes|notre|nos|votre|vos|il|elle|ils|elles|on|est|sont|c)';
+/**
+ * The name a law bears, which `namesSomeone` lets go: a label of law, at most one word of its
+ * subject — « la loi immigration de Darmanin » —, then the name. Not a person's record — « la
+ * politique de Macron », « le gouvernement », « le quinquennat », « les années », « le plan »
+ * (D16.70, (4)) —, and not a name further in the sentence: « les lois et la femme de Macron »,
+ * « la loi travail et Macron » (review of 24/11/2026: each showed our sentences under a name
+ * that the index holds, and that only this fold could hide).
+ */
+const LAW_NAME = new RegExp(
+  `\\b((?:contre )?reformes?|lois?|circulaires?|ordonnances?|decrets?|taxes?|pactes?)(?: (?!${LINK_WORD}\\b)[a-z0-9]+)? (?:(?:de |d |du |des )(?:la |le |les |l )?)?${PERSON_OTHER}\\b`,
+  'g',
+);
+
+/**
+ * The question with each law's name folded into its law — within a clause: « La loi : Macron mis
+ * en examen » names a man after a law, it names no law (review of 24/11/2026: the fold of D21.7
+ * read across the colon, and our sentences stood under the charge).
+ */
+const lawsFolded = (question: string, law: RegExp): string =>
+  spelledClauses(question)
+    .map((clause) => clause.replace(law, '$1'))
+    .join(' ');
 const BOOK = /\b(?:programme|avenir en commun|aec|livre)\b/;
 /** After « est », what makes the question one about a position, a leaning, or the vote's outcome. */
 const POSITION =
@@ -383,9 +435,9 @@ const JUDGED: readonly RegExp[] = [
   ),
   // an opinion asked about one
   new RegExp(
-    `\\b(?:penser|penses|pensez|pense|pensent|dire|dis|dites) (?:[a-z]+ ){0,2}(?:de|du|des|sur) (?:le |la |les |l )?${NAMED}\\b(?! dans le programme)`,
+    `\\b(?:penser|penses|pensez|pense|pensent|dire|dis|dites) (?:[a-z]+ ){0,2}(?:de|d|du|des|sur) (?:le |la |les |l )?${NAMED}\\b(?! dans le programme)`,
   ),
-  new RegExp(`\\bavis (?:sur|de|du|des) (?:le |la |les |l )?${NAMED}\\b`),
+  new RegExp(`\\bavis (?:sur|de|d|du|des) (?:le |la |les |l )?${NAMED}\\b`),
 ];
 const ANY_NAMED = new RegExp(`\\b${NAMED}\\b`);
 const EACH_PERSON = new RegExp(`\\b${PERSON}\\b`, 'g');
@@ -418,11 +470,15 @@ export function asksOffTopic(question: string): boolean {
   if (INSULT.some((pattern) => pattern.test(folded))) return true;
   if (!ANY_NAMED.test(folded)) return false;
   if ([...CHARGED, ...JUDGED, ...PERSONAL_OF].some((pattern) => pattern.test(folded))) return true;
+  // What is asked « d'Attal », « de l'élu »: the patterns written with an elided word.
+  const kept = foldKept(question);
+  if ([...JUDGED, ...PERSONAL_OF].some((pattern) => pattern.test(kept))) return true;
   // What is said after a name — leaving, dying, a fortune hidden abroad — belongs to a person,
   // never to a law: « Taxe Zucman : partir ou payer ? » asks about the tax (D21.7, 23/11/2026).
   // A law's name, right after its label, is folded into the law first; the person named apart
-  // stays a person (« la taxe Zucman, Zucman doit partir »).
-  const asLaw = folded.replace(LAW_LABEL, '$1');
+  // stays a person (« la taxe Zucman, Zucman doit partir »), and so does one named after a
+  // break (« La loi : Macron mis en examen »).
+  const asLaw = lawsFolded(question, LAW_LABEL);
   if (PERSONAL_AFTER.some((pattern) => pattern.test(asLaw))) return true;
   const left = folded.replace(LABEL, '$1');
   // Two persons set side by side and nothing else — « X ou Y ? », « X aime Y ? ». With a
@@ -446,7 +502,7 @@ export function asksOffTopic(question: string): boolean {
  * `measuresFor`.
  */
 export function namesSomeone(question: string): boolean {
-  const folded = fold(question).replace(LABEL, '$1');
+  const folded = lawsFolded(question, LAW_NAME);
   return ANY_NAMED.test(folded) || BARE_NAME.test(folded);
 }
 
@@ -482,7 +538,8 @@ const SOMEONE: readonly RegExp[] = [
 /** True when the question points at one person by a title or a nickname. */
 export function refersToSomeone(question: string): boolean {
   const folded = fold(question);
-  return SOMEONE.some((pattern) => pattern.test(folded));
+  const kept = foldKept(question);
+  return SOMEONE.some((pattern) => pattern.test(folded) || pattern.test(kept));
 }
 
 /**
@@ -505,7 +562,7 @@ export function putsOnTrial(question: string): boolean {
 }
 
 /** A number, and how one is written with its unit: « 60 », « 32h », « 6eme », « 60ans », « 1700€ ». */
-const NUMBER = /^\d+(?:h|e|er|ere|eme|ème|k|m|ans?|%|€)?$/;
+const NUMBER = /^\d+(?:h|e|er|ere|eme|ème|k|m|ans?|%|€)?$/i;
 
 /**
  * The words of a question that the search does not know: they found no measure at all, and
@@ -527,13 +584,30 @@ export function strangersIn(
   const read = question.normalize('NFKC');
   // Letters typed apart make one word, which the search never saw: « M.L.P. », « l f i ».
   const apart = wordsOf(read).filter((word) => !tokenize(read).includes(word));
-  return [...[...read.matchAll(/[\p{L}\p{N}]+/gu)].map((match) => match[0]), ...apart].filter(
+  // A word with its marks — « O̲b̲o̲n̲o̲ » is one word, not five letters too short to count.
+  return [...[...read.matchAll(/[\p{L}\p{M}\p{N}]+/gu)].map((match) => match[0]), ...apart].filter(
     (typed) => {
-      const term = processTerm(tokenize(typed)[0] ?? '');
-      if (term === null || NUMBER.test(typed) || typed.length < 3) return false;
-      return !found.has(term) && !fillerOnly([term]) && !known(typed, term);
+      if (NUMBER.test(typed) || typed.length < 3) return false;
+      // A letter the search cannot read — « ø », « ı », a small capital — makes the word one
+      // it never saw: judged by its first piece, « Søren » was « s », a word too short to count
+      // (review of 24/11/2026).
+      if (!readable(typed)) return true;
+      // Every piece of the word, as the search cuts it.
+      return tokenize(typed).some((piece) => {
+        const term = processTerm(piece);
+        return term !== null && !found.has(term) && !fillerOnly([term]) && !known(typed, term);
+      });
     },
   );
+}
+
+/**
+ * Letters the search reads: once accents and marks are gone, a to z and the digits — « é »,
+ * « œ », « Ç » are. Not « ø », « ı », « ß », a small capital « ᴍ » or « ɑ »: the search drops
+ * them, and with them a name, a party or an epithet written with them (review of 24/11/2026).
+ */
+function readable(text: string): boolean {
+  return /^[a-z0-9]*$/.test(normalize(text).replace(/[^\p{L}\p{N}]+/gu, ''));
 }
 
 /**
@@ -757,7 +831,15 @@ export function aloneIn(
     return !(lexicon.people(term) && /^(?:mon|ma|mes)$/.test(words[at - 1] ?? ''));
   });
   const marked = (term: string): boolean => lexicon.sensitive(term) || lexicon.soft(term);
-  const hard = core.filter((word) => lexicon.sensitive(stem(word)));
+  // The subject as the search asked it: a phrase the book writes in other words was searched in
+  // those words (D21.8) — « exil fiscal » is « évasion fiscale », a sensitive subject, and the
+  // people next to it must be weighed as next to « évasion » (review of 24/11/2026).
+  // The search's own words are those it credits to the question (`by`): never what a typo
+  // or a look-alike matched in a measure.
+  const asked = [...new Set(hits.flatMap((hit) => hit.by ?? []))].filter(
+    (term) => lexicon.sensitive(term) && !core.some((word) => stem(word) === term),
+  );
+  const hard = [...core.filter((word) => lexicon.sensitive(stem(word))), ...asked];
   // A measure holds a word that led to it as written — or, for the subject itself, through a
   // synonym that is the same kind of subject: « prison » is « détention » in the book, and
   // « Russie » is written « russe ». Not through any synonym: the words a group adds
@@ -768,9 +850,11 @@ export function aloneIn(
       lexicon.alias(word).some((alias) => marked(alias) && (hit.via ?? []).includes(alias)));
   if (hard.length === 0) {
     // A softer subject and no other: what the search ranks best — once nothing points at
-    // anyone, and nobody but the asker's own people stands in the question.
+    // anyone, and nobody but the asker's own people stands in the question: neither a person
+    // of every day nor a people — « les migrants et la Russie » (review of 24/11/2026).
     const somebodyElse = core.find(
-      (word) => !lexicon.soft(stem(word)) && lexicon.people(stem(word)),
+      (word) =>
+        !lexicon.soft(stem(word)) && (lexicon.people(stem(word)) || lexicon.kin(stem(word))),
     );
     return somebodyElse === undefined ? { rows: rowsOf(hits, knows) } : { beside: somebodyElse };
   }
@@ -799,6 +883,13 @@ export function aloneIn(
 
 const MONTH =
   /^(?:janvier|fevrier|mars|avril|mai|juin|juillet|aout|septembre|octobre|novembre|decembre)$/;
+/**
+ * A month cut short, as a phone writes it: « janv », « févr », « avr », « juil », « octobr » —
+ * never three letters that begin other words (« déc » is « décision », « oct » « octroi »).
+ */
+const MONTH_CUT = /^(?:janv|fevr|avr|juil|septem|octob|novem|decem)/;
+/** A day and its month in figures: « 7/10 », « 17 / 10 ». */
+const DAY_MONTH = /(?:^|[^\d/])([12]?\d|3[01])\s*\/\s*(0?[1-9]|1[0-2])(?![\d/])/g;
 /** What makes a date with a month: a figure, or a number in words. */
 const COUNTED =
   /^(?:\d+(?:er|e)?|premier|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|treize|quatorze|quinze|seize|vingt|trente)$/;
@@ -811,28 +902,49 @@ const COUNTED =
  * of 15/11/2026). « Le 17 octobre 1961 » is the date of that measure, and keeps its sentence.
  */
 function datesMissed(question: string, shown: readonly Ranked[]): boolean {
-  const words = tokenize(question);
+  // The words as the search read them: letters typed apart put back together, a figure in
+  // another form of itself a figure — « le 7 o c t o b r e », « le ７ octobre », « le 𝟕
+  // octobre » found the measure on 17 October 1961 as « le 7 octobre » did, and showed its
+  // sentence (review of 24/11/2026).
+  const words = wordsOf(question);
   const held = new Set(shown.flatMap((hit) => hit.by ?? []));
+  // « 1/3 », « 3/4 » are parts of a whole, not the first days of the year's first months.
+  const slashed = [...question.normalize('NFKC').matchAll(DAY_MONTH)]
+    .map((date) => [date[1] ?? '', date[2] ?? ''])
+    .filter(([day, month]) => !(Number(month) <= 4 && Number(day) < Number(month)))
+    .flat();
   // With a month in the question every number is part of a date, in figures or in words:
-  // « le 7 du mois d'octobre », « le sept octobre ».
-  const beside = words.some((word) => MONTH.test(word))
-    ? words.filter((word) => COUNTED.test(word))
-    : [];
+  // « le 7 du mois d'octobre », « le sept octobre », « les 7 octobres », « le 7 octobr ».
+  const dated =
+    slashed.length > 0 ||
+    words.some((word) => MONTH.test(word) || MONTH.test(stem(word)) || MONTH_CUT.test(word));
+  const beside = dated ? [...words.filter((word) => COUNTED.test(word)), ...slashed] : [];
   return beside.some((counted) => !held.has(stem(counted)));
 }
 
+/** Signs of a measure, not of a target: « 2 °C », « n° 12 » (review of 24/11/2026). */
+const UNIT_SIGNS = new Set(['°']);
+/** Brackets around a name, three deep: a coded mark, made of no word (review of 24/11/2026). */
+const ECHO = /\({3}|\){3}/;
+
 /**
- * True when the question holds a sign that is no word — a flag, a religious sign, an animal —
- * or a letter of another writing: the search reads neither, and each is a target all the
- * same. « ✡ finance » is made of one word of the book; so is « 卐 finance », whose sign is,
- * for Unicode, a letter. A few faces of every day — what the asker feels — are let through;
- * anything else gets links.
+ * True when the question holds a sign that is no word — a flag, a religious sign, an animal,
+ * brackets three deep — or a letter the search cannot read: of another writing, or a Latin
+ * letter it drops (« ø », a small capital). The search reads none of them, and each is a target
+ * all the same. « ✡ finance » is made of one word of the book; so is « 卐 finance », whose sign
+ * is, for Unicode, a letter; so is « la retraite de ᴍᴀᴄʀᴏɴ ». A few faces of every day — what
+ * the asker feels — and the degree sign are let through; anything else gets links.
  */
 export function pointsWithASign(question: string, lexicon: Lexicon): boolean {
   const read = question.normalize('NFKC');
   return (
-    [...read.matchAll(/\p{So}/gu)].some((sign) => !lexicon.feeling(sign[0])) ||
-    [...read.matchAll(/\p{L}/gu)].some((letter) => !/\p{Script=Latin}/u.test(letter[0]))
+    [...read.matchAll(/\p{So}/gu)].some(
+      (sign) => !lexicon.feeling(sign[0]) && !UNIT_SIGNS.has(sign[0]),
+    ) ||
+    ECHO.test(read) ||
+    [...read.matchAll(/\p{L}/gu)].some(
+      (letter) => !/\p{Script=Latin}/u.test(letter[0]) || !readable(letter[0]),
+    )
   );
 }
 
@@ -841,6 +953,14 @@ const GLUE_WORD = new RegExp(`^${GLUE}$`);
 /** What may stand before the people of a bare statement: « tous les… », « la plupart des… ». */
 const ALL_OF =
   /^(?:les|le|la|l|des|de|d|tous|toutes|tout|ces|plupart|majorite|beaucoup|trop|mais|et)$/;
+
+/**
+ * What makes a statement asked, cut or quoted — in any writing of it: « ？ », « ¿ », « ❓ »,
+ * « ‹…› », « ‘…’ », a straight quote that opens a word (review of 24/11/2026: only the
+ * ASCII marks counted, and « les migrants sont des parasites？ » was refused). Never the
+ * apostrophe of an elision: « les roms c’est tous des voleurs » is the bare statement.
+ */
+const ASKED_OR_QUOTED = /[?,:;«»"“”„‟‹›‘¿؟❓❔]|\p{Ps}|\p{Pe}|(?:^|\s)'/u;
 
 /**
  * True when the question is a hateful statement and nothing else — refused like an insult,
@@ -862,7 +982,7 @@ const ALL_OF =
  * get the measures of the subject one may ask in their place, as links (`measuresFor`).
  */
 export function hateful(question: string, lexicon: Lexicon): boolean {
-  if (/[?,:;«»"“”()]/.test(question)) return false;
+  if (ASKED_OR_QUOTED.test(question.normalize('NFKC'))) return false;
   const words = fold(question)
     .replace(AS_SUBJECT, ' ')
     .split(' ')
@@ -897,13 +1017,33 @@ export function hateful(question: string, lexicon: Lexicon): boolean {
  */
 function ridesAlong(question: string, objection: string, lexicon: Lexicon): boolean {
   const own = terms(objection);
+  const ownWords = new Set(wordsOf(objection));
+  const added = wordsOf(question)
+    .filter((word) => !ownWords.has(word))
+    .join(' ');
   return (
     pointsWithASign(question, lexicon) ||
+    // Somebody named, pointed at by a title, or put on trial, in what the question adds to the
+    // objection — « Borne dit que… », « Leur chef dit que… » (review of 24/11/2026). Whoever
+    // the objection's own wording names is the objection's: the answer is ours.
+    [namesSomeone, refersToSomeone, putsOnTrial].some((rule) => rule(added)) ||
     wordsOf(question).some((word) => {
       const term = processTerm(word);
       if (term === null || NUMBER.test(word)) return false;
+      // A subject, a people, what is said of a people to charge it: a charge, unless it is a
+      // word of the objection itself, as the objection writes it — five letters in common are
+      // not enough: « communautarisme » is not « communisme » (review of 24/11/2026).
+      if (
+        lexicon.sensitive(term) ||
+        lexicon.soft(term) ||
+        lexicon.kin(term) ||
+        lexicon.said(term) ||
+        lexicon.crime(word) ||
+        lexicon.insult(word)
+      ) {
+        return !own.includes(term);
+      }
       if (own.some((other) => sameWord(other, term))) return false;
-      if (lexicon.sensitive(term) || lexicon.soft(term)) return true;
       return !(
         fillerOnly([term]) ||
         lexicon.neutral(term) ||
@@ -1016,15 +1156,20 @@ export function measuresFor(
   }
   const rows = rowsOf(hits, knows);
   const shown = hits.filter((hit) => rows.includes(hit.id));
-  // A date that is the date of no measure found the measures of another day: nothing.
-  if (datesMissed(question, shown)) return { rows: [], sentences: false, example: null };
+  // A date that is the date of no measure found the measures of another day: nothing — and
+  // nothing of ours either, no card above « Rien trouvé » (review of 24/11/2026).
+  if (datesMissed(question, shown)) {
+    return { rows: [], sentences: false, example: null, charged: true };
+  }
   // A people or a country, and what one says of it to charge it: « X contrôle… », « les X
   // nous envahissent » are made of words of the book.
   const peoples = lexicon !== null && words.some((word) => lexicon.kin(stem(word)));
   const told =
     lexicon !== null &&
     (peoples || words.some((word) => lexicon.soft(stem(word)))) &&
-    words.some((word) => lexicon.said(stem(word)) || lexicon.insult(word));
+    words.some(
+      (word) => lexicon.said(stem(word)) || lexicon.insult(word) || lexicon.crime(word),
+    );
   const pointing =
     instead !== null ||
     told ||
@@ -1059,7 +1204,17 @@ export function measuresFor(
       return { rows: alone.rows, sentences: true, example: null };
     }
   }
-  if (rows.length === 0) return { rows, sentences: false, example: null };
+  // The question as the rules read it — letters typed apart put back together: « r a c i s m e »
+  // is a sensitive subject (review of 24/11/2026).
+  const spelt = wordsOf(question);
+  const markedHere =
+    lexicon !== null &&
+    spelt.some((word) => lexicon.sensitive(stem(word)) || lexicon.soft(stem(word)));
+  if (rows.length === 0) {
+    return pointing || peoples || markedHere
+      ? { rows, sentences: false, example: null, charged: true }
+      : { rows, sentences: false, example: null };
+  }
   // An example to ask alone: a word of the question that is nothing but a subject, written
   // in the book exactly as it was typed — a typo, a verb, a look-alike is not echoed back.
   // In a question that holds a sensitive subject, only a subject one may suggest: under
@@ -1074,7 +1229,8 @@ export function measuresFor(
   const typed = all.filter((word) => word.length >= 3 && !NUMBER.test(word) && !putsOnTrial(word));
   // A sensitive subject, a people, or anything thrown at somebody: only a subject one may
   // suggest — « les migrants violent nos femmes » gave « femmes » (eighth review).
-  const strict = putsOnTrial(question) || all.some((word) => marked(termOf(word)));
+  const strict =
+    putsOnTrial(question) || markedHere || all.some((word) => marked(termOf(word)));
   const subject = (word: string): boolean => {
     const term = termOf(word);
     return (
@@ -1100,7 +1256,9 @@ export function measuresFor(
   // Next to a people, no word of the question is a subject to suggest.
   const example =
     peoples || instead !== null ? null : (typed.find(strict ? subject : plain) ?? null);
-  return pointing || strict
+  // A people in the question is a charge too: our card would stand above « les X squattent… »
+  // (review of 24/11/2026 — the people rule had come back for the example only).
+  return pointing || strict || peoples
     ? { rows, sentences: false, example, charged: true }
     : { rows, sentences: false, example };
 }
@@ -1127,11 +1285,13 @@ const SITE =
   '(?:ce site|le site|cette appli|l appli|cette application|cette page|ce truc|ce projet)';
 /** The site named by « ce » — when what follows is what a site does, or nothing. */
 const THIS =
-  '(?:(?:ce site(?: web| internet)?|cette appli|cette application|ce chatbot|ce bot|ce chat)(?:$| (?:est|existe|pue|marche|fonctionne|appartient|sert|ment|garde|enregistre|dit|raconte|vient|repond|aujourd hui|il|elle|c)\\b))';
+  '(?:(?:ce site(?: web| internet)?|cette appli|cette application|ce chatbot|ce bot)(?:$| (?:est|existe|pue|marche|fonctionne|appartient|sert|ment|garde|enregistre|dit|raconte|vient|repond|aujourd hui|il|elle|c)\\b))';
 const YOU = '(?:tu es|es|es tu|vous etes|etes vous|etes)';
 const TEXTS = '(?:reponses|phrases|textes|explications)';
 const WHO =
   '(?:une ia|l ia|un robot|un bot|un chatbot|une machine|un humain|une humaine|une personne|une vraie personne|quelqu un|chatgpt|un algorithme|claude|mistral|gemini|gpt|llama|copilot)';
+/** A model by name, or « quelle IA »: of the site only when asked of it, or of the reader. */
+const MODEL = '(?:quelle ia|chatgpt|chat gpt)';
 const ABOUT_SITE: readonly RegExp[] = [
   new RegExp(`\\b${THIS}`),
   /^(?:c )?est quoi ce (?:truc|machin)$/,
@@ -1152,7 +1312,15 @@ const ABOUT_SITE: readonly RegExp[] = [
   /\b(?:d )?ou (?:tu|vous) (?:sors|sortez|tires|tirez|prends|prenez) (?:tes|vos|ces|ca)\b/,
   /^(?:vos|tes|les|quelles) sources$/,
   /^(?:c )?est source$/,
-  /\bquelle ia\b/,
+  // « quelle IA », « ChatGPT »: asked of the reader or of the site, or as the whole question —
+  // « quelle IA dans les services publics ? », « interdire ChatGPT à l'école ? » are about the
+  // programme (review of 24/11/2026; « ce chat est maltraité » was about a cat, and « ce chat »
+  // left the site's names).
+  new RegExp(`^(?:(?:est ce (?:que )?)?(?:c )?est )?${MODEL}$`),
+  new RegExp(
+    `\\b(?:tu|vous|te|je parle a|on parle a|je discute avec|on discute avec)(?: [a-z]+){0,2} ${MODEL}\\b`,
+  ),
+  new RegExp(`\\b${MODEL}(?: [a-z]+){0,2} (?:tu|vous|te|ici|derriere|${SITE})\\b`),
   // who are you, who is behind, whose is it
   /\b(?:qui es tu|qui etes vous|tu es qui|vous etes qui|on parle a qui|je parle a qui)\b/,
   /^es qui\b/,
@@ -1169,7 +1337,6 @@ const ABOUT_SITE: readonly RegExp[] = [
   new RegExp(
     `(?:^|\\b)${YOU}(?: [a-z]+)? (?:une ia|un robot|un bot|un chatbot|une machine|un humain|humain|une vraie personne|chatgpt)\\b`,
   ),
-  /\b(?:chatgpt|chat gpt)\b/,
   new RegExp(`\\b${SITE} est (?:[a-z]+ )?(?:une ia|un robot|un chatbot)\\b`),
   // official, the real programme, reliable, free — as the whole question, or of the site by name
   /^(?:est ce que |est ce )?(?:c )?(?:est )?(?:bien |vraiment )?officiel$/,

@@ -1,7 +1,7 @@
 /**
  * The themes shown under the first gesture of the game, on the first screen of the site (D19.15)
- * — six of the fifteen answers to what people hear (data/2026/riposte.json; the fifteen are
- * all in the section « Chercher », further down the page).
+ * — six of our answers to what people hear (data/2026/riposte.json; all of them are in the
+ * section « Chercher », further down the page).
  *
  * Six that name a need of every day and name no one: housing, transport, pay, pensions, taxes,
  * energy. They stand on the same screen as the mascot, so the rule of the game's own words

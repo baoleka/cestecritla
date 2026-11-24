@@ -15,6 +15,7 @@ import {
   expand,
   groupBySection,
   inBookWords,
+  joinWords,
   searchOptions,
   type BookWording,
   type SearchDoc,
@@ -84,7 +85,7 @@ export function loadEngine(indexUrl: string, metaUrl: string): Promise<Engine> {
  * measures in the sheet (review of 23/11/2026, S8).
  */
 export function findSections(engine: Engine, question: string, max: number): SectionHit[] {
-  const searched = inBookWords(spelled(question).join(' '), engine.meta.book_words).text;
+  const searched = inBookWords(joinWords(spelled(question)), engine.meta.book_words).text;
   const query = buildQuery(searched, expand(searched, engine.meta.synonyms));
   const hits = engine.index
     .search(query as Parameters<typeof engine.index.search>[0], searchOptions())
@@ -99,7 +100,7 @@ export function findSections(engine: Engine, question: string, max: number): Sec
 export function findRanked(engine: Engine, asked: string): Ranked[] {
   // Letters typed apart are one word: « R.S.A. » is searched as « rsa ».
   // A phrase the book writes in other words is searched in its words (D21.8): « exil fiscal ».
-  const book = inBookWords(spelled(asked).join(' '), engine.meta.book_words);
+  const book = inBookWords(joinWords(spelled(asked)), engine.meta.book_words);
   const question = book.text;
   const query = buildQuery(question, expand(question, engine.meta.synonyms));
   // The words of the question as the index cuts them: a word that found no measure AS WRITTEN

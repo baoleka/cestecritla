@@ -10,6 +10,7 @@
 import { readFileSync } from 'node:fs';
 import type { SearchEvalFile } from '../../scripts/eval-2026.ts';
 import type { VerificationFile } from '../../scripts/verify-2026.ts';
+import { isDay } from './days.ts';
 import { cards, ripostes } from './editorial.ts';
 import { manifest, quotes } from './edition.ts';
 import { isLocatorDisplay, type LocatorDisplay } from './first-words.ts';
@@ -116,8 +117,10 @@ export interface LaunchFacts {
 }
 
 export function launchFacts(): LaunchFacts {
-  const launch = read('data/launch.json') as { lcen_declared_on: string | null };
-  return { lcenDeclared: launch.lcen_declared_on !== null };
+  const launch = read('data/launch.json') as { lcen_declared_on?: unknown };
+  // A day, as the launch gate reads it (scripts/launch.ts): a missing key, '' or « bientôt » is
+  // no declaration, and the notice says no more than the gate (review of 24/11/2026).
+  return { lcenDeclared: isDay(launch.lcen_declared_on) };
 }
 
 export interface GameFacts {

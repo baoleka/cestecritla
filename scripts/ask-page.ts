@@ -26,6 +26,7 @@ import {
   fillerOnly,
   groupBySection,
   inBookWords,
+  joinWords,
   lookAlikeOnly,
   searchOptions,
   spelled,
@@ -76,7 +77,7 @@ export function loadPage(): (question: string) => PageAsk {
   const find = (asked: string) => {
     // Letters typed apart are one word, for the search as for the rules (`spelled`).
     // A phrase the book writes in other words is searched in its words (D21.8).
-    const book = inBookWords(spelled(asked).join(' '), bookWords);
+    const book = inBookWords(joinWords(spelled(asked)), bookWords);
     const question = book.text;
     const query = buildQuery(question, expand(question, groups));
     const typed = new Set(terms(question));

@@ -70,6 +70,13 @@ export interface Turn {
   /** With links only: a word of the question that, asked alone, gets sentences — or null. */
   example?: string | null;
   /**
+   * True when the question names, points at or charges somebody, or holds a sensitive subject
+   * (`Found.charged`) — or when that cannot be known, the index having failed: nothing of ours
+   * stands above its links, not even the explanation of one of its words (review of
+   * 24/11/2026: « c'est quoi l'antisémitisme de X ? » opened our explanation of the word).
+   */
+  charged?: boolean;
+  /**
    * True when the question is refused once the files of the sheet say what it is — a coded
    * phrase, a people put on trial (src/lib/chat-local.ts, `hateful`): the one sentence an
    * insult gets, and nothing else.
@@ -311,12 +318,17 @@ export function viewOf(turn: Turn, page: PageState, last: boolean): TurnView {
         : { kind: 'rows', rows, reading: gists === undefined || gists === 'pending' };
 
   // The words of the sentences wait for the turn to hold what it will hold: all of its
-  // sentences, or none — a block that grew under the reader would move what they read.
+  // sentences, or none — a block that grew under the reader would move what they read. The
+  // words of the question wait for the search, like « En clair »: only then is it known that
+  // nobody is charged in it — and a charge gets none.
   const awaited = measures.kind === 'searching' || (measures.kind === 'rows' && measures.reading);
-  const wording: Wording = {
-    question: turn.question,
-    sentences: awaited ? null : rows.flatMap((row) => (row.gist === null ? [] : [row.gist])),
-  };
+  const wording: Wording | null =
+    !settled || turn.charged === true
+      ? null
+      : {
+          question: turn.question,
+          sentences: awaited ? null : rows.flatMap((row) => (row.gist === null ? [] : [row.gist])),
+        };
 
   // What was explained stays in the thread, whatever has changed since. What may still be
   // asked — the offer, a follow-up — depends on the page as it is now.

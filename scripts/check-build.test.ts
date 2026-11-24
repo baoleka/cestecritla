@@ -423,7 +423,10 @@ void test('the script of the sheet is small, and fetched at the first press — 
   // people left the code for the data on 15/11 (D16.72, D16.73), which paid for the rules of
   // those passes; the next rule comes in the same way. On 19/11/2026 the reading of the
   // explained words left it for a module of its own (PLAN-MOTS, lot 1, test below): 15.2 KB.
-  const budget = 16 * 1024;
+  // On 24/11/2026 the rules the review of src/lib asked for (PLAN-REVUES) brought it to 16.8 KB;
+  // asked whether to take lists out of the code or to raise the ceiling, the editor answered
+  // « Relever à 17 Ko » (D21.15). The rule above still holds for the next one.
+  const budget = 17 * 1024;
   assert.ok(gz <= budget, `the sheet's script: ${String(gz)} B gzip > ${String(budget)} B`);
   console.log(`  sheet script: ${String(gz)} B gzip of ${String(budget)} B`);
   // No page names it: neither as a script, nor as a preload. The search's script imports it

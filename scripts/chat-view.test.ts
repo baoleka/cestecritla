@@ -53,16 +53,18 @@ void test('a turn starts by searching, and asks nothing of anyone', () => {
   assert.deepEqual(viewOf(turn, page(), true), {
     plain: null,
     measures: { kind: 'searching' },
-    wording: { question: QUESTION, sentences: null },
+    wording: null,
     ai: null,
   });
   assert.equal(nextStep(turn, page()), null);
 });
 
-void test('the words of the question are read at once, those of the sentences once they are all there', () => {
-  // Searching, then waiting for the sentences: the question alone can be read.
+void test('the words of the question are read once the search has said nobody is charged, those of the sentences once they are all there', () => {
+  // Searching: nothing yet — it is not known that nobody is named or charged in the question,
+  // and our explanation of one of its words would stand above a charge (review of 24/11/2026).
+  assert.equal(viewOf(newTurn(QUESTION, NOTHING, null), page(), true).wording, null);
+  // Searched, then waiting for the sentences: the question alone can be read.
   const waiting = { question: QUESTION, sentences: null };
-  assert.deepEqual(viewOf(newTurn(QUESTION, NOTHING, null), page(), true).wording, waiting);
   assert.deepEqual(viewOf(searched(), page(), true).wording, waiting);
   assert.deepEqual(viewOf({ ...searched(), gists: 'pending' }, page(), true).wording, waiting);
   // Answered: the question, and the sentences shown — not one the page did not ask about.
@@ -85,6 +87,12 @@ void test('the words of the question are read at once, those of the sentences on
   assert.equal(viewOf(newTurn('pour qui voter ?', NOTHING, null), page(), true).wording, null);
   const frozen = withGists(searched(), { kind: 'silence', reopen: '2027-04-11T18:00:00Z' });
   assert.equal(viewOf(frozen, page(), true).wording, null);
+  // A question that names, points at or charges somebody: links, and none of our words above
+  // them — « c'est quoi l'antisémitisme de X ? » opened our explanation of the word.
+  assert.equal(
+    viewOf(searched({ charged: true, linksOnly: true }), page(), true).wording,
+    null,
+  );
 });
 
 void test('nothing found: one sentence, nothing sent — never « the programme does not speak of it »', () => {

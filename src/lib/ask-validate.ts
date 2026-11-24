@@ -157,7 +157,11 @@ export const PROVISIONAL_MAX_COPIED_SHARE = 0.5;
 const cp = (...codes: number[]): string => codes.map((c) => String.fromCodePoint(c)).join('');
 /** No-break, narrow no-break and thin spaces, written as code points so that they show here. */
 const ODD_SPACES = new RegExp(`[${cp(0xa0, 0x202f, 0x2009)}]`, 'g');
-const APOSTROPHES = /[’‘`´]/g;
+/**
+ * Apostrophes, and what looks like one: « ＇ » (full-width), « ′ » (prime), « ՚ », « ꞌ », « ʼ »
+ * — left as they were, « n＇entretient » was a word no rule read (review of 24/11/2026).
+ */
+const APOSTROPHES = /[’`´\uFF07\u2032\u055A\uA78C\u02BC\u02B9]/g;
 
 /** One spelling of spaces and apostrophes; nothing else is touched. */
 function plain(text: string): string {
@@ -236,7 +240,8 @@ const listed = (words: string): string[] => words.split(/\s+/).filter((word) => 
 /** Ranks and shares, « sixième », « deux cinquièmes »: with their plural. */
 const ORDINALS = listed(
   `deuxieme second seconde troisieme quatrieme cinquieme sixieme septieme huitieme neuvieme
-   dixieme onzieme douzieme vingtieme centieme millieme`,
+   dixieme onzieme douzieme treizieme quatorzieme quinzieme seizieme vingtieme trentieme
+   quarantieme cinquantieme soixantieme centieme millieme millionieme milliardieme`,
 );
 /** « Une vingtaine » — a closed list: « semaine » and « domaine » end the same way. */
 const ROUND_LOTS = listed(
@@ -249,7 +254,8 @@ const NUMBER_WORDS: ReadonlySet<string> = new Set([
   ...listed(
     `zero deux trois quatre cinq six sept huit neuf dix onze douze treize quatorze quinze seize
      vingt vingts trente quarante cinquante soixante septante huitante octante nonante cent cents
-     mille million millions milliard milliards moitie tiers quart quarts demi demie`,
+     mille million millions milliard milliards billion billions trillion trillions moitie tiers
+     quart quarts demi demie`,
   ),
   ...[...ORDINALS, ...ROUND_LOTS].flatMap((word) => [word, `${word}s`]),
 ]);
@@ -371,12 +377,13 @@ const PERSON: readonly RegExp[] = [
 
 const VOTE_ADVICE: readonly RegExp[] = [
   alone('votez|votons'),
-  alone('vot(?:e|er|es|ent) (?:pour|contre)'),
+  // whatever the tense: « votera pour », « voteraient contre » (review of 24/11/2026)
+  alone('vot(?:e|er|es|ent|era|eras|erons|erez|eront|erait|eraient|ait|aient) (?:pour|contre)'),
   alone('(?:faut|allez|aller|doit|devez) voter'),
   alone('bulletin de vote'),
 ];
 /** Any form of the word: allowed only in a sentence about a measure that uses it. */
-const VOTE_WORD = alone('vot(?:e|es|er|ez|ons|ent|ant|ée?s?)');
+const VOTE_WORD = alone('vot(?:e|es|er|ez|ons|ent|ant|ée?s?|ai[st]?|aient|erai[st]?|era|erons|erez|eront|erions|eriez|eraient|ions|iez|âmes|âtes|èrent|ants?|antes?|ation|ations)');
 
 /**
  * Other parties and politicians. A cited measure may name one (a law is often known by a
@@ -417,12 +424,20 @@ const SELF_UNLESS_CITED: readonly RegExp[] = [
 const ADDRESS: readonly RegExp[] = [
   /https?:/i,
   /www\./i,
-  new RegExp(`[a-z0-9-]+\\.(?:fr|com|org|net|eu|io|gouv)${EDGE_AFTER}`, 'iu'),
+  // Any ending of two letters or more — « programme.info », « europa.int », « exemple.be »:
+  // refusing a word glued to a full stop is the safe side here (review of 24/11/2026).
+  new RegExp(`[a-z0-9-]+\\.[a-z]{2,}${EDGE_AFTER}`, 'iu'),
   /@/,
 ];
 
-/** Guillemets and double quotes of every kind, as code points: « » " “ ” „ ‹ ›. */
-const QUOTES = new RegExp(`[${cp(0xab, 0xbb, 0x22, 0x201c, 0x201d, 0x201e, 0x2039, 0x203a)}]`);
+/**
+ * Guillemets and quotes of every kind, as code points: « » " “ ” „ ‟ ‹ › ＂ 〝 〞 ″ ‶, the
+ * single opening quote ‘ — and a straight one that opens a word after a space: « une ‘borne de
+ * recharge’ » quoted the book unseen (review of 24/11/2026).
+ */
+const QUOTES = new RegExp(
+  `[${cp(0xab, 0xbb, 0x22, 0x201c, 0x201d, 0x201e, 0x201f, 0x2039, 0x203a, 0xff02, 0x301d, 0x301e, 0x2033, 0x2036, 0x2018)}]|(?:^| )'`,
+);
 const MARKUP = /[<>{}[\]\\`*_#|~^]/;
 const CONTROL = /\p{Cc}/u;
 /**
@@ -434,6 +449,12 @@ const CONTROL = /\p{Cc}/u;
 const FORMAT = /\p{Cf}/u;
 const LOOSE_MARK = /\p{M}/u;
 const FOREIGN_LETTER = /(?!\p{Script=Latin})\p{L}/u;
+/**
+ * A Latin letter French does not write, and NFKC leaves as it is — « ạ », « ẹ », « ɑ », a small
+ * capital « ᴘ »: « nẹ … pạs » was a negation no rule read (review of 24/11/2026). What `LETTERS`
+ * leaves out is refused, as its comment says.
+ */
+const OUTSIDE_LETTERS = new RegExp(`(?![${WORD}])\\p{L}`, 'u');
 function otherForm(text: string): boolean {
   for (const character of text) {
     if (/\p{L}/u.test(character) && character.normalize('NFKC') !== character) return true;
@@ -528,9 +549,12 @@ function ownRefusals(raw: string, index: number, length: Length): Own {
   if (LOOSE_MARK.test(text)) refuse('markup', 'accent without its letter');
   if (FOREIGN_LETTER.test(text)) refuse('markup', 'letter of another alphabet');
   else if (otherForm(text)) refuse('markup', 'letter in another form');
+  else if (OUTSIDE_LETTERS.test(text)) refuse('markup', 'letter French does not write');
   const markup = MARKUP.exec(text);
   if (markup !== null) refuse('markup', markup[0]);
-  if (/[.!?…]["»”]?\s+\p{Lu}/u.test(text)) refuse('several', 'more than one sentence');
+  // A capital after the end of a sentence, with or without a space: « …par commune.Elle
+  // ouvre… » is two sentences (review of 24/11/2026).
+  if (/[.!?…]["»”]?\s*\p{Lu}/u.test(text)) refuse('several', 'more than one sentence');
   const words = wordsOf(text).length;
   if (words > length.max || (text !== '' && words < length.min)) {
     refuse('length', `${String(words)} words`);
@@ -576,10 +600,13 @@ function heldRefusals(own: Own, index: number, held: readonly string[]): Refusal
   /** The very word found, not another one of the same list: « Macron » is not « Le Pen ». */
   const unlessHeld = (rule: RuleId, patterns: readonly RegExp[]): void => {
     for (const pattern of patterns) {
-      const found = pattern.exec(text);
-      if (found === null) continue;
-      const same = alone(literal(found[0]), pattern.flags);
-      if (!heldPlain.some((other) => same.test(other))) refuse(rule, found[0]);
+      // Every word the pattern finds, not the first only: once a cited measure held « Macron »,
+      // « Bardella » next to it went unread (review of 24/11/2026).
+      const every = new RegExp(pattern.source, `${pattern.flags.replace('g', '')}g`);
+      for (const found of text.matchAll(every)) {
+        const same = alone(literal(found[0]), pattern.flags);
+        if (!heldPlain.some((other) => same.test(other))) refuse(rule, found[0]);
+      }
     }
   };
   if (!own.advice && VOTE_WORD.test(text) && !heldPlain.some((other) => VOTE_WORD.test(other))) {
@@ -1047,7 +1074,9 @@ function explainRefusals(
   // --- its names: any word written with a capital is a word of the page, or a common one
   text.split(' ').forEach((word, position) => {
     const core = bare(word);
-    if (!/^\p{Lu}/u.test(core)) return;
+    // A capital at its head, or after a hyphen: « pro-Ruffin », « anti-Poutine » hold a name
+    // after a small prefix (review of 24/11/2026). Not after an elision: « l'État ».
+    if (!/^\p{Lu}/u.test(core) && !/-\p{Lu}/u.test(core)) return;
     const acronym = /^[\p{Lu}\p{N}]{2,}$/u.test(core);
     // « États-Unis » is two words and one name: read whole, then part by part.
     const whole = copyTokens(core);

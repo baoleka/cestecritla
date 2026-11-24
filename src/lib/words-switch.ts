@@ -37,17 +37,24 @@ function surfacesOf(value: unknown): WordsSite {
 }
 
 /**
+ * The line under the search links to « Mots du programme » (/mot/#mot-…), which only the
+ * `pages` surface builds: without it the link led to an anchor that is not there (review of
+ * 24/11/2026, S21).
+ */
+const linked = (site: WordsSite): WordsSite => ({ ...site, search: site.pages && site.search });
+
+/**
  * The surfaces of a host: production's are `production`; the preview host shows those, and those
  * its own line opens on top — never fewer.
  */
 export function wordsFor(file: unknown, host: 'apex' | 'preview'): WordsSite {
   const read = isRecord(file) ? file : {};
   const production = surfacesOf(read['production']);
-  if (host === 'apex') return production;
+  if (host === 'apex') return linked(production);
   const preview = surfacesOf(read['preview']);
-  return {
+  return linked({
     pages: production.pages || preview.pages,
     search: production.search || preview.search,
     game: production.game || preview.game,
-  };
+  });
 }

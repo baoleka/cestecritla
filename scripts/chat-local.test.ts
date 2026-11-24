@@ -493,8 +493,17 @@ void test('a title, a nickname, a name that is also a word: somebody is pointed 
   }
   // A word that only looks like a word of the book is not one: « françois » is not « français ».
   assert.deepEqual(strangersIn('françois et la fraude', hits), ['françois']);
-  // How a phone writes a number is a number.
+  // How a phone writes a number is a number — in capitals too (review of 24/11/2026).
   assert.deepEqual(strangersIn('la retraite a 60ans 32h 6eme 1700€', []), ['retraite']);
+  assert.deepEqual(strangersIn('la retraite a 60ANS 32H 6ÈME', []), ['retraite']);
+  // A name is judged whole: a letter the search drops, or a mark under each letter, does not
+  // leave it a piece too short to count (review of 24/11/2026: « Søren » was « s »).
+  const retraite = [{ id: A, score: 1, by: terms('retraite') }];
+  assert.deepEqual(strangersIn('Søren et la retraite', retraite), ['Søren']);
+  assert.deepEqual(strangersIn('Słowacki et la retraite', retraite), ['Słowacki']);
+  const underlined = `O̲b̲o̲n̲o̲ et la retraite`;
+  assert.deepEqual(strangersIn(underlined, retraite).length, 1);
+  assert.deepEqual(strangersIn('l’œuvre et la retraite', retraite), ['œuvre']);
 });
 
 void test('a sensitive subject gets our sentences only when it is asked alone (sixth review)', () => {
@@ -639,6 +648,15 @@ void test('a sign that is no word — a flag, a religious sign, an animal — is
     `${sign(0x5350)} finance`,
     `${sign(0x041c)}élenchon finance`,
     `${sign(0x05d9, 0x05d4, 0x05d5, 0x05d3, 0x05d9)} finance`,
+    // A Latin letter the search drops is no letter it reads: a small capital, « ɑ », « ø », « ı »
+    // hid a name from every rule (review of 24/11/2026).
+    `la retraite de ${sign(0x1d0d, 0x1d00, 0x1d04, 0x0280, 0x1d0f, 0x0274)}`,
+    `M${sign(0x0251)}cron et la retraite`,
+    `S${sign(0x00f8)}ren et la retraite`,
+    `K${sign(0x0131)}l${sign(0x0131)}çdaro${sign(0x011f)}lu et la retraite`,
+    `${sign(0x029f, 0xa730, 0x026a)} et la police`,
+    // Brackets three deep are a coded mark, made of no word.
+    '(((la finance)))',
   ]) {
     assert.ok(pointsWithASign(question, NOTHING), question);
     assert.equal(measuresFor(question, [], hits, all, NOTHING).sentences, false, question);
@@ -652,6 +670,9 @@ void test('a sign that is no word — a flag, a religious sign, an animal — is
     'la retraite + la finance = ?',
     '100 % retraite',
     'ça coûte combien, la retraite ? Et où est la finance ?',
+    // A degree is a measure's sign, not a target's (review of 24/11/2026).
+    'la finance et 2 °C',
+    'la police (la retraite)',
   ]) {
     assert.equal(pointsWithASign(question, NOTHING), false, question);
     assert.equal(measuresFor(question, [], hits, all, NOTHING).sentences, true, question);
@@ -729,11 +750,25 @@ void test('a date has to be the date of a measure shown (seventh review)', () =>
     'le 7 octobre 2023',
     'le 7 du mois d’octobre',
     'le sept du mois d’octobre',
+    // …and the same date written any other way: letters apart, a figure in another form, the
+    // month in the plural or cut short, a day and a month in figures (review of 24/11/2026).
+    'le 7 o c t o b r e',
+    'le 7 O.C.T.O.B.R.E',
+    `le ${String.fromCodePoint(0xff17)} octobre`,
+    `le ${String.fromCodePoint(0x1d7d5)} octobre`,
+    'le ⁷ octobre',
+    'les 7 octobres',
+    'le 7 octobr',
+    'le massacre du 7/10',
   ]) {
     // …and nothing is shown at all: the first words of the measure of another day, under
     // this date, would read as if the book spoke of it (eighth review).
     const found = measuresFor(question, [], [DAY], all, lexicon);
     assert.deepEqual([found.rows, found.sentences], [[], false], question);
+  }
+  // The measure's own date in figures, a part of a whole: the measure.
+  for (const question of ['le massacre du 17/10/1961', 'les 3/4 du massacre']) {
+    assert.equal(shown(question), true, question);
   }
 });
 
@@ -788,6 +823,14 @@ void test('a hateful statement that is the whole question is refused; whoever re
     'les immigrés sont des délinquants non',
     'les juifs sont des voleurs : antisémitisme',
     'les musulmans sont des terroristes en puissance',
+    // …in whatever writing the question mark or the quotation marks come (review of
+    // 24/11/2026: only the ASCII ones counted).
+    'les musulmans sont des terroristes ❓',
+    'les migrants sont des parasites？',
+    '¿ les migrants sont des parasites',
+    '‘les migrants sont des parasites’',
+    "'les migrants sont des parasites'",
+    '‹ les migrants sont des parasites ›',
     // What was done to a people, what was said of it once: not what the asker says of it
     // (eleventh review).
     'les migrants sont traités comme des animaux',
@@ -945,6 +988,66 @@ void test('on the index of the book: « exil fiscal » finds the tax, never the 
   }
   assert.deepEqual(page('taxe Zucman').rows, ['p2c2-s02-m02', 'p2c2-s02-m03']);
   assert.deepEqual(page('exit tax').rows, ['p2c2-s02-m03']);
+});
+
+void test('on the index of the book: a people next to a subject, a sensitive word typed apart, a date of another day — no sentence, and nothing of ours above the links (review of 24/11/2026)', () => {
+  const page = loadPage();
+  for (const question of [
+    // a people next to a country, or next to « exil fiscal », which the search reads as
+    // « évasion fiscale » (D21.8)
+    'les migrants et la Russie',
+    'les africains et la Russie',
+    'les étrangers et l’exil fiscal',
+    'les Algériens et l’exil fiscal',
+    'les migrants sont des exilés fiscaux',
+    // a people and a verb no list holds
+    'les migrants squattent la garantie d’autonomie',
+    'les immigrés abusent de la garantie d’autonomie',
+    'les étrangers volent la Sécurité sociale intégrale',
+    // a sensitive subject typed apart
+    'la règle verte et le r a c i s m e',
+    'écocide et r.a.c.i.s.m.e',
+    // a name and the date of another day
+    'Mélenchon le 7 octobre, c’est quoi la 6e République ?',
+  ]) {
+    const { shown } = page(question);
+    assert.deepEqual([shown.sentences, shown.charged], [false, true], question);
+  }
+  // A subject asked alone keeps its sentences: a country and a subject of the book, the tax.
+  for (const question of ['la Russie et l’énergie', 'l’exil fiscal']) {
+    assert.equal(page(question).shown.sentences, true, question);
+  }
+});
+
+void test('one of our objections, and what rides along it in other words than an epithet: a name, a title, a people (review of 24/11/2026)', () => {
+  const real = lexiconOf(wordLists(), () => []);
+  const all = (): boolean => true;
+  const hits = [{ id: A, score: 10, by: terms('retraite') }];
+  const supports = [C, D];
+  const reviewed = (question: string, objection: string): boolean =>
+    measuresFor(question, supports, hits, all, real, objection).reviewed === true;
+  const pensions = 'La retraite à 60 ans, c’est infinançable';
+  assert.ok(reviewed(pensions, pensions));
+  assert.ok(reviewed('Mon père dit que la retraite à 60 ans, c’est infinançable', pensions));
+  for (const question of [
+    'Borne dit que la retraite à 60 ans, c’est infinançable',
+    'Leur chef dit que la retraite à 60 ans, c’est infinançable',
+    'Macron dit que la retraite à 60 ans, c’est infinançable',
+  ]) {
+    assert.equal(reviewed(question, pensions), false, question);
+  }
+  // A people and what is said of it, whatever the objection.
+  const taxes = 'Avec vous, les impôts vont exploser';
+  assert.ok(reviewed(taxes, taxes));
+  assert.equal(reviewed(`${taxes}, les noirs achètent tout`, taxes), false);
+  // Five letters in common are not a word of the objection: « communautarisme » is not
+  // « communisme ».
+  const industry = 'Ils veulent tout nationaliser, c’est le communisme';
+  assert.ok(reviewed(industry, industry));
+  assert.equal(reviewed(`${industry} et le communautarisme`, industry), false);
+  // Whoever the objection's own wording names is the objection's.
+  const exile = 'Avec la taxe Zucman, les riches vont tous partir';
+  assert.ok(reviewed(exile, exile));
 });
 
 void test('on the index of the book: what the sixth and seventh reviews typed gets no sentence, and a subject asked alone keeps its sentences', () => {
@@ -1187,6 +1290,9 @@ void test('the ordinary words: words of every day and names of places — never 
   const real = lexiconOf(lists, () => []);
   for (const term of lists.people) {
     assert.equal(real.neutral(term), false, `${term} is in both lists`);
+    // A name of origin is no person of every day: « noir » vouched for itself, and « les noirs
+    // achètent tout » kept our written answer under an objection (review of 24/11/2026).
+    assert.equal(real.kin(stem(term)), false, `${term} is a people of the sensitive list`);
   }
   // What the lists are for: a question made of everyday words keeps its sentences.
   const hits = [{ id: A, score: 10, by: terms('loyers plan') }];
@@ -1801,4 +1907,128 @@ void test('on the evaluation set, the phone keeps for itself what asks for a vot
     .map((item) => item.id);
   // h20: « je dois voter pour qui ? » · h28: « qui va gagner… un pronostic ».
   assert.deepEqual(kept, ['h20', 'h28']);
+});
+
+void test('what the review of 24/11/2026 found in the rules, both ways: a vote under a condition, a name behind a record or a break, a mockery alone', () => {
+  // A condition about one's own vote is taken out of the question, not laid over it: what is
+  // left may still ask whom to vote for.
+  for (const question of [
+    'Pour qui voter si on vote utile ?',
+    'si je vote, pour qui voter en 2027 ?',
+    'quand on vote, pour qui voter ?',
+    'pour qui voter en 2027, si je vote ?',
+    'Si je vote, qui va gagner ?',
+    'si je vote, pour qui ?',
+  ]) {
+    assert.ok(asksForVote(question), question);
+  }
+  for (const question of [
+    'Si je vote Mélenchon, mes impôts baissent ?',
+    'Si je vote pour LFI, la retraite à 60 ans ?',
+    'on me traite d’islamo-gauchiste parce que je vote LFI',
+    // …with an elided word too: the search drops it, the condition is still one
+    'On me traite de facho parce qu’on vote LFI',
+    'Puisqu’on vote LFI, mes impôts baissent ?',
+    'Lorsqu’on vote LFI, la retraite à 60 ans ?',
+  ]) {
+    assert.equal(asksForVote(question), false, question);
+  }
+  assert.ok(asksForVote('On vote LFI ?'));
+  // A pattern written with an elided word reads it: a title, an opinion asked, a fortune.
+  assert.ok(refersToSomeone('L’élu et la retraite à 60 ans'));
+  assert.ok(refersToSomeone('l’élue et le smic'));
+  assert.equal(refersToSomeone('les élus et la retraite'), false);
+  for (const question of ['Que penser d’Attal ?', 'Ton avis d’Attal ?', 'Le patrimoine d’Autain']) {
+    assert.ok(asksOffTopic(question), question);
+  }
+  // A person's record is no law, and neither is a law with another word of the sentence, or a
+  // break, between it and the name: the name stays a name, and the question gets links.
+  for (const question of [
+    'les années Macron et le chômage',
+    'le gouvernement Macron et la retraite',
+    'le quinquennat Macron et la retraite',
+    'la politique de Macron sur les retraites',
+    'la politique de Retailleau et les migrants',
+    'le gouvernement Netanyahou et Gaza',
+    'les lois et la femme de Macron',
+    'la loi et les amis de Macron',
+    'la loi travail et Macron',
+    'Après la loi, Macron et la retraite',
+    'la loi : Macron et la retraite',
+  ]) {
+    assert.ok(namesSomeone(question), question);
+  }
+  // A law that bears a name is still the law, one word of its subject included.
+  for (const question of [
+    'abroger la réforme Macron des retraites',
+    'la loi immigration de Darmanin',
+    'abroger la loi Kasbarian',
+    'la taxe Zucman, c’est quoi ?',
+    'la circulaire Retailleau',
+    'le décret de Darmanin',
+  ]) {
+    assert.equal(namesSomeone(question), false, question);
+  }
+  // What is said of a man after a break is his, whatever law ends the clause before it (the
+  // fold of D21.7 read across the colon: these were refused before it, and are again).
+  for (const question of [
+    'La loi : Macron mis en examen',
+    'Encore une taxe : Macron va mourir',
+    'Le pacte, Macron malade',
+    'La taxe ? Macron, comptes en Suisse',
+    'Après la loi, Macron doit partir ?',
+    'la taxe, Macron est riche',
+    'la loi. Macron mis en examen',
+  ]) {
+    assert.ok(asksOffTopic(question), question);
+  }
+  // …and the law's own name, in the same clause, is still the law's (D21.7).
+  for (const question of [
+    'Taxe Zucman : partir ou payer ?',
+    'Avec la taxe Zucman, les riches vont tous partir',
+  ]) {
+    assert.equal(asksOffTopic(question), false, question);
+  }
+  // A mockery is refused next to a name, never alone: alone, it is a word of a question.
+  for (const question of [
+    'le statut des clowns et des artistes de cirque',
+    'que prévoit le programme contre les charlatans des thérapies alternatives ?',
+    'la réforme des retraites est débile, que propose le programme ?',
+    'les clowns à l’hôpital',
+    'le théâtre de guignol',
+  ]) {
+    assert.equal(asksOffTopic(question), false, question);
+  }
+  for (const question of [
+    'Macron est un clown',
+    'le clown Macron',
+    'ce guignol de Bardella',
+    'Mélenchon débile',
+    'LFI, des charlatans',
+    'bande de clowns',
+  ]) {
+    assert.ok(asksOffTopic(question), question);
+  }
+  // « quelle IA », « ChatGPT »: the site's when asked of it or of the reader, the programme's
+  // otherwise — and « ce chat » is a cat.
+  for (const question of [
+    'quelle IA ?',
+    'c’est quelle IA ?',
+    'quelle IA tu utilises ?',
+    'quelle IA derrière ce site ?',
+    'es-tu ChatGPT ?',
+    'c’est ChatGPT ?',
+  ]) {
+    assert.ok(asksAboutSite(question), question);
+  }
+  for (const question of [
+    'Quelle IA dans les services publics ?',
+    'Quelle IA pour l’école ?',
+    'réguler ChatGPT à l’école ?',
+    'interdire ChatGPT ?',
+    'ChatGPT et l’emploi',
+    'ce chat est maltraité, que prévoit le programme ?',
+  ]) {
+    assert.equal(asksAboutSite(question), false, question);
+  }
 });

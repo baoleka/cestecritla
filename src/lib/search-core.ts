@@ -82,15 +82,38 @@ const APART = /(^|[^a-z0-9])((?:[a-z][^a-z0-9]+)+[a-z]\.?)(?![a-z0-9])/g;
  * bold — are read as the letters they are: the index would drop them, and a name with them.
  */
 export function spelled(text: string): string[] {
+  return wordsIn(rejoined(text));
+}
+
+/** The text folded, with its letters typed apart put back together, punctuation still there. */
+function rejoined(text: string): string {
   const join = (_run: string, before: string, letters: string): string => {
     const word = letters.replace(/[^a-z]/g, '');
     return /^[yat]+$/.test(word) ? `${before}${letters}` : `${before}${word}`;
   };
-  return normalize(text.normalize('NFKC'))
-    .replace(DOTTED, join)
-    .replace(APART, join)
-    .split(/[^a-z0-9]+/)
-    .filter((token) => token.length > 0);
+  return normalize(text.normalize('NFKC')).replace(DOTTED, join).replace(APART, join);
+}
+
+const wordsIn = (folded: string): string[] =>
+  folded.split(/[^a-z0-9]+/).filter((token) => token.length > 0);
+
+/**
+ * Where a sentence breaks: a comma, a colon, a question mark, a full stop that ends a word,
+ * quotation marks, brackets, a dash. Never inside a word, never inside a number (« 49.3 »).
+ */
+const BREAK = /[,;:!?…«»"“”()[\]{}|]|\.(?![a-z0-9])|\s-+\s|[–—]/;
+
+/**
+ * The words of a question, as `spelled` reads them, cut where the sentence breaks: « La loi :
+ * Macron… » is two clauses, « la loi Macron » one. The breaks are found after the letters typed
+ * apart are put back together — the commas of « m, a, c, r, o, n » are no break —, so the
+ * clauses, joined by a space, are `spelled` word for word.
+ */
+export function spelledClauses(text: string): string[] {
+  return rejoined(text)
+    .split(BREAK)
+    .map((clause) => wordsIn(clause).join(' '))
+    .filter((clause) => clause !== '');
 }
 
 /** Light French stemming: plural, feminine "ée", "eaux" → "eau", "aux" → "al", "-ement" / "-ent". */
@@ -171,6 +194,9 @@ export const SEARCH = {
   maxFuzzy: 6,
 } as const;
 
+/** A number is searched as it is written: « 1500 » is not the start of « 150000 ». */
+const NUMBER_TERM = /^\d+$/;
+
 export function searchOptions(): {
   fuzzy: (term: string) => number | false;
   prefix: (term: string) => boolean;
@@ -179,8 +205,11 @@ export function searchOptions(): {
   maxFuzzy: number;
 } {
   return {
-    fuzzy: (term) => (term.length >= SEARCH.fuzzyMinLength ? 0.2 : false),
-    prefix: (term) => term.length >= SEARCH.prefixMinLength,
+    // Neither near nor the start of a number: « 1 500 euros » found a measure on 150 000, and
+    // « 200 000 » measures on 700 000 (review of 24/11/2026).
+    fuzzy: (term) =>
+      term.length >= SEARCH.fuzzyMinLength && !NUMBER_TERM.test(term) ? 0.2 : false,
+    prefix: (term) => term.length >= SEARCH.prefixMinLength && !NUMBER_TERM.test(term),
     boost: { ...SEARCH.boost },
     bm25: { ...SEARCH.bm25 },
     maxFuzzy: SEARCH.maxFuzzy,
@@ -283,7 +312,25 @@ export function inBookWords(question: string, wordings: readonly BookWording[]):
   }
   if (added.length === 0) return { text: question, credit };
   const kept = tokens.filter((_token, at) => !dropped.has(at));
-  return { text: [...kept, ...added].join(' '), credit };
+  return { text: joinWords([...kept, ...added]), credit };
+}
+
+/**
+ * Words joined into one line that the search reads back as the same words: a space between
+ * them — and a comma between two numbers, which the rule for thousands written with a space
+ * (`normalize`) would otherwise merge: « En 2027, 100 % Sécu ? » was searched as 2027100
+ * (review of 24/11/2026). A number typed « 1 600 » is one word by then.
+ */
+export function joinWords(words: readonly string[]): string {
+  return words.reduce(
+    (line, word, at) =>
+      at === 0
+        ? word
+        : /\d$/.test(words[at - 1] ?? '') && /^\d/.test(word)
+          ? `${line}, ${word}`
+          : `${line} ${word}`,
+    '',
+  );
 }
 
 /** The words that found a proposition, with the words typed that the book's words stand for. */
@@ -357,7 +404,13 @@ export function groupBySection(hits: readonly Hit[], maxItems = 4): SectionHit[]
  */
 export function lookAlikeOnly(found: readonly string[], asked: readonly string[]): boolean {
   return !found.some((term) =>
-    asked.some((word) => term === word || term.startsWith(word) || word.startsWith(term)),
+    asked.some(
+      (word) =>
+        term === word ||
+        (!NUMBER_TERM.test(word) &&
+          !NUMBER_TERM.test(term) &&
+          (term.startsWith(word) || word.startsWith(term))),
+    ),
   );
 }
 
@@ -371,6 +424,8 @@ export function lookAlikeOnly(found: readonly string[], asked: readonly string[]
  * here costs a row that is beside the point; a word too many costs « rien trouvé » to a
  * question made of that word alone — which is why « monde » or « France » are not in it.
  */
+// Compared with the words as the index cuts them: each written as it is typed, and kept as its
+// stem — « avis », « années », « mauvais », « soutient » were never seen (review of 24/11/2026).
 const FILLERS: ReadonlySet<string> = new Set(
   `parle parler parlent dit dire disent veut veulent vouloir veux voulez pense penser pensent
    propose proposer proposent prevoit prevoir prevoient fait faire font va vont aller peut
@@ -381,7 +436,8 @@ const FILLERS: ReadonlySet<string> = new Set(
    payer ecrit ecrire officiel officielle sorte sortes facon cote vie site sites combien
    coute coutent couter coutera couterait soutient soutiennent soutenu importe`
     .split(/\s+/)
-    .filter((word) => word !== ''),
+    .filter((word) => word !== '')
+    .map(stem),
 );
 
 /**

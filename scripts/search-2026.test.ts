@@ -12,11 +12,16 @@ import {
   STOPWORDS,
   credited,
   expand,
+  fillerOnly,
   groupBySection,
   inBookWords,
+  joinWords,
+  lookAlikeOnly,
   processTerm,
+  searchOptions,
   sectionOf,
   spelled,
+  spelledClauses,
   terms,
   tokenize,
 } from '../src/lib/search-core.js';
@@ -84,6 +89,63 @@ void test('letters typed apart are one word, and the small words of a sentence s
   for (const typed of ['Les loyers à Lyon, c’est quoi le plan ?', 'l’hôpital et les 32 heures']) {
     assert.deepEqual(spelled(typed), tokenize(typed), typed);
   }
+});
+
+void test('a question cut where it breaks: the same words, never a break inside letters typed apart or a number', () => {
+  for (const [typed, clauses] of [
+    ['La loi : Macron mis en examen', ['la loi', 'macron mis en examen']],
+    ['la loi. Macron', ['la loi', 'macron']],
+    ['Taxe Zucman, c’est quoi ?', ['taxe zucman', 'est quoi']],
+    ['« la taxe » (Zucman) — partir ?', ['la taxe', 'zucman', 'partir']],
+    ['la loi - Macron', ['la loi', 'macron']],
+    // …and none where the letters of a name or a number stand apart
+    ['m, a, c, r, o, n et la retraite', ['macron et la retraite']],
+    ['L.F.I. et la Russie', ['lfi et la russie']],
+    ['M. A. C. R. O. N. mis en examen', ['macron mis en examen']],
+    ['le 49.3 et la loi', ['le 49 3 et la loi']],
+    ['y a-t-il une mesure ?', ['y a t il une mesure']],
+  ] as const) {
+    assert.deepEqual(spelledClauses(typed), clauses, typed);
+  }
+  // Joined, the clauses are the words of `spelled`, one for one.
+  for (const typed of [
+    'Les loyers à Lyon, c’est quoi le plan ?',
+    'R.S.A. : à combien ?',
+    'La taxe ? Macron, comptes en Suisse',
+    'S.M.I.C. à combien ?',
+  ]) {
+    assert.equal(spelledClauses(typed).join(' '), spelled(typed).join(' '), typed);
+  }
+});
+
+void test('a number is searched as it is written, two numbers stay two, a filler is a filler (review of 24/11/2026)', () => {
+  // Neither near nor the start of another number…
+  const options = searchOptions();
+  for (const number of ['1500', '2000', '200000', '60']) {
+    assert.equal(options.fuzzy(number), false, number);
+    assert.equal(options.prefix(number), false, number);
+  }
+  assert.notEqual(options.fuzzy('retraites'), false);
+  assert.equal(options.prefix('retraite'), true);
+  // …and a measure found by another number is found by a look-alike only.
+  assert.equal(lookAlikeOnly(['150000'], ['1500']), true);
+  assert.equal(lookAlikeOnly(['1500'], ['1500']), false);
+  assert.equal(lookAlikeOnly(['retraites'], ['retraite']), false);
+  // Two numbers apart are never one: the rule for thousands written with a space would merge
+  // them once the words are joined again.
+  assert.deepEqual(terms(joinWords(spelled('En 2027, 100 % Sécu ?'))), ['2027', '100', 'secu']);
+  assert.deepEqual(terms(joinWords(spelled('le SMIC à 1 600 euros'))), ['smic', '1600', 'euro']);
+  assert.deepEqual(
+    terms(inBookWords(joinWords(spelled('2027, 100 exilés fiscaux')), [
+      { said: ['exilés fiscaux'], searched: 'évasion fiscale' },
+    ]).text),
+    ['2027', '100', 'evasion', 'fiscale'],
+  );
+  // The fillers are compared as the index cuts words.
+  for (const word of ['avis', 'années', 'année', 'mauvais', 'soutient', 'soutiennent']) {
+    assert.equal(fillerOnly(terms(word)), true, word);
+  }
+  assert.equal(fillerOnly(terms('retraite')), false);
 });
 
 void test('synonyms: a phrase of a group brings the others, and only then', () => {

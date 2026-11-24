@@ -81,6 +81,23 @@ for (const [root, asks] of BUILDS) {
   );
 }
 
+void test('the line under the search opens with « Mots du programme », never without it (review of 24/11/2026, S21)', () => {
+  const on = { pages: 'on', search: 'on', game: 'on' };
+  // Its link is /mot/#mot-<id>, an anchor only the page of the words builds.
+  for (const host of ['apex', 'preview'] as const) {
+    const closed = wordsFor({ production: { ...on, pages: 'off' }, preview: {} }, host);
+    assert.deepEqual([closed.pages, closed.search, closed.game], [false, false, true], host);
+    const open = wordsFor({ production: on, preview: {} }, host);
+    assert.deepEqual([open.pages, open.search, open.game], [true, true, true], host);
+  }
+  // The preview opens what production keeps closed, both together or not at all.
+  const preview = wordsFor(
+    { production: { pages: 'off', search: 'on' }, preview: { pages: 'on' } },
+    'preview',
+  );
+  assert.deepEqual([preview.pages, preview.search], [true, true]);
+});
+
 void test('the texts of « En clair » no longer carry the explained words', () => {
   const root = 'dist-gists';
   if (!existsSync(join(root, 'data'))) return;

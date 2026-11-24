@@ -12,7 +12,23 @@
  * Pure, and shared: the page runs it before sending anything (a recognised objection never
  * leaves the phone), the Worker runs it again.
  */
-import { sameWord, terms } from './search-core.js';
+import { sameWord, terms, tokenize } from './search-core.js';
+
+/**
+ * « Sans nucléaire… » and « Avec le nucléaire… » share every word the index keeps: an objection
+ * written with one of these is not recognised in a question that says the other (review of
+ * 24/11/2026).
+ */
+const OPPOSITES: readonly (readonly [string, string])[] = [['sans', 'avec']];
+const saysTheOpposite = (question: string, objection: string): boolean => {
+  const asked = new Set(tokenize(question));
+  const own = new Set(tokenize(objection));
+  return OPPOSITES.some(
+    ([one, other]) =>
+      (own.has(one) && asked.has(other) && !asked.has(one)) ||
+      (own.has(other) && asked.has(one) && !asked.has(other)),
+  );
+};
 
 export interface ReviewedEntry {
   slug: string;
@@ -30,6 +46,7 @@ export function reviewedFor(question: string, entries: readonly ReviewedEntry[])
   for (const entry of entries) {
     const own = [...new Set(terms(entry.objection))];
     if (own.length < REVIEWED_MIN_WORDS) continue;
+    if (saysTheOpposite(question, entry.objection)) continue;
     const held = own.filter((word) => asked.some((other) => sameWord(word, other))).length;
     const share = held / own.length;
     if (held < REVIEWED_MIN_WORDS || share < REVIEWED_MIN_SHARE) continue;

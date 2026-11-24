@@ -37,6 +37,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { modeFor, type AskHost, type SiteMode } from './ask-mode.js';
 import { MAX_GIST_CHARS, parseGistsResponse } from './chat-contract.js';
+import { isDay } from './days.js';
 import { canonicalHash } from './fingerprint.js';
 import type { GameWordsFile } from './game.js';
 import { wordsFingerprint } from './word-links.js';
@@ -212,7 +213,9 @@ export function campaignDecided(ask: unknown): boolean {
   const decision: unknown = (ask as Record<string, unknown>)['campaign'];
   if (typeof decision !== 'object' || decision === null) return false;
   const { serve, decided_on: on, decided_by: by } = decision as Record<string, unknown>;
-  return serve === true && by === 'editor' && isDate(on) && !Number.isNaN(Date.parse(on));
+  // A day that exists, as the Worker reads it (src/worker/chat.ts, `isDay`): « 2026-02-30 »
+  // passed here while the Worker refused it (review of 24/11/2026).
+  return serve === true && by === 'editor' && isDay(on);
 }
 
 export interface GameGistsDecision {

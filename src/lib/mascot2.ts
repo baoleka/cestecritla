@@ -1,8 +1,8 @@
 /**
  * The mascot, second generation, as numbers (D17.1 to D17.17; docs/discovery/PLAN-TORTUE.md) —
  * shared by the build, the game and the sheet the editor validates. Pure: no file, no page, no
- * clock. IN PREPARATION: nothing that is online imports this module (src/lib/turtle.ts is the
- * turtle that is served).
+ * clock. Served since 15 November 2026 (D17.36), and the only generation since 16 November
+ * (lot F, D17.37); src/lib/turtle.ts keeps the arcs both generations drew.
  *
  * Five states, the same thresholds as before (D17.1), and one name: « ta tortue » (D17.2).
  *

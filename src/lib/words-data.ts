@@ -284,10 +284,8 @@ export function wordsPages(entries: readonly TermEntry[] = explainedTerms()): Wo
  * words of its page, cannot change under the name it had (R73) — the fingerprint of the three
  * files of the sheet did not cover them. The page is in the name, never a word (D20.13).
  */
-export const pageWordsName = (
-  file: PageWordsFile,
-  page: Pick<WordsPage, 'kind' | 'key'>,
-): string => `mots-${canonicalHash(file).slice(0, 16)}-${page.kind}-${page.key}`;
+export const pageWordsName = (file: PageWordsFile, page: Pick<WordsPage, 'kind' | 'key'>): string =>
+  `mots-${canonicalHash(file).slice(0, 16)}-${page.kind}-${page.key}`;
 
 /** The file of a page's words: who wrote them, the labels, each word as a dictionary orders them. */
 export function pageWords(

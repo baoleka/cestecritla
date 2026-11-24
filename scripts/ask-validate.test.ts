@@ -856,3 +856,67 @@ void test('how much an output copies is two numbers: the longest run, the larges
   assert.deepEqual(copyMeasure('', shown), { longest: 0, share: 0 });
   assert.deepEqual(copyMeasure({ phrases: [] }, shown), { longest: 0, share: 0 });
 });
+
+void test('what the review of 24/11/2026 found the control let through, before a deposit', () => {
+  // Every name of a list, not the first only: the measure names Macron, not Bardella.
+  assert.ok(
+    rulesOf(
+      'Le programme abroge la réforme Macron des jardins partagés, voulue par Bardella.',
+      GARDENS,
+    ).includes('party'),
+  );
+  assert.ok(
+    !rulesOf('Le programme abroge la réforme Macron des jardins partagés.', GARDENS).includes(
+      'party',
+    ),
+  );
+  // Quantities and ranks in letters no measure holds.
+  for (const texte of [
+    'Le programme prévoit un billion pour les bibliothèques de quartier.',
+    'Le programme ouvre une treizième bibliothèque de quartier dans chaque commune.',
+    'Le programme ouvre la trentième bibliothèque de quartier dans chaque commune.',
+  ]) {
+    assert.ok(rulesOf(texte, LIBRARY).includes('number'), texte);
+  }
+  // The vote, whatever the tense.
+  for (const texte of [
+    'Les habitants voteront le budget de chaque bibliothèque de quartier.',
+    'Les habitants votaient le budget de chaque bibliothèque de quartier.',
+    'Les votants choisiront chaque bibliothèque de quartier.',
+  ]) {
+    assert.ok(rulesOf(texte, LIBRARY).includes('vote'), texte);
+  }
+  // A letter French does not write, an apostrophe in another form: refused, or read.
+  assert.ok(
+    rulesOf(
+      `Le programme n${ch(0x1eb9)} ferme p${ch(0x1ea1)}s la bibliothèque de quartier.`,
+      LIBRARY,
+    ).includes('markup'),
+  );
+  assert.ok(
+    rulesOf(
+      `Le programme n${ch(0xff07)}ouvre la bibliothèque de quartier que le dimanche.`,
+      LIBRARY,
+    ).includes('negation'),
+  );
+  // Single quotes are quotes; two sentences glued are two.
+  assert.ok(
+    rulesOf(
+      `Le programme prévoit une ${ch(0x2018)}bibliothèque de quartier${ch(0x2019)} dans chaque commune.`,
+      LIBRARY,
+    ).includes('quote'),
+  );
+  assert.ok(
+    rulesOf(
+      'Le programme ouvre une bibliothèque de quartier par commune.Elle ouvre le dimanche.',
+      LIBRARY,
+    ).includes('several'),
+  );
+  // An address, whatever its ending.
+  assert.ok(
+    rulesOf(
+      'Le programme ouvre une bibliothèque de quartier, détaillée sur programme.info.',
+      LIBRARY,
+    ).includes('address'),
+  );
+});

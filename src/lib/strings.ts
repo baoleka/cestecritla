@@ -8,6 +8,7 @@
  * the page.
  */
 import kit from '../../design/strings.json';
+import { isDay, isInstant } from './days.ts';
 
 type Kit = typeof kit;
 export type StringKey = Exclude<keyof Kit, '$meta'>;
@@ -40,22 +41,32 @@ export function fr(n: number): string {
   return n.toLocaleString('fr-FR').replace(/\s/g, NBSP);
 }
 
-/** ISO date → `12 novembre 2026`. */
+/**
+ * ISO date → `12 novembre 2026`, `1er décembre 2026`. A day that does not exist throws: `Date`
+ * would print « 2026-04-31 » as « 1 mai 2026 », and the build would publish it (review of
+ * 24/11/2026).
+ */
 export function frDate(iso: string): string {
-  return new Date(iso)
-    .toLocaleDateString('fr-FR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-      timeZone: 'UTC',
-    })
+  const day = iso.slice(0, 10);
+  if (!(/^\d{4}-\d{2}-\d{2}$/.test(iso) ? isDay(iso) : isInstant(iso))) {
+    throw new Error(`strings: « ${iso} » is no day`);
+  }
+  return new Intl.DateTimeFormat('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  })
+    .formatToParts(new Date(`${day}T00:00:00Z`))
+    .map((part) => (part.type === 'day' && part.value === '1' ? '1er' : part.value))
+    .join('')
     .replace(/\s/g, NBSP);
 }
 
 /** A date or a month, ISO → `8 avril 2026`, `juillet 2025`: when a study was published. */
 export function frWhen(iso: string): string {
   if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) return frDate(iso);
-  if (!/^\d{4}-\d{2}$/.test(iso))
+  if (!/^\d{4}-(?:0[1-9]|1[0-2])$/.test(iso))
     throw new Error(`strings: « ${iso} » is neither a day nor a month`);
   return new Date(`${iso}-01`)
     .toLocaleDateString('fr-FR', { month: 'long', year: 'numeric', timeZone: 'UTC' })

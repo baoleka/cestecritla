@@ -15,7 +15,7 @@
  * A wrong match would put a text about something else at the top of the sheet.
  */
 import { reviewedFor, type ReviewedEntry } from './ask-reviewed.js';
-import { sameWord, terms } from './search-core.js';
+import { processTerm, sameWord, tokenize } from './search-core.js';
 
 export interface NotionEntry {
   id: string;
@@ -90,7 +90,19 @@ export function foldRanks(text: string): string {
   return out;
 }
 
-const wordsOf = (text: string): string[] => terms(foldRanks(text));
+/**
+ * Words that turn a term into its opposite, which the index drops as small words: kept here, so
+ * that « principe de régression » is not the card of « principe de non-régression » (review of
+ * 24/11/2026).
+ */
+const NEGATIONS: ReadonlySet<string> = new Set(['non', 'sans', 'pas', 'ni', 'anti']);
+
+const wordsOf = (text: string): string[] =>
+  tokenize(foldRanks(text)).flatMap((token) => {
+    if (NEGATIONS.has(token)) return [token];
+    const term = processTerm(token);
+    return term === null ? [] : [term];
+  });
 
 /** Where `needle` stands in a row in `hay`, each word matched as the same word; -1 when nowhere. */
 function rowIn(hay: readonly string[], needle: readonly string[]): number {

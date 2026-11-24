@@ -192,7 +192,7 @@ function withExplained(data: GameData, explaining: GameExplaining | null): GameD
     const ids = wordsOfSentence(word.gist, explaining);
     for (const id of ids) {
       const entry = byId.get(id);
-      if (entry !== undefined) used.set(id, [entry.term, prose(entry.plain)]);
+      if (entry !== undefined) used.set(id, [prose(entry.term), prose(entry.plain)]);
     }
     return ids.length === 0 ? word : { ...word, terms: ids };
   });
