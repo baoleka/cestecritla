@@ -440,3 +440,53 @@ Chaque revue : `/code-review max <cible> --max-findings all`, rapport seulement 
 | T18 | `scripts/build.ts:43` | Commentaires périmés | mineur |
 | T19 | `scripts/build-mode.ts:685` | Le refus de la build de retrait parle encore de deux pages | mineur |
 | T20 | `src/holding/pages/mentions-legales/index.astro:10` | PLAUSIBLE : la page des mentions de la build de retrait est indexable — question pour l'éditeur | mineur |
+
+### 24-25 novembre 2026, dans la nuit — revue 13 : `.github/workflows`
+- **16 constats** (8 importants, 3 antérieurs, 5 mineurs) : 13 confirmés, 3 plausibles ; un réfuté (le Worker des phrases typé avec des liaisons qu'il n'a pas : `worker-runtime.test.ts` le fait tourner sans elles). Le balayage final n'a jamais rendu son texte. **Rien de tout cela ne touche le site en ligne.** Recensés ailleurs : M2/C4, C5, D11/C7, M16, D4/D16.
+
+| # | Où | Constat | Gravité |
+|---|---|---|---|
+| G1 | `.github/workflows/watch.yml:72` | Dès qu'un signal d'aec2027.fr bouge, la veille ouvre un ticket « Veille R6 » chaque jour | important |
+| G2 | `.github/workflows/watch.yml:40` | Une sortie en erreur (site injoignable, script de rappel qui plante) laisse la tâche au vert : le rappel du gel ou des mots peut ne jamais s'ouvrir sans que personne le voie | important |
+| G3 | `.github/workflows/watch.yml:28` | PLAUSIBLE : une sonde d'aec2027.fr bloquée (aucune limite de temps) fait couper la tâche avant les rappels du gel et des mots | important |
+| G4 | `.github/workflows/watch.yml:126` | Le rappel des faits datés des mots s'arrête pour de bon dès qu'un fait d'une échéance passée reste non relu | important |
+| G5 | `.github/workflows/recrawl.yml:74` | Le rappel hebdomadaire (ticket n° 1) fait relever à la main la moitié des signaux ; `watch-source.ts --live` existe depuis le 12 novembre | important |
+| G6 | `.github/workflows/watch.yml:100` | PLAUSIBLE : la recherche des doublons de GitHub compare des mots dans n'importe quel ordre : un ancien titre peut avaler un rappel | important |
+| G7 | `.github/workflows/ci.yml:78` | « Worker startup budget » ne peut jamais échouer : aucun seuil | important |
+| G8 | `.github/workflows/ci.yml:200` | Le contrôle de la build d'essai qui demande ne tourne jamais dans la CI | important |
+| G9 | `scripts/watch-aec2027.ts:94` | Une erreur HTTP (403, 429, 5xx) est rapportée comme un changement d'aec2027.fr | antérieur |
+| G10 | `scripts/check-no-ai-mention.test.ts:399` | PLAUSIBLE : une partie de la section « Quand tu demandes » n'est jamais contrôlée sur la build servie | antérieur |
+| G11 | `scripts/watch-aec2027.ts:115` | Le signal du manifeste manque un balisage courant (`href` d'abord, adresse relative) | antérieur |
+| G12 | `.github/workflows/ci.yml:6` | « Rien ne sort au-delà de `npm ci` » est faux : télémétrie de wrangler et d'Astro, navigateurs | mineur |
+| G13 | `.github/workflows/ci.yml:1` | « Chaque porte » : le balayage du jeu, `e2e:gists` et `e2e:mascot2` ne tournent jamais en CI, et un seul moteur | mineur |
+| G14 | `.github/workflows/ci.yml:170` | Quatre commentaires contredisent le code (l'un dit qu'une question est envoyée) | mineur |
+| G15 | `.github/workflows/watch.yml:3` | « Le re-crawl est hebdomadaire et marche » : aucun workflow ne crawle depuis `a2e6003` | mineur |
+| G16 | `.github/workflows/recrawl.yml:26` | Du français dans le code : « lundi », `rappel`, `/tmp/rappel.md` | mineur |
+
+### 25 novembre 2026, dans la nuit — revue 14 : `scripts/seed-ask-2026.ts`
+- **22 constats** (14 importants, 1 antérieur, 7 mineurs) : 21 confirmés ou plausibles, un du balayage ; deux réfutés. Toutes les reproductions sur des données inventées, avec un `npx` de substitution qui ne faisait que noter ses arguments : aucun `private/`, rien vers Cloudflare. **Rien ne s'est produit** : l'outil ne tourne que sur la machine de l'éditeur, et seulement avec `--remote` et l'accord du jour.
+
+| # | Où | Constat | Gravité |
+|---|---|---|---|
+| E1 | `scripts/seed-ask-2026.ts:806` | Une option de mode mal tapée (`--switch=stopped`, `--withdraw`, `--gist`) dépose tout le texte du livre dans la base de production — y compris depuis la commande d'arrêt documentée, qui porte l'accord du jour | important |
+| E2 | `scripts/seed-ask-2026.ts:461` | Redéposer les phrases depuis une copie sans fichier des verdicts efface les 1 069 phrases, chaque contrôle dit « passé » | important |
+| E3 | `scripts/seed-ask-2026.ts:759` | Deux modes sur une ligne, ou `--check` et `--dry-run`, font en silence autre chose : la fiche 8 tapée d'une ligne rouvre sans rien déposer | important |
+| E4 | `scripts/seed-ask-2026.ts:767` | `--switch open` rouvre les phrases sans accord daté, alors que l'en-tête promet que rien ne part sans lui — question pour l'éditeur | important |
+| E5 | `scripts/seed-ask-2026.ts:726` | Quand l'arrêt d'urgence échoue, l'erreur est cachée et la commande proposée lit la base locale | important |
+| E6 | `scripts/seed-ask-2026.ts:834` | `--remote=<base>`, ou `--remote` en dernier, n'envoie rien et sort en succès sans le dire | important |
+| E7 | `scripts/seed-ask-2026.ts:838` | Tapé sans « .ts », l'outil ne fait rien et sort en succès — la commande d'arrêt comprise | important |
+| E8 | `scripts/seed-ask-2026.ts:745` | PLAUSIBLE : `--env preview` agit sur la base de production (une base pour tous les hôtes), et affiche « (preview) » | important |
+| E9 | `scripts/seed-ask-2026.ts:554` | Réexporter les phrases du jeu sans répéter `--link-only` défait les cinq cartes de D19.20 et D19.21 et efface sa validation | important |
+| E10 | `scripts/seed-ask-2026.ts:598` | Un identifiant répété dans `--link-only` efface sa validation du fichier du jeu | important |
+| E11 | `scripts/seed-ask-2026.ts:221` | Le retrait du site laisse les 1 069 phrases chez Cloudflare, alors que la base est promise vidée au retrait (D16.6) | important |
+| E12 | `scripts/seed-ask-2026.ts:596` | Le fichier du jeu dit toujours « écrites par une IA, lues par personne », quel que soit l'auteur | important |
+| E13 | `scripts/seed-ask-2026.ts:602` | Sa validation du fichier du jeu survit à un changement de son titre ou de sa note | important |
+| E14 | `scripts/seed-ask-2026.ts:175` | Un caractère NUL dans une proposition ferait afficher un morceau du livre dans le terminal | important |
+| E15 | `docs/discovery/09-architecture.md:614` | La fiche 8 arrête une phrase fausse par l'interrupteur de la base, mais 43 phrases sont dans le fichier du jeu, qu'aucun interrupteur n'atteint | antérieur |
+| E16 | `CLAUDE.md:47` | `--switch open\|stopped [--what ask\|gists]` : `--what` est obligatoire, `ask` a disparu | mineur |
+| E17 | `scripts/seed-ask-2026.ts:669` | « NOT added to the repository » : le fichier du jeu est suivi depuis D19.22 | mineur |
+| E18 | `scripts/seed-ask-2026.ts:507` | Un dépôt n'affiche jamais l'empreinte que `ask.json` doit noter | mineur |
+| E19 | `scripts/seed-ask-2026.ts:5` | Des commentaires disent que l'éditeur a lu les phrases | mineur |
+| E20 | `scripts/seed-ask-2026.ts:425` | Un commentaire de documentation posé sur le mauvais symbole | mineur |
+| E21 | `scripts/seed-ask-2026.ts:324` | Des jours de lecture impossibles passent (`isDay`) | mineur |
+| E22 | `scripts/seed-ask-2026.ts:532` | PLAUSIBLE : le compte des phrases qui écrivent le mot de leur carte se trompe pour -al/-aux | mineur |
