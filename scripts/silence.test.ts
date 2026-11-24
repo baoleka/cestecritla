@@ -208,8 +208,11 @@ void test('a moved date only needs a calendar change (decree of convocation)', (
 });
 
 void test('reopen time renders in Paris wall-clock French', () => {
-  assert.equal(formatReopenTimeFr(at('2027-04-18T18:00:00Z')), 'dimanche 18 avril, 20 h');
-  assert.equal(formatReopenTimeFr(at('2027-05-02T18:00:00Z')), 'dimanche 2 mai, 20 h');
+  assert.equal(
+    formatReopenTimeFr(at('2027-04-18T18:00:00Z')),
+    'dimanche 18 avril, 20 h (heure de Paris)',
+  );
+  assert.equal(formatReopenTimeFr(at('2027-05-02T18:00:00Z')), 'dimanche 2 mai, 20 h (heure de Paris)');
 });
 
 void test('invalid input is rejected', () => {
@@ -333,5 +336,8 @@ void test('a page deployed for a window announces its end — from the eve, and 
     );
   }
   // What the page writes with it: a day and an hour, in Paris.
-  assert.match(formatReopenTimeFr(first.endUtc), /^dimanche \d{1,2} \p{L}+, 20 h$/u);
+  assert.match(
+    formatReopenTimeFr(first.endUtc),
+    /^dimanche \d{1,2} \p{L}+, 20 h \(heure de Paris\)$/u,
+  );
 });

@@ -335,7 +335,10 @@ export function announcedReopen(
   return window?.endUtc ?? null;
 }
 
-/** Paris wall-clock rendering of an instant for the `{reopenTime}` placeholder: "dimanche 18 avril, 20 h". */
+/**
+ * Paris wall-clock rendering of an instant for the `{reopenTime}` placeholder: "dimanche 18
+ * avril, 20 h (heure de Paris)" — the zone said, for a reader overseas (D21.26).
+ */
 export function formatReopenTimeFr(instant: Date): string {
   const formatter = new Intl.DateTimeFormat('fr-FR', {
     timeZone: PARIS_TZ,
@@ -349,5 +352,5 @@ export function formatReopenTimeFr(instant: Date): string {
   const get = (type: Intl.DateTimeFormatPartTypes): string =>
     parts.find((p) => p.type === type)?.value ?? '';
   const day = get('day') === '1' ? '1er' : get('day');
-  return `${get('weekday')} ${day} ${get('month')}, ${get('hour')} h`;
+  return `${get('weekday')} ${day} ${get('month')}, ${get('hour')} h (heure de Paris)`;
 }
