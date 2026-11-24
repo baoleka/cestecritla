@@ -379,3 +379,64 @@ Chaque revue : `/code-review max <cible> --max-findings all`, rapport seulement 
   - « Tout effacer » reste sur la page Confidentialité dans toute build de l'app (D21.32, C2) ;
   - l'exception des clés `texte` et `phrases` est écrite dans `CLAUDE.md` (D21.33, B52).
 - **Ce que ces textes ont demandé aux portes** : trois phrases validées dépassent quinze mots ; elles sont à la liste d'exceptions de `scripts/check-strings.test.ts`, avec sa décision pour raison. « Préparé avec une IA. » est une mention de l'outil qui a écrit nos textes, pas d'une IA en direct (exemptée comme `concept.authorship.accepted`). « restaure » a quitté le vocabulaire jugé (`data/2026/vocabulary.json`), à la main, comme l'outil l'aurait fait : l'outil lit `private/`, absent de la copie de travail ; il sera rejoué dans le dépôt principal.
+
+### 24 novembre 2026, 23 h 07 — ses réponses du soir en production (D21.34, D21.35)
+- **L'anti-fuite complète, dans le dépôt principal**, a d'abord échoué sur le contrôle du nouveau balayage des titres et des aperçus : il plantait sa fenêtre dans une balise `<meta>`, que le lecteur efface avant de lire. Corrigé : le contrôle passe par la même extraction que les pages (`291c654`). **Son premier vrai passage a trouvé un aperçu** : la carte « conscription citoyenne » mettait dans le sien au moins dix mots de suite que le livre de 2026 écrit aussi (déjà dans l'édition 2025, que le balayage des corps de page soustrait). Sur sa réponse « Reformuler » (D21.34), sa deuxième phrase devient « Elle commence par une formation militaire, et l'objection de conscience y est un droit. » — vérifiée par l'anti-fuite avant de lui être proposée (`cbab91d`). « commence » est jugé clair à la main dans `data/2026/vocabulary.json` : les jugements de l'outil sont sous `private/lexicon/`, que la campagne ne touche pas (D21.14) ; l'outil, s'il tourne sans ce jugement, refusera et le nommera, sans rien écraser.
+- **Portes, dans la copie de travail puis sur `main`** : toutes vertes (718 tests unitaires, la build « scrutin » et les tests qui la lisent, bout en bout du site, de « Demander », de la feuille, des mots et du jeu dans les trois moteurs, balayage des 48 cartes, accessibilité, lint, typage ; l'anti-fuite complète sur `main`). Deux retouches de « Demander » avant le commit : « ‡ » retiré (je l'avais ajouté sans qu'il le nomme), et un nombre suivi d'un montant (« le smic à 1488 euros ») reste un montant.
+- **En ligne, sur sa réponse « Aperçu puis production » (D21.35)** : commit `cbab91d`. Aperçu à 23 h 04 (22 h 04 UTC), Worker `cestecritla-preview` version `13ba6cb1` ; production à 23 h 07 (22 h 07 UTC), Worker `cestecritla` version `76e263be`. Le Worker des phrases n'est pas touché. **Vérifié en ligne** : sur les trois hôtes, 1 311 fichiers sur 1 314 identiques à la build, les trois écarts connus ; aucun fichier `.mjs` ni chemin absolu dans ce qui part. Sonde de « Demander », avec les cas de ce soir (« ₪ », « † », « 1488 », le montant) : en production, un moteur à la fois, 45 « ok » ; sur l'aperçu, le premier passage complet a perdu deux phrases de WebKit au limiteur de débit (6 par minute, D7.5 : la page garde ses liens), rejoué seul : « ok ».
+- **Retour arrière, sa décision** : l'étiquette locale `prod-avant-reponses` (`79ea2bf`, la build servie de 21 h 28 à 23 h 07), fiche 14 du runbook.
+- **Télémétrie** (revues 12 et 13) : chaque build envoyait un événement à Astro, chaque commande de wrangler à Cloudflare ; sur cette machine, la télémétrie d'Astro est active depuis le premier build, le 9 septembre 2026. Ce soir, les builds et déploiements de la session sont partis avec `ASTRO_TELEMETRY_DISABLED=1` et `WRANGLER_SEND_METRICS=false` ; les scripts et la CI les porteront (lot des « rails »). Les envois passés ne se reprennent pas.
+
+### 24 novembre 2026, dans la nuit — revue 10 : `scripts/launch.ts`
+- **21 constats** (9 importants, 3 antérieurs, 9 mineurs) : 16 confirmés, 2 plausibles et 2 réfutés à la vérification, puis 3 d'un balayage final, relus contre le code. Rien construit ni testé dans la copie de travail, aucun `private/` ouvert.
+
+| # | Où | Constat | Gravité |
+|---|---|---|---|
+| A1 | `scripts/launch.ts:630` | Le retrait meurt sur un fichier de données à moitié écrit (une réponse en brouillon, `privacy_page` à `null`, un mot du jeu sans épingle) : les gardes de l'app sont lues même pour la build de retrait (avec D5, M5) | important |
+| A2 | `scripts/launch.ts:743` | La garde des mots expliqués prend pour une ouverture de la production une ligne du journal qui décide autre chose : « words.json » se lit dans « game-words.json », une ouverture de l'aperçu ou une fermeture comptent | important |
+| A3 | `scripts/launch.ts:722` | Le mandat D20.3, consommé, vaut encore pour sceller et ouvrir les mots, et la décision de l'éditeur est refusée (`--seal` écrit toujours « session ») ; même règle pour les cartes (`editorial.test.ts`) | important |
+| A4 | `scripts/launch.ts:189` | L'empreinte de la page Confidentialité ne couvre que les phrases `privacy.*` : boutons d'effacement, hébergeur, contact, adresses de Cloudflare, champs gardés sur le téléphone changent sans nouvelle relecture | important |
+| A5 | `scripts/launch.ts:257` | L'aperçu ne vérifie pas la ligne sur la couleur de la tortue, contrairement au code, à `PLAN-TORTUE.md` et à D17.26 | important |
+| A6 | `scripts/launch.ts:160` | Le Worker des phrases est retenu en production par des gardes des seules pages (tortue, liste du jeu, page Confidentialité), contre D19.12 ; déjà arrivé (R40) | important |
+| A7 | `scripts/launch.ts:472` | La date de la planche de la tortue n'a pas d'auteur : une session peut la redater, contre D17.24 ; de même la liste du jeu (B39) | important |
+| A8 | `scripts/launch.ts:338` | La production accepte un modèle nommé que l'aperçu refuse (« ne garde rien ») — avec M4 | important |
+| A9 | `scripts/launch.ts:402` | Une liste de un ou deux mots passe la garde ; la build cache alors le jeu et la tortue (D16.11) | important |
+| A10 | `scripts/mascot2-kit.ts:119` | Le mouvement de la tortue suit les durées du site (`motion`), hors de son empreinte | antérieur |
+| A11 | `scripts/mascot2-kit.ts:96` | Ses teintes servies viennent de `tokens.json` (`mascot-role`) ; l'empreinte les lit dans `palette.json` | antérieur |
+| A12 | `scripts/mascot2-kit.ts:111` | L'empreinte lit la chorégraphie du module chargé, pas du dossier donné | antérieur |
+| A13 | `scripts/launch.ts:600` | Jour UTC contre jour de Paris : entre minuit et 1 h (2 h l'été), une décision datée du jour est refusée, avec une mauvaise raison | mineur |
+| A14 | `scripts/launch.ts:598` | « Une vraie date » : `Date.parse` accepte le 31 novembre (`isDay` existe) | mineur |
+| A15 | `scripts/launch.ts:746` | Rien n'exige que le « oui » du relecteur précède l'ouverture, contrairement à trois textes | mineur |
+| A16 | `scripts/launch.ts:718` | Une ligne de décision à lettre (D0.15b) est invisible à la garde des mots, et à cinq tests | mineur |
+| A17 | `scripts/launch.ts:623` | PLAUSIBLE : au déploiement, la garde de l'accueil ne lit pas la ligne de décision (seul un test la lit) | mineur |
+| A18 | `scripts/launch.ts:317` | PLAUSIBLE : `preview_mode: null` bloque la production, alors que tous les lecteurs le lisent comme absent | mineur |
+| A19 | `scripts/launch.ts:464` | Une erreur de lecture d'un fichier de couleurs est rapportée comme une planche non validée | mineur |
+| A20 | `scripts/launch.ts:767` | `npx tsx scripts/launch` (sans « .ts ») ne fait rien et sort en succès | mineur |
+| A21 | `scripts/launch.ts:164` | Commentaires périmés ou mal placés (dont « avant la décision elle-même », après le lancement) | mineur |
+- **Réfutés** : « session » comme relecteur de lignes de la page Confidentialité (voulu : D16.81, D17.26) ; la liste des vérifications du sceau (un journal, pas une condition) ; une nouvelle relecture après un mot changé (D20.22 ne la demande pas).
+
+### 24 novembre 2026, dans la nuit — revue 12 : `scripts/build.ts`
+- **20 constats** (10 importants, 2 antérieurs, 8 mineurs), tous confirmés sauf un plausible ; rien construit dans la copie de travail. **Effets de la revue** : avant qu'on la trouve, des builds de copies d'essai ont envoyé la télémétrie d'Astro ; liées au `node_modules` du dépôt principal, elles réécrivaient ses caches de Vite et d'Astro.
+
+| # | Où | Constat | Gravité |
+|---|---|---|---|
+| T1 | `scripts/build.ts:233` | Une build morte à mi-course laisse un `dist/` partiel sous l'ancien marqueur, et le déploiement l'accepte ; ses fichiers serveur `.mjs` portent le chemin absolu de la copie de travail (D0.15) ; un `\| head` suffit à la tuer (avec D2, D12, M12) | important |
+| T2 | `scripts/build.ts:173` | `npm run build:neutral`, la seule réponse prête à une demande de retrait de la charte (D14.12), sert un site sans échelle de texte, espacements, cibles ni mouvement | important |
+| T3 | `scripts/build.ts:207` | Chaque build prévient Astro (télémétrie), avec un identifiant que tout le monde peut recalculer depuis le dépôt public | important |
+| T4 | `scripts/build.ts:118` | Une option tapée sans `--` (`npm run build --holding`) construit la production en silence (jumeau de D1) | important |
+| T5 | `src/holding/pages/mentions-legales/index.astro:7` | Depuis `ee3b797` (D21.18), la build de retrait lit `data/launch.json` et meurt sur une virgule de trop — une régression de ce soir | important |
+| T6 | `scripts/build.ts:203` | Rien ne sérialise les builds : deux builds en même temps mêlent leurs fichiers sous un seul marqueur (même racine que M9) | important |
+| T7 | `scripts/build.ts:49` | Chaque build réécrit deux fichiers suivis (`tokens.css`, `mascot2-tokens.css`) : deux builds proches se passent leurs couleurs | important |
+| T8 | `scripts/build.ts:116` | (= M7) Le choix neutre n'est écrit nulle part ; un arbre neutre fait échouer `mascot2.test.ts` | important |
+| T9 | `scripts/build.ts:237` | (= M8) Le marqueur dit comment, jamais à partir de quoi : construire, revenir en arrière, déployer passe les gardes à empreinte | important |
+| T10 | `docs/discovery/14-risques.md:415` | La fiche 6 (réédition du programme) fait mettre la page de retrait, qui dit désormais « Ce site est retiré. » — question pour l'éditeur | important |
+| T11 | `design/tokens.neutral.json:10` | Les routes documentées vers la charte neutre échouent (copie du fichier, fiche 2 du runbook) | antérieur |
+| T12 | `scripts/build.ts:220` | Astro garde par erreur les entrées `g`, `i`, `t` de `dist/` à son nettoyage | antérieur |
+| T13 | `scripts/build.ts:124` | Arguments lus à l'exact, sans refus : `--host=preview` construit l'apex (racine de U11) | mineur |
+| T14 | `scripts/build.ts:175` | Le contrôle « sortie produite » ne teste que l'existence ; une police retirée part quand même | mineur |
+| T15 | `scripts/build.ts:80` | Les erreurs de `checkEdition` ne nomment pas le fichier ; un `synonyms.json` cassé tue la build après le nettoyage de `dist/` | mineur |
+| T16 | `scripts/build.ts:200` | Une build sans jeu (liste non attestée) ne le dit nulle part | mineur |
+| T17 | `scripts/build.ts:246` | La dernière ligne ne dit pas si la build est neutre ou pour l'aperçu | mineur |
+| T18 | `scripts/build.ts:43` | Commentaires périmés | mineur |
+| T19 | `scripts/build-mode.ts:685` | Le refus de la build de retrait parle encore de deux pages | mineur |
+| T20 | `src/holding/pages/mentions-legales/index.astro:10` | PLAUSIBLE : la page des mentions de la build de retrait est indexable — question pour l'éditeur | mineur |
