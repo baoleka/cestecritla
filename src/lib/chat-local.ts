@@ -924,8 +924,17 @@ function datesMissed(question: string, shown: readonly Ranked[]): boolean {
 
 /** Signs of a measure, not of a target: « 2 °C », « n° 12 » (review of 24/11/2026). */
 const UNIT_SIGNS = new Set(['°']);
+/**
+ * Two signs aimed at somebody that the rule above does not read — Unicode files « ₪ » among the
+ * currencies and « † » among the punctuation, not among the symbols (D21.27). The currencies
+ * one counts in (« 1 500 € ») stay amounts.
+ */
+const AIMED = /[₪†]/u;
 /** Brackets around a name, three deep: a coded mark, made of no word (review of 24/11/2026). */
 const ECHO = /\({3}|\){3}/;
+/** A number with what it counts after it — a currency, a percentage, millions, gross or net. */
+const AMOUNT =
+  /\d+(?=\s*(?:[€$£%‰]|(?:euros?|eur|centimes?|millions?|milliards?|brut|bruts|net|nets)\b))/giu;
 
 /**
  * True when the question holds a sign that is no word — a flag, a religious sign, an animal,
@@ -942,6 +951,7 @@ export function pointsWithASign(question: string, lexicon: Lexicon): boolean {
       (sign) => !lexicon.feeling(sign[0]) && !UNIT_SIGNS.has(sign[0]),
     ) ||
     ECHO.test(read) ||
+    AIMED.test(read) ||
     [...read.matchAll(/\p{L}/gu)].some(
       (letter) => !/\p{Script=Latin}/u.test(letter[0]) || !readable(letter[0]),
     )
@@ -1135,9 +1145,11 @@ export function measuresFor(
   }
   // A coded phrase, a slur — said, or reported by whom it was thrown at: the measures of the
   // subject one may ask in its place, as links, and that subject as the example. A list never
-  // refuses, and never brings a sentence.
+  // refuses, and never brings a sentence. A number of that list is read only where it counts
+  // nothing: « le smic à 1488 euros » is an amount (D21.27).
   const words = wordsOf(question);
-  const instead = lexicon?.trope(words.map(stem).join(' ')) ?? null;
+  const coded = wordsOf(question.normalize('NFKC').replace(AMOUNT, ' '));
+  const instead = lexicon?.trope(coded.map(stem).join(' ')) ?? null;
   if (instead !== null && instead !== '' && search !== null) {
     const about = rowsOf(search(instead), knows);
     return { rows: about, sentences: false, example: instead, charged: true };
@@ -1167,9 +1179,7 @@ export function measuresFor(
   const told =
     lexicon !== null &&
     (peoples || words.some((word) => lexicon.soft(stem(word)))) &&
-    words.some(
-      (word) => lexicon.said(stem(word)) || lexicon.insult(word) || lexicon.crime(word),
-    );
+    words.some((word) => lexicon.said(stem(word)) || lexicon.insult(word) || lexicon.crime(word));
   const pointing =
     instead !== null ||
     told ||
@@ -1229,8 +1239,7 @@ export function measuresFor(
   const typed = all.filter((word) => word.length >= 3 && !NUMBER.test(word) && !putsOnTrial(word));
   // A sensitive subject, a people, or anything thrown at somebody: only a subject one may
   // suggest — « les migrants violent nos femmes » gave « femmes » (eighth review).
-  const strict =
-    putsOnTrial(question) || markedHere || all.some((word) => marked(termOf(word)));
+  const strict = putsOnTrial(question) || markedHere || all.some((word) => marked(termOf(word)));
   const subject = (word: string): boolean => {
     const term = termOf(word);
     return (

@@ -657,6 +657,9 @@ void test('a sign that is no word — a flag, a religious sign, an animal — is
     `${sign(0x029f, 0xa730, 0x026a)} et la police`,
     // Brackets three deep are a coded mark, made of no word.
     '(((la finance)))',
+    // The currency of a country, a dagger: aimed at somebody all the same (D21.27).
+    `${sign(0x20aa)} finance`,
+    `la police ${sign(0x2020)}`,
   ]) {
     assert.ok(pointsWithASign(question, NOTHING), question);
     assert.equal(measuresFor(question, [], hits, all, NOTHING).sentences, false, question);
@@ -928,9 +931,23 @@ void test('a coded phrase, a slur: the measures of the subject to ask in its pla
     ['que dit le programme sur la préférence nationale ?', 'immigration'],
     ['c’est quoi le grand remplacement ?', 'immigration'],
     ['on traite mon fils de pédé au collège', 'homophobie'],
+    // A number for a code: links, and the subject to ask in its place (D21.27).
+    ['1488 la finance', 'racisme'],
   ] as const) {
     assert.equal(real.trope(spelled(question).map(stem).join(' ')), subject, question);
   }
+  // The same number as an amount is an amount: never the measures of racism for a wage.
+  for (const question of [
+    'le smic à 1488 euros ?',
+    'un salaire de 1488 € net',
+    '1488€ par mois',
+    'une hausse de 1488 millions',
+  ]) {
+    const found = measuresFor(question, [], own, all, real, null, search);
+    assert.notEqual(found.example, 'racisme', question);
+    assert.ok(!found.rows.includes(C), question);
+  }
+  assert.equal(measuresFor('1488 la finance', [], own, all, real, null, search).example, 'racisme');
   assert.equal(real.trope(spelled('les collabos pendant la guerre').map(stem).join(' ')), '');
   const none = measuresFor('les collabos au travail', [], own, all, real, null, search);
   assert.deepEqual([none.rows, none.sentences, none.charged], [[A], false, true]);
