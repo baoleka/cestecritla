@@ -1,0 +1,324 @@
+# Plan — dix-neuf revues de code au niveau max : « que tout soit nickel »
+
+## Contexte
+Le 23 novembre 2026, au soir, juste après R73, l'éditeur demande : « Explore le repo. Planifie toutes les code review max nécessaires pour s'assurer que tout est nickel. » R73 était un défaut que ni les 704 tests ni la sonde de 257 contrôles n'avaient vu, et qu'une porte du dépôt tenait même : `site.test.ts` exigeait le nom fautif.
+
+**La commande** (VÉRIFIÉ dans l'outil installé, v2.1.330) : `/code-review [niveau] [--fix] [--comment] [<pr#>|<branche>|<chemin>] [--max-findings <n>|all]`.
+- Elle prend une seule cible, ici un chemin.
+- Au niveau max, de nombreux relecteurs, puis une passe qui tente de réfuter chaque constat.
+
+**Le critère « nécessaire »** : tout ce qui part en ligne, tout ce qui décide de ce qui part en ligne, ce qui touche au texte du livre ou à la base de production, et les portes qui tiennent les non-négociables.
+
+Plan approuvé par l'éditeur le 23/11/2026, avec sa réponse sur l'isolation de `private/` : une worktree (D21.14).
+
+## Les dix-neuf revues
+Chaque revue : `/code-review max <cible> --max-findings all`, rapport seulement (ni `--fix`, ni `--comment`).
+
+**Vague 1 — ce que reçoit le visiteur**
+1. `src/worker` (le pilote)
+2. `src/scripts`
+3. `src/lib`
+4. `src/components`
+5. `src/pages`
+6. `src/layouts`
+
+**Vague 2 — ce qui décide de ce qui part en ligne**
+7. `astro.config.ts`
+8. `public`
+9. `scripts/deploy.ts`
+10. `scripts/launch.ts`
+11. `scripts/build-mode.ts`
+12. `scripts/build.ts`
+13. `.github/workflows`
+
+**Vague 3 — le texte du livre et la base de production**
+14. `scripts/seed-ask-2026.ts`
+15. `scripts/gists-2026.ts`
+
+**Vague 4 — les portes des non-négociables**
+16. `scripts/leak.test.ts`
+17. `scripts/check-build.test.ts`
+18. `scripts/chat-worker.test.ts`
+19. `scripts/e2e-sheet.ts`
+
+## Ce qui n'est pas revu, et pourquoi
+- `prototypes/` : archivé, jamais servi.
+- La chaîne 2025 : elle ne sert qu'une archive datée, et ne tourne plus.
+- `eval/` et le banc : le banc a conclu (D16.33), aucun modèle ne répond (D16.60).
+- Le reste de la chaîne 2026 : lancé par la session sur la machine de l'éditeur seulement. Ses sorties sont scellées ou tenues par des portes.
+- Les autres tests : ils tournent à chaque changement.
+- `src/styles` : tenu par les portes de contraste, d'accessibilité et le balayage du jeu. `mascot2.css` est scellé.
+- `src/holding`, `design/`, `data/` : la page de retrait est construite par la CI ; les textes et données sont validés ou scellés par l'éditeur.
+
+## Isolation de `private/` (D21.14)
+- Les revues, les vérifications et les correctifs se font dans une worktree, `.claude/worktrees/revues` (branche `worktree-revues`, tirée de `39daa63`), où `private/` n'existe pas. Aucun relecteur ne peut l'ouvrir, même par erreur.
+- La session n'y ouvre rien non plus pendant la campagne.
+- La branche n'est jamais poussée.
+- À la fin, dans le dépôt principal : `git merge --ff-only`, l'anti-fuite et toutes les portes, le déploiement sur l'accord de l'éditeur, le push.
+
+## Ce qui est fait de chaque constat
+1. **Le revérifier** : relire le code, le reproduire. Un constat « PLAUSIBLE » n'est corrigé qu'une fois reproduit.
+2. **Le confronter aux décisions** : un comportement voulu est « conforme à Dxx », sans changement.
+3. **Le classer** :
+   - un défaut de code est corrigé, avec un test quand c'est testable, un commit par correctif, et les portes de `CLAUDE.md` ;
+   - ce qui appartient à l'éditeur (textes, fichiers scellés, tortue, page Confidentialité, réponses validées) devient une question pour lui ;
+   - un détail mineur est regroupé ou laissé, et dit.
+4. **Une urgence** (un défaut confirmé de vie privée ou de sécurité en ligne) arrête la campagne et lui est dite aussitôt.
+
+## Journal
+
+### 23-24 novembre 2026 — revues 1 et 2 : `src/worker` et `src/scripts`
+- **Revue 1, `src/worker`** (le pilote) : 47 min, 463 000 jetons de relecteurs. Lecture en profondeur du répertoire, et aussi des tests et scripts qui le touchent. 11 constats, aucun déclenchable par un visiteur aujourd'hui.
+- **Revue 2, `src/scripts`** : 28 constats (13 importants, 1 hors du répertoire, 14 mineurs). La plupart sont reproduits sur les données du dépôt, ou dans les trois moteurs sur une build.
+- **Registre des constats** (W = worker, S = scripts). Statut : à vérifier → confirmé / conforme à une décision / question pour l'éditeur → corrigé (commit).
+
+| # | Où | Constat | Gravité |
+|---|---|---|---|
+| W1 | `src/worker/index.ts:104` | L'arrêt manuel (fiche 6 : `silence_override: on` puis `deploy`) ne touche pas le Worker des phrases, construit à part | important |
+| W2 | `src/worker/index.ts:408` | L'interrupteur `ask` de la base n'arrête rien ; `--switch stopped` sans `--what` change 0 ligne et sort 0 (fiches 8, 11) | important |
+| W3 | `src/worker/ask.ts:136` | `/api/bench` peut rendre une sortie mal formée qui tient une mesure par morceaux de 4 ou 5 mots (latent : plus de texte en base) | important |
+| W4 | `scripts/worker-runtime.test.ts:100` | Les tests échoueront pendant les deux fenêtres de gel de 2027 (vraie horloge, vrai `flags.json`) | antérieur |
+| W5 | `scripts/ask-worker.test.ts:820` | Les portes de source effacent tout après `//`, même dans `'https://…'` : un appel extérieur passerait | antérieur |
+| W6 | `scripts/bench-explain.ts:194` | Le banc sous-compte ce qu'il dépense (réservations non comptées) | antérieur |
+| W7 | `scripts/worker-runtime.test.ts:280` | Le contrôle du débit échoue au hasard à la minute ronde | antérieur |
+| W8 | `src/worker/measures.ts:154` | `/api/chat` admet 5 identifiants et n'en lit que 3 | mineur |
+| W9 | `src/worker/chat.ts:146` | `isDay` accepte « 2026-11-31 » (aussi `campaignDecided`) | mineur |
+| W10 | `src/worker/budget-core.ts:97` | Le registre des neurones peut rendre au mauvais créneau horaire | mineur |
+| W11 | `src/worker/measures.ts:12` | Des commentaires disent « lues par l'éditeur » ou qu'un modèle lit la question | mineur |
+| S1 | `src/scripts/chat.ts:728` | Notre carte « En clair » sous une question qui met en cause, quand elle porte aussi une date (ou rien trouvé) — contre D16.72 | important |
+| S2 | `src/scripts/chat.ts:369` | La définition d'un mot (écrite par une IA) reste ouverte sous une question qui met en cause : **question pour l'éditeur** (D16.72 couvre-t-il les mots ?) | important |
+| S3 | `src/scripts/chat.ts:708` | Index en échec : la carte « En clair » reste, sans savoir si la question met en cause | important |
+| S4 | `src/scripts/game2.ts:935` | Après « Garder » depuis sa fiche, « Ne pas garder » écrit le jeu sur le téléphone | important |
+| S5 | `src/scripts/chat.ts:212` | La feuille ne relit `/flags.json` qu'une fois : après une mise en veille à cheval sur le gel, « en pause » jusqu'au rechargement | important |
+| S6 | `src/scripts/game2.ts:961` | Stockage refusé : « Elle est gardée sur ce téléphone. » alors que rien n'est écrit | important |
+| S7 | `src/scripts/game2.ts:1506` | Retour arrière (bfcache) : le jeu se reconstruit depuis le stockage et perd l'écran en cours | important |
+| S8 | `src/scripts/engine.ts:80` | La recherche en tapant ne trouve rien pour « R.S.A. », « S.M.I.C. » (la feuille, si) | important |
+| S9 | `src/scripts/words-search.ts:79` | La ligne « Ce que veut dire » ne suit pas le texte quand les sections ne changent pas | important |
+| S10 | `src/scripts/words-search.ts:77` | Arrivée par `#q=` : jamais de ligne « Ce que veut dire » | important |
+| S11 | `src/scripts/search.ts:202` | Premier chargement : la ligne d'état peut dire le compte d'une recherche dépassée | important |
+| S12 | `src/scripts/search.ts:184` | Premier chargement : une recherche dépassée vole le focus au champ | important |
+| S13 | `src/scripts/words-hub.ts:110` | « Mots du programme » : le filtre ne trouve pas les termes à espace insécable (« règle des 3 % ») | important |
+| S14 | `src/lib/terms.ts:90` | Les mots expliqués ratent « 5e République », « sixième », « oeuvre » (rangs, ligatures) | antérieur |
+| S15 | `src/scripts/game2.ts:1051` | Mouvement réduit : la phrase du passage est écrite dans la même tâche que le focus (lecteur d'écran) | mineur |
+| S16 | `src/scripts/chat.ts:549` | Le focus sur un lien de mesure part quand les phrases arrivent | mineur |
+| S17 | `src/scripts/chat.ts:442` | Textes des mots en échec : le mot demandé disparaît | mineur |
+| S18 | `src/scripts/game2.ts:1585` | Un échec du fichier du jeu n'est jamais retenté | mineur |
+| S19 | `src/scripts/game2.ts:1625` | `pageshow` au premier chargement contourne « près de l'écran » | mineur |
+| S20 | `src/scripts/game2.ts:565` | Latent : un joueur dont tous les mots ont quitté la liste revoit l'entrée | mineur |
+| S21 | `src/scripts/words-search.ts:54` | Latent : surfaces « pages » fermée et « search » ouverte → lien vers une ancre absente | mineur |
+| S22 | `src/scripts/words-hub.ts:21` | « oeuvre » ne trouve pas « bois d'œuvre » dans le filtre | mineur |
+| S23 | `src/scripts/chat.ts:167` | Firefox : un échec d'import du module des mots n'est jamais retenté | mineur |
+| S24 | `src/scripts/game2.ts:1221` | PLAUSIBLE : deux touches de couleur en moins de 350 ms bloquent un passage | mineur |
+| S25 | `src/scripts/chat.ts:765` | PLAUSIBLE : le rattrapage de R73 ne couvre pas le dessin ni `gists()`/`explain()` | mineur |
+| S26 | `src/scripts/engine.ts:69` | `ready` posé avant `loadJS` : plus de « ouverture » après un index illisible | mineur |
+| S27 | `src/scripts/words-hub.ts:35` | Le hub ne vérifie pas que ses textes sont des chaînes | mineur |
+| S28 | `src/scripts/chat.ts:553` | Un commentaire de documentation décalé | mineur |
+
+### 24 novembre 2026 — revues 5 et 7 : `src/pages` et `astro.config.ts` ; la limite d'usage
+- **Revue 5, `src/pages`** : 18 constats (7 importants). La plupart touchent des textes validés par l'éditeur ou sa page Confidentialité : ce sont des questions pour lui.
+- **Revue 7, `astro.config.ts`** : 23 constats (2 importants). Plusieurs portent sur `build-mode.ts`, `_headers` et `check-build.test.ts`, que d'autres revues couvrent aussi.
+- **Dans la nuit du 23 au 24**, la limite d'usage hebdomadaire a coupé quatre revues avant leur passe de vérification : `src/lib`, `src/layouts`, `public`, `scripts/deploy.ts`. Elles sont relancées le 24 à 19 h 30, après la réinitialisation, là où elles s'étaient arrêtées.
+- **Coût observé** : une revue max consomme de 300 000 à 500 000 jetons de relecteurs et dure de 40 minutes à plusieurs heures.
+
+| # | Où | Constat | Gravité |
+|---|---|---|---|
+| P1 | `src/pages/a-propos/index.astro:35` | « Les mesures qu'ils citent et leurs chiffres sont vérifiés contre le livre » : faux pour les chiffres d'études de `/r/exil-fiscal/` — **texte : l'éditeur** | important |
+| P2 | `src/pages/licence/index.astro:35` | « Le code de l'app est libre, sous licence MIT », mais le `LICENSE` ne nomme pas `src/` ni `public/` — **texte juridique : l'éditeur** | important |
+| P3 | `src/pages/404.astro:6` | Dans la build de retrait (`holding`), la page 404 n'a pas « Site non officiel. » | important |
+| P4 | `src/pages/exactitude/index.astro:91` | « Relu par trois navigateurs » quoi que dise `verification.json` ; `verify-2026.ts --write` accepte un seul moteur | important |
+| P5 | `src/pages/exactitude/index.astro:114` | « Objectif manqué » resterait affiché une fois les 90 % atteints | important |
+| P6 | `src/pages/exactitude/index.astro:73` | « Seize objections » tapé à la main ; rien ne le lie au fichier | important |
+| P7 | `src/pages/methodologie/index.astro:47` | « Partout sur le site, des mots… » même surfaces fermées — latent ; **texte : l'éditeur** | important |
+| P8 | `scripts/check-build.test.ts:171` | La porte « relu par » refuserait le premier texte vraiment relu | antérieur |
+| P9 | `src/pages/s/[section].astro:159` | « Chaque numéro ouvre… sur la mesure » : 55 liens s'arrêtent au titre — **texte : l'éditeur** | mineur |
+| P10 | `src/pages/methodologie/index.astro:31` | « Seules les empreintes sont publiées » : faux (34 mesures citées, incipits, repères) — **texte : l'éditeur** | mineur |
+| P11 | `src/pages/s/[section].astro:145` | « 0 mesures » pour p3c1-s02 | mineur |
+| P12 | `src/pages/confidentialite/index.astro:66` | La page ne nomme que melenchon2027.fr comme destination des liens ; `/r/exil-fiscal/` mène aussi au CAE et à l'Assemblée — **texte et relecture datée : l'éditeur** | mineur |
+| P13 | `src/pages/sitemap.xml.ts:33` | Toutes les pages datées du 12/11 (`lastmod`) | mineur |
+| P14 | `src/pages/404.astro:6` | La 404 se déclare canonique en `/404/` et `/404` répond 200 sans `noindex` | mineur |
+| P15 | `src/pages/mot/index.astro:11` | = S21 | mineur |
+| P16 | `src/pages/sommaire/index.astro:32` | `/sommaire/` embarque la feuille de style de la feuille (+0,7 Ko gzip) | mineur |
+| P17 | `src/pages/r/[slug].astro:29` | `/r/rip-16/` « a changé d'adresse » alors qu'elle n'a jamais existé | mineur |
+| P18 | `src/pages/data/[name].json.ts:13` | Commentaires périmés (« re-read », « fifteen ») | mineur |
+| C1 | `astro.config.ts:93` | `target: 'es2022'` : aucun `-webkit-hyphens`, pas de césure sur Safari 15.4-16 (le défaut « L'immigrati/on ») | important |
+| C2 | `astro.config.ts:32` | `__CEL_GAME_WRITES__` suit la validation de la liste : une build sans liste validée perd « Tout effacer » — **page Confidentialité : l'éditeur** | important |
+| C3 | `public/_headers:40` | `immutable` s'applique aussi au 404 : Chromium garde un an un nom manquant (VÉRIFIÉ) | antérieur |
+| C4 | `scripts/build-mode.ts:587` | La build « scrutin » et la fiche 9 sont refusées quand la liste du jeu n'est plus validée | antérieur |
+| C5 | `scripts/build-mode.ts:119` | Les portes jugent la vraie build « scrutin » comme une build qui demande ; la CI ne la construit jamais | antérieur |
+| C6 | `scripts/build-mode.ts:374` | Une build d'essai qui nomme un modèle passe la garde de production | antérieur |
+| C7 | `scripts/build-mode.ts:391` | Une build de l'aperçu peut partir en production avec des surfaces de mots fermées là | antérieur |
+| C8 | `src/components/Search.astro:169` | Après un déploiement, « Demander » ne s'ouvre plus dans un onglet d'avant (aucun rattrapage de l'import) | antérieur |
+| C9 | `src/components/Search.astro:166` | `HTMLDialogElement` absent (Safari 14-15.3, Firefox 79-97) : `ReferenceError`, bouton mort | antérieur |
+| C10 | `astro.config.ts:59` | `base-uri` et `form-action` absents de la politique de la page (seulement dans `_headers`) | mineur |
+| C11 | `src/pages/index.astro:61` | Le garde du gel s'exécute avant la politique de sécurité (meta CSP rendue après) | mineur |
+| C12 | `astro.config.ts:60` | Rien ne vérifie que `_headers` et la meta ne contraignent pas la même directive | mineur |
+| C13 | `astro.config.ts:63` | Six empreintes de scripts inutiles dans chaque page (265 o gzip sur l'accueil) | mineur |
+| C14 | `scripts/check-build.test.ts:141` | La porte des puits Trusted Types rate des formes courantes (`(0,eval)`, `srcdoc`…) | mineur |
+| C15 | `astro.config.ts:62` | `npm run dev` sert Trusted Types : la barre d'outils et le rechargement CSS cassent (PLAUSIBLE) | mineur |
+| C16 | `astro.config.ts:90` | = S21 | mineur |
+| C17 | `src/holding/pages/index.astro:42` | Le texte de la page de retrait parle de l'édition 2025 — **texte : l'éditeur** | mineur |
+| C18 | `astro.config.ts:1` | Aucun lint ni contrôle de types ne lit `astro.config.ts` | mineur |
+| C19 | `src/layouts/Base.astro:56` | = P14 | mineur |
+| C20 | `src/components/Search.astro:51` | = P16 | mineur |
+| C21 | `public/_headers:43` | `/fonts/*` et `/og/*` gelés un an sous des noms fixes (le défaut de R73, latent) | mineur |
+| C22 | `astro.config.ts:12` | Commentaire : source et statut des chiffres de LCP | mineur |
+| C23 | `scripts/e2e.ts:599` | Le contrôle « script du jeu non chargé » ne voit plus `Game2` | mineur |
+
+### 24 novembre 2026 — revue 6 : `src/layouts` ; le lot du Worker corrigé
+- **Revue 6, `src/layouts`** (`Base.astro`) : 24 constats. La revue a été forcée de rendre la main avant ses vérificateurs : les verdicts sont ceux du coordinateur, CONFIRMÉ ou PLAUSIBLE, aucun réfuté.
+- **Lot du Worker corrigé** (commits `63dcbd2`, `9a06de8`) : W1 à W7, W9 (côté Worker), W10 (commentaire seulement : le code reste, décision expliquée dans le commentaire), W11, W12. W8 et la moitié de W9 qui touche `src/lib/game-gists.ts` attendent la fin de la revue de `src/lib`.
+- **W12**, oublié au premier registre : les commentaires du budget parlaient d'un compteur unique pour tout le site, alors que chaque Worker a le sien.
+
+| # | Où | Constat | Gravité |
+|---|---|---|---|
+| L1 | `src/layouts/Base.astro:152` | = P3 (la 404 de la build de retrait, sans « Site non officiel. ») | important |
+| L2 | `src/layouts/Base.astro:81` | Le rebrand neutre garde la charte : `theme-color`, favicon, image d'aperçu | important |
+| L3 | `src/layouts/Base.astro:56` | = P14 (`/404/` canonique, `/404` indexable ; VÉRIFIÉ en ligne) | important |
+| L4 | `src/layouts/Base.astro:181` | Build de retrait : plus aucune mention légale en ligne — **lecture juridique : l'éditeur** | important |
+| L5 | `scripts/build-mode.ts:419` | Retrait : les pages de l'app (`/sommaire/`, `/mot/…`, pages institutionnelles) tombent en 404 au lieu de la page de retrait | antérieur |
+| L6 | `src/holding/pages/index.astro:41` | = C17 (texte de la page de retrait faux) — **texte : l'éditeur** | antérieur |
+| L7 | `src/styles/base.css:138` | Le libellé « Mesure clé, premiers mots » est dessiné en Gowun Batang gras (la police du programme), chargé tard | antérieur |
+| L8 | `src/components/Search.astro:169` | = C8 (« Demander » mort après un déploiement) | antérieur |
+| L9 | `src/pages/r/[slug].astro:56` | Titre des réponses : « « objection » — C'est écrit là » — **texte : l'éditeur** | antérieur |
+| L10 | `src/pages/index.astro:57` | Build « scrutin » : la description de l'accueil ne dit plus « Site non officiel. » — **texte : l'éditeur** | antérieur |
+| L11 | `src/pages/r/[slug].astro:57` | Les aperçus de quatre réponses portent 8 à 13 mots d'affilée du programme — **lecture de D15.7 : l'éditeur** ; porte à ajouter | antérieur |
+| L12 | `src/pages/mot/[slug].astro:41` | Descriptions et aperçus : texte préparé avec une IA, sans l'étiquette — **l'éditeur** | antérieur |
+| L13 | `src/styles/base.css:16` | Les métriques de repli des polices ne calibrent pas le repli : CLS 0,02 à 0,04 au chargement tardif (PROBABLE) | antérieur |
+| L14 | `src/styles/base.css:241` | Le lien vers l'accueil (en-tête) fait 43 px, sous le plancher de 44 px | antérieur |
+| L15 | `src/pages/sitemap.xml.ts:32` | = P13 | antérieur |
+| L16 | `src/layouts/Base.astro:138` | = C11 (le garde du gel avant la politique de sécurité) | mineur |
+| L17 | `src/layouts/Base.astro:165` | Accueil : « Chercher » montré et « Sommaire » caché même si la recherche ne démarre pas | mineur |
+| L18 | `src/layouts/Base.astro:100` | = C21 (`/og/` gelé un an sous un nom fixe) | mineur |
+| L19 | `src/layouts/Base.astro:127` | Pendant un gel, l'accueil précharge la Bold d'un jeu caché | mineur |
+| L20 | `src/layouts/Base.astro:91` | Pas d'icône sur la page de retrait, ni d'icône de repli (`.ico`, `apple-touch-icon`) | mineur |
+| L21 | `src/layouts/Base.astro:103` | Pas de `og:image:alt` : « Site non officiel » ne se dit pas aux lecteurs d'écran | mineur |
+| L22 | `src/layouts/Base.astro:187` | Le pied de page ne marque jamais la page courante (`aria-current`) | mineur |
+| L23 | `src/layouts/Base.astro:183` | « Pages du site » tapé hors du kit de textes | mineur |
+| L24 | `src/layouts/Base.astro:34` | Commentaires périmés du gabarit | mineur |
+- **Compléments de la revue 6** (vérificateurs arrivés après la synthèse) :
+  - **L4 CONFIRMÉ** : la build de retrait ne publie plus le nom et l'adresse de l'hébergeur, que la lecture du projet (`11-conformite.md`, LCEN art. 1-1 II) tient pour la condition de l'anonymat de l'éditeur. **Question pour l'éditeur.**
+  - **L10 RÉFUTÉ** : la description de l'accueil de la build « scrutin » est un texte validé (D19.19, `TEXTES-JEU-DABORD.md`), tenu par `game-page.test.ts`.
+  - **L11 ramené à trois pages** au-delà de la ligne du projet (neuf mots d'affilée du livre, `leak-scan.ts`) : `/r/retraites/` (14 mots), `/r/laicite/` (10), `/r/immigration/` (9) ; les mêmes mots sont dans leur paragraphe visible. Ce sont des réponses acceptées (rip-02, rip-11, rip-05) : **reformulation par l'éditeur**, puis une porte sur `<meta>`, `<title>` et JSON-LD.
+  - **Ajouts** : le retrait (`build:holding && deploy`) ne touche pas le Worker des phrases, qui répond encore derrière la page de retrait jusqu'à `deploy:chat -- --withdraw` : une ligne à ajouter au runbook. Les renvois à la « runbook sheet 9 » de `build-mode.ts`, `build.ts`, `launch.ts` et `wrangler.static.jsonc` visent la fiche 9 de `14-risques.md` §4, pas celle de `09-architecture.md`, qui parle aujourd'hui du jeu.
+  - **Dernier passage du balayage (trois constats de plus, mesurés dans les trois moteurs)** ; la revue compte 26 constats :
+    - **L25 (important)**, `src/layouts/Base.astro:153` : texte agrandi à 200 % sur un téléphone, l'en-tête collant dépasse la place que la page lui garde (`scroll-padding-block-start: 5rem`, soit 160 px, contre 214 px à 390 × 844). Les titres atteints par une ancre et les liens qui prennent le focus passent dessous (WCAG 2.4.11, bloquant selon `design/perf-budget.md`). Le jeu contourne déjà le défaut pour son seul bloc.
+    - **L26 (antérieur)**, `src/styles/base.css:268` : à 320 px et 200 %, le nom du site et « Site non officiel. » se coupent au milieu des mots. À corriger avec L25, car l'en-tête qui passe à la ligne grandit.
+    - **L27 (mineur)**, `src/layouts/Base.astro:142` : une page imprimée ne porte « Site non officiel. » que sur sa première feuille (aucune règle `@media print`).
+
+### 24 novembre 2026, au soir — le lot de `src/scripts`
+- **Écrits** :
+  - la feuille : S3, S5, S17, S23, S25, S28 ;
+  - la recherche : S8, S9, S10, S11, S12, S26 ;
+  - le jeu : S4, S6, S7, S15, S18, S19, S20, S24.
+  Types et lint verts ; builds et e2e en cours.
+- **Attendent une autre revue** : S1 et S14 (`src/lib`), S13, S22, S27 (`WordsHub.astro`, revue des composants en cours), S21 (couplage des surfaces de mots).
+- **Laissé pour plus tard** : S16 (le focus perdu à l'arrivée des phrases) demande une mise à jour de l'affichage par clé.
+- **Question pour l'éditeur** : S2.
+
+### 24 novembre 2026, au soir — revue 9 : `scripts/deploy.ts`
+- **16 constats** : 15 confirmés, 1 plausible ; 12 importants. wrangler n'a jamais tourné pour de vrai (un `npx` de substitution). Sept candidats réfutés : des choix documentés et tenus par des tests, ou un déclencheur impossible.
+- **Ces correctifs touchent aussi `build-mode.ts` et `launch.ts`**, qui ont leur propre revue (10 et 11) : ils se feront d'un bloc, après ces deux revues.
+
+| # | Où | Constat | Gravité |
+|---|---|---|---|
+| D1 | `scripts/deploy.ts:75` | `npm run deploy --dry-run` (sans `--`) déploie la production pour de vrai ; `deploy:chat --withdraw` sans `--` déploie au lieu de retirer | important |
+| D2 | `scripts/deploy.ts:176` | Une build ratée à mi-course (dist/ vidé par Astro) part en production : vide ou partielle | important |
+| D3 | `scripts/deploy.ts:240` | Une build d'essai (`dist-ask/`, un modèle nommé) passe aujourd'hui toutes les gardes de la production | important |
+| D4 | `scripts/deploy.ts:175` | `npm run deploy -- --bench` déploie la production au lieu d'être refusé | important |
+| D5 | `scripts/deploy.ts:234` | Le retrait (D14.10) meurt sur une virgule de trop dans `launch.json` (lecture faite même pour la build de retrait) | important |
+| D6 | `scripts/deploy.ts:234` | La fiche 9 (retirer un mot du jeu) est refusée à l'apex depuis le lancement | important |
+| D7 | `scripts/deploy.ts:250` | `deploy` ne touche jamais le Worker des phrases : la fiche 6 (= W1) et **le retrait** le laissent répondre | important |
+| D8 | `scripts/deploy.ts:226` | Un fichier des phrases du jeu commité mais jamais poussé passe la garde « dépôt public » | important |
+| D9 | `scripts/deploy.ts:132` | Le contrôle du nom avant `wrangler delete` ignore `env.preview.name` : le retrait pourrait supprimer un autre Worker | important |
+| D10 | `scripts/deploy.ts:243` | Des mots expliqués jamais scellés passent si `dist/` est resté d'une build d'essai | important |
+| D11 | `scripts/deploy.ts:181` | Une build de l'aperçu peut partir en production (hôte du marqueur jamais lu) — latent | important |
+| D12 | `scripts/deploy.ts:185` | PLAUSIBLE : un marqueur « scrutin » périmé laisse passer une page qui demande pendant un gel | important |
+| D13 | `scripts/deploy.ts:107` | Un `--accord` répété arrive à wrangler comme argument positionnel | mineur |
+| D14 | `scripts/deploy.ts:171` | `--outdir` accepté pour un vrai déploiement et n'importe quel dossier | mineur |
+| D15 | `scripts/deploy.ts:273` | Sortie 1 sans message quand `npx` ne se lance pas | mineur |
+| D16 | `scripts/build-mode.test.ts:702` | Aucun test ne joue le vrai chemin de déploiement ; un test fige l'expression fautive de D4 | mineur |
+
+### 24 novembre 2026, au soir — revue 8 : `public/`
+- **19 constats** : 3 importants, 11 antérieurs, 5 mineurs. Aucune urgence de vie privée ni de sécurité. Les vérificateurs ont fait tourner le vrai serveur de fichiers de Cloudflare (celui de miniflare) avec la configuration de la production, et deux requêtes ordinaires vers `cestecritla.fr`.
+- **Mesuré de plus** : la 404 gardée un an (C3) est aussi gardée par WebKit, donc Safari et tous les navigateurs d'iPhone, et même au rechargement ; Firefox redemande. Un seul nouvel essai `fetch(url, { cache: 'reload' })` la remplace dans les trois moteurs. Elle a désormais un déclencheur daté : la build « scrutin » la veille de chaque fenêtre de 2027 (fiche 7), puis la build normale, qui rend les mêmes noms.
+- **Réfuté** : « les étiquettes de retour arrière sont antérieures aux noms par empreinte » (`prod-avant-r73` est la build de R73 elle-même ; les trois plus anciennes ne lisent pas `book_words`).
+
+| # | Où | Constat | Gravité |
+|---|---|---|---|
+| U1 | `public/_headers:59` | = C3, mesuré de plus (Chromium et WebKit ; le correctif mesuré : un nouvel essai `cache: 'reload'`) | important |
+| U2 | `public/_headers:32` | = C8 : « Demander » mort après un déploiement ; seul un rattrapage de l'import couvre tous les chemins | important |
+| U3 | `public/favicon.svg:1` | = L2 : la build neutre garde la charte dans l'icône, l'image d'aperçu et `theme-color` ; aucune porte | important |
+| U4 | `public/flags.json:2` | = W1, compléments : un `deploy:chat` pendant un arrêt y fige « on » ; `?x=1` sur l'aperçu atteint le Worker des pages | antérieur |
+| U5 | `src/lib/silence-guard.ts:24` | « on » n'atteint jamais le HTML : sans JavaScript, la première manche du jeu reste pendant un arrêt manuel | antérieur |
+| U6 | `src/scripts/silence-now.ts:87` | L'interrupteur s'ouvre sur une faute de frappe (« On », virgule de trop) ; rien ne lit le fichier avant le déploiement | antérieur |
+| U7 | `docs/discovery/09-architecture.md:606` | Fiches 1, 3 et 5 : des clés de `flags.json` que plus rien ne lit (`chat: off`, `silence: on`) — la veille CNCCEP mène à la fiche 5 | antérieur |
+| U8 | `docs/discovery/09-architecture.md:613` | Fiches 6 et 7 : l'apex seul ; l'aperçu garde la build normale pendant les fenêtres de 2027 | antérieur |
+| U9 | `scripts/deploy.ts:250` | = D7 (le retrait laisse le Worker des phrases répondre) | antérieur |
+| U10 | `src/holding/pages/index.astro:42` | = C17 (texte de retrait) ; les renvois « runbook sheet 9 » | antérieur |
+| U11 | `design/tokens.neutral.json:10` | La commande écrite du rebrand (`--tokens=neutral`) construit la charte sans un mot ; seule `build:neutral` marche, et aucun document ne la nomme | antérieur |
+| U12 | `scripts/headers.test.ts:53` | La porte « un en-tête, une valeur » ne voit pas l'hôte de l'aperçu (`noindex, noindex` sur `/data/` de beta) et refuse le bon correctif | antérieur |
+| U13 | `scripts/e2e-kit.ts:45` | Toutes les portes de navigateur échoueront pendant les deux fenêtres de 2027 (la classe de W4) | antérieur |
+| U14 | `src/pages/404.astro:6` | = P14 / L3 | antérieur |
+| U15 | `public/_headers:39` | = C21 : polices et image d'aperçu sous des noms fixes gelés un an ; deux commentaires faux | mineur |
+| U16 | `public/_headers:78` | Commentaire : `/api/ask` n'existe plus (aussi `routes.test.ts:152`, `wrangler.chat.jsonc:11`) | mineur |
+| U17 | `public/_headers:3` | Commentaire : `upgrade-insecure-requests` est dans l'en-tête sans être « ce qu'une meta ne peut pas dire » | mineur |
+| U18 | `src/layouts/Base.astro:91` | = L20 | mineur |
+| U19 | `src/layouts/Base.astro:100` | = L21 (`og:image:alt`, **texte : l'éditeur**) | mineur |
+- **Vérifié aussi, rien à redire** : chaque caractère des pages, des fichiers de données et de l'image d'aperçu est dans les trois polices ; l'image fait bien 1 200 × 630 ; en production, l'en-tête `Date` est à l'heure et le HTML est celui de la build (une page de mentions identique octet pour octet, sans réécriture d'adresse).
+
+### 24 novembre 2026, au soir — revue 4 : `src/components` ; les lots de `src/scripts` et des portes de pages commités
+- **Commits** : `052e52b`, le lot de `src/scripts` (S3 à S28 écrits plus haut ; les trois contrôles de la suite du jeu qui lisaient la phrase avant `SAY_LATER_MS` attendent désormais, comme le reste de la suite) ; `f436d29`, P4, P5, P6, P8.
+- **Revue 4, `src/components`** : 25 constats (7 importants, 2 hors du répertoire, 16 mineurs), reproduits dans les trois moteurs sur une copie de la build de production. **Réfutés** : l'historique du jeu sans JavaScript (accepté par la revue de sécurité du 19/11, M3) ; un regroupement de lettres de `WordsHub` qu'aucun mot actuel ne déclenche (la liste est scellée).
+
+| # | Où | Constat | Gravité |
+|---|---|---|---|
+| K1 | `src/components/Search.astro:166` | = C9 : sans `<dialog>`, `ReferenceError` ; « Demander » reste grisé et mort, la ligne « Ce que veut dire » ne charge jamais | important |
+| K2 | `src/components/Search.astro:169` | = C8 / U2 : un import de la feuille qui échoue laisse « Demander » mort, sans un mot (aussi l'import de `:189`) | important |
+| K3 | `src/components/ChatSheet.astro:113` | Retour arrière (bfcache) : la question reste dans le champ avec ses résultats, une pression ramène la conversation — contre « Elle disparaît quand tu quittes la page. » | important |
+| K4 | `src/components/WordsHub.astro:22` | = moitié composant de S13 / S22 : le pli des noms garde l'espace insécable et « œ » | important |
+| K5 | `src/components/WordsHub.astro:81` | Un mot ouvert avant que le script tourne reste vide (aussi `Words.astro:27`) | important |
+| K6 | `src/components/GameStorage.astro:64` | Un onglet fermé garde sa manche (restauration de Chromium et Firefox) après « Tout est effacé. » — **textes et D16.42 : l'éditeur** | important |
+| K7 | `src/components/Game2.astro:490` | PLAUSIBLE : sans `<dialog>`, sa fiche fermée se dessine dans le bloc du jeu | important |
+| K8 | `src/styles/game.css:606` | « Les prochains mots : … » sans guillemets ni police du livre (règles retirées par `2a5279a`) | antérieur |
+| K9 | `src/scripts/game2.ts:1575` | Script présent, données en échec : la manche du HTML inscrit `/#a1`, `/#b2-4` dans l'historique — **avec K6 : l'éditeur** | antérieur |
+| K10 | `src/components/Search.astro:168` | Deux pressions pendant le chargement : le focus va au champ, le clavier couvre la réponse | mineur |
+| K11 | `src/components/Search.astro:99` | Branche sans `<dialog>` : l'étiquette invite encore à poser une question (latent, derrière K1) | mineur |
+| K12 | `src/components/Search.astro:51` | = P16 / C20 : feuilles de style de composants non rendus | mineur |
+| K13 | `src/components/Search.astro:137` | La ligne « Ce que veut dire » n'est jamais annoncée | mineur |
+| K14 | `src/components/Search.astro:140` | Niveaux de titres de l'accueil (h2 dans h2) | mineur |
+| K15 | `src/components/Search.astro:6` | Commentaire de contrat périmé (« hidden », « l'adresse garde la requête ») | mineur |
+| K16 | `src/components/Chips.astro:3` | Commentaires : « quinze réponses… relues par une personne » | mineur |
+| K17 | `src/components/WordsHub.astro:65` | La ligne « Aucun mot » entre dans l'arbre avec son texte : peut-être pas dite | mineur |
+| K18 | `src/components/WordsHub.astro:76` | `/mot/` expose 30 repères, dont 25 lettres | mineur |
+| K19 | `src/components/Game2.astro:450` | La manche du HTML n'ouvre pas la mesure surlignée (aucun `enhanceOfficialLinks` sur l'accueil) | mineur |
+| K20 | `src/components/Game2.astro:493` | PLAUSIBLE : la phrase de sa figure, écrite dans la tâche qui ouvre la fiche (famille de S15) | mineur |
+| K21 | `src/components/Game2.astro:397` | Prise du bloc ratée : « Ta tortue change… » sur la manche du HTML (compromis consigné par la session, pas par l'éditeur) | mineur |
+| K22 | `src/components/Studies.astro:24` | « Même étude, p. 15 » : un lien qui ne nomme pas sa source (WCAG 2.4.4) | mineur |
+| K23 | `src/components/Authorship.astro:35` | = V5-a : le jour d'un texte « reviewed » avec études, deux phrases collées | mineur |
+| K24 | `src/components/Bridge.astro:34` | Latent : le chapitre que rend `bridgeTarget()` est ignoré | mineur |
+| K25 | `src/components/Quote.astro:39` | Titres officiels sans espaces typographiques : « : » ou « » » en début de ligne | mineur |
+
+### 24 novembre 2026, dans la nuit — revue 3 : `src/lib` ; les règles de « Demander » corrigées (non déployé)
+- **Revue 3, `src/lib`** : 53 constats (30 importants, 4 hors du répertoire, 19 mineurs), tous reproduits sur le vrai pipeline de la feuille (`scripts/ask-page.ts`, `cleanQuestion`, les refus du téléphone), sauf sept restés PLAUSIBLES. Deux réfutés : le futur en -clure (R36, déjà connu) ; `Array.prototype.at` (hors du téléphone, cible es2022).
+- **Le plus grave** : « Demander » montrait nos phrases d'IA là où ses règles demandent des liens — sous un responsable politique nommé derrière « la politique de », « le gouvernement » ou une ponctuation (dont **une régression de D21.7** : « La loi : Macron mis en examen » n'était plus refusé), sous un nom écrit en petites capitales ou avec « ø », sous « le 7 octobre » écrit autrement (la capture que D16.71 avait fermée), sous une consigne de vote assortie d'un « si on vote », à côté d'un peuple avec « exil fiscal » ou un pays.
+- **Corrigé dans la copie de travail, testé, non déployé** (B = `src/lib`) :
+  - noms et lois : B1, B2 (le nom d'une loi n'est plié dans sa loi que dans la même proposition, et plus derrière « la politique de », « le gouvernement », « le quinquennat », « les années », « le plan » ; `spelledClauses` dans `search-core.ts`) ;
+  - lettres et signes : B4, B5, B35 (une lettre que la recherche ne lit pas est un signe : liens), B6 en partie (« ° » n'est plus un signe ; les parenthèses triples en sont un) ;
+  - dates : B3 (« le 7 o c t o b r e », « le ７ octobre », « 7/10 », « octobr ») ;
+  - vote : B7, B18 (la condition est retirée de la question au lieu de tout couvrir ; « parce qu'on vote » lu) ;
+  - tours mis en cause : B8, B9, B10, B11 (= S1), B12 (aucun mot expliqué au-dessus des liens d'une question mise en cause : le tour porte `charged`, et les mots de la question attendent la fin de la recherche), B13, B17, B19 ;
+  - refus trop larges : B14 (ponctuation non ASCII), B15 (« clowns », « charlatans », « guignols », « bouffons », « débile » ne refusent plus seuls, seulement à côté d'un nom), B16 (« quelle IA », « ChatGPT », « ce chat ») ;
+  - recherche : B20 (mots de remplissage par racine), B21 (un nombre cherché tel qu'écrit : « 1 500 » ne trouve plus « 150 000 »), B22 (« 2027, 100 » ne devient plus 2027100) — **chiffres de `/exactitude` inchangés** ;
+  - données : « noir », « noire », « noirs », « noires » retirés de `people` (`data/2026/ordinary.json`, écrit par la session) : un nom d'origine ne se porte jamais garant de lui-même (règle de `CLAUDE.md`), et une porte le tient désormais ;
+  - divers : B23 (le jeu tourne de nouveau une fois tout trouvé), B24 (= S21), B36, B37, B38, B41, B42, B45 à B48 (dates lues à rebours, « 1er », `campaignDecided` = moitié de W9), B51, B53 ;
+  - le contrôle avant dépôt (`ask-validate.ts`, aucun visiteur) : B25 à B30, B49, B50.
+- **Laissés** : B39 (une liste validée sans `by` : l'écrire demanderait « editor », donc son mot), B40 (un fichier des phrases du jeu cassé ne peut pas atteindre un commit), B43 (la liste de gel jamais appliquée : à reprendre avec les portes), S14 (« 5e République », « sixième » : des alias dans `terms.json`, scellé).
+- **Pour l'éditeur** : B6 (« ₪ », « † », « 1488 » : des cibles ?), B44 (l'heure de réouverture sans fuseau : un texte), B52 (les clés JSON françaises `texte`, `phrases` : une exception à écrire), et **le déploiement de ces règles**, qui changent ce que « Demander » montre.
+- **Recensés ailleurs** : B31 = D10, B32 = S6, B33 = D8, B34 = D11.
+- **Lot des composants, écrit dans la même nuit** :
+  - `Search.astro` : K1 (sans `<dialog>`, la page devient celle d'un champ qui cherche ; plus de `ReferenceError`), K11 (son étiquette aussi, chaîne existante), K2 = C8 = U2 (un import de la feuille qui échoue fait de même, au lieu d'un bouton mort ; l'import de la note « scrutin » a son rattrapage), K10 (un seul import à la fois), K15 (commentaire de contrat) ;
+  - K3 : quand la page est quittée avec une conversation, le champ oublie la question qui l'a ouverte, ses résultats et son compte (`cel:forget`) ;
+  - « Mots du programme » : K4 = S13 = S22 (un même pli des deux côtés : espaces insécables, « œ » et « oe »), K5 (un mot ouvert avant le script est rempli, ici et sous les fiches), K18 (plus de 25 repères de lettres), S27 (seuls des textes sont gardés) ;
+  - jeu : K7 (sa fiche fermée n'est plus dessinée sans `<dialog>`), K8 (les « prochains mots » retrouvent guillemets et police du livre, règles perdues en `2a5279a`), K20 (la phrase de sa figure dite après le focus, comme S15) ;
+  - K22 (« Même étude » nomme sa source aux lecteurs d'écran, avec les mots du fichier), K23 (= V5-a : deux phrases terminées), K16 et deux autres commentaires (« quinze… relues par une personne »).
+  - **Laissés** : K12 (= P16, 0,7 Ko), K13, K14, K17, K19, K21, K24, K25 (mineurs, ou un texte ou une mise en page à montrer). **Pour l'éditeur** : K6 et K9 (un onglet fermé, l'historique : ses textes de la page Confidentialité).
