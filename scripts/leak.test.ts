@@ -329,20 +329,25 @@ void test('content: nothing added since the freeze holds the 2026 text', { skip 
     ...corpus.chapters.map((c) => c.title),
     ...corpus.sections.map((s) => s.title),
   ]);
+  const HEAD =
+    /<title>([^<]*)<\/title>|<meta (?:name|property)="(?:description|og:title|og:description|twitter:title|twitter:description)" content="([^"]*)"/g;
+  // What a page's title and previews say, out of their tags: the scanner reads a page without
+  // its tags, and a preview lives in one.
+  const headOf = (html: string): string =>
+    [...html.matchAll(HEAD)].map((match) => match[1] ?? match[2] ?? '').join('\n');
+  // The control goes the way of a page: a window that only the subtraction of the 2025 edition
+  // hides, planted in a preview, is found.
   const shared = [...headIndex.shingles.keys()].find((window) => !index.shingles.has(window));
   assert.ok(
     shared !== undefined &&
-      scanForLeaks(`<meta name="description" content="${shared}">`, headIndex).length === 1,
+      scanForLeaks(headOf(`<meta name="description" content="${shared}">`), headIndex).length === 1,
     'the control of the previews was not detected',
   );
-  const HEAD =
-    /<title>([^<]*)<\/title>|<meta (?:name|property)="(?:description|og:title|og:description|twitter:title|twitter:description)" content="([^"]*)"/g;
   for (const file of built.filter((f) => f.endsWith('.html'))) {
-    const head = [...readFileSync(file, 'utf8').matchAll(HEAD)]
-      .map((match) => match[1] ?? match[2] ?? '')
-      .join('\n');
-    for (const hit of scanForLeaks(head, headIndex)) {
-      findings.push(`${file}, its title or a preview: ${hit.id} (${String(hit.windows)} window(s))`);
+    for (const hit of scanForLeaks(headOf(readFileSync(file, 'utf8')), headIndex)) {
+      findings.push(
+        `${file}, its title or a preview: ${hit.id} (${String(hit.windows)} window(s))`,
+      );
     }
   }
   assert.deepEqual(
