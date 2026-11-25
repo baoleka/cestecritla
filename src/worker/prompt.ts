@@ -273,7 +273,7 @@ Si une CARTE définit le mot, dis ce qu'elle dit, avec d'autres mots.
 Si aucun mot des PHRASES ne demande d'explication : {"phrases":[]}`;
 
 /** What a follow-up adds: the same explanation again, never the previous one. */
-const FOLLOW: Readonly<Record<FollowUp, string>> = {
+export const FOLLOW: Readonly<Record<FollowUp, string>> = {
   simpler:
     '\n\nCette fois, explique plus simplement : des mots de tous les jours, des phrases de quinze mots au plus, comme à une personne de douze ans.',
   example:

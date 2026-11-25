@@ -104,7 +104,14 @@ export function siteFor(
     // His decision for the campaign months is for the sentences: a model explains then only on
     // a decision of its own (D21.48; review 18, X20).
     model: campaignAllowsExplaining(file, now) ? reads : null,
-    minShared: typeof minShared === 'number' ? minShared : undefined,
+    // A whole number from 1: 0 or below turned the topic rule off, quietly (review 18, X8).
+    minShared:
+      typeof minShared === 'number' &&
+      Number.isInteger(minShared) &&
+      minShared >= 1 &&
+      minShared <= 20
+        ? minShared
+        : undefined,
   };
 }
 

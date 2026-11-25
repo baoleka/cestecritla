@@ -10,7 +10,7 @@
  * Run: npx tsx --test scripts/chat-worker.test.ts
  */
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import {
   type ChatRequest,
@@ -39,12 +39,70 @@ import {
 } from '../src/worker/chat.js';
 import { MODELS, keepsNothing } from '../src/worker/models.js';
 import {
+  FOLLOW,
   MAX_EXPLAIN_TOKENS,
   SYSTEM_EXPLAIN,
   estimateNeurons,
   explainRequest,
 } from '../src/worker/prompt.js';
+import { buildSync } from 'esbuild';
+import ts from 'typescript';
 import { LocalD1 } from './d1-local.js';
+import { editorSaid } from './launch.js';
+
+/**
+ * The Worker as wrangler bundles it, read by TypeScript's parser: every name, every string and
+ * every regular expression of what is KEPT of every file it imports — library files, folders,
+ * data — and nothing of the page-side helpers the bundle drops. Hand-kept lists of files and
+ * patterns over text missed a field read through a string, a name in a template, a compound
+ * name, a file in a subfolder, and most of a file whose regular expressions hold a backtick
+ * (review 18, X3, X4, X5, X17).
+ */
+function workerBundle(entry: string): {
+  names: Set<string>;
+  strings: string[];
+  patterns: string[];
+} {
+  const built = buildSync({
+    entryPoints: [entry],
+    bundle: true,
+    write: false,
+    format: 'esm',
+    platform: 'neutral',
+    target: 'es2022',
+    external: ['cloudflare:*', 'node:*'],
+    legalComments: 'none',
+    treeShaking: true,
+    mainFields: ['module', 'main'],
+    logLevel: 'silent',
+  });
+  const text = built.outputFiles[0]?.text ?? '';
+  const source = ts.createSourceFile(
+    'worker.js',
+    text,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.JS,
+  );
+  const names = new Set<string>();
+  const strings: string[] = [];
+  const patterns: string[] = [];
+  const visit = (node: ts.Node): void => {
+    if (ts.isIdentifier(node) || ts.isPrivateIdentifier(node)) names.add(node.text);
+    else if (
+      ts.isStringLiteral(node) ||
+      ts.isNoSubstitutionTemplateLiteral(node) ||
+      ts.isTemplateHead(node) ||
+      ts.isTemplateMiddle(node) ||
+      ts.isTemplateTail(node)
+    ) {
+      strings.push(node.text);
+    } else if (node.kind === ts.SyntaxKind.RegularExpressionLiteral) patterns.push(node.getText());
+    ts.forEachChild(node, visit);
+  };
+  visit(source);
+  return { names, strings, patterns };
+}
 import { codeOf } from './source-code.js';
 
 const CORPUS = '27ee6e713fe25e7e';
@@ -61,7 +119,10 @@ const MEASURES: readonly (readonly [string, string])[] = [
   [BUSES, 'ZORGLUB Rendre gratuits les transports scolaires jusqu’à 16 ans'],
   [BARE, 'ZORGLUB Une mesure que personne n’a su dire en une phrase'],
 ];
-/** The sentences the editor read — one measure has none: its link alone is a verdict. */
+/**
+ * The sentences written ahead and kept by a reader — an AI, read by no person one by one
+ * (D16.57 to D16.59) — one measure has none: its link alone is a verdict.
+ */
 const GISTS: readonly (readonly [string, string])[] = [
   [
     LIBRARY,
@@ -183,7 +244,7 @@ function chatHarness(overrides: Partial<ChatDeps> = {}, output: unknown = EXPLAN
 const QUIET: ChatResponse = { kind: 'quiet', why: 'none' };
 const SPENT: ChatResponse = { kind: 'quiet', why: 'spent' };
 
-void test('/api/gists: the sentences the editor read, in the order named — and no model anywhere', async () => {
+void test('/api/gists: the sentences written ahead, in the order named — and no model anywhere', async () => {
   const { deps, calls } = gistsHarness();
   const answer = await answerGists(GISTS_REQUEST, deps);
   assert.deepEqual(answer, {
@@ -301,7 +362,10 @@ void test('what the model reads: our sentences, our card, words of our sentences
   );
   const user = messages[1]?.content ?? '';
   // The read sentences of the measures named, in the order named; the card the request names.
-  assert.ok(user.indexOf(GISTS[1]?.[1] ?? '?') < user.indexOf(GISTS[0]?.[1] ?? '?'));
+  // Both are there: a sentence missing gave -1, smaller than any place (review 18, X25).
+  const first = user.indexOf(GISTS[1]?.[1] ?? '?');
+  const second = user.indexOf(GISTS[0]?.[1] ?? '?');
+  assert.ok(first >= 0 && second >= 0 && first < second, `${String(first)} ${String(second)}`);
   assert.ok(user.includes(CARDS[0]?.plain ?? '?'));
   assert.ok(!user.includes(GISTS[2]?.[1] ?? '?'), 'a sentence that is not on the screen');
   // The words to explain, last, as OUR sentence writes them — found there by the Worker.
@@ -309,7 +373,7 @@ void test('what the model reads: our sentences, our card, words of our sentences
   assert.ok(user.endsWith('MOTS :\n- verger\n- communal'), user.slice(-60));
   // Nothing of what was typed: not the question, not the one word of it that is not ours.
   assert.ok(!/zorglub/i.test(sent) && !sent.includes('quoi'));
-  assert.doesNotMatch(user, /QUESTION/);
+  assert.doesNotMatch(user, /question/i);
   // No text of a measure, no identifier, nothing of a previous turn.
   assert.ok(!sent.includes('ZORGLUB'), 'the text of the book reached the model');
   assert.ok(!sent.includes(ORCHARD) && !sent.includes(LIBRARY));
@@ -405,13 +469,30 @@ void test('the instruction asks for what the control checks', () => {
   ]) {
     assert.match(SYSTEM_EXPLAIN, said);
   }
+  // The cap it states is the constant the control holds: « 24 » held 2 and 4, and « un à
+  // trois » counts words to pick, not explanations (review 18, X26).
+  const SAID_CAP: Readonly<Record<number, string>> = {
+    1: 'Une',
+    2: 'Deux',
+    3: 'Trois',
+    4: 'Quatre',
+  };
   assert.ok(
-    SYSTEM_EXPLAIN.includes(String(MAX_EXPLAIN_SENTENCES)) || /un à trois/.test(SYSTEM_EXPLAIN),
+    SYSTEM_EXPLAIN.includes(`${SAID_CAP[MAX_EXPLAIN_SENTENCES] ?? '?'} explications au plus`),
+    `the instruction does not say ${String(MAX_EXPLAIN_SENTENCES)} explanations at most`,
   );
-  // It speaks of no question: the model is never given one (D16.53).
-  assert.doesNotMatch(SYSTEM_EXPLAIN, /QUESTION|question/);
-  // It names neither the book nor the movement: the model is not told whose programme it is.
-  assert.doesNotMatch(SYSTEM_EXPLAIN, /Avenir en commun|insoumis|Mélenchon|LFI/i);
+  // It speaks of no question, in no case and in none of the texts sent with it: the model is
+  // never given one (D16.53; review 18, X27). Nor does it name the book or the movement.
+  for (const [name, text] of [
+    ['the instruction', SYSTEM_EXPLAIN],
+    ...Object.entries(FOLLOW).map(([key, follow]) => [
+      `the follow-up « ${key} »`,
+      `${SYSTEM_EXPLAIN}${follow}`,
+    ]),
+  ] as const) {
+    assert.doesNotMatch(text, /question/i, name);
+    assert.doesNotMatch(text, /Avenir en commun|insoumis|Mélenchon|LFI/i, name);
+  }
   // What a call may cost at most is known before it is made — and stays under the room
   // `/api/gists` asks the counter for, for every model that may read a question.
   const long = 'x'.repeat(300);
@@ -436,6 +517,8 @@ void test('the instruction asks for what the control checks', () => {
 });
 
 void test('every step before the model answers without anything having gone anywhere', async () => {
+  // The one step that reserves asks a counter that refuses: what it was asked is kept here.
+  const refused: number[] = [];
   const steps: readonly (readonly [string, Partial<ChatDeps>, ChatRequest, ChatResponse])[] = [
     [
       'electoral silence',
@@ -453,7 +536,12 @@ void test('every step before the model answers without anything having gone anyw
     ['the sentences are stopped', { db: base({ gists: 'stopped' }) }, CHAT_REQUEST, QUIET],
     [
       'the allowance is spent, or closed',
-      { reserve: () => Promise.resolve(false) },
+      {
+        reserve: (neurons) => {
+          refused.push(neurons);
+          return Promise.resolve(false);
+        },
+      },
       CHAT_REQUEST,
       SPENT,
     ],
@@ -463,6 +551,16 @@ void test('every step before the model answers without anything having gone anyw
     assert.deepEqual(await answerChat(request, deps), expected, label);
     assert.equal(calls.run, 0, `${label}: the model was called`);
     assert.deepEqual(calls.settle, [], label);
+    // Nothing held, given back or closed either: a reservation taken before a refusal held
+    // the allowance for a day, a close on a word not ours shut explanations for everyone
+    // (review 18, X7). The one step that reserves is the one refused the reservation.
+    const reserving = label === 'the allowance is spent, or closed';
+    assert.equal(
+      (reserving ? refused : calls.reserve).length,
+      reserving ? 1 : 0,
+      `${label}: reserved`,
+    );
+    assert.deepEqual([calls.release, calls.close], [[], 0], `${label}: given back or closed`);
   }
 });
 
@@ -479,6 +577,8 @@ void test('the model silent, slow or refused: no explanation, and the allowance 
   assert.deepEqual(await answerChat(CHAT_REQUEST, refused.deps), SPENT);
   assert.deepEqual(refused.calls.release, refused.calls.reserve);
   assert.equal(refused.calls.close, 1);
+  // …and nothing settled: a refused call is not billed, nor given back twice (review 18, X19).
+  assert.deepEqual(refused.calls.settle, []);
   // A cost nobody states is the reservation itself.
   const unknown = chatHarness({
     run: () => Promise.resolve({ output: EXPLANATION, neurons: null, cached: false }),
@@ -571,8 +671,16 @@ void test('the Worker follows the file: sentences without a model, a model only 
     committed.mode === 'chat' || committed.preview_mode === 'chat' ? 'chat' : 'off',
   );
   assert.equal(siteFor(committed, 'preview', BEFORE).model, null, 'no model is named (D16.60)');
-  const wiring = readFileSync('src/worker/index.ts', 'utf8');
+  // Read as code, comments out: a comment satisfied it, or failed it (review 18, X14). The
+  // file is read in one place, once, and the routes take what that place says (X6).
+  const wiring = codeOf(readFileSync('src/worker/index.ts', 'utf8'));
+  assert.equal(
+    wiring.split('siteFor(').length - 1,
+    1,
+    'the configuration is read in one place: chatConfigured',
+  );
   assert.match(wiring, /siteFor\(askConfig, env\.ENVIRONMENT, new Date\(\)\)/);
+  assert.equal(wiring.split('askConfig').length - 1, 2, 'askConfig: imported, read once');
   assert.doesNotMatch(wiring, /modeFor|keepsNothing/, 'the wiring decides nothing of the mode');
 });
 
@@ -621,25 +729,23 @@ void test('from 1 January 2027 the sentences are served only if the editor decid
   }
   // The committed file carries the question, and no answer the session would have invented.
   const committed = JSON.parse(readFileSync('data/2026/ask.json', 'utf8')) as {
-    campaign?: { serve: unknown; decided_on: unknown; decided_by: unknown };
+    campaign?: { serve: unknown; decided_on: unknown; decided_by: unknown } | null;
   };
   assert.ok(committed.campaign !== undefined, 'data/2026/ask.json: campaign');
-  if (committed.campaign.decided_by !== 'editor') {
+  // Null is the cautious answer, read as such — not a crash (review 18, X23).
+  if (committed.campaign === null || committed.campaign.decided_by !== 'editor') {
     assert.equal(campaignAllows(committed, firstHour), false);
   } else {
-    // His decision is written where decisions are, on its day, as his: a session never
-    // writes « editor » from nothing (D16.65). He decided on 15 November 2026 (D16.78).
+    // His decision is written where decisions are, on its day, as his — read as every gate
+    // reads his decisions: his mark at the head of the status, a row that names the file and
+    // the field, lettered rows too (`editorSaid`). « campagne » anywhere in a row of that day
+    // let the palette of the turtle or the campaign of reviews stand for it (review 18, X1,
+    // X24; the class of A2). He decided on 15 November 2026 (D16.78).
     const on = String(committed.campaign.decided_on);
-    const rows = readFileSync('docs/discovery/decisions.md', 'utf8').split('\n');
+    const decisions = readFileSync('docs/discovery/decisions.md', 'utf8');
     assert.ok(
-      rows.some(
-        (row) =>
-          /^\| D\d+\.\d+ \|/.test(row) &&
-          row.includes(`| ${on} |`) &&
-          /campagne/.test(row) &&
-          /DÉCISION \(utilisateur\)/.test(row),
-      ),
-      `docs/discovery/decisions.md: no decision of the editor about the campaign on ${on}`,
+      editorSaid(decisions, on, ['data/2026/ask.json', '`campaign`']),
+      `docs/discovery/decisions.md: no decision of the editor naming the campaign field on ${on}`,
     );
     assert.equal(campaignAllows(committed, firstHour), committed.campaign.serve === true);
   }
@@ -669,35 +775,76 @@ void test('what the routes of the chat do not contain: the reader of the book, a
     assert.match(code, /request\.method !== 'POST'\) return empty\(405\)/, route);
     assert.match(code, /request\.headers\.get\('origin'\) !== origin\) return empty\(403\)/, route);
     assert.match(code, new RegExp(`${parser}\\(await readBody\\(request\\)\\)`), route);
-    // A closed route reads nothing: the hour and the mode are asked before a body is opened.
-    const closedAt = code.indexOf(route === 'handleGists' ? 'closedGists(' : 'closedChat(');
-    assert.ok(closedAt > -1 && closedAt < code.indexOf('readBody(request)'), route);
-    assert.match(code, /if \(closed !== null\) return json\(closed\);/, route);
-    // …each on its own count: reading sentences is not slowed by what the model answers.
-    assert.match(code, new RegExp(`withinRate\\(request, env, '${lane}'\\)`), route);
+    // A closed route reads nothing: its mode from the one place that reads the file, its closed
+    // answer RETURNED, its count kept — and only then the body. The presence of each line was
+    // checked, never their order: a body read above the return passed (review 18, X2, X12).
+    const steps = [
+      'const config = chatConfigured(env);',
+      'if (closed !== null) return json(closed);',
+      route === 'handleGists'
+        ? "if (!(await withinRate(request, env, 'gists'))) return json(LOCAL_GISTS);"
+        : "if (!(await withinRate(request, env, 'chat'))) return json(QUIET);",
+      'readBody(request)',
+    ].map((step) => code.indexOf(step));
+    assert.ok(
+      steps.every((at, i) => at > -1 && (i === 0 || at > (steps[i - 1] ?? -1))),
+      `${route} (${lane}): ${steps.join(' ')}`,
+    );
+    // One reader of bodies, once, and no other: a clone, a stream, a second parse (X13).
+    assert.equal(code.split('readBody(').length - 1, 1, `${route}: one read of the body`);
+    assert.doesNotMatch(
+      code,
+      /request\.(?:clone|json|text|arrayBuffer|formData|blob)\s*\(|request\.body\b|new Response\(\s*request/,
+      `${route}: another reader of the body`,
+    );
+    // The mode and the model are not rebuilt here, and no route reads a measure (X6, X11).
+    assert.doesNotMatch(code, /askConfig|siteFor\(|modeFor|keepsNothing/, route);
+    assert.doesNotMatch(code, /loadMeasures|keptTerms|propositions/, route);
+  }
+  // /api/gists calls no model — not even one it is handed (review 18, X10) — and asks the
+  // counter for the room an explanation needs; /api/chat settles what it spent, gives back
+  // what it did not, closes when told: the wiring of the allowance, as written (X18).
+  const gistsHandler = index.slice(index.indexOf('async function handleGists'));
+  const gistsCode = gistsHandler.slice(0, gistsHandler.indexOf('\n}\n'));
+  assert.doesNotMatch(
+    gistsCode,
+    /runDirect|runModel|env\.AI\b|\brun:/,
+    'handleGists calls a model',
+  );
+  assert.ok(gistsCode.includes('available: () => budget.available(EXPLAIN_ROOM, hardStop(env)),'));
+  const chatHandler = index.slice(index.indexOf('async function handleChat'));
+  const chatCode = chatHandler.slice(0, chatHandler.indexOf('\n}\n'));
+  for (const wire of [
+    'reserve: (neurons) => budget.reserve(neurons, hardStop(env)),',
+    'settle: (reserved, spent) => budget.settle(reserved, spent),',
+    'release: (reserved) => budget.release(reserved),',
+    'close: () => budget.close(),',
+  ]) {
+    assert.ok(chatCode.includes(wire), `handleChat: ${wire}`);
   }
   // The word « question » names nothing in the Worker any more — no field, no variable, no
-  // parameter: nothing a visitor typed reaches it (D16.53). Nor does the word of an agreement.
-  // (What is looked at is the code — its names — not the French of an instruction: the older
-  // prompts of the bench tell a model « Tu ne connais pas sa question ».)
-  const names = (source: string): string =>
-    strip(source)
-      .replace(/`(?:[^`\\]|\\.)*`/g, '``')
-      .replace(/'(?:[^'\\\n]|\\.)*'/g, "''")
-      .replace(/"(?:[^"\\\n]|\\.)*"/g, '""');
-  for (const name of readdirSync('src/worker').filter((file) => file.endsWith('.ts'))) {
-    const code = names(readFileSync(`src/worker/${name}`, 'utf8'));
-    assert.ok(!/\bquestion\b/i.test(code), `src/worker/${name} names a question`);
-    assert.ok(!/\bconsent/i.test(code), `src/worker/${name} names an agreement`);
+  // parameter, in any case and inside any compound: nothing a visitor typed reaches it
+  // (D16.53). Nor does the word of an agreement. And no string is that word: a key, a header,
+  // a parameter of the address (`body['question']`, `x-question`). What is read is the bundle,
+  // by a parser (`workerBundle`): the prose of an instruction is a string, and stays allowed —
+  // the older prompts of the bench tell a model « Tu ne connais pas sa question ».
+  for (const entry of ['src/worker/index.ts', 'src/worker/chat.ts']) {
+    const { names, strings } = workerBundle(entry);
+    assert.ok(names.size > 100, `${entry}: ${String(names.size)} names — the bundle was not read`);
+    assert.deepEqual(
+      [...names].filter((name) => /question|consent/i.test(name)),
+      [],
+      `${entry}: a name of a question, or of an agreement`,
+    );
+    assert.deepEqual(
+      strings.filter((text) => /^(?:x-)?(?:questions?|consent)$/i.test(text)),
+      [],
+      `${entry}: a string that is the word`,
+    );
   }
-  // …and the files the Worker imports to read a request do not either.
-  for (const file of [
-    'src/lib/chat-contract.ts',
-    'src/lib/chat-words.ts',
-    'src/lib/ask-validate.ts',
-  ]) {
-    assert.ok(!/\bquestion\b/.test(names(readFileSync(file, 'utf8'))), file);
-  }
+  // …nor the schema of the base the Worker reads (X5).
+  const schema = readFileSync('src/worker/sql/schema.sql', 'utf8').replace(/--[^\n]*/g, '');
+  assert.doesNotMatch(schema, /question|consent/i, 'src/worker/sql/schema.sql');
 });
 
 void test('a closed route answers before it is told anything: the hour and the mode, never the request', () => {
@@ -732,16 +879,28 @@ void test('the first explanation of a Worker that has just woken costs what the 
   // 50 ms in the control at the first request, 1 ms each afterwards — for a limit of 10 ms.
   // Two things hold it down, and this test holds both in place.
   // 1. No pattern stands on the Unicode properties at the edge of a word: each such pattern
-  //    costs the engine about half a millisecond at its first use, and there were 120.
-  for (const file of ['src/lib/ask-validate.ts', 'src/lib/notions.ts']) {
-    const code = codeOf(readFileSync(file, 'utf8'));
-    assert.doesNotMatch(code, /\(\?<?!\[\\{1,2}p\{/u, `${file}: an edge built on \\p{…}`);
+  //    costs the engine about half a millisecond at its first use, and there were 120. Read
+  //    in what the Worker keeps of every file, by a parser — a regular expression, or the string
+  //    a `new RegExp` is built from (LETTERS, WORD) — whatever the spelling of the edge (review
+  //    18, X16). One lookahead stands on a property and is no edge: « a letter not of Latin
+  //    script », one character, tested where markup is looked for.
+  const NOT_AN_EDGE = '/(?!\\p{Script=Latin})\\p{L}/u';
+  for (const entry of ['src/worker/index.ts', 'src/worker/chat.ts']) {
+    const { strings, patterns } = workerBundle(entry);
+    const edges = [...patterns, ...strings].filter(
+      (source) => /\(\?<?[!=][^)]*\\[pP]\{/.test(source) && source !== NOT_AN_EDGE,
+    );
+    assert.deepEqual(edges, [], `${entry}: an edge built on \\p{…}`);
+    assert.deepEqual(
+      strings.filter((text) => /^\\?\\[pP]\{L\}/.test(text)),
+      [],
+      `${entry}: letters written as a property, for a pattern to be built from`,
+    );
   }
-  // 2. The control and the notions run once while the Worker loads, on an invented sentence:
-  //    what is left to compile is paid there, where the allowance is larger.
-  //    It is done in the file of the chat's own path: the one place of the Worker, with the
-  //    prompt, where the word of a sentence to read may stand.
-  const path = readFileSync('src/worker/chat.ts', 'utf8');
+  // 2. The control and the cutting of words run once while the Worker loads, on an invented
+  //    sentence: what is left to compile is paid there, where the allowance is larger. It is
+  //    done in the file of the chat's own path — read as code, a comment proves nothing (X14).
+  const path = codeOf(readFileSync('src/worker/chat.ts', 'utf8'));
   const loaded = path.slice(0, path.indexOf('\nexport function closedGists'));
   assert.match(loaded, /^validateExplanation\(/m, 'the control is not warmed while loading');
   assert.match(loaded, /^wordsShown\(/m, 'the cutting of words is not warmed while loading');
@@ -770,4 +929,18 @@ void test('his decision for the campaign months serves the sentences, and no mod
     siteFor(sheet({ ...decided, explain: true, decided_by: 'session' }), 'production', from).model,
     null,
   );
+});
+
+void test('a threshold of the control from the file is a whole number from 1, or none (review 18, X8)', () => {
+  const at = new Date(Date.parse(CAMPAIGN_FROM) - 1);
+  const sheet = (min_shared: unknown) => ({
+    mode: 'chat',
+    preview_mode: 'chat',
+    model: null,
+    min_shared,
+  });
+  assert.equal(siteFor(sheet(2), 'production', at).minShared, 2);
+  for (const wrong of [0, -3, 0.5, 1e9, '2', null]) {
+    assert.equal(siteFor(sheet(wrong), 'production', at).minShared, undefined, String(wrong));
+  }
 });

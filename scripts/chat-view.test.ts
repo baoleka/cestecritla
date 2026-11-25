@@ -89,10 +89,7 @@ void test('the words of the question are read once the search has said nobody is
   assert.equal(viewOf(frozen, page(), true).wording, null);
   // A question that names, points at or charges somebody: links, and none of our words above
   // them — « c'est quoi l'antisémitisme de X ? » opened our explanation of the word.
-  assert.equal(
-    viewOf(searched({ charged: true, linksOnly: true }), page(), true).wording,
-    null,
-  );
+  assert.equal(viewOf(searched({ charged: true, linksOnly: true }), page(), true).wording, null);
 });
 
 void test('nothing found: one sentence, nothing sent — never « the programme does not speak of it »', () => {
@@ -105,7 +102,7 @@ void test('nothing found: one sentence, nothing sent — never « the programme 
   assert.equal(nextStep(unknown, page()), null);
 });
 
-void test('the links are there before the sentences: rows first, then what the editor read', () => {
+void test('the links are there before the sentences: rows first, then the sentences written ahead', () => {
   const turn = searched();
   assert.equal(nextStep(turn, page()), 'gists');
   assert.deepEqual(viewOf(turn, page(), true).measures, {

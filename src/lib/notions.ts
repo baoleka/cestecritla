@@ -4,9 +4,9 @@
  * (data/2026/riposte.json). It is the first block of the sheet (PLAN-CHAT §1): shown at once,
  * without the network, without a model, without an agreement.
  *
- * Pure, and shared. The page runs it before anything is sent; the Worker runs it again on the
- * question it receives, to hand the model the card a visitor is already reading — so that the
- * explanation rests on our words, not on what the model remembers of a notion.
+ * Pure, and shared. The page runs it before anything is sent; since D16.53 the Worker never
+ * receives a question — it is told which of our cards the visitor is reading, by their names,
+ * so that an explanation rests on our words, not on what the model remembers of a notion.
  *
  * The rule is narrow on purpose, like the one that recognises an objection (ask-reviewed.ts):
  * the question must hold the term itself — every word of it, in a row, in its order. « La règle

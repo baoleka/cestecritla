@@ -9,8 +9,8 @@
  * answers, and the chips of the home page still lead to the fifteen answers. A wrong match would
  * put a text that answers something else at the top of the page.
  *
- * Pure, and shared: the page runs it before sending anything (a recognised objection never
- * leaves the phone), the Worker runs it again.
+ * Pure: the page runs it before sending anything — a recognised objection never leaves the
+ * phone, and since D16.53 the Worker is never sent a question to run it on.
  */
 import { sameWord, terms, tokenize } from './search-core.js';
 

@@ -7,7 +7,7 @@
  *
  *   « En clair »                      what a person wrote and re-read: a card, an objection —
  *                                     recognised on the phone, shown at once
- *   « Ce que prévoit le programme »   a row per measure: the sentence the editor read, or its
+ *   « Ce que prévoit le programme »   a row per measure: the sentence written ahead, or its
  *                                     link alone — the link is there before the sentence
  *   the explained words               the acronyms and technical terms of the question and
  *                                     of the sentences, each with a short text written ahead:

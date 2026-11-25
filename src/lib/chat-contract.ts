@@ -6,8 +6,9 @@
  * **NO REQUEST OF THE SITE CARRIES A SENTENCE** (D16.53, which restores D16.22 without
  * exception). What a visitor types never leaves the phone.
  *
- *   /api/gists   identifiers of measures, nothing else. It brings back the sentences the editor
- *                read, one per measure. No model runs.
+ *   /api/gists   identifiers of measures, nothing else. It brings back the sentences written
+ *                ahead, one per measure — written and checked by an AI, read by no person one
+ *                by one (D16.57 to D16.59). No model runs.
  *   /api/chat    the same identifiers, and — in place of the question — the words of OUR OWN
  *                sentences that the question uses (src/lib/chat-words.ts), the identifiers of
  *                our cards it names, and the follow-up chosen. Every field is a value the
@@ -29,7 +30,8 @@
  * fail loudly.
  *
  * **No word of the programme leaves the Worker.** `GistsResponse` carries sentences of ours,
- * read by the editor; `ChatResponse` carries sentences of the model, about words. Neither has a
+ * kept by a reader who is named with them; `ChatResponse` carries sentences of the model, about
+ * words. Neither has a
  * field for a text of the book — titles and links are resolved in the browser, from files that
  * are already public.
  */
@@ -46,7 +48,7 @@ import { isInstant } from './days.js';
 export const MAX_GIST_IDS = 3;
 /** How many measures an explanation may rest on: the three shown, and the two that follow. */
 export const MAX_CHAT_IDS = 5;
-/** A read sentence is one short sentence. This bounds the bytes; the editor's reading does the rest. */
+/** A read sentence is one short sentence. This bounds the bytes; its reading does the rest. */
 export const MAX_GIST_CHARS = 300;
 /** How many words an explanation may be asked about, and how many of our cards may go with it. */
 export const MAX_CHAT_WORDS = 3;
@@ -123,7 +125,7 @@ export function parseGistsRequest(value: unknown): GistsRequest | null {
   return ids === null ? null : { corpus, ids };
 }
 
-/** A sentence of ours about one measure, read by the editor before it was served (D16.49). */
+/** A sentence of ours about one measure, kept by its reader before it was served (D16.49). */
 export interface Gist {
   id: string;
   text: string;
@@ -134,7 +136,7 @@ export interface Gist {
  *
  *   gists     the sentences the base holds for these measures — fewer than asked, or none: a
  *             measure without a read sentence keeps its link alone, and that is a verdict of
- *             the editor, not a gap. `ai` says whether an explanation may be asked for now:
+ *             its reader, not a gap. `ai` says whether an explanation may be asked for now:
  *             false when the mode, the electoral silence, the allowance of the day or the stop
  *             flag say so — and then the page does not even offer one.
  *   silence   electoral silence: questions reopen at `reopen` (ISO 8601, UTC)
