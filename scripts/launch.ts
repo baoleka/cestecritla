@@ -557,10 +557,19 @@ export function chatLaunchBlockers(root = '.'): string[] {
  */
 export function artefactBlockers(root = '.'): string[] {
   const at = (path: string): string => (root === '.' ? path : `${root}/${path}`);
+  const corpus = field(field(readObject(at(MANIFEST_PATH)), 'meta'), 'corpus_version');
+  return [...askBlockers(root, corpus), ...gameArtefactBlockers(root)];
+}
+
+/**
+ * The part of the artefacts that only a build showing the game needs: its list of words and
+ * her sheet. A build that shows no game — the scrutin build (D16.16), or the build of sheet 9
+ * that takes a word out — ships nothing they hold (review 11, C4; review 9, D6).
+ */
+export function gameArtefactBlockers(root = '.'): string[] {
+  const at = (path: string): string => (root === '.' ? path : `${root}/${path}`);
   const out: string[] = [];
   const corpus = field(field(readObject(at(MANIFEST_PATH)), 'meta'), 'corpus_version');
-
-  out.push(...askBlockers(root, corpus));
 
   // The words of the game: a new kind of extract, validated with its measured share (D16.15).
   const words = readObject(at(WORDS_PATH));

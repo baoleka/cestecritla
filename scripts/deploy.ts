@@ -63,6 +63,7 @@ import {
 import {
   WORDS_SWITCH_PATH,
   chatLaunchBlockers,
+  gameArtefactBlockers,
   homeBlockers,
   launchBlockers,
   previewChatBlockers,
@@ -107,7 +108,7 @@ if (swallowed.length > 0) {
 const refused = refusedArguments(given);
 if (refused.length > 0) {
   console.error(
-    `deploy refused: ${refused.join(' ')} — only --bench, --chat, --withdraw, --accord <day>, --dry-run and --outdir`,
+    `deploy refused: ${refused.join(' ')} — only --bench, --chat, --withdraw, --without-game, --accord <day>, --dry-run and --outdir`,
   );
   process.exit(2);
 }
@@ -120,6 +121,7 @@ const accord =
     : (given.find((arg) => arg.startsWith('--accord='))?.slice('--accord='.length) ?? null);
 const forWrangler = given.filter(
   (arg, i) =>
+    arg !== '--without-game' &&
     arg !== '--bench' &&
     arg !== '--chat' &&
     arg !== '--withdraw' &&
@@ -270,6 +272,11 @@ function gistsUnpublished(): string[] {
 // The withdrawal reads nothing of the app: its pages are its one rule (`withdrawalContext`).
 // Every reader below is for an app build only — none of them may stand between the editor and
 // the holding page (review 9, D5; review 10, A1; review 11, M5).
+/** The launch's lines, without those of the game's list and her sheet. */
+function withoutGameArtefacts(lines: readonly string[]): string[] {
+  const game = new Set(gameArtefactBlockers());
+  return lines.filter((line) => !game.has(line));
+}
 const refusal = deployRefusal(
   target,
   mode,
@@ -281,9 +288,16 @@ const refusal = deployRefusal(
         builtFor: marker.host,
         policyValidated: citationPolicyValidated(),
         dryRun: passthrough.includes('--dry-run'),
-        launchBlockers: launchBlockers(readLaunchInputs()),
+        // A build that shows no game — the scrutin build, or sheet 9's taken at the operator's
+        // word — is not held by what only the game ships: its list and her sheet (C4, D6).
+        launchBlockers:
+          scrutinBuild || (gameFile === null && given.includes('--without-game'))
+            ? withoutGameArtefacts(launchBlockers(readLaunchInputs()))
+            : launchBlockers(readLaunchInputs()),
         insideSilenceWindow: nearSilenceWindow(new Date()),
         scrutinBuild,
+        showsNoGame: gameFile === null && !scrutinBuild,
+        withoutGame: given.includes('--without-game'),
         ask,
         workerProblems: workerProblems(),
         previewBlockers: previewChatBlockers(),

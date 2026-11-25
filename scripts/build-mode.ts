@@ -385,7 +385,13 @@ export function refusedArguments(given: readonly string[]): string[] {
   if (seen.has('--outdir') && !seen.has('--dry-run')) refused.push('--outdir (without --dry-run)');
   for (let i = 0; i < given.length; i += 1) {
     const arg = given[i] ?? '';
-    if (arg === '--bench' || arg === '--chat' || arg === '--withdraw' || arg === '--dry-run') {
+    if (
+      arg === '--bench' ||
+      arg === '--chat' ||
+      arg === '--withdraw' ||
+      arg === '--dry-run' ||
+      arg === '--without-game'
+    ) {
       continue;
     }
     if (/^--outdir=.+/.test(arg) || /^--accord=\d{4}-\d{2}-\d{2}$/.test(arg)) continue;
@@ -447,6 +453,10 @@ export function distProblems(
   const stray = dist.gameFiles.filter((name) => name !== expected.gameFile);
   if (expected.gameFile === null && dist.gameFiles.length > 0) {
     out.push('dist/ shows the game, and the list of words is not validated as it stands');
+  } else if (expected.gameFile !== null && dist.gameFiles.length === 0) {
+    // Built while the list was not validated, or by hand without the game: a build of today
+    // would show it, and the turtle with it (review 11, M11).
+    out.push('dist/ shows no game, and a build of today would: build again');
   } else if (stray.length > 0) {
     out.push('dist/ shows a game built from another list of words');
   }
@@ -594,6 +604,13 @@ export interface DeployContext {
   leftovers?: readonly string[];
   /** The host the app build in dist/ was made for (its marker): it goes to that host only. */
   builtFor?: DeployTarget;
+  /**
+   * A build of today shows no game — and no turtle with it — outside the scrutin build: the list
+   * of words is not validated as it stands (`gameSite().on` false).
+   */
+  showsNoGame?: boolean;
+  /** `--without-game`: the operator says it is the gesture of sheet 9 (a word taken out). */
+  withoutGame?: boolean;
   /**
    * What holds back the preview host's pages whatever they ask (scripts/launch.ts,
    * `previewPageBlockers`): the line of the privacy page about her colour (A5).
@@ -783,6 +800,23 @@ export function deployRefusal(
   // Since the launch (14/11/2026, D16.36) a gate that stands again is a change awaiting its
   // date — never a reason to put the holding page back, which is the withdrawal and the
   // editor's decision (review 11, M1).
+  // The game is not optional (D16.11): production goes without it only when sheet 9 takes a
+  // word out, and the operator says so — a list broken by accident looks the same (review 9,
+  // D6; review 10, A9). The scrutin build shows no game by law (D16.16). A dry run sends nothing.
+  if (
+    target === 'apex' &&
+    mode === 'app' &&
+    !context.dryRun &&
+    context.showsNoGame === true &&
+    !context.scrutinBuild &&
+    context.withoutGame !== true
+  ) {
+    return (
+      'this build shows no game, and no turtle with it (D16.11): the list of words is not ' +
+      'validated as it stands. If this is the gesture of sheet 9 — a word taken out until the ' +
+      'editor validates the list again —, say so: `npm run deploy -- --without-game`'
+    );
+  }
   if (target === 'apex' && mode !== 'holding' && context.launchBlockers.length > 0) {
     return (
       `production does not take this app build — ${context.launchBlockers.join(' · ')}. ` +

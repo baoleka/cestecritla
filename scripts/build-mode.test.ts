@@ -974,10 +974,15 @@ void test('dist/ is read, whatever the marker says: no game without its list, no
   const game = 'jeu-0123456789abcdef.json';
   const off = { gameFile: null, ask: 'off' } as const;
   const playing = { gameFile: game, ask: 'off' } as const;
-  // Nothing shown is nothing to refuse — the scrutin build, or a build older than the list.
+  // Nothing shown where a build of today shows nothing — the scrutin build, sheet 9's.
   assert.deepEqual(distProblems({ gameFiles: [], asks: false }, off), []);
-  assert.deepEqual(distProblems({ gameFiles: [], asks: false }, playing), []);
   assert.deepEqual(distProblems({ gameFiles: [game], asks: false }, playing), []);
+  // …but a dist/ without the game where a build of today would show it — built before the
+  // list was validated again, or by hand — would serve no turtle (M11).
+  assert.match(
+    distProblems({ gameFiles: [], asks: false }, playing).join(),
+    /shows no game, and a build of today would/,
+  );
   // A test build copied over dist/, an `astro build` run by hand with the test variable.
   assert.match(distProblems({ gameFiles: [game], asks: false }, off).join(), /not validated/);
   // A build made before the list changed.
@@ -1089,6 +1094,25 @@ void test('the apex takes no app build from main until the editor has dated his 
     String(deployRefusal('apex', 'app', pages, { ...held, launchBlockers: ['not decided'] })),
     /production does not take this app build — not decided/,
   );
+});
+
+void test('production goes without the game only when sheet 9 says so, or for the scrutin build (D6, C4)', () => {
+  const pages = ['index.html', 's/p1c1-s01/index.html'];
+  const gameless: DeployContext = { ...VALIDATED, launchBlockers: [], showsNoGame: true };
+  // A list broken by accident looks like sheet 9's gesture: the operator says which.
+  assert.match(
+    String(deployRefusal('apex', 'app', pages, gameless)),
+    /shows no game, and no turtle with it[\s\S]*--without-game/,
+  );
+  assert.equal(deployRefusal('apex', 'app', pages, { ...gameless, withoutGame: true }), null);
+  // The scrutin build shows no game by law; a dry run sends nothing; the preview host is free.
+  assert.equal(deployRefusal('apex', 'app', pages, { ...gameless, scrutinBuild: true }), null);
+  assert.equal(deployRefusal('apex', 'app', pages, { ...gameless, dryRun: true }), null);
+  assert.equal(deployRefusal('preview', 'app', pages, gameless), null);
+  // The flag is the script's own and never reaches wrangler.
+  assert.deepEqual(refusedArguments(['--without-game']), []);
+  const deploy = readFileSync('scripts/deploy.ts', 'utf8');
+  assert.match(deploy, /arg !== '--without-game' &&/);
 });
 
 void test('the apex takes no app build while the explained words are held (D20.15)', () => {
