@@ -480,7 +480,7 @@
       "slug": "exil-fiscal",
       "theme": "Exil fiscal",
       "objection": "« Avec la taxe Zucman, les riches vont tous partir »",
-      "answer": "Le programme crée la taxe Zucman : une garantie d'impôt de 2 % sur le patrimoine de chaque centimillionnaire. Il rétablit et renforce l'ISF. Contre l'évasion fiscale, il rétablit aussi une exit tax renforcée et instaure un impôt universel, sur les entreprises comme sur les revenus des particuliers.",
+      "answer": "Le programme crée la taxe Zucman : un impôt plancher de 2 % du patrimoine pour chaque centimillionnaire. Il rétablit et renforce l'ISF. Contre l'évasion fiscale, il rétablit aussi une exit tax renforcée et instaure un impôt universel, sur les entreprises comme sur les revenus des particuliers.",
       "avoid": "Ne pas dire « personne ne part » : l'exil existe, il est faible. Ne pas dire que ces études mesurent la taxe Zucman ou les centimillionnaires. Leurs auteurs jugent difficile d'étendre leurs résultats à une réforme très différente, visant les très hauts patrimoines. Ne pas avancer de recette : la mesure n'en chiffre pas.",
       "supports": [
         {
@@ -535,7 +535,7 @@
       "review": {
         "status": "accepted",
         "by": "Baoleka",
-        "on": "2026-11-23"
+        "on": "2026-11-25"
       }
     }
   ]

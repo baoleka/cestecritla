@@ -938,6 +938,8 @@ const RULES_FR: Readonly<Record<string, string>> = {
   book: 'des mots du livre à la suite : le dépôt la refuserait',
 };
 
+// Keyed by the labels the judge model writes — French words in the code, under the written
+// exception of D21.33 as D21.45 extends it (review 15, H28).
 const LABELS_FR: Readonly<Record<JudgeVerdict, string>> = {
   fidele: 'fidèle',
   ajout: 'ajout',

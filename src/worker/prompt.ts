@@ -170,7 +170,8 @@ export function gistRequest(
  * through against the measure it is about. The sentence never comes in from outside — it was
  * written a moment earlier, in the same invocation — and a label is all a judge gives: one that
  * explained itself could recite the measure. A judge is a model too: its label sorts what the
- * editor reads first, it proves nothing.
+ * editor reads first, it proves nothing. The labels are French words because the model writes
+ * them: the written exception of D21.33, as D21.45 extends it.
  */
 export const JUDGE_VERDICTS = ['fidele', 'ajout', 'ecart'] as const;
 export type JudgeVerdict = (typeof JUDGE_VERDICTS)[number];
