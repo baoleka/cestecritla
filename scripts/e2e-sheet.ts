@@ -57,7 +57,7 @@ import { formatReopenTimeFr } from '../src/lib/silence.js';
 import { MODELS } from '../src/worker/models.js';
 import type { Manifest } from './aec26-types.js';
 import { loadPage } from './ask-page.js';
-import { ENGINES, checker, report, serve, until } from './e2e-kit.js';
+import { ENGINES, GATE_HOUR, checker, report, serve, until } from './e2e-kit.js';
 import { beforePolicy, metaPolicy, policyProblems } from './page-policy.js';
 import { QUIET_QUESTION, plainSentence, sheetCase, wordySentence } from './terms-fixtures.js';
 import type { Outcome } from './e2e-kit.js';
@@ -101,7 +101,7 @@ const MODEL_NAMES = new RegExp(
 );
 const namesAModel = (text: string): boolean => LIVE_AI.test(text) || MODEL_NAMES.test(text);
 /** The hour every context of the run is held at: outside the windows of 2027 (U13). */
-const AT = new Date('2026-11-25T12:00:00.000Z');
+const AT = GATE_HOUR;
 /** Inside the first window of 2027: the phone freezes by itself (§5 ter). */
 const IN_A_WINDOW = new Date('2027-04-17T10:00:00.000Z');
 /** When the questions come back after that window — what the Worker says in « silence ». */

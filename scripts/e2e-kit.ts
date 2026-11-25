@@ -5,9 +5,42 @@
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
 import { extname, join, normalize } from 'node:path';
-import { chromium, firefox, webkit, type Browser, type BrowserType, type Page } from 'playwright';
+import {
+  chromium,
+  firefox,
+  webkit,
+  type Browser,
+  type BrowserContext,
+  type BrowserContextOptions,
+  type BrowserType,
+  type Page,
+} from 'playwright';
 
 export const ENGINES: Record<string, BrowserType> = { chromium, firefox, webkit };
+
+/**
+ * The hour the browser gates run at — on the page's clock and in the Date of the server alike:
+ * outside the windows of electoral silence of 2027. On the real hour the page freezes by itself
+ * in those windows, and every gate failed for their 136 hours — CI red, and a fix made then
+ * unable to pass its own gates (review 8, U13; review 19, Y19). A gate that plays the freeze
+ * sets its own hour.
+ */
+export const GATE_HOUR = new Date('2026-11-25T12:00:00.000Z');
+
+/**
+ * A browser context whose clock is held at GATE_HOUR, timers running. `hold: false` for a gate
+ * run against a host on the network, whose Date is the real one: the page must read the same
+ * hour on both sides, or it doubts — and closes.
+ */
+export async function heldContext(
+  browser: Browser,
+  options: BrowserContextOptions = {},
+  hold = true,
+): Promise<BrowserContext> {
+  const context = await browser.newContext(options);
+  if (hold) await context.clock.setFixedTime(GATE_HOUR);
+  return context;
+}
 
 const MIME: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
@@ -44,7 +77,7 @@ export function serve(
     }
     res.writeHead(200, {
       'content-type': MIME[extname(file)] ?? 'application/octet-stream',
-      date: new Date().toUTCString(),
+      date: GATE_HOUR.toUTCString(),
     });
     res.end(readFileSync(file));
   });
@@ -79,8 +112,13 @@ export const STILL = 0.02;
  * and the script wins on a fast machine. `also` runs in the page before anything else: it is
  * how a caller makes the page misbehave, to see that this measure notices.
  */
-export async function lateLayoutShift(browser: Browser, url: string, also = ''): Promise<number> {
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+export async function lateLayoutShift(
+  browser: Browser,
+  url: string,
+  also = '',
+  hold = true,
+): Promise<number> {
+  const context = await heldContext(browser, { viewport: { width: 390, height: 844 } }, hold);
   await context.addInitScript(
     'window.__shift = 0; new PerformanceObserver((list) => { for (const entry of list.getEntries()) { if (!entry.hadRecentInput) window.__shift += entry.value; } }).observe({ type: "layout-shift", buffered: true });',
   );

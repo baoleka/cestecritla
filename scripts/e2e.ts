@@ -32,7 +32,7 @@ import { CRAWL_ROOT, type FetchLog } from './aec26-source.js';
 import type { Manifest } from './aec26-types.js';
 import { rootFontScript } from './a11y-conditions.js';
 import { builtAskMode } from './build-mode.js';
-import { STILL, lateLayoutShift } from './e2e-kit.js';
+import { GATE_HOUR, STILL, heldContext, lateLayoutShift } from './e2e-kit.js';
 
 const ENGINES: Record<string, BrowserType> = { chromium, firefox, webkit };
 const MIME: Record<string, string> = {
@@ -65,7 +65,10 @@ function serve(root: string): Promise<{ server: Server; origin: string }> {
         .end(readFileSync(join(root, '404.html')));
       return;
     }
-    res.writeHead(200, { 'content-type': MIME[extname(file)] ?? 'application/octet-stream' });
+    res.writeHead(200, {
+      'content-type': MIME[extname(file)] ?? 'application/octet-stream',
+      date: GATE_HOUR.toUTCString(),
+    });
     res.end(readFileSync(file));
   });
   return new Promise((done) => {
@@ -176,7 +179,7 @@ async function runEngine(
 
     // --- 1. without JavaScript
     {
-      const context = await browser.newContext({ javaScriptEnabled: false });
+      const context = await heldContext(browser, { javaScriptEnabled: false });
       const page = await context.newPage();
       await guard(page);
       await page.goto(`${origin}/`);
@@ -225,7 +228,7 @@ async function runEngine(
       check('…and a block revealed late is seen to move it', moved > STILL, moved.toFixed(4));
     }
 
-    const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    const context = await heldContext(browser, { viewport: { width: 390, height: 844 } });
     const page = await context.newPage();
     await guard(page);
 
@@ -250,7 +253,7 @@ async function runEngine(
     // review of 24/11/2026, L25)
     {
       for (const width of [390, 320]) {
-        const context = await browser.newContext({ viewport: { width, height: 844 } });
+        const context = await heldContext(browser, { viewport: { width, height: 844 } });
         await context.addInitScript(rootFontScript(200));
         const large = await context.newPage();
         await guard(large);
@@ -325,7 +328,7 @@ async function runEngine(
         (await page.locator('#chercher a[href="/sommaire/"]').isVisible()),
     );
     {
-      const small = await browser.newContext({ viewport: { width: 320, height: 640 } });
+      const small = await heldContext(browser, { viewport: { width: 320, height: 640 } });
       const narrow = await small.newPage();
       await narrow.goto(`${origin}/`);
       check(

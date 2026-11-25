@@ -91,6 +91,7 @@ import {
   serve,
   until,
   type Outcome,
+  heldContext,
 } from './e2e-kit.js';
 import { FLASH_AREA_PX, LINE_MIN, contrastRatio } from './mascot2-kit.js';
 import { flashesOf, readPng, withinFlashRule, type Picture } from './picture-kit.js';
@@ -567,7 +568,7 @@ async function runEngine(
     stored: string | null,
     options: Parameters<Browser['newContext']>[0] = phone,
   ): Promise<{ context: BrowserContext; view: Page }> => {
-    const context = await browser.newContext(options);
+    const context = await heldContext(browser, options);
     if (stored !== null) await context.addInitScript(seedTab(stored));
     const view = await context.newPage();
     await arrive(view);
@@ -894,7 +895,7 @@ async function runEngine(
         turtle: held.standing.state,
         arcs: held.standing.arcs,
       });
-      const context = await browser.newContext(phone);
+      const context = await heldContext(browser, phone);
       const setup = await context.newPage();
       await setup.goto(`${origin}/sommaire/`);
       await setup.evaluate(`localStorage.setItem('${STORAGE_KEY}', ${JSON.stringify(string)})`);
@@ -1033,7 +1034,7 @@ async function runEngine(
       if (asked === undefined || there === null) throw new Error('the second word has no place');
       const elsewhere = data.parts.map((p) => p.number).find((n) => n !== there.part.number) ?? 0;
       for (const tile of [there.part.number, elsewhere]) {
-        const context = await browser.newContext(phone);
+        const context = await heldContext(browser, phone);
         const view = await context.newPage();
         await arrive(view);
         await reveal(view);
@@ -1044,7 +1045,7 @@ async function runEngine(
       }
     }
     for (const tile of [place.part.number]) {
-      const context = await browser.newContext(phone);
+      const context = await heldContext(browser, phone);
       const view = await context.newPage();
       await arrive(view);
       const before: Stores = await view.evaluate(stores);
@@ -1181,7 +1182,7 @@ async function runEngine(
     );
 
     // « Garder ta tortue », then another tab of the same phone.
-    const pocket = await browser.newContext(phone);
+    const pocket = await heldContext(browser, phone);
     const tab = await pocket.newPage();
     await arrive(tab);
     await playRound(tab);
@@ -1358,7 +1359,7 @@ async function runEngine(
     // A link is something anyone can send. « /#fin » shows no word: followed, it writes
     // nothing and moves nothing — like an anchor of the round as it was before the entrance
     // (« /#m2-3 »). « /#b2-3 » shows one card: that word is found, and no other.
-    const linked = await browser.newContext(phone);
+    const linked = await heldContext(browser, phone);
     const landing = await linked.newPage();
     await arrive(landing, '/#fin');
     const fromEnd: Stores = await landing.evaluate(stores);
@@ -1460,7 +1461,7 @@ async function runEngine(
     await linked.close();
 
     // A browser that refuses to store anything: the game is played all the same.
-    const refusing = await browser.newContext(phone);
+    const refusing = await heldContext(browser, phone);
     await refusing.addInitScript(
       "Storage.prototype.setItem = function () { throw new DOMException('refused', 'QuotaExceededError'); };",
     );
@@ -2279,7 +2280,7 @@ async function runEngine(
   // --- the data cannot be had: the round of the HTML goes on
   async function runWithoutData(): Promise<void> {
     server.failData = true;
-    const offline = await browser.newContext(phone);
+    const offline = await heldContext(browser, phone);
     const view = await offline.newPage();
     await view.goto(`${origin}/`);
     await view.waitForTimeout(500);
@@ -2312,7 +2313,7 @@ async function runEngine(
   async function runShare(): Promise<void> {
     // A flamingo with a colour: nothing of her is in what is sent.
     const stored = resting(data, passageRound.get('12') ?? 2, 4);
-    const sharing = await browser.newContext(phone);
+    const sharing = await heldContext(browser, phone);
     await sharing.addInitScript(
       'window.__shared = []; navigator.share = (data) => { window.__shared.push(data); return Promise.resolve(); };',
     );
@@ -2330,7 +2331,7 @@ async function runEngine(
     await sharing.close();
 
     // No share sheet: the address is copied, and it is said.
-    const copying = await browser.newContext(phone);
+    const copying = await heldContext(browser, phone);
     await copying.addInitScript(
       "window.__copied = []; Object.defineProperty(navigator, 'share', { value: undefined, configurable: true }); Object.defineProperty(navigator, 'clipboard', { value: { writeText: (text) => { window.__copied.push(text); return Promise.resolve(); } }, configurable: true });",
     );
@@ -2682,7 +2683,7 @@ async function runEngine(
     // Two tabs of a phone that keeps her: one left on the end of round 1, the other plays round
     // 2. The first shows the flamingo — and says what she is now, not « Elle prend la vague ».
     {
-      const pocket = await browser.newContext(phone);
+      const pocket = await heldContext(browser, phone);
       const tab = await pocket.newPage();
       await arrive(tab);
       await playRound(tab);
@@ -2786,7 +2787,7 @@ async function runEngine(
     // happened to her is said with « Lien copié. », not wiped by it.
     {
       const at = ending(data, kit, passageRound.get('12') ?? 2);
-      const copying = await browser.newContext(phone);
+      const copying = await heldContext(browser, phone);
       await copying.addInitScript(
         "Object.defineProperty(navigator, 'share', { value: undefined, configurable: true }); Object.defineProperty(navigator, 'clipboard', { value: { writeText: () => Promise.resolve() }, configurable: true });",
       );
@@ -2811,7 +2812,7 @@ async function runEngine(
     // Her sheet says the phone keeps her colour only when the phone holds it: a colour given in
     // one tab while nothing was kept, then « Garder » in another tab that has none.
     {
-      const pocket = await browser.newContext(phone);
+      const pocket = await heldContext(browser, phone);
       await pocket.addInitScript(seedTab(resting(data, passageRound.get('12') ?? 2)));
       const one = await pocket.newPage();
       await arrive(one);
@@ -2836,7 +2837,7 @@ async function runEngine(
     // A hint asked for in one tab while another tab of the phone finds a word: the tiles are
     // marked all the same.
     {
-      const pocket = await browser.newContext(phone);
+      const pocket = await heldContext(browser, phone);
       // After the first round: the part is still what is asked, so the hint is there (D19.7).
       await pocket.addInitScript(seedTab(resting(data, 1)));
       const one = await pocket.newPage();
@@ -2860,7 +2861,7 @@ async function runEngine(
     // another tab finds a word without changing her: nothing changes there without a gesture.
     {
       const at = ending(data, kit, 1, { declined: false });
-      const pocket = await browser.newContext(phone);
+      const pocket = await heldContext(browser, phone);
       // The first tab only: the second arrives on what the phone keeps.
       const one = await pocket.newPage();
       await one.addInitScript(seedTab(at.stored));
@@ -2886,7 +2887,7 @@ async function runEngine(
     // Someone already in the round of the HTML, by the keyboard, when the script takes it over:
     // the focus follows them into the script's round.
     {
-      const context = await browser.newContext(phone);
+      const context = await heldContext(browser, phone);
       const view = await context.newPage();
       await view.route('**/data/jeu-*.json', async (route) => {
         await new Promise((done) => setTimeout(done, 1200));
@@ -2906,7 +2907,7 @@ async function runEngine(
     }
     // …on the way to the search, onto the way to the search…
     {
-      const context = await browser.newContext(phone);
+      const context = await heldContext(browser, phone);
       const view = await context.newPage();
       await view.route('**/data/jeu-*.json', async (route) => {
         await new Promise((done) => setTimeout(done, 1200));
@@ -2926,7 +2927,7 @@ async function runEngine(
     }
     // …and on a theme of the other door, onto the same theme — never back up to the words.
     {
-      const context = await browser.newContext(phone);
+      const context = await heldContext(browser, phone);
       const view = await context.newPage();
       await view.route('**/data/jeu-*.json', async (route) => {
         await new Promise((done) => setTimeout(done, 1200));
@@ -2946,7 +2947,7 @@ async function runEngine(
     }
     // Someone further in the round of the HTML — a question, by its anchor: onto the question.
     {
-      const context = await browser.newContext(phone);
+      const context = await heldContext(browser, phone);
       const view = await context.newPage();
       await view.route('**/data/jeu-*.json', async (route) => {
         await new Promise((done) => setTimeout(done, 1200));
@@ -3159,7 +3160,7 @@ async function runEngine(
       prepare?: (context: BrowserContext, view: Page) => Promise<void>,
     ): Promise<{ view: Page; asked: string[]; close: () => Promise<void> }> => {
       server.flags = flags;
-      const context = await browser.newContext(phone);
+      const context = await heldContext(browser, phone);
       const view = await context.newPage();
       const asked: string[] = [];
       view.on('request', (r) => asked.push(r.url()));
@@ -3381,7 +3382,7 @@ async function runEngine(
       const open = async (
         stored: string | null,
       ): Promise<{ context: BrowserContext; view: Page }> => {
-        const context = await browser.newContext({ ...condition.options, bypassCSP: true });
+        const context = await heldContext(browser, { ...condition.options, bypassCSP: true });
         if (percent !== 100) await context.addInitScript(rootFontScript(percent));
         if (stored !== null) await context.addInitScript(seedTab(stored));
         const view = await context.newPage();
@@ -3648,7 +3649,7 @@ async function runEngine(
     let fromHtml: Entrance;
     // --- 1. without JavaScript
     {
-      const context = await browser.newContext({ ...phone, javaScriptEnabled: false });
+      const context = await heldContext(browser, { ...phone, javaScriptEnabled: false });
       const page = await context.newPage();
       await page.goto(`${origin}/`);
       check(
@@ -3898,7 +3899,7 @@ async function runEngine(
     }
 
     // --- 2. the script takes the block over
-    const context = await browser.newContext(phone);
+    const context = await heldContext(browser, phone);
     const page = await context.newPage();
     const requests: { url: string; method: string; body: string }[] = [];
     const violations: string[] = [];

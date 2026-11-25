@@ -26,7 +26,7 @@ import { join, resolve } from 'node:path';
 import { chromium, type Page } from 'playwright';
 import { ROUND, draw, endOfRound, type GameData, type Standing } from '../src/lib/game-engine.js';
 import { STORAGE_KEY } from '../src/lib/game-state2.js';
-import { serve, until } from './e2e-kit.js';
+import { serve, until, heldContext } from './e2e-kit.js';
 
 const rootAt = process.argv.indexOf('--root');
 const root = resolve(rootAt === -1 ? 'dist-ask' : (process.argv[rootAt + 1] ?? 'dist-ask'));
@@ -189,7 +189,7 @@ async function main(): Promise<void> {
       let tightest = Infinity;
       let doorUnder = 0;
       for (let round = 1; round <= rounds; round += 1) {
-        const context = await browser.newContext({
+        const context = await heldContext(browser, {
           viewport: { width, height },
           reducedMotion: 'reduce',
           locale: 'fr-FR',

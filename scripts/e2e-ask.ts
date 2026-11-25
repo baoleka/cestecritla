@@ -42,7 +42,17 @@ import { parseChatRequest, parseGistsRequest } from '../src/lib/chat-contract.js
 import { askedWords } from '../src/lib/chat-local.js';
 import type { Manifest } from './aec26-types.js';
 import { loadPage } from './ask-page.js';
-import { ENGINES, STILL, checker, lateLayoutShift, report, serve, until } from './e2e-kit.js';
+import {
+  GATE_HOUR,
+  ENGINES,
+  STILL,
+  checker,
+  lateLayoutShift,
+  report,
+  serve,
+  until,
+  heldContext,
+} from './e2e-kit.js';
 import { policyProblems } from './page-policy.js';
 import type { Outcome } from './e2e-kit.js';
 
@@ -220,7 +230,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       page.on('pageerror', (error) => violations.push(`page error: ${error.message}`));
     };
 
-    const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    const context = await heldContext(browser, { viewport: { width: 390, height: 844 } });
     const page = await context.newPage();
     await guard(page);
     const text = (selector: string): Promise<string> =>
@@ -866,7 +876,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     // its explanation. The hour of the server, read at arrival, ages with the device's clock —
     // it used not to, and five minutes after arriving every question stayed on the phone.
     {
-      const late = await browser.newContext({ viewport: { width: 390, height: 844 } });
+      const late = await heldContext(browser, { viewport: { width: 390, height: 844 } });
       const view = await late.newPage();
       await guard(view);
       await view.goto(`${origin}/`);
@@ -877,7 +887,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       const sent = [posted.gists.length, posted.chat.length];
       sim.gists = 'toutes';
       sim.chat = 'explique';
-      await view.clock.setFixedTime(new Date(Date.now() + 10 * 60 * 1000));
+      await view.clock.setFixedTime(new Date(GATE_HOUR.getTime() + 10 * 60 * 1000));
       await view.fill('#q', 'l’hôpital, dix minutes plus tard');
       await view.click('#ask');
       await until(view, "document.querySelector('#chat-thread .c-offer') !== null");
@@ -911,7 +921,7 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         ['390 px', 390],
         ['320 px', 320],
       ] as const) {
-        const audited = await browser.newContext({
+        const audited = await heldContext(browser, {
           viewport: { width, height: 700 },
           bypassCSP: true,
         });

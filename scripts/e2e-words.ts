@@ -20,7 +20,16 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Browser, Page, Route } from 'playwright';
-import { ENGINES, STILL, checker, lateLayoutShift, report, serve, until } from './e2e-kit.js';
+import {
+  ENGINES,
+  STILL,
+  checker,
+  lateLayoutShift,
+  report,
+  serve,
+  until,
+  heldContext,
+} from './e2e-kit.js';
 import type { Outcome } from './e2e-kit.js';
 
 const flag = (name: string): string | null => {
@@ -79,7 +88,11 @@ async function runEngine(name: string, origin: string): Promise<Outcome> {
   const browser: Browser = await type.launch();
   try {
     for (const { path, file, words } of pages) {
-      const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+      const context = await heldContext(
+        browser,
+        { viewport: { width: 390, height: 844 } },
+        ORIGIN === null,
+      );
       const page: Page = await context.newPage();
       const requested: string[] = [];
       await page.route('**/*', async (route: Route) => {
@@ -165,7 +178,11 @@ async function runEngine(name: string, origin: string): Promise<Outcome> {
     // --- 4. a link to « #mots » arrives on the line open; without script it is not shown
     const first = pages[0];
     if (first !== undefined) {
-      const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+      const context = await heldContext(
+        browser,
+        { viewport: { width: 390, height: 844 } },
+        ORIGIN === null,
+      );
       const page = await context.newPage();
       await page.goto(`${origin}${first.path}#mots`);
       await until(page, `document.querySelector('${SHELL}').dataset.filled !== undefined`);
@@ -174,7 +191,7 @@ async function runEngine(name: string, origin: string): Promise<Outcome> {
         await page.evaluate<boolean>(`document.querySelector('${SHELL}').open`),
       );
       await context.close();
-      const quiet = await browser.newContext({ javaScriptEnabled: false });
+      const quiet = await heldContext(browser, { javaScriptEnabled: false }, ORIGIN === null);
       const still = await quiet.newPage();
       await still.goto(`${origin}${first.path}`);
       check(
@@ -188,17 +205,21 @@ async function runEngine(name: string, origin: string): Promise<Outcome> {
 
     // --- 5. the page does not move; the audit, with a word open (Chromium measures both)
     if (name === 'chromium' && first !== undefined) {
-      const shift = await lateLayoutShift(browser, `${origin}${first.path}`);
+      const shift = await lateLayoutShift(browser, `${origin}${first.path}`, '', ORIGIN === null);
       check(
         `the page of a section does not move once painted (${shift.toFixed(4)})`,
         shift < STILL,
       );
       const axe = readFileSync('node_modules/axe-core/axe.min.js', 'utf8');
       for (const width of [390, 320]) {
-        const audited = await browser.newContext({
-          viewport: { width, height: 700 },
-          bypassCSP: true,
-        });
+        const audited = await heldContext(
+          browser,
+          {
+            viewport: { width, height: 700 },
+            bypassCSP: true,
+          },
+          ORIGIN === null,
+        );
         const view = await audited.newPage();
         await view.goto(`${origin}${first.path}#mots`);
         await until(view, `document.querySelector('${SHELL}').dataset.filled !== undefined`);
@@ -251,7 +272,11 @@ async function hubChecks(
   origin: string,
   check: (label: string, ok: boolean, detail?: string) => void,
 ): Promise<void> {
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const context = await heldContext(
+    browser,
+    { viewport: { width: 390, height: 844 } },
+    ORIGIN === null,
+  );
   const page = await context.newPage();
   const requested: string[] = [];
   await page.route('**/*', async (route: Route) => {
@@ -321,7 +346,11 @@ async function hubChecks(
   );
   await context.close();
 
-  const arriving = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const arriving = await heldContext(
+    browser,
+    { viewport: { width: 390, height: 844 } },
+    ORIGIN === null,
+  );
   const view = await arriving.newPage();
   await view.goto(`${origin}/mot/#mot-moratoire`);
   await until(view, "document.querySelector('#mot-moratoire').dataset.filled !== undefined");
@@ -348,7 +377,11 @@ async function searchChecks(
   origin: string,
   check: (label: string, ok: boolean, detail?: string) => void,
 ): Promise<void> {
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const context = await heldContext(
+    browser,
+    { viewport: { width: 390, height: 844 } },
+    ORIGIN === null,
+  );
   const page = await context.newPage();
   const requested: string[] = [];
   await page.route('**/*', async (route: Route) => {

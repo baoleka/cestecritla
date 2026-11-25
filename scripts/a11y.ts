@@ -36,6 +36,7 @@ import { extname, join, normalize } from 'node:path';
 import { chromium, type Browser } from 'playwright';
 import { CONDITIONS, rootFontScript } from './a11y-conditions.js';
 import { readBuildMode } from './build-mode.js';
+import { GATE_HOUR, heldContext } from './e2e-kit.js';
 
 /** Pages that must pass in every condition. Grows as routes land. */
 const APP_PATHS: readonly string[] = [
@@ -103,7 +104,10 @@ function serveDist(port: number): Promise<Server> {
     );
     try {
       const body = readFileSync(join('dist', rel));
-      res.writeHead(200, { 'content-type': MIME[extname(rel)] ?? 'application/octet-stream' });
+      res.writeHead(200, {
+        'content-type': MIME[extname(rel)] ?? 'application/octet-stream',
+        date: GATE_HOUR.toUTCString(),
+      });
       res.end(body);
     } catch {
       res.writeHead(404).end('not found');
@@ -131,7 +135,7 @@ async function audit(browser: Browser, base: string): Promise<Finding[]> {
   for (const condition of CONDITIONS) {
     // bypassCSP because axe is injected inline, which our own CSP correctly refuses — the
     // policy is enforced, and that is the point of shipping no 'unsafe-inline'.
-    const context = await browser.newContext({ ...condition.options, bypassCSP: true });
+    const context = await heldContext(browser, { ...condition.options, bypassCSP: true });
     const percent = condition.rootFontPercent ?? 100;
     if (percent !== 100) await context.addInitScript(rootFontScript(percent));
     const page = await context.newPage();
