@@ -66,5 +66,8 @@ function stripTrailingCommas(text: string): string {
 }
 
 export function parseJsonc(text: string): unknown {
-  return JSON.parse(stripTrailingCommas(stripJsoncComments(text)));
+  // A byte-order mark is no character of the file: wrangler drops it, and so do we — read with
+  // it, the file of the chat's Worker « named no Worker » (review 11, M18).
+  const body = text.startsWith('\uFEFF') ? text.slice(1) : text;
+  return JSON.parse(stripTrailingCommas(stripJsoncComments(body)));
 }

@@ -22,6 +22,7 @@
  * (sheet 6): three static files, nothing to decide in a hurry.
  */
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import {
   existsSync,
   mkdirSync,
@@ -74,6 +75,11 @@ export const ASK_PATH = 'data/2026/ask.json';
  * variable says who started it. scripts/deploy.ts says so once its gates have passed; the two
  * commands that send nothing (`wrangler types`, `wrangler check startup`) say that instead.
  * A tripwire for the command typed too fast, not a lock (14-risques.md R41).
+ *
+ * What runs no build step passes no gate: `wrangler rollback` — and the dashboard's button —
+ * put back the version before, whatever it was. Between the eve of a silence window and its
+ * end that is the normal build, game and questions, served through the vote (L49): in a window,
+ * never a rollback — the scrutin build again (review 11, M10; sheets 7 and 13).
  */
 export const DEPLOY_GUARD = {
   command: 'node scripts/deploy-guard.mjs',
@@ -83,11 +89,50 @@ export const DEPLOY_GUARD = {
 } as const;
 
 /**
+ * What wrangler reads from its environment to change the Worker or the environment it acts on:
+ * `WRANGLER_CI_OVERRIDE_NAME` renames the target with a warning only, `CLOUDFLARE_ENV` picks an
+ * environment — each would undo a choice the guard has just made (review 11, M15).
+ */
+export const RETARGETS = /^(?:WRANGLER_CI_[A-Z_]+|CLOUDFLARE_ENV)$/;
+
+/** The files of environment wrangler loads from the directory it runs in, by itself. */
+export const ENV_FILES = /^\.env(?:\..+)?$/;
+
+/**
  * The environment scripts/deploy.ts hands wrangler: ours, with its usage reports off
- * (scripts/quiet-env.ts), plus the word the guard waits for.
+ * (scripts/quiet-env.ts), without what would retarget it, plus the word the guard waits for.
  */
 export function guardedEnv(env: NodeJS.ProcessEnv = process.env): NodeJS.ProcessEnv {
-  return { ...quietEnv(env), [DEPLOY_GUARD.variable]: DEPLOY_GUARD.caller };
+  const kept = Object.fromEntries(Object.entries(env).filter(([name]) => !RETARGETS.test(name)));
+  return { ...quietEnv(kept), [DEPLOY_GUARD.variable]: DEPLOY_GUARD.caller };
+}
+
+/**
+ * The files of environment in a directory that would set what the guard reads or what retargets
+ * wrangler: wrangler loads `.env`, `.env.local`, `.env.<env>` by itself, none of them ignored by
+ * git — a line `CEL_DEPLOY_FROM=…` there opened the guard to every bare `wrangler deploy`
+ * (review 11, M15). Named, and refused before anything is sent.
+ */
+export function envFileProblems(dir = '.'): string[] {
+  const out: string[] = [];
+  for (const name of readdirSync(dir)) {
+    if (!ENV_FILES.test(name)) continue;
+    let text: string;
+    try {
+      text = readFileSync(join(dir, name), 'utf8');
+    } catch {
+      continue;
+    }
+    for (const line of text.split('\n')) {
+      const set = /^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=/.exec(line);
+      const variable = set?.[1];
+      if (variable === undefined) continue;
+      if (variable === DEPLOY_GUARD.variable || RETARGETS.test(variable)) {
+        out.push(`${name} sets ${variable}, which wrangler would read: take the line out`);
+      }
+    }
+  }
+  return out;
 }
 
 /**
@@ -155,6 +200,7 @@ export function wranglerConfig(
 
 /** A base nobody has created yet: `wrangler d1 create` gives the real identifier. */
 export const UNSET_DATABASE_ID = '00000000-0000-0000-0000-000000000000';
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
  * What the Worker's configuration still lacks before it may be deployed — read from the files,
@@ -182,10 +228,15 @@ export function workerProblems(root = '.'): string[] {
     for (const [name, env] of environments) {
       const bases = Array.isArray(env['d1_databases']) ? env['d1_databases'] : [];
       const id = record(bases[0])['database_id'];
-      if (typeof id !== 'string' || id === UNSET_DATABASE_ID) {
+      // An identifier is one: an empty one made wrangler create a base of that name, outside
+      // the « eu » jurisdiction (review 11, M17).
+      if (typeof id !== 'string' || id === UNSET_DATABASE_ID || !UUID.test(id)) {
         out.push(`${file} (${name}): the private base has no identifier yet (lot I3)`);
       }
-      if (record(env['vars'])['CORPUS_VERSION'] !== manifest) {
+      // Two versions absent are no version: undefined equalled undefined (M17).
+      if (typeof manifest !== 'string') {
+        out.push('data/2026/manifest.json carries no corpus version');
+      } else if (record(env['vars'])['CORPUS_VERSION'] !== manifest) {
         out.push(`${file} (${name}): CORPUS_VERSION is not the corpus of the manifest`);
       }
     }
@@ -553,16 +604,47 @@ export function htmlPages(dir = 'dist'): string[] {
 export const EXPOSURE_POLICY_PATH = 'data/2026/exposure-policy.json';
 
 /** True once the editor has dated the citation policy (`validated_on`, D15.7). */
-export function citationPolicyValidated(path: string = EXPOSURE_POLICY_PATH): boolean {
-  if (!existsSync(path)) return false;
-  const parsed: unknown = JSON.parse(readFileSync(path, 'utf8'));
-  return (
-    typeof parsed === 'object' &&
-    parsed !== null &&
-    'validated_on' in parsed &&
-    typeof parsed.validated_on === 'string' &&
-    /^\d{4}-\d{2}-\d{2}$/.test(parsed.validated_on)
+/**
+ * The ceilings of the citation policy as the editor validated them: on 12/11/2026 (D15.18), with
+ * the display of the first words he decided on 14/11/2026 (D16.32) — the two changes the file
+ * has had (`git log -- data/2026/exposure-policy.json`). A date alone was enough: the ceilings
+ * could move under it, and a day that is none, or to come, passed (review 11, M19). A change of
+ * a ceiling is his to validate again — then this fingerprint, with the decision that says so.
+ */
+export const POLICY_AS_VALIDATED =
+  'b68cbb9d22ff0d04c158f6a2d218ada5056be6155934307914c2976115121c36';
+
+/** The fingerprint of the policy's ceilings: every field but the day of its validation. */
+export function policyFingerprint(policy: Record<string, unknown>): string {
+  const ceilings = Object.fromEntries(
+    Object.entries(policy)
+      .filter(([key]) => key !== 'validated_on')
+      .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)),
   );
+  return createHash('sha256').update(JSON.stringify(ceilings)).digest('hex');
+}
+
+export function citationPolicyValidated(
+  path: string = EXPOSURE_POLICY_PATH,
+  now: Date = new Date(),
+): boolean {
+  if (!existsSync(path)) return false;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(readFileSync(path, 'utf8'));
+  } catch {
+    // Unreadable is not validated — and the withdrawal never reads it (review 11, D5).
+    return false;
+  }
+  if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) return false;
+  const policy = parsed as Record<string, unknown>;
+  const day = policy['validated_on'];
+  if (typeof day !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(day)) return false;
+  // A real day, and one that has come.
+  const at = new Date(`${day}T00:00:00Z`);
+  if (Number.isNaN(at.getTime()) || at.toISOString().slice(0, 10) !== day) return false;
+  if (at.getTime() > now.getTime()) return false;
+  return policyFingerprint(policy) === POLICY_AS_VALIDATED;
 }
 
 export interface DeployContext {

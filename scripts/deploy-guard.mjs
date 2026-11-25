@@ -13,9 +13,11 @@
  * It is a tripwire, not a lock: whoever sets the variable by hand passes. It is there for the
  * command typed too fast, by a person or by an agent.
  *
- * Plain JavaScript, no import, on purpose: it must run under whatever `node` wrangler was
- * started with, and fail closed when it cannot.
+ * Plain JavaScript, no import but Node's own, on purpose: it must run under whatever `node`
+ * wrangler was started with, and fail closed when it cannot.
  */
+import { readFileSync, readdirSync } from 'node:fs';
+
 const VARIABLE = 'CEL_DEPLOY_FROM';
 /** scripts/deploy.ts says so itself, once its gates have passed. */
 const CALLER = 'scripts/deploy.ts';
@@ -25,6 +27,27 @@ const CALLER = 'scripts/deploy.ts';
  * this file and chosen to go round it.
  */
 const READS_ONLY = 'nothing-is-sent';
+
+/**
+ * wrangler loads `.env`, `.env.local` and `.env.<env>` from the directory it runs in, by
+ * itself: a line that sets the variable there would open this guard to every bare
+ * `wrangler deploy` (review 11, M15). Such a file stops it, whoever started it.
+ */
+const opened = readdirSync('.').filter((name) => {
+  if (!/^\.env(?:\..+)?$/.test(name)) return false;
+  try {
+    return new RegExp(`^\\s*(?:export\\s+)?${VARIABLE}\\s*=`, 'm').test(readFileSync(name, 'utf8'));
+  } catch {
+    return false;
+  }
+});
+if (opened.length > 0) {
+  console.error(
+    `\ndeploy refused: ${opened.join(', ')} sets ${VARIABLE}, which this guard would read as if ` +
+      'scripts/deploy.ts had. Nothing was sent. Take the line out.\n',
+  );
+  process.exit(1);
+}
 
 const said = process.env[VARIABLE];
 if (said === CALLER || said === READS_ONLY) process.exit(0);

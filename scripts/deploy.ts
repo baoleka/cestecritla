@@ -54,6 +54,7 @@ import {
   readBuildMarker,
   readDist,
   giveLock,
+  envFileProblems,
   takeLock,
   treeState,
   refusedArguments,
@@ -114,6 +115,14 @@ if (refused.length > 0) {
     `deploy refused: ${refused.join(' ')} — only --bench, --chat, --withdraw, --without-game, --accord <day>, --dry-run and --outdir`,
   );
   process.exit(2);
+}
+
+// What wrangler would read by itself, from a file of environment in this directory: the word
+// the guard waits for, or a name that retargets the deploy (review 11, M15).
+const envFiles = envFileProblems();
+if (envFiles.length > 0) {
+  console.error(`deploy refused: ${envFiles.join(' · ')} — nothing was sent`);
+  process.exit(1);
 }
 
 // The script's own arguments never reach wrangler.
@@ -349,6 +358,14 @@ if (refusal !== null) {
   process.exit(1);
 }
 
+// The preview Worker carries the bench's Durable Object class: a holding build goes there as
+// static files, a descent never tried (R27) — said before it goes (review 11, M16).
+if (mode === 'holding' && target === 'preview' && !passthrough.includes('--dry-run')) {
+  console.warn(
+    'deploy: the preview Worker carries the Durable Object class of the bench — a static deploy ' +
+      'there was never tried (R27): if wrangler refuses it, runbook sheet 11',
+  );
+}
 const args = wranglerDeployArgs(target, mode, passthrough, ask);
 console.log(
   `deploy: ${mode} build, ${String(pages.length)} page(s) → ${target}` +
