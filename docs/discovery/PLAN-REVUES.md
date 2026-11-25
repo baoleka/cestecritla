@@ -723,3 +723,37 @@ Chaque revue : `/code-review max <cible> --max-findings all`, rapport seulement 
 ### 25 novembre 2026, au matin — la porte du Worker des phrases (revue 18), corrigée
 - **Commit `d5b9922`. La porte tient ce qu'elle dit tenir** : sa décision de campagne lue comme toutes ses décisions — sa marque en tête du statut, une ligne qui nomme le fichier et le champ, les lignes à lettre comprises, `campaign: null` jugé au lieu de faire planter le test (X1, X23, X24 ; `editorSaid`) ; **une route fermée ne lit rien** — la configuration, le retour fermé, le compteur et le corps, dans cet ordre, un seul lecteur de corps et aucun autre (X2, X12, X13) ; **le Worker tel que wrangler l'empaquette, lu par l'analyseur de TypeScript** : aucun nom ne contient « question » ni « consent », aucune chaîne n'est ce mot, ni dans le schéma de la base — ce qui couvre les noms composés, les chaînes, les gabarits, les sous-dossiers et tout fichier importé (X3, X4, X5, X17) ; aucun bord de mot sur une propriété Unicode, quelle qu'en soit l'écriture (X16) ; le câblage lu comme du code, la configuration lue en un seul endroit (X6, X14) ; `/api/gists` n'appelle aucun modèle et aucune route ne lit une mesure (X10, X11) ; les étapes de refus ne réservent, ne rendent ni ne ferment rien, EXHAUSTED ne règle rien, le branchement de l'allocation est épinglé (X7, X18, X19) ; la consigne dit le plafond que tient la constante, et aucune de ses variantes ne parle d'une question (X25, X26, X27) ; les commentaires et le titre ne disent plus que l'éditeur a lu les phrases (X9, X32). **Dans le code** : un seuil du contrôle lu dans `data/2026/ask.json` est un entier de 1 à 20, ou rien — 0 ou moins éteignait la règle du sujet sans un mot (X8). Rien de servi ne change.
 - **Restent** : X15, X21, X22, X28 à X31 (des tests de plus sur des chemins fermés).
+
+### 25 novembre 2026, au matin — revue 19 : `scripts/e2e-sheet.ts`
+- **28 constats** (18 importants, 1 antérieur, 9 mineurs), 2 candidats réfutés (V13 : les noms des fichiers des mots ne se lisent qu'au motif — d'autres portes les tiennent ; V15 : une course sur la lecture des requêtes — aucun contrôle ne lit sans marge) : 5 relecteurs, 25 vérificateurs, un balayage ; chaque verdict repose sur une copie mutée de la build qui passait la porte inchangée (106/100/100), dans trois moteurs quand il le fallait. **Le constat central** : la plupart des contrôles de vie privée et de sûreté de la porte restaient verts pendant que la propriété qu'ils nomment cassait — la question tapée envoyée dans d'autres requêtes (corps, balises, sockets, cookies, `/api/chat/`), ajoutée aux corps suivants de `/api/gists`, envoyée par le chemin d'erreur, gardée dans un cookie ou une base ; le gel du téléphone retiré ; `charged` perdu ; les liens retirés aux personnes qui rapportent une phrase haineuse. **Une question pour l'éditeur** (Y11).
+
+| # | Où | Constat | Gravité |
+|---|---|---|---|
+| Y1 | `scripts/e2e-sheet.ts:170` | « La question ne quitte pas le téléphone » ne voit que les adresses et les corps de deux adresses exactes : d'autres corps, des en-têtes, des cookies, des sockets, `/api/chat/` passent | important |
+| Y2 | `scripts/e2e-sheet.ts:282` | Seul le premier corps envoyé à `/api/gists` est tenu à « l'état du livre et des identifiants, rien d'autre » | important |
+| Y3 | `scripts/e2e-sheet.ts:395` | La page des titres périmés (§5 bis) n'est pas gardée, et ce que les pages de l'audit (§9) enregistrent n'est jamais lu | important |
+| Y4 | `scripts/e2e-sheet.ts:143` | La garde est posée sur la page, pas sur le contexte : une page que la feuille ouvre part sur le vrai réseau, sans être vue | important |
+| Y5 | `scripts/e2e-sheet.ts:186` | Les refus de la politique ne sont comptés ni dans Firefox, ni pour Trusted Types dans Chromium | important |
+| Y6 | `scripts/e2e-sheet.ts:956` | « Rien n'est écrit sur le téléphone » ne compare que les noms des clés : cookies, bases et caches ne sont pas lus | important |
+| Y7 | `scripts/e2e-sheet.ts:104` | Le gel du téléphone lui-même n'est jamais joué : seule la réponse simulée du Worker l'est | important |
+| Y8 | `scripts/e2e-sheet.ts:943` | Aucune question à la fois mise en cause et qui demande un mot : la règle B12 n'est tenue de bout en bout par rien | important |
+| Y9 | `scripts/e2e-sheet.ts:765` | Cinq contrôles qui promettent des liens acceptent « Rien trouvé » | important |
+| Y10 | `scripts/e2e-sheet.ts:156` | Le Worker simulé répond des phrases à tout corps, là où le vrai refuse | important |
+| Y11 | `scripts/e2e-sheet.ts:34` | **Question pour l'éditeur** : les textes de « En clair », étiquetés « préparée avec une IA », ne portent pas la marque lisible par une machine que le dossier légal dit sur tout texte d'IA | important |
+| Y12 | `scripts/e2e-sheet.ts:379` | Le contrôle du silence électoral se satisfait du mot « reprennent » du gabarit : ni le jour ni l'heure | important |
+| Y13 | `scripts/e2e-sheet.ts:664` | La seconde moitié du contrôle du vote ne peut pas échouer | important |
+| Y14 | `scripts/e2e-sheet.ts:348` | Le seul scénario où le Worker dit qu'une IA est là ne vérifie que des absences | important |
+| Y15 | `scripts/e2e-sheet.ts:607` | Les liens des tours d'après (le site, les objections) ne sont pas vérifiés | important |
+| Y16 | `scripts/e2e-sheet.ts:810` | L'exemple donné n'est pas lié à sa question | important |
+| Y17 | `scripts/e2e-sheet.ts:1039` | Le débordement se mesure sur la page et la feuille, jamais sur la conversation, qui défile seule | important |
+| Y18 | `scripts/e2e-sheet.ts:473` | `before` accepte un bloc rangé dans l'autre | important |
+| Y19 | `scripts/e2e-sheet.ts:192` | (classe de U13) La porte tourne sur l'heure réelle : rouge, puis plantée, pendant les deux fenêtres de 2027 | antérieur |
+| Y20 | `scripts/e2e-sheet.ts:212` | Une attente qui échoue tue le passage : aucun résultat de ce moteur, les suivants ne tournent pas | mineur |
+| Y21 | `scripts/e2e-sheet.ts:156` | Le Worker simulé plante sur un corps hors contrat | mineur |
+| Y22 | `scripts/e2e-sheet.ts:36` | L'en-tête promet la lecture de la politique de la page, que rien ne lit | mineur |
+| Y23 | `scripts/e2e-sheet.ts:253` | Le script de la feuille n'est cherché que par son nom, jamais après l'appui | mineur |
+| Y24 | `scripts/e2e-sheet.ts:71` | Les noms de modèles : sensibles à la casse, ni gpt-oss ni les clés | mineur |
+| Y25 | `scripts/e2e-sheet.ts:477` | Les fichiers de la feuille ne sont comptés qu'au huitième tour | mineur |
+| Y26 | `scripts/e2e-sheet.ts:1065` | Une build d'essai plus ancienne que les sources est jugée contre les règles d'aujourd'hui | mineur |
+| Y27 | `scripts/e2e-sheet.ts:68` | Les mots de panne sans bord de mot (« terroristes », « panneaux ») | mineur |
+| Y28 | `scripts/e2e-sheet.ts:74` | Des identifiants français dans le code (les scénarios, `moratoire`) | mineur |

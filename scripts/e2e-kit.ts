@@ -117,7 +117,11 @@ export function checker(engine: string): {
   };
 }
 
-/** Runs the engines asked for (`--engines chromium,webkit`), prints, and exits 1 on a failure. */
+/**
+ * Runs the engines asked for (`--engines chromium,webkit`), prints, and exits 1 on a failure.
+ * A run that throws is a failure of its engine, said with its message: the other engines still
+ * run and print what they saw — a bare stack used to hide them all (review 19).
+ */
 export async function report(
   run: (engine: string) => Promise<Outcome>,
   args: readonly string[] = process.argv.slice(2),
@@ -127,7 +131,13 @@ export async function report(
     : Object.keys(ENGINES);
   let failed = 0;
   for (const engine of selected) {
-    const result = await run(engine);
+    let result: Outcome;
+    try {
+      result = await run(engine);
+    } catch (error) {
+      const said = error instanceof Error ? (error.message.split('\n')[0] ?? '') : String(error);
+      result = { engine, passed: [], failed: [`the run of ${engine} stopped — ${said}`] };
+    }
     console.log(
       `${result.engine}: ${String(result.passed.length)} passed, ${String(result.failed.length)} failed`,
     );
