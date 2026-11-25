@@ -589,3 +589,128 @@ Chaque revue : `/code-review max <cible> --max-findings all`, rapport seulement 
   - **Une ligne n'est jamais collée à une ligne coupée** (H9) : une dernière ligne entière sans retour est fermée, une ligne coupée est retirée (tous les lecteurs l'ignoraient déjà) ; `--take` écrit en une fois. **Le tableau des juges ne compte que la lecture de l'éditeur** (H19). **Les commentaires** ne disent plus que l'éditeur a lu les phrases, ni que le fichier du jeu n'est pas suivi (H27).
 - **Laissé, avec sa raison** : H28 — les étiquettes `fidele`, `ajout`, `ecart` sont des valeurs que le modèle juge écrit, comme les clés `texte` et `phrases` de D21.33 : la question est pour l'éditeur, dans le prochain lot de questions ; leur chemin est fermé (aucun juge ne tourne). Le même format de ligne du registre et la même redirection suivie dans `bench-ask.ts` et `bench-explain.ts` sont hors du périmètre (le banc a conclu, D16.33).
 - **Vérifié** : les tests de l'outil (43), du Worker et de son registre, la suite entière, le typage, le lint ; la porte de navigateur du bureau dans trois moteurs (37 contrôles chacun, dont sept nouveaux : la touche tenue, deux fois, le « & » d’un AZERTY, la lettre verrouillée, le focus, deux fois, la touche c) ; la build d'essai de la feuille et sa sonde.
+
+### 25 novembre 2026, au matin — les constats mineurs des revues 9 à 14, corrigés
+- **`build.ts`** (T12, T14 à T19 ; M12 à M14 ; commit `3ec5e3c`) : la build vide sa sortie elle-même — Astro gardait, par une erreur à lui, toute entrée de premier niveau nommée g, i ou t ; `public/fonts` ne tient que les polices publiées, et `dist/` exactement celles-là ; un fichier publié qui ne se lit pas est nommé avant qu'on touche à `dist/` ; la build dit si le jeu y est, et sa dernière ligne dit l'hôte, les couleurs et la sortie ; les commentaires et les refus disent le site lancé (trois pages d'attente, la fiche du retrait, la commande de build de l'hôte).
+- **La garde de déploiement** (M10, M15 à M19 ; commit `bb47693`) : un fichier `.env*`, que wrangler lit de lui-même, ne peut plus ouvrir la garde ni renommer la cible, et `WRANGLER_CI_*` et `CLOUDFLARE_ENV` ne passent plus à wrangler ; une build d'attente envoyée à l'aperçu prévient de R27 ; un identifiant de base vide n'en est pas un ; un BOM n'est pas un caractère ; **la politique de citation ne tient qu'avec les plafonds que l'éditeur a validés (D15.18, avec l'affichage de D16.32 : les deux seuls changements du fichier), un vrai jour passé** ; jamais de `wrangler rollback` dans une fenêtre de silence (R41, fiches 7 et 13).
+- **L'outil de la base** (E12, E15, E17 à E22 ; commit `2c932b9`) : le fichier du jeu ne dit « écrites par une IA, lues par personne » que tant que c'est vrai ; la fiche 8 dit comment arrêter une phrase du jeu ; un dépôt dit son empreinte ; un jour de lecture qui n'existe pas est refusé ; « locaux » compte pour « local ».
+- **La build « scrutin » et les builds d'essai** (C5, C6, Q4, Q16, Q17 ; commit `5707de5`) : toutes les portes qui lisent `dist/` jugent la build « scrutin » pour ce qu'elle est, et la CI la construit, la passe par ces portes et en fait un déploiement à blanc ; une feuille qui offre l'explication d'un modèle est une build d'essai tant que le fichier n'en nomme aucun ; **une référence de couleur qui ne nomme rien arrête la build** — depuis `870cd18`, la build neutre publiait `{color.violet-200}` telle quelle, et perdait `--duration-fast` (le petit bond de la tortue) : le jeu neutre a son ombre, dans sa palette (`relief`). Rien de servi : la build neutre n'est pas en ligne.
+
+### 25 novembre 2026, au matin — ses réponses (D21.43 à D21.45)
+- **Le début de « exil fiscal » est reformulé, validé mot pour mot** (D21.43, N4 ; commit `13e1df6`) : « Le programme crée la taxe Zucman : un impôt plancher de 2 % du patrimoine pour chaque centimillionnaire. » ; sa plus longue suite commune avec les mesures citées : quatre mots. **Un changement de ce que sert le site** (la page `/r/exil-fiscal/`, l'accueil, le fichier de « En clair ») : il partira avec son accord de déploiement.
+- **Les plafonds de poids restent en gzip -9, et c'est écrit** (D21.44, Q1) : `design/perf-budget.md` dit ce que Cloudflare envoie (brotli 4, zstd 3 : 2 à 8 % de plus) et les quatre fichiers qui dépasseraient mesurés ainsi.
+- **L'exception de D21.33 couvre les étiquettes des juges** (D21.45, H28).
+
+### 25 novembre 2026, au matin — la porte anti-fuite (revue 16), corrigée
+- **Commit `7d64613`** : un signe seul compte pour le mot que la politique compte (N4) ; seuls les vraies balises et les commentaires sont retirés, chaque message de commit est lu seul (N1) ; **les fichiers des commits pas encore poussés et l'index sont lus tels que committés** (N2) ; le test des phrases lit aussi les messages, toutes les formulations gardées, une copie échappée, et chaque phrase doit pouvoir être trouvée (N3, N7, N8, N14, N15) ; les pages lues sont une build finie de l'app (N6) ; ce qui n'est pas lu est dit, ce qui ne se décode pas est un constat (N12, N18) ; les chemins privés viennent de leurs écrivains (N22, N23, N24) ; le `meta` du fichier du jeu est lu à toute profondeur, les commentaires disent ce que sont les fichiers (N16, N25). **Le contrôle de nos phrases garde son propre découpage**, mesuré sans les signes seuls : la porte du dépôt est la plus stricte des deux.
+- **Restent** : N5 (les attributs des pages), N9 (le seuil de la moitié), N10 (JSON-LD), N11 (les mesures citées hors de leurs pages), N13 (`data/2026` en CI), N17 (les formulations d'avant une réédition), N19 à N21 (les échappements, l'ellipse, les validateurs).
+
+### 25 novembre 2026, au matin — revue 16 : `scripts/leak.test.ts`
+- **25 constats** (17 importants, 3 antérieurs, 5 mineurs), 2 candidats réfutés ; reproduits sur du texte inventé, le corpus libre de 2025 ou les 43 phrases publiques du jeu : aucun `private/` ouvert, les deux tests de contenu sautent dans la copie de travail. **Un cas réel, pour l'éditeur** : la description et l'og:description de `/r/exil-fiscal/` — le début de notre réponse `rip-16`, validé mot pour mot (D21.10) — reprennent **neuf mots de suite** de la mesure citée p2c2-s02-m03 (« … 2 % … » : le balayage des aperçus compte huit jetons, parce qu'il efface le « % » seul) ; **vérifié par la session, en comptant seulement** : 9 mots, la production sert la même page. C'est le cas des trois débuts reformulés de D21.21.
+
+| # | Où | Constat | Gravité |
+|---|---|---|---|
+| N1 | `scripts/leak.test.ts:316` | Le texte entre un « < » isolé et le « > » suivant n'est jamais lu (une comparaison, une flèche) : 16 % du Markdown modifié depuis le gel échappe à la porte | important |
+| N2 | `scripts/leak.test.ts:302` | Les tests lisent l'arbre de travail, un push publie des commits : un texte commité puis retiré passe sans être lu | important |
+| N3 | `scripts/leak.test.ts:445` | Un message de commit qui cite une de nos phrases non publiées passe | important |
+| N4 | `scripts/leak.test.ts:347` | Le balayage des aperçus laisse passer neuf mots dont un signe seul (« % ») : le cas réel de `/r/exil-fiscal/` | important |
+| N5 | `scripts/leak.test.ts:62` | Le texte du livre dans un attribut d'une page (alt, title, aria-label, data-*) n'est lu par aucun balayage | important |
+| N6 | `scripts/leak.test.ts:310` | Sans `dist/`, ou avec une autre build dedans, le balayage des pages passe sur zéro page | important |
+| N7 | `scripts/leak.test.ts:390` | Seule la dernière formulation d'une phrase est cherchée : une formulation d'avant passe | important |
+| N8 | `scripts/leak.test.ts:403` | Une phrase écrite autrement qu'en texte brut (échappée en HTML, en JSON, un mot en `<em>`) passe | important |
+| N9 | `scripts/leak.test.ts:439` | Plus de la moitié des fenêtres exigée : 72 % d'une phrase copiée passe | important |
+| N10 | `scripts/leak.test.ts:333` | Le JSON-LD et le texte des images ne sont pas tenus à la règle des aperçus | important |
+| N11 | `scripts/leak.test.ts:314` | Une mesure citée entière peut paraître n'importe où sous `dist/` | important |
+| N12 | `scripts/leak.test.ts:244` | Des fichiers sont comptés propres sans être lus (images, archives, plus de 8 Mio) | important |
+| N13 | `scripts/leak.test.ts:170` | En CI, un fichier de `data/2026` peut tenir une phrase entière écrite sans espaces ordinaires | important |
+| N14 | `scripts/leak.test.ts:415` | Un texte nouveau d'une mesure que le jeu publie n'est jamais cherché | important |
+| N15 | `scripts/leak.test.ts:422` | Une phrase à moitié contenue dans une plus longue ne peut jamais être signalée | important |
+| N16 | `scripts/leak.test.ts:233` | Le test du fichier du jeu ne lit `meta` qu'à un niveau | important |
+| N17 | `scripts/leak.test.ts:268` | Après une réédition, l'ancienne formulation des mesures changées n'est plus protégée | important |
+| N18 | `scripts/leak.test.ts:447` | Un fichier que la porte ne sait pas décoder (UTF-16, Latin-1, .docx) est déclaré propre | important |
+| N19 | `scripts/leak-scan.ts:119` | Le texte du livre écrit avec des échappements courants (\\uXXXX, entités, « + ») échappe surtout | antérieur |
+| N20 | `scripts/leak-scan.ts:90` | Les fenêtres qui enjambent une ellipse ne peuvent jamais correspondre | antérieur |
+| N21 | `scripts/aec26-publish.ts:342` | Les validateurs du manifeste et des citations laissent de la place à du texte que la CI ne voit pas | antérieur |
+| N22 | `scripts/leak.test.ts:254` | Un fichier privé déplacé change les tests de contenu en sauts, et le passage en succès | mineur |
+| N23 | `scripts/leak.test.ts:389` | Une dernière ligne coupée du fichier des verdicts fait échouer le test sans dire pourquoi | mineur |
+| N24 | `scripts/leak.test.ts:309` | Un lien vers un dossier non suivi fait échouer le test (EISDIR) | mineur |
+| N25 | `scripts/leak.test.ts:147` | Des commentaires ne sont plus vrais (« relus par une personne », le fichier du jeu « pas encore là ») | mineur |
+
+### 25 novembre 2026, au matin — revue 17 : `scripts/check-build.test.ts`
+- **35 constats** (15 importants, 6 antérieurs dans d'autres fichiers, 14 mineurs) : 6 relecteurs, 20 vérificateurs, un balayage ; tout reproduit sur des copies de HEAD et des builds fabriquées, dans trois moteurs quand il le fallait. Les 23 tests passent sur les builds du jour, mais beaucoup tiennent par coïncidence. **Une régression de la session, trouvée pendant la revue** (Q17) : depuis `870cd18`, la build neutre publiait une référence non résolue (`{color.violet-200}`) qui fait perdre aux navigateurs `--duration-fast` — le petit bond de la tortue, les transitions du jeu ; **corrigée** (une référence qui ne nomme rien arrête la build ; le jeu neutre a son ombre, `relief`), rien de servi : la build neutre n'est pas en ligne.
+
+| # | Où | Constat | Gravité |
+|---|---|---|---|
+| Q1 | `scripts/check-build.test.ts:239` | Les plafonds pèsent en gzip -9 ; Cloudflare envoie brotli 4 ou zstd 3, plus gros : tels qu'envoyés, quatre fichiers dépassent — **question pour l'éditeur** | important |
+| Q2 | `scripts/check-build.test.ts:445` | Le plafond des mots expliqués pèse un reste de 776 o : le module est coupé en trois morceaux que le test ne pèse pas | important |
+| Q3 | `scripts/check-build.test.ts:344` | La porte des « look-behind » ne lit pas la source d'expressions que la feuille reçoit en données (`clair-*.json`) | important |
+| Q4 | `scripts/check-build.test.ts:585` | La feuille neutre que la build utilise n'est lue par aucun test (voir Q17) | important |
+| Q5 | `scripts/check-build.test.ts:126` | La porte de la politique de sécurité laisse passer `https:`, un hôte sans schéma, `trusted-types 'none' default` | important |
+| Q6 | `scripts/check-build.test.ts:99` | « Aucune requête ne sort » ne voit que 7 balises : 27 vecteurs passent (`//hôte`, srcset, url() en CSS…) | important |
+| Q7 | `scripts/check-build.test.ts:93` | Aucune porte ne lit `_headers` pour une origine tierce (`Link`, rapports) | important |
+| Q8 | `scripts/check-build.test.ts:121` | La présence de la règle est vérifiée, pas sa place : une balise qui ferme l'en-tête la rend inopérante | important |
+| Q9 | `scripts/check-build.test.ts:404` | Quatre portes ne jugent que les builds d'essai, jamais `dist/` | important |
+| Q10 | `scripts/check-build.test.ts:405` | Un morceau absent passe pour une build absente : renommer un fichier retire sa porte en silence | important |
+| Q11 | `scripts/check-build.test.ts:357` | « Un site qui ne répond pas ne publie rien de la feuille » ne tourne sur aucune build (avec C5) | important |
+| Q12 | `scripts/check-build.test.ts:200` | Le `rel` des liens que la recherche construit au chargement n'est vérifié par personne | important |
+| Q13 | `scripts/check-build.test.ts:539` | Les polices figées sont lues par une expression sur la source, jamais dans `dist/` | important |
+| Q14 | `scripts/check-build.test.ts:224` | La porte « jamais de px » ne connaît qu'une forme de requête média | important |
+| Q15 | `scripts/check-build.test.ts:30` | La liste d'exclusion ne lit ni l'icône, ni `sitemap.xml`, `robots.txt`, `_headers`, `_redirects` | important |
+| Q16 | `scripts/build-mode.ts:133` | (= C5) `builtAskMode` ignore la build « scrutin » | antérieur |
+| Q17 | `scripts/build-tokens.ts:42` | La build neutre publie du CSS invalide : une référence non résolue (régression de `870cd18`) | antérieur |
+| Q18 | `scripts/e2e.ts:161` | Les suites de navigateur ne comptent pas la plupart des refus de la politique (Firefox, Trusted Types) | antérieur |
+| Q19 | `scripts/a11y.ts:163` | La porte d'accessibilité ne refuse ni `meta-viewport` ni un zoom bloqué ; aucune largeur au-delà de 390 px | antérieur |
+| Q20 | `scripts/e2e-ask.ts:813` | « N'ouvre aucun tiers » a le même trou que Q5 | antérieur |
+| Q21 | `src/components/Search.astro:208` | La recherche charge le moteur des mots expliqués avant toute frappe (3 254 o) | antérieur |
+| Q22 | `scripts/check-build.test.ts:70` | Les interdits de zoom et de la charte n'attrapent qu'une graphie | mineur |
+| Q23 | `scripts/check-build.test.ts:47` | L'interdit « Config » peut refuser une build correcte | mineur |
+| Q24 | `scripts/check-build.test.ts:142` | Le balayage des puits HTML laisse passer `+=`, `setHTMLUnsafe`, `eval?.(`… (avec C14) | mineur |
+| Q25 | `scripts/check-build.test.ts:180` | La porte « relu par » s'aveugle dans les deux états pour lesquels elle existe | mineur |
+| Q26 | `scripts/check-build.test.ts:294` | La porte des noms de R73 ne lit que le premier niveau de `dist/data/` | mineur |
+| Q27 | `scripts/check-build.test.ts:389` | La porte des formulaires laisse passer `formaction` et une règle `form-action` élargie | mineur |
+| Q28 | `scripts/check-build.test.ts:591` | « Un deux-points par déclaration » laisse passer un « ; » perdu | mineur |
+| Q29 | `scripts/check-build.test.ts:584` | Le contrôle de syntaxe du CSS saute sans `dist/` alors qu'il lit une source | mineur |
+| Q30 | `scripts/check-build.test.ts:500` | Le test des réponses compte, il ne compare pas lesquelles | mineur |
+| Q31 | `scripts/check-build.test.ts:117` | `dist-scrutin/` n'est lu que par une boucle | mineur |
+| Q32 | `scripts/check-build.test.ts:162` | Des commentaires ne décrivent plus le code | mineur |
+| Q33 | `scripts/check-build.test.ts:311` | Le fichier n'est pas au format de Prettier (une ligne de 101 colonnes) | mineur |
+| Q34 | `scripts/check-build.test.ts:567` | La porte du chemin critique (P3) ne pèse que le HTML d'une page | mineur |
+| Q35 | `scripts/check-build.test.ts:281` | La ligne affichée donne le total d'une famille contre le plafond d'un fichier | mineur |
+
+### 25 novembre 2026, au matin — revue 18 : `scripts/chat-worker.test.ts`
+- **32 constats** (7 importants, 2 antérieurs, 23 mineurs) : 6 relecteurs, 8 vérificateurs, un balayage ; chaque verdict repose sur un mutant ou une sonde exécutés sur des copies de HEAD (`git archive`), dans le moteur du Worker quand il le fallait. **Rien de servi n'en dépend aujourd'hui** : aucun modèle n'est nommé, `/api/chat` est fermée, la base ne tient plus le livre. **Ce que la porte devait tenir et ne tenait pas** : qu'une route fermée ne lit rien, qu'aucun fichier du Worker ne nomme une question, que `/api/gists` n'appelle aucun modèle, et que la décision de campagne soit la sienne. **Une question pour l'éditeur** (X20).
+
+| # | Où | Constat | Gravité |
+|---|---|---|---|
+| X1 | `scripts/chat-worker.test.ts:634` | La garde de la décision de campagne accepte n'importe quelle ligne du jour qui contient « campagne » (la palette de la tortue, la campagne de revues) — classe de A2 | important |
+| X2 | `scripts/chat-worker.test.ts:674` | « Une route fermée ne lit rien » n'est pas tenu : la place du retour anticipé n'est jamais vérifiée | important |
+| X3 | `scripts/chat-worker.test.ts:686` | La porte de D16.53 ne voit pas une question lue par une chaîne (`body['question']`, un en-tête) ni dans un `${…}` | important |
+| X4 | `scripts/chat-worker.test.ts:690` | Elle ne voit que le mot nu : `questionText`, `questions`, `userConsent` passent | important |
+| X5 | `scripts/chat-worker.test.ts:699` | Elle lit 3 des 9 fichiers de bibliothèque compilés dans le Worker, aucun sous-dossier, ni le schéma de la base | important |
+| X6 | `scripts/chat-worker.test.ts:575` | « Le câblage ne décide rien du mode » ne tient que pour le texte d'un appel | important |
+| X7 | `scripts/chat-worker.test.ts:464` | Les étapes de refus ne vérifient ni la réservation, ni sa restitution, ni la fermeture : une requête forgée pourrait tenir l'allocation ou fermer les explications pour tous | important |
+| X8 | `src/worker/chat.ts:105` | `siteFor` passe tel quel un seuil `min_shared` de 0 ou négatif, qui éteint une règle du contrôle | antérieur |
+| X9 | `src/lib/chat-contract.ts:9` | Des commentaires disent que l'éditeur a lu les phrases, ou que le Worker lit une question (classe de W11, E19, K16) | antérieur |
+| X10 | `scripts/chat-worker.test.ts:204` | « `/api/gists` n'appelle aucun modèle » est vérifié sur l'objet du test lui-même | mineur |
+| X11 | `scripts/chat-worker.test.ts:653` | « Le chemin d'une question ne lit aucune mesure » n'est vérifié que sur `chat.ts` | mineur |
+| X12 | `scripts/chat-worker.test.ts:677` | Le débit de `/api/chat` : la présence de l'appel, ni son effet ni sa place | mineur |
+| X13 | `scripts/chat-worker.test.ts:662` | « Un seul lecteur des corps » n'a aucune assertion | mineur |
+| X14 | `scripts/chat-worker.test.ts:574` | Deux contrôles de source lisent les commentaires | mineur |
+| X15 | `scripts/chat-worker.test.ts:660` | « Pas de passerelle » ne lit que le corps de `runDirect` | mineur |
+| X16 | `scripts/chat-worker.test.ts:738` | La porte du démarrage à froid est étroite, et lit un fichier qui n'est plus sur le chemin | mineur |
+| X17 | `scripts/chat-worker.test.ts:685` | `names()` lit mal un fichier qui a un accent grave dans une expression régulière | mineur |
+| X18 | `scripts/chat-worker.test.ts:287` | Le branchement de l'allocation dans les deux routes n'est lu par aucun test | mineur |
+| X19 | `scripts/chat-worker.test.ts:480` | Sur EXHAUSTED, rien ne vérifie que rien n'a été réglé | mineur |
+| X20 | `scripts/chat-worker.test.ts:580` | **Question pour l'éditeur** : sa décision de campagne (les phrases restent servies, D16.78) ouvrirait aussi, un modèle nommé, les explications en direct pendant la campagne | mineur |
+| X21 | `scripts/chat-worker.test.ts:533` | Aucun test ne montre le seuil du fichier atteindre le contrôle | mineur |
+| X22 | `scripts/chat-worker.test.ts:299` | Aucune relance (« plus simple », « un exemple ») ne passe par `answerChat` | mineur |
+| X23 | `scripts/chat-worker.test.ts:627` | `campaign: null` fait planter le test au lieu d'être jugé | mineur |
+| X24 | `scripts/chat-worker.test.ts:637` | (= A16) Le motif des lignes de décision saute les lignes à lettre | mineur |
+| X25 | `scripts/chat-worker.test.ts:304` | `indexOf(first) < indexOf(second)` est vrai quand la première phrase manque | mineur |
+| X26 | `scripts/chat-worker.test.ts:409` | Rien ne lie le plafond de phrases de la consigne à la constante | mineur |
+| X27 | `scripts/chat-worker.test.ts:412` | Les contrôles de la consigne sont sensibles à la casse, et sautent les textes des relances | mineur |
+| X28 | `scripts/chat-worker.test.ts:423` | PLAUSIBLE : la liste des modèles qui coûtent est écrite à la main | mineur |
+| X29 | `scripts/chat-worker.test.ts:309` | « Les mots arrivent tels que notre phrase les écrit » ne peut pas échouer avec ce jeu d'essai | mineur |
+| X30 | `scripts/chat-worker.test.ts:256` | La base du jeu d'essai n'a pas la forme de celle de la production | mineur |
+| X31 | `src/worker/chat.ts:316` | `explainedOutput`, seul filtre entre la sortie brute d'un modèle et la route du banc, n'est testé par aucun script | mineur |
+| X32 | `scripts/chat-worker.test.ts:64` | PLAUSIBLE : le test dit que « l'éditeur a lu » les phrases (classe de W11) | mineur |
