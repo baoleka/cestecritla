@@ -447,7 +447,8 @@ export function gistsBaseProblems(
 }
 
 /** The whole book, cut as the leak gate cuts it; official titles are shown on purpose. */
-function leakIndexOf(corpus: PrivateCorpus): LeakIndex {
+/** The whole book in windows, as the deposit scans a sentence — the desk and `--take` too. */
+export function leakIndexOf(corpus: PrivateCorpus): LeakIndex {
   const all = everything(corpus);
   return buildLeakIndex(
     all.filter((item) => item.kind !== 'title').map(({ id, text }) => ({ id, text })),

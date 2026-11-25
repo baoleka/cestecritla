@@ -2,7 +2,9 @@
  * The sentences written ahead, from the first call to the last verdict (PLAN-CHAT §3 and §4,
  * lots C2 and C3): ONE sentence in our own words for each of the 1,069 measures of the book,
  * written by a model through the bench route, labelled by other models — a sort, not a proof —
- * and then READ BY THE EDITOR, one by one. Only what he keeps may enter the base.
+ * and then read, one by one: by the session, an AI, for the 1,069 deposited on 15/11/2026
+ * (D16.57 to D16.61); by the editor at the desk below, should he ever read them. Only what a
+ * reader kept may enter the base, and the base says who read it.
  *
  *   npm run gists -- --status [--only <prefix>] [--writers a,b] [--judges x,y]
  *       where the work stands: sentences written, judged, read, link only, waiting — and how
@@ -15,8 +17,10 @@
  *       the editor's reading desk: one local page, the measures of the next lot with their
  *       text and the sentences written about them, three choices each — « Fidèle », « Aucune :
  *       lien seul », « Corriger ». A measure whose verdict no longer holds comes back on it.
- *       With `--unwritten`, the measures no writer could write: a sentence to write, or the
- *       link alone
+ *       With `--unwritten`, every measure with no verdict that holds and nothing to read — new
+ *       after a re-edition, reworded, or that no writer could write: a sentence to write, or
+ *       the link alone. Nobody else can be asked any more: the writers stopped (D16.58), and
+ *       the text left the base on 15/11/2026
  *   npm run gists -- --take <private/…file or folder> [--dry-run]
  *       the sentences the SESSION wrote and read itself (the editor's mandate of 14/11/2026,
  *       D16.57 and D16.58): one line a measure, « id | sentence », or « id | LINK » for the link
@@ -29,21 +33,28 @@
  *       the sentences of the GAME (D19.2): data/2026/game-gists.json — the sentences of the
  *       deposit for the measures the words of the game are pinned to, and nothing else. It
  *       refuses unless what this machine holds is what data/2026/ask.json says was deposited.
- *       The file is written, never added to the repository: its push is the editor's accord.
+ *       The file is tracked since the editor's accord of 19/11/2026 (D19.22): any change to it
+ *       — a card more or less, a new deposit — changes its seal and asks for his accord again.
  *       `--link-only` leaves the card of these words with its link alone — a faithful sentence
  *       that should still not stand under a game word; the file names them
  *
  * Exit codes: 0 done (or the budget of the session reached); 1 something is wrong and nothing
- * more was asked; 2 a command line this tool does not read; 3 the free allowance is spent —
- * come back later, and in more than half an hour: after a refusal the Worker keeps the model
- * closed that long, and a call made sooner is answered « spent » without reaching it.
+ * more was asked; 2 a command line this tool does not read — nothing is read or written, and
+ * every flag is read strictly: one mode, the flags of that mode, « --flag value » and never
+ * « --flag=value » (review 15, H1); 3 come back later: the free allowance is spent, or the
+ * model gave no answer twice in a row — and in more than half an hour: after a refusal the
+ * Worker keeps the model closed that long, and a call made sooner is answered « spent »
+ * without reaching it.
  *
  * READ docs/discovery/neurons-log.md BEFORE ANY `--write`. The free allowance of the account
  * is the budget of this work and of the site alike; `--budget` is mandatory for that reason,
- * and each session adds its line to that file.
+ * and each session adds a row to the table of that file — with its hour, and even when it is
+ * cut short (review 15, H12, H13). Since 15/11/2026 the base holds no text of the book: a
+ * session of writing needs it deposited again, the editor's accord.
  *
  * What it keeps is under private/gists/ (scripts/gists-core.ts): runs.jsonl, one line per call,
- * and verdicts.jsonl, the editor's verdicts. What it prints is identifiers, labels and numbers —
+ * and verdicts.jsonl, the verdicts of the editor and of the session. What it prints is
+ * identifiers, labels and numbers —
  * never a sentence, never a word of a measure. The one place the text of the book is shown is
  * the reading desk: a page served to this machine alone, behind a token, that nothing keeps.
  */
@@ -65,6 +76,7 @@ import {
   SESSION,
   VERDICTS_PATH,
   appendLine,
+  appendLines,
   controlGist,
   lastVerdicts,
   measuresOf,
@@ -86,7 +98,14 @@ import {
   type VerdictLine,
 } from './gists-core.js';
 import { PRIVATE_CORPUS_PATH } from './ingest-2026.js';
-import { prepareGameGists, prepareGists, readPrivateCorpus, seedRows } from './seed-ask-2026.js';
+import { scanForLeaks, type LeakIndex } from './leak-scan.js';
+import {
+  leakIndexOf,
+  prepareGameGists,
+  prepareGists,
+  readPrivateCorpus,
+  seedRows,
+} from './seed-ask-2026.js';
 
 const MANIFEST_PATH = 'data/2026/manifest.json';
 const BENCH_URL = 'https://beta.cestecritla.fr/api/bench';
@@ -129,6 +148,13 @@ export interface Sentence {
   text: string;
   /** By judge, for those that answered: its label, or null when it gave none we know. */
   labels: Map<string, JudgeVerdict | null>;
+  /**
+   * The rule of today's control that refuses it, where the text of the book is; null when it
+   * passes, or where it cannot be checked. A sentence refused today is shown on the desk, to be
+   * corrected — and is no sentence written: neither counted so, nor left unasked (review 15,
+   * H15).
+   */
+  refused: string | null;
 }
 
 export interface Known {
@@ -166,6 +192,10 @@ export function knownOf(
     ways.add(run.variant);
     answered.set(run.writer, ways);
     if (run.passed && run.text !== null) kept.set(run.writer, run);
+    // The same way asked again for its labels, served the same answer from the cache, and
+    // refused now by the Worker's own control: the sentence it had kept no longer passes
+    // (review 15, H15). A refusal of a new answer says nothing of the one kept.
+    else if (run.cached && kept.get(run.writer)?.variant === run.variant) kept.delete(run.writer);
   }
   const sentences: Sentence[] = [];
   for (const [writer, last] of kept) {
@@ -176,7 +206,8 @@ export function knownOf(
       if (run.writer !== writer || !run.passed || run.text !== last.text) continue;
       for (const judge of run.judges) if (judge.answered) labels.set(judge.model, judge.verdict);
     }
-    sentences.push({ writer, variant: last.variant, text: last.text, labels });
+    const refused = recheck === undefined ? null : recheck(measure, last.text);
+    sentences.push({ writer, variant: last.variant, text: last.text, labels, refused });
   }
   const holds = verdict !== undefined && stands(verdict, measure, recheck);
   return {
@@ -248,9 +279,12 @@ export function nextAction(
   asked: ReadonlySet<string>,
 ): Action {
   if (known.verdict !== null) return { kind: 'none', why: 'verdict' };
-  if (known.sentences.length > 0) {
+  // A sentence today's control refuses is no sentence written: its labels are not asked for,
+  // and the next way, or the next writer, is (review 15, H15).
+  const passing = known.sentences.filter((sentence) => sentence.refused === null);
+  if (passing.length > 0) {
     let waiting = false;
-    for (const sentence of known.sentences) {
+    for (const sentence of passing) {
       const { writer, variant } = sentence;
       if (!isModelKey(writer) || missingLabels(sentence, judges).length === 0) continue;
       if (asked.has(callKey(writer, variant))) {
@@ -388,7 +422,9 @@ export function readReply(status: number, body: unknown, id: string): Reply {
       verdict: label,
       answered: label !== null || cost !== null || fromCache,
     });
-    if (!fromCache && cost !== null) billed += cost;
+    // What the Worker's ledger keeps for the judge — its reservation when the call was cut or
+    // its cost unknown — or, from a Worker that does not say it, the cost alone (review 15, H4).
+    billed += amount(entry['kept']) ?? (!fromCache && cost !== null ? cost : 0);
   }
   const cached = body['cached'] === true;
   const cost = amount(body['neurons']);
@@ -423,20 +459,27 @@ const STOPS: Readonly<Record<StopReason, { code: 0 | 1 | 3; say: string }>> = {
     code: 3,
     say: 'the Worker says the allowance is spent: come back later — in more than half an hour',
   },
+  // No answer is not a refusal of the allowance, which the Worker says « spent »: a deadline,
+  // the capacity of the platform, an error (review 15, H18).
   silent: {
     code: 3,
-    say: 'two calls in a row got no answer — the free allowance is spent: come back later',
+    say: 'two calls in a row got no answer (a deadline, the capacity, an error): come back later',
   },
   judges: {
     code: 3,
-    say: 'twice in a row no judge answered — the free allowance is spent: come back later',
+    say: 'twice in a row no judge answered (a deadline, the capacity, an error): come back later',
   },
   rate: { code: 3, say: 'the route still answers 429 after its waits: come back later' },
   http: { code: 1, say: 'the bench route refused the request' },
   unreachable: { code: 1, say: 'the bench route could not be reached' },
   unreadable: { code: 1, say: 'the bench route answered a shape this tool does not know' },
   corpus: { code: 1, say: 'the base is not at the corpus version of the manifest' },
-  absent: { code: 1, say: 'the base does not hold this measure: is the text deposited?' },
+  absent: {
+    code: 1,
+    say:
+      'the base holds no text of this measure — the text of the book was withdrawn from it on ' +
+      '15/11/2026; writing needs it deposited again (seed-ask-2026.ts --text), the editor’s accord',
+  },
 };
 
 export interface WriteOptions {
@@ -455,6 +498,12 @@ export interface WriteOptions {
   /** Measures this session may ask about. */
   limit?: number;
   minOverlap: number;
+  /**
+   * The control of today, where the text of the book is at the manifest's version: a verdict
+   * whose sentence it refuses, or a sentence of runs.jsonl it refuses, is asked again — as
+   * `--status` and the desk count them (review 15, H14, H15).
+   */
+  recheck?: Recheck;
   /** One call of the route, already paced: its status and its body. */
   ask: (request: BenchAsk) => Promise<{ status: number; body: unknown }>;
   /** Keeps a line of runs.jsonl. */
@@ -519,7 +568,12 @@ export async function writeSession(options: WriteOptions): Promise<WriteResult> 
     const verdict = options.verdicts.get(measure.id);
     const asked = new Set<string>();
     for (;;) {
-      const action = nextAction(knownOf(measure, mine, verdict), writers, judges, asked);
+      const action = nextAction(
+        knownOf(measure, mine, verdict, options.recheck),
+        writers,
+        judges,
+        asked,
+      );
       if (action.kind === 'none') break;
       if (neurons >= budget) return stop('budget');
       if (asked.size === 0) {
@@ -548,13 +602,19 @@ export async function writeSession(options: WriteOptions): Promise<WriteResult> 
         return stop(reply.status === 429 ? 'rate' : 'http', `HTTP ${String(reply.status)}`);
       }
       if (reply.kind === 'unreadable') return stop('unreadable', measure.id);
-      // The pins below are the manifest's: they hold only if the base holds the same book.
-      if (reply.corpus !== options.corpus) return stop('corpus', measure.id);
+      // A base without the measure — or without any book: since the withdrawal of the text,
+      // the route answers no corpus at all, which is no other version (review 15, H17).
+      if (reply.kind === 'absent' || reply.corpus === null) return stop('absent', measure.id);
+      // The pins below are the manifest's: they hold only if the base holds the same book. A
+      // call that ran was billed all the same: counted, never kept (review 15, H11).
+      if (reply.corpus !== options.corpus) {
+        if (reply.kind === 'ran' || reply.kind === 'silent') neurons += reply.neurons;
+        return stop('corpus', measure.id);
+      }
       if (reply.kind === 'spent') {
         const counted = reply.used === null ? '' : `${reply.used.toFixed(0)} neurons counted`;
         return stop('spent', counted);
       }
-      if (reply.kind === 'absent') return stop('absent', measure.id);
 
       const said = `${measure.id} ${action.writer} v${String(action.variant)}`;
       const line: RunLine = {
@@ -592,7 +652,9 @@ export async function writeSession(options: WriteOptions): Promise<WriteResult> 
       if (action.why === 'write') written += 1;
       if (action.judges.length === 0) continue;
       // The writer came back, from the cache or not, and no judge did: nothing more is served.
-      if (reply.judges.every((judge) => judge.verdict === null)) {
+      // A judge that answered a label we do not read has answered, and was billed: not mute
+      // (review 15, H10).
+      if (reply.judges.every((judge) => !judge.answered)) {
         mute += 1;
         if (mute >= 2) return stop('judges');
       } else mute = 0;
@@ -667,12 +729,14 @@ export function statusOf(
   };
   for (const state of known.values()) {
     if (state.previous !== null) out.again += 1;
-    if (state.sentences.length > 0) {
+    // Written: a sentence today's control lets through, where it can be checked (H15).
+    const passing = state.sentences.filter((sentence) => sentence.refused === null);
+    if (passing.length > 0) {
       out.written += 1;
-      if (state.sentences.every((sentence) => missingLabels(sentence, judges).length === 0)) {
+      if (passing.every((sentence) => missingLabels(sentence, judges).length === 0)) {
         out.judged += 1;
       }
-      for (const { writer } of state.sentences) {
+      for (const { writer } of passing) {
         out.byWriter.set(writer, (out.byWriter.get(writer) ?? 0) + 1);
       }
     }
@@ -684,7 +748,7 @@ export function statusOf(
     }
     out.waiting += 1;
     if (hasSentence(state)) out.readable += 1;
-    if (state.sentences.length > 0) continue;
+    if (passing.length > 0) continue;
     // Nothing written about the measure as it is: something is left to ask, or nothing is.
     const next = nextAction(state, writers, judges, new Set());
     if (next.kind === 'ask') out.toWrite += 1;
@@ -718,7 +782,9 @@ export function agreement(known: ReadonlyMap<string, Known>): Map<string, Map<st
     }
   };
   for (const { verdict, sentences } of known.values()) {
-    if (verdict === null) continue;
+    // The editor's reading, and his alone: a « lien seul » of the session is no refusal of his
+    // (review 15, H19).
+    if (verdict === null || readerOf(verdict) !== EDITOR) continue;
     for (const sentence of sentences) {
       if (verdict.verdict === 'link-only') count(sentence, false);
       else if (verdict.writer === EDITOR) {
@@ -800,6 +866,8 @@ export interface DeskDeps {
   judges?: readonly ModelKey[];
   /** The measures of the private corpus, read at each request and kept nowhere. */
   texts: () => ReadonlyMap<string, MeasureText>;
+  /** The book in windows, as the deposit scans a sentence: where it is, nothing it holds is kept. */
+  leaks?: LeakIndex;
   runs: () => RunLine[];
   verdicts: () => VerdictLine[];
   /** Keeps a verdict, at once. */
@@ -845,7 +913,9 @@ const RULES_FR: Readonly<Record<string, string>> = {
     party: 'un parti ou une personnalité que la mesure ne nomme pas',
     self: 'la phrase parle d’elle-même ou d’une IA',
     address: 'une adresse',
-    markup: 'un caractère de mise en forme, ou qui ne se voit pas',
+    // Visible letters too: another alphabet, a lone accent, a Latin letter French does not
+    // write — « Δ », « ș » (review 15, H22).
+    markup: 'un caractère de mise en forme, invisible, ou une lettre que le français n’écrit pas',
     overlap: 'trop loin des mots de la mesure',
     // Those of an explanation: no sentence about a measure meets them, and they are named all
     // the same.
@@ -863,6 +933,9 @@ const RULES_FR: Readonly<Record<string, string>> = {
   changed: 'la phrase a changé depuis l’affichage : recharge la page',
   pin: 'le texte de cette machine n’est pas celui du manifeste',
   request: 'demande illisible',
+  // What the deposit would refuse, said here rather than there (review 15, H6).
+  twin: 'la phrase d’une autre mesure, mot pour mot : le dépôt la refuserait',
+  book: 'des mots du livre à la suite : le dépôt la refuserait',
 };
 
 const LABELS_FR: Readonly<Record<JudgeVerdict, string>> = {
@@ -908,6 +981,34 @@ interface DeskState {
   /** The measures of the private corpus, as this request read them. */
   texts: ReadonlyMap<string, MeasureText>;
   known: Map<string, Known>;
+  /**
+   * By measure, the last sentence a reader kept that does not hold today — whatever verdict
+   * came after it. Taken from `previous` alone, it was offered until the first choice, and a
+   * « Fidèle » given back after « Revenir » was refused (review 15, H5).
+   */
+  before: Map<string, VerdictLine>;
+}
+
+/**
+ * What the deposit would refuse of a sentence about to be kept: the sentence of another measure,
+ * word for word, or words of the book in a row (scripts/seed-ask-2026.ts, `gistProblems`).
+ * Kept, it held its measure off the desk while the whole deposit failed on it (review 15, H6).
+ */
+function depositRefusal(
+  measure: Measure,
+  text: string,
+  others: ReadonlyMap<string, VerdictLine>,
+  byId: ReadonlyMap<string, Measure>,
+  leaks: LeakIndex | undefined,
+): 'twin' | 'book' | null {
+  for (const [id, held] of others) {
+    if (id === measure.id || held.verdict !== 'read' || held.text !== text) continue;
+    const twin = byId.get(id);
+    // Two measures of the same text may be said by the same sentence, as the deposit allows.
+    if (twin !== undefined && twin.sha256 !== measure.sha256 && pinned(held, twin)) return 'twin';
+  }
+  if (leaks !== undefined && scanForLeaks(text, leaks).length > 0) return 'book';
+  return null;
 }
 
 /**
@@ -921,8 +1022,21 @@ function deskState(deps: DeskDeps): DeskState {
   );
   const texts = deps.texts();
   const recheck = recheckWith(shownTexts(texts), deps.minOverlap);
-  const verdicts = lastVerdicts(deps.verdicts());
-  return { measures, texts, known: knowledge(measures, deps.runs(), verdicts, recheck) };
+  const lines = deps.verdicts();
+  const verdicts = lastVerdicts(lines);
+  const byId = new Map(measures.map((measure) => [measure.id, measure]));
+  const before = new Map<string, VerdictLine>();
+  for (const line of lines) {
+    const measure = byId.get(line.id);
+    if (measure === undefined || line.verdict !== 'read' || line.text === null) continue;
+    if (!stands(line, measure, recheck)) before.set(line.id, line);
+  }
+  return {
+    measures,
+    texts,
+    known: knowledge(measures, deps.runs(), verdicts, recheck),
+    before,
+  };
 }
 
 /** A sentence a block offers to the editor. */
@@ -938,7 +1052,7 @@ interface Offer {
  * editor kept before, when that verdict no longer holds and nobody has written it again. He
  * read it once: it is the first thing to read again.
  */
-function offersOf(state: Known, deps: DeskDeps): Offer[] {
+function offersOf(state: Known, deps: DeskDeps, before: VerdictLine | undefined): Offer[] {
   const offers = state.sentences.map((sentence) => {
     const labels = judgesFor(sentence.writer, deps.judges).map((judge) => {
       const label = sentence.labels.get(judge);
@@ -954,7 +1068,7 @@ function offersOf(state: Known, deps: DeskDeps): Offer[] {
         (labels.length === 0 ? '' : ` · juges — ${labels.join(' ; ')}`),
     };
   });
-  const { previous } = state;
+  const previous = before ?? state.previous;
   if (previous?.verdict !== 'read' || previous.writer === null || previous.text === null) {
     return offers;
   }
@@ -973,9 +1087,10 @@ function offersOf(state: Known, deps: DeskDeps): Offer[] {
 function awaits(state: Known, deps: DeskDeps): boolean {
   if (state.verdict !== null) return false;
   if (!deps.unwritten) return hasSentence(state);
-  if (hasSentence(state)) return false;
-  const next = nextAction(state, deps.writers, deps.judges, new Set());
-  return next.kind === 'none' && next.why === 'unwritten';
+  // Every measure with nothing to read: since the writers stopped (D16.58) and the text left
+  // the base (15/11/2026), no writer can be asked — a measure new after a re-edition, or
+  // reworded after a « lien seul », was on no page at all (review 15, H8).
+  return !hasSentence(state);
 }
 
 export interface DeskCounts {
@@ -1078,6 +1193,8 @@ const DESK_SCRIPT = `
     last = block;
     if (left) { leftAll.textContent = String(left.waiting); ruled.textContent = String(left.ruled); }
     count();
+    // The editor may have moved on while the answer came: the selection stays where he is.
+    if (current !== block) return;
     var rest = open();
     var after = rest.filter(function (b) {
       return (block.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
@@ -1113,8 +1230,11 @@ const DESK_SCRIPT = `
   function edit(block, candidate) {
     var form = block.querySelector('form');
     var area = form.querySelector('textarea');
-    if (candidate) {
+    // What the editor typed is never replaced: the box is filled when it opens, or while it
+    // still holds the sentence it was filled with.
+    if (candidate && (form.hidden || area.value === form.dataset.filled)) {
       area.value = candidate.querySelector('.sentence').textContent;
+      form.dataset.filled = area.value;
       form.dataset.from = candidate.dataset.writer;
     }
     form.hidden = false;
@@ -1154,6 +1274,11 @@ const DESK_SCRIPT = `
     else if (action === 'link-only') send(block, { action: 'link-only' }, 'Lien seul');
     else if (action === 'reopen') reopen(block);
   });
+  // The block the editor is in, by the keyboard or the mouse, is the one the keys rule on.
+  main.addEventListener('focusin', function (event) {
+    var block = event.target.closest('article');
+    if (block && block !== current && !block.classList.contains('done')) select(block, false);
+  });
   main.addEventListener('submit', function (event) {
     event.preventDefault();
     var form = event.target;
@@ -1165,11 +1290,21 @@ const DESK_SCRIPT = `
     var target = event.target;
     if (target && target.tagName === 'TEXTAREA') {
       if (event.key === 'Escape') { event.preventDefault(); cancel(target.closest('article')); }
-      else if (event.key === 'Enter') { event.preventDefault(); target.form.requestSubmit(); }
+      else if (event.key === 'Enter') {
+        event.preventDefault();
+        // A key held down, or a word still being composed, sends nothing.
+        if (!event.repeat && !event.isComposing) target.form.requestSubmit();
+      }
       return;
     }
     if (event.ctrlKey || event.metaKey || event.altKey) return;
-    var key = event.key;
+    // The digits by their place on the keyboard, whatever it writes there — « & », « é », « à »
+    // on a French one —, the numeric pad, and the letters whatever the lock.
+    var place = /^(?:Digit|Numpad)([0-9])$/.exec(event.code || '');
+    var key = place ? place[1] : event.key.length === 1 ? event.key.toLowerCase() : event.key;
+    // A key held down rules once: its repeats would rule on the measures after it, each in the
+    // editor's name. Only moving goes on.
+    if (event.repeat && key !== 'j' && key !== 'k') return;
     if (key === 'u') { if (last && last.classList.contains('done')) reopen(last); return; }
     if (key === 'j' || key === 'k') {
       var rest = open();
@@ -1181,6 +1316,13 @@ const DESK_SCRIPT = `
       return;
     }
     if (!current || current.classList.contains('done')) return;
+    // A block off the screen is brought back first: a key never rules on what is not seen.
+    var box = current.getBoundingClientRect();
+    if (box.bottom <= 0 || box.top >= window.innerHeight) {
+      event.preventDefault();
+      select(current, true);
+      return;
+    }
     if (key === '0') { event.preventDefault(); send(current, { action: 'link-only' }, 'Lien seul'); return; }
     if (key === 'c') { event.preventDefault(); edit(current, current.querySelector('.candidate')); return; }
     if (key >= '1' && key <= '9') { event.preventDefault(); read(current, current.querySelectorAll('.candidate')[Number(key) - 1]); }
@@ -1228,9 +1370,10 @@ function measureHtml(
   shown: MeasureText,
   title: string,
   deps: DeskDeps,
+  before: VerdictLine | undefined,
 ): string {
   const id = esc(measure.id);
-  const offers = offersOf(state, deps);
+  const offers = offersOf(state, deps, before);
   const candidates = offers
     .map((offer, index) => offerHtml(offer, index + 1, measure, shown, deps))
     .join('');
@@ -1255,7 +1398,9 @@ function measureHtml(
     `<form${none ? ' data-fixed="1"' : ' hidden'}>` +
     `<label for="c-${id}">${none ? 'Écrire une phrase' : 'Corriger la phrase'} — une seule, ` +
     `${String(MAX_GIST_CHARS)} caractères au plus</label>` +
-    `<textarea id="c-${id}" rows="3" maxlength="${String(MAX_GIST_CHARS)}"></textarea>` +
+    // No spelling service, no suggestions: what is typed here stays on this machine (H26).
+    `<textarea id="c-${id}" rows="3" maxlength="${String(MAX_GIST_CHARS)}" ` +
+    'spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>' +
     '<p class="actions"><button type="submit" class="yes">Enregistrer cette phrase</button>' +
     (none ? '' : '<button type="button" data-action="cancel">Annuler</button>') +
     '</p></form>' +
@@ -1284,16 +1429,20 @@ export function deskPage(deps: DeskDeps): string {
       astray += 1;
       continue;
     }
-    blocks.push(measureHtml(measure, known, shown, titles.get(measure.sectionId) ?? '', deps));
+    const title = titles.get(measure.sectionId) ?? '';
+    blocks.push(measureHtml(measure, known, shown, title, deps, state.before.get(measure.id)));
   }
   const nonce = deps.nonce();
   const what = deps.unwritten ? 'sans phrase' : 'à lire';
   const rules = JSON.stringify(RULES_FR).replace(/</g, '\\u003c');
   const script = DESK_SCRIPT.replace('__RULES__', () => rules);
   return (
-    '<!doctype html>\n<html lang="fr">\n<head>\n<meta charset="utf-8">\n' +
+    // The one page that shows the text of the book: no translation offered by the browser,
+    // which would send it away (review 15, H26).
+    '<!doctype html>\n<html lang="fr" translate="no">\n<head>\n<meta charset="utf-8">\n' +
     '<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
     '<meta name="robots" content="noindex, nofollow">\n' +
+    '<meta name="google" content="notranslate">\n' +
     '<title>Relecture des phrases — page locale</title>\n' +
     `<style nonce="${nonce}">${DESK_STYLE}</style>\n</head>\n<body>\n` +
     '<p class="banner">Page locale : elle contient le texte du livre, ne pas partager</p>\n' +
@@ -1379,29 +1528,44 @@ function deskVerdict(body: string, deps: DeskDeps): DeskResponse {
   const base = { id, read_on: deps.today(), ...pinOf(measure) };
   const control = (sentence: string): ReturnType<typeof controlGist> =>
     controlGist(id, sentence, shownText(shown.text, shown.lead), deps.minOverlap);
+  const before = state.before.get(id);
+  // What the deposit would refuse is refused here, with its reason (H6): the verdicts of the
+  // other measures, on their pins, as the deposit takes them.
+  const all = new Map(measuresOf(deps.manifest).map((held) => [held.id, held]));
+  const deposit = (sentence: string): string | null =>
+    depositRefusal(measure, sentence, lastVerdicts(deps.verdicts()), all, deps.leaks);
 
   let line: VerdictLine;
   if (action === 'link-only') {
     line = { ...base, verdict: 'link-only', writer: null, text: null };
   } else if (action === 'read') {
-    const offers = offersOf(known, deps).filter((offer) => offer.writer === writer);
+    const offers = offersOf(known, deps, before).filter((offer) => offer.writer === writer);
     if (offers.length === 0) return refuse('request', 400);
     // What is kept is what was on the screen: a sentence rewritten since is not that one.
     const offer = offers.find((candidate) => candidate.text === text);
     if (offer === undefined) return refuse('changed');
     const checked = control(offer.text);
     if (!checked.ok) return refuse(checked.rule);
+    const refused = deposit(checked.text);
+    if (refused !== null) return refuse(refused);
     line = { ...base, verdict: 'read', writer: offer.writer, text: checked.text };
     // A sentence of the editor's kept again keeps the trace of what it corrected.
-    const origin = known.previous?.from;
+    const origin = before?.from;
     if (offer.writer === EDITOR && origin !== undefined) line.from = origin;
   } else if (action === 'correct') {
     if (typeof text !== 'string') return refuse('request', 400);
     // What was typed, on one line: a return left at the end of a box is not a second sentence.
     const checked = control(text.replace(/\s+/gu, ' ').trim());
     if (!checked.ok) return refuse(checked.rule);
+    const refused = deposit(checked.text);
+    if (refused !== null) return refuse(refused);
     line = { ...base, verdict: 'read', writer: EDITOR, text: checked.text };
-    if (typeof from === 'string' && isModelKey(from)) line.from = from;
+    // What was corrected: a model's sentence, the session's — or his own, corrected again,
+    // which keeps the trace of what it had corrected (review 15, H20).
+    if (typeof from === 'string' && (isModelKey(from) || from === SESSION)) line.from = from;
+    else if (from === EDITOR && before?.writer === EDITOR && before.from !== undefined) {
+      line.from = before.from;
+    }
   } else return refuse('request', 400);
 
   deps.record(line);
@@ -1567,11 +1731,15 @@ export interface TakeDeps {
   minOverlap: number;
   /** YYYY-MM-DD. */
   today: string;
+  /** The book in windows, as the deposit scans a sentence. */
+  leaks?: LeakIndex;
 }
 
 export interface TakeResult {
   /** The verdicts to add — none as soon as one line is refused: all, or nothing. */
   lines: VerdictLine[];
+  /** The measures whose standing verdict is the editor's: left as he ruled (H7). */
+  editor: string[];
   /** Lines the file of verdicts already holds as they are, read by the session. */
   same: number;
   /** A measure and the rule that refuses its line — a name, never a sentence. */
@@ -1587,7 +1755,7 @@ export interface TakeResult {
  * many it is about to replace, and the caller decides.
  */
 export function takeSession(taken: readonly Taken[], deps: TakeDeps): TakeResult {
-  const out: TakeResult = { lines: [], same: 0, refused: [] };
+  const out: TakeResult = { lines: [], same: 0, refused: [], editor: [] };
   const byId = new Map(deps.measures.map((measure) => [measure.id, measure]));
   const seen = new Set<string>();
   for (const { id, text } of taken) {
@@ -1612,6 +1780,12 @@ export function takeSession(taken: readonly Taken[], deps: TakeDeps): TakeResult
     }
     const base = { id, read_on: deps.today, ...pinOf(measure), by: SESSION } as const;
     const held = deps.verdicts.get(id);
+    // A verdict the editor gave stands: the session's take never replaces it — his say, since
+    // the mandate D16.57 is consumed (D16.76; review 15, H7). Listed, and left as he ruled.
+    if (held !== undefined && readerOf(held) === EDITOR && pinned(held, measure)) {
+      out.editor.push(id);
+      continue;
+    }
     const mine = held !== undefined && readerOf(held) === SESSION && pinned(held, measure);
     if (text === null) {
       if (mine && held.verdict === 'link-only') out.same += 1;
@@ -1625,6 +1799,17 @@ export function takeSession(taken: readonly Taken[], deps: TakeDeps): TakeResult
     }
     if (mine && held.verdict === 'read' && held.text === checked.text) out.same += 1;
     else out.lines.push({ ...base, verdict: 'read', writer: SESSION, text: checked.text });
+  }
+  // What the deposit would refuse, against what the verdicts will be once the take is kept:
+  // a sentence of another measure, word for word — in the take or out of it — or words of the
+  // book in a row (review 15, H6).
+  const after = new Map(deps.verdicts);
+  for (const line of out.lines) after.set(line.id, line);
+  for (const line of out.lines) {
+    const measure = byId.get(line.id);
+    if (measure === undefined || line.text === null) continue;
+    const refused = depositRefusal(measure, line.text, after, byId, deps.leaks);
+    if (refused !== null) out.refused.push({ id: line.id, rule: refused });
   }
   if (out.refused.length > 0) out.lines = [];
   return out;
@@ -1671,6 +1856,9 @@ function benchCaller(
           method: 'POST',
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ key, ...request }),
+          // A 307 or a 308 would carry the key, in this body, wherever it points — plain http
+          // included: no redirect is followed (review 15, H25).
+          redirect: 'error',
           signal: AbortSignal.timeout(60_000),
         }),
       clock,
@@ -1687,12 +1875,146 @@ function benchCaller(
   };
 }
 
+/** The modes of the tool, and the flags each one reads (review 15, H1). */
+const MODES = ['--status', '--write', '--serve', '--take', '--sql', '--game'] as const;
+type Mode = (typeof MODES)[number];
+/** The flags that take a value — `--take` its path. */
+const VALUED = [
+  '--only',
+  '--writers',
+  '--judges',
+  '--budget',
+  '--limit',
+  '--port',
+  '--lot',
+  '--link-only',
+  '--take',
+] as const;
+const ALONE = [
+  '--status',
+  '--write',
+  '--serve',
+  '--sql',
+  '--game',
+  '--check',
+  '--dry-run',
+  '--unwritten',
+] as const;
+const READS: Readonly<Record<Mode, readonly string[]>> = {
+  '--status': ['--only', '--writers', '--judges'],
+  '--write': ['--budget', '--limit', '--writers', '--judges', '--only'],
+  '--serve': ['--port', '--lot', '--unwritten', '--only', '--writers', '--judges'],
+  '--take': ['--dry-run'],
+  '--sql': ['--check'],
+  '--game': ['--check', '--link-only'],
+};
+
+/**
+ * The command line, read strictly: what it cannot read is said, and nothing is read or written.
+ * Read loosely, a dry run mistyped wrote for real — verdicts.jsonl, that only grows, or the
+ * tracked file of the game — and a list of words typed with a space for a comma kept its first
+ * word alone: four of the five cards the editor left to their link would have shown a
+ * sentence again (review 15, H1; review 14, E1, E3, E6, E9).
+ */
+export function readCommand(
+  args: readonly string[],
+): { mode: Mode; flags: Map<string, string | true> } | string {
+  const flags = new Map<string, string | true>();
+  for (let i = 0; i < args.length; i += 1) {
+    const arg = args[i] ?? '';
+    if (flags.has(arg)) return `${arg} is written twice`;
+    if ((VALUED as readonly string[]).includes(arg)) {
+      const value = args[i + 1];
+      if (value === undefined || value.startsWith('-')) return `${arg} takes a value`;
+      flags.set(arg, value);
+      i += 1;
+    } else if ((ALONE as readonly string[]).includes(arg)) {
+      flags.set(arg, true);
+    } else {
+      return arg.startsWith('-')
+        ? `${arg} is not a flag of this tool (write « --flag value », never « --flag=value »)`
+        : `« ${arg} » stands alone on the line`;
+    }
+  }
+  const modes = MODES.filter((mode) => flags.has(mode));
+  const [mode] = modes;
+  if (mode === undefined) return 'one of --status, --write, --serve, --take, --sql, --game';
+  if (modes.length > 1) return `one mode per command, not ${modes.join(' and ')}`;
+  for (const flag of flags.keys()) {
+    if (flag === mode || READS[mode].includes(flag)) continue;
+    // Each mode has its own dry run: the other one is refused, never ignored.
+    if (flag === '--check' && mode === '--take') return '--take takes --dry-run, not --check';
+    if (flag === '--dry-run' && (mode === '--sql' || mode === '--game')) {
+      return `${mode} takes --check, not --dry-run`;
+    }
+    const owners = MODES.filter((owner) => READS[owner].includes(flag));
+    return `${flag} goes with ${owners.join(' or ')}, not with ${mode}`;
+  }
+  const words = flags.get('--link-only');
+  if (typeof words === 'string' && !/^w\d{3}(?:,w\d{3})*$/.test(words)) {
+    return '--link-only takes word ids of the game, separated by commas: w037 or w037,w012';
+  }
+  if (mode === '--write' && !flags.has('--budget')) {
+    return '--write needs --budget <neurons>: there is no second allowance';
+  }
+  return { mode, flags };
+}
+
+/** The head of the table of the register of the allowance, its eight columns. */
+export const REGISTER_HEAD =
+  '| Date/heure (UTC) | Étape | Modèle | Appels | Tokens in/out | Neurons (`usage.neurons`) | ' +
+  'Cumul jour | Note |\n|---|---|---|---|---|---|---|---|';
+
+/**
+ * The row a session of writing adds to the register (docs/discovery/neurons-log.md): a row of
+ * its table, eight cells, with the hour — the register counts in twenty-four hours that slide —
+ * and a comma decimal, as the rows written by hand (review 15, H13).
+ */
+export function registerRow(entry: {
+  at: Date;
+  writers: readonly ModelKey[];
+  calls: number;
+  measures: number;
+  neurons: number;
+  cut: boolean;
+}): string {
+  const hour = entry.at.toISOString().slice(0, 16).replace('T', ' ');
+  const neurons = entry.neurons.toFixed(2).replace('.', ',');
+  const models = entry.writers.map((writer) => MODELS[writer].name).join(', ');
+  const note =
+    `${String(entry.measures)} mesures, compté par \`gists-2026.ts\`` +
+    (entry.cut ? ' ; session interrompue : au moins ce compte' : '');
+  return (
+    `| ${hour} | phrases écrites d'avance (\`--write\`) | ${models}, juges compris | ` +
+    `${String(entry.calls)} | — | ${neurons} | — | ${note} |`
+  );
+}
+
+/** The cells of a row of a table, or 0 for a line that is none. */
+const cellsOf = (line: string): number =>
+  /^\|.*\|$/.test(line.trim()) ? line.trim().split('|').length - 2 : 0;
+
+/**
+ * Appends a row to the register. After prose, or under a table of another shape, the head of
+ * the table comes first, after a blank line: a row glued to a paragraph is no row, and two
+ * rows of 14/11/2026 read so (review 15, H13).
+ */
+export function appendRegisterRow(path: string, row: string): void {
+  const text = existsSync(path) ? readFileSync(path, 'utf8') : '';
+  const last = text.trimEnd().split('\n').at(-1) ?? '';
+  const end = text === '' || text.endsWith('\n') ? '' : '\n';
+  const head = cellsOf(last) === 8 ? '' : `${text === '' ? '' : '\n'}${REGISTER_HEAD}\n`;
+  appendFileSync(path, `${end}${head}${row}\n`);
+}
+
 async function main(args: readonly string[]): Promise<number> {
+  const read = readCommand(args);
+  if (typeof read === 'string') throw new UsageError(`${read} — nothing was read or written`);
   const value = (flag: string): string | undefined => {
-    const at = args.indexOf(flag);
-    return at === -1 ? undefined : args[at + 1];
+    const given = read.flags.get(flag);
+    return typeof given === 'string' ? given : undefined;
   };
-  const has = (flag: string): boolean => args.includes(flag);
+  const has = (flag: string): boolean => read.flags.has(flag);
   const print = (line: string): void => {
     console.log(line);
   };
@@ -1700,9 +2022,6 @@ async function main(args: readonly string[]): Promise<number> {
   if (has('--sql')) return prepareGists(has('--check')).code;
   if (has('--game')) {
     const named = value('--link-only');
-    if (named !== undefined && !/^w\d{3}(?:,w\d{3})*$/.test(named)) {
-      throw new UsageError('--link-only takes word ids of the game: w037 or w037,w012');
-    }
     // Not named, the words left to their link are those the file already names (review 14, E9).
     return prepareGameGists(has('--check'), named === undefined ? null : named.split(','));
   }
@@ -1718,13 +2037,25 @@ async function main(args: readonly string[]): Promise<number> {
   const writers = modelList(value('--writers'), '--writers') ?? DEFAULT_WRITERS;
   const judges = modelList(value('--judges'), '--judges');
   const listed = judges === undefined ? {} : { judges };
+  /**
+   * Where the book is, at the manifest's version, a verdict — or a sentence of runs.jsonl — is
+   * believed only if it still passes the control; elsewhere, on its pin alone. The same for
+   * `--status` and `--write`, as for the desk and `--take`: a text of another version said
+   * « to read again » of measures that had not moved (review 15, H14, H16).
+   */
+  const recheckHere = (): Recheck | undefined => {
+    if (!existsSync(PRIVATE_CORPUS_PATH)) return undefined;
+    const book = readPrivateCorpus();
+    if (book.meta.corpus_version !== corpus) {
+      print('the text on this machine is not at the version of the manifest: pins alone');
+      return undefined;
+    }
+    return recheckWith(shownTexts(measureTexts(book)), readMinOverlap());
+  };
 
   if (has('--status')) {
     const runs = readRuns();
-    // Where the book is, a verdict is believed only if its sentence still passes the control.
-    const recheck = existsSync(PRIVATE_CORPUS_PATH)
-      ? recheckWith(shownTexts(measureTexts(readPrivateCorpus())), readMinOverlap())
-      : undefined;
+    const recheck = recheckHere();
     const known = knowledge(measures, runs, lastVerdicts(readVerdicts()), recheck);
     const status = statusOf(measures, runs, known, writers, judges);
     for (const line of statusLines(corpus, status, agreement(known))) print(line);
@@ -1749,46 +2080,67 @@ async function main(args: readonly string[]): Promise<number> {
     if (url.protocol !== 'https:' && url.hostname !== '127.0.0.1' && url.hostname !== 'localhost') {
       throw new UsageError('BENCH_URL must be an https address');
     }
+    const recheck = recheckHere();
     print(
       `writing through ${url.host}: ${String(measures.length)} measures in scope, ` +
         `writers ${writers.join(' then ')}, budget ${String(budget)} neurons`,
     );
-    const result = await writeSession({
-      measures,
-      corpus,
-      runs: readRuns(),
-      verdicts: lastVerdicts(readVerdicts()),
-      writers,
-      ...listed,
-      budget,
-      ...limit,
-      minOverlap: readMinOverlap(),
-      ask: benchCaller(url.href, key),
-      record: (line) => {
-        appendLine(RUNS_PATH, line);
-      },
-      print,
-    });
+    // Every neuron spent goes in the register of the allowance, this tool's like the bench's —
+    // and what was billed so far when the session is cut short too: Ctrl+C, a killed wrapper,
+    // an error (review 15, H12). A session that was only told « spent », or only served from
+    // the cache, spent none: it adds no row — a loop that waits for the allowance would
+    // otherwise fill the register with zeros, one every half hour.
+    const sofar = { calls: 0, neurons: 0, measures: new Set<string>() };
+    let registered = false;
+    const register = (calls: number, asked: number, neurons: number, cut: boolean): void => {
+      if (registered || neurons <= 0 || !existsSync(NEURONS_LOG)) return;
+      registered = true;
+      const row = registerRow({ at: new Date(), writers, calls, measures: asked, neurons, cut });
+      appendRegisterRow(NEURONS_LOG, row);
+      print(`row added to ${NEURONS_LOG}`);
+    };
+    const interrupted = (signal: NodeJS.Signals): void => {
+      register(sofar.calls, sofar.measures.size, sofar.neurons, true);
+      process.exit(signal === 'SIGINT' ? 130 : 143);
+    };
+    process.once('SIGINT', interrupted);
+    process.once('SIGTERM', interrupted);
+    let result: WriteResult;
+    try {
+      result = await writeSession({
+        measures,
+        corpus,
+        runs: readRuns(),
+        verdicts: lastVerdicts(readVerdicts()),
+        writers,
+        ...listed,
+        budget,
+        ...limit,
+        minOverlap: readMinOverlap(),
+        ...(recheck === undefined ? {} : { recheck }),
+        ask: benchCaller(url.href, key),
+        record: (line) => {
+          appendLine(RUNS_PATH, line);
+          sofar.calls += 1;
+          sofar.neurons += line.neurons;
+          sofar.measures.add(line.id);
+        },
+        print,
+      });
+    } catch (error) {
+      register(sofar.calls, sofar.measures.size, sofar.neurons, true);
+      throw error;
+    } finally {
+      process.removeListener('SIGINT', interrupted);
+      process.removeListener('SIGTERM', interrupted);
+    }
     const about = result.detail === '' ? '' : ` (${result.detail})`;
     print(
       `\n${String(result.calls)} calls about ${String(result.measures)} measures, ` +
         `${String(result.written)} newly written, ${result.neurons.toFixed(2)} neurons — ` +
         `${STOPS[result.reason].say}${about}`,
     );
-    // Every neuron spent goes in the register of the allowance, this tool's like the bench's.
-    // A session that was only told « spent », or only served from the cache, spent none: it
-    // adds no line — a loop that waits for the allowance would otherwise fill the register
-    // with zeros, one every half hour.
-    if (result.neurons > 0 && existsSync(NEURONS_LOG)) {
-      const day = new Date().toISOString().slice(0, 10);
-      appendFileSync(
-        NEURONS_LOG,
-        `| ${day} | phrases écrites d'avance — ${writers.map((w) => MODELS[w].name).join(', ')}, ` +
-          `juges compris | ${String(result.calls)} appels, ${String(result.measures)} mesures | ` +
-          `${result.neurons.toFixed(2)} neurons |\n`,
-      );
-      print(`line added to ${NEURONS_LOG}`);
-    }
+    register(result.calls, result.measures, result.neurons, false);
     return result.code;
   }
 
@@ -1825,28 +2177,30 @@ async function main(args: readonly string[]): Promise<number> {
       verdicts: standing,
       minOverlap,
       today: new Date().toISOString().slice(0, 10),
+      leaks: leakIndexOf(readPrivateCorpus()),
     });
     for (const { id, rule } of result.refused) print(`  ✖ ${id}: ${rule}`);
     if (result.refused.length > 0) {
       print(`${String(result.refused.length)} line(s) refused: nothing was kept`);
       return 1;
     }
-    const replaced = result.lines.filter((line) => {
-      const held = standing.get(line.id);
-      return held !== undefined && readerOf(held) === EDITOR;
-    }).length;
     const sentences = result.lines.filter((line) => line.verdict === 'read').length;
     print(
       `${String(taken.length)} line(s) of the session: ${String(sentences)} sentence(s) and ` +
         `${String(result.lines.length - sentences)} link(s) alone to keep, ` +
         `${String(result.same)} already kept as they are — read by the session, an AI`,
     );
-    if (replaced > 0) print(`  ${String(replaced)} of them replace a verdict of the editor`);
+    if (result.editor.length > 0) {
+      print(
+        `  ${String(result.editor.length)} measure(s) left as the editor ruled: ` +
+          result.editor.join(', '),
+      );
+    }
     if (has('--dry-run')) {
       print('dry run: nothing was written');
       return 0;
     }
-    for (const line of result.lines) appendLine(VERDICTS_PATH, line);
+    appendLines(VERDICTS_PATH, result.lines);
     print(`written: ${String(result.lines.length)} line(s) in ${GISTS_DIR}/verdicts.jsonl`);
     return 0;
   }
@@ -1874,6 +2228,7 @@ async function main(args: readonly string[]): Promise<number> {
       writers,
       ...listed,
       texts: () => measureTexts(readPrivateCorpus()),
+      leaks: leakIndexOf(readPrivateCorpus()),
       runs: () => readRuns(),
       verdicts: () => readVerdicts(),
       record: (line) => {
@@ -1897,7 +2252,9 @@ async function main(args: readonly string[]): Promise<number> {
   throw new UsageError('one of --status, --write, --serve, --take, --sql, --game');
 }
 
-if (process.argv[1] !== undefined && /gists-2026\.ts$/.test(process.argv[1])) {
+// Typed with or without its extension: `npx tsx scripts/gists-2026` runs it too, where it used
+// to run nothing and exit 0 (review 15, H24; review 14, E7).
+if (process.argv[1] !== undefined && /(?:^|\/)gists-2026(?:\.ts|\.js)?$/.test(process.argv[1])) {
   try {
     process.exitCode = await main(process.argv.slice(2));
   } catch (error) {

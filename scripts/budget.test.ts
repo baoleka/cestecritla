@@ -547,7 +547,13 @@ interface BenchReply {
   model_ms?: number;
   neurons?: number | null;
   verdict?: { kind: string };
-  judges?: { model: string; verdict: string | null; neurons: number | null; ms: number }[];
+  judges?: {
+    model: string;
+    verdict: string | null;
+    neurons: number | null;
+    kept: number;
+    ms: number;
+  }[];
 }
 
 async function bench(env: unknown, fields: Record<string, unknown> = {}): Promise<BenchReply> {
@@ -650,6 +656,7 @@ void test('the Worker, a judge refused: silent, given back — and the judges af
     model,
     verdict: null,
     neurons: null,
+    kept: 0,
     cached: false,
     ms: 0,
   });
@@ -695,4 +702,13 @@ void test('the Worker, a judge refused: silent, given back — and the judges af
   );
   assert.ok((late.used ?? 0) > 4.5, String(late.used));
   assert.deepEqual(slow.state.rows('breaker'), []);
+  // What each cut judge keeps on the ledger is said with it: the writer of sentences counts
+  // what the allowance counts (review 15, H4).
+  const kept = (late.judges ?? []).map((judge) => judge.kept);
+  assert.ok(
+    kept.every((each) => each > 0),
+    JSON.stringify(kept),
+  );
+  const said = kept.reduce((sum, each) => sum + each, 4.5);
+  assert.equal(Math.round(said * 1000), Math.round((late.used ?? 0) * 1000));
 });

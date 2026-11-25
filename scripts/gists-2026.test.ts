@@ -28,8 +28,10 @@ import { LocalD1 } from './d1-local.js';
 import {
   DEFAULT_WRITERS,
   JUDGE_POOL,
+  REGISTER_HEAD,
   VARIANT_ORDER,
   agreement,
+  appendRegisterRow,
   deskHandle,
   deskPage,
   judgesFor,
@@ -39,7 +41,9 @@ import {
   measureTexts,
   nextAction,
   parseTaken,
+  readCommand,
   readReply,
+  registerRow,
   startDesk,
   statusLines,
   statusOf,
@@ -54,6 +58,7 @@ import {
   EDITOR,
   SESSION,
   appendLine,
+  appendLines,
   controlGist,
   lastVerdicts,
   measuresOf,
@@ -607,8 +612,8 @@ function bench(script: Script = {}): {
       : request.judges.map((judge) => {
           const label = (script.judge ?? ((): JudgeVerdict => 'fidele'))(judge, id);
           return label === 'silent'
-            ? { model: judge, verdict: null, neurons: null, cached: false, ms: 90 }
-            : { model: judge, verdict: label, neurons: 1.5, cached: false, ms: 300 };
+            ? { model: judge, verdict: null, neurons: null, kept: 2, cached: false, ms: 90 }
+            : { model: judge, verdict: label, neurons: 1.5, kept: 1.5, cached: false, ms: 300 };
         });
     return Promise.resolve({
       status: 200,
@@ -1341,7 +1346,13 @@ void test('the page: the measures to read with their text, the sentences, the ju
   // The measures that have a sentence and no verdict, in the order of the work: the one nobody
   // could write is not read here.
   assert.deepEqual(shownIds(page), [LIBRARY, TREES, BUSES, BOOKMOBILES]);
-  assert.match(page, /<html lang="fr">/);
+  assert.match(page, /<html lang="fr" translate="no">/);
+  // The one page that shows the book sends nothing to a service of the browser (review 15, H26).
+  assert.match(page, /<meta name="google" content="notranslate">/);
+  assert.equal(
+    (page.match(/<textarea /g) ?? []).length,
+    (page.match(/<textarea [^>]*spellcheck="false" autocomplete="off"/g) ?? []).length,
+  );
   assert.match(
     page,
     /<p class="banner">Page locale : elle contient le texte du livre, ne pas partager<\/p>/,
@@ -1385,7 +1396,10 @@ void test('the page: the measures to read with their text, the sentences, the ju
     assert.match(block(id), /data-action="read"><kbd>1<\/kbd> Fidèle<\/button>/);
     assert.match(block(id), /data-action="edit">Corriger<\/button>/);
     assert.match(block(id), /data-action="link-only"><kbd>0<\/kbd> Aucune : lien seul<\/button>/);
-    assert.match(block(id), /<textarea id="c-[^"]+" rows="3" maxlength="300"><\/textarea>/);
+    assert.match(
+      block(id),
+      /<textarea id="c-[^"]+" rows="3" maxlength="300" spellcheck="false" autocomplete="off"[^>]*><\/textarea>/,
+    );
   }
   // How much is left: in this lot, in all, and what is already ruled on.
   assert.match(
@@ -1588,21 +1602,26 @@ void test('« Corriger »: the control decides — the rule is named when it ref
 void test('the measures nobody could write have their own page: a sentence to write, or the link alone', () => {
   const { deps, kept } = desk({ unwritten: true });
   const page = deskPage(deps);
-  assert.deepEqual(shownIds(page), [LENDING]);
+  // Every measure with nothing to read: one no writer could write, and one no writer was ever
+  // asked about — nobody can be asked any more (review 15, H8).
+  assert.deepEqual(shownIds(page), [LENDING, ORCHARDS]);
   assert.match(page, /Aucune phrase n’a passé le contrôle pour cette mesure\./);
   assert.match(page, /<form data-fixed="1"><label for="c-p1c1-s01-m02">Écrire une phrase/);
   assert.doesNotMatch(blocksOf(page), /data-action="read"|data-action="edit"|class="candidate"/);
-  assert.match(page, /<span id="left-all">1<\/span> sans phrase en tout/);
+  assert.match(page, /<span id="left-all">2<\/span> sans phrase en tout/);
   assert.equal(
     answered(post(deps, { id: LENDING, action: 'correct', text: said(LENDING) }))['ok'],
     true,
   );
   assert.deepEqual([kept[0]?.writer, kept[0]?.text], ['editor', said(LENDING)]);
+  assert.deepEqual(shownIds(deskPage(deps)), [ORCHARDS]);
+  assert.equal(answered(post(deps, { id: ORCHARDS, action: 'link-only' }))['ok'], true);
   assert.deepEqual(shownIds(deskPage(deps)), []);
   assert.match(deskPage(deps), /Rien sans phrase pour l’instant dans ce périmètre\./);
-  // A measure still to be asked is on neither page: the tool has something left to try.
+  // A measure a writer was asked about once, and no more, is on it too: after a re-edition, a
+  // measure new or reworded comes to the editor, or to nobody.
   const early = desk({ unwritten: true, runs: () => [refusedRun(LENDING, 2)] });
-  assert.deepEqual(shownIds(deskPage(early.deps)), []);
+  assert.ok(shownIds(deskPage(early.deps)).includes(LENDING));
 });
 
 void test('a sentence today’s control refuses cannot be kept as it is; a text that is not the published one cannot be read', () => {
@@ -2295,7 +2314,12 @@ void test('a sentence is taken only against the text the manifest publishes the 
     ...takeDeps(),
     texts: measureTexts(moved),
   });
-  assert.deepEqual(result, { lines: [], same: 0, refused: [{ id: TREES, rule: 'pin' }] });
+  assert.deepEqual(result, {
+    lines: [],
+    same: 0,
+    refused: [{ id: TREES, rule: 'pin' }],
+    editor: [],
+  });
 });
 
 void test('taking the same file twice writes nothing the second time', () => {
@@ -2306,10 +2330,12 @@ void test('taking the same file twice writes nothing the second time', () => {
   const first = takeSession(taken, takeDeps());
   const again = takeSession(taken, takeDeps(first.lines));
   assert.deepEqual({ lines: again.lines, same: again.same }, { lines: [], same: 2 });
-  // A verdict of the editor on the same measure is not « the same »: the session's replaces it,
-  // and the tool can count it before anything is written.
-  const over = takeSession(taken, takeDeps([verdict(LIBRARY, { text: said(LIBRARY) })]));
-  assert.equal(over.lines.length, 2);
+  // A verdict of the editor on the same measure stands: the session's take never replaces it
+  // — his « lien seul » included —, and says which measures it left as he ruled (review 15, H7).
+  for (const his of [verdict(LIBRARY, { text: said(LIBRARY) }), linkOnly(LIBRARY)]) {
+    const over = takeSession(taken, takeDeps([his]));
+    assert.deepEqual([over.lines.map((line) => line.id), over.editor], [[ORCHARDS], [LIBRARY]]);
+  }
   assert.equal(readerOf(verdict(LIBRARY)), EDITOR);
 });
 
@@ -2364,4 +2390,343 @@ void test('the status counts the verdicts of the session apart, and says what it
   );
   // No line of the status carries a sentence.
   for (const line of lines) assert.equal(holdsBook(line), null, line);
+});
+
+// ---------------------------------------------------------------------------------------------
+// Review 15: the command line, what a session counts and says, the register
+// ---------------------------------------------------------------------------------------------
+
+void test('the command line is read strictly: one mode, its own flags, « --flag value » — or nothing is read', () => {
+  const words = (line: string): string[] => line.split(' ').filter((word) => word !== '');
+  const refused = (line: string): string => {
+    const read = readCommand(words(line));
+    assert.equal(typeof read, 'string', `${line} should be refused`);
+    return typeof read === 'string' ? read : '';
+  };
+  // A dry run mistyped, or the other mode's dry run: refused, never ignored — verdicts.jsonl
+  // only grows, and the file of the game is tracked.
+  for (const line of [
+    '--take private/gists/session --dryrun',
+    '--take private/gists/session --dry-run=1',
+    '--take private/gists/session -n',
+    '--game --check=1',
+    '--game --chek',
+  ]) {
+    assert.match(refused(line), /not a flag of this tool/, line);
+  }
+  assert.match(refused('--take private/gists/session --check'), /--take takes --dry-run/);
+  assert.match(refused('--game --dry-run'), /--game takes --check/);
+  assert.match(refused('--sql --dry-run'), /--sql takes --check/);
+  // The words left to their link: one value, commas — a space kept the first word alone, and
+  // four of the five cards of D19.20 and D19.21 would have shown a sentence again.
+  assert.match(refused('--game --link-only w000 w005,w026,w037,w047'), /stands alone/);
+  assert.match(refused('--game --link-only=w000,w005'), /never « --flag=value »/);
+  assert.match(refused('--game --link-only'), /takes a value/);
+  assert.match(refused('--game --link-only w0,w5'), /word ids of the game/);
+  // One mode, and only the flags of that mode.
+  assert.match(refused(''), /one of --status/);
+  assert.match(refused('--write --budget 40 --limit=3'), /not a flag/);
+  assert.match(refused('--take private/gists/session --write --budget 40'), /one mode/);
+  assert.match(refused('--serve --take private/gists/session'), /one mode/);
+  assert.match(refused('--status --bogus'), /not a flag/);
+  assert.match(refused('--status --budget 4'), /--budget goes with --write, not with --status/);
+  assert.match(refused('--status --only p1 --only p2'), /written twice/);
+  assert.match(refused('--status p1c1'), /stands alone/);
+  assert.match(refused('--write'), /--write needs --budget/);
+  assert.match(refused('--write --budget -4'), /takes a value/);
+
+  const read = (line: string): [string, Record<string, string | true>] => {
+    const got = readCommand(words(line));
+    if (typeof got === 'string') throw new Error(`${line}: ${got}`);
+    return [got.mode, Object.fromEntries(got.flags)];
+  };
+  assert.deepEqual(read('--game --check --link-only w000,w005,w026,w037,w047'), [
+    '--game',
+    { '--game': true, '--check': true, '--link-only': 'w000,w005,w026,w037,w047' },
+  ]);
+  assert.deepEqual(read('--take private/gists/session --dry-run'), [
+    '--take',
+    { '--take': 'private/gists/session', '--dry-run': true },
+  ]);
+  assert.deepEqual(read('--write --budget 40 --limit 3 --only p1c1-s01'), [
+    '--write',
+    { '--write': true, '--budget': '40', '--limit': '3', '--only': 'p1c1-s01' },
+  ]);
+  assert.deepEqual(read('--serve --unwritten --lot 20'), [
+    '--serve',
+    { '--serve': true, '--unwritten': true, '--lot': '20' },
+  ]);
+  assert.deepEqual(read('--status'), ['--status', { '--status': true }]);
+});
+
+void test('a judge is counted at what the Worker keeps for it: cut, or without a cost, its reservation', () => {
+  const base = {
+    corpus: CORPUS,
+    ids: [LIBRARY],
+    load_ms: 3,
+    ran: true,
+    verdict: { kind: 'answer', sentences: [{ text: said(LIBRARY), ids: [LIBRARY] }] },
+    neurons: 4.5,
+    reserved: 6,
+    cached: false,
+    model_ms: 1200,
+  };
+  const reply = readReply(
+    200,
+    {
+      ...base,
+      judges: [
+        // Cut: no label, no cost — its reservation stays on the Worker's ledger.
+        { model: 'mistral-small-3.1', verdict: null, neurons: null, kept: 2.5, cached: false },
+        // Answered, its cost unknown: settled at its reservation.
+        { model: 'llama-3.3-70b', verdict: 'fidele', neurons: null, kept: 3, cached: false },
+      ],
+    },
+    LIBRARY,
+  );
+  assert.ok(reply.kind === 'ran');
+  assert.equal(reply.neurons, 4.5 + 2.5 + 3);
+  // A cut judge is still one to ask: what it kept is no answer.
+  assert.deepEqual(
+    reply.judges.map((judge) => judge.answered),
+    [false, true],
+  );
+});
+
+void test('a session says what stopped it, and counts every call that was billed', async () => {
+  const ending = async (
+    script: Script,
+    overrides: Partial<WriteOptions> = {},
+  ): Promise<[string, number, number]> => {
+    const run = session(script, overrides);
+    const result = await writeSession(run.options);
+    return [result.reason, result.calls, result.neurons];
+  };
+  // Since the withdrawal of the text, the route answers no corpus and no measure: the base
+  // holds no book — not « another version » of it, which pointed at a deposit of the text.
+  const withdrawn: WriteOptions['ask'] = () =>
+    Promise.resolve({ status: 200, body: { corpus: null, ids: [], ran: false } });
+  assert.deepEqual(await ending({}, { ask: withdrawn }), ['absent', 1, 0]);
+  // Another version of the book: the call ran and was billed — counted, never kept.
+  const other = session({ corpus: 'bbbbbbbbbbbbbbbb' });
+  const astray = await writeSession(other.options);
+  assert.deepEqual([astray.reason, astray.calls, other.recorded.length], ['corpus', 1, 0]);
+  assert.ok(astray.neurons > 0, 'a call that ran is counted');
+  // Judges that answer a label this tool does not read have answered, and were billed: not
+  // mute — the session goes to its end.
+  assert.deepEqual((await ending({ judge: () => null })).slice(0, 2), ['done', 6]);
+  // Judges cut every time: the session stops, and what the Worker kept for them is counted.
+  const [reason, calls, neurons] = await ending({ judge: () => 'silent' });
+  assert.deepEqual([reason, calls], ['judges', 2]);
+  assert.ok(neurons > calls * 4.5, `${String(neurons)}: the judges cut are counted`);
+});
+
+void test('a session of writing believes what --status believes: today’s control, where the book is', async () => {
+  const everyMeasureRead = new Map(ORDER.map((held) => [held.id, verdict(held.id)]));
+  // On their pins alone, every verdict holds: nothing to ask.
+  const pins = session(STORY, { verdicts: everyMeasureRead });
+  assert.equal((await writeSession(pins.options)).calls, 0);
+  // Today's control refuses the sentence each verdict keeps: every measure is asked again.
+  const refusing = session(STORY, { verdicts: everyMeasureRead, recheck: () => 'number' });
+  assert.ok((await writeSession(refusing.options)).calls > 0);
+
+  // A sentence of runs.jsonl today's control refuses stays, marked — the desk shows it, to be
+  // corrected — and is no sentence written: the next way is asked, and it is not counted.
+  const held = knownOf(measure(LIBRARY), [run(LIBRARY)], undefined, () => 'number');
+  assert.deepEqual(
+    held.sentences.map((sentence) => sentence.refused),
+    ['number'],
+  );
+  const next = nextAction(held, DEFAULT_WRITERS, undefined, new Set());
+  assert.deepEqual(next.kind === 'ask' ? [next.why, next.variant] : next, ['write', 0]);
+  const counted = statusOf([measure(LIBRARY)], [run(LIBRARY)], new Map([[LIBRARY, held]]));
+  assert.deepEqual([counted.written, counted.toWrite], [0, 1]);
+  assert.equal(knownOf(measure(LIBRARY), [run(LIBRARY)], undefined).sentences[0]?.refused, null);
+  // The same way asked again for its labels, served the same answer from the cache, and refused
+  // now by the Worker's control: the sentence it had kept is taken back.
+  const cachedRefusal = { ...refusedRun(LIBRARY, 2), cached: true };
+  const again = knownOf(measure(LIBRARY), [run(LIBRARY), cachedRefusal], undefined);
+  assert.deepEqual(again.sentences, []);
+  // A new answer refused, or another way refused, leaves the sentence where it was.
+  for (const later of [refusedRun(LIBRARY, 2), { ...refusedRun(LIBRARY, 0), cached: true }]) {
+    assert.equal(knownOf(measure(LIBRARY), [run(LIBRARY), later], undefined).sentences.length, 1);
+  }
+});
+
+void test('a session of writing adds a row of the register’s table: its hour, eight cells, a comma decimal', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'cel-register-'));
+  try {
+    const path = join(dir, 'neurons-log.md');
+    const entry = {
+      at: new Date('2026-11-25T14:05:09.000Z'),
+      writers: ['gemma-4-26b', 'mistral-small-3.1'] as const,
+      calls: 18,
+      measures: 11,
+      neurons: 157.4,
+      cut: false,
+    };
+    const row = registerRow(entry);
+    assert.equal(row.split('|').length - 2, 8);
+    assert.match(row, /^\| 2026-11-25 14:05 \| /);
+    assert.match(row, /\| 18 \| — \| 157,40 \| — \| 11 mesures/);
+    assert.doesNotMatch(row, /interrompue/);
+    assert.match(registerRow({ ...entry, cut: true }), /session interrompue : au moins ce compte/);
+    assert.equal(REGISTER_HEAD.split('\n')[0]?.split('|').length, 10);
+
+    // After prose, the head of the table first, after a blank line: a row glued to a paragraph
+    // is no row — the two rows of 14/11/2026 read so.
+    writeFileSync(path, '# Registre\n\nUn paragraphe.\n');
+    appendRegisterRow(path, row);
+    assert.equal(
+      readFileSync(path, 'utf8'),
+      `# Registre\n\nUn paragraphe.\n\n${REGISTER_HEAD}\n${row}\n`,
+    );
+    // Under a row of the table: the row alone.
+    appendRegisterRow(path, row);
+    assert.equal(readFileSync(path, 'utf8').split(REGISTER_HEAD).length, 2);
+    assert.equal(readFileSync(path, 'utf8').split(row).length, 3);
+    // Under a row of another shape, and with no newline at the end: the head again, on a line
+    // of its own.
+    writeFileSync(path, '| 2026-11-14 | x | y | z |');
+    appendRegisterRow(path, row);
+    assert.equal(
+      readFileSync(path, 'utf8'),
+      `| 2026-11-14 | x | y | z |\n\n${REGISTER_HEAD}\n${row}\n`,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+// ---------------------------------------------------------------------------------------------
+// Review 15: the desk and the take — what the deposit would refuse, the sentence kept before,
+// the reader of a tally, the file a cut write leaves
+// ---------------------------------------------------------------------------------------------
+
+void test('after a first choice, the sentence kept before is still offered — and a correction says what it corrected', () => {
+  // The book moved: the verdict is on another wording, and the sentence it kept is offered.
+  const stale = verdict(LIBRARY, { measure_sha256: sha256('another wording') });
+  const { deps, kept } = desk({ runs: () => [] }, [stale]);
+  assert.ok(shownIds(deskPage(deps)).includes(LIBRARY));
+  // « Lien seul » by mistake, « Revenir », then « Fidèle » on that sentence: a new choice
+  // replaces the old, as the page says (review 15, H5).
+  assert.equal(answered(post(deps, { id: LIBRARY, action: 'link-only' }))['ok'], true);
+  const again = answered(
+    post(deps, { id: LIBRARY, action: 'read', writer: 'gemma-4-26b', text: said(LIBRARY) }),
+  );
+  assert.equal(again['ok'], true, JSON.stringify(again));
+  assert.deepEqual(
+    [kept.at(-1)?.verdict, kept.at(-1)?.writer, kept.at(-1)?.text],
+    ['read', 'gemma-4-26b', said(LIBRARY)],
+  );
+
+  // A sentence of the session corrected: what was corrected is the session's (review 15, H20).
+  const session = verdict(BUSES, {
+    writer: SESSION,
+    by: SESSION,
+    measure_sha256: sha256('another wording'),
+  });
+  const his = verdict(TREES, {
+    writer: EDITOR,
+    from: 'gemma-4-26b',
+    measure_sha256: sha256('another wording'),
+  });
+  const second = desk({ runs: () => [] }, [session, his]);
+  const correct = (id: string, from: string, text: string): Record<string, unknown> =>
+    answered(post(second.deps, { id, action: 'correct', from, text }));
+  assert.equal(correct(BUSES, SESSION, said(BUSES))['ok'], true);
+  assert.equal(second.kept.at(-1)?.from, SESSION);
+  // His own sentence corrected again keeps the trace of what it had corrected.
+  assert.equal(correct(TREES, EDITOR, said(TREES))['ok'], true);
+  assert.equal(second.kept.at(-1)?.from, 'gemma-4-26b');
+});
+
+void test('the desk and the take refuse what the deposit would: a sentence of another measure, words of the book in a row', () => {
+  const leaks = buildLeakIndex(
+    BOOK.map(({ id, text }) => ({ id, text })),
+    [],
+  );
+  // The sentence of the measure above, word for word, for its sub-measure: the control lets it
+  // through, the deposit would not (review 15, H6).
+  const { deps, kept } = desk({ runs: () => [], leaks }, [verdict(LENDING)]);
+  assert.deepEqual(
+    answered(post(deps, { id: BOOKMOBILES, action: 'correct', text: said(LENDING) })),
+    { ok: false, rule: 'twin' },
+  );
+  assert.equal(kept.length, 1);
+  // The whole of a short measure, inside a sentence about another: words of the book in a row.
+  const whole = 'Le programme prévoit un service de prêt, avec des bibliobus pour les villages.';
+  const other = desk({ runs: () => [], leaks });
+  assert.deepEqual(answered(post(other.deps, { id: LENDING, action: 'correct', text: whole })), {
+    ok: false,
+    rule: 'book',
+  });
+  assert.equal(other.kept.length, 0);
+  // Without the book on the machine, only the twin can be seen.
+  const blind = desk({ runs: () => [] });
+  assert.equal(
+    answered(post(blind.deps, { id: LENDING, action: 'correct', text: whole }))['ok'],
+    true,
+  );
+
+  // The same for the take: against a verdict that stands, or within the take — all or nothing.
+  const deposits = { ...takeDeps([verdict(LENDING)]), leaks };
+  assert.deepEqual(takeSession([{ id: BOOKMOBILES, text: said(LENDING) }], deposits).refused, [
+    { id: BOOKMOBILES, rule: 'twin' },
+  ]);
+  const both = takeSession(
+    [
+      { id: LENDING, text: said(LENDING) },
+      { id: BOOKMOBILES, text: said(LENDING) },
+    ],
+    { ...takeDeps(), leaks },
+  );
+  assert.deepEqual([both.lines, both.refused.map((line) => line.rule)], [[], ['twin', 'twin']]);
+  // (Not against his verdict on that measure: the take leaves it as he ruled.)
+  assert.deepEqual(takeSession([{ id: LENDING, text: whole }], { ...takeDeps(), leaks }).refused, [
+    { id: LENDING, rule: 'book' },
+  ]);
+});
+
+void test('the judges are tallied against the editor’s reading alone: a « lien seul » of the session is none', () => {
+  const runs = [run(LIBRARY)];
+  const of = (line: VerdictLine) =>
+    agreement(knowledge([measure(LIBRARY)], runs, lastVerdicts([line])));
+  assert.equal(of({ ...linkOnly(LIBRARY), by: SESSION }).size, 0);
+  const tally = of(linkOnly(LIBRARY));
+  assert.ok(tally.size > 0);
+  for (const byLabel of tally.values()) {
+    for (const counted of byLabel.values()) assert.equal(counted.kept, 0);
+  }
+});
+
+void test('a line is never glued to one a cut write left: closed when whole, taken out when cut', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'cel-lines-'));
+  try {
+    const path = join(dir, 'verdicts.jsonl');
+    const first = verdict(LIBRARY);
+    const second = verdict(TREES);
+    // A line whole but left without its newline, by a hand: closed, and kept.
+    writeFileSync(path, JSON.stringify(first));
+    appendLine(path, second);
+    assert.deepEqual(
+      readVerdicts(path).map((line) => line.id),
+      [LIBRARY, TREES],
+    );
+    // A line cut short by a write that did not finish: taken out — every reader skipped it.
+    writeFileSync(path, `${JSON.stringify(first)}\n${JSON.stringify(second).slice(0, 20)}`);
+    appendLine(path, second);
+    assert.deepEqual(
+      readVerdicts(path).map((line) => line.id),
+      [LIBRARY, TREES],
+    );
+    // Several lines in one write.
+    appendLines(path, [verdict(BUSES), verdict(ORCHARDS)]);
+    assert.deepEqual(
+      readVerdicts(path).map((line) => line.id),
+      [LIBRARY, TREES, BUSES, ORCHARDS],
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });

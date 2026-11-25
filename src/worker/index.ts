@@ -335,6 +335,12 @@ interface Judgement {
   /** The label, or null when the judge gave none we know — or did not answer. */
   verdict: JudgeVerdict | null;
   neurons: number | null;
+  /**
+   * What the allowance keeps for this judge: its cost, its reservation when the cost is unknown
+   * or the call was cut, nothing when it was not made. Without it the writer of sentences
+   * counted a cut judge at zero while this ledger kept its reservation (review 15, H4).
+   */
+  kept: number;
   cached: boolean;
   ms: number;
 }
@@ -356,7 +362,14 @@ async function judgements(
     const model = MODELS[key];
     const input = judgeRequest(candidate, sentence, model);
     const reserved = estimateNeurons(input, model);
-    const silent: Judgement = { model: key, verdict: null, neurons: null, cached: false, ms: 0 };
+    const silent: Judgement = {
+      model: key,
+      verdict: null,
+      neurons: null,
+      kept: 0,
+      cached: false,
+      ms: 0,
+    };
     if (!(await budget.reserve(reserved, hardStop(env)))) {
       out.push(silent);
       continue;
@@ -370,14 +383,17 @@ async function judgements(
       continue;
     }
     if (run === null) {
-      out.push({ ...silent, ms: Date.now() - called });
+      // Cut or failed: its reservation stays on the ledger, as a call that may have been billed.
+      out.push({ ...silent, kept: reserved, ms: Date.now() - called });
       continue;
     }
-    await budget.settle(reserved, run.cached ? 0 : (run.neurons ?? reserved));
+    const kept = run.cached ? 0 : (run.neurons ?? reserved);
+    await budget.settle(reserved, kept);
     out.push({
       model: key,
       verdict: readJudgement(run.output),
       neurons: run.neurons,
+      kept,
       cached: run.cached,
       ms: Date.now() - called,
     });

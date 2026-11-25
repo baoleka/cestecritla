@@ -83,6 +83,9 @@ vérifications de `/api/bench` se sont arrêtées avant le modèle (une mesure q
 base est lue, rien n'est appelé). Cumul du 13/11 (UTC) inchangé : **308,57 / 10 000**. Le compteur du
 Worker (`NEURON_HARD_STOP`) s'arrête à 8 500 par jour ; `scripts/bench-ask.ts --live` exige un
 `--budget` et inscrit sa ligne ici.
+
+| Date (UTC) | Étape | Volume | Neurons |
+|---|---|---|---|
 | 2026-11-13 | banc « Demander » — Gemma 4 26B, mode answer | 1 items | 19.35 neurons |
 | 2026-11-13 | banc « Demander » — Gemma 4 26B, mode answer | 19 items | 290.05 neurons |
 | 2026-11-13 | banc « Demander » — Gemma 4 26B, mode answer | 8 items | 57.75 neurons |
@@ -113,6 +116,9 @@ des 35 appels restés sans réponse en six secondes (Gemma 12, gpt-oss 16, Llama
 a PROBABLEMENT coûté quand même. Consommation réelle du jour : entre 6 271 et 8 930, sous le quota
 de 10 000. Les deux dernières lignes de Llama, à 0 item, sont ce refus. Résultats : `08-ia.md` §10.8,
 `eval/ask-results.md`.
+
+| Date (UTC) | Étape | Volume | Neurons |
+|---|---|---|---|
 | 2026-11-14 | banc « Demander » — Mistral Small 3.1, mode select | 87 items | 3515.58 neurons |
 
 **14 novembre 2026 (UTC), après minuit.** Mesure de la sélection seule (ligne ci-dessus : 3 515,58) ;
@@ -175,5 +181,8 @@ avaient vingt-quatre heures ; le gros, dépensé le 13 entre le soir et 0 h 36 U
 soir et cette nuit. **PROBABLE** (deux observations concordantes, aucune lecture d'un compteur de
 la plateforme) : l'essai ne se finira pas avant la nuit du 14 au 15, et l'écriture des 1 069
 phrases (lot C3) doit se compter en neurons par vingt-quatre heures glissantes, pas par jour.
+
+| Date (UTC) | Étape | Volume | Neurons |
+|---|---|---|---|
 | 2026-11-14 | phrases écrites d'avance — Gemma 4 26B, Mistral Small 3.1, juges compris | 18 appels, 11 mesures | 157.40 neurons |
 | 2026-11-14 | phrases écrites d'avance — Gemma 4 26B, Mistral Small 3.1, juges compris | 30 appels, 14 mesures | 363.59 neurons |

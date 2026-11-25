@@ -3,14 +3,15 @@
  * and what of it may enter the base.
  *
  * One sentence in our own words per measure of the book: written by a model through the bench
- * route, labelled by other models, then READ BY THE EDITOR, one by one. Two files keep the
+ * route, labelled by other models, then read one by one — by the session, an AI, for the 1,069
+ * deposited on 15/11/2026 (D16.57 to D16.61), never yet by the editor. Two files keep the
  * state, both under private/gists/ and both append-only:
  *
  *   runs.jsonl      one line per call of the bench route — which measure, which writer, which
  *                   way of asking, what the control made of it, the sentence when it let one
  *                   through, the labels of the judges, what it cost
- *   verdicts.jsonl  the editor's verdicts — « read », with the sentence kept, or « link-only »;
- *                   the last line for a measure wins
+ *   verdicts.jsonl  the verdicts, the editor's and the session's — « read », with the sentence
+ *                   kept, or « link-only »; the last line for a measure wins
  *
  * Since the editor's mandate of 14/11/2026 (D16.57, D16.58) the session that works for him — an
 AI — writes the sentences itself, against the text, and reads them itself. Its verdicts go in
@@ -19,7 +20,8 @@ and what the site says of the sentences is held to who read them (D16.59).
 
 They hold sentences of ours, never the text of the book — and they stay private all the same:
  * a sentence about each of the 1,069 measures is a paraphrase of a whole book whose rights are
- * reserved, and none of it leaves this machine before the editor has read it.
+ * reserved, and none of it leaves this machine but through the deposit, which takes only what
+ * a reader kept — the reader named with it.
  *
  * Every line is pinned to the fingerprint of its measure — the one the public manifest
  * publishes. A measure whose text moved since has no sentence and no verdict any more: it is
@@ -30,7 +32,7 @@ They hold sentences of ours, never the text of the book — and they stay privat
  * Shared by the tool (scripts/gists-2026.ts) and by the deposit in the base
  * (scripts/seed-ask-2026.ts). No network here, no server, and nothing printed.
  */
-import { appendFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
+import { appendFileSync, existsSync, mkdirSync, readFileSync, truncateSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { PROPOSITION_ID } from '../src/lib/ask-contract.js';
 import { validateAnswer } from '../src/lib/ask-validate.js';
@@ -321,8 +323,34 @@ export const readVerdicts = (path: string = VERDICTS_PATH): VerdictLine[] =>
 
 /** Adds one line at the end of a file, creating its directory the first time. */
 export function appendLine(path: string, line: RunLine | VerdictLine): void {
+  appendLines(path, [line]);
+}
+
+/**
+ * Appends lines in one write — a take is all or nothing on the disk too. A last line left
+ * without its newline is closed first; one cut short, a write that did not finish and that
+ * every reader already skips, is taken out: glued to the next line, either made the whole file
+ * unreadable for every mode, and lost the verdict the desk had just said « enregistré »
+ * (review 15, H9).
+ */
+export function appendLines(path: string, lines: readonly (RunLine | VerdictLine)[]): void {
   mkdirSync(dirname(path), { recursive: true });
-  appendFileSync(path, `${JSON.stringify(line)}\n`);
+  if (existsSync(path)) {
+    const raw = readFileSync(path, 'utf8');
+    if (raw !== '' && !raw.endsWith('\n')) {
+      const cut = raw.lastIndexOf('\n') + 1;
+      let whole = true;
+      try {
+        JSON.parse(raw.slice(cut));
+      } catch {
+        whole = false;
+      }
+      if (whole) appendFileSync(path, '\n');
+      else truncateSync(path, Buffer.byteLength(raw.slice(0, cut)));
+    }
+  }
+  if (lines.length === 0) return;
+  appendFileSync(path, lines.map((line) => `${JSON.stringify(line)}\n`).join(''));
 }
 
 /** The editor's verdict on each measure: the file only grows, and its last line wins. */

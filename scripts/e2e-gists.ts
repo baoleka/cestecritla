@@ -313,6 +313,64 @@ async function runEngine(name: string): Promise<Outcome> {
     await page.close();
   } finally {
     await second.close();
+  }
+
+  // 10. A key rules once, on the block the editor is in, whatever his keyboard writes, and
+  // never over what he typed (review 15, H2, H3, H21, H23).
+  const third = await desk();
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+    await page.goto(`${third.origin}/${TOKEN}/`);
+    // A keydown as the browser sends it, with what Playwright's keyboard cannot give: a repeat,
+    // or a key that writes another character than its place says.
+    const press = (init: { key: string; code: string; repeat?: boolean }): Promise<void> =>
+      page.evaluate(({ key, code, repeat }) => {
+        const target = document.activeElement ?? document.body;
+        const repeated = repeat === true;
+        target.dispatchEvent(
+          new KeyboardEvent('keydown', { key, code, repeat: repeated, bubbles: true }),
+        );
+      }, init);
+    const settled = (): Promise<void> => page.waitForTimeout(400);
+    await press({ key: '1', code: 'Digit1', repeat: true });
+    await settled();
+    check('a key held down rules nothing by its repeats', third.kept.length === 0);
+    // On a French keyboard, the key of « 1 » writes « & ».
+    await press({ key: '&', code: 'Digit1' });
+    await folded(page, LIBRARY);
+    check(
+      'the digit is read by its place on the keyboard: « & » on a French one',
+      third.kept.length === 1 && third.kept[0]?.writer === 'gemma-4-26b',
+    );
+    await press({ key: '1', code: 'Digit1', repeat: true });
+    await settled();
+    check('…and its repeats rule nothing on the next measure', third.kept.length === 1);
+    await press({ key: 'J', code: 'KeyJ' });
+    check('a letter is read whatever the lock', (await current(page)) === BUSES);
+    // The block the editor is in — the focus on one of its buttons — is the one ruled on.
+    await page.locator(`article[data-id="${TREES}"] button[data-action="link-only"]`).focus();
+    check('the focus selects its block', (await current(page)) === TREES);
+    await press({ key: '0', code: 'Digit0' });
+    await folded(page, TREES);
+    check(
+      'a key rules on the block that has the focus',
+      third.kept[1]?.id === TREES && third.kept[1].verdict === 'link-only',
+    );
+    // What was typed is never replaced by « c ».
+    await page.locator(`article[data-id="${BUSES}"] .book`).click();
+    await page.keyboard.press('c');
+    const box = page.locator(`article[data-id="${BUSES}"] textarea`);
+    await box.waitFor({ state: 'visible' });
+    await box.fill('Une phrase en cours, pas encore gardée.');
+    await page.locator(`article[data-id="${BUSES}"] .book`).click();
+    await page.keyboard.press('c');
+    check(
+      '« c » brings back the box as it was typed',
+      (await box.inputValue()) === 'Une phrase en cours, pas encore gardée.',
+    );
+    await page.close();
+  } finally {
+    await third.close();
     await browser.close();
   }
   return out;
