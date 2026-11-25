@@ -29,10 +29,14 @@ import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node
 import { resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import {
+  BUILD_LOCK,
   BUILD_MARKER,
   appRedirects,
+  giveLock,
   holdingRedirects,
   swallowedFlags,
+  takeLock,
+  treeState,
   type BuildMode,
 } from './build-mode.js';
 import { quietEnv } from './quiet-env.js';
@@ -213,6 +217,15 @@ const outDir =
 // The marker of the last build goes before anything else is touched: a build that stops
 // half-way — Astro has emptied dist/ by then, and left its server files in it — leaves NO
 // marker, and scripts/deploy.ts sends nothing without one (review 9, D2; review 12, T1).
+// One build or deploy at a time in this checkout (review 12, T6; review 11, M9): two builds
+// into dist/ at once mixed their files under one marker. A test build writes elsewhere.
+if (askTest === null) {
+  const held = takeLock(`a build (${mode})`, resolve(root, BUILD_LOCK));
+  if (held !== null) throw new Error(`build refused: ${held}`);
+  process.on('exit', () => {
+    giveLock(resolve(root, BUILD_LOCK));
+  });
+}
 if (askTest === null) rmSync(resolve(root, BUILD_MARKER), { force: true });
 
 function run(step: Step): number {
@@ -282,6 +295,7 @@ writeFileSync(
 );
 console.log(`✓ ${outDir}/_redirects (${mode})`);
 
+const tree = askTest === null ? treeState(root) : null;
 // What the dist-bound gates and the deploy guard read. Written last, `complete`, once every
 // step has succeeded: the previous one was removed when this build began. A test build of the
 // ask screen says nothing about dist/: it leaves the marker alone.
@@ -294,6 +308,9 @@ if (askTest === null) {
       ...(scrutin ? { scrutin: true } : {}),
       ...(host === 'preview' ? { host } : {}),
       ...(update ? { update: true } : {}),
+      // From what: the commit, and whether a tracked file differed from it (M8, T9) — what
+      // goes out is what is committed, or the deploy says so.
+      ...(tree === null ? {} : { commit: tree.commit, dirty: tree.dirty }),
       complete: true,
     })}\n`,
   );

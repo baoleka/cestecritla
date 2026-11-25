@@ -18,9 +18,18 @@
  * (D14.10: if exposure becomes untenable the app is withdrawn), and the first answer to the next
  * re-edition of the programme: one command, two static files, nothing to decide in a hurry.
  */
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs';
 import { homedir } from 'node:os';
-import { join, relative } from 'node:path';
+import { dirname, join, relative } from 'node:path';
 import { modeFor } from '../src/lib/ask-mode.js';
 import { SILENCE_APPROACH_MS, silenceWindows, type SilenceWindow } from '../src/lib/silence.js';
 import { parseJsonc } from './jsonc.js';
@@ -646,6 +655,57 @@ export function withdrawalContext(
   };
 }
 
+/** The commit checked out and whether a tracked file differs from it — null outside git. */
+export function treeState(cwd = '.'): { commit: string; dirty: boolean } | null {
+  const run = (...args: string[]): string | null => {
+    const result = spawnSync('git', args, { cwd, encoding: 'utf8' });
+    return result.status === 0 ? result.stdout.trim() : null;
+  };
+  const commit = run('rev-parse', 'HEAD');
+  const changes = run('status', '--porcelain', '--untracked-files=no');
+  return commit === null || changes === null ? null : { commit, dirty: changes !== '' };
+}
+
+/** The lock a build and a deploy share: one of them at a time in a checkout (T6, M9). */
+export const BUILD_LOCK = 'build/.lock';
+
+/**
+ * Takes the lock, or says who holds it. A lock whose process is gone is taken over: a build
+ * killed half-way leaves its lock behind, and no marker (`readBuildMarker`).
+ */
+export function takeLock(what: string, lock: string = BUILD_LOCK): string | null {
+  mkdirSync(dirname(lock), { recursive: true });
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      writeFileSync(lock, `${String(process.pid)} ${what}\n`, { flag: 'wx' });
+      return null;
+    } catch {
+      const [pid = '', ...rest] = (existsSync(lock) ? readFileSync(lock, 'utf8') : '')
+        .trim()
+        .split(' ');
+      const alive = (() => {
+        try {
+          process.kill(Number(pid), 0);
+          return true;
+        } catch {
+          return false;
+        }
+      })();
+      if (alive && pid !== '')
+        return `${rest.join(' ') || 'a build or a deploy'} runs here (process ${pid})`;
+      rmSync(lock, { force: true });
+    }
+  }
+  return 'the lock of this checkout could not be taken';
+}
+
+/** Gives the lock back — only if this process holds it. */
+export function giveLock(lock: string = BUILD_LOCK): void {
+  if (!existsSync(lock)) return;
+  if (readFileSync(lock, 'utf8').split(' ')[0] === String(process.pid))
+    rmSync(lock, { force: true });
+}
+
 /** What build/last-build.json says of the build in dist/. */
 export interface BuildMarker {
   mode: BuildMode;
@@ -656,6 +716,9 @@ export interface BuildMarker {
   complete: boolean;
   /** A holding build of a re-edition (`npm run build:update`, D21.37), not of a withdrawal. */
   update: boolean;
+  /** The commit it was built from, and whether a tracked file differed from it then (M8, T9). */
+  commit: string | null;
+  dirty: boolean | null;
 }
 
 /**
@@ -680,6 +743,8 @@ export function readBuildMarker(marker: string = BUILD_MARKER): BuildMarker | nu
     host: record['host'] === 'preview' ? 'preview' : 'apex',
     complete: record['complete'] === true,
     update: record['update'] === true,
+    commit: typeof record['commit'] === 'string' ? record['commit'] : null,
+    dirty: typeof record['dirty'] === 'boolean' ? record['dirty'] : null,
   };
 }
 

@@ -53,6 +53,9 @@ import {
   readAskMode,
   readBuildMarker,
   readDist,
+  giveLock,
+  takeLock,
+  treeState,
   refusedArguments,
   swallowedFlags,
   withdrawalContext,
@@ -205,6 +208,16 @@ if (!existsSync('dist')) {
 
 // A build removes the last marker when it begins and writes its own when it is done: without a
 // finished one, dist/ is a build that stopped half-way (review 9, D2; review 12, T1).
+// One build or deploy at a time (T6, M9): a build started while wrangler uploads would send
+// half of it. Taken before dist/ is read, given back at the exit.
+const held = takeLock(`a deploy (${target})`);
+if (held !== null) {
+  console.error(`deploy refused: ${held} — wait for it`);
+  process.exit(1);
+}
+process.on('exit', () => {
+  giveLock();
+});
 const marker = readBuildMarker();
 if (marker === null || !marker.complete) {
   console.error(
@@ -214,6 +227,29 @@ if (marker === null || !marker.complete) {
   process.exit(1);
 }
 const mode = marker.mode;
+// What goes out is what is committed (review 11, M8; review 12, T9): a build of a tree with an
+// uncommitted change, or of a commit that is no longer the one checked out, or a tree changed
+// since — build, revert, deploy passed every gate that reads the files of today. The withdrawal
+// is exempt: its own gesture edits data/launch.json just before it. A dry run sends nothing.
+if (mode === 'app' && !passthrough.includes('--dry-run')) {
+  const now = treeState();
+  const why =
+    marker.commit === null || marker.dirty === null
+      ? 'dist/ does not say what it was built from'
+      : marker.dirty
+        ? 'dist/ was built from a tree with uncommitted changes'
+        : now === null
+          ? 'the tree cannot be read by git'
+          : now.commit !== marker.commit
+            ? `dist/ was built from ${marker.commit.slice(0, 7)}, and ${now.commit.slice(0, 7)} is checked out`
+            : now.dirty
+              ? 'the tree has uncommitted changes since dist/ was built'
+              : null;
+  if (why !== null) {
+    console.error(`deploy refused: ${why} — commit, build, then deploy`);
+    process.exit(1);
+  }
+}
 const pages = htmlPages('dist');
 const leftovers = distLeftovers('dist');
 // What a build of today would publish of the game: its one file, or nothing — while the editor

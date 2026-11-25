@@ -121,6 +121,43 @@ void test('nothing goes out of a build that stopped half-way: no finished marker
   }
 });
 
+void test('what goes out is what is committed: a build of a changed tree, or of another commit, is refused (M8, T9)', () => {
+  for (const marker of [
+    '{"mode":"app","complete":true}',
+    '{"mode":"app","complete":true,"commit":"abc","dirty":true}',
+    '{"mode":"app","complete":true,"commit":"abc","dirty":false}',
+  ]) {
+    inScratch(({ put, deploy }) => {
+      put('dist/index.html', '<!doctype html><title>x</title>');
+      put('build/last-build.json', marker);
+      // Outside a repository, the tree cannot be read: that is refused too.
+      const { run, asked } = deploy(['apex']);
+      assert.equal(run.status, 1, marker);
+      assert.match(
+        run.stderr,
+        /does not say what it was built from|built from a tree with uncommitted changes|cannot be read by git/,
+        marker,
+      );
+      assert.equal(asked, null, marker);
+    });
+  }
+});
+
+void test('one build or deploy at a time: a lock held by a live process stops the deploy (T6, M9)', () => {
+  inScratch(({ put, deploy }) => {
+    holdingBuild(put);
+    // This very test process holds it, alive.
+    put('build/.lock', `${String(process.pid)} a build (app)\n`);
+    const { run, asked } = deploy(['apex', '--dry-run']);
+    assert.equal(run.status, 1);
+    assert.match(run.stderr, /a build \(app\) runs here/);
+    assert.equal(asked, null);
+    // A lock left by a process that is gone is taken over.
+    put('build/.lock', '999999999 a build (app)\n');
+    assert.equal(deploy(['apex', '--dry-run']).run.status, 0);
+  });
+});
+
 void test('a flag npm took for itself stops the deploy: `npm run deploy --dry-run` sends nothing', () => {
   inScratch(({ put, deploy }) => {
     holdingBuild(put);
