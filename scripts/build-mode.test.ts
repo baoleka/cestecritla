@@ -117,7 +117,11 @@ void test('the JSONC reader keeps a URL inside a string and drops a comment afte
 
 void test('the apex refuses an app build until launch day', () => {
   const refusal = deployRefusal('apex', 'app', ['index.html', 's/c1-s02/index.html'], VALIDATED);
-  assert.match(String(refusal), /holding page until the launch is decided/);
+  // Since the launch, a gate that stands again is a change awaiting its date: the refusal sends
+  // to the preview host, and names the holding page as what it is — the withdrawal (M1).
+  assert.match(String(refusal), /production does not take this app build/);
+  assert.match(String(refusal), /is the withdrawal \(D14\.10\), the editor's decision/);
+  assert.doesNotMatch(String(refusal), /run `npm run build:holding` first/);
 });
 
 void test('the apex accepts a holding build made of exactly its pages', () => {
@@ -262,7 +266,7 @@ void test('the Worker is deployed only when it is ready, and the bench only on t
           launchBlockers: waiting,
         }),
       ),
-      /holding page until the launch is decided.*has not been rehearsed/,
+      /production does not take this app build.*has not been rehearsed/,
     );
   }
   // …and once nothing stands in the way, what the Worker's files lack is not its business:
@@ -703,7 +707,13 @@ void test('the preview host may ask before production does, never the other way 
   const deploy = readFileSync('scripts/deploy.ts', 'utf8');
   assert.match(deploy, /const hostAsk = readAskMode\(undefined, target\);/);
   assert.match(deploy, /given\.includes\('--bench'\) && hostAsk === 'off' \? 'bench' : hostAsk/);
-  assert.equal((deploy.match(/previewBlockers: previewChatBlockers\(\)/g) ?? []).length, 2);
+  // The pages that ask, and the Worker of the chat — the latter held to the chat's own gates,
+  // without the privacy page of the pages (review 10, A6).
+  assert.equal((deploy.match(/previewBlockers: previewChatBlockers\(\)/g) ?? []).length, 1);
+  assert.match(
+    deploy,
+    /previewBlockers: previewChatBlockers\('\.', undefined, \{ pages: false \}\)/,
+  );
   // One rule, three readers: the pages are built for a host the build names — a variable set
   // by the build script on every run, so that none left in a shell can open anything…
   const pagesConfig = readFileSync('src/lib/ask-config.ts', 'utf8');
@@ -1055,10 +1065,10 @@ void test('the apex takes no app build from main until the editor has dated his 
   assert.equal(deployRefusal('apex', 'app', pages, { ...held, dryRun: true }), null);
   // His word given, nothing of this rule is left.
   assert.equal(deployRefusal('apex', 'app', pages, { ...held, homeBlockers: [] }), null);
-  // A launch that is not decided still speaks first: the holding page is what the apex takes.
+  // A gate of the launch that stands again still speaks first.
   assert.match(
     String(deployRefusal('apex', 'app', pages, { ...held, launchBlockers: ['not decided'] })),
-    /holding page until the launch is decided/,
+    /production does not take this app build — not decided/,
   );
 });
 
@@ -1075,11 +1085,9 @@ void test('the apex takes no app build while the explained words are held (D20.1
   assert.match(refusal, /production does not take these explained words yet \(D20\.15\)/);
   assert.match(refusal, /changed since they were sealed/);
   assert.match(refusal, /runbook sheet 15/);
-  // The scrutin build is an app build too.
-  assert.match(
-    String(deployRefusal('apex', 'app', pages, { ...held, scrutinBuild: true })),
-    /D20\.15/,
-  );
+  // The scrutin build shows no explained word: the rule protects nothing there, and must not
+  // hold back the build that closes before a window (review 11, M2).
+  assert.equal(deployRefusal('apex', 'app', pages, { ...held, scrutinBuild: true }), null);
   // What closes always may; the preview host is where the words are shown first; a dry run
   // sends nothing; and once sealed and opened, nothing of this rule is left.
   assert.equal(deployRefusal('apex', 'holding', [...HOLDING_PAGES], held), null);

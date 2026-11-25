@@ -62,9 +62,11 @@ import {
 } from './build-mode.js';
 import {
   WORDS_SWITCH_PATH,
+  chatLaunchBlockers,
   homeBlockers,
   launchBlockers,
   previewChatBlockers,
+  previewPageBlockers,
   readLaunchInputs,
   wordsBlockers,
 } from './launch.js';
@@ -169,8 +171,9 @@ if (given.includes('--chat')) {
     today,
     workerProblems: workerProblems(),
     ask: readAskMode(undefined, 'apex'),
-    launchBlockers: launchBlockers(readLaunchInputs()),
-    previewBlockers: previewChatBlockers(),
+    // The gates of the chat, and none of the pages' (review 10, A6).
+    launchBlockers: chatLaunchBlockers(),
+    previewBlockers: previewChatBlockers('.', undefined, { pages: false }),
   });
   if (refusal !== null) {
     console.error(`deploy refused (${target}, the Worker of the chat): ${refusal}`);
@@ -278,6 +281,7 @@ const refusal = deployRefusal(
         ask,
         workerProblems: workerProblems(),
         previewBlockers: previewChatBlockers(),
+        previewPageBlockers: target === 'preview' ? previewPageBlockers() : [],
         distProblems: distProblems(readDist('dist'), { gameFile, ask }),
         gistsProblems: shownGists === null ? [] : gistsUnpublished(),
         homeBlockers: homeBlockers(),

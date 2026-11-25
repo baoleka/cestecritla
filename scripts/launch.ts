@@ -27,10 +27,12 @@ import { existsSync, readFileSync } from 'node:fs';
 import { canonicalHash, listFingerprint } from '../src/lib/fingerprint.js';
 import { WORD_LINKS_PATH, highlightedWords, wordsFingerprint } from '../src/lib/word-links.js';
 import { LOCAL_CHECKS } from '../src/lib/game.js';
+import { ROUND } from '../src/lib/game-engine.js';
 import { citationPolicyValidated } from './build-mode.js';
 import { modeFor } from '../src/lib/ask-mode.js';
 import { MASCOT2_VALIDATION_PATH, mascot2Fingerprint } from './mascot2-kit.js';
 import { isModelKey, keepsNothing } from '../src/worker/models.js';
+import { isDay } from '../src/lib/days.js';
 
 export { canonicalHash };
 
@@ -108,6 +110,72 @@ export interface LaunchInputs {
   /** What the self-validating files still lack (`artefactBlockers`): empty when all are in place. */
   artefacts: readonly string[];
 }
+
+/**
+ * Today, as decisions.md dates it: the day in Paris. Between midnight and 1 h (2 h in summer)
+ * the day in UTC is still the day before, and the editor's word written on his day was refused
+ * for an hour, with a reason that said it was missing (review 10, A13).
+ */
+export function parisDay(now: Date = new Date()): string {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Europe/Paris',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(now);
+}
+
+/** A row of the table of decisions.md, read by its columns. */
+export interface DecisionRow {
+  id: string;
+  date: string;
+  content: string;
+  status: string;
+}
+
+/**
+ * The rows of the table of decisions — an amendment row too (« D0.15b », review 10, A16) — each
+ * read by its columns: a mark is looked for in its own column, never anywhere in the line.
+ */
+export function decisionRows(decisions: string): DecisionRow[] {
+  return decisions
+    .split('\n')
+    .filter((row) => /^\| D\d+\.\d+[a-z]? \|/.test(row))
+    .map((row) => {
+      const cells = row.split(' | ');
+      return {
+        id: (cells[0] ?? '').replace(/^\| /, ''),
+        date: cells[1] ?? '',
+        content: cells[2] ?? '',
+        status: cells.slice(3).join(' | '),
+      };
+    });
+}
+
+/** The mark that opens the status of a decision of the editor. */
+export const EDITOR_MARK = '**DÉCISION (utilisateur)**';
+
+/**
+ * His row on `on`: his mark opens its status, and the row names each of `names` — the record
+ * it fills, or the first characters of what it was given on. A date a session wrote without his
+ * word finds no such row (review 10, A7).
+ */
+export function editorSaid(decisions: string, on: unknown, names: readonly string[]): boolean {
+  return decisionRows(decisions).some(
+    (row) =>
+      row.date === on &&
+      row.status.startsWith(EDITOR_MARK) &&
+      names.every((name) => `${row.content} | ${row.status}`.includes(name)),
+  );
+}
+
+/** decisions.md under a root — '' without it, which no gate reads as his word. */
+function decisionsUnder(at: (path: string) => string): string {
+  const path = at('docs/discovery/decisions.md');
+  return existsSync(path) ? readFileSync(path, 'utf8') : '';
+}
+/** The mark of a decision the session took under the mandate of the explained words (D20.3). */
+const MANDATE_MARK = '**DÉCISION (session, sur le mandat D20.3)**';
 
 const isDate = (value: unknown): value is string =>
   typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value);
@@ -258,6 +326,15 @@ function chatPrivacyBlockers(at: (path: string) => string): string[] {
  * host that serves her, the preview first: it is the one validation a preview needs, because
  * the line is about what is written on a visitor's phone.
  */
+/**
+ * What holds back the preview host's pages, whatever they do with a question: the line of the
+ * privacy page about the colour given to her, shown wherever the game writes — the preview host
+ * first (review 10, A5; D17.26).
+ */
+export function previewPageBlockers(root = '.'): string[] {
+  return mascotPrivacyBlockers((path) => (root === '.' ? path : `${root}/${path}`));
+}
+
 function mascotPrivacyBlockers(at: (path: string) => string): string[] {
   const read = field(readObject(at(LAUNCH_PATH)), 'privacy_mascot');
   if (
@@ -300,14 +377,14 @@ function measureCount(path: string): number {
 }
 
 /**
- * What the files that carry their own validation still lack. Each line names the file and the
- * lot of the plan that produces it, so that the gate reads as a to-do list long before launch.
+ * What the answering of a question still lacks for production (data/2026/ask.json): the gates of
+ * PLAN-CHAT §5 that a file can carry — and, for the mode "chat", every one the preview host
+ * asks for too. The Worker of the chat is held to these and to nothing of the pages
+ * (`chatLaunchBlockers`; review 10, A6).
  */
-export function artefactBlockers(root = '.'): string[] {
+function askBlockers(root: string, corpus: unknown): string[] {
   const at = (path: string): string => (root === '.' ? path : `${root}/${path}`);
   const out: string[] = [];
-  const corpus = field(field(readObject(at(MANIFEST_PATH)), 'meta'), 'corpus_version');
-
   // How a question is answered: the sheet of the chat, or search only (D16.4, D16.51).
   const ask = readObject(at(ASK_PATH));
   if (ask === null) {
@@ -315,7 +392,10 @@ export function artefactBlockers(root = '.'): string[] {
   } else if (ask.mode !== 'chat' && ask.mode !== 'off') {
     out.push(`${ASK_PATH}: mode must be "chat" or "off"`);
   } else if (
+    // Left out or null, the preview host does what production does (src/lib/ask-mode.ts): every
+    // reader reads the two alike, and so does this gate (review 10, A18).
     ask.preview_mode !== undefined &&
+    ask.preview_mode !== null &&
     ask.preview_mode !== 'chat' &&
     ask.preview_mode !== 'off'
   ) {
@@ -389,7 +469,55 @@ export function artefactBlockers(root = '.'): string[] {
         `${ASK_PATH}: the deployment of the chat has not been rehearsed on the preview host: deployment_rehearsed_on (lot C10)`,
       );
     }
+    // Production asks for every gate the preview host asks for (review 10, A8; review 11, M4):
+    // a model that keeps nothing of a call, where one is named, and the legal file of the chat.
+    if (namesModel(ask) && (!isModelKey(ask.model) || !keepsNothing(ask.model))) {
+      out.push(
+        `${ASK_PATH}: no model is named whose host writes that it keeps nothing of a call: model`,
+      );
+    }
+    out.push(...legalFileBlockers(ask));
   }
+
+  return out;
+}
+
+/** The legal file of the chat (18-dossier-chat.md): done for real, and by whom it is dated. */
+function legalFileBlockers(ask: Json | null): string[] {
+  if (!isDate(ask?.preview_legal_on)) {
+    return [
+      `${ASK_PATH}: the legal file of the chat is not done for real — the reading of the gesture, the register, the short impact assessment, what is known of the dashboard: preview_legal_on`,
+    ];
+  }
+  if (!isReviewer(ask.preview_legal_by)) {
+    return [
+      `${ASK_PATH}: the legal file of the chat is dated, and nothing says by whom — the editor, or the session: preview_legal_by (D16.63)`,
+    ];
+  }
+  return [];
+}
+
+/**
+ * What holds the Worker of the chat back from the apex: the gates of the chat, and none of the
+ * pages' — a retouch of the mascot, the game's list or a line of the privacy page awaiting its
+ * date changes nothing the Worker serves, and must not keep a fix of it from going out (D19.12;
+ * review 10, A6: it happened to the fix of R40).
+ */
+export function chatLaunchBlockers(root = '.'): string[] {
+  const at = (path: string): string => (root === '.' ? path : `${root}/${path}`);
+  return askBlockers(root, field(field(readObject(at(MANIFEST_PATH)), 'meta'), 'corpus_version'));
+}
+
+/**
+ * What the files that carry their own validation still lack. Each line names the file and the
+ * lot of the plan that produces it, so that the gate reads as a to-do list long before launch.
+ */
+export function artefactBlockers(root = '.'): string[] {
+  const at = (path: string): string => (root === '.' ? path : `${root}/${path}`);
+  const out: string[] = [];
+  const corpus = field(field(readObject(at(MANIFEST_PATH)), 'meta'), 'corpus_version');
+
+  out.push(...askBlockers(root, corpus));
 
   // The words of the game: a new kind of extract, validated with its measured share (D16.15).
   const words = readObject(at(WORDS_PATH));
@@ -398,9 +526,12 @@ export function artefactBlockers(root = '.'): string[] {
   } else {
     const meta = words.meta;
     const list = listFingerprint(words.words, field(meta, 'pool'));
-    // The game is not optional (D16.11): a list with no word in it is a game that does not exist.
-    if (!Array.isArray(words.words) || words.words.length === 0) {
-      out.push(`${WORDS_PATH}: the list holds no word yet (lot J3)`);
+    // The game is not optional (D16.11): below a round of words the build hides it, and the
+    // turtle with it (src/lib/game-data.ts) — the same threshold, not a second one (A9).
+    if (!Array.isArray(words.words) || words.words.length < ROUND) {
+      out.push(
+        `${WORDS_PATH}: the list holds fewer than a round of words (${String(ROUND)}): the build would show no game, and no turtle (D16.11)`,
+      );
     }
     if (!isDate(field(meta, 'pool_reviewed_on'))) {
       out.push(
@@ -411,6 +542,13 @@ export function artefactBlockers(root = '.'): string[] {
       out.push(`${WORDS_PATH}: the list is not validated by the editor: meta.validated.on`);
     } else if (field(field(meta, 'validated'), 'list_sha256') !== list) {
       out.push(`${WORDS_PATH}: the list or its pool of sections changed after it was validated`);
+    } else if (
+      !editorSaid(decisionsUnder(at), field(field(meta, 'validated'), 'on'), [list.slice(0, 12)])
+    ) {
+      // His validation names the list it was given on (D19.18 names 8fc8898fd770…; B39, A7).
+      out.push(
+        `docs/discovery/decisions.md: no decision of the editor on ${String(field(field(meta, 'validated'), 'on'))} that names the list (${list.slice(0, 12)}…)`,
+      );
     }
     const attested = field(meta, 'attested');
     const checks = field(attested, 'checks');
@@ -459,12 +597,19 @@ export function mascotBlockers(root = '.'): string[] {
   const at = (path: string): string => (root === '.' ? path : `${root}/${path}`);
   const out: string[] = [...mascotPrivacyBlockers(at)];
   let drawing: string | null = null;
+  let unread = '';
   try {
     drawing = mascot2Fingerprint(root);
-  } catch {
-    // A palette that cannot be read is a drawing that cannot be fingerprinted: not validated.
+  } catch (error) {
+    // A file of hers that cannot be read is a drawing that cannot be fingerprinted: said as it
+    // is — not as a sheet left unvalidated, which sent the operator to the wrong file (A19).
+    unread = error instanceof Error ? (error.message.split('\n')[0] ?? '') : String(error);
   }
   const record = readObject(at(MASCOT2_VALIDATION_PATH));
+  if (unread !== '') {
+    out.push(`the mascot cannot be fingerprinted — ${unread}`);
+    return out;
+  }
   if (record === null || drawing === null) {
     out.push(`the mascot is not drawn or not validated: ${MASCOT2_VALIDATION_PATH} (lot A2)`);
     return out;
@@ -473,6 +618,13 @@ export function mascotBlockers(root = '.'): string[] {
     out.push(`${MASCOT2_VALIDATION_PATH}: the sheet is not dated by the editor: validated_on`);
   } else if (record.drawing_sha256 !== drawing) {
     out.push(`${MASCOT2_VALIDATION_PATH}: the drawing changed after the sheet was validated`);
+  } else if (
+    !editorSaid(decisionsUnder(at), record.validated_on, [MASCOT2_VALIDATION_PATH, 'validated_on'])
+  ) {
+    // The date is his (D17.24: « une session ne l'écrit pas sans ton mot »).
+    out.push(
+      `docs/discovery/decisions.md: no decision of the editor on ${record.validated_on} that dates ${MASCOT2_VALIDATION_PATH} (validated_on)`,
+    );
   }
   // The question is about a drawing too: asked of another one, it was not asked of her.
   if (!isDate(record.same_character_asked_on)) {
@@ -494,7 +646,11 @@ export function mascotBlockers(root = '.'): string[] {
  * as a file can carry them. The others (every measure read, forty threads, the model confirmed)
  * are production's: they are measured on this very host.
  */
-export function previewChatBlockers(root = '.', privacyHash?: string): string[] {
+export function previewChatBlockers(
+  root = '.',
+  privacyHash?: string,
+  options: { pages?: boolean } = {},
+): string[] {
   const at = (path: string): string => (root === '.' ? path : `${root}/${path}`);
   const ask = readObject(at(ASK_PATH));
   if (modeFor(ask, 'preview') !== 'chat') return [];
@@ -525,19 +681,16 @@ export function previewChatBlockers(root = '.', privacyHash?: string): string[] 
       `${ASK_PATH}: the deployment of the chat has not been rehearsed: deployment_rehearsed_on (lot C10)`,
     );
   }
-  if (!isDate(ask?.preview_legal_on)) {
-    out.push(
-      `${ASK_PATH}: the legal file of the chat is not done for real — the reading of the gesture, the register, the short impact assessment, what is known of the dashboard: preview_legal_on`,
-    );
-  } else if (!isReviewer(ask.preview_legal_by)) {
-    out.push(
-      `${ASK_PATH}: the legal file of the chat is dated, and nothing says by whom — the editor, or the session: preview_legal_by (D16.63)`,
-    );
-  }
+  out.push(...legalFileBlockers(ask));
+  // The page the agreement of the sheet sends its reader to: the gate of the PAGES that ask. The
+  // Worker of the chat serves none of it (`pages: false`, review 10, A6).
   const launch = readObject(at(LAUNCH_PATH));
   const privacy = field(launch, 'privacy_page');
   const today = privacyHash ?? privacyStringsHash(readObject(at(STRINGS_PATH)) ?? {});
-  if (!isDate(field(privacy, 'reviewed_on')) || field(privacy, 'sha256') !== today) {
+  if (
+    options.pages !== false &&
+    (!isDate(field(privacy, 'reviewed_on')) || field(privacy, 'sha256') !== today)
+  ) {
     out.push(
       `${LAUNCH_PATH}: the privacy page — where the agreement of the sheet sends its reader — is not re-read as it stands: privacy_page`,
     );
@@ -594,12 +747,13 @@ const HOME_DECIDED_FROM = '2026-11-18';
  * A shape alone let « 0000-00-00 », a day of last month or a day to come stand for his word.
  */
 const saidSince = (value: unknown, today: Date): value is string =>
-  isDate(value) &&
-  !Number.isNaN(Date.parse(value)) &&
-  value >= HOME_DECIDED_FROM &&
-  value <= today.toISOString().slice(0, 10);
+  isDay(value) && value >= HOME_DECIDED_FROM && value <= parisDay(today);
 
-export function homeBlockersOf(record: unknown, today: Date = new Date()): string[] {
+export function homeBlockersOf(
+  record: unknown,
+  today: Date = new Date(),
+  decisions: string | null = null,
+): string[] {
   if (typeof record !== 'object' || record === null || Array.isArray(record)) {
     return [
       `${LAUNCH_PATH}: nothing says whether production may serve the home page of main: home (D19.12)`,
@@ -616,13 +770,32 @@ export function homeBlockersOf(record: unknown, today: Date = new Date()): strin
         `home.decided_on, home.decided_by (D19.12) — until then production is built from ${from}`,
     ];
   }
+  // His word is written in decisions.md, on its day, in his own column (review 10, A17): read
+  // at the deploy too, not by a test alone.
+  const on = field(record, 'decided_on');
+  if (
+    decisions !== null &&
+    !decisionRows(decisions).some(
+      (row) =>
+        row.date === on &&
+        row.status.startsWith(EDITOR_MARK) &&
+        row.content.includes('home.decided_on'),
+    )
+  ) {
+    return [
+      `docs/discovery/decisions.md: no decision of the editor on ${String(on)} that names home.decided_on`,
+    ];
+  }
   return [];
 }
 
 /** The same, read from the committed file. Never throws: an unreadable file blocks. */
-export function homeBlockers(root = '.'): string[] {
+export function homeBlockers(root = '.', today: Date = new Date()): string[] {
   const at = (path: string): string => (root === '.' ? path : `${root}/${path}`);
-  return homeBlockersOf(field(readObject(at(LAUNCH_PATH)), 'home'));
+  const decisions = existsSync(at('docs/discovery/decisions.md'))
+    ? readFileSync(at('docs/discovery/decisions.md'), 'utf8')
+    : '';
+  return homeBlockersOf(field(readObject(at(LAUNCH_PATH)), 'home'), today, decisions);
 }
 
 export function readLaunchInputs(): LaunchInputs {
@@ -667,13 +840,16 @@ export const WORDS_SWITCH_PATH = 'data/2026/words.json';
 const DECISIONS_PATH = 'docs/discovery/decisions.md';
 /** The day « Aucun mot ne bloque » was decided (D20.1): no seal of its charter, nor opening, is older. */
 const WORDS_DECIDED_FROM = '2026-11-19';
+/**
+ * The last day the session could seal or open the explained words under its mandate (D20.3): it
+ * was consumed by the opening of production (D20.22, 19/11/2026). From the next day a seal and
+ * an opening are the editor's, and his alone (review 10, A3; D20.22, D21.9).
+ */
+const WORDS_MANDATE_LAST_DAY = '2026-11-19';
 
-/** A day a seal or an opening can bear: a real date, not before the work began, not after today. */
+/** A day a seal or an opening can bear: a real day, not before the work began, not after today. */
 const wordsSaidSince = (value: unknown, today: Date): value is string =>
-  isDate(value) &&
-  !Number.isNaN(Date.parse(value)) &&
-  value >= WORDS_DECIDED_FROM &&
-  value <= today.toISOString().slice(0, 10);
+  isDay(value) && value >= WORDS_DECIDED_FROM && value <= parisDay(today);
 
 /**
  * What keeps production from taking the explained words of main (PLAN-MOTS, D20.15) — empty when
@@ -715,17 +891,36 @@ export function wordsBlockersOf(
   }
   const charter = field(meta, 'charter');
   if (charter !== 1 && charter !== 2) out.push(`${TERMS_PATH}: meta.charter is 1 or 2`);
-  const rows = decisions.split('\n').filter((row) => /^\| D\d+\.\d+ \|/.test(row));
-  const written = (on: string, marks: readonly string[]): boolean =>
-    rows.some((row) => row.includes(`| ${on} |`) && marks.every((mark) => row.includes(mark)));
-  /** Who may seal or open: the session under its mandate, or the editor — each by its mark. */
-  const markOf = (who: unknown): string | null =>
-    who === 'session' ? 'D20.3' : who === 'editor' ? 'DÉCISION (utilisateur)' : null;
+  const rows = decisionRows(decisions);
+  /**
+   * Who may seal or open, and on which days: the session under its mandate until the day it
+   * was consumed, the editor always — each known by the mark that opens the status of its row,
+   * never by a word found elsewhere in it (review 10, A2, A3).
+   */
+  const markOf = (who: unknown, on: string): string | null =>
+    who === 'editor'
+      ? EDITOR_MARK
+      : who === 'session' && on <= WORDS_MANDATE_LAST_DAY
+        ? MANDATE_MARK
+        : null;
   if (charter === 2) {
-    const mark = markOf(field(sealed, 'by'));
+    const by = field(sealed, 'by');
+    const mark = markOf(by, sealedOn);
     if (mark === null) {
-      out.push(`${TERMS_PATH}: meta.sealed.by is the session (D20.3) or the editor`);
-    } else if (!wordsSaidSince(sealedOn, today) || !written(sealedOn, [seal.slice(0, 12), mark])) {
+      out.push(
+        by === 'session'
+          ? `${TERMS_PATH}: the mandate D20.3 is consumed since D20.22 — a seal after ${WORDS_MANDATE_LAST_DAY} is the editor's: meta.sealed.by`
+          : `${TERMS_PATH}: meta.sealed.by is the editor (or the session, under D20.3, until ${WORDS_MANDATE_LAST_DAY})`,
+      );
+    } else if (
+      !wordsSaidSince(sealedOn, today) ||
+      !rows.some(
+        (row) =>
+          row.date === sealedOn &&
+          row.status.startsWith(mark) &&
+          row.content.includes(seal.slice(0, 12)),
+      )
+    ) {
       out.push(
         `docs/discovery/decisions.md: no decision on ${sealedOn} that names the seal of the explained words (${seal.slice(0, 12)}…)`,
       );
@@ -735,13 +930,27 @@ export function wordsBlockersOf(
   const opened = ['pages', 'search', 'game'].some((surface) => field(production, surface) === 'on');
   if (charter === 2 || opened) {
     const on = field(words, 'decided_on');
-    const mark = markOf(field(words, 'decided_by'));
-    if (!wordsSaidSince(on, today) || mark === null) {
+    const by = field(words, 'decided_by');
+    const mark = wordsSaidSince(on, today) ? markOf(by, on) : null;
+    // The opening names its decision (`decided_in`): the row of that number, on that day, in its
+    // author's column, naming this very file — not a row that only mentions the game's list,
+    // opens the preview host or closes production (review 10, A2).
+    const named = rows.find((row) => row.id === field(words, 'decided_in'));
+    if (mark === null) {
       out.push(
-        `${WORDS_SWITCH_PATH}: production takes these explained words only once they are opened — decided_on, decided_by (D20.15)`,
+        by === 'session' && isDay(on) && on > WORDS_MANDATE_LAST_DAY
+          ? `${WORDS_SWITCH_PATH}: the mandate D20.3 is consumed since D20.22 — an opening after ${WORDS_MANDATE_LAST_DAY} is the editor's: decided_by`
+          : `${WORDS_SWITCH_PATH}: production takes these explained words only once they are opened — decided_on, decided_by (D20.15)`,
       );
-    } else if (!written(on, ['words.json', mark])) {
-      out.push(`docs/discovery/decisions.md: no decision on ${on} that opens ${WORDS_SWITCH_PATH}`);
+    } else if (
+      named === undefined ||
+      named.date !== on ||
+      !named.status.startsWith(mark) ||
+      !named.content.includes(WORDS_SWITCH_PATH)
+    ) {
+      out.push(
+        `docs/discovery/decisions.md: no decision on ${String(on)} that opens ${WORDS_SWITCH_PATH} — decided_in names it`,
+      );
     }
     if (!wordsSaidSince(field(words, 'reviewer_yes_on'), today)) {
       out.push(
@@ -764,4 +973,7 @@ export function wordsBlockers(root = '.', today: Date = new Date()): string[] {
   );
 }
 
-if (process.argv[1] !== undefined && /launch\.ts$/.test(process.argv[1])) main();
+// Its own name, with or without its extension — not any script whose name ends in it (A20).
+if (process.argv[1] !== undefined && /(?:^|\/)launch(?:\.ts|\.js)?$/.test(process.argv[1])) {
+  main();
+}

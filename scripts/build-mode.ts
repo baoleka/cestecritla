@@ -565,6 +565,11 @@ export interface DeployContext {
   leftovers?: readonly string[];
   /** The host the app build in dist/ was made for (its marker): it goes to that host only. */
   builtFor?: DeployTarget;
+  /**
+   * What holds back the preview host's pages whatever they ask (scripts/launch.ts,
+   * `previewPageBlockers`): the line of the privacy page about her colour (A5).
+   */
+  previewPageBlockers?: readonly string[];
 }
 
 /**
@@ -743,11 +748,15 @@ export function deployRefusal(
       `build it for this one: ${target === 'preview' ? '`npm run build:preview`' : '`npm run build`'}`
     );
   }
+  // Since the launch (14/11/2026, D16.36) a gate that stands again is a change awaiting its
+  // date — never a reason to put the holding page back, which is the withdrawal and the
+  // editor's decision (review 11, M1).
   if (target === 'apex' && mode !== 'holding' && context.launchBlockers.length > 0) {
     return (
-      'the apex serves the holding page until the launch is decided (D15.15): ' +
-      'run `npm run build:holding` first, or deploy the app with `npm run deploy:preview`. ' +
-      `Before the app can go there — ${context.launchBlockers.join(' · ')}`
+      `production does not take this app build — ${context.launchBlockers.join(' · ')}. ` +
+      'Show it on the preview host with `npm run build:preview && npm run deploy:preview -- --bench`; ' +
+      'putting the holding page back (`npm run build:holding`) is the withdrawal (D14.10), ' +
+      "the editor's decision"
     );
   }
   // The game-first home (D19.1) is written on main before production serves it — one code path,
@@ -768,7 +777,16 @@ export function deployRefusal(
   // for the new charter or a surface opened there, opened after an independent reviewer's yes on
   // the preview host. The preview host is where they are shown first; a dry run sends nothing.
   const words = context.wordsBlockers ?? [];
-  if (target === 'apex' && mode === 'app' && !context.dryRun && words.length > 0) {
+  // The scrutin build shows no explained word (src/lib/words-config.ts): the rule protects
+  // nothing there, and must not hold back the build that closes before a window (review 11,
+  // M2). The home's rule above does hold it: before his yes it would carry the new home page.
+  if (
+    target === 'apex' &&
+    mode === 'app' &&
+    !context.dryRun &&
+    !context.scrutinBuild &&
+    words.length > 0
+  ) {
     return (
       'production does not take these explained words yet (D20.15): ' +
       `${words.join(' · ')}. ` +
@@ -801,6 +819,16 @@ export function deployRefusal(
   // to the preview host alone: the apex never runs a model nobody has chosen yet.
   if (mode === 'app' && context.ask === 'bench' && target !== 'preview') {
     return 'the bench runs on the preview host only: `npm run deploy:preview -- --bench`';
+  }
+  // The line of the privacy page about her colour is read before any host shows it — the preview
+  // host first, as its own rule says (review 10, A5; D17.26). A dry run sends nothing.
+  if (
+    mode === 'app' &&
+    target === 'preview' &&
+    !context.dryRun &&
+    (context.previewPageBlockers ?? []).length > 0
+  ) {
+    return `the preview host does not take these pages yet — ${(context.previewPageBlockers ?? []).join(' · ')}`;
   }
   // The preview host is public: before its pages ask, the gates that come before any question
   // hold (scripts/launch.ts, `previewChatBlockers`). A dry run sends nothing.

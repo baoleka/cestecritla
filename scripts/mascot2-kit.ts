@@ -10,6 +10,17 @@ import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { EVOLUTIONS, FINDS, PULSE_HOLD_MS, TRICK_HOLD_MS } from '../src/lib/mascot2.js';
 
+/** A JSON file of hers, or an error that names it — never one that only quotes its bytes (A19). */
+function readNamed(path: string): unknown {
+  try {
+    return JSON.parse(readFileSync(path, 'utf8'));
+  } catch (error) {
+    throw new Error(
+      `${path} cannot be read as JSON (${error instanceof Error ? error.name : 'error'})`,
+    );
+  }
+}
+
 export const MASCOT2_SVG_PATH = 'design/mascot/v2/mascot.svg';
 export const MASCOT2_CSS_PATH = 'src/styles/mascot2.css';
 export const MASCOT2_PALETTE_PATH = 'design/mascot/v2/palette.json';
@@ -43,7 +54,7 @@ export interface PaletteFile {
 const at = (root: string, path: string): string => (root === '.' ? path : `${root}/${path}`);
 
 export function readPalette(root = '.'): PaletteFile {
-  return JSON.parse(readFileSync(at(root, MASCOT2_PALETTE_PATH), 'utf8')) as PaletteFile;
+  return readNamed(at(root, MASCOT2_PALETTE_PATH)) as PaletteFile;
 }
 
 interface TokenFile {
@@ -61,7 +72,7 @@ function sharedRoles(root: string): string[] {
   const out: string[] = [];
   for (const path of MASCOT2_TOKEN_SETS) {
     if (!existsSync(at(root, path))) continue;
-    const tokens = JSON.parse(readFileSync(at(root, path), 'utf8')) as TokenFile;
+    const tokens = readNamed(at(root, path)) as TokenFile;
     for (const [theme, roles] of Object.entries(tokens['color-role'] ?? {})) {
       for (const [role, raw] of Object.entries(roles ?? {})) {
         if (!role.startsWith('turtle-') || typeof raw !== 'string') continue;

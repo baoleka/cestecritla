@@ -156,7 +156,7 @@ void test('a blocked launch is refused at the apex, with its reasons, dry run or
       dryRun,
       launchBlockers: blockers,
     });
-    assert.match(String(refusal), /holding page until the launch is decided/);
+    assert.match(String(refusal), /production does not take this app build/);
     assert.match(String(refusal), /P0\.5/);
   }
   // The holding page is never blocked by any of this: it is also the withdrawal gesture.
@@ -245,7 +245,12 @@ void test('the files that validate themselves: missing, in place, then edited af
   );
   rmSync(empty, { recursive: true });
 
-  const words = [{ slot: 0, id: 'w000', word: 'mot', pin: { id: 'p1c1-s01-m01', sha256: 'x' } }];
+  // A round of words: below it the build hides the game, and the turtle with it (A9).
+  const words = [
+    { slot: 0, id: 'w000', word: 'mot', pin: { id: 'p1c1-s01-m01', sha256: 'x' } },
+    { slot: 1, id: 'w001', word: 'autre', pin: { id: 'p1c1-s01-m02', sha256: 'y' } },
+    { slot: 2, id: 'w002', word: 'encore', pin: { id: 'p1c1-s01-m03', sha256: 'z' } },
+  ];
   const pool = { sensitive_2025: ['c4-s01'], judged: { 'p6c1-s01': null } };
   const svg = '<svg xmlns="http://www.w3.org/2000/svg" class="mascot"/>';
   // Six colours for her flamingo, in each theme, and the neutral set's six (D17.3, D17.16).
@@ -303,6 +308,9 @@ void test('the files that validate themselves: missing, in place, then edited af
       threads_read_on: '2026-12-02',
       model_confirmed_on: '2026-12-02',
       deployment_rehearsed_on: '2026-12-01',
+      // The legal file of the chat: production asks for it as the preview host does (M4).
+      preview_legal_on: '2026-12-01',
+      preview_legal_by: 'session',
     },
     [WORDS_PATH]: {
       meta: {
@@ -324,6 +332,12 @@ void test('the files that validate themselves: missing, in place, then edited af
       highlighted: ['w000'],
       measure_only: [],
     },
+    // His word, where decisions are, on its day (review 10, A7): the list he validated, named
+    // by its fingerprint, and the sheet he dated, named by its record.
+    'docs/discovery/decisions.md': [
+      `| D30.1 | 2026-12-02 | La liste ${listFingerprint(words, pool).slice(0, 12)} est validée | **DÉCISION (utilisateur)** — « Oui » | \`data/2026/game-words.json\` | — |`,
+      '| D30.2 | 2026-12-03 | La planche est datée | **DÉCISION (utilisateur)** — « Oui, date-la » | `design/mascot/v2/validation.json` (`validated_on`) | — |',
+    ].join('\n'),
     [MASCOT2_SVG_PATH]: svg,
     [MASCOT2_CSS_PATH]: '.mascot { display: block; }',
     [MASCOT2_PALETTE_PATH]: palette,
@@ -348,6 +362,16 @@ void test('the files that validate themselves: missing, in place, then edited af
   };
   assert.match(artefactBlockers(ready).join('\n'), /mascot is not drawn or not validated/);
   stamp();
+  assert.deepEqual(artefactBlockers(ready), []);
+  // A date a session would write without his word finds no row of his, and is refused (A7).
+  const decisionsAt = join(ready, 'docs/discovery/decisions.md');
+  const rows = readFileSync(decisionsAt, 'utf8');
+  writeFileSync(decisionsAt, rows.replaceAll('**DÉCISION (utilisateur)**', '**PROPOSÉE**'));
+  assert.match(
+    artefactBlockers(ready).join('\n'),
+    /no decision of the editor on 2026-12-02 that names the list[\s\S]*no decision of the editor on 2026-12-03 that dates design\/mascot\/v2\/validation\.json/,
+  );
+  writeFileSync(decisionsAt, rows);
   assert.deepEqual(artefactBlockers(ready), []);
 
   // The line of the privacy page about her colour: re-read as it stands, and signed. A date
@@ -395,7 +419,11 @@ void test('the files that validate themselves: missing, in place, then edited af
   }
   // A palette that cannot be read is a drawing nobody can have validated — and nothing throws.
   writeFileSync(join(ready, MASCOT2_PALETTE_PATH), 'not json');
-  assert.match(artefactBlockers(ready).join('\n'), /mascot is not drawn or not validated/);
+  // Said as it is, naming the file — not as a sheet left unvalidated (A19).
+  assert.match(
+    artefactBlockers(ready).join('\n'),
+    /the mascot cannot be fingerprinted — \S*design\/mascot\/v2\/palette\.json cannot be read as JSON/,
+  );
   writeFileSync(join(ready, MASCOT2_PALETTE_PATH), JSON.stringify(palette));
   assert.deepEqual(artefactBlockers(ready), []);
   writeFileSync(
@@ -466,6 +494,8 @@ void test('the files that validate themselves: missing, in place, then edited af
     threads_read_on: '2026-12-02',
     model_confirmed_on: '2026-12-02',
     deployment_rehearsed_on: '2026-12-01',
+    preview_legal_on: '2026-12-02',
+    preview_legal_by: 'session',
   };
   const asked = (file: unknown): string => {
     writeFileSync(join(ready, ASK_PATH), JSON.stringify(file));
@@ -486,6 +516,10 @@ void test('the files that validate themselves: missing, in place, then edited af
     [{ threads_read_on: null }, /has not read the forty threads/],
     [{ model_confirmed_on: 'soon' }, /has not confirmed the model/],
     [{ deployment_rehearsed_on: null }, /has not been rehearsed on the preview host/],
+    // Every gate the preview host asks for, production asks for too (A8, M4).
+    [{ model: 'gpt-oss-120b' }, /keeps nothing of a call/],
+    [{ preview_legal_on: null }, /legal file of the chat is not done for real/],
+    [{ preview_legal_by: 'a person' }, /legal file of the chat is dated, and nothing says by whom/],
   ] as const) {
     assert.match(asked({ ...chat, ...without }), said, JSON.stringify(without));
   }
@@ -496,6 +530,8 @@ void test('the files that validate themselves: missing, in place, then edited af
     model: null,
     gists: { ...chat.gists, read_by: 'session' },
     deployment_rehearsed_on: '2026-12-01',
+    preview_legal_on: '2026-12-02',
+    preview_legal_by: 'session',
   };
   assert.equal(asked(sheet), '');
   assert.equal(asked({ ...sheet, database: { corpus_version: 'c0ffee' }, bench: null }), '');
@@ -759,62 +795,139 @@ void test('production takes the explained words of main only sealed as they stan
     String(wordsBlockersOf(changed, closed, '', today)),
     /changed since they were sealed/,
   );
-  // The new charter: its seal is written where decisions are, on its day, with its first
-  // twelve characters, by the session under its mandate…
-  const sealedTwo = {
-    meta: { charter: 2, sealed: { sha256: seal, on: '2026-11-21', by: 'session' } },
+  // The new charter: its seal is written where decisions are, on its day, with its first twelve
+  // characters, in its author's column. The session could seal under its mandate until the day
+  // it was consumed (D20.3, D20.22: 19/11/2026)…
+  const SESSION = '**DÉCISION (session, sur le mandat D20.3)**';
+  const EDITOR = '**DÉCISION (utilisateur)**';
+  const row = (id: string, on: string, content: string, status: string): string =>
+    `| ${id} | ${on} | ${content} | ${status} | — | — |`;
+  const sealedOn = (on: string, by: string): unknown => ({
+    meta: { charter: 2, sealed: { sha256: seal, on, by } },
     entries,
-  };
-  const opened = {
+  });
+  const openedOn = (on: string, by: string, id: string): Record<string, unknown> => ({
     ...closed,
-    decided_on: '2026-11-23',
-    decided_by: 'session',
-    reviewer_yes_on: '2026-11-22',
-  };
-  const sealRow = `| D20.40 | 2026-11-21 | Le sceau ${seal.slice(0, 12)} | **DÉCISION (session, sur le mandat D20.3)** | — | — |`;
-  const openRow =
-    '| D20.41 | 2026-11-23 | data/2026/words.json ouvert | **DÉCISION (session, sur le mandat D20.3)** | — | — |';
-  assert.deepEqual(wordsBlockersOf(sealedTwo, opened, `${sealRow}\n${openRow}`, today), []);
-  assert.match(String(wordsBlockersOf(sealedTwo, opened, openRow, today)), /names the seal/);
-  // …a row of another day, or without the seal, is no such row.
+    decided_on: on,
+    decided_by: by,
+    decided_in: id,
+    reviewer_yes_on: '2026-11-19',
+  });
+  const mandateRows = [
+    row('D20.40', '2026-11-19', `Le sceau ${seal.slice(0, 12)}`, SESSION),
+    row('D20.41', '2026-11-19', '`data/2026/words.json` ouvert en production', SESSION),
+  ].join('\n');
+  assert.deepEqual(
+    wordsBlockersOf(
+      sealedOn('2026-11-19', 'session'),
+      openedOn('2026-11-19', 'session', 'D20.41'),
+      mandateRows,
+      today,
+    ),
+    [],
+  );
+  // …and not a day after: from 20/11/2026 a seal and an opening are the editor's (review 10, A3).
   assert.match(
     String(
       wordsBlockersOf(
-        sealedTwo,
-        opened,
-        `${sealRow.replace('2026-11-21', '2026-11-20')}\n${openRow}`,
+        sealedOn('2026-11-21', 'session'),
+        closed,
+        row('D21.40', '2026-11-21', `Le sceau ${seal.slice(0, 12)}`, SESSION),
+        today,
+      ),
+    ),
+    /the mandate D20\.3 is consumed since D20\.22 — a seal after 2026-11-19 is the editor's/,
+  );
+  assert.match(
+    String(
+      wordsBlockersOf(
+        sealedOn('2026-11-19', 'session'),
+        openedOn('2026-11-23', 'session', 'D21.41'),
+        mandateRows,
+        today,
+      ),
+    ),
+    /the mandate D20\.3 is consumed since D20\.22 — an opening after 2026-11-19 is the editor's/,
+  );
+  // His seal and his opening, each in his column, the opening named by its decision.
+  const hisRows = [
+    row('D21.40', '2026-11-21', `Le sceau ${seal.slice(0, 12)}`, EDITOR),
+    row('D21.41', '2026-11-23', '`data/2026/words.json` ouvert en production', EDITOR),
+  ].join('\n');
+  const his = openedOn('2026-11-23', 'editor', 'D21.41');
+  assert.deepEqual(wordsBlockersOf(sealedOn('2026-11-21', 'editor'), his, hisRows, today), []);
+  // A seal row of another day, or without the seal, is no such row.
+  assert.match(
+    String(
+      wordsBlockersOf(
+        sealedOn('2026-11-21', 'editor'),
+        his,
+        hisRows.replace('| 2026-11-21 |', '| 2026-11-20 |'),
         today,
       ),
     ),
     /names the seal/,
   );
-  // …and it goes out only once opened: decided, by whom, and after the yes of a reviewer.
+  // The opening is the row its record names (review 10, A2): not a row that mentions the game's
+  // list, nor one of another day, another author, or one that is only proposed.
+  const sealed21 = sealedOn('2026-11-21', 'editor');
+  const sealRow21 = row('D21.40', '2026-11-21', `Le sceau ${seal.slice(0, 12)}`, EDITOR);
+  for (const [opening, rows] of [
+    [
+      his,
+      `${sealRow21}\n${row('D21.41', '2026-11-23', '`data/2026/game-words.json` validée', EDITOR)}`,
+    ],
+    [his, `${sealRow21}\n${row('D21.41', '2026-11-22', '`data/2026/words.json` ouvert', EDITOR)}`],
+    [his, `${sealRow21}\n${row('D21.41', '2026-11-23', '`data/2026/words.json` ouvert', SESSION)}`],
+    [
+      his,
+      `${sealRow21}\n${row('D21.41', '2026-11-23', '`data/2026/words.json` ouvert — **DÉCISION (utilisateur)**', '**PROPOSÉE**')}`,
+    ],
+    [{ ...his, decided_in: undefined }, hisRows],
+    [{ ...his, decided_in: 'D21.99' }, hisRows],
+  ] as const) {
+    assert.match(
+      String(wordsBlockersOf(sealed21, opening, rows, today)),
+      /no decision on 2026-11-23 that opens data\/2026\/words\.json — decided_in names it/,
+      rows,
+    );
+  }
+  // An amendment row is a row (A16).
+  assert.deepEqual(
+    wordsBlockersOf(
+      sealed21,
+      { ...his, decided_in: 'D21.41b' },
+      `${sealRow21}\n${row('D21.41b', '2026-11-23', '`data/2026/words.json` ouvert', EDITOR)}`,
+      today,
+    ),
+    [],
+  );
+  // It goes out only once opened: decided, by whom, on a real day of Paris since the work began,
+  // not after today (A13, A14), and after the yes of a reviewer.
   for (const missing of [
-    { ...opened, decided_on: null },
-    { ...opened, decided_by: null },
-    { ...opened, decided_by: 'quelqu’un' },
-    { ...opened, decided_on: '2026-11-30' },
-    { ...opened, decided_on: '2026-11-18' },
+    { ...his, decided_on: null },
+    { ...his, decided_by: null },
+    { ...his, decided_by: 'quelqu’un' },
+    { ...his, decided_on: '2026-11-30' },
+    { ...his, decided_on: '2026-11-18' },
+    { ...his, decided_on: '2026-11-31' },
   ]) {
     assert.match(
-      String(wordsBlockersOf(sealedTwo, missing, `${sealRow}\n${openRow}`, today)),
+      String(wordsBlockersOf(sealed21, missing, hisRows, today)),
       /only once they are opened/,
+      JSON.stringify(missing),
     );
   }
   assert.match(
-    String(
-      wordsBlockersOf(
-        sealedTwo,
-        { ...opened, reviewer_yes_on: null },
-        `${sealRow}\n${openRow}`,
-        today,
-      ),
-    ),
+    String(wordsBlockersOf(sealed21, { ...his, reviewer_yes_on: null }, hisRows, today)),
     /no independent reviewer has said yes/,
   );
-  assert.match(
-    String(wordsBlockersOf(sealedTwo, opened, sealRow, today)),
-    /opens data\/2026\/words\.json/,
+  // His word written on his day, read at half past midnight in Paris — still the day before in
+  // UTC — is his word (A13).
+  const lateNight = new Date('2026-11-22T23:30:00Z');
+  assert.deepEqual(
+    wordsBlockersOf(sealed21, { ...his, decided_on: '2026-11-23' }, hisRows, lateNight),
+    [],
   );
   // A surface opened in production asks for the same, whatever the charter.
   const surface = { ...closed, production: { pages: 'on', search: 'off', game: 'off' } };
@@ -825,25 +938,11 @@ void test('production takes the explained words of main only sealed as they stan
       {
         ...surface,
         decided_on: '2026-11-23',
-        decided_by: 'session',
+        decided_by: 'editor',
+        decided_in: 'D21.41',
         reviewer_yes_on: '2026-11-22',
       },
-      openRow,
-      today,
-    ),
-    [],
-  );
-  // The editor's own word counts, by its own mark.
-  const byHim = { ...opened, decided_by: 'editor' };
-  assert.match(
-    String(wordsBlockersOf(sealedTwo, byHim, `${sealRow}\n${openRow}`, today)),
-    /opens data\/2026\/words\.json/,
-  );
-  assert.deepEqual(
-    wordsBlockersOf(
-      sealedTwo,
-      byHim,
-      `${sealRow}\n${openRow.replace('**DÉCISION (session, sur le mandat D20.3)**', '**DÉCISION (utilisateur)**')}`,
+      hisRows,
       today,
     ),
     [],
