@@ -370,6 +370,37 @@ void test('content: nothing added since the freeze holds the 2026 text', { skip 
   );
   const built = walkDir('dist').filter((f) => !BINARY.test(f));
   const findings: string[] = [];
+  /**
+   * Where, in a JSON file, the words of an item are: the field — by the `id` of the object that
+   * holds it when there is one (« rip-13.answer ») — so that a finding in our own texts can be
+   * placed without a word of the book being printed (review 16).
+   */
+  const fieldsOf = (text: string, id: string, allowed?: ReadonlySet<string>): string[] => {
+    let data: unknown;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      return [];
+    }
+    const out: string[] = [];
+    const walk = (value: unknown, path: string): void => {
+      if (typeof value === 'string') {
+        if (scanForLeaks(value, index, allowed).some((hit) => hit.id === id)) out.push(path);
+      } else if (Array.isArray(value)) {
+        value.forEach((item, at) => {
+          walk(item, `${path}[${String(at)}]`);
+        });
+      } else if (typeof value === 'object' && value !== null) {
+        const record = value as Record<string, unknown>;
+        const named = typeof record['id'] === 'string' ? record['id'] : null;
+        for (const [key, item] of Object.entries(record)) {
+          walk(item, named === null ? `${path}.${key}` : `${named}.${key}`);
+        }
+      }
+    };
+    walk(data, '');
+    return out;
+  };
   const scan = (name: string, bytes: Buffer, allowed?: ReadonlySet<string>): void => {
     const text = textOf(bytes);
     if (text === null) {
@@ -377,7 +408,11 @@ void test('content: nothing added since the freeze holds the 2026 text', { skip 
       return;
     }
     for (const hit of scanForLeaks(text, index, allowed)) {
-      findings.push(`${name}: ${hit.id} (${String(hit.windows)} window(s))`);
+      const where = name.endsWith('.json') ? fieldsOf(text, hit.id, allowed) : [];
+      findings.push(
+        `${name}: ${hit.id} (${String(hit.windows)} window(s))` +
+          (where.length === 0 ? '' : ` — in ${where.slice(0, 3).join(', ')}`),
+      );
     }
   };
   for (const file of [...candidates, ...built]) {
@@ -530,6 +565,9 @@ void test(
       // Not committed: none is published.
     }
     const published = new Set(committed.gists.map((gist) => `${gist.id}\n${gist.text}`));
+    // What the game publishes is public: its windows are no one's secret — an earlier wording
+    // of a published sentence, nearly the same, was found « in » the file that publishes it.
+    const publicWindows = new Set<string>();
     // Read as the scanner reads a page — entities, escapes and tags undone, accents folded — so
     // that a copy escaped in HTML or JSON, or a word set in <em>, is the sentence (review 16, N8).
     const bare = (text: string): string[] =>
@@ -546,6 +584,14 @@ void test(
     /** How many windows each sentence was cut in, by its key (measure and wording). */
     const cut = new Map<string, number>();
     const label = new Map<string, string>();
+    for (const gist of committed.gists) {
+      const words = bare(gist.text);
+      for (let size = 1; size <= SIZE; size += 1) {
+        for (let at = 0; at + size <= words.length; at += 1) {
+          publicWindows.add(words.slice(at, at + size).join(' '));
+        }
+      }
+    }
     let unpublished = 0;
     for (const [id, texts] of kept) {
       for (const text of texts) {
@@ -554,12 +600,19 @@ void test(
         const words = bare(text);
         const size = Math.min(SIZE, words.length);
         if (size === 0) continue;
-        unpublished += 1;
-        sizes.add(size);
-        cut.set(key, words.length - size + 1);
-        label.set(key, id);
+        // Only the windows that are this wording's own: those a published sentence holds too
+        // are public already (and a wording with none of its own is public in substance).
+        const own: string[] = [];
         for (let at = 0; at + size <= words.length; at += 1) {
           const window = words.slice(at, at + size).join(' ');
+          if (!publicWindows.has(window)) own.push(window);
+        }
+        if (own.length === 0) continue;
+        unpublished += 1;
+        sizes.add(size);
+        cut.set(key, own.length);
+        label.set(key, id);
+        for (const window of own) {
           const holders = windows.get(window) ?? new Set<string>();
           holders.add(key);
           windows.set(window, holders);
