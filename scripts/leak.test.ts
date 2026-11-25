@@ -103,11 +103,13 @@ void test('scanner: nine words in a row are found through markup, encoding and t
     [],
   );
   // The escapes a copy may be written in: JSON's, the references of HTML (review 16, N19).
-  const escaped = [...nine]
+  const escaped = nine
+    .split('')
     .map((c) => (c === ' ' ? ' ' : `\\u${c.charCodeAt(0).toString(16).padStart(4, '0')}`))
     .join('');
   assert.ok(found(escaped).includes(victim.id), 'escaped as JSON escapes a string');
-  const referenced = [...nine]
+  const referenced = nine
+    .split('')
     .map((c) => (c === ' ' ? ' ' : `&#${String(c.codePointAt(0))};`))
     .join('');
   assert.ok(found(referenced).includes(victim.id), 'written in references of HTML');
