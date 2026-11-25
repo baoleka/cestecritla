@@ -293,6 +293,8 @@ void test('the holding build redirects every old prefix and says only what is tr
   assert.match(html, /href="\/mentions-legales\/"/);
   const notice = readFileSync('dist/mentions-legales/index.html', 'utf8');
   assert.match(notice, /Site non officiel\./);
+  // Served, and not indexed like the pages beside it (D21.41).
+  assert.match(notice, /<meta name="robots" content="noindex">/);
   // Every screen of the withdrawal says whose site it is not (the 404 too: review, P3).
   assert.match(readFileSync('dist/404.html', 'utf8'), /Site non officiel\./);
 });
