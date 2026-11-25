@@ -26,6 +26,9 @@
 const WINDOW = 9;
 const SHORT_MIN = 4;
 
+/** The token of a word that is nothing but a mark: « % », « : », « — ». */
+export const MARK = '·';
+
 /** Words as the policy counts them — split on whitespace — folded so that typography is ignored. */
 export function leakTokens(text: string): string[] {
   return (
@@ -35,13 +38,18 @@ export function leakTokens(text: string): string[] {
       .toLowerCase()
       .replace(/œ/g, 'oe')
       .replace(/æ/g, 'ae')
-      // Characters of markup and of URLs separate words (`text=Inscrire`, `"note":"Créer`);
-      // apostrophes, hyphens and the rest of punctuation vanish, so that a word of the book is one
-      // token here exactly when the policy counts it as one word.
+      // Characters of markup and of URLs separate words (`text=Inscrire`, `"note":"Créer`).
       .replace(/[="<>[\]{}|\\/#~`]+/g, ' ')
-      .replace(/[^\p{L}\p{N}\s]+/gu, '')
       .split(/\s+/u)
-      .filter((token) => token !== '')
+      .filter((word) => word !== '')
+      // Apostrophes, hyphens and the rest of punctuation vanish inside a word, so that a word of
+      // the book is one token here exactly when the policy counts it as one word — and a word
+      // that is nothing but a mark stays one: the policy counts « % » as a word, and deleting it
+      // made nine words of the book read as eight in a preview of the site (review 16, N4).
+      .map((word) => {
+        const letters = word.replace(/[^\p{L}\p{N}]+/gu, '');
+        return letters === '' ? MARK : letters;
+      })
   );
 }
 
@@ -138,7 +146,10 @@ export function readable(content: string): string {
         /…|<\/(?:p|li|blockquote|figcaption|figure|h[1-6]|div|section|td|th|dd|dt)>/gi,
         BREAK,
       )
-      .replace(/<[^>]*>/g, ' ')
+      // Real tags and comments only: a lone « < » — « p95 < 3 s », `i < n` — opened a « tag »
+      // that the next « > », a quotation mark of Markdown or an arrow, closed, and everything
+      // between was never read (review 16, N1).
+      .replace(/<!--[\s\S]*?-->|<\/?[A-Za-z][^<>]*>/g, ' ')
       .replace(/&nbsp;|&#160;|&#xa0;/gi, ' ')
       .replace(/&amp;/g, '&')
       .replace(/&#39;|&#x27;|&rsquo;|&apos;/gi, '’')

@@ -3,15 +3,18 @@
  *
  *   structure   what CI can prove without the corpus: the published files have no field a
  *               sentence could hide in, and the words they let out stay under the ceilings;
- *   content     what only the machine holding private/ can prove: no tracked file, no commit
- *               message and no built page contains nine words in a row of the 2026 edition.
- *               Skipped — and said so — where the corpus is absent.
+ *   content     what only the machine holding private/ can prove: no tracked file, no file of
+ *               a commit not yet pushed, no commit message and no built page contains nine
+ *               words in a row of the 2026 edition; no page's title or preview holds any run of
+ *               the book; and none of our sentences that the game does not publish is in a
+ *               public file. Skipped — and said so — where private/ is absent; failing, not
+ *               skipped, where private/ is and the file it reads is not (review 16, N22).
  *
  * Run: npx tsx --test scripts/leak.test.ts
  */
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, lstatSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import type { Dataset } from './aec-types.js';
@@ -23,6 +26,8 @@ import {
   validateQuotes,
 } from './aec26-publish.js';
 import type { ExposurePolicy, Manifest, PrivateCorpus, QuotesFile } from './aec26-types.js';
+import { VERDICTS_PATH, readVerdicts } from './gists-core.js';
+import { PRIVATE_CORPUS_PATH } from './ingest-2026.js';
 import {
   buildLeakIndex,
   leakTokens,
@@ -31,7 +36,9 @@ import {
   type LeakSource,
 } from './leak-scan.js';
 
-const PRIVATE_CORPUS = 'private/corpus/aec-2026.json';
+// The paths of their writers, never a copy: a path that moved turned these tests into skips,
+// and the run into a pass (review 16, N22).
+const PRIVATE_CORPUS = PRIVATE_CORPUS_PATH;
 const json = (path: string): unknown => JSON.parse(readFileSync(path, 'utf8'));
 
 // ---------------------------------------------------------------------------------------------
@@ -68,6 +75,20 @@ void test('scanner: nine words in a row are found through markup, encoding and t
     'capitals, no-break spaces',
   );
   assert.ok(found(JSON.stringify({ note: nine })).includes(victim.id), 'inside JSON');
+
+  // A word that is nothing but a mark is a word, as the policy counts it (review 16, N4).
+  const marked = buildLeakIndex(
+    [{ id: 'm', text: 'une garantie de deux % sur le patrimoine de chacun' }],
+    [],
+  );
+  assert.equal(scanForLeaks('Note : une garantie de deux % sur le patrimoine', marked).length, 0);
+  assert.equal(
+    scanForLeaks('une garantie de deux\u00a0% sur le patrimoine de chacun', marked).length,
+    1,
+  );
+  // A lone « < » before the words and a « > » after them hide nothing (review 16, N1).
+  assert.ok(found(`p95 < 3 000 ms. ${nine} => fin`).includes(victim.id), 'between < and >');
+  assert.ok(found(`for (i = 0; i < n; i += 1) { ${nine} } x => y`).includes(victim.id));
 
   // Eight words — the most an incipit or a locator may carry — are not a leak.
   assert.deepEqual(found(words.slice(0, 8).join(' ')), []);
@@ -144,21 +165,22 @@ void test('structure: the words let out are the ones declared, and under the cei
 });
 
 /**
- * Files of data/2026 whose long strings are our own words: the editorial texts a person
- * re-read, the synonyms — and the explained words (terms.json, D16.62): general knowledge an
+ * Files of data/2026 whose long strings are our own words: the editorial texts — our answers
+ * and cards, published on the editor's word without a re-reading line by line (« accepted »,
+ * D16.79) —, the synonyms, and the explained words (terms.json, D16.62): general knowledge an
  * AI wrote, with nothing of the book in it. The content gate below reads them like any other
- * file, where the private corpus is.
+ * file, where the private corpus is (review 16, N25).
  */
 const EDITORIAL = new Set(['riposte.json', 'glossary.json', 'synonyms.json', 'terms.json']);
 /** Keys allowed to hold more than eight words in the generated files. */
 const LONG_OK = new Set(['title', 'id_scheme', 'hash_rule', 'note_fr', 'attribution']);
 
 /**
- * The sentences of the game (D19.2): the one file of data/2026 that holds sentences ABOUT
- * measures of the book — our words, published for the words of the game and for them only. It
- * is not waved through with the editorial files, whose invariant is « nothing of the book in
- * it »: it has a rule of its own, right below, and the content gate reads it like any other
- * file where the private corpus is — tracked or not.
+ * The sentences of the game (D19.2): our sentences about measures of the book, one per word of
+ * the game — published for them and for them only (our answers describe measures too, in
+ * riposte.json). It is not waved through with the editorial files, whose invariant is « nothing
+ * of the book in it »: it has a rule of its own, right below, and the content gate reads it
+ * like any other file where the private corpus is — tracked since D19.22.
  */
 const GAME_SENTENCES = 'game-gists.json';
 
@@ -201,7 +223,7 @@ void test(
   {
     skip:
       !existsSync(join('data/2026', GAME_SENTENCES)) &&
-      'the sentences of the game are not on this machine yet (the editor’s go)',
+      'no file of the game’s sentences here (tracked since D19.22: a checkout without it is broken)',
   },
   () => {
     const file = json(join('data/2026', GAME_SENTENCES)) as {
@@ -228,12 +250,22 @@ void test(
       const text = String(gist['text']);
       assert.ok(text.length <= 300 && !/[\r\n]/.test(text), `${String(gist['id'])}: not one line`);
     }
-    // In `meta`, our own notice and title may be long; nothing else may.
-    for (const [key, value] of Object.entries(file.meta)) {
-      if (typeof value !== 'string' || LONG_OK.has(key)) continue;
-      const count = value.split(/\s+/).filter((w) => w !== '').length;
-      assert.ok(count <= 8, `meta.${key} holds ${String(count)} words`);
-    }
+    // In `meta`, our own notice and title may be long; nothing else may — at any depth: a
+    // nested object or list had room for a sentence the editor kept out (review 16, N16).
+    const shallow = (value: unknown, path: string, key: string): void => {
+      if (typeof value === 'string') {
+        if (path.split('.').length === 2 && LONG_OK.has(key)) return;
+        const count = value.split(/\s+/).filter((w) => w !== '').length;
+        assert.ok(count <= 8, `${path} holds ${String(count)} words`);
+      } else if (Array.isArray(value)) {
+        value.forEach((item, at) => {
+          shallow(item, `${path}[${String(at)}]`, key);
+        });
+      } else if (typeof value === 'object' && value !== null) {
+        for (const [name, item] of Object.entries(value)) shallow(item, `${path}.${name}`, name);
+      }
+    };
+    shallow(file.meta, 'meta', '');
   },
 );
 
@@ -245,15 +277,32 @@ const BINARY = /\.(png|jpe?g|gif|webp|avif|ico|woff2?|ttf|otf|pdf|zip|gz|br|mp4|
 
 function walkDir(dir: string): string[] {
   if (!existsSync(dir)) return [];
-  return readdirSync(dir).flatMap((name) => {
-    const path = join(dir, name);
-    return statSync(path).isDirectory() ? walkDir(path) : [path];
+  // Links are not followed: a dangling one threw, and a link to a directory read as a file
+  // (review 16, N24).
+  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const path = join(dir, entry.name);
+    return entry.isDirectory() ? walkDir(path) : entry.isFile() ? [path] : [];
   });
 }
 
-const skip = existsSync(PRIVATE_CORPUS)
-  ? false
-  : 'no private corpus on this machine: only the structural gate runs here';
+/**
+ * The text of a file, or null when it is not UTF-8: read as UTF-8 anyway, a UTF-16 or Latin-1
+ * file gave tokens nothing matches, and passed as clean (review 16, N18).
+ */
+function textOf(bytes: Buffer): string | null {
+  try {
+    return new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+  } catch {
+    return null;
+  }
+}
+
+// Where private/ is, the files it should hold are read, or the test fails: skipped there, it
+// passed (review 16, N22).
+const skip =
+  existsSync(PRIVATE_CORPUS) || existsSync('private')
+    ? false
+    : 'no private corpus on this machine: only the structural gate runs here';
 
 /**
  * The last commit before the 2026 edition existed (10 September 2026; the book came out on
@@ -306,20 +355,85 @@ void test('content: nothing added since the freeze holds the 2026 text', { skip 
   // The sentences of the game are written on this machine before they are tracked, and may be
   // kept out of `git status` meanwhile: they are read here whatever git says of them.
   changed.add(join('data/2026', GAME_SENTENCES));
-  const candidates = [...changed].filter((f) => f !== '' && !BINARY.test(f) && existsSync(f));
+  // Files only, links and directories aside (review 16, N24).
+  const candidates = [...changed].filter(
+    (f) => f !== '' && !BINARY.test(f) && existsSync(f) && lstatSync(f).isFile(),
+  );
+  // The pages scanned are a finished build of the app (review 16, N6): without one, or with
+  // another build in dist/, the scan of pages passed on what was there.
+  const marker = existsSync('build/last-build.json')
+    ? (json('build/last-build.json') as { mode?: unknown; complete?: unknown })
+    : null;
+  assert.ok(
+    existsSync('dist/index.html') && marker?.mode === 'app' && marker.complete === true,
+    'dist/ holds no finished build of the app: run `npm run build` first',
+  );
   const built = walkDir('dist').filter((f) => !BINARY.test(f));
   const findings: string[] = [];
+  const scan = (name: string, bytes: Buffer, allowed?: ReadonlySet<string>): void => {
+    const text = textOf(bytes);
+    if (text === null) {
+      findings.push(`${name}: not UTF-8 — nothing in it can be read, so nothing in it is known`);
+      return;
+    }
+    for (const hit of scanForLeaks(text, index, allowed)) {
+      findings.push(`${name}: ${hit.id} (${String(hit.windows)} window(s))`);
+    }
+  };
   for (const file of [...candidates, ...built]) {
-    if (statSync(file).size > 8 * 1024 * 1024) continue;
+    if (statSync(file).size > 8 * 1024 * 1024) {
+      findings.push(`${file}: over 8 MiB, not read — read it in parts, or keep it out`);
+      continue;
+    }
     const allowed =
       file === 'data/2026/quotes.json' || file.startsWith('dist/') ? quoted : undefined;
-    for (const hit of scanForLeaks(readFileSync(file, 'utf8'), index, allowed)) {
-      findings.push(`${file}: ${hit.id} (${String(hit.windows)} window(s))`);
+    scan(file, readFileSync(file), allowed);
+  }
+  // What a push publishes is commits, not the working tree: the files of every commit not yet
+  // on origin/main as committed, and the index as staged — a text committed, then rewritten
+  // before this test ran, went out unread (review 16, N2).
+  let unpushed: string[] = [];
+  try {
+    unpushed = git('rev-list', 'origin/main..HEAD')
+      .split('\n')
+      .filter((commit) => commit !== '');
+  } catch {
+    // No origin/main here: the working tree is all there is to read.
+  }
+  const blobs: [string, string][] = [];
+  for (const commit of unpushed) {
+    const paths = git(
+      'diff-tree',
+      '--no-commit-id',
+      '-r',
+      '--name-only',
+      '--diff-filter=AM',
+      '-z',
+      commit,
+    );
+    for (const path of paths.split('\0')) {
+      if (path !== '' && !BINARY.test(path))
+        blobs.push([`${path} at ${commit.slice(0, 7)}`, `${commit}:${path}`]);
     }
   }
-  for (const hit of scanForLeaks(git('log', '--format=%B', `${FREEZE}..HEAD`), index)) {
-    findings.push(`a commit message: ${hit.id} (${String(hit.windows)} window(s))`);
+  for (const path of git('diff', '--cached', '--name-only', '--diff-filter=AM', '-z').split('\0')) {
+    if (path !== '' && !BINARY.test(path)) blobs.push([`${path} (staged)`, `:${path}`]);
   }
+  for (const [name, object] of blobs) {
+    const bytes = execFileSync('git', ['show', object], { maxBuffer: 256 * 1024 * 1024 });
+    scan(name, bytes, name.startsWith('data/2026/quotes.json') ? quoted : undefined);
+  }
+  // Each message on its own: one string, a « < » in one and a « > » in another hid what lay
+  // between (review 16, N1).
+  const messages = git('log', '--format=%B%x00', `${FREEZE}..HEAD`).split('\0');
+  for (const message of messages) {
+    for (const hit of scanForLeaks(message, index)) {
+      findings.push(`a commit message: ${hit.id} (${String(hit.windows)} window(s))`);
+    }
+  }
+  // What is not read is said: images, archives and documents added since the freeze (review 16,
+  // N12) — a capture of a card, a recording of a session, read by no gate.
+  const unread = [...changed].filter((f) => f !== '' && BINARY.test(f) && existsSync(f));
   // A page's title and its link previews hold no text of the book at all (D15.7) — not even
   // what the 2025 edition already wrote, which the scan above subtracts, nor a quoted measure,
   // which it lets pass on a page: three answers put 9 to 14 words of the book in their previews
@@ -358,9 +472,18 @@ void test('content: nothing added since the freeze holds the 2026 text', { skip 
       `${String(index.covered)} of ${String(index.items)} items`,
   );
   console.log(
-    `leak gate: ${String(candidates.length)} changed file(s), ${String(built.length)} built file(s), ` +
+    `leak gate: ${String(candidates.length)} changed file(s), ${String(blobs.length)} file(s) of ` +
+      `${String(unpushed.length)} commit(s) not pushed or staged, ${String(messages.length)} ` +
+      `message(s), ${String(built.length)} built file(s) of the app, ` +
       `${String(index.shingles.size)} windows, ${String(index.covered)}/${String(index.items)} items covered`,
   );
+  if (unread.length > 0) {
+    console.log(
+      `  not read — ${String(unread.length)} image(s), archive(s) or document(s) added since the ` +
+        `freeze: look at them before a push (${unread.slice(0, 5).join(', ')}` +
+        `${unread.length > 5 ? ', …' : ''})`,
+    );
+  }
 });
 
 /**
@@ -378,48 +501,69 @@ void test('content: nothing added since the freeze holds the 2026 text', { skip 
  * l'eau, l'air, la forêt… », fourteen words that the public archive of that edition holds
  * too — is one or two windows of a sentence, not the sentence.
  */
-const VERDICTS = 'private/gists/verdicts.jsonl';
+const VERDICTS = VERDICTS_PATH;
 void test(
   'content: no tracked file, and no built file, holds a sentence of ours that the game does not publish',
-  { skip: !existsSync(VERDICTS) && 'no sentences on this machine' },
+  { skip: !existsSync(VERDICTS) && !existsSync('private') && 'no sentences on this machine' },
   () => {
-    const kept = new Map<string, string>();
-    for (const line of readFileSync(VERDICTS, 'utf8').split('\n')) {
-      if (line.trim() === '') continue;
-      const row = JSON.parse(line) as { id?: unknown; text?: unknown };
-      if (typeof row.id === 'string' && typeof row.text === 'string') kept.set(row.id, row.text);
+    // Every wording a reader kept, not the last alone: an earlier one is what a reviewer was
+    // shown (review 16, N7). Read as the tool reads the file: a last line cut short by a write
+    // under way is not a line yet (N23).
+    const kept = new Map<string, Set<string>>();
+    for (const row of readVerdicts(VERDICTS)) {
+      if (row.verdict !== 'read' || row.text === null) continue;
+      const texts = kept.get(row.id) ?? new Set<string>();
+      texts.add(row.text);
+      kept.set(row.id, texts);
     }
     assert.ok(kept.size > 1000, `only ${String(kept.size)} sentences were found`);
     const tracked = git('ls-files', '-z')
       .split('\0')
       .filter((f) => f !== '' && !BINARY.test(f) && existsSync(f));
-    // The sentences the game publishes: those of its file — once that file is in the repository.
+    // The sentences the game publishes: the (measure, sentence) pairs of its file as COMMITTED —
+    // a new wording of a measure it publishes is not published (review 16, N14).
     const gamePath = join('data/2026', GAME_SENTENCES);
-    const published = new Set<string>(
-      tracked.includes(gamePath)
-        ? (json(gamePath) as { gists: { id: string }[] }).gists.map((gist) => gist.id)
-        : [],
-    );
+    let committed: { gists: { id: string; text: string }[] } = { gists: [] };
+    try {
+      committed = JSON.parse(git('show', `HEAD:${gamePath}`)) as typeof committed;
+    } catch {
+      // Not committed: none is published.
+    }
+    const published = new Set(committed.gists.map((gist) => `${gist.id}\n${gist.text}`));
+    // Read as the scanner reads a page — entities, escapes and tags undone, accents folded — so
+    // that a copy escaped in HTML or JSON, or a word set in <em>, is the sentence (review 16, N8).
     const bare = (text: string): string[] =>
-      text
-        .normalize('NFC')
+      readable(text)
+        .normalize('NFD')
+        .replace(/\p{M}+/gu, '')
         .toLowerCase()
         .split(/[^\p{L}\p{N}]+/u)
-        .filter((word) => word !== '');
+        .filter((word) => word !== '' && word !== 'xxbreakxx');
     const SIZE = 12;
-    const windows = new Map<string, string>();
+    /** A window → every sentence that holds it: shared, it counts for each (review 16, N15). */
+    const windows = new Map<string, Set<string>>();
     const sizes = new Set<number>();
-    /** How many windows each sentence was cut in. */
+    /** How many windows each sentence was cut in, by its key (measure and wording). */
     const cut = new Map<string, number>();
-    for (const [id, text] of kept) {
-      if (published.has(id)) continue;
-      const words = bare(text);
-      const size = Math.min(SIZE, words.length);
-      if (size === 0) continue;
-      sizes.add(size);
-      cut.set(id, words.length - size + 1);
-      for (let at = 0; at + size <= words.length; at += 1) {
-        windows.set(words.slice(at, at + size).join(' '), id);
+    const label = new Map<string, string>();
+    let unpublished = 0;
+    for (const [id, texts] of kept) {
+      for (const text of texts) {
+        const key = `${id}\n${text}`;
+        if (published.has(key)) continue;
+        const words = bare(text);
+        const size = Math.min(SIZE, words.length);
+        if (size === 0) continue;
+        unpublished += 1;
+        sizes.add(size);
+        cut.set(key, words.length - size + 1);
+        label.set(key, id);
+        for (let at = 0; at + size <= words.length; at += 1) {
+          const window = words.slice(at, at + size).join(' ');
+          const holders = windows.get(window) ?? new Set<string>();
+          holders.add(key);
+          windows.set(window, holders);
+        }
       }
     }
     const found = (text: string): string[] => {
@@ -428,29 +572,54 @@ void test(
       for (const size of sizes) {
         for (let at = 0; at + size <= words.length; at += 1) {
           const window = words.slice(at, at + size).join(' ');
-          const id = windows.get(window);
-          if (id === undefined) continue;
-          const seen = hits.get(id) ?? new Set<string>();
-          seen.add(window);
-          hits.set(id, seen);
+          for (const key of windows.get(window) ?? []) {
+            const seen = hits.get(key) ?? new Set<string>();
+            seen.add(window);
+            hits.set(key, seen);
+          }
         }
       }
       // More than half of a sentence's windows: the sentence is there.
-      return [...hits].filter(([id, seen]) => seen.size * 2 > (cut.get(id) ?? 0)).map(([id]) => id);
+      return [
+        ...new Set(
+          [...hits]
+            .filter(([key, seen]) => seen.size * 2 > (cut.get(key) ?? 0))
+            .map(([key]) => label.get(key) ?? ''),
+        ),
+      ];
     };
-    // The gate can fail: a sentence that is not published, quoted and re-wrapped, is found.
-    const [sampleId, sample] = [...kept].find(([id]) => !published.has(id)) ?? ['', ''];
-    assert.deepEqual(found(`> « ${sample.replace(/ /g, '\n  ')} »`), [sampleId]);
+    // The gate can fail: every sentence that is not published, quoted and re-wrapped, escaped as
+    // HTML would, is found — only the ids that fail are printed (review 16, N15, N8).
+    const missed: string[] = [];
+    for (const [key, id] of label) {
+      const sentence = key.slice(key.indexOf('\n') + 1);
+      const wrapped = `> « ${sentence.replace(/ /g, '\n  ').replace(/'/g, '&#39;')} »`;
+      if (!found(wrapped).includes(id)) missed.push(id);
+    }
+    assert.deepEqual(
+      missed.slice(0, 10),
+      [],
+      `${String(missed.length)} sentence(s) cannot be found`,
+    );
     const findings: string[] = [];
     for (const file of [...tracked, ...walkDir('dist').filter((f) => !BINARY.test(f))]) {
-      if (statSync(file).size > 8 * 1024 * 1024) continue;
+      if (!lstatSync(file).isFile()) continue;
+      if (statSync(file).size > 8 * 1024 * 1024) {
+        findings.push(`${file}: over 8 MiB, not read`);
+        continue;
+      }
       const hits = found(readFileSync(file, 'utf8'));
       if (hits.length > 0) findings.push(`${file}: ${hits.join(', ')}`);
     }
+    // The messages of the commits too: a fix that quotes the sentence it changes (review 16, N3).
+    for (const message of git('log', '--format=%B%x00', `${FREEZE}..HEAD`).split('\0')) {
+      const hits = found(message);
+      if (hits.length > 0) findings.push(`a commit message: ${hits.join(', ')}`);
+    }
     assert.deepEqual(findings, [], 'a sentence the game does not publish is in a public file');
     console.log(
-      `sentences gate: ${String(kept.size - published.size)} of ${String(kept.size)} sentences are not published; ` +
-        `none is in ${String(tracked.length)} tracked file(s) nor in dist/`,
+      `sentences gate: ${String(unpublished)} wording(s) of ${String(kept.size)} sentences are not ` +
+        `published; none is in ${String(tracked.length)} tracked file(s), in dist/, nor in a commit message`,
     );
   },
 );

@@ -41,7 +41,7 @@ import {
   validateSelection,
   type RuleId,
 } from '../src/lib/ask-validate.js';
-import { leakTokens } from './leak-scan.js';
+import { MARK, leakTokens } from './leak-scan.js';
 
 const LIBRARY = 'p1c1-s01-k01';
 const TREES = 'p1c1-s01-m01';
@@ -451,14 +451,20 @@ void test('copy: an output is read as text, whatever shape the model gave it', (
   assert.ok(!carriesCopy(42, CANDIDATES));
 });
 
-void test('copy: words are folded exactly as the repository gate folds them', () => {
+void test('copy: words are folded exactly as the repository gate folds them, marks aside', () => {
   for (const sample of [
     'L’école, l’hôpital — et les « services publics » : 1 600 € !',
     'Sœurs et cœurs, peut-être ; aujourd’hui.',
     'text=Inscrire%20dans <p>la loi</p> {"note":"Créer"}',
   ]) {
-    assert.deepEqual(copyTokens(sample), leakTokens(sample), sample);
+    // A word that is nothing but a mark counts for the repository, not here (review 16, N4).
+    assert.deepEqual(
+      copyTokens(sample),
+      leakTokens(sample).filter((token) => token !== MARK),
+      sample,
+    );
   }
+  assert.ok(leakTokens('de 2 % sur').includes(MARK));
 });
 
 void test('opinion and person: the programme is the subject, and nobody is advised', () => {

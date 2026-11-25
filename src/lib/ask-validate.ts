@@ -183,8 +183,11 @@ function wordsOf(text: string): string[] {
 /**
  * Words folded for the copy check — the definition of scripts/leak-scan.ts (`leakTokens`), so
  * that "six words in a row" means here what "nine words in a row" means for the repository:
- * accents, case, apostrophes, hyphens and punctuation do not make two words different.
- * scripts/ask-validate.test.ts holds the two to the same output.
+ * accents, case, apostrophes, hyphens and punctuation do not make two words different. One
+ * difference, on purpose: a word that is nothing but a mark (« % », « : ») is a word for the
+ * repository, as the policy counts it (review 16, N4), and none here, where the thresholds were
+ * measured without it — the repository is the stricter of the two.
+ * scripts/ask-validate.test.ts holds the two to the same output, marks aside.
  */
 export function copyTokens(text: string): string[] {
   return text
@@ -383,7 +386,9 @@ const VOTE_ADVICE: readonly RegExp[] = [
   alone('bulletin de vote'),
 ];
 /** Any form of the word: allowed only in a sentence about a measure that uses it. */
-const VOTE_WORD = alone('vot(?:e|es|er|ez|ons|ent|ant|ée?s?|ai[st]?|aient|erai[st]?|era|erons|erez|eront|erions|eriez|eraient|ions|iez|âmes|âtes|èrent|ants?|antes?|ation|ations)');
+const VOTE_WORD = alone(
+  'vot(?:e|es|er|ez|ons|ent|ant|ée?s?|ai[st]?|aient|erai[st]?|era|erons|erez|eront|erions|eriez|eraient|ions|iez|âmes|âtes|èrent|ants?|antes?|ation|ations)',
+);
 
 /**
  * Other parties and politicians. A cited measure may name one (a law is often known by a
