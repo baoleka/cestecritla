@@ -2,8 +2,10 @@
  * Fills the private base of « Demander » (D16.6) — the one place outside this machine where
  * the text of the 2026 edition is allowed to live: a Cloudflare D1 database only the Worker
  * reads, and never serves. Since the plan of 14 November 2026 (PLAN-CHAT §3) the same base
- * holds the sentences written ahead, one per measure, each read by the editor: those are ours,
- * and they are what a route may hand out.
+ * holds the sentences written ahead, one per measure, each kept by a reader who is named with it
+ * — the session, an AI, for the 1,069 deposited on 15/11/2026 (D16.57 to D16.61); no person has
+ * read them one by one. Those are ours, and they are what a route may hand out. Since the
+ * withdrawal of 15/11/2026 the base holds no text of the book.
  *
  *   npx tsx scripts/seed-ask-2026.ts --text [--check]
  *       writes private/ask/seed-<corpus>.sql and prints what it holds (numbers only); with
@@ -62,9 +64,11 @@ import { wordsFingerprint } from '../src/lib/word-links.js';
 import type { Manifest, PrivateCorpus } from './aec26-types.js';
 import { LocalD1 } from './d1-local.js';
 import { quietEnv } from './quiet-env.js';
+import { isDay } from '../src/lib/days.js';
 import {
   ASK_CONFIG_PATH,
-  DAY,
+  EDITOR,
+  SESSION,
   controlGist,
   gameGistsFrom,
   lastVerdicts,
@@ -73,6 +77,7 @@ import {
   readBy,
   readMinOverlap,
   readVerdicts,
+  readerOf,
   recheckWith,
   VERDICTS_PATH,
   shownText,
@@ -354,7 +359,8 @@ export function gistProblems(
     seen.add(row.id);
     if (!pinned(row, measure))
       problems.push(`${row.id}: read against another state of its measure`);
-    if (!DAY.test(row.read_on)) problems.push(`${row.id}: read on no day`);
+    // A day that exists: « 2026-02-30 » had the shape (review 14, E21).
+    if (!isDay(row.read_on)) problems.push(`${row.id}: read on no day`);
     if (row.text.trim() === '') {
       problems.push(`${row.id}: no sentence`);
       continue;
@@ -446,8 +452,10 @@ export function gistsBaseProblems(
   return problems;
 }
 
-/** The whole book, cut as the leak gate cuts it; official titles are shown on purpose. */
-/** The whole book in windows, as the deposit scans a sentence — the desk and `--take` too. */
+/**
+ * The whole book in windows, cut as the leak gate cuts it — official titles are shown on
+ * purpose: what the deposit scans a sentence against, and the desk and `--take` too.
+ */
 export function leakIndexOf(corpus: PrivateCorpus): LeakIndex {
   const all = everything(corpus);
   return buildLeakIndex(
@@ -578,6 +586,12 @@ export function prepareGists(
       `control of today and holds no run of the book — ${String(Buffer.byteLength(sql))} bytes ` +
       'of SQL, sentences stopped',
   );
+  // What data/2026/ask.json must note once it is sent (`gists.sha256`, with the day and the
+  // count): said here, or the record was written from memory (review 14, E18).
+  console.log(
+    `  its fingerprint: ${gistsFingerprint(set.rows)} — ${String(set.rows.length)} sentence(s); ` +
+      `${ASK_CONFIG_PATH} notes it with the day of the deposit`,
+  );
   if (check) return { code: 0, file: null };
   mkdirSync(SEED_DIR, { recursive: true });
   const file = `${SEED_DIR}/gists-${version}.sql`;
@@ -597,12 +611,17 @@ const folded = (text: string): string =>
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase();
 
-/** True when the sentence writes the word, in the singular or the plural. A count, not a gate. */
-function writesWord(sentence: string, word: string): boolean {
+/**
+ * True when the sentence writes the word, in the singular or the plural — « local » and
+ * « locaux », « travail » and « travaux » too (review 14, E22). A count, not a gate.
+ */
+export function writesWord(sentence: string, word: string): boolean {
   const stem = folded(word).replace(/(?:s|x)$/, '');
-  return new RegExp(`(?<![a-z])${stem.replace(/[^a-z]/g, '.')}(?:s|x|aux)?(?![a-z])`).test(
-    folded(sentence),
-  );
+  const shape = (letters: string): string => letters.replace(/[^a-z]/g, '.');
+  const forms = [`${shape(stem)}(?:s|x)?`];
+  if (stem.endsWith('al')) forms.push(`${shape(stem.slice(0, -2))}aux`);
+  if (stem.endsWith('ail')) forms.push(`${shape(stem.slice(0, -3))}aux`);
+  return new RegExp(`(?<![a-z])(?:${forms.join('|')})(?![a-z])`).test(folded(sentence));
 }
 
 /**
@@ -614,9 +633,10 @@ function writesWord(sentence: string, word: string): boolean {
  * a later state of them. Every sentence passes here the checks of a deposit — its pin, the
  * control of today, no run of the book — before the file is written.
  *
- * The file is written and NOT added to the repository: its first push is the editor's accord,
- * given at that moment on the numbers this prints (CLAUDE.md). An accord already written in the
- * file is kept only if the sentences are, to the byte, the ones it was given on.
+ * The file is tracked since the editor's accord of 19/11/2026 (D19.22): written again, it is
+ * a new seal, and pushing it asks for his accord again, on the numbers this prints. An accord
+ * already written in the file is kept only if the sentences are, to the byte, the ones it was
+ * given on.
  *
  * Identifiers and numbers only: never a sentence, never a word of a measure.
  */
@@ -666,6 +686,23 @@ export function prepareGameGists(check: boolean, named: readonly string[] | null
     problems.push(`${id}: its measure moved since its sentence was read`);
   for (const problem of problems) console.error(`  ✖ ${problem}`);
   if (problems.length > 0) return 1;
+
+  // What the file says of its sentences — written and checked by an AI, read by no person —
+  // is true only while every one of them is the session's: another reader, or a sentence of
+  // the editor's, is his to word, and the file is not written (review 14, E12).
+  const verdicts = lastVerdicts(readVerdicts());
+  const others = draft.gists.filter((gist) => {
+    const verdict = verdicts.get(gist.id);
+    return verdict === undefined || readerOf(verdict) !== SESSION || verdict.writer === EDITOR;
+  });
+  if (others.length > 0) {
+    console.error(
+      `game: ${String(others.length)} sentence(s) of the game were not kept by the session ` +
+        `(${others.map((gist) => gist.id).join(', ')}): what the file says of who wrote and ` +
+        'read them is the editor’s to word — nothing was written',
+    );
+    return 1;
+  }
 
   // What the file says of its sentences is sealed with them: the validation is given on both.
   const claims = {
@@ -758,7 +795,7 @@ export function prepareGameGists(check: boolean, named: readonly string[] | null
   if (check) return 0;
   writeFileSync(GAME_GISTS_PATH, text);
   console.log(
-    `written: ${GAME_GISTS_PATH} — NOT added to the repository: its push is the editor's`,
+    `written: ${GAME_GISTS_PATH} — tracked: a new seal, whose push is the editor's accord`,
   );
   return 0;
 }

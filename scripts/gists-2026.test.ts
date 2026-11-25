@@ -119,6 +119,7 @@ import {
   switchSql,
   switchedRows,
   textWithdrawalSql,
+  writesWord,
 } from './seed-ask-2026.js';
 
 // ---------------------------------------------------------------------------------------------
@@ -2729,4 +2730,25 @@ void test('a line is never glued to one a cut write left: closed when whole, tak
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+void test('a sentence read on a day that does not exist is not deposited; a word is counted in its plural too (review 14, E21, E22)', () => {
+  const row = (read_on: string): GistRow => ({
+    id: LIBRARY,
+    text: said(LIBRARY),
+    read_on,
+    ...pinOf(measure(LIBRARY)),
+  });
+  const days = (read_on: string): string[] =>
+    gistProblems([row(read_on)], MANIFEST, { minOverlap: 0.5 }).filter((problem) =>
+      problem.includes('read on no day'),
+    );
+  assert.deepEqual(days('2026-11-15'), []);
+  for (const day of ['2026-02-30', '2026-11-31', '2026-13-01']) {
+    assert.equal(days(day).length, 1, day);
+  }
+  assert.equal(writesWord('De nouveaux locaux pour les associations.', 'local'), true);
+  assert.equal(writesWord('Les travaux commencent au printemps.', 'travail'), true);
+  assert.equal(writesWord('Un tarif social du gaz.', 'social'), true);
+  assert.equal(writesWord('Des tarifs sociaux du gaz.', 'social'), true);
 });
