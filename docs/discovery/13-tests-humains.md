@@ -1412,3 +1412,43 @@ Des modèles, pas des gens ; des images, pas des gestes ; une seule section mont
 d'IA, qui refroidit presque tous les lecteurs, reste telle quelle : elle dit vrai, et l'éditeur
 a validé sa forme pour les phrases (D19.19). La page « Exactitude » pose à de vraies personnes
 la question que cette session ne peut pas trancher (`accuracy.unverified.07`).
+
+## 11. Session 7 (25 novembre 2026, au matin, par lecteurs-agents lancés à l'aveugle) — la phrase de « wagon »
+
+> **Ce qui a été lu.** La carte « wagon » (mesure p1c3-s03-m06), en texte : le lieu officiel
+> (partie, chapitre, section), « C'est écrit là », l'étiquette « Phrase écrite et vérifiée par
+> une IA » et **une seule phrase par lecteur** — celle que servait « Demander » (« …hors
+> contrainte écologique ») ou l'une de six réécritures, toutes passées au contrôle du site
+> (aucune ne peut dire « sauf » : la règle des négations le refuse, et c'est elle qui avait
+> amené « hors »). **Lecteurs** : chacun lancé hors du dépôt, dans son propre dossier au nom
+> neutre, `--setting-sources local`, `--tools Read`, le chemin exact de chaque fichier ; deux
+> lectures — **attentive** (cinq lecteurs par phrase : Opus, Sonnet deux fois, Haiku, Fable ;
+> « dans quels cas l'obligation vaut-elle ? », « qu'est-ce qui passe avant ? ») et **personas**
+> (les sept de `eval/personas.json`, modèles du 19 novembre ; « raconte-la à un ami en quinze
+> mots », « bonne ou mauvaise pour l'environnement ? »). **82 lectures en quatre tours ; les
+> critères de chaque tour écrits avant de le lancer** ; copies, clés et critères sous
+> `private/personas/2026-11-25-wagon/`, hors du dépôt. **Ce qu'ils disent avoir reçu** : rien
+> sur le site ; 21 copies sur 82 signalent l'adresse du compte, jointe d'office (R49).
+> **Statut : HYPOTHÈSE** (des modèles, sur du texte).
+
+| Fin de la phrase | Attentifs : justes | Personas : à l'envers | Personas : condition gardée dans son sens | Personas gênés par la fin |
+|---|---|---|---|---|
+| « hors contrainte écologique » (servie jusqu'au 25/11) | 3 / 5 (2 indécis, dont un qui nomme la lecture à l'envers) | 0 / 7 | 0 / 7 | 6 / 7 |
+| « là où l'environnement le permet » | 1 / 5 (« environnement » lu comme « les alentours ») | — | — | — |
+| « dans le respect des contraintes écologiques » | 1 / 5 | — | — | — |
+| « toute contrainte écologique l'emportant sur cette obligation » | 5 / 5 | 0 / 7 | 2 / 7 | 6 / 7 |
+| « mais toute contrainte écologique passe avant » | 5 / 5 | **1 / 7** (« l'écolo passe après ») | 0 / 7 | 5 / 7 |
+| « si l'écologie le permet » | 3 / 5 | 0 / 7 | 3 / 7 | 6 / 7 (« en capture, ça se retourne contre nous ») |
+| « une contrainte écologique lève cette obligation » | 3 / 5 | 0 / 7 | 4 / 7 | 6 / 7 |
+| **« là où une contrainte écologique s'y oppose, cette obligation tombe »** | 4 / 5 | 0 / 7 | 4 / 7 | 5 / 7 |
+
+**Ce que la session en tire.** Le contresens du 19 novembre (six personas sur sept, R59) **ne se
+reproduit pas** dans ces lectures : lue sur du texte, la phrase d'alors est surtout **incomprise**
+(six sur sept), pas renversée. Quelle que soit la tournure, la condition elle-même intrigue qui
+lit vite — une écologie qui empêcherait le rail — et sept copies y voient une échappatoire ou une
+mesure affaiblie : c'est la mesure telle qu'elle est écrite. « Gênés » compte, sur une même règle,
+la fin dite bizarre, floue ou incomprise. Retenue, puis choisie par l'éditeur (D21.51) : **« là où
+une contrainte écologique s'y oppose, cette obligation tombe »** — aucun contresens, la condition
+gardée dans son sens par quatre personas sur sept (deux pour la meilleure tournure précédente).
+Une passe a compté de travers : un premier compte donnait 5 sur 7 personas gênés pour
+« …l'emportant… » ; recompté sur la même règle, 6 sur 7 (tableau ci-dessus).

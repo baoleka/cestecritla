@@ -28,7 +28,7 @@ ses pages et admettent de courts extraits, avec l'auteur et un lien vers la page
 | `words.json` | Où les mots expliqués paraissent hors de la feuille de « Demander » : les pages, la recherche, le jeu — un interrupteur par hôte (PLAN-MOTS, D20.11) | à la main |
 | `term-places.json` | Pour chaque section, les identifiants des mots expliqués (`terms.json`) que son texte emploie — aucun mot du livre, ni où, ni combien de fois (PLAN-MOTS, lot 4) | `scripts/lexicon-2026.ts --places`, sur la machine qui tient le texte |
 | `vocabulary.json` | Chaque racine de ce que le site montre — l'index du livre et nos propres textes —, jugée une fois : claire, à expliquer (et les entrées qui la tiennent), à surveiller, ou nom propre ; jugée par la session, une IA, et, pour l'index, par un autre modèle à part (PLAN-MOTS, lot 9) | `scripts/lexicon-2026.ts --vocabulary`, depuis les jugements gardés hors du dépôt |
-| `game-gists.json` | Les phrases du jeu : une phrase **de nous** par mesure où un mot du jeu est épinglé (voir « Les phrases du jeu »). **Dans ce dépôt depuis le 19 novembre 2026, sur l'accord daté de l'éditeur : quarante-trois phrases ; cinq cartes gardent leur lien seul** | `npm run gists -- --game --link-only …` |
+| `game-gists.json` | Les phrases du jeu : une phrase **de nous** par mesure où un mot du jeu est épinglé (voir « Les phrases du jeu »). **Dans ce dépôt depuis le 19 novembre 2026, sur l'accord daté de l'éditeur : quarante-trois phrases, puis quarante-quatre depuis le 25 novembre 2026 ; quatre cartes gardent leur lien seul** | `npm run gists -- --game --link-only …` |
 
 ## Vérifier une citation
 
@@ -125,11 +125,12 @@ Depuis le 18 novembre 2026 (D19.2), une carte du jeu peut montrer, sous le lieu 
   prévoit », et c'est pourtant notre résumé — une phrase pour une mesure, qui peut être
   incomplète ou imprécise. Chacune mène à la page officielle, qui seule fait foi.
 - **Combien.** Au plus une par mot du jeu — quarante-huit au plus, sur 1 069 mesures ;
-  **quarante-trois aujourd'hui**. Toutes les autres phrases restent dans une base privée et
+  **quarante-quatre aujourd'hui**. Toutes les autres phrases restent dans une base privée et
   ne sont publiées dans aucun fichier — une porte locale le tient (`scripts/leak.test.ts`).
   Une carte peut garder son lien seul (`meta.link_only`) : l'éditeur en a décidé ainsi pour
-  cinq, le 19 novembre 2026 — une phrase lue à contresens, et quatre fidèles à leur mesure
-  mais sur des sujets lourds à côté d'une mascotte.
+  quatre, le 19 novembre 2026 — fidèles à leur mesure mais sur des sujets lourds à côté d'une
+  mascotte. Une cinquième, dont la phrase était lue à contresens, a retrouvé la sienne,
+  réécrite et redéposée, le 25 novembre 2026.
 - **Comment le fichier est fait.** `npm run gists -- --game` l'écrit, en local, à partir du
   dépôt de phrases que `ask.json` nomme, et le scelle (`meta.sha256` : les phrases **et** ce
   que le fichier dit d'elles — qui les a écrites, le livre, la liste, le dépôt, les cartes

@@ -860,3 +860,22 @@ l'éditeur :
 - la boîte en forme de champ sous les trois mots, que les maquettes avaient et que l'écran
   construit n'a pas (une à deux voix de mieux, §9.8) : elle touche la règle « rien ne se tape
   à côté d'elle ».
+
+### 25 novembre 2026 — la phrase de « wagon », réécrite, redéposée, rendue à sa carte (D21.51)
+
+- **Sa demande** : « Je veux juste faire 1 (wagon). »
+- **Pourquoi « hors »** : la règle des négations du contrôle (`src/lib/ask-validate.ts`) refuse
+  « sauf », « hormis », « excepté » : la condition de la mesure (« dès lors qu'aucune contrainte
+  écologique n'existe ») avait été rendue par « hors contrainte écologique », qui se lit comme
+  « hors taxe ».
+- **Le choix** : six réécritures passées au contrôle, quatre tours de lecture à l'aveugle,
+  82 lectures, les critères écrits avant chaque tour (`13-tests-humains.md` §11, HYPOTHÈSE) ;
+  sa réponse, sur les deux tournures retenues : « …là où une contrainte écologique s'y oppose,
+  cette obligation tombe ».
+- **Fait** : verdict de la session (`npm run gists -- --take`), dépôt dans la base de production
+  (empreinte `632575bca4e7…`, 1 069 phrases, une seule change ; `--accord 2026-11-25`), phrases
+  rouvertes moins d'une minute après ; vérifié par empreinte, sans imprimer la phrase :
+  `cestecritla.fr`, `www` et l'aperçu servent la nouvelle. Le fichier du jeu rescellé avec la
+  carte « wagon » et sa phrase — quarante-quatre phrases, sceau `beef68693e92…`, son accord
+  daté (`meta.validated`) ; quatre cartes gardent leur lien seul (D19.21).
+- **Ce qui reste ouvert** : R55 et la boîte en forme de champ, ci-dessus.
