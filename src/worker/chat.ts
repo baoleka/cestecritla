@@ -101,7 +101,9 @@ export function siteFor(
   const open = mode === 'chat' && (!named || reads !== null) && campaignAllows(file, now);
   return {
     mode: open ? 'chat' : 'off',
-    model: reads,
+    // His decision for the campaign months is for the sentences: a model explains then only on
+    // a decision of its own (D21.48; review 18, X20).
+    model: campaignAllowsExplaining(file, now) ? reads : null,
     minShared: typeof minShared === 'number' ? minShared : undefined,
   };
 }
@@ -139,6 +141,21 @@ export function campaignAllows(config: unknown, now: Date): boolean {
   if (typeof decision !== 'object' || decision === null) return false;
   const { serve, decided_on: on, decided_by: by } = decision as Record<string, unknown>;
   return serve === true && by === 'editor' && typeof on === 'string' && isDay(on);
+}
+
+/**
+ * True when a model may explain at this hour, as far as the campaign goes. The editor's decision
+ * to serve the sentences during the campaign months (D16.78) is for the sentences alone: live
+ * explanations would be AI text no person read either, written on the spot — from the first
+ * hour of those months they need a decision of their own, which the file would say with the
+ * same date and hand: `campaign.explain: true` (D21.48). None is written today, and no model is
+ * named (D16.60).
+ */
+export function campaignAllowsExplaining(config: unknown, now: Date): boolean {
+  if (now.getTime() < Date.parse(CAMPAIGN_FROM)) return true;
+  if (!campaignAllows(config, now)) return false;
+  const decision = (config as Record<string, unknown>)['campaign'] as Record<string, unknown>;
+  return decision['explain'] === true;
 }
 
 /**

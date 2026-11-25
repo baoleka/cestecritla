@@ -748,3 +748,26 @@ void test('the first explanation of a Worker that has just woken costs what the 
   // …and what it is warmed on is ours: an invented sentence, never a word of the book.
   assert.match(loaded, /Un verger communal est un terrain planté/);
 });
+
+void test('his decision for the campaign months serves the sentences, and no model explains on it (D21.48)', () => {
+  const decided = { serve: true, decided_on: '2026-11-15', decided_by: 'editor' };
+  const sheet = (campaign: Record<string, unknown>) => ({
+    mode: 'chat',
+    preview_mode: 'chat',
+    model: 'mistral-small-3.1',
+    campaign,
+  });
+  const before = new Date(Date.parse(CAMPAIGN_FROM) - 1);
+  const from = new Date(CAMPAIGN_FROM);
+  // Before the campaign months, a model named may explain.
+  assert.notEqual(siteFor(sheet(decided), 'production', before).model, null);
+  // From their first hour, his decision keeps the sentences served — and closes the model.
+  const during = siteFor(sheet(decided), 'production', from);
+  assert.deepEqual([during.mode, during.model], ['chat', null]);
+  // Only a decision of its own would open it, on the same date and hand.
+  assert.notEqual(siteFor(sheet({ ...decided, explain: true }), 'production', from).model, null);
+  assert.equal(
+    siteFor(sheet({ ...decided, explain: true, decided_by: 'session' }), 'production', from).model,
+    null,
+  );
+});
