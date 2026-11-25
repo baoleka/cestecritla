@@ -158,7 +158,14 @@ async function runEngine(
       // their scripts and styles, complain about jQuery, and that says nothing about us.
       const ours = (): boolean => page.url().startsWith(origin);
       page.on('console', (message) => {
-        if (ours() && /content security policy|refused to/i.test(message.text())) {
+        // Firefox writes « Content-Security-Policy », Chromium « requires 'TrustedHTML' »
+        // (review 17, Q18): every wording counts.
+        if (
+          ours() &&
+          /content[- ]security[- ]policy|refused to|requires '?trusted|TrustedHTML|TrustedScript/i.test(
+            message.text(),
+          )
+        ) {
           violations.push(message.text());
         }
       });

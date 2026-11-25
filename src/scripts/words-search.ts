@@ -10,11 +10,12 @@
  * It draws when the search draws. A MutationObserver on the results is called once the search
  * has changed them, before the page is painted: the line and the results come in one frame, and
  * nothing moves twice. How the words are found is fetched at the first sign of a search, like
- * the index — one file, the same for everyone (D20.13). What is typed is read here, and sent
- * nowhere.
+ * the index — one file, the same for everyone (D20.13) — and the module that reads it with it:
+ * nothing of the explained words, neither their engine nor their drawing, comes with the page
+ * (PLAN-MOTS, « deux modules différés »; the line imported both, 2.4 KB at every arrival:
+ * review 17, Q21). What is typed is read here, and sent nowhere.
  */
-import { CARD_PREFIX, type TermWording } from '../lib/terms.ts';
-import { el, typographic } from './words-view.ts';
+import type { TermWording } from '../lib/terms.ts';
 import type * as Words from './words.ts';
 
 const form = document.querySelector<HTMLFormElement>('#search');
@@ -41,19 +42,22 @@ if (form && input && row && results && list && stringsNode) {
     // Results shown with words in the field, and nothing yet to read them with: an arrival by a
     // link that carries `#q=` never focuses the field, and the line never came (S10).
     if (question !== '' && (kit === null || wordings === null)) prepare();
+    const loaded = question === '' ? null : kit;
     const found =
-      kit === null || wordings === null || question === ''
-        ? []
-        : kit.named(question, wordings, cards);
+      loaded === null || wordings === null ? [] : loaded.named(question, wordings, cards);
     const first = found[0]?.entry;
     const text =
-      first === undefined ? '' : (strings.wordRow ?? '').replace('{term}', typographic(first.term));
+      first === undefined || loaded === null
+        ? ''
+        : (strings.wordRow ?? '').replace('{term}', loaded.typographic(first.term));
     if (row.textContent === text && row.hidden === (first === undefined)) return;
     row.replaceChildren();
     row.hidden = first === undefined;
-    if (first === undefined) return;
-    const card = first.id.startsWith(CARD_PREFIX) ? first.id.slice(CARD_PREFIX.length) : null;
-    const link = el('a', text);
+    if (first === undefined || loaded === null) return;
+    const card = first.id.startsWith(loaded.CARD_PREFIX)
+      ? first.id.slice(loaded.CARD_PREFIX.length)
+      : null;
+    const link = loaded.el('a', text);
     link.href = card === null ? `/mot/#mot-${first.id}` : `/mot/${card}/`;
     row.append(link);
   };

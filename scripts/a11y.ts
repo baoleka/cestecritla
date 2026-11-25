@@ -160,7 +160,11 @@ async function audit(browser: Browser, base: string): Promise<Finding[]> {
         path,
         violations: result.violations.length,
         serious: result.violations
-          .filter((v) => v.impact === 'serious' || v.impact === 'critical')
+          // A zoom capped or forbidden is « moderate » or « minor » to axe, and A2 to us: the
+          // rule of the charter has no other gate in a browser (review 17, Q19).
+          .filter(
+            (v) => v.impact === 'serious' || v.impact === 'critical' || /^meta-viewport/.test(v.id),
+          )
           .map((v) => `${v.id}(${String(v.impact)})`),
         overflow: box.sw > box.cw ? `${String(box.sw)} > ${String(box.cw)}` : null,
       });

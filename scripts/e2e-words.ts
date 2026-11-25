@@ -88,7 +88,11 @@ async function runEngine(name: string, origin: string): Promise<Outcome> {
       });
       const violations: string[] = [];
       page.on('console', (message) => {
-        if (/Content Security Policy|TrustedHTML|TrustedScript/i.test(message.text())) {
+        if (
+          /content[- ]security[- ]policy|refused to|requires '?trusted|TrustedHTML|TrustedScript/i.test(
+            message.text(),
+          )
+        ) {
           violations.push(message.text());
         }
       });

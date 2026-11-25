@@ -21,6 +21,10 @@ import {
 import { fillItem, type WordText } from './words-view.ts';
 
 export { wordItem } from './words-view.ts';
+// What the line of the search draws with, taken from here once this module has come: the line
+// imports nothing of the words with the page (src/scripts/words-search.ts; review 17, Q21).
+export { el, typographic } from './words-view.ts';
+export { CARD_PREFIX } from '../lib/terms.ts';
 
 /** Where the files of a build's words are (src/components/ChatSheet.astro). */
 export interface WordsAddresses {

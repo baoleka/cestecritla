@@ -19,6 +19,8 @@ export const CONDITIONS: readonly Condition[] = [
     options: { viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 },
   },
   { label: 'reflow 320px', options: { viewport: { width: 320, height: 640 } } },
+  // Above the one breakpoint of the site (25em): no width over 390 px was ever audited.
+  { label: 'wide 1280px', options: { viewport: { width: 1280, height: 800 } } },
   { label: 'small 320x256', options: { viewport: { width: 320, height: 256 } } },
   { label: 'dark 390px', options: { viewport: { width: 390, height: 844 }, colorScheme: 'dark' } },
   { label: 'font 130%', options: { viewport: { width: 390, height: 844 } }, rootFontPercent: 130 },

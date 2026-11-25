@@ -548,7 +548,9 @@ async function runEngine(
       view.on('pageerror', (e) => breaches.push(String(e)));
       view.on('console', (m) => {
         if (
-          /Content Security Policy|Trusted ?Types|Refused to/i.test(m.text()) &&
+          /content[- ]security[- ]policy|trusted ?types|requires '?trusted|TrustedHTML|TrustedScript|refused to/i.test(
+            m.text(),
+          ) &&
           !/duplicate/i.test(m.text())
         ) {
           breaches.push(m.text());
@@ -3904,7 +3906,12 @@ async function runEngine(
       requests.push({ url: r.url(), method: r.method(), body: r.postData() ?? '' }),
     );
     page.on('console', (m) => {
-      if (/Content Security Policy|Refused to/i.test(m.text()) && !/duplicate/i.test(m.text())) {
+      if (
+        /content[- ]security[- ]policy|refused to|requires '?trusted|TrustedHTML|TrustedScript/i.test(
+          m.text(),
+        ) &&
+        !/duplicate/i.test(m.text())
+      ) {
         violations.push(m.text());
       }
     });

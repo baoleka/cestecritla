@@ -42,6 +42,7 @@ import { askedWords } from '../src/lib/chat-local.js';
 import type { Manifest } from './aec26-types.js';
 import { loadPage } from './ask-page.js';
 import { ENGINES, STILL, checker, lateLayoutShift, report, serve, until } from './e2e-kit.js';
+import { policyProblems } from './page-policy.js';
 import type { Outcome } from './e2e-kit.js';
 
 const ROOT = 'dist-ask';
@@ -190,7 +191,11 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         void dialog.dismiss();
       });
       page.on('console', (message) => {
-        if (/content security policy|refused to/i.test(message.text()))
+        if (
+          /content[- ]security[- ]policy|refused to|requires '?trusted|TrustedHTML|TrustedScript/i.test(
+            message.text(),
+          )
+        )
           violations.push(message.text());
       });
       page.on('pageerror', (error) => violations.push(`page error: ${error.message}`));
@@ -810,7 +815,12 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       return /http-equiv="content-security-policy" content="([^"]*)"/.exec(html)?.[1] ?? '';
     };
     for (const other of ['index.html', 'sommaire/index.html', 'exactitude/index.html']) {
-      check(`${other} opens no third party`, !policyOf(other).includes('https://'));
+      const problems = policyProblems(policyOf(other));
+      check(
+        `${other} opens no third party: its policy, directive by directive`,
+        problems.length === 0,
+        problems.join(' | '),
+      );
     }
     check(
       'nothing we ship violates the Content-Security-Policy',
