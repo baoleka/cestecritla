@@ -396,12 +396,16 @@ void test('the privacy page shows what the chat adds exactly where the field ask
       ? readFileSync(file, 'utf8').replace(/&nbsp;/g, '\u00a0')
       : null;
   };
-  const quiet = askMode === 'off' ? page('dist') : null;
+  const built = page('dist');
+  const quiet = askMode === 'off' ? built : null;
+  // The page that ships, where the site asks: every line of the chat it should carry is on it —
+  // not on a test build alone (review 13, G10). Its model, or none, is the configured one.
+  const live = askMode === 'chat' ? built : null;
   // Two pages of a site that asks: with a model that explains (closed since D16.60, built for
   // its tests), and as the sheet opens — one sending, no model.
   const asking = page('dist-ask');
   const sheet = page('dist-gists');
-  if (quiet === null && asking === null && sheet === null) {
+  if (quiet === null && live === null && asking === null && sheet === null) {
     console.log('  (skipped: no build)');
     return;
   }
@@ -424,6 +428,14 @@ void test('the privacy page shows what the chat adds exactly where the field ask
         sheet.includes(text),
         withoutModel,
         `${key} on the page of the sheet without a live AI: expected ${String(withoutModel)}`,
+      );
+    }
+    if (live !== null) {
+      const expected = configuredModel() === null ? withoutModel : withModel;
+      assert.equal(
+        live.includes(text),
+        expected,
+        `${key} on the page this build ships: expected ${String(expected)}`,
       );
     }
   }

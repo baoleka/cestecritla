@@ -23,7 +23,7 @@ name: Rappel de vérification hebdomadaire de la source
 
 on:
   schedule:
-    - cron: '0 6 * * 1' # lundi 06:00 UTC
+    - cron: '0 6 * * 1' # Monday 06:00 UTC
   workflow_dispatch:
 
 permissions:
@@ -35,7 +35,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  rappel:
+  reminder:
     name: Ouvrir le rappel de la semaine
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -64,23 +64,23 @@ jobs:
             echo "du programme, en ligne depuis le 5 novembre 2026 (D15.1). Elle répond 403 aux"
             echo "runners GitHub (D14.13) : la vérification se fait **en local**."
             echo
-            echo "- [ ] **La clause de licence** des mentions légales a-t-elle changé ?"
-            echo "      Référence : \`docs/discovery/captures/2026-11-12/edition-2026/mentions-legales.txt\`"
-            echo "- [ ] **Le sommaire** a-t-il changé ? Référence : 6 parties, 23 chapitres (3-3-4-7-3-3)."
-            echo "- [ ] **Le flux** \`/feed/?post_type=lfi_programme_2026\` porte-t-il un \`lastBuildDate\`"
-            echo "      plus récent que le dernier relevé ?"
+            echo "- [ ] \`npm run watch:source -- --live\`, depuis une connexion résidentielle :"
+            echo "      cinq requêtes, six signaux (sommaire, nombre de mesures, clause de licence, flux,"
+            echo "      robots.txt, en-tête Document-Policy). Sortie 0 : rien n'a bougé ; 3 : un signal"
+            echo "      a bougé ; 1 : la source n'a pas pu être vue. Sans \`--live\`, l'outil ne relit"
+            echo "      que le dernier relevé gardé sur la machine."
+            echo "- [ ] Si la sortie est 3 : \`npm run recrawl:2026\` (35 requêtes), **avec l'accord de"
+            echo "      l'éditeur**."
             echo "- [ ] **cestecritla.fr** répond-il toujours ce qu'on croit qu'il répond ?"
             echo
-            echo "Tant que le lot B de \`docs/discovery/PLAN-EDITION-2026.md\` n'a pas livré"
-            echo "\`scripts/watch-source.ts\` et le re-crawl de l'édition 2026, ces points se relèvent"
-            echo "à la main. **Ne pas lancer \`npm run recrawl\`** : il vise l'édition 2025, que la"
-            echo "source ne sert plus."
+            echo "**Ne pas lancer \`npm run recrawl\`** : il vise l'édition 2025, que la source ne"
+            echo "sert plus."
             echo
             echo "Si quelque chose a bougé : archiver une pièce datée sous"
             echo "\`docs/discovery/captures/\` **avant** toute décision (D12.6), et ne jamais y"
             echo "commiter une page du livre — le texte de l'édition 2026 reste sous \`private/\` (D15.6)."
-          } > /tmp/rappel.md
+          } > /tmp/reminder.md
           gh issue create \
             --title "Vérification de la source — semaine du $(date -u +%Y-%m-%d)" \
-            --body-file /tmp/rappel.md \
+            --body-file /tmp/reminder.md \
             --label recrawl

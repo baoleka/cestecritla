@@ -1,4 +1,7 @@
-# Continuous integration — every gate, on every pull request (D6.5, D12.3).
+# Continuous integration — on every pull request and push to main (D6.5, D12.3): every gate of
+# CLAUDE.md that needs neither private/ nor a quiet machine, in Chromium. What stays on the
+# editor's machine: the three engines, the measures of frames and flashes (`npm run e2e:game`
+# without `--no-lab`, `npm run e2e:mascot2:motion`), and the content half of the leak gate.
 #
 # Until now .github/workflows/ held only recrawl.yml: nothing checked a pull request, and none
 # of the conformity gates the dossier describes existed anywhere but on paper.
@@ -64,8 +67,8 @@ jobs:
       - name: Build
         run: npm run build
 
-      # Gate 2 of CLAUDE.md. One command covers every test file, check-strings.test.ts included
-      # since it was renamed into the glob at 5c6ee51 — do not split it back into two arguments.
+      # Gate 2 of CLAUDE.md. One glob, scripts/*.test.ts, covers every test file — do not split
+      # it into several arguments.
       - name: Tests
         run: npm test
 
@@ -82,8 +85,10 @@ jobs:
       - name: Contrast
         run: npm run contrast
 
+      # wrangler measures the startup and never judges it (review 13, G7): the budget is read off
+      # the profile it writes, well under Cloudflare's limit of one second.
       - name: Worker startup budget
-        run: npx wrangler check startup
+        run: npx wrangler check startup && npx tsx scripts/startup-budget.ts worker-startup.cpuprofile
         env:
           CEL_DEPLOY_FROM: nothing-is-sent
 
@@ -134,8 +139,8 @@ jobs:
       - name: Deploy dry run (bench → preview host)
         run: npx tsx scripts/deploy.ts preview --bench --dry-run --outdir /tmp/wdry-bench
 
-      # The holding site (D15.4) is what the apex actually serves until launch day, and the
-      # withdrawal gesture of runbook sheet 9. It is a second build of the same tree, so it goes
+      # The holding site (D15.4) served the apex until the launch (14/11/2026, D16.36); it is the
+      # withdrawal now (D14.10, sheet 9 of 14-risques.md §4). It is a second build of the same tree, so it goes
       # through the same dist-bound gates — and through scripts/deploy.ts, the only caller of
       # wrangler, which must accept it for the apex and pick the static-only configuration.
       - name: Build (holding)
@@ -177,8 +182,9 @@ jobs:
 
       # « Demander », before any bench allows it to ship: a test build of the app as it would be
       # if the site answered questions, against a Worker that is simulated. No model runs, no
-      # neuron is spent. Typing sends nothing; the gesture sends one question; every answer of
-      # the Worker, right or wrong, becomes a page.
+      # neuron is spent. Typing sends nothing; the gesture sends once, to /api/gists, the state
+      # of the book and measure ids — never the question (D16.53); every answer of the Worker,
+      # right or wrong, becomes a page.
       - name: End to end of the ask screen (test build, simulated Worker)
         run: npm run build:ask && npx tsx scripts/e2e-ask.ts --engines chromium
 
@@ -187,12 +193,14 @@ jobs:
       - name: End to end of the sheet without a live AI (test build, simulated Worker)
         run: npm run build:gists && npx tsx scripts/e2e-sheet.ts --engines chromium
 
-      # The explained words outside the sheet (PLAN-MOTS, D20.11, D20.13), on the same test build:
-      # a folded line that fetches nothing until it is opened, then one file, under its label.
+      # The explained words outside the sheet (PLAN-MOTS, D20.11, D20.13), on the test build of
+      # the sheet (dist-gists/): a folded line that fetches nothing until it is opened, then one
+      # file, under its label.
       - name: End to end of the explained words (test build)
         run: npx tsx scripts/e2e-words.ts --engines chromium
 
-      # « Où est-ce écrit ? », on the same test build: without script, then with it — a choice is
+      # « Où est-ce écrit ? », on the ask test build (dist-ask/, built above): without script,
+      # then with it — a choice is
       # never wrong, a round sends nothing and writes nothing, and the mascot (D17.1 to D17.36)
       # changes at the end of a round only: her four passages beat by beat, « Passer », less
       # motion, her sheet, her colour, what is written and where. A shared runner is not a quiet
@@ -201,11 +209,25 @@ jobs:
       - name: End to end of the game (test build)
         run: npx tsx scripts/e2e-game.ts --engines chromium --no-lab
 
-      # The gates that judge the notices, the security policy and the words of the game read
-      # dist-ask/ when it is there: replayed now that it is, so that the half of each that needs
-      # the screen to exist is exercised too — her place in the game block among them.
+      # Gates of CLAUDE.md that need neither private/ nor a quiet machine, and that CI never ran
+      # (review 13, G13): the 48 cards and 16 round ends at five phone sizes (no tile over five
+      # lines, « Mot suivant » whole at 390 × 844), her figures as the sheet counts them, and the
+      # reading desk on an invented book.
+      - name: Sweep of the game's cards (test build)
+        run: npx tsx scripts/sweep-game.ts
+
+      - name: Her figures, state by state
+        run: npx tsx scripts/mascot2-render.ts --engines chromium
+
+      - name: End to end of the reading desk (invented book)
+        run: npx tsx scripts/e2e-gists.ts --engines chromium
+
+      # The gates that judge the notices, the security policy, the words of the game — and the
+      # rule of the deploy that refuses a test build that asks (review 13, G8) — read dist-ask/
+      # when it is there: replayed now that it is, so that the half of each that needs the
+      # screen to exist is exercised too — her place in the game block among them.
       - name: Notices, policy and words of the test build
-        run: npm run build:scrutin:test && npx tsx --test scripts/check-no-ai-mention.test.ts scripts/check-build.test.ts scripts/game-page.test.ts scripts/words-page.test.ts
+        run: npm run build:scrutin:test && npx tsx --test scripts/check-no-ai-mention.test.ts scripts/check-build.test.ts scripts/game-page.test.ts scripts/words-page.test.ts scripts/build-mode.test.ts
 
       # The parser's second opinion (D15.6): the synthetic official site — 2026 markup around the
       # 2025 text — re-read by a real DOM, and a sample of deep links followed.

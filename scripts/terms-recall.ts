@@ -76,14 +76,17 @@ export function dueFacts(file: SourcesFile, now: Date): DueFact[] {
 /** The reminder to open at `now`, or null when nothing is due. */
 export function reminderAt(file: SourcesFile, now: Date): Reminder | null {
   const due = dueFacts(file, now);
-  const first = due[0];
-  if (first === undefined) return null;
+  // Keyed on the LATEST due day: each new due day gets its own reminder, listing everything
+  // still unread — a fact of an earlier day left unread no longer hides the later ones (review
+  // 13, G4).
+  const latest = due.at(-1);
+  if (latest === undefined) return null;
   const every = String(file.meta.recheck_every_days);
   const lines = due.map(
     (fact) => `- \`${fact.id}\` — lue le ${fact.read_on} : ${fact.urls.join(' ; ')}`,
   );
   return {
-    title: `[mots-${first.due_on}] Relire les sources de ${String(due.length)} fait(s) des mots expliqués`,
+    title: `[mots-${latest.due_on}] Relire les sources de ${String(due.length)} fait(s) des mots expliqués`,
     body: [
       `Ces mots expliqués disent un fait qui peut changer — une année, une part, une durée. Leur source a été lue il y a ${every} jours ou plus (\`${SOURCES_PATH}\`) :`,
       '',

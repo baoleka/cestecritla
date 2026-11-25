@@ -46,10 +46,15 @@ void test('a fact is due ninety days after its oldest source was read, and not a
   );
 });
 
-void test('one reminder per due day: its title names the first day, its text every fact', () => {
+void test('one reminder per due day: its title names the latest day, its text every fact', () => {
   const reminder = reminderAt(FILE, new Date('2027-03-01T06:00:00Z'));
   assert.ok(reminder !== null);
-  assert.match(reminder.title, /^\[mots-2027-02-17\] /);
+  // The latest due day: a fact of an earlier day still unread does not hide this one (G4).
+  assert.match(reminder.title, /^\[mots-2027-02-23\] /);
+  const before = reminderAt(FILE, new Date('2027-02-18T06:00:00Z'));
+  assert.ok(before !== null);
+  assert.match(before.title, /^\[mots-2027-02-17\] /);
+  assert.notEqual(before.title.split(']')[0], reminder.title.split(']')[0], 'a new day, a new key');
   assert.match(reminder.body, /`seuil-de-pauvrete` — lue le 2026-11-19/);
   assert.match(reminder.body, /`asn` — lue le 2026-11-25/);
   assert.doesNotMatch(reminder.body, /scrutin-proportionnel/);

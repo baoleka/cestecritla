@@ -6,9 +6,11 @@
  * answer is a set of triggers, not a reflex. Until now the watch "rested on memory": the script
  * was named in three documents as if it existed and never did.
  *
- * One HEAD per day from the cron that already runs the re-crawl, plus one GET to look at the
- * body. Reference values are archived IN the script, measured 7-9 September 2026, so a change
- * is a diff and not a recollection.
+ * One HEAD per day from the daily cron of .github/workflows/watch.yml, plus one GET to look at
+ * the body. Reference values are archived IN the script, measured 7-9 September 2026, so a
+ * change is a diff and not a recollection — and they stay what the site WAS until someone
+ * reports what it became into REFERENCE (the issue the workflow opens says so). Every request
+ * gives up after twenty seconds (review 13, G3): a host that never answers is unreachable.
  *
  * Two rules of composure, from D12.6, that this script must not be allowed to break:
  *   - no pivot on a rumour, a screenshot or a message — only on an observed, archived signal;
@@ -19,6 +21,31 @@
  * Exit: 0 unchanged · 3 a signal changed · 1 unreachable
  */
 import { USER_AGENT } from './aec-common.js';
+
+/** How long one request may wait (review 13, G3): a silent host is unreachable, not slow. */
+const WAIT_MS = 20_000;
+
+/**
+ * The manifest a page declares, as an absolute address: a `<link>` whose `rel` holds the word
+ * « manifest », its attributes in any order, quoted or not, its address relative or not (review
+ * 13, G11). Undefined when the page declares none or the address does not parse.
+ */
+export function declaredManifest(body: string, base: string): string | undefined {
+  for (const tag of body.match(/<link\b[^>]*>/gi) ?? []) {
+    const attribute = (name: string): string | undefined => {
+      const found = new RegExp(`\\b${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, 'i').exec(
+        tag,
+      );
+      return found === null ? undefined : (found[1] ?? found[2] ?? found[3]);
+    };
+    const rel = attribute('rel');
+    const href = attribute('href');
+    if (rel === undefined || href === undefined) continue;
+    if (!rel.toLowerCase().split(/\s+/).includes('manifest')) continue;
+    return URL.canParse(href, base) ? new URL(href, base).href : undefined;
+  }
+  return undefined;
+}
 
 const URL_WATCHED = 'https://aec2027.fr/';
 
@@ -95,26 +122,32 @@ if (isMain) {
       method: 'HEAD',
       headers: { 'user-agent': USER_AGENT },
       redirect: 'follow',
+      signal: AbortSignal.timeout(WAIT_MS),
     });
     const page = await fetch(URL_WATCHED, {
       headers: { 'user-agent': USER_AGENT },
       redirect: 'follow',
+      signal: AbortSignal.timeout(WAIT_MS),
     });
+    // An error page — a 403 to the runner, a 503 of maintenance, a 429 — is the site out of
+    // reach, never the site changed (review 13, G9): it takes the path of « unreachable ».
+    if (!head.ok || !page.ok) {
+      throw new Error(`HTTP ${String(head.status)} / ${String(page.status)}`);
+    }
     const body = await page.text();
     const resolves = async (url: string): Promise<boolean> =>
       fetch(url, {
         method: 'HEAD',
         headers: { 'user-agent': USER_AGENT },
         redirect: 'follow',
+        signal: AbortSignal.timeout(WAIT_MS),
       }).then(
         (r) => r.ok,
         () => false,
       );
     const sitemap = await resolves(`${URL_WATCHED}sitemap.xml`);
     // Follow the declared manifest URL, whatever host it points at.
-    const declared = /<link\b[^>]*rel=["']?manifest["']?[^>]*href=["']([^"']+)["']/i.exec(
-      body,
-    )?.[1];
+    const declared = declaredManifest(body, page.url);
     const manifestResolves = declared === undefined ? false : await resolves(declared);
 
     const signals = compare(head.headers, body, sitemap, manifestResolves);
