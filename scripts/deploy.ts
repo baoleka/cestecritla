@@ -52,6 +52,7 @@ import {
   nearSilenceWindow,
   readAskMode,
   readBuildMarker,
+  namedModel,
   readDist,
   giveLock,
   envFileProblems,
@@ -347,7 +348,7 @@ const refusal = deployRefusal(
         workerProblems: workerProblems(),
         previewBlockers: previewChatBlockers(),
         previewPageBlockers: target === 'preview' ? previewPageBlockers() : [],
-        distProblems: distProblems(readDist('dist'), { gameFile, ask }),
+        distProblems: distProblems(readDist('dist'), { gameFile, ask, model: namedModel() }),
         gistsProblems: shownGists === null ? [] : gistsUnpublished(),
         homeBlockers: homeBlockers(),
         wordsBlockers: wordsBlockers(),
@@ -369,7 +370,11 @@ if (mode === 'holding' && target === 'preview' && !passthrough.includes('--dry-r
 const args = wranglerDeployArgs(target, mode, passthrough, ask);
 console.log(
   `deploy: ${mode} build, ${String(pages.length)} page(s) → ${target}` +
-    (mode === 'app' ? ` — questions: ${ask}` : '') +
+    (mode === 'app'
+      ? scrutinBuild
+        ? ' — the scrutin build: neither question nor game'
+        : ` — questions: ${ask}`
+      : '') +
     // Said before it goes: the neutral set is the answer to a takedown (D14.12).
     (marker.tokens === 'neutral' ? ' — NEUTRAL COLOURS' : ''),
 );

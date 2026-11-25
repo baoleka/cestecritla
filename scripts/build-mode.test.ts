@@ -679,6 +679,29 @@ void test('the preview host may ask before production does, never the other way 
   assert.equal(builtAskMode(file, marker), 'chat');
   writeFileSync(marker, '{"mode":"app"}');
   assert.equal(builtAskMode(file, marker), 'off');
+  // The scrutin build asks nothing, whatever the file says (review 9, C5).
+  says({ mode: 'chat', preview_mode: 'chat' });
+  writeFileSync(marker, '{"mode":"app","scrutin":true,"complete":true}');
+  assert.equal(builtAskMode(file, marker), 'off');
+  writeFileSync(marker, '{"mode":"app","complete":true}');
+  assert.equal(builtAskMode(file, marker), 'chat');
+  says({ mode: 'off', preview_mode: 'chat' });
+
+  // A sheet that offers a model's explanation is a test build while the file names no model
+  // (review 9, C6): by « asks » alone it looked like the real one.
+  const offering = { gameFiles: [], asks: true, offers: true };
+  assert.match(
+    distProblems(offering, { gameFile: null, ask: 'chat', model: null }).join(),
+    /offers an explanation by a model, and data\/2026\/ask\.json names none: a test build/,
+  );
+  assert.deepEqual(
+    distProblems(offering, { gameFile: null, ask: 'chat', model: 'mistral-small-3.1' }),
+    [],
+  );
+  assert.deepEqual(
+    distProblems({ ...offering, offers: false }, { gameFile: null, ask: 'chat', model: null }),
+    [],
+  );
 
   // A build that asks, made for the preview host, never reaches the apex: the directory is
   // read, and production's mode says the site answers none.
@@ -1019,13 +1042,23 @@ void test('dist/ is read, whatever the marker says: no game without its list, no
     assert.equal(deployRefusal(target, 'holding', [...HOLDING_PAGES], wrong), null);
   }
 
-  assert.deepEqual(readDist('build/does-not-exist'), { gameFiles: [], asks: false });
-  // The test builds are exactly what this refuses: they show everything, validated or not.
+  assert.deepEqual(readDist('build/does-not-exist'), {
+    gameFiles: [],
+    asks: false,
+    offers: false,
+  });
+  // The test builds are exactly what this refuses: they show everything, validated or not —
+  // and the sheet that offers a model's explanation, even where production asks (C6).
   if (existsSync('dist-ask/index.html')) {
     const test = readDist('dist-ask');
     assert.equal(test.asks, true);
+    assert.equal(test.offers, true);
     assert.equal(test.gameFiles.length, 1);
     assert.notDeepEqual(distProblems(test, off), []);
+    assert.notDeepEqual(
+      distProblems(test, { gameFile: test.gameFiles[0] ?? null, ask: 'chat', model: null }),
+      [],
+    );
   }
 });
 

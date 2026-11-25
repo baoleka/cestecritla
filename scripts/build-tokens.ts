@@ -38,18 +38,23 @@ export function pxToRem(value: string, unit: 'rem' | 'em' = 'rem'): string {
   return `${String(Number(n.toFixed(4)))}${unit}`;
 }
 
-/** Resolve `{a.b.c}` references against the token tree, following chains. */
+/**
+ * Resolve `{a.b.c}` references against the token tree, following chains. A reference that names
+ * no token stops the build: left as written, `{color.violet-200}` went into the neutral sheet,
+ * and the declaration after it was lost in every browser — `--duration-fast`, her small jump
+ * (review 17).
+ */
 export function resolveRefs(value: string, tree: { [k: string]: Json }): string {
   return value.replace(/\{([^}]+)\}/g, (_all, path: string) => {
     let node: Json = tree;
     for (const key of path.split('.')) {
-      if (!isObj(node)) return _all;
-      const next: Json | undefined = node[key];
-      if (next === undefined) return _all;
+      const next: Json | undefined = isObj(node) ? node[key] : undefined;
+      if (next === undefined) throw new Error(`tokens: {${path}} names no token`);
       node = next;
     }
     if (isObj(node) && typeof node['$value'] === 'string') return resolveRefs(node['$value'], tree);
-    return typeof node === 'string' ? resolveRefs(node, tree) : _all;
+    if (typeof node === 'string') return resolveRefs(node, tree);
+    throw new Error(`tokens: {${path}} names no value`);
   });
 }
 
@@ -238,7 +243,8 @@ export function neutralTokens(
   [k: string]: Json;
 } {
   const over: { [k: string]: Json } = { ...main };
-  for (const group of ['color', 'color-role', 'mascot-role']) {
+  // Its shadow too: the charter's points at a colour of the charter (review 17).
+  for (const group of ['color', 'color-role', 'mascot-role', 'shadow']) {
     const value = neutral[group];
     if (value !== undefined) over[group] = value;
   }

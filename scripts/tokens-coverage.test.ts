@@ -50,7 +50,10 @@ void test('every property read without a fallback is given by the charter and by
     neutral: neutralTokens(main, read('design/tokens.neutral.json')),
   };
   for (const [name, tokens] of Object.entries(sets)) {
-    const given = defined(`${buildTokensCss(tokens)}\n${buildMascotTokensCss(tokens)}`);
+    const sheet = `${buildTokensCss(tokens)}\n${buildMascotTokensCss(tokens)}`;
+    // A reference left as written breaks the declaration after it, once minified (review 17).
+    assert.doesNotMatch(sheet, /\{[a-z]/, `the ${name} set leaves a reference unresolved`);
+    const given = defined(sheet);
     const missing = [...read_].filter(([property]) => !given.has(property));
     assert.deepEqual(
       missing.map(([property, file]) => `${property} (${file})`),

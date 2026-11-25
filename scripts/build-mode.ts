@@ -146,6 +146,16 @@ export type AskDeploy = 'off' | 'chat' | 'bench';
  * The mode the committed file says for a host (src/lib/ask-mode.ts): production's unless the
  * preview host is named — it may ask first. Anything unreadable is "off": no Worker by accident.
  */
+/** The model data/2026/ask.json names — null when it names none (D16.60), or cannot be read. */
+export function namedModel(path: string = ASK_PATH): string | null {
+  try {
+    const file = JSON.parse(readFileSync(path, 'utf8')) as { model?: unknown };
+    return typeof file.model === 'string' ? file.model : null;
+  } catch {
+    return null;
+  }
+}
+
 export function readAskMode(
   path: string = ASK_PATH,
   target: DeployTarget = 'apex',
@@ -182,6 +192,9 @@ export function builtAskMode(
   path: string = ASK_PATH,
   marker: string = BUILD_MARKER,
 ): Exclude<AskDeploy, 'bench'> {
+  // The scrutin build asks nothing, whatever the file says (D16.16): read as asking, every
+  // gate failed the very build it exists to protect (review 9, C5).
+  if (readBuildScrutin(marker)) return 'off';
   return readAskMode(path, readBuildHost(marker));
 }
 
@@ -480,6 +493,12 @@ export interface DistContent {
   gameFiles: string[];
   /** The home page carries the sheet that sends a question (`id="chat-config"`). */
   asks: boolean;
+  /**
+   * …and offers an explanation by a model (`id="chat-offer"`): only a sheet built with one
+   * named — a test sheet (dist-ask/) since D16.60, which looked, by `asks` alone, like the real
+   * one (review 9, C6).
+   */
+  offers?: boolean;
 }
 
 export function readDist(dir = 'dist'): DistContent {
@@ -494,6 +513,7 @@ export function readDist(dir = 'dist'): DistContent {
           .sort()
       : [],
     asks: holds(home, 'id="chat-config"'),
+    offers: holds(home, 'id="chat-offer"'),
   };
 }
 
@@ -510,7 +530,7 @@ export function readDist(dir = 'dist'): DistContent {
  */
 export function distProblems(
   dist: DistContent,
-  expected: { gameFile: string | null; ask: AskDeploy },
+  expected: { gameFile: string | null; ask: AskDeploy; model?: string | null },
 ): string[] {
   const out: string[] = [];
   const stray = dist.gameFiles.filter((name) => name !== expected.gameFile);
@@ -527,6 +547,11 @@ export function distProblems(
   }
   if (dist.asks && (expected.ask === 'off' || expected.ask === 'bench')) {
     out.push(`dist/ sends questions, and ${ASK_PATH} says this host answers none`);
+  }
+  // A sheet that offers a model's explanation, where the file names no model: a test build —
+  // no AI answers a visitor (D16.60).
+  if (dist.offers === true && (expected.model ?? null) === null) {
+    out.push(`dist/ offers an explanation by a model, and ${ASK_PATH} names none: a test build`);
   }
   return out;
 }

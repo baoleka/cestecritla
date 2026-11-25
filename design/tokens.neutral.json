@@ -91,6 +91,16 @@
       "$description": "Ombre pleine en mode sombre."
     }
   },
+  "shadow": {
+    "block-3d": {
+      "$value": "6px 6px 0 {color.relief}",
+      "$description": "L'ombre pleine du wordmark dans la palette neutre (« relief ») : celle de la charte nommait Violet 200, absent de ce jeu — la build neutre publiait la référence telle quelle (revue 17)."
+    },
+    "block-3d-dark": {
+      "$value": "6px 6px 0 {color.relief-sombre}",
+      "$description": "La même en mode sombre (« relief-sombre »)."
+    }
+  },
   "color-role": {
     "light": {
       "bg": "{color.papier}",

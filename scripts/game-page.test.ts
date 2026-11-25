@@ -41,7 +41,7 @@ import { ROUND, type GameData } from '../src/lib/game-engine.js';
 import { KEPT_FIELDS2, STORAGE_KEY, TAB_FIELDS2 } from '../src/lib/game-state2.js';
 import { mascotMarkup } from '../src/lib/mascot2.js';
 import { STORAGE_MAP, STORAGE_STRINGS, TINT_LABEL } from '../src/lib/storage-map.js';
-import { BUILD_MARKER, builtAskMode, readBuildHost } from './build-mode.js';
+import { BUILD_MARKER, builtAskMode, readBuildHost, readBuildScrutin } from './build-mode.js';
 import { wordsFor } from '../src/lib/words-switch.js';
 import { explainedTerms } from '../src/lib/words-data.js';
 import { MASCOT2_SVG_PATH } from './mascot2-kit.js';
@@ -102,14 +102,18 @@ const appBuilt =
   existsSync(BUILD_MARKER) &&
   (JSON.parse(readFileSync(BUILD_MARKER, 'utf8')) as { mode?: string }).mode === 'app' &&
   existsSync('dist/index.html');
-const site = gameSite();
+/** The rule, on the committed files. */
+const rule = gameSite();
+// The build in dist/, read from its marker: the scrutin build shows no game, whatever this
+// process's variables say (review 9, C5).
+const site = readBuildScrutin() ? { ...rule, on: false } : rule;
 
 void test('the game is shown only when the editor validated this very list', () => {
   const file = gameWords();
   const corpus = gameSources().manifest.meta.corpus_version;
   const missing = wordsNotReady(file, corpus);
   // The committed state and the rule agree: a list that is not validated shows nothing.
-  assert.equal(site.on, missing.length === 0 || site.test);
+  assert.equal(rule.on, missing.length === 0 || rule.test);
   // Each reason is one the editor can act on.
   const validated = { on: '2026-12-01', list_sha256: file.meta.attested.list_sha256 };
   const ready = { ...file, meta: { ...file.meta, validated } };
@@ -158,9 +162,16 @@ void test(
       assert.ok(!html.includes('id="jeu"'), `${page}: the game block`);
       // Not even its styles: a page that does not show the game does not import it.
       assert.ok(!/\.g-tile|\.t-shell/.test(html), `${page}: the game’s stylesheet`);
-      // And no page claims a storage that this build never writes.
-      assert.ok(!html.includes(STORAGE_KEY), `${page}: names the game’s storage key`);
-      assert.ok(!html.includes('id="erase-all"'), `${page}: offers to erase what is never written`);
+      // And no page claims a storage that this build never writes — the scrutin build may: a
+      // phone holds the memory of the game played before the freeze, and the gesture that
+      // erases it stays within reach (D16.16).
+      if (!site.writes) {
+        assert.ok(!html.includes(STORAGE_KEY), `${page}: names the game’s storage key`);
+        assert.ok(
+          !html.includes('id="erase-all"'),
+          `${page}: offers to erase what is never written`,
+        );
+      }
       assert.ok(
         !html.includes('id="mots-du-jeu"'),
         `${page}: counts the words of a game not shown`,

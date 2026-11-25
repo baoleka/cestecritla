@@ -139,6 +139,19 @@ jobs:
       - name: Deploy dry run (bench → preview host)
         run: npx tsx scripts/deploy.ts preview --bench --dry-run --outdir /tmp/wdry-bench
 
+      # The build deployed before each silence window of 2027 (D16.16), in dist/ as it will go
+      # out: every gate that reads dist/ judges it for what it is — it asks nothing and plays
+      # nothing — and scripts/deploy.ts takes it for the apex (review 9, C5: CI never built it,
+      # and the gates failed it).
+      - name: Build (scrutin)
+        run: npm run build:scrutin
+
+      - name: Tests (on the scrutin build)
+        run: npm test
+
+      - name: Deploy dry run (scrutin → apex)
+        run: npx tsx scripts/deploy.ts apex --dry-run --outdir /tmp/wdry-scrutin
+
       # The holding site (D15.4) served the apex until the launch (14/11/2026, D16.36); it is the
       # withdrawal now (D14.10, sheet 9 of 14-risques.md §4). It is a second build of the same tree, so it goes
       # through the same dist-bound gates — and through scripts/deploy.ts, the only caller of
