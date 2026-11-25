@@ -878,4 +878,16 @@ l'éditeur :
   `cestecritla.fr`, `www` et l'aperçu servent la nouvelle. Le fichier du jeu rescellé avec la
   carte « wagon » et sa phrase — quarante-quatre phrases, sceau `beef68693e92…`, son accord
   daté (`meta.validated`) ; quatre cartes gardent leur lien seul (D19.21).
+- **Portes** (commit `ea5a1e3`) : toutes vertes — types, contraste, lint, a11y, e2e, « Demander », le jeu, le
+  balayage des 48 cartes à cinq tailles, les mots, la feuille, la build « scrutin », le bureau de lecture,
+  766 tests ; l'anti-fuite sur le commit (elle ne tient pour publiée qu'une phrase du jeu commitée).
+- **L'aperçu** : `npm run build:preview && npm run deploy:preview -- --bench`, version `f87feb89` ; vérifié
+  en ligne : 1 397 fichiers sur 1 400 identiques à la build (les trois écarts connus), le fichier du jeu
+  sert 44 cartes avec une phrase, « wagon » comprise ; sonde de « Demander » : 48 « ok » dans trois moteurs,
+  dont « le fret ferroviaire et le wagon isolé ».
+- **La production** : `npm run build && npm run deploy`, le 25/11/2026 à 9 h 06 (8 h 06 UTC), Worker
+  `cestecritla` version `cdea6b7d` ; vérifié en ligne sur `cestecritla.fr` et `www` : 1 397 fichiers sur
+  1 400 identiques à la build, 44 cartes avec une phrase ; sonde de « Demander » : 48 « ok » dans trois moteurs sur l'apex,
+  16 sur `www`. Retour arrière, sa décision : l'étiquette locale `prod-avant-wagon` (`70ff4da`) ;
+  pour la base, un verdict de plus et un dépôt, ou Time Travel de D1 (sept jours).
 - **Ce qui reste ouvert** : R55 et la boîte en forme de champ, ci-dessus.

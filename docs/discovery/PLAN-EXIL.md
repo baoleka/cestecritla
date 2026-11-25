@@ -190,7 +190,7 @@ L'approbation de ce plan vaut aussi son accord pour deux gestes, qui seront cons
   - La sonde de la feuille : 257 « ok », aucun échec.
 - **Écrit.** `data/launch.json` : `home.serving` nomme `6a09927`. L'état du projet est dans `CLAUDE.md`, R72 au registre, une ligne dans `data/2026/NOTICE.md`.
 - **Ce qui reste.**
-  - **Le chiffre de 2013**, proposé et non retenu (D21.10) : « En 2013, la hausse de l'impôt sur les revenus du capital a fait partir moins de 350 foyers de plus par an, sur les 385 000 du 1 % le plus riche » (communiqué du CAE du 25/07/2025). C'est la meilleure réponse au point le plus fort du lecteur hostile ; à reproposer à part.
+  - **Le chiffre de 2013**, proposé et non retenu (D21.10) : « En 2013, la hausse de l'impôt sur les revenus du capital a fait partir moins de 350 foyers de plus par an, sur les 385 000 du 1 % le plus riche » (communiqué du CAE du 25/07/2025). C'est la meilleure réponse au point le plus fort du lecteur hostile ; à reproposer à part. **Reproposé le 25/11/2026, avec la phrase de « wagon » : « Je veux juste faire 1 (wagon). » — pas retenu cette fois non plus.**
   - **Ce qu'aucune vérification ne couvre** : de vrais lecteurs, de vrais téléphones, la réaction d'un économiste hostile en chair et en os. HYPOTHÈSE.
 
 ### 23 novembre 2026, au soir — « On cherche dans le programme… » sans fin (R73)
