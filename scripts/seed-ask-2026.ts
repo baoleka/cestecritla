@@ -28,6 +28,10 @@
  *       takes the text of the book OUT of the base, and leaves the sentences as they are:
  *       once they are written nothing reads the text there any more (PLAN-CHAT §7). The text
  *       stays on this machine; depositing it again is `--text`.
+ *   npx tsx scripts/seed-ask-2026.ts --withdraw-gists --remote <database> --accord <YYYY-MM-DD>
+ *       takes the sentences OUT of the base — the third gesture of the withdrawal of the site
+ *       (D21.36, runbook sheet 9 of 14-risques.md §4): they stay on this machine, and
+ *       depositing them again is `--gists`.
  *
  * One mode per command, and nothing else on the line: a flag the tool does not know, a flag
  * without its value, `--flag=value`, a word alone, a flag written twice, or two modes at once
@@ -245,6 +249,19 @@ export function textWithdrawalSql(): string {
 // ---------------------------------------------------------------------------------------------
 // The sentences written ahead (PLAN-CHAT §3)
 // ---------------------------------------------------------------------------------------------
+
+/**
+ * Takes the sentences OUT of a base, at the withdrawal of the site — the base was promised
+ * « vidée au retrait du site » (D16.6), and the editor chose to keep that promise (D21.36): their
+ * description first, the switch with it, so that a route finds none and answers "local"; then
+ * their rows. The table stays, empty, as the text's does. The sentences stay on this machine
+ * (private/gists/), and a deposit puts them back. Not a row, not a key of the text is touched.
+ */
+export function gistsWithdrawalSql(): string {
+  return [`DELETE FROM meta WHERE key IN (${keyList(GIST_KEYS)});`, 'DELETE FROM gists;'].join(
+    '\n',
+  );
+}
 
 /**
  * The fingerprint of a set of sentences: its rows in the order of their identifiers, each as
@@ -832,8 +849,15 @@ function send(
 
 /** The flags of the tool: those that take a value, and those that stand alone. */
 const VALUED = ['--remote', '--env', '--accord', '--switch', '--what'] as const;
-const ALONE = ['--text', '--gists', '--withdraw-text', '--check', '--fewer'] as const;
-const MODES = ['--text', '--gists', '--withdraw-text', '--switch'] as const;
+const ALONE = [
+  '--text',
+  '--gists',
+  '--withdraw-text',
+  '--withdraw-gists',
+  '--check',
+  '--fewer',
+] as const;
+const MODES = ['--text', '--gists', '--withdraw-text', '--withdraw-gists', '--switch'] as const;
 
 /**
  * The command line, read strictly (review 14, E1, E3, E6): what it cannot read is said, and
@@ -869,9 +893,12 @@ export function readCommand(
   if (flags.has('--what') && mode !== '--switch') return '--what goes with --switch';
   if (flags.has('--remote') && check) return '--check sends nothing: drop --remote';
   if (flags.has('--remote') && mode === null) {
-    return 'name what to send: --text, --gists, --withdraw-text or --switch';
+    return 'name what to send: --text, --gists, --withdraw-text, --withdraw-gists or --switch';
   }
-  if ((mode === '--switch' || mode === '--withdraw-text') && !flags.has('--remote')) {
+  if (
+    (mode === '--switch' || mode === '--withdraw-text' || mode === '--withdraw-gists') &&
+    !flags.has('--remote')
+  ) {
     return `${mode} acts on the base: --remote <database>`;
   }
   return { flags, mode };
@@ -894,7 +921,8 @@ function main(): void {
 
   if (read.mode === null) {
     console.error(
-      'seed: name the mode — --text [--check], --gists [--check], --withdraw-text or --switch ' +
+      'seed: name the mode — --text [--check], --gists [--check], --withdraw-text, ' +
+        '--withdraw-gists or --switch ' +
         '(see the head of this file)',
     );
     process.exitCode = 2;
@@ -948,6 +976,29 @@ function main(): void {
     writeFileSync(file, `${textWithdrawalSql()}\n`);
     console.log('withdrawal of the text: its rows and its keys — the sentences are left alone');
     process.exitCode = send(file, 'the withdrawal of the text', remote, env, value('--accord'));
+    return;
+  }
+
+  if (args.includes('--withdraw-gists')) {
+    if (remote === undefined) {
+      console.error('usage: --withdraw-gists --remote <database> --accord <YYYY-MM-DD>');
+      process.exitCode = 2;
+      return;
+    }
+    mkdirSync(SEED_DIR, { recursive: true });
+    const file = `${SEED_DIR}/withdraw-gists.sql`;
+    writeFileSync(file, `${gistsWithdrawalSql()}\n`);
+    console.log(
+      'withdrawal of the sentences: their rows and their keys — the text is left alone, and the ' +
+        'sentences stay on this machine (private/gists/)',
+    );
+    process.exitCode = send(
+      file,
+      'the withdrawal of the sentences',
+      remote,
+      env,
+      value('--accord'),
+    );
     return;
   }
 

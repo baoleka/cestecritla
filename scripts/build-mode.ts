@@ -608,6 +608,8 @@ export interface BuildMarker {
   host: DeployTarget;
   /** Written by a build whose every step succeeded (scripts/build.ts): its last act. */
   complete: boolean;
+  /** A holding build of a re-edition (`npm run build:update`, D21.37), not of a withdrawal. */
+  update: boolean;
 }
 
 /**
@@ -631,6 +633,7 @@ export function readBuildMarker(marker: string = BUILD_MARKER): BuildMarker | nu
     scrutin: record['scrutin'] === true,
     host: record['host'] === 'preview' ? 'preview' : 'apex',
     complete: record['complete'] === true,
+    update: record['update'] === true,
   };
 }
 

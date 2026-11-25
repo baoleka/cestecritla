@@ -23,14 +23,36 @@ import { t } from '../../lib/strings.ts';
 /** The 2026 book. Answers 200; the 2025 URL now redirects to it (observed 12/11/2026). */
 const BOOK_URL = 'https://melenchon2027.fr/programme/livre/';
 
-const description = 'Site non officiel. Ce site est retiré.';
+/**
+ * The same frame serves two moments, each with the editor's own words: the withdrawal (D21.17)
+ * and a re-edition of the programme, while the site is brought up to date (D21.37) —
+ * `npm run build:update`. A withdrawn site does not say it is updating; an updating one does
+ * not say it is withdrawn.
+ */
+const updating = process.env.CEL_HOLDING === 'update';
+const said = updating
+  ? 'L’Avenir en commun a été réédité. Ce site se met à jour.'
+  : 'Ce site est retiré.';
+const description = `Site non officiel. ${said}`;
 ---
 
 <Base title="C'est écrit là" description={description} noindex>
   <p class="label">Site non officiel.</p>
   <h1>C’est écrit là</h1>
-  <p>Ce site est retiré.</p>
-  <p><cite>L’Avenir en commun</cite> se lit sur le site officiel.</p>
+  {
+    updating ? (
+      <p>
+        <cite>L’Avenir en commun</cite> a été réédité. Ce site se met à jour.
+      </p>
+    ) : (
+      <>
+        <p>Ce site est retiré.</p>
+        <p>
+          <cite>L’Avenir en commun</cite> se lit sur le site officiel.
+        </p>
+      </>
+    )
+  }
   <p>
     <a class="cta" href={BOOK_URL} rel="noopener noreferrer">Lire le programme sur melenchon2027.fr</a>
   </p>

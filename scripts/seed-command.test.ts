@@ -33,6 +33,8 @@ void test('a slip of the keyboard is refused before anything is read — never t
     [['--text', 'preview'], /stands alone/],
     [['--text', '--remote', 'a', '--remote', 'b'], /written twice/],
     [['--withdraw-text', '--accord', D], /acts on the base: --remote/],
+    [['--withdraw-gists', '--accord', D], /acts on the base: --remote/],
+    [['--withdraw-gists', '--gists', '--remote', 'db'], /one mode per command/],
     [['--fewer'], /--fewer goes with --gists/],
   ];
   for (const [args, reason] of refused) {
@@ -67,6 +69,8 @@ void test('the documented commands read as they are written', () => {
       '--switch',
     ],
     [['--remote', 'db', '--withdraw-text', '--accord', D], '--withdraw-text'],
+    // The third gesture of the withdrawal (D21.36).
+    [['--withdraw-gists', '--remote', 'db', '--accord', D], '--withdraw-gists'],
   ];
   for (const [args, mode] of modes) {
     const read = readCommand(args);

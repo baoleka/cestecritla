@@ -19,6 +19,7 @@ import {
   appRedirects,
   holdingRedirects,
   htmlPages,
+  readBuildMarker,
   readBuildMode,
 } from './build-mode.js';
 
@@ -279,10 +280,15 @@ void test('the holding build redirects every old prefix and says only what is tr
   }
   assert.match(html, /Site non officiel\./, 'the independence label is never cut');
   assert.match(html, /href="https:\/\/melenchon2027\.fr\/programme\/livre\/"/, 'official link');
-  // The editor's text of a withdrawal, and nothing of the holding page of September (D21.17):
-  // a withdrawn site does not say it is updating.
-  assert.match(html, /Ce site est retiré\./);
-  assert.doesNotMatch(html, /se met à jour|pour l’instant|édition 2025/);
+  // The editor's words for each moment (D21.17, D21.37): a withdrawn site does not say it is
+  // updating, an updating one does not say it is withdrawn.
+  if (readBuildMarker()?.update === true) {
+    assert.match(html, /a été réédité\. Ce site se met à jour\./);
+    assert.doesNotMatch(html, /retiré|pour l’instant|édition 2025/);
+  } else {
+    assert.match(html, /Ce site est retiré\./);
+    assert.doesNotMatch(html, /se met à jour|pour l’instant|édition 2025/);
+  }
   // The legal notice stays served, and the page leads to it (D21.18) — with the label too.
   assert.match(html, /href="\/mentions-legales\/"/);
   const notice = readFileSync('dist/mentions-legales/index.html', 'utf8');

@@ -133,6 +133,7 @@ const swallowed = swallowedFlags([
   '--fast',
   '--neutral',
   '--holding',
+  '--update',
   '--ask-test',
   '--scrutin',
   '--host',
@@ -150,6 +151,7 @@ const { values: given } = parseArgs({
     fast: { type: 'boolean' },
     neutral: { type: 'boolean' },
     holding: { type: 'boolean' },
+    update: { type: 'boolean' },
     'ask-test': { type: 'string' },
     scrutin: { type: 'boolean' },
     host: { type: 'string' },
@@ -162,6 +164,13 @@ const fast = given.fast === true;
 const neutral = given.neutral === true;
 /** The holding site (D15.4): astro.config.ts switches its source tree on CEL_BUILD. */
 const mode: BuildMode = given.holding === true ? 'holding' : 'app';
+/**
+ * The page of a re-edition (D21.37): the holding build with the editor's words for a site that
+ * is being brought up to date, not withdrawn — runbook sheet 6 of 14-risques.md §4.
+ */
+const update = given.update === true;
+if (update && mode !== 'holding')
+  throw new Error('--update is a holding build: --holding --update');
 /**
  * The sheet of « Demander », for its tests: `--ask-test chat` builds into dist-ask/ the sheet
  * with a model that explains (closed since D16.60); `--ask-test gists` builds into dist-gists/
@@ -257,6 +266,7 @@ execFileSync('npx', ['--no-install', 'astro', 'build', '--outDir', outDir], {
     // it stands, validated or not. It goes to dist-ask/, which nothing deploys.
     CEL_GAME_TEST: askTest === null ? '' : '1',
     CEL_SCRUTIN: scrutin ? '1' : '',
+    CEL_HOLDING: update ? 'update' : '',
     CEL_HOST: host === 'preview' ? 'preview' : '',
   },
 });
@@ -283,6 +293,7 @@ if (askTest === null) {
       mode,
       ...(scrutin ? { scrutin: true } : {}),
       ...(host === 'preview' ? { host } : {}),
+      ...(update ? { update: true } : {}),
       complete: true,
     })}\n`,
   );
@@ -294,7 +305,9 @@ const label = scrutin
   : askTest !== null
     ? `build:ask (${askTest})`
     : mode === 'holding'
-      ? 'build:holding'
+      ? update
+        ? 'build:update'
+        : 'build:holding'
       : fast
         ? 'build:fast'
         : 'build';

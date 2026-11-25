@@ -44,7 +44,7 @@ import { siteFor } from '../src/worker/chat.js';
 import type { Manifest } from './aec26-types.js';
 import { CHAT_CONFIG } from './build-mode.js';
 import { parseJsonc } from './jsonc.js';
-import { gistsSql, switchSql } from './seed-ask-2026.js';
+import { gistsSql, gistsWithdrawalSql, switchSql } from './seed-ask-2026.js';
 
 const ORIGIN = 'https://beta.cestecritla.fr';
 const manifest = JSON.parse(readFileSync('data/2026/manifest.json', 'utf8')) as Manifest;
@@ -352,6 +352,18 @@ void test('the Worker built from the committed file does, on each host, what tha
       environment,
     );
   }
+});
+
+void test('the withdrawal of the sentences empties the base: every route answers « local » (D21.36)', async () => {
+  const worker = await start(await bundle(sheet), 'preview', { salt: SALT });
+  await worker.sql(OPEN);
+  const asked = { corpus: CORPUS, ids: [IDS[0]] };
+  assert.equal(((await worker.post('/api/gists', asked)).body as { kind: string }).kind, 'gists');
+  for (const statement of gistsWithdrawalSql().split('\n')) await worker.sql(statement);
+  assert.deepEqual((await worker.post('/api/gists', asked)).body, LOCAL);
+  // Reopening finds no switch: nothing comes back without a new deposit.
+  await worker.sql(OPEN);
+  assert.deepEqual((await worker.post('/api/gists', asked)).body, LOCAL);
 });
 
 void test('in the clear, nothing is read: a request by plain HTTP is refused before anything else', async () => {
