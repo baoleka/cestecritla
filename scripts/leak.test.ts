@@ -174,6 +174,14 @@ void test('structure: the words let out are the ones declared, and under the cei
 const EDITORIAL = new Set(['riposte.json', 'glossary.json', 'synonyms.json', 'terms.json']);
 /** Keys allowed to hold more than eight words in the generated files. */
 const LONG_OK = new Set(['title', 'id_scheme', 'hash_rule', 'note_fr', 'attribution']);
+/**
+ * Keys whose values run without a space and say nothing of the book: an address and its
+ * anchor, a slug, a locator (the 4 to 8 words a link carries, encoded), a pattern of the
+ * sheet's lists (review 16, N13).
+ */
+const NO_SPACE_OK = new Set(['url', 'anchor', 'slug', 'locator', 'asking']);
+/** What stands for a space when a sentence is disguised as one word. */
+const SPACES = /[\s\u200B-\u200D\u2060\uFEFF_+·]+/u;
 
 /**
  * The sentences of the game (D19.2): our sentences about measures of the book, one per word of
@@ -189,10 +197,22 @@ void test('structure: no generated file of data/2026 has room for a sentence', (
     if (EDITORIAL.has(name) || name === GAME_SENTENCES) continue;
     const walk = (value: unknown, path: string, key: string): void => {
       if (typeof value === 'string') {
-        const words = value.split(/\s+/).filter((w) => w !== '').length;
+        const words = value.split(SPACES).filter((w) => w !== '').length;
         const isQuote = name === 'quotes.json' && key === 'text';
         if (words > 8 && !LONG_OK.has(key) && !isQuote) {
           assert.fail(`${name}: ${path} holds ${String(words)} words`);
+        }
+        // Without any space at all, a long string is room for a sentence written another way.
+        if (
+          !/\s/u.test(value) &&
+          value.length > 60 &&
+          !NO_SPACE_OK.has(key) &&
+          !LONG_OK.has(key) &&
+          !isQuote &&
+          !/^https?:\/\//.test(value) &&
+          !/^[0-9a-f]+$/.test(value)
+        ) {
+          assert.fail(`${name}: ${path} holds ${String(value.length)} characters and no space`);
         }
         return;
       }
@@ -347,6 +367,29 @@ void test('content: nothing added since the freeze holds the 2026 text', { skip 
   );
 
   const quoted = new Set(quotes.quotes.map((q) => q.id));
+  // A quoted measure stands whole on the pages that quote it, and nowhere else under dist/ —
+  // every built file let all of them through (review 16, N11).
+  const slugOf = new Map(
+    (json('data/2026/riposte.json') as { entries: { id: string; slug: string }[] }).entries.map(
+      (entry) => [entry.id, entry.slug],
+    ),
+  );
+  const quotedOn = new Map<string, Set<string>>();
+  for (const quote of quotes.quotes) {
+    for (const use of quote.used_by) {
+      const [kind = '', ref = ''] = use.split(':');
+      const page =
+        kind === 'mot'
+          ? `dist/mot/${ref}/index.html`
+          : kind === 'riposte'
+            ? `dist/r/${slugOf.get(ref) ?? ref}/index.html`
+            : null;
+      if (page === null) continue;
+      const on = quotedOn.get(page) ?? new Set<string>();
+      on.add(quote.id);
+      quotedOn.set(page, on);
+    }
+  }
   // Everything that is new or changed since the freeze, committed or not.
   const changed = new Set([
     ...git('diff', '--name-only', '-z', FREEZE).split('\0'),
@@ -421,7 +464,11 @@ void test('content: nothing added since the freeze holds the 2026 text', { skip 
       continue;
     }
     const allowed =
-      file === 'data/2026/quotes.json' || file.startsWith('dist/') ? quoted : undefined;
+      file === 'data/2026/quotes.json'
+        ? quoted
+        : file.startsWith('dist/')
+          ? (quotedOn.get(file) ?? new Set<string>())
+          : undefined;
     scan(file, readFileSync(file), allowed);
   }
   // What a push publishes is commits, not the working tree: the files of every commit not yet
@@ -509,11 +556,36 @@ void test('content: nothing added since the freeze holds the 2026 text', { skip 
     ...corpus.sections.map((s) => s.title),
   ]);
   const HEAD =
-    /<title>([^<]*)<\/title>|<meta (?:name|property)="(?:description|og:title|og:description|twitter:title|twitter:description)" content="([^"]*)"/g;
+    /<title>([^<]*)<\/title>|<meta (?:name|property)="(?:description|og:title|og:description|og:image:alt|twitter:title|twitter:description|twitter:image:alt)" content="([^"]*)"/g;
   // What a page's title and previews say, out of their tags: the scanner reads a page without
-  // its tags, and a preview lives in one.
-  const headOf = (html: string): string =>
-    [...html.matchAll(HEAD)].map((match) => match[1] ?? match[2] ?? '').join('\n');
+  // its tags, and a preview lives in one — and what it tells the machines that make previews
+  // and results, its JSON-LD, but the names of the book and of its author (review 16, N10).
+  const headOf = (html: string): string => {
+    const said = [...html.matchAll(HEAD)].map((match) => match[1] ?? match[2] ?? '');
+    for (const block of html.matchAll(
+      /<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g,
+    )) {
+      const walk = (value: unknown): void => {
+        if (typeof value === 'string') {
+          if (!/^https?:\/\//.test(value)) said.push(value);
+        } else if (Array.isArray(value)) {
+          value.forEach(walk);
+        } else if (typeof value === 'object' && value !== null) {
+          const record = value as Record<string, unknown>;
+          const identity = record['@type'] === 'Book' || record['@type'] === 'Organization';
+          for (const [key, item] of Object.entries(record)) {
+            if (!(identity && key === 'name')) walk(item);
+          }
+        }
+      };
+      try {
+        walk(JSON.parse(block[1] ?? ''));
+      } catch {
+        said.push(block[1] ?? '');
+      }
+    }
+    return said.join('\n');
+  };
   // The control goes the way of a page: a window that only the subtraction of the 2025 edition
   // hides, planted in a preview, is found.
   const shared = [...headIndex.shingles.keys()].find((window) => !index.shingles.has(window));
@@ -608,6 +680,16 @@ void test(
         .split(/[^\p{L}\p{N}]+/u)
         .filter((word) => word !== '' && word !== 'xxbreakxx');
     const SIZE = 12;
+    // The windows of the archive of 2025 are public too: a list of nouns the book wrote then is
+    // no secret of ours, whoever holds it (review 16, N9).
+    for (const file of git('ls-tree', '-r', '--name-only', FREEZE, '--', 'data')
+      .split('\n')
+      .filter((path) => path.endsWith('.json'))) {
+      const words = bare(git('show', `${FREEZE}:${file}`));
+      for (let at = 0; at + SIZE <= words.length; at += 1) {
+        publicWindows.add(words.slice(at, at + SIZE).join(' '));
+      }
+    }
     /** A window → every sentence that holds it: shared, it counts for each (review 16, N15). */
     const windows = new Map<string, Set<string>>();
     const sizes = new Set<number>();
@@ -662,11 +744,12 @@ void test(
           }
         }
       }
-      // More than half of a sentence's windows: the sentence is there.
+      // Two of a sentence's own windows — thirteen of its words in a row — or its only one: the
+      // sentence is there. More than half let 72 % of a sentence through (review 16, N9).
       return [
         ...new Set(
           [...hits]
-            .filter(([key, seen]) => seen.size * 2 > (cut.get(key) ?? 0))
+            .filter(([key, seen]) => seen.size >= Math.min(2, cut.get(key) ?? 0))
             .map(([key]) => label.get(key) ?? ''),
         ),
       ];

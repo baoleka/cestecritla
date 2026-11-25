@@ -38,8 +38,12 @@ export function leakTokens(text: string): string[] {
       .toLowerCase()
       .replace(/œ/g, 'oe')
       .replace(/æ/g, 'ae')
-      // Characters of markup and of URLs separate words (`text=Inscrire`, `"note":"Créer`).
-      .replace(/[="<>[\]{}|\\/#~`]+/g, ' ')
+      // Characters of markup and of URLs separate words (`text=Inscrire`, `"note":"Créer`) —
+      // and what stands for a space where a sentence is disguised as one word: `_`, `+`, `·`,
+      // the characters of no width (review 16, N13, N19). Stricter than the control of our
+      // sentences (src/lib/ask-validate.ts), which never meets them: the gate of the repository
+      // is the stricter of the two.
+      .replace(/[="<>[\]{}|\\/#~`_+·\u200B-\u200D\u2060\uFEFF]+/g, ' ')
       .split(/\s+/u)
       .filter((word) => word !== '')
       // Apostrophes, hyphens and the rest of punctuation vanish inside a word, so that a word of
@@ -123,6 +127,60 @@ export function buildLeakIndex(corpus: readonly LeakSource[], known: readonly st
 /** A token no sentence contains: windows cannot span it. */
 const BREAK = ' xxbreakxx ';
 
+/**
+ * What a tag says in words: its attributes meant to be read — an image's text, a title, a label,
+ * a description, a value, our data — each a block of its own. Addresses are not: a link's own
+ * words are its locator, which the policy lets out (review 16, N5).
+ */
+const URL_ATTRIBUTES = new Set([
+  'href',
+  'src',
+  'srcset',
+  'action',
+  'formaction',
+  'data-fragment',
+  'xlink:href',
+  'style',
+  'class',
+  'id',
+  'rel',
+  'type',
+]);
+function attributeText(tag: string): string {
+  const values: string[] = [];
+  for (const attr of tag.matchAll(/\s([\w:.-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g)) {
+    if (URL_ATTRIBUTES.has((attr[1] ?? '').toLowerCase())) continue;
+    values.push(attr[2] ?? attr[3] ?? '');
+  }
+  return values.length === 0 ? ' ' : `${BREAK}${values.join(BREAK)}${BREAK}`;
+}
+
+/** The escapes of JSON and the references of HTML a copy may be written in (review 16, N19). */
+function unescaped(text: string): string {
+  return (
+    text
+      .replace(/\\u([0-9a-fA-F]{4})/g, (_match, hex: string) =>
+        String.fromCharCode(Number.parseInt(hex, 16)),
+      )
+      .replace(
+        /&#x([0-9a-fA-F]+);|&#(\d+);/g,
+        (whole, hex: string | undefined, dec: string | undefined) => {
+          const code =
+            hex === undefined ? Number.parseInt(dec ?? '', 10) : Number.parseInt(hex, 16);
+          return Number.isInteger(code) && code > 0 && code <= 0x10ffff
+            ? String.fromCodePoint(code)
+            : whole;
+        },
+      )
+      // An accented letter written as a reference: the accent is folded away anyway.
+      .replace(/&([a-zA-Z])(?:acute|grave|circ|uml|cedil|tilde|ring);/g, '$1')
+      .replace(/&(?:oe|OE)lig;/g, 'oe')
+      .replace(/&(?:ae|AE)lig;/g, 'ae')
+      .replace(/&(?:laquo|raquo|ldquo|rdquo|lsquo|bdquo|quot);/g, ' ')
+      .replace(/&hellip;/g, '…')
+  );
+}
+
 /** Makes percent-encoded text and HTML readable as words before they are compared. */
 export function readable(content: string): string {
   let text = content;
@@ -136,6 +194,7 @@ export function readable(content: string): string {
       }
     });
   }
+  text = unescaped(text);
   return (
     text
       // An ellipsis and the end of a block are where a quotation STOPS. Without a marker there,
@@ -149,7 +208,9 @@ export function readable(content: string): string {
       // Real tags and comments only: a lone « < » — « p95 < 3 s », `i < n` — opened a « tag »
       // that the next « > », a quotation mark of Markdown or an arrow, closed, and everything
       // between was never read (review 16, N1).
-      .replace(/<!--[\s\S]*?-->|<\/?[A-Za-z][^<>]*>/g, ' ')
+      .replace(/<!--[\s\S]*?-->|<\/?[A-Za-z][^<>]*>/g, (tag) =>
+        tag.startsWith('<!--') ? ' ' : attributeText(tag),
+      )
       .replace(/&nbsp;|&#160;|&#xa0;/gi, ' ')
       .replace(/&amp;/g, '&')
       .replace(/&#39;|&#x27;|&rsquo;|&apos;/gi, '’')

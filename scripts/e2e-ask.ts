@@ -38,6 +38,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import type { Page, Route } from 'playwright';
+import { parseChatRequest, parseGistsRequest } from '../src/lib/chat-contract.js';
 import { askedWords } from '../src/lib/chat-local.js';
 import type { Manifest } from './aec26-types.js';
 import { loadPage } from './ask-page.js';
@@ -150,6 +151,15 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     const escaped: string[] = [];
     const requested: string[] = [];
     const posted = { gists: [] as string[], chat: [] as string[] };
+    /** What the Worker's own readers would refuse: answered here as it would be, a 400 (review 19). */
+    const refused: string[] = [];
+    const readAs = <T>(body: string, parse: (value: unknown) => T | null): T | null => {
+      try {
+        return parse(JSON.parse(body) as unknown);
+      } catch {
+        return null;
+      }
+    };
     const violations: string[] = [];
     const dialogs: string[] = [];
 
@@ -167,13 +177,22 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
         if (url === `${origin}/api/gists`) {
           const body = request.postData() ?? '';
           posted.gists.push(body);
-          const ids = (JSON.parse(body) as { ids?: string[] }).ids ?? [];
-          return fulfil(gistsAnswer(ids));
+          const asked = readAs(body, parseGistsRequest);
+          if (asked === null || asked.corpus !== corpus) {
+            refused.push(`/api/gists: ${body.slice(0, 120)}`);
+            return route.fulfill({ status: 400, body: '' });
+          }
+          return fulfil(gistsAnswer(asked.ids));
         }
         if (url === `${origin}/api/chat`) {
           const body = request.postData() ?? '';
           posted.chat.push(body);
-          return fulfil(chatAnswer((JSON.parse(body) as { follow?: unknown }).follow));
+          const asked = readAs(body, parseChatRequest);
+          if (asked === null || asked.corpus !== corpus) {
+            refused.push(`/api/chat: ${body.slice(0, 120)}`);
+            return route.fulfill({ status: 400, body: '' });
+          }
+          return fulfil(chatAnswer(asked.follow));
         }
         if (url.startsWith(origin)) return route.continue();
         if (url.startsWith(OFFICIAL) && request.resourceType() === 'document') {
@@ -229,9 +248,13 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
     // --- 1. before any gesture
     await page.goto(`${origin}/`);
     await until(page, "!document.querySelector('#ask').disabled");
-    const stored = await page.evaluate<string>(
-      'JSON.stringify([Object.keys(localStorage), Object.keys(sessionStorage)])',
-    );
+    // What is kept on the phone: both storages and their values, the bases, the caches, the
+    // cookies — the names of the keys alone let a question kept for a year through (review 19).
+    const stores = (): Promise<string> =>
+      page.evaluate<string>(
+        "(async () => JSON.stringify({ local: Object.entries(localStorage), session: Object.entries(sessionStorage), bases: typeof indexedDB.databases === 'function' ? (await indexedDB.databases()).map((base) => base.name) : [], caches: typeof caches === 'undefined' ? [] : await caches.keys(), cookie: document.cookie }))()",
+      );
+    const stored = await stores();
     const hint = await text('#search-hint');
     check(
       'the notice names an AI and its model before the first use',
@@ -761,11 +784,14 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
 
     // --- 7. nothing written on the phone; the thread emptied, the sheet closed and reopened
     check(
-      'after a whole conversation nothing was written: no storage, no address',
-      (await page.evaluate<string>(
-        'JSON.stringify([Object.keys(localStorage), Object.keys(sessionStorage)])',
-      )) === stored && page.url() === `${origin}/`,
+      'after a whole conversation nothing was written: no storage, no base, no cache, no cookie, no address',
+      (await stores()) === stored && page.url() === `${origin}/`,
       page.url(),
+    );
+    check(
+      'every request to the Worker is one its readers read: nothing a page should not send',
+      refused.length === 0,
+      refused.slice(0, 3).join(' | '),
     );
     check(
       'no page says the programme does not speak of something',
@@ -929,13 +955,15 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
           answered.length === 0,
           answered.join(','),
         );
-        const box: { sw: number; cw: number; sheet: number } = await view.evaluate(
-          "({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth, sheet: document.querySelector('#chat-sheet').scrollWidth - document.querySelector('#chat-sheet').clientWidth })",
+        // The conversation scrolls in a box of its own: what overflows there moves neither
+        // number of the page nor the sheet's (review 19).
+        const box: { sw: number; cw: number; sheet: number; scroll: number } = await view.evaluate(
+          "({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth, sheet: document.querySelector('#chat-sheet').scrollWidth - document.querySelector('#chat-sheet').clientWidth, scroll: document.querySelector('#chat-scroll').scrollWidth - document.querySelector('#chat-scroll').clientWidth })",
         );
         check(
-          `the sheet does not overflow at ${label}`,
-          box.sw <= box.cw && box.sheet <= 0,
-          `${String(box.sw)} > ${String(box.cw)} / ${String(box.sheet)}`,
+          `the sheet does not overflow at ${label}, nor the conversation inside it`,
+          box.sw <= box.cw && box.sheet <= 0 && box.scroll <= 0,
+          `${String(box.sw)} > ${String(box.cw)} / ${String(box.sheet)} / ${String(box.scroll)}`,
         );
         await audited.close();
       }

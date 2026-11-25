@@ -35,6 +35,7 @@ import {
   type GistsDeps,
   CAMPAIGN_FROM,
   campaignAllows,
+  explainedOutput,
   siteFor,
 } from '../src/worker/chat.js';
 import { MODELS, keepsNothing } from '../src/worker/models.js';
@@ -138,22 +139,27 @@ const GISTS: readonly (readonly [string, string])[] = [
   ],
 ];
 
-function base(options: { gists?: string; corpus?: string } = {}): LocalD1 {
+function base(options: { gists?: string; corpus?: string; text?: boolean } = {}): LocalD1 {
   const db = new LocalD1();
   db.exec(SCHEMA);
+  // The text of the book: what the base held before 15/11/2026. `text: false` is the base as
+  // production holds it since — sentences, and no line of the book (review 18, X30).
+  const withText = options.text ?? true;
   const measure = db.db.prepare(
     'INSERT INTO propositions (id, section_id, kind, ord, text, lead) VALUES (?, ?, ?, ?, ?, ?)',
   );
   MEASURES.forEach(([id, text], ord) => {
-    measure.run(id, id.replace(/-[km]\d{2}$/, ''), 'measure', ord, text, '');
+    if (withText) measure.run(id, id.replace(/-[km]\d{2}$/, ''), 'measure', ord, text, '');
   });
   const gist = db.db.prepare(
     'INSERT INTO gists (id, text, measure_sha256, read_on) VALUES (?, ?, ?, ?)',
   );
   for (const [id, text] of GISTS) gist.run(id, text, 'a'.repeat(64), '2026-11-20');
   const meta = db.db.prepare('INSERT INTO meta (key, value) VALUES (?, ?)');
-  meta.run('corpus_version', CORPUS);
-  meta.run('ask', 'stopped');
+  if (withText) {
+    meta.run('corpus_version', CORPUS);
+    meta.run('ask', 'stopped');
+  }
   meta.run('gists', options.gists ?? 'open');
   meta.run('gists_corpus', options.corpus ?? CORPUS);
   return db;
@@ -764,6 +770,15 @@ void test('what the routes of the chat do not contain: the reader of the book, a
   const body = direct.slice(0, direct.indexOf('\n}\n'));
   assert.match(body, /returnRawResponse: true/);
   assert.doesNotMatch(body, /gateway|GATEWAY|cacheTtl|skipCache/);
+  // …and it calls the model itself: a helper between them would be read by nothing above, and
+  // the handler of the chat names no gateway either (review 18, X15).
+  assert.match(
+    body,
+    /\bconst ai = env\.AI as unknown as\b[\s\S]*?\bawait ai\.run\(model\.id, request, \{/,
+    'runDirect calls the model itself',
+  );
+  const handler = index.slice(index.indexOf('async function handleChat'));
+  assert.doesNotMatch(handler.slice(0, handler.indexOf('\n}\n')), /gateway|cacheTtl|skipCache/i);
   assert.match(index, /run: \(body\) =>[^,]*runDirect\(env, model, body\)/);
   // Both routes: same origin, one reader of bodies, the rate limiter, and no other reader.
   for (const [route, parser, lane] of [
@@ -943,4 +958,70 @@ void test('a threshold of the control from the file is a whole number from 1, or
   for (const wrong of [0, -3, 0.5, 1e9, '2', null]) {
     assert.equal(siteFor(sheet(wrong), 'production', at).minShared, undefined, String(wrong));
   }
+});
+
+void test('the threshold of the file reaches the control: what siteFor reads is what answerChat holds (review 18, X21)', async () => {
+  const at = new Date(Date.parse(CAMPAIGN_FROM) - 1);
+  const sheet = (min_shared: number) => ({
+    mode: 'chat',
+    preview_mode: 'chat',
+    model: null,
+    min_shared,
+  });
+  // The explanation shares a few words with the sentences on the screen: enough at 1, not at 20.
+  const usual = chatHarness({ minShared: siteFor(sheet(1), 'production', at).minShared });
+  assert.equal((await answerChat(CHAT_REQUEST, usual.deps)).kind, 'explain');
+  const strict = chatHarness({ minShared: siteFor(sheet(20), 'production', at).minShared });
+  assert.deepEqual(await answerChat(CHAT_REQUEST, strict.deps), QUIET);
+});
+
+void test('a follow-up goes through answerChat to the instruction, and only when it is asked (review 18, X22)', async () => {
+  const written = (calls: { request: Record<string, unknown> }, follow: string): boolean =>
+    JSON.stringify(calls.request).includes(JSON.stringify(follow).slice(1, -1));
+  for (const follow of FOLLOW_UPS) {
+    const { deps, calls } = chatHarness();
+    await answerChat({ ...CHAT_REQUEST, follow }, deps);
+    assert.ok(written(calls, FOLLOW[follow]), `${follow}: not in what the model is asked`);
+    for (const other of FOLLOW_UPS.filter((key) => key !== follow)) {
+      assert.ok(!written(calls, FOLLOW[other]), `${follow}: asks « ${other} » too`);
+    }
+  }
+  const first = chatHarness();
+  await answerChat(CHAT_REQUEST, first.deps);
+  for (const follow of FOLLOW_UPS) assert.ok(!written(first.calls, FOLLOW[follow]), follow);
+});
+
+void test('the model is handed the words as our sentence writes them, accents and endings (review 18, X29)', async () => {
+  // The page sends the index's own form of a word (« ecole »): the Worker finds, in our
+  // sentence, how it is written there (« écoles ») — the fixture's two words were spelled the
+  // same both ways, and the rule could not fail.
+  const { deps, calls } = chatHarness();
+  await answerChat(
+    { ...CHAT_REQUEST, words: askedWords('les écoles financées', ON_SCREEN), cards: [] },
+    deps,
+  );
+  const asked = JSON.stringify(calls.request);
+  assert.ok(asked.includes('écoles'), asked.slice(0, 300));
+  assert.doesNotMatch(asked, /\becole\b/);
+});
+
+void test('what the bench returns of an explanation is its sentences, or a marker — never the raw output (review 18, X31)', () => {
+  assert.deepEqual(explainedOutput(EXPLANATION), EXPLANATION);
+  assert.deepEqual(explainedOutput(JSON.stringify(EXPLANATION)), EXPLANATION);
+  for (const raw of [
+    'Voici une explication en prose, que personne ne doit lire.',
+    { phrases: EXPLANATION.phrases, note: 'une clé de plus' },
+    { answer: 'Une explication.' },
+    null,
+    42,
+  ]) {
+    assert.deepEqual(explainedOutput(raw), { unreadable: true }, JSON.stringify(raw));
+  }
+});
+
+void test('the base as production holds it — sentences, no line of the book — gives the same sentences (review 18, X30)', async () => {
+  const before = await answerGists(GISTS_REQUEST, gistsHarness().deps);
+  const now = await answerGists(GISTS_REQUEST, gistsHarness({ db: base({ text: false }) }).deps);
+  assert.deepEqual(now, before);
+  assert.equal(now.kind, 'gists');
 });

@@ -879,7 +879,9 @@ function main(): void {
   }
   const decision = blockers.filter((line) => line.startsWith('the launch has not been decided'));
   const rest = blockers.filter((line) => !line.startsWith('the launch has not been decided'));
-  console.log(`launch: ${String(rest.length)} thing(s) missing before the decision itself`);
+  console.log(
+    `launch: ${String(rest.length)} thing(s) missing${decision.length > 0 ? ' before the decision itself' : ''}`,
+  );
   for (const line of rest) console.log(`  - ${line}`);
   for (const line of decision) console.log(`  · ${line}`);
   for (const line of home) console.log(`  · ${line}`);
@@ -1004,9 +1006,15 @@ export function wordsBlockersOf(
         `docs/discovery/decisions.md: no decision on ${String(on)} that opens ${WORDS_SWITCH_PATH} — decided_in names it`,
       );
     }
-    if (!wordsSaidSince(field(words, 'reviewer_yes_on'), today)) {
+    const yes = field(words, 'reviewer_yes_on');
+    if (!wordsSaidSince(yes, today)) {
       out.push(
         `${WORDS_SWITCH_PATH}: no independent reviewer has said yes on the preview host — reviewer_yes_on (D20.15)`,
+      );
+    } else if (typeof on === 'string' && typeof yes === 'string' && yes > on) {
+      // The yes comes first: three texts say the opening followed it (review 10, A15).
+      out.push(
+        `${WORDS_SWITCH_PATH}: the reviewer said yes on ${yes}, after the opening of ${on} — reviewer_yes_on`,
       );
     }
   }
