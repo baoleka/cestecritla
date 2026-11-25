@@ -499,12 +499,14 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       explained,
     );
     check(
-      'what an AI wrote carries a mark a machine can read — the explanation, each sentence written ahead — and what a person wrote does not',
+      'what an AI wrote carries a mark a machine can read — the explanation, each sentence written ahead, « En clair » (D21.49) — and no link does',
       (await count(`${LAST} .c-ai [data-generated-by="ai"]`)) === 1 &&
         (await count(`${LAST} .c-gists .c-row > p[data-generated-by="ai"]`)) ===
           (await count(`${LAST} .c-gists .c-row > p:not(.sources)`)) &&
         (await count(`${LAST} .c-gists .c-row > p[data-generated-by="ai"]`)) >= 1 &&
-        (await count('.c-plain [data-generated-by], .sources[data-generated-by]')) === 0,
+        (await count('.c-plain > p:not(.c-badge):not(:has(a)):not([data-generated-by="ai"])')) ===
+          0 &&
+        (await count('.c-plain p[data-generated-by] a, .sources[data-generated-by]')) === 0,
     );
     check(
       'the mention says an AI wrote it, which, where — and what it does not say',

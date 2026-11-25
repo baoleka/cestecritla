@@ -237,8 +237,9 @@ références [C1]… renvoient à l'annexe.
   avant le premier usage, dit quand même d'où viennent les phrases (« écrites d'avance par une
   IA »). PROBABLE : aucun texte lu ne traite d'un texte généré puis servi tel quel.
 - **§ 2** : le marquage incombe aux fournisseurs. Tout texte qu'une IA a écrit porte ici
-  l'attribut `data-generated-by="ai"` — les phrases et les explications de mots, plus
-  seulement une explication en direct (`src/scripts/chat.ts`, tenu par `scripts/e2e-sheet.ts`).
+  l'attribut `data-generated-by="ai"` — les phrases, les explications de mots et les textes de
+  « En clair », nos réponses et nos cartes (D21.49), plus seulement une explication en direct
+  (`src/scripts/chat.ts`, tenu par `scripts/e2e-sheet.ts`).
 - **§ 4, second alinéa** : **dans le champ, et sans exception possible** — l'exception demande
   une relecture humaine qui vérifie les faits, et personne n'a relu ces textes un à un
   (D16.57, D16.61). Le site le **dit**, de façon claire et distincte, au plus tard à la

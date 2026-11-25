@@ -251,9 +251,9 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
    */
   const set = (text: string): string => text.replace(/'/g, '’');
   /**
-   * A text an AI wrote ahead — a sentence of the base, an explanation of a word — with the
-   * mark a machine can read on it (AI Act, art. 50 § 2). What a person reads is the label of
-   * its block.
+   * A text an AI wrote ahead — a sentence of the base, an explanation of a word, our answer or
+   * our card in « En clair » (D21.49) — with the mark a machine can read on it (AI Act, art. 50
+   * § 2). What a person reads is the label of its block. A link is never marked.
    */
   const written = (text: string): HTMLElement => {
     const node = el('p', set(text));
@@ -360,7 +360,7 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
       if (objection !== null) {
         const entry = config.objections.find((o) => o.slug === objection);
         const answer = plain?.objections[objection]?.answer;
-        if (answer !== undefined) part.append(el('p', answer));
+        if (answer !== undefined) part.append(written(answer));
         const link = el('a', answer === undefined ? (entry?.objection ?? '') : s.reviewedLink);
         link.href = `/r/${objection}/`;
         const line = el('p');
@@ -370,7 +370,7 @@ if (form && field && sheet && thread && scroller && composer && input && clear &
       for (const id of cards) {
         const term = config.cards.find((c) => c.id === id)?.term ?? '';
         const text = plain?.cards[id]?.plain;
-        if (text !== undefined) part.append(el('p', text));
+        if (text !== undefined) part.append(written(text));
         const link = el('a', s.card.replace('{term}', term));
         link.href = `/mot/${id}/`;
         const line = el('p');

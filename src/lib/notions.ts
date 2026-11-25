@@ -132,7 +132,7 @@ export function notionsIn(question: string, entries: readonly NotionEntry[]): st
     .map((entry) => entry.id);
 }
 
-/** What a question carries that a person already wrote about. */
+/** What a question carries that one of our texts already answers (prepared with an AI, D16.79). */
 export interface Recognised {
   /** The slug of the objection it carries, or null. */
   objection: string | null;
@@ -156,7 +156,7 @@ export interface KnownCard extends NotionEntry {
   plain: string;
 }
 
-/** An objection with the answer a person wrote. */
+/** An objection with our answer to it (prepared with an AI, D16.79). */
 export interface KnownObjection extends ReviewedEntry {
   answer: string;
 }

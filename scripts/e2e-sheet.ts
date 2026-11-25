@@ -41,8 +41,8 @@
  *      one is opened: two more files, the same whatever the word (D20.13), and nothing more
  *      after. Each opens on a short text under a label that says an AI wrote and checked it;
  *      what the question names is open; a freeze, a request for a vote or a charge shows
- *      none; every sentence and every explanation an AI wrote carries a mark a machine can
- *      read;
+ *      none; every text an AI wrote — a sentence, an explanation, « En clair » (D21.49) —
+ *      carries a mark a machine can read, and no link does;
  *   8. nothing is written on the phone — no storage, no base, no cache, no cookie — nothing in
  *      the address; the thread empties;
  *   9. the policy of the page names nobody but us, read directive by directive; the sheet
@@ -1284,6 +1284,19 @@ async function runEngine(name: string, origin: string, manifest: Manifest): Prom
       chargedWord.slice(0, 220),
     );
     check('none of those sent anything either', posted.gists.length === afterObjection);
+    // « En clair » — our answers and our cards, prepared with an AI — carries the mark a machine
+    // can read on every text it shows, like the sentences and the words; its links carry none
+    // (D21.49; the legal file says so of every text an AI wrote in the sheet: review 19, Y11).
+    const plainTexts = await count('#chat-thread .c-plain > p:not(.c-badge):not(:has(a))');
+    check(
+      '« En clair » carries the mark of an AI on each of its texts, and none on its links',
+      plainTexts >= 2 &&
+        (await count(
+          '#chat-thread .c-plain > p:not(.c-badge):not(:has(a))[data-generated-by="ai"]',
+        )) === plainTexts &&
+        (await count('#chat-thread .c-plain p[data-generated-by] a')) === 0,
+      String(plainTexts),
+    );
     await linksBeside('the whole conversation: our answers, the site, the objections');
 
     // --- 8. nothing is written on the phone; the thread empties
