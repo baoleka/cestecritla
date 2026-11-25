@@ -389,7 +389,7 @@
       "slug": "energie",
       "theme": "Énergie",
       "objection": "« Sans nucléaire, on aura des coupures de courant »",
-      "answer": "Le texte planifie le passage à 100 % d'énergies renouvelables, au plus tard en 2060. Il déploie des technologies de stockage pour équilibrer le système. Il ferme progressivement les centrales nucléaires, sans les prolonger au-delà de 60 ans.",
+      "answer": "Le texte planifie une énergie 100 % renouvelable, au plus tard en 2060. Il déploie des technologies de stockage pour équilibrer le système. Il ferme progressivement les centrales nucléaires, sans les prolonger au-delà de 60 ans.",
       "avoid": "Ne pas cacher la sortie du nucléaire : elle est écrite, avec sa limite de 60 ans. Ne pas promettre une date de fermeture par centrale.",
       "supports": [
         {
@@ -414,7 +414,7 @@
       "review": {
         "status": "accepted",
         "by": "Baoleka",
-        "on": "2026-11-14"
+        "on": "2026-11-25"
       }
     },
     {

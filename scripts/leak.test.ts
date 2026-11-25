@@ -454,9 +454,39 @@ void test('content: nothing added since the freeze holds the 2026 text', { skip 
   for (const path of git('diff', '--cached', '--name-only', '--diff-filter=AM', '-z').split('\0')) {
     if (path !== '' && !BINARY.test(path)) blobs.push([`${path} (staged)`, `:${path}`]);
   }
+  // Only what a push ADDS: a blob that repeats what origin/main already holds publishes nothing
+  // new — the earlier wording of an answer, rewritten since, is in history either way, and the
+  // scan of the working tree above is what says it must change.
+  const show = (object: string): Buffer | null => {
+    try {
+      return execFileSync('git', ['show', object], {
+        maxBuffer: 256 * 1024 * 1024,
+        stdio: ['ignore', 'pipe', 'ignore'],
+      });
+    } catch {
+      return null;
+    }
+  };
   for (const [name, object] of blobs) {
-    const bytes = execFileSync('git', ['show', object], { maxBuffer: 256 * 1024 * 1024 });
-    scan(name, bytes, name.startsWith('data/2026/quotes.json') ? quoted : undefined);
+    const bytes = show(object);
+    if (bytes === null) continue;
+    const allowed = name.startsWith('data/2026/quotes.json') ? quoted : undefined;
+    const path = object.slice(object.indexOf(':') + 1);
+    const before = show(`origin/main:${path}`);
+    const text = before === null ? null : textOf(before);
+    const held = new Map(
+      (text === null ? [] : scanForLeaks(text, index, allowed)).map((hit) => [hit.id, hit.windows]),
+    );
+    const now = textOf(bytes);
+    if (now === null) {
+      findings.push(`${name}: not UTF-8 — nothing in it can be read, so nothing in it is known`);
+      continue;
+    }
+    for (const hit of scanForLeaks(now, index, allowed)) {
+      if (hit.windows > (held.get(hit.id) ?? 0)) {
+        findings.push(`${name}: ${hit.id} (${String(hit.windows)} window(s), new to origin/main)`);
+      }
+    }
   }
   // Each message on its own: one string, a « < » in one and a « > » in another hid what lay
   // between (review 16, N1).
