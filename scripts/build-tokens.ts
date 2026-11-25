@@ -15,8 +15,8 @@
  *
  * Run from the repository root:  npx tsx scripts/build-tokens.ts
  */
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
 
 type Json = string | number | boolean | null | Json[] | { [k: string]: Json };
 const isObj = (v: Json | undefined): v is { [k: string]: Json } =>
@@ -215,9 +215,41 @@ export function buildMascotTokensCss(tokens: { [k: string]: Json }): string {
   ].join('\n');
 }
 
-/** Where the two stylesheets go. */
+/** Where the two stylesheets of the charter go: tracked, rewritten only when they change. */
 export const TOKENS_CSS_PATH = 'src/styles/tokens.css';
 export const MASCOT_TOKENS_CSS_PATH = 'src/styles/mascot2-tokens.css';
+/**
+ * Where the neutral set goes (D0.17, D14.12): untracked, and read by a neutral build alone
+ * (astro.config.ts, `CEL_TOKENS`). Written over the tracked sheets, it left the tree changed —
+ * a neutral working tree, two builds passing each other their colours (review 12, T7, T8).
+ */
+export const NEUTRAL_TOKENS_CSS_PATH = 'build/neutral/tokens.css';
+export const NEUTRAL_MASCOT_TOKENS_CSS_PATH = 'build/neutral/mascot2-tokens.css';
+
+/**
+ * The neutral set as the build uses it: the groups of colour the neutral file defines, over the
+ * rest of the charter's tokens — its type scale, spacing, radii, motion and tap targets. Used
+ * alone as the whole tree, the neutral file shipped a site without them (review 12, T2).
+ */
+export function neutralTokens(
+  main: { [k: string]: Json },
+  neutral: { [k: string]: Json },
+): {
+  [k: string]: Json;
+} {
+  const over: { [k: string]: Json } = { ...main };
+  for (const group of ['color', 'color-role', 'mascot-role']) {
+    const value = neutral[group];
+    if (value !== undefined) over[group] = value;
+  }
+  return over;
+}
+
+/** Writes a file only when its bytes change: a build of the same charter touches nothing. */
+function writeIfChanged(path: string, text: string): void {
+  if (existsSync(path) && readFileSync(path, 'utf8') === text) return;
+  writeFileSync(path, text);
+}
 
 const isMain = process.argv[1]?.endsWith('build-tokens.ts') ?? false;
 if (isMain) {
@@ -226,15 +258,19 @@ if (isMain) {
   // Since D14.12 removed the message 0 to LFI, this is the only prepared answer to a takedown
   // request, so it has to be one flag away rather than a document to implement under pressure.
   const neutral = process.argv.includes('--neutral');
-  const source = neutral ? 'design/tokens.neutral.json' : 'design/tokens.json';
-  const tokens = JSON.parse(readFileSync(resolve(root, source), 'utf8')) as {
-    [k: string]: Json;
-  };
+  const read = (path: string): { [k: string]: Json } =>
+    JSON.parse(readFileSync(resolve(root, path), 'utf8')) as { [k: string]: Json };
+  const tokens = neutral
+    ? neutralTokens(read('design/tokens.json'), read('design/tokens.neutral.json'))
+    : read('design/tokens.json');
   const css = buildTokensCss(tokens);
-  mkdirSync(resolve(root, 'src/styles'), { recursive: true });
-  writeFileSync(resolve(root, TOKENS_CSS_PATH), css);
+  const [sheet, mascotSheet] = neutral
+    ? [NEUTRAL_TOKENS_CSS_PATH, NEUTRAL_MASCOT_TOKENS_CSS_PATH]
+    : [TOKENS_CSS_PATH, MASCOT_TOKENS_CSS_PATH];
+  mkdirSync(dirname(resolve(root, sheet)), { recursive: true });
+  writeIfChanged(resolve(root, sheet), css);
   // Her tints, apart: the same themes, another file.
-  writeFileSync(resolve(root, MASCOT_TOKENS_CSS_PATH), buildMascotTokensCss(tokens));
+  writeIfChanged(resolve(root, mascotSheet), buildMascotTokensCss(tokens));
   console.log(
     `tokens.css: ${String(css.split('\n').length)} lines, ${String(Buffer.byteLength(css))} B` +
       (neutral ? ' — NEUTRAL SET (rebrand light, D0.17)' : ''),

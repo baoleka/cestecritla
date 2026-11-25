@@ -58,6 +58,7 @@ const STEPS: readonly Step[] = [
     name: 'tokens',
     script: 'scripts/build-tokens.ts',
     reads: ['design/tokens.json'],
+    // The charter's sheets; a neutral build writes build/neutral/ instead (T7).
     writes: ['src/styles/tokens.css', 'src/styles/mascot2-tokens.css'],
   },
   {
@@ -280,6 +281,8 @@ execFileSync('npx', ['--no-install', 'astro', 'build', '--outDir', outDir], {
     CEL_GAME_TEST: askTest === null ? '' : '1',
     CEL_SCRUTIN: scrutin ? '1' : '',
     CEL_HOLDING: update ? 'update' : '',
+    // The set of colours the pages import (astro.config.ts): the charter's, or the neutral one.
+    CEL_TOKENS: neutral ? 'neutral' : '',
     CEL_HOST: host === 'preview' ? 'preview' : '',
   },
 });
@@ -308,6 +311,8 @@ if (askTest === null) {
       ...(scrutin ? { scrutin: true } : {}),
       ...(host === 'preview' ? { host } : {}),
       ...(update ? { update: true } : {}),
+      // Which colours went out: a neutral build is said, for the deploy to say it (T8, M7).
+      ...(neutral ? { tokens: 'neutral' } : {}),
       // From what: the commit, and whether a tracked file differed from it (M8, T9) — what
       // goes out is what is committed, or the deploy says so.
       ...(tree === null ? {} : { commit: tree.commit, dirty: tree.dirty }),

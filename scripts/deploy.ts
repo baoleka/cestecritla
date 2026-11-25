@@ -352,7 +352,9 @@ if (refusal !== null) {
 const args = wranglerDeployArgs(target, mode, passthrough, ask);
 console.log(
   `deploy: ${mode} build, ${String(pages.length)} page(s) → ${target}` +
-    (mode === 'app' ? ` — questions: ${ask}` : ''),
+    (mode === 'app' ? ` — questions: ${ask}` : '') +
+    // Said before it goes: the neutral set is the answer to a takedown (D14.12).
+    (marker.tokens === 'neutral' ? ' — NEUTRAL COLOURS' : ''),
 );
 // What goes out of the game's sentences, said before it goes: a build never fails on a file it
 // will not show — it keeps every card at its link alone —, so the reason is printed here.

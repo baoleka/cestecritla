@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import { askSite } from './src/lib/ask-config.ts';
 import { gameSite } from './src/lib/game-data.ts';
@@ -31,6 +32,8 @@ const game = site.on;
 // app, the game shown or not: in the "scrutin" build (D16.16), and in one whose list of words is
 // no longer validated, where phones may still keep a turtle (D21.32).
 const gameWrites = !holding;
+/** The neutral set of colours (`npm run build:neutral`): the takedown's answer, D14.12. */
+const neutralTokens = process.env.CEL_TOKENS === 'neutral';
 /** The build deployed before each electoral silence window: neither question nor game. */
 const scrutin = process.env.CEL_SCRUTIN === '1';
 // Does the field of this build open the sheet of « Demander »? A constant the bundler can see,
@@ -82,6 +85,26 @@ export default defineConfig({
   },
 
   vite: {
+    // The sheets of colours the pages import: the charter's, tracked, or the neutral set a
+    // neutral build writes outside the tree (D0.17, D14.12; review 12, T7).
+    resolve: {
+      alias: {
+        '@cel/tokens.css': fileURLToPath(
+          new URL(
+            neutralTokens ? './build/neutral/tokens.css' : './src/styles/tokens.css',
+            import.meta.url,
+          ),
+        ),
+        '@cel/mascot2-tokens.css': fileURLToPath(
+          new URL(
+            neutralTokens
+              ? './build/neutral/mascot2-tokens.css'
+              : './src/styles/mascot2-tokens.css',
+            import.meta.url,
+          ),
+        ),
+      },
+    },
     define: {
       __CEL_GAME__: JSON.stringify(game),
       __CEL_GAME_WRITES__: JSON.stringify(gameWrites),

@@ -716,6 +716,8 @@ export interface BuildMarker {
   complete: boolean;
   /** A holding build of a re-edition (`npm run build:update`, D21.37), not of a withdrawal. */
   update: boolean;
+  /** The set of colours that went out: the charter's, or the neutral one (D14.12; T8, M7). */
+  tokens: 'charter' | 'neutral';
   /** The commit it was built from, and whether a tracked file differed from it then (M8, T9). */
   commit: string | null;
   dirty: boolean | null;
@@ -743,6 +745,7 @@ export function readBuildMarker(marker: string = BUILD_MARKER): BuildMarker | nu
     host: record['host'] === 'preview' ? 'preview' : 'apex',
     complete: record['complete'] === true,
     update: record['update'] === true,
+    tokens: record['tokens'] === 'neutral' ? 'neutral' : 'charter',
     commit: typeof record['commit'] === 'string' ? record['commit'] : null,
     dirty: typeof record['dirty'] === 'boolean' ? record['dirty'] : null,
   };
