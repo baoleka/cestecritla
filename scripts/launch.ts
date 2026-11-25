@@ -23,6 +23,7 @@
  *
  *   npx tsx scripts/launch.ts        lists what is still missing; exits 1 while something is
  */
+import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { canonicalHash, listFingerprint } from '../src/lib/fingerprint.js';
 import { WORD_LINKS_PATH, highlightedWords, wordsFingerprint } from '../src/lib/word-links.js';
@@ -229,7 +230,6 @@ export function launchBlockers(inputs: LaunchInputs): string[] {
   return out;
 }
 
-/** Fingerprint of everything the privacy page can say: the `privacy.*` strings of the kit. */
 /**
  * A string of the privacy page that only a site that asks ever shows: the section « Quand tu
  * demandes » (`privacy.chat.*`) and the variants of a line for that mode (`privacy.*.ask`).
@@ -259,6 +259,49 @@ export function privacyStringsHash(strings: Record<string, unknown>): string {
     strings,
     (key) => key.startsWith('privacy.') && !isChatPrivacyKey(key) && !isMascotPrivacyKey(key),
   );
+}
+
+/** The sources whose words and structure make what the privacy page says, beside the kit. */
+export const PRIVACY_PAGE_SOURCES = [
+  'src/pages/confidentialite/index.astro',
+  'src/components/GameStorage.astro',
+  'src/lib/storage-map.ts',
+] as const;
+
+/**
+ * Fingerprint of everything the privacy page of a site can say — what its dated reading
+ * (`privacy_page`) covers (review 10, A4): its `privacy.*` strings (`privacyStringsHash`), every
+ * other string of the kit its sources print (the confirmation of « Tout effacer », the host, the
+ * contact…), and the bytes of those sources — the addresses written in them, the sections they
+ * render, the fields the phone keeps. The chat's section and her colour keep their own readings.
+ */
+export function privacyPageHash(root = '.'): string {
+  const at = (path: string): string => (root === '.' ? path : `${root}/${path}`);
+  const strings = readObject(at(STRINGS_PATH)) ?? {};
+  const sources = PRIVACY_PAGE_SOURCES.map((path) =>
+    existsSync(at(path)) ? readFileSync(at(path), 'utf8') : '',
+  );
+  const printed = [
+    ...new Set(
+      sources.flatMap((text) =>
+        [...text.matchAll(/'([a-z][a-z0-9_]*(?:\.[a-z0-9_]+)+)'/g)].map((match) => match[1] ?? ''),
+      ),
+    ),
+  ]
+    .filter((key) => key in strings && !isChatPrivacyKey(key) && !isMascotPrivacyKey(key))
+    .sort();
+  return canonicalHash({
+    strings: privacyStringsHash(strings),
+    printed: Object.fromEntries(printed.map((key) => [key, strings[key]])),
+    sources: Object.fromEntries(
+      PRIVACY_PAGE_SOURCES.map((path, index) => [
+        path,
+        createHash('sha256')
+          .update(sources[index] ?? '')
+          .digest('hex'),
+      ]),
+    ),
+  });
 }
 
 /** Fingerprint of what the privacy page adds where the field asks. */
@@ -686,7 +729,7 @@ export function previewChatBlockers(
   // Worker of the chat serves none of it (`pages: false`, review 10, A6).
   const launch = readObject(at(LAUNCH_PATH));
   const privacy = field(launch, 'privacy_page');
-  const today = privacyHash ?? privacyStringsHash(readObject(at(STRINGS_PATH)) ?? {});
+  const today = privacyHash ?? privacyPageHash(root);
   if (
     options.pages !== false &&
     (!isDate(field(privacy, 'reviewed_on')) || field(privacy, 'sha256') !== today)
@@ -803,7 +846,7 @@ export function readLaunchInputs(): LaunchInputs {
     launch: JSON.parse(readFileSync(LAUNCH_PATH, 'utf8')) as LaunchFile,
     policyValidated: citationPolicyValidated(),
     pendingReviews: pendingReviews(),
-    privacyHash: privacyStringsHash(readObject(STRINGS_PATH) ?? {}),
+    privacyHash: privacyPageHash(),
     artefacts: artefactBlockers(),
   };
 }

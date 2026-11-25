@@ -123,9 +123,36 @@ export const mascot2Choreography = (): string =>
   JSON.stringify({ FINDS, EVOLUTIONS, TRICK_HOLD_MS, PULSE_HOLD_MS });
 
 /**
+ * What of the site's own tokens plays and shows in her: the durations and easings of
+ * design/tokens.json `motion` her stylesheet names (`--duration-*`, `--easing-*`), and her tints
+ * as the build serves them (`mascot-role`, src/styles/mascot2-tokens.css) — read where the
+ * build takes them, not where they were chosen (review 10, A10, A11; D21.38).
+ */
+export function mascot2SiteTokens(root = '.'): string {
+  const css = readFileSync(at(root, MASCOT2_CSS_PATH), 'utf8');
+  const tokens = readNamed(at(root, 'design/tokens.json')) as Record<string, unknown>;
+  const motion = (tokens['motion'] ?? {}) as Record<string, Record<string, unknown> | undefined>;
+  const named = [
+    ...new Set(
+      [...css.matchAll(/var\(--(duration|easing)-([a-z0-9-]+)/g)].map(
+        (match) => `${match[1] ?? ''}.${match[2] ?? ''}`,
+      ),
+    ),
+  ].sort();
+  const values = named.map((path) => {
+    const [group = '', name = ''] = path.split('.');
+    return [path, motion[group]?.[name] ?? null];
+  });
+  // The values of her tints, not the sentence that describes them.
+  const role = (tokens['mascot-role'] ?? {}) as Record<string, unknown>;
+  return JSON.stringify({ motion: values, tints: { light: role['light'], dark: role['dark'] } });
+}
+
+/**
  * What the editor validates when the sheet is dated: the drawing, the stylesheet that makes its
- * states and its movement, its colours, and the beats of its evolutions. One fingerprint: a
- * retouch of any of them un-validates her. Null while she is not drawn.
+ * states and its movement, its colours, the beats of its evolutions, and the tokens of the site
+ * that play and show in her. One fingerprint: a retouch of any of them un-validates her. Null
+ * while she is not drawn.
  */
 export function mascot2Fingerprint(root = '.'): string | null {
   const files = [MASCOT2_SVG_PATH, MASCOT2_CSS_PATH, MASCOT2_PALETTE_PATH].map((p) => at(root, p));
@@ -138,6 +165,8 @@ export function mascot2Fingerprint(root = '.'): string | null {
     .update(JSON.stringify(mascot2Colours(root)))
     .update('\n')
     .update(mascot2Choreography())
+    .update('\n')
+    .update(mascot2SiteTokens(root))
     .digest('hex');
 }
 
