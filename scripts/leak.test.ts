@@ -90,6 +90,33 @@ void test('scanner: nine words in a row are found through markup, encoding and t
   assert.ok(found(`p95 < 3 000 ms. ${nine} => fin`).includes(victim.id), 'between < and >');
   assert.ok(found(`for (i = 0; i < n; i += 1) { ${nine} } x => y`).includes(victim.id));
 
+  // In an attribute a reader is shown — an image's text, a title, a label, a description —
+  // the words are read; in an address, the locator a link carries, they are not (review 16, N5).
+  for (const attribute of ['alt', 'title', 'aria-label', 'content', 'data-note']) {
+    assert.ok(found(`<img ${attribute}="${nine}">`).includes(victim.id), attribute);
+  }
+  assert.ok(found(`<img alt='${nine}'>`).includes(victim.id), 'single quotes');
+  // (How many words a link's locator carries is held where links are made: the structure gate
+  // above, on the manifest — not here.)
+  assert.deepEqual(
+    found(`<a href="#x:~:text=${encodeURIComponent(nine)}" data-fragment="${nine}">y</a>`),
+    [],
+  );
+  // The escapes a copy may be written in: JSON's, the references of HTML (review 16, N19).
+  const escaped = [...nine]
+    .map((c) => (c === ' ' ? ' ' : `\\u${c.charCodeAt(0).toString(16).padStart(4, '0')}`))
+    .join('');
+  assert.ok(found(escaped).includes(victim.id), 'escaped as JSON escapes a string');
+  const referenced = [...nine]
+    .map((c) => (c === ' ' ? ' ' : `&#${String(c.codePointAt(0))};`))
+    .join('');
+  assert.ok(found(referenced).includes(victim.id), 'written in references of HTML');
+  // A sentence disguised as one word — joined by `_`, `+`, `·` or a character of no width —
+  // is the sentence (review 16, N13).
+  for (const joint of ['_', '+', '·', '\u200b']) {
+    assert.ok(found(words.slice(2, 11).join(joint)).includes(victim.id), JSON.stringify(joint));
+  }
+
   // Eight words — the most an incipit or a locator may carry — are not a leak.
   assert.deepEqual(found(words.slice(0, 8).join(' ')), []);
   // The same words in another order are not the book.
