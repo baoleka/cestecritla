@@ -321,10 +321,14 @@ void test('an app build redirects only what it has no page for (D15.8)', () => {
 void test('every bridge answers, is kept out of indexes and prints nothing of either edition', () => {
   if (!built || holding) return;
   const bridges = htmlPages('dist').filter(
-    (page) => /^(?:m|a)\//.test(page) || /^s\/c\d/.test(page),
+    (page) => /^(?:m|a)\//.test(page) || /^[sr]\/c\d/.test(page),
   );
-  // 837 propositions + 48 statistics + 89 sections of the 2025 edition.
-  assert.equal(bridges.length, 974, `${String(bridges.length)} bridge pages`);
+  // 837 propositions + 48 statistics + 89 sections of the 2025 edition — and the 87 key
+  // measures under `/r/`, where the September prototype sent two of its eight links (M6).
+  assert.equal(bridges.length, 974 + 87, `${String(bridges.length)} bridge pages`);
+  for (const sent of ['r/c6-s01-k01/index.html', 'r/c8-s02-k01/index.html']) {
+    assert.ok(bridges.includes(sent), `${sent}: a link sent on 9/9/2026 answers 404`);
+  }
   for (const page of bridges) {
     const html = readFileSync(`dist/${page}`, 'utf8');
     assert.match(html, /<meta name="robots" content="noindex">/, `${page}: indexable`);

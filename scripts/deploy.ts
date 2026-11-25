@@ -166,6 +166,7 @@ if (given.includes('--chat')) {
     process.exit(gone.status ?? 1);
   }
   const refusal = chatDeployRefusal(target, {
+    named: chatWorkerName(target),
     dryRun: forWrangler.includes('--dry-run'),
     accord,
     today,
@@ -259,6 +260,11 @@ function gistsUnpublished(): string[] {
   if (git('diff', '--quiet', 'HEAD', '--', GAME_GISTS_PATH) !== 0) {
     return [`${GAME_GISTS_PATH} is shown by this build and differs from the committed file`];
   }
+  // Committed is not published: the repository the site points to is main on GitHub, as this
+  // machine last saw it (review 9, D8; review 11 — a commit of a worktree's branch passed).
+  if (git('diff', '--quiet', 'origin/main', '--', GAME_GISTS_PATH) !== 0) {
+    return [`${GAME_GISTS_PATH} is shown by this build and is not the file of origin/main`];
+  }
   return [];
 }
 // The withdrawal reads nothing of the app: its pages are its one rule (`withdrawalContext`).
@@ -316,4 +322,24 @@ const result = spawnSync('npx', ['--no-install', 'wrangler', ...args], {
   stdio: 'inherit',
   env: guardedEnv(),
 });
+// An npx that could not start leaves no word of its own (review 9, D15).
+if (result.error !== undefined)
+  console.error(`deploy: npx did not start — ${result.error.message}`);
+// The holding page closes the site's pages, and nothing else (review 9, D7; D21.36): the Worker
+// of the sentences answers on its own addresses until it is stopped, withdrawn, and its base
+// emptied — the other gestures of sheet 9 (14-risques.md §4).
+if (
+  result.status === 0 &&
+  mode === 'holding' &&
+  target === 'apex' &&
+  !passthrough.includes('--dry-run')
+) {
+  console.log(
+    'deploy: the pages are withdrawn. The Worker of the sentences still answers: ' +
+      '`npx tsx scripts/seed-ask-2026.ts --switch stopped --what gists --remote cestecritla-ask`, ' +
+      'then `npm run deploy:chat -- --withdraw --accord <day>` and ' +
+      '`npx tsx scripts/seed-ask-2026.ts --withdraw-gists --remote cestecritla-ask --accord <day>` ' +
+      '(sheet 9)',
+  );
+}
 process.exit(result.status ?? 1);

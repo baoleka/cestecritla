@@ -1,0 +1,25 @@
+---
+/**
+ * `/r/<key measure of 2025>/` — bridges for the links the September prototype sent under `/r/`
+ * (D15.8).
+ *
+ * Those links named a key measure of the 2025 edition (`/r/c6-s01-k01/`): two of the eight sent
+ * on 9/9/2026 answered 404 since the re-edition (review 11, M6). Each of the 87 key measures
+ * answers here with the same bridge as under `/m/`. Our answers keep `/r/<slug>/` and their
+ * first addresses `/r/rip-NN/` ([slug].astro): a key measure's identifier is never one of them.
+ */
+import Bridge from '../../components/Bridge.astro';
+import { oldMeasures } from '../../lib/archive-2025.ts';
+
+export function getStaticPaths() {
+  return oldMeasures()
+    .filter((old) => /-k\d+$/.test(old.id))
+    .map((old) => ({
+      params: { old: old.id },
+      props: { sectionId: old.sectionId },
+    }));
+}
+const { sectionId } = Astro.props;
+---
+
+<Bridge path={`r/${Astro.params.old}`} sectionId={sectionId} />

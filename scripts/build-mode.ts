@@ -233,7 +233,16 @@ export function chatWorkerName(target: DeployTarget, root = '.'): string | null 
     const name =
       typeof config === 'object' && config !== null && 'name' in config ? config.name : null;
     if (typeof name !== 'string') return null;
-    return target === 'preview' ? `${name}-preview` : name;
+    if (target === 'apex') return name;
+    // wrangler names an environment by its own `name` when it has one, `<name>-<env>` when not:
+    // the name checked is the one it would act on (review 9, D9).
+    const env =
+      typeof config === 'object' && config !== null && 'env' in config ? config.env : null;
+    const preview =
+      typeof env === 'object' && env !== null && 'preview' in env ? env.preview : null;
+    const own =
+      typeof preview === 'object' && preview !== null && 'name' in preview ? preview.name : null;
+    return typeof own === 'string' ? own : `${name}-preview`;
   } catch {
     return null;
   }
@@ -276,6 +285,11 @@ export function chatWithdrawRefusal(
 export interface ChatDeployContext {
   /** `--dry-run`: wrangler bundles and uploads nothing. */
   dryRun: boolean;
+  /**
+   * The Worker the configuration names for this target (`chatWorkerName`): a configuration
+   * edited to name the site's own Worker would replace it (review 11, M3).
+   */
+  named?: string | null;
   /** The day given with `--accord`, and today: sending a Worker is the editor's decision. */
   accord: string | null;
   today: string;
@@ -302,6 +316,12 @@ export interface ChatDeployContext {
  * site answers questions and every gate of the launch holds — the rehearsal among them.
  */
 export function chatDeployRefusal(target: DeployTarget, context: ChatDeployContext): string | null {
+  if (context.named !== undefined && context.named !== CHAT_WORKERS[target]) {
+    return (
+      `${CHAT_CONFIG} names ${context.named ?? 'no Worker'} for this target, not ` +
+      `${CHAT_WORKERS[target]}: nothing is deployed`
+    );
+  }
   if (context.dryRun) return null;
   if (context.workerProblems.length > 0) {
     return `the Worker is not ready to be deployed — ${context.workerProblems.join(' · ')}`;
@@ -354,6 +374,15 @@ export function swallowedFlags(
  */
 export function refusedArguments(given: readonly string[]): string[] {
   const refused: string[] = [];
+  // A flag written twice reaches wrangler half-read — a second `--accord`'s day as a word
+  // (review 9, D13); `--outdir` keeps a bundle, and only a dry run makes one (D14).
+  const seen = new Set<string>();
+  for (const arg of given) {
+    const flag = arg.split('=')[0] ?? arg;
+    if (flag.startsWith('--') && seen.has(flag)) refused.push(`${flag} (twice)`);
+    seen.add(flag);
+  }
+  if (seen.has('--outdir') && !seen.has('--dry-run')) refused.push('--outdir (without --dry-run)');
   for (let i = 0; i < given.length; i += 1) {
     const arg = given[i] ?? '';
     if (arg === '--bench' || arg === '--chat' || arg === '--withdraw' || arg === '--dry-run') {

@@ -622,6 +622,15 @@ void test('nothing reaches wrangler that could undo a choice of the guard', () =
     assert.notDeepEqual(refusedArguments(args), [], args.join(' '));
   }
   assert.deepEqual(refusedArguments(['--dry-run', '--env', 'x']), ['--env', 'x']);
+  // A flag written twice reached wrangler half-read (D13); a bundle is kept only by a dry run
+  // (D14).
+  assert.deepEqual(
+    refusedArguments(['--chat', '--accord', '2026-11-14', '--accord', '2026-11-15']),
+    ['--accord (twice)'],
+  );
+  assert.deepEqual(refusedArguments(['--outdir', 'build/worker']), [
+    '--outdir (without --dry-run)',
+  ]);
   // The script refuses before it reads anything else, and long before it starts wrangler.
   const deploy = readFileSync('scripts/deploy.ts', 'utf8');
   const refusedAt = deploy.indexOf('refusedArguments(given)');
@@ -846,6 +855,16 @@ void test('the Worker of the chat is deployed by the script alone, with an accor
   };
   for (const target of ['preview', 'apex'] as const) {
     assert.equal(chatDeployRefusal(target, ready), null, target);
+    // The name the configuration gives is the chat's own, or nothing is deployed — not even a
+    // dry run: a configuration naming the site's Worker would replace it (M3).
+    assert.equal(chatDeployRefusal(target, { ...ready, named: chatWorkerName(target) }), null);
+    for (const named of ['cestecritla', 'cestecritla-preview', null]) {
+      assert.match(
+        String(chatDeployRefusal(target, { ...ready, dryRun: true, named })),
+        /nothing is deployed/,
+        `${target} ${String(named)}`,
+      );
+    }
     // Sending a Worker is the editor's decision at the time: no day, another day — nothing goes.
     for (const accord of [null, '2026-11-19', 'oui']) {
       assert.match(
