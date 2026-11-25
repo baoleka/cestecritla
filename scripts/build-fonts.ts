@@ -9,7 +9,7 @@
  *
  * If an italic is ever reintroduced, this script fails until it is subset to the 900 axis.
  */
-import { copyFileSync, mkdirSync, readdirSync, statSync } from 'node:fs';
+import { copyFileSync, mkdirSync, readdirSync, rmSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 /** P8: fonts delivered per page, all faces together. */
@@ -34,6 +34,16 @@ for (const name of SHIPPED) {
   total += size;
   copyFileSync(src, resolve(to, name));
   console.log(`  ${name}: ${String(size)} B`);
+}
+
+// public/fonts holds what is shipped and nothing else: a font taken out of SHIPPED, or the old
+// name a rename leaves, went on shipping from every machine that had built once — Astro copies
+// all of public/ (review 12, T14).
+for (const name of readdirSync(to)) {
+  if (!(SHIPPED as readonly string[]).includes(name)) {
+    rmSync(resolve(to, name), { recursive: true, force: true });
+    console.log(`  removed, not shipped: ${name}`);
+  }
 }
 
 const available = readdirSync(from).filter((f) => f.endsWith('.woff2'));

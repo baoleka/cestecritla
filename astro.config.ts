@@ -13,7 +13,7 @@ import { wordsSite } from './src/lib/words-config.ts';
 // worth -525 ms of LCP on its own (perf-budget.md §1.2).
 //
 // Two source trees, one configuration (D15.4). `npm run build:holding` sets CEL_BUILD=holding and
-// Astro then reads its pages from src/holding/ — two pages that import the same layout, tokens
+// Astro then reads its pages from src/holding/ — three pages that import the same layout, tokens
 // and fonts as the app. Switching `srcDir` rather than filtering routes means the holding build
 // CANNOT emit a page of the app by accident: those files are simply outside its tree. Everything
 // else below (CSP hashes, inlined stylesheet, trailing slashes) applies to both, so the page that

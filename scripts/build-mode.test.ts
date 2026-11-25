@@ -985,14 +985,14 @@ void test('dist/ is read, whatever the marker says: no game without its list, no
   );
   // A test build copied over dist/, an `astro build` run by hand with the test variable.
   assert.match(distProblems({ gameFiles: [game], asks: false }, off).join(), /not validated/);
-  // A build made before the list changed.
+  // A build made before the list, its sentences or the words it explains changed.
   assert.match(
     distProblems({ gameFiles: ['jeu-ffffffffffffffff.json'], asks: false }, playing).join(),
-    /another list of words/,
+    /a game file that is not today’s for this host/,
   );
   assert.match(
     distProblems({ gameFiles: [game, 'jeu-ffffffffffffffff.json'], asks: false }, playing).join(),
-    /another list of words/,
+    /a game file that is not today’s for this host/,
   );
   // A page that sends questions while the data says none is answered — the bench included:
   // there the Worker goes out, and the page still asks nothing.

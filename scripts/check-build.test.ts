@@ -308,7 +308,11 @@ void test('every file of data is named by what it holds: a browser keeps it a ye
     // The three files of the sheet's words go together, under one fingerprint (words-data.ts).
     const words = /^mots-([0-9a-f]{16})(?:-sens|-exemples)?\.json$/.exec(name)?.[1];
     if (words !== undefined) {
-      const three = [`mots-${words}.json`, `mots-${words}-sens.json`, `mots-${words}-exemples.json`];
+      const three = [
+        `mots-${words}.json`,
+        `mots-${words}-sens.json`,
+        `mots-${words}-exemples.json`,
+      ];
       const together = three.every((file) => existsSync(join('dist', 'data', file)))
         ? fingerprint({
             finder: held(three[0] ?? ''),
@@ -510,6 +514,11 @@ void test('fonts delivered stay under the P8 budget of 75 KB', () => {
   const total = fonts.reduce((n, f) => n + statSync(f).size, 0);
   const budget = 75 * 1024;
   assert.ok(total <= budget, `fonts ${String(total)} B > ${String(budget)} B`);
+  // …and they are exactly the fonts the build ships, no stray one (review 12, T14).
+  const shipped = (read('scripts/build-fonts.ts').match(/'[A-Za-z-]+-latin\.woff2'/g) ?? []).map(
+    (name) => name.slice(1, -1),
+  );
+  assert.deepEqual(fonts.map((f) => f.slice(f.lastIndexOf('/') + 1)).sort(), [...shipped].sort());
   console.log(`  fonts: ${String(total)} B of ${String(budget)} B (${String(fonts.length)} files)`);
 });
 

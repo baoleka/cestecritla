@@ -2,27 +2,31 @@
  * The build pipeline (§18.7). Nothing chained these scripts before: they existed separately and
  * the dossier called the missing orchestration the critical path (H-PLA-18).
  *
- * Every step declares what it reads and what it writes, so a broken contract fails here rather
- * than three steps later. Since the 2026 edition (D15.6) the app is built from the published
- * files of data/2026/ and nothing else: the 2025 projection (scripts/build-projection.ts) is no
- * longer a step — that script and its test remain as the tooling of a dated archive.
+ * Every step declares what it reads and what it writes. Since the 2026 edition (D15.6) the app
+ * is built from public files alone: those of data/2026/, and the dated archive of 2025 that the
+ * bridges of old links read (data/aec-2025.json). The 2025 projection
+ * (scripts/build-projection.ts) is no longer a step — that script and its test remain as the
+ * tooling of a dated archive.
  *
- *   npm run build          everything
- *   npm run build:fast     the same, skipping any step marked slow (none today: a full build
- *                          takes a few seconds, measured and printed at the end).
- *   npm run build:holding  the holding site (D15.4): two pages, nothing of the programme, and a
- *                          _redirects file so old links land on it. Also the withdrawal gesture
- *                          of runbook sheet 9 (D14.10). See scripts/build-mode.ts.
- *   npm run build:scrutin  the app as served during an electoral silence window (D16.16):
- *                          neither question nor game. Deployed before each window.
- *   npm run build:ask      a TEST build of the app as it would be if the site answered
- *                          questions (src/lib/ask-config.ts), into dist-ask/. It exists so that
- *                          the ask screen is tested before any bench allows it to ship; it is
- *                          never what scripts/deploy.ts deploys, and it leaves dist/ and its
- *                          marker untouched.
+ *   npm run build              production's app, into dist/
+ *   npm run build:preview      the app of the preview host (`--host preview`)
+ *   npm run build:fast         the same as `build`: no step is marked slow today
+ *   npm run build:neutral      the app in the neutral set of colours, the prepared answer to a
+ *                              takedown of the charter (D0.17, D14.12; sheet 2 of the runbook)
+ *   npm run build:scrutin      the app as served during an electoral silence window (D16.16):
+ *                              neither question nor game. Deployed before each window
+ *   npm run build:holding      three pages and nothing of the programme — the page, its 404 and
+ *                              the legal notice — and a _redirects file so old links land on it:
+ *                              the withdrawal (D14.10, sheet 9 of 14-risques.md §4). See
+ *                              scripts/build-mode.ts
+ *   npm run build:update       the same pages with the words of a re-edition (D21.37, sheet 6)
+ *   npm run build:ask          TEST builds, never deployed, that leave dist/ and its marker
+ *   npm run build:gists        untouched: the sheet of « Demander » with a model that explains
+ *   npm run build:scrutin:test (dist-ask/, closed since D16.60), the sheet as it opens
+ *                              (dist-gists/), the scrutin build of the test site (dist-scrutin/)
  *
- * The build is deterministic: no timestamp, no random seed, no network. Two runs in a row
- * produce byte-identical output.
+ * The build is deterministic: no timestamp, no random seed, no network — Astro's usage report
+ * is off (review 12, T3). Two runs in a row produce byte-identical output.
  */
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -39,6 +43,7 @@ import {
   treeState,
   type BuildMode,
 } from './build-mode.js';
+import { gameWords, wordsNotReady } from '../src/lib/game-data.js';
 import { quietEnv } from './quiet-env.js';
 
 interface Step {
@@ -48,11 +53,8 @@ interface Step {
   readonly writes: readonly string[];
   /** Skipped by `build:fast`. */
   readonly slow?: true;
-  /** Skipped by `build:holding`: the holding site reads no corpus at all. */
-  readonly corpus?: true;
 }
 
-/** Steps not yet written are listed as `pending` so the pipeline says what it does not do. */
 const STEPS: readonly Step[] = [
   {
     name: 'tokens',
@@ -71,8 +73,7 @@ const STEPS: readonly Step[] = [
 
 /**
  * What the app is built from (D15.6): public files only, all of them committed. The private
- * corpus is never read here — scripts/check-repo.test.ts refuses the word in this file — so a
- * build on CI, which has no corpus, is the same build.
+ * corpus is never read here, so a build on CI, which has no corpus, is the same build.
  */
 const EDITION_INPUTS: readonly string[] = [
   'data/2026/manifest.json',
@@ -84,13 +85,25 @@ const EDITION_INPUTS: readonly string[] = [
   'data/aec-2025.json',
 ];
 
-/** Every published file must come from the same state of the book. */
+/**
+ * Every published file must come from the same state of the book — and read: a file that does
+ * not parse is named here, before dist/ is touched, rather than by Astro half-way through a
+ * build (review 12, T15).
+ */
 function checkEdition(root: string): string {
+  const parsed = new Map<string, unknown>();
   for (const input of EDITION_INPUTS) {
     if (!existsSync(resolve(root, input))) throw new Error(`edition: missing input ${input}`);
+    try {
+      parsed.set(input, JSON.parse(readFileSync(resolve(root, input), 'utf8')));
+    } catch (error) {
+      throw new Error(
+        `edition: ${input} is not JSON (${error instanceof Error ? error.message : 'unreadable'})`,
+      );
+    }
   }
   const version = (path: string, at: (file: unknown) => unknown): string => {
-    const value = at(JSON.parse(readFileSync(resolve(root, path), 'utf8')));
+    const value = at(parsed.get(path));
     if (typeof value !== 'string') throw new Error(`edition: ${path} carries no corpus version`);
     return value;
   };
@@ -165,7 +178,7 @@ const { values: given } = parseArgs({
   allowPositionals: false,
 });
 const fast = given.fast === true;
-/** Light rebrand (D0.17): every step is identical, only the token source changes. */
+/** Light rebrand (D0.17): only the colours change, over the rest of the charter's tokens. */
 const neutral = given.neutral === true;
 /** The holding site (D15.4): astro.config.ts switches its source tree on CEL_BUILD. */
 const mode: BuildMode = given.holding === true ? 'holding' : 'app';
@@ -196,10 +209,10 @@ if (askTest !== null && mode !== 'app') throw new Error('--ask-test is a build o
 const scrutin = given.scrutin === true;
 if (scrutin && mode !== 'app') throw new Error('--scrutin is a build of the app');
 /**
- * The host the pages are built for (src/lib/ask-mode.ts): `--host preview` is the build of the
- * preview host, which may ask a question while production still answers none. Without the
- * flag the build is production's. The marker says which, and scripts/deploy.ts sends neither
- * to the other host if they differ in what they do with a question.
+ * The host the pages are built for (src/lib/ask-mode.ts, data/2026/words.json): `--host preview`
+ * is the build of the preview host, which may open a surface before production. Without the
+ * flag the build is production's. The marker says which, and scripts/deploy.ts sends it to no
+ * other host (review 9, D11).
  */
 const host = given.host ?? 'apex';
 if (host !== 'apex' && host !== 'preview') throw new Error('--host takes "preview" or "apex"');
@@ -254,10 +267,6 @@ for (const step of STEPS) {
     console.log(`· skipped (fast): ${step.name}`);
     continue;
   }
-  if (mode === 'holding' && step.corpus === true) {
-    console.log(`· skipped (holding): ${step.name}`);
-    continue;
-  }
   const ms = run(step);
   n += 1;
   console.log(`✓ ${step.name} (${String(ms)} ms)`);
@@ -265,6 +274,21 @@ for (const step of STEPS) {
 
 const corpusVersion = mode === 'app' ? checkEdition(root) : null;
 if (corpusVersion !== null) console.log(`✓ edition 2026, corpus ${corpusVersion}`);
+// Whether the game is in this build, said: a list no longer attested drops it, and the turtle
+// with it, in silence (D16.15) — production waits for it, the preview host does not (review
+// 12, T16).
+if (corpusVersion !== null && askTest === null) {
+  const reasons = wordsNotReady(gameWords(), corpusVersion);
+  if (scrutin) console.log('· game: off — the scrutin build shows none (D16.16)');
+  else if (reasons.length === 0) console.log('✓ game: on, the list as the editor validated it');
+  else console.log(`· game: OFF, and the turtle with it — ${reasons.join('; ')}`);
+}
+
+// Astro empties its output by itself — but keeps, by a slip of its own (a Set built from the
+// string ".git"), every top-level entry named g, i or t: a page or a file under one of those
+// letters would outlive every build, the withdrawal's included (review 12, T12). The output is
+// emptied here, after every check has passed.
+rmSync(resolve(root, outDir), { recursive: true, force: true });
 
 const astroStarted = Date.now();
 execFileSync('npx', ['--no-install', 'astro', 'build', '--outDir', outDir], {
@@ -277,7 +301,8 @@ execFileSync('npx', ['--no-install', 'astro', 'build', '--outDir', outDir], {
     // Never inherited: a variable left in a shell must not turn a real build into a test one.
     CEL_ASK_TEST: askTest ?? '',
     // The test build is the whole page as it will be: it shows the game too, with the list as
-    // it stands, validated or not. It goes to dist-ask/, which nothing deploys.
+    // it stands, validated or not. It goes to dist-ask/, dist-gists/ or dist-scrutin/, which
+    // nothing deploys.
     CEL_GAME_TEST: askTest === null ? '' : '1',
     CEL_SCRUTIN: scrutin ? '1' : '',
     CEL_HOLDING: update ? 'update' : '',
@@ -288,8 +313,8 @@ execFileSync('npx', ['--no-install', 'astro', 'build', '--outDir', outDir], {
 });
 console.log(`✓ astro build (${String(Date.now() - astroStarted)} ms)`);
 
-// Old links must land somewhere (D15.4, D15.8). Astro empties dist/ on every build, so a file
-// written here can never survive into a build of the other mode. The holding site redirects
+// Old links must land somewhere (D15.4, D15.8). The output is emptied before every build, so
+// a file written here can never survive into a build of the other mode. The holding site redirects
 // every old prefix to its one page; the app answers `/m/`, `/a/`, `/s/` and `/r/` with real
 // bridge pages and only redirects the two prefixes it has nothing to put behind.
 writeFileSync(
@@ -334,4 +359,11 @@ const label = scrutin
         ? 'build:fast'
         : 'build';
 const seconds = (total / 1000).toFixed(1);
-console.log(`${label}: ${String(n)} data step(s) + astro, ${seconds} s`);
+// The last line says which build is in the output: the host and the colours too (review 12,
+// T17) — three builds printed the same line.
+const which = [
+  ...(host === 'preview' ? ['for the preview host'] : []),
+  ...(neutral ? ['NEUTRAL colours'] : []),
+];
+const about = which.length === 0 ? '' : ` (${which.join(', ')})`;
+console.log(`${label}${about}: ${String(n)} data step(s) + astro, ${seconds} s → ${outDir}/`);

@@ -3,20 +3,23 @@
  *
  * Two builds exist since the 2026 edition replaced the 2025 one at the source (D15.1):
  *
- *   app      the full site, built by `npm run build`
- *   holding  two pages and nothing of the programme, built by `npm run build:holding`
+ *   app      the full site, built by `npm run build` — `build:preview` for the preview host,
+ *            `build:scrutin` before an electoral silence window, `build:neutral` for the rebrand
+ *   holding  three pages and nothing of the programme (the page, its 404, the legal notice),
+ *            built by `npm run build:holding` — or `build:update`, for a re-edition (D21.37)
  *
- * Until launch day the apex serves the holding build and nothing else; the app is only ever
- * deployed to the preview host. `scripts/build.ts` records the mode in build/last-build.json
+ * Since the launch (14/11/2026, D16.36) the apex serves the app; the holding build is the
+ * withdrawal and the re-edition. `scripts/build.ts` records the mode in build/last-build.json
  * when it finishes, and every dist-bound gate reads it from here — so a holding dist/ is judged
  * as a holding dist/, not as an app with 977 pages missing. `scripts/deploy.ts` is the only
  * caller of wrangler: it applies the rule below, then picks the configuration for the build —
- * static files, or the Worker of « Demander » when data/2026/ask.json says the site answers
- * questions (D16.4, D16.7).
+ * static files on the apex whatever its mode (its « Demander » is a Worker of its own,
+ * `wrangler.chat.jsonc`), the Worker of the bench on the preview host with `--bench` (R27).
  *
- * The holding mode is not a one-off. It is also the withdrawal gesture of runbook sheet 9
- * (D14.10: if exposure becomes untenable the app is withdrawn), and the first answer to the next
- * re-edition of the programme: one command, two static files, nothing to decide in a hurry.
+ * The holding mode is the withdrawal (D14.10: if exposure becomes untenable the app is
+ * withdrawn — sheet 9 of 14-risques.md §4, whose other gestures take the chat Worker and the
+ * sentences of the base away too) and the first answer to the next re-edition of the programme
+ * (sheet 6): three static files, nothing to decide in a hurry.
  */
 import { spawnSync } from 'node:child_process';
 import {
@@ -375,8 +378,10 @@ export function swallowedFlags(
 
 /**
  * What `scripts/deploy.ts` hands on to wrangler: `--dry-run`, and `--outdir <dir>` for the
- * bundle of a dry run. Nothing else — `--config`, `--env`, `--name`, `--assets` or `--route`
- * would each undo a choice the guard has just made, and wrangler reads the last one it is given.
+ * bundle of a dry run. Nothing else — `--config`, `--env`, `--name`, `--assets`, `--route`,
+ * `--domain(s)` or a bare path (wrangler takes it for the script, or the assets) would each undo
+ * a choice the guard has just made: the list is what is let through, not what is refused
+ * (review 11, M14). Wrangler 4.130 itself stops on a repeated `--config` or `--env`.
  * `--bench`, `--chat`, `--withdraw` and `--accord <day>` are the script's own and never reach
  * wrangler.
  * Returns the arguments it refuses.
@@ -443,15 +448,13 @@ export function readDist(dir = 'dist'): DistContent {
 
 /**
  * Where a build directory disagrees with the data it would be deployed under. The marker says
- * how the last `npm run build` was made; it says nothing of a directory filled another way — a
- * test build copied over it, an `astro build` run by hand with a test variable, a build older
- * than the list of words. So the directory itself is read:
- *   - it shows the game only if the editor validated the list as it stands, and from that list;
+ * how the last build was made; it says nothing of a directory filled another way — a test
+ * build copied over it, an `astro build` run by hand with a test variable, a build older than
+ * the list of words. So the directory itself is read:
+ *   - it shows the game only if the editor validated the list as it stands, and its game file
+ *     is the one a build of today makes for this host — the list, the sentences and the words
+ *     explained, which differ by host (data/2026/words.json);
  *   - it sends questions only if data/2026/ask.json says the site answers them.
- * (From 15 to 16 November 2026 a third rule refused a build showing the second generation of
- * the mascot to a host data/mascot.json gave the first; it went with the first generation, lot
- * F of docs/discovery/PLAN-TORTUE.md. Of the two hosts, only what they do with a question can
- * differ now — and that rule is the one above.)
  * `gameFile` is the file a build of today would publish — null while the list is not ready.
  */
 export function distProblems(
@@ -467,7 +470,9 @@ export function distProblems(
     // would show it, and the turtle with it (review 11, M11).
     out.push('dist/ shows no game, and a build of today would: build again');
   } else if (stray.length > 0) {
-    out.push('dist/ shows a game built from another list of words');
+    // The list, the sentences or the words it explains: not the game of today for this host
+    // (review 11, M12 — it said « another list » of a file whose list had not moved).
+    out.push('dist/ shows a game file that is not today’s for this host');
   }
   if (dist.asks && (expected.ask === 'off' || expected.ask === 'bench')) {
     out.push(`dist/ sends questions, and ${ASK_PATH} says this host answers none`);
@@ -520,8 +525,8 @@ export function holdingRedirects(): string {
 }
 
 /**
- * The mode of the build in dist/. A dist/ produced before the marker existed is an app build,
- * which is the safe reading: an app build is the one the apex refuses.
+ * The mode of the build in dist/. A dist/ produced before the marker existed is read as an app
+ * build, which is the safe reading: an app build is the one held by every gate.
  */
 export function readBuildMode(marker: string = BUILD_MARKER): BuildMode {
   if (!existsSync(marker)) return 'app';
@@ -566,8 +571,9 @@ export interface DeployContext {
   /** `--dry-run`: wrangler bundles and uploads nothing. */
   dryRun: boolean;
   /**
-   * What still stands between the app and the apex (scripts/launch.ts): the editor's decision,
-   * the legal declaration, the contact address, the reviews. Empty on launch day, and only then.
+   * What still stands between the app and the apex (scripts/launch.ts): the editor's decisions,
+   * the legal declaration, the contact address, the reviews, what the game ships. Empty since
+   * the launch; a blocker that comes back holds the app, never the withdrawal.
    */
   launchBlockers: readonly string[];
   /**
@@ -831,8 +837,8 @@ export function nearSilenceWindow(
 /**
  * Why this build must not be deployed to this target — or null when it may.
  *
- * Kept pure so the rule is tested without a dist/: the apex takes the holding build until every
- * launch condition is met (scripts/launch.ts), a holding build is exactly its two pages, and an
+ * Kept pure so the rule is tested without a dist/: the holding build goes wherever it is sent —
+ * the withdrawal always may (D14.10) —, a holding build is exactly its three pages, and an
  * app build — which carries incipits, locators
  * and quotations of a book that is all rights reserved — goes nowhere public, not even to the
  * noindex preview host, before the editor has seen and dated the measured exposure.
@@ -947,7 +953,13 @@ export function deployRefusal(
     return `${(context.gistsProblems ?? []).join(' · ')} — commit and push the file first, then build again`;
   }
   if (mode === 'app' && context.distProblems.length > 0) {
-    return `${context.distProblems.join(' · ')} — run \`npm run build\` and deploy that`;
+    // The remedy of this host: its own build (review 11, M12).
+    const build = context.scrutinBuild
+      ? 'npm run build:scrutin'
+      : target === 'preview'
+        ? 'npm run build:preview'
+        : 'npm run build';
+    return `${context.distProblems.join(' · ')} — run \`${build}\` and deploy that`;
   }
   // The Worker (D16.7) goes out only with an app that answers questions — and, for the bench,
   // to the preview host alone: the apex never runs a model nobody has chosen yet.
@@ -1000,7 +1012,7 @@ export function deployRefusal(
     const missing = HOLDING_PAGES.filter((p) => !pages.includes(p));
     if (unexpected.length > 0 || missing.length > 0) {
       return (
-        'a holding build ships exactly index.html and 404.html — ' +
+        `a holding build ships exactly ${HOLDING_PAGES.join(', ')} — ` +
         `unexpected: ${unexpected.slice(0, 5).join(', ') || 'none'}` +
         `${unexpected.length > 5 ? ` (+${String(unexpected.length - 5)} more)` : ''}; ` +
         `missing: ${missing.join(', ') || 'none'}`
